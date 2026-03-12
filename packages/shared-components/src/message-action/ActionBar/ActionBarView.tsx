@@ -39,13 +39,13 @@ export interface ActionBarViewSnapshot {
     showReact: boolean;
     showReply: boolean;
     showReplyInThread: boolean;
-    showStartThread: boolean;
     showThreadForDeletedMessage: boolean;
     isDownloadEncrypted: boolean;
     isDownloadLoading: boolean;
     isFailed: boolean;
     isPinned: boolean;
     isQuoteExpanded: boolean;
+    isThreadReplyAllowed: boolean;
 }
 
 export interface ActionBarViewActions {
@@ -94,7 +94,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         showReact,
         showReply,
         showReplyInThread,
-        showStartThread,
+        isThreadReplyAllowed,
         showThreadForDeletedMessage,
         isDownloadEncrypted,
         isDownloadLoading,
@@ -103,44 +103,48 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         isQuoteExpanded,
     } = useViewModel(vm);
 
-    const menuItems: JSX.Element[] = [];
+    const handleContextMenu =
+        (action: ((anchor: HTMLElement | null) => void) | undefined, ref: React.RefObject<HTMLButtonElement | null>) =>
+        (event: React.MouseEvent<HTMLButtonElement>): void => {
+            event.preventDefault();
+            event.stopPropagation();
+            action?.(ref.current);
+        };
 
-    if (showEdit) {
-        menuItems.push(
-            <Tooltip description={_t("action|edit")} placement="top" key="edit">
-                <Button
-                    ref={editTriggerRef}
-                    kind="tertiary"
-                    size="sm"
-                    iconOnly={true}
-                    aria-label={_t("action|edit")}
-                    onClick={() => vm.onEditClick?.(editTriggerRef.current)}
-                    className={styles.toolbar_item}
-                    Icon={EditIcon}
-                />
-            </Tooltip>,
-        );
-    }
+    const editButton = (
+        <Tooltip description={_t("action|edit")} placement="top" key="edit">
+            <Button
+                ref={editTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={_t("action|edit")}
+                onClick={() => vm.onEditClick?.(editTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onEditClick, editTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={EditIcon}
+            />
+        </Tooltip>
+    );
 
-    if (showPinOrUnpin) {
-        const description = isPinned ? _t("action|unpin") : _t("action|pin");
-        menuItems.push(
-            <Tooltip description={description} placement="top" key="pin">
-                <Button
-                    ref={pinTriggerRef}
-                    kind="tertiary"
-                    size="sm"
-                    iconOnly={true}
-                    aria-label={description}
-                    onClick={() => vm.onPinClick?.(pinTriggerRef.current)}
-                    className={styles.toolbar_item}
-                    Icon={isPinned ? UnpinIcon : PinIcon}
-                />
-            </Tooltip>,
-        );
-    }
+    const pinDescription = isPinned ? _t("action|unpin") : _t("action|pin");
+    const pinButton = (
+        <Tooltip description={pinDescription} placement="top" key="pin">
+            <Button
+                ref={pinTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={pinDescription}
+                onClick={() => vm.onPinClick?.(pinTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onPinClick, pinTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={isPinned ? UnpinIcon : PinIcon}
+            />
+        </Tooltip>
+    );
 
-    const cancelSendingButton = (
+    const cancelButton = (
         <Tooltip description={_t("action|delete")} placement="top" key="cancel">
             <Button
                 ref={cancelTriggerRef}
@@ -149,13 +153,85 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 iconOnly={true}
                 aria-label={_t("action|delete")}
                 onClick={() => vm.onCancelClick?.(cancelTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onCancelClick, cancelTriggerRef)}
                 className={styles.toolbar_item}
                 Icon={DeleteIcon}
             />
         </Tooltip>
     );
 
-    const threadTooltipDescription = showStartThread
+    const replyButton = (
+        <Tooltip description={_t("action|reply")} placement="top" key="reply">
+            <Button
+                ref={replyTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={_t("action|reply")}
+                onClick={() => vm.onReplyClick?.(replyTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onReplyClick, replyTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={ReplyIcon}
+            />
+        </Tooltip>
+    );
+
+    const reactButton = (
+        <Tooltip description={_t("action|react")} placement="top" key="react">
+            <Button
+                ref={reactTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={_t("action|react")}
+                onClick={() => vm.onReactionsClick?.(reactTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onReactionsClick, reactTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={ReactionAddIcon}
+            />
+        </Tooltip>
+    );
+
+    let downloadTitle = _t("action|download");
+    if (isDownloadLoading) {
+        downloadTitle = isDownloadEncrypted
+            ? _t("timeline|download_action_decrypting")
+            : _t("timeline|download_action_downloading");
+    }
+    const downloadButton = (
+        <Tooltip description={downloadTitle} placement="top" key="download">
+            <Button
+                ref={downloadTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={downloadTitle}
+                disabled={isDownloadLoading}
+                onClick={() => vm.onDownloadClick?.(downloadTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onDownloadClick, downloadTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={isDownloadLoading ? InlineSpinner : DownloadIcon}
+            />
+        </Tooltip>
+    );
+
+    const hideButton = (
+        <Tooltip description={_t("action|hide")} placement="top" key="hide">
+            <Button
+                ref={hideTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={_t("action|hide")}
+                onClick={() => vm.onHideClick?.(hideTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onHideClick, hideTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={VisibilityOffIcon}
+            />
+        </Tooltip>
+    );
+
+    const threadTooltipDescription = isThreadReplyAllowed
         ? _t("action|reply_in_thread")
         : _t("threads|error_start_thread_existing_relation");
     const threadTooltipButton = (
@@ -166,157 +242,107 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 size="sm"
                 iconOnly={true}
                 aria-label={threadTooltipDescription}
-                disabled={!showStartThread}
+                disabled={!isThreadReplyAllowed}
                 onClick={() => vm.onReplyInThreadClick?.(replyInThreadTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onReplyInThreadClick, replyInThreadTriggerRef)}
                 className={styles.toolbar_item}
                 Icon={ThreadsIcon}
             />
         </Tooltip>
     );
 
-    if (showCancel && isFailed) {
-        menuItems.splice(
-            0,
-            0,
-            <Tooltip description={_t("action|retry")} placement="top" key="resend">
-                <Button
-                    ref={resendTriggerRef}
-                    kind="tertiary"
-                    size="sm"
-                    iconOnly={true}
-                    aria-label={_t("action|retry")}
-                    onClick={() => vm.onResendClick?.(resendTriggerRef.current)}
-                    className={styles.toolbar_item}
-                    Icon={RestartIcon}
-                />
-            </Tooltip>,
-        );
-        menuItems.push(cancelSendingButton);
-    } else {
-        if (showReply) {
-            if (showReplyInThread) {
-                menuItems.splice(0, 0, threadTooltipButton);
-            }
-            menuItems.splice(
-                0,
-                0,
-                <Tooltip description={_t("action|reply")} placement="top" key="reply">
-                    <Button
-                        ref={replyTriggerRef}
-                        kind="tertiary"
-                        size="sm"
-                        iconOnly={true}
-                        aria-label={_t("action|reply")}
-                        onClick={() => vm.onReplyClick?.(replyTriggerRef.current)}
-                        className={styles.toolbar_item}
-                        Icon={ReplyIcon}
-                    />
-                </Tooltip>,
-            );
-        }
+    const resendButton = (
+        <Tooltip description={_t("action|retry")} placement="top" key="resend">
+            <Button
+                ref={resendTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={_t("action|retry")}
+                onClick={() => vm.onResendClick?.(resendTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onResendClick, resendTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={RestartIcon}
+            />
+        </Tooltip>
+    );
 
-        if (showReact) {
-            menuItems.splice(
-                0,
-                0,
-                <Tooltip description={_t("action|react")} placement="top" key="react">
-                    <Button
-                        ref={reactTriggerRef}
-                        kind="tertiary"
-                        size="sm"
-                        iconOnly={true}
-                        aria-label={_t("action|react")}
-                        onClick={() => vm.onReactionsClick?.(reactTriggerRef.current)}
-                        className={styles.toolbar_item}
-                        Icon={ReactionAddIcon}
-                    />
-                </Tooltip>,
-            );
+    const expandDescription = isQuoteExpanded
+        ? _t("timeline|mab|collapse_reply_chain")
+        : _t("timeline|mab|expand_reply_chain");
+    const expandButton = (
+        <Tooltip
+            description={expandDescription}
+            caption={`${_t("keyboard|shift")} + ${_t("action|click")}`}
+            placement="top"
+            key="expand"
+        >
+            <Button
+                ref={expandTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={expandDescription}
+                onClick={() => vm.onToggleThreadExpanded?.(expandTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onToggleThreadExpanded, expandTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={isQuoteExpanded ? CollapseIcon : ExpandIcon}
+            />
+        </Tooltip>
+    );
+
+    const optionsButton = (
+        <Tooltip description={_t("common|options")} placement="top" key="options">
+            <Button
+                ref={optionsTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={_t("common|options")}
+                onClick={() => vm.onOptionsClick?.(optionsTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onOptionsClick, optionsTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={OverflowHorizontalIcon}
+            />
+        </Tooltip>
+    );
+
+    const menuItems: JSX.Element[] = [];
+
+    if (showCancel && isFailed) {
+        menuItems.push(resendButton, cancelButton);
+    } else {
+        if (showHide) {
+            menuItems.push(hideButton);
         }
         if (showDownload) {
-            let downloadTitle = isDownloadEncrypted
-                ? _t("timeline|download_action_decrypting")
-                : _t("timeline|download_action_downloading");
-            downloadTitle = isDownloadLoading ? _t("action|download") : downloadTitle;
-
-            menuItems.splice(
-                0,
-                0,
-                <Tooltip description={downloadTitle} placement="top" key="download">
-                    <Button
-                        ref={downloadTriggerRef}
-                        kind="tertiary"
-                        size="sm"
-                        iconOnly={true}
-                        aria-label={downloadTitle}
-                        onClick={() => vm.onDownloadClick?.(downloadTriggerRef.current)}
-                        className={styles.toolbar_item}
-                        Icon={isDownloadLoading ? InlineSpinner : DownloadIcon}
-                    />
-                </Tooltip>,
-            );
+            menuItems.push(downloadButton);
         }
-        if (showHide) {
-            menuItems.splice(
-                0,
-                0,
-                <Tooltip description={_t("action|hide")} placement="top" key="hide">
-                    <Button
-                        ref={hideTriggerRef}
-                        kind="tertiary"
-                        size="sm"
-                        iconOnly={true}
-                        aria-label={_t("action|hide")}
-                        onClick={() => vm.onHideClick?.(hideTriggerRef.current)}
-                        className={styles.toolbar_item}
-                        Icon={VisibilityOffIcon}
-                    />
-                </Tooltip>,
-            );
+        if (showReact) {
+            menuItems.push(reactButton);
         }
-        if (showThreadForDeletedMessage) {
-            menuItems.unshift(threadTooltipButton);
+        if (!showReply && showThreadForDeletedMessage) {
+            menuItems.push(threadTooltipButton);
         }
-
+        if (showReply) {
+            menuItems.push(replyButton);
+        }
+        if (showReply && showReplyInThread) {
+            menuItems.push(threadTooltipButton);
+        }
+        if (showEdit) {
+            menuItems.push(editButton);
+        }
+        if (showPinOrUnpin) {
+            menuItems.push(pinButton);
+        }
         if (showCancel) {
-            menuItems.push(cancelSendingButton);
+            menuItems.push(cancelButton);
         }
-
         if (showExpandCollapse) {
-            const description = isQuoteExpanded
-                ? _t("timeline|mab|collapse_reply_chain")
-                : _t("timeline|mab|expand_reply_chain");
-
-            menuItems.push(
-                <Tooltip description={description} placement="top" key="expand">
-                    <Button
-                        ref={expandTriggerRef}
-                        kind="tertiary"
-                        size="sm"
-                        iconOnly={true}
-                        aria-label={description}
-                        onClick={() => vm.onToggleThreadExpanded?.(expandTriggerRef.current)}
-                        className={styles.toolbar_item}
-                        Icon={isQuoteExpanded ? CollapseIcon : ExpandIcon}
-                    />
-                </Tooltip>,
-            );
+            menuItems.push(expandButton);
         }
-
-        menuItems.push(
-            <Tooltip description={_t("common|options")} placement="top" key="options">
-                <Button
-                    ref={optionsTriggerRef}
-                    kind="tertiary"
-                    size="sm"
-                    iconOnly={true}
-                    aria-label={_t("common|options")}
-                    onClick={() => vm.onOptionsClick?.(optionsTriggerRef.current)}
-                    className={styles.toolbar_item}
-                    Icon={OverflowHorizontalIcon}
-                />
-            </Tooltip>,
-        );
+        menuItems.push(optionsButton);
     }
 
     return (

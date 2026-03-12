@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Back",
+        "click": "Click",
         "delete": "Delete",
         "dismiss": "Dismiss",
         "download": "Download",
@@ -33,6 +34,9 @@
         "options": "Options",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
         "open_dial_pad": "Open dial pad"

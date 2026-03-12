@@ -61,13 +61,13 @@ const meta = {
         showReact: true,
         showReply: true,
         showReplyInThread: true,
-        showStartThread: true,
         showThreadForDeletedMessage: true,
         isDownloadEncrypted: false,
         isDownloadLoading: false,
         isFailed: false,
         isPinned: false,
         isQuoteExpanded: false,
+        isThreadReplyAllowed: true,
     },
 } satisfies Meta<typeof ActionBarViewWrapper>;
 

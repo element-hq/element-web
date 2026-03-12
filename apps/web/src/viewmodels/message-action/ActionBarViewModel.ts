@@ -69,7 +69,7 @@ interface DerivedEventState {
     showPinOrUnpin: boolean;
     showReact: boolean;
     showReply: boolean;
-    showStartThread: boolean;
+    isThreadReplyAllowed: boolean;
     showExpandCollapse: boolean;
     showReplyInThread: boolean;
     showThreadForDeletedMessage: boolean;
@@ -136,7 +136,7 @@ export class ActionBarViewModel
             showPinOrUnpin: PinningUtils.canPin(client, mxEvent) || PinningUtils.canUnpin(client, mxEvent),
             showReact: contentActionable && props.canReact && !props.isSearch,
             showReply: contentActionable && props.canSendMessages,
-            showStartThread: !(!!relationType && relationType !== RelationType.Thread),
+            isThreadReplyAllowed: !(!!relationType && relationType !== RelationType.Thread),
             showExpandCollapse: props.isQuoteExpanded !== undefined && shouldDisplayReply(mxEvent),
             showReplyInThread: contentActionable && ActionBarViewModel.canShowReplyInThreadAction(props),
             showThreadForDeletedMessage:
@@ -300,7 +300,7 @@ export class ActionBarViewModel
         super.dispose();
     }
 
-    public onReplyClick = (_anchor: HTMLDivElement | null): void => {
+    public onReplyClick = (_anchor: HTMLElement | null): void => {
         defaultDispatcher.dispatch({
             action: "reply_to_event",
             event: this.props.mxEvent,
@@ -308,7 +308,7 @@ export class ActionBarViewModel
         });
     };
 
-    public onEditClick = (_anchor: HTMLDivElement | null): void => {
+    public onEditClick = (_anchor: HTMLElement | null): void => {
         editEvent(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
@@ -317,24 +317,24 @@ export class ActionBarViewModel
         );
     };
 
-    public onResendClick = (_anchor: HTMLDivElement | null): void => {
+    public onResendClick = (_anchor: HTMLElement | null): void => {
         this.runActionOnFailedEv((event) => Resend.resend(MatrixClientPeg.safeGet(), event));
     };
 
-    public onCancelClick = (_anchor: HTMLDivElement | null): void => {
+    public onCancelClick = (_anchor: HTMLElement | null): void => {
         this.runActionOnFailedEv(
             (event) => Resend.removeFromQueue(MatrixClientPeg.safeGet(), event),
             (event) => canCancel(event.status),
         );
     };
 
-    public onPinClick = async (_anchor: HTMLDivElement | null): Promise<void> => {
+    public onPinClick = async (_anchor: HTMLElement | null): Promise<void> => {
         const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         await PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         PosthogTrackers.trackPinUnpinMessage(isPinned ? "Pin" : "Unpin", "Timeline");
     };
 
-    public onDownloadClick = async (_anchor: HTMLDivElement | null): Promise<void> => {
+    public onDownloadClick = async (_anchor: HTMLElement | null): Promise<void> => {
         if (this.isDownloadLoading || !this.canDownload) return;
 
         try {
@@ -361,23 +361,23 @@ export class ActionBarViewModel
         }
     };
 
-    public onHideClick = (_anchor: HTMLDivElement | null): void => {
+    public onHideClick = (_anchor: HTMLElement | null): void => {
         void setMediaVisibility(this.props.mxEvent, false);
     };
 
-    public onToggleThreadExpanded = (anchor: HTMLDivElement | null): void => {
+    public onToggleThreadExpanded = (anchor: HTMLElement | null): void => {
         this.props.onToggleThreadExpanded?.(anchor);
     };
 
-    public onOptionsClick = (anchor: HTMLDivElement | null): void => {
+    public onOptionsClick = (anchor: HTMLElement | null): void => {
         this.props.onOptionsClick?.(anchor);
     };
 
-    public onReactionsClick = (anchor: HTMLDivElement | null): void => {
+    public onReactionsClick = (anchor: HTMLElement | null): void => {
         this.props.onReactionsClick?.(anchor);
     };
 
-    public onReplyInThreadClick = (_anchor: HTMLDivElement | null): void => {
+    public onReplyInThreadClick = (_anchor: HTMLElement | null): void => {
         const { mxEvent, isCard } = this.props;
         const thread = mxEvent.getThread();
 

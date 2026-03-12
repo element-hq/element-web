@@ -50,6 +50,7 @@ import { uniqueId, uniqBy } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import {
     useCreateAutoDisposedViewModel,
+    ActionBarView,
     DecryptionFailureBodyView,
     MessageTimestampView,
     ReactionsRowButtonView,
@@ -78,7 +79,6 @@ import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import SenderProfile from "../messages/SenderProfile";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
-import MessageActionBar from "../messages/MessageActionBar";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import { isContentActionable } from "../../../utils/EventUtils";
@@ -109,12 +109,14 @@ import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import SettingsStore from "../../../settings/SettingsStore";
+import { CardContext } from "../right_panel/context";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
 } from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
+import { ActionBarViewModel } from "../../../viewmodels/message-action/ActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 export type GetRelationsForEvent = (
@@ -1152,7 +1154,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const showMessageActionBar = !isEditing && !this.props.forExport;
         const actionBar = showMessageActionBar ? (
-            <MessageActionBar
+            <ActionBarWrapper
                 mxEvent={this.props.mxEvent}
                 reactions={this.state.reactions}
                 permalinkCreator={this.props.permalinkCreator}
@@ -1878,6 +1880,127 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
                 {items}
             </ReactionsRowView>
             {contextMenu}
+        </>
+    );
+}
+
+interface ActionBarWrapperProps {
+    mxEvent: MatrixEvent;
+    reactions?: Relations | null;
+    permalinkCreator?: RoomPermalinkCreator;
+    getTile: () => IEventTileType | null;
+    getReplyChain: () => ReplyChain | null;
+    onFocusChange?: (focused: boolean) => void;
+    isQuoteExpanded?: boolean;
+    toggleThreadExpanded: () => void;
+    getRelationsForEvent?: GetRelationsForEvent;
+}
+
+function ActionBarWrapper({
+    mxEvent,
+    reactions,
+    permalinkCreator,
+    getTile,
+    getReplyChain,
+    onFocusChange,
+    isQuoteExpanded,
+    toggleThreadExpanded,
+    getRelationsForEvent,
+}: Readonly<ActionBarWrapperProps>): JSX.Element {
+    const roomContext = useContext(RoomContext);
+    const { isCard } = useContext(CardContext);
+    const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
+    const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ActionBarViewModel({
+                mxEvent,
+                timelineRenderingType: roomContext.timelineRenderingType,
+                canSendMessages: roomContext.canSendMessages,
+                canReact: roomContext.canReact,
+                isSearch: Boolean(roomContext.search),
+                isCard,
+                isQuoteExpanded,
+                onToggleThreadExpanded: toggleThreadExpanded,
+                onOptionsClick: (anchor) => setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
+                onReactionsClick: (anchor) => setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
+                getRelationsForEvent,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            mxEvent,
+            timelineRenderingType: roomContext.timelineRenderingType,
+            canSendMessages: roomContext.canSendMessages,
+            canReact: roomContext.canReact,
+            isSearch: Boolean(roomContext.search),
+            isCard,
+            isQuoteExpanded,
+            getRelationsForEvent,
+            onToggleThreadExpanded: toggleThreadExpanded,
+            onOptionsClick: (anchor) => setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
+            onReactionsClick: (anchor) => setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
+        });
+    }, [
+        vm,
+        mxEvent,
+        roomContext.timelineRenderingType,
+        roomContext.canSendMessages,
+        roomContext.canReact,
+        roomContext.search,
+        isCard,
+        isQuoteExpanded,
+        getRelationsForEvent,
+        toggleThreadExpanded,
+    ]);
+
+    useEffect(() => {
+        onFocusChange?.(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));
+    }, [onFocusChange, optionsMenuAnchorRect, reactionsMenuAnchorRect]);
+
+    useEffect(() => {
+        setOptionsMenuAnchorRect(null);
+        setReactionsMenuAnchorRect(null);
+    }, [mxEvent]);
+
+    const closeOptionsMenu = useCallback((): void => {
+        setOptionsMenuAnchorRect(null);
+    }, []);
+
+    const closeReactionsMenu = useCallback((): void => {
+        setReactionsMenuAnchorRect(null);
+    }, []);
+
+    const tile = getTile();
+    const replyChain = getReplyChain();
+    const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
+    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
+
+    return (
+        <>
+            <ActionBarView vm={vm} className="mx_MessageActionBar" />
+            {optionsMenuAnchorRect ? (
+                <MessageContextMenu
+                    {...aboveLeftOf(optionsMenuAnchorRect)}
+                    mxEvent={mxEvent}
+                    permalinkCreator={permalinkCreator}
+                    eventTileOps={eventTileOps}
+                    collapseReplyChain={collapseReplyChain}
+                    onFinished={closeOptionsMenu}
+                    getRelationsForEvent={getRelationsForEvent}
+                />
+            ) : null}
+            {reactionsMenuAnchorRect ? (
+                <ContextMenu
+                    {...aboveLeftOf(reactionsMenuAnchorRect)}
+                    onFinished={closeReactionsMenu}
+                    managed={false}
+                    focusLock
+                >
+                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionsMenu} />
+                </ContextMenu>
+            ) : null}
         </>
     );
 }
