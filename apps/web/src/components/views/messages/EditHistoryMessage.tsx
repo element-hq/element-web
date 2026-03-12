@@ -6,22 +6,27 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef } from "react";
+import React, { type JSX, createRef, useEffect } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { EventContentBodyView } from "@element-hq/web-shared-components";
+import {
+    EventContentBodyView,
+    RedactedBodyView,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
 
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
+import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import RedactedBody from "./RedactedBody";
 import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -151,7 +156,12 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
-            contentContainer = <RedactedBody mxEvent={this.props.mxEvent} />;
+            contentContainer = (
+                <RedactedBodyWrapper
+                    mxEvent={this.props.mxEvent}
+                    showTwelveHour={this.props.isTwelveHour ?? SettingsStore.getValue("showTwelveHourTimestamps")}
+                />
+            );
         } else {
             let contentElements;
             if (this.props.previousEdit) {
@@ -195,4 +205,27 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             </li>
         );
     }
+}
+
+interface RedactedBodyWrapperProps {
+    mxEvent: MatrixEvent;
+    showTwelveHour: boolean;
+}
+
+function RedactedBodyWrapper({ mxEvent, showTwelveHour }: Readonly<RedactedBodyWrapperProps>): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new RedactedBodyViewModel({
+                client: MatrixClientPeg.safeGet(),
+                mxEvent,
+                showTwelveHour,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+        vm.setShowTwelveHour(showTwelveHour);
+    }, [mxEvent, showTwelveHour, vm]);
+
+    return <RedactedBodyView vm={vm} className="mx_RedactedBody" />;
 }

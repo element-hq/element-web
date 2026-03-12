@@ -18,12 +18,15 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
+import {
+    useCreateAutoDisposedViewModel,
+    DecryptionFailureBodyView,
+    RedactedBodyView,
+} from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
-import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -40,6 +43,8 @@ import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -246,7 +251,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType: React.ComponentType<IBodyProps> = RedactedBody;
+        let BodyType: React.ComponentType<IBodyProps> = RedactedBodyWrapper;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (this.props.mxEvent.isDecryptionFailure()) {
@@ -348,4 +353,26 @@ function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element
         vm.setVerificationState(verificationState);
     }, [verificationState, vm]);
     return <DecryptionFailureBodyView vm={vm} ref={ref} className="mx_DecryptionFailureBody mx_EventTile_content" />;
+}
+
+/**
+ * Bridge redacted events into the view model until MessageEvent becomes a function component.
+ */
+function RedactedBodyWrapper({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
+    const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new RedactedBodyViewModel({
+                client: MatrixClientPeg.safeGet(),
+                mxEvent,
+                showTwelveHour,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+        vm.setShowTwelveHour(showTwelveHour);
+    }, [mxEvent, showTwelveHour, vm]);
+
+    return <RedactedBodyView vm={vm} ref={ref} className="mx_RedactedBody" />;
 }

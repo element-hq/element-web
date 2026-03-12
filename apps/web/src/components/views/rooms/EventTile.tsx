@@ -52,6 +52,7 @@ import {
     useCreateAutoDisposedViewModel,
     DecryptionFailureBodyView,
     MessageTimestampView,
+    RedactedBodyView,
     ReactionsRowButtonView,
     ReactionsRowView,
     useViewModel,
@@ -87,7 +88,6 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
-import RedactedBody from "../messages/RedactedBody";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from "../../../utils/Reply";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -106,6 +106,7 @@ import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -1399,12 +1400,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             avatar
                         )}
                         <div className={lineClasses} key="mx_EventTile_line">
-                            <div className="mx_EventTile_body">
-                                {this.props.mxEvent.isRedacted() ? (
-                                    <RedactedBody mxEvent={this.props.mxEvent} />
-                                ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
-                                ) : (
+                                <div className="mx_EventTile_body">
+                                    {this.props.mxEvent.isRedacted() ? (
+                                        <RedactedBodyWrapper mxEvent={this.props.mxEvent} />
+                                    ) : this.props.mxEvent.isDecryptionFailure() ? (
+                                        <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
+                                    ) : (
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
                             </div>
@@ -1618,6 +1619,28 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
     }, [verificationState, vm]);
 
     return <DecryptionFailureBodyView vm={vm} className="mx_DecryptionFailureBody mx_EventTile_content" />;
+}
+
+/**
+ * Bridge redacted events into the view model until EventTile becomes a function component.
+ */
+function RedactedBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
+    const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new RedactedBodyViewModel({
+                client: MatrixClientPeg.safeGet(),
+                mxEvent,
+                showTwelveHour,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+        vm.setShowTwelveHour(showTwelveHour);
+    }, [mxEvent, showTwelveHour, vm]);
+
+    return <RedactedBodyView vm={vm} className="mx_RedactedBody" />;
 }
 
 /**

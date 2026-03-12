@@ -65,9 +65,37 @@ describe("MessageEvent", () => {
     beforeEach(() => {
         client = stubClient();
         room = mkRoom(client, "!room:example.com");
+        jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(SettingsStore, "getValue");
         jest.spyOn(SettingsStore, "watchSetting");
         jest.spyOn(SettingsStore, "unwatchSetting").mockImplementation(jest.fn());
+    });
+
+    it("renders the shared redacted body for redacted events", () => {
+        jest.spyOn(room, "getMember").mockReturnValue({ name: "Moderator" } as any);
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@alice:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: MsgType.Text,
+                body: "Secret",
+            },
+            unsigned: {
+                redacted_because: {
+                    sender: "@moderator:example.com",
+                    origin_server_ts: Date.UTC(2022, 10, 17, 15, 58, 32),
+                },
+            },
+        });
+        jest.spyOn(event, "isRedacted").mockReturnValue(true);
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText("Message deleted by Moderator")).toBeInTheDocument();
+        expect(result.container.querySelector(".mx_RedactedBody")).not.toBeNull();
+        expect(result.queryByTestId("textual-body")).toBeNull();
     });
 
     describe("when an image with a caption is sent", () => {
