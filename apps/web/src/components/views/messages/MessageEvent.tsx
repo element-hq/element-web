@@ -25,6 +25,7 @@ import {
 } from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import UnknownBody from "./UnknownBody";
@@ -44,7 +45,6 @@ import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -359,11 +359,12 @@ function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element
  * Bridge redacted events into the view model until MessageEvent becomes a function component.
  */
 function RedactedBodyWrapper({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
+    const client = useMatrixClientContext();
     const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new RedactedBodyViewModel({
-                client: MatrixClientPeg.safeGet(),
+                client,
                 mxEvent,
                 showTwelveHour,
             }),

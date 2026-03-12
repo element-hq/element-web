@@ -17,6 +17,7 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
 jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
@@ -59,7 +60,11 @@ describe("MessageEvent", () => {
     let event: MatrixEvent;
 
     const renderMessageEvent = (): RenderResult => {
-        return render(<MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />);
+        return render(
+            <MatrixClientContext.Provider value={client}>
+                <MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />
+            </MatrixClientContext.Provider>,
+        );
     };
 
     beforeEach(() => {

@@ -25,8 +25,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import MatrixClientContext, { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -213,10 +212,11 @@ interface RedactedBodyWrapperProps {
 }
 
 function RedactedBodyWrapper({ mxEvent, showTwelveHour }: Readonly<RedactedBodyWrapperProps>): JSX.Element {
+    const client = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new RedactedBodyViewModel({
-                client: MatrixClientPeg.safeGet(),
+                client,
                 mxEvent,
                 showTwelveHour,
             }),
