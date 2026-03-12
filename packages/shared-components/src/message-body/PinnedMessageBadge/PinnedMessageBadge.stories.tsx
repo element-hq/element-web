@@ -6,17 +6,17 @@
  */
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PinnedMessageBadgeView } from "./PinnedMessageBadgeView";
+import { PinnedMessageBadge } from "./PinnedMessageBadge";
 
 const meta = {
     title: "Message body/PinnedMessageBadge",
-    component: PinnedMessageBadgeView,
+    component: PinnedMessageBadge,
     args: {
         "aria-describedby": "event-tile-description",
         "tabIndex": 0,
     },
     tags: ["autodocs"],
-} satisfies Meta<typeof PinnedMessageBadgeView>;
+} satisfies Meta<typeof PinnedMessageBadge>;
 
 export default meta;
 

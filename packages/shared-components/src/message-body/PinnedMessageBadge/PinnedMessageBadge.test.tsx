@@ -10,11 +10,11 @@ import { composeStories } from "@storybook/react-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "@test-utils";
 
-import * as stories from "./PinnedMessageBadgeView.stories";
+import * as stories from "./PinnedMessageBadge.stories";
 
 const { Default } = composeStories(stories);
 
-describe("PinnedMessageBadgeView", () => {
+describe("PinnedMessageBadge", () => {
     it("renders the default badge", () => {
         const { container } = render(<Default />);
         expect(container).toMatchSnapshot();

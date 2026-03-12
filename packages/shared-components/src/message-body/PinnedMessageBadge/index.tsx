@@ -5,4 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { PinnedMessageBadgeView, type PinnedMessageBadgeProps } from "./PinnedMessageBadgeView";
+export { PinnedMessageBadge, type PinnedMessageBadgeProps } from "./PinnedMessageBadge";
