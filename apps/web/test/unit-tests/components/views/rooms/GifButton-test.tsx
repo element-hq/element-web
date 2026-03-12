@@ -16,6 +16,7 @@ import * as ContentMessages from "../../../../../src/ContentMessages";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
+import SdkConfig from "../../../../../src/SdkConfig";
 
 jest.mock("../../../../../src/ContentMessages", () => ({
     ...jest.requireActual("../../../../../src/ContentMessages"),
@@ -41,6 +42,13 @@ describe("GifButton", () => {
     };
 
     beforeEach(() => {
+        // Configure the Klipy API key for the GIF service
+        SdkConfig.put({
+            gif: {
+                api_key: "test-klipy-api-key",
+            },
+        } as any);
+
         // Mock IntersectionObserver which is used by GifGrid for infinite scroll
         const mockIntersectionObserver = jest.fn().mockReturnValue({
             observe: jest.fn(),
@@ -107,12 +115,16 @@ describe("GifButton", () => {
         fireEvent.click(button);
 
         // Wait for the trending GIFs to load, then click the first one
-        const gifButton = await screen.findByTitle("A funny cat");
+        const gifButton = await screen.findByRole("button", { name: "A funny cat" });
         fireEvent.click(gifButton);
 
         // Verify uploadFile was called with the Matrix client, room ID, and a blob
         await waitFor(() => {
-            expect(ContentMessages.uploadFile).toHaveBeenCalledWith(mockClient, roomId, expect.any(Blob));
+            expect(ContentMessages.uploadFile).toHaveBeenCalledWith(
+                mockClient,
+                roomId,
+                expect.objectContaining({ size: expect.any(Number), type: expect.any(String) }),
+            );
         });
 
         // Verify sendEvent was called with m.sticker and the correct content

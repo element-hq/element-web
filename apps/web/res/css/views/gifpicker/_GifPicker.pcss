@@ -31,11 +31,6 @@ Please see LICENSE files in the repository root for full details.
 
         &::placeholder {
             color: var(--cpd-color-text-secondary);
-            font: var(--cpd-font-body-md-regular);
-        }
-
-        &:focus {
-            outline: none;
         }
     }
 }
@@ -52,14 +47,21 @@ Please see LICENSE files in the repository root for full details.
     flex: 1;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgb(0 0 0 / 0.2) transparent;
+    scrollbar-color: rgb(0, 0, 0, 0.2) transparent;
     padding: 0 8px;
 }
 
 .mx_GifPicker_grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 4px;
+
+    /* Row container for accessibility structure */
+    > [role="row"] {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+    }
 }
 
 .mx_GifPicker_gridItem {

@@ -608,6 +608,8 @@
             "user_description": "Users"
         },
         "close_sticker_picker": "Hide stickers",
+        "gif_grid_label": "GIF search results",
+        "gif_item": "GIF",
         "gif_search_placeholder": "Search KLIPY",
         "gif_trending": "Trending",
         "gif_no_results": "No GIFs found",

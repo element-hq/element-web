@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { type Dispatch, type JSX, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { type IContent, type IEventRelation, EventType, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { InlineSpinner } from "@vector-im/compound-web";
@@ -17,9 +17,16 @@ import dis from "../../../dispatcher/dispatcher";
 import { attachRelation } from "../../../utils/messages";
 import { addReplyToMessageContent } from "../../../utils/Reply";
 import { GifSearch } from "./GifSearch";
-import { GifGrid } from "./GifGrid";
+import { GifGrid, GIFS_PER_ROW } from "./GifGrid";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {
+    type IAction as RovingAction,
+    type IState as RovingState,
+    RovingTabIndexProvider,
+    Type,
+} from "../../../accessibility/RovingTabIndex";
+import { Key } from "../../../Keyboard";
 
 interface GifPickerProps {
     relation?: IEventRelation;
@@ -221,29 +228,105 @@ export function GifPicker({ relation, onFinished }: GifPickerProps): JSX.Element
         [roomId, matrixClient, relation, replyToEvent, onFinished, timelineRenderingType],
     );
 
+    // Keyboard navigation for grid - handles arrow keys to move between GIF items
+    const handleKeyDown = useCallback(
+        (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
+            if (!state.activeNode) return;
+            if (![Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)) return;
+
+            // Get DOM structure: button -> gridcell -> row
+            const gridcellNode = state.activeNode.parentElement;
+            const rowElement = gridcellNode?.parentElement;
+            if (!rowElement || !gridcellNode) return;
+
+            const columnIndex = Array.from(rowElement.children).indexOf(gridcellNode);
+            const refIndex = state.nodes.indexOf(state.activeNode);
+
+            let focusNode: HTMLElement | undefined;
+            let newRowElement: Element | undefined;
+
+            switch (ev.key) {
+                case Key.ARROW_LEFT:
+                    focusNode = state.nodes[refIndex - 1];
+                    newRowElement = focusNode?.parentElement?.parentElement ?? undefined;
+                    break;
+
+                case Key.ARROW_RIGHT:
+                    focusNode = state.nodes[refIndex + 1];
+                    newRowElement = focusNode?.parentElement?.parentElement ?? undefined;
+                    break;
+
+                case Key.ARROW_UP:
+                case Key.ARROW_DOWN: {
+                    // Calculate the offset to move to the same column in prev/next row
+                    const offset =
+                        ev.key === Key.ARROW_UP
+                            ? -(columnIndex + 1 + (GIFS_PER_ROW - 1 - columnIndex))
+                            : GIFS_PER_ROW - columnIndex;
+                    const targetNode = state.nodes[refIndex + offset];
+                    newRowElement = targetNode?.parentElement?.parentElement ?? undefined;
+                    if (newRowElement) {
+                        const newColumnIndex = Math.min(columnIndex, newRowElement.children.length - 1);
+                        const targetCell = newRowElement.children[newColumnIndex];
+                        focusNode = targetCell?.children[0] as HTMLElement | undefined;
+                    }
+                    break;
+                }
+            }
+
+            if (focusNode) {
+                focusNode.focus();
+                dispatch({
+                    type: Type.SetFocus,
+                    payload: { node: focusNode },
+                });
+
+                if (rowElement !== newRowElement) {
+                    focusNode.scrollIntoView({
+                        behavior: "auto",
+                        block: "nearest",
+                    });
+                }
+
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
+        },
+        [],
+    );
+
     return (
-        <div className="mx_GifPicker">
-            <GifSearch query={query} onChange={handleQueryChange} />
-            <div className="mx_GifPicker_header">
-                <span>{query.trim() === "" ? _t("composer|gif_trending") : query}</span>
-            </div>
-            <div className="mx_GifPicker_body">
-                {error ? (
-                    <div className="mx_GifPicker_error">
-                        <span>{error}</span>
+        <RovingTabIndexProvider onKeyDown={handleKeyDown}>
+            {({ onKeyDownHandler }) => (
+                <div className="mx_GifPicker" onKeyDown={onKeyDownHandler}>
+                    <GifSearch query={query} onChange={handleQueryChange} />
+                    <div className="mx_GifPicker_header">
+                        <span>{query.trim() === "" ? _t("composer|gif_trending") : query}</span>
                     </div>
-                ) : (
-                    <GifGrid results={results} onSelect={handleSelect} onLoadMore={handleLoadMore} loading={loading} />
-                )}
-                {loading && (
-                    <div className="mx_GifPicker_loading">
-                        <InlineSpinner />
+                    <div className="mx_GifPicker_body">
+                        {error ? (
+                            <div className="mx_GifPicker_error">
+                                <span>{error}</span>
+                            </div>
+                        ) : (
+                            <GifGrid
+                                results={results}
+                                onSelect={handleSelect}
+                                onLoadMore={handleLoadMore}
+                                loading={loading}
+                            />
+                        )}
+                        {loading && (
+                            <div className="mx_GifPicker_loading">
+                                <InlineSpinner />
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
-            <div className="mx_GifPicker_footer">
-                <span>{_t("composer|gif_powered_by_klipy")}</span>
-            </div>
-        </div>
+                    <div className="mx_GifPicker_footer">
+                        <span>{_t("composer|gif_powered_by_klipy")}</span>
+                    </div>
+                </div>
+            )}
+        </RovingTabIndexProvider>
     );
 }
