@@ -8,59 +8,64 @@
 import React, { type ComponentProps } from "react";
 import { fn } from "storybook/test";
 
-import type { Meta, StoryFn } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LinkedText } from "./LinkedText";
 import { LinkedTextContext } from "./LinkedTextContext";
 
-export default {
+const meta = {
     title: "Utils/LinkedText",
     component: LinkedText,
+    decorators: [
+        (Story, { args }) => (
+            <LinkedTextContext.Provider
+                value={{
+                    userIdListener: args.userIdListener,
+                    roomAliasListener: args.roomAliasListener,
+                    urlTargetTransformer: args.urlTargetTransformer,
+                    hrefTransformer: args.hrefTransformer,
+                }}
+            >
+                <Story />
+            </LinkedTextContext.Provider>
+        ),
+    ],
     args: {
         children: "I love working on https://matrix.org.",
-    },
-    argTypes: {
-        canClick: { control: "boolean" },
     },
     tags: ["autodocs"],
 } satisfies Meta<ComponentProps<typeof LinkedText> & ComponentProps<typeof LinkedTextContext>["value"]>;
 
-const Template: StoryFn<ComponentProps<typeof LinkedText> & ComponentProps<typeof LinkedTextContext>["value"]> = ({
-    children,
-    ...args
-}) => (
-    <LinkedTextContext.Provider value={args}>
-        <LinkedText>{children}</LinkedText>
-    </LinkedTextContext.Provider>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
-Default.args = {};
+export const Default: Story = {};
 
-export const WithUserId = Template.bind({});
-
-WithUserId.args = {
-    children: "I love talking to @alice:example.org.",
-    userIdListener: fn(),
-};
-
-export const WithRoomAlias = Template.bind({});
-
-WithRoomAlias.args = {
-    children: "I love talking in #general:example.org.",
-    roomAliasListener: fn(),
-};
-
-export const WithCustomUrlTarget = Template.bind({});
-WithCustomUrlTarget.tags = ["skip-test"];
-WithCustomUrlTarget.args = {
-    urlTargetTransformer: () => "_fake_target",
-};
-
-export const WithCustomHref = Template.bind({});
-
-WithCustomHref.tags = ["skip-test"];
-WithCustomHref.args = {
-    hrefTransformer: () => {
-        return "https://example.org";
+export const WithUserId: Story = {
+    args: {
+        children: "I love talking to @alice:example.org.",
+        userIdListener: fn(),
     },
+};
+
+export const WithRoomAlias: Story = {
+    args: {
+        children: "I love talking in #general:example.org.",
+        roomAliasListener: fn(),
+    },
+};
+
+export const WithCustomUrlTarget: Story = {
+    args: {
+        urlTargetTransformer: () => "_fake_target",
+    },
+    tags: ["skip-test"],
+};
+
+export const WithCustomHref: Story = {
+    args: {
+        hrefTransformer: () => {
+            return "https://example.org";
+        },
+    },
+    tags: ["skip-test"],
 };

@@ -65,13 +65,10 @@ const NewRoomIntro: React.FC = () => {
         dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
     }
 
-    const renderedTopic = useMemo(() => {
-        if (dmPartner) {
-            return undefined;
-        }
-        return <LinkedText as="span">{topicToHtml(topic?.text, topic?.html)}</LinkedText>;
-    }, [topic, dmPartner]);
-
+    const renderedTopic = useMemo(
+        () => (dmPartner ? undefined : <LinkedText as="span">{topicToHtml(topic?.text, topic?.html)}</LinkedText>),
+        [topic, dmPartner],
+    );
     if (!room || !roomId) {
         throw new Error("Unable to create a NewRoomIntro without room and roomId");
     }

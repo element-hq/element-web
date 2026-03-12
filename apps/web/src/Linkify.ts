@@ -208,6 +208,11 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
+/**
+ * Handler function when a UserID link is clicked.
+ * @param event The click event
+ * @param userId The linked UserID
+ */
 function onUserClick(event: MouseEvent, userId: string): void {
     event.preventDefault();
     dis.dispatch<ViewUserPayload>({
@@ -216,6 +221,11 @@ function onUserClick(event: MouseEvent, userId: string): void {
     });
 }
 
+/**
+ * Handler function when a Room Alias link is clicked.
+ * @param event The click event
+ * @param roomAlias The linked room alias
+ */
 function onAliasClick(event: MouseEvent, roomAlias: string): void {
     event.preventDefault();
     dis.dispatch<ViewRoomPayload>({
@@ -226,6 +236,12 @@ function onAliasClick(event: MouseEvent, roomAlias: string): void {
     });
 }
 
+/**
+ * Generates a set of event handlers for a regular URL link.
+ *
+ * @param href The link location.
+ * @returns Event listenenrs compatible with linkifyjs.
+ */
 function urlEventListeners(href: string): LinkEventListener {
     // intercept local permalinks to users and show them like userids (in userinfo of current room)
     try {
@@ -255,6 +271,12 @@ function urlEventListeners(href: string): LinkEventListener {
     return {};
 }
 
+/**
+ * Generates a set of event handlers for a UserID link.
+ *
+ * @param href A link that contains a userId.
+ * @returns Event listenenrs compatible with linkifyjs.
+ */
 export function userIdEventListeners(href: string): LinkEventListener {
     return {
         click: function (e: MouseEvent) {
@@ -265,6 +287,12 @@ export function userIdEventListeners(href: string): LinkEventListener {
     };
 }
 
+/**
+ * Generates a set of event handlers for a UserID link.
+ *
+ * @param href A link that contains a room alias.
+ * @returns Event listenenrs compatible with linkifyjs.
+ */
 export function roomAliasEventListeners(href: string): LinkEventListener {
     return {
         click: function (e: MouseEvent) {
@@ -275,6 +303,13 @@ export function roomAliasEventListeners(href: string): LinkEventListener {
     };
 }
 
+/**
+ * Generates a `target` attribute for the anchor element
+ * for the given `href` value.
+ *
+ * @param href A URL from a link.
+ * @returns The resulting `target` value.
+ */
 function urlTargetTransformFunction(href: string): string {
     try {
         const transformed = tryTransformPermalinkToLocalHref(href);
@@ -292,6 +327,13 @@ function urlTargetTransformFunction(href: string): string {
     return "";
 }
 
+/**
+ * Generates the result `href` value based on an incoming `href` value and a link type.
+ *
+ * @param href A URL from a link.
+ * @param type The type of link beinh handled.
+ * @returns The resulting `href` value.
+ */
 export function formatHref(href: string, type: LinkifyMatrixOpaqueIdType): string {
     switch (type) {
         case LinkifyMatrixOpaqueIdType.URL:
@@ -315,6 +357,10 @@ export function formatHref(href: string, type: LinkifyMatrixOpaqueIdType): strin
     }
 }
 
+/**
+ * The standard configuration for a LinkedTextContext.Provider
+ * within Element Web.
+ */
 export const LinkedTextConfiguration = {
     userIdListener: userIdEventListeners,
     roomAliasListener: roomAliasEventListeners,

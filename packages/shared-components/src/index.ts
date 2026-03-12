@@ -27,6 +27,7 @@ export * from "./message-body/TimelineSeparator/";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";
+export * from "./room/WidgetPip";
 export * from "./profile/DisambiguatedProfile";
 export * from "./room/HistoryVisibilityBadge";
 export * from "./rich-list/RichItem";
