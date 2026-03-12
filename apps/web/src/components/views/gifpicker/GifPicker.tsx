@@ -228,11 +228,35 @@ export function GifPicker({ relation, onFinished }: GifPickerProps): JSX.Element
         [roomId, matrixClient, relation, replyToEvent, onFinished, timelineRenderingType],
     );
 
+    // Track whether keyboard navigation has been activated (first arrow key press)
+    const [keyboardActive, setKeyboardActive] = useState(false);
+
     // Keyboard navigation for grid - handles arrow keys to move between GIF items
     const handleKeyDown = useCallback(
         (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
-            if (!state.activeNode) return;
             if (![Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)) return;
+
+            // On first arrow key press, focus the first GIF item
+            if (!keyboardActive) {
+                setKeyboardActive(true);
+                if (state.nodes.length > 0) {
+                    const firstNode = state.nodes[0];
+                    firstNode?.focus();
+                    firstNode?.scrollIntoView({
+                        behavior: "auto",
+                        block: "nearest",
+                    });
+                    dispatch({
+                        type: Type.SetFocus,
+                        payload: { node: firstNode },
+                    });
+                }
+                ev.preventDefault();
+                ev.stopPropagation();
+                return;
+            }
+
+            if (!state.activeNode) return;
 
             // Get DOM structure: button -> gridcell -> row
             const gridcellNode = state.activeNode.parentElement;
@@ -292,7 +316,7 @@ export function GifPicker({ relation, onFinished }: GifPickerProps): JSX.Element
                 ev.stopPropagation();
             }
         },
-        [],
+        [keyboardActive],
     );
 
     return (
