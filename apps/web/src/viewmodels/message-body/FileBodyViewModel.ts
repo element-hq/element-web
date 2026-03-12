@@ -11,7 +11,7 @@ import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 import {
     BaseViewModel,
-    FileBodyViewRendering,
+    FileBodyViewState,
     FileBodyViewInfoIcon,
     type FileBodyViewSnapshot,
     type FileBodyViewModel as FileBodyViewModelInterface,
@@ -95,7 +95,7 @@ function computedStyle(element: HTMLElement | null): string {
     const style = window.getComputedStyle(element, null);
     let cssText = style.cssText;
     // noinspection EqualityComparisonWithCoercionJS
-    if (cssText == "") {
+    if (cssText === "") {
         // Firefox doesn't implement ".cssText" for computed styles.
         // https://bugzilla.mozilla.org/show_bug.cgi?id=137687
         for (const rule of style) {
@@ -140,17 +140,12 @@ export class FileBodyViewModel
         //Whether or not to show the default placeholder for the file. Defaults to true.
         const showFileInfo = props.showFileInfo ?? true;
 
-        let showDownload =
-            !showFileInfo ||
-            (props.timelineRenderingType !== TimelineRenderingType.Room &&
-                props.timelineRenderingType !== TimelineRenderingType.Search &&
-                props.timelineRenderingType !== TimelineRenderingType.Pinned);
-        if (showFileInfo) {
-            showDownload = false;
-        }
-        if (props.timelineRenderingType === TimelineRenderingType.Thread) {
-            showDownload = false;
-        }
+        const showDownload =
+            !showFileInfo &&
+            props.timelineRenderingType !== TimelineRenderingType.Room &&
+            props.timelineRenderingType !== TimelineRenderingType.Search &&
+            props.timelineRenderingType !== TimelineRenderingType.Pinned &&
+            props.timelineRenderingType !== TimelineRenderingType.Thread;
 
         const fileInfoLabel = showFileInfo
             ? presentableTextForFile(content, _t("common|attachment"), true, true)
@@ -166,8 +161,8 @@ export class FileBodyViewModel
 
         if (props.forExport) {
             return {
-                rendering: FileBodyViewRendering.EXPORT,
-                infoShow: showFileInfo,
+                state: FileBodyViewState.EXPORT,
+                showInfo: showFileInfo,
                 infoLabel: fileInfoLabel,
                 infoTooltip: fileInfoTooltip,
                 infoIcon: fileInfoIcon,
@@ -176,17 +171,15 @@ export class FileBodyViewModel
         }
 
         if (isEncrypted) {
-            const rendering = decryptedBlob
-                ? FileBodyViewRendering.ENCRYPTED_IFRAME
-                : FileBodyViewRendering.ENCRYPTED_PENDING;
+            const state = decryptedBlob ? FileBodyViewState.ENCRYPTED : FileBodyViewState.DECRYPTION_PENDING;
 
             return {
-                rendering,
-                infoShow: showFileInfo,
+                state,
+                showInfo: showFileInfo,
                 infoLabel: fileInfoLabel,
                 infoTooltip: fileInfoTooltip,
                 infoIcon: fileInfoIcon,
-                downloadShow: showDownload,
+                showDownload,
                 downloadLabel,
                 downloadTitle: downloadTitle,
             };
@@ -194,12 +187,12 @@ export class FileBodyViewModel
 
         if (media.srcHttp) {
             return {
-                rendering: FileBodyViewRendering.UNENCRYPTED,
-                infoShow: showFileInfo,
+                state: FileBodyViewState.UNENCRYPTED,
+                showInfo: showFileInfo,
                 infoLabel: fileInfoLabel,
                 infoTooltip: fileInfoTooltip,
                 infoIcon: fileInfoIcon,
-                downloadShow: showDownload,
+                showDownload,
                 downloadLabel,
                 downloadTitle: downloadTitle,
                 downloadHref: media.srcHttp,
@@ -207,8 +200,8 @@ export class FileBodyViewModel
         }
 
         return {
-            rendering: FileBodyViewRendering.INVALID,
-            infoShow: showFileInfo,
+            state: FileBodyViewState.INVALID,
+            showInfo: showFileInfo,
             infoLabel: fileInfoLabel,
             infoTooltip: fileInfoTooltip,
             infoIcon: fileInfoIcon,

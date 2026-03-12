@@ -10,12 +10,7 @@ import { composeStories } from "@storybook/react-vite";
 import { fireEvent, render, screen } from "@test-utils";
 import { describe, it, expect, vi } from "vitest";
 
-import {
-    FileBodyView,
-    FileBodyViewRendering,
-    type FileBodyViewActions,
-    type FileBodyViewSnapshot,
-} from "./FileBodyView";
+import { FileBodyView, FileBodyViewState, type FileBodyViewActions, type FileBodyViewSnapshot } from "./FileBodyView";
 import { MockViewModel } from "../../viewmodel/MockViewModel";
 import { I18nApi } from "../../index";
 import { I18nContext } from "../../utils/i18nContext";
@@ -35,13 +30,13 @@ const {
     LongFilenameInfo,
     UnencryptedDownload,
     EncryptedIframeDownload,
-    EncryptedPendingDownload,
+    DecryptionPendingDownload,
     LongFilenameDownload,
 } = composeStories(stories);
 
 const defaultSnapshot: FileBodyViewSnapshot = {
-    rendering: FileBodyViewRendering.UNENCRYPTED,
-    infoShow: true,
+    state: FileBodyViewState.UNENCRYPTED,
+    showInfo: true,
 };
 
 class TestViewModel extends MockViewModel<FileBodyViewSnapshot> implements FileBodyViewActions {
@@ -69,7 +64,7 @@ describe("FileBodyView", () => {
         ["video-info", VideoInfo],
         ["unencrypted-download", UnencryptedDownload],
         ["encrypted-iframe-download", EncryptedIframeDownload],
-        ["encrypted-pending-download", EncryptedPendingDownload],
+        ["decryption-pending-download", DecryptionPendingDownload],
         ["long-filename-download", LongFilenameDownload],
     ])("matches snapshot for %s story", (_name, Story) => {
         const { container } = renderWithI18n(<Story />);
@@ -101,8 +96,8 @@ describe("FileBodyView", () => {
 
     it("uses href in export mode", () => {
         const vm = new TestViewModel({
-            rendering: FileBodyViewRendering.EXPORT,
-            infoShow: true,
+            state: FileBodyViewState.EXPORT,
+            showInfo: true,
             infoHref: "https://example.org/export.pdf",
         });
 
@@ -114,8 +109,8 @@ describe("FileBodyView", () => {
 
     it("uses href in unencrypted download mode", () => {
         const vm = new TestViewModel({
-            rendering: FileBodyViewRendering.UNENCRYPTED,
-            downloadShow: true,
+            state: FileBodyViewState.UNENCRYPTED,
+            showDownload: true,
             downloadHref: "https://example.org/download.pdf",
         });
 
@@ -128,7 +123,7 @@ describe("FileBodyView", () => {
     });
 
     it("renders safely when href is missing in EXPORT mode", () => {
-        const vm = new TestViewModel({ rendering: FileBodyViewRendering.EXPORT, infoShow: true });
+        const vm = new TestViewModel({ state: FileBodyViewState.EXPORT, showInfo: true });
 
         const { container } = renderWithI18n(<FileBodyView vm={vm} />);
 
@@ -138,7 +133,7 @@ describe("FileBodyView", () => {
     });
 
     it("renders safely when href is missing in UNENCRYPTED mode", () => {
-        const vm = new TestViewModel({ rendering: FileBodyViewRendering.UNENCRYPTED, downloadShow: true });
+        const vm = new TestViewModel({ state: FileBodyViewState.UNENCRYPTED, showDownload: true });
 
         renderWithI18n(<FileBodyView vm={vm} />);
 
@@ -156,11 +151,11 @@ describe("FileBodyView", () => {
         expect(screen.getByRole("button", { name: "spec.pdf" })).toBeInTheDocument();
     });
 
-    it("renders download button in encrypted-pending mode", () => {
+    it("renders download button in decryption-pending mode", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
-            downloadShow: true,
+            state: FileBodyViewState.DECRYPTION_PENDING,
+            showDownload: true,
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);
@@ -184,8 +179,8 @@ describe("FileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
-                downloadShow: true,
+                state: FileBodyViewState.DECRYPTION_PENDING,
+                showDownload: true,
             },
             { onDownloadClick },
         );
@@ -201,8 +196,8 @@ describe("FileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: FileBodyViewRendering.UNENCRYPTED,
-                downloadShow: true,
+                state: FileBodyViewState.UNENCRYPTED,
+                showDownload: true,
             },
             { onDownloadLinkClick },
         );
@@ -218,8 +213,8 @@ describe("FileBodyView", () => {
         const vm = new TestViewModel(
             {
                 ...defaultSnapshot,
-                rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
-                downloadShow: true,
+                state: FileBodyViewState.ENCRYPTED,
+                showDownload: true,
             },
             { onDownloadIframeLoad },
         );
@@ -234,8 +229,8 @@ describe("FileBodyView", () => {
     it("wires refLink in encrypted-iframe-download mode", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
-            downloadShow: true,
+            state: FileBodyViewState.ENCRYPTED,
+            showDownload: true,
         });
         const refLink = React.createRef<HTMLAnchorElement>() as React.RefObject<HTMLAnchorElement>;
 
@@ -247,8 +242,8 @@ describe("FileBodyView", () => {
     it("wires refIFrame in encrypted-iframe-download mode", () => {
         const vm = new TestViewModel({
             ...defaultSnapshot,
-            rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
-            downloadShow: true,
+            state: FileBodyViewState.ENCRYPTED,
+            showDownload: true,
         });
         const refIFrame = React.createRef<HTMLIFrameElement>() as React.RefObject<HTMLIFrameElement>;
 
@@ -257,26 +252,25 @@ describe("FileBodyView", () => {
         expect(refIFrame.current).toBeInstanceOf(HTMLIFrameElement);
     });
 
-    it.each([
-        FileBodyViewRendering.UNENCRYPTED,
-        FileBodyViewRendering.ENCRYPTED_PENDING,
-        FileBodyViewRendering.ENCRYPTED_IFRAME,
-    ])("hides info row in %s mode", (rendering) => {
-        const vm = new TestViewModel({
-            ...defaultSnapshot,
-            rendering,
-            infoShow: false,
-            downloadShow: true,
-        });
+    it.each([FileBodyViewState.UNENCRYPTED, FileBodyViewState.DECRYPTION_PENDING, FileBodyViewState.ENCRYPTED])(
+        "hides info row in %s mode",
+        (state) => {
+            const vm = new TestViewModel({
+                ...defaultSnapshot,
+                state,
+                showInfo: false,
+                showDownload: true,
+            });
 
-        renderWithI18n(<FileBodyView vm={vm} />);
+            renderWithI18n(<FileBodyView vm={vm} />);
 
-        expect(screen.queryByRole("button", { name: "Attachment" })).not.toBeInTheDocument();
-    });
+            expect(screen.queryByRole("button", { name: "Attachment" })).not.toBeInTheDocument();
+        },
+    );
 
     it("shows message in invalid mode", () => {
         const vm = new TestViewModel({
-            rendering: FileBodyViewRendering.INVALID,
+            state: FileBodyViewState.INVALID,
         });
 
         renderWithI18n(<FileBodyView vm={vm} />);

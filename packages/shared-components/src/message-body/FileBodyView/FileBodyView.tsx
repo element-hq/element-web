@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type MouseEvent } from "react";
+import React, { type ComponentType, type JSX, type MouseEvent } from "react";
 import classNames from "classnames";
 import { Button, Tooltip } from "@vector-im/compound-web";
 import {
@@ -24,11 +24,16 @@ import { MediaBody } from "../MediaBody";
 /**
  * Which visual state to render for the component.
  */
-export enum FileBodyViewRendering {
+export enum FileBodyViewState {
+    /** Export-only rendering where the info row links to the source file. */
     EXPORT = "EXPORT",
-    ENCRYPTED_PENDING = "ENCRYPTED_PENDING",
-    ENCRYPTED_IFRAME = "ENCRYPTED_IFRAME",
+    /** Encrypted file before decryption has completed; shows the button that starts the flow. */
+    DECRYPTION_PENDING = "DECRYPTION_PENDING",
+    /** Encrypted file after decryption; renders the sandboxed iframe download path. */
+    ENCRYPTED = "ENCRYPTED",
+    /** Unencrypted file with a direct download link. */
     UNENCRYPTED = "UNENCRYPTED",
+    /** Fallback for missing or unusable file metadata. */
     INVALID = "INVALID",
 }
 
@@ -45,13 +50,13 @@ export enum FileBodyViewInfoIcon {
 export interface FileBodyViewSnapshot {
     /**
      * Primary rendering branch for the component.
-     * Controls the overall flow (export, encrypted, unencrypted, invalid).
+     * Controls the overall state (export, encrypted, unencrypted, invalid).
      */
-    rendering: FileBodyViewRendering;
+    state: FileBodyViewState;
     /**
      * Whether to render the info row (icon + label + tooltip).
      */
-    infoShow?: boolean;
+    showInfo?: boolean;
     /**
      * Optional info label (normally the file name). Defaults to 'Attachment'.
      */
@@ -71,7 +76,7 @@ export interface FileBodyViewSnapshot {
     /**
      * Whether to render download controls for the current rendering branch.
      */
-    downloadShow?: boolean;
+    showDownload?: boolean;
     /**
      * Optional download label (normally file/action text). Defaults to 'Download'.
      */
@@ -134,24 +139,38 @@ interface FileBodyViewProps {
 }
 
 /**
+ * Create the correct icon to render in the view
+ */
+function getInfoIcon(infoIcon?: FileBodyViewInfoIcon): ComponentType<React.SVGAttributes<SVGElement>> {
+    if (infoIcon === FileBodyViewInfoIcon.AUDIO) {
+        return VolumeOnSolidIcon;
+    } else if (infoIcon === FileBodyViewInfoIcon.DOWNLOAD) {
+        return DownloadIcon;
+    } else if (infoIcon === FileBodyViewInfoIcon.VIDEO) {
+        return VideoCallSolidIcon;
+    }
+    return AttachmentIcon;
+}
+
+/**
  * Renders the body of a file message for info, export, and download flows.
  *
- * Rendering is selected by `snapshot.rendering` from the view model and supports:
+ * Rendering is selected by `snapshot.state` from the view model and supports:
  * - export link (`EXPORT`)
- * - encrypted download flows (`ENCRYPTED_PENDING`, `ENCRYPTED_IFRAME`)
+ * - encrypted download flows (`DECRYPTION_PENDING`, `ENCRYPTED`)
  * - unencrypted download flow (`UNENCRYPTED`)
  * - invalid-file fallback (`INVALID`)
  *
  * Visibility/content for the info row and download controls are driven by snapshot fields:
- * - `infoShow`, `infoLabel`, `infoTooltip`, `infoIcon`, `infoHref`
- * - `downloadShow`, `downloadLabel`, `downloadTitle`, `downloadHref`
+ * - `showInfo`, `infoLabel`, `infoTooltip`, `infoIcon`, `infoHref`
+ * - `showDownload`, `downloadLabel`, `downloadTitle`, `downloadHref`
  *
  * Common usage patterns:
- * - info-only display: set `infoShow: true`, `downloadShow: false`
+ * - info-only display: set `showInfo: true`, `showDownload: false`
  * - export link (`EXPORT`)
- * - download-only display: set `infoShow: false`, `downloadShow: true`
+ * - download-only display: set `showInfo: false`, `showDownload: true`
  *
- * Note on using the encrypted iframe, `ENCRYPTED_IFRAME`:
+ * Note on using the encrypted iframe, `ENCRYPTED`:
  * To make this rendering branch work, it is expected that a `usercontent/` target
  * is available relative to the root of the application as is described in detail here,
  * https://github.com/element-hq/element-web/blob/develop/docs/usercontent.md
@@ -163,14 +182,15 @@ interface FileBodyViewProps {
  */
 export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<FileBodyViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
+
     const {
-        rendering,
-        infoShow,
+        state,
+        showInfo,
         infoLabel,
         infoTooltip,
         infoIcon,
         infoHref,
-        downloadShow,
+        showDownload,
         downloadLabel,
         downloadTitle,
         downloadHref,
@@ -178,17 +198,9 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
 
     const resolvedInfoLabel = infoLabel ?? _t("common|attachment");
     const resolvedInfoTooltip = infoTooltip ?? resolvedInfoLabel;
+    const resolvedInfoIcon = getInfoIcon(infoIcon);
 
-    let resolvedInfoIcon = AttachmentIcon;
-    if (infoIcon === FileBodyViewInfoIcon.AUDIO) {
-        resolvedInfoIcon = VolumeOnSolidIcon;
-    } else if (infoIcon === FileBodyViewInfoIcon.ATTACHMENT) {
-        resolvedInfoIcon = AttachmentIcon;
-    } else if (infoIcon === FileBodyViewInfoIcon.VIDEO) {
-        resolvedInfoIcon = VideoCallSolidIcon;
-    }
-
-    const info = infoShow ? (
+    const info = showInfo ? (
         <Tooltip description={resolvedInfoTooltip} placement="right">
             <MediaBody data-type="info">
                 <Button
@@ -210,19 +222,19 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
     const resolvedDownloadLabel = downloadLabel ?? _t("action|download");
     const resolvedDownloadTitle = downloadTitle ?? resolvedDownloadLabel;
 
-    switch (rendering) {
-        case FileBodyViewRendering.EXPORT:
+    switch (state) {
+        case FileBodyViewState.EXPORT:
             return (
                 <span className={classes}>
                     <a href={infoHref}>{info}</a>
                 </span>
             );
 
-        case FileBodyViewRendering.ENCRYPTED_PENDING:
+        case FileBodyViewState.DECRYPTION_PENDING:
             return (
                 <span className={classes}>
                     {info}
-                    {downloadShow && (
+                    {showDownload && (
                         <div data-type="download">
                             {/* Decrypt/download is triggered by the view model action, not by an anchor `href`. */}
                             <Button size="sm" kind="secondary" Icon={DownloadIcon} onClick={vm.onDownloadClick}>
@@ -233,11 +245,11 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                 </span>
             );
 
-        case FileBodyViewRendering.ENCRYPTED_IFRAME:
+        case FileBodyViewState.ENCRYPTED:
             return (
                 <span className={classes}>
                     {info}
-                    {downloadShow && (
+                    {showDownload && (
                         <div data-type="download">
                             <div aria-hidden style={{ display: "none" }}>
                                 {/*
@@ -267,11 +279,11 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                 </span>
             );
 
-        case FileBodyViewRendering.UNENCRYPTED:
+        case FileBodyViewState.UNENCRYPTED:
             return (
                 <span className={classes}>
                     {info}
-                    {downloadShow && (
+                    {showDownload && (
                         <div data-type="download">
                             {/* Unencrypted media uses an anchor element with VM-controlled click behavior. */}
                             <Button
@@ -291,7 +303,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                 </span>
             );
 
-        case FileBodyViewRendering.INVALID:
+        case FileBodyViewState.INVALID:
         default:
             return (
                 <>

@@ -8,7 +8,7 @@
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { createRef, type RefObject } from "react";
-import { FileBodyViewInfoIcon, FileBodyViewRendering } from "@element-hq/web-shared-components";
+import { FileBodyViewInfoIcon, FileBodyViewState } from "@element-hq/web-shared-components";
 
 import Modal from "../../../src/Modal";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
@@ -81,9 +81,9 @@ describe("FileBodyViewModel", () => {
     it("shows unencrypted download snapshot in file rendering type", () => {
         const vm = createVm();
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.UNENCRYPTED,
-            infoShow: false,
-            downloadShow: true,
+            state: FileBodyViewState.UNENCRYPTED,
+            showInfo: false,
+            showDownload: true,
             downloadHref: "https://server/file",
         });
     });
@@ -99,11 +99,11 @@ describe("FileBodyViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.UNENCRYPTED,
-            infoShow: true,
+            state: FileBodyViewState.UNENCRYPTED,
+            showInfo: true,
             infoLabel: "alt",
             infoIcon: expectedIcon,
-            downloadShow: false,
+            showDownload: false,
         });
     });
 
@@ -115,8 +115,8 @@ describe("FileBodyViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.EXPORT,
-            infoShow: true,
+            state: FileBodyViewState.EXPORT,
+            showInfo: true,
             infoLabel: "alt",
             infoHref: "https://server/export-file",
         });
@@ -146,7 +146,7 @@ describe("FileBodyViewModel", () => {
 
         await vm.onDownloadClick();
 
-        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_IFRAME);
+        expect(vm.getSnapshot().state).toBe(FileBodyViewState.ENCRYPTED);
 
         vm.onDownloadIframeLoad();
 
@@ -206,7 +206,7 @@ describe("FileBodyViewModel", () => {
                 description: expect.stringMatching(/decrypt/i),
             }),
         );
-        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_PENDING);
+        expect(vm.getSnapshot().state).toBe(FileBodyViewState.DECRYPTION_PENDING);
     });
 
     it("resets decrypted state when mxEvent changes", async () => {
@@ -216,14 +216,14 @@ describe("FileBodyViewModel", () => {
         });
 
         await vm.onDownloadClick();
-        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_IFRAME);
+        expect(vm.getSnapshot().state).toBe(FileBodyViewState.ENCRYPTED);
 
         vm.setProps({
             mxEvent: mkMediaEvent({ body: "new", file: { url: "mxc://server/file-b" } }),
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
+            state: FileBodyViewState.DECRYPTION_PENDING,
         });
     });
 
@@ -234,15 +234,15 @@ describe("FileBodyViewModel", () => {
         });
 
         await vm.onDownloadClick();
-        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.ENCRYPTED_IFRAME);
+        expect(vm.getSnapshot().state).toBe(FileBodyViewState.ENCRYPTED);
 
         vm.setProps({
             timelineRenderingType: TimelineRenderingType.Thread,
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
-            downloadShow: false,
+            state: FileBodyViewState.ENCRYPTED,
+            showDownload: false,
         });
     });
 
@@ -254,7 +254,7 @@ describe("FileBodyViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
+            state: FileBodyViewState.DECRYPTION_PENDING,
             downloadTitle: "my-file.pdf",
         });
     });
@@ -266,8 +266,8 @@ describe("FileBodyViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.UNENCRYPTED,
-            downloadShow: false,
+            state: FileBodyViewState.UNENCRYPTED,
+            showDownload: false,
         });
     });
 
@@ -278,8 +278,8 @@ describe("FileBodyViewModel", () => {
         });
 
         expect(vm.getSnapshot()).toMatchObject({
-            rendering: FileBodyViewRendering.INVALID,
-            infoShow: true,
+            state: FileBodyViewState.INVALID,
+            showInfo: true,
             infoLabel: "alt",
             infoIcon: FileBodyViewInfoIcon.ATTACHMENT,
         });
@@ -301,6 +301,6 @@ describe("FileBodyViewModel", () => {
 
         await vm.onDownloadClick();
 
-        expect(vm.getSnapshot().rendering).toBe(FileBodyViewRendering.UNENCRYPTED);
+        expect(vm.getSnapshot().state).toBe(FileBodyViewState.UNENCRYPTED);
     });
 });

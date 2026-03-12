@@ -7,7 +7,7 @@
 
 export {
     FileBodyView,
-    FileBodyViewRendering,
+    FileBodyViewState,
     FileBodyViewInfoIcon,
     type FileBodyViewActions,
     type FileBodyViewSnapshot,

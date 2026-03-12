@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
     FileBodyView,
     FileBodyViewInfoIcon,
-    FileBodyViewRendering,
+    FileBodyViewState,
     type FileBodyViewActions,
     type FileBodyViewSnapshot,
 } from "./FileBodyView";
@@ -46,8 +46,8 @@ const meta = {
     component: FileBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {
-        rendering: {
-            options: Object.entries(FileBodyViewRendering)
+        state: {
+            options: Object.entries(FileBodyViewState)
                 .filter(([key, value]) => key === value)
                 .map(([key]) => key),
             control: { type: "select" },
@@ -58,18 +58,18 @@ const meta = {
                 .map(([key]) => key),
             control: { type: "select" },
         },
-        infoShow: { control: "boolean" },
-        downloadShow: { control: "boolean" },
+        showInfo: { control: "boolean" },
+        showDownload: { control: "boolean" },
         className: { control: "text" },
     },
     args: {
-        rendering: FileBodyViewRendering.UNENCRYPTED,
-        infoShow: true,
+        state: FileBodyViewState.UNENCRYPTED,
+        showInfo: true,
         infoLabel: "spec.pdf",
         infoTooltip: "spec.pdf (22 KB)",
         infoIcon: FileBodyViewInfoIcon.ATTACHMENT,
         infoHref: "https://example.org/spec.pdf",
-        downloadShow: true,
+        showDownload: true,
         downloadLabel: "Download file",
         downloadTitle: "Download title",
         downloadHref: "https://example.org/download/spec.pdf",
@@ -84,19 +84,19 @@ export const Default: Story = {};
 
 export const Export: Story = {
     args: {
-        rendering: FileBodyViewRendering.EXPORT,
+        state: FileBodyViewState.EXPORT,
     },
 };
 
 export const Invalid: Story = {
     args: {
-        rendering: FileBodyViewRendering.INVALID,
+        state: FileBodyViewState.INVALID,
     },
 };
 
 export const LongFilenameInfo: Story = {
     args: {
-        downloadShow: false,
+        showDownload: false,
         infoLabel: "a very long filename to show ellipsis.pdf",
         infoTooltip: "a very long filename to show ellipsis.pdf (12 kB)",
     },
@@ -111,7 +111,7 @@ export const LongFilenameInfo: Story = {
 
 export const AudioInfo: Story = {
     args: {
-        downloadShow: false,
+        showDownload: false,
         infoIcon: FileBodyViewInfoIcon.AUDIO,
         infoLabel: "voice-message.ogg",
     },
@@ -119,7 +119,7 @@ export const AudioInfo: Story = {
 
 export const VideoInfo: Story = {
     args: {
-        downloadShow: false,
+        showDownload: false,
         infoIcon: FileBodyViewInfoIcon.VIDEO,
         infoLabel: "clip.mp4",
     },
@@ -127,30 +127,30 @@ export const VideoInfo: Story = {
 
 export const UnencryptedDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.UNENCRYPTED,
-        infoShow: false,
+        state: FileBodyViewState.UNENCRYPTED,
+        showInfo: false,
     },
 };
 
 export const EncryptedIframeDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.ENCRYPTED_IFRAME,
-        infoShow: false,
+        state: FileBodyViewState.ENCRYPTED,
+        showInfo: false,
     },
 };
 
-export const EncryptedPendingDownload: Story = {
+export const DecryptionPendingDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.ENCRYPTED_PENDING,
-        infoShow: false,
+        state: FileBodyViewState.DECRYPTION_PENDING,
+        showInfo: false,
     },
 };
 
 export const LongFilenameDownload: Story = {
     args: {
-        rendering: FileBodyViewRendering.UNENCRYPTED,
-        infoShow: false,
-        downloadShow: true,
+        state: FileBodyViewState.UNENCRYPTED,
+        showInfo: false,
+        showDownload: true,
         downloadLabel: "a very long filename that show no ellipsis.pdf",
     },
 };
