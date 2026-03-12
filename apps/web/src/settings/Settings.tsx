@@ -51,6 +51,7 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
+import CompatibilityCheckController from "./controllers/CompatibilityCheckController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -1314,7 +1315,9 @@ export const SETTINGS: Settings = {
         displayName: _td("labs|automatic_debug_logs"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
-        controller: new ReloadOnChangeController(),
+        controller: new CompatibilityCheckController(() =>
+            SdkConfig.get("sentry") ? false : _t("labs|automatic_debug_logs_disabled"),
+        ),
     },
     "automaticDecryptionErrorReporting": {
         displayName: _td("labs|automatic_debug_logs_decryption"),
