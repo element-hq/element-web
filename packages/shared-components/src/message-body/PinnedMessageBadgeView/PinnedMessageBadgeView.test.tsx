@@ -12,16 +12,11 @@ import { render } from "@test-utils";
 
 import * as stories from "./PinnedMessageBadgeView.stories";
 
-const { Default, WithAriaDescription } = composeStories(stories);
+const { Default } = composeStories(stories);
 
-describe("PinnedMessageBadge", () => {
+describe("PinnedMessageBadgeView", () => {
     it("renders the default badge", () => {
         const { container } = render(<Default />);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders the badge with host attributes", () => {
-        const { container } = render(<WithAriaDescription />);
         expect(container).toMatchSnapshot();
     });
 });

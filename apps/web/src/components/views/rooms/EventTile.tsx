@@ -52,7 +52,7 @@ import {
     useCreateAutoDisposedViewModel,
     DecryptionFailureBodyView,
     MessageTimestampView,
-    PinnedMessageBadge,
+    PinnedMessageBadgeView,
     ReactionsRowButtonView,
     ReactionsRowView,
     useViewModel,
@@ -1210,7 +1210,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {
-            pinnedMessageBadge = <PinnedMessageBadge aria-describedby={this.id} tabIndex={0} />;
+            pinnedMessageBadge = <PinnedMessageBadgeView aria-describedby={this.id} tabIndex={0} />;
         }
 
         let reactionsRow: JSX.Element | undefined;
