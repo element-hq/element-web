@@ -72,6 +72,7 @@ describe("MessageComposer", () => {
             (
                 [
                     "MessageComposerInput.showStickersButton",
+                    "MessageComposerInput.showGifButton",
                     "MessageComposerInput.showPollsButton",
                     "feature_wysiwyg_composer",
                 ] as const

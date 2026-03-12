@@ -1,0 +1,135 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_GifPicker {
+    width: 340px;
+    height: min(450px, 80vh);
+    max-height: 80vh;
+
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.mx_GifPicker_search {
+    margin: 8px;
+    border-radius: 4px;
+    border: 1px solid $input-border-color;
+    background-color: $background;
+    display: flex;
+
+    input {
+        flex: 1;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px 0;
+
+        &::placeholder {
+            color: var(--cpd-color-text-secondary);
+            font: var(--cpd-font-body-md-regular);
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.mx_GifPicker_header {
+    display: flex;
+    align-items: center;
+    padding: 4px 12px;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-semibold);
+}
+
+.mx_GifPicker_body {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0 0 0 / 0.2) transparent;
+    padding: 0 8px;
+}
+
+.mx_GifPicker_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+}
+
+.mx_GifPicker_gridItem {
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    border: none;
+    padding: 0;
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+}
+
+.mx_GifPicker_gridItem img {
+    width: 100%;
+    height: auto;
+    display: block;
+    min-height: 80px;
+    object-fit: cover;
+}
+
+.mx_GifPicker_footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-top: 1px solid $message-action-bar-border-color;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-xs-regular);
+    gap: 4px;
+}
+
+.mx_GifPicker_loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_GifPicker_empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-md-regular);
+    gap: 8px;
+}
+
+.mx_GifPicker_error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: var(--cpd-color-text-critical-primary);
+    font: var(--cpd-font-body-md-regular);
+    gap: 8px;
+}
+
+.mx_GifPicker_sentinel {
+    height: 1px;
+    width: 100%;
+}

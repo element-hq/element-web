@@ -244,6 +244,7 @@ export interface Settings {
     "useCustomFontSize": IBaseSetting<boolean>;
     "MessageComposerInput.suggestEmoji": IBaseSetting<boolean>;
     "MessageComposerInput.showStickersButton": IBaseSetting<boolean>;
+    "MessageComposerInput.showGifButton": IBaseSetting<boolean>;
     "MessageComposerInput.showPollsButton": IBaseSetting<boolean>;
     "MessageComposerInput.insertTrailingColon": IBaseSetting<boolean>;
     "Notifications.alwaysShowBadgeCounts": IBaseSetting<boolean>;
@@ -737,6 +738,13 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|show_stickers_button"),
         default: true,
         controller: new UIFeatureController(UIFeature.Widgets, false),
+    },
+    "MessageComposerInput.showGifButton": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("settings|show_gif_button"),
+        description: _td("settings|show_gif_button_description"),
+        shouldWarn: true,
+        default: false,
     },
     "MessageComposerInput.showPollsButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

@@ -39,6 +39,7 @@ import { useDispatcher } from "../../../hooks/useDispatcher";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
+import { GifButton } from "./GifButton";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
@@ -56,6 +57,7 @@ interface IProps {
     showLocationButton: boolean;
     showPollsButton: boolean;
     showStickersButton: boolean;
+    showGifButton: boolean;
     toggleButtonMenu: () => void;
     isRichTextEnabled: boolean;
     onComposerModeClick: () => void;
@@ -89,6 +91,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
+            showGifButton(props),
             uploadButton(), // props passed via UploadButtonContext
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
@@ -109,6 +112,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             uploadButton(), // props passed via UploadButtonContext
         ];
         moreButtons = [
+            showGifButton(props),
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -262,6 +266,17 @@ function showStickersButton(props: IProps): ReactElement | null {
         >
             <StickerIcon />
         </CollapsibleButton>
+    ) : null;
+}
+
+function showGifButton(props: IProps): ReactElement | null {
+    return props.showGifButton ? (
+        <GifButton
+            key="gif_button"
+            relation={props.relation}
+            menuPosition={props.menuPosition}
+            className="mx_MessageComposer_button"
+        />
     ) : null;
 }
 

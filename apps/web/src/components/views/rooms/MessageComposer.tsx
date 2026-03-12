@@ -51,6 +51,7 @@ import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysiwyg_composer/";
 import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/MatrixClientContext";
+import { KlipyGifService } from "../../../gif/KlipyGifService";
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
@@ -97,6 +98,7 @@ interface IState {
     isMenuOpen: boolean;
     isStickerPickerOpen: boolean;
     showStickersButton: boolean;
+    showGifButton: boolean;
     showPollsButton: boolean;
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
@@ -148,6 +150,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             isMenuOpen: false,
             isStickerPickerOpen: false,
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
+            showGifButton: SettingsStore.getValue("MessageComposerInput.showGifButton"),
             showPollsButton: SettingsStore.getValue("MessageComposerInput.showPollsButton"),
             isWysiwygLabEnabled: isWysiwygLabEnabled,
             isRichTextEnabled: isRichTextEnabled,
@@ -242,6 +245,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         }
 
         SettingsStore.monitorSetting("MessageComposerInput.showStickersButton", null);
+        SettingsStore.monitorSetting("MessageComposerInput.showGifButton", null);
         SettingsStore.monitorSetting("MessageComposerInput.showPollsButton", null);
         SettingsStore.monitorSetting("feature_wysiwyg_composer", null);
 
@@ -283,6 +287,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         const showStickersButton = SettingsStore.getValue("MessageComposerInput.showStickersButton");
                         if (this.state.showStickersButton !== showStickersButton) {
                             this.setState({ showStickersButton });
+                        }
+                        break;
+                    }
+                    case "MessageComposerInput.showGifButton": {
+                        const showGifButton = SettingsStore.getValue("MessageComposerInput.showGifButton");
+                        if (this.state.showGifButton !== showGifButton) {
+                            this.setState({ showGifButton });
                         }
                         break;
                     }
@@ -499,6 +510,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return this.state.showStickersButton && !isLocalRoom(this.props.room);
     }
 
+    private get showGifButton(): boolean {
+        return this.state.showGifButton && KlipyGifService.sharedInstance().isAvailable();
+    }
+
     private getMenuPosition(): MenuProps | undefined {
         if (this.ref.current) {
             const hasFormattingButtons = this.state.isWysiwygLabEnabled && this.state.isRichTextEnabled;
@@ -700,6 +715,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     }
                                     showPollsButton={this.state.showPollsButton}
                                     showStickersButton={this.showStickersButton}
+                                    showGifButton={this.showGifButton}
                                     isRichTextEnabled={this.state.isRichTextEnabled}
                                     onComposerModeClick={this.onRichTextToggle}
                                     toggleButtonMenu={this.toggleButtonMenu}
