@@ -117,7 +117,7 @@
         "show_advanced": "Show advanced",
         "show_all": "Show all",
         "sign_in": "Sign in",
-        "sign_out": "Sign out",
+        "sign_out": "Remove this device",
         "skip": "Skip",
         "start": "Start",
         "start_chat": "Start chat",
@@ -221,11 +221,11 @@
         "incorrect_password": "Incorrect password",
         "log_in_new_account": "<a>Log in</a> to your new account.",
         "logout_dialog": {
-            "description": "Are you sure you want to sign out?",
+            "description": "Are you sure you want to remove this device?",
             "megolm_export": "Manually export keys",
             "setup_key_backup_title": "You'll lose access to your encrypted messages",
             "setup_secure_backup_description_1": "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
-            "setup_secure_backup_description_2": "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
+            "setup_secure_backup_description_2": "When you remove this device you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
             "skip_key_backup": "I don't want my encrypted messages"
         },
         "misconfigured_body": "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
@@ -298,16 +298,16 @@
         "registration_username_validation": "Use lowercase letters, numbers, dashes and underscores only",
         "reset_password": {
             "confirm_new_password": "Confirm new password",
-            "devices_logout_success": "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.",
-            "other_devices_logout_warning_1": "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
-            "other_devices_logout_warning_2": "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.",
+            "devices_logout_success": "All your devices have been removed and will no longer receive push notifications. To re-enable notifications, sign in again on each device.",
+            "other_devices_logout_warning_1": "Removing your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
+            "other_devices_logout_warning_2": "If you want to retain access to your chat history in encrypted rooms, get a recovery key or export your message keys from one of your other devices before proceeding.",
             "password_not_entered": "A new password must be entered.",
             "passwords_mismatch": "New passwords must match each other.",
             "rate_limit_error": "Too many attempts in a short time. Wait some time before trying again.",
             "rate_limit_error_with_time": "Too many attempts in a short time. Retry after %(timeout)s.",
             "reset_successful": "Your password has been reset.",
             "return_to_login": "Return to login screen",
-            "sign_out_other_devices": "Sign out of all devices"
+            "sign_out_other_devices": "Remove other devices"
         },
         "reset_password_action": "Reset password",
         "reset_password_button": "Forgot password?",
@@ -330,8 +330,8 @@
         "server_picker_title": "Sign into your homeserver",
         "server_picker_title_default": "Server Options",
         "server_picker_title_registration": "Host account on",
-        "session_logged_out_description": "For security, this session has been signed out. Please sign in again.",
-        "session_logged_out_title": "Signed Out",
+        "session_logged_out_description": "For security, this session has been removed. Please sign in again.",
+        "session_logged_out_title": "Session removed",
         "set_email": {
             "description": "This will allow you to reset your password and receive notifications.",
             "verification_pending_description": "Please check your email and click on the link it contains. Once this is done, click continue.",
@@ -1131,11 +1131,11 @@
         "non_urgent_echo_failure_toast": "Your server isn't responding to some <a>requests</a>.",
         "resource_limits": "This homeserver has exceeded one of its resource limits.",
         "session_restore": {
-            "clear_storage_button": "Clear Storage and Sign Out",
-            "clear_storage_description": "Sign out and remove encryption keys?",
-            "description_1": "We encountered an error trying to restore your previous session.",
+            "clear_storage_button": "Remove this device",
+            "clear_storage_description": "Remove this device together with its encryption keys?",
+            "description_1": "We encountered an error trying to restore your session.",
             "description_2": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
-            "description_3": "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.",
+            "description_3": "Clearing your browser's storage may fix the problem, but will remove this device and cause any encrypted chat history to become unreadable.",
             "title": "Unable to restore session"
         },
         "something_went_wrong": "Something went wrong!",
@@ -1564,7 +1564,7 @@
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
-        "sliding_sync_disabled_notice": "Log out and back in to disable",
+        "sliding_sync_disabled_notice": "Sign in again to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "under_active_development": "Under active development.",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
@@ -2556,13 +2556,13 @@
                 "title": "Advanced"
             },
             "confirm_key_storage_off": "Are you sure you want to keep key storage turned off?",
-            "confirm_key_storage_off_description": "If you sign out of all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
+            "confirm_key_storage_off_description": "If you remove all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Delete key storage",
                 "confirm": "Delete key storage",
                 "description": "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:",
                 "list_first": "You will not have encrypted message history on new devices",
-                "list_second": "You will lose access to your encrypted messages if you are signed out of %(brand)s everywhere",
+                "list_second": "You will lose access to your encrypted messages if you're not signed in to any devices",
                 "title": "Are you sure you want to turn off key storage and delete it?"
             },
             "device_not_verified_button": "Verify this device",
@@ -2887,19 +2887,19 @@
         "send_read_receipts_unsupported": "Your server doesn't support disabling sending read receipts.",
         "send_typing_notifications": "Send typing notifications",
         "sessions": {
-            "best_security_note": "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.",
+            "best_security_note": "For best security, verify your sessions and remove any session that you don't recognize or use anymore.",
             "browser": "Browser",
             "confirm_sign_out": {
-                "one": "Confirm signing out this device",
-                "other": "Confirm signing out these devices"
+                "one": "Confirm removing this device",
+                "other": "Confirm removing these devices"
             },
             "confirm_sign_out_body": {
-                "one": "Click the button below to confirm signing out this device.",
-                "other": "Click the button below to confirm signing out these devices."
+                "one": "Click the button below to confirm removing this device.",
+                "other": "Click the button below to confirm removing these devices."
             },
             "confirm_sign_out_continue": {
-                "one": "Sign out device",
-                "other": "Sign out devices"
+                "one": "Remove device",
+                "other": "Remove devices"
             },
             "confirm_sign_out_sso": {
                 "one": "Confirm logging out this device by using Single Sign On to prove your identity.",
@@ -2908,7 +2908,7 @@
             "current_session": "Current session",
             "desktop_session": "Desktop session",
             "details_heading": "Session details",
-            "device_unverified_description": "Verify or sign out from this session for best security and reliability.",
+            "device_unverified_description": "Verify or remove this session for best security and reliability.",
             "device_unverified_description_current": "Verify your current session for enhanced secure messaging.",
             "device_verified_description": "This session is ready for secure messaging.",
             "device_verified_description_current": "Your current session is ready for secure messaging.",
@@ -2926,7 +2926,7 @@
             "inactive_sessions": "Inactive sessions",
             "inactive_sessions_explainer_1": "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.",
             "inactive_sessions_explainer_2": "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.",
-            "inactive_sessions_list_description": "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
+            "inactive_sessions_list_description": "Consider removing old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
             "ip": "IP address",
             "last_activity": "Last activity",
             "manage": "Manage this session",
@@ -2957,15 +2957,15 @@
             "sign_in_with_qr_button": "Show QR code",
             "sign_in_with_qr_description": "Use a QR code to sign in to another device and set up secure messaging.",
             "sign_in_with_qr_unsupported": "Not supported by your account provider",
-            "sign_out": "Sign out of this session",
-            "sign_out_all_other_sessions": "Sign out of all other sessions (%(otherSessionsCount)s)",
+            "sign_out": "Remove this session",
+            "sign_out_all_other_sessions": "Remove all other sessions (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Are you sure you want to sign out of %(count)s session?",
-                "other": "Are you sure you want to sign out of %(count)s sessions?"
+                "one": "Are you sure you want to remove %(count)s session?",
+                "other": "Are you sure you want to remove %(count)s sessions?"
             },
             "sign_out_n_sessions": {
-                "one": "Sign out of %(count)s session",
-                "other": "Sign out of %(count)s sessions"
+                "one": "Remove %(count)s session",
+                "other": "Remove %(count)s sessions"
             },
             "title": "Sessions",
             "unknown_session": "Unknown session type",
@@ -2974,15 +2974,15 @@
             "unverified_session_explainer_2": "You won't be able to participate in rooms where encryption is enabled when using this session.",
             "unverified_session_explainer_3": "For best security and privacy, it is recommended to use Matrix clients that support encryption.",
             "unverified_sessions": "Unverified sessions",
-            "unverified_sessions_explainer_1": "Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.",
+            "unverified_sessions_explainer_1": "Unverified sessions are sessions that have logged in with your credentials but have not been confirmed with your digital identity.",
             "unverified_sessions_explainer_2": "You should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.",
-            "unverified_sessions_list_description": "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.",
+            "unverified_sessions_list_description": "Verify your sessions for enhanced secure messaging or remove those you don't recognize or use anymore.",
             "url": "URL",
             "verified_session": "Verified session",
             "verified_sessions": "Verified sessions",
             "verified_sessions_explainer_1": "Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.",
             "verified_sessions_explainer_2": "This means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.",
-            "verified_sessions_list_description": "For best security, sign out from any session that you don't recognize or use anymore.",
+            "verified_sessions_list_description": "For best security, remove any session that you don't recognize or use anymore.",
             "verify_session": "Verify session",
             "web_session": "Web session"
         },
