@@ -5,42 +5,33 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.menu {
+.toolbar {
+    display: inline-flex;
     flex-direction: row;
     padding: 0;
-    gap: 0;
-    /* margin: var(--cpd-space-1x);
-    gap: var(--cpd-space-1x); */
-    background-color: inherit;
-    color: inherit;
-    max-inline-size: none;
-    border-radius: var(--cpd-space-2x);
-
-    /* & div {
-        outline: none !important;
-    } */
+    gap: var(--cpd-space-0-5x);
+    border-radius: 8px;
+    background: var(--cpd-color-bg-canvas-default);
+    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
 }
 
-.menu_item {
+.toolbar_item {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: 0;
-    padding: 0;
+    padding: 0 !important;
+    border: none;
 
-    width: 28px;
-    height: 28px;
     margin: 3px;
-    border-radius: 3px;
+    block-size: 28px !important;
+    inline-size: 28px !important;
+    border-radius: 6px;
 
-    svg {
-        margin: 0 !important;
-        width: 20px;
-        height: 20px;
-        color: var(--cpd-color-icon-secondary) !important;
+    color: var(--cpd-color-icon-secondary) !important;
 
-        &:hover {
-            color: var(--cpd-color-icon-primary) !important;
-        }
+    &:hover {
+        color: var(--cpd-color-icon-primary) !important;
+        background: var(--cpd-color-bg-subtle-secondary) !important;
+        z-index: 1;
     }
 }

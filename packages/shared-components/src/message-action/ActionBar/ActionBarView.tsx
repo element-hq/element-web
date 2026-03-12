@@ -22,40 +22,25 @@ import {
     OverflowHorizontalIcon,
     ReactionAddIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { Menu, MenuItem, InlineSpinner, Tooltip } from "@vector-im/compound-web";
+import { Button, InlineSpinner, Tooltip } from "@vector-im/compound-web";
 
 import { useI18n } from "../../utils/i18nContext";
+import { Flex } from "../../utils/Flex";
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./ActionBarView.module.css";
 
 export interface ActionBarViewSnapshot {
-    /**
-     * The edge along which the menu and trigger will be aligned.
-     * @default center
-     */
-    align?: "start" | "center" | "end";
-    /**
-     * The side of the trigger on which to place the menu. Note that the menu may
-     * still end up on a different side than the one you request if there isn't
-     * enough space.
-     * @default bottom
-     */
-    side?: "top" | "right" | "bottom" | "left";
-
-    canCancel: boolean;
-    canEdit: boolean;
-    canPinOrUnpin: boolean;
-    canReact: boolean;
-    canSendMessages: boolean;
-    canStartThread: boolean;
-
-    showDownloadAction: boolean;
-    showExpandCollapseAction: boolean;
-    showHideAction: boolean;
-    showReplyInThreadAction: boolean;
+    showCancel: boolean;
+    showDownload: boolean;
+    showEdit: boolean;
+    showExpandCollapse: boolean;
+    showHide: boolean;
+    showPinOrUnpin: boolean;
+    showReact: boolean;
+    showReply: boolean;
+    showReplyInThread: boolean;
+    showStartThread: boolean;
     showThreadForDeletedMessage: boolean;
-
-    isContentActionable: boolean;
     isDownloadEncrypted: boolean;
     isDownloadLoading: boolean;
     isFailed: boolean;
@@ -64,17 +49,17 @@ export interface ActionBarViewSnapshot {
 }
 
 export interface ActionBarViewActions {
-    onCancelClick?: (anchor: HTMLDivElement | null) => void;
-    onDownloadClick?: (anchor: HTMLDivElement | null) => void;
-    onEditClick?: (anchor: HTMLDivElement | null) => void;
-    onHideClick?: (anchor: HTMLDivElement | null) => void;
-    onOptionsClick?: (anchor: HTMLDivElement | null) => void;
-    onPinClick?: (anchor: HTMLDivElement | null) => void;
-    onReactionsClick?: (anchor: HTMLDivElement | null) => void;
-    onReplyClick?: (anchor: HTMLDivElement | null) => void;
-    onReplyInThreadClick?: (anchor: HTMLDivElement | null) => void;
-    onResendClick?: (anchor: HTMLDivElement | null) => void;
-    onToggleThreadExpanded?: (anchor: HTMLDivElement | null) => void;
+    onCancelClick?: (anchor: HTMLElement | null) => void;
+    onDownloadClick?: (anchor: HTMLElement | null) => void;
+    onEditClick?: (anchor: HTMLElement | null) => void;
+    onHideClick?: (anchor: HTMLElement | null) => void;
+    onOptionsClick?: (anchor: HTMLElement | null) => void;
+    onPinClick?: (anchor: HTMLElement | null) => void;
+    onReactionsClick?: (anchor: HTMLElement | null) => void;
+    onReplyClick?: (anchor: HTMLElement | null) => void;
+    onReplyInThreadClick?: (anchor: HTMLElement | null) => void;
+    onResendClick?: (anchor: HTMLElement | null) => void;
+    onToggleThreadExpanded?: (anchor: HTMLElement | null) => void;
 }
 
 export type ActionBarViewModel = ViewModel<ActionBarViewSnapshot, ActionBarViewActions>;
@@ -84,297 +69,264 @@ interface ActionBarViewProps {
     vm: ActionBarViewModel;
     /** Optional CSS class names to apply to the component container.*/
     className?: string;
-    /** The element used as the menu anchor. */
-    anchor: React.ReactNode;
-    /** Whether the menu should be rendered. */
-    open: boolean;
 }
 
-export function ActionBarView({ vm, className, anchor, open }: Readonly<ActionBarViewProps>): JSX.Element | null {
+export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): JSX.Element | null {
     const { translate: _t } = useI18n();
-    const cancelTriggerRef = useRef<HTMLDivElement>(null);
-    const downloadTriggerRef = useRef<HTMLDivElement>(null);
-    const editTriggerRef = useRef<HTMLDivElement>(null);
-    const expandTriggerRef = useRef<HTMLDivElement>(null);
-    const hideTriggerRef = useRef<HTMLDivElement>(null);
-    const pinTriggerRef = useRef<HTMLDivElement>(null);
-    const reactTriggerRef = useRef<HTMLDivElement>(null);
-    const replyTriggerRef = useRef<HTMLDivElement>(null);
-    const replyInThreadTriggerRef = useRef<HTMLDivElement>(null);
-    const resendTriggerRef = useRef<HTMLDivElement>(null);
-    const optionsTriggerRef = useRef<HTMLDivElement>(null);
+    const cancelTriggerRef = useRef<HTMLButtonElement>(null);
+    const downloadTriggerRef = useRef<HTMLButtonElement>(null);
+    const editTriggerRef = useRef<HTMLButtonElement>(null);
+    const expandTriggerRef = useRef<HTMLButtonElement>(null);
+    const hideTriggerRef = useRef<HTMLButtonElement>(null);
+    const pinTriggerRef = useRef<HTMLButtonElement>(null);
+    const reactTriggerRef = useRef<HTMLButtonElement>(null);
+    const replyTriggerRef = useRef<HTMLButtonElement>(null);
+    const replyInThreadTriggerRef = useRef<HTMLButtonElement>(null);
+    const resendTriggerRef = useRef<HTMLButtonElement>(null);
+    const optionsTriggerRef = useRef<HTMLButtonElement>(null);
     const {
-        side,
-        align,
-        canEdit,
-        canPinOrUnpin,
-        isPinned,
-        canCancel,
-        isFailed,
-        isContentActionable,
-        canSendMessages,
-        canReact,
-        canStartThread,
+        showCancel,
+        showDownload,
+        showEdit,
+        showExpandCollapse,
+        showHide,
+        showPinOrUnpin,
+        showReact,
+        showReply,
+        showReplyInThread,
+        showStartThread,
+        showThreadForDeletedMessage,
         isDownloadEncrypted,
         isDownloadLoading,
-        showReplyInThreadAction,
-        showThreadForDeletedMessage,
-        showDownloadAction,
-        showHideAction,
-        showExpandCollapseAction,
+        isFailed,
+        isPinned,
         isQuoteExpanded,
     } = useViewModel(vm);
 
-    if (!open) {
-        return null;
-    }
-
     const menuItems: JSX.Element[] = [];
 
-    if (canEdit) {
+    if (showEdit) {
         menuItems.push(
-            <div ref={editTriggerRef} key="edit">
-                <Tooltip description={_t("action|edit")} placement="top">
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        aria-label={_t("action|edit")}
-                        onSelect={() => vm.onEditClick?.(editTriggerRef.current)}
-                        hideChevron={true}
-                        className={styles.menu_item}
-                        Icon={EditIcon}
-                    />
-                </Tooltip>
-            </div>,
+            <Tooltip description={_t("action|edit")} placement="top" key="edit">
+                <Button
+                    ref={editTriggerRef}
+                    kind="tertiary"
+                    size="sm"
+                    iconOnly={true}
+                    aria-label={_t("action|edit")}
+                    onClick={() => vm.onEditClick?.(editTriggerRef.current)}
+                    className={styles.toolbar_item}
+                    Icon={EditIcon}
+                />
+            </Tooltip>,
         );
     }
 
-    if (canPinOrUnpin) {
+    if (showPinOrUnpin) {
         const description = isPinned ? _t("action|unpin") : _t("action|pin");
         menuItems.push(
-            <div ref={pinTriggerRef} key="pin">
-                <Tooltip description={description} placement="top">
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        aria-label={description}
-                        onSelect={() => vm.onPinClick?.(pinTriggerRef.current)}
-                        hideChevron={true}
-                        className={styles.menu_item}
-                        Icon={isPinned ? UnpinIcon : PinIcon}
-                    />
-                </Tooltip>
-            </div>,
+            <Tooltip description={description} placement="top" key="pin">
+                <Button
+                    ref={pinTriggerRef}
+                    kind="tertiary"
+                    size="sm"
+                    iconOnly={true}
+                    aria-label={description}
+                    onClick={() => vm.onPinClick?.(pinTriggerRef.current)}
+                    className={styles.toolbar_item}
+                    Icon={isPinned ? UnpinIcon : PinIcon}
+                />
+            </Tooltip>,
         );
     }
 
     const cancelSendingButton = (
-        <div ref={cancelTriggerRef} key="cancel">
-            <Tooltip description={_t("action|delete")} placement="top">
-                <MenuItem
-                    as="div"
-                    label={null}
-                    aria-label={_t("action|delete")}
-                    onSelect={() => vm.onCancelClick?.(cancelTriggerRef.current)}
-                    hideChevron={true}
-                    className={styles.menu_item}
-                    Icon={DeleteIcon}
-                />
-            </Tooltip>
-        </div>
+        <Tooltip description={_t("action|delete")} placement="top" key="cancel">
+            <Button
+                ref={cancelTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={_t("action|delete")}
+                onClick={() => vm.onCancelClick?.(cancelTriggerRef.current)}
+                className={styles.toolbar_item}
+                Icon={DeleteIcon}
+            />
+        </Tooltip>
     );
 
-    const threadTooltipDescription = canStartThread
+    const threadTooltipDescription = showStartThread
         ? _t("action|reply_in_thread")
         : _t("threads|error_start_thread_existing_relation");
     const threadTooltipButton = (
-        <div ref={replyInThreadTriggerRef} key="reply_thread">
-            <Tooltip description={threadTooltipDescription} placement="top">
-                <MenuItem
-                    as="div"
-                    label={null}
-                    aria-label={threadTooltipDescription}
-                    onSelect={
-                        canStartThread && vm.onReplyInThreadClick
-                            ? () => vm.onReplyInThreadClick?.(replyInThreadTriggerRef.current)
-                            : null
-                    }
-                    hideChevron={true}
-                    className={styles.menu_item}
-                    Icon={ThreadsIcon}
-                />
-            </Tooltip>
-        </div>
+        <Tooltip description={threadTooltipDescription} placement="top" key="reply_thread">
+            <Button
+                ref={replyInThreadTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={true}
+                aria-label={threadTooltipDescription}
+                disabled={!showStartThread}
+                onClick={() => vm.onReplyInThreadClick?.(replyInThreadTriggerRef.current)}
+                className={styles.toolbar_item}
+                Icon={ThreadsIcon}
+            />
+        </Tooltip>
     );
 
-    if (canCancel && isFailed) {
+    if (showCancel && isFailed) {
         menuItems.splice(
             0,
             0,
-            <div ref={resendTriggerRef} key="resend">
-                <Tooltip description={_t("action|retry")} placement="top">
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        aria-label={_t("action|retry")}
-                        onSelect={() => vm.onResendClick?.(resendTriggerRef.current)}
-                        hideChevron={true}
-                        className={styles.menu_item}
-                        Icon={RestartIcon}
-                    />
-                </Tooltip>
-            </div>,
+            <Tooltip description={_t("action|retry")} placement="top" key="resend">
+                <Button
+                    ref={resendTriggerRef}
+                    kind="tertiary"
+                    size="sm"
+                    iconOnly={true}
+                    aria-label={_t("action|retry")}
+                    onClick={() => vm.onResendClick?.(resendTriggerRef.current)}
+                    className={styles.toolbar_item}
+                    Icon={RestartIcon}
+                />
+            </Tooltip>,
         );
         menuItems.push(cancelSendingButton);
     } else {
-        if (isContentActionable) {
-            if (canSendMessages) {
-                if (showReplyInThreadAction) {
-                    menuItems.splice(0, 0, threadTooltipButton);
-                }
-                menuItems.splice(
-                    0,
-                    0,
-                    <div ref={replyTriggerRef} key="reply">
-                        <Tooltip description={_t("action|reply")} placement="top">
-                            <MenuItem
-                                as="div"
-                                label={null}
-                                aria-label={_t("action|reply")}
-                                onSelect={() => vm.onReplyClick?.(replyTriggerRef.current)}
-                                hideChevron={true}
-                                className={styles.menu_item}
-                                Icon={ReplyIcon}
-                            />
-                        </Tooltip>
-                    </div>,
-                );
+        if (showReply) {
+            if (showReplyInThread) {
+                menuItems.splice(0, 0, threadTooltipButton);
             }
+            menuItems.splice(
+                0,
+                0,
+                <Tooltip description={_t("action|reply")} placement="top" key="reply">
+                    <Button
+                        ref={replyTriggerRef}
+                        kind="tertiary"
+                        size="sm"
+                        iconOnly={true}
+                        aria-label={_t("action|reply")}
+                        onClick={() => vm.onReplyClick?.(replyTriggerRef.current)}
+                        className={styles.toolbar_item}
+                        Icon={ReplyIcon}
+                    />
+                </Tooltip>,
+            );
+        }
 
-            if (canReact) {
-                menuItems.splice(
-                    0,
-                    0,
-                    <div ref={reactTriggerRef} key="react">
-                        <Tooltip description={_t("action|react")} placement="top">
-                            <MenuItem
-                                as="div"
-                                label={null}
-                                aria-label={_t("action|react")}
-                                onSelect={() => vm.onReactionsClick?.(reactTriggerRef.current)}
-                                hideChevron={true}
-                                className={styles.menu_item}
-                                Icon={ReactionAddIcon}
-                            />
-                        </Tooltip>
-                    </div>,
-                );
-            }
-            if (showDownloadAction) {
-                let downloadTitle = isDownloadEncrypted
-                    ? _t("timeline|download_action_decrypting")
-                    : _t("timeline|download_action_downloading");
-                downloadTitle = isDownloadLoading ? _t("action|download") : downloadTitle;
+        if (showReact) {
+            menuItems.splice(
+                0,
+                0,
+                <Tooltip description={_t("action|react")} placement="top" key="react">
+                    <Button
+                        ref={reactTriggerRef}
+                        kind="tertiary"
+                        size="sm"
+                        iconOnly={true}
+                        aria-label={_t("action|react")}
+                        onClick={() => vm.onReactionsClick?.(reactTriggerRef.current)}
+                        className={styles.toolbar_item}
+                        Icon={ReactionAddIcon}
+                    />
+                </Tooltip>,
+            );
+        }
+        if (showDownload) {
+            let downloadTitle = isDownloadEncrypted
+                ? _t("timeline|download_action_decrypting")
+                : _t("timeline|download_action_downloading");
+            downloadTitle = isDownloadLoading ? _t("action|download") : downloadTitle;
 
-                menuItems.splice(
-                    0,
-                    0,
-                    <div ref={downloadTriggerRef} key="download">
-                        <Tooltip description={downloadTitle} placement="top">
-                            <MenuItem
-                                as="div"
-                                label={null}
-                                aria-label={downloadTitle}
-                                onSelect={() => vm.onDownloadClick?.(downloadTriggerRef.current)}
-                                hideChevron={true}
-                                className={styles.menu_item}
-                                Icon={isDownloadLoading ? InlineSpinner : DownloadIcon}
-                            />
-                        </Tooltip>
-                    </div>,
-                );
-            }
-            if (showHideAction) {
-                menuItems.splice(
-                    0,
-                    0,
-                    <div ref={hideTriggerRef} key="hide">
-                        <Tooltip description={_t("action|hide")} placement="top">
-                            <MenuItem
-                                as="div"
-                                label={null}
-                                aria-label={_t("action|hide")}
-                                onSelect={() => vm.onHideClick?.(hideTriggerRef.current)}
-                                hideChevron={true}
-                                className={styles.menu_item}
-                                Icon={VisibilityOffIcon}
-                            />
-                        </Tooltip>
-                    </div>,
-                );
-            }
-        } else if (showThreadForDeletedMessage) {
+            menuItems.splice(
+                0,
+                0,
+                <Tooltip description={downloadTitle} placement="top" key="download">
+                    <Button
+                        ref={downloadTriggerRef}
+                        kind="tertiary"
+                        size="sm"
+                        iconOnly={true}
+                        aria-label={downloadTitle}
+                        onClick={() => vm.onDownloadClick?.(downloadTriggerRef.current)}
+                        className={styles.toolbar_item}
+                        Icon={isDownloadLoading ? InlineSpinner : DownloadIcon}
+                    />
+                </Tooltip>,
+            );
+        }
+        if (showHide) {
+            menuItems.splice(
+                0,
+                0,
+                <Tooltip description={_t("action|hide")} placement="top" key="hide">
+                    <Button
+                        ref={hideTriggerRef}
+                        kind="tertiary"
+                        size="sm"
+                        iconOnly={true}
+                        aria-label={_t("action|hide")}
+                        onClick={() => vm.onHideClick?.(hideTriggerRef.current)}
+                        className={styles.toolbar_item}
+                        Icon={VisibilityOffIcon}
+                    />
+                </Tooltip>,
+            );
+        }
+        if (showThreadForDeletedMessage) {
             menuItems.unshift(threadTooltipButton);
         }
 
-        if (canCancel) {
+        if (showCancel) {
             menuItems.push(cancelSendingButton);
         }
 
-        if (showExpandCollapseAction) {
+        if (showExpandCollapse) {
             const description = isQuoteExpanded
                 ? _t("timeline|mab|collapse_reply_chain")
                 : _t("timeline|mab|expand_reply_chain");
 
             menuItems.push(
-                <div ref={expandTriggerRef} key="expand">
-                    <Tooltip description={description} placement="top">
-                        <MenuItem
-                            as="div"
-                            //caption={_t(ALTERNATE_KEY_NAME[Key.SHIFT]) + " + " + _t("action|click")}
-                            //label={_t("keyboard|shift") + " + " + _t("action|click")}
-                            aria-label={description}
-                            label={null}
-                            onSelect={() => vm.onToggleThreadExpanded?.(expandTriggerRef.current)}
-                            hideChevron={true}
-                            className={styles.menu_item}
-                            Icon={isQuoteExpanded ? CollapseIcon : ExpandIcon}
-                        />
-                    </Tooltip>
-                </div>,
+                <Tooltip description={description} placement="top" key="expand">
+                    <Button
+                        ref={expandTriggerRef}
+                        kind="tertiary"
+                        size="sm"
+                        iconOnly={true}
+                        aria-label={description}
+                        onClick={() => vm.onToggleThreadExpanded?.(expandTriggerRef.current)}
+                        className={styles.toolbar_item}
+                        Icon={isQuoteExpanded ? CollapseIcon : ExpandIcon}
+                    />
+                </Tooltip>,
             );
         }
 
         menuItems.push(
-            <div ref={optionsTriggerRef} key="options">
-                <Tooltip description={_t("common|options")} placement="top">
-                    <MenuItem
-                        as="div"
-                        label={null}
-                        aria-label={_t("common|options")}
-                        onSelect={() => vm.onOptionsClick?.(optionsTriggerRef.current)}
-                        hideChevron={true}
-                        className={styles.menu_item}
-                        Icon={OverflowHorizontalIcon}
-                    />
-                </Tooltip>
-            </div>,
+            <Tooltip description={_t("common|options")} placement="top" key="options">
+                <Button
+                    ref={optionsTriggerRef}
+                    kind="tertiary"
+                    size="sm"
+                    iconOnly={true}
+                    aria-label={_t("common|options")}
+                    onClick={() => vm.onOptionsClick?.(optionsTriggerRef.current)}
+                    className={styles.toolbar_item}
+                    Icon={OverflowHorizontalIcon}
+                />
+            </Tooltip>,
         );
     }
 
     return (
-        <Menu
-            side={side}
-            align={align}
-            open={open}
-            onOpenChange={() => {}}
-            trigger={anchor}
-            title={_t("timeline|mab|label")}
-            showTitle={false}
+        <Flex
+            role="toolbar"
+            aria-label={_t("timeline|mab|label")}
             aria-live="off"
-            className={classNames(className, styles.menu)}
+            className={classNames(className, styles.toolbar)}
         >
             {menuItems}
-        </Menu>
+        </Flex>
     );
 }

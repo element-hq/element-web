@@ -52,10 +52,10 @@ export interface ActionBarViewModelProps {
     isSearch?: boolean;
     isCard?: boolean;
     isQuoteExpanded?: boolean;
-    onOptionsClick?: (anchor: HTMLDivElement | null) => void;
-    onReactionsClick?: (anchor: HTMLDivElement | null) => void;
+    onOptionsClick?: (anchor: HTMLElement | null) => void;
+    onReactionsClick?: (anchor: HTMLElement | null) => void;
     getRelationsForEvent?: GetRelationsForEvent;
-    onToggleThreadExpanded?: (anchor: HTMLDivElement | null) => void;
+    onToggleThreadExpanded?: (anchor: HTMLElement | null) => void;
 }
 
 interface LocalActionBarState {
@@ -64,24 +64,23 @@ interface LocalActionBarState {
 }
 
 interface DerivedEventState {
-    canCancel: boolean;
-    canEdit: boolean;
-    canPinOrUnpin: boolean;
-    canReact: boolean;
-    canSendMessages: boolean;
-    canStartThread: boolean;
-    showExpandCollapseAction: boolean;
-    showReplyInThreadAction: boolean;
+    showCancel: boolean;
+    showEdit: boolean;
+    showPinOrUnpin: boolean;
+    showReact: boolean;
+    showReply: boolean;
+    showStartThread: boolean;
+    showExpandCollapse: boolean;
+    showReplyInThread: boolean;
     showThreadForDeletedMessage: boolean;
-    isContentActionable: boolean;
     isFailed: boolean;
     isPinned: boolean;
     isQuoteExpanded: boolean;
 }
 
 interface DerivedMediaState {
-    showDownloadAction: boolean;
-    showHideAction: boolean;
+    showDownload: boolean;
+    showHide: boolean;
     isDownloadEncrypted: boolean;
     isDownloadLoading: boolean;
 }
@@ -116,8 +115,6 @@ export class ActionBarViewModel
         const mediaState = ActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
 
         return {
-            align: "end",
-            side: "top",
             ...eventState,
             ...mediaState,
         };
@@ -128,22 +125,22 @@ export class ActionBarViewModel
         client: ReturnType<typeof MatrixClientPeg.safeGet>,
     ): DerivedEventState {
         const { mxEvent } = props;
+        const contentActionable = isContentActionable(mxEvent);
         const editStatus = mxEvent.replacingEvent()?.status;
         const redactStatus = mxEvent.localRedactionEvent()?.status;
         const relationType = mxEvent.getRelation()?.rel_type;
 
         return {
-            canCancel: canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus),
-            canEdit: canEditContent(client, mxEvent),
-            canPinOrUnpin: PinningUtils.canPin(client, mxEvent) || PinningUtils.canUnpin(client, mxEvent),
-            canReact: props.canReact && !props.isSearch,
-            canSendMessages: props.canSendMessages,
-            canStartThread: !(!!relationType && relationType !== RelationType.Thread),
-            showExpandCollapseAction: props.isQuoteExpanded !== undefined && shouldDisplayReply(mxEvent),
-            showReplyInThreadAction: ActionBarViewModel.canShowReplyInThreadAction(props),
+            showCancel: canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus),
+            showEdit: canEditContent(client, mxEvent),
+            showPinOrUnpin: PinningUtils.canPin(client, mxEvent) || PinningUtils.canUnpin(client, mxEvent),
+            showReact: contentActionable && props.canReact && !props.isSearch,
+            showReply: contentActionable && props.canSendMessages,
+            showStartThread: !(!!relationType && relationType !== RelationType.Thread),
+            showExpandCollapse: props.isQuoteExpanded !== undefined && shouldDisplayReply(mxEvent),
+            showReplyInThread: contentActionable && ActionBarViewModel.canShowReplyInThreadAction(props),
             showThreadForDeletedMessage:
-                props.timelineRenderingType === TimelineRenderingType.Room && Boolean(mxEvent.getThread()),
-            isContentActionable: isContentActionable(mxEvent),
+                !contentActionable && props.timelineRenderingType === TimelineRenderingType.Room && Boolean(mxEvent.getThread()),
             isFailed: [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT),
             isPinned: PinningUtils.isPinned(client, mxEvent),
             isQuoteExpanded: props.isQuoteExpanded ?? false,
@@ -155,11 +152,12 @@ export class ActionBarViewModel
         client: ReturnType<typeof MatrixClientPeg.safeGet>,
         localState: LocalActionBarState,
     ): DerivedMediaState {
+        const contentActionable = isContentActionable(mxEvent);
         const mediaHelper = MediaEventHelper.isEligible(mxEvent) ? new MediaEventHelper(mxEvent) : undefined;
 
         return {
-            showDownloadAction: Boolean(mediaHelper) && localState.canDownload,
-            showHideAction: MediaEventHelper.canHide(mxEvent) && getMediaVisibility(mxEvent, client),
+            showDownload: contentActionable && Boolean(mediaHelper) && localState.canDownload,
+            showHide: contentActionable && MediaEventHelper.canHide(mxEvent) && getMediaVisibility(mxEvent, client),
             isDownloadEncrypted: mediaHelper?.media.isEncrypted ?? false,
             isDownloadLoading: localState.isDownloadLoading,
         };
