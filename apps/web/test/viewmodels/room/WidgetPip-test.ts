@@ -7,6 +7,7 @@
 
 import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { type MockedObject } from "jest-mock";
+import { useRef } from "react";
 
 import { mkRoom, stubClient } from "../../test-utils";
 import { WidgetPipViewModel } from "../../../src/viewmodels/room/WidgetPipViewModel";
@@ -50,6 +51,8 @@ describe("WidgetPipViewModel", () => {
         vm = new WidgetPipViewModel({
             room,
             widgetId,
+            onStartMoving: () => {},
+            movePersistedElement: useRef<() => void>(null),
         });
     });
 
