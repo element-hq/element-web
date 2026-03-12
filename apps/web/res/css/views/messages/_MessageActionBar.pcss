@@ -9,18 +9,9 @@ Please see LICENSE files in the repository root for full details.
 .mx_MessageActionBar {
     --MessageActionBar-size-button: 28px;
     --MessageActionBar-size-margin: 3px;
-    --MessageActionBar-item-hover-background: var(--cpd-color-bg-subtle-secondary);
-    --MessageActionBar-item-hover-borderRadius: 6px;
-    --MessageActionBar-item-hover-zIndex: 1;
 
     position: absolute;
-    cursor: pointer;
-    display: flex;
-    gap: var(--cpd-space-0-5x);
     line-height: $font-24px;
-    border-radius: 8px;
-    background: $background;
-    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
     top: calc(
         -1 *
             (
@@ -75,24 +66,13 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    > * {
-        white-space: nowrap;
-        display: inline-block;
-        position: relative;
-        margin: var(--MessageActionBar-size-margin);
-
-        &:hover {
-            background: var(--MessageActionBar-item-hover-background);
-            border-radius: var(--MessageActionBar-item-hover-borderRadius);
-            z-index: var(--MessageActionBar-item-hover-zIndex);
-        }
-    }
-
     .mx_MessageActionBar_iconButton {
         --MessageActionBar-icon-size: 20px;
         width: var(--MessageActionBar-size-button);
         height: var(--MessageActionBar-size-button);
         color: var(--cpd-color-icon-secondary);
+        position: relative;
+        margin: var(--MessageActionBar-size-margin);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -111,14 +91,9 @@ Please see LICENSE files in the repository root for full details.
 
         &:hover {
             color: var(--cpd-color-icon-primary);
-        }
-
-        &.mx_MessageActionBar_downloadButton {
-            &.mx_MessageActionBar_downloadSpinnerButton {
-                svg {
-                    display: none; /* hide the download icon */
-                }
-            }
+            background: var(--cpd-color-bg-subtle-secondary);
+            border-radius: 6px;
+            z-index: 1;
         }
     }
 }
