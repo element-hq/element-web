@@ -222,3 +222,11 @@ Please see LICENSE files in the repository root for full details.
     /* Important to force the color on ED titlebar until we remove the old room list */
     background-color: var(--cpd-color-bg-canvas-default) !important;
 }
+
+#left-panel .mx_LeftPanel_wrapper--user {
+    /*
+     * Disable background when using the new room list.
+     * This background sometimes shows when the panel is resized and it looks like a thicker border.
+     */
+    background: none;
+}
