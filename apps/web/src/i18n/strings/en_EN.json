@@ -2164,6 +2164,11 @@
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
         },
+        "section": {
+            "chats": "Chats",
+            "favourites": "Favourites",
+            "low_priority": "Low Priority"
+        },
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
