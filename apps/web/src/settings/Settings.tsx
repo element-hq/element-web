@@ -51,7 +51,6 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
-import CompatibilityCheckController from "./controllers/CompatibilityCheckController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
