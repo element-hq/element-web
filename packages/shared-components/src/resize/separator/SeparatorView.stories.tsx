@@ -50,7 +50,7 @@ export const Default: Story = {
             >
                 <Group>
                     <Panel collapsible defaultSize="0" minSize="200px" maxSize="400px">
-                        <Flex align="center" justify="center">
+                        <Flex tabIndex={0} align="center" justify="center">
                             LEFT CONTENT
                         </Flex>
                     </Panel>
@@ -76,7 +76,7 @@ export const LeftPanelExpanded: Story = {
             >
                 <Group>
                     <Panel collapsible defaultSize="200px" minSize="200px" maxSize="400px">
-                        <Flex align="center" justify="center">
+                        <Flex tabIndex={0} align="center" justify="center">
                             LEFT CONTENT
                         </Flex>
                     </Panel>
@@ -107,7 +107,7 @@ export const Hover: Story = {
             >
                 <Group>
                     <Panel collapsible defaultSize="0" minSize="200px" maxSize="400px">
-                        <Flex align="center" justify="center">
+                        <Flex tabIndex={0} align="center" justify="center">
                             LEFT CONTENT
                         </Flex>
                     </Panel>
@@ -140,7 +140,7 @@ export const KeyboardFocused: Story = {
             >
                 <Group>
                     <Panel collapsible defaultSize="200px" minSize="200px" maxSize="400px">
-                        <Flex align="center" justify="center">
+                        <Flex tabIndex={0} align="center" justify="center">
                             LEFT CONTENT
                         </Flex>
                     </Panel>
