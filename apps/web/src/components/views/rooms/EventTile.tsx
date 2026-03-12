@@ -53,6 +53,7 @@ import {
     DecryptionFailureBodyView,
     MessageTimestampView,
     RedactedBodyView,
+    PinnedMessageBadge,
     ReactionsRowButtonView,
     ReactionsRowView,
     useViewModel,
@@ -102,7 +103,6 @@ import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
-import { PinnedMessageBadge } from "../messages/PinnedMessageBadge";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
