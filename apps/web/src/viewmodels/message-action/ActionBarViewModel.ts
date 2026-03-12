@@ -140,7 +140,9 @@ export class ActionBarViewModel
             showExpandCollapse: props.isQuoteExpanded !== undefined && shouldDisplayReply(mxEvent),
             showReplyInThread: contentActionable && ActionBarViewModel.canShowReplyInThreadAction(props),
             showThreadForDeletedMessage:
-                !contentActionable && props.timelineRenderingType === TimelineRenderingType.Room && Boolean(mxEvent.getThread()),
+                !contentActionable &&
+                props.timelineRenderingType === TimelineRenderingType.Room &&
+                Boolean(mxEvent.getThread()),
             isFailed: [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT),
             isPinned: PinningUtils.isPinned(client, mxEvent),
             isQuoteExpanded: props.isQuoteExpanded ?? false,
