@@ -371,8 +371,8 @@
             "email_resent": "Resent!",
             "fallback_button": "Start authentication",
             "mas_cross_signing_reset_cta": "Continue to account",
-            "mas_cross_signing_reset_description": "You're about to go to your %(serverName)s account to reset your identity. Once you have completed reset on your account, please return here and click Retry.",
-            "mas_cross_signing_reset_title": "Go to your account to reset your identity",
+            "mas_cross_signing_reset_description": "You're about to go to your %(serverName)s account to reset your digital identity. Once you have completed reset on your account, please return here and click Retry.",
+            "mas_cross_signing_reset_title": "Go to your account to reset your digital identity",
             "msisdn": "A text message has been sent to %(msisdn)s",
             "msisdn_token_incorrect": "Token incorrect",
             "msisdn_token_prompt": "Please enter the code it contains:",
@@ -773,7 +773,7 @@
             "cross_signing_public_keys_on_device_status": "Cross-signing public keys:",
             "cross_signing_ready": "Cross-signing is ready for use.",
             "cross_signing_status": "Cross-signing status:",
-            "cross_signing_untrusted": "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.",
+            "cross_signing_untrusted": "Your account has the digital identity in secret storage, but it is not yet trusted by this session.",
             "crypto_not_available": "Cryptographic module is not available",
             "device_id": "Device ID",
             "key_backup_active_version": "Active backup version:",
@@ -891,10 +891,10 @@
         "user_read_up_to_private_ignore_synthetic": "User read up to (m.read.private;ignoreSynthetic): ",
         "user_room_membership": "Membership: %(membership)s",
         "user_verification_status": {
-            "identity_changed": "Verification status: <E2EIcon /> Unverified, and identity changed",
+            "identity_changed": "Verification status: <E2EIcon /> Unverified, and digital identity changed",
             "unverified": "Verification status: <E2EIcon /> Unverified",
             "verified": "Verification status: <E2EIcon /> Verified",
-            "was_verified": "Verification status: <E2EIcon /> Was verified, but identity changed"
+            "was_verified": "Verification status: <E2EIcon /> Was verified, but digital identity changed"
         },
         "users": "Users",
         "value": "Value",
@@ -960,7 +960,7 @@
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "forgot_recovery_key": "Forgot recovery key?",
-        "identity_needs_reset_description": "You have to reset your cryptographic identity in order to ensure access to your message history",
+        "identity_needs_reset_description": "You have to reset your digital identity in order to ensure access to your message history",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
         "key_storage_out_of_sync": "Your key storage is out of sync.",
@@ -980,8 +980,8 @@
             "title": "New Recovery Method",
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
-        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
-        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity was reset. <a>Learn more</a>",
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
@@ -995,7 +995,7 @@
             "explainer": "Back up your keys before removing this device to avoid losing them."
         },
         "turn_on_key_storage": "Turn on key storage",
-        "turn_on_key_storage_description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices.",
+        "turn_on_key_storage_description": "Store your digital identity and message keys securely on the server. This will allow you to view your message history on any new devices.",
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
@@ -1019,7 +1019,7 @@
             "complete_description": "You've successfully verified this user.",
             "complete_title": "Verified!",
             "confirm_identity_description": "Verify this device to set up secure messaging",
-            "confirm_identity_title": "Confirm your identity",
+            "confirm_identity_title": "Confirm your digital identity",
             "confirm_the_emojis": "Confirm that the emojis below match those shown on your other device.",
             "error_starting_description": "We were unable to start a chat with the other user.",
             "error_starting_title": "Error starting verification",
@@ -1103,8 +1103,8 @@
             "waiting_other_user": "Waiting for %(displayName)s to verify…"
         },
         "verification_requested_toast_title": "Verification requested",
-        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
-        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity was reset. <a>Learn more</a>",
+        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
         "verify_toast_description": "Other users may not trust it",
         "verify_toast_title": "Verify this session",
         "withdraw_verification_action": "Withdraw verification"
@@ -2537,10 +2537,10 @@
                 "breadcrumb_page": "Reset encryption",
                 "breadcrumb_second_description": "You will lose any message history that’s stored only on the server",
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
-                "breadcrumb_title": "Are you sure you want to reset your identity?",
-                "breadcrumb_title_cant_confirm": "You need to reset your identity",
-                "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
-                "breadcrumb_title_sync_failed": "Failed to sync key storage. You need to reset your identity.",
+                "breadcrumb_title": "Are you sure you want to reset your digital identity?",
+                "breadcrumb_title_cant_confirm": "You need to reset your digital identity",
+                "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your digital identity.",
+                "breadcrumb_title_sync_failed": "Failed to sync key storage. You need to reset your digital identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
                 "do_not_close_warning": "Do not close this window until the reset is finished",
@@ -2549,7 +2549,7 @@
                 "other_people_device_description": "Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages. Changes require an application restart to take effect.",
                 "other_people_device_label": "In encrypted rooms, only send messages to verified users",
                 "other_people_device_title": "Other people’s devices",
-                "reset_identity": "Reset cryptographic identity",
+                "reset_identity": "Reset digital identity",
                 "reset_in_progress": "Reset in progress...",
                 "session_id": "Session ID:",
                 "session_key": "Session key:",
@@ -2560,7 +2560,7 @@
             "delete_key_storage": {
                 "breadcrumb_page": "Delete key storage",
                 "confirm": "Delete key storage",
-                "description": "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:",
+                "description": "Deleting key storage will remove your digital identity and message keys from the server and turn off the following security features:",
                 "list_first": "You will not have encrypted message history on new devices",
                 "list_second": "You will lose access to your encrypted messages if you're not signed in to any devices",
                 "title": "Are you sure you want to turn off key storage and delete it?"
@@ -2571,7 +2571,7 @@
             "dialog_title": "<strong>Settings:</strong> Encryption",
             "key_storage": {
                 "allow_key_storage": "Allow key storage",
-                "description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
+                "description": "Store your digital identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
                 "title": "Key storage"
             },
             "recovery": {
@@ -2980,7 +2980,7 @@
             "url": "URL",
             "verified_session": "Verified session",
             "verified_sessions": "Verified sessions",
-            "verified_sessions_explainer_1": "Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.",
+            "verified_sessions_explainer_1": "Verified sessions are anywhere you are using this account after confirming your digital identity.",
             "verified_sessions_explainer_2": "This means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.",
             "verified_sessions_list_description": "For best security, remove any session that you don't recognize or use anymore.",
             "verify_session": "Verify session",
@@ -3344,7 +3344,7 @@
         "creation_summary_dm": "%(creator)s created this DM.",
         "creation_summary_room": "%(creator)s created and configured the room.",
         "decryption_failure": {
-            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_identity_previously_verified": "Sender's verified digital identity was reset",
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
