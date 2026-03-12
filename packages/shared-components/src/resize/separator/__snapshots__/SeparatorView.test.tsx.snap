@@ -15,14 +15,15 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
         data-panel="true"
         data-testid="_r_1_"
         id="_r_1_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 0 1 0px; overflow: hidden;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 0 1 0px; overflow: visible;"
       >
         <div
-          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
             class="flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            tabindex="0"
           >
             LEFT CONTENT
           </div>
@@ -60,10 +61,10 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
         data-panel="true"
         data-testid="_r_7_"
         id="_r_7_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 100 1 0px; overflow: hidden;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 100 1 0px; overflow: visible;"
       >
         <div
-          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
             class="flex"
@@ -93,14 +94,15 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
         data-panel="true"
         data-testid="_r_h_"
         id="_r_h_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 49.751 1 0px; overflow: hidden;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 49.751 1 0px; overflow: visible;"
       >
         <div
-          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
             class="flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            tabindex="0"
           >
             LEFT CONTENT
           </div>
@@ -138,10 +140,10 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
         data-panel="true"
         data-testid="_r_n_"
         id="_r_n_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 50.249 1 0px; overflow: hidden;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 50.249 1 0px; overflow: visible;"
       >
         <div
-          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
             class="flex"
@@ -171,14 +173,15 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
         data-panel="true"
         data-testid="_r_9_"
         id="_r_9_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 48.309 1 0px; overflow: hidden;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 48.309 1 0px; overflow: visible;"
       >
         <div
-          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
             class="flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            tabindex="0"
           >
             LEFT CONTENT
           </div>
@@ -216,10 +219,10 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
         data-panel="true"
         data-testid="_r_f_"
         id="_r_f_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 51.691 1 0px; overflow: hidden;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 51.691 1 0px; overflow: visible;"
       >
         <div
-          style="max-height: 100%; max-width: 100%; flex-grow: 1; touch-action: pan-y;"
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
             class="flex"
