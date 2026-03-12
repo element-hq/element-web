@@ -52,7 +52,7 @@ describe("WidgetPipViewModel", () => {
             room,
             widgetId,
             onStartMoving: () => {},
-            movePersistedElement: useRef<() => void>(null),
+            movePersistedElement: useRef(null),
         });
     });
 
