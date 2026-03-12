@@ -11,6 +11,7 @@ import { render, fireEvent, screen } from "jest-matrix-react";
 import { Room, type MatrixClient, JoinRule, MatrixEvent, HistoryVisibility } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import RoomSummaryCardView from "../../../../../src/components/views/right_panel/RoomSummaryCardView";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -44,7 +45,9 @@ describe("<RoomSummaryCard />", () => {
 
         return render(<RoomSummaryCardView {...defaultProps} {...props} />, {
             wrapper: ({ children }) => (
-                <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
+                <MatrixClientContext.Provider value={mockClient}>
+                    <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>
+                </MatrixClientContext.Provider>
             ),
         });
     };

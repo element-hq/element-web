@@ -42,6 +42,7 @@ export * from "./room-list/VirtualizedRoomListView";
 export * from "./timeline/DateSeparatorView/";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./utils/LinkedText";
 export * from "./right-panel/WidgetContextMenu";
 export * from "./utils/VirtualizedList";
 
@@ -53,5 +54,6 @@ export * from "./utils/DateUtils";
 export * from "./utils/numbers";
 export * from "./utils/FormattingUtils";
 export * from "./utils/I18nApi";
+export * from "./utils/linkify";
 // MVVM
 export * from "./viewmodel";
