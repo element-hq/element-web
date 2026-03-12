@@ -351,7 +351,6 @@ export interface Settings {
     "Spaces.showPeopleInSpace": IBaseSetting<boolean>;
     "developerMode": IBaseSetting<boolean>;
     "automaticErrorReporting": IBaseSetting<boolean>;
-    "automaticDecryptionErrorReporting": IBaseSetting<boolean>;
     "debug_scroll_panel": IBaseSetting<boolean>;
     "debug_timeline_panel": IBaseSetting<boolean>;
     "debug_registration": IBaseSetting<boolean>;
@@ -1313,12 +1312,6 @@ export const SETTINGS: Settings = {
     "automaticErrorReporting": {
         displayName: _td("labs|automatic_debug_logs"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-        controller: new ReloadOnChangeController(),
-    },
-    "automaticDecryptionErrorReporting": {
-        displayName: _td("labs|automatic_debug_logs_decryption"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         controller: new ReloadOnChangeController(),
     },

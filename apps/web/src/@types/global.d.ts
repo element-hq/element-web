@@ -39,7 +39,6 @@ import { type SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { type RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 import { type ConsoleLogger, type IndexedDBLogStore } from "../rageshake/rageshake";
 import type ActiveWidgetStore from "../stores/ActiveWidgetStore";
-import type AutoRageshakeStore from "../stores/AutoRageshakeStore";
 import { type IConfigOptions } from "../IConfigOptions";
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { type DeepReadonly } from "./common";
@@ -85,7 +84,6 @@ declare global {
         matrixChat?: MatrixChat;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
-        mxAutoRageshakeStore?: AutoRageshakeStore;
         mxDispatcher: MatrixDispatcher;
         mxMatrixClientPeg: IMatrixClientPeg;
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
