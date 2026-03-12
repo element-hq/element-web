@@ -11,6 +11,7 @@ import {
     type FilterId,
     type RoomListViewActions,
     type RoomListViewState,
+    _t,
 } from "@element-hq/web-shared-components";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -20,37 +21,47 @@ import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDel
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, { RoomListStoreV3Event, type RoomsResult } from "../../stores/room-list-v3/RoomListStoreV3";
-import { FilterKey } from "../../stores/room-list-v3/skip-list/filters";
+import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
+import { CHATS_TAG } from "../../stores/room-list-v3/SectionStore";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
+import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
 
 interface RoomListViewViewModelProps {
     client: MatrixClient;
 }
 
-const filterKeyToIdMap: Map<FilterKey, FilterId> = new Map([
-    [FilterKey.UnreadFilter, "unread"],
-    [FilterKey.PeopleFilter, "people"],
-    [FilterKey.RoomsFilter, "rooms"],
-    [FilterKey.FavouriteFilter, "favourite"],
-    [FilterKey.MentionsFilter, "mentions"],
-    [FilterKey.InvitesFilter, "invites"],
-    [FilterKey.LowPriorityFilter, "low_priority"],
+const filterKeyToIdMap: Map<FilterEnum, FilterId> = new Map([
+    [FilterEnum.UnreadFilter, "unread"],
+    [FilterEnum.PeopleFilter, "people"],
+    [FilterEnum.RoomsFilter, "rooms"],
+    [FilterEnum.FavouriteFilter, "favourite"],
+    [FilterEnum.MentionsFilter, "mentions"],
+    [FilterEnum.InvitesFilter, "invites"],
+    [FilterEnum.LowPriorityFilter, "low_priority"],
 ]);
+
+const TAG_TO_TITLE_MAP: Record<string, string> = {
+    [DefaultTagID.Favourite]: _t("room_list|section|favourites"),
+    [DefaultTagID.LowPriority]: _t("room_list|section|low_priority"),
+    [CHATS_TAG]: _t("room_list|section|chats"),
+};
 
 export class RoomListViewViewModel
     extends BaseViewModel<RoomListSnapshot, RoomListViewViewModelProps>
     implements RoomListViewActions
 {
     // State tracking
-    private activeFilter: FilterKey | undefined = undefined;
+    private activeFilter: FilterEnum | undefined = undefined;
     private roomsResult: RoomsResult;
     private lastActiveRoomIndex: number | undefined = undefined;
 
     // Child view model management
+    private roomSectionHeaderViewModels = new Map<string, RoomListSectionHeaderViewModel>();
     private roomItemViewModels = new Map<string, RoomListItemViewModel>();
     private roomsMap = new Map<string, Room>();
 
@@ -61,13 +72,18 @@ export class RoomListViewViewModel
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
         const filterIds = [...filterKeyToIdMap.values()];
-        const roomIds = roomsResult.rooms.map((room) => room.roomId);
-        const sections = [{ id: "all", roomIds }];
+        const sections = roomsResult.sections.map(({ tag, rooms }) => ({
+            id: tag,
+            roomIds: rooms.map((room) => room.roomId),
+        }));
+
+        const isRoomListEmpty = roomsResult.sections.every((section) => section.rooms.length === 0);
+        const isFlatList = roomsResult.sections.length === 1 && roomsResult.sections[0].tag == CHATS_TAG;
 
         super(props, {
             // Initial view state - start with empty, will populate in async init
             isLoadingRooms: RoomListStoreV3.instance.isLoadingRooms,
-            isRoomListEmpty: roomsResult.rooms.length === 0,
+            isRoomListEmpty,
             filterIds,
             activeFilterId: undefined,
             roomListState: {
@@ -75,8 +91,7 @@ export class RoomListViewViewModel
                 spaceId: roomsResult.spaceId,
                 filterKeys: undefined,
             },
-            // Until we implement sections, this view model only supports the flat list mode
-            isFlatList: true,
+            isFlatList,
             sections,
             canCreateRoom,
         });
@@ -147,7 +162,7 @@ export class RoomListViewViewModel
      */
     private updateRoomsMap(roomsResult: RoomsResult): void {
         this.roomsMap.clear();
-        for (const room of roomsResult.rooms) {
+        for (const room of roomsResult.sections.flatMap((section) => section.rooms)) {
             this.roomsMap.set(room.roomId, room);
         }
     }
@@ -167,7 +182,7 @@ export class RoomListViewViewModel
      * Get the ordered list of room IDs.
      */
     public get roomIds(): string[] {
-        return this.roomsResult.rooms.map((room) => room.roomId);
+        return this.roomsResult.sections.flatMap((section) => section.rooms).map((room) => room.roomId);
     }
 
     /**
@@ -199,13 +214,22 @@ export class RoomListViewViewModel
         return viewModel;
     }
 
-    /**
-     * Not implemented - this view model does not support sections.
-     * Flat list mode is forced so this method is never be called.
-     * @throw Error if called
-     */
-    public getSectionViewModel(): never {
-        throw new Error("Sections are not supported in this room list");
+    public getSectionViewModel(tag: string): RoomListSectionHeaderViewModel {
+        if (this.roomSectionHeaderViewModels.has(tag)) return this.roomSectionHeaderViewModels.get(tag)!;
+
+        const title = TAG_TO_TITLE_MAP[tag] || tag;
+        const viewModel = new RoomListSectionHeaderViewModel({
+            tag,
+            title,
+            onToggleExpanded: () => {
+                // TODO implement expand/collapse logic
+                // This will require changes to the data structure to track which sections are expanded, and to slice roomIds accordingly
+                // For now we can just log the click to verify the button is working
+                console.log(`Toggled section ${tag}`);
+            },
+        });
+        this.roomSectionHeaderViewModels.set(tag, viewModel);
+        return viewModel;
     }
 
     /**
@@ -250,7 +274,7 @@ export class RoomListViewViewModel
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
-        const rooms = this.roomsResult.rooms;
+        const rooms = this.roomsResult.sections.flatMap((section) => section.rooms);
 
         const filteredRooms = unread
             ? // Filter the rooms to only include unread ones and the active room
@@ -338,7 +362,9 @@ export class RoomListViewViewModel
             return undefined;
         }
 
-        const index = this.roomsResult.rooms.findIndex((room) => room.roomId === roomId);
+        const index = this.roomsResult.sections
+            .flatMap((section) => section.rooms)
+            .findIndex((room) => room.roomId === roomId);
         return index >= 0 ? index : undefined;
     }
 
@@ -350,47 +376,47 @@ export class RoomListViewViewModel
      * @param roomId - The room ID to apply sticky logic for (can be null/undefined)
      * @returns The modified rooms array with sticky positioning applied
      */
-    private applyStickyRoom(isRoomChange: boolean, roomId: string | null | undefined): Room[] {
-        const rooms = this.roomsResult.rooms;
+    // private applyStickyRoom(isRoomChange: boolean, roomId: string | null | undefined): Room[] {
+    //     const rooms = this.roomsResult.rooms;
 
-        if (!roomId) {
-            return rooms;
-        }
+    //     if (!roomId) {
+    //         return rooms;
+    //     }
 
-        const newIndex = rooms.findIndex((room) => room.roomId === roomId);
-        const oldIndex = this.lastActiveRoomIndex;
+    //     const newIndex = rooms.findIndex((room) => room.roomId === roomId);
+    //     const oldIndex = this.lastActiveRoomIndex;
 
-        // When opening another room, the index should obviously change
-        if (isRoomChange) {
-            return rooms;
-        }
+    //     // When opening another room, the index should obviously change
+    //     if (isRoomChange) {
+    //         return rooms;
+    //     }
 
-        // If oldIndex is undefined, then there was no active room before
-        // Similarly, if newIndex is -1, the active room is not in the current list
-        if (newIndex === -1 || oldIndex === undefined) {
-            return rooms;
-        }
+    //     // If oldIndex is undefined, then there was no active room before
+    //     // Similarly, if newIndex is -1, the active room is not in the current list
+    //     if (newIndex === -1 || oldIndex === undefined) {
+    //         return rooms;
+    //     }
 
-        // If the index hasn't changed, we have nothing to do
-        if (newIndex === oldIndex) {
-            return rooms;
-        }
+    //     // If the index hasn't changed, we have nothing to do
+    //     if (newIndex === oldIndex) {
+    //         return rooms;
+    //     }
 
-        // If the old index falls out of the bounds of the rooms array
-        // (usually because rooms were removed), we can no longer place
-        // the active room in the same old index
-        if (oldIndex > rooms.length - 1) {
-            return rooms;
-        }
+    //     // If the old index falls out of the bounds of the rooms array
+    //     // (usually because rooms were removed), we can no longer place
+    //     // the active room in the same old index
+    //     if (oldIndex > rooms.length - 1) {
+    //         return rooms;
+    //     }
 
-        // Making the active room sticky is as simple as removing it from
-        // its new index and placing it in the old index
-        const newRooms = [...rooms];
-        const [stickyRoom] = newRooms.splice(newIndex, 1);
-        newRooms.splice(oldIndex, 0, stickyRoom);
+    //     // Making the active room sticky is as simple as removing it from
+    //     // its new index and placing it in the old index
+    //     const newRooms = [...rooms];
+    //     const [stickyRoom] = newRooms.splice(newIndex, 1);
+    //     newRooms.splice(oldIndex, 0, stickyRoom);
 
-        return newRooms;
-    }
+    //     return newRooms;
+    // }
 
     private async updateRoomListData(
         isRoomChange: boolean = false,
@@ -400,14 +426,15 @@ export class RoomListViewViewModel
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
         const roomId = roomIdOverride ?? SdkContextClass.instance.roomViewStore.getRoomId();
 
+        // TODO to implement for sections
         // Apply sticky room logic to keep selected room at same position
-        const stickyRooms = this.applyStickyRoom(isRoomChange, roomId);
+        //const stickyRooms = this.applyStickyRoom(isRoomChange, roomId);
 
         // Update roomsResult with sticky rooms
-        this.roomsResult = {
-            ...this.roomsResult,
-            rooms: stickyRooms,
-        };
+        // this.roomsResult = {
+        //     ...this.roomsResult,
+        //     rooms: stickyRooms,
+        // };
 
         // Rebuild roomsMap with the reordered rooms
         this.updateRoomsMap(this.roomsResult);
@@ -420,8 +447,11 @@ export class RoomListViewViewModel
 
         // Build the complete state atomically to ensure consistency
         // roomIds and roomListState must always be in sync
-        const roomIds = this.roomIds;
-        const sections = [{ id: "all", roomIds }];
+        //const roomIds = this.roomIds;
+        const sections = this.roomsResult.sections.map(({ tag, rooms }) => ({
+            id: tag,
+            roomIds: rooms.map((room) => room.roomId),
+        }));
 
         // Update filter keys - only update if they have actually changed to prevent unnecessary re-renders of the room list
         const previousFilterKeys = this.snapshot.current.roomListState.filterKeys;
@@ -433,7 +463,7 @@ export class RoomListViewViewModel
         };
 
         const activeFilterId = this.activeFilter !== undefined ? filterKeyToIdMap.get(this.activeFilter) : undefined;
-        const isRoomListEmpty = roomIds.length === 0;
+        const isRoomListEmpty = this.roomsResult.sections.every((section) => section.rooms.length === 0);
         const isLoadingRooms = RoomListStoreV3.instance.isLoadingRooms;
 
         // Single atomic snapshot update
