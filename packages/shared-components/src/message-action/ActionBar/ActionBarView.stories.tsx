@@ -9,19 +9,12 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-    type ActionBarMenuRenderer,
-    ActionBarView,
-    type ActionBarViewActions,
-    type ActionBarViewSnapshot,
-} from "./ActionBarView";
+import { ActionBarView, type ActionBarViewActions, type ActionBarViewSnapshot } from "./ActionBarView";
 import { useMockedViewModel } from "../../viewmodel";
 
 type WrapperProps = ActionBarViewSnapshot &
     Partial<ActionBarViewActions> & {
         open?: boolean;
-        reactionsMenu?: ActionBarMenuRenderer;
-        optionsMenu?: ActionBarMenuRenderer;
     };
 
 const ActionBarViewWrapper = ({ ...snapshotAndActions }: WrapperProps): JSX.Element => {
@@ -30,14 +23,14 @@ const ActionBarViewWrapper = ({ ...snapshotAndActions }: WrapperProps): JSX.Elem
         onDownloadClick = fn(),
         onEditClick = fn(),
         onHideClick = fn(),
+        onOptionsClick = fn(),
         onPinClick = fn(),
+        onReactionsClick = fn(),
         onReplyClick = fn(),
         onReplyInThreadClick = fn(),
         onResendClick = fn(),
         onToggleThreadExpanded = fn(),
         open = true,
-        reactionsMenu,
-        optionsMenu,
         ...snapshot
     } = snapshotAndActions;
 
@@ -46,7 +39,9 @@ const ActionBarViewWrapper = ({ ...snapshotAndActions }: WrapperProps): JSX.Elem
         onDownloadClick,
         onEditClick,
         onHideClick,
+        onOptionsClick,
         onPinClick,
+        onReactionsClick,
         onReplyClick,
         onReplyInThreadClick,
         onResendClick,
@@ -57,9 +52,8 @@ const ActionBarViewWrapper = ({ ...snapshotAndActions }: WrapperProps): JSX.Elem
         <ActionBarView
             vm={vm}
             open={open}
-            reactionsMenu={reactionsMenu}
-            optionsMenu={optionsMenu}
-            trigger={
+            className="mx_MessageActionBar"
+            anchor={
                 <div
                     style={{
                         marginTop: "100px",
@@ -87,8 +81,6 @@ const meta = {
     tags: ["autodocs"],
     args: {
         open: false,
-        reactionsMenu: ({ open }) => (open ? <div>Reactions menu</div> : null),
-        optionsMenu: ({ open }) => (open ? <div>Options menu</div> : null),
         align: "end",
         side: "top",
         canCancel: true,

@@ -18,7 +18,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
-    type ActionBarMenuRenderer,
     BaseViewModel,
     type ActionBarViewActions,
     type ActionBarViewSnapshot,
@@ -37,6 +36,7 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { shouldDisplayReply } from "../../utils/Reply";
 import { MediaEventHelper } from "../../utils/MediaEventHelper";
 import SettingsStore from "../../settings/SettingsStore";
+import { type SettingKey } from "../../settings/Settings";
 import { getMediaVisibility, setMediaVisibility } from "../../utils/media/mediaVisibility";
 import { FileDownloader } from "../../utils/FileDownloader";
 import { _t } from "../../languageHandler";
@@ -52,97 +52,124 @@ export interface ActionBarViewModelProps {
     isSearch?: boolean;
     isCard?: boolean;
     isQuoteExpanded?: boolean;
-    reactionsMenu?: ActionBarMenuRenderer;
-    optionsMenu?: ActionBarMenuRenderer;
+    onOptionsClick?: (anchor: HTMLDivElement | null) => void;
+    onReactionsClick?: (anchor: HTMLDivElement | null) => void;
     getRelationsForEvent?: GetRelationsForEvent;
-    onToggleThreadExpanded?: () => void;
+    onToggleThreadExpanded?: (anchor: HTMLDivElement | null) => void;
+}
+
+interface LocalActionBarState {
+    canDownload: boolean;
+    isDownloadLoading: boolean;
+}
+
+interface DerivedEventState {
+    canCancel: boolean;
+    canEdit: boolean;
+    canPinOrUnpin: boolean;
+    canReact: boolean;
+    canSendMessages: boolean;
+    canStartThread: boolean;
+    showExpandCollapseAction: boolean;
+    showReplyInThreadAction: boolean;
+    showThreadForDeletedMessage: boolean;
+    isContentActionable: boolean;
+    isFailed: boolean;
+    isPinned: boolean;
+    isQuoteExpanded: boolean;
+}
+
+interface DerivedMediaState {
+    showDownloadAction: boolean;
+    showHideAction: boolean;
+    isDownloadEncrypted: boolean;
+    isDownloadLoading: boolean;
 }
 
 export class ActionBarViewModel
     extends BaseViewModel<ActionBarViewSnapshot, ActionBarViewModelProps>
     implements ActionBarViewActions
 {
-    private eventUnsubscribers: Array<() => void> = [];
-    private roomStateUnsubscriber?: () => void;
-    private mediaPreviewWatcherRef?: string;
-    private mediaVisibilityWatcherRef?: string;
+    private listenerCleanups: Array<() => void> = [];
     private canDownload = true;
     private isDownloadLoading = false;
     private readonly downloader = new FileDownloader();
     private downloadedBlob?: Blob;
 
     public constructor(props: ActionBarViewModelProps) {
-        super(props, ActionBarViewModel.initialSnapshot(props));
+        super(
+            props,
+            ActionBarViewModel.buildSnapshot(props, {
+                canDownload: true,
+                isDownloadLoading: false,
+            }),
+        );
         this.setupListeners();
     }
 
-    private static initialSnapshot(props: ActionBarViewModelProps): ActionBarViewSnapshot {
+    private static buildSnapshot(
+        props: ActionBarViewModelProps,
+        localState: LocalActionBarState,
+    ): ActionBarViewSnapshot {
         const client = MatrixClientPeg.safeGet();
-        const { mxEvent } = props;
+        const eventState = ActionBarViewModel.getDerivedEventState(props, client);
+        const mediaState = ActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
 
         return {
             align: "end",
             side: "top",
-            canCancel: false,
+            ...eventState,
+            ...mediaState,
+        };
+    }
+
+    private static getDerivedEventState(
+        props: ActionBarViewModelProps,
+        client: ReturnType<typeof MatrixClientPeg.safeGet>,
+    ): DerivedEventState {
+        const { mxEvent } = props;
+        const editStatus = mxEvent.replacingEvent()?.status;
+        const redactStatus = mxEvent.localRedactionEvent()?.status;
+        const relationType = mxEvent.getRelation()?.rel_type;
+
+        return {
+            canCancel: canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus),
             canEdit: canEditContent(client, mxEvent),
             canPinOrUnpin: PinningUtils.canPin(client, mxEvent) || PinningUtils.canUnpin(client, mxEvent),
             canReact: props.canReact && !props.isSearch,
             canSendMessages: props.canSendMessages,
-            showDownloadAction: false,
+            canStartThread: !(!!relationType && relationType !== RelationType.Thread),
             showExpandCollapseAction: props.isQuoteExpanded !== undefined && shouldDisplayReply(mxEvent),
-            showHideAction: MediaEventHelper.canHide(mxEvent) && getMediaVisibility(mxEvent, client),
             showReplyInThreadAction: ActionBarViewModel.canShowReplyInThreadAction(props),
             showThreadForDeletedMessage:
                 props.timelineRenderingType === TimelineRenderingType.Room && Boolean(mxEvent.getThread()),
-            canStartThread: !(
-                !!mxEvent.getRelation()?.rel_type && mxEvent.getRelation()?.rel_type !== RelationType.Thread
-            ),
             isContentActionable: isContentActionable(mxEvent),
-            isDownloadEncrypted: MediaEventHelper.isEligible(mxEvent)
-                ? new MediaEventHelper(mxEvent).media.isEncrypted
-                : false,
-            isDownloadLoading: false,
-            isFailed: false,
+            isFailed: [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT),
             isPinned: PinningUtils.isPinned(client, mxEvent),
             isQuoteExpanded: props.isQuoteExpanded ?? false,
         };
     }
 
-    private computeSnapshot(): ActionBarViewSnapshot {
-        const client = MatrixClientPeg.safeGet();
-        const { mxEvent } = this.props;
-        const editStatus = mxEvent.replacingEvent()?.status;
-        const redactStatus = mxEvent.localRedactionEvent()?.status;
-        const canCancelPending = canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus);
-        const isFailed = [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT);
-        const relationType = mxEvent.getRelation()?.rel_type;
-        const canStartThread = !(!!relationType && relationType !== RelationType.Thread);
-        const mediaIsVisible = getMediaVisibility(mxEvent, client);
+    private static getDerivedMediaState(
+        mxEvent: MatrixEvent,
+        client: ReturnType<typeof MatrixClientPeg.safeGet>,
+        localState: LocalActionBarState,
+    ): DerivedMediaState {
+        const mediaHelper = MediaEventHelper.isEligible(mxEvent) ? new MediaEventHelper(mxEvent) : undefined;
 
         return {
-            align: "end",
-            side: "top",
-            canCancel: canCancelPending,
-            canEdit: canEditContent(client, mxEvent),
-            canPinOrUnpin: PinningUtils.canPin(client, mxEvent) || PinningUtils.canUnpin(client, mxEvent),
-            canReact: this.props.canReact && !this.props.isSearch,
-            canSendMessages: this.props.canSendMessages,
-            showDownloadAction: MediaEventHelper.isEligible(mxEvent) && this.canDownload,
-            showExpandCollapseAction: this.props.isQuoteExpanded !== undefined && shouldDisplayReply(mxEvent),
-            showHideAction: MediaEventHelper.canHide(mxEvent) && mediaIsVisible,
-            showReplyInThreadAction: ActionBarViewModel.canShowReplyInThreadAction(this.props),
-            showThreadForDeletedMessage:
-                this.props.timelineRenderingType === TimelineRenderingType.Room && Boolean(mxEvent.getThread()),
-            canStartThread: canStartThread,
-            isContentActionable: isContentActionable(mxEvent),
-            isDownloadEncrypted: MediaEventHelper.isEligible(mxEvent)
-                ? new MediaEventHelper(mxEvent).media.isEncrypted
-                : false,
-            isDownloadLoading: this.isDownloadLoading,
-            isFailed,
-            isPinned: PinningUtils.isPinned(client, mxEvent),
-            isQuoteExpanded: this.props.isQuoteExpanded ?? false,
+            showDownloadAction: Boolean(mediaHelper) && localState.canDownload,
+            showHideAction: MediaEventHelper.canHide(mxEvent) && getMediaVisibility(mxEvent, client),
+            isDownloadEncrypted: mediaHelper?.media.isEncrypted ?? false,
+            isDownloadLoading: localState.isDownloadLoading,
         };
+    }
+
+    private computeSnapshot(): ActionBarViewSnapshot {
+        return ActionBarViewModel.buildSnapshot(this.props, {
+            canDownload: this.canDownload,
+            isDownloadLoading: this.isDownloadLoading,
+        });
     }
 
     private static canShowReplyInThreadAction(props: ActionBarViewModelProps): boolean {
@@ -163,19 +190,15 @@ export class ActionBarViewModel
         this.trackEvent(mxEvent, MatrixEventEvent.Status, this.refreshSnapshot);
         this.trackEvent(mxEvent, MatrixEventEvent.Decrypted, this.refreshSnapshot);
         this.trackEvent(mxEvent, MatrixEventEvent.BeforeRedaction, this.refreshSnapshot);
-        this.mediaPreviewWatcherRef = SettingsStore.watchSetting(
-            "mediaPreviewConfig",
-            roomId ?? null,
-            this.refreshSnapshot,
-        );
-        this.mediaVisibilityWatcherRef = SettingsStore.watchSetting("showMediaEventIds", null, this.refreshSnapshot);
+        this.watchSetting("mediaPreviewConfig", roomId ?? null);
+        this.watchSetting("showMediaEventIds", null);
 
         const roomState = roomId
             ? MatrixClientPeg.safeGet().getRoom(roomId)?.getLiveTimeline().getState(EventTimeline.FORWARDS)
             : undefined;
         if (roomState) {
             roomState.on(RoomStateEvent.Events, this.onRoomEvent);
-            this.roomStateUnsubscriber = () => roomState.off(RoomStateEvent.Events, this.onRoomEvent);
+            this.addListenerCleanup(() => roomState.off(RoomStateEvent.Events, this.onRoomEvent));
         }
 
         MatrixClientPeg.safeGet().decryptEventIfNeeded(mxEvent);
@@ -183,26 +206,35 @@ export class ActionBarViewModel
     }
 
     private teardownListeners(): void {
-        for (const unsubscribe of this.eventUnsubscribers) {
-            unsubscribe();
+        for (const cleanup of this.listenerCleanups) {
+            cleanup();
         }
-        this.eventUnsubscribers = [];
-        this.roomStateUnsubscriber?.();
-        this.roomStateUnsubscriber = undefined;
-        SettingsStore.unwatchSetting(this.mediaPreviewWatcherRef);
-        SettingsStore.unwatchSetting(this.mediaVisibilityWatcherRef);
-        this.mediaPreviewWatcherRef = undefined;
-        this.mediaVisibilityWatcherRef = undefined;
+        this.listenerCleanups = [];
+    }
+
+    private addListenerCleanup(cleanup: () => void): void {
+        this.listenerCleanups.push(cleanup);
     }
 
     private trackEvent(event: MatrixEvent, eventName: MatrixEventEvent, callback: (...args: unknown[]) => void): void {
         event.on(eventName, callback);
-        this.eventUnsubscribers.push(() => event.off(eventName, callback));
+        this.addListenerCleanup(() => event.off(eventName, callback));
+    }
+
+    private watchSetting(settingName: SettingKey, roomId: string | null): void {
+        const watcherRef = SettingsStore.watchSetting(settingName, roomId, this.refreshSnapshot);
+        this.addListenerCleanup(() => SettingsStore.unwatchSetting(watcherRef));
     }
 
     private readonly refreshSnapshot = (): void => {
         this.snapshot.set(this.computeSnapshot());
     };
+
+    private resetEventState(): void {
+        this.downloadedBlob = undefined;
+        this.canDownload = true;
+        this.isDownloadLoading = false;
+    }
 
     private async updateDownloadPermission(): Promise<void> {
         const { mxEvent } = this.props;
@@ -258,9 +290,7 @@ export class ActionBarViewModel
         };
 
         if (this.props.mxEvent !== prevEvent || this.props.mxEvent.getRoomId() !== prevRoomId) {
-            this.downloadedBlob = undefined;
-            this.canDownload = true;
-            this.isDownloadLoading = false;
+            this.resetEventState();
             this.setupListeners();
         }
 
@@ -272,15 +302,7 @@ export class ActionBarViewModel
         super.dispose();
     }
 
-    public get reactionsMenu(): ActionBarMenuRenderer | undefined {
-        return this.props.reactionsMenu;
-    }
-
-    public get optionsMenu(): ActionBarMenuRenderer | undefined {
-        return this.props.optionsMenu;
-    }
-
-    public onReplyClick = (): void => {
+    public onReplyClick = (_anchor: HTMLDivElement | null): void => {
         defaultDispatcher.dispatch({
             action: "reply_to_event",
             event: this.props.mxEvent,
@@ -288,7 +310,7 @@ export class ActionBarViewModel
         });
     };
 
-    public onEditClick = (): void => {
+    public onEditClick = (_anchor: HTMLDivElement | null): void => {
         editEvent(
             MatrixClientPeg.safeGet(),
             this.props.mxEvent,
@@ -297,24 +319,24 @@ export class ActionBarViewModel
         );
     };
 
-    public onResendClick = (): void => {
+    public onResendClick = (_anchor: HTMLDivElement | null): void => {
         this.runActionOnFailedEv((event) => Resend.resend(MatrixClientPeg.safeGet(), event));
     };
 
-    public onCancelClick = (): void => {
+    public onCancelClick = (_anchor: HTMLDivElement | null): void => {
         this.runActionOnFailedEv(
             (event) => Resend.removeFromQueue(MatrixClientPeg.safeGet(), event),
             (event) => canCancel(event.status),
         );
     };
 
-    public onPinClick = async (): Promise<void> => {
+    public onPinClick = async (_anchor: HTMLDivElement | null): Promise<void> => {
         const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         await PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         PosthogTrackers.trackPinUnpinMessage(isPinned ? "Pin" : "Unpin", "Timeline");
     };
 
-    public onDownloadClick = async (): Promise<void> => {
+    public onDownloadClick = async (_anchor: HTMLDivElement | null): Promise<void> => {
         if (this.isDownloadLoading || !this.canDownload) return;
 
         try {
@@ -341,15 +363,23 @@ export class ActionBarViewModel
         }
     };
 
-    public onHideClick = (): void => {
+    public onHideClick = (_anchor: HTMLDivElement | null): void => {
         void setMediaVisibility(this.props.mxEvent, false);
     };
 
-    public onToggleThreadExpanded = (): void => {
-        this.props.onToggleThreadExpanded?.();
+    public onToggleThreadExpanded = (anchor: HTMLDivElement | null): void => {
+        this.props.onToggleThreadExpanded?.(anchor);
     };
 
-    public onReplyInThreadClick = (): void => {
+    public onOptionsClick = (anchor: HTMLDivElement | null): void => {
+        this.props.onOptionsClick?.(anchor);
+    };
+
+    public onReactionsClick = (anchor: HTMLDivElement | null): void => {
+        this.props.onReactionsClick?.(anchor);
+    };
+
+    public onReplyInThreadClick = (_anchor: HTMLDivElement | null): void => {
         const { mxEvent, isCard } = this.props;
         const thread = mxEvent.getThread();
 
