@@ -1400,12 +1400,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             avatar
                         )}
                         <div className={lineClasses} key="mx_EventTile_line">
-                                <div className="mx_EventTile_body">
-                                    {this.props.mxEvent.isRedacted() ? (
-                                        <RedactedBodyWrapper mxEvent={this.props.mxEvent} />
-                                    ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                        <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
-                                    ) : (
+                            <div className="mx_EventTile_body">
+                                {this.props.mxEvent.isRedacted() ? (
+                                    <RedactedBodyWrapper mxEvent={this.props.mxEvent} />
+                                ) : this.props.mxEvent.isDecryptionFailure() ? (
+                                    <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
+                                ) : (
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
                             </div>

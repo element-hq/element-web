@@ -47,7 +47,10 @@ export class RedactedBodyViewModel
         return _t("timeline|redaction", { name: sender?.name ?? redactedBecauseUserId });
     };
 
-    private static readonly computeTooltip = ({ mxEvent, showTwelveHour }: RedactedBodyViewModelProps): string | undefined => {
+    private static readonly computeTooltip = ({
+        mxEvent,
+        showTwelveHour,
+    }: RedactedBodyViewModelProps): string | undefined => {
         const redactionTs = mxEvent.getUnsigned().redacted_because?.origin_server_ts;
         if (!redactionTs) {
             return undefined;
