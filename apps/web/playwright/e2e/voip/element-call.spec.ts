@@ -508,15 +508,16 @@ test.describe("Element Call", () => {
 
             await openAndJoinCall(page);
             await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.locator(".mx_WidgetPip");
+            const pipContainer = page.getByTestId("widget-pip-container");
 
             // We should have a PiP container here.
             await expect(pipContainer).toBeVisible();
 
             // Leave the call.
-            const overlay = page.locator(".mx_WidgetPip_overlay");
-            await overlay.hover({ timeout: 2000 }); // Show the call footer.
-            await overlay.getByRole("button", { name: "Leave", exact: true }).click();
+            const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
+
+            // await overlay.hover({ timeout: 2000 }); // Show the call footer.
+            await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
 
             // PiP container goes.
             await expect(pipContainer).not.toBeVisible();
@@ -541,15 +542,14 @@ test.describe("Element Call", () => {
 
             await openAndJoinCall(page);
             await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.locator(".mx_WidgetPip");
+            const pipContainer = page.getByTestId("widget-pip-container");
 
             // We should have a PiP container here.
             await expect(pipContainer).toBeVisible();
 
             // Leave the call.
-            const overlay = page.locator(".mx_WidgetPip_overlay");
-            await overlay.hover({ timeout: 2000 }); // Show the call footer.
-            await overlay.getByRole("button", { name: "Leave", exact: true }).click();
+            const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
+            await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
 
             // PiP container goes.
             await expect(pipContainer).not.toBeVisible();
@@ -578,15 +578,16 @@ test.describe("Element Call", () => {
             await openAndJoinCall(page, true);
 
             await app.viewRoomByName("OtherRoom");
-            const pipContainer = page.locator(".mx_WidgetPip");
+            const pipContainer = page.getByTestId("widget-pip-container");
 
             // We should have a PiP container here.
             await expect(pipContainer).toBeVisible();
 
             // Leave the call.
-            const overlay = page.locator(".mx_WidgetPip_overlay");
-            await overlay.hover({ timeout: 2000 }); // Show the call footer.
-            await overlay.getByRole("button", { name: "Leave", exact: true }).click();
+            const fakeWidget = page.locator('iframe[title="Element Call"]').contentFrame();
+
+            // await overlay.hover({ timeout: 2000 }); // Show the call footer.
+            await fakeWidget.getByRole("button", { name: "Close", exact: true }).click();
 
             // PiP container goes.
             await expect(pipContainer).not.toBeVisible();
