@@ -1927,6 +1927,13 @@ function ActionBarWrapper({
     const { isCard } = useContext(CardContext);
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
     const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
+    const isSearch = Boolean(roomContext.search);
+    const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
+        setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
+    }, []);
+    const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
+        setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
+    }, []);
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new ActionBarViewModel({
@@ -1934,12 +1941,12 @@ function ActionBarWrapper({
                 timelineRenderingType: roomContext.timelineRenderingType,
                 canSendMessages: roomContext.canSendMessages,
                 canReact: roomContext.canReact,
-                isSearch: Boolean(roomContext.search),
+                isSearch,
                 isCard,
                 isQuoteExpanded,
                 onToggleThreadExpanded: toggleThreadExpanded,
-                onOptionsClick: (anchor) => setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
-                onReactionsClick: (anchor) => setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
+                onOptionsClick: handleOptionsClick,
+                onReactionsClick: handleReactionsClick,
                 getRelationsForEvent,
             }),
     );
@@ -1950,13 +1957,13 @@ function ActionBarWrapper({
             timelineRenderingType: roomContext.timelineRenderingType,
             canSendMessages: roomContext.canSendMessages,
             canReact: roomContext.canReact,
-            isSearch: Boolean(roomContext.search),
+            isSearch,
             isCard,
             isQuoteExpanded,
             getRelationsForEvent,
             onToggleThreadExpanded: toggleThreadExpanded,
-            onOptionsClick: (anchor) => setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
-            onReactionsClick: (anchor) => setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null),
+            onOptionsClick: handleOptionsClick,
+            onReactionsClick: handleReactionsClick,
         });
     }, [
         vm,
@@ -1964,10 +1971,12 @@ function ActionBarWrapper({
         roomContext.timelineRenderingType,
         roomContext.canSendMessages,
         roomContext.canReact,
-        roomContext.search,
+        isSearch,
         isCard,
         isQuoteExpanded,
         getRelationsForEvent,
+        handleOptionsClick,
+        handleReactionsClick,
         toggleThreadExpanded,
     ]);
 

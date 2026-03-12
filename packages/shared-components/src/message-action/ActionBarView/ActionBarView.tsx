@@ -29,25 +29,53 @@ import { Flex } from "../../utils/Flex";
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./ActionBarView.module.css";
 
+/**
+ * Snapshot state for the message action toolbar.
+ *
+ * The flags intentionally model which actions are available for the current
+ * message so the view can stay stateless and only render the relevant controls.
+ */
 export interface ActionBarViewSnapshot {
+    /** Show the delete action for the message. */
     showCancel: boolean;
+    /** Show the download action for media messages. */
     showDownload: boolean;
+    /** Show the edit action when the message can be edited. */
     showEdit: boolean;
+    /** Show the expand or collapse action for a reply chain. */
     showExpandCollapse: boolean;
+    /** Show the hide action for visible media. */
     showHide: boolean;
+    /** Show the pin or unpin action. */
     showPinOrUnpin: boolean;
+    /** Show the add reaction action. */
     showReact: boolean;
+    /** Show the reply action. */
     showReply: boolean;
+    /** Show the reply in thread action. */
     showReplyInThread: boolean;
+    /** Show the thread action for deleted messages that still have a thread context. */
     showThreadForDeletedMessage: boolean;
+    /** Whether the current download is for encrypted media. */
     isDownloadEncrypted: boolean;
+    /** Whether a media download or decryption is currently in progress. */
     isDownloadLoading: boolean;
+    /** Whether the event is in a failed-to-send state. */
     isFailed: boolean;
+    /** Whether the message is currently pinned. */
     isPinned: boolean;
+    /** Whether the reply chain is currently expanded. */
     isQuoteExpanded: boolean;
+    /** Whether starting or replying in a thread is allowed for this event. */
     isThreadReplyAllowed: boolean;
 }
 
+/**
+ * Event handlers for toolbar actions.
+ *
+ * Each callback receives the triggering button so menus can be positioned from
+ * the action anchor when needed.
+ */
 export interface ActionBarViewActions {
     onCancelClick?: (anchor: HTMLElement | null) => void;
     onDownloadClick?: (anchor: HTMLElement | null) => void;
@@ -71,6 +99,17 @@ interface ActionBarViewProps {
     className?: string;
 }
 
+/**
+ * Compact toolbar for message-level actions such as reply, react, edit,
+ * download, and overflow options.
+ *
+ * Use `className` for host-level container styling, following standard React patterns.
+ *
+ * @example
+ * ```tsx
+ * <ActionBarView vm={actionBarVm} className="mx_MessageActionBar" />
+ * ```
+ */
 export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): JSX.Element | null {
     const { translate: _t } = useI18n();
     const cancelTriggerRef = useRef<HTMLButtonElement>(null);

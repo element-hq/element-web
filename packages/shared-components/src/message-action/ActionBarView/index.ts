@@ -5,9 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export type {
-    ActionBarViewActions,
-    ActionBarViewModel,
-    ActionBarViewSnapshot,
+export {
+    ActionBarView,
+    type ActionBarViewActions,
+    type ActionBarViewModel,
+    type ActionBarViewSnapshot,
 } from "./ActionBarView";
-export { ActionBarView } from "./ActionBarView";

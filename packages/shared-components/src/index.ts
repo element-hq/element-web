@@ -24,7 +24,7 @@ export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./message-body/ReactionsRowButton";
 export * from "./message-body/ReactionsRow";
 export * from "./message-body/TimelineSeparator/";
-export * from "./message-action/ActionBar";
+export * from "./message-action/ActionBarView";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
 export * from "./room/RoomStatusBar";

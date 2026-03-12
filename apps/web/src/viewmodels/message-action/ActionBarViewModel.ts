@@ -69,18 +69,18 @@ interface DerivedEventState {
     showPinOrUnpin: boolean;
     showReact: boolean;
     showReply: boolean;
-    isThreadReplyAllowed: boolean;
     showExpandCollapse: boolean;
     showReplyInThread: boolean;
     showThreadForDeletedMessage: boolean;
     isFailed: boolean;
     isPinned: boolean;
     isQuoteExpanded: boolean;
+    isThreadReplyAllowed: boolean;
 }
 
 interface DerivedMediaState {
-    showDownload: boolean;
     showHide: boolean;
+    showDownload: boolean;
     isDownloadEncrypted: boolean;
     isDownloadLoading: boolean;
 }
