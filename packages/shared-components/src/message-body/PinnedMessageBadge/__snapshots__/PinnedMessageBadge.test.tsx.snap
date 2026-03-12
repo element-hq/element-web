@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PinnedMessageBadgeView > renders the default badge 1`] = `
+exports[`PinnedMessageBadge > renders the default badge 1`] = `
 <div>
   <div
     aria-describedby="event-tile-description"
