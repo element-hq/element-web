@@ -13,7 +13,7 @@ const meta = {
     component: PinnedMessageBadgeView,
     args: {
         "aria-describedby": "event-tile-description",
-        tabIndex: 0,
+        "tabIndex": 0,
     },
     tags: ["autodocs"],
 } satisfies Meta<typeof PinnedMessageBadgeView>;
