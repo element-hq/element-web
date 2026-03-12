@@ -992,7 +992,7 @@
         "set_up_recovery_toast_description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
         "set_up_toast_title": "Set up Secure Backup",
         "setup_secure_backup": {
-            "explainer": "Back up your keys before signing out to avoid losing them."
+            "explainer": "Back up your keys before removing this device to avoid losing them."
         },
         "turn_on_key_storage": "Turn on key storage",
         "turn_on_key_storage_description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices.",
@@ -1139,7 +1139,7 @@
             "title": "Unable to restore session"
         },
         "something_went_wrong": "Something went wrong!",
-        "storage_evicted_description_1": "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.",
+        "storage_evicted_description_1": "Some session data, including encrypted message keys, is missing. Remove this device and sign in again to fix this, restoring keys from backup.",
         "storage_evicted_description_2": "Your browser likely removed this data when running low on disk space.",
         "storage_evicted_title": "Missing session data",
         "sync": "Unable to connect to Homeserver. Retrying…",
@@ -2902,8 +2902,8 @@
                 "other": "Remove devices"
             },
             "confirm_sign_out_sso": {
-                "one": "Confirm logging out this device by using Single Sign On to prove your identity.",
-                "other": "Confirm logging out these devices by using Single Sign On to prove your identity."
+                "one": "Confirm removing this device by using Single Sign On to prove your identity.",
+                "other": "Confirm removing these devices by using Single Sign On to prove your identity."
             },
             "current_session": "Current session",
             "desktop_session": "Desktop session",
@@ -3151,7 +3151,7 @@
         "view": "Views room with given address",
         "whois": "Displays information about a user"
     },
-    "sliding_sync_legacy_no_longer_supported": "Legacy sliding sync is no longer supported: please log out and back in to enable the new sliding sync flag",
+    "sliding_sync_legacy_no_longer_supported": "Legacy sliding sync is no longer supported: please sign in again to enable the new sliding sync flag",
     "space": {
         "add_existing_room_space": {
             "create": "Want to add a new room instead?",
@@ -3812,7 +3812,7 @@
         "ban_space_everything": "Ban them from everything I'm able to",
         "ban_space_specific": "Ban them from specific things I'm able to",
         "deactivate_confirm_action": "Deactivate user",
-        "deactivate_confirm_description": "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
+        "deactivate_confirm_description": "Deactivating this user will remove their devices and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
         "deactivate_confirm_title": "Deactivate user?",
         "demote_button": "Demote",
         "demote_self_confirm_description_space": "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.",
