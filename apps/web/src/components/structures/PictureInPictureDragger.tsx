@@ -18,10 +18,10 @@ const MOVING_AMT = 0.2;
 const SNAPPING_AMT = 0.1;
 
 const PADDING = {
-    top: 58,
-    bottom: 58,
-    left: 76,
-    right: 8,
+    top: 80,
+    bottom: 87,
+    left: 84,
+    right: 16,
 };
 
 /**
@@ -53,7 +53,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     private initX = 0;
     private initY = 0;
     private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH;
-    private desiredTranslationY = UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_HEIGHT;
+    private desiredTranslationY = PADDING.top;
     private translationX = this.desiredTranslationX;
     private translationY = this.desiredTranslationY;
     private mouseHeld = false;

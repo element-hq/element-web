@@ -8,7 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { type UIComponent } from "../../settings/UIFeature";
 import { ComponentVisibilityCustomisations } from "../ComponentVisibility";
+import { ModuleApi } from "../../modules/Api.ts";
 
 export function shouldShowComponent(component: UIComponent): boolean {
-    return ComponentVisibilityCustomisations.shouldShowComponent?.(component) ?? true;
+    return (
+        ModuleApi.instance.customisations.shouldShowComponent(component) ??
+        ComponentVisibilityCustomisations.shouldShowComponent?.(component) ??
+        true
+    );
 }

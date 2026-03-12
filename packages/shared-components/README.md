@@ -108,7 +108,7 @@ function MyApp() {
 pnpm install
 
 # Build the library
-pnpm prepare
+pnpm prepack
 ```
 
 ### Running Storybook
