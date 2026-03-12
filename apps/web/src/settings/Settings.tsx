@@ -351,7 +351,6 @@ export interface Settings {
     "Spaces.enabledMetaSpaces": IBaseSetting<Partial<Record<MetaSpace, boolean>>>;
     "Spaces.showPeopleInSpace": IBaseSetting<boolean>;
     "developerMode": IBaseSetting<boolean>;
-    "automaticErrorReporting": IBaseSetting<boolean>;
     "automaticDecryptionErrorReporting": IBaseSetting<boolean>;
     "debug_scroll_panel": IBaseSetting<boolean>;
     "debug_timeline_panel": IBaseSetting<boolean>;
@@ -1310,16 +1309,6 @@ export const SETTINGS: Settings = {
         displayName: _td("devtools|developer_mode"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
-    },
-    "automaticErrorReporting": {
-        displayName: _td("labs|automatic_debug_logs"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-        controller: new CompatibilityCheckController(
-            () => (SdkConfig.get("sentry") ? false : _t("labs|automatic_debug_logs_disabled")),
-            false,
-            true,
-        ),
     },
     "automaticDecryptionErrorReporting": {
         displayName: _td("labs|automatic_debug_logs_decryption"),
