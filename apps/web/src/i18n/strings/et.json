@@ -1554,7 +1554,6 @@
         "notification_settings_beta_caption": "Võtame kasutusele senisest lihtsama viisi teavituste seadistamiseks. Kohanda rakendust %(brand)s nii nagu soovid.",
         "notification_settings_beta_title": "Teavituste seadistused",
         "notifications": "Kasuta jututoa päises teavituste riba",
-        "release_announcement": "Teave uue versiooni kohta",
         "render_reaction_images": "Kujuta reaktsioonides ka kohandatud pilte",
         "render_reaction_images_description": "Mõnikord nimetatakse neid ka „kohandatud emotikonideks“.",
         "report_to_moderators": "Teata moderaatoritele",
@@ -2087,7 +2086,6 @@
         "not_found_title": "Seda jututuba või kogukonda pole olemas.",
         "not_found_title_name": "Jututuba %(roomName)s ei ole olemas.",
         "peek_join_prompt": "Sa vaatad jututoa %(roomName)s eelvaadet. Kas soovid sellega liituda?",
-        "pinned_message_badge": "Esiletõstetud sõnum",
         "pinned_message_banner": {
             "button_close_list": "Sulge loend",
             "button_view_all": "Vaata kõiki",
