@@ -49,6 +49,11 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         ).toBeVisible();
     };
 
+    const scrollToBottomOfTimeline = async (page: Page) => {
+        await page.locator(".mx_RoomView_MessageList").click();
+        await page.mouse.wheel(0, 100);
+    };
+
     /**
      * Take snapshots of mx_EventTile_last on each layout, outputting log for reference/debugging.
      * @param detail The snapshot name. Used for outputting logs too.
@@ -113,10 +118,12 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             `,
             mask: [page.getByTestId("audio-player-seek")],
             clip: undefined,
+            hideJumpToBottomButton: true,
         };
 
         // Take a snapshot of mx_EventTile_last on IRC layout
         screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-irc-layout.png`, screenshotOptions);
 
         // Take a snapshot on modern/group layout
@@ -125,6 +132,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await groupTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(groupTile);
         screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-group-layout.png`, screenshotOptions);
 
         // Take a snapshot on bubble layout
@@ -133,6 +141,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await bubbleTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(bubbleTile);
         screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-bubble-layout.png`, screenshotOptions);
     };
 
