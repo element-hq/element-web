@@ -15,7 +15,7 @@ import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
-import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import Heading from "../typography/Heading";
 import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel";
@@ -31,7 +31,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     const apps = useWidgets(room);
     const app = apps.find((a) => a.id === widgetId);
-    const isRight = app && WidgetLayoutStore.instance.isInContainer(room, app, Container.Right);
+    const isRight = app && WidgetLayoutStore.instance.isInContainer(room, app, "right");
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 

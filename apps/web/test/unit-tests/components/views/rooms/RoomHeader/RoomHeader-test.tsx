@@ -53,7 +53,7 @@ import dispatcher from "../../../../../../src/dispatcher/dispatcher";
 import { CallStore } from "../../../../../../src/stores/CallStore";
 import { type Call } from "../../../../../../src/models/Call";
 import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
-import { Container, WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { _t } from "../../../../../../src/languageHandler";
 import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
@@ -504,7 +504,7 @@ describe("RoomHeader", () => {
             const videoButton = screen.getByRole("button", { name: "Video call" });
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
             await user.click(videoButton);
-            expect(spy).toHaveBeenCalledWith(room, widget, Container.Top);
+            expect(spy).toHaveBeenCalledWith(room, widget, "top");
         });
 
         it("disables calling if there's a jitsi call", () => {
@@ -869,7 +869,7 @@ describe("RoomHeader", () => {
         });
     });
 
-    it("renders additionalButtons", async () => {
+    it("renders legacy additionalButtons", async () => {
         const additionalButtons: ViewRoomOpts["buttons"] = [
             {
                 icon: () => <>test-icon</>,
@@ -878,11 +878,11 @@ describe("RoomHeader", () => {
                 onClick: () => {},
             },
         ];
-        render(<RoomHeader room={room} additionalButtons={additionalButtons} />, getWrapper());
+        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
         expect(screen.getByRole("button", { name: "test-label" })).toBeInTheDocument();
     });
 
-    it("calls onClick-callback on additionalButtons", () => {
+    it("calls onClick-callback on legacyAdditionalButtons", () => {
         const callback = jest.fn();
         const additionalButtons: ViewRoomOpts["buttons"] = [
             {
@@ -893,7 +893,7 @@ describe("RoomHeader", () => {
             },
         ];
 
-        render(<RoomHeader room={room} additionalButtons={additionalButtons} />, getWrapper());
+        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
 
         const button = screen.getByRole("button", { name: "test-label" });
         const event = createEvent.click(button);

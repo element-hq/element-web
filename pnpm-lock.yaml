@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@element-hq/element-web-module-api':
-      specifier: 1.11.0
-      version: 1.11.0
+      specifier: 1.12.0
+      version: 1.12.0
     '@element-hq/element-web-playwright-common':
       specifier: 2.2.7
       version: 2.2.7
@@ -149,7 +149,7 @@ importers:
         version: 7.28.6
       '@element-hq/element-web-module-api':
         specifier: 'catalog:'
-        version: 1.11.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
+        version: 1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
       '@element-hq/web-shared-components':
         specifier: workspace:*
         version: link:../../packages/shared-components
@@ -267,18 +267,6 @@ importers:
       katex:
         specifier: ^0.16.0
         version: 0.16.33
-      linkify-html:
-        specifier: 4.3.2
-        version: 4.3.2(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.2)
-      linkify-react:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)(react@19.2.4)
-      linkify-string:
-        specifier: 4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)
-      linkifyjs:
-        specifier: 4.3.2
-        version: 4.3.2
       lodash:
         specifier: npm:lodash-es@^4.17.21
         version: lodash-es@4.17.23
@@ -290,7 +278,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/219eb617dc6d5f48c9424eae38b9863fd177f99c
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d99363d288b8471e38892ec11fd9b37c062b85fe
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -423,7 +411,7 @@ importers:
         version: 0.16.3
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
-        version: 2.2.7(@element-hq/element-web-module-api@1.11.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)
+        version: 2.2.7(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)
       '@element-hq/element-web-playwright-common-local':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -762,7 +750,7 @@ importers:
     dependencies:
       '@element-hq/element-web-module-api':
         specifier: 'catalog:'
-        version: 1.11.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
+        version: 1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
       '@matrix-org/spec':
         specifier: ^1.7.0
         version: 1.16.0
@@ -778,6 +766,18 @@ importers:
       html-react-parser:
         specifier: ^5.2.2
         version: 5.2.17(@types/react@19.2.10)(react@19.2.4)
+      linkify-html:
+        specifier: 4.3.2
+        version: 4.3.2(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.2)
+      linkify-react:
+        specifier: 4.3.2
+        version: 4.3.2(linkifyjs@4.3.2)(react@19.2.4)
+      linkify-string:
+        specifier: 4.3.2
+        version: 4.3.2(linkifyjs@4.3.2)
+      linkifyjs:
+        specifier: 4.3.2
+        version: 4.3.2
       lodash:
         specifier: npm:lodash-es@^4.17.21
         version: lodash-es@4.17.23
@@ -2016,8 +2016,8 @@ packages:
   '@element-hq/element-call-embedded@0.16.3':
     resolution: {integrity: sha512-OViKJonDaDNVBUW9WdV9mk78/Ruh34C7XsEgt3O8D9z+64C39elbIgllHSoH5S12IRlv9RYrrV37FZLo6QWsDQ==}
 
-  '@element-hq/element-web-module-api@1.11.0':
-    resolution: {integrity: sha512-RBkvt+Z32CGLkiPtYcQTryQBjG01ZrSVV98CS1cPz/kTeBtxEbVBpqDoOLdGvpmVe0dWo4DLaFcldw2iK39TPA==}
+  '@element-hq/element-web-module-api@1.12.0':
+    resolution: {integrity: sha512-fLhHFiL1UbRjolpgera3osHHxhSzfnDGTRhaDEv1UsrHRHwMu3hb/IcyXNqGhLXkJiuX8XoOH0aetaAUqQ0YQA==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       '@matrix-org/react-sdk-module-api': '*'
@@ -2669,8 +2669,8 @@ packages:
   '@matrix-org/emojibase-bindings@1.5.0':
     resolution: {integrity: sha512-+W9/ow2Z3iQa7ZOF698PBhwNcgGkn36B5Sr8VDPx8N8CH7+Uw+7TrtbtKPZVdgf4m/THmgmfX40jS5YDBsLaYg==}
 
-  '@matrix-org/matrix-sdk-crypto-wasm@17.1.0':
-    resolution: {integrity: sha512-yKPqBvKlHSqkt/UJh+Z+zLKQP8bd19OxokXYXh3VkKbW0+C44nPHsidSwd3SH+RxT+Ck2PDRwVcVXEnUft+/2g==}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.0.0':
+    resolution: {integrity: sha512-88+n+dvxLI1cjS10UIlKXVYK7TGWbpAnnaDC9fow7ch/hCvdu3dFhJ3tS3/13N9s9+1QFXB4FFuommj+tHJPhQ==}
     engines: {node: '>= 18'}
 
   '@matrix-org/react-sdk-module-api@2.5.0':
@@ -7819,8 +7819,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/219eb617dc6d5f48c9424eae38b9863fd177f99c:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/219eb617dc6d5f48c9424eae38b9863fd177f99c}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d99363d288b8471e38892ec11fd9b37c062b85fe:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d99363d288b8471e38892ec11fd9b37c062b85fe}
     version: 41.1.0
     engines: {node: '>=22.0.0'}
 
@@ -11980,7 +11980,7 @@ snapshots:
 
   '@element-hq/element-call-embedded@0.16.3': {}
 
-  '@element-hq/element-web-module-api@1.11.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)':
+  '@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)':
     dependencies:
       '@types/react': 19.2.10
       '@types/react-dom': 19.2.3(@types/react@19.2.10)
@@ -11989,10 +11989,10 @@ snapshots:
       '@matrix-org/react-sdk-module-api': 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4)
       matrix-web-i18n: 3.6.0
 
-  '@element-hq/element-web-playwright-common@2.2.7(@element-hq/element-web-module-api@1.11.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)':
+  '@element-hq/element-web-playwright-common@2.2.7(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)':
     dependencies:
       '@axe-core/playwright': 4.11.1(playwright-core@1.58.2)
-      '@element-hq/element-web-module-api': 1.11.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
+      '@element-hq/element-web-module-api': 1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
       '@playwright/test': 1.58.2
       '@testcontainers/postgresql': 11.11.0
       glob: 13.0.6
@@ -12712,7 +12712,7 @@ snapshots:
       emojibase: 17.0.0
       emojibase-data: 17.0.0(emojibase@17.0.0)
 
-  '@matrix-org/matrix-sdk-crypto-wasm@17.1.0': {}
+  '@matrix-org/matrix-sdk-crypto-wasm@18.0.0': {}
 
   '@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4)':
     dependencies:
@@ -18712,10 +18712,10 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/219eb617dc6d5f48c9424eae38b9863fd177f99c:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d99363d288b8471e38892ec11fd9b37c062b85fe:
     dependencies:
       '@babel/runtime': 7.28.6
-      '@matrix-org/matrix-sdk-crypto-wasm': 17.1.0
+      '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
       another-json: 0.2.0
       bs58: 6.0.0
       content-type: 1.0.5

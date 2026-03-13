@@ -25,7 +25,7 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { WidgetType } from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
@@ -79,7 +79,7 @@ const showSnapshotButton = (widgetMessaging: WidgetMessaging | undefined): boole
 const showMoveButtons = (app: IWidget, room: Room | undefined, showUnpin: boolean | undefined): [boolean, boolean] => {
     if (!showUnpin) return [false, false];
 
-    const pinnedWidgets = room ? WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top) : [];
+    const pinnedWidgets = room ? WidgetLayoutStore.instance.getContainerWidgets(room, "top") : [];
     const widgetIndex = pinnedWidgets.findIndex((widget) => widget.id === app.id);
     return [widgetIndex > 0, widgetIndex < pinnedWidgets.length - 1];
 };
@@ -221,7 +221,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     if (showMoveLeftButton) {
         const onClick = (): void => {
             if (!room) throw new Error("room must be defined");
-            WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, -1);
+            WidgetLayoutStore.instance.moveWithinContainer(room, "top", app, -1);
             onFinished();
         };
 
@@ -232,7 +232,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     if (showMoveRightButton) {
         const onClick = (): void => {
             if (!room) throw new Error("room must be defined");
-            WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, 1);
+            WidgetLayoutStore.instance.moveWithinContainer(room, "top", app, 1);
             onFinished();
         };
 

@@ -17,14 +17,14 @@ import { decode } from "html-entities";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
+import { PERMITTED_URL_SCHEMES, LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
-import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { linkifyHtml, sanitizeHtmlParams, transformTags } from "./Linkify";
+import { sanitizeHtmlParams, transformTags, linkifyHtml } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
-export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";
+export { linkifyAndSanitizeHtml } from "./Linkify";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -323,13 +323,12 @@ function analyseEvent(content: IContent, highlights?: string[], opts: EventRende
     if (opts.linkify) {
         // Prevent mutating the source of sanitizeParams.
         sanitizeParams = { ...sanitizeParams };
-        sanitizeParams.allowedClasses ??= {};
-        if (typeof sanitizeParams.allowedClasses.a === "boolean") {
-            // All classes are already allowed for "a"
-        } else {
-            sanitizeParams.allowedClasses.a ??= [];
-            sanitizeParams.allowedClasses.a.push("linkified");
-        }
+        if (typeof sanitizeParams.allowedAttributes === "object") {
+            const attribs = { ...sanitizeParams.allowedAttributes };
+            // We allow data-linkified because TextualBody uses it to passthrough links.
+            attribs["a"] = [...sanitizeParams.allowedAttributes["a"], `data-${LINKIFIED_DATA_ATTRIBUTE}`];
+            sanitizeParams.allowedAttributes = attribs;
+        } // else: No attibutes are are allowed for "a"
     }
 
     try {

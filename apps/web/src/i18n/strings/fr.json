@@ -1554,7 +1554,6 @@
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
-        "release_announcement": "Annonce de sortie",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "report_to_moderators": "Signaler aux modérateurs",
@@ -2087,7 +2086,6 @@
         "not_found_title": "Ce salon ou cet espace n’existe pas.",
         "not_found_title_name": "%(roomName)s n’existe pas.",
         "peek_join_prompt": "Ceci est un aperçu de %(roomName)s. Voulez-vous rejoindre le salon ?",
-        "pinned_message_badge": "Message épinglé",
         "pinned_message_banner": {
             "button_close_list": "Fermer la liste",
             "button_view_all": "Voir tout",

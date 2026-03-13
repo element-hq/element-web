@@ -1280,7 +1280,6 @@
         "msc3531_hide_messages_pending_moderation": "Anna moderaattorien piilottaa moderointia odottavia viestejä.",
         "notification_settings": "Uudet ilmoitusasetukset",
         "notification_settings_beta_title": "Ilmoitusasetukset",
-        "release_announcement": "Julkaisutiedote",
         "report_to_moderators": "Ilmoita moderaattoreille",
         "report_to_moderators_description": "Moderointia tukevissa huoneissa väärinkäytökset voi ilmoittaa Ilmoita-painikkeella huoneen moderaattoreille.",
         "sliding_sync": "Liukuvan synkronoinnin tila",
@@ -1715,7 +1714,6 @@
         "not_found_title": "Tätä huonetta tai tilaa ei ole olemassa.",
         "not_found_title_name": "Huonetta %(roomName)s ei ole olemassa.",
         "peek_join_prompt": "Esikatselet huonetta %(roomName)s. Haluatko liittyä siihen?",
-        "pinned_message_badge": "Kiinnitetty viesti",
         "pinned_message_banner": {
             "button_view_all": "Näytä kaikki",
             "description": "Kiinnitetyt viestit",
