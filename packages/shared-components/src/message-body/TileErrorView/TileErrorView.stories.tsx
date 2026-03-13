@@ -35,7 +35,11 @@ const TileErrorViewWrapper = ({
         onViewSourceClick: onViewSourceClick ?? fn(),
     });
 
-    return <TileErrorView vm={vm} className={className} layout={layout} />;
+    return (
+        <ul>
+            <TileErrorView vm={vm} className={className} layout={layout} />
+        </ul>
+    );
 };
 
 const meta = {

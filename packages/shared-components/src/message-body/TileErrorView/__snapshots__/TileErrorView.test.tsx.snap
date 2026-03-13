@@ -2,72 +2,76 @@
 
 exports[`TileErrorView > renders the bubble layout variant 1`] = `
 <div>
-  <li
-    class="tileErrorView bubble"
-    data-layout="bubble"
-    role="status"
-  >
-    <div
-      class="line"
+  <ul>
+    <li
+      class="tileErrorView bubble"
+      data-layout="bubble"
     >
-      <span
-        class="message"
+      <div
+        class="line"
+        role="status"
       >
-        Can't load this message
-         (m.room.message)
-      </span>
-      <button
-        class="_button_13vu4_8"
-        data-kind="secondary"
-        data-size="sm"
-        role="button"
-        tabindex="0"
-      >
-        Submit debug logs
-      </button>
-      <button
-        class="viewSourceButton"
-        type="button"
-      >
-        View source
-      </button>
-    </div>
-  </li>
+        <span
+          class="message"
+        >
+          Can't load this message
+           (m.room.message)
+        </span>
+        <button
+          class="_button_13vu4_8"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          Submit debug logs
+        </button>
+        <button
+          class="viewSourceButton"
+          type="button"
+        >
+          View source
+        </button>
+      </div>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`TileErrorView > renders the default tile error state 1`] = `
 <div>
-  <li
-    class="tileErrorView"
-    data-layout="group"
-    role="status"
-  >
-    <div
-      class="line"
+  <ul>
+    <li
+      class="tileErrorView"
+      data-layout="group"
     >
-      <span
-        class="message"
+      <div
+        class="line"
+        role="status"
       >
-        Can't load this message
-         (m.room.message)
-      </span>
-      <button
-        class="_button_13vu4_8"
-        data-kind="secondary"
-        data-size="sm"
-        role="button"
-        tabindex="0"
-      >
-        Submit debug logs
-      </button>
-      <button
-        class="viewSourceButton"
-        type="button"
-      >
-        View source
-      </button>
-    </div>
-  </li>
+        <span
+          class="message"
+        >
+          Can't load this message
+           (m.room.message)
+        </span>
+        <button
+          class="_button_13vu4_8"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          Submit debug logs
+        </button>
+        <button
+          class="viewSourceButton"
+          type="button"
+        >
+          View source
+        </button>
+      </div>
+    </li>
+  </ul>
 </div>
 `;

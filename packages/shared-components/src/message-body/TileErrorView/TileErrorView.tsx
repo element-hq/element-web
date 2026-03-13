@@ -68,9 +68,8 @@ export function TileErrorView({ vm, className, layout = "group" }: Readonly<Tile
         <li
             className={classNames(styles.tileErrorView, className, { [styles.bubble]: layout === "bubble" })}
             data-layout={layout}
-            role="status"
         >
-            <div className={styles.line}>
+            <div className={styles.line} role="status">
                 <span className={styles.message}>
                     {message}
                     {eventType && ` (${eventType})`}
