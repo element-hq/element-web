@@ -1174,6 +1174,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         const showMessageActionBar =
+            !isInfoMessage &&
             !isEditing &&
             !this.props.forExport &&
             (this.state.hover ||
