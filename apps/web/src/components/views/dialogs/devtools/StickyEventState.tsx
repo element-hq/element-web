@@ -132,8 +132,7 @@ interface StateEventButtonProps {
  * @param onClick - callback to show the event details when the row is clicked
  */
 const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyKey, expiresAt, onClick }) => {
-    const [timeRemaining, setTimeRemaining] = useState<string>("");
-    const [isExpired, setIsExpired] = useState<boolean>(false);
+    const [timeRemainingFormatted, setTimeRemainingFormatted] = useState<string>("");
 
     useEffect(() => {
         const updateCountdown = (): void => {
@@ -141,12 +140,9 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
             const remaining = expiresAt - now;
 
             if (remaining <= 0) {
-                setIsExpired(true);
-                setTimeRemaining("");
+                setTimeRemainingFormatted(_t("devtools|expired"));
                 return;
             }
-
-            setIsExpired(false);
 
             // Calculate time remaining
             const totalSeconds = Math.floor(remaining / 1000);
@@ -157,13 +153,13 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
 
             // Format the display
             if (days > 0) {
-                setTimeRemaining(`${days}d ${hours}h ${minutes}m`);
+                setTimeRemainingFormatted(`${days}d ${hours}h ${minutes}m`);
             } else if (hours > 0) {
-                setTimeRemaining(`${hours}h ${minutes}m ${seconds}s`);
+                setTimeRemainingFormatted(`${hours}h ${minutes}m ${seconds}s`);
             } else if (minutes > 0) {
-                setTimeRemaining(`${minutes}m ${seconds}s`);
+                setTimeRemainingFormatted(`${minutes}m ${seconds}s`);
             } else {
-                setTimeRemaining(`${seconds}s`);
+                setTimeRemainingFormatted(`${seconds}s`);
             }
         };
 
@@ -186,7 +182,7 @@ const StickyEventTableLine: React.FC<StateEventButtonProps> = ({ userId, stickyK
         >
             <td>{userId}</td>
             <td>{stickyKey ?? <i>unkeyed</i>}</td>
-            <td className="expired_column">{isExpired ? _t("devtools|expired") : timeRemaining}</td>
+            <td className="remaining_time_column">{timeRemainingFormatted}</td>
         </tr>
     );
 };
