@@ -160,6 +160,20 @@ describe("ActionBarViewModel", () => {
         });
     };
 
+    const createPendingPromise = <T,>(): {
+        promise: Promise<T>;
+        resolve: (value: T) => void;
+        reject: (reason?: unknown) => void;
+    } => {
+        let resolve!: (value: T) => void;
+        let reject!: (reason?: unknown) => void;
+        const promise = new Promise<T>((res, rej) => {
+            resolve = res;
+            reject = rej;
+        });
+        return { promise, resolve, reject };
+    };
+
     beforeEach(() => {
         jest.clearAllMocks();
         client = createTestClient();
@@ -272,6 +286,50 @@ describe("ActionBarViewModel", () => {
         expect(vm.getSnapshot().showHide).toBe(false);
     });
 
+    it("ignores stale download permission results after setProps changes the event", async () => {
+        jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
+        const permissionA = createPendingPromise<boolean>();
+        const permissionB = createPendingPromise<boolean>();
+        const eventA = createMessageEvent({
+            event_id: "$eventA",
+            content: { msgtype: MsgType.Image, body: "Image A", url: "mxc://example.org/a" },
+        });
+        const eventB = createMessageEvent({
+            event_id: "$eventB",
+            content: { msgtype: MsgType.Image, body: "Image B", url: "mxc://example.org/b" },
+        });
+
+        getHintsForMessageSpy.mockImplementation((event) => {
+            if (event === eventA) {
+                return {
+                    allowDownloadingMedia: jest.fn().mockReturnValue(permissionA.promise),
+                } as never;
+            }
+
+            if (event === eventB) {
+                return {
+                    allowDownloadingMedia: jest.fn().mockReturnValue(permissionB.promise),
+                } as never;
+            }
+
+            return null;
+        });
+
+        const vm = createVm({ mxEvent: eventA });
+        expect(vm.getSnapshot().showDownload).toBe(false);
+
+        vm.setProps({ mxEvent: eventB });
+        permissionA.resolve(true);
+        await Promise.resolve();
+
+        expect(vm.getSnapshot().showDownload).toBe(false);
+
+        permissionB.resolve(false);
+        await Promise.resolve();
+
+        expect(vm.getSnapshot().showDownload).toBe(false);
+    });
+
     it("refreshes on event status changes and removes listeners on dispose", () => {
         const mxEvent = createMessageEvent();
         const offSpy = jest.spyOn(mxEvent, "off");
@@ -344,6 +402,67 @@ describe("ActionBarViewModel", () => {
             }),
         );
         expect(vm.getSnapshot().isDownloadLoading).toBe(false);
+    });
+
+    it("ignores stale download completion after setProps changes the event", async () => {
+        jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
+        const firstDownload = createPendingPromise<void>();
+        const eventA = createMessageEvent({
+            event_id: "$eventA",
+            content: { msgtype: MsgType.Image, body: "Image A", url: "mxc://example.org/a" },
+        });
+        const eventB = createMessageEvent({
+            event_id: "$eventB",
+            content: { msgtype: MsgType.Image, body: "Image B", url: "mxc://example.org/b" },
+        });
+
+        const vm = createVm({ mxEvent: eventA });
+        (vm as unknown as { downloadedBlob: Blob }).downloadedBlob = new Blob(["a"]);
+        mockDownload.mockReturnValueOnce(firstDownload.promise);
+
+        const firstDownloadCall = vm.onDownloadClick(null);
+
+        expect(vm.getSnapshot().isDownloadLoading).toBe(true);
+
+        vm.setProps({ mxEvent: eventB });
+        (vm as unknown as { downloadedBlob: Blob }).downloadedBlob = new Blob(["b"]);
+
+        expect(vm.getSnapshot().isDownloadLoading).toBe(false);
+
+        const secondDownload = vm.onDownloadClick(null);
+        await secondDownload;
+
+        firstDownload.resolve();
+        await firstDownloadCall;
+
+        expect(mockDownload).toHaveBeenCalledTimes(2);
+        expect(mockDownload).toHaveBeenNthCalledWith(2, {
+            blob: expect.any(Blob),
+            name: "Image B",
+        });
+        expect(vm.getSnapshot().isDownloadLoading).toBe(false);
+    });
+
+    it("ignores stale download permission results after dispose", async () => {
+        jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
+        const permission = createPendingPromise<boolean>();
+        const event = createMessageEvent({
+            event_id: "$eventA",
+            content: { msgtype: MsgType.Image, body: "Image A", url: "mxc://example.org/a" },
+        });
+
+        getHintsForMessageSpy.mockReturnValue({
+            allowDownloadingMedia: jest.fn().mockReturnValue(permission.promise),
+        } as never);
+
+        const vm = createVm({ mxEvent: event });
+        expect(vm.getSnapshot().showDownload).toBe(false);
+
+        vm.dispose();
+        permission.resolve(true);
+        await Promise.resolve();
+
+        expect(vm.getSnapshot().showDownload).toBe(false);
     });
 
     it("dispatches reply and thread actions and forwards callbacks", async () => {

@@ -90,6 +90,8 @@ export class ActionBarViewModel
     implements ActionBarViewActions
 {
     private listenerCleanups: Array<() => void> = [];
+    private downloadPermissionRequestId = 0;
+    private downloadRequestId = 0;
     private canDownload = true;
     private isDownloadLoading = false;
     private readonly downloader = new FileDownloader();
@@ -202,7 +204,7 @@ export class ActionBarViewModel
         }
 
         MatrixClientPeg.safeGet().decryptEventIfNeeded(mxEvent);
-        void this.updateDownloadPermission();
+        void this.updateDownloadPermission(++this.downloadPermissionRequestId);
     }
 
     private teardownListeners(): void {
@@ -236,27 +238,46 @@ export class ActionBarViewModel
         this.isDownloadLoading = false;
     }
 
-    private async updateDownloadPermission(): Promise<void> {
+    private isCurrentDownloadPermissionRequest(requestId: number, mxEvent: MatrixEvent): boolean {
+        return !this.isDisposed && requestId === this.downloadPermissionRequestId && this.props.mxEvent === mxEvent;
+    }
+
+    private updateDownloadPermissionState(requestId: number, mxEvent: MatrixEvent, canDownload: boolean): boolean {
+        if (!this.isCurrentDownloadPermissionRequest(requestId, mxEvent)) return false;
+        this.canDownload = canDownload;
+        this.refreshSnapshot();
+        return true;
+    }
+
+    private async updateDownloadPermission(requestId: number): Promise<void> {
         const { mxEvent } = this.props;
         const hints = ModuleApi.instance.customComponents.getHintsForMessage(mxEvent);
 
         if (!hints?.allowDownloadingMedia) {
-            this.canDownload = true;
-            this.refreshSnapshot();
+            this.updateDownloadPermissionState(requestId, mxEvent, true);
             return;
         }
 
-        this.canDownload = false;
-        this.refreshSnapshot();
+        if (!this.updateDownloadPermissionState(requestId, mxEvent, false)) return;
 
         try {
-            this.canDownload = await hints.allowDownloadingMedia();
+            const canDownload = await hints.allowDownloadingMedia();
+            this.updateDownloadPermissionState(requestId, mxEvent, canDownload);
         } catch (err) {
             logger.error(`Failed to check media download permission for ${mxEvent.getId()}`, err);
-            this.canDownload = false;
+            this.updateDownloadPermissionState(requestId, mxEvent, false);
         }
+    }
 
+    private isCurrentDownloadRequest(requestId: number, mxEvent: MatrixEvent): boolean {
+        return !this.isDisposed && requestId === this.downloadRequestId && this.props.mxEvent === mxEvent;
+    }
+
+    private setDownloadLoading(requestId: number, mxEvent: MatrixEvent, isDownloadLoading: boolean): boolean {
+        if (!this.isCurrentDownloadRequest(requestId, mxEvent)) return false;
+        this.isDownloadLoading = isDownloadLoading;
         this.refreshSnapshot();
+        return true;
     }
 
     private readonly onRoomEvent = (event?: MatrixEvent): void => {
@@ -339,14 +360,17 @@ export class ActionBarViewModel
 
     public onDownloadClick = async (_anchor: HTMLElement | null): Promise<void> => {
         if (this.isDownloadLoading || !this.canDownload) return;
+        const requestId = ++this.downloadRequestId;
+        const { mxEvent } = this.props;
 
         try {
-            this.isDownloadLoading = true;
-            this.refreshSnapshot();
-            const mediaEventHelper = new MediaEventHelper(this.props.mxEvent);
+            if (!this.setDownloadLoading(requestId, mxEvent, true)) return;
+            const mediaEventHelper = new MediaEventHelper(mxEvent);
 
             if (!this.downloadedBlob) {
-                this.downloadedBlob = await mediaEventHelper.sourceBlob.value;
+                const downloadedBlob = await mediaEventHelper.sourceBlob.value;
+                if (!this.isCurrentDownloadRequest(requestId, mxEvent)) return;
+                this.downloadedBlob = downloadedBlob;
             }
 
             await this.downloader.download({
@@ -354,13 +378,13 @@ export class ActionBarViewModel
                 name: mediaEventHelper.fileName ?? _t("common|image"),
             });
         } catch (e) {
+            if (!this.isCurrentDownloadRequest(requestId, mxEvent)) return;
             Modal.createDialog(ErrorDialog, {
                 title: _t("timeline|download_failed"),
                 description: `${_t("timeline|download_failed_description")}\n\n${String(e)}`,
             });
         } finally {
-            this.isDownloadLoading = false;
-            this.refreshSnapshot();
+            this.setDownloadLoading(requestId, mxEvent, false);
         }
     };
 
@@ -403,5 +427,3 @@ export class ActionBarViewModel
         });
     };
 }
-
-export default ActionBarViewModel;
