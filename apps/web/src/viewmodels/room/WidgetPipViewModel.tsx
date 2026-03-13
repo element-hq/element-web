@@ -20,7 +20,7 @@ import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { type Call } from "../../models/Call";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import PersistentApp from "../../components/views/elements/PersistentApp";
 
 export interface Props {
@@ -91,7 +91,7 @@ export class WidgetPipViewModel
                 metricsTrigger: "WebFloatingCallWindow",
             });
         } else if (this.viewingRoom) {
-            WidgetLayoutStore.instance.moveToContainer(this.props.room, this.widget, Container.Center);
+            WidgetLayoutStore.instance.moveToContainer(this.props.room, this.widget, "center");
         } else {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,

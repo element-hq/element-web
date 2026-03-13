@@ -42,7 +42,7 @@ import { Action } from "./dispatcher/actions";
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "./widgets/ManagedHybrid";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
-import { Container, WidgetLayoutStore } from "./stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "./stores/widgets/WidgetLayoutStore";
 import IncomingLegacyCallToast, { getIncomingLegacyCallToastKey } from "./toasts/IncomingLegacyCallToast";
 import ToastStore from "./stores/ToastStore";
 import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
@@ -1027,7 +1027,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             // If there already is a Jitsi widget, pin it
             const room = client.getRoom(roomId);
             if (isNotNull(room)) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
+                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
             }
             return;
         }
