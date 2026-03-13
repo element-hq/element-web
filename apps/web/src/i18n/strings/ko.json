@@ -1540,7 +1540,6 @@
         "notification_settings_beta_caption": "더욱 간편해진 알림 설정 방법을 만나보세요. 원하는 대로, 당신의 취향에 맞게 %(brand)s을(를) 설정할 수 있습니다.",
         "notification_settings_beta_title": "알림 설정",
         "notifications": "방 헤더에서 알림 패널 활성화",
-        "release_announcement": "출시 공지",
         "render_reaction_images": "반응에 사용자 정의 이미지 렌더링",
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
         "report_to_moderators": "관리자에게 신고하기",
@@ -2053,7 +2052,6 @@
         "not_found_title": "이 방 또는 스페이스가 존재하지 않습니다.",
         "not_found_title_name": "%(roomName)s은 없는 방이에요.",
         "peek_join_prompt": "%(roomName)s 방을 미리 보고 있습니다. 참가하겠습니까?",
-        "pinned_message_badge": "고정된 메시지",
         "pinned_message_banner": {
             "button_close_list": "목록닫기",
             "button_view_all": "모두 보기",

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { EventContentBodyView } from "@element-hq/web-shared-components";
+import { EventContentBodyView, LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";
 
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { formatDate } from "../../../DateUtils";
@@ -26,7 +26,6 @@ import LinkPreviewGroup from "../rooms/LinkPreviewGroup";
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
-import { options as linkifyOpts } from "../../../linkify-matrix";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
@@ -250,7 +249,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private onBodyLinkClick = (e: MouseEvent): void => {
         let target: HTMLLinkElement | null = e.target as HTMLLinkElement;
         // links processed by linkifyjs have their own handler so don't handle those here
-        if (target.classList.contains(linkifyOpts.className as string)) return;
+        if (target.dataset[LINKIFIED_DATA_ATTRIBUTE]) return;
         if (target.nodeName !== "A") {
             // Jump to parent as the `<a>` may contain children, e.g. an anchor wrapping an inline code section
             target = target.closest<HTMLLinkElement>("a");

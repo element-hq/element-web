@@ -1553,7 +1553,6 @@
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
-        "release_announcement": "Pengumuman rilis",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
@@ -2077,7 +2076,6 @@
         "not_found_title": "Ruangan atau space ini tidak ada.",
         "not_found_title_name": "%(roomName)s tidak ada.",
         "peek_join_prompt": "Anda melihat tampilan %(roomName)s. Ingin bergabung?",
-        "pinned_message_badge": "Pesan yang disematkan",
         "pinned_message_banner": {
             "button_close_list": "Tutup daftar",
             "button_view_all": "Lihat semua",
