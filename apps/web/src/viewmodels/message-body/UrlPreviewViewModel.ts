@@ -183,6 +183,72 @@ export class UrlPreviewViewModel
         return [...links];
     }
 
+    private readonly client: MatrixClient;
+    private readonly storageKey: string;
+    private readonly eventSendTime: number;
+    private readonly useCompactLayoutSettingWatcher: string;
+
+    /**
+     * Should the URL preview render according to the application.
+     */
+    private urlPreviewVisible: boolean;
+    /**
+     * Should media be rendered in the preview.
+     */
+    private mediaVisible: boolean;
+    /**
+     * Has the user opted to render this individual preview, or hide it.
+     */
+    private urlPreviewEnabledByUser: boolean;
+
+    /**
+     * Calculated set of links from the provided DOM element.
+     */
+    private readonly links: Array<string> = [];
+
+    /**
+     * Should the preview limit how many links are rendered. If `false`, all
+     * links will be rendered.
+     */
+    private limitPreviews = true;
+
+    /**
+     * A cache containing all previously calculated previews.
+     */
+    private readonly previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
+
+    /**
+     * Called when the user clicks on the preview thumbnail.
+     */
+    public readonly onImageClick: (preview: UrlPreviewViewSnapshotPreview) => void;
+
+    public constructor(props: UrlPreviewViewModelProps) {
+        const storageKey = `hide_preview_${props.mxEvent.getId()}`;
+        super(props, {
+            previews: [],
+            totalPreviewCount: 0,
+            previewsLimited: true,
+            overPreviewLimit: false,
+            compactLayout: SettingsStore.getValue("useCompactLayout"),
+        });
+        this.urlPreviewEnabledByUser = global.localStorage.getItem(storageKey) !== "1";
+        this.urlPreviewVisible = props.visible;
+        this.mediaVisible = props.mediaVisible;
+        this.storageKey = storageKey;
+        this.client = props.client;
+        this.eventSendTime = props.mxEvent.getTs();
+        this.onImageClick = props.onImageClicked;
+        this.useCompactLayoutSettingWatcher = SettingsStore.watchSetting(
+            "useCompactLayout",
+            null,
+            (_setting, _roomid, _level, compactLayout) => {
+                this.snapshot.merge({
+                    compactLayout,
+                });
+            },
+        );
+    }
+
     /**
      * Fetch a complete preview of a given URL.
      * Will always return a cached response if it was previously calculated.
@@ -248,81 +314,11 @@ export class UrlPreviewViewModel
         return result;
     }
 
-    private readonly client: MatrixClient;
-    private readonly storageKey: string;
-    private readonly eventSendTime: number;
-    private readonly useCompactLayoutSettingWatcher: string;
-
-    /**
-     * Should the URL preview render according to the application.
-     */
-    private urlPreviewVisible: boolean;
-    /**
-     * Should media be rendered in the preview.
-     */
-    private mediaVisible: boolean;
-    /**
-     * Has the user opted to render this individual preview, or hide it.
-     */
-    private urlPreviewEnabledByUser: boolean;
-
-    /**
-     * Calculated set of links from the provided DOM element.
-     */
-    private links: Array<string> = [];
-
-    /**
-     * Should the preview limit how many links are rendered. If `false`, all
-     * links will be rendered.
-     */
-    private limitPreviews = true;
-
-    /**
-     * A cache containing all previously calculated previews.
-     */
-    private readonly previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
-
-    /**
-     * Called when the user clicks on the preview thumbnail.
-     */
-    public readonly onImageClick: (preview: UrlPreviewViewSnapshotPreview) => void;
-
-    public constructor(props: UrlPreviewViewModelProps) {
-        const storageKey = `hide_preview_${props.mxEvent.getId()}`;
-        super(props, {
-            previews: [],
-            totalPreviewCount: 0,
-            previewsLimited: true,
-            overPreviewLimit: false,
-            compactLayout: SettingsStore.getValue("useCompactLayout"),
-        });
-        this.urlPreviewEnabledByUser = global.localStorage.getItem(storageKey) !== "1";
-        this.urlPreviewVisible = props.visible;
-        this.mediaVisible = props.mediaVisible;
-        this.storageKey = storageKey;
-        this.client = props.client;
-        this.eventSendTime = props.mxEvent.getTs();
-        this.onImageClick = props.onImageClicked;
-        this.useCompactLayoutSettingWatcher = SettingsStore.watchSetting(
-            "useCompactLayout",
-            null,
-            (_setting, _roomid, _level, compactLayout) => {
-                this.snapshot.merge({
-                    compactLayout,
-                });
-            },
-        );
-    }
-
     public dispose(): void {
         super.dispose();
         SettingsStore.unwatchSetting(this.useCompactLayoutSettingWatcher);
     }
 
-    /**
-     * Get the visibility for the preview based on the the internal
-     * and external state.
-     */
     private get visibility(): PreviewVisibility {
         if (!this.urlPreviewVisible) {
             return PreviewVisibility.Hidden;
@@ -334,6 +330,10 @@ export class UrlPreviewViewModel
         return PreviewVisibility.Visible;
     }
 
+    /**
+     * Recompute the snapshot for the view model, generating previews
+     * for the previously-calculated links.
+     */
     private async computeSnapshot(): Promise<void> {
         const previews =
             this.visibility <= PreviewVisibility.UserHidden
@@ -365,19 +365,23 @@ export class UrlPreviewViewModel
      * viewable.
      * @param urlPreviewVisible Whether URL previews are hidden for this room.
      * @param mediaVisible Whether media is hidden for this room or event.
+     *
+     * @returns A promise that completes when the snapshot has been recomputed.
      */
-    public updateHidden(urlPreviewVisible: boolean, mediaVisible: boolean): void {
+    public readonly updateHidden = (urlPreviewVisible: boolean, mediaVisible: boolean): Promise<void> => {
         this.urlPreviewVisible = urlPreviewVisible;
         this.mediaVisible = mediaVisible;
         // Changing the visibility here means we need to clear cache as we may need to load
         // the media again.
         this.previewCache.clear();
-        void this.computeSnapshot();
-    }
+        return this.computeSnapshot();
+    };
 
     /**
      * Called when the user has requsted previews be visible. The provided
      * props `urlPreviewVisible` state will always override this.
+     *
+     * @returns A promise that completes when the snapshot has been recomputed.
      */
     public readonly onShowClick = (): Promise<void> => {
         // FIXME: persist this somewhere smarter than local storage
@@ -389,6 +393,8 @@ export class UrlPreviewViewModel
     /**
      * Called when the user has requsted previews be hidden. Will take precedence
      * over other settings.
+     *
+     * @returns A promise that completes when the snapshot has been recomputed.
      */
     public readonly onHideClick = (): Promise<void> => {
         // FIXME: persist this somewhere smarter than local storage
@@ -398,11 +404,13 @@ export class UrlPreviewViewModel
     };
 
     /**
-     * Called when the user toggle the number of previews visible.
+     * Called when the user toggles the number of previews visible.
+     *
+     * @returns A promise that completes when the snapshot has been recomputed.
      */
-    public readonly onTogglePreviewLimit = (): void => {
+    public readonly onTogglePreviewLimit = (): Promise<void> => {
         this.limitPreviews = !this.limitPreviews;
-        void this.computeSnapshot();
+        return this.computeSnapshot();
     };
 
     /**

@@ -15,6 +15,7 @@ import {
     EventContentBodyView,
     LINKIFIED_DATA_ATTRIBUTE,
 } from "@element-hq/web-shared-components";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { formatDate } from "../../../DateUtils";
@@ -38,6 +39,8 @@ import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreview
 import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 import ImageView from "../elements/ImageView.tsx";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
+
+const logger = rootLogger.getChild("TextualBody");
 
 type Props = IBodyProps & { urlPreviewViewModel: UrlPreviewViewModel };
 
@@ -162,7 +165,13 @@ class InnerTextualBody extends React.Component<Props> {
         },
 
         unhideWidget: () => {
-            void this.props.urlPreviewViewModel.onShowClick();
+            (async () => {
+                try {
+                    await this.props.urlPreviewViewModel.onShowClick();
+                } catch (ex) {
+                    logger.warn("UrlPreviewViewModel failed to onShowClick", ex);
+                }
+            })();
         },
     });
 
@@ -255,8 +264,15 @@ class InnerTextualBody extends React.Component<Props> {
     }
 
     public componentDidMount(): void {
-        if (this.contentRef.current) {
-            void this.props.urlPreviewViewModel.updateEventElement(this.contentRef.current);
+        const content = this.contentRef.current;
+        if (content) {
+            (async () => {
+                try {
+                    void this.props.urlPreviewViewModel.updateEventElement(content);
+                } catch (ex) {
+                    logger.warn("UrlPreviewViewModel failed to updateEventElement", ex);
+                }
+            })();
         }
     }
 
@@ -396,7 +412,13 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
     );
 
     useEffect(() => {
-        vm.updateHidden(props.showUrlPreview ?? false, mediaVisible);
+        (async () => {
+            try {
+                await vm.updateHidden(props.showUrlPreview ?? false, mediaVisible);
+            } catch (ex) {
+                logger.warn("UrlPreviewViewModel failed to updateHidden", ex);
+            }
+        })();
     }, [vm, props.showUrlPreview, mediaVisible]);
 
     return <InnerTextualBody urlPreviewViewModel={vm} {...props} />;
