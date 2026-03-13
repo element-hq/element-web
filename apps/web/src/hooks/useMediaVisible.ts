@@ -6,11 +6,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback } from "react";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "./useSettings";
+import { useRoomState } from "./useRoomState";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
-import { getMediaVisibility, setMediaVisibility } from "../utils/media/mediaVisibility";
+import { computeMediaVisibility, setMediaVisibility } from "../utils/media/mediaVisibility";
+
+const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRule.Restricted];
 
 /**
  * Should the media event be visible in the client, or hidden.
@@ -28,8 +31,11 @@ import { getMediaVisibility, setMediaVisibility } from "../utils/media/mediaVisi
  */
 export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: boolean) => void] {
     const client = useMatrixClientContext();
-    useSettingValue("mediaPreviewConfig", mxEvent?.getRoomId());
-    useSettingValue("showMediaEventIds");
+    const roomId = mxEvent?.getRoomId();
+    const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
+    const eventVisibility = useSettingValue("showMediaEventIds");
+    const room = roomId ? client.getRoom(roomId) ?? undefined : undefined;
+    const joinRule = useRoomState(room, (state) => state.getJoinRule());
 
     const setMediaVisible = useCallback(
         (visible: boolean) => {
@@ -39,5 +45,15 @@ export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: bool
         [mxEvent],
     );
 
-    return [mxEvent ? getMediaVisibility(mxEvent, client) : false, setMediaVisible];
+    return [
+        computeMediaVisibility(
+            mediaPreviewSetting,
+            eventVisibility,
+            client.getUserId() ?? undefined,
+            mxEvent?.getId(),
+            mxEvent?.getSender(),
+            joinRule ? PRIVATE_JOIN_RULES.includes(joinRule) : false,
+        ),
+        setMediaVisible,
+    ];
 }

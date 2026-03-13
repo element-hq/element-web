@@ -260,7 +260,8 @@ export class ActionBarViewModel
     }
 
     private readonly onRoomEvent = (event?: MatrixEvent): void => {
-        if (!event || event.getType() !== EventType.RoomPinnedEvents) return;
+        if (!event) return;
+        if (event.getType() !== EventType.RoomPinnedEvents && event.getType() !== EventType.RoomJoinRules) return;
         this.refreshSnapshot();
     };
 

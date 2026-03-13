@@ -227,7 +227,7 @@ describe("ActionBarViewModel", () => {
         );
     });
 
-    it("reacts to media download permission hints and room pin updates", async () => {
+    it("reacts to media download permission hints and room state updates", async () => {
         jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
         jest.spyOn(MediaEventHelper, "canHide").mockReturnValue(true);
         getHintsForMessageSpy.mockReturnValue({
@@ -257,6 +257,19 @@ describe("ActionBarViewModel", () => {
         );
 
         expect(vm.getSnapshot().isPinned).toBe(true);
+
+        mocked(getMediaVisibility).mockReturnValue(false);
+        roomState.emit(
+            RoomStateEvent.Events,
+            new MatrixEvent({
+                type: EventType.RoomJoinRules,
+                room_id: roomId,
+                sender: userId,
+                content: { join_rule: "public" },
+            }),
+        );
+
+        expect(vm.getSnapshot().showHide).toBe(false);
     });
 
     it("refreshes on event status changes and removes listeners on dispose", () => {

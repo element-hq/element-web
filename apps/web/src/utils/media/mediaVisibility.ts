@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { JoinRule, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { MediaPreviewValue } from "../../@types/media_preview";
+import { type MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_preview";
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 
@@ -15,23 +15,26 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
 
 function isRoomPrivate(client: MatrixClient, roomId?: string): boolean {
     const room = roomId ? client.getRoom(roomId) : undefined;
-    const joinRule = room?.getJoinRule();
+    const joinRule = room?.currentState.getJoinRule();
 
     return joinRule ? PRIVATE_JOIN_RULES.includes(joinRule) : false;
 }
 
-export function getMediaVisibility(mxEvent: MatrixEvent, client: MatrixClient): boolean {
-    const eventId = mxEvent.getId();
-    const roomId = mxEvent.getRoomId();
-    const mediaPreviewSetting = SettingsStore.getValue("mediaPreviewConfig", roomId);
-    const eventVisibility = SettingsStore.getValue("showMediaEventIds");
+export function computeMediaVisibility(
+    mediaPreviewSetting: MediaPreviewConfig,
+    eventVisibility: Record<string, boolean>,
+    userId: string | undefined,
+    eventId: string | undefined,
+    sender: string | undefined,
+    roomIsPrivate: boolean,
+): boolean {
     const explicitEventVisibility = eventId ? eventVisibility[eventId] : undefined;
 
     if (explicitEventVisibility !== undefined) {
         return explicitEventVisibility;
     }
 
-    if (mxEvent.getSender() === client.getUserId()) {
+    if (sender === userId) {
         return true;
     }
 
@@ -41,11 +44,27 @@ export function getMediaVisibility(mxEvent: MatrixEvent, client: MatrixClient): 
         case MediaPreviewValue.On:
             return true;
         case MediaPreviewValue.Private:
-            return isRoomPrivate(client, roomId);
+            return roomIsPrivate;
         default:
             console.warn("Invalid media visibility setting", mediaPreviewSetting.media_previews);
             return false;
     }
+}
+
+export function getMediaVisibility(mxEvent: MatrixEvent, client: MatrixClient): boolean {
+    const eventId = mxEvent.getId();
+    const roomId = mxEvent.getRoomId();
+    const mediaPreviewSetting = SettingsStore.getValue("mediaPreviewConfig", roomId);
+    const eventVisibility = SettingsStore.getValue("showMediaEventIds");
+
+    return computeMediaVisibility(
+        mediaPreviewSetting,
+        eventVisibility,
+        client.getUserId() ?? undefined,
+        eventId,
+        mxEvent.getSender(),
+        isRoomPrivate(client, roomId),
+    );
 }
 
 export async function setMediaVisibility(mxEvent: MatrixEvent, visible: boolean): Promise<void> {
