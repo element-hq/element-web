@@ -30,7 +30,7 @@ export default class WidgetLifecycleModule implements Module {
     public constructor(private api: ModuleApi) {}
 
     public async load(): Promise<void> {
-        if (!this.api.widgetLifecycle?.registerPreloadApprover) {
+        if (!this.api.widgetLifecycle) {
             throw new Error(
                 "Widget lifecycle API is not available. Update Element Web to a build that provides widget lifecycle module support.",
             );

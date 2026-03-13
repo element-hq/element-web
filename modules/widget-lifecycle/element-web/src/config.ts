@@ -32,16 +32,16 @@ const ModuleConfigSchema = z.partial(
 /** Map from URL patterns to their widget approval configuration. */
 export type WidgetLifecycleModuleConfig = Record<string, WidgetConfiguration>;
 
-/**
- * Parse and validate the widget lifecycle module configuration.
- * Returns an empty config if the input is falsy; throws on schema violations.
- */
 declare module "@element-hq/element-web-module-api" {
     export interface Config {
         [CONFIG_KEY]: z.input<typeof ModuleConfigSchema>;
     }
 }
 
+/**
+ * Parse and validate the widget lifecycle module configuration.
+ * Returns an empty config if the input is falsy; throws on schema violations.
+ */
 export const parseWidgetLifecycleConfig = (value: unknown): WidgetLifecycleModuleConfig => {
     if (!value) return {};
 
