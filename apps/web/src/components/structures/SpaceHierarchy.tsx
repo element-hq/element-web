@@ -41,6 +41,7 @@ import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/src/types";
 import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { LinkedText } from "@element-hq/web-shared-components";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -55,7 +56,7 @@ import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/spaces/SpaceStore";
-import { Linkify, topicToHtml } from "../../HtmlUtils";
+import { topicToHtml } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
 import { type IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
@@ -233,20 +234,12 @@ const Tile: React.FC<ITileProps> = ({
 
     let topicSection: ReactNode | undefined;
     if (topic) {
+        // prevent clicks on links from bubbling up to the room tile
         topicSection = (
-            <Linkify
-                options={{
-                    attributes: {
-                        onClick(ev: MouseEvent) {
-                            // prevent clicks on links from bubbling up to the room tile
-                            ev.stopPropagation();
-                        },
-                    },
-                }}
-            >
+            <LinkedText onLinkClick={(ev) => ev.stopPropagation()}>
                 {" · "}
                 {topic}
-            </Linkify>
+            </LinkedText>
         );
     }
 

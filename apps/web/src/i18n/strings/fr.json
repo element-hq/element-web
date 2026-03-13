@@ -668,7 +668,7 @@
         "join_rule_knock_label": "Tout le monde peut demander à venir, mais un admin ou un modérateur doit autoriser l’accès. Vous pouvez modifier ceci plus tard.",
         "join_rule_public_label": "Quiconque pourra trouver et rejoindre ce salon.",
         "join_rule_public_parent_space_label": "Quiconque pourra trouver et rejoindre ce salon, pas seulement les membres de <SpaceName/>.",
-        "join_rule_restricted": "Visible pour les membres de l'espace",
+        "join_rule_restricted": "Standard",
         "join_rule_restricted_label": "Tout le monde dans <SpaceName/> pourra trouver et rejoindre ce salon.",
         "name_validation_required": "Veuillez renseigner un nom pour le salon",
         "room_visibility_label": "Visibilité du salon",
@@ -1554,7 +1554,6 @@
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
-        "release_announcement": "Annonce de sortie",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "report_to_moderators": "Signaler aux modérateurs",
@@ -2062,9 +2061,6 @@
         "joining_space": "Entrée dans l’espace…",
         "jump_read_marker": "Aller au premier message non lu.",
         "jump_to_bottom_button": "Sauter aux messages les plus récents",
-        "jump_to_date": "Aller à la date",
-        "jump_to_date_beginning": "Le début de ce salon",
-        "jump_to_date_prompt": "Choisissez vers quelle date aller",
         "kick_reason": "Motif : %(reason)s",
         "kicked_by": "Vous avez été retiré par %(memberName)s",
         "kicked_from_room_by": "Vous avez été expulsé(e) de %(roomName)s par %(memberName)s",
@@ -2090,7 +2086,6 @@
         "not_found_title": "Ce salon ou cet espace n’existe pas.",
         "not_found_title_name": "%(roomName)s n’existe pas.",
         "peek_join_prompt": "Ceci est un aperçu de %(roomName)s. Voulez-vous rejoindre le salon ?",
-        "pinned_message_badge": "Message épinglé",
         "pinned_message_banner": {
             "button_close_list": "Fermer la liste",
             "button_view_all": "Voir tout",
@@ -2358,11 +2353,11 @@
             "history_visibility_warning": "Les changements n'affecteront pas les messages passés, juste les nouveaux. <a>En savoir plus</a>",
             "history_visibility_world_readable": "Tout le monde (l'historique est public)",
             "join_rule_description": "Choisir qui peut rejoindre %(roomName)s.",
-            "join_rule_invite": "Privé (sur invitation)",
+            "join_rule_invite": "Sur invitation uniquement",
             "join_rule_invite_description": "Seules les personnes invitées peuvent venir.",
             "join_rule_knock": "Demander à venir",
             "join_rule_knock_description": "Les personnes ne peuvent pas venir tant que l’accès ne leur est pas autorisé.",
-            "join_rule_public_description": "Tout le monde peut trouver et venir.",
+            "join_rule_public_description": "Tout le monde peut joindre",
             "join_rule_restricted": "Membres de l’espace",
             "join_rule_restricted_description": "Tout le monde dans un espace peut trouver et venir. <a>Modifier les accès des espaces ici.</a>",
             "join_rule_restricted_description_active_space": "Quiconque dans <spaceName/> peut trouver et rejoindre. Vous pouvez également choisir d’autres espaces.",
@@ -2382,8 +2377,8 @@
                 "one": "& %(count)s autres"
             },
             "join_rule_restricted_summary": {
-                "other": "%(count)s espaces ont actuellement l’accès",
-                "one": "Actuellement, un espace a accès"
+                "one": "Actuellement, un espace a été authorisé",
+                "other": "%(count)s espaces ont été authorisés"
             },
             "join_rule_restricted_upgrade_description": "Cette mise-à-jour permettra aux membres des espaces sélectionnés d’accéder à ce salon sans invitation.",
             "join_rule_restricted_upgrade_warning": "Ce salon se trouve dans certains espaces pour lesquels vous n’êtes pas administrateur. Dans ces espaces, l’ancien salon sera toujours disponible, mais un message sera affiché pour inciter les personnes à rejoindre le nouveau salon.",
@@ -3482,7 +3477,7 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s a accepté l’invitation pour %(displayName)s",
             "accepted_invite": "%(targetName)s a accepté une invitation",
-            "ban": "%(senderName)s a banni un utilisateur",
+            "ban": "%(senderName)s a banni %(targetName)s",
             "ban_reason": "%(senderName)s a banni %(targetName)s : %(reason)s",
             "change_avatar": "%(senderName)s a changé son image de profil",
             "change_name": "%(oldDisplayName)s a changé son nom d’affichage en %(displayName)s",

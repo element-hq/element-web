@@ -10,8 +10,28 @@
     width: 100%;
     padding: 12px 16px;
     border-bottom: 1px solid #e0e0e0;
+
+    button {
+        all: unset;
+    }
 }
 
 .itemSelected {
+    background-color: #559f24;
+}
+
+.group {
+    width: 100%;
+    padding: 8px;
+    background-color: #00adad;
+    border: 1px solid lightgrey;
+    font-weight: "bold";
+
+    button {
+        all: unset;
+    }
+}
+
+.groupSelected {
     background-color: #559f24;
 }
