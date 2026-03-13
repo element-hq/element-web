@@ -53,7 +53,7 @@ export function LeftResizablePanelView({
         if (panelRef) vm.setPanelHandle(panelRef);
     }, [vm, panelRef]);
 
-    const defaultSize = initialSize !== undefined ? `${initialSize}%` : props.defaultSize;
+    const defaultSize = initialSize === undefined ? props.defaultSize : `${initialSize}%`;
 
     return (
         <Panel

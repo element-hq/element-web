@@ -66,32 +66,49 @@ export const Default: Story = {
     ],
 };
 
+const commonDecorator = (Story: React.ComponentType): React.ReactElement => {
+    return (
+        <div
+            style={{
+                height: "600px",
+            }}
+        >
+            <Group>
+                <Panel collapsible defaultSize="200px" minSize="200px" maxSize="400px">
+                    <Flex tabIndex={0} align="center" justify="center">
+                        LEFT CONTENT
+                    </Flex>
+                </Panel>
+                <Story />
+                <Panel>
+                    <Flex align="center" justify="center">
+                        MAIN CONTENT
+                    </Flex>
+                </Panel>
+            </Group>
+        </div>
+    );
+};
+
 export const LeftPanelExpanded: Story = {
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    height: "600px",
-                }}
-            >
-                <Group>
-                    <Panel collapsible defaultSize="200px" minSize="200px" maxSize="400px">
-                        <Flex tabIndex={0} align="center" justify="center">
-                            LEFT CONTENT
-                        </Flex>
-                    </Panel>
-                    <Story />
-                    <Panel>
-                        <Flex align="center" justify="center">
-                            MAIN CONTENT
-                        </Flex>
-                    </Panel>
-                </Group>
-            </div>
-        ),
-    ],
+    decorators: [(Story) => commonDecorator(Story)],
     args: {
         isCollapsed: false,
+    },
+};
+
+export const KeyboardFocused: Story = {
+    // We'll manually take a screenshot for this story
+    tags: ["autodocs", "!snapshot"],
+    decorators: [(Story) => commonDecorator(Story)],
+    args: {
+        isCollapsed: false,
+        isFocusedViaKeyboard: true,
+    },
+    play: async ({ canvas, canvasElement }) => {
+        const separator = canvas.getByRole("separator");
+        separator.focus();
+        await expect(canvasElement).toMatchImageSnapshot();
     },
 };
 
@@ -123,44 +140,7 @@ export const Hover: Story = {
     ],
     play: async ({ canvas, canvasElement }) => {
         const separator = canvas.getByRole("separator");
-        separator.setAttribute("data-separator", "hover");
-        await expect(canvasElement).toMatchImageSnapshot();
-    },
-};
-
-export const KeyboardFocused: Story = {
-    // We'll manually take a screenshot for this story
-    tags: ["autodocs", "!snapshot"],
-    decorators: [
-        (Story) => (
-            <div
-                style={{
-                    height: "600px",
-                }}
-            >
-                <Group>
-                    <Panel collapsible defaultSize="200px" minSize="200px" maxSize="400px">
-                        <Flex tabIndex={0} align="center" justify="center">
-                            LEFT CONTENT
-                        </Flex>
-                    </Panel>
-                    <Story />
-                    <Panel>
-                        <Flex align="center" justify="center">
-                            MAIN CONTENT
-                        </Flex>
-                    </Panel>
-                </Group>
-            </div>
-        ),
-    ],
-    args: {
-        isCollapsed: false,
-        isFocusedViaKeyboard: true,
-    },
-    play: async ({ canvas, canvasElement }) => {
-        const separator = canvas.getByRole("separator");
-        separator.focus();
+        separator.dataset.separator = "hover";
         await expect(canvasElement).toMatchImageSnapshot();
     },
 };
