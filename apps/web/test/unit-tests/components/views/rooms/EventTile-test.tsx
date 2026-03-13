@@ -202,7 +202,7 @@ describe("EventTile", () => {
 
         it("renders the tile error fallback when tile rendering throws", async () => {
             const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-            jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
+            const renderTileSpy = jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
                 throw new Error("Boom");
             });
 
@@ -213,6 +213,7 @@ describe("EventTile", () => {
                     expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
                 });
             } finally {
+                renderTileSpy.mockRestore();
                 consoleErrorSpy.mockRestore();
             }
         });
