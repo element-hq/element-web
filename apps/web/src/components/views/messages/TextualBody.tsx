@@ -79,6 +79,20 @@ class InnerTextualBody extends React.Component<Props> {
         });
     }
 
+    public updateURLPreviewViewModel(): void {
+        const content = this.contentRef.current;
+        if (!content) {
+            return;
+        }
+        (async () => {
+            try {
+                void this.props.urlPreviewViewModel.updateEventElement(content);
+            } catch (ex) {
+                logger.warn("UrlPreviewViewModel failed to updateEventElement", ex);
+            }
+        })();
+    }
+
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
         // Update the ViewModel when relevant props change
         const mxEventChanged = prevProps.mxEvent !== this.props.mxEvent;
@@ -108,6 +122,7 @@ class InnerTextualBody extends React.Component<Props> {
                 this.EventContentBodyViewModel.setHighlights(this.props.highlights);
             }
         }
+        this.updateURLPreviewViewModel();
     }
 
     public componentWillUnmount(): void {
@@ -264,16 +279,7 @@ class InnerTextualBody extends React.Component<Props> {
     }
 
     public componentDidMount(): void {
-        const content = this.contentRef.current;
-        if (content) {
-            (async () => {
-                try {
-                    void this.props.urlPreviewViewModel.updateEventElement(content);
-                } catch (ex) {
-                    logger.warn("UrlPreviewViewModel failed to updateEventElement", ex);
-                }
-            })();
-        }
+        this.updateURLPreviewViewModel();
     }
 
     public render(): React.ReactNode {

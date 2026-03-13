@@ -204,7 +204,7 @@ export class UrlPreviewViewModel
     /**
      * Calculated set of links from the provided DOM element.
      */
-    private readonly links: Array<string> = [];
+    private links: Array<string> = [];
 
     /**
      * Should the preview limit how many links are rendered. If `false`, all
@@ -355,9 +355,13 @@ export class UrlPreviewViewModel
      * Trigger a recalculation of the links in an event.
      * @param eventElement
      */
-    public updateEventElement(eventElement: HTMLDivElement): Promise<void> {
-        this.links = UrlPreviewViewModel.findLinks([eventElement]);
-        return this.computeSnapshot();
+    public async updateEventElement(eventElement: HTMLDivElement): Promise<void> {
+        const newLinks = UrlPreviewViewModel.findLinks([eventElement]);
+        // Only recalculate if the set of links has changed.
+        if (newLinks.some((x) => !this.links.includes(x)) || this.links.some((x) => !newLinks.includes(x))) {
+            this.links = newLinks;
+            return this.computeSnapshot();
+        }
     }
 
     /**
