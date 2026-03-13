@@ -34,7 +34,7 @@ export function useMediaVisible(mxEvent?: MatrixEvent): [boolean, (visible: bool
     const roomId = mxEvent?.getRoomId();
     const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
     const eventVisibility = useSettingValue("showMediaEventIds");
-    const room = roomId ? client.getRoom(roomId) ?? undefined : undefined;
+    const room = roomId ? (client.getRoom(roomId) ?? undefined) : undefined;
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
 
     const setMediaVisible = useCallback(
