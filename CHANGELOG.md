@@ -1,3 +1,60 @@
+Changes in [1.12.12](https://github.com/element-hq/element-web/releases/tag/v1.12.12) (2026-03-10)
+==================================================================================================
+## ✨ Features
+
+* Add stable support for MSC4380 invite blocking ([#31966](https://github.com/element-hq/element-web/pull/31966)). Contributed by @richvdh.
+* Hide the names of banned users behind a spoiler tag ([#32424](https://github.com/element-hq/element-web/pull/32424)). Contributed by @andybalaam.
+* Room list: remove bold effect on selected room ([#32593](https://github.com/element-hq/element-web/pull/32593)). Contributed by @florianduros.
+* Use Compound buttons in auth screens ([#32562](https://github.com/element-hq/element-web/pull/32562)). Contributed by @t3chguy.
+* Track room list sorting algorithm changes ([#32556](https://github.com/element-hq/element-web/pull/32556)). Contributed by @MidhunSureshR.
+* Update `sso_redirect_options` to work for Native OIDC ([#32537](https://github.com/element-hq/element-web/pull/32537)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* Room list: avoid excessive re-renders on room list store update or filter change ([#32663](https://github.com/element-hq/element-web/pull/32663)). Contributed by @florianduros.
+* Room list: listen to call event to check number of participants ([#32677](https://github.com/element-hq/element-web/pull/32677)). Contributed by @florianduros.
+* Fix invite-specific join errors not being shown ([#32621](https://github.com/element-hq/element-web/pull/32621)). Contributed by @Half-Shot.
+* Prevent logging lots of "Browser unsupported" lines ([#32647](https://github.com/element-hq/element-web/pull/32647)). Contributed by @Half-Shot.
+* Update critical gradient for room status bar ([#32575](https://github.com/element-hq/element-web/pull/32575)). Contributed by @Half-Shot.
+* Room list: avoid header overflowing when too long ([#32645](https://github.com/element-hq/element-web/pull/32645)). Contributed by @florianduros.
+* Room list: center focus outline of room list item ([#32637](https://github.com/element-hq/element-web/pull/32637)). Contributed by @florianduros.
+* Fix misaligned cross in complete security dialog ([#32614](https://github.com/element-hq/element-web/pull/32614)). Contributed by @dbkr.
+* Room list: fix keyboard navigation ([#32585](https://github.com/element-hq/element-web/pull/32585)). Contributed by @florianduros.
+* Don't show empty privacy section ([#32582](https://github.com/element-hq/element-web/pull/32582)). Contributed by @dbkr.
+* Disable room list image dragging ([#32590](https://github.com/element-hq/element-web/pull/32590)). Contributed by @florianduros.
+* Update UserMenu theme toggle to use IconButton ([#32591](https://github.com/element-hq/element-web/pull/32591)). Contributed by @t3chguy.
+* Room list: make room list item scales with large font size ([#32523](https://github.com/element-hq/element-web/pull/32523)). Contributed by @florianduros.
+
+
+Changes in [1.12.11](https://github.com/element-hq/element-web/releases/tag/v1.12.11) (2026-02-24)
+==================================================================================================
+## 🦖 Deprecations
+
+* Remove UIFeature.BulkUnverifiedSessionsReminder setting ([#31943](https://github.com/element-hq/element-web/pull/31943)). Contributed by @andybalaam.
+* Remove unused function to auto-rageshake when key backup is not set up ([#31942](https://github.com/element-hq/element-web/pull/31942)). Contributed by @andybalaam.
+
+## ✨ Features
+
+* Room list: update the visuals in order to have better contrast ([#32421](https://github.com/element-hq/element-web/pull/32421)). Contributed by @florianduros.
+*  Set history visibility to "invited" for DMs and new non-public rooms when creating a room ([#31974](https://github.com/element-hq/element-web/pull/31974)). Contributed by @langleyd.
+* Remove server acl status/summaries from timeline  ([#32461](https://github.com/element-hq/element-web/pull/32461)). Contributed by @langleyd.
+* Update `globalBlacklistUnverifiedDevices` on setting change ([#31983](https://github.com/element-hq/element-web/pull/31983)). Contributed by @kaylendog.
+* Add badge for history visibiltity to room info panel ([#31927](https://github.com/element-hq/element-web/pull/31927)). Contributed by @richvdh.
+
+## 🐛 Bug Fixes
+
+* Default useOnlyCurrentProfiles to true ([#32524](https://github.com/element-hq/element-web/pull/32524)). Contributed by @dbkr.
+* Keep custom theme active after reload ([#32506](https://github.com/element-hq/element-web/pull/32506)). Contributed by @florianduros.
+* Update font format from 'ttf' to 'truetype' ([#32493](https://github.com/element-hq/element-web/pull/32493)). Contributed by @all-yall.
+* Fix videos on Firefox ([#32497](https://github.com/element-hq/element-web/pull/32497)). Contributed by @p1gp1g.
+* Use a dedicated FAQ/help entry for key storage. ([#32480](https://github.com/element-hq/element-web/pull/32480)). Contributed by @mxandreas.
+* Avoid showing two chat timelines side by side after a call ([#32484](https://github.com/element-hq/element-web/pull/32484)). Contributed by @robintown.
+* Update screenshot for reactive display name disambiguation ([#32431](https://github.com/element-hq/element-web/pull/32431)). Contributed by @aditya-cherukuru.
+* Fix Status Bar being unreadable when the user overrides the default OS light/dark theme. ([#32442](https://github.com/element-hq/element-web/pull/32442)). Contributed by @Half-Shot.
+* fix: Remove state\_key: null from Seshat search results ([#31524](https://github.com/element-hq/element-web/pull/31524)). Contributed by @shinaoka.
+* Fix user pill deserialisation ([#31947](https://github.com/element-hq/element-web/pull/31947)). Contributed by @t3chguy.
+
+
 Changes in [1.12.10](https://github.com/element-hq/element-web/releases/tag/v1.12.10) (2026-02-10)
 ==================================================================================================
 ## ✨ Features

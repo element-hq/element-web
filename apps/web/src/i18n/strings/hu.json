@@ -1546,7 +1546,6 @@
         "notification_settings_beta_caption": "Bemutatjuk az értesítési beállítások módosításának egyszerűbb módját. Testreszabhatja a sajátját, ahogy tetszik itt: %(brand)s.",
         "notification_settings_beta_title": "Értesítési beállítások",
         "notifications": "Engedélyezze az értesítési panelt a szoba fejlécében",
-        "release_announcement": "Kiadási bejelentés",
         "render_reaction_images": "Egyéni képek megjelenítése reakciókban",
         "render_reaction_images_description": "Néha „egyéni emodzsiknak” nevezik.",
         "report_to_moderators": "Jelentés a moderátoroknak",
@@ -2075,7 +2074,6 @@
         "not_found_title": "Ez a szoba vagy tér nem létezik.",
         "not_found_title_name": "%(roomName)s nem létezik.",
         "peek_join_prompt": "%(roomName)s szoba előnézetét látod. Belépsz?",
-        "pinned_message_badge": "Kitűzött üzenet",
         "pinned_message_banner": {
             "button_close_list": "Lista bezárása",
             "button_view_all": "Összes megtekintése",

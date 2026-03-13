@@ -1,9 +1,11 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PinnedMessageBadge should render 1`] = `
-<DocumentFragment>
+exports[`PinnedMessageBadge > renders the default badge 1`] = `
+<div>
   <div
-    class="mx_PinnedMessageBadge"
+    aria-describedby="event-tile-description"
+    class="pinnedMessageBadge"
+    tabindex="0"
   >
     <svg
       fill="currentColor"
@@ -18,5 +20,5 @@ exports[`PinnedMessageBadge should render 1`] = `
     </svg>
     Pinned message
   </div>
-</DocumentFragment>
+</div>
 `;

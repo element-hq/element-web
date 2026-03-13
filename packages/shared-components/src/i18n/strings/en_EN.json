@@ -3,6 +3,7 @@
         "seek_bar_label": "Audio seek bar"
     },
     "action": {
+        "back": "Back",
         "delete": "Delete",
         "dismiss": "Dismiss",
         "edit": "Edit",
@@ -46,6 +47,7 @@
         "jump_to_date": "Jump to date",
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",
+        "pinned_message_badge": "Pinned message",
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",

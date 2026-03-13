@@ -1549,7 +1549,6 @@
         "notification_settings_beta_caption": "Представляємо простіший спосіб змінювати налаштування сповіщень. Налаштуйте %(brand)s, саме так, як вам подобається.",
         "notification_settings_beta_title": "Налаштування сповіщень",
         "notifications": "Увімкнути панель сповіщень у шапці кімнати",
-        "release_announcement": "Оголошення про випуск",
         "render_reaction_images": "Відтворення кастомних зображень у реакціях",
         "render_reaction_images_description": "Іноді їх називають \"користувацькими емодзі\".",
         "report_to_moderators": "Поскаржитись модераторам",
@@ -2082,7 +2081,6 @@
         "not_found_title": "Такої кімнати або простору не існує.",
         "not_found_title_name": "%(roomName)s не існує.",
         "peek_join_prompt": "Ви попередньо переглядаєте %(roomName)s. Бажаєте приєднатися?",
-        "pinned_message_badge": "Закріплене повідомлення",
         "pinned_message_banner": {
             "button_close_list": "Закрити список",
             "button_view_all": "Подивитись все",

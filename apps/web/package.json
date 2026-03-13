@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.12.11-rc.0",
+    "version": "1.12.12",
     "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
@@ -78,10 +78,6 @@
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
         "katex": "^0.16.0",
-        "linkify-html": "4.3.2",
-        "linkify-react": "4.3.2",
-        "linkify-string": "4.3.2",
-        "linkifyjs": "4.3.2",
         "lodash": "npm:lodash-es@^4.17.21",
         "maplibre-gl": "^5.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
