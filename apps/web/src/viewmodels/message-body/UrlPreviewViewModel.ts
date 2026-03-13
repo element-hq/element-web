@@ -33,8 +33,8 @@ export interface UrlPreviewViewModelProps {
 }
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
-export const PREVIEW_WIDTH = 100;
-export const PREVIEW_HEIGHT = 100;
+export const PREVIEW_WIDTH = 478;
+export const PREVIEW_HEIGHT = 200;
 
 export enum PreviewVisibility {
     /**

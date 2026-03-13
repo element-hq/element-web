@@ -84,9 +84,23 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             {preview.title}
         </Text>
     ) : null;
+
+    const useInline = !preview.image && !preview.author;
+
     return (
-        <div className={classNames(styles.container)}>
+        <div className={classNames(styles.container, useInline && styles.inline)}>
             {img}
+            {useInline && (
+                <div className={styles.siteAvatar}>
+                    <Avatar
+                        type="square"
+                        size="48px"
+                        name={preview.siteName}
+                        id={preview.siteName}
+                        src={preview.siteIcon}
+                    />
+                </div>
+            )}
             <div className={classNames(styles.textContent)}>
                 {preview.author && (
                     <div className={styles.author}>
@@ -112,7 +126,9 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
                 </LinkedText>
                 {preview.siteName && (
                     <div className={styles.siteName}>
-                        <Avatar size="16px" name={preview.siteName} id={preview.siteName} src={preview.siteIcon} />{" "}
+                        {!useInline && (
+                            <Avatar size="16px" name={preview.siteName} id={preview.siteName} src={preview.siteIcon} />
+                        )}
                         <Text as="span" size="sm" weight="regular">
                             {preview.siteName}
                         </Text>

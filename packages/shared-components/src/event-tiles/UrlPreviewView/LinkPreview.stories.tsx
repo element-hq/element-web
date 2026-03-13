@@ -21,6 +21,12 @@ export default {
     args: {
         onImageClick: fn(),
     },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/sI9A2kV2K4xeiyqJsL7Ey3/Link-Previews?node-id=86-7231",
+        },
+    },
 } satisfies Meta<typeof LinkPreview>;
 
 const Template: StoryFn<typeof LinkPreview> = (args) => (
@@ -45,6 +51,7 @@ export const Title = Template.bind({});
 Title.args = {
     title: "A simple title",
     link: "https://matrix.org",
+    siteName: "matrix.org",
 };
 
 export const TitleAndDescription = Template.bind({});
@@ -52,6 +59,7 @@ TitleAndDescription.args = {
     title: "A simple title",
     description: "A simple description with a link to https://matrix.org",
     link: "https://matrix.org",
+    siteName: "matrix.org",
 };
 
 export const WithTooltip = Template.bind({});
