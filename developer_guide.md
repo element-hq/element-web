@@ -125,6 +125,7 @@ See [`docs/playwright.md`](./docs/playwright.md) for how to run the end-to-end t
 
 New code should be committed as follows:
 
-- All new components: https://github.com/element-hq/element-web/tree/develop/src/components
+- New UI components that are reusable, could be used by other Element projects (Element Desktop, Aurora, Element modules...), or don't have tight coupling to specific application logic: [`packages/shared-components`](./packages/shared-components/README.md) (see the [contributing guide](./CONTRIBUTING.md#shared-components))
+- All other new components: https://github.com/element-hq/element-web/tree/develop/src/components
 - CSS: https://github.com/element-hq/element-web/tree/develop/res/css
 - Theme specific CSS & resources: https://github.com/element-hq/element-web/tree/develop/res/themes
