@@ -24,6 +24,7 @@ export * from "./message-body/PinnedMessageBadge";
 export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./message-body/ReactionsRowButton";
 export * from "./message-body/ReactionsRow";
+export * from "./message-body/TileErrorView";
 export * from "./message-body/TimelineSeparator/";
 export * from "./pill-input/Pill";
 export * from "./pill-input/PillInput";
