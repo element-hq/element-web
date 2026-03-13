@@ -938,6 +938,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 link: anchorElement?.href || permalink,
             },
             actionBarFocused: true,
+            hover: false,
         });
     }
 
@@ -945,6 +946,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.setState({
             contextMenu: undefined,
             actionBarFocused: false,
+            hover: false,
         });
     };
 
@@ -1174,7 +1176,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const showMessageActionBar =
             !isEditing &&
             !this.props.forExport &&
-            (this.state.hover || this.state.showActionBarFromFocus || this.state.actionBarFocused);
+            (this.state.hover ||
+                this.state.showActionBarFromFocus ||
+                (this.state.actionBarFocused && !this.state.contextMenu));
         const actionBar = showMessageActionBar ? (
             <ActionBarWrapper
                 mxEvent={this.props.mxEvent}
