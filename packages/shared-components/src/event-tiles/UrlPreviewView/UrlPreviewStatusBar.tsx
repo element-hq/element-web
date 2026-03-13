@@ -34,7 +34,7 @@ export function UrlPreviewStatusBar({ vm, onHideClick }: UrlPreviewStatusBarProp
     return (
         <div className={styles.banner}>
             <div className={styles.content}>
-                <UrlPreviewGroupView vm={vm} />
+                <UrlPreviewGroupView noImagePreviewHack={true} vm={vm} />
             </div>
             <div className={styles.actions}>
                 <IconButton onClick={onHideClick}>

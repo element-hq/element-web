@@ -7,28 +7,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useMemo, type ReactNode } from "react";
-import {
-    UrlPreviewGroupView,
-    UrlPreviewStatusBar,
-    useCreateAutoDisposedViewModel,
-} from "@element-hq/web-shared-components";
+import { UrlPreviewStatusBar, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreviewViewModel";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 export function MessageComposorUrlPreview({ content }: { content: string }): ReactNode | null {
     const urls = useMemo(() => new Set(content.split(" ").filter((word) => URL.canParse(word.trim()))), [content]);
-    // Should this always be on, it's our message!
-    const [mediaVisible] = useMediaVisible();
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new UrlPreviewViewModel({
                 client: MatrixClientPeg.safeGet(),
                 mxEvent: new MatrixEvent({ origin_server_ts: Date.now() }),
-                mediaVisible,
+                mediaVisible: false,
                 onImageClicked: () => {},
                 // XXX: Look at settings store.
                 visible: true,

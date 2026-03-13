@@ -26,6 +26,7 @@ export interface UrlPreviewGroupViewSnapshot {
 
 export interface UrlPreviewGroupViewProps {
     vm: ViewModel<UrlPreviewGroupViewSnapshot> & UrlPreviewGroupViewActions;
+    noImagePreviewHack?: boolean;
 }
 
 export interface UrlPreviewGroupViewActions {
@@ -38,7 +39,7 @@ export interface UrlPreviewGroupViewActions {
 /**
  * UrlPreviewGroupView renders a list of URL previews for a single event.
  */
-export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Element | null {
+export function UrlPreviewGroupView({ vm, noImagePreviewHack }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
     const { previews, totalPreviewCount, previewsLimited, overPreviewLimit, compactLayout } = useViewModel(vm);
     if (previews.length === 0) {
@@ -60,7 +61,12 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
         <div className={styles.wrapper}>
             <div className={classNames(styles.previewGroup, compactLayout && styles.compactLayout)}>
                 {previews.map((preview, i) => (
-                    <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
+                    <LinkPreview
+                        key={preview.link}
+                        onImageClick={() => vm.onImageClick(preview)}
+                        image={noImagePreviewHack ? undefined : preview.image}
+                        {...preview}
+                    />
                 ))}
                 {toggleButton}
             </div>
