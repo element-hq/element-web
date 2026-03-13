@@ -19,7 +19,7 @@ import { LEFT_PANEL_ID, type ResizerSnapshot } from "..";
 
 export interface LeftResizablePanelViewActions {
     /**
-     * Indicates to the view-model that the left panel was resized.
+     * Indicates to the view-model that the left panel is being resized.
      * @param panelSize The new panel size.
      */
     onLeftPanelResize: (panelSize: PanelSize) => void;

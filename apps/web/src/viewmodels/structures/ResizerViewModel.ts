@@ -35,6 +35,9 @@ function getInitialState(): ResizerSnapshot {
     };
 }
 
+/**
+ * Viewmodel that drives the resizable left panel.
+ */
 export class ResizerViewModel
     extends BaseViewModel<ResizerSnapshot, void>
     implements SeparatorViewActions, LeftResizablePanelViewActions, GroupViewActions

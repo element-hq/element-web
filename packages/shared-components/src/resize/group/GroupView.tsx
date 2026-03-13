@@ -23,6 +23,9 @@ interface Props {
     vm: ViewModel<unknown, GroupViewActions>;
 }
 
+/**
+ * This the root component for collapsible left panel. Based on {@link Group} from react-resizable-panels.
+ */
 export function GroupView({ vm, children }: PropsWithChildren<Props>): React.ReactNode {
     useViewModel(vm);
 

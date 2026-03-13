@@ -38,6 +38,9 @@ interface Props {
     className?: string;
 }
 
+/**
+ * Custom separator for collapsible left-panel based on {@link Separator}.
+ */
 export function SeparatorView({ vm, className }: Props): React.ReactNode {
     const { translate: _t } = useI18n();
     const { isCollapsed, isFocusedViaKeyboard } = useViewModel(vm);
