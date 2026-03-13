@@ -119,7 +119,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
             <p
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
             >
-              Great description
+              A regular square image.
             </p>
           </div>
         </div>
@@ -137,7 +137,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
             <img
               alt=""
               class="thumbnail"
-              src="/static/element.png"
+              src="/static/tallImage.png"
             />
           </button>
           <div
@@ -158,7 +158,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
             <p
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
             >
-              Another description
+              This one has a taller image which should crop nicely.
             </p>
           </div>
         </div>
@@ -369,7 +369,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
             <p
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
             >
-              Great description
+              A regular square image.
             </p>
           </div>
         </div>
@@ -387,7 +387,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
             <img
               alt=""
               class="thumbnail"
-              src="/static/element.png"
+              src="/static/tallImage.png"
             />
           </button>
           <div
@@ -408,7 +408,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
             <p
               class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
             >
-              Another description
+              This one has a taller image which should crop nicely.
             </p>
           </div>
         </div>

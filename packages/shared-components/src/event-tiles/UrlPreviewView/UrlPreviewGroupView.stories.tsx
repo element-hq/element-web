@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import imageFile from "../../../static/element.png";
+import tallImageFile from "../../../static/tallImage.png";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import {
     UrlPreviewGroupView,
@@ -89,20 +90,21 @@ MultiplePreviewsVisible.args = {
     previews: [
         {
             title: "One",
-            description: "Great description",
+            description: "A regular square image.",
             link: "https://matrix.org",
             image: {
                 imageThumb: imageFile,
                 imageFull: imageFile,
             },
         },
+        // These images should appear the same size despite having different dimensions.
         {
             title: "Two",
-            description: "Another description",
+            description: "This one has a taller image which should crop nicely.",
             link: "https://matrix.org",
             image: {
-                imageThumb: imageFile,
-                imageFull: imageFile,
+                imageThumb: tallImageFile,
+                imageFull: tallImageFile,
             },
         },
         {

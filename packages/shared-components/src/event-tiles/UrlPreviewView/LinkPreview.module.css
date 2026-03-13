@@ -9,6 +9,8 @@
     /* Thumbnails are always limited to a maxiumum of 100px */
     max-width: 100px;
     max-height: 100px;
+    /* Ensure we don't stretch the image */
+    object-fit: cover;
 }
 
 .link {
@@ -44,6 +46,9 @@
         padding: 0;
         border: none;
         background: none;
+
+        /* Consistent image size */
+        flex: 0 0 100px;
     }
 
     .caption {
