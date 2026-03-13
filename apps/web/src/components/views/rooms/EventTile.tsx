@@ -1602,7 +1602,11 @@ class EventTileErrorBoundary extends React.Component<EventTileErrorBoundaryProps
     public render(): ReactNode {
         if (this.state.error) {
             return (
-                <EventTileErrorFallback error={this.state.error} layout={this.props.layout} mxEvent={this.props.mxEvent} />
+                <EventTileErrorFallback
+                    error={this.state.error}
+                    layout={this.props.layout}
+                    mxEvent={this.props.mxEvent}
+                />
             );
         }
 

@@ -6,7 +6,7 @@
  */
 
 import { mocked } from "jest-mock";
-import { MatrixEvent, type MatrixEventEventContent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../src/Modal";
 import SdkConfig from "../../../src/SdkConfig";
@@ -18,7 +18,7 @@ import { TileErrorViewModel } from "../../../src/viewmodels/message-body/TileErr
 describe("TileErrorViewModel", () => {
     const createEvent = (type = "m.room.message"): MatrixEvent =>
         new MatrixEvent({
-            content: {} as MatrixEventEventContent,
+            content: {},
             event_id: `$${type}`,
             origin_server_ts: Date.now(),
             room_id: "!room:example.org",
