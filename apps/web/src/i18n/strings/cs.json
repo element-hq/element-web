@@ -1554,7 +1554,6 @@
         "notification_settings_beta_caption": "Představujeme jednodušší způsob, jak změnit nastavení oznámení. Přizpůsobte svůj %(brand)s přesně tak, jak se vám líbí.",
         "notification_settings_beta_title": "Nastavení oznámení",
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
-        "release_announcement": "Oznámení o vydání",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",
@@ -2093,7 +2092,6 @@
         "not_found_title": "Tato místnost nebo prostor neexistuje.",
         "not_found_title_name": "%(roomName)s neexistuje.",
         "peek_join_prompt": "Nahlížíte do místnosti %(roomName)s. Chcete do ní vstoupit?",
-        "pinned_message_badge": "Připnutá zpráva",
         "pinned_message_banner": {
             "button_close_list": "Zavřít seznam",
             "button_view_all": "Zobrazit vše",

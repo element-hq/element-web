@@ -1568,7 +1568,6 @@
         "notification_settings_beta_caption": "Predstavujeme jednoduchší spôsob zmeny nastavení oznámení. Prispôsobte si svoju aplikáciu %(brand)s, presne podľa svojich predstáv.",
         "notification_settings_beta_title": "Nastavenia oznámení",
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
-        "release_announcement": "Oznámenie o vydaní",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
@@ -2113,7 +2112,6 @@
         "not_found_title": "Táto miestnosť alebo priestor neexistuje.",
         "not_found_title_name": "%(roomName)s neexistuje.",
         "peek_join_prompt": "Zobrazujete náhľad %(roomName)s. Chcete sa k nej pripojiť?",
-        "pinned_message_badge": "Pripnutá správa",
         "pinned_message_banner": {
             "button_close_list": "Zatvoriť zoznam",
             "button_view_all": "Zobraziť všetko",
