@@ -49,10 +49,6 @@ class InnerTextualBody extends React.Component<Props> {
 
     private EventContentBodyViewModel: EventContentBodyViewModel;
 
-    public state = {
-        links: [],
-    };
-
     public constructor(props: Props, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
         const mxEvent = props.mxEvent;
