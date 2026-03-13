@@ -11,8 +11,7 @@ import "./@types/commonmark"; // import better types than @types/commonmark
 import * as commonmark from "commonmark";
 import { escape } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-
-import { linkify } from "./linkify-matrix";
+import { findLinksInString } from "@element-hq/web-shared-components";
 
 const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "s", "u", "br", "br/"];
 
@@ -186,7 +185,7 @@ export default class Markdown {
                 // We should not do this if previous node was not a textnode, as we can't combine it then.
                 if ((node.type === "emph" || node.type === "strong") && previousNode?.type === "text") {
                     if (event.entering) {
-                        const foundLinks = linkify.find(text);
+                        const foundLinks = findLinksInString(text);
                         for (const { value } of foundLinks) {
                             if (node?.firstChild?.literal) {
                                 /**
@@ -197,7 +196,7 @@ export default class Markdown {
                                 const nonEmphasizedText = `${format}${innerNodeLiteral(node)}${format}`;
                                 const f = getTextUntilEndOrLinebreak(node);
                                 const newText = value + nonEmphasizedText + f;
-                                const newLinks = linkify.find(newText);
+                                const newLinks = findLinksInString(newText);
                                 // Should always find only one link here, if it finds more it means that the algorithm is broken
                                 if (newLinks.length === 1) {
                                     const emphasisTextNode = new commonmark.Node("text");

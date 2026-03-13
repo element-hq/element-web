@@ -75,16 +75,6 @@ export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
                 .getOrCreate(LabGroup.Experimental, [])
                 .push(<SettingsFlag key="lowBandwidth" name="lowBandwidth" level={SettingLevel.DEVICE} />);
 
-            groups
-                .getOrCreate(LabGroup.Analytics, [])
-                .push(
-                    <SettingsFlag
-                        key="automaticErrorReporting"
-                        name="automaticErrorReporting"
-                        level={SettingLevel.DEVICE}
-                    />,
-                );
-
             labsSections = (
                 <>
                     {sortBy(Array.from(groups.entries()), "0").map(([group, flags]) => (

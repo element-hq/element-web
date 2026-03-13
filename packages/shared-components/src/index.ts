@@ -20,6 +20,7 @@ export * from "./message-body/EventContentBody";
 export * from "./message-body/MediaBody";
 export * from "./message-body/MessageTimestampView";
 export * from "./message-body/DecryptionFailureBodyView";
+export * from "./message-body/PinnedMessageBadge";
 export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./message-body/ReactionsRowButton";
 export * from "./message-body/ReactionsRow";
@@ -41,6 +42,7 @@ export * from "./room-list/VirtualizedRoomListView";
 export * from "./timeline/DateSeparatorView/";
 export * from "./utils/Box";
 export * from "./utils/Flex";
+export * from "./utils/LinkedText";
 export * from "./right-panel/WidgetContextMenu";
 export * from "./utils/VirtualizedList";
 
@@ -52,5 +54,6 @@ export * from "./utils/DateUtils";
 export * from "./utils/numbers";
 export * from "./utils/FormattingUtils";
 export * from "./utils/I18nApi";
+export * from "./utils/linkify";
 // MVVM
 export * from "./viewmodel";
