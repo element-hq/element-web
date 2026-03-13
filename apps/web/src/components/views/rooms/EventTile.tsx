@@ -271,6 +271,7 @@ export interface EventTileProps {
 interface IState {
     // Whether the action bar is focused.
     actionBarFocused: boolean;
+    showActionBarFromFocus: boolean;
 
     /**
      * E2EE shield we should show for decryption problems.
@@ -345,6 +346,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.state = {
             // Whether the action bar is focused.
             actionBarFocused: false,
+            showActionBarFromFocus: false,
 
             shieldColour: EventShieldColour.NONE,
             shieldReason: null,
@@ -862,8 +864,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.setState({ actionBarFocused });
     };
 
-    private onFocusWithin = (): void => {
-        this.setState({ focusWithin: true });
+    private onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
+        // Show the action toolbar for keyboard-visible focus, with what-input as a fallback signal.
+        const target = event.target as HTMLElement;
+        const showActionBarFromFocus =
+            target.matches(":focus-visible") || document.body.getAttribute("data-whatinput") === "keyboard";
+        this.setState({ focusWithin: true, showActionBarFromFocus });
     };
 
     private onBlurWithin = (event: FocusEvent<HTMLElement>): void => {
@@ -871,7 +877,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             return;
         }
 
-        this.setState({ focusWithin: false });
+        this.setState({ focusWithin: false, showActionBarFromFocus: false });
     };
 
     private getTile: () => IEventTileType | null = () => this.tile.current;
@@ -1168,7 +1174,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const showMessageActionBar =
             !isEditing &&
             !this.props.forExport &&
-            (this.state.hover || this.state.focusWithin || this.state.actionBarFocused);
+            (this.state.hover || this.state.showActionBarFromFocus || this.state.actionBarFocused);
         const actionBar = showMessageActionBar ? (
             <ActionBarWrapper
                 mxEvent={this.props.mxEvent}
