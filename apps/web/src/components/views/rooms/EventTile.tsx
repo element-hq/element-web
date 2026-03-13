@@ -861,7 +861,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private onActionBarFocusChange = (actionBarFocused: boolean): void => {
-        this.setState({ actionBarFocused });
+        this.setState({
+            actionBarFocused,
+            hover: actionBarFocused ? this.state.hover : (this.ref.current?.matches(":hover") ?? false),
+        });
     };
 
     private onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
@@ -1174,7 +1177,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         const showMessageActionBar =
-            !isInfoMessage &&
             !isEditing &&
             !this.props.forExport &&
             (this.state.hover ||
