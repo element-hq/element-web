@@ -10,9 +10,7 @@ import {
     MentionIcon,
     ErrorSolidIcon,
     NotificationsOffSolidIcon,
-    VideoCallSolidIcon,
     EmailSolidIcon,
-    VoiceCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
 
@@ -41,8 +39,6 @@ export interface NotificationDecorationData {
     count: number;
     /** Whether notifications are muted */
     muted: boolean;
-    /** Optional call type indicator */
-    callType?: "video" | "voice";
 }
 
 /**
@@ -56,7 +52,6 @@ export interface NotificationDecorationProps extends NotificationDecorationData 
 export const NotificationDecoration: React.FC<NotificationDecorationProps> = ({
     hasAnyNotificationOrActivity,
     muted,
-    callType,
     isUnsentMessage,
     invited,
     isMention,
@@ -65,7 +60,7 @@ export const NotificationDecoration: React.FC<NotificationDecorationProps> = ({
     count,
 }) => {
     // Don't render anything if there's nothing to show
-    if (!hasAnyNotificationOrActivity && !muted && !callType) {
+    if (!hasAnyNotificationOrActivity && !muted) {
         return null;
     }
 
@@ -73,12 +68,6 @@ export const NotificationDecoration: React.FC<NotificationDecorationProps> = ({
         <Flex align="center" justify="center" gap="var(--cpd-space-1x)" data-testid="notification-decoration">
             {isUnsentMessage && (
                 <ErrorSolidIcon width="20px" height="20px" fill="var(--cpd-color-icon-critical-primary)" />
-            )}
-            {callType === "video" && (
-                <VideoCallSolidIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
-            )}
-            {callType === "voice" && (
-                <VoiceCallSolidIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />
             )}
             {invited && <EmailSolidIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}
             {isMention && <MentionIcon width="20px" height="20px" fill="var(--cpd-color-icon-accent-primary)" />}

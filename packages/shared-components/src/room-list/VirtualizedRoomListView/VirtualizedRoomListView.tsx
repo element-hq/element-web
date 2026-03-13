@@ -9,7 +9,7 @@ import React, { useCallback, useMemo, useRef, type JSX, type ReactNode } from "r
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
-import { RoomListItemView, type Room } from "../RoomListItemView";
+import { RoomListItemView, type Room, type CallParticipantListItem } from "../RoomListItemView";
 import { useViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
 import { FlatVirtualizedList, type VirtualizedListContext } from "../../utils/VirtualizedList";
@@ -51,6 +51,12 @@ export interface VirtualizedRoomListViewProps {
      * Optional callback for keyboard key down events
      */
     onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+
+    /**
+     * Render function for user avatar
+     * @param avatarUrl - The URL of the user's avatar
+     */
+    renderUserAvatar: (participant: CallParticipantListItem) => ReactNode;
 }
 
 /** Height of a single room list item in pixels (44px item + 8px padding bottom) */
@@ -81,7 +87,7 @@ const EXTENDED_VIEWPORT_HEIGHT = 25 * ROOM_LIST_ITEM_HEIGHT;
  * <VirtualizedRoomListView vm={roomListViewModel} renderAvatar={(room) => <Avatar room={room} />} />
  * ```
  */
-export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: VirtualizedRoomListViewProps): JSX.Element {
+export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown, renderUserAvatar }: VirtualizedRoomListViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
     const { roomListState, roomIds } = snapshot;
     const activeRoomIndex = roomListState.activeRoomIndex;
@@ -128,10 +134,11 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     onFocus={onFocus}
                     roomIndex={index}
                     roomCount={roomCount}
+                    renderCallUserAvatar={renderUserAvatar}
                 />
             );
         },
-        [activeRoomIndex, roomCount, renderAvatar, vm],
+        [activeRoomIndex, roomCount, renderAvatar, vm, renderUserAvatar],
     );
 
     /**

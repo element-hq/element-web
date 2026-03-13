@@ -56,10 +56,19 @@
         display: flex;
     }
 
-    /* When the menu is visible, hide the notification decoration to avoid clutter */
+    /* When the menu is visible, hide the notification decoration and call member list to avoid clutter */
     .notificationDecoration {
         display: none;
     }
+    .callRoomList {
+        display: none;
+    }
+}
+
+.callRoomList {
+    flex: 0 0 auto;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .container {
@@ -126,4 +135,10 @@
 
 .lastItem {
     --padding-bottom: 0px;
+}
+
+.rightAlignedContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
