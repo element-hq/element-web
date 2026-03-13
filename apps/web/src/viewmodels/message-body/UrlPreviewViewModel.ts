@@ -231,7 +231,7 @@ export class UrlPreviewViewModel
             overPreviewLimit: false,
             compactLayout: SettingsStore.getValue("useCompactLayout"),
         });
-        this.urlPreviewEnabledByUser = global.localStorage.getItem(storageKey) !== "1";
+        this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(storageKey) !== "1";
         this.urlPreviewVisible = props.visible;
         this.mediaVisible = props.mediaVisible;
         this.storageKey = storageKey;
@@ -390,7 +390,7 @@ export class UrlPreviewViewModel
     public readonly onShowClick = (): Promise<void> => {
         // FIXME: persist this somewhere smarter than local storage
         this.urlPreviewEnabledByUser = true;
-        global.localStorage?.removeItem(this.storageKey);
+        globalThis.localStorage?.removeItem(this.storageKey);
         return this.computeSnapshot();
     };
 
@@ -402,7 +402,7 @@ export class UrlPreviewViewModel
      */
     public readonly onHideClick = (): Promise<void> => {
         // FIXME: persist this somewhere smarter than local storage
-        global.localStorage?.setItem(this.storageKey, "1");
+        globalThis.localStorage?.setItem(this.storageKey, "1");
         this.urlPreviewEnabledByUser = false;
         return this.computeSnapshot();
     };
