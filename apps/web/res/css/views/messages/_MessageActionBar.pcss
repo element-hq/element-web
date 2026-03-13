@@ -11,7 +11,6 @@ Please see LICENSE files in the repository root for full details.
     --MessageActionBar-size-margin: 3px;
 
     position: absolute;
-    line-height: $font-24px;
     top: calc(
         -1 *
             (
@@ -63,37 +62,6 @@ Please see LICENSE files in the repository root for full details.
             height: 100%;
             top: 0;
             left: 0;
-        }
-    }
-
-    .mx_MessageActionBar_iconButton {
-        --MessageActionBar-icon-size: 20px;
-        width: var(--MessageActionBar-size-button);
-        height: var(--MessageActionBar-size-button);
-        color: var(--cpd-color-icon-secondary);
-        position: relative;
-        margin: var(--MessageActionBar-size-margin);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            height: var(--MessageActionBar-icon-size);
-            width: var(--MessageActionBar-icon-size);
-            flex: 0 0 var(--MessageActionBar-icon-size);
-        }
-
-        &:disabled,
-        &[disabled] {
-            cursor: not-allowed;
-            opacity: 0.75;
-        }
-
-        &:hover {
-            color: var(--cpd-color-icon-primary);
-            background: var(--cpd-color-bg-subtle-secondary);
-            border-radius: 6px;
-            z-index: 1;
         }
     }
 }

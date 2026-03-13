@@ -938,6 +938,13 @@ $left-gutter: 64px;
     }
 }
 
+.mx_EventTile:hover .mx_LegacyActionBar,
+.mx_EventTile.mx_EventTile_actionBarFocused .mx_LegacyActionBar,
+[data-whatinput="keyboard"] .mx_EventTile:focus-within .mx_LegacyActionBar,
+.mx_EventTile:focus-visible:focus-within .mx_LegacyActionBar {
+    visibility: visible;
+}
+
 .mx_EventTile[data-shape="ThreadsList"],
 .mx_EventTile[data-shape="Notification"] {
     --topOffset: $spacing-12;
