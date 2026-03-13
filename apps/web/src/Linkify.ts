@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024, 2025 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
@@ -6,15 +7,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
-import { merge } from "lodash";
-import _Linkify from "linkify-react";
+import {
+    PERMITTED_URL_SCHEMES,
+    linkifyString as _linkifyString,
+    linkifyHtml as _linkifyHtml,
+    LinkifyMatrixOpaqueIdType,
+    generateLinkedTextOptions,
+    type LinkEventListener,
+} from "@element-hq/web-shared-components";
+import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
 
-import { _linkifyString, _linkifyHtml, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
-import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
+import { ELEMENT_URL_PATTERN } from "./linkify-matrix";
 import { mediaFromMxc } from "./customisations/Media";
-import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
+import {
+    parsePermalink,
+    tryTransformEntityToPermalink,
+    tryTransformPermalinkToLocalHref,
+} from "./utils/permalinks/Permalinks";
+import dis from "./dispatcher/dispatcher";
+import { Action } from "./dispatcher/actions";
+import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -29,7 +44,7 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
             const transformed = tryTransformPermalinkToLocalHref(attribs.href); // only used to check if it is a link that can be handled locally
             if (
                 transformed !== attribs.href || // it could be converted so handle locally symbols e.g. @user:server.tdl, matrix: and matrix.to
-                attribs.href.match(ELEMENT_URL_PATTERN) // for https links to Element domains
+                ELEMENT_URL_PATTERN.test(attribs.href) // for https links to Element domains
             ) {
                 delete attribs.target;
             }
@@ -193,43 +208,199 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
-/* Wrapper around linkify-react merging in our default linkify options */
-export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
-    return (
-        <_Linkify as={as} options={merge({}, linkifyMatrixOptions, options)}>
-            {children}
-        </_Linkify>
-    );
+/**
+ * Handler function when a UserID link is clicked.
+ * @param event The click event
+ * @param userId The linked UserID
+ */
+function onUserClick(event: MouseEvent, userId: string): void {
+    event.preventDefault();
+    dis.dispatch<ViewUserPayload>({
+        action: Action.ViewUser,
+        member: new User(userId),
+    });
 }
+
+/**
+ * Handler function when a Room Alias link is clicked.
+ * @param event The click event
+ * @param roomAlias The linked room alias
+ */
+function onAliasClick(event: MouseEvent, roomAlias: string): void {
+    event.preventDefault();
+    dis.dispatch<ViewRoomPayload>({
+        action: Action.ViewRoom,
+        room_alias: roomAlias,
+        metricsTrigger: "Timeline",
+        metricsViaKeyboard: false,
+    });
+}
+
+/**
+ * Generates a set of event handlers for a regular URL link.
+ *
+ * @param href The link location.
+ * @returns Event listenenrs compatible with linkifyjs.
+ */
+function urlEventListeners(href: string): LinkEventListener {
+    // intercept local permalinks to users and show them like userids (in userinfo of current room)
+    try {
+        const permalink = parsePermalink(href);
+        if (permalink?.userId) {
+            return {
+                click: function (e: MouseEvent) {
+                    onUserClick(e, permalink.userId!);
+                },
+            };
+        } else {
+            // for events, rooms etc. (anything other than users)
+            const localHref = tryTransformPermalinkToLocalHref(href);
+            if (localHref !== href) {
+                // it could be converted to a localHref -> therefore handle locally
+                return {
+                    click: function (e: MouseEvent) {
+                        e.preventDefault();
+                        globalThis.location.hash = localHref;
+                    },
+                };
+            }
+        }
+    } catch {
+        // OK fine, it's not actually a permalink
+    }
+    return {};
+}
+
+/**
+ * Generates a set of event handlers for a UserID link.
+ *
+ * @param href A link that contains a userId.
+ * @returns Event listenenrs compatible with linkifyjs.
+ */
+export function userIdEventListeners(href: string): LinkEventListener {
+    return {
+        click: function (e: MouseEvent) {
+            e.preventDefault();
+            const userId = parsePermalink(href)?.userId ?? href;
+            if (userId) onUserClick(e, userId);
+        },
+    };
+}
+
+/**
+ * Generates a set of event handlers for a UserID link.
+ *
+ * @param href A link that contains a room alias.
+ * @returns Event listenenrs compatible with linkifyjs.
+ */
+export function roomAliasEventListeners(href: string): LinkEventListener {
+    return {
+        click: function (e: MouseEvent) {
+            e.preventDefault();
+            const alias = parsePermalink(href)?.roomIdOrAlias ?? href;
+            if (alias) onAliasClick(e, alias);
+        },
+    };
+}
+
+/**
+ * Generates a `target` attribute for the anchor element
+ * for the given `href` value.
+ *
+ * @param href A URL from a link.
+ * @returns The resulting `target` value.
+ */
+function urlTargetTransformFunction(href: string): string {
+    try {
+        const transformed = tryTransformPermalinkToLocalHref(href);
+        if (
+            transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
+            ELEMENT_URL_PATTERN.test(decodeURIComponent(href)) // for https links to Element domains
+        ) {
+            return "";
+        } else {
+            return "_blank";
+        }
+    } catch {
+        // malformed URI
+    }
+    return "";
+}
+
+/**
+ * Generates the result `href` value based on an incoming `href` value and a link type.
+ *
+ * @param href A URL from a link.
+ * @param type The type of link beinh handled.
+ * @returns The resulting `href` value.
+ */
+export function formatHref(href: string, type: LinkifyMatrixOpaqueIdType): string {
+    switch (type) {
+        case LinkifyMatrixOpaqueIdType.URL:
+            if (href.startsWith("mxc://") && MatrixClientPeg.get()) {
+                return getHttpUriForMxc(
+                    MatrixClientPeg.get()!.baseUrl,
+                    href,
+                    undefined,
+                    undefined,
+                    undefined,
+                    false,
+                    true,
+                );
+            }
+        // fallthrough
+        case LinkifyMatrixOpaqueIdType.RoomAlias:
+        case LinkifyMatrixOpaqueIdType.UserId:
+        default: {
+            return tryTransformEntityToPermalink(MatrixClientPeg.safeGet(), href) ?? "";
+        }
+    }
+}
+
+/**
+ * The standard configuration for a LinkedTextContext.Provider
+ * within Element Web.
+ */
+export const LinkedTextConfiguration = {
+    userIdListener: userIdEventListeners,
+    roomAliasListener: roomAliasEventListeners,
+    urlListener: urlEventListeners,
+    hrefTransformer: formatHref,
+    urlTargetTransformer: urlTargetTransformFunction,
+};
 
 /**
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
- * @param {string} str string to linkify
- * @param {object} [options] Options for linkifyString. Default: linkifyMatrixOptions
- * @returns {string} Linkified string
+ * @param str string to linkify
+ * @param [options] Options for linkifyString.
+ * @returns Linkified string
  */
-export function linkifyString(str: string, options = linkifyMatrixOptions): string {
-    return _linkifyString(str, options);
+export function linkifyString(value: string, options = generateLinkedTextOptions(LinkedTextConfiguration)): string {
+    return _linkifyString(value, options);
 }
 
 /**
  * Linkifies the given HTML-formatted string. This is a wrapper around 'linkifyjs/html'.
  *
- * @param {string} str HTML string to linkify
- * @param {object} [options] Options for linkifyHtml. Default: linkifyMatrixOptions
- * @returns {string} Linkified string
+ * @param str HTML string to linkify
+ * @param [options] Options for linkifyHtml.
+ * @returns Linkified string
  */
-export function linkifyHtml(str: string, options = linkifyMatrixOptions): string {
-    return _linkifyHtml(str, options);
+export function linkifyHtml(value: string, options = generateLinkedTextOptions(LinkedTextConfiguration)): string {
+    return _linkifyHtml(value, options);
 }
+
 /**
  * Linkify the given string and sanitize the HTML afterwards.
  *
- * @param {string} dirtyHtml The HTML string to sanitize and linkify
- * @param {object} [options] Options for linkifyString. Default: linkifyMatrixOptions
- * @returns {string}
+ * @param dirtyString The string to linkify, and then sanitize.
+ * @param [options] Options for linkifyString. Default: linkifyMatrixOptions
+ * @returns HTML string
  */
-export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrixOptions): string {
+export function linkifyAndSanitizeHtml(
+    dirtyHtml: string,
+    options = generateLinkedTextOptions(LinkedTextConfiguration),
+): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }

@@ -1496,7 +1496,6 @@
         "notification_settings_beta_caption": "Ներկայացնում ենք ձեր ծանուցումների կարգավորումները փոխելու ավելի պարզ միջոց: Անհատականացրեք ձեր %(brand)s-ն այնպես, ինչպես ցանկանում եք:",
         "notification_settings_beta_title": "Ծանուցման կարգավորումներ",
         "notifications": "Միացնել ծանուցումների վահանակը սենյակի վերնագրում",
-        "release_announcement": "Թողարկման հայտարարություն",
         "render_reaction_images": "Արձանագրել հատուկ պատկերներ ռեակցիաներում",
         "render_reaction_images_description": "Երբեմն կոչվում է “հատուկ էմոջիներ”:",
         "report_to_moderators": "Հաղորդել մոդերատորներին",
@@ -2013,7 +2012,6 @@
         "not_found_title": "Այս սենյակը կամ տարածքը գոյություն չունի։",
         "not_found_title_name": "%(roomName)s-ը գոյություն չունի։",
         "peek_join_prompt": "Դուք նախադիտում եք %(roomName)s-ը. Ուզու՞մ եք միանալ դրան։",
-        "pinned_message_badge": "Ամրացված հաղորդագրություն",
         "pinned_message_banner": {
             "button_close_list": "Փակել ցանկը",
             "button_view_all": "Դիտել բոլորը",

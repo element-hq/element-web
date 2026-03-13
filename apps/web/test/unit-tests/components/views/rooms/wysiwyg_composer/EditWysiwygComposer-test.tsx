@@ -55,7 +55,9 @@ describe("EditWysiwygComposer", () => {
     it("Should not render the component when not ready", async () => {
         // When
         const { rerender } = customRender(false);
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"), {
+            timeout: 2000,
+        });
 
         rerender(
             <MatrixClientContext.Provider value={mockClient}>

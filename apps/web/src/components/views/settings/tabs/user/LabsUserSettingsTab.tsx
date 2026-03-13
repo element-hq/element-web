@@ -79,11 +79,6 @@ export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
                 .getOrCreate(LabGroup.Analytics, [])
                 .push(
                     <SettingsFlag
-                        key="automaticErrorReporting"
-                        name="automaticErrorReporting"
-                        level={SettingLevel.DEVICE}
-                    />,
-                    <SettingsFlag
                         key="automaticDecryptionErrorReporting"
                         name="automaticDecryptionErrorReporting"
                         level={SettingLevel.DEVICE}

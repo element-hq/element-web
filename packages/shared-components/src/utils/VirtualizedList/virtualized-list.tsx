@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useRef, type JSX, useCallback, useEffect, useState, useMemo } from "react";
-import { type VirtuosoHandle, type ListRange, Virtuoso, type VirtuosoProps } from "react-virtuoso";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type ListRange, type VirtuosoHandle, type VirtuosoProps } from "react-virtuoso";
 
 /**
  * Keyboard key codes
@@ -42,7 +42,7 @@ export type VirtualizedListContext<Context> = {
     context: Context;
 };
 
-export interface IVirtualizedListProps<Item, Context> extends Omit<
+export interface VirtualizedListProps<Item, Context> extends Omit<
     VirtuosoProps<Item, VirtualizedListContext<Context>>,
     "data" | "itemContent" | "context"
 > {
@@ -51,21 +51,6 @@ export interface IVirtualizedListProps<Item, Context> extends Omit<
      * Each item will be passed to getItemComponent for rendering.
      */
     items: Item[];
-
-    /**
-     * Function that renders each list item as a JSX element.
-     * @param index - The index of the item in the list
-     * @param item - The data item to render
-     * @param context - The context object containing the focused key and any additional data
-     * @param onFocus - A callback that is required to be called when the item component receives focus
-     * @returns JSX element representing the rendered item
-     */
-    getItemComponent: (
-        index: number,
-        item: Item,
-        context: VirtualizedListContext<Context>,
-        onFocus: (item: Item, e: React.FocusEvent) => void,
-    ) => JSX.Element;
 
     /**
      * Optional additional context data to pass to each rendered item.
@@ -108,6 +93,28 @@ export interface IVirtualizedListProps<Item, Context> extends Omit<
      * @param range - The new visible range with startIndex and endIndex
      */
     rangeChanged?: (range: ListRange) => void;
+
+    /**
+     * Optional function to map from the items array index to the scroll index
+     * used by virtuoso's scrollIntoView. This is needed when the items array
+     * contains entries (such as group headers) that don't have a direct 1:1
+     * mapping with virtuoso's own item indices.
+     *
+     * @param itemsIndex - The index in the items array
+     * @returns The index to pass to virtuoso's scrollIntoView
+     */
+    mapScrollIndex?: (itemsIndex: number) => number;
+
+    /**
+     * Optional function to map from virtuoso's reported visible-range indices
+     * back to the items array indices. This is needed when virtuoso reports
+     * ranges in a different index space than the items array (e.g., in
+     * GroupedVirtuoso where group headers are not counted in the range).
+     *
+     * @param virtuosoIndex - The index reported by virtuoso's rangeChanged
+     * @returns The corresponding index in the items array
+     */
+    mapRangeIndex?: (virtuosoIndex: number) => number;
 }
 
 /**
@@ -117,24 +124,49 @@ export type ScrollIntoViewOnChange<Item, Context> = NonNullable<
     VirtuosoProps<Item, VirtualizedListContext<Context>>["scrollIntoViewOnChange"]
 >;
 
+export interface UseVirtualizedListResult<Item, Context> extends Omit<
+    VirtuosoProps<Item, VirtualizedListContext<Context>>,
+    "data" | "itemContent" | "context" | "onKeyDown" | "onFocus" | "onBlur" | "rangeChanged" | "scrollerRef" | "ref"
+> {
+    ref: React.RefObject<VirtuosoHandle | null>;
+    scrollerRef: (element: HTMLElement | Window | null) => void;
+    onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+    onFocus: (e: React.FocusEvent) => void;
+    onBlur: (event: React.FocusEvent<HTMLDivElement>) => void;
+    rangeChanged: (range: ListRange) => void;
+    onFocusForGetItemComponent: (item: Item, e: React.FocusEvent) => void;
+    context: VirtualizedListContext<Context>;
+}
+
 /**
- * A generic virtualized list component built on top of react-virtuoso.
- * Provides keyboard navigation and virtualized rendering for performance with large lists.
+ * A hook that provides keyboard navigation and focus management for a virtualized list
+ * built on top of react-virtuoso.
  *
- * @template Item - The type of data items in the list
- * @template Context - The type of additional context data passed to items
+ * Handles Arrow Up/Down, Home, End, Page Up/Down key navigation, focus tracking via
+ * a roving `tabIndex`, and automatic scrolling to keep the focused item visible.
+ *
+ * Returns props to spread onto a Virtuoso component along with an `onFocusForGetItemComponent`
+ * callback that each item must call on focus to keep the focus state in sync.
+ *
+ * @param props - The virtualized list configuration including items, focusability checks,
+ *                key extraction, and any pass-through Virtuoso props.
+ * @returns An object of props to wire up to a Virtuoso component, plus `onFocusForGetItemComponent`
+ *          for individual item focus handling.
  */
-export function VirtualizedList<Item, Context>(props: IVirtualizedListProps<Item, Context>): React.ReactElement {
+export function useVirtualizedList<Item, Context>(
+    props: VirtualizedListProps<Item, Context>,
+): UseVirtualizedListResult<Item, Context> {
     // Extract our custom props to avoid conflicts with Virtuoso props
     const {
         items,
-        getItemComponent,
         isItemFocusable,
         getItemKey,
         context,
         onKeyDown,
         totalCount,
         rangeChanged,
+        mapScrollIndex,
+        mapRangeIndex,
         ...virtuosoProps
     } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -181,14 +213,15 @@ export function VirtualizedList<Item, Context>(props: IVirtualizedListProps<Item
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
                 setTabIndexKey(key);
+                const scrollIndex = mapScrollIndex ? mapScrollIndex(clampedIndex) : clampedIndex;
                 virtuosoHandleRef.current?.scrollIntoView({
-                    index: clampedIndex,
+                    index: scrollIndex,
                     align: align,
                     behavior: "auto",
                 });
             }
         },
-        [items, getItemKey],
+        [items, getItemKey, mapScrollIndex],
     );
 
     /**
@@ -300,18 +333,12 @@ export function VirtualizedList<Item, Context>(props: IVirtualizedListProps<Item
         [getItemKey],
     );
 
-    const getItemComponentInternal = useCallback(
-        (index: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element =>
-            getItemComponent(index, item, context, onFocusForGetItemComponent),
-        [getItemComponent, onFocusForGetItemComponent],
-    );
-
     /**
      * Handles focus events on the list.
      * Sets the focused state and scrolls to the focused item if it is not currently visible.
      */
     const onFocus = useCallback(
-        (e?: React.FocusEvent): void => {
+        (e: React.FocusEvent): void => {
             if (e?.currentTarget !== virtuosoDomRef.current || typeof tabIndexKey !== "string") {
                 return;
             }
@@ -325,8 +352,8 @@ export function VirtualizedList<Item, Context>(props: IVirtualizedListProps<Item
             ) {
                 scrollToIndex(index);
             }
-            e?.stopPropagation();
-            e?.preventDefault();
+            e.stopPropagation();
+            e.preventDefault();
         },
         [keyToIndexMap, visibleRange, scrollToIndex, tabIndexKey],
     );
@@ -351,31 +378,24 @@ export function VirtualizedList<Item, Context>(props: IVirtualizedListProps<Item
     // Combine internal range tracking with optional external callback
     const handleRangeChanged = useCallback(
         (range: ListRange) => {
-            setVisibleRange(range);
+            const internalRange = mapRangeIndex
+                ? { startIndex: mapRangeIndex(range.startIndex), endIndex: mapRangeIndex(range.endIndex) }
+                : range;
+            setVisibleRange(internalRange);
             rangeChanged?.(range);
         },
-        [rangeChanged],
+        [rangeChanged, mapRangeIndex],
     );
 
-    return (
-        <Virtuoso
-            // note that either the container of direct children must be focusable to be axe
-            // compliant, so we leave tabIndex as the default so the container can be focused
-            // (virtuoso wraps the children inside another couple of elements so setting it
-            // on those doesn't seem to work, unfortunately)
-            ref={virtuosoHandleRef}
-            scrollerRef={scrollerRef}
-            onKeyDown={keyDownCallback}
-            context={listContext}
-            rangeChanged={handleRangeChanged}
-            // virtuoso errors internally if you pass undefined.
-            overscan={props.overscan || 0}
-            data={props.items}
-            totalCount={totalCount}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            itemContent={getItemComponentInternal}
-            {...virtuosoProps}
-        />
-    );
+    return {
+        ...virtuosoProps,
+        ref: virtuosoHandleRef,
+        scrollerRef,
+        onKeyDown: keyDownCallback,
+        onFocus,
+        onBlur,
+        rangeChanged: handleRangeChanged,
+        onFocusForGetItemComponent,
+        context: listContext,
+    };
 }

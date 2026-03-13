@@ -99,7 +99,6 @@ export enum LabGroup {
 
 export enum Features {
     NotificationSettings2 = "feature_notification_settings2",
-    ReleaseAnnouncement = "feature_release_announcement",
 }
 
 export const labGroupNames: Record<LabGroup, TranslationKey> = {
@@ -206,7 +205,6 @@ export interface Settings {
     // [settingName: `feature_${string}`]: IFeature;
     "feature_video_rooms": IFeature;
     [Features.NotificationSettings2]: IFeature;
-    [Features.ReleaseAnnouncement]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
     "feature_report_to_moderators": IFeature;
     "feature_latex_maths": IFeature;
@@ -350,7 +348,6 @@ export interface Settings {
     "Spaces.enabledMetaSpaces": IBaseSetting<Partial<Record<MetaSpace, boolean>>>;
     "Spaces.showPeopleInSpace": IBaseSetting<boolean>;
     "developerMode": IBaseSetting<boolean>;
-    "automaticErrorReporting": IBaseSetting<boolean>;
     "automaticDecryptionErrorReporting": IBaseSetting<boolean>;
     "debug_scroll_panel": IBaseSetting<boolean>;
     "debug_timeline_panel": IBaseSetting<boolean>;
@@ -1310,12 +1307,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
-    "automaticErrorReporting": {
-        displayName: _td("labs|automatic_debug_logs"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-        controller: new ReloadOnChangeController(),
-    },
     "automaticDecryptionErrorReporting": {
         displayName: _td("labs|automatic_debug_logs_decryption"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -1355,16 +1346,6 @@ export const SETTINGS: Settings = {
         default: [],
         // Contains room IDs
         shouldExportToRageshake: false,
-    },
-    /**
-     * Enable or disable the release announcement feature
-     */
-    [Features.ReleaseAnnouncement]: {
-        isFeature: true,
-        labsGroup: LabGroup.Ui,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: true,
-        displayName: _td("labs|release_announcement"),
     },
     /**
      * Managed by the {@link ReleaseAnnouncementStore}
