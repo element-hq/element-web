@@ -51,4 +51,24 @@ export interface UrlPreviewViewSnapshotPreview {
          */
         height?: number;
     };
+
+    /**
+     * The HTTP URI of the the sites icon.
+     */
+    siteIcon?: string;
+
+    author?: {
+        name: string;
+        username?: string;
+        avatar?: string;
+    };
+
+    /**
+     * Is the media playable.
+     */
+    playable?: boolean;
+    /**
+     * How many seconds long is the linked media, if it is playable.
+     */
+    duration?: number;
 }

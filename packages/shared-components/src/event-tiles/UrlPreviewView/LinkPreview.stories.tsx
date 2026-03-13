@@ -10,6 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import imageFile from "../../../static/element.png";
+import imageFileWide from "../../../static/doggo.png";
 import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../utils/LinkedText";
 
@@ -59,6 +60,66 @@ WithTooltip.args = {
     description: "A simple description",
     showTooltipOnLink: true,
     link: "https://matrix.org",
+};
+
+export const Article = Template.bind({});
+Article.args = {
+    title: "Dogs: why are they so good",
+    description:
+        "They're just great, right! I mean just look at that lovely smile, just anticipating when he's gonna get his next treat. This article doesn't really cover anything useful.",
+    link: "https://matrix.org",
+    siteName: "techcrunch.com",
+    siteIcon: imageFile,
+    image: {
+        imageThumb: imageFileWide,
+        imageFull: imageFileWide,
+    },
+};
+
+export const Video = Template.bind({});
+Video.args = {
+    title: "Dogs: why are they so good",
+    description:
+        "They're just great, right! I mean just look at that lovely smile, just anticipating when he's gonna get his next treat. This article doesn't really cover anything useful.",
+    link: "https://matrix.org",
+    siteName: "techcrunch.com",
+    siteIcon: imageFile,
+    playable: true,
+    duration: 65,
+    image: {
+        imageThumb: imageFileWide,
+        imageFull: imageFileWide,
+    },
+};
+
+export const Social = Template.bind({});
+Social.args = {
+    description: "Dogs are great.",
+    link: "https://matrix.org",
+    siteName: "techcrunch.com",
+    siteIcon: imageFile,
+    author: {
+        username: "@test",
+        name: "Test user",
+        avatar: imageFile,
+    },
+};
+
+export const SocialWithImage = Template.bind({});
+SocialWithImage.args = {
+    description: "Dogs are great.",
+    link: "https://matrix.org",
+    siteName: "techcrunch.com",
+    siteIcon: imageFile,
+    author: {
+        username: "@test",
+        name: "Test user",
+        avatar: imageFile,
+    },
+    image: {
+        imageThumb: imageFileWide,
+        imageFull: imageFileWide,
+    },
 };
 
 export const WithVeryLongText = Template.bind({});

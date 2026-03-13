@@ -6,13 +6,15 @@
  */
 
 import React, { type MouseEventHandler, type JSX, useCallback, useMemo } from "react";
-import { Tooltip, Text } from "@vector-im/compound-web";
+import { Tooltip, Text, Avatar } from "@vector-im/compound-web";
 import classNames from "classnames";
+import PlaySolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
 
 import { useI18n } from "../../utils/i18nContext";
 import styles from "./LinkPreview.module.css";
 import type { UrlPreviewViewSnapshotPreview } from "./types";
 import { LinkedText } from "../../utils/LinkedText";
+import { Clock } from "../../audio/Clock";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
@@ -51,36 +53,71 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
     // Don't render a button to show the image, just hide it outright
     if (preview.image?.imageThumb) {
         img = (
-            <button
-                aria-label={_t("timeline|url_preview|view_image")}
-                className={styles.image}
-                onClick={onImageClickHandler}
-            >
-                <img className={styles.thumbnail} src={preview.image.imageThumb} alt="" />
-            </button>
+            <div style={{ backgroundImage: `url('${preview.image.imageThumb}')` }} className={styles.preview}>
+                {preview.duration && (
+                    <span className={styles.duration}>
+                        <Clock seconds={preview.duration} />
+                    </span>
+                )}
+                {preview.playable && (
+                    <button aria-label={_t("timeline|url_preview|view_image")} onClick={onImageClickHandler}>
+                        <div className={styles.playIcon}>
+                            <PlaySolidIcon width="24px" height="24px" />
+                        </div>
+                    </button>
+                )}
+            </div>
         );
     }
 
-    const anchor = (
-        <a className={styles.link} href={preview.link} target="_blank" rel="noreferrer noopener">
+    const anchor = preview.title ? (
+        <Text
+            as="a"
+            type="body"
+            weight="semibold"
+            size="lg"
+            className={styles.title}
+            href={preview.link}
+            target="_blank"
+            rel="noreferrer noopener"
+        >
             {preview.title}
-        </a>
-    );
+        </Text>
+    ) : null;
     return (
         <div className={classNames(styles.container)}>
-            <div className={styles.wrapImageCaption}>
-                {img}
-                <div className={styles.caption}>
-                    <Text as="span" size="sm" weight="regular">
-                        {preview.siteName}
-                    </Text>
-                    <Text type="body" size="md" className={styles.title}>
-                        {tooltipCaption ? <Tooltip label={tooltipCaption}>{anchor}</Tooltip> : anchor}
-                    </Text>
-                    <LinkedText type="body" size="md" className={styles.description}>
-                        {preview.description}
-                    </LinkedText>
-                </div>
+            {img}
+            <div className={classNames(styles.textContent)}>
+                {preview.author && (
+                    <div className={styles.author}>
+                        <Avatar
+                            size="36px"
+                            name={preview.author.name}
+                            id={preview.author.name}
+                            src={preview.siteIcon}
+                        />{" "}
+                        <div>
+                            <Text as="span" size="md" weight="semibold">
+                                {preview.author.username}
+                            </Text>
+                            <Text as="span" size="sm" weight="regular">
+                                {preview.author.name}
+                            </Text>
+                        </div>
+                    </div>
+                )}
+                {anchor && tooltipCaption ? <Tooltip label={tooltipCaption}>{anchor}</Tooltip> : anchor}
+                <LinkedText type="body" size="md" className={styles.description}>
+                    {preview.description}
+                </LinkedText>
+                {preview.siteName && (
+                    <div className={styles.siteName}>
+                        <Avatar size="16px" name={preview.siteName} id={preview.siteName} src={preview.siteIcon} />{" "}
+                        <Text as="span" size="sm" weight="regular">
+                            {preview.siteName}
+                        </Text>
+                    </div>
+                )}
             </div>
         </div>
     );
