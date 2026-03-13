@@ -92,7 +92,6 @@ export enum LabGroup {
     Analytics,
     Themes,
     Encryption,
-    Experimental,
     Developer,
     Ui,
 }
@@ -110,10 +109,8 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Threads]: _td("labs|group_threads"),
     [LabGroup.VoiceAndVideo]: _td("labs|group_voip"),
     [LabGroup.Moderation]: _td("labs|group_moderation"),
-    [LabGroup.Analytics]: _td("common|analytics"),
     [LabGroup.Themes]: _td("labs|group_themes"),
     [LabGroup.Encryption]: _td("labs|group_encryption"),
-    [LabGroup.Experimental]: _td("labs|group_experimental"),
     [LabGroup.Developer]: _td("labs|group_developer"),
     [LabGroup.Ui]: _td("labs|group_ui"),
 };
@@ -328,6 +325,10 @@ export interface Settings {
     }>;
     "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
+    /**
+     * This is the 2019-era low bandwidth that deals with disabling features of the
+     * client. It does NOT make any API or spec changes.
+     */
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
