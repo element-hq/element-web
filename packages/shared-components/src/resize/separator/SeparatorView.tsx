@@ -14,6 +14,7 @@ import { Tooltip } from "@vector-im/compound-web";
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./SeparatorView.module.css";
 import { type ResizerSnapshot } from "..";
+import { useI18n } from "../../utils/i18nContext";
 
 export interface SeparatorViewActions {
     /**
@@ -38,6 +39,7 @@ interface Props {
 }
 
 export function SeparatorView({ vm, className }: Props): React.ReactNode {
+    const { translate: _t } = useI18n();
     const { isCollapsed, isFocusedViaKeyboard } = useViewModel(vm);
 
     const classes = classNames(styles.separator, className, {
@@ -50,9 +52,9 @@ export function SeparatorView({ vm, className }: Props): React.ReactNode {
             onClick={vm.onSeparatorClick}
             onFocus={vm.onFocus}
             onBlur={vm.onBlur}
-            aria-label="Click or drag to expand"
+            aria-label={_t("left_panel|separator_label")}
         >
-            <Tooltip description="Click or drag to expand" placement="right">
+            <Tooltip description={_t("left_panel|separator_label")} placement="right">
                 <DragIcon
                     width="20px"
                     height="12px"
