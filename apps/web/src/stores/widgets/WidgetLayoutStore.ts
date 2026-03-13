@@ -10,7 +10,7 @@ import { type Room, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/m
 import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
 import { type IWidget } from "matrix-widget-api";
 import { clamp, defaultNumber, sum } from "@element-hq/web-shared-components";
-import { Container } from "@element-hq/element-web-module-api";
+import { type Container } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { type IApp } from "../WidgetStore";
@@ -23,7 +23,7 @@ import { UPDATE_EVENT } from "../AsyncStore";
 import { type IStoredLayout, type ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, type IWidgetLayouts } from "./types";
 
 export type { IStoredLayout, ILayoutStateEvent };
-export { Container, WIDGET_LAYOUT_EVENT_TYPE };
+export { type Container, WIDGET_LAYOUT_EVENT_TYPE };
 
 export type ILayoutSettings = Partial<ILayoutStateEvent> & {
     overrides?: string; // event ID for layout state event, if present
