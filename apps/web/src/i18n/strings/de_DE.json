@@ -1554,7 +1554,6 @@
         "notification_settings_beta_caption": "Einen einfacheren Weg um die Einstellungen für Benachrichtigungen zu ändern vorstellen. Passe Deine %(brand)s so an wie Du willst.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Chat-Kopfzeile einschalten",
-        "release_announcement": "Release Ankündigung",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "report_to_moderators": "An Moderatoren melden",
@@ -2087,7 +2086,6 @@
         "not_found_title": "Dieser Chat oder Space existiert nicht.",
         "not_found_title_name": "%(roomName)s existiert nicht.",
         "peek_join_prompt": "Du erkundest den Chat %(roomName)s. Willst du ihm beitreten?",
-        "pinned_message_badge": "Fixierte Nachrichten",
         "pinned_message_banner": {
             "button_close_list": "Liste schließen",
             "button_view_all": "Alle anzeigen",
