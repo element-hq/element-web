@@ -13,30 +13,38 @@ import {
     MSC4108RendezvousSession,
     MSC4108SecureChannel,
     MSC4108SignInWithQR,
+    MSC4108v2025SignInWithQR,
     RendezvousError,
     type RendezvousFailureReason,
     RendezvousIntent,
+    signInByGeneratingQR,
+    linkNewDeviceByGeneratingQR,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
+import { MatrixClientPeg, type IMatrixClientCreds } from "../../../MatrixClientPeg";
+import { configureFromCompletedOAuthLogin, restoreSessionFromStorage } from "../../../Lifecycle";
 
 interface IProps {
     client: MatrixClient;
+    clientId: string;
     mode: Mode;
-    onFinished(...args: any): void;
+    onFinished(success: boolean, credentials?: IMatrixClientCreds): void;
 }
 
 interface IState {
     phase: Phase;
-    rendezvous?: MSC4108SignInWithQR;
+    rendezvous?: MSC4108SignInWithQR | MSC4108v2025SignInWithQR;
     mediaPermissionError?: boolean;
     verificationUri?: string;
     userCode?: string;
     checkCode?: string;
     failureReason?: FailureReason;
+    homeserverBaseUrl?: string;
+    newClient?: MatrixClient;
 }
 
 export enum LoginWithQRFailureReason {
@@ -65,7 +73,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     }
 
     private get ourIntent(): RendezvousIntent {
-        return RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
+        return this.props.client.getUserId() ? RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE : RendezvousIntent.LOGIN_ON_NEW_DEVICE;
     }
 
     public componentDidMount(): void {
@@ -99,23 +107,31 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     }
 
-    private onFinished(success: boolean): void {
+    private onFinished(success: boolean, credentials?: IMatrixClientCreds): void {
         this.finished = true;
-        this.props.onFinished(success);
+        this.props.onFinished(success, credentials);
     }
 
     private generateAndShowCode = async (): Promise<void> => {
-        let rendezvous: MSC4108SignInWithQR;
+        let rendezvous: MSC4108SignInWithQR | MSC4108v2025SignInWithQR;
         try {
-            const transport = new MSC4108RendezvousSession({
-                onFailure: this.onFailure,
-                client: this.props.client,
-            });
-            await transport.send("");
-            const channel = new MSC4108SecureChannel(transport, undefined, this.onFailure);
-            rendezvous = new MSC4108SignInWithQR(channel, false, this.props.client, this.onFailure);
+            const msc4388 = true;
 
-            await rendezvous.generateCode();
+            if (msc4388) {
+                // use helper methods for 2025 version
+                rendezvous = this.ourIntent === RendezvousIntent.LOGIN_ON_NEW_DEVICE ? await signInByGeneratingQR(this.props.client, this.onFailure) : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure);
+            } else {
+                // old way for 2024 version
+                const transport = new MSC4108RendezvousSession({
+                    onFailure: this.onFailure,
+                    client: this.props.client,
+                });
+                await transport.send("");
+                const channel = new MSC4108SecureChannel(transport, undefined, this.onFailure);
+                rendezvous = new MSC4108SignInWithQR(channel, false, this.props.client, this.onFailure);
+
+                await rendezvous.generateCode();
+            }
             this.setState({
                 phase: Phase.ShowingQR,
                 rendezvous,
@@ -136,6 +152,16 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                     phase: Phase.OutOfBandConfirmation,
                     verificationUri,
                 });
+            } else {
+                if (!(rendezvous instanceof MSC4108v2025SignInWithQR)) {
+                    throw new Error("Sign in on new device using QR is not implemented for 2024 version of MSC4108");
+                }
+                const { baseUrl } = await rendezvous.negotiateProtocols();
+                this.setState({
+                    phase: Phase.OutOfBandConfirmation,
+                    homeserverBaseUrl: baseUrl,
+                });
+
             }
 
             // we ask the user to confirm that the channel is secure
@@ -148,7 +174,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     };
 
     private approveLogin = async (checkCode: string | undefined): Promise<void> => {
-        if (!(this.state.rendezvous instanceof MSC4108SignInWithQR)) {
+        if (!this.state.rendezvous) {
             this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
             throw new Error("Rendezvous not found");
         }
@@ -175,8 +201,73 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 // done
                 this.onFinished(true);
             } else {
-                this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                throw new Error("New device flows around OIDC are not yet implemented");
+                if (!(this.state.rendezvous instanceof MSC4108v2025SignInWithQR)) {
+                    throw new Error("Sign in on new device using QR is not implemented for 2024 version of MSC4108");
+                }
+
+                if (!this.state.homeserverBaseUrl) {
+                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+                    throw new Error("Homeserver base URL not found in state");
+                }
+
+                if (new URL(this.props.client.baseUrl).toString() !== new URL(this.state.homeserverBaseUrl).toString()) {
+                    // would need to switch homeservers
+                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+                    logger.info(`Changing homeservers during new device login not yet supported: ${this.props.client.baseUrl} -> ${this.state.homeserverBaseUrl}`);
+                    throw new Error("Changing homeservers during new device login not yet supported");
+                }
+
+                const metadata = await this.props.client.getAuthMetadata();
+                const deviceId = this.props.client.getDeviceId()!;
+                const { userCode } = await this.state.rendezvous.deviceAuthorizationGrant({
+                    metadata,
+                    clientId: this.props.clientId,
+                    deviceId,
+                });
+                this.setState({ phase: Phase.WaitingForDevice, userCode });
+
+                const datr = await this.state.rendezvous.completeLoginOnNewDevice({
+                    clientId: this.props.clientId,
+                });
+
+                if (datr) {
+                    // TODO: this is not the right way to do this
+
+                    // store and use the new credentials
+                    const credentials = await configureFromCompletedOAuthLogin({
+                        accessToken: datr.access_token,
+                        refreshToken: datr.refresh_token,
+                        homeserverUrl: this.state.homeserverBaseUrl,
+                        clientId: this.props.clientId,
+                        idToken: datr.id_token ?? '', // I'm not sure the idToken is actually required
+                        issuer: metadata!.issuer,
+                        identityServerUrl: undefined, // PROTOTYPE: we should have stored this from before
+                    });
+
+                    const { secrets } = await this.state.rendezvous.shareSecrets();
+
+                    await restoreSessionFromStorage();
+
+                    if (secrets) {
+                        const crypto = MatrixClientPeg.safeGet().getCrypto();
+                        if (crypto) {
+                            await crypto.importSecretsBundle?.(secrets);
+                            // it should be sufficient to just upload the device keys with the signature
+                            // but this seems to do the job for now
+                            await crypto.crossSignDevice(deviceId);
+                        } else {
+                            logger.warn("Crypto not initialised");
+                        }
+                    } else {
+                        logger.warn("No secrets received from QR login");
+                    }
+
+                    // PROTOTYPE: fudge to try and allow the self verification to complete before we change screen
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+                    // done
+                    this.onFinished(true, credentials);
+                }
             }
         } catch (e: RendezvousError | unknown) {
             logger.error("Error whilst approving sign in", e);

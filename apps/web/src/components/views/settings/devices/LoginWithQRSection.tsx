@@ -11,7 +11,7 @@ import {
     type IServerVersions,
     type OidcClientConfig,
     type MatrixClient,
-    DEVICE_CODE_SCOPE,
+    OAuthGrantType,
 } from "matrix-js-sdk/src/matrix";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
 import { Text } from "@vector-im/compound-web";
@@ -28,19 +28,24 @@ interface IProps {
     isCrossSigningReady?: boolean;
 }
 
-export function shouldShowQr(
+export function shouldShowQrForLinkNewDevice(
     cli: MatrixClient,
     isCrossSigningReady: boolean,
     oidcClientConfig?: OidcClientConfig,
     versions?: IServerVersions,
 ): boolean {
+    // support MSC4108 v2024
     const msc4108Supported = !!versions?.unstable_features?.["org.matrix.msc4108"];
+    // and MSC4108 v2025 which uses MSC4388
+    const msc4388Supported = !!versions?.unstable_features?.["io.element.msc4388"];
 
-    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
+    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(
+        OAuthGrantType.DeviceAuthorization,
+    );
 
     return (
         !!deviceAuthorizationGrantSupported &&
-        msc4108Supported &&
+        (msc4388Supported || msc4108Supported) &&
         !!cli.getCrypto()?.exportSecretsBundle &&
         isCrossSigningReady
     );
@@ -48,7 +53,7 @@ export function shouldShowQr(
 
 const LoginWithQRSection: React.FC<IProps> = ({ onShowQr, versions, oidcClientConfig, isCrossSigningReady }) => {
     const cli = useMatrixClientContext();
-    const offerShowQr = shouldShowQr(cli, !!isCrossSigningReady, oidcClientConfig, versions);
+    const offerShowQr = shouldShowQrForLinkNewDevice(cli, !!isCrossSigningReady, oidcClientConfig, versions);
 
     return (
         <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>
