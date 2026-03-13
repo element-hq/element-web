@@ -4,10 +4,11 @@ exports[`TileErrorView > renders the bubble layout variant 1`] = `
 <div>
   <li
     class="tileErrorView bubble"
+    data-layout="bubble"
+    role="status"
   >
     <div
       class="line"
-      role="status"
     >
       <span
         class="message"
@@ -39,10 +40,11 @@ exports[`TileErrorView > renders the default tile error state 1`] = `
 <div>
   <li
     class="tileErrorView"
+    data-layout="group"
+    role="status"
   >
     <div
       class="line"
-      role="status"
     >
       <span
         class="message"

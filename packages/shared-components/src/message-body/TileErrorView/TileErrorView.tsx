@@ -65,8 +65,12 @@ export function TileErrorView({ vm, className, layout = "group" }: Readonly<Tile
     const { message, eventType, bugReportCtaLabel, viewSourceCtaLabel } = useViewModel(vm);
 
     return (
-        <li className={classNames(styles.tileErrorView, className, { [styles.bubble]: layout === "bubble" })}>
-            <div className={styles.line} role="status">
+        <li
+            className={classNames(styles.tileErrorView, className, { [styles.bubble]: layout === "bubble" })}
+            data-layout={layout}
+            role="status"
+        >
+            <div className={styles.line}>
                 <span className={styles.message}>
                     {message}
                     {eventType && ` (${eventType})`}

@@ -1,0 +1,132 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import { type MouseEventHandler } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    BaseViewModel,
+    type TileErrorViewSnapshot as TileErrorViewSnapshotInterface,
+    type TileErrorViewModel as TileErrorViewModelInterface,
+} from "@element-hq/web-shared-components";
+
+import { _t } from "../../languageHandler";
+import Modal from "../../Modal";
+import SdkConfig from "../../SdkConfig";
+import { BugReportEndpointURLLocal } from "../../IConfigOptions";
+import ViewSource from "../../components/structures/ViewSource";
+import BugReportDialog from "../../components/views/dialogs/BugReportDialog";
+
+const TILE_ERROR_BUG_REPORT_LABEL = "react-tile-soft-crash";
+
+export interface TileErrorViewModelProps {
+    /**
+     * Event whose tile failed to render.
+     */
+    mxEvent: MatrixEvent;
+    /**
+     * Render error captured by the boundary.
+     */
+    error: Error;
+    /**
+     * Whether developer mode is enabled, which controls the view-source action.
+     */
+    developerMode: boolean;
+}
+
+function getBugReportCtaLabel(): string | undefined {
+    const bugReportUrl = SdkConfig.get().bug_report_endpoint_url;
+
+    if (!bugReportUrl) {
+        return undefined;
+    }
+
+    return bugReportUrl === BugReportEndpointURLLocal
+        ? _t("bug_reporting|download_logs")
+        : _t("bug_reporting|submit_debug_logs");
+}
+
+function getViewSourceCtaLabel(developerMode: boolean): string | undefined {
+    return developerMode ? _t("action|view_source") : undefined;
+}
+
+export class TileErrorViewModel
+    extends BaseViewModel<TileErrorViewSnapshotInterface, TileErrorViewModelProps>
+    implements TileErrorViewModelInterface
+{
+    private static readonly computeSnapshot = (props: TileErrorViewModelProps): TileErrorViewSnapshotInterface => ({
+        message: _t("timeline|error_rendering_message"),
+        eventType: props.mxEvent.getType(),
+        bugReportCtaLabel: getBugReportCtaLabel(),
+        viewSourceCtaLabel: getViewSourceCtaLabel(props.developerMode),
+    });
+
+    public constructor(props: TileErrorViewModelProps) {
+        super(props, TileErrorViewModel.computeSnapshot(props));
+    }
+
+    public setMxEvent(mxEvent: MatrixEvent): void {
+        if (this.props.mxEvent === mxEvent) return;
+
+        this.props = {
+            ...this.props,
+            mxEvent,
+        };
+
+        const nextEventType = mxEvent.getType();
+        if (this.snapshot.current.eventType !== nextEventType) {
+            this.snapshot.merge({ eventType: nextEventType });
+        }
+    }
+
+    public setError(error: Error): void {
+        if (this.props.error === error) return;
+
+        this.props = {
+            ...this.props,
+            error,
+        };
+    }
+
+    public setDeveloperMode(developerMode: boolean): void {
+        if (this.props.developerMode === developerMode) return;
+
+        this.props = {
+            ...this.props,
+            developerMode,
+        };
+
+        const nextViewSourceCtaLabel = getViewSourceCtaLabel(developerMode);
+        if (this.snapshot.current.viewSourceCtaLabel !== nextViewSourceCtaLabel) {
+            this.snapshot.merge({ viewSourceCtaLabel: nextViewSourceCtaLabel });
+        }
+    }
+
+    public onBugReportClick: MouseEventHandler<HTMLButtonElement> = () => {
+        if (!this.snapshot.current.bugReportCtaLabel) {
+            return;
+        }
+
+        Modal.createDialog(BugReportDialog, {
+            label: TILE_ERROR_BUG_REPORT_LABEL,
+            error: this.props.error,
+        });
+    };
+
+    public onViewSourceClick: MouseEventHandler<HTMLButtonElement> = () => {
+        if (!this.snapshot.current.viewSourceCtaLabel) {
+            return;
+        }
+
+        Modal.createDialog(
+            ViewSource,
+            {
+                mxEvent: this.props.mxEvent,
+            },
+            "mx_Dialog_viewsource",
+        );
+    };
+}
