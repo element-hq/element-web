@@ -9,7 +9,7 @@
         "prepare": "vite build",
         "lint:types": "tsc --noEmit",
         "lint:codestyle": "echo 'handled by lint:eslint'",
-        "test": "echo no tests yet"
+        "test": "vitest run --coverage"
     },
     "devDependencies": {
         "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
@@ -22,7 +22,8 @@
         "typescript": "^5.7.3",
         "vite": "^7.1.11",
         "vite-plugin-node-polyfills": "^0.25.0",
-        "vite-plugin-svgr": "^4.3.0"
+        "vite-plugin-svgr": "^4.3.0",
+        "vitest": "^4.0.0"
     },
     "dependencies": {
         "@vector-im/compound-design-tokens": "^6.0.0",
