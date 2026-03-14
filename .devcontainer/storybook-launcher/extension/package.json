@@ -1,0 +1,59 @@
+{
+    "name": "storybook-launcher",
+    "displayName": "Storybook Launcher",
+    "description": "Quick access to the Storybook Playground from the Activity Bar",
+    "version": "0.0.2",
+    "publisher": "element-hq",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": ["Other"],
+    "activationEvents": ["onStartupFinished"],
+    "main": "./extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "storybookLauncher.openInBrowser",
+                "title": "Open Storybook Playground In Browser",
+                "icon": "$(globe)"
+            },
+            {
+                "command": "storybookLauncher.openPreview",
+                "title": "Open Storybook Playground Preview",
+                "icon": "$(open-preview)"
+            }
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "storybook-launcher",
+                    "title": "Storybook Playground",
+                    "icon": "media/icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "storybook-launcher": [
+                {
+                    "id": "storybookLauncher.welcome",
+                    "name": "Storybook Playground"
+                }
+            ]
+        },
+        "viewsWelcome": [
+            {
+                "view": "storybookLauncher.welcome",
+                "contents": "Open the AI Prototype story in Storybook.\n\n[$(globe) Open Storybook Playground In Browser](command:storybookLauncher.openInBrowser)\n\n[$(open-preview) Open In Editor Preview](command:storybookLauncher.openPreview)\n\nYou can reopen this panel any time from the **Element** icon in the Activity Bar on the left."
+            }
+        ],
+        "menus": {
+            "view/title": [
+                {
+                    "command": "storybookLauncher.openInBrowser",
+                    "when": "view == storybookLauncher.welcome",
+                    "group": "navigation"
+                }
+            ]
+        }
+    }
+}

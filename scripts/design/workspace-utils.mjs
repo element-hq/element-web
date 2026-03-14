@@ -42,7 +42,7 @@ function expandWorkspacePattern(pattern) {
         .map((entry) => path.join(absoluteBaseDir, entry.name));
 }
 
-export function getWorkspacePackages() {
+function getWorkspacePackages() {
     const packages = [];
     const rootPackagePath = path.join(repoRoot, "package.json");
     const rootPackage = readJson(rootPackagePath);
@@ -75,7 +75,7 @@ export function getWorkspacePackages() {
     return packages;
 }
 
-export function findPackagesByScript(scriptName) {
+function findPackagesByScript(scriptName) {
     return getWorkspacePackages().filter((pkg) => pkg.packageJson.scripts?.[scriptName]);
 }
 

@@ -1,0 +1,7 @@
+{
+    "chat.mcp.autoStart": true,
+    "workbench.startupEditor": "none",
+    "workbench.tips.enabled": false,
+    "workbench.welcome.enabled": false,
+    "github.copilot.chat.openAtStartup": true
+}
