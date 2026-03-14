@@ -1,0 +1,230 @@
+/*
+ * Designer Setup Guide — AI Prototyping Environment
+ * All sizing and colour values use Compound design tokens exclusively.
+ */
+
+/* ─── Page canvas ─────────────────────────────────────────────────────────── */
+
+.canvas {
+    background: var(--cpd-color-bg-canvas-default);
+    display: flex;
+    justify-content: center;
+    padding: var(--cpd-space-14x) var(--cpd-space-6x);
+    box-sizing: border-box;
+}
+
+/* ─── Content surface ─────────────────────────────────────────────────────── */
+
+.surface {
+    width: 100%;
+    max-width: 720px;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────────────── */
+
+.header {
+    padding-bottom: var(--cpd-space-8x);
+}
+
+.badge {
+    display: inline-block;
+    padding: var(--cpd-space-1x) var(--cpd-space-3x);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--cpd-color-icon-accent-primary) 12%, transparent);
+    color: var(--cpd-color-icon-accent-primary);
+    font: var(--cpd-font-body-xs-semibold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.headline {
+    margin: var(--cpd-space-4x) 0 0;
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-heading-xl-semibold);
+}
+
+.lead {
+    margin: var(--cpd-space-3x) 0 0;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-lg-regular);
+    line-height: 1.6;
+    max-width: 60ch;
+}
+
+/* ─── Divider ─────────────────────────────────────────────────────────────── */
+
+.divider {
+    border: none;
+    border-top: 1px solid var(--cpd-color-border-interactive-secondary);
+    margin: 0 0 var(--cpd-space-8x);
+}
+
+/* ─── Steps container ─────────────────────────────────────────────────────── */
+
+.steps {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ─── Individual step ─────────────────────────────────────────────────────── */
+
+.step {
+    display: flex;
+    align-items: stretch;
+    gap: var(--cpd-space-5x);
+}
+
+/* Left rail: badge + connector line */
+
+.stepAside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    padding-top: var(--cpd-space-1x);
+}
+
+.stepBadge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--cpd-color-icon-accent-primary);
+    color: #fff;
+    font: var(--cpd-font-body-md-semibold);
+    line-height: 1;
+}
+
+.stepLine {
+    flex: 1;
+    width: 2px;
+    margin: var(--cpd-space-2x) 0;
+    min-height: var(--cpd-space-6x);
+    background: var(--cpd-color-border-interactive-secondary);
+    border-radius: 1px;
+}
+
+/* Step content */
+
+.stepBody {
+    flex: 1;
+    padding-bottom: var(--cpd-space-10x);
+}
+
+.stepTitle {
+    margin: var(--cpd-space-1x) 0 0;
+    color: var(--cpd-color-text-primary);
+    font: var(--cpd-font-body-lg-semibold);
+}
+
+.stepDesc {
+    margin: var(--cpd-space-2x) 0 0;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-md-regular);
+    line-height: 1.6;
+    max-width: 58ch;
+}
+
+/* ─── Code block ──────────────────────────────────────────────────────────── */
+
+.code {
+    margin: var(--cpd-space-4x) 0 0;
+    padding: var(--cpd-space-4x) var(--cpd-space-5x);
+    border-radius: var(--cpd-space-3x);
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: ui-monospace, "SFMono-Regular", "Fira Code", "Cascadia Code", monospace;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+/* ─── Prompt block ────────────────────────────────────────────────────────── */
+
+.prompt {
+    margin: var(--cpd-space-4x) 0 0;
+    padding: var(--cpd-space-4x) var(--cpd-space-5x);
+    border-radius: var(--cpd-space-3x);
+    border-left: 3px solid var(--cpd-color-icon-accent-primary);
+    background: color-mix(in srgb, var(--cpd-color-icon-accent-primary) 6%, var(--cpd-color-bg-canvas-default));
+}
+
+.promptLabel {
+    display: block;
+    color: var(--cpd-color-icon-accent-primary);
+    font: var(--cpd-font-body-xs-semibold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: var(--cpd-space-2x);
+}
+
+.promptText {
+    margin: 0;
+    font-family: ui-monospace, "SFMono-Regular", "Fira Code", "Cascadia Code", monospace;
+    font-size: 0.8125rem;
+    color: var(--cpd-color-text-primary);
+    line-height: 1.65;
+}
+
+/* ─── Step footer: action + hint ──────────────────────────────────────────── */
+
+.stepFooter {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--cpd-space-3x) var(--cpd-space-5x);
+    margin-top: var(--cpd-space-4x);
+}
+
+.hint {
+    margin: 0;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-regular);
+    font-style: italic;
+    max-width: 50ch;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────────────── */
+
+.footer {
+    padding-top: var(--cpd-space-6x);
+    border-top: 1px solid var(--cpd-color-border-interactive-secondary);
+    margin-top: var(--cpd-space-2x);
+}
+
+.footerText {
+    margin: 0;
+    color: var(--cpd-color-text-secondary);
+    font: var(--cpd-font-body-sm-regular);
+    line-height: 1.6;
+}
+
+.inlineCode {
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background: var(--cpd-color-bg-subtle-secondary);
+    color: var(--cpd-color-text-primary);
+    font-family: ui-monospace, "SFMono-Regular", monospace;
+    font-size: 0.85em;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+    .canvas {
+        padding: var(--cpd-space-8x) var(--cpd-space-4x);
+    }
+
+    .headline {
+        font: var(--cpd-font-heading-lg-semibold);
+    }
+
+    .lead {
+        font: var(--cpd-font-body-md-regular);
+    }
+}

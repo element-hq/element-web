@@ -1,0 +1,43 @@
+{
+    "name": "element-web designer prototyping",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+    "postCreateCommand": "corepack enable && pnpm install --frozen-lockfile",
+    "postAttachCommand": "pnpm design:start",
+    "forwardPorts": [6007],
+    "portsAttributes": {
+        "6007": {
+            "label": "Shared Components Storybook",
+            "onAutoForward": "openBrowser",
+            "requireLocalPort": false
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "chat.mcp.autoStart": true,
+                "workbench.startupEditor": "none",
+                "workbench.tips.enabled": false,
+                "workbench.welcome.enabled": false,
+                "github.copilot.chat.openAtStartup": true
+            },
+            "extensions": [
+                "GitHub.copilot",
+                "GitHub.copilot-chat"
+            ],
+            "mcp": {
+                "servers": {
+                    "element-web-figma": {
+                        "command": "node",
+                        "args": [
+                            "scripts/design/figma-mcp-server.mjs"
+                        ],
+                        "env": {
+                            "FIGMA_TOKEN": "${env:FIGMA_TOKEN}",
+                            "FIGMA_FILE": "${env:FIGMA_FILE}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
