@@ -2,12 +2,12 @@
     "name": "element-web designer prototyping",
     "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
     "postCreateCommand": "corepack enable && pnpm install --frozen-lockfile",
-    "postAttachCommand": "pnpm design:start",
+    "postAttachCommand": "node .devcontainer/storybook-launcher/build-vsix.mjs && code --install-extension $(ls .devcontainer/storybook-launcher/*.vsix | head -1) --force 2>/dev/null; pnpm run storybook:design",
     "forwardPorts": [6007],
     "portsAttributes": {
         "6007": {
             "label": "Shared Components Storybook",
-            "onAutoForward": "openBrowser",
+            "onAutoForward": "openPreview",
             "requireLocalPort": false
         }
     },

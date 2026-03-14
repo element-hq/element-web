@@ -119,7 +119,7 @@ function DesignerSetupGuide(): JSX.Element {
             <div className={styles.surface}>
                 <header className={styles.header}>
                     <span className={styles.badge}>AI Prototyping Environment</span>
-                    <h1 className={styles.headline}>Welcome — let’s get you set up</h1>
+                    <h1 className={styles.headline}>Welcome — let’s get you set up 🚀</h1>
                     <p className={styles.lead}>
                         This Codespace connects Figma to a live Storybook via Copilot Chat. Follow the four steps below
                         and you will be translating designs into interactive component stories in minutes — no engineering

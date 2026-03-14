@@ -11,8 +11,8 @@ package-lock.json
 **/.idea
 /webpack-stats.json
 /.tmp
-.vscode
-.vscode/
+.vscode/*
+!.vscode/settings.json
 .env
 .env.*
 coverage
