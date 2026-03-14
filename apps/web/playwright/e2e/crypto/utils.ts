@@ -337,7 +337,7 @@ export async function disableKeyBackup(app: ElementAppPage): Promise<void> {
     if (await keyStorageToggle.isChecked()) {
         await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
         await encryptionTab.getByRole("button", { name: "Delete key storage" }).click();
-        await encryptionTab.getByRole("switch", { name: "Allow key storage" }).isVisible();
+        await expect(encryptionTab.getByRole("switch", { name: "Allow key storage" })).toBeVisible();
 
         // Wait for the update to account data to stick
         await new Promise((resolve) => setTimeout(resolve, 2000));

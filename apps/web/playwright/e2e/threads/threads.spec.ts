@@ -454,8 +454,8 @@ test.describe("Threads", () => {
         await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
 
         locator = page.locator(".mx_BaseCard");
-        await expect(locator.locator(".mx_EventTile").first().getByText("Hello Mr. Bot")).toBeAttached();
-        await expect(locator.locator(".mx_EventTile").last().getByText("Hello Mr. User")).toBeAttached();
+        await expect(locator.locator(".mx_EventTile").first().getByText("Hello Mr. Bot")).toBeVisible();
+        await expect(locator.locator(".mx_EventTile").last().getByText("Hello Mr. User")).toBeVisible();
     });
 
     test("navigate through right panel", { tag: "@screenshot" }, async ({ page, app, user }) => {
