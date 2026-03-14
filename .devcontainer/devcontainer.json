@@ -12,10 +12,13 @@
         }
     },
     "customizations": {
+        "codespaces": {
+            "openFiles": []
+        },
         "vscode": {
             "settings": {
                 "chat.mcp.autoStart": true,
-                "workbench.startupEditor": "none",
+                "workbench.startupEditor": "welcomePageInEmptyWorkbench",
                 "workbench.tips.enabled": false,
                 "workbench.welcome.enabled": false,
                 "github.copilot.chat.openAtStartup": true
