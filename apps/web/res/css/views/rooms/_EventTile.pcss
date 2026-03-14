@@ -293,14 +293,16 @@ $left-gutter: 64px;
             width: var(--name-width);
             margin-inline-end: 0; /* override mx_EventTile > * */
 
-            > .mx_DisambiguatedProfile_displayName {
+            > .mx_DisambiguatedProfile_displayName,
+            > [data-part="display-name"] {
                 width: 100%;
                 text-align: end;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
 
-            > .mx_DisambiguatedProfile_mxid {
+            > .mx_DisambiguatedProfile_mxid,
+            > [data-part="mxid"] {
                 visibility: collapse;
                 margin-left: 0; /* Override the inherited margin. */
                 padding: 0 5px;
@@ -310,7 +312,8 @@ $left-gutter: 64px;
                 overflow: visible;
                 z-index: 10;
 
-                > .mx_DisambiguatedProfile_displayName {
+                > .mx_DisambiguatedProfile_displayName,
+                > [data-part="display-name"] {
                     overflow: visible;
                     display: inline;
                     background-color: $event-selected-color;
@@ -318,7 +321,8 @@ $left-gutter: 64px;
                     padding-right: $spacing-8;
                 }
 
-                > .mx_DisambiguatedProfile_mxid {
+                > .mx_DisambiguatedProfile_mxid,
+                > [data-part="mxid"] {
                     visibility: visible;
                     opacity: 1;
                     background-color: $event-selected-color;
@@ -1019,18 +1023,22 @@ $left-gutter: 64px;
         flex: 1;
 
         .mx_DisambiguatedProfile_displayName,
-        .mx_DisambiguatedProfile_mxid {
+        .mx_DisambiguatedProfile_mxid,
+        [data-part="display-name"],
+        [data-part="mxid"] {
             display: block;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .mx_DisambiguatedProfile_displayName {
+        .mx_DisambiguatedProfile_displayName,
+        [data-part="display-name"] {
             flex: none;
             max-width: 100%;
         }
 
-        .mx_DisambiguatedProfile_mxid {
+        .mx_DisambiguatedProfile_mxid,
+        [data-part="mxid"] {
             flex: 1;
         }
     }

@@ -22,6 +22,7 @@ export * from "./message-body/MessageTimestampView";
 export * from "./message-body/DecryptionFailureBodyView";
 export * from "./message-body/PinnedMessageBadge";
 export * from "./message-body/ReactionsRowButtonTooltip";
+export * from "./message-body/SenderProfile";
 export * from "./message-body/ReactionsRowButton";
 export * from "./message-body/ReactionsRow";
 export * from "./message-body/TimelineSeparator/";

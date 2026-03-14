@@ -55,6 +55,8 @@ import {
     PinnedMessageBadge,
     ReactionsRowButtonView,
     ReactionsRowView,
+    SenderProfileView,
+    type SenderProfileViewActions,
     useViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -77,7 +79,6 @@ import { type ComposerInsertPayload } from "../../../dispatcher/payloads/Compose
 import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
-import SenderProfile from "../messages/SenderProfile";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionPicker from "../emojipicker/ReactionPicker";
@@ -106,8 +107,10 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { SenderProfileViewModel } from "../../../viewmodels/message-body/SenderProfileViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
+import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 import SettingsStore from "../../../settings/SettingsStore";
 import {
     MessageTimestampViewModel,
@@ -116,6 +119,31 @@ import {
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+
+interface SenderProfileWrapperProps {
+    mxEvent: MatrixEvent;
+    onClick?: SenderProfileViewActions["onClick"];
+    withTooltip?: boolean;
+}
+
+const SenderProfileItem: React.FC<SenderProfileWrapperProps> = ({ mxEvent, onClick, withTooltip }) => {
+    const sender = mxEvent.getSender();
+    const member = useRoomMemberProfile({
+        userId: sender,
+        member: mxEvent.sender,
+    });
+
+    const vm = useCreateAutoDisposedViewModel(
+        () => new SenderProfileViewModel({ mxEvent, member, onClick, withTooltip }),
+    );
+    useEffect(() => {
+        vm.setMxEvent(mxEvent);
+        vm.setMember(member);
+        vm.setWithTooltip(withTooltip);
+    }, [mxEvent, member, withTooltip, vm]);
+
+    return <SenderProfileView vm={vm} />;
+};
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1142,11 +1170,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 this.context.timelineRenderingType === TimelineRenderingType.Pinned ||
                 this.context.timelineRenderingType === TimelineRenderingType.Thread
             ) {
-                sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
+                sender = <SenderProfileItem onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
             } else if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} withTooltip />;
+                sender = <SenderProfileItem mxEvent={this.props.mxEvent} withTooltip />;
             } else {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} />;
+                sender = <SenderProfileItem mxEvent={this.props.mxEvent} />;
             }
         }
 
