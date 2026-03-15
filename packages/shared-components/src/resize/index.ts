@@ -15,7 +15,10 @@ export * from "./group/GroupView";
 export * from "./separator/SeparatorView";
 export * from "./panel/LeftResizablePanelView";
 
-export interface ResizerSnapshot {
+/**
+ * Common snapshot for GroupView, SeparatorView and LeftResizablePanelView.
+ */
+export interface ResizerViewSnapshot {
     /**
      * Whether the left panel is collapsed or not.
      */

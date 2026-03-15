@@ -15,13 +15,13 @@ import {
     Panel,
     Separator,
     type LeftResizablePanelViewActions,
-    type ResizerSnapshot,
+    type ResizerViewSnapshot,
 } from "..";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { Flex } from "../../utils/Flex";
 
-type LeftResizablePanelViewProps = ResizerSnapshot & LeftResizablePanelViewActions;
+type LeftResizablePanelViewProps = ResizerViewSnapshot & LeftResizablePanelViewActions;
 
 const Wrapper = ({ onLeftPanelResize, setPanelHandle, ...snapshot }: LeftResizablePanelViewProps): JSX.Element => {
     const vm = useMockedViewModel(snapshot, { onLeftPanelResize, setPanelHandle });

@@ -12,7 +12,7 @@ import {
     type PanelSize,
     type PanelImperativeHandle,
     type GroupViewActions,
-    type ResizerSnapshot,
+    type ResizerViewSnapshot,
 } from "@element-hq/web-shared-components";
 import { debounce } from "lodash";
 import whatInput from "what-input";
@@ -20,7 +20,7 @@ import whatInput from "what-input";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 
-function getInitialState(): ResizerSnapshot {
+function getInitialState(): ResizerViewSnapshot {
     if (SettingsStore.getValue("RoomList.isPanelCollapsed")) {
         return {
             isCollapsed: true,
@@ -39,7 +39,7 @@ function getInitialState(): ResizerSnapshot {
  * Viewmodel that drives the resizable left panel.
  */
 export class ResizerViewModel
-    extends BaseViewModel<ResizerSnapshot, void>
+    extends BaseViewModel<ResizerViewSnapshot, void>
     implements SeparatorViewActions, LeftResizablePanelViewActions, GroupViewActions
 {
     /**

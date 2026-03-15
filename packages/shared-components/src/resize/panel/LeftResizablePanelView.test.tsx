@@ -21,14 +21,14 @@ import {
     Panel,
     type PanelImperativeHandle,
     type PanelSize,
-    type ResizerSnapshot,
+    type ResizerViewSnapshot,
     Separator,
 } from "..";
 
 const { Default } = composeStories(stories);
 
-class MockViewModel extends BaseViewModel<ResizerSnapshot, unknown> implements LeftResizablePanelViewActions {
-    public constructor(snapshot: ResizerSnapshot) {
+class MockViewModel extends BaseViewModel<ResizerViewSnapshot, unknown> implements LeftResizablePanelViewActions {
+    public constructor(snapshot: ResizerViewSnapshot) {
         super(undefined, snapshot);
     }
 
@@ -36,7 +36,7 @@ class MockViewModel extends BaseViewModel<ResizerSnapshot, unknown> implements L
     public setPanelHandle: (handle: PanelImperativeHandle) => void = vi.fn();
 }
 
-function renderPanel(initialSnapshot?: Partial<ResizerSnapshot>): MockViewModel {
+function renderPanel(initialSnapshot?: Partial<ResizerViewSnapshot>): MockViewModel {
     const snapshot = { isCollapsed: false, isFocusedViaKeyboard: false, initialSize: 20, ...initialSnapshot };
     const vm = new MockViewModel(snapshot);
     render(

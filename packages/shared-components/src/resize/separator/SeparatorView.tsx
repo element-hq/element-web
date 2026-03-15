@@ -13,7 +13,7 @@ import { Tooltip } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./SeparatorView.module.css";
-import { type ResizerSnapshot } from "..";
+import { type ResizerViewSnapshot } from "..";
 import { useI18n } from "../../utils/i18nContext";
 
 export interface SeparatorViewActions {
@@ -34,7 +34,7 @@ export interface SeparatorViewActions {
 }
 
 interface Props {
-    vm: ViewModel<ResizerSnapshot, SeparatorViewActions>;
+    vm: ViewModel<ResizerViewSnapshot, SeparatorViewActions>;
     className?: string;
 }
 

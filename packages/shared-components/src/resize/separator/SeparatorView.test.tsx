@@ -13,12 +13,12 @@ import { userEvent } from "vitest/browser";
 
 import * as stories from "./SeparatorView.stories";
 import { BaseViewModel } from "../../viewmodel";
-import { Group, Panel, type ResizerSnapshot, SeparatorView, type SeparatorViewActions } from "..";
+import { Group, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 
 const { Default, LeftPanelExpanded, KeyboardFocused } = composeStories(stories);
 
-class MockViewModel extends BaseViewModel<ResizerSnapshot, unknown> implements SeparatorViewActions {
-    public constructor(snapshot: ResizerSnapshot) {
+class MockViewModel extends BaseViewModel<ResizerViewSnapshot, unknown> implements SeparatorViewActions {
+    public constructor(snapshot: ResizerViewSnapshot) {
         super(undefined, snapshot);
     }
     public onBlur: () => void = vi.fn();
@@ -26,7 +26,7 @@ class MockViewModel extends BaseViewModel<ResizerSnapshot, unknown> implements S
     public onSeparatorClick: () => void = vi.fn();
 }
 
-function renderPanel(initialSnapshot?: Partial<ResizerSnapshot>): MockViewModel {
+function renderPanel(initialSnapshot?: Partial<ResizerViewSnapshot>): MockViewModel {
     const snapshot = { isCollapsed: true, isFocusedViaKeyboard: false, initialSize: 20, ...initialSnapshot };
     const vm = new MockViewModel(snapshot);
     render(

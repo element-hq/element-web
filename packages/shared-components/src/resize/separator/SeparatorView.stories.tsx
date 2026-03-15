@@ -9,12 +9,12 @@ import React, { type JSX } from "react";
 import { expect, fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Group, Panel, type ResizerSnapshot, SeparatorView, type SeparatorViewActions } from "..";
+import { Group, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { Flex } from "../../utils/Flex";
 
-type SeparatorViewProps = ResizerSnapshot & SeparatorViewActions;
+type SeparatorViewProps = ResizerViewSnapshot & SeparatorViewActions;
 
 const Wrapper = ({ onFocus, onBlur, onSeparatorClick, ...snapshot }: SeparatorViewProps): JSX.Element => {
     const vm = useMockedViewModel(snapshot, { onFocus, onBlur, onSeparatorClick });

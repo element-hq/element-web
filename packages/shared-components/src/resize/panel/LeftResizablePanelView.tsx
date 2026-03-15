@@ -15,7 +15,7 @@ import {
 } from "react-resizable-panels";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
-import { LEFT_PANEL_ID, type ResizerSnapshot } from "..";
+import { LEFT_PANEL_ID, type ResizerViewSnapshot } from "..";
 
 export interface LeftResizablePanelViewActions {
     /**
@@ -32,7 +32,7 @@ export interface LeftResizablePanelViewActions {
 }
 
 type Props = {
-    vm: ViewModel<ResizerSnapshot, LeftResizablePanelViewActions>;
+    vm: ViewModel<ResizerViewSnapshot, LeftResizablePanelViewActions>;
     className?: string;
 } & Pick<PanelProps, "minSize" | "maxSize" | "defaultSize">;
 
