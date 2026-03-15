@@ -31,6 +31,7 @@ export default defineConfig({
                 "@vector-im/compound-design-tokens",
                 "@vector-im/compound-web",
                 "react-virtuoso",
+                "react-resizable-panels",
             ],
             output: {
                 // Provide global variables to use in the UMD build
