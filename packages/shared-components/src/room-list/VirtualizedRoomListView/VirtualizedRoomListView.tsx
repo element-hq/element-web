@@ -256,13 +256,13 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
      * Get the key for a room item
      * Since we're using virtualization, items are always room ID strings
      */
-    const getItemKey = useCallback((item: string): string => {
-        return item;
-    }, []);
+    const getItemKey = useCallback((item: string): string => item, []);
 
-    const getHeaderKey = useCallback((header: string): string => {
-        return header;
-    }, []);
+    /**
+     * Get the key for a group header
+     * We are passing the section ID as the header key, which is a string, so we can return it directly
+     */
+    const getHeaderKey = useCallback((header: string): string => header, []);
 
     const context = useMemo(
         () => ({
