@@ -3395,8 +3395,7 @@
             "voice_call_unsupported": "%(senderName)s placed a voice call. (not supported by this browser)"
         },
         "m.file": {
-            "error_decrypting": "Error decrypting attachment",
-            "error_invalid": "Invalid file"
+            "error_decrypting": "Error decrypting attachment"
         },
         "m.image": {
             "error": "Unable to show image due to error",

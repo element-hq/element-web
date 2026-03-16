@@ -30,6 +30,7 @@
         "unpin": "Unpin"
     },
     "common": {
+        "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
         "options": "Options",
         "preferences": "Preferences",
@@ -184,6 +185,9 @@
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
+        },
+        "m.file": {
+            "error_invalid": "Invalid file"
         },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",
