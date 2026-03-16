@@ -47,7 +47,7 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
     let toggleButton: JSX.Element | undefined;
     if (overPreviewLimit) {
         toggleButton = (
-            <Button className={styles.toggleButton} kind="tertiary" size="sm" onClick={() => vm.onTogglePreviewLimit()}>
+            <Button className={styles.toggleButton} kind="tertiary" size="sm" onClick={vm.onTogglePreviewLimit}>
                 {previewsLimited
                     ? _t("timeline|url_preview|show_n_more", { count: totalPreviewCount - previews.length })
                     : _t("action|collapse")}
@@ -58,12 +58,12 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
     return (
         <div className={styles.wrapper}>
             <div className={classNames(styles.previewGroup, compactLayout && styles.compactLayout)}>
-                {previews.map((preview, i) => (
+                {previews.map((preview) => (
                     <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
                 ))}
                 {toggleButton}
             </div>
-            <IconButton size="20px" onClick={() => vm.onHideClick()} aria-label={_t("timeline|url_preview|close")}>
+            <IconButton size="20px" onClick={vm.onHideClick} aria-label={_t("timeline|url_preview|close")}>
                 <CloseIcon />
             </IconButton>
         </div>

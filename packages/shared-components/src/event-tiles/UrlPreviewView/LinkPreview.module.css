@@ -6,7 +6,7 @@
  */
 
 .thumbnail {
-    /* Thumbnails are always limited to a maxiumum of 100px */
+    /* Thumbnails are always limited to a maximum of 100px */
     max-width: 100px;
     max-height: 100px;
     /* Ensure we don't stretch the image */
@@ -79,7 +79,7 @@
     .description {
         margin: var(--cpd-space-1x) 0;
         word-wrap: break-word;
-        line-clamp: 2;
+        line-clamp: 3;
         -webkit-line-clamp: 3;
     }
 }
