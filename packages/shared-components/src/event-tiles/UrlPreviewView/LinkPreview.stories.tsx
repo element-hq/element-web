@@ -68,6 +68,7 @@ WithTooltip.args = {
     description: "A simple description",
     showTooltipOnLink: true,
     link: "https://matrix.org",
+    siteName: "matrix.org",
 };
 
 export const Article = Template.bind({});
