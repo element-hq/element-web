@@ -37,4 +37,10 @@ export interface ResizerViewSnapshot {
 /**
  * Export relevant parts of the underlying library.
  */
-export { Group, Panel, Separator, type PanelSize, type PanelImperativeHandle } from "react-resizable-panels";
+export {
+    Group as ResizableGroup,
+    Panel,
+    Separator,
+    type PanelSize,
+    type PanelImperativeHandle,
+} from "react-resizable-panels";

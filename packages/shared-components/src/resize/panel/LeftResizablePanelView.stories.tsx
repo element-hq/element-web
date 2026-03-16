@@ -10,7 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-    Group,
+    ResizableGroup,
     LeftResizablePanelView,
     Panel,
     Separator,
@@ -66,7 +66,7 @@ export const Default: Story = {
                     height: "600px",
                 }}
             >
-                <Group>
+                <ResizableGroup>
                     <Story />
                     <Separator />
                     <Panel>
@@ -74,7 +74,7 @@ export const Default: Story = {
                             MAIN CONTENT
                         </Flex>
                     </Panel>
-                </Group>
+                </ResizableGroup>
             </div>
         ),
     ],

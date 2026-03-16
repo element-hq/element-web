@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { expect, fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Group, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
+import { ResizableGroup, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { Flex } from "../../utils/Flex";
@@ -54,7 +54,7 @@ export const Default: Story = {
                     height: "600px",
                 }}
             >
-                <Group>
+                <ResizableGroup>
                     <Panel collapsible defaultSize="0" minSize="200px" maxSize="400px">
                         <Flex tabIndex={0} align="center" justify="center">
                             LEFT CONTENT
@@ -66,7 +66,7 @@ export const Default: Story = {
                             MAIN CONTENT
                         </Flex>
                     </Panel>
-                </Group>
+                </ResizableGroup>
             </div>
         ),
     ],
@@ -79,7 +79,7 @@ const commonDecorator = (Story: React.ComponentType): React.ReactElement => {
                 height: "600px",
             }}
         >
-            <Group>
+            <ResizableGroup>
                 <Panel collapsible defaultSize="200px" minSize="200px" maxSize="400px">
                     <Flex tabIndex={0} align="center" justify="center">
                         LEFT CONTENT
@@ -91,7 +91,7 @@ const commonDecorator = (Story: React.ComponentType): React.ReactElement => {
                         MAIN CONTENT
                     </Flex>
                 </Panel>
-            </Group>
+            </ResizableGroup>
         </div>
     );
 };
@@ -128,7 +128,7 @@ export const Hover: Story = {
                     height: "600px",
                 }}
             >
-                <Group>
+                <ResizableGroup>
                     <Panel collapsible defaultSize="0" minSize="200px" maxSize="400px">
                         <Flex tabIndex={0} align="center" justify="center">
                             LEFT CONTENT
@@ -140,7 +140,7 @@ export const Hover: Story = {
                             MAIN CONTENT
                         </Flex>
                     </Panel>
-                </Group>
+                </ResizableGroup>
             </div>
         ),
     ],

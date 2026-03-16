@@ -14,7 +14,7 @@ import userEvent from "@testing-library/user-event";
 import * as stories from "./LeftResizablePanelView.stories";
 import { BaseViewModel } from "../../viewmodel";
 import {
-    Group,
+    ResizableGroup,
     LEFT_PANEL_ID,
     LeftResizablePanelView,
     type LeftResizablePanelViewActions,
@@ -40,11 +40,11 @@ function renderPanel(initialSnapshot?: Partial<ResizerViewSnapshot>): MockViewMo
     const snapshot = { isCollapsed: false, isFocusedViaKeyboard: false, initialSize: 20, ...initialSnapshot };
     const vm = new MockViewModel(snapshot);
     render(
-        <Group>
+        <ResizableGroup>
             <LeftResizablePanelView vm={vm}>Left</LeftResizablePanelView>
             <Separator />
             <Panel>Test</Panel>
-        </Group>,
+        </ResizableGroup>,
     );
     return vm;
 }

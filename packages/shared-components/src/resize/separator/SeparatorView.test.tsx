@@ -13,7 +13,7 @@ import { userEvent } from "vitest/browser";
 
 import * as stories from "./SeparatorView.stories";
 import { BaseViewModel } from "../../viewmodel";
-import { Group, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
+import { ResizableGroup, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 
 const { Default, LeftPanelExpanded, KeyboardFocused } = composeStories(stories);
 
@@ -30,11 +30,11 @@ function renderPanel(initialSnapshot?: Partial<ResizerViewSnapshot>): MockViewMo
     const snapshot = { isCollapsed: true, isFocusedViaKeyboard: false, initialSize: 20, ...initialSnapshot };
     const vm = new MockViewModel(snapshot);
     render(
-        <Group>
+        <ResizableGroup>
             <Panel>Left</Panel>
             <SeparatorView vm={vm} />
             <Panel>Test</Panel>
-        </Group>,
+        </ResizableGroup>,
     );
     return vm;
 }
