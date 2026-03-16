@@ -66,7 +66,7 @@ describe("RoomListViewViewModel", () => {
             viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const snapshot = viewModel.getSnapshot();
-            expect(snapshot.roomIds).toEqual(["!room1:server", "!room2:server", "!room3:server"]);
+            expect(snapshot.sections[0].roomIds).toEqual(["!room1:server", "!room2:server", "!room3:server"]);
             expect(snapshot.isRoomListEmpty).toBe(false);
             expect(snapshot.isLoadingRooms).toBe(false);
             expect(snapshot.roomListState.spaceId).toBe("home");
@@ -82,7 +82,7 @@ describe("RoomListViewViewModel", () => {
 
             viewModel = new RoomListViewViewModel({ client: matrixClient });
 
-            expect(viewModel.getSnapshot().roomIds).toEqual([]);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([]);
             expect(viewModel.getSnapshot().isRoomListEmpty).toBe(true);
         });
 
@@ -106,7 +106,7 @@ describe("RoomListViewViewModel", () => {
 
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
-            expect(viewModel.getSnapshot().roomIds).toEqual([
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
                 "!room1:server",
                 "!room2:server",
                 "!room3:server",
@@ -156,7 +156,7 @@ describe("RoomListViewViewModel", () => {
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
             expect(viewModel.getSnapshot().roomListState.spaceId).toBe("!space:server");
-            expect(viewModel.getSnapshot().roomIds).toEqual(["!room1:server", "!room2:server"]);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual(["!room1:server", "!room2:server"]);
         });
 
         it("should clear view models when space changes", () => {
@@ -240,7 +240,7 @@ describe("RoomListViewViewModel", () => {
 
             // Active room should still be at index 1 (sticky behavior)
             expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(1);
-            expect(viewModel.getSnapshot().roomIds[1]).toBe("!room2:server");
+            expect(viewModel.getSnapshot().sections[0].roomIds[1]).toBe("!room2:server");
         });
 
         it("should not apply sticky behavior when user changes rooms", async () => {
@@ -283,7 +283,7 @@ describe("RoomListViewViewModel", () => {
             viewModel.onToggleFilter("unread");
 
             expect(viewModel.getSnapshot().activeFilterId).toBe("unread");
-            expect(viewModel.getSnapshot().roomIds).toEqual(["!room1:server"]);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual(["!room1:server"]);
         });
 
         it("should toggle filter off", () => {
@@ -307,7 +307,11 @@ describe("RoomListViewViewModel", () => {
             viewModel.onToggleFilter("unread");
 
             expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
-            expect(viewModel.getSnapshot().roomIds).toEqual(["!room1:server", "!room2:server", "!room3:server"]);
+            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([
+                "!room1:server",
+                "!room2:server",
+                "!room3:server",
+            ]);
         });
     });
 
