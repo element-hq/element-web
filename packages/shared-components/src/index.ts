@@ -38,6 +38,7 @@ export * from "./room-list/RoomListSearchView";
 export * from "./room-list/RoomListSectionHeaderView";
 export * from "./room-list/RoomListView";
 export * from "./room-list/RoomListItemView";
+export * from "./room-list/RoomListItemAccessibilityWrapper";
 export * from "./room-list/RoomListPrimaryFilters";
 export * from "./room-list/VirtualizedRoomListView";
 export * from "./timeline/DateSeparatorView/";
