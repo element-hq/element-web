@@ -3740,14 +3740,7 @@
             "one_user": "%(displayName)s is typing …",
             "two_users": "%(names)s and %(lastPerson)s are typing …"
         },
-        "undecryptable_tooltip": "This message could not be decrypted",
-        "url_preview": {
-            "close": "Close preview",
-            "show_n_more": {
-                "one": "Show %(count)s other preview",
-                "other": "Show %(count)s other previews"
-            }
-        }
+        "undecryptable_tooltip": "This message could not be decrypted"
     },
     "truncated_list_n_more": {
         "other": "And %(count)s more..."
