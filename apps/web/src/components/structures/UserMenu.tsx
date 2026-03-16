@@ -6,14 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { useCallback, type JSX, type ReactNode } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import {
     HomeSolidIcon,
-    LockSolidIcon,
-    QrCodeIcon,
     SettingsSolidIcon,
     ChatProblemIcon,
+    DevicesIcon,
+    LockIcon,
+    SettingsIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { MenuItem } from "@vector-im/compound-web";
 import { QuickSettingsMenu } from "@element-hq/web-shared-components";
@@ -136,7 +137,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             ) : null,
             <MenuItem
                 key="link_new_device"
-                Icon={QrCodeIcon}
+                Icon={DevicesIcon}
                 label={_t("user_menu|link_new_device")}
                 onSelect={() =>
                     defaultDispatcher.dispatch({
@@ -148,7 +149,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             />,
             <MenuItem
                 key="security"
-                Icon={LockSolidIcon}
+                Icon={LockIcon}
                 label={_t("room_settings|security|title")}
                 onSelect={() =>
                     defaultDispatcher.dispatch({
@@ -167,7 +168,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             ) : null,
             <MenuItem
                 key="settings"
-                Icon={SettingsSolidIcon}
+                Icon={SettingsIcon}
                 label={_t("user_menu|settings")}
                 onSelect={() =>
                     defaultDispatcher.dispatch({
@@ -193,7 +194,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 userId={userId}
                 displayName={displayName}
                 avatarUrl={avatarUrl}
-                manageAccountHref={externalAccountManagementUrl}
+                onManageAccount={externalAccountManagementUrl}
             >
                 {this.renderContextMenu()}
             </QuickSettingsMenu>

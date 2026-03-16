@@ -6,7 +6,7 @@
  */
 
 import { type Meta, type StoryObj } from "@storybook/react-vite";
-import React from "react";
+import React, { useState } from "react";
 import { MenuItem } from "@vector-im/compound-web";
 import { fn } from "storybook/test";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
@@ -15,18 +15,23 @@ import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
 
-import { QuickSettingsMenu } from "./QuickSettingsMenu";
+import { QuickSettingsMenu, type QuickSettingsMenuViewProps } from "./QuickSettingsMenu";
 import avatarUrl from "../../../static/element.png";
+
+const QuickSettingsMenuWrapper = ({ open: defaultOpen, ...props }: QuickSettingsMenuViewProps): JSX.Element => {
+    const [open, setOpen] = useState(defaultOpen);
+    return <QuickSettingsMenu {...props} open={open} setOpen={setOpen} />;
+};
 
 const meta = {
     title: "Menus/QuickSettingsMenu",
-    component: QuickSettingsMenu,
+    component: QuickSettingsMenuWrapper,
     tags: ["autodocs"],
     args: {
         displayName: "string",
         userId: "string",
     },
-} satisfies Meta<typeof QuickSettingsMenu>;
+} satisfies Meta<typeof QuickSettingsMenuWrapper>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -36,7 +41,28 @@ export const Default: Story = {
         open: true,
         setOpen: fn(),
         avatarUrl,
-        displayName: "Sally Sanderson",
+        displayName: "Sally Sanderson the Third",
+        userId: "@person-name:homeserver.com",
+        manageAccountHref: "#",
+        expanded: true,
+        children: (
+            <>
+                <MenuItem Icon={<QrCodeIcon />} label="Link new device" onSelect={fn()} />
+                <MenuItem Icon={<LockIcon />} label="Security & Privacy" onSelect={fn()} />
+                <MenuItem Icon={<ChatProblemIcon />} label="Feedback" onSelect={fn()} />
+                <MenuItem Icon={<SettingsIcon />} label="All settings" onSelect={fn()} />
+                <MenuItem Icon={<SignOutIcon />} kind="critical" label="Sign out" onSelect={fn()} />
+            </>
+        ),
+    },
+};
+
+export const ShorterName: Story = {
+    args: {
+        open: true,
+        setOpen: fn(),
+        avatarUrl,
+        displayName: "Short Name",
         userId: "@person-name:homeserver.com",
         manageAccountHref: "#",
         expanded: true,

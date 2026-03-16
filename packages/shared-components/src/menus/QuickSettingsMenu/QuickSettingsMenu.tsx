@@ -55,14 +55,14 @@ export function QuickSettingsMenu({
             >
                 <section className={styles.profile}>
                     <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />
-                    <Text type="heading" size="md" weight="semibold" as="span">
+                    <Text className={styles.displayname} type="heading" size="md" weight="semibold" as="span">
                         {displayName}
                     </Text>
                     <Text size="md" as="span" type="body">
                         {userId}
                     </Text>
                     {manageAccountHref && (
-                        <Button as="a" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
+                        <Button as="a" size="sm" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
                             Manage account
                         </Button>
                     )}
