@@ -1529,7 +1529,6 @@
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
         "notifications": "Włącz panel powiadomień w nagłówku pokoju.",
-        "release_announcement": "Ogłoszenie o wydaniu",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
         "report_to_moderators": "Zgłoś do moderatorów",
@@ -2050,7 +2049,6 @@
         "not_found_title": "Ten pokój lub przestrzeń nie istnieje.",
         "not_found_title_name": "%(roomName)s nie istnieje.",
         "peek_join_prompt": "Przeglądasz %(roomName)s. Czy chcesz dołączyć do pokoju?",
-        "pinned_message_badge": "Przypięta wiadomość",
         "pinned_message_banner": {
             "button_close_list": "Zamknij listę",
             "button_view_all": "Pokaż wszystkie",

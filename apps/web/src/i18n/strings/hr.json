@@ -1567,7 +1567,6 @@
         "notification_settings_beta_caption": "Predstavljamo jednostavniji način promjene postavki obavijesti. Prilagodite svoj %(brand)s tako da bude po vašoj mjeri.",
         "notification_settings_beta_title": "Postavke obavijesti",
         "notifications": "Omogući ploču s obavijestima u zaglavlju sobe",
-        "release_announcement": "Najava nove inačice",
         "render_reaction_images": "Prikaži prilagođene slike u reakcijama",
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
         "report_to_moderators": "Prijavi moderatorima",
@@ -2112,7 +2111,6 @@
         "not_found_title": "Ova soba ili prostor ne postoji.",
         "not_found_title_name": "%(roomName)s ne postoji.",
         "peek_join_prompt": "Pregledavate sobu %(roomName)s. Želite li joj se pridružiti?",
-        "pinned_message_badge": "Prikvačena poruka",
         "pinned_message_banner": {
             "button_close_list": "Zatvori popis",
             "button_view_all": "Prikaži sve",

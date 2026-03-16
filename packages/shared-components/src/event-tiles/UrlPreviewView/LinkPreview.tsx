@@ -46,7 +46,7 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             }
             onImageClick();
         },
-        [preview, onImageClick],
+        [preview.image?.imageFull, onImageClick],
     );
 
     let img: JSX.Element | undefined;

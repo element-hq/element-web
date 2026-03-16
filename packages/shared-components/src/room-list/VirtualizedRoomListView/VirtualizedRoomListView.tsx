@@ -12,7 +12,7 @@ import { isEqual } from "lodash";
 import { RoomListItemView, type Room } from "../RoomListItemView";
 import { useViewModel } from "../../viewmodel";
 import { _t } from "../../utils/i18n";
-import { VirtualizedList, type VirtualizedListContext } from "../../utils/VirtualizedList";
+import { FlatVirtualizedList, type VirtualizedListContext } from "../../utils/VirtualizedList";
 import type { RoomListViewModel } from "../RoomListView";
 
 /**
@@ -174,7 +174,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     );
 
     return (
-        <VirtualizedList
+        <FlatVirtualizedList
             context={context}
             scrollIntoViewOnChange={scrollIntoViewOnChange}
             // If fixedItemHeight is not set and initialTopMostItemIndex=undefined, virtuoso crashes
