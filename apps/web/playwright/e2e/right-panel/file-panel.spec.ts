@@ -85,7 +85,7 @@ test.describe("FilePanel", () => {
             await expect(filePanelMessageList.locator(".mx_EventTile")).toHaveCount(3);
 
             // Assert that the download links are rendered
-            await expect(filePanelMessageList.locator(".mx_MFileBody_download,.mx_MFileBody_info")).toHaveCount(3);
+            await expect(filePanelMessageList.locator(".mx_MFileBody")).toHaveCount(3);
 
             // Assert that the sender of the files is rendered on all of the tiles
             await expect(filePanelMessageList.getByText(NAME)).toHaveCount(3);
@@ -103,9 +103,7 @@ test.describe("FilePanel", () => {
 
             // Detect the JSON file
             // Assert that the tile is rendered as a button
-            const file = filePanelMessageList.locator(
-                ".mx_EventTile_mediaLine .mx_MFileBody .mx_MFileBody_info[role='button'] .mx_MFileBody_info_filename",
-            );
+            const file = filePanelMessageList.locator(".mx_EventTile_mediaLine .mx_MFileBody [role='button']");
             // Assert that the file name is rendered inside the button with ellipsis
             await expect(file.getByText(/matrix.*?\.json/)).toBeVisible();
 
@@ -177,8 +175,7 @@ test.describe("FilePanel", () => {
             const tile = page.locator(".mx_FilePanel .mx_EventTile");
             // Assert that the file size is displayed in kibibytes, not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
-            await expect(tile.locator(".mx_MFileBody_info_filename", { hasText: size })).toBeVisible();
-            await expect(tile.locator(".mx_MFileBody_info", { hasText: size })).toBeVisible();
+            await expect(tile.locator(".mx_MFileBody [data-type='info']", { hasText: size })).toBeVisible();
         });
     });
 
@@ -194,7 +191,7 @@ test.describe("FilePanel", () => {
                 ".mx_FilePanel .mx_RoomView_MessageList .mx_EventTile_mediaLine.mx_EventTile_image .mx_MImageBody",
             );
 
-            const link = imageBody.locator(".mx_MFileBody_download a");
+            const link = imageBody.locator(".mx_MFileBody a");
 
             const downloadPromise = page.waitForEvent("download");
 
