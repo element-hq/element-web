@@ -40,7 +40,7 @@ export type QuickSettingsMenuViewProps = {
 export function QuickSettingsMenu({ vm }: QuickSettingsMenuViewProps): JSX.Element {
     const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions } = useViewModel(vm);
     const trigger = (
-        <button className={styles.triggerButton}>
+        <button className={styles.triggerButton} aria-label="User menu">
             <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
             {expanded ? (
                 <Text type="heading" size="sm" as="span" weight="semibold">
