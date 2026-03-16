@@ -16,6 +16,17 @@ describe("RedactedBodyViewModel", () => {
     let client: MatrixClient;
     let room: Room;
 
+    const makeRedactedBecauseEvent = ({ sender, originServerTs }: { sender: string; originServerTs: number }) => ({
+        content: {},
+        event_id: "$redaction:example.com",
+        origin_server_ts: originServerTs,
+        redacts: "$message:example.com",
+        room_id: room.roomId,
+        sender,
+        type: EventType.RoomRedaction,
+        unsigned: {},
+    });
+
     const makeRedactedEvent = ({
         sender = "@alice:example.com",
         redactedBecauseSender = sender,
@@ -35,10 +46,10 @@ describe("RedactedBodyViewModel", () => {
                 body: "Message",
             },
             unsigned: {
-                redacted_because: {
+                redacted_because: makeRedactedBecauseEvent({
                     sender: redactedBecauseSender,
-                    origin_server_ts: originServerTs,
-                },
+                    originServerTs,
+                }),
             },
         });
 

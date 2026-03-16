@@ -60,6 +60,17 @@ describe("MessageEvent", () => {
     let client: MatrixClient;
     let event: MatrixEvent;
 
+    const makeRedactedBecauseEvent = ({ sender, originServerTs }: { sender: string; originServerTs: number }) => ({
+        content: {},
+        event_id: "$redaction:example.com",
+        origin_server_ts: originServerTs,
+        redacts: "$message:example.com",
+        room_id: room.roomId,
+        sender,
+        type: EventType.RoomRedaction,
+        unsigned: {},
+    });
+
     const renderMessageEvent = (): RenderResult => {
         return render(
             <MatrixClientContext.Provider value={client}>
@@ -89,10 +100,10 @@ describe("MessageEvent", () => {
                 body: "Secret",
             },
             unsigned: {
-                redacted_because: {
+                redacted_because: makeRedactedBecauseEvent({
                     sender: "@moderator:example.com",
-                    origin_server_ts: Date.UTC(2022, 10, 17, 15, 58, 32),
-                },
+                    originServerTs: Date.UTC(2022, 10, 17, 15, 58, 32),
+                }),
             },
         });
         jest.spyOn(event, "isRedacted").mockReturnValue(true);
