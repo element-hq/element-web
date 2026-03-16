@@ -861,10 +861,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private readonly onActionBarFocusChange = (actionBarFocused: boolean): void => {
-        this.setState({
+        this.setState((prevState) => ({
             actionBarFocused,
-            hover: actionBarFocused ? this.state.hover : (this.ref.current?.matches(":hover") ?? false),
-        });
+            hover: actionBarFocused ? prevState.hover : (this.ref.current?.matches(":hover") ?? false),
+        }));
     };
 
     private readonly onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
