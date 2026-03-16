@@ -182,10 +182,10 @@ test.describe("Timeline", () => {
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-irc-layout.png", {
                     css: `
-                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                    .mx_MessageTimestamp {
                         visibility: hidden;
                     }
-                    .mx_MessagePanel_myReadMarker {
+                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -218,10 +218,10 @@ test.describe("Timeline", () => {
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-modern-layout.png", {
                     css: `
-                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                    .mx_MessageTimestamp {
                         visibility: hidden;
                     }
-                    .mx_MessagePanel_myReadMarker {
+                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -260,7 +260,7 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-bubble-layout.png", {
                     // Exclude timestamp from snapshot
                     css: `
-                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                        .mx_MessageTimestamp {
                             visibility: hidden;
                         }
                     `,
@@ -280,7 +280,7 @@ test.describe("Timeline", () => {
                 // Save snapshot of collapsed generic event list summary on bubble layout
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("collapsed-gels-bubble-layout.png", {
                     css: `
-                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                        .mx_MessageTimestamp {
                             visibility: hidden;
                         }
                     `,
@@ -325,10 +325,10 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp and read marker from snapshot
                         css: `
-                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                        .mx_MessageTimestamp {
                             visibility: hidden;
                         }
-                        .mx_MessagePanel_myReadMarker {
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -523,10 +523,10 @@ test.describe("Timeline", () => {
                 const screenshotOptions = {
                     // Hide because flaky - See https://github.com/vector-im/element-web/issues/24957
                     css: `
-                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                        .mx_MessageTimestamp {
                             visibility: hidden;
                         }
-                        .mx_MessagePanel_myReadMarker {
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -651,10 +651,10 @@ test.describe("Timeline", () => {
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
                     css: `
-                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                        .mx_MessageTimestamp {
                             visibility: hidden;
                         }
-                        .mx_MessagePanel_myReadMarker {
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -1131,10 +1131,10 @@ test.describe("Timeline", () => {
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
                 css: `
-                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                    .mx_MessageTimestamp {
                         visibility: hidden;
                     }
-                    .mx_MessagePanel_myReadMarker {
+                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -1259,10 +1259,10 @@ test.describe("Timeline", () => {
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
                     css: `
-                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                        .mx_MessageTimestamp {
                             visibility: hidden;
                         }
-                        .mx_MessagePanel_myReadMarker {
+                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -1325,10 +1325,10 @@ test.describe("Timeline", () => {
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
                 css: `
-                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
+                    .mx_MessageTimestamp {
                         visibility: hidden;
                     }
-                    .mx_MessagePanel_myReadMarker {
+                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
