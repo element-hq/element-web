@@ -16,10 +16,8 @@ import {
     type LoginRequest,
     type OidcClientConfig,
     type ISSOFlow,
-    type ValidatedAuthMetadata,
-    type IServerVersions,
-    OAuthGrantType,
 } from "matrix-js-sdk/src/matrix";
+import { isSignInWithQRAvailable } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type IMatrixClientCreds } from "./MatrixClientPeg";
@@ -127,10 +125,11 @@ export default class Login {
 
                 let possibleQrFlow: LoginWithQrFlow | undefined;
                 try {
-                    const versions = await this.createTemporaryClient().getVersions();
+                    // TODO: this seems wasteful
+                    const tempClient = this.createTemporaryClient();
                     // we reuse the clientId from the oidcFlow for QR login
                     // it might be that we later find that the homeserver is different and we initialise a new client
-                    possibleQrFlow = tryInitLoginWithQRFlow(this.delegatedAuthentication, versions, oidcFlow.clientId);
+                    possibleQrFlow = await tryInitLoginWithQRFlow(tempClient,oidcFlow.clientId);
                 } catch (e) {
                     logger.warn("Could not fetch server versions for login with QR support, assuming unsupported", e);
                 }
@@ -307,18 +306,14 @@ export async function sendLoginRequest(
     return creds;
 }
 
-const tryInitLoginWithQRFlow = (
-    authMetadata: ValidatedAuthMetadata,
-    versions: IServerVersions,
+const tryInitLoginWithQRFlow = async (
+    tempClient: MatrixClient,
     clientId: string,
-): LoginWithQrFlow | undefined => {
-    const msc4388Supported = !!versions?.unstable_features?.["io.element.msc4388"];
+): Promise<LoginWithQrFlow | undefined> => {
+    // This could fail because the server doesn't support the API or it requires authentication
+    const canUseServer = await isSignInWithQRAvailable(tempClient);
 
-    const deviceAuthorizationGrantSupported = authMetadata?.grant_types_supported.includes(
-        OAuthGrantType.DeviceAuthorization,
-    );
-
-    if (!msc4388Supported || !deviceAuthorizationGrantSupported) return undefined;
+    if (!canUseServer) return undefined;
 
     const flow = {
         type: "loginWithQrFlow",
