@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
+    useEffect,
     type ElementType,
     type FocusEventHandler,
     type JSX,
@@ -13,15 +14,27 @@ import React, {
     type ReactNode,
     type Ref,
 } from "react";
+import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Tooltip } from "@vector-im/compound-web";
+import { MessageTimestampView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import type { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { _t } from "../../../../languageHandler";
 import { Layout } from "../../../../settings/enums/Layout";
+import {
+    MessageTimestampViewModel,
+    type MessageTimestampViewModelProps,
+} from "../../../../viewmodels/message-body/MessageTimestampViewModel";
+import MemberAvatar from "../../avatars/MemberAvatar";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
+import SenderProfile from "../../messages/SenderProfile";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
 import { EventTileThreadToolbar } from "./EventTileThreadToolbar";
+import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
+import { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
+import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -46,25 +59,42 @@ export interface EventTileViewProps {
     lineClasses: string;
     ariaLive?: "off";
     scrollToken?: string;
+    isTwelveHour?: boolean;
     isOwnEvent: boolean;
     isRenderingNotification: boolean;
     replyChain?: ReactNode;
-    avatar?: ReactNode;
-    sender?: ReactNode;
+    avatarMember?: RoomMember | null;
+    avatarSize?: string | null;
+    avatarViewUserOnClick: boolean;
+    avatarForceHistorical: boolean;
+    senderMode: "hidden" | "default" | "composerInsert" | "tooltip";
+    onSenderProfileClick?: () => void;
     actionBar?: ReactNode;
     messageBody: ReactNode;
-    threadInfo?: ReactNode;
-    threadPanelSummary?: ReactNode;
-    msgOption?: ReactNode;
+    threadInfoSummary?: ReactNode;
+    threadInfoHref?: string;
+    threadInfoLabel?: string;
+    threadPanelReplyCount?: number;
+    threadPanelPreview?: ReactNode;
+    showThreadToolbar?: boolean;
+    sentReceiptIcon?: ReactNode;
+    sentReceiptLabel?: string;
+    readReceipts?: ReactNode;
     pinnedMessageBadge?: ReactNode;
     reactionsRow?: ReactNode;
     hasFooter: boolean;
-    timestamp?: ReactNode;
-    linkedTimestamp?: ReactNode;
-    groupTimestamp?: ReactNode;
-    ircTimestamp?: ReactNode;
-    groupPadlock?: ReactNode;
-    ircPadlock?: ReactNode;
+    showTimestamp?: boolean;
+    showLinkedTimestamp?: boolean;
+    showDummyTimestamp?: boolean;
+    timestampTs?: number;
+    timestampReceivedTs?: number;
+    showRelativeTimestamp?: boolean;
+    showGroupPadlock: boolean;
+    showIrcPadlock: boolean;
+    e2ePadlockIcon: "none" | "normal" | "warning" | "decryptionFailure";
+    e2ePadlockTitle?: string;
+    e2ePadlockSharedUserId?: string;
+    e2ePadlockRoomId?: string;
     contextMenu?: ReactNode;
     onMouseEnter: MouseEventHandler<HTMLElement>;
     onMouseLeave: MouseEventHandler<HTMLElement>;
@@ -92,25 +122,42 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
         lineClasses,
         ariaLive,
         scrollToken,
+        isTwelveHour,
         isOwnEvent,
         isRenderingNotification,
         replyChain,
-        avatar,
-        sender,
+        avatarMember,
+        avatarSize,
+        avatarViewUserOnClick,
+        avatarForceHistorical,
+        senderMode,
+        onSenderProfileClick,
         actionBar,
         messageBody,
-        threadInfo,
-        threadPanelSummary,
-        msgOption,
+        threadInfoSummary,
+        threadInfoHref,
+        threadInfoLabel,
+        threadPanelReplyCount,
+        threadPanelPreview,
+        showThreadToolbar,
+        sentReceiptIcon,
+        sentReceiptLabel,
+        readReceipts,
         pinnedMessageBadge,
         reactionsRow,
         hasFooter,
-        timestamp,
-        linkedTimestamp,
-        groupTimestamp,
-        ircTimestamp,
-        groupPadlock,
-        ircPadlock,
+        showTimestamp,
+        showLinkedTimestamp,
+        showDummyTimestamp,
+        timestampTs,
+        timestampReceivedTs,
+        showRelativeTimestamp,
+        showGroupPadlock,
+        showIrcPadlock,
+        e2ePadlockIcon,
+        e2ePadlockTitle,
+        e2ePadlockSharedUserId,
+        e2ePadlockRoomId,
         contextMenu,
         onMouseEnter,
         onMouseLeave,
@@ -126,6 +173,56 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
     } = props;
 
     const Root = (as ?? "li") as ElementType;
+    const avatar = (
+        <EventTileAvatar
+            member={avatarMember}
+            size={avatarSize}
+            viewUserOnClick={avatarViewUserOnClick}
+            forceHistorical={avatarForceHistorical}
+        />
+    );
+    const sender = <EventTileSenderProfile mode={senderMode} mxEvent={mxEvent} onClick={onSenderProfileClick} />;
+    const timestamp = showTimestamp ? (
+        <EventTileTimestamp
+            showRelative={showRelativeTimestamp}
+            showTwelveHour={isTwelveHour}
+            ts={timestampTs ?? 0}
+            receivedTs={timestampReceivedTs}
+        />
+    ) : undefined;
+    const linkedTimestamp = !showLinkedTimestamp ? undefined : !showTimestamp ? (
+        showDummyTimestamp ? (
+            <span className="mx_MessageTimestamp" />
+        ) : undefined
+    ) : (
+        <EventTileTimestamp
+            showRelative={showRelativeTimestamp}
+            showTwelveHour={isTwelveHour}
+            ts={timestampTs ?? 0}
+            receivedTs={timestampReceivedTs}
+            href={permalink}
+            onClick={onPermalinkClicked}
+            onContextMenu={onTimestampContextMenu}
+        />
+    );
+    const groupTimestamp = layout !== Layout.IRC ? linkedTimestamp : null;
+    const ircTimestamp = layout === Layout.IRC ? linkedTimestamp : null;
+    const groupPadlock = showGroupPadlock ? (
+        <EventTileE2ePadlock
+            icon={e2ePadlockIcon}
+            title={e2ePadlockTitle}
+            sharedUserId={e2ePadlockSharedUserId}
+            roomId={e2ePadlockRoomId}
+        />
+    ) : null;
+    const ircPadlock = showIrcPadlock ? (
+        <EventTileE2ePadlock
+            icon={e2ePadlockIcon}
+            title={e2ePadlockTitle}
+            sharedUserId={e2ePadlockSharedUserId}
+            roomId={e2ePadlockRoomId}
+        />
+    ) : null;
 
     switch (timelineRenderingType) {
         case TimelineRenderingType.Thread:
@@ -155,7 +252,11 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                         {messageBody}
                         {actionBar}
                         {linkedTimestamp}
-                        {msgOption}
+                        <EventTileMsgOption
+                            sentReceiptIcon={sentReceiptIcon}
+                            sentReceiptLabel={sentReceiptLabel}
+                            readReceipts={readReceipts}
+                        />
                     </div>
                     {hasFooter && (
                         <div className="mx_EventTile_footer">
@@ -212,12 +313,21 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                     )}
                     <div className={lineClasses}>
                         <div className="mx_EventTile_body">{messageBody}</div>
-                        {threadPanelSummary}
+                        {threadPanelReplyCount !== undefined && threadPanelPreview !== undefined && (
+                            <EventTileThreadPanelSummary
+                                replyCount={threadPanelReplyCount}
+                                preview={threadPanelPreview}
+                            />
+                        )}
                     </div>
-                    {timelineRenderingType === TimelineRenderingType.ThreadsList && (
+                    {showThreadToolbar && (
                         <EventTileThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLinkToThread} />
                     )}
-                    {msgOption}
+                    <EventTileMsgOption
+                        sentReceiptIcon={sentReceiptIcon}
+                        sentReceiptLabel={sentReceiptLabel}
+                        readReceipts={readReceipts}
+                    />
                 </Root>
             );
         case TimelineRenderingType.File:
@@ -273,7 +383,11 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                                         {reactionsRow}
                                     </div>
                                 )}
-                                {threadInfo}
+                                <EventTileThreadInfo
+                                    summary={threadInfoSummary}
+                                    href={threadInfoHref}
+                                    label={threadInfoLabel}
+                                />
                             </>
                         )}
                     </div>
@@ -286,11 +400,189 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                                     {layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
                                 </div>
                             )}
-                            {threadInfo}
+                            <EventTileThreadInfo
+                                summary={threadInfoSummary}
+                                href={threadInfoHref}
+                                label={threadInfoLabel}
+                            />
                         </>
                     )}
-                    {msgOption}
+                    <EventTileMsgOption
+                        sentReceiptIcon={sentReceiptIcon}
+                        sentReceiptLabel={sentReceiptLabel}
+                        readReceipts={readReceipts}
+                    />
                 </Root>
             );
     }
+}
+
+function EventTileThreadPanelSummary({ replyCount, preview }: { replyCount: number; preview: ReactNode }): JSX.Element {
+    return (
+        <div className="mx_ThreadPanel_replies">
+            <ThreadsIcon />
+            <span className="mx_ThreadPanel_replies_amount">{replyCount}</span>
+            {preview}
+        </div>
+    );
+}
+
+function EventTileThreadInfo({
+    summary,
+    href,
+    label,
+}: {
+    summary?: ReactNode;
+    href?: string;
+    label?: string;
+}): JSX.Element | undefined {
+    if (summary) {
+        return <>{summary}</>;
+    }
+
+    if (href && label) {
+        return (
+            <a className="mx_ThreadSummary_icon" href={href}>
+                <ThreadsIcon />
+                {label}
+            </a>
+        );
+    }
+
+    if (label) {
+        return (
+            <p className="mx_ThreadSummary_icon">
+                <ThreadsIcon />
+                {label}
+            </p>
+        );
+    }
+
+    return undefined;
+}
+
+function EventTileMsgOption({
+    sentReceiptIcon,
+    sentReceiptLabel,
+    readReceipts,
+}: {
+    sentReceiptIcon?: ReactNode;
+    sentReceiptLabel?: string;
+    readReceipts?: ReactNode;
+}): JSX.Element | undefined {
+    if (sentReceiptIcon && sentReceiptLabel) {
+        return (
+            <div className="mx_EventTile_msgOption">
+                <div className="mx_ReadReceiptGroup">
+                    <Tooltip label={sentReceiptLabel} placement="top-end">
+                        <div className="mx_ReadReceiptGroup_button" role="status">
+                            <span className="mx_ReadReceiptGroup_container">{sentReceiptIcon}</span>
+                        </div>
+                    </Tooltip>
+                </div>
+            </div>
+        );
+    }
+
+    if (readReceipts) {
+        return <>{readReceipts}</>;
+    }
+
+    return undefined;
+}
+
+function EventTileE2ePadlock({
+    icon,
+    title,
+    sharedUserId,
+    roomId,
+}: {
+    icon: EventTileViewProps["e2ePadlockIcon"];
+    title?: string;
+    sharedUserId?: string;
+    roomId?: string;
+}): JSX.Element | null {
+    if (sharedUserId && roomId) {
+        return <E2eMessageSharedIcon keyForwardingUserId={sharedUserId} roomId={roomId} />;
+    }
+
+    switch (icon) {
+        case "decryptionFailure":
+            return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.DecryptionFailure} />;
+        case "normal":
+            return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.Normal} />;
+        case "warning":
+            return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.Warning} />;
+        default:
+            return null;
+    }
+}
+
+function EventTileAvatar({
+    member,
+    size,
+    viewUserOnClick,
+    forceHistorical,
+}: {
+    member?: RoomMember | null;
+    size?: string | null;
+    viewUserOnClick: boolean;
+    forceHistorical: boolean;
+}): JSX.Element | undefined {
+    if (!member || size === null || size === undefined) return undefined;
+
+    return (
+        <div className="mx_EventTile_avatar">
+            <MemberAvatar
+                member={member}
+                size={size}
+                viewUserOnClick={viewUserOnClick}
+                forceHistorical={forceHistorical}
+            />
+        </div>
+    );
+}
+
+function EventTileSenderProfile({
+    mode,
+    mxEvent,
+    onClick,
+}: {
+    mode: EventTileViewProps["senderMode"];
+    mxEvent: MatrixEvent;
+    onClick?: () => void;
+}): JSX.Element | undefined {
+    switch (mode) {
+        case "hidden":
+            return undefined;
+        case "composerInsert":
+            return <SenderProfile onClick={onClick} mxEvent={mxEvent} />;
+        case "tooltip":
+            return <SenderProfile mxEvent={mxEvent} withTooltip />;
+        default:
+            return <SenderProfile mxEvent={mxEvent} />;
+    }
+}
+
+function EventTileTimestamp(props: MessageTimestampViewModelProps): JSX.Element | undefined {
+    const viewModel = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+    useEffect(() => {
+        viewModel.setTimestamp(props.ts);
+        viewModel.setReceivedTimestamp(props.receivedTs);
+        viewModel.setDisplayOptions({
+            showTwelveHour: props.showTwelveHour,
+            showRelative: props.showRelative,
+        });
+        viewModel.setHref(props.href);
+        viewModel.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
+    }, [viewModel, props]);
+
+    return (
+        <>
+            {props.receivedTs ? (
+                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
+            ) : undefined}
+            <MessageTimestampView vm={viewModel} className="mx_MessageTimestamp" />
+        </>
+    );
 }
