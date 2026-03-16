@@ -17,8 +17,9 @@ A beta feature MUST have an expected timeline to be upgraded to a stable feature
 should not exceed 3 months. If a feature persists in beta for longer and hasn't been explicitly
 extended, the feature MAY be backed out to labs.
 
-A beta feature MUST have a rollback path for users to opt-out. If a feature is irreversible or
-could corrupt a user's session or account, it should not be in beta.
+A beta feature SHOULD have a rollback path for users to opt-out. If a feature is irreversible or
+could corrupt a user's session or account, it should not be in beta. If this is not possible, it
+MUST be discussed with the team first to devise an alternative strategy.
 
 A beta feature SHOULD have analytics so that the team can understand how many users
 are using it.
