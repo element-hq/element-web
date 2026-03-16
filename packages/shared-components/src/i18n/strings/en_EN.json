@@ -205,7 +205,15 @@
             "label": "Message Actions"
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
-        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "url_preview": {
+            "close": "Close preview",
+            "show_n_more": {
+                "one": "Show %(count)s other preview",
+                "other": "Show %(count)s other previews"
+            },
+            "view_image": "View image"
+        }
     },
     "widget": {
         "context_menu": {

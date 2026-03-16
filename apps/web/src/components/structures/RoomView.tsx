@@ -271,7 +271,7 @@ export interface IRoomState {
     showAvatarChanges: boolean;
     showDisplaynameChanges: boolean;
     matrixClientIsReady: boolean;
-    showUrlPreview?: boolean;
+    showUrlPreview: boolean;
     e2eStatus?: E2EStatus;
     rejecting?: boolean;
     hasPinnedWidgets?: boolean;
@@ -499,6 +499,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showJoinLeaves: true,
             showAvatarChanges: true,
             showDisplaynameChanges: true,
+            // Default to false to avoid any accidental leakage.
+            showUrlPreview: false,
             matrixClientIsReady: context.client?.isInitialSyncComplete(),
             mainSplitContentType: MainSplitContentType.Timeline,
             timelineRenderingType: TimelineRenderingType.Room,
