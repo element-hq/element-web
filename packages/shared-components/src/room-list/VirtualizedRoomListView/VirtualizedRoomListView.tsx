@@ -180,7 +180,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     );
 
     /**
-     * Get the item component for a specific index
+     * Get the item component for a specific index in a grouped list
+     * Since we have sections, we can calculate the room's index within its section and pass it to getItemComponent
      * Gets the room's view model and passes it to RoomListItemView
      */
     const getItemComponentForGroupedList = useCallback(
@@ -199,7 +200,8 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     );
 
     /**
-     * Get the item component for a specific index
+     * Get the item component for a specific index in a flat list
+     * Since we don't have sections, we can pass 0 for the room's index within its section to getItemComponent
      * Gets the room's view model and passes it to RoomListItemView
      */
     const getItemComponentForFlatList = useCallback(
