@@ -19,7 +19,7 @@ import {
     createGetRoomItemViewModel,
     mockRoomIds,
     mockSections,
-    createGetSectionViewModel,
+    createGetSectionHeaderViewModel,
     mockSmallListSections,
     mockLargeListSections,
     mockLargeListRoomIds,
@@ -35,7 +35,7 @@ const RoomListViewWrapperImpl = ({
     createChatRoom,
     createRoom,
     getRoomItemViewModel,
-    getSectionViewModel,
+    getSectionHeaderViewModel,
     updateVisibleRooms,
     renderAvatar: renderAvatarProp,
     ...rest
@@ -45,7 +45,7 @@ const RoomListViewWrapperImpl = ({
         createChatRoom,
         createRoom,
         getRoomItemViewModel,
-        getSectionViewModel,
+        getSectionHeaderViewModel,
         updateVisibleRooms,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
@@ -93,7 +93,7 @@ const meta = {
         createChatRoom: fn(),
         createRoom: fn(),
         getRoomItemViewModel: createGetRoomItemViewModel(mockRoomIds),
-        getSectionViewModel: createGetSectionViewModel(mockSections.map((section) => section.id)),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockSections.map((section) => section.id)),
         updateVisibleRooms: fn(),
         renderAvatar,
         isFlatList: true,
@@ -225,7 +225,7 @@ export const LargeFlatList: Story = {
     args: {
         sections: mockLargeListSections,
         getRoomItemViewModel: createGetRoomItemViewModel(mockLargeListRoomIds),
-        getSectionViewModel: createGetSectionViewModel(mockLargeListSections.map((section) => section.id)),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockLargeListSections.map((section) => section.id)),
     },
 };
 
@@ -241,6 +241,6 @@ export const LargeSectionList: Story = {
         isFlatList: false,
         sections: mockLargeListSections,
         getRoomItemViewModel: createGetRoomItemViewModel(mockLargeListRoomIds),
-        getSectionViewModel: createGetSectionViewModel(mockLargeListSections.map((section) => section.id)),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockLargeListSections.map((section) => section.id)),
     },
 };

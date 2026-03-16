@@ -63,7 +63,7 @@ export interface RoomListViewActions {
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
     /** Get view model for a specific section header (virtualization API) */
-    getSectionViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
+    getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
 }
 
 /**

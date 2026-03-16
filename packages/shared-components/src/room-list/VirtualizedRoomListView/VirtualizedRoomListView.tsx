@@ -226,7 +226,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             onFocus: (header: string, e: React.FocusEvent) => void,
         ): JSX.Element => {
             const { vm, sectionCount, sections } = context.context;
-            const sectionHeaderVM = vm.getSectionViewModel(headerId);
+            const sectionHeaderVM = vm.getSectionHeaderViewModel(headerId);
             const indexInList = sections
                 .slice(0, groupIndex)
                 // +1 for each section header

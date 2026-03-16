@@ -19,7 +19,7 @@ import {
     renderAvatar,
     createGetRoomItemViewModel,
     mock10RoomsIds,
-    createGetSectionViewModel,
+    createGetSectionHeaderViewModel,
     mock10RoomsSections,
 } from "../story-mocks";
 
@@ -31,7 +31,7 @@ const RoomListWrapperImpl = ({
     createChatRoom,
     createRoom,
     getRoomItemViewModel,
-    getSectionViewModel,
+    getSectionHeaderViewModel,
     updateVisibleRooms,
     renderAvatar: renderAvatarProp,
     ...rest
@@ -41,7 +41,7 @@ const RoomListWrapperImpl = ({
         createChatRoom,
         createRoom,
         getRoomItemViewModel,
-        getSectionViewModel,
+        getSectionHeaderViewModel,
         updateVisibleRooms,
     });
 
@@ -77,7 +77,7 @@ const meta = {
         createChatRoom: fn(),
         createRoom: fn(),
         getRoomItemViewModel: createGetRoomItemViewModel(mock10RoomsIds),
-        getSectionViewModel: createGetSectionViewModel(mock10RoomsSections.map((section) => section.id)),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(mock10RoomsSections.map((section) => section.id)),
         updateVisibleRooms: fn(),
         renderAvatar,
         isFlatList: true,

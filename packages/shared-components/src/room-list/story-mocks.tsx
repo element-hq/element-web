@@ -132,7 +132,7 @@ export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string)
     return (roomId: string) => viewModels.get(roomId)!;
 };
 
-export const createGetSectionViewModel = (
+export const createGetSectionHeaderViewModel = (
     sectionIds: string[],
 ): ((sectionId: string) => RoomListSectionHeaderViewModel) => {
     const viewModels = new Map<string, RoomListSectionHeaderViewModel>();

@@ -204,7 +204,7 @@ export class RoomListViewViewModel
      * Flat list mode is forced so this method is never be called.
      * @throw Error if called
      */
-    public getSectionViewModel(): never {
+    public getSectionHeaderViewModel(): never {
         throw new Error("Sections are not supported in this room list");
     }
 
