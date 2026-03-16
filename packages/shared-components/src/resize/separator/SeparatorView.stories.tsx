@@ -34,6 +34,12 @@ const meta = {
         isCollapsed: true,
         isFocusedViaKeyboard: false,
     },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/rTaQE2nIUSLav4Tg3nozq7/Compound-Web-Components?node-id=10603-14568&t=hvg0p1vDW5Cg6ZKY-4",
+        },
+    },
 } satisfies Meta<typeof SeparatorViewWrapper>;
 
 export default meta;

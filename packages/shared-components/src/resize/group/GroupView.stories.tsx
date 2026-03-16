@@ -45,6 +45,12 @@ const meta = {
     args: {
         onLeftPanelResized: fn(),
     },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/vlmt46QDdE4dgXDiyBJXqp/ER-33-Left-Panel?node-id=2503-46137&t=d52sHg9vUDKnQS1Y-4",
+        },
+    },
 } satisfies Meta<typeof GroupViewWrapper>;
 
 export default meta;
