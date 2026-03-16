@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`QuickSettingsMenu > renders a basic menu 1`] = `
+<div
+  aria-hidden="true"
+  data-aria-hidden="true"
+>
+  <button
+    aria-controls="radix-_r_1_"
+    aria-expanded="true"
+    aria-haspopup="menu"
+    class="triggerButton"
+    data-state="open"
+    id="radix-_r_0_"
+    type="button"
+  >
+    <span
+      aria-label="@person-name:homeserver.com"
+      class="_avatar_zysgz_8"
+      data-color="1"
+      data-type="round"
+      role="img"
+      style="--cpd-avatar-size: 36px;"
+    >
+      <img
+        alt=""
+        class="_image_zysgz_43"
+        data-type="round"
+        height="36px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="/static/element.png"
+        width="36px"
+      />
+    </span>
+    <span
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+    >
+      Sally Sanderson
+    </span>
+  </button>
+</div>
+`;
+
+exports[`QuickSettingsMenu > renders a menu with a longer name 1`] = `
+<div
+  aria-hidden="true"
+  data-aria-hidden="true"
+>
+  <button
+    aria-controls="radix-_r_7_"
+    aria-expanded="true"
+    aria-haspopup="menu"
+    class="triggerButton"
+    data-state="open"
+    id="radix-_r_6_"
+    type="button"
+  >
+    <span
+      aria-label="@person-name:homeserver.com"
+      class="_avatar_zysgz_8"
+      data-color="1"
+      data-type="round"
+      role="img"
+      style="--cpd-avatar-size: 36px;"
+    >
+      <img
+        alt=""
+        class="_image_zysgz_43"
+        data-type="round"
+        height="36px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="/static/element.png"
+        width="36px"
+      />
+    </span>
+    <span
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+    >
+      Sally Sanderson with a longer name
+    </span>
+  </button>
+</div>
+`;

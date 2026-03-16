@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`QuickSettingsMenuViewModel should generate a menu options for a guest 1`] = `
+{
+  "actions": [
+    {
+      "icon": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "label": "Link new device",
+      "onSelect": [Function],
+    },
+    {
+      "icon": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "label": "Security & Privacy",
+      "onSelect": [Function],
+    },
+    {
+      "icon": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "label": "All settings",
+      "onSelect": [Function],
+    },
+  ],
+  "avatarUrl": undefined,
+  "displayName": "@alice:domain",
+  "expanded": true,
+  "manageAccountHref": undefined,
+  "open": false,
+  "userId": "@alice:domain",
+}
+`;
+
+exports[`QuickSettingsMenuViewModel should generate a menu options for a logged in client 1`] = `
+{
+  "actions": [
+    {
+      "icon": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "label": "Link new device",
+      "onSelect": [Function],
+    },
+    {
+      "icon": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "label": "Security & Privacy",
+      "onSelect": [Function],
+    },
+    {
+      "icon": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "label": "All settings",
+      "onSelect": [Function],
+    },
+  ],
+  "avatarUrl": undefined,
+  "displayName": "@alice:domain",
+  "expanded": true,
+  "manageAccountHref": undefined,
+  "open": false,
+  "userId": "@alice:domain",
+}
+`;

@@ -1,0 +1,81 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+import type { MockedObject } from "jest-mock";
+import { MatrixError, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { QuickSettingsMenuViewModel } from "../../../src/viewmodels/menus/QuickSettingsMenuViewModel";
+import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
+import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import SdkConfig from "../../../src/SdkConfig";
+
+describe("QuickSettingsMenuViewModel", () => {
+    let dispatcher: MatrixDispatcher;
+    let client: MockedObject<MatrixClient>;
+    beforeEach(() => {
+        dispatcher = new MatrixDispatcher();
+        client = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(),
+            ...mockClientMethodsServer(),
+            getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
+        });
+        SdkContextClass.instance.client = client;
+    });
+    afterEach(() => {
+        jest.resetAllMocks();
+        SdkContextClass.instance.onLoggedOut();
+        SdkContextClass.instance.client = undefined;
+    });
+    it("should generate a menu options for a logged in client", () => {
+        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        expect(vm.getSnapshot()).toMatchSnapshot();
+    });
+    it("should show a link for account management", async () => {
+        client.getAuthMetadata.mockResolvedValue({
+            account_management_uri: "https://example.org/",
+        } as any);
+        // Wait for readiness as we would do in a real client.
+        await SdkContextClass.instance.oidcClientStore.readyPromise;
+        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        expect(vm.getSnapshot().manageAccountHref).toEqual("https://example.org/");
+    });
+    it("should generate a menu options for a guest", () => {
+        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        expect(vm.getSnapshot()).toMatchSnapshot();
+    });
+    it("should generate a menu options that include feedback", () => {
+        SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
+        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        expect(vm.getSnapshot().actions).toContainEqual({
+            label: "Feedback",
+            onSelect: expect.anything(),
+            icon: expect.anything(),
+        });
+    });
+    it("should generate a menu options that includes a home page", () => {
+        SdkConfig.put({ embedded_pages: { home_url: "https://example.org" } });
+        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        expect(vm.getSnapshot().actions).toContainEqual({
+            label: "Home",
+            onSelect: expect.anything(),
+            icon: expect.anything(),
+        });
+    });
+    it("can toggle menu", () => {
+        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        vm.setOpen(true);
+        expect(vm.getSnapshot().open).toEqual(true);
+        vm.setOpen(false);
+        expect(vm.getSnapshot().open).toEqual(false);
+    });
+    it("can toggle expanded state", () => {
+        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        vm.setExpanded(true);
+        expect(vm.getSnapshot().expanded).toEqual(true);
+        vm.setExpanded(false);
+        expect(vm.getSnapshot().expanded).toEqual(false);
+    });
+});

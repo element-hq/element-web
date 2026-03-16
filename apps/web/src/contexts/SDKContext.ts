@@ -194,5 +194,6 @@ export class SdkContextClass {
 
     public onLoggedOut(): void {
         this._UserProfilesStore = undefined;
+        this._OidcClientStore = undefined;
     }
 }

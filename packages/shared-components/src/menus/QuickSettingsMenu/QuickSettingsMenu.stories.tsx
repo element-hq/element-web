@@ -6,21 +6,34 @@
  */
 
 import { type Meta, type StoryObj } from "@storybook/react-vite";
-import React, { useState } from "react";
-import { MenuItem } from "@vector-im/compound-web";
+import React, { type JSX } from "react";
 import { fn } from "storybook/test";
-import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
-import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
-import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-problem";
-import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
-import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
+import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
 
-import { QuickSettingsMenu, type QuickSettingsMenuViewProps } from "./QuickSettingsMenu";
+import {
+    QuickSettingsMenu,
+    type QuickSettingsMenuSnapshot,
+    type QuickSettingsMenuViewActions,
+} from "./QuickSettingsMenu";
 import avatarUrl from "../../../static/element.png";
+import { BaseViewModel, useCreateAutoDisposedViewModel } from "../../viewmodel";
 
-const QuickSettingsMenuWrapper = ({ open: defaultOpen, ...props }: QuickSettingsMenuViewProps): JSX.Element => {
-    const [open, setOpen] = useState(defaultOpen);
-    return <QuickSettingsMenu {...props} open={open} setOpen={setOpen} />;
+class MockQuickSettingsViewModel
+    extends BaseViewModel<QuickSettingsMenuSnapshot, undefined>
+    implements QuickSettingsMenuViewActions
+{
+    public constructor(snapshot: QuickSettingsMenuSnapshot) {
+        super(undefined, snapshot);
+    }
+
+    public setOpen = (open: boolean): void => {
+        this.snapshot.merge({ open });
+    };
+}
+
+const QuickSettingsMenuWrapper = (snapshot: QuickSettingsMenuSnapshot): JSX.Element => {
+    const vm = useCreateAutoDisposedViewModel(() => new MockQuickSettingsViewModel(snapshot));
+    return <QuickSettingsMenu vm={vm} />;
 };
 
 const meta = {
@@ -28,52 +41,61 @@ const meta = {
     component: QuickSettingsMenuWrapper,
     tags: ["autodocs"],
     args: {
-        displayName: "string",
-        userId: "string",
+        open: false,
+        avatarUrl,
+        displayName: "Sally Sanderson",
+        userId: "@person-name:homeserver.com",
+        manageAccountHref: "#",
+        expanded: true,
+        actions: [
+            {
+                icon: CheckCircleIcon,
+                label: "One action",
+                onSelect: fn(),
+            },
+            {
+                icon: CheckCircleIcon,
+                label: "Another action",
+                onSelect: fn(),
+            },
+            {
+                icon: CheckCircleIcon,
+                label: "Third action",
+                onSelect: fn(),
+            },
+        ],
+    },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/rTaQE2nIUSLav4Tg3nozq7/Compound-Web-Components?node-id=11583-3479&t=DwFpi7Zlq9uJr1SQ-0",
+        },
     },
 } satisfies Meta<typeof QuickSettingsMenuWrapper>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Default: Story = {};
+
+export const LongerName: Story = {
     args: {
-        open: true,
-        setOpen: fn(),
-        avatarUrl,
-        displayName: "Sally Sanderson the Third",
-        userId: "@person-name:homeserver.com",
-        manageAccountHref: "#",
-        expanded: true,
-        children: (
-            <>
-                <MenuItem Icon={<QrCodeIcon />} label="Link new device" onSelect={fn()} />
-                <MenuItem Icon={<LockIcon />} label="Security & Privacy" onSelect={fn()} />
-                <MenuItem Icon={<ChatProblemIcon />} label="Feedback" onSelect={fn()} />
-                <MenuItem Icon={<SettingsIcon />} label="All settings" onSelect={fn()} />
-                <MenuItem Icon={<SignOutIcon />} kind="critical" label="Sign out" onSelect={fn()} />
-            </>
-        ),
+        displayName: "Sally Sanderson with a longer name",
     },
 };
 
-export const ShorterName: Story = {
+export const AlreadyOpen: Story = {
     args: {
         open: true,
-        setOpen: fn(),
-        avatarUrl,
-        displayName: "Short Name",
+        displayName: "Sally Sanderson with a longer name",
         userId: "@person-name:homeserver.com",
-        manageAccountHref: "#",
         expanded: true,
-        children: (
-            <>
-                <MenuItem Icon={<QrCodeIcon />} label="Link new device" onSelect={fn()} />
-                <MenuItem Icon={<LockIcon />} label="Security & Privacy" onSelect={fn()} />
-                <MenuItem Icon={<ChatProblemIcon />} label="Feedback" onSelect={fn()} />
-                <MenuItem Icon={<SettingsIcon />} label="All settings" onSelect={fn()} />
-                <MenuItem Icon={<SignOutIcon />} kind="critical" label="Sign out" onSelect={fn()} />
-            </>
-        ),
+    },
+};
+
+export const Condensed: Story = {
+    args: {
+        displayName: "Sally Sanderson with a longer name",
+        expanded: false,
     },
 };

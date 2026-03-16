@@ -5,32 +5,40 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type PropsWithChildren } from "react";
-import { Avatar, Button, Menu, Separator, Text } from "@vector-im/compound-web";
+import React, { type JSX } from "react";
+import { Avatar, Button, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import styles from "./QuickSettingsMenu.module.css";
+import { useViewModel, type ViewModel } from "../../viewmodel";
 
-export type QuickSettingsMenuViewProps = PropsWithChildren<{
+type Icon = React.ForwardRefExoticComponent<
+    Omit<React.SVGProps<SVGSVGElement>, "ref" | "children"> & React.RefAttributes<SVGSVGElement>
+>;
+
+export interface QuickSettingsMenuSnapshot {
     open: boolean;
-    setOpen: (open: boolean) => void;
     expanded?: boolean;
     avatarUrl?: string;
     displayName: string;
     userId: string;
     manageAccountHref?: string;
-}>;
+    actions: {
+        icon?: Icon;
+        label: string;
+        onSelect: () => void;
+    }[];
+}
 
-export function QuickSettingsMenu({
-    userId,
-    displayName,
-    avatarUrl,
-    manageAccountHref,
-    expanded,
-    children,
-    open,
-    setOpen,
-}: QuickSettingsMenuViewProps): JSX.Element {
+export declare interface QuickSettingsMenuViewActions {
+    setOpen: (open: boolean) => void;
+}
+export type QuickSettingsMenuViewProps = {
+    vm: ViewModel<QuickSettingsMenuSnapshot, QuickSettingsMenuViewActions>;
+};
+
+export function QuickSettingsMenu({ vm }: QuickSettingsMenuViewProps): JSX.Element {
+    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions } = useViewModel(vm);
     const trigger = (
         <button className={styles.triggerButton}>
             <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
@@ -48,7 +56,7 @@ export function QuickSettingsMenu({
                 showTitle={false}
                 title="Quick Settings"
                 trigger={trigger}
-                onOpenChange={setOpen}
+                onOpenChange={vm.setOpen}
                 align="start"
                 side="bottom"
                 className={styles.container}
@@ -68,7 +76,16 @@ export function QuickSettingsMenu({
                     )}
                 </section>
                 <Separator />
-                <section className={styles.actions}>{children}</section>
+                <section className={styles.actions}>
+                    {actions.map((action) => (
+                        <MenuItem
+                            key={action.label}
+                            Icon={action.icon}
+                            label={action.label}
+                            onSelect={action.onSelect}
+                        />
+                    ))}
+                </section>
             </Menu>
         </>
     );
