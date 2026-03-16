@@ -6,128 +6,45 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, useMemo } from "react";
+import React, { type JSX, type ReactNode } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import {
-    ChatSolidIcon,
     HomeSolidIcon,
     LockSolidIcon,
     QrCodeIcon,
     SettingsSolidIcon,
-    LeaveIcon,
-    NotificationsSolidIcon,
-    ThemeIcon,
+    ChatProblemIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { IconButton } from "@vector-im/compound-web";
+import { MenuItem } from "@vector-im/compound-web";
+import { QuickSettingsMenu } from "@element-hq/web-shared-components";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
-import { ChevronFace, ContextMenuButton, type MenuProps } from "./ContextMenu";
 import { UserTab } from "../views/dialogs/UserTab";
-import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
-import LogoutDialog, { shouldShowLogoutDialog } from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
-import { findHighContrastTheme, isHighContrastTheme } from "../../theme";
-import { useRovingTabIndex } from "../../accessibility/RovingTabIndex";
-import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import { getHomePageUrl } from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import BaseAvatar from "../views/avatars/BaseAvatar";
-import { SettingLevel } from "../../settings/SettingLevel";
-import IconizedContextMenu, {
-    IconizedContextMenuOption,
-    IconizedContextMenuOptionList,
-} from "../views/context_menus/IconizedContextMenu";
-import { UIFeature } from "../../settings/UIFeature";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
-import PosthogTrackers from "../../PosthogTrackers";
 import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-import { SDKContext } from "../../contexts/SDKContext";
+import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
-import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher.ts";
-import { useTypedEventEmitterState } from "../../hooks/useEventEmitter.ts";
 
 interface IProps {
     isPanelCollapsed: boolean;
     children?: ReactNode;
 }
 
-type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
-
 interface IState {
-    contextMenuPosition: PartialDOMRect | null;
     selectedSpace?: Room | null;
+    open: boolean;
 }
-
-const toRightOf = (rect: PartialDOMRect): MenuProps => {
-    return {
-        left: rect.width + rect.left + 8,
-        top: rect.top,
-        chevronFace: ChevronFace.None,
-    };
-};
-
-const below = (rect: PartialDOMRect): MenuProps => {
-    return {
-        left: rect.left,
-        top: rect.top + rect.height,
-        chevronFace: ChevronFace.None,
-    };
-};
-
-const ThemeSwitchButton = (): JSX.Element => {
-    const [onFocus, isActive, ref] = useRovingTabIndex();
-    const themeWatcher = useMemo(() => new ThemeWatcher(), []);
-    const [isHighContrast, isDark] = useTypedEventEmitterState(
-        themeWatcher,
-        ThemeWatcherEvent.Change,
-        (theme: string) => [isHighContrastTheme(theme), themeWatcher.isUserOnDarkTheme()],
-    );
-
-    const onSwitchThemeClick = (ev: ButtonEvent): void => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        PosthogTrackers.trackInteraction("WebUserMenuThemeToggleButton", ev);
-
-        // Disable system theme matching if the user hits this button
-        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
-
-        let newTheme = isDark ? "light" : "dark";
-        if (isHighContrast) {
-            const hcTheme = findHighContrastTheme(newTheme);
-            if (hcTheme) {
-                newTheme = hcTheme;
-            }
-        }
-        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
-        themeWatcher.recheck(newTheme);
-    };
-
-    return (
-        <IconButton
-            ref={ref}
-            onFocus={onFocus}
-            tabIndex={isActive ? 0 : -1}
-            className="mx_UserMenu_contextMenu_themeButton"
-            onClick={onSwitchThemeClick}
-            tooltip={isDark ? _t("user_menu|switch_theme_light") : _t("user_menu|switch_theme_dark")}
-            size="32px"
-            kind="secondary"
-        >
-            <ThemeIcon />
-        </IconButton>
-    );
-};
 
 export default class UserMenu extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
@@ -136,14 +53,13 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private themeWatcherRef?: string;
     private readonly dndWatcherRef?: string;
-    private buttonRef = createRef<HTMLButtonElement>();
 
     public constructor(props: IProps) {
         super(props);
 
         this.state = {
-            contextMenuPosition: null,
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
+            open: false,
         };
     }
 
@@ -154,7 +70,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        this.dispatcherRef = defaultDispatcher.register((action) => {
+            if (action.action === Action.ToggleUserMenu) {
+                this.setState((s) => ({ open: !s.open }));
+            }
+        });
     }
 
     public componentWillUnmount(): void {
@@ -177,265 +97,106 @@ export default class UserMenu extends React.Component<IProps, IState> {
         });
     };
 
-    private onAction = (payload: ActionPayload): void => {
-        switch (payload.action) {
-            case Action.ToggleUserMenu:
-                if (this.state.contextMenuPosition) {
-                    this.setState({ contextMenuPosition: null });
-                } else {
-                    if (this.buttonRef.current) this.buttonRef.current.click();
-                }
-                break;
-        }
-    };
-
-    private onOpenMenuClick = (ev: ButtonEvent): void => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.setState({ contextMenuPosition: ev.currentTarget.getBoundingClientRect() });
-    };
-
-    private onContextMenu = (ev: React.MouseEvent): void => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.setState({
-            contextMenuPosition: {
-                left: ev.clientX,
-                top: ev.clientY,
-                width: 20,
-                height: 0,
-            },
-        });
-    };
-
-    private onCloseMenu = (): void => {
-        this.setState({ contextMenuPosition: null });
-    };
-
-    private onSettingsOpen = (ev: ButtonEvent, tabId?: string, props?: Record<string, any>): void => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        const payload: OpenToTabPayload = { action: Action.ViewUserSettings, initialTabId: tabId, props };
-        defaultDispatcher.dispatch(payload);
-        this.setState({ contextMenuPosition: null }); // also close the menu
-    };
-
-    private onProvideFeedback = (ev: ButtonEvent): void => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        Modal.createDialog(FeedbackDialog);
-        this.setState({ contextMenuPosition: null }); // also close the menu
-    };
-
-    private onSignOutClick = async (ev: ButtonEvent): Promise<void> => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        if (await shouldShowLogoutDialog(MatrixClientPeg.safeGet())) {
-            Modal.createDialog(LogoutDialog);
-        } else {
-            defaultDispatcher.dispatch({ action: "logout" });
-        }
-
-        this.setState({ contextMenuPosition: null }); // also close the menu
-    };
-
-    private onSignInClick = (): void => {
-        defaultDispatcher.dispatch({ action: "start_login" });
-        this.setState({ contextMenuPosition: null }); // also close the menu
-    };
-
-    private onRegisterClick = (): void => {
-        defaultDispatcher.dispatch({ action: "start_registration" });
-        this.setState({ contextMenuPosition: null }); // also close the menu
-    };
-
-    private onHomeClick = (ev: ButtonEvent): void => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        defaultDispatcher.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage });
-        this.setState({ contextMenuPosition: null }); // also close the menu
-    };
-
-    private renderContextMenu = (): React.ReactNode => {
-        if (!this.state.contextMenuPosition) return null;
-
-        let topSection: JSX.Element | undefined;
+    // TODO: Remove Action.ToggleUserMenu
+    private renderContextMenu = (): JSX.Element[] => {
         if (MatrixClientPeg.safeGet().isGuest()) {
-            topSection = (
-                <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
-                    {_t(
-                        "auth|sign_in_prompt",
-                        {},
-                        {
-                            a: (sub) => (
-                                <AccessibleButton kind="link_inline" onClick={this.onSignInClick}>
-                                    {sub}
-                                </AccessibleButton>
-                            ),
-                        },
-                    )}
-                    {SettingsStore.getValue(UIFeature.Registration)
-                        ? _t(
-                              "auth|create_account_prompt",
-                              {},
-                              {
-                                  a: (sub) => (
-                                      <AccessibleButton kind="link_inline" onClick={this.onRegisterClick}>
-                                          {sub}
-                                      </AccessibleButton>
-                                  ),
-                              },
-                          )
-                        : null}
-                </div>
-            );
-        }
-
-        let homeButton: JSX.Element | undefined;
-        if (this.hasHomePage) {
-            homeButton = (
-                <IconizedContextMenuOption
-                    icon={<HomeSolidIcon />}
-                    label={_t("common|home")}
-                    onClick={this.onHomeClick}
-                />
-            );
-        }
-
-        let feedbackButton: JSX.Element | undefined;
-        if (shouldShowFeedback()) {
-            feedbackButton = (
-                <IconizedContextMenuOption
-                    icon={<ChatSolidIcon />}
-                    label={_t("common|feedback")}
-                    onClick={this.onProvideFeedback}
-                />
-            );
-        }
-
-        const linkNewDeviceButton = (
-            <IconizedContextMenuOption
-                icon={<QrCodeIcon />}
-                label={_t("user_menu|link_new_device")}
-                onClick={(e) => this.onSettingsOpen(e, UserTab.SessionManager, { showMsc4108QrCode: true })}
-            />
-        );
-
-        let primaryOptionList = (
-            <IconizedContextMenuOptionList>
-                {homeButton}
-                {linkNewDeviceButton}
-                <IconizedContextMenuOption
-                    icon={<NotificationsSolidIcon />}
-                    label={_t("notifications|enable_prompt_toast_title")}
-                    onClick={(e) => this.onSettingsOpen(e, UserTab.Notifications)}
-                />
-                <IconizedContextMenuOption
-                    icon={<LockSolidIcon />}
-                    label={_t("room_settings|security|title")}
-                    onClick={(e) => this.onSettingsOpen(e, UserTab.Security)}
-                />
-                <IconizedContextMenuOption
-                    icon={<SettingsSolidIcon />}
+            // TODO: More guest buttons?
+            return [
+                <MenuItem
+                    key="sign_in"
+                    label={_t("auth|sign_in_prompt")}
+                    onSelect={() => defaultDispatcher.dispatch({ action: "start_login" })}
+                />,
+                <MenuItem
+                    key="start_reg"
+                    label={_t("auth|create_account_prompt")}
+                    onSelect={() => defaultDispatcher.dispatch({ action: "start_registration" })}
+                />,
+                <MenuItem
+                    key="settings"
+                    Icon={SettingsSolidIcon}
                     label={_t("user_menu|settings")}
-                    onClick={(e) => this.onSettingsOpen(e)}
-                />
-                {feedbackButton}
-                <IconizedContextMenuOption
-                    className="mx_IconizedContextMenu_option_red"
-                    icon={<LeaveIcon />}
-                    label={_t("action|sign_out")}
-                    onClick={this.onSignOutClick}
-                />
-            </IconizedContextMenuOptionList>
-        );
-
-        if (MatrixClientPeg.safeGet().isGuest()) {
-            primaryOptionList = (
-                <IconizedContextMenuOptionList>
-                    {homeButton}
-                    <IconizedContextMenuOption
-                        icon={<SettingsSolidIcon />}
-                        label={_t("common|settings")}
-                        onClick={(e) => this.onSettingsOpen(e)}
-                    />
-                    {feedbackButton}
-                </IconizedContextMenuOptionList>
-            );
+                    onSelect={() =>
+                        defaultDispatcher.dispatch({
+                            action: Action.ViewUserSettings,
+                        })
+                    }
+                />,
+            ];
         }
 
-        const position = this.props.isPanelCollapsed
-            ? toRightOf(this.state.contextMenuPosition)
-            : below(this.state.contextMenuPosition);
-
-        const userIdentifierString = UserIdentifierCustomisations.getDisplayUserIdentifier(
-            MatrixClientPeg.safeGet().getSafeUserId(),
-            {
-                withDisplayName: true,
-            },
-        );
-
-        return (
-            <IconizedContextMenu {...position} onFinished={this.onCloseMenu} className="mx_UserMenu_contextMenu">
-                <div className="mx_UserMenu_contextMenu_header">
-                    <div className="mx_UserMenu_contextMenu_name">
-                        <span className="mx_UserMenu_contextMenu_displayName">
-                            {OwnProfileStore.instance.displayName}
-                        </span>
-                        <span className="mx_UserMenu_contextMenu_userId" title={userIdentifierString || ""}>
-                            {userIdentifierString}
-                        </span>
-                    </div>
-
-                    <ThemeSwitchButton />
-                </div>
-                {topSection}
-                {primaryOptionList}
-            </IconizedContextMenu>
-        );
+        return [
+            this.hasHomePage ? (
+                <MenuItem
+                    key="view_homepage"
+                    Icon={HomeSolidIcon}
+                    label={_t("common|home")}
+                    onSelect={() => defaultDispatcher.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage })}
+                />
+            ) : null,
+            <MenuItem
+                key="link_new_device"
+                Icon={QrCodeIcon}
+                label={_t("user_menu|link_new_device")}
+                onSelect={() =>
+                    defaultDispatcher.dispatch({
+                        action: Action.ViewUserSettings,
+                        initialTabId: UserTab.SessionManager,
+                        props: { showMsc4108QrCode: true },
+                    })
+                }
+            />,
+            <MenuItem
+                key="security"
+                Icon={LockSolidIcon}
+                label={_t("room_settings|security|title")}
+                onSelect={() =>
+                    defaultDispatcher.dispatch({
+                        action: Action.ViewUserSettings,
+                        initialTabId: UserTab.Security,
+                    })
+                }
+            />,
+            shouldShowFeedback() ? (
+                <MenuItem
+                    key="feedback"
+                    Icon={ChatProblemIcon}
+                    label={_t("common|feedback")}
+                    onSelect={() => Modal.createDialog(FeedbackDialog)}
+                />
+            ) : null,
+            <MenuItem
+                key="settings"
+                Icon={SettingsSolidIcon}
+                label={_t("user_menu|settings")}
+                onSelect={() =>
+                    defaultDispatcher.dispatch({
+                        action: Action.ViewUserSettings,
+                    })
+                }
+            />,
+        ].filter<JSX.Element>((item) => item !== null);
     };
 
     public render(): React.ReactNode {
-        const avatarSize = 32; // should match border-radius of the avatar
-
+        const avatarSize = 88; // should match border-radius of the avatar
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
         const displayName = OwnProfileStore.instance.displayName || userId;
-        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
-
-        let name: JSX.Element | undefined;
-        if (!this.props.isPanelCollapsed) {
-            name = <div className="mx_UserMenu_name">{displayName}</div>;
-        }
+        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize) ?? undefined;
+        const externalAccountManagementUrl = SdkContextClass.instance.oidcClientStore.accountManagementEndpoint;
 
         return (
-            <div className="mx_UserMenu">
-                <ContextMenuButton
-                    className="mx_UserMenu_contextMenuButton"
-                    onClick={this.onOpenMenuClick}
-                    ref={this.buttonRef}
-                    label={_t("a11y|user_menu")}
-                    isExpanded={!!this.state.contextMenuPosition}
-                    onContextMenu={this.onContextMenu}
-                >
-                    <div className="mx_UserMenu_userAvatar">
-                        <BaseAvatar
-                            idName={userId}
-                            name={displayName}
-                            url={avatarUrl}
-                            size={avatarSize + "px"}
-                            className="mx_UserMenu_userAvatar_BaseAvatar"
-                        />
-                    </div>
-                    {name}
-                    {this.renderContextMenu()}
-                </ContextMenuButton>
-
-                {this.props.children}
-            </div>
+            <QuickSettingsMenu
+                open={this.state.open}
+                setOpen={(open) => this.setState({ open })}
+                expanded={!this.props.isPanelCollapsed}
+                userId={userId}
+                displayName={displayName}
+                avatarUrl={avatarUrl}
+                manageAccountHref={externalAccountManagementUrl}
+            >
+                {this.renderContextMenu()}
+            </QuickSettingsMenu>
         );
     }
 }

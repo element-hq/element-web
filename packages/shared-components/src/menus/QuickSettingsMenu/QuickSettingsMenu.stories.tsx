@@ -1,9 +1,9 @@
 /*
-Copyright 2025 New Vector Ltd.
-
-SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
 import { type Meta, type StoryObj } from "@storybook/react-vite";
 import React from "react";
@@ -16,6 +16,7 @@ import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/set
 import SignOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/sign-out";
 
 import { QuickSettingsMenu } from "./QuickSettingsMenu";
+import avatarUrl from "../../../static/element.png";
 
 const meta = {
     title: "Menus/QuickSettingsMenu",
@@ -32,9 +33,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
+        open: true,
+        setOpen: fn(),
+        avatarUrl,
         displayName: "Sally Sanderson",
         userId: "@person-name:homeserver.com",
         manageAccountHref: "#",
+        expanded: true,
         children: (
             <>
                 <MenuItem Icon={<QrCodeIcon />} label="Link new device" onSelect={fn()} />

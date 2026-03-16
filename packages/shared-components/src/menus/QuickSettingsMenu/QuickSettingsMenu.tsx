@@ -1,17 +1,20 @@
 /*
-Copyright 2025 New Vector Ltd.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-import React, { type JSX, type PropsWithChildren, useState } from "react";
+import React, { type JSX, type PropsWithChildren } from "react";
 import { Avatar, Button, Menu, Separator, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import styles from "./QuickSettingsMenu.module.css";
 
 export type QuickSettingsMenuViewProps = PropsWithChildren<{
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    expanded?: boolean;
     avatarUrl?: string;
     displayName: string;
     userId: string;
@@ -23,15 +26,19 @@ export function QuickSettingsMenu({
     displayName,
     avatarUrl,
     manageAccountHref,
+    expanded,
     children,
+    open,
+    setOpen,
 }: QuickSettingsMenuViewProps): JSX.Element {
-    const [open, isOpen] = useState(true);
     const trigger = (
         <button className={styles.triggerButton}>
-            <Avatar id={userId} name={displayName} type="round" size="48px" src={avatarUrl} />
-            <Text type="heading" size="sm" as="span" weight="semibold">
-                {displayName}
-            </Text>
+            <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
+            {expanded ? (
+                <Text type="heading" size="sm" as="span" weight="semibold">
+                    {displayName}
+                </Text>
+            ) : null}
         </button>
     );
     return (
@@ -41,7 +48,7 @@ export function QuickSettingsMenu({
                 showTitle={false}
                 title="Quick Settings"
                 trigger={trigger}
-                onOpenChange={isOpen}
+                onOpenChange={setOpen}
                 align="start"
                 side="bottom"
                 className={styles.container}
