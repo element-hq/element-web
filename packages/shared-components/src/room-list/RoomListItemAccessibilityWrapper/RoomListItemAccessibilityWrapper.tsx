@@ -27,7 +27,7 @@ export interface RoomListItemAccessibilityWrapperPros extends RoomListItemViewPr
  *
  * @example
  * ``
- * <RoomListItemAccessibiltyWrapper
+ * <RoomListItemAccessibilityWrapper
  *   roomIndex={0}
  *   roomIndexInSection={0}
  *   roomCount={10}
