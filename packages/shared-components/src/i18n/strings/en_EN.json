@@ -5,6 +5,7 @@
     "action": {
         "back": "Back",
         "click": "Click",
+        "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
         "download": "Download",
