@@ -16,7 +16,7 @@ exports[`ActionBarView > story snapshots > renders DecryptingAttachment 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -97,7 +97,7 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -118,7 +118,7 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -142,7 +142,7 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -164,7 +164,7 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -188,7 +188,7 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -207,11 +207,12 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
     </button>
     <button
       aria-label="Pin"
+      aria-pressed="false"
       class="_button_13vu4_8 toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -234,7 +235,7 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -250,12 +251,13 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       </svg>
     </button>
     <button
+      aria-expanded="false"
       aria-label="Expand quotes"
       class="_button_13vu4_8 toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -276,7 +278,7 @@ exports[`ActionBarView > story snapshots > renders Default 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -335,7 +337,7 @@ exports[`ActionBarView > story snapshots > renders DeletedMessageThreadOnly 1`] 
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -370,7 +372,7 @@ exports[`ActionBarView > story snapshots > renders DownloadingAttachment 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -445,12 +447,13 @@ exports[`ActionBarView > story snapshots > renders ExpandedReplyChain 1`] = `
       </svg>
     </button>
     <button
+      aria-expanded="true"
       aria-label="Collapse quotes"
       class="_button_13vu4_8 toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -471,7 +474,7 @@ exports[`ActionBarView > story snapshots > renders ExpandedReplyChain 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -526,7 +529,7 @@ exports[`ActionBarView > story snapshots > renders FailedMessage 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -618,7 +621,7 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -635,11 +638,12 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
     </button>
     <button
       aria-label="Unpin"
+      aria-pressed="true"
       class="_button_13vu4_8 toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -665,7 +669,7 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -723,7 +727,7 @@ exports[`ActionBarView > story snapshots > renders ThreadReplyDisabled 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -740,12 +744,12 @@ exports[`ActionBarView > story snapshots > renders ThreadReplyDisabled 1`] = `
     </button>
     <button
       aria-disabled="true"
-      aria-label="Can't create a thread from an event with an existing relation"
+      aria-label="Reply in thread"
       class="_button_13vu4_8 toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -769,7 +773,7 @@ exports[`ActionBarView > story snapshots > renders ThreadReplyDisabled 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -827,7 +831,7 @@ exports[`ActionBarView > story snapshots > renders TypicalMessage 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -849,7 +853,7 @@ exports[`ActionBarView > story snapshots > renders TypicalMessage 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"
@@ -873,7 +877,7 @@ exports[`ActionBarView > story snapshots > renders TypicalMessage 1`] = `
       data-kind="tertiary"
       data-size="sm"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <svg
         aria-hidden="true"

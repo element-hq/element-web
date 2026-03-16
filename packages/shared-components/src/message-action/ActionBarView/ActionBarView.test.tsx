@@ -84,9 +84,7 @@ describe("ActionBarView", () => {
     it("renders a disabled thread reply button when thread reply is not allowed", () => {
         render(<ThreadReplyDisabled />);
 
-        const threadButton = screen.getByRole("button", {
-            name: /can't create a thread from an event with an existing relation/i,
-        });
+        const threadButton = screen.getByRole("button", { name: /reply in thread/i });
         expect(threadButton).toHaveAttribute("aria-disabled", "true");
     });
 
@@ -102,6 +100,43 @@ describe("ActionBarView", () => {
 
         expect(screen.getByRole("button", { name: /options/i })).toBeInTheDocument();
         expect(screen.getAllByRole("button")).toHaveLength(1);
+    });
+
+    it("uses roving tab index and arrow keys within the toolbar", async () => {
+        const user = userEvent.setup();
+
+        const { rerender } = render(<Minimal />);
+
+        const optionsButton = screen.getByRole("button", { name: /options/i });
+        expect(optionsButton).toHaveAttribute("tabindex", "0");
+
+        rerender(<PinnedMessage />);
+
+        const reactButton = screen.getByRole("button", { name: /react/i });
+        const replyButton = screen.getByRole("button", { name: /^reply$/i });
+        const unpinButton = screen.getByRole("button", { name: /unpin/i });
+        const optionsButtonInToolbar = screen.getByRole("button", { name: /options/i });
+
+        expect(reactButton).toHaveAttribute("tabindex", "0");
+        expect(replyButton).toHaveAttribute("tabindex", "-1");
+        expect(unpinButton).toHaveAttribute("tabindex", "-1");
+        expect(optionsButtonInToolbar).toHaveAttribute("tabindex", "-1");
+
+        await user.tab();
+        expect(reactButton).toHaveFocus();
+
+        await user.keyboard("{ArrowRight}");
+        expect(replyButton).toHaveFocus();
+        expect(replyButton).toHaveAttribute("tabindex", "0");
+        expect(reactButton).toHaveAttribute("tabindex", "-1");
+
+        await user.keyboard("{End}");
+        expect(optionsButtonInToolbar).toHaveFocus();
+        expect(optionsButtonInToolbar).toHaveAttribute("tabindex", "0");
+
+        await user.keyboard("{ArrowLeft}");
+        expect(unpinButton).toHaveFocus();
+        expect(unpinButton).toHaveAttribute("tabindex", "0");
     });
 
     it("applies a custom class name to the toolbar", () => {

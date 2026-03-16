@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useRef } from "react";
+import React, { type JSX, useLayoutEffect, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     CollapseIcon,
@@ -92,6 +92,26 @@ export interface ActionBarViewActions {
 
 export type ActionBarViewModel = ViewModel<ActionBarViewSnapshot, ActionBarViewActions>;
 
+enum ToolbarAction {
+    Cancel = "cancel",
+    Download = "download",
+    Edit = "edit",
+    Expand = "expand",
+    Hide = "hide",
+    Options = "options",
+    Pin = "pin",
+    React = "react",
+    Reply = "reply",
+    ReplyInThread = "replyInThread",
+    Resend = "resend",
+}
+
+interface ToolbarButtonMeta {
+    action: ToolbarAction;
+    ref: React.RefObject<HTMLButtonElement | null>;
+    disabled?: boolean;
+}
+
 interface ActionBarViewProps {
     /** The view model for the component. */
     vm: ActionBarViewModel;
@@ -112,6 +132,7 @@ interface ActionBarViewProps {
  */
 export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): JSX.Element | null {
     const { translate: _t } = useI18n();
+    const [activeIndex, setActiveIndex] = useState(0);
     const cancelTriggerRef = useRef<HTMLButtonElement>(null);
     const downloadTriggerRef = useRef<HTMLButtonElement>(null);
     const editTriggerRef = useRef<HTMLButtonElement>(null);
@@ -150,9 +171,12 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
             action?.(ref.current);
         };
 
-    const editButton = (
+    const actionButtons: Partial<Record<ToolbarAction, JSX.Element>> = {};
+
+    actionButtons[ToolbarAction.Edit] = (
         <Tooltip description={_t("action|edit")} placement="top" key="edit">
             <Button
+                key={ToolbarAction.Edit}
                 ref={editTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -167,14 +191,16 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     );
 
     const pinDescription = isPinned ? _t("action|unpin") : _t("action|pin");
-    const pinButton = (
+    actionButtons[ToolbarAction.Pin] = (
         <Tooltip description={pinDescription} placement="top" key="pin">
             <Button
+                key={ToolbarAction.Pin}
                 ref={pinTriggerRef}
                 kind="tertiary"
                 size="sm"
                 iconOnly={true}
                 aria-label={pinDescription}
+                aria-pressed={isPinned}
                 onClick={() => vm.onPinClick?.(pinTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onPinClick, pinTriggerRef)}
                 className={styles.toolbar_item}
@@ -183,9 +209,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         </Tooltip>
     );
 
-    const cancelButton = (
+    actionButtons[ToolbarAction.Cancel] = (
         <Tooltip description={_t("action|delete")} placement="top" key="cancel">
             <Button
+                key={ToolbarAction.Cancel}
                 ref={cancelTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -199,9 +226,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         </Tooltip>
     );
 
-    const replyButton = (
+    actionButtons[ToolbarAction.Reply] = (
         <Tooltip description={_t("action|reply")} placement="top" key="reply">
             <Button
+                key={ToolbarAction.Reply}
                 ref={replyTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -215,9 +243,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         </Tooltip>
     );
 
-    const reactButton = (
+    actionButtons[ToolbarAction.React] = (
         <Tooltip description={_t("action|react")} placement="top" key="react">
             <Button
+                key={ToolbarAction.React}
                 ref={reactTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -237,9 +266,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
             ? _t("timeline|download_action_decrypting")
             : _t("timeline|download_action_downloading");
     }
-    const downloadButton = (
+    actionButtons[ToolbarAction.Download] = (
         <Tooltip description={downloadTitle} placement="top" key="download">
             <Button
+                key={ToolbarAction.Download}
                 ref={downloadTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -254,9 +284,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         </Tooltip>
     );
 
-    const hideButton = (
+    actionButtons[ToolbarAction.Hide] = (
         <Tooltip description={_t("action|hide")} placement="top" key="hide">
             <Button
+                key={ToolbarAction.Hide}
                 ref={hideTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -273,14 +304,15 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     const threadTooltipDescription = isThreadReplyAllowed
         ? _t("action|reply_in_thread")
         : _t("threads|error_start_thread_existing_relation");
-    const threadTooltipButton = (
+    actionButtons[ToolbarAction.ReplyInThread] = (
         <Tooltip description={threadTooltipDescription} placement="top" key="reply_thread">
             <Button
+                key={ToolbarAction.ReplyInThread}
                 ref={replyInThreadTriggerRef}
                 kind="tertiary"
                 size="sm"
                 iconOnly={true}
-                aria-label={threadTooltipDescription}
+                aria-label={_t("action|reply_in_thread")}
                 disabled={!isThreadReplyAllowed}
                 onClick={() => vm.onReplyInThreadClick?.(replyInThreadTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onReplyInThreadClick, replyInThreadTriggerRef)}
@@ -290,9 +322,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         </Tooltip>
     );
 
-    const resendButton = (
+    actionButtons[ToolbarAction.Resend] = (
         <Tooltip description={_t("action|retry")} placement="top" key="resend">
             <Button
+                key={ToolbarAction.Resend}
                 ref={resendTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -309,7 +342,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     const expandDescription = isQuoteExpanded
         ? _t("timeline|mab|collapse_reply_chain")
         : _t("timeline|mab|expand_reply_chain");
-    const expandButton = (
+    actionButtons[ToolbarAction.Expand] = (
         <Tooltip
             description={expandDescription}
             caption={`${_t("keyboard|shift")} + ${_t("action|click")}`}
@@ -317,11 +350,13 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
             key="expand"
         >
             <Button
+                key={ToolbarAction.Expand}
                 ref={expandTriggerRef}
                 kind="tertiary"
                 size="sm"
                 iconOnly={true}
                 aria-label={expandDescription}
+                aria-expanded={isQuoteExpanded}
                 onClick={() => vm.onToggleThreadExpanded?.(expandTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onToggleThreadExpanded, expandTriggerRef)}
                 className={styles.toolbar_item}
@@ -330,9 +365,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         </Tooltip>
     );
 
-    const optionsButton = (
+    actionButtons[ToolbarAction.Options] = (
         <Tooltip description={_t("common|options")} placement="top" key="options">
             <Button
+                key={ToolbarAction.Options}
                 ref={optionsTriggerRef}
                 kind="tertiary"
                 size="sm"
@@ -346,52 +382,149 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         </Tooltip>
     );
 
-    const menuItems: JSX.Element[] = [];
+    const toolbarButtons = useMemo<ToolbarButtonMeta[]>(() => {
+        const items: ToolbarButtonMeta[] = [];
 
-    if (showCancel && isFailed) {
-        menuItems.push(resendButton, cancelButton);
-    } else {
+        if (showCancel && isFailed) {
+            items.push({ action: ToolbarAction.Resend, ref: resendTriggerRef });
+            items.push({ action: ToolbarAction.Cancel, ref: cancelTriggerRef });
+            return items;
+        }
+
         if (showHide) {
-            menuItems.push(hideButton);
+            items.push({ action: ToolbarAction.Hide, ref: hideTriggerRef });
         }
         if (showDownload) {
-            menuItems.push(downloadButton);
+            items.push({ action: ToolbarAction.Download, ref: downloadTriggerRef, disabled: isDownloadLoading });
         }
         if (showReact) {
-            menuItems.push(reactButton);
+            items.push({ action: ToolbarAction.React, ref: reactTriggerRef });
         }
         if (!showReply && showThreadForDeletedMessage) {
-            menuItems.push(threadTooltipButton);
+            items.push({
+                action: ToolbarAction.ReplyInThread,
+                ref: replyInThreadTriggerRef,
+                disabled: !isThreadReplyAllowed,
+            });
         }
         if (showReply) {
-            menuItems.push(replyButton);
+            items.push({ action: ToolbarAction.Reply, ref: replyTriggerRef });
         }
         if (showReply && showReplyInThread) {
-            menuItems.push(threadTooltipButton);
+            items.push({
+                action: ToolbarAction.ReplyInThread,
+                ref: replyInThreadTriggerRef,
+                disabled: !isThreadReplyAllowed,
+            });
         }
         if (showEdit) {
-            menuItems.push(editButton);
+            items.push({ action: ToolbarAction.Edit, ref: editTriggerRef });
         }
         if (showPinOrUnpin) {
-            menuItems.push(pinButton);
+            items.push({ action: ToolbarAction.Pin, ref: pinTriggerRef });
         }
         if (showCancel) {
-            menuItems.push(cancelButton);
+            items.push({ action: ToolbarAction.Cancel, ref: cancelTriggerRef });
         }
         if (showExpandCollapse) {
-            menuItems.push(expandButton);
+            items.push({ action: ToolbarAction.Expand, ref: expandTriggerRef });
         }
-        menuItems.push(optionsButton);
-    }
+        items.push({ action: ToolbarAction.Options, ref: optionsTriggerRef });
+
+        return items;
+    }, [
+        isDownloadLoading,
+        isFailed,
+        isThreadReplyAllowed,
+        showCancel,
+        showDownload,
+        showEdit,
+        showExpandCollapse,
+        showHide,
+        showPinOrUnpin,
+        showReact,
+        showReply,
+        showReplyInThread,
+        showThreadForDeletedMessage,
+    ]);
+
+    // Handle RovingIndex for toolbar
+    const enabledIndices = toolbarButtons
+        .map((item, index) => (!item.disabled ? index : -1))
+        .filter((index) => index >= 0);
+    const fallbackIndex = enabledIndices[0] ?? 0;
+    const currentIndex =
+        toolbarButtons[activeIndex] && !toolbarButtons[activeIndex].disabled ? activeIndex : fallbackIndex;
+
+    useLayoutEffect(() => {
+        setActiveIndex(currentIndex);
+
+        toolbarButtons.forEach(({ ref }, index) => {
+            if (ref.current) {
+                ref.current.tabIndex = index === currentIndex ? 0 : -1;
+            }
+        });
+    }, [currentIndex, toolbarButtons]);
+
+    const focusButtonAtIndex = (index: number): void => {
+        const button = toolbarButtons[index]?.ref.current;
+        if (!button) {
+            return;
+        }
+
+        setActiveIndex(index);
+        button.focus();
+    };
+
+    const handleToolbarKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+        if (enabledIndices.length === 0) {
+            return;
+        }
+
+        const focusedIndex = toolbarButtons.findIndex(({ ref }) => ref.current === document.activeElement);
+        const startIndex = focusedIndex >= 0 ? focusedIndex : currentIndex;
+
+        switch (event.key) {
+            case "ArrowRight": {
+                event.preventDefault();
+                const nextIndex = enabledIndices.find((index) => index > startIndex) ?? enabledIndices[0];
+                focusButtonAtIndex(nextIndex);
+                break;
+            }
+            case "ArrowLeft": {
+                event.preventDefault();
+                const previousIndex = [...enabledIndices].reverse().find((index) => index < startIndex);
+                focusButtonAtIndex(previousIndex ?? enabledIndices[enabledIndices.length - 1]);
+                break;
+            }
+            case "Home":
+                event.preventDefault();
+                focusButtonAtIndex(enabledIndices[0]);
+                break;
+            case "End":
+                event.preventDefault();
+                focusButtonAtIndex(enabledIndices[enabledIndices.length - 1]);
+                break;
+        }
+    };
+
+    const handleToolbarFocusCapture = (): void => {
+        const focusedIndex = toolbarButtons.findIndex(({ ref }) => ref.current === document.activeElement);
+        if (focusedIndex >= 0 && focusedIndex !== activeIndex) {
+            setActiveIndex(focusedIndex);
+        }
+    };
 
     return (
         <Flex
             role="toolbar"
             aria-label={_t("timeline|mab|label")}
             aria-live="off"
+            onKeyDown={handleToolbarKeyDown}
+            onFocusCapture={handleToolbarFocusCapture}
             className={classNames(className, styles.toolbar)}
         >
-            {menuItems}
+            {toolbarButtons.map((meta) => actionButtons[meta.action])}
         </Flex>
     );
 }
