@@ -441,7 +441,7 @@ test.describe("Threads", () => {
         textbox = locator.getByRole("textbox", { name: "Send an unencrypted message…" });
         await textbox.fill("Hello Mr. User");
         await textbox.press("Enter");
-        await expect(locator.locator(".mx_EventTile_last").getByText("Hello Mr. User")).toBeAttached();
+        await expect(locator.locator(".mx_EventTile_last").getByText("Hello Mr. User")).toBeVisible();
         // Close thread
         await locator.getByTestId("base-card-close-button").click();
 

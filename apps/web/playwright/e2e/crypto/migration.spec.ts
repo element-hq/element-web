@@ -44,6 +44,7 @@ test.describe("migration", { tag: "@no-webkit" }, function () {
         const initialProgress = parseFloat(await progressBar.getAttribute("value"));
         const initialMax = parseFloat(await progressBar.getAttribute("max"));
         expect(initialMax).toBeGreaterThan(4000);
+        expect(initialProgress).toBeGreaterThanOrEqual(0);
         expect(initialProgress).toBeLessThanOrEqual(500);
 
         // Later, the progress should pass 50%
