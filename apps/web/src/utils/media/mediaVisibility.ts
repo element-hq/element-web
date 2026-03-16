@@ -11,13 +11,18 @@ import { type MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_p
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 
-const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRule.Restricted];
-
 function isRoomPrivate(client: MatrixClient, roomId?: string): boolean {
     const room = roomId ? client.getRoom(roomId) : undefined;
     const joinRule = room?.currentState.getJoinRule();
 
-    return joinRule ? PRIVATE_JOIN_RULES.includes(joinRule) : false;
+    switch (joinRule) {
+        case JoinRule.Invite:
+        case JoinRule.Knock:
+        case JoinRule.Restricted:
+            return true;
+        default:
+            return false;
+    }
 }
 
 export function computeMediaVisibility(

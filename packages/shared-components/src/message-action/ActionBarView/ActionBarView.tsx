@@ -386,8 +386,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         const items: ToolbarButtonMeta[] = [];
 
         if (showCancel && isFailed) {
-            items.push({ action: ToolbarAction.Resend, ref: resendTriggerRef });
-            items.push({ action: ToolbarAction.Cancel, ref: cancelTriggerRef });
+            items.push(
+                { action: ToolbarAction.Resend, ref: resendTriggerRef },
+                { action: ToolbarAction.Cancel, ref: cancelTriggerRef },
+            );
             return items;
         }
 
@@ -450,7 +452,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
 
     // Handle RovingIndex for toolbar
     const enabledIndices = toolbarButtons
-        .map((item, index) => (!item.disabled ? index : -1))
+        .map((item, index) => (item.disabled ? -1 : index))
         .filter((index) => index >= 0);
     const fallbackIndex = enabledIndices[0] ?? 0;
     const currentIndex =

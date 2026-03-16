@@ -458,7 +458,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.verifyEvent();
     }
 
-    private updateThread = (thread: Thread): void => {
+    private readonly updateThread = (thread: Thread): void => {
         this.setState({ thread });
     };
 
@@ -503,7 +503,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
     }
 
-    private onNewThread = (thread: Thread): void => {
+    private readonly onNewThread = (thread: Thread): void => {
         if (thread.id === this.props.mxEvent.getId()) {
             this.updateThread(thread);
             const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
@@ -566,7 +566,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
     }
 
-    private viewInRoom = (evt: ButtonEvent): void => {
+    private readonly viewInRoom = (evt: ButtonEvent): void => {
         evt.preventDefault();
         evt.stopPropagation();
         dis.dispatch<ViewRoomPayload>({
@@ -578,7 +578,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private copyLinkToThread = async (evt: ButtonEvent): Promise<void> => {
+    private readonly copyLinkToThread = async (evt: ButtonEvent): Promise<void> => {
         evt.preventDefault();
         evt.stopPropagation();
         const { permalinkCreator, mxEvent } = this.props;
@@ -587,7 +587,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         await copyPlaintext(matrixToUrl);
     };
 
-    private onRoomReceipt = (ev: MatrixEvent, room: Room): void => {
+    private readonly onRoomReceipt = (ev: MatrixEvent, room: Room): void => {
         // ignore events for other rooms
         const tileRoom = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
         if (room !== tileRoom) return;
@@ -609,20 +609,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     /** called when the event is decrypted after we show it.
      */
-    private onDecrypted = (): void => {
+    private readonly onDecrypted = (): void => {
         // we need to re-verify the sending device.
         this.verifyEvent();
         this.forceUpdate();
     };
 
-    private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
+    private readonly onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
         if (userId === this.props.mxEvent.getSender()) {
             this.verifyEvent();
         }
     };
 
     /** called when the event is edited after we show it. */
-    private onReplaced = (): void => {
+    private readonly onReplaced = (): void => {
         // re-verify the event if it is replaced (the edit may not be verified)
         this.verifyEvent();
     };
@@ -737,7 +737,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return !!(actions?.tweaks.highlight || previousActions?.tweaks.highlight);
     }
 
-    private onSenderProfileClick = (): void => {
+    private readonly onSenderProfileClick = (): void => {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             userId: this.props.mxEvent.getSender()!,
@@ -745,7 +745,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private onPermalinkClicked = (e: MouseEvent): void => {
+    private readonly onPermalinkClicked = (e: MouseEvent): void => {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Element when clicked.
         e.preventDefault();
@@ -860,22 +860,22 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return null;
     }
 
-    private onActionBarFocusChange = (actionBarFocused: boolean): void => {
+    private readonly onActionBarFocusChange = (actionBarFocused: boolean): void => {
         this.setState({
             actionBarFocused,
             hover: actionBarFocused ? this.state.hover : (this.ref.current?.matches(":hover") ?? false),
         });
     };
 
-    private onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
+    private readonly onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
         // Show the action toolbar for keyboard-visible focus, with what-input as a fallback signal.
         const target = event.target as HTMLElement;
         const showActionBarFromFocus =
-            target.matches(":focus-visible") || document.body.getAttribute("data-whatinput") === "keyboard";
+            target.matches(":focus-visible") || document.body.dataset["data-whatinput"] === "keyboard";
         this.setState({ focusWithin: true, showActionBarFromFocus });
     };
 
-    private onBlurWithin = (event: FocusEvent<HTMLElement>): void => {
+    private readonly onBlurWithin = (event: FocusEvent<HTMLElement>): void => {
         if (event.currentTarget.contains(event.relatedTarget)) {
             return;
         }
@@ -883,11 +883,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.setState({ focusWithin: false, showActionBarFromFocus: false });
     };
 
-    private getTile: () => IEventTileType | null = () => this.tile.current;
+    private readonly getTile: () => IEventTileType | null = () => this.tile.current;
 
-    private getReplyChain = (): ReplyChain | null => this.replyChain.current;
+    private readonly getReplyChain = (): ReplyChain | null => this.replyChain.current;
 
-    private getReactions = (): Relations | null => {
+    private readonly getReactions = (): Relations | null => {
         if (!this.props.showReactions || !this.props.getRelationsForEvent) {
             return null;
         }
@@ -895,7 +895,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction") ?? null;
     };
 
-    private onReactionsCreated = (relationType: string, eventType: string): void => {
+    private readonly onReactionsCreated = (relationType: string, eventType: string): void => {
         if (relationType !== "m.annotation" || eventType !== "m.reaction") {
             return;
         }
@@ -904,11 +904,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private onContextMenu = (ev: React.MouseEvent): void => {
+    private readonly onContextMenu = (ev: React.MouseEvent): void => {
         this.showContextMenu(ev);
     };
 
-    private onTimestampContextMenu = (ev: React.MouseEvent): void => {
+    private readonly onTimestampContextMenu = (ev: React.MouseEvent): void => {
         this.showContextMenu(ev, this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!));
     };
 
@@ -945,7 +945,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     }
 
-    private onCloseMenu = (): void => {
+    private readonly onCloseMenu = (): void => {
         this.setState({
             contextMenu: undefined,
             actionBarFocused: false,
@@ -953,7 +953,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private setQuoteExpanded = (expanded: boolean): void => {
+    private readonly setQuoteExpanded = (expanded: boolean): void => {
         this.setState({
             isQuoteExpanded: expanded,
         });
