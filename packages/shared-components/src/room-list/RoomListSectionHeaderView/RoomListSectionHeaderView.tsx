@@ -5,8 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { memo, type JSX, type FocusEvent } from "react";
-import { type MouseEventHandler } from "react";
+import React, { memo, type JSX, type FocusEvent, type MouseEventHandler } from "react";
 import ChevronRightIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-right";
 import classNames from "classnames";
 
