@@ -371,9 +371,8 @@ function RedactedBodyWrapper({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref
     );
 
     useEffect(() => {
-        vm.setEvent(mxEvent);
         vm.setShowTwelveHour(showTwelveHour);
-    }, [mxEvent, showTwelveHour, vm]);
+    }, [showTwelveHour, vm]);
 
     return <RedactedBodyView vm={vm} ref={ref} className="mx_RedactedBody" />;
 }

@@ -1637,9 +1637,8 @@ function RedactedBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element
     );
 
     useEffect(() => {
-        vm.setEvent(mxEvent);
         vm.setShowTwelveHour(showTwelveHour);
-    }, [mxEvent, showTwelveHour, vm]);
+    }, [showTwelveHour, vm]);
 
     return <RedactedBodyView vm={vm} className="mx_RedactedBody" />;
 }
