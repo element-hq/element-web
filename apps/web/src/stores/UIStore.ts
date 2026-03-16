@@ -10,6 +10,8 @@ import EventEmitter from "events";
 
 export enum UI_EVENTS {
     Resize = "resize",
+    WidthIncreased = "width-increased",
+    WidthDecreased = "width-decreased",
 }
 
 export default class UIStore extends EventEmitter {
@@ -19,9 +21,14 @@ export default class UIStore extends EventEmitter {
 
     private uiElementDimensions = new Map<string, DOMRectReadOnly>();
     private trackedUiElements = new Map<Element, string>();
+    private timeoutId: number = 0;
 
     public windowWidth: number;
     public windowHeight: number;
+    /**
+     * Whether the window is currently being resized.
+     */
+    public isWindowBeingResized: boolean = false;
 
     public constructor() {
         super();
@@ -81,7 +88,12 @@ export default class UIStore extends EventEmitter {
         const windowEntry = entries.find((entry) => entry.target === document.body);
 
         if (windowEntry) {
-            this.windowWidth = windowEntry.contentRect.width;
+            this.setWindowAsBeingResized();
+
+            const currentWidth = windowEntry.contentRect.width;
+            this.emitWidthChangeEvents(currentWidth);
+
+            this.windowWidth = currentWidth;
             this.windowHeight = windowEntry.contentRect.height;
         }
 
@@ -94,6 +106,31 @@ export default class UIStore extends EventEmitter {
         });
 
         this.emit(UI_EVENTS.Resize, entries);
+    };
+
+    /**
+     * Emit any necessary {@link UI_EVENTS.WidthIncreased} or {@link UI_EVENTS.WidthDecreased} events.
+     * @param currentWidth The current width of {@link window}
+     */
+    private emitWidthChangeEvents = (currentWidth: number): void => {
+        if (currentWidth > this.windowWidth) this.emit(UI_EVENTS.WidthIncreased, currentWidth);
+        if (currentWidth < this.windowWidth) this.emit(UI_EVENTS.WidthDecreased, currentWidth);
+    };
+
+    /**
+     * Update {@link UIStore#isWindowBeingResized}.
+     */
+    private setWindowAsBeingResized = (): void => {
+        // Window is being resized, so set to true.
+        this.isWindowBeingResized = true;
+        // Reset any previous timeout.
+        window.clearTimeout(this.timeoutId);
+        // Set to false after a second.
+        // If the window continues to be resized, this method will be called
+        // again and this setTimeout will be cancelled.
+        this.timeoutId = window.setTimeout(() => {
+            this.isWindowBeingResized = false;
+        }, 1000);
     };
 }
 
