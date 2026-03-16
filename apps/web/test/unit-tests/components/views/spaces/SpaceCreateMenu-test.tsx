@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, cleanup } from "jest-matrix-react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { HistoryVisibility, MatrixError, type MatrixClient, Preset, RoomType, Visibility } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
 import { type MockedObject } from "jest-mock";
 
-import SpaceCreateMenu from "../../../../../src/components/views/spaces/SpaceCreateMenu";
+import * as createRoomModule from "../../../../../src/createRoom";
+import SpaceCreateMenu, { createSpace } from "../../../../../src/components/views/spaces/SpaceCreateMenu";
 import {
     getMockClientWithEventEmitter,
     mockClientMethodsRooms,
@@ -117,5 +117,36 @@ describe("<SpaceCreateMenu />", () => {
             topic: "A description",
             visibility: "private",
         });
+    });
+
+    it("should pass name and topic at the top level when creating a space", async () => {
+        const createRoomSpy = jest.spyOn(createRoomModule, "default").mockResolvedValue("!room:id");
+        client.doesServerSupportUnstableFeature.mockResolvedValue(false);
+
+        await createSpace(client, "My Name", true, "#my-namefoobar:server", "A description");
+
+        expect(createRoomSpy).toHaveBeenCalledWith(client, {
+            name: "My Name",
+            topic: "A description",
+            createOpts: {
+                preset: Preset.PublicChat,
+                visibility: Visibility.Private,
+                power_level_content_override: {
+                    events_default: 100,
+                    invite: 0,
+                },
+                room_alias_name: "my-namefoobar",
+            },
+            avatar: undefined,
+            roomType: RoomType.Space,
+            historyVisibility: HistoryVisibility.WorldReadable,
+            spinner: false,
+            encryption: false,
+            andView: true,
+            inlineErrors: true,
+        });
+
+        expect(createRoomSpy.mock.calls[0][1]?.createOpts).not.toHaveProperty("name");
+        expect(createRoomSpy.mock.calls[0][1]?.createOpts).not.toHaveProperty("topic");
     });
 });
