@@ -34,7 +34,6 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
 import TextualBody from "./TextualBody";
 import MImageBody from "./MImageBody";
-import MFileBody from "./MFileBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MVideoBody from "./MVideoBody";
 import MStickerBody from "./MStickerBody";
@@ -45,6 +44,7 @@ import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
+import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -72,7 +72,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Notice, TextualBody],
     [MsgType.Emote, TextualBody],
     [MsgType.Image, MImageBody],
-    [MsgType.File, MFileBody],
+    [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyViewFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, MVideoBody],
 ]);
@@ -261,7 +261,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             } else if (msgtype && this.bodyTypes.has(msgtype)) {
                 BodyType = this.bodyTypes.get(msgtype)!;
             } else if (content.url) {
-                // Fallback to MFileBody if there's a content URL
+                // Fallback to file body if there's a content URL
                 BodyType = this.bodyTypes.get(MsgType.File)!;
             } else {
                 // Fallback to UnknownBody otherwise if not redacted

@@ -76,7 +76,7 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 
 Enables sharing your current location to the timeline, with live updates.
 
-## Video rooms (`feature_video_rooms`)
+## Video rooms (`feature_video_rooms`) [Beta]
 
 Enables support for creating video rooms, which are persistent video chats that users can jump in and out of.
 
@@ -134,3 +134,10 @@ Encrypt most of the state events in the room, including the room name and topic.
 WARNING: this means that users joining a room who do not have access to its history will not be able to see the name or
 topic of the room, or any other room state information. It also means the room name and topic are not available before
 joining a room.
+
+## New notifications settings (`feature_notification_settings2`) [Beta]
+
+Replaces the legacy notification settings with a new one to manage push rules.
+
+**Warning** This feature has options which are not backwards compatible, disabling
+it may have unintended consequences.

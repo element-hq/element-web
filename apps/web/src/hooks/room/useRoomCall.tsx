@@ -22,7 +22,7 @@ import { useCall, useConnectionState, useParticipantCount } from "../useCall";
 import { useRoomMemberCount } from "../useRoomMembers";
 import { ConnectionState } from "../../models/Call";
 import { placeCall } from "../../utils/room/placeCall";
-import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { isManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../widgets/ManagedHybrid";
@@ -214,8 +214,8 @@ export const useRoomCall = (
         widget = groupCall?.widget ?? jitsiWidget;
     }
     const updateWidgetState = useCallback((): void => {
-        setCanPinWidget(WidgetLayoutStore.instance.canAddToContainer(room, Container.Top));
-        setWidgetPinned(!!widget && WidgetLayoutStore.instance.isInContainer(room, widget, Container.Top));
+        setCanPinWidget(WidgetLayoutStore.instance.canAddToContainer(room, "top"));
+        setWidgetPinned(!!widget && WidgetLayoutStore.instance.isInContainer(room, widget, "top"));
     }, [room, widget]);
     useEventEmitter(WidgetLayoutStore.instance, WidgetLayoutStore.emissionForRoom(room), updateWidgetState);
     useEffect(() => {
@@ -266,7 +266,7 @@ export const useRoomCall = (
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
+                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
             } else {
                 placeCall(room, CallType.Voice, callPlatformType, evt?.shiftKey || undefined, true);
             }
@@ -277,7 +277,7 @@ export const useRoomCall = (
         (evt: React.MouseEvent | undefined, callPlatformType: PlatformCallType): void => {
             evt?.stopPropagation();
             if (widget && promptPinWidget) {
-                WidgetLayoutStore.instance.moveToContainer(room, widget, Container.Top);
+                WidgetLayoutStore.instance.moveToContainer(room, widget, "top");
             } else {
                 // If we have pressed shift then always skip the lobby, otherwise `undefined` will defer
                 // to the defaults of the call implementation.

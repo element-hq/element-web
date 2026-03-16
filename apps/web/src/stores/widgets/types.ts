@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type Container } from "@element-hq/element-web-module-api";
+
 export interface IStoredLayout {
     // Where to store the widget. Required.
     container: Container;
@@ -42,15 +44,3 @@ export interface ILayoutStateEvent {
 }
 
 export const WIDGET_LAYOUT_EVENT_TYPE = "io.element.widgets.layout";
-
-export enum Container {
-    // "Top" is the app drawer, and currently the only sensible value.
-    Top = "top",
-
-    // "Right" is the right panel, and the default for widgets. Setting
-    // this as a container on a widget is essentially like saying "no
-    // changes needed", though this may change in the future.
-    Right = "right",
-
-    Center = "center",
-}

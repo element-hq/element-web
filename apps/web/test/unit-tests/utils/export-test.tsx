@@ -238,7 +238,7 @@ describe("export", function () {
 
     it("checks if the icons' html corresponds to export regex", function () {
         const exporter = new HTMLExporter(mockRoom, ExportType.Beginning, mockExportOptions, setProgressText);
-        const fileRegex = /<span class="mx_MFileBody_info_icon">.*?<\/span>/;
+        const fileRegex = /<span class="[^"]*\bmx_MFileBody\b[^"]*">.*?<\/span>/;
         expect(fileRegex.test(renderToString(exporter.getEventTile(mkFileEvent(), true)))).toBeTruthy();
     });
 
