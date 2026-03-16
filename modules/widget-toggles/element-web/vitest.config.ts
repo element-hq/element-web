@@ -7,12 +7,13 @@ Please see LICENSE files in the repository root for full details.
 
 import { defineConfig } from "vitest/config";
 import { env } from "node:process";
+import { playwright } from "@vitest/browser-playwright";
 
 const isGHA = env["GITHUB_ACTIONS"] !== undefined;
 
 export default defineConfig({
     test: {
-        include: ["tests/**/*.test.ts"],
+        include: ["tests/**/*.test.{ts,tsx}"],
         exclude: ["./e2e/**/*", "./node_modules/**/*"],
         reporters: isGHA
             ? ["default", ["vitest-sonar-reporter", { outputFile: "coverage/sonar-report.xml" }]]
@@ -22,5 +23,12 @@ export default defineConfig({
             include: ["src/**/*.ts"],
             reporter: [["lcov", { projectRoot: "../../../" }], "text"],
         },
+        browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [{ browser: "chromium" }],
+        },
+        setupFiles: ["tests/setupTests.ts"],
     },
 });
