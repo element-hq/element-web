@@ -1556,6 +1556,7 @@ const SafeEventTile = (props: EventTileProps): JSX.Element => {
             {/* <UnwrappedEventTile {...props} /> */}
             <EventTileNew
                 {...props}
+                isContinuation={props.continuation}
                 cli={cli}
                 timelineRenderingType={context.timelineRenderingType}
                 showHiddenEvents={context.showHiddenEvents}
@@ -1614,7 +1615,7 @@ export function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
  * Bridge decryption-failure events into the view model using current local verification state.
  * This wrapper can be removed after EventTile has been changed to a function component.
  */
-function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
+export function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
     const verificationState = useContext(LocalDeviceVerificationStateContext);
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -1634,7 +1635,7 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
  * Wraps MessageTimestampView with a view model synced to the provided props.
  * This wrapper can be removed after EventTile has been changed to a function component.
  */
-function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
+export function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
     useEffect(() => {
         vm.setTimestamp(props.ts);
@@ -1731,12 +1732,12 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
     return [...myReactions.values()];
 };
 
-interface ReactionsRowWrapperProps {
+export interface ReactionsRowWrapperProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
 }
 
-function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrapperProps>): JSX.Element | null {
+export function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrapperProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
