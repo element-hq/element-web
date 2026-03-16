@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    useEffect,
     type ElementType,
     type FocusEventHandler,
     type JSX,
@@ -14,27 +13,22 @@ import React, {
     type ReactNode,
     type Ref,
 } from "react";
-import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { Tooltip } from "@vector-im/compound-web";
-import { MessageTimestampView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { _t } from "../../../../languageHandler";
 import { Layout } from "../../../../settings/enums/Layout";
-import {
-    MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "../../../../viewmodels/message-body/MessageTimestampViewModel";
-import MemberAvatar from "../../avatars/MemberAvatar";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
-import SenderProfile from "../../messages/SenderProfile";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
+import { EventTileAvatar } from "./EventTileAvatar";
+import { EventTileE2ePadlock } from "./EventTileE2ePadlock";
+import { EventTileMsgOption } from "./EventTileMsgOption";
+import { EventTileSenderProfile } from "./EventTileSenderProfile";
 import { EventTileThreadToolbar } from "./EventTileThreadToolbar";
-import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
-import { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
-import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
+import { EventTileTimestamp } from "./EventTileTimestamp";
+import { EventTileThreadInfo } from "./EventTileThreadInfo";
+import { EventTileThreadPanelSummary } from "./EventTileThreadPanelSummary";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -415,174 +409,4 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                 </Root>
             );
     }
-}
-
-function EventTileThreadPanelSummary({ replyCount, preview }: { replyCount: number; preview: ReactNode }): JSX.Element {
-    return (
-        <div className="mx_ThreadPanel_replies">
-            <ThreadsIcon />
-            <span className="mx_ThreadPanel_replies_amount">{replyCount}</span>
-            {preview}
-        </div>
-    );
-}
-
-function EventTileThreadInfo({
-    summary,
-    href,
-    label,
-}: {
-    summary?: ReactNode;
-    href?: string;
-    label?: string;
-}): JSX.Element | undefined {
-    if (summary) {
-        return <>{summary}</>;
-    }
-
-    if (href && label) {
-        return (
-            <a className="mx_ThreadSummary_icon" href={href}>
-                <ThreadsIcon />
-                {label}
-            </a>
-        );
-    }
-
-    if (label) {
-        return (
-            <p className="mx_ThreadSummary_icon">
-                <ThreadsIcon />
-                {label}
-            </p>
-        );
-    }
-
-    return undefined;
-}
-
-function EventTileMsgOption({
-    sentReceiptIcon,
-    sentReceiptLabel,
-    readReceipts,
-}: {
-    sentReceiptIcon?: ReactNode;
-    sentReceiptLabel?: string;
-    readReceipts?: ReactNode;
-}): JSX.Element | undefined {
-    if (sentReceiptIcon && sentReceiptLabel) {
-        return (
-            <div className="mx_EventTile_msgOption">
-                <div className="mx_ReadReceiptGroup">
-                    <Tooltip label={sentReceiptLabel} placement="top-end">
-                        <div className="mx_ReadReceiptGroup_button" role="status">
-                            <span className="mx_ReadReceiptGroup_container">{sentReceiptIcon}</span>
-                        </div>
-                    </Tooltip>
-                </div>
-            </div>
-        );
-    }
-
-    if (readReceipts) {
-        return <>{readReceipts}</>;
-    }
-
-    return undefined;
-}
-
-function EventTileE2ePadlock({
-    icon,
-    title,
-    sharedUserId,
-    roomId,
-}: {
-    icon: EventTileViewProps["e2ePadlockIcon"];
-    title?: string;
-    sharedUserId?: string;
-    roomId?: string;
-}): JSX.Element | null {
-    if (sharedUserId && roomId) {
-        return <E2eMessageSharedIcon keyForwardingUserId={sharedUserId} roomId={roomId} />;
-    }
-
-    switch (icon) {
-        case "decryptionFailure":
-            return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.DecryptionFailure} />;
-        case "normal":
-            return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.Normal} />;
-        case "warning":
-            return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.Warning} />;
-        default:
-            return null;
-    }
-}
-
-function EventTileAvatar({
-    member,
-    size,
-    viewUserOnClick,
-    forceHistorical,
-}: {
-    member?: RoomMember | null;
-    size?: string | null;
-    viewUserOnClick: boolean;
-    forceHistorical: boolean;
-}): JSX.Element | undefined {
-    if (!member || size === null || size === undefined) return undefined;
-
-    return (
-        <div className="mx_EventTile_avatar">
-            <MemberAvatar
-                member={member}
-                size={size}
-                viewUserOnClick={viewUserOnClick}
-                forceHistorical={forceHistorical}
-            />
-        </div>
-    );
-}
-
-function EventTileSenderProfile({
-    mode,
-    mxEvent,
-    onClick,
-}: {
-    mode: EventTileViewProps["senderMode"];
-    mxEvent: MatrixEvent;
-    onClick?: () => void;
-}): JSX.Element | undefined {
-    switch (mode) {
-        case "hidden":
-            return undefined;
-        case "composerInsert":
-            return <SenderProfile onClick={onClick} mxEvent={mxEvent} />;
-        case "tooltip":
-            return <SenderProfile mxEvent={mxEvent} withTooltip />;
-        default:
-            return <SenderProfile mxEvent={mxEvent} />;
-    }
-}
-
-function EventTileTimestamp(props: MessageTimestampViewModelProps): JSX.Element | undefined {
-    const viewModel = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
-    useEffect(() => {
-        viewModel.setTimestamp(props.ts);
-        viewModel.setReceivedTimestamp(props.receivedTs);
-        viewModel.setDisplayOptions({
-            showTwelveHour: props.showTwelveHour,
-            showRelative: props.showRelative,
-        });
-        viewModel.setHref(props.href);
-        viewModel.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
-    }, [viewModel, props]);
-
-    return (
-        <>
-            {props.receivedTs ? (
-                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
-            ) : undefined}
-            <MessageTimestampView vm={viewModel} className="mx_MessageTimestamp" />
-        </>
-    );
 }

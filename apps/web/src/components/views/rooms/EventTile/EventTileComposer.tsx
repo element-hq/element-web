@@ -5,13 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useEffect, type ContextType, type JSX, type MouseEvent, type ReactNode } from "react";
+import React, { useContext, type ContextType, type JSX, type MouseEvent, type ReactNode } from "react";
 import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import {
-    DecryptionFailureBodyView,
-    PinnedMessageBadge,
-    useCreateAutoDisposedViewModel,
-} from "@element-hq/web-shared-components";
+import { PinnedMessageBadge } from "@element-hq/web-shared-components";
 
 import type { EventStatus, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { IReadReceiptPosition } from "../ReadReceiptMarker";
@@ -24,8 +20,6 @@ import dis from "../../../../dispatcher/dispatcher";
 import { type ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import { _t } from "../../../../languageHandler";
 import { getLateEventInfo } from "../../../structures/grouper/LateEventGrouper";
-import { DecryptionFailureBodyViewModel } from "../../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
-import { LocalDeviceVerificationStateContext } from "../../../../contexts/LocalDeviceVerificationStateContext";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import NotificationBadge from "../NotificationBadge";
 import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
@@ -228,20 +222,4 @@ function getSentReceiptDetails(
     }
 
     return icon && label ? { icon, label } : undefined;
-}
-
-export function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
-    const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const viewModel = useCreateAutoDisposedViewModel(
-        () =>
-            new DecryptionFailureBodyViewModel({
-                decryptionFailureCode: mxEvent.decryptionFailureReason,
-                verificationState,
-            }),
-    );
-    useEffect(() => {
-        viewModel.setVerificationState(verificationState);
-    }, [verificationState, viewModel]);
-
-    return <DecryptionFailureBodyView vm={viewModel} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }

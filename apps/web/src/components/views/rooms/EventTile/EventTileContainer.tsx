@@ -12,7 +12,8 @@ import RoomContext, { TimelineRenderingType } from "../../../../contexts/RoomCon
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import type { EventTileProps } from "../EventTile";
 import { EventTileViewModel } from "../../../../viewmodels/room/EventTileViewModel";
-import { DecryptionFailureBodyWrapper, EventTileComposer } from "./EventTileComposer";
+import { EventTileComposer } from "./EventTileComposer";
+import { EventTileDecryptionFailureBody } from "./EventTileDecryptionFailureBody";
 import { Action } from "../../../../dispatcher/actions";
 import dis from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
@@ -185,7 +186,7 @@ export function EventTileContainer(props: EventTileProps): JSX.Element {
             props.mxEvent.isRedacted() ? (
                 <RedactedBody mxEvent={props.mxEvent} />
             ) : props.mxEvent.isDecryptionFailure() ? (
-                <DecryptionFailureBodyWrapper mxEvent={props.mxEvent} />
+                <EventTileDecryptionFailureBody mxEvent={props.mxEvent} />
             ) : (
                 <EventPreview mxEvent={props.mxEvent} />
             )
