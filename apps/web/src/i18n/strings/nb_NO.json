@@ -1554,7 +1554,6 @@
         "notification_settings_beta_caption": "Vi introduserer en enklere måte å endre varslingsinnstillingene dine på. Tilpass %(brand)s, akkurat slik du vil.",
         "notification_settings_beta_title": "Innstillinger for varsler",
         "notifications": "Aktiver varslingspanelet i romoverskriften",
-        "release_announcement": "Kunngjøring om ny versjon",
         "render_reaction_images": "Gjengi egendefinerte bilder i reaksjoner",
         "render_reaction_images_description": "Noen ganger omtalt som \"egendefinerte emojier\".",
         "report_to_moderators": "Rapporter til moderatorene",
@@ -2087,7 +2086,6 @@
         "not_found_title": "Dette rommet eller området eksisterer ikke.",
         "not_found_title_name": "%(roomName)s eksisterer ikke.",
         "peek_join_prompt": "Du forhåndsviser %(roomName)s. Vil du bli med?",
-        "pinned_message_badge": "Festet melding",
         "pinned_message_banner": {
             "button_close_list": "Lukk liste",
             "button_view_all": "Vis alle",

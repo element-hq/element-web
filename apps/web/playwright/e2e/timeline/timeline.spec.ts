@@ -779,7 +779,7 @@ test.describe("Timeline", () => {
             // Assert that the file size is displayed in kibibytes (1024 bytes), not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
             await expect(
-                page.locator(".mx_EventTile_last .mx_MFileBody_info_filename").getByText(/1.12 KB/),
+                page.locator(".mx_EventTile_last .mx_MFileBody [data-type='info']").getByText(/1.12 KB/),
             ).toBeVisible();
         });
 

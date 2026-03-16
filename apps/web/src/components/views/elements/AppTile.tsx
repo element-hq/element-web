@@ -47,7 +47,7 @@ import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../s
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
-import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
@@ -682,21 +682,17 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private onToggleMaximisedClick = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
-        const targetContainer = WidgetLayoutStore.instance.isInContainer(
-            this.props.room,
-            this.props.app,
-            Container.Center,
-        )
-            ? Container.Top
-            : Container.Center;
+        const targetContainer = WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, "center")
+            ? "top"
+            : "center";
         WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, targetContainer);
 
-        if (targetContainer === Container.Top) this.closeChatCardIfNeeded();
+        if (targetContainer === "top") this.closeChatCardIfNeeded();
     };
 
     private onMinimiseClicked = (): void => {
         if (!this.props.room) return; // ignore action - it shouldn't even be visible
-        WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, Container.Right);
+        WidgetLayoutStore.instance.moveToContainer(this.props.room, this.props.app, "right");
         this.closeChatCardIfNeeded();
     };
 
@@ -822,8 +818,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         const layoutButtons: ReactNode[] = [];
         if (this.props.showLayoutButtons) {
             const isMaximised =
-                this.props.room &&
-                WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center);
+                this.props.room && WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, "center");
 
             layoutButtons.push(
                 <AccessibleButton

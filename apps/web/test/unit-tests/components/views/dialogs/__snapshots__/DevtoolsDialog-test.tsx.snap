@@ -103,6 +103,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           Users
         </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Explore sticky state
+        </button>
       </div>
       <div>
         <h2

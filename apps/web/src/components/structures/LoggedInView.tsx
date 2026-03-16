@@ -194,6 +194,9 @@ class LoggedInView extends React.Component<IProps, IState> {
             SettingsStore.watchSetting("userTimezonePublish", null, this.onTimezoneUpdate),
             SettingsStore.watchSetting("userTimezone", null, this.onTimezoneUpdate),
         ];
+        // Call this initially to ensure that we set the correct timezone, if the
+        // system time has changed between sessions.
+        void this.onTimezoneUpdate();
 
         this.loadResizer();
 
