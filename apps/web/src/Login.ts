@@ -129,7 +129,7 @@ export default class Login {
                     const tempClient = this.createTemporaryClient();
                     // we reuse the clientId from the oidcFlow for QR login
                     // it might be that we later find that the homeserver is different and we initialise a new client
-                    possibleQrFlow = await tryInitLoginWithQRFlow(tempClient,oidcFlow.clientId);
+                    possibleQrFlow = await tryInitLoginWithQRFlow(tempClient, oidcFlow.clientId);
                 } catch (e) {
                     logger.warn("Could not fetch server versions for login with QR support, assuming unsupported", e);
                 }
@@ -317,7 +317,7 @@ const tryInitLoginWithQRFlow = async (
 
     const flow = {
         type: "loginWithQrFlow",
-        clientId
+        clientId,
     } satisfies LoginWithQrFlow;
 
     return flow;

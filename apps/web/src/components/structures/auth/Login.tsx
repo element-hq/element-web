@@ -15,7 +15,7 @@ import { QrCodeIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
-import Login, { LoginWithQrFlow, type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
+import Login, { type LoginWithQrFlow, type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import AuthPage from "../../views/auth/AuthPage";
@@ -37,7 +37,6 @@ import { startOidcLogin } from "../../../utils/oidc/authorize";
 import { ModuleApi } from "../../../modules/Api.ts";
 import LoginWithQR from "../../views/auth/LoginWithQR.tsx";
 import { Mode } from "../../views/auth/LoginWithQR-types.ts";
-import type LoginWithQRFlow from "../../views/auth/LoginWithQRFlow.tsx";
 import createMatrixClient from "../../../utils/createMatrixClient.ts";
 
 interface IProps {
@@ -464,7 +463,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                     );
                 }}
             >
-                {_t("action|continue")}
+                {_t("Sign in manually")}
             </Button>
         );
     };
@@ -500,11 +499,10 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
     private renderLoginWithQRStep = (): JSX.Element => {
         return (
             <>
-                <p className="mx_Login_withQR_or">or</p>
-                <AccessibleButton className="mx_Login_withQR" kind="primary_outline" onClick={this.startLoginWithQR}>
+                <Button className="mx_Login_fullWidthButton" kind="primary" size="sm" onClick={this.startLoginWithQR}>
                     <QrCodeIcon />
                     {_t("Sign in with QR code")}
-                </AccessibleButton>
+                </Button>
             </>
         );
     };

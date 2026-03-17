@@ -73,7 +73,9 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     }
 
     private get ourIntent(): RendezvousIntent {
-        return this.props.client.getUserId() ? RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE : RendezvousIntent.LOGIN_ON_NEW_DEVICE;
+        return this.props.client.getUserId()
+            ? RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
+            : RendezvousIntent.LOGIN_ON_NEW_DEVICE;
     }
 
     public componentDidMount(): void {
@@ -119,7 +121,10 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
 
             if (msc4388) {
                 // use helper methods for 2025 version
-                rendezvous = this.ourIntent === RendezvousIntent.LOGIN_ON_NEW_DEVICE ? await signInByGeneratingQR(this.props.client, this.onFailure) : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure);
+                rendezvous =
+                    this.ourIntent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
+                        ? await signInByGeneratingQR(this.props.client, this.onFailure)
+                        : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure);
             } else {
                 // old way for 2024 version
                 const transport = new MSC4108RendezvousSession({
@@ -161,7 +166,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                     phase: Phase.OutOfBandConfirmation,
                     homeserverBaseUrl: baseUrl,
                 });
-
             }
 
             // we ask the user to confirm that the channel is secure
@@ -210,10 +214,14 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                     throw new Error("Homeserver base URL not found in state");
                 }
 
-                if (new URL(this.props.client.baseUrl).toString() !== new URL(this.state.homeserverBaseUrl).toString()) {
+                if (
+                    new URL(this.props.client.baseUrl).toString() !== new URL(this.state.homeserverBaseUrl).toString()
+                ) {
                     // would need to switch homeservers
                     this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                    logger.info(`Changing homeservers during new device login not yet supported: ${this.props.client.baseUrl} -> ${this.state.homeserverBaseUrl}`);
+                    logger.info(
+                        `Changing homeservers during new device login not yet supported: ${this.props.client.baseUrl} -> ${this.state.homeserverBaseUrl}`,
+                    );
                     throw new Error("Changing homeservers during new device login not yet supported");
                 }
 
@@ -239,7 +247,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                         refreshToken: datr.refresh_token,
                         homeserverUrl: this.state.homeserverBaseUrl,
                         clientId: this.props.clientId,
-                        idToken: datr.id_token ?? '', // I'm not sure the idToken is actually required
+                        idToken: datr.id_token ?? "", // I'm not sure the idToken is actually required
                         issuer: metadata!.issuer,
                         identityServerUrl: undefined, // PROTOTYPE: we should have stored this from before
                     });
