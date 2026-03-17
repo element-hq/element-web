@@ -212,7 +212,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           aria-current="page"
           class="_last-page_1xygz_30"
         >
-          Set up recovery
+          Get recovery key
         </span>
       </li>
     </ol>
@@ -371,7 +371,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           aria-current="page"
           class="_last-page_1xygz_30"
         >
-          Set up recovery
+          Get recovery key
         </span>
       </li>
     </ol>
@@ -552,7 +552,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
           aria-current="page"
           class="_last-page_1xygz_30"
         >
-          Set up recovery
+          Get recovery key
         </span>
       </li>
     </ol>
@@ -582,7 +582,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Set up recovery
+        Get recovery key
       </h2>
       <span>
         Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.
@@ -669,7 +669,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
           aria-current="page"
           class="_last-page_1xygz_30"
         >
-          Set up recovery
+          Get recovery key
         </span>
       </li>
     </ol>
