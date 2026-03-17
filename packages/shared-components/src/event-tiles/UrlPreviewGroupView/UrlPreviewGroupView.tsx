@@ -12,12 +12,12 @@ import classNames from "classnames";
 
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { useI18n } from "../../utils/i18nContext";
-import type { UrlPreviewGroupViewPreview } from "./types";
+import type { UrlPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
 import styles from "./UrlPreviewGroupView.module.css";
 
 export interface UrlPreviewGroupViewSnapshot {
-    previews: Array<UrlPreviewGroupViewPreview>;
+    previews: Array<UrlPreview>;
     totalPreviewCount: number;
     previewsLimited: boolean;
     overPreviewLimit: boolean;
@@ -31,7 +31,7 @@ export interface UrlPreviewGroupViewProps {
 export interface UrlPreviewGroupViewActions {
     onTogglePreviewLimit: () => void;
     onHideClick: () => Promise<void>;
-    onImageClick: (preview: UrlPreviewGroupViewPreview) => void;
+    onImageClick: (preview: UrlPreview) => void;
 }
 
 export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewActions>;

@@ -10,7 +10,7 @@ import { expect } from "@jest/globals";
 import type { MockedObject } from "jest-mock";
 import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 import { UrlPreviewGroupViewModel } from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
-import type { UrlPreviewGroupViewPreview } from "@element-hq/web-shared-components";
+import type { UrlPreview } from "@element-hq/web-shared-components";
 import { getMockClientWithEventEmitter, mkEvent } from "../../test-utils";
 
 const IMAGE_MXC = "mxc://example.org/abc";
@@ -25,13 +25,13 @@ const BASIC_PREVIEW_OGDATA = {
 function getViewModel({ mediaVisible, visible } = { mediaVisible: true, visible: true }): {
     vm: UrlPreviewGroupViewModel;
     client: MockedObject<MatrixClient>;
-    onImageClicked: jest.Mock<void, [UrlPreviewGroupViewPreview]>;
+    onImageClicked: jest.Mock<void, [UrlPreview]>;
 } {
     const client = getMockClientWithEventEmitter({
         getUrlPreview: jest.fn(),
         mxcUrlToHttp: jest.fn(),
     });
-    const onImageClicked = jest.fn<void, [UrlPreviewGroupViewPreview]>();
+    const onImageClicked = jest.fn<void, [UrlPreview]>();
     const vm = new UrlPreviewGroupViewModel({
         client,
         mediaVisible,

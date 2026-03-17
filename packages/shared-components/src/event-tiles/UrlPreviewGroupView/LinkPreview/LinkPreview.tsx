@@ -11,14 +11,14 @@ import classNames from "classnames";
 
 import { useI18n } from "../../../utils/i18nContext";
 import styles from "./LinkPreview.module.css";
-import type { UrlPreviewGroupViewPreview } from "../types";
+import type { UrlPreview } from "../types";
 import { LinkedText } from "../../../utils/LinkedText";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-export type LinkPreviewProps = UrlPreviewGroupViewPreview & LinkPreviewActions;
+export type LinkPreviewProps = UrlPreview & LinkPreviewActions;
 
 /**
  * LinkPreview renders a single preview component for a single link on an event. It is usually rendered as part of

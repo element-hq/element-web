@@ -13,4 +13,4 @@ export {
     type UrlPreviewGroupViewModel,
 } from "./UrlPreviewGroupView";
 
-export { type UrlPreviewGroupViewPreview } from "./types";
+export { type UrlPreview } from "./types";

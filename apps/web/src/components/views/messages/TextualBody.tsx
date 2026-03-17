@@ -10,7 +10,7 @@ import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, useCa
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
     UrlPreviewGroupView,
-    type UrlPreviewGroupViewPreview,
+    type UrlPreview,
     useCreateAutoDisposedViewModel,
     EventContentBodyView,
     LINKIFIED_DATA_ATTRIBUTE,
@@ -390,7 +390,7 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
     const [mediaVisible] = useMediaVisible(props.mxEvent);
     const client = useMatrixClientContext();
 
-    const onUrlPreviewImageClicked = useCallback((preview: UrlPreviewGroupViewPreview): void => {
+    const onUrlPreviewImageClicked = useCallback((preview: UrlPreview): void => {
         if (!preview.image?.imageFull) {
             // Should never get this far, but doesn't hurt to check.
             return;

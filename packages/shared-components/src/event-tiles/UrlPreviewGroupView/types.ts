@@ -5,7 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export interface UrlPreviewGroupViewPreview {
+/** Represents a URL preview. */
+export interface UrlPreview {
     /**
      * The URL for the preview.
      */

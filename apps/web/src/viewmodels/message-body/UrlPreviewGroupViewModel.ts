@@ -9,7 +9,7 @@ import {
     BaseViewModel,
     type UrlPreviewGroupViewSnapshot,
     type UrlPreviewGroupViewActions,
-    type UrlPreviewGroupViewPreview,
+    type UrlPreview,
 } from "@element-hq/web-shared-components";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
@@ -28,7 +28,7 @@ export interface UrlPreviewGroupViewModelProps {
     mxEvent: MatrixEvent;
     mediaVisible: boolean;
     visible: boolean;
-    onImageClicked: (preview: UrlPreviewGroupViewPreview) => void;
+    onImageClicked: (preview: UrlPreview) => void;
 }
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
@@ -89,7 +89,7 @@ export class UrlPreviewGroupViewModel
     private static getBaseMetadataFromResponse(
         response: IPreviewUrlResponse,
         link: string,
-    ): Pick<UrlPreviewGroupViewPreview, "title" | "description" | "siteName"> {
+    ): Pick<UrlPreview, "title" | "description" | "siteName"> {
         let title =
             typeof response["og:title"] === "string" && response["og:title"].trim()
                 ? response["og:title"].trim()
@@ -215,12 +215,12 @@ export class UrlPreviewGroupViewModel
     /**
      * A cache containing all previously calculated previews.
      */
-    private readonly previewCache = new Map<string, UrlPreviewGroupViewPreview>();
+    private readonly previewCache = new Map<string, UrlPreview>();
 
     /**
      * Called when the user clicks on the preview thumbnail.
      */
-    public readonly onImageClick: (preview: UrlPreviewGroupViewPreview) => void;
+    public readonly onImageClick: (preview: UrlPreview) => void;
 
     public constructor(props: UrlPreviewGroupViewModelProps) {
         const storageKey = `hide_preview_${props.mxEvent.getId()}`;
@@ -256,7 +256,7 @@ export class UrlPreviewGroupViewModel
      * @returns A Promise that returns the snapshot needed to render the preview, or null
      * if the resource could not be previewed.
      */
-    private async fetchPreview(link: string): Promise<UrlPreviewGroupViewPreview | null> {
+    private async fetchPreview(link: string): Promise<UrlPreview | null> {
         const cached = this.previewCache.get(link);
         if (cached) {
             return cached;
@@ -282,7 +282,7 @@ export class UrlPreviewGroupViewModel
         if (title === link && !hasImage) {
             return null;
         }
-        let image: UrlPreviewGroupViewPreview["image"];
+        let image: UrlPreview["image"];
         if (typeof preview["og:image"] === "string" && this.visibility > PreviewVisibility.MediaHidden) {
             const media = mediaFromMxc(preview["og:image"], this.client);
             const declaredHeight = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:height"]);
@@ -309,7 +309,7 @@ export class UrlPreviewGroupViewModel
             siteName,
             showTooltipOnLink: link !== title && PlatformPeg.get()?.needsUrlTooltips(),
             image,
-        } satisfies UrlPreviewGroupViewPreview;
+        } satisfies UrlPreview;
         this.previewCache.set(link, result);
         return result;
     }
