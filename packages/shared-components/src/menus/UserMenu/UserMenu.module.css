@@ -46,6 +46,7 @@
     border: none;
     background: none;
     display: flex;
+    color: var(--cpd-color-body-primary);
     gap: var(--cpd-space-2x);
     > span {
         height: fit-content;

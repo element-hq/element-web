@@ -16,28 +16,62 @@ type Icon = React.ForwardRefExoticComponent<
     Omit<React.SVGProps<SVGSVGElement>, "ref" | "children"> & React.RefAttributes<SVGSVGElement>
 >;
 
-export interface UserMenuSnapshot {
+export interface UserMenuViewSnapshot {
+    /**
+     * Is the menu open or closed.
+     */
     open: boolean;
-    expanded?: boolean;
+    /**
+     * Is the menu toggle expanded (avatar + displayname) or collapsed (avatar).
+     */
+    expanded: boolean;
+    /**
+     * Avatar URL for the user, if one is set.
+     */
     avatarUrl?: string;
+    /**
+     * Display name for the user.
+     */
     displayName: string;
+    /**
+     * Matrix user ID for the user.
+     */
     userId: string;
+    /**
+     * Account management URL if the user is using OIDC.
+     */
     manageAccountHref?: string;
+    /**
+     * A set of actions that the user can perform from the menu.
+     */
     actions: {
+        /**
+         * Optional menu icon.
+         */
         icon?: Icon;
+        /**
+         * Human-readable label.
+         */
         label: string;
+        /**
+         * Callback to perform when the action is selected.
+         */
         onSelect: () => void;
     }[];
 }
 
 export declare interface UserMenuViewActions {
+    /**
+     * Called when the menu is opened or closed.
+     */
     setOpen: (open: boolean) => void;
 }
+
 export type UserMenuViewProps = {
-    vm: ViewModel<UserMenuSnapshot, UserMenuViewActions>;
+    vm: ViewModel<UserMenuViewSnapshot, UserMenuViewActions>;
 };
 
-export function UserMenu({ vm }: UserMenuViewProps): JSX.Element {
+export function UserMenuView({ vm }: UserMenuViewProps): JSX.Element {
     const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions } = useViewModel(vm);
     const trigger = (
         <button className={styles.triggerButton} aria-label="User menu">
@@ -54,7 +88,7 @@ export function UserMenu({ vm }: UserMenuViewProps): JSX.Element {
             <Menu
                 open={open}
                 showTitle={false}
-                title="Quick Settings"
+                title="User menu"
                 trigger={trigger}
                 onOpenChange={vm.setOpen}
                 align="start"

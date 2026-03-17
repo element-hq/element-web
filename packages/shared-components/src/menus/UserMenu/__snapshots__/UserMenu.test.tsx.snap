@@ -1,0 +1,390 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UserMenu > renders a button 1`] = `
+<div>
+  <button
+    aria-expanded="false"
+    aria-haspopup="menu"
+    aria-label="User menu"
+    class="triggerButton"
+    data-state="closed"
+    id="radix-_r_0_"
+    type="button"
+  >
+    <span
+      aria-label="@person-name:homeserver.com"
+      class="_avatar_zysgz_8"
+      data-color="1"
+      data-type="round"
+      role="img"
+      style="--cpd-avatar-size: 36px;"
+    >
+      <img
+        alt=""
+        class="_image_zysgz_43"
+        data-type="round"
+        height="36px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="/static/element.png"
+        width="36px"
+      />
+    </span>
+    <span
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+    >
+      Sally Sanderson
+    </span>
+  </button>
+</div>
+`;
+
+exports[`UserMenu > renders a button with a longer name 1`] = `
+<div>
+  <button
+    aria-expanded="false"
+    aria-haspopup="menu"
+    aria-label="User menu"
+    class="triggerButton"
+    data-state="closed"
+    id="radix-_r_2_"
+    type="button"
+  >
+    <span
+      aria-label="@person-name:homeserver.com"
+      class="_avatar_zysgz_8"
+      data-color="1"
+      data-type="round"
+      role="img"
+      style="--cpd-avatar-size: 36px;"
+    >
+      <img
+        alt=""
+        class="_image_zysgz_43"
+        data-type="round"
+        height="36px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="/static/element.png"
+        width="36px"
+      />
+    </span>
+    <span
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+    >
+      Sally Sanderson with a longer name
+    </span>
+  </button>
+</div>
+`;
+
+exports[`UserMenu > renders a menu 1`] = `
+<body
+  data-scroll-locked="1"
+  style="pointer-events: none;"
+>
+  <span
+    aria-hidden="true"
+    data-aria-hidden="true"
+    data-radix-focus-guard=""
+    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"
+    tabindex="0"
+  />
+  
+  
+
+
+  <div
+    aria-hidden="true"
+    data-aria-hidden="true"
+  >
+    <button
+      aria-controls="radix-_r_7_"
+      aria-expanded="true"
+      aria-haspopup="menu"
+      aria-label="User menu"
+      class="triggerButton"
+      data-state="open"
+      id="radix-_r_6_"
+      type="button"
+    >
+      <span
+        aria-label="@person-name:homeserver.com"
+        class="_avatar_zysgz_8"
+        data-color="1"
+        data-type="round"
+        role="img"
+        style="--cpd-avatar-size: 36px;"
+      >
+        <img
+          alt=""
+          class="_image_zysgz_43"
+          data-type="round"
+          height="36px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="/static/element.png"
+          width="36px"
+        />
+      </span>
+      <span
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        Sally Sanderson
+      </span>
+    </button>
+  </div>
+  <div
+    data-radix-popper-content-wrapper=""
+    dir="ltr"
+    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, 49px); min-width: max-content; --radix-popper-transform-origin: 0% 0px; z-index: auto; --radix-popper-available-width: 414px; --radix-popper-available-height: 847px; --radix-popper-anchor-width: 145.0625px; --radix-popper-anchor-height: 41px;"
+  >
+    <div
+      aria-label="User menu"
+      aria-labelledby="radix-_r_6_"
+      aria-orientation="vertical"
+      class="container _menu_1w1u7_8"
+      data-align="start"
+      data-orientation="vertical"
+      data-radix-menu-content=""
+      data-side="bottom"
+      data-state="open"
+      dir="ltr"
+      id="radix-_r_7_"
+      role="menu"
+      style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); pointer-events: auto;"
+      tabindex="-1"
+    >
+      <section
+        class="profile"
+      >
+        <span
+          aria-label="@person-name:homeserver.com"
+          class="_avatar_zysgz_8"
+          data-color="1"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 88px;"
+        >
+          <img
+            alt=""
+            class="_image_zysgz_43"
+            data-type="round"
+            height="88px"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            src="/static/element.png"
+            width="88px"
+          />
+        </span>
+        <span
+          class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112 displayname"
+        >
+          Sally Sanderson
+        </span>
+        <span
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+        >
+          @person-name:homeserver.com
+        </span>
+        <a
+          class="_button_13vu4_8 _has-icon_13vu4_60"
+          data-kind="tertiary"
+          data-size="sm"
+          href="#"
+          role="link"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
+            />
+            <path
+              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
+            />
+          </svg>
+          Manage account
+        </a>
+      </section>
+      <div
+        class="_separator_cqpyv_8"
+        data-kind="primary"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <section
+        class="actions"
+      >
+        <button
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
+          data-kind="primary"
+          data-orientation="vertical"
+          data-radix-collection-item=""
+          role="menuitem"
+          tabindex="-1"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_lqfwq_50"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m10.6 13.8-2.15-2.15a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275.95.95 0 0 0-.275.7q0 .425.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65a.95.95 0 0 0 .275-.7.95.95 0 0 0-.275-.7.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275zM12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
+          >
+            One action
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_lqfwq_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
+          data-kind="primary"
+          data-orientation="vertical"
+          data-radix-collection-item=""
+          role="menuitem"
+          tabindex="-1"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_lqfwq_50"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m10.6 13.8-2.15-2.15a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275.95.95 0 0 0-.275.7q0 .425.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65a.95.95 0 0 0 .275-.7.95.95 0 0 0-.275-.7.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275zM12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
+          >
+            Another action
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_lqfwq_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_lqfwq_8 _interactive_lqfwq_26"
+          data-kind="primary"
+          data-orientation="vertical"
+          data-radix-collection-item=""
+          role="menuitem"
+          tabindex="-1"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_lqfwq_50"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m10.6 13.8-2.15-2.15a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275.95.95 0 0 0-.275.7q0 .425.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65a.95.95 0 0 0 .275-.7.95.95 0 0 0-.275-.7.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275zM12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_lqfwq_34"
+          >
+            Third action
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_lqfwq_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+        </button>
+      </section>
+    </div>
+  </div>
+  <span
+    aria-hidden="true"
+    data-aria-hidden="true"
+    data-radix-focus-guard=""
+    style="outline: none; opacity: 0; position: fixed; pointer-events: none;"
+    tabindex="0"
+  />
+</body>
+`;
+
+exports[`UserMenu > renders condensed view 1`] = `
+<div>
+  <button
+    aria-expanded="false"
+    aria-haspopup="menu"
+    aria-label="User menu"
+    class="triggerButton"
+    data-state="closed"
+    id="radix-_r_4_"
+    type="button"
+  >
+    <span
+      aria-label="@person-name:homeserver.com"
+      class="_avatar_zysgz_8"
+      data-color="1"
+      data-type="round"
+      role="img"
+      style="--cpd-avatar-size: 36px;"
+    >
+      <img
+        alt=""
+        class="_image_zysgz_43"
+        data-type="round"
+        height="36px"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        src="/static/element.png"
+        width="36px"
+      />
+    </span>
+  </button>
+</div>
+`;

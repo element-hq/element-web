@@ -5,27 +5,32 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import userEvent from "@testing-library/user-event";
 import { composeStories } from "@storybook/react-vite";
 import { render } from "@test-utils";
 import React from "react";
 import { describe, it, expect } from "vitest";
+import userEvent from "@testing-library/user-event";
 
 import * as stories from "./UserMenu.stories.tsx";
 
-const { Default, LongerName } = composeStories(stories);
+const { Default, LongerName, Condensed } = composeStories(stories);
 
 describe("UserMenu", () => {
-    it("renders a basic menu", async () => {
-        const { container, getByRole } = render(<Default />);
-        await userEvent.click(getByRole("button"));
-
+    it("renders a button", async () => {
+        const { container } = render(<Default />);
         expect(container).toMatchSnapshot();
     });
-    it("renders a menu with a longer name", async () => {
-        const { container, getByRole } = render(<LongerName />);
-        await userEvent.click(getByRole("button"));
-
+    it("renders a button with a longer name", async () => {
+        const { container } = render(<LongerName />);
         expect(container).toMatchSnapshot();
+    });
+    it("renders condensed view", async () => {
+        const { container } = render(<Condensed />);
+        expect(container).toMatchSnapshot();
+    });
+    it("renders a menu", async () => {
+        const { baseElement, getByRole } = render(<Default />);
+        await userEvent.click(getByRole("button"));
+        expect(baseElement).toMatchSnapshot();
     });
 });

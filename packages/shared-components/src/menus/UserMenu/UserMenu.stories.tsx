@@ -10,12 +10,12 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
 
-import { UserMenu, type UserMenuSnapshot, type UserMenuViewActions } from "./UserMenu";
+import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
 import { BaseViewModel, useCreateAutoDisposedViewModel } from "../../viewmodel";
 
-class MockQuickSettingsViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
-    public constructor(snapshot: UserMenuSnapshot) {
+class MockUserMenuViewModel extends BaseViewModel<UserMenuViewSnapshot, undefined> implements UserMenuViewActions {
+    public constructor(snapshot: UserMenuViewSnapshot) {
         super(undefined, snapshot);
     }
 
@@ -24,9 +24,9 @@ class MockQuickSettingsViewModel extends BaseViewModel<UserMenuSnapshot, undefin
     };
 }
 
-const UserMenuWrapper = (snapshot: UserMenuSnapshot): JSX.Element => {
-    const vm = useCreateAutoDisposedViewModel(() => new MockQuickSettingsViewModel(snapshot));
-    return <UserMenu vm={vm} />;
+const UserMenuWrapper = (snapshot: UserMenuViewSnapshot): JSX.Element => {
+    const vm = useCreateAutoDisposedViewModel(() => new MockUserMenuViewModel(snapshot));
+    return <UserMenuView vm={vm} />;
 };
 
 const meta = {
@@ -84,6 +84,32 @@ export const AlreadyOpen: Story = {
         userId: "@person-name:homeserver.com",
         expanded: true,
     },
+    parameters: {
+        a11y: {
+            /*
+             * Axe's context parameter
+             * See https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#context-parameter
+             * to learn more.
+             */
+            config: {
+                rules: [
+                    {
+                        // Menu contains a header which is invalid
+                        id: "aria-required-children",
+                        enabled: false,
+                    },
+                    {
+                        // Menu pops open by default
+                        id: "aria-hidden-focus",
+                        enabled: false,
+                    },
+                ],
+            },
+        },
+    },
+    // Only used for playwright tests for the menu.
+    // Steals focus if actually opened on the storybook page
+    tags: ["!dev", "!autodocs"],
 };
 
 export const Condensed: Story = {
