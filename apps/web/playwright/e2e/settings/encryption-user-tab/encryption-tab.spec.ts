@@ -111,7 +111,7 @@ test.describe("Encryption tab", () => {
 
             // The user is prompted to reset their identity
             await expect(
-                dialog.getByText("Forgot your recovery key? You’ll need to reset your identity."),
+                dialog.getByText("Forgot your recovery key? You’ll need to reset your digital identity."),
             ).toBeVisible();
         });
 
