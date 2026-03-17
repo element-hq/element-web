@@ -126,7 +126,7 @@ test.describe("Account user settings tab", () => {
         await expect(accountPhoneNumbers.getByRole("button", { name: "Add" })).toBeVisible();
     });
 
-    test("should support changing a display name", async ({ uut, page, app }) => {
+    test("should support changing a display name", async ({ uut, page, app, user }) => {
         // Change the diaplay name to USER_NAME_NEW
         const displayNameInput = uut
             .locator(".mx_SettingsTab .mx_UserProfileSettings")
@@ -137,7 +137,8 @@ test.describe("Account user settings tab", () => {
         await app.closeDialog();
 
         // Assert the avatar's initial characters are set
-        await expect(page.locator(".mx_UserMenu .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
+        const menu = page.getByRole("menu", { name: "User menu" });
+        await expect(menu.getByRole("img", { name: user.userId }).getByText("A")).toBeVisible(); // Alice
         await expect(page.locator(".mx_RoomView_wrapper .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
     });
 

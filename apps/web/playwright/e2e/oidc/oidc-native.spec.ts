@@ -74,7 +74,8 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             (request) => request.url() === revokeUri && request.postDataJSON()["token_type_hint"] === "refresh_token",
         );
         const locator = await app.settings.openUserMenu();
-        await locator.getByRole("menuitem", { name: "Sign out", exact: true }).click();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Sign out", exact: true }).click();
         await revokeAccessTokenPromise;
         await revokeRefreshTokenPromise;
     });
@@ -122,7 +123,9 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         // Allow the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);
-        await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
+        await page.getByRole("button", { name: "User menu" }).click();
+        await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
+        await page.getByRole("button", { name: "Sign out" }).click();
         await expect(page).toHaveURL(/\/#\/login$/);
 
         // Log in again
@@ -154,7 +157,9 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await page.getByRole("button", { name: "User menu" }).click();
             await expect(page.getByText(userId, { exact: true })).toBeVisible();
             await page.waitForTimeout(2000);
-            await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
+            await page.getByRole("button", { name: "User menu" }).click();
+            await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
+            await page.getByRole("button", { name: "Sign out" }).click();
             await expect(page).toHaveURL(/\/#\/login$/);
 
             // Log in again
@@ -198,7 +203,12 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 await page.getByRole("button", { name: "User menu" }).click();
                 await expect(page.getByText(userId, { exact: true })).toBeVisible();
                 await page.waitForTimeout(2000);
-                await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
+                await page.getByRole("button", { name: "User menu" }).click();
+                await page
+                    .getByRole("menu", { name: "User menu" })
+                    .getByRole("menuitem", { name: "All settings" })
+                    .click();
+                await page.getByRole("button", { name: "Sign out" }).click();
                 await expect(page).toHaveURL(/\/#\/login$/);
 
                 // Log in again

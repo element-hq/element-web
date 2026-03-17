@@ -23,7 +23,8 @@ test.describe("Logout tests", () => {
         await sendMessageInCurrentRoom(page, "Hello secret world");
 
         const locator = await app.settings.openUserMenu();
-        await locator.getByRole("menuitem", { name: "Sign out", exact: true }).click();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Sign out", exact: true }).click();
 
         const currentDialogLocator = page.locator(".mx_Dialog");
 
@@ -41,7 +42,8 @@ test.describe("Logout tests", () => {
         await sendMessageInCurrentRoom(page, "Hello secret world");
 
         const locator = await app.settings.openUserMenu();
-        await locator.getByRole("menuitem", { name: "Sign out", exact: true }).click();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Sign out", exact: true }).click();
 
         const currentDialogLocator = page.locator(".mx_Dialog");
 
@@ -54,7 +56,8 @@ test.describe("Logout tests", () => {
         await sendMessageInCurrentRoom(page, "Hello public world!");
 
         const locator = await app.settings.openUserMenu();
-        await locator.getByRole("menuitem", { name: "Sign out", exact: true }).click();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Sign out", exact: true }).click();
 
         // Should have logged out directly
         await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();

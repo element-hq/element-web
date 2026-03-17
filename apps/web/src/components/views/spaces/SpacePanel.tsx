@@ -18,6 +18,7 @@ import React, {
     useLayoutEffect,
     useRef,
     useState,
+    useContext,
 } from "react";
 import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";
@@ -31,7 +32,7 @@ import {
     PlusIcon,
     ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { useCreateAutoDisposedViewModel, UserMenu } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
@@ -63,7 +64,6 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import UIStore from "../../../stores/UIStore";
 import QuickSettingsButton from "./QuickSettingsButton";
 import { useSettingValue } from "../../../hooks/useSettings";
-import UserMenu from "../../structures/UserMenu";
 import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -82,6 +82,7 @@ import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
 import { UserMenuViewModel } from "../../../viewmodels/menus/UserMenuViewModel.ts";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -395,6 +396,7 @@ const SpacePanel: React.FC = () => {
         if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
         return () => UIStore.instance.stopTrackingElementDimensions("SpacePanel");
     }, []);
+    const sdkContext = useContext(SDKContext);
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
         if (payload.action === Action.ToggleSpacePanel) {
@@ -405,7 +407,13 @@ const SpacePanel: React.FC = () => {
     const newRoomListEnabled = useSettingValue("feature_new_room_list");
 
     const userMenuVm = useCreateAutoDisposedViewModel(
-        () => new UserMenuViewModel(defaultDispatcher, client, isPanelCollapsed),
+        () =>
+            new UserMenuViewModel(
+                defaultDispatcher,
+                client,
+                isPanelCollapsed,
+                sdkContext.oidcClientStore.accountManagementEndpoint,
+            ),
     );
 
     useDispatcher(defaultDispatcher, (payload) => {

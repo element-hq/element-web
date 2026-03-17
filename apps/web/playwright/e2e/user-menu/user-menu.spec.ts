@@ -15,8 +15,8 @@ test.describe("User Menu", () => {
         await page.getByRole("button", { name: "User menu", exact: true }).click();
         const menu = page.getByRole("menu");
 
-        await expect(menu.locator(".mx_UserMenu_contextMenu_displayName", { hasText: user.displayName })).toBeVisible();
-        await expect(menu.locator(".mx_UserMenu_contextMenu_userId", { hasText: user.userId })).toBeVisible();
+        await expect(menu.getByText(user.displayName)).toBeVisible();
+        await expect(menu.getByText(user.userId)).toBeVisible();
         await expect(menu).toMatchScreenshot("user-menu.png");
     });
 });

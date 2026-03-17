@@ -252,7 +252,9 @@ export async function logIntoElementAndVerify(page: Page, credentials: Credentia
  */
 export async function logOutOfElement(page: Page, discardKeys: boolean = false) {
     await page.getByRole("button", { name: "User menu" }).click();
-    await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
+
+    await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
+    await page.getByRole("button", { name: "Sign out" }).click();
     if (discardKeys) {
         await page.getByRole("button", { name: "I don't want my encrypted messages" }).click();
     } else {

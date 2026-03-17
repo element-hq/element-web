@@ -30,26 +30,39 @@ describe("UserMenuViewModel", () => {
         SdkContextClass.instance.onLoggedOut();
         SdkContextClass.instance.client = undefined;
     });
+    it("should not generate actions until the menu is opened", () => {
+        const vm = new UserMenuViewModel(dispatcher, client, true);
+        expect(vm.getSnapshot()).toMatchInlineSnapshot(`
+{
+  "actions": [],
+  "avatarUrl": undefined,
+  "displayName": "@alice:domain",
+  "expanded": false,
+  "manageAccountHref": undefined,
+  "open": false,
+  "userId": "@alice:domain",
+}
+`);
+    });
     it("should generate a menu options for a logged in client", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
+        vm.setOpen(true);
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should show a link for account management", async () => {
-        client.getAuthMetadata.mockResolvedValue({
-            account_management_uri: "https://example.org/",
-        } as any);
-        // Wait for readiness as we would do in a real client.
-        await SdkContextClass.instance.oidcClientStore.readyPromise;
-        const vm = new UserMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true, "https://example.org/");
+        vm.setOpen(true);
         expect(vm.getSnapshot().manageAccountHref).toEqual("https://example.org/");
     });
     it("should generate a menu options for a guest", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
+        vm.setOpen(true);
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should generate a menu options that include feedback", () => {
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
         const vm = new UserMenuViewModel(dispatcher, client, true);
+        vm.setOpen(true);
         expect(vm.getSnapshot().actions).toContainEqual({
             label: "Feedback",
             onSelect: expect.anything(),
@@ -59,6 +72,7 @@ describe("UserMenuViewModel", () => {
     it("should generate a menu options that includes a home page", () => {
         SdkConfig.put({ embedded_pages: { home_url: "https://example.org" } });
         const vm = new UserMenuViewModel(dispatcher, client, true);
+        vm.setOpen(true);
         expect(vm.getSnapshot().actions).toContainEqual({
             label: "Home",
             onSelect: expect.anything(),

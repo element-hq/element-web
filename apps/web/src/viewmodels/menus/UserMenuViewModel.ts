@@ -12,7 +12,6 @@ import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
 
-import { SdkContextClass } from "../../contexts/SDKContext";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -120,22 +119,21 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
         private readonly dispatcher: MatrixDispatcher,
         private readonly client: MatrixClient,
         isPanelCollapsed: boolean,
+        accountManagementEndpoint?: string,
     ) {
         const userId = client.getSafeUserId();
         const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
-        const manageAccountHref = SdkContextClass.instance.oidcClientStore.accountManagementEndpoint;
 
         super(undefined, {
             open: false,
             userId,
             displayName,
             avatarUrl,
-            manageAccountHref,
-            expanded: isPanelCollapsed,
+            manageAccountHref: accountManagementEndpoint,
+            expanded: !isPanelCollapsed,
             actions: [],
         });
-        this.snapshot.merge({ actions: this.getActions() });
         OwnProfileStore.instance.on(UPDATE_EVENT, this.recalculateProfile);
     }
 
@@ -147,11 +145,10 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
     public recalculateProfile = (): void => {
         const displayName = OwnProfileStore.instance.displayName || this.snapshot.current.userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
-        const manageAccountHref = SdkContextClass.instance.oidcClientStore.accountManagementEndpoint;
-        this.snapshot.merge({ displayName, avatarUrl, manageAccountHref });
+        this.snapshot.merge({ displayName, avatarUrl });
     };
     public setOpen = (isOpen: boolean): void => {
-        this.snapshot.merge({ open: isOpen });
+        this.snapshot.merge({ open: isOpen, actions: isOpen ? this.getActions() : [] });
     };
 
     public setExpanded = (expanded: boolean): void => {
