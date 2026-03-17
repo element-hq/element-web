@@ -21,11 +21,16 @@ const MockThumbnail = (): JSX.Element => (
 
 const ImageReplyBodyViewWrapper = ({
     className,
+    children,
     ...snapshotProps
-}: ImageReplyBodyViewSnapshot & { className?: string }): JSX.Element => {
+}: ImageReplyBodyViewSnapshot & { children?: React.ReactNode; className?: string }): JSX.Element => {
     const vm = useMockedViewModel(snapshotProps, {});
 
-    return <ImageReplyBodyView vm={vm} className={className} />;
+    return (
+        <ImageReplyBodyView vm={vm} className={className}>
+            {children}
+        </ImageReplyBodyView>
+    );
 };
 
 const meta = {
@@ -34,7 +39,7 @@ const meta = {
     tags: ["autodocs"],
     args: {
         isVisible: true,
-        thumbnail: <MockThumbnail />,
+        children: <MockThumbnail />,
     },
 } satisfies Meta<typeof ImageReplyBodyViewWrapper>;
 
@@ -45,7 +50,7 @@ export const Default: Story = {};
 
 export const Empty: Story = {
     args: {
-        thumbnail: undefined,
+        children: undefined,
     },
 };
 

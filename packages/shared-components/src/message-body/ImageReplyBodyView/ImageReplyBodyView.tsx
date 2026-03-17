@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { type JSX, type PropsWithChildren } from "react";
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
@@ -16,10 +16,6 @@ export interface ImageReplyBodyViewSnapshot {
      * Controls whether the reply image body should render at all.
      */
     isVisible?: boolean;
-    /**
-     * Thumbnail/content node to render inside the reply body container.
-     */
-    thumbnail?: ReactNode;
 }
 
 export type ImageReplyBodyViewModel = ViewModel<ImageReplyBodyViewSnapshot>;
@@ -33,14 +29,18 @@ interface ImageReplyBodyViewProps {
      * Optional CSS class for host-level styling.
      */
     className?: string;
+    /**
+     * Reply image content to render inside the container.
+     */
+    children?: PropsWithChildren["children"];
 }
 
-export function ImageReplyBodyView({ vm, className }: Readonly<ImageReplyBodyViewProps>): JSX.Element {
-    const { isVisible = true, thumbnail } = useViewModel(vm);
+export function ImageReplyBodyView({ vm, className, children }: Readonly<ImageReplyBodyViewProps>): JSX.Element {
+    const { isVisible = true } = useViewModel(vm);
 
     if (!isVisible) {
         return <></>;
     }
 
-    return <div className={classNames("mx_MImageReplyBody", styles.root, className)}>{thumbnail}</div>;
+    return <div className={classNames(styles.root, className)}>{children}</div>;
 }

@@ -26,6 +26,11 @@ jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
 jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-body" />,
+    MImageBodyInner: class extends require("react").Component {
+        public render(): React.ReactNode {
+            return <div data-testid="image-body-inner" />;
+        }
+    },
 }));
 
 jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
@@ -37,11 +42,6 @@ jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
     FileBodyViewFactory: () => <div data-testid="file-body" />,
     renderMBody: () => <div data-testid="file-body" />,
-}));
-
-jest.mock("../../../../../src/components/views/messages/MImageReplyBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="image-reply-body" />,
 }));
 
 jest.mock("../../../../../src/components/views/messages/MStickerBody", () => ({

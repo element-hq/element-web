@@ -6,17 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, type JSX } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type ImageContent } from "matrix-js-sdk/src/types";
+import { ImageReplyBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SenderProfile from "../messages/SenderProfile";
-import MImageReplyBody from "../messages/MImageReplyBody";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -26,7 +27,45 @@ import { renderReplyTile } from "../../../events/EventTileFactory";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type IBodyProps } from "../messages/IBodyProps";
+import { MImageBodyInner } from "../messages/MImageBody";
 import { FileBodyViewFactory, renderMBody } from "../messages/MBodyFactory";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { ImageReplyBodyViewModel } from "../../../viewmodels/message-body/ImageReplyBodyViewModel";
+
+const FORCED_IMAGE_HEIGHT = 44;
+
+class ReplyImageBodyThumbnail extends MImageBodyInner {
+    public onClick = (ev: React.MouseEvent): void => {
+        ev.preventDefault();
+    };
+
+    public wrapImage(contentUrl: string | null | undefined, children: JSX.Element): React.ReactNode {
+        return children;
+    }
+
+    public render(): React.ReactNode {
+        if (this.state.error) {
+            return super.render();
+        }
+
+        const content = this.props.mxEvent.getContent<ImageContent>();
+
+        return this.state.contentUrl
+            ? this.messageContent(this.state.contentUrl, this.state.thumbUrl, content, FORCED_IMAGE_HEIGHT)
+            : undefined;
+    }
+}
+
+function ImageReplyBodyWrapper(props: IBodyProps): JSX.Element {
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent);
+    const vm = useCreateAutoDisposedViewModel(() => new ImageReplyBodyViewModel());
+
+    return (
+        <ImageReplyBodyView vm={vm}>
+            <ReplyImageBodyThumbnail mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />
+        </ImageReplyBodyView>
+    );
+}
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -133,14 +172,14 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const ReplyTileFileBody: React.ComponentType<IBodyProps> = (props) => renderMBody(props, FileBodyViewFactory);
 
         const msgtypeOverrides: Record<string, React.ComponentType<IBodyProps>> = {
-            [MsgType.Image]: MImageReplyBody,
+            [MsgType.Image]: ImageReplyBodyWrapper,
             // Override audio and video body with file body. We also hide the download/decrypt button using CSS
             [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : ReplyTileFileBody,
             [MsgType.Video]: ReplyTileFileBody,
         };
         const evOverrides: Record<string, React.ComponentType<IBodyProps>> = {
-            // Use MImageReplyBody so that the sticker isn't taking up a lot of space
-            [EventType.Sticker]: MImageReplyBody,
+            // Use the compact reply-image wrapper so that the sticker isn't taking up a lot of space
+            [EventType.Sticker]: ImageReplyBodyWrapper,
         };
 
         return (

@@ -34,7 +34,11 @@ describe("ImageReplyBodyView", () => {
 
     it("applies a custom className to the container", () => {
         const vm = new MockViewModel<ImageReplyBodyViewSnapshot>({}) as ImageReplyBodyViewModel;
-        const { container } = render(<ImageReplyBodyView vm={vm} className="custom-image-reply another-class" />);
+        const { container } = render(
+            <ImageReplyBodyView vm={vm} className="custom-image-reply another-class">
+                <span>Thumbnail</span>
+            </ImageReplyBodyView>,
+        );
 
         expect(container.firstChild).toHaveClass("custom-image-reply", "another-class");
     });
