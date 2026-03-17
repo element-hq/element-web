@@ -190,7 +190,7 @@ export class PosthogAnalytics {
         this.setProperty("WebLayout", layout);
     };
 
-    private onUrlPreviewSettingUpdated = (value: boolean): void => {
+    private readonly onUrlPreviewSettingUpdated = (value: boolean): void => {
         this.setProperty("URLPreviewsEnabled", value);
     };
 
