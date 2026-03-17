@@ -11,7 +11,7 @@ import { type User } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
 import ReadReceiptMarker, { type IReadReceiptPosition } from "./ReadReceiptMarker";
-import { type IReadReceiptProps } from "./EventTile";
+import { type ReadReceiptProps } from "./EventTile";
 import AccessibleButton from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
@@ -32,7 +32,7 @@ const READ_AVATAR_OFFSET = 10;
 export const READ_AVATAR_SIZE = 16;
 
 interface Props {
-    readReceipts: IReadReceiptProps[];
+    readReceipts: ReadReceiptProps[];
     readReceiptMap: { [userId: string]: IReadReceiptPosition };
     checkUnmounting?: () => boolean;
     suppressAnimation: boolean;
@@ -198,7 +198,7 @@ export function ReadReceiptGroup({
     );
 }
 
-interface ReadReceiptPersonProps extends IReadReceiptProps {
+interface ReadReceiptPersonProps extends ReadReceiptProps {
     isTwelveHour?: boolean;
     onAfterClick?: () => void;
 }

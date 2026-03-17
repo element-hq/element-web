@@ -5,5 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-export { default, isEligibleForSpecialReceipt, UnwrappedEventTile } from "./EventTile";
-export type { EventTileProps, GetRelationsForEvent, IReadReceiptProps, IEventTileOps, IEventTileType } from "./EventTile";
+export { default } from "./EventTile";
+export { UnwrappedEventTile } from "./EventTilePresenter";
+export type {
+    EventTileApi,
+    EventTileHandle,
+    EventTileOps,
+    EventTileProps,
+    GetRelationsForEvent,
+    ReadReceiptProps,
+} from "./EventTile";

@@ -25,7 +25,12 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { EventTileViewModel, type EventTileViewModelProps } from "../../../src/viewmodels/room/EventTileViewModel";
-import { ClickMode, EncryptionIndicatorMode, SenderMode, ThreadInfoMode } from "../../../src/components/views/rooms/EventTile/EventTileModes";
+import {
+    ClickMode,
+    EncryptionIndicatorMode,
+    SenderMode,
+    ThreadInfoMode,
+} from "../../../src/components/views/rooms/EventTile/EventTileModes";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../test-utils";
@@ -393,7 +398,7 @@ describe("EventTileViewModel", () => {
                     decryptEvent: async (): Promise<IEventDecryptionResult> => {
                         throw new Error("can't decrypt");
                     },
-                } as Parameters<MatrixEvent["attemptDecryption"]>[0];
+                } as unknown as Parameters<MatrixEvent["attemptDecryption"]>[0];
                 await mxEvent.attemptDecryption(mockCrypto);
 
                 const vm = createViewModel();
@@ -418,7 +423,7 @@ describe("EventTileViewModel", () => {
                     decryptEvent: async (): Promise<IEventDecryptionResult> => {
                         throw new Error("can't decrypt");
                     },
-                } as Parameters<MatrixEvent["attemptDecryption"]>[0];
+                } as unknown as Parameters<MatrixEvent["attemptDecryption"]>[0];
                 await mxEvent.attemptDecryption(mockCrypto);
                 // @ts-expect-error internal test setup
                 mxEvent._decryptionFailureReason = DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED;
@@ -511,8 +516,8 @@ describe("EventTileViewModel", () => {
                     room_id: ROOM_ID,
                     sender: "@alice:example.org",
                     content: {
-                        msgtype: "m.text",
-                        body: "* edited body",
+                        "msgtype": "m.text",
+                        "body": "* edited body",
                         "m.new_content": {
                             msgtype: "m.text",
                             body: "edited body",

@@ -34,7 +34,7 @@ import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
-import { type IEventTileOps } from "../rooms/EventTile";
+import { type EventTileOps } from "../rooms/EventTile";
 import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreviewViewModel";
 import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 import ImageView from "../elements/ImageView.tsx";
@@ -173,7 +173,7 @@ class InnerTextualBody extends React.Component<Props> {
         }
     };
 
-    public getEventTileOps = (): IEventTileOps => ({
+    public getEventTileOps = (): EventTileOps => ({
         isWidgetHidden: () => {
             // This controls whether the Show preview button is visibile.
             return this.props.urlPreviewViewModel.isPreviewHiddenByUser;

@@ -30,8 +30,7 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
-import EventTile, { type EventTileProps } from "../../../../../../src/components/views/rooms/EventTile";
-import { type EventTileHandle } from "../../../../../../src/components/views/rooms/EventTile/EventTile";
+import EventTile, { type EventTileHandle, type EventTileProps } from "../../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -614,7 +613,7 @@ describe("EventTile", () => {
         } as unknown as Thread;
 
         act(() => {
-            room.emit(ThreadEvent.New, thread);
+            room.emit(ThreadEvent.New, thread, false);
         });
 
         expect(offSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));

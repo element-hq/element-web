@@ -57,7 +57,7 @@ import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { Action } from "../../../dispatcher/actions";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import { type GetRelationsForEvent, type IEventTileType } from "../rooms/EventTile";
+import { type EventTileApi, type GetRelationsForEvent } from "../rooms/EventTile";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
@@ -65,7 +65,7 @@ import { HideActionButton } from "./HideActionButton.tsx";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
-    getTile: () => IEventTileType | null;
+    getTile: () => EventTileApi | null;
     getReplyChain: () => ReplyChain | null;
     permalinkCreator?: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
@@ -251,7 +251,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
 interface IMessageActionBarProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null | undefined;
-    getTile: () => IEventTileType | null;
+    getTile: () => EventTileApi | null;
     getReplyChain: () => ReplyChain | null;
     permalinkCreator?: RoomPermalinkCreator;
     onFocusChange?: (menuDisplayed: boolean) => void;
