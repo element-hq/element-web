@@ -72,6 +72,7 @@ export interface EventTileViewSnapshot {
     contextMenu?: EventTileContextMenuState;
     isQuoteExpanded: boolean;
     thread: Thread | null;
+    threadUpdateKey: string;
     threadNotification?: NotificationCountType;
     shouldShowSentReceipt: boolean;
     shouldShowSendingReceipt: boolean;
@@ -262,6 +263,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         nextSnapshot.showTimestamp = EventTileViewModel.getShowTimestamp(this.props, nextSnapshot);
         nextSnapshot.hasThread = Boolean(nextSnapshot.thread);
         nextSnapshot.isThreadRoot = nextSnapshot.thread?.id === this.props.mxEvent.getId();
+        nextSnapshot.threadUpdateKey = EventTileViewModel.getThreadUpdateKey(nextSnapshot.thread);
         nextSnapshot.hasRenderer = EventTileViewModel.getDisplayInfo(this.props).hasRenderer;
         nextSnapshot.isBubbleMessage = EventTileViewModel.getDisplayInfo(this.props).isBubbleMessage;
         nextSnapshot.isInfoMessage = EventTileViewModel.getDisplayInfo(this.props).isInfoMessage;
@@ -327,6 +329,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             contextMenu: undefined,
             isQuoteExpanded: false,
             thread: EventTileViewModel.getThread(props),
+            threadUpdateKey: "",
             threadNotification: undefined,
             shouldShowSentReceipt: EventTileViewModel.getShouldShowSentReceipt(props),
             shouldShowSendingReceipt: EventTileViewModel.getShouldShowSendingReceipt(props),
@@ -384,6 +387,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.showTimestamp = EventTileViewModel.getShowTimestamp(props, snapshot);
         snapshot.hasThread = Boolean(snapshot.thread);
         snapshot.isThreadRoot = snapshot.thread?.id === props.mxEvent.getId();
+        snapshot.threadUpdateKey = EventTileViewModel.getThreadUpdateKey(snapshot.thread);
         snapshot.hasRenderer = displayInfo.hasRenderer;
         snapshot.isBubbleMessage = displayInfo.isBubbleMessage;
         snapshot.isInfoMessage = displayInfo.isInfoMessage;
@@ -897,6 +901,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             thread = room?.findThreadForEvent(props.mxEvent) ?? undefined;
         }
         return thread ?? null;
+    }
+
+    private static getThreadUpdateKey(thread: Thread | null): string {
+        if (!thread) return "";
+
+        return `${thread.id}:${thread.length}:${thread.replyToEvent?.getId() ?? ""}`;
     }
 
     private getReactions(): Relations | null {

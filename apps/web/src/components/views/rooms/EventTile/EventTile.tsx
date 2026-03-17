@@ -89,6 +89,7 @@ export interface IEventTileType {
 
 export interface EventTileHandle {
     ref: RefObject<HTMLElement | null>;
+    forceUpdate(): void;
     getEventTileOps?: IEventTileType["getEventTileOps"];
     getMediaHelper: IEventTileType["getMediaHelper"];
 }
@@ -125,7 +126,6 @@ export interface EventTileProps {
     as?: string;
     alwaysShowTimestamps?: boolean;
     hideSender?: boolean;
-    showThreadInfo?: boolean;
     isSeeingThroughMessageHiddenForModeration?: boolean;
     hideTimestamp?: boolean;
     inhibitInteraction?: boolean;
@@ -145,18 +145,6 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
     const tileRef = useRef<IEventTileType>(null);
     const replyChainRef = useRef<ReplyChain>(null);
     const renderTileProps = props;
-
-    useImperativeHandle(
-        forwardedRef,
-        (): EventTileHandle => ({
-            ref: rootRef,
-            get getEventTileOps(): IEventTileType["getEventTileOps"] {
-                return tileRef.current?.getEventTileOps?.bind(tileRef.current);
-            },
-            getMediaHelper: () => tileRef.current?.getMediaHelper(),
-        }),
-        [],
-    );
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -190,6 +178,19 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
                 callEventGrouper: props.callEventGrouper,
                 showHiddenEvents: roomContext.showHiddenEvents,
             }),
+    );
+
+    useImperativeHandle(
+        forwardedRef,
+        (): EventTileHandle => ({
+            ref: rootRef,
+            forceUpdate: () => vm.refreshDerivedState(),
+            get getEventTileOps(): IEventTileType["getEventTileOps"] {
+                return tileRef.current?.getEventTileOps?.bind(tileRef.current);
+            },
+            getMediaHelper: () => tileRef.current?.getMediaHelper(),
+        }),
+        [vm],
     );
 
     useEffect(() => {
@@ -496,7 +497,12 @@ function composeEventTileViewProps({
     ) : undefined;
     const threadInfoSummary =
         snapshot.threadInfoMode === "summary" ? (
-            <ThreadSummary mxEvent={props.mxEvent} thread={snapshot.thread!} data-testid="thread-summary" />
+            <ThreadSummary
+                key={snapshot.threadUpdateKey}
+                mxEvent={props.mxEvent}
+                thread={snapshot.thread!}
+                data-testid="thread-summary"
+            />
         ) : undefined;
     const threadInfoHref = snapshot.threadInfoMode === "searchLink" ? props.highlightLink : undefined;
     const threadInfoLabel =
@@ -505,7 +511,9 @@ function composeEventTileViewProps({
             : undefined;
     const threadPanelReplyCount = snapshot.showThreadPanelSummary && snapshot.thread ? snapshot.thread.length : undefined;
     const threadPanelPreview =
-        snapshot.showThreadPanelSummary && snapshot.thread ? <ThreadMessagePreview thread={snapshot.thread} /> : undefined;
+        snapshot.showThreadPanelSummary && snapshot.thread ? (
+            <ThreadMessagePreview key={snapshot.threadUpdateKey} thread={snapshot.thread} />
+        ) : undefined;
     const sentReceipt = getSentReceiptDetails(props.eventSendStatus, snapshot);
     const readReceipts = snapshot.showReadReceipts ? (
         <ReadReceiptGroup
