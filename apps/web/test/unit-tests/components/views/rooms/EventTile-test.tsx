@@ -200,6 +200,14 @@ describe("EventTile", () => {
         );
     });
 
+    describe("EventTile renderingType: Pinned", () => {
+        it("does not render a DisambiguatedProfile for bubble messages", () => {
+            const { container } = getComponent({ layout: Layout.Bubble }, TimelineRenderingType.Pinned);
+
+            expect(container.getElementsByClassName("mx_DisambiguatedProfile")).toHaveLength(0);
+        });
+    });
+
     describe("EventTile in the right panel", () => {
         beforeAll(() => {
             const dmRoomMap: DMRoomMap = {

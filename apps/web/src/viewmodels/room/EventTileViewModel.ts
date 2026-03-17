@@ -640,7 +640,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
     ): EventTileViewSnapshot["senderMode"] {
-        if (!snapshot.showSender) return SenderMode.Hidden;
+        if (!snapshot.showSender || !EventTileViewModel.getNeedsSenderProfile(props, snapshot)) {
+            return SenderMode.Hidden;
+        }
 
         switch (props.timelineRenderingType) {
             case TimelineRenderingType.Room:
