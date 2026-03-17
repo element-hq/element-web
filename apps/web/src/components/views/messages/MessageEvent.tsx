@@ -18,7 +18,11 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { DecryptionFailureBodyView, useCreateAutoDisposedViewModel, VideoBodyView } from "@element-hq/web-shared-components";
+import {
+    DecryptionFailureBodyView,
+    useCreateAutoDisposedViewModel,
+    VideoBodyView,
+} from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -397,7 +401,12 @@ export function VideoBodyViewWrapper({
     ) : null;
 
     return (
-        <VideoBodyView vm={vm} className="mx_MVideoBody" containerClassName="mx_MVideoBody_container" videoRef={videoRef}>
+        <VideoBodyView
+            vm={vm}
+            className="mx_MVideoBody"
+            containerClassName="mx_MVideoBody_container"
+            videoRef={videoRef}
+        >
             {fileBody}
         </VideoBodyView>
     );

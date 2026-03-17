@@ -29,6 +29,26 @@ vis.setup({
                 .sb-wrapper {
                     visibility: hidden !important;
                 }
+                /*
+                 * Mask browser-native video overlays during screenshot generation.
+                 * Chromium can paint transient spinner/play affordances differently
+                 * between runs, which makes the baseline noisy.
+                 */
+                [data-video-body-view-state="READY"] {
+                    position: relative;
+                }
+                [data-video-body-view-state="READY"]::after {
+                    content: "";
+                    position: absolute;
+                    inset-inline-start: 50%;
+                    inset-block-start: 50%;
+                    width: 112px;
+                    height: 112px;
+                    transform: translate(-50%, -50%);
+                    border-radius: 999px;
+                    background: #ff4fcf;
+                    pointer-events: none;
+                }
             `),
         );
         document.head.appendChild(style);

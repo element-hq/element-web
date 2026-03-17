@@ -294,7 +294,11 @@ export class VideoBodyViewModel
             const autoplay = !this.props.inhibitInteraction && (SettingsStore.getValue("autoplayVideo") as boolean);
             const thumbnailUrl = await currentHelper.thumbnailUrl.value;
 
-            if (this.isDisposed || currentEvent !== this.props.mxEvent || currentHelper !== this.props.mediaEventHelper) {
+            if (
+                this.isDisposed ||
+                currentEvent !== this.props.mxEvent ||
+                currentHelper !== this.props.mediaEventHelper
+            ) {
                 return;
             }
 
@@ -324,7 +328,11 @@ export class VideoBodyViewModel
 
             this.updateSnapshotFromState();
         } catch (error) {
-            if (this.isDisposed || currentEvent !== this.props.mxEvent || currentHelper !== this.props.mediaEventHelper) {
+            if (
+                this.isDisposed ||
+                currentEvent !== this.props.mxEvent ||
+                currentHelper !== this.props.mediaEventHelper
+            ) {
                 return;
             }
 
@@ -437,7 +445,11 @@ export class VideoBodyViewModel
             const decryptedUrl = await currentHelper.sourceUrl.value;
             const decryptedBlob = await currentHelper.sourceBlob.value;
 
-            if (this.isDisposed || currentEvent !== this.props.mxEvent || currentHelper !== this.props.mediaEventHelper) {
+            if (
+                this.isDisposed ||
+                currentEvent !== this.props.mxEvent ||
+                currentHelper !== this.props.mediaEventHelper
+            ) {
                 return;
             }
 
@@ -450,7 +462,11 @@ export class VideoBodyViewModel
             this.updateSnapshotFromState();
             void this.props.videoRef.current?.play();
         } catch (error) {
-            if (this.isDisposed || currentEvent !== this.props.mxEvent || currentHelper !== this.props.mediaEventHelper) {
+            if (
+                this.isDisposed ||
+                currentEvent !== this.props.mxEvent ||
+                currentHelper !== this.props.mediaEventHelper
+            ) {
                 return;
             }
 

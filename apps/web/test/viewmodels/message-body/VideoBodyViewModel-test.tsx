@@ -39,9 +39,7 @@ describe("VideoBodyViewModel", () => {
             },
         });
 
-    const createVm = (
-        overrides?: Partial<ConstructorParameters<typeof VideoBodyViewModel>[0]>,
-    ): VideoBodyViewModel =>
+    const createVm = (overrides?: Partial<ConstructorParameters<typeof VideoBodyViewModel>[0]>): VideoBodyViewModel =>
         new VideoBodyViewModel({
             mxEvent: createEvent(),
             mediaVisible: false,
