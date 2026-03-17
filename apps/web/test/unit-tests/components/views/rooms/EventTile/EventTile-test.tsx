@@ -28,12 +28,15 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
-import EventTile, { type EventTileProps } from "../../../../../../src/components/views/rooms/EventTile";
+import EventTile, {
+    type EventTileHandle,
+    type EventTileProps,
+} from "../../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../../../test-utils";
-import { mkThread } from "../../../../../test-utils/threads";
+import { makeThreadEvent, mkThread } from "../../../../../test-utils/threads";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import dis from "../../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../../src/dispatcher/actions";
@@ -141,6 +144,42 @@ describe("EventTile", () => {
             act(() => room.processThreadedEvents([redaction], false));
 
             await waitFor(() => expect(screen.queryByTestId("thread-summary")).toBeNull());
+        });
+
+        it("updates the thread preview when a new reply is added", async () => {
+            const {
+                thread,
+                rootEvent,
+                events: [, reply1],
+            } = mkThread({
+                room,
+                client,
+                authorId: "@alice:example.org",
+                participantUserIds: ["@alice:example.org"],
+                length: 2,
+            });
+            thread.initialEventsFetched = true;
+
+            reply1.getContent().body = "ReplyEvent1";
+
+            getComponent({ mxEvent: rootEvent }, TimelineRenderingType.Room);
+
+            await screen.findByText("ReplyEvent1");
+
+            const reply2 = makeThreadEvent({
+                user: "@alice:example.org",
+                room: room.roomId,
+                event: true,
+                msg: "ReplyEvent2",
+                rootEventId: rootEvent.getId()!,
+                replyToEventId: reply1.getId()!,
+            });
+
+            await act(async () => {
+                await thread.addEvent(reply2, false, true);
+            });
+
+            await screen.findByText("ReplyEvent2");
         });
     });
 
@@ -409,6 +448,20 @@ describe("EventTile", () => {
 
         // The event tile should now show the not encrypted status
         await waitFor(() => expect(screen.getByText("Not encrypted")).toBeInTheDocument());
+    });
+
+    it("refreshes derived state when forceUpdate is called through the imperative ref", () => {
+        const ref = React.createRef<EventTileHandle>();
+        const isPinnedSpy = jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
+
+        getComponent({ ref });
+
+        expect(screen.queryByText("Pinned message")).toBeNull();
+
+        isPinnedSpy.mockReturnValue(true);
+        act(() => ref.current?.forceUpdate());
+
+        expect(screen.getByText("Pinned message")).toBeInTheDocument();
     });
 
     it.each([

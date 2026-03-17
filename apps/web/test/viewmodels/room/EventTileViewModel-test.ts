@@ -25,9 +25,11 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { EventTileViewModel, type EventTileViewModelProps } from "../../../src/viewmodels/room/EventTileViewModel";
-import { ClickMode, EventTileEncryptionIndicatorMode, SenderMode } from "../../../src/components/views/rooms/EventTile/EventTileModes";
+import { ClickMode, EncryptionIndicatorMode, SenderMode, ThreadInfoMode } from "../../../src/components/views/rooms/EventTile/EventTileModes";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
+import { Layout } from "../../../src/settings/enums/Layout";
 import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../test-utils";
+import { mkThread } from "../../test-utils/threads";
 
 describe("EventTileViewModel", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -103,6 +105,161 @@ describe("EventTileViewModel", () => {
 
             expect(vm.getSnapshot().senderMode).toBe(senderMode);
         });
+
+        it("hides the sender when hideSender is set", () => {
+            const vm = createViewModel({ hideSender: true });
+
+            expect(vm.getSnapshot().senderMode).toBe(SenderMode.Hidden);
+        });
+
+        it("sets the message search metrics trigger in search view", () => {
+            const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Search });
+
+            expect(vm.getSnapshot().viewRoomMetricsTrigger).toBe("MessageSearch");
+        });
+    });
+
+    describe("thread and timestamp modes", () => {
+        it("shows thread summary mode for a thread root", () => {
+            const { rootEvent } = mkThread({
+                room,
+                client,
+                authorId: "@alice:example.org",
+                participantUserIds: ["@bob:example.org"],
+                length: 2,
+            });
+
+            const vm = createViewModel({ mxEvent: rootEvent });
+
+            expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.Summary);
+        });
+
+        it("shows search link thread info mode for threaded search results with a highlight link", () => {
+            const searchResult = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "search result",
+                event: true,
+            });
+            Object.defineProperty(searchResult, "threadRootId", { value: "$thread-root" });
+
+            const vm = createViewModel({
+                mxEvent: searchResult,
+                timelineRenderingType: TimelineRenderingType.Search,
+                highlightLink: "#event",
+            });
+
+            expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.SearchLink);
+        });
+
+        it("shows search text thread info mode for threaded search results without a highlight link", () => {
+            const searchResult = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "search result",
+                event: true,
+            });
+            Object.defineProperty(searchResult, "threadRootId", { value: "$thread-root" });
+
+            const vm = createViewModel({
+                mxEvent: searchResult,
+                timelineRenderingType: TimelineRenderingType.Search,
+            });
+
+            expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.SearchText);
+        });
+
+        it("shows timestamps when alwaysShowTimestamps is set", () => {
+            const timestampedEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "timestamped",
+                event: true,
+                ts: 123,
+            });
+            const vm = createViewModel({ mxEvent: timestampedEvent, alwaysShowTimestamps: true });
+
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+        });
+
+        it("suppresses timestamps when hideTimestamp is set", () => {
+            const vm = createViewModel({ alwaysShowTimestamps: true, hideTimestamp: true });
+
+            expect(vm.getSnapshot().showTimestamp).toBe(false);
+        });
+
+        it("uses the latest reply timestamp for thread list tiles", () => {
+            const rootEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "root",
+                event: true,
+                ts: 100,
+            });
+            jest.spyOn(rootEvent, "getThread").mockReturnValue({
+                id: "$thread",
+                length: 2,
+                replyToEvent: {
+                    getTs: () => 101,
+                    getId: () => "$reply",
+                },
+            } as never);
+
+            const vm = createViewModel({
+                mxEvent: rootEvent,
+                timelineRenderingType: TimelineRenderingType.ThreadsList,
+            });
+
+            expect(vm.getSnapshot().timestampTs).toBe(101);
+        });
+    });
+
+    describe("padlock and receipts", () => {
+        it("shows the group padlock for non-IRC layouts", () => {
+            const vm = createViewModel({ layout: Layout.Group });
+
+            expect(vm.getSnapshot().showGroupPadlock).toBe(true);
+            expect(vm.getSnapshot().showIrcPadlock).toBe(false);
+        });
+
+        it("shows the IRC padlock for IRC layout", () => {
+            const vm = createViewModel({ layout: Layout.IRC });
+
+            expect(vm.getSnapshot().showGroupPadlock).toBe(false);
+            expect(vm.getSnapshot().showIrcPadlock).toBe(true);
+        });
+
+        it("shows the thread toolbar in the thread list", () => {
+            const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.ThreadsList });
+
+            expect(vm.getSnapshot().showThreadToolbar).toBe(true);
+        });
+
+        it("shows read receipts when enabled and no sending state takes priority", () => {
+            const vm = createViewModel({
+                showReadReceipts: true,
+                readReceipts: [{ userId: "@bob:example.org", ts: 1 }],
+            });
+
+            expect(vm.getSnapshot().showReadReceipts).toBe(true);
+        });
+
+        it("shows the thread panel summary for notifications with a thread", () => {
+            const { rootEvent } = mkThread({
+                room,
+                client,
+                authorId: "@alice:example.org",
+                participantUserIds: ["@bob:example.org"],
+                length: 2,
+            });
+
+            const vm = createViewModel({
+                mxEvent: rootEvent,
+                timelineRenderingType: TimelineRenderingType.Notification,
+            });
+
+            expect(vm.getSnapshot().showThreadPanelSummary).toBe(true);
+        });
     });
 
     describe("event verification", () => {
@@ -133,7 +290,7 @@ describe("EventTileViewModel", () => {
             await flushPromises();
 
             expect(vm.getSnapshot()).toMatchObject({
-                encryptionIndicatorMode: EventTileEncryptionIndicatorMode.Warning,
+                encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
                 encryptionIndicatorTitle: "Encrypted by a device not verified by its owner.",
             });
         });
@@ -154,7 +311,7 @@ describe("EventTileViewModel", () => {
             await flushPromises();
 
             expect(vm.getSnapshot()).toMatchObject({
-                encryptionIndicatorMode: EventTileEncryptionIndicatorMode.None,
+                encryptionIndicatorMode: EncryptionIndicatorMode.None,
                 encryptionIndicatorTitle: undefined,
             });
         });
@@ -191,7 +348,7 @@ describe("EventTileViewModel", () => {
             await flushPromises();
 
             expect(vm.getSnapshot()).toMatchObject({
-                encryptionIndicatorMode: EventTileEncryptionIndicatorMode.Normal,
+                encryptionIndicatorMode: EncryptionIndicatorMode.Normal,
                 encryptionIndicatorTitle: expectedText,
             });
         });
@@ -214,7 +371,7 @@ describe("EventTileViewModel", () => {
             await flushPromises();
 
             expect(vm.getSnapshot()).toMatchObject({
-                encryptionIndicatorMode: EventTileEncryptionIndicatorMode.None,
+                encryptionIndicatorMode: EncryptionIndicatorMode.None,
                 sharedKeysUserId: "@bob:example.org",
                 sharedKeysRoomId: room.roomId,
             });
@@ -243,7 +400,7 @@ describe("EventTileViewModel", () => {
                 await flushPromises();
 
                 expect(vm.getSnapshot()).toMatchObject({
-                    encryptionIndicatorMode: EventTileEncryptionIndicatorMode.DecryptionFailure,
+                    encryptionIndicatorMode: EncryptionIndicatorMode.DecryptionFailure,
                     encryptionIndicatorTitle: "This message could not be decrypted",
                 });
             });
@@ -269,7 +426,7 @@ describe("EventTileViewModel", () => {
                 const vm = createViewModel();
                 await flushPromises();
 
-                expect(vm.getSnapshot().encryptionIndicatorMode).toBe(EventTileEncryptionIndicatorMode.None);
+                expect(vm.getSnapshot().encryptionIndicatorMode).toBe(EncryptionIndicatorMode.None);
             });
         });
 
@@ -297,7 +454,7 @@ describe("EventTileViewModel", () => {
             await flushPromises();
 
             expect(vm.getSnapshot()).toMatchObject({
-                encryptionIndicatorMode: EventTileEncryptionIndicatorMode.Warning,
+                encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
                 encryptionIndicatorTitle: "Not encrypted",
             });
         });

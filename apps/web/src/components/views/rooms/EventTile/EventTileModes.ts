@@ -27,7 +27,7 @@ export enum ClickMode {
     ShowThread = "showThread",
 }
 
-export enum EventTileEncryptionIndicatorMode {
+export enum EncryptionIndicatorMode {
     None = "none",
     Normal = E2ePadlockIcon.Normal,
     Warning = E2ePadlockIcon.Warning,

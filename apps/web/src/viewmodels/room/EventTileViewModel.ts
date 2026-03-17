@@ -35,7 +35,7 @@ import { BaseViewModel } from "@element-hq/web-shared-components";
 import type LegacyCallEventGrouper from "../../components/structures/LegacyCallEventGrouper";
 import {
     ClickMode,
-    EventTileEncryptionIndicatorMode,
+    EncryptionIndicatorMode,
     SenderMode,
     ThreadInfoMode,
 } from "../../components/views/rooms/EventTile/EventTileModes";
@@ -118,7 +118,7 @@ export interface EventTileViewSnapshot {
     senderMode: SenderMode;
     isPinned: boolean;
     hasFooter: boolean;
-    encryptionIndicatorMode: EventTileEncryptionIndicatorMode;
+    encryptionIndicatorMode: EncryptionIndicatorMode;
     encryptionIndicatorTitle?: string;
     sharedKeysUserId?: string;
     sharedKeysRoomId?: string;
@@ -375,7 +375,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             senderMode: SenderMode.Hidden,
             isPinned: false,
             hasFooter: false,
-            encryptionIndicatorMode: EventTileEncryptionIndicatorMode.None,
+            encryptionIndicatorMode: EncryptionIndicatorMode.None,
             encryptionIndicatorTitle: undefined,
             sharedKeysUserId: undefined,
             sharedKeysRoomId: undefined,
@@ -712,15 +712,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     ): EventTileViewSnapshot["encryptionIndicatorMode"] {
         const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
 
-        if (isLocalRoom(event.getRoomId()!)) return EventTileEncryptionIndicatorMode.None;
+        if (isLocalRoom(event.getRoomId()!)) return EncryptionIndicatorMode.None;
 
         if (event.isDecryptionFailure()) {
             switch (event.decryptionFailureReason) {
                 case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
                 case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
-                    return EventTileEncryptionIndicatorMode.None;
+                    return EncryptionIndicatorMode.None;
                 default:
-                    return EventTileEncryptionIndicatorMode.DecryptionFailure;
+                    return EncryptionIndicatorMode.DecryptionFailure;
             }
         }
 
@@ -728,24 +728,24 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             snapshot.shieldReason === EventShieldReason.AUTHENTICITY_NOT_GUARANTEED &&
             props.mxEvent.getKeyForwardingUser()
         ) {
-            return EventTileEncryptionIndicatorMode.None;
+            return EncryptionIndicatorMode.None;
         }
 
         if (snapshot.shieldColour !== EventShieldColour.NONE) {
             return snapshot.shieldColour === EventShieldColour.GREY
-                ? EventTileEncryptionIndicatorMode.Normal
-                : EventTileEncryptionIndicatorMode.Warning;
+                ? EncryptionIndicatorMode.Normal
+                : EncryptionIndicatorMode.Warning;
         }
 
         if (props.isRoomEncrypted) {
-            if (event.status === EventStatus.ENCRYPTING) return EventTileEncryptionIndicatorMode.None;
-            if (event.status === EventStatus.NOT_SENT) return EventTileEncryptionIndicatorMode.None;
-            if (event.isState()) return EventTileEncryptionIndicatorMode.None;
-            if (event.isRedacted()) return EventTileEncryptionIndicatorMode.None;
-            if (!event.isEncrypted()) return EventTileEncryptionIndicatorMode.Warning;
+            if (event.status === EventStatus.ENCRYPTING) return EncryptionIndicatorMode.None;
+            if (event.status === EventStatus.NOT_SENT) return EncryptionIndicatorMode.None;
+            if (event.isState()) return EncryptionIndicatorMode.None;
+            if (event.isRedacted()) return EncryptionIndicatorMode.None;
+            if (!event.isEncrypted()) return EncryptionIndicatorMode.Warning;
         }
 
-        return EventTileEncryptionIndicatorMode.None;
+        return EncryptionIndicatorMode.None;
     }
 
     private static getEncryptionIndicatorTitle(

@@ -29,7 +29,7 @@ import { ThreadToolbar } from "./ThreadToolbar";
 import { Timestamp } from "./Timestamp";
 import { ThreadInfo } from "./ThreadInfo";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
-import { EventTileEncryptionIndicatorMode, SenderMode } from "./EventTileModes";
+import { type EncryptionIndicatorMode, type SenderMode } from "./EventTileModes";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -86,7 +86,7 @@ export interface EventTileViewProps {
     showRelativeTimestamp?: boolean;
     showGroupPadlock: boolean;
     showIrcPadlock: boolean;
-    encryptionIndicatorMode: EventTileEncryptionIndicatorMode;
+    encryptionIndicatorMode: EncryptionIndicatorMode;
     encryptionIndicatorTitle?: string;
     sharedKeysUserId?: string;
     sharedKeysRoomId?: string;
@@ -309,15 +309,10 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                     <div className={lineClasses}>
                         <div className="mx_EventTile_body">{messageBody}</div>
                         {threadPanelReplyCount !== undefined && threadPanelPreview !== undefined && (
-                            <ThreadPanelSummary
-                                replyCount={threadPanelReplyCount}
-                                preview={threadPanelPreview}
-                            />
+                            <ThreadPanelSummary replyCount={threadPanelReplyCount} preview={threadPanelPreview} />
                         )}
                     </div>
-                    {showThreadToolbar && (
-                        <ThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLinkToThread} />
-                    )}
+                    {showThreadToolbar && <ThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLinkToThread} />}
                     <MessageStatus
                         sentReceiptIcon={sentReceiptIcon}
                         sentReceiptLabel={sentReceiptLabel}
@@ -378,11 +373,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                                         {reactionsRow}
                                     </div>
                                 )}
-                                <ThreadInfo
-                                    summary={threadInfoSummary}
-                                    href={threadInfoHref}
-                                    label={threadInfoLabel}
-                                />
+                                <ThreadInfo summary={threadInfoSummary} href={threadInfoHref} label={threadInfoLabel} />
                             </>
                         )}
                     </div>
@@ -395,11 +386,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                                     {layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
                                 </div>
                             )}
-                            <ThreadInfo
-                                summary={threadInfoSummary}
-                                href={threadInfoHref}
-                                label={threadInfoLabel}
-                            />
+                            <ThreadInfo summary={threadInfoSummary} href={threadInfoHref} label={threadInfoLabel} />
                         </>
                     )}
                     <MessageStatus

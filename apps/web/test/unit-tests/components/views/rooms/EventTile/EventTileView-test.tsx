@@ -13,7 +13,7 @@ import type { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { mkMessage } from "../../../../../test-utils";
 import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { Layout } from "../../../../../../src/settings/enums/Layout";
-import { EventTileEncryptionIndicatorMode, SenderMode } from "../../../../../../src/components/views/rooms/EventTile/EventTileModes";
+import { EncryptionIndicatorMode, SenderMode } from "../../../../../../src/components/views/rooms/EventTile/EventTileModes";
 import { EventTileView, type EventTileViewProps } from "../../../../../../src/components/views/rooms/EventTile/EventTileView";
 
 jest.mock("../../../../../../src/components/views/avatars/RoomAvatar", () => ({
@@ -48,7 +48,18 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/EncryptionIndi
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/MessageStatus", () => ({
-    MessageStatus: () => <div data-testid="message-status" />,
+    MessageStatus: ({
+        sentReceiptIcon,
+        readReceipts,
+    }: {
+        sentReceiptIcon?: React.ReactNode;
+        readReceipts?: React.ReactNode;
+    }) => (
+        <div data-testid="message-status">
+            {sentReceiptIcon ? <div data-testid="sent-receipt">{sentReceiptIcon}</div> : null}
+            {readReceipts ? <div data-testid="read-receipts">{readReceipts}</div> : null}
+        </div>
+    ),
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/Sender", () => ({
@@ -60,11 +71,34 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/Sender", () =>
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/Timestamp", () => ({
-    Timestamp: () => <span data-testid="timestamp" />,
+    Timestamp: ({
+        ts,
+        href,
+    }: {
+        ts: number;
+        href?: string;
+    }) => <span data-testid={href ? "linked-timestamp" : "timestamp"}>{href ? `${href}:${ts}` : ts}</span>,
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadInfo", () => ({
-    ThreadInfo: ({ label }: { label?: string }) => <div data-testid="thread-info">{label}</div>,
+    ThreadInfo: ({
+        summary,
+        href,
+        label,
+    }: {
+        summary?: React.ReactNode;
+        href?: string;
+        label?: string;
+    }) =>
+        summary ? (
+            <div data-testid="thread-info-summary">{summary}</div>
+        ) : href ? (
+            <a data-testid="thread-info-link" href={href}>
+                {label}
+            </a>
+        ) : (
+            <div data-testid="thread-info-text">{label}</div>
+        ),
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadPanelSummary", () => ({
@@ -91,7 +125,7 @@ describe("EventTileView", () => {
             hasFooter: false,
             showGroupPadlock: false,
             showIrcPadlock: false,
-            encryptionIndicatorMode: EventTileEncryptionIndicatorMode.None,
+            encryptionIndicatorMode: EncryptionIndicatorMode.None,
             onMouseEnter: jest.fn(),
             onMouseLeave: jest.fn(),
             onFocus: jest.fn(),
@@ -143,6 +177,44 @@ describe("EventTileView", () => {
         );
     });
 
+    it("renders thread info summary content", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    threadInfoSummary: <span>Thread summary</span>,
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("thread-info-summary")).toHaveTextContent("Thread summary");
+    });
+
+    it("renders thread info links", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    threadInfoHref: "#thread",
+                    threadInfoLabel: "In thread",
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("thread-info-link")).toHaveAttribute("href", "#thread");
+        expect(screen.getByTestId("thread-info-link")).toHaveTextContent("In thread");
+    });
+
+    it("renders thread info text when no link is provided", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    threadInfoLabel: "In thread",
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("thread-info-text")).toHaveTextContent("In thread");
+    });
+
     it("renders the pinned message badge for thread tiles", () => {
         render(
             <EventTileView
@@ -189,6 +261,82 @@ describe("EventTileView", () => {
         },
     );
 
+    it("renders a timestamp when showTimestamp is true in the thread list", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    timelineRenderingType: TimelineRenderingType.ThreadsList,
+                    showTimestamp: true,
+                    timestampTs: 123,
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("timestamp")).toHaveTextContent("123");
+    });
+
+    it("renders a linked timestamp when enabled", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    showTimestamp: true,
+                    showLinkedTimestamp: true,
+                    timestampTs: 123,
+                    permalink: "#event",
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("linked-timestamp")).toHaveTextContent("#event:123");
+    });
+
+    it("renders an IRC dummy timestamp placeholder", () => {
+        const { container } = render(
+            <EventTileView
+                {...makeProps({
+                    layout: Layout.IRC,
+                    showLinkedTimestamp: true,
+                    showDummyTimestamp: true,
+                })}
+            />,
+        );
+
+        expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+    });
+
+    it("renders the encryption indicator for group layouts", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    showGroupPadlock: true,
+                    encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
+                    encryptionIndicatorTitle: "Warning",
+                    sharedKeysUserId: "@bob:example.org",
+                    sharedKeysRoomId: "!room:example.org",
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("encryption-indicator")).toHaveTextContent(
+            "warning:Warning:@bob:example.org:!room:example.org",
+        );
+    });
+
+    it("renders the encryption indicator for IRC layouts", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    layout: Layout.IRC,
+                    showIrcPadlock: true,
+                    encryptionIndicatorMode: EncryptionIndicatorMode.Normal,
+                    encryptionIndicatorTitle: "Info",
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("encryption-indicator")).toHaveTextContent("normal:Info");
+    });
+
     it("renders the thread toolbar for thread list tiles", () => {
         const { container } = render(
             <EventTileView
@@ -222,5 +370,30 @@ describe("EventTileView", () => {
 
         await userEvent.click(getByLabelText(container, "View in room"));
         expect(viewInRoom).toHaveBeenCalledTimes(1);
+    });
+
+    it("renders sent receipt status", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    sentReceiptIcon: <span>sent</span>,
+                    sentReceiptLabel: "Sent",
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("sent-receipt")).toHaveTextContent("sent");
+    });
+
+    it("renders read receipts status", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    readReceipts: <span>readers</span>,
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("read-receipts")).toHaveTextContent("readers");
     });
 });
