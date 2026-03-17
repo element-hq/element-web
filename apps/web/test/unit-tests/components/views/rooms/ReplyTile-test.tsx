@@ -71,10 +71,10 @@ jest.mock("../../../../../src/components/views/messages/MImageBody", () => {
                 ReactActual.createElement(
                     "button",
                     {
-                        type: "button",
+                        "type": "button",
                         "data-testid": "reply-thumbnail",
                         "data-forced-height": String(forcedHeight),
-                        onClick: this.onClick,
+                        "onClick": this.onClick,
                     },
                     "thumbnail",
                 ),
@@ -82,7 +82,7 @@ jest.mock("../../../../../src/components/views/messages/MImageBody", () => {
         }
 
         public wrapImage(contentUrl: string | null | undefined, children: React.ReactNode): React.ReactNode {
-            return ReactActual.createElement("a", { href: contentUrl, "data-testid": "wrapped-image" }, children);
+            return ReactActual.createElement("a", { "href": contentUrl, "data-testid": "wrapped-image" }, children);
         }
 
         public render(): React.ReactNode {
