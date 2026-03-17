@@ -91,7 +91,8 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             },
         ]
             .filter((item) => item !== null)
-            .filter((item) => !this.client.isGuest() || !item.onlyAuthenticated);
+            .filter((item) => !this.client.isGuest() || !item.onlyAuthenticated)
+            .map(({ onlyAuthenticated, ...item }) => item);
     }
 
     public constructor(

@@ -38,7 +38,6 @@ describe("UserMenuViewModel", () => {
   "avatarUrl": undefined,
   "displayName": "@alice:domain",
   "expanded": false,
-  "manageAccountHref": undefined,
   "open": false,
   "userId": "@alice:domain",
 }
