@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     BaseViewModel,
-    type RoomListSnapshot,
+    type RoomListViewSnapshot,
     type FilterId,
     type RoomListViewActions,
     type RoomListViewState,
@@ -27,7 +27,7 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 
-interface RoomListViewViewModelProps {
+interface RoomListViewModelProps {
     client: MatrixClient;
 }
 
@@ -41,8 +41,8 @@ const filterKeyToIdMap: Map<FilterKey, FilterId> = new Map([
     [FilterKey.LowPriorityFilter, "low_priority"],
 ]);
 
-export class RoomListViewViewModel
-    extends BaseViewModel<RoomListSnapshot, RoomListViewViewModelProps>
+export class RoomListViewModel
+    extends BaseViewModel<RoomListViewSnapshot, RoomListViewModelProps>
     implements RoomListViewActions
 {
     // State tracking
@@ -54,13 +54,15 @@ export class RoomListViewViewModel
     private roomItemViewModels = new Map<string, RoomListItemViewModel>();
     private roomsMap = new Map<string, Room>();
 
-    public constructor(props: RoomListViewViewModelProps) {
+    public constructor(props: RoomListViewModelProps) {
         const activeSpace = SpaceStore.instance.activeSpaceRoom;
 
         // Get initial rooms
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
         const filterIds = [...filterKeyToIdMap.values()];
+        const roomIds = roomsResult.rooms.map((room) => room.roomId);
+        const sections = [{ id: "all", roomIds }];
 
         super(props, {
             // Initial view state - start with empty, will populate in async init
@@ -73,7 +75,9 @@ export class RoomListViewViewModel
                 spaceId: roomsResult.spaceId,
                 filterKeys: undefined,
             },
-            roomIds: roomsResult.rooms.map((room) => room.roomId),
+            // Until we implement sections, this view model only supports the flat list mode
+            isFlatList: true,
+            sections,
             canCreateRoom,
         });
 
@@ -193,6 +197,15 @@ export class RoomListViewViewModel
 
         // Return the view model - the view will call useViewModel() on it
         return viewModel;
+    }
+
+    /**
+     * Not implemented - this view model does not support sections.
+     * Flat list mode is forced so this method is never be called.
+     * @throw Error if called
+     */
+    public getSectionHeaderViewModel(): never {
+        throw new Error("Sections are not supported in this room list");
     }
 
     /**
@@ -408,6 +421,7 @@ export class RoomListViewViewModel
         // Build the complete state atomically to ensure consistency
         // roomIds and roomListState must always be in sync
         const roomIds = this.roomIds;
+        const sections = [{ id: "all", roomIds }];
 
         // Update filter keys - only update if they have actually changed to prevent unnecessary re-renders of the room list
         const previousFilterKeys = this.snapshot.current.roomListState.filterKeys;
@@ -428,7 +442,7 @@ export class RoomListViewViewModel
             isRoomListEmpty,
             activeFilterId,
             roomListState,
-            roomIds,
+            sections,
         });
     }
 

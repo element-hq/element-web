@@ -9,7 +9,7 @@ import {
     BaseViewModel,
     type UrlPreviewGroupViewSnapshot,
     type UrlPreviewGroupViewActions,
-    type UrlPreviewViewSnapshotPreview,
+    type UrlPreview,
 } from "@element-hq/web-shared-components";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
@@ -23,14 +23,14 @@ import { thumbHeight } from "../../ImageUtils";
 import SettingsStore from "../../settings/SettingsStore";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 
-const logger = rootLogger.getChild("UrlPreviewViewModel");
+const logger = rootLogger.getChild("UrlPreviewGroupViewModel");
 
-export interface UrlPreviewViewModelProps {
+export interface UrlPreviewGroupViewModelProps {
     client: MatrixClient;
     mxEvent: MatrixEvent;
     mediaVisible: boolean;
     visible: boolean;
-    onImageClicked: (preview: UrlPreviewViewSnapshotPreview) => void;
+    onImageClicked: (preview: UrlPreview) => void;
 }
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
@@ -59,8 +59,8 @@ export enum PreviewVisibility {
 /**
  * ViewModel for fetching and rendering URL previews for an individual event.
  */
-export class UrlPreviewViewModel
-    extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewViewModelProps>
+export class UrlPreviewGroupViewModel
+    extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewModelProps>
     implements UrlPreviewGroupViewActions
 {
     /**
@@ -91,7 +91,7 @@ export class UrlPreviewViewModel
     private static getBaseMetadataFromResponse(
         response: IPreviewUrlResponse,
         link: string,
-    ): Pick<UrlPreviewViewSnapshotPreview, "title" | "description" | "siteName"> {
+    ): Pick<UrlPreview, "title" | "description" | "siteName"> {
         let title =
             typeof response["og:title"] === "string" && response["og:title"].trim()
                 ? response["og:title"].trim()
@@ -217,14 +217,14 @@ export class UrlPreviewViewModel
     /**
      * A cache containing all previously calculated previews.
      */
-    private readonly previewCache = new Map<string, UrlPreviewViewSnapshotPreview>();
+    private readonly previewCache = new Map<string, UrlPreview>();
 
     /**
      * Called when the user clicks on the preview thumbnail.
      */
-    public readonly onImageClick: (preview: UrlPreviewViewSnapshotPreview) => void;
+    public readonly onImageClick: (preview: UrlPreview) => void;
 
-    public constructor(props: UrlPreviewViewModelProps) {
+    public constructor(props: UrlPreviewGroupViewModelProps) {
         const storageKey = `hide_preview_${props.mxEvent.getId()}`;
         super(props, {
             previews: [],
@@ -258,7 +258,7 @@ export class UrlPreviewViewModel
      * @returns A Promise that returns the snapshot needed to render the preview, or null
      * if the resource could not be previewed.
      */
-    private async fetchPreview(link: string): Promise<UrlPreviewViewSnapshotPreview | null> {
+    private async fetchPreview(link: string): Promise<UrlPreview | null> {
         const cached = this.previewCache.get(link);
         if (cached) {
             return cached;
@@ -277,18 +277,18 @@ export class UrlPreviewViewModel
             return null;
         }
 
-        const { title, description, siteName } = UrlPreviewViewModel.getBaseMetadataFromResponse(preview, link);
+        const { title, description, siteName } = UrlPreviewGroupViewModel.getBaseMetadataFromResponse(preview, link);
         const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
         // Ensure we have something relevant to render.
         // The title must not just be the link, or we must have an image.
         if (title === link && !hasImage) {
             return null;
         }
-        let image: UrlPreviewViewSnapshotPreview["image"];
+        let image: UrlPreview["image"];
         if (typeof preview["og:image"] === "string" && this.visibility > PreviewVisibility.MediaHidden) {
             const media = mediaFromMxc(preview["og:image"], this.client);
-            const declaredHeight = UrlPreviewViewModel.getNumberFromOpenGraph(preview["og:image:height"]);
-            const declaredWidth = UrlPreviewViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
+            const declaredHeight = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:height"]);
+            const declaredWidth = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
             const width = Math.min(declaredWidth ?? PREVIEW_WIDTH, PREVIEW_WIDTH);
             const height = thumbHeight(width, declaredHeight, PREVIEW_WIDTH, PREVIEW_WIDTH) ?? PREVIEW_WIDTH;
             const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale");
@@ -299,7 +299,7 @@ export class UrlPreviewViewModel
                     imageFull: media.srcHttp ?? thumb,
                     width,
                     height,
-                    fileSize: UrlPreviewViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
+                    fileSize: UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
                 };
             }
         }
@@ -311,7 +311,7 @@ export class UrlPreviewViewModel
             siteName,
             showTooltipOnLink: link !== title && PlatformPeg.get()?.needsUrlTooltips(),
             image,
-        } satisfies UrlPreviewViewSnapshotPreview;
+        } satisfies UrlPreview;
         this.previewCache.set(link, result);
         return result;
     }
@@ -358,7 +358,7 @@ export class UrlPreviewViewModel
      * @param eventElement
      */
     public async updateEventElement(eventElement: HTMLDivElement): Promise<void> {
-        const newLinks = UrlPreviewViewModel.findLinks([eventElement]);
+        const newLinks = UrlPreviewGroupViewModel.findLinks([eventElement]);
         // Only recalculate if the set of links has changed.
         if (newLinks.some((x) => !this.links.includes(x)) || this.links.some((x) => !newLinks.includes(x))) {
             this.links = newLinks;

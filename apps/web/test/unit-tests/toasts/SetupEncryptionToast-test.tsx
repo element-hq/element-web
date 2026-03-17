@@ -340,7 +340,7 @@ describe("SetupEncryptionToast", () => {
 
             await expect(screen.findByText("Verify this session")).resolves.toBeInTheDocument();
             await expect(screen.findByRole("button", { name: "Later" })).resolves.toBeInTheDocument();
-            await expect(screen.findByRole("button", { name: "Verify" })).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("button", { name: "Continue" })).resolves.toBeInTheDocument();
         });
 
         it("should dismiss the toast when 'Later' button clicked, and remember it", async () => {
@@ -354,14 +354,14 @@ describe("SetupEncryptionToast", () => {
             expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
         });
 
-        it("should open the verification dialog when 'Verify' clicked", async () => {
+        it("should open the verification dialog when 'Continue' clicked", async () => {
             jest.spyOn(Modal, "createDialog");
 
             // When we show the toast, and click Verify
             act(() => showToast("verify_this_session"));
 
             const user = userEvent.setup();
-            await user.click(await screen.findByRole("button", { name: "Verify" }));
+            await user.click(await screen.findByRole("button", { name: "Continue" }));
 
             // Then the dialog was opened
             expect(Modal.createDialog).toHaveBeenCalledWith(SetupEncryptionDialog, {}, undefined, false, true);

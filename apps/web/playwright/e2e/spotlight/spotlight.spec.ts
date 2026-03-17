@@ -203,8 +203,6 @@ test.describe("Spotlight", () => {
             .locator("..")
             .locator("[role=menuitemradio]")
             .click();
-        await page.waitForTimeout(3_600_000);
-
         await page.waitForTimeout(500); // wait for the dialog to settle
 
         const resultLocator = spotlight.results;

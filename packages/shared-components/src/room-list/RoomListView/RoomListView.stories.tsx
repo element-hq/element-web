@@ -11,18 +11,22 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "../RoomListItemView";
 import type { FilterId } from "../RoomListPrimaryFilters";
-import { RoomListView, type RoomListSnapshot, type RoomListViewActions } from "./RoomListView";
+import { RoomListView, type RoomListViewSnapshot, type RoomListViewActions } from "./RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
     renderAvatar,
     createGetRoomItemViewModel,
     mockRoomIds,
-    smallListRoomIds,
-    largeListRoomIds,
+    mockSections,
+    createGetSectionHeaderViewModel,
+    mockSmallListSections,
+    mockLargeListSections,
+    mockLargeListRoomIds,
 } from "../story-mocks";
 
-type RoomListViewProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
+type RoomListViewProps = RoomListViewSnapshot &
+    RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 
 const mockFilterIds: FilterId[] = ["unread", "people", "rooms", "favourite"];
 
@@ -32,6 +36,7 @@ const RoomListViewWrapperImpl = ({
     createChatRoom,
     createRoom,
     getRoomItemViewModel,
+    getSectionHeaderViewModel,
     updateVisibleRooms,
     renderAvatar: renderAvatarProp,
     ...rest
@@ -41,6 +46,7 @@ const RoomListViewWrapperImpl = ({
         createChatRoom,
         createRoom,
         getRoomItemViewModel,
+        getSectionHeaderViewModel,
         updateVisibleRooms,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
@@ -81,15 +87,17 @@ const meta = {
             spaceId: "!space:server",
             filterKeys: undefined,
         },
-        roomIds: mockRoomIds,
+        sections: mockSections,
         canCreateRoom: true,
         // Action properties (callbacks)
         onToggleFilter: fn(),
         createChatRoom: fn(),
         createRoom: fn(),
         getRoomItemViewModel: createGetRoomItemViewModel(mockRoomIds),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockSections.map((section) => section.id)),
         updateVisibleRooms: fn(),
         renderAvatar,
+        isFlatList: true,
     },
     parameters: {
         design: {
@@ -103,6 +111,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Section: Story = {
+    args: {
+        isFlatList: false,
+    },
+};
 
 export const Loading: Story = {
     args: {
@@ -148,7 +162,6 @@ export const WithSelection: Story = {
 export const EmptyFavouriteFilter: Story = {
     args: {
         isRoomListEmpty: true,
-        roomIds: [],
         filterIds: ["favourite", "people"],
         activeFilterId: "favourite",
     },
@@ -157,7 +170,6 @@ export const EmptyFavouriteFilter: Story = {
 export const EmptyPeopleFilter: Story = {
     args: {
         isRoomListEmpty: true,
-        roomIds: [],
         filterIds: ["people", "rooms"],
         activeFilterId: "people",
     },
@@ -166,7 +178,6 @@ export const EmptyPeopleFilter: Story = {
 export const EmptyRoomsFilter: Story = {
     args: {
         isRoomListEmpty: true,
-        roomIds: [],
         filterIds: ["rooms", "people"],
         activeFilterId: "rooms",
     },
@@ -175,7 +186,6 @@ export const EmptyRoomsFilter: Story = {
 export const EmptyUnreadFilter: Story = {
     args: {
         isRoomListEmpty: true,
-        roomIds: [],
         filterIds: ["unread", "people"],
         activeFilterId: "unread",
     },
@@ -184,7 +194,6 @@ export const EmptyUnreadFilter: Story = {
 export const EmptyInvitesFilter: Story = {
     args: {
         isRoomListEmpty: true,
-        roomIds: [],
         filterIds: ["invites", "people"],
         activeFilterId: "invites",
     },
@@ -193,7 +202,7 @@ export const EmptyInvitesFilter: Story = {
 export const EmptyMentionsFilter: Story = {
     args: {
         isRoomListEmpty: true,
-        roomIds: [],
+
         filterIds: ["mentions", "people"],
         activeFilterId: "mentions",
     },
@@ -202,22 +211,37 @@ export const EmptyMentionsFilter: Story = {
 export const EmptyLowPriorityFilter: Story = {
     args: {
         isRoomListEmpty: true,
-        roomIds: [],
         filterIds: ["low_priority", "people"],
         activeFilterId: "low_priority",
     },
 };
 
-export const SmallList: Story = {
+export const SmallFlatList: Story = {
     args: {
-        roomIds: smallListRoomIds,
-        getRoomItemViewModel: createGetRoomItemViewModel(smallListRoomIds),
+        sections: mockSmallListSections,
     },
 };
 
-export const LargeList: Story = {
+export const LargeFlatList: Story = {
     args: {
-        roomIds: largeListRoomIds,
-        getRoomItemViewModel: createGetRoomItemViewModel(largeListRoomIds),
+        sections: mockLargeListSections,
+        getRoomItemViewModel: createGetRoomItemViewModel(mockLargeListRoomIds),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockLargeListSections.map((section) => section.id)),
+    },
+};
+
+export const SmallSectionList: Story = {
+    args: {
+        isFlatList: false,
+        sections: mockSmallListSections,
+    },
+};
+
+export const LargeSectionList: Story = {
+    args: {
+        isFlatList: false,
+        sections: mockLargeListSections,
+        getRoomItemViewModel: createGetRoomItemViewModel(mockLargeListRoomIds),
+        getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockLargeListSections.map((section) => section.id)),
     },
 };
