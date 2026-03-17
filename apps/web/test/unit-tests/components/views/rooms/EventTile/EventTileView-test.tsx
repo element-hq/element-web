@@ -396,4 +396,10 @@ describe("EventTileView", () => {
 
         expect(screen.getByTestId("read-receipts")).toHaveTextContent("readers");
     });
+
+    it("does not render a footer when there is no pinned badge or reactions", () => {
+        const { container } = render(<EventTileView {...makeProps()} />);
+
+        expect(container.querySelector(".mx_EventTile_footer")).toBeNull();
+    });
 });

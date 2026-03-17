@@ -9,6 +9,7 @@ import React, {
     useContext,
     useEffect,
     useImperativeHandle,
+    useId,
     useRef,
     type JSX,
     type MouseEvent,
@@ -142,6 +143,7 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
     const roomContext = useContext(RoomContext);
     const cli = useMatrixClientContext();
     const isRoomEncrypted = Boolean(roomContext.isRoomEncrypted);
+    const tileContentId = useId();
     const rootRef = useRef<HTMLElement>(null);
     const tileRef = useRef<IEventTileType>(null);
     const replyChainRef = useRef<ReplyChain>(null);
@@ -423,6 +425,7 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         snapshot: vmSnapshot,
         roomContext,
         room,
+        tileContentId,
         rootRef,
         actionBar,
         contextMenu,
@@ -454,6 +457,7 @@ interface ComposeEventTileViewPropsArgs {
     snapshot: EventTileViewSnapshot;
     roomContext: React.ContextType<typeof RoomContext>;
     room: Room | null;
+    tileContentId: string;
     rootRef: RefObject<HTMLElement | null>;
     actionBar?: ReactNode;
     contextMenu?: ReactNode;
@@ -473,6 +477,7 @@ function composeEventTileViewProps({
     snapshot,
     roomContext,
     room,
+    tileContentId,
     rootRef,
     actionBar,
     contextMenu,
@@ -494,7 +499,7 @@ function composeEventTileViewProps({
         });
     };
     const pinnedMessageBadge = snapshot.isPinned ? (
-        <PinnedMessageBadge aria-describedby={props.mxEvent.getId() ?? "event-tile"} tabIndex={0} />
+        <PinnedMessageBadge aria-describedby={tileContentId} tabIndex={0} />
     ) : undefined;
     const threadInfoSummary =
         snapshot.threadInfoMode === ThreadInfoMode.Summary ? (
@@ -527,12 +532,12 @@ function composeEventTileViewProps({
         />
     ) : undefined;
     const reactionsRow = props.isRedacted ? undefined : <ReactionsRow mxEvent={props.mxEvent} reactions={snapshot.reactions} />;
-    const hasFooter = Boolean(snapshot.isPinned || reactionsRow);
+    const hasFooter = Boolean(snapshot.isPinned || snapshot.reactions);
 
     const commonProps: EventTileViewProps = {
         as: props.as,
         rootRef,
-        id: props.mxEvent.getId() ?? "event-tile",
+        id: tileContentId,
         mxEvent: props.mxEvent,
         room,
         layout: props.layout,
