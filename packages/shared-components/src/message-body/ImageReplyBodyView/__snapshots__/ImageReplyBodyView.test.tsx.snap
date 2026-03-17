@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ImageReplyBodyView > does not render when hidden 1`] = `<div />`;
+
+exports[`ImageReplyBodyView > renders an empty reply image body container 1`] = `
+<div>
+  <div
+    class="mx_MImageReplyBody root"
+  />
+</div>
+`;
+
+exports[`ImageReplyBodyView > renders the default reply image body 1`] = `
+<div>
+  <div
+    class="mx_MImageReplyBody root"
+  >
+    <div
+      class="mx_MImageBody_thumbnail_container"
+    >
+      <div
+        aria-label="Reply image preview"
+        role="img"
+      >
+        Thumbnail
+      </div>
+    </div>
+  </div>
+</div>
+`;
