@@ -145,12 +145,12 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
         this.snapshot.merge({ expanded });
     };
 
-    private onCreateAccount = (): void => {
+    private readonly onCreateAccount = (): void => {
         this.setOpen(false);
         this.dispatcher.dispatch({ action: "start_registration" });
     };
 
-    private onSignIn = (): void => {
+    private readonly onSignIn = (): void => {
         this.setOpen(false);
         this.dispatcher.dispatch({ action: "start_login" });
     };

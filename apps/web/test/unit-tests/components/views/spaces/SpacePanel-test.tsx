@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, fireEvent, act, cleanup } from "jest-matrix-react";
+import { render, screen, fireEvent, act, cleanup, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -23,6 +23,8 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import UnwrappedSpacePanel from "../../../../../src/components/views/spaces/SpacePanel";
+import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
 
 // DND test utilities based on
 // https://github.com/colinrobertbrooks/react-beautiful-dnd-test-utils/issues/18#issuecomment-1373388693
@@ -111,6 +113,7 @@ describe("<SpacePanel />", () => {
     const mockClient = {
         getUserId: jest.fn().mockReturnValue("@test:test"),
         getSafeUserId: jest.fn().mockReturnValue("@test:test"),
+        getClientWellKnown: jest.fn(),
         mxcUrlToHttp: jest.fn(),
         getRoom: jest.fn(),
         isGuest: jest.fn(),
@@ -190,5 +193,14 @@ describe("<SpacePanel />", () => {
         await drop(room1);
 
         expect(SpaceStore.instance.moveRootSpace).toHaveBeenCalledWith(0, 1);
+    });
+
+    it("should be able to open the user menu via dispatcher", async () => {
+        const { baseElement } = render(<SpacePanel />);
+        defaultDispatcher.dispatch({ action: Action.ToggleUserMenu });
+        await waitFor(() => {
+            // Menu exists outside the component due to Portals, so select it manually.
+            expect(baseElement.querySelector("div[aria-label='User menu']")).toBeInTheDocument();
+        });
     });
 });

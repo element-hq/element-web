@@ -8,30 +8,17 @@ exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
         "$$typeof": Symbol(react.forward_ref),
         "render": [Function],
       },
-      "label": "Link new device",
-      "onSelect": [Function],
-    },
-    {
-      "icon": {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      },
-      "label": "Security & Privacy",
-      "onSelect": [Function],
-    },
-    {
-      "icon": {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      },
       "label": "All settings",
       "onSelect": [Function],
     },
   ],
   "avatarUrl": undefined,
+  "createAccount": [Function],
   "displayName": "@alice:domain",
   "expanded": false,
   "open": true,
+  "showAvatar": false,
+  "signIn": [Function],
   "userId": "@alice:domain",
 }
 `;
