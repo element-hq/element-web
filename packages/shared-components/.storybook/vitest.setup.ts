@@ -24,6 +24,7 @@ vis.setup({
                 /* Inhibit all animations for the screenshot to be more stable */
                 *, *::before, *::after {
                     animation: none !important;
+                    transition: none !important;
                 }
                 /* Hide all storybook elements */
                 .sb-wrapper {
