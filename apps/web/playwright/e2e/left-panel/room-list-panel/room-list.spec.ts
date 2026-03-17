@@ -326,11 +326,11 @@ test.describe("Room list", () => {
             await page.getByRole("textbox", { name: "Name" }).fill("video room");
             await page.getByRole("button", { name: "Create video room" }).click();
 
-            const roomListView = getRoomList(page);
-            const videoRoom = roomListView.getByRole("option", { name: "video room" });
-
             // focus the user menu to avoid to have hover decoration
             await page.getByRole("button", { name: "User menu" }).focus();
+
+            const roomListView = getRoomList(page);
+            const videoRoom = roomListView.getByRole("option", { name: "video room" });
 
             await expect(videoRoom).toBeVisible();
             await expect(videoRoom).toMatchScreenshot("room-list-item-video.png");
