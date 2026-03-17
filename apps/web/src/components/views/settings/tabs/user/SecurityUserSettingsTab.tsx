@@ -294,6 +294,36 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         );
     }
 
+    private renderProxySection(): ReactNode {
+        if (!PlatformPeg.get().supportsProxyConfiguration()) return null;
+
+        const config = SettingsStore.getValue("desktopProxyConfig");
+        let description = _t("settings|network_proxy|mode_system_selected");
+        if (config.mode === "direct") {
+            description = _t("settings|network_proxy|mode_direct_selected");
+        } else if (config.mode === "custom") {
+            description = _t("settings|network_proxy|mode_custom_selected");
+        }
+
+        return (
+            <SettingsSection heading={_t("settings|network_proxy|title")}>
+                <SettingsSubsection>
+                    <SettingsSubsectionText>
+                        {description}
+                    </SettingsSubsectionText>
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={() => {
+                            Modal.createDialog(NetworkProxyModal, {});
+                        }}
+                    >
+                        {_t("settings|network_proxy|settings_button")}
+                    </AccessibleButton>
+                </SettingsSubsection>
+            </SettingsSection>
+        );
+    }
+
     public render(): React.ReactNode {
         const secureBackup = <SecureBackup />;
 
@@ -377,6 +407,8 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             );
         }
 
+        const proxySection = this.renderProxySection();
+
         return (
             <SettingsTab>
                 {warning}
@@ -386,6 +418,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     {eventIndex}
                 </SettingsSection>
                 {privacySection}
+                {proxySection}
                 {advancedSection}
             </SettingsTab>
         );

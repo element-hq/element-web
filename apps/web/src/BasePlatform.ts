@@ -316,6 +316,14 @@ export default abstract class BasePlatform {
         return false;
     }
 
+    /**
+     * Returns true if the platform supports network proxy configuration.
+     * @returns {boolean} whether the platform supports proxy configuration
+     */
+    public supportsProxyConfiguration(): boolean {
+        return false;
+    }
+
     public navigateForwardBack(back: boolean): void {}
 
     public getAvailableSpellCheckLanguages(): Promise<string[]> | null {

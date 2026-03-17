@@ -48,6 +48,7 @@ export * from "./utils/Box";
 export * from "./utils/Flex";
 export * from "./utils/LinkedText";
 export * from "./right-panel/WidgetContextMenu";
+export * from "./settings/NetworkProxyView";
 export * from "./utils/VirtualizedList";
 
 // Utils
