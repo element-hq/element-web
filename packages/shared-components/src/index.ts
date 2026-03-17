@@ -23,6 +23,7 @@ export * from "./message-body/MessageTimestampView";
 export * from "./message-body/DecryptionFailureBodyView";
 export * from "./message-body/FileBodyView";
 export * from "./message-body/PinnedMessageBadge";
+export * from "./message-body/VideoBodyView";
 export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./message-body/ReactionsRowButton";
 export * from "./message-body/ReactionsRow";
