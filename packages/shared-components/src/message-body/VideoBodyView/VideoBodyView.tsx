@@ -114,12 +114,7 @@ interface VideoBodyViewProps {
     children?: PropsWithChildren["children"];
 }
 
-export function VideoBodyView({
-    vm,
-    className,
-    videoRef,
-    children,
-}: Readonly<VideoBodyViewProps>): JSX.Element {
+export function VideoBodyView({ vm, className, videoRef, children }: Readonly<VideoBodyViewProps>): JSX.Element {
     const {
         state,
         videoLabel,
@@ -157,11 +152,7 @@ export function VideoBodyView({
         return (
             <span className={rootClassName}>
                 <div className={containerClassName} style={containerStyle}>
-                    <button
-                        type="button"
-                        onClick={vm.onPreviewClick}
-                        className={styles.hiddenButton}
-                    >
+                    <button type="button" onClick={vm.onPreviewClick} className={styles.hiddenButton}>
                         <div className={styles.hiddenButtonContent}>
                             <VisibilityOnIcon />
                             <span>{hiddenButtonLabel}</span>

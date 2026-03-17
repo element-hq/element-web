@@ -12,7 +12,12 @@ import { describe, expect, it, vi } from "vitest";
 
 import { MockViewModel } from "../../viewmodel/MockViewModel";
 import * as stories from "./VideoBodyView.stories";
-import { VideoBodyView, VideoBodyViewState, type VideoBodyViewActions, type VideoBodyViewSnapshot } from "./VideoBodyView";
+import {
+    VideoBodyView,
+    VideoBodyViewState,
+    type VideoBodyViewActions,
+    type VideoBodyViewSnapshot,
+} from "./VideoBodyView";
 
 const { Ready, Hidden, Error } = composeStories(stories);
 

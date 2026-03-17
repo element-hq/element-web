@@ -8,7 +8,12 @@
 import React, { type ReactNode } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { VideoBodyView, VideoBodyViewState, type VideoBodyViewActions, type VideoBodyViewSnapshot } from "./VideoBodyView";
+import {
+    VideoBodyView,
+    VideoBodyViewState,
+    type VideoBodyViewActions,
+    type VideoBodyViewSnapshot,
+} from "./VideoBodyView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
