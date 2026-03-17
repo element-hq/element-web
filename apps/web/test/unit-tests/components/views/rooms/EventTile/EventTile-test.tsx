@@ -13,10 +13,12 @@ import {
     EventType,
     type IEventDecryptionResult,
     type MatrixClient,
-    MatrixEvent,
+    type MatrixEvent,
     NotificationCountType,
     PendingEventOrdering,
     Room,
+    type Thread,
+    ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
 import {
     type CryptoApi,
@@ -28,10 +30,8 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
-import EventTile, {
-    type EventTileHandle,
-    type EventTileProps,
-} from "../../../../../../src/components/views/rooms/EventTile";
+import EventTile, { type EventTileProps } from "../../../../../../src/components/views/rooms/EventTile";
+import { type EventTileHandle } from "../../../../../../src/components/views/rooms/EventTile/EventTile";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -42,12 +42,27 @@ import dis from "../../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../../src/dispatcher/actions";
 import PinningUtils from "../../../../../../src/utils/PinningUtils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
+import { DecryptionFailureTracker } from "../../../../../../src/DecryptionFailureTracker";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
     let mxEvent: MatrixEvent;
     let room: Room;
     let client: MatrixClient;
+
+    function defer<T>(): {
+        promise: Promise<T>;
+        resolve: (value: T) => void;
+        reject: (reason?: unknown) => void;
+    } {
+        let resolve!: (value: T) => void;
+        let reject!: (reason?: unknown) => void;
+        const promise = new Promise<T>((res, rej) => {
+            resolve = res;
+            reject = rej;
+        });
+        return { promise, resolve, reject };
+    }
 
     // let changeEvent: (event: MatrixEvent) => void;
 
@@ -424,6 +439,185 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName("Not encrypted");
         });
+
+        it("ignores stale verification results after the event changes", async () => {
+            const firstEvent = await mkEncryptedMatrixEvent({
+                plainContent: { msgtype: "m.text", body: "msg1" },
+                plainType: "m.room.message",
+                sender: "@alice:example.org",
+                roomId: room.roomId,
+            });
+            const secondEvent = await mkEncryptedMatrixEvent({
+                plainContent: { msgtype: "m.text", body: "msg2" },
+                plainType: "m.room.message",
+                sender: "@alice:example.org",
+                roomId: room.roomId,
+            });
+
+            const firstResult = defer<EventEncryptionInfo | null>();
+            const secondResult = defer<EventEncryptionInfo | null>();
+            const getEncryptionInfoForEvent = jest.fn((event: MatrixEvent) => {
+                if (event.getId() === firstEvent.getId()) {
+                    return firstResult.promise;
+                }
+                if (event.getId() === secondEvent.getId()) {
+                    return secondResult.promise;
+                }
+                return Promise.resolve(null);
+            });
+            client.getCrypto = () =>
+                ({
+                    getEncryptionInfoForEvent,
+                }) as unknown as CryptoApi;
+
+            const roomContext = getRoomContext(room, {});
+            const { container, rerender } = render(
+                <WrappedEventTile
+                    roomContext={roomContext}
+                    eventTilePropertyOverrides={{ mxEvent: firstEvent, replacingEventId: firstEvent.replacingEventId() }}
+                />,
+            );
+
+            rerender(
+                <WrappedEventTile
+                    roomContext={roomContext}
+                    eventTilePropertyOverrides={{ mxEvent: secondEvent, replacingEventId: secondEvent.replacingEventId() }}
+                />,
+            );
+
+            await act(async () => {
+                secondResult.resolve({
+                    shieldColour: EventShieldColour.RED,
+                    shieldReason: EventShieldReason.UNSIGNED_DEVICE,
+                } as EventEncryptionInfo);
+                await flushPromises();
+            });
+
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                "Encrypted by a device not verified by its owner.",
+            );
+
+            await act(async () => {
+                firstResult.resolve({
+                    shieldColour: EventShieldColour.NONE,
+                    shieldReason: null,
+                } as EventEncryptionInfo);
+                await flushPromises();
+            });
+
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                "Encrypted by a device not verified by its owner.",
+            );
+        });
+    });
+
+    it("decrypts the event on mount and when the event prop changes", async () => {
+        const firstEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "First",
+            event: true,
+        });
+        const secondEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "Second",
+            event: true,
+        });
+
+        const roomContext = getRoomContext(room, {});
+        const { rerender } = render(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: firstEvent, replacingEventId: firstEvent.replacingEventId() }}
+            />,
+        );
+
+        await waitFor(() => expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(firstEvent));
+
+        jest.mocked(client.decryptEventIfNeeded).mockClear();
+
+        rerender(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: secondEvent, replacingEventId: secondEvent.replacingEventId() }}
+            />,
+        );
+
+        await waitFor(() => expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(secondEvent));
+    });
+
+    it("marks the event as visible to the decryption failure tracker on mount", () => {
+        const addVisibleEventSpy = jest.spyOn(DecryptionFailureTracker.instance, "addVisibleEvent");
+
+        getComponent();
+
+        expect(addVisibleEventSpy).toHaveBeenCalledWith(mxEvent);
+    });
+
+    it("marks a new event as visible to the decryption failure tracker when the event prop changes", () => {
+        const addVisibleEventSpy = jest.spyOn(DecryptionFailureTracker.instance, "addVisibleEvent");
+        const firstEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "First",
+            event: true,
+        });
+        const secondEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "Second",
+            event: true,
+        });
+
+        const roomContext = getRoomContext(room, {});
+        const { rerender } = render(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: firstEvent, replacingEventId: firstEvent.replacingEventId() }}
+            />,
+        );
+
+        expect(addVisibleEventSpy).toHaveBeenCalledWith(firstEvent);
+
+        addVisibleEventSpy.mockClear();
+
+        rerender(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: secondEvent, replacingEventId: secondEvent.replacingEventId() }}
+            />,
+        );
+
+        expect(addVisibleEventSpy).toHaveBeenCalledWith(secondEvent);
+    });
+
+    it("does not mark exported events as visible to the decryption failure tracker", () => {
+        const addVisibleEventSpy = jest.spyOn(DecryptionFailureTracker.instance, "addVisibleEvent");
+
+        getComponent({ forExport: true });
+
+        expect(addVisibleEventSpy).not.toHaveBeenCalled();
+    });
+
+    it("removes the ThreadEvent.New listener once the matching thread is found", () => {
+        const offSpy = jest.spyOn(room, "off");
+        getComponent();
+
+        const thread = {
+            id: mxEvent.getId(),
+            length: 0,
+            on: jest.fn(),
+            off: jest.fn(),
+        } as unknown as Thread;
+
+        act(() => {
+            room.emit(ThreadEvent.New, thread);
+        });
+
+        expect(offSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
     });
 
     it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {

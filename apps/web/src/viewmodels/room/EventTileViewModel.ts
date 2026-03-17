@@ -42,6 +42,7 @@ import {
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { _t } from "../../languageHandler";
 import { ElementCallEventType } from "../../call-types";
+import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { isMessageEvent } from "../../events/EventTileFactory";
 import { Layout } from "../../settings/enums/Layout";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
@@ -160,6 +161,7 @@ export interface EventTileViewModelProps {
 
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
     private isListeningForReceipts = false;
+    private verifyGeneration = 0;
 
     public constructor(props: EventTileViewModelProps) {
         super(props, EventTileViewModel.computeSnapshot(props));
@@ -170,6 +172,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             );
             this.disposables.trackListener(props.mxEvent, MatrixEventEvent.Decrypted, this.onDecrypted);
             this.disposables.trackListener(props.mxEvent, MatrixEventEvent.Replaced, this.onReplaced);
+            DecryptionFailureTracker.instance.addVisibleEvent(props.mxEvent);
 
             if (props.showReactions) {
                 this.disposables.trackListener(props.mxEvent, MatrixEventEvent.RelationsCreated, (...args: unknown[]) =>
@@ -191,6 +194,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         this.updateReceiptListener();
+        void props.cli.decryptEventIfNeeded(props.mxEvent);
         void this.verifyEvent();
     }
 
@@ -241,6 +245,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             previousEventSendStatus !== props.eventSendStatus ||
             previousShowReactions !== props.showReactions
         ) {
+            if (previousEvent !== props.mxEvent) {
+                if (!props.forExport) {
+                    DecryptionFailureTracker.instance.addVisibleEvent(props.mxEvent);
+                }
+                void props.cli.decryptEventIfNeeded(props.mxEvent);
+            }
             void this.verifyEvent();
         }
     }
@@ -1003,11 +1013,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private onNewThread = (thread: Thread): void => {
         if (thread.id === this.props.mxEvent.getId()) {
             this.updateThread(thread);
+            const roomId = this.props.mxEvent.getRoomId();
+            const room = roomId ? this.props.cli.getRoom(roomId) : null;
+            room?.off(ThreadEvent.New, this.onNewThread);
         }
     };
 
     private async verifyEvent(): Promise<void> {
         try {
+            const verifyGeneration = ++this.verifyGeneration;
             const event = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
             if (!event.isEncrypted() || event.isRedacted()) {
@@ -1019,6 +1033,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             }
 
             const encryptionInfo = (await this.props.cli.getCrypto()?.getEncryptionInfoForEvent(event)) ?? null;
+            if (this.isDisposed || verifyGeneration !== this.verifyGeneration) {
+                return;
+            }
             if (encryptionInfo === null) {
                 this.updateSnapshot({
                     shieldColour: EventShieldColour.NONE,
