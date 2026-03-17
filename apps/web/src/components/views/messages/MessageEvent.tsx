@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { type JSX, createRef, useContext, useEffect } from "react";
+import React, { type JSX, createRef, useContext, useEffect, useRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -18,7 +18,7 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
+import { DecryptionFailureBodyView, useCreateAutoDisposedViewModel, VideoBodyView } from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -31,7 +31,6 @@ import { type IBodyProps } from "./IBodyProps";
 import TextualBody from "./TextualBody";
 import MImageBody from "./MImageBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
-import MVideoBody from "./MVideoBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
@@ -39,7 +38,10 @@ import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -69,7 +71,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Image, MImageBody],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyViewFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
-    [MsgType.Video, MVideoBody],
+    [MsgType.Video, VideoBodyViewWrapper],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
@@ -264,7 +266,8 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
 
             if (
-                ((BodyType === MImageBody || BodyType == MVideoBody) && !this.validateImageOrVideoMimetype(content)) ||
+                ((BodyType === MImageBody || BodyType === VideoBodyViewWrapper) &&
+                    !this.validateImageOrVideoMimetype(content)) ||
                 (BodyType === MStickerBody && !this.validateStickerMimetype(content))
             ) {
                 BodyType = this.bodyTypes.get(MsgType.File)!;
@@ -330,6 +333,75 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
         <TextualBody {...{ ...props, ref: undefined }} />
     </div>
 );
+
+/**
+ * Bridge video events into the shared view using a local wrapper until MessageEvent becomes a function component.
+ */
+export function VideoBodyViewWrapper({
+    mxEvent,
+    mediaEventHelper,
+    forExport,
+    inhibitInteraction,
+}: IBodyProps): JSX.Element {
+    const roomContext = useContext(RoomContext);
+    const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new VideoBodyViewModel({
+                mxEvent,
+                mediaEventHelper,
+                forExport,
+                inhibitInteraction,
+                mediaVisible,
+                onPreviewClick: (): void => setMediaVisible(true),
+                videoRef,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setEvent(mxEvent, mediaEventHelper);
+    }, [mxEvent, mediaEventHelper, vm]);
+
+    useEffect(() => {
+        vm.setForExport(forExport);
+    }, [forExport, vm]);
+
+    useEffect(() => {
+        vm.setInhibitInteraction(inhibitInteraction);
+    }, [inhibitInteraction, vm]);
+
+    useEffect(() => {
+        vm.setMediaVisible(mediaVisible);
+    }, [mediaVisible, vm]);
+
+    useEffect(() => {
+        vm.setOnPreviewClick((): void => setMediaVisible(true));
+    }, [setMediaVisible, vm]);
+
+    const showFileBody =
+        !forExport &&
+        roomContext.timelineRenderingType !== TimelineRenderingType.Room &&
+        roomContext.timelineRenderingType !== TimelineRenderingType.Pinned &&
+        roomContext.timelineRenderingType !== TimelineRenderingType.Search;
+
+    const fileBody = showFileBody ? (
+        <FileBodyViewFactory
+            mxEvent={mxEvent}
+            mediaEventHelper={mediaEventHelper}
+            forExport={forExport}
+            inhibitInteraction={inhibitInteraction}
+            showFileInfo={false}
+        />
+    ) : null;
+
+    return (
+        <VideoBodyView vm={vm} className="mx_MVideoBody" containerClassName="mx_MVideoBody_container" videoRef={videoRef}>
+            {fileBody}
+        </VideoBodyView>
+    );
+}
 
 /**
  * Bridge decryption-failure events into the view model using current local verification state.

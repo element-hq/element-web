@@ -37,6 +37,10 @@ export interface VideoBodyViewSnapshot {
      */
     videoLabel?: string;
     /**
+     * Title applied to the video element.
+     */
+    videoTitle?: string;
+    /**
      * Label shown in the hidden-preview placeholder.
      */
     hiddenButtonLabel?: string;
@@ -105,6 +109,10 @@ interface VideoBodyViewProps {
      */
     className?: string;
     /**
+     * Optional CSS class applied to the media frame container.
+     */
+    containerClassName?: string;
+    /**
      * Optional ref to the rendered video element.
      */
     videoRef?: Ref<HTMLVideoElement>;
@@ -114,10 +122,17 @@ interface VideoBodyViewProps {
     children?: PropsWithChildren["children"];
 }
 
-export function VideoBodyView({ vm, className, videoRef, children }: Readonly<VideoBodyViewProps>): JSX.Element {
+export function VideoBodyView({
+    vm,
+    className,
+    containerClassName,
+    videoRef,
+    children,
+}: Readonly<VideoBodyViewProps>): JSX.Element {
     const {
         state,
         videoLabel,
+        videoTitle,
         hiddenButtonLabel,
         errorLabel,
         maxWidth,
@@ -132,7 +147,7 @@ export function VideoBodyView({ vm, className, videoRef, children }: Readonly<Vi
     } = useViewModel(vm);
 
     const rootClassName = classNames(className, styles.root);
-    const containerClassName = styles.container;
+    const resolvedContainerClassName = classNames(containerClassName, styles.container);
 
     const containerStyle =
         state === VideoBodyViewState.HIDDEN
@@ -151,7 +166,7 @@ export function VideoBodyView({ vm, className, videoRef, children }: Readonly<Vi
     if (state === VideoBodyViewState.HIDDEN) {
         return (
             <span className={rootClassName}>
-                <div className={containerClassName} style={containerStyle}>
+                <div className={resolvedContainerClassName} style={containerStyle}>
                     <button type="button" onClick={vm.onPreviewClick} className={styles.hiddenButton}>
                         <div className={styles.hiddenButtonContent}>
                             <VisibilityOnIcon />
@@ -168,7 +183,7 @@ export function VideoBodyView({ vm, className, videoRef, children }: Readonly<Vi
     if (state === VideoBodyViewState.LOADING) {
         return (
             <span className={rootClassName}>
-                <div className={containerClassName} style={containerStyle}>
+                <div className={resolvedContainerClassName} style={containerStyle}>
                     <div className={styles.loadingContainer}>
                         <InlineSpinner aria-label="Loading..." role="progressbar" />
                     </div>
@@ -180,7 +195,7 @@ export function VideoBodyView({ vm, className, videoRef, children }: Readonly<Vi
 
     return (
         <span className={rootClassName}>
-            <div className={containerClassName} style={containerStyle}>
+            <div className={resolvedContainerClassName} style={containerStyle}>
                 {/* Captions will be supplied from app-side data once the VM wiring is in place. */}
                 {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                 <video
@@ -188,6 +203,7 @@ export function VideoBodyView({ vm, className, videoRef, children }: Readonly<Vi
                     ref={videoRef}
                     src={src}
                     aria-label={videoLabel}
+                    title={videoTitle}
                     controls={controls}
                     controlsList="nodownload"
                     crossOrigin="anonymous"
