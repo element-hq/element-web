@@ -12,12 +12,12 @@ import { type Interaction as InteractionEvent } from "@matrix-org/analytics-even
 import { type PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
 import { type RoomListSortingAlgorithmChanged } from "@matrix-org/analytics-events/types/typescript/RoomListSortingAlgorithmChanged";
 import { type UrlPreviewRendered } from "@matrix-org/analytics-events/types/typescript/UrlPreviewRendered";
+import { type UrlPreviewViewSnapshotPreview } from "@element-hq/web-shared-components";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import { SortingAlgorithm } from "./stores/room-list-v3/skip-list/sorters";
-import { UrlPreviewViewSnapshotPreview } from "@element-hq/web-shared-components";
 import { LruCache } from "./utils/LruCache";
 
 export type ScreenName = ScreenEvent["$current_url"];
