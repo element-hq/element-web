@@ -10,24 +10,27 @@ import React, { type JSX } from "react";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 import { shouldDisplayReply } from "../../../../utils/Reply";
-import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
 import ReplyChain from "../../elements/ReplyChain";
 import type { EventTileProps } from "./EventTilePresenter";
 
 interface ReplyPreviewProps {
     props: EventTileProps;
-    snapshot: EventTileViewSnapshot;
     cli: MatrixClient;
     showHiddenEvents: boolean;
+    hover: boolean;
+    focusWithin: boolean;
+    isQuoteExpanded: boolean;
     replyChainRef: React.RefObject<ReplyChain | null>;
     setQuoteExpanded: (expanded: boolean) => void;
 }
 
 export function ReplyPreview({
     props,
-    snapshot,
     cli,
     showHiddenEvents,
+    hover,
+    focusWithin,
+    isQuoteExpanded,
     replyChainRef,
     setQuoteExpanded,
 }: ReplyPreviewProps): JSX.Element | undefined {
@@ -42,8 +45,8 @@ export function ReplyPreview({
             forExport={props.forExport}
             permalinkCreator={props.permalinkCreator}
             layout={props.layout}
-            alwaysShowTimestamps={props.alwaysShowTimestamps || snapshot.hover || snapshot.focusWithin}
-            isQuoteExpanded={snapshot.isQuoteExpanded}
+            alwaysShowTimestamps={props.alwaysShowTimestamps || hover || focusWithin}
+            isQuoteExpanded={isQuoteExpanded}
             setQuoteExpanded={setQuoteExpanded}
             getRelationsForEvent={props.getRelationsForEvent}
         />

@@ -272,13 +272,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         if (this.currentCli && this.isListeningForUserTrust) {
             this.currentCli.off(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
         }
-        if (this.currentCli && this.isListeningForReceipts) {
-            this.currentCli.off(RoomEvent.Receipt, this.onRoomReceipt);
-        }
 
         this.currentCli = null;
         this.isListeningForUserTrust = false;
-        this.isListeningForReceipts = false;
     }
 
     private bindEventListeners(props: EventTileViewModelProps): void {
@@ -303,6 +299,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.currentEvent.off(ThreadEvent.Update, this.onThreadUpdate);
         this.currentEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.currentEvent.off(MatrixEventEvent.Replaced, this.onReplaced);
+        const eventId = this.currentEvent.getId();
+        if (eventId) {
+            DecryptionFailureTracker.instance.visibleEvents.delete(eventId);
+        }
         if (this.isListeningForReactions) {
             this.currentEvent.off(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
         }
@@ -313,10 +313,16 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private bindRoomListeners(room: Room | null): void {
         this.currentRoom = room;
+        if (room && this.isListeningForReceipts) {
+            room.on(RoomEvent.Receipt, this.onRoomReceipt);
+        }
         room?.on(ThreadEvent.New, this.onNewThread);
     }
 
     private unbindRoomListeners(): void {
+        if (this.currentRoom && this.isListeningForReceipts) {
+            this.currentRoom.off(RoomEvent.Receipt, this.onRoomReceipt);
+        }
         this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
         this.currentRoom = null;
     }
@@ -340,10 +346,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
         const shouldListen = snapshot.shouldShowSentReceipt || snapshot.shouldShowSendingReceipt;
         if (shouldListen && !this.isListeningForReceipts) {
-            this.props.cli.on(RoomEvent.Receipt, this.onRoomReceipt);
+            this.currentRoom?.on(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = true;
         } else if (!shouldListen && this.isListeningForReceipts) {
-            this.props.cli.off(RoomEvent.Receipt, this.onRoomReceipt);
+            this.currentRoom?.off(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = false;
         }
     }

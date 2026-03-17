@@ -10,6 +10,7 @@ import React, {
     useEffect,
     useImperativeHandle,
     useId,
+    useMemo,
     useRef,
     type JSX,
     type MouseEvent,
@@ -135,7 +136,10 @@ export interface EventTileProps {
 function buildEventTileViewModelProps(
     props: EventTileProps,
     cli: ReturnType<typeof useMatrixClientContext>,
-    roomContext: React.ContextType<typeof RoomContext>,
+    roomContext: Pick<
+        React.ContextType<typeof RoomContext>,
+        "timelineRenderingType" | "isRoomEncrypted" | "showHiddenEvents"
+    >,
 ): EventTileViewModelProps {
     return {
         cli,
@@ -196,11 +200,104 @@ function useEventTileViewModel(
 ): UseEventTileViewModelResult {
     const roomContext = useContext(RoomContext);
     const cli = useMatrixClientContext();
+    const {
+        mxEvent,
+        forExport,
+        showReactions,
+        getRelationsForEvent,
+        readReceipts,
+        lastSuccessful,
+        eventSendStatus,
+        isRedacted,
+        continuation,
+        last,
+        lastInSection,
+        contextual,
+        isSelectedEvent,
+        isTwelveHour,
+        layout,
+        editState,
+        permalinkCreator,
+        alwaysShowTimestamps,
+        hideSender,
+        hideTimestamp,
+        inhibitInteraction,
+        showReadReceipts,
+        highlightLink,
+        callEventGrouper,
+    } = props;
+    const { showHiddenEvents, isRoomEncrypted, timelineRenderingType } = roomContext;
     const tileContentId = useId();
     const rootRef = useRef<HTMLElement>(null);
     const tileRef = useRef<EventTileApi>(null);
     const replyChainRef = useRef<ReplyChain>(null);
-    const viewModelProps = buildEventTileViewModelProps(props, cli, roomContext);
+    const viewModelProps = useMemo(
+        () =>
+            buildEventTileViewModelProps(
+                {
+                    mxEvent,
+                    forExport,
+                    showReactions,
+                    getRelationsForEvent,
+                    readReceipts,
+                    lastSuccessful,
+                    eventSendStatus,
+                    isRedacted,
+                    continuation,
+                    last,
+                    lastInSection,
+                    contextual,
+                    isSelectedEvent,
+                    isTwelveHour,
+                    layout,
+                    editState,
+                    permalinkCreator,
+                    alwaysShowTimestamps,
+                    hideSender,
+                    hideTimestamp,
+                    inhibitInteraction,
+                    showReadReceipts,
+                    highlightLink,
+                    callEventGrouper,
+                },
+                cli,
+                {
+                    showHiddenEvents,
+                    isRoomEncrypted,
+                    timelineRenderingType,
+                },
+            ),
+        [
+            cli,
+            mxEvent,
+            forExport,
+            showReactions,
+            getRelationsForEvent,
+            readReceipts,
+            lastSuccessful,
+            eventSendStatus,
+            isRedacted,
+            continuation,
+            last,
+            lastInSection,
+            contextual,
+            isSelectedEvent,
+            isTwelveHour,
+            layout,
+            editState,
+            permalinkCreator,
+            alwaysShowTimestamps,
+            hideSender,
+            hideTimestamp,
+            inhibitInteraction,
+            showReadReceipts,
+            highlightLink,
+            callEventGrouper,
+            showHiddenEvents,
+            isRoomEncrypted,
+            timelineRenderingType,
+        ],
+    );
 
     const vm = useCreateAutoDisposedViewModel(() => new EventTileViewModel(viewModelProps));
 
@@ -219,38 +316,7 @@ function useEventTileViewModel(
 
     useEffect(() => {
         vm.updateProps(viewModelProps);
-    }, [
-        cli,
-        props.mxEvent,
-        props.forExport,
-        props.showReactions,
-        props.getRelationsForEvent,
-        props.readReceipts,
-        props.lastSuccessful,
-        props.eventSendStatus,
-        props.isRedacted,
-        props.continuation,
-        props.last,
-        props.lastInSection,
-        props.contextual,
-        props.isSelectedEvent,
-        props.isTwelveHour,
-        props.layout,
-        props.editState,
-        props.permalinkCreator,
-        props.alwaysShowTimestamps,
-        props.hideSender,
-        props.hideTimestamp,
-        props.inhibitInteraction,
-        props.showReadReceipts,
-        props.highlightLink,
-        props.callEventGrouper,
-        roomContext.showHiddenEvents,
-        roomContext.isRoomEncrypted,
-        roomContext.timelineRenderingType,
-        viewModelProps,
-        vm,
-    ]);
+    }, [viewModelProps, vm]);
 
     const snapshot = useViewModel(vm);
 
@@ -398,38 +464,69 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         onListTileClick,
     } = useEventTileActions(props, cli, roomContext, vm, vmSnapshot);
 
-    const messageBody: ReactNode = (
-        <MessageBody
-            mxEvent={props.mxEvent}
-            timelineRenderingType={roomContext.timelineRenderingType}
-            snapshot={vmSnapshot}
-            renderTileProps={renderTileProps}
-            tileRef={tileRef}
-            permalinkCreator={props.permalinkCreator}
-            showHiddenEvents={roomContext.showHiddenEvents}
-        />
+    const messageBody: ReactNode = useMemo(
+        () => (
+            <MessageBody
+                mxEvent={props.mxEvent}
+                timelineRenderingType={roomContext.timelineRenderingType}
+                tileRenderType={vmSnapshot.tileRenderType}
+                isSeeingThroughMessageHiddenForModeration={vmSnapshot.isSeeingThroughMessageHiddenForModeration}
+                renderTileProps={renderTileProps}
+                tileRef={tileRef}
+                permalinkCreator={props.permalinkCreator}
+                showHiddenEvents={roomContext.showHiddenEvents}
+            />
+        ),
+        [
+            props,
+            renderTileProps,
+            tileRef,
+            roomContext.timelineRenderingType,
+            roomContext.showHiddenEvents,
+            vmSnapshot.tileRenderType,
+            vmSnapshot.isSeeingThroughMessageHiddenForModeration,
+        ],
     );
 
-    const replyChain = (
-        <ReplyPreview
-            props={props}
-            snapshot={vmSnapshot}
-            cli={cli}
-            showHiddenEvents={roomContext.showHiddenEvents}
-            replyChainRef={replyChainRef}
-            setQuoteExpanded={(expanded) => vm.setQuoteExpanded(expanded)}
-        />
+    const replyChain = useMemo(
+        () => (
+            <ReplyPreview
+                props={props}
+                cli={cli}
+                showHiddenEvents={roomContext.showHiddenEvents}
+                hover={vmSnapshot.hover}
+                focusWithin={vmSnapshot.focusWithin}
+                isQuoteExpanded={vmSnapshot.isQuoteExpanded}
+                replyChainRef={replyChainRef}
+                setQuoteExpanded={(expanded) => vm.setQuoteExpanded(expanded)}
+            />
+        ),
+        [
+            props,
+            cli,
+            roomContext.showHiddenEvents,
+            replyChainRef,
+            vm,
+            vmSnapshot.hover,
+            vmSnapshot.focusWithin,
+            vmSnapshot.isQuoteExpanded,
+        ],
     );
 
-    const actionBar = (
-        <ActionBar
-            props={props}
-            snapshot={vmSnapshot}
-            tileRef={tileRef}
-            replyChainRef={replyChainRef}
-            onFocusChange={(focused) => vm.setActionBarFocused(focused)}
-            toggleThreadExpanded={() => vm.setQuoteExpanded(!vmSnapshot.isQuoteExpanded)}
-        />
+    const actionBar = useMemo(
+        () => (
+            <ActionBar
+                props={props}
+                reactions={vmSnapshot.reactions}
+                isEditing={vmSnapshot.isEditing}
+                isQuoteExpanded={vmSnapshot.isQuoteExpanded}
+                tileRef={tileRef}
+                replyChainRef={replyChainRef}
+                onFocusChange={(focused) => vm.setActionBarFocused(focused)}
+                toggleThreadExpanded={() => vm.setQuoteExpanded(!vmSnapshot.isQuoteExpanded)}
+            />
+        ),
+        [props, vmSnapshot.isEditing, vmSnapshot.reactions, vmSnapshot.isQuoteExpanded, tileRef, replyChainRef, vm],
     );
 
     const contextMenu = vmSnapshot.contextMenu ? (

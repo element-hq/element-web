@@ -10,7 +10,6 @@ import React, { type JSX } from "react";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { renderTile } from "../../../../events/EventTileFactory";
-import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
 import RedactedBody from "../../messages/RedactedBody";
 import { EventPreview } from "../EventPreview";
 import { DecryptionFailureBody } from "./DecryptionFailureBody";
@@ -19,7 +18,8 @@ import type { EventTileApi, EventTileProps } from "./EventTilePresenter";
 interface MessageBodyProps {
     mxEvent: MatrixEvent;
     timelineRenderingType: TimelineRenderingType;
-    snapshot: EventTileViewSnapshot;
+    tileRenderType: TimelineRenderingType;
+    isSeeingThroughMessageHiddenForModeration: boolean;
     renderTileProps: EventTileProps;
     tileRef: React.RefObject<EventTileApi | null>;
     permalinkCreator: EventTileProps["permalinkCreator"];
@@ -29,7 +29,8 @@ interface MessageBodyProps {
 export function MessageBody({
     mxEvent,
     timelineRenderingType,
-    snapshot,
+    tileRenderType,
+    isSeeingThroughMessageHiddenForModeration,
     renderTileProps,
     tileRef,
     permalinkCreator,
@@ -50,11 +51,11 @@ export function MessageBody({
         return <EventPreview mxEvent={mxEvent} />;
     }
 
-    return renderTile(snapshot.tileRenderType, {
+    return renderTile(tileRenderType, {
         ...renderTileProps,
         ref: tileRef,
         permalinkCreator,
         showHiddenEvents,
-        isSeeingThroughMessageHiddenForModeration: snapshot.isSeeingThroughMessageHiddenForModeration,
+        isSeeingThroughMessageHiddenForModeration,
     });
 }

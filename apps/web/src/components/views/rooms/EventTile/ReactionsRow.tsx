@@ -100,10 +100,10 @@ export interface ReactionsRowProps {
 export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
-    const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
-    const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
+    const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
+    const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -123,13 +123,6 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     const closeReactionMenu = useCallback((): void => {
         setMenuDisplayed(false);
     }, []);
-
-    const updateReactionsState = useCallback((): void => {
-        const nextReactionGroups = getReactionGroups(reactions);
-        setReactionGroups(nextReactionGroups);
-        setMyReactions(getMyReactions(reactions, userId));
-        vm.setReactionGroupCount(nextReactionGroups.length);
-    }, [reactions, userId, vm]);
 
     useEffect(() => {
         vm.setActionable(isContentActionable(mxEvent));
@@ -154,22 +147,32 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     }, [menuDisplayed, vm]);
 
     useEffect(() => {
-        updateReactionsState();
-    }, [updateReactionsState]);
+        vm.setReactionGroupCount(reactionGroups.length);
+    }, [reactionGroups.length, vm]);
+
+    useEffect(() => {
+        setReactionGroups(getReactionGroups(reactions));
+        setMyReactions(getMyReactions(reactions, userId));
+    }, [reactions, userId]);
 
     useEffect(() => {
         if (!reactions) return;
 
-        reactions.on(RelationsEvent.Add, updateReactionsState);
-        reactions.on(RelationsEvent.Remove, updateReactionsState);
-        reactions.on(RelationsEvent.Redaction, updateReactionsState);
+        const onRelationsChanged = (): void => {
+            setReactionGroups(getReactionGroups(reactions));
+            setMyReactions(getMyReactions(reactions, userId));
+        };
+
+        reactions.on(RelationsEvent.Add, onRelationsChanged);
+        reactions.on(RelationsEvent.Remove, onRelationsChanged);
+        reactions.on(RelationsEvent.Redaction, onRelationsChanged);
 
         return () => {
-            reactions.off(RelationsEvent.Add, updateReactionsState);
-            reactions.off(RelationsEvent.Remove, updateReactionsState);
-            reactions.off(RelationsEvent.Redaction, updateReactionsState);
+            reactions.off(RelationsEvent.Add, onRelationsChanged);
+            reactions.off(RelationsEvent.Remove, onRelationsChanged);
+            reactions.off(RelationsEvent.Redaction, onRelationsChanged);
         };
-    }, [reactions, updateReactionsState]);
+    }, [reactions, userId]);
 
     useEffect(() => {
         const onDecrypted = (): void => {

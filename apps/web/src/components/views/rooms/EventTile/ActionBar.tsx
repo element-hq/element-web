@@ -7,14 +7,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
+import type { Relations } from "matrix-js-sdk/src/matrix";
 import type ReplyChain from "../../elements/ReplyChain";
 import MessageActionBar from "../../messages/MessageActionBar";
 import type { EventTileApi, EventTileProps } from "./EventTilePresenter";
 
 interface ActionBarProps {
     props: EventTileProps;
-    snapshot: EventTileViewSnapshot;
+    reactions: Relations | null;
+    isEditing: boolean;
+    isQuoteExpanded: boolean;
     tileRef: React.RefObject<EventTileApi | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFocusChange: (focused: boolean) => void;
@@ -23,25 +25,27 @@ interface ActionBarProps {
 
 export function ActionBar({
     props,
-    snapshot,
+    reactions,
+    isEditing,
+    isQuoteExpanded,
     tileRef,
     replyChainRef,
     onFocusChange,
     toggleThreadExpanded,
 }: ActionBarProps): JSX.Element | undefined {
-    if (snapshot.isEditing || props.forExport) {
+    if (isEditing || props.forExport) {
         return undefined;
     }
 
     return (
         <MessageActionBar
             mxEvent={props.mxEvent}
-            reactions={snapshot.reactions}
+            reactions={reactions}
             permalinkCreator={props.permalinkCreator}
             getTile={() => tileRef.current}
             getReplyChain={() => replyChainRef.current}
             onFocusChange={onFocusChange}
-            isQuoteExpanded={snapshot.isQuoteExpanded}
+            isQuoteExpanded={isQuoteExpanded}
             toggleThreadExpanded={toggleThreadExpanded}
             getRelationsForEvent={props.getRelationsForEvent}
         />
