@@ -7,9 +7,9 @@
 
 import { fn } from "storybook/test";
 
-import { type RoomListItemActions } from "./RoomListItemView";
+import { type RoomListItemViewActions } from "./RoomListItemView";
 
-export const mockedActions: RoomListItemActions = {
+export const mockedActions: RoomListItemViewActions = {
     onOpenRoom: fn(),
     onMarkAsRead: fn(),
     onMarkAsUnread: fn(),

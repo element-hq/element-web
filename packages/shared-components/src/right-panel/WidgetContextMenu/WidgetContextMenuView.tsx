@@ -13,7 +13,7 @@ import { type ViewModel } from "../../viewmodel/ViewModel.ts";
 import { useI18n } from "../../utils/i18nContext.ts";
 import { useViewModel } from "../../viewmodel/useViewModel.ts";
 
-export interface WidgetContextMenuSnapshot {
+export interface WidgetContextMenuViewSnapshot {
     /**
      * Indicates if the audio stream button needs to be shown or not
      * depending on the config value audio_stream_url and widget type jitsi
@@ -57,7 +57,7 @@ export interface WidgetContextMenuSnapshot {
     userWidget: boolean;
 }
 
-export interface WidgetContextMenuAction {
+export interface WidgetContextMenuViewActions {
     /**
      * Function triggered when stream audio is clicked
      */
@@ -89,7 +89,7 @@ export interface WidgetContextMenuAction {
     onMoveButton: (direction: number) => void;
 }
 
-export type WidgetContextMenuViewModel = ViewModel<WidgetContextMenuSnapshot, WidgetContextMenuAction>;
+export type WidgetContextMenuViewModel = ViewModel<WidgetContextMenuViewSnapshot, WidgetContextMenuViewActions>;
 
 interface WidgetContextMenuViewProps {
     vm: WidgetContextMenuViewModel;

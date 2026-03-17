@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import {
     BaseViewModel,
     RoomNotifState,
-    type RoomListItemSnapshot,
-    type RoomListItemActions,
+    type RoomListItemViewSnapshot,
+    type RoomListItemViewActions,
 } from "@element-hq/web-shared-components";
 import { RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
@@ -46,11 +46,11 @@ interface RoomItemProps {
 /**
  * View model for an individual room list item.
  * Manages per-room subscriptions and updates only when this specific room's data changes.
- * Implements RoomListItemActions to provide interaction callbacks.
+ * Implements RoomListItemViewActions to provide interaction callbacks.
  */
 export class RoomListItemViewModel
-    extends BaseViewModel<RoomListItemSnapshot, RoomItemProps>
-    implements RoomListItemActions
+    extends BaseViewModel<RoomListItemViewSnapshot, RoomItemProps>
+    implements RoomListItemViewActions
 {
     private notifState: RoomNotificationState;
     /**
@@ -205,7 +205,7 @@ export class RoomListItemViewModel
         room: Room,
         client: MatrixClient,
         notifState: RoomNotificationState,
-    ): RoomListItemSnapshot {
+    ): RoomListItemViewSnapshot {
         // Get room tags for menu state
         const roomTags = room.tags;
         const isDm = Boolean(DMRoomMap.shared().getUserIdForRoomId(room.roomId));

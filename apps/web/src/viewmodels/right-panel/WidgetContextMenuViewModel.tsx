@@ -11,7 +11,7 @@ import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import {
     BaseViewModel,
-    type WidgetContextMenuSnapshot,
+    type WidgetContextMenuViewSnapshot,
     WidgetContextMenuView,
     type WidgetContextMenuViewModel as WidgetContextMenuViewModelInterface,
 } from "@element-hq/web-shared-components";
@@ -56,7 +56,7 @@ const checkRevokeButtonState = (
 };
 
 export class WidgetContextMenuViewModel
-    extends BaseViewModel<WidgetContextMenuSnapshot, WidgetContextMenuViewModelProps>
+    extends BaseViewModel<WidgetContextMenuViewSnapshot, WidgetContextMenuViewModelProps>
     implements WidgetContextMenuViewModelInterface
 {
     private _app: IWidget;
@@ -96,7 +96,7 @@ export class WidgetContextMenuViewModel
         menuDisplayed: boolean,
         trigger: ReactNode,
         onDeleteClick?: () => void,
-    ): WidgetContextMenuSnapshot => {
+    ): WidgetContextMenuViewSnapshot => {
         const showStreamAudioStreamButton = !!getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type);
         const canModify = userWidget || WidgetUtils.canUserModifyWidgets(cli, room?.roomId);
         const widgetMessaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(app));
