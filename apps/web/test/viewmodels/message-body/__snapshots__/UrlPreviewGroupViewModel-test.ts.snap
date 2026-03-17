@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:description': 'A description',\\n  'og:title': ''\\n} 1`] = `
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:description': 'A description',\\n  'og:title': ''\\n} 1`] = `
 {
   "description": undefined,
   "image": undefined,
@@ -11,7 +11,7 @@ exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n
 }
 `;
 
-exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:site_name': 'Site name',\\n  'og:title': ''\\n} 1`] = `
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:site_name': 'Site name',\\n  'og:title': ''\\n} 1`] = `
 {
   "description": undefined,
   "image": undefined,
@@ -22,7 +22,7 @@ exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n
 }
 `;
 
-exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Basic title'\\n} 1`] = `
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Basic title'\\n} 1`] = `
 {
   "description": undefined,
   "image": undefined,
@@ -33,7 +33,7 @@ exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n
 }
 `;
 
-exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Cool blog',\\n  'og:site_name': 'Cool site'\\n} 1`] = `
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Cool blog',\\n  'og:site_name': 'Cool site'\\n} 1`] = `
 {
   "description": undefined,
   "image": undefined,
@@ -44,7 +44,7 @@ exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n
 }
 `;
 
-exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Media test',\\n  'og:image:height': '500',\\n  'og:image:width': 500,\\n  'matrix:image:size': 1024,\\n  'og:image': 'mxc://example.org/abc'\\n} 1`] = `
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Media test',\\n  'og:image:height': '500',\\n  'og:image:width': 500,\\n  'matrix:image:size': 1024,\\n  'og:image': 'mxc://example.org/abc'\\n} 1`] = `
 {
   "description": undefined,
   "image": {
@@ -61,7 +61,7 @@ exports[`UrlPreviewViewModel handles different kinds of opengraph responses {\\n
 }
 `;
 
-exports[`UrlPreviewViewModel should deduplicate multiple versions of the same URL 1`] = `
+exports[`UrlPreviewGroupViewModel should deduplicate multiple versions of the same URL 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -80,7 +80,7 @@ exports[`UrlPreviewViewModel should deduplicate multiple versions of the same UR
 }
 `;
 
-exports[`UrlPreviewViewModel should handle being hidden and shown by the user 1`] = `
+exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the user 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -90,7 +90,7 @@ exports[`UrlPreviewViewModel should handle being hidden and shown by the user 1`
 }
 `;
 
-exports[`UrlPreviewViewModel should handle being hidden and shown by the user 2`] = `
+exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the user 2`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -109,7 +109,7 @@ exports[`UrlPreviewViewModel should handle being hidden and shown by the user 2`
 }
 `;
 
-exports[`UrlPreviewViewModel should hide preview when invisible 1`] = `
+exports[`UrlPreviewGroupViewModel should hide preview when invisible 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -119,7 +119,7 @@ exports[`UrlPreviewViewModel should hide preview when invisible 1`] = `
 }
 `;
 
-exports[`UrlPreviewViewModel should ignore failed previews 1`] = `
+exports[`UrlPreviewGroupViewModel should ignore failed previews 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -129,7 +129,7 @@ exports[`UrlPreviewViewModel should ignore failed previews 1`] = `
 }
 `;
 
-exports[`UrlPreviewViewModel should ignore media when mediaVisible is false 1`] = `
+exports[`UrlPreviewGroupViewModel should ignore media when mediaVisible is false 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -148,7 +148,7 @@ exports[`UrlPreviewViewModel should ignore media when mediaVisible is false 1`] 
 }
 `;
 
-exports[`UrlPreviewViewModel should preview a URL with media 1`] = `
+exports[`UrlPreviewGroupViewModel should preview a URL with media 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -173,7 +173,7 @@ exports[`UrlPreviewViewModel should preview a URL with media 1`] = `
 }
 `;
 
-exports[`UrlPreviewViewModel should preview a single valid URL 1`] = `
+exports[`UrlPreviewGroupViewModel should preview a single valid URL 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,
@@ -192,7 +192,7 @@ exports[`UrlPreviewViewModel should preview a single valid URL 1`] = `
 }
 `;
 
-exports[`UrlPreviewViewModel should return no previews by default 1`] = `
+exports[`UrlPreviewGroupViewModel should return no previews by default 1`] = `
 {
   "compactLayout": false,
   "overPreviewLimit": false,

@@ -12,7 +12,7 @@ import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type Room, type RoomItemViewModel } from "../RoomListItemView";
+import { type Room, type RoomListItemViewModel } from "../RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "../RoomListSectionHeaderView";
 
 export type RoomListSection = {
@@ -25,7 +25,7 @@ export type RoomListSection = {
 /**
  * Snapshot for the room list view
  */
-export type RoomListSnapshot = {
+export type RoomListViewSnapshot = {
     /** Whether the rooms are currently loading */
     isLoadingRooms: boolean;
     /** Whether the room list is empty */
@@ -59,7 +59,7 @@ export interface RoomListViewActions {
     /** Called to create a new room */
     createRoom: () => void;
     /** Get view model for a specific room (virtualization API) */
-    getRoomItemViewModel: (roomId: string) => RoomItemViewModel;
+    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
     /** Get view model for a specific section header (virtualization API) */
@@ -69,7 +69,7 @@ export interface RoomListViewActions {
 /**
  * The view model type for the room list view
  */
-export type RoomListViewModel = ViewModel<RoomListSnapshot, RoomListViewActions>;
+export type RoomListViewModel = ViewModel<RoomListViewSnapshot, RoomListViewActions>;
 
 /**
  * Props for RoomListView component
