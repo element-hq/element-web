@@ -20,8 +20,10 @@ import { PinnedMessageBadge, useCreateAutoDisposedViewModel, useViewModel } from
 import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import {
     EventType,
+    type RelationType,
     type EventStatus,
     type MatrixEvent,
+    type Relations,
     type Room,
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
@@ -29,13 +31,6 @@ import {
 import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
 import RoomContext, { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import type {
-    EventTileProps as LegacyEventTileProps,
-    GetRelationsForEvent,
-    IReadReceiptProps,
-    IEventTileOps,
-    IEventTileType,
-} from "../EventTile";
 import { EventTileViewModel } from "../../../../viewmodels/room/EventTileViewModel";
 import { EventTileDecryptionFailureBody } from "./EventTileDecryptionFailureBody";
 import { Action } from "../../../../dispatcher/actions";
@@ -56,6 +51,7 @@ import PlatformPeg from "../../../../PlatformPeg";
 import { Layout } from "../../../../settings/enums/Layout";
 import { getLateEventInfo } from "../../../structures/grouper/LateEventGrouper";
 import { aboveRightOf } from "../../../structures/ContextMenu";
+import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrouper";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import NotificationBadge from "../NotificationBadge";
@@ -65,29 +61,83 @@ import TileErrorBoundary from "../../messages/TileErrorBoundary";
 import { EventTileReactionsRow } from "./EventTileReactionsRow";
 import { shouldDisplayReply } from "../../../../utils/Reply";
 import MessageActionBar from "../../messages/MessageActionBar";
+import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
+import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
+import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 
-export interface EventTileContainerHandle {
+export type GetRelationsForEvent = (
+    eventId: string,
+    relationType: RelationType | string,
+    eventType: EventType | string,
+) => Relations | null | undefined;
+
+export interface IReadReceiptProps {
+    userId: string;
+    roomMember: RoomMember | null;
+    ts: number;
+}
+
+export interface IEventTileOps {
+    isWidgetHidden(): boolean;
+    unhideWidget(): void;
+}
+
+export interface IEventTileType {
+    getEventTileOps?(): IEventTileOps;
+    getMediaHelper(): { destroy?(): void } | undefined;
+}
+
+export interface EventTileHandle {
     ref: RefObject<HTMLElement | null>;
     getEventTileOps?: IEventTileType["getEventTileOps"];
     getMediaHelper: IEventTileType["getMediaHelper"];
 }
 
-export type UnwrappedEventTile = EventTileContainerHandle;
+export type UnwrappedEventTile = EventTileHandle;
 
-export type EventTileProps = Omit<LegacyEventTileProps, "ref"> & {
+export interface EventTileProps {
+    mxEvent: MatrixEvent;
+    isRedacted?: boolean;
+    continuation?: boolean;
+    last?: boolean;
+    lastInSection?: boolean;
+    lastSuccessful?: boolean;
+    contextual?: boolean;
+    highlights?: string[];
+    highlightLink?: string;
+    showUrlPreview?: boolean;
+    isSelectedEvent?: boolean;
+    resizeObserver?: ResizeObserver;
+    readReceipts?: IReadReceiptProps[];
+    readReceiptMap?: { [userId: string]: IReadReceiptPosition };
+    checkUnmounting?: () => boolean;
+    eventSendStatus?: EventStatus;
+    forExport?: boolean;
+    isTwelveHour?: boolean;
+    getRelationsForEvent?: GetRelationsForEvent;
+    showReactions?: boolean;
+    layout?: Layout;
+    showReadReceipts?: boolean;
+    editState?: EditorStateTransfer;
+    replacingEventId?: string;
+    permalinkCreator?: RoomPermalinkCreator;
+    callEventGrouper?: LegacyCallEventGrouper;
+    as?: string;
+    alwaysShowTimestamps?: boolean;
+    hideSender?: boolean;
+    showThreadInfo?: boolean;
+    isSeeingThroughMessageHiddenForModeration?: boolean;
+    hideTimestamp?: boolean;
+    inhibitInteraction?: boolean;
     ref?: Ref<UnwrappedEventTile>;
-};
-
-export type EventTileContainerProps = EventTileProps;
-
-export type { GetRelationsForEvent, IReadReceiptProps, IEventTileOps, IEventTileType };
+}
 
 export function isEligibleForSpecialReceipt(event: MatrixEvent): boolean {
     if (!isMessageEvent(event) && event.getType() !== EventType.RoomMessageEncrypted) return false;
     return true;
 }
 
-export function UnwrappedEventTileContainer({ ref: forwardedRef, ...props }: EventTileContainerProps): JSX.Element {
+export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
     const roomContext = useContext(RoomContext);
     const cli = useMatrixClientContext();
     const isRoomEncrypted = Boolean(roomContext.isRoomEncrypted);
@@ -98,7 +148,7 @@ export function UnwrappedEventTileContainer({ ref: forwardedRef, ...props }: Eve
 
     useImperativeHandle(
         forwardedRef,
-        (): EventTileContainerHandle => ({
+        (): EventTileHandle => ({
             ref: rootRef,
             get getEventTileOps(): IEventTileType["getEventTileOps"] {
                 return tileRef.current?.getEventTileOps?.bind(tileRef.current);
@@ -387,16 +437,14 @@ export function UnwrappedEventTileContainer({ ref: forwardedRef, ...props }: Eve
     return <EventTileView {...eventTileViewProps} />;
 }
 
-export function EventTileContainer(props: EventTileContainerProps): JSX.Element {
+export function EventTile(props: EventTileProps): JSX.Element {
     return (
         <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
-            <UnwrappedEventTileContainer {...props} />
+            <UnwrappedEventTile {...props} />
         </TileErrorBoundary>
     );
 }
-
-export const UnwrappedEventTile = UnwrappedEventTileContainer;
-export default EventTileContainer;
+export default EventTile;
 
 interface ComposeEventTileViewPropsArgs {
     props: EventTileProps;
