@@ -42,5 +42,5 @@ export function ImageReplyBodyView({ vm, className, children }: Readonly<ImageRe
         return <></>;
     }
 
-    return <div className={classNames(styles.root, className)}>{children}</div>;
+    return <div className={classNames(styles.imageReplyBodyView, className)}>{children}</div>;
 }
