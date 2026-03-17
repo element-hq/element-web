@@ -201,8 +201,8 @@ describe("EventTile", () => {
     });
 
     describe("EventTile renderingType: Pinned", () => {
-        it("does not render a DisambiguatedProfile for bubble messages", () => {
-            const { container } = getComponent({ layout: Layout.Bubble }, TimelineRenderingType.Pinned);
+        it("does not render a DisambiguatedProfile for continuation messages", () => {
+            const { container } = getComponent({ continuation: true }, TimelineRenderingType.Pinned);
 
             expect(container.getElementsByClassName("mx_DisambiguatedProfile")).toHaveLength(0);
         });
