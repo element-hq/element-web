@@ -76,9 +76,9 @@ exports[`VideoBodyView > matches snapshot for ready story 1`] = `
         controls=""
         controlslist="nodownload"
         crossorigin="anonymous"
-        poster="https://example.org/demo-poster.jpg"
+        poster="/static/element.png"
         preload="none"
-        src="https://example.org/demo.mp4"
+        src="/static/videoBodyDemo.webm"
       />
     </div>
     <div

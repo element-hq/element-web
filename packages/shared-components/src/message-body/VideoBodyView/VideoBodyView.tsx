@@ -169,7 +169,6 @@ export function VideoBodyView({
                 <div
                     className={resolvedContainerClassName}
                     style={containerStyle}
-                    data-video-body-view-state={VideoBodyViewState.HIDDEN}
                 >
                     <button type="button" onClick={vm.onPreviewClick} className={styles.hiddenButton}>
                         <div className={styles.hiddenButtonContent}>
@@ -190,7 +189,6 @@ export function VideoBodyView({
                 <div
                     className={resolvedContainerClassName}
                     style={containerStyle}
-                    data-video-body-view-state={VideoBodyViewState.LOADING}
                 >
                     <div className={styles.loadingContainer}>
                         <InlineSpinner aria-label="Loading..." role="progressbar" />
@@ -206,7 +204,6 @@ export function VideoBodyView({
             <div
                 className={resolvedContainerClassName}
                 style={containerStyle}
-                data-video-body-view-state={VideoBodyViewState.READY}
             >
                 {/* Captions will be supplied from app-side data once the VM wiring is in place. */}
                 {/* eslint-disable-next-line jsx-a11y/media-has-caption */}

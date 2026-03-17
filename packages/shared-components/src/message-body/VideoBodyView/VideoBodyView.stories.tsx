@@ -8,6 +8,7 @@
 import React, { type ReactNode } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import posterImage from "../../../static/element.png";
 import {
     VideoBodyView,
     VideoBodyViewState,
@@ -16,6 +17,8 @@ import {
 } from "./VideoBodyView";
 import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
+
+const demoVideo = new URL("../../../static/videoBodyDemo.webm", import.meta.url).href;
 
 type VideoBodyViewProps = VideoBodyViewSnapshot &
     VideoBodyViewActions & {
@@ -62,8 +65,8 @@ const meta = {
         maxWidth: 320,
         maxHeight: 180,
         aspectRatio: "16/9",
-        src: "https://example.org/demo.mp4",
-        poster: "https://example.org/demo-poster.jpg",
+        src: demoVideo,
+        poster: posterImage,
         preload: "none",
         controls: true,
         muted: false,
