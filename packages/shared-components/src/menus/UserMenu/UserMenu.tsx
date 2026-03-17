@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX } from "react";
-import { Avatar, Button, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
+import { Avatar, Button, Link, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 import classNames from "classnames";
 
@@ -31,6 +31,10 @@ export interface UserMenuViewSnapshot {
      * Avatar URL for the user, if one is set.
      */
     avatarUrl?: string;
+    /**
+     * Hide the avatar if the user is a guest. Defaults to true
+     */
+    showAvatar?: boolean;
     /**
      * Display name for the user.
      */
@@ -60,6 +64,14 @@ export interface UserMenuViewSnapshot {
          */
         onSelect: () => void;
     }[];
+    /**
+     * Optional action to create an account.
+     */
+    createAccount?: () => void;
+    /**
+     * Optional action to sign in.
+     */
+    signIn?: () => void;
 }
 
 export declare interface UserMenuViewActions {
@@ -78,7 +90,18 @@ export type UserMenuViewProps = {
 };
 
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
-    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions } = useViewModel(vm);
+    const {
+        userId,
+        displayName,
+        avatarUrl,
+        expanded,
+        open,
+        manageAccountHref,
+        actions,
+        showAvatar,
+        createAccount,
+        signIn,
+    } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={classNames(styles.triggerButton)} aria-label={_t("menus|user_menu|title")}>
@@ -103,7 +126,9 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                 className={classNames(styles.container, className)}
             >
                 <section className={styles.profile}>
-                    <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />
+                    {showAvatar !== false && (
+                        <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />
+                    )}
                     <Text className={styles.displayname} type="heading" size="md" weight="semibold" as="span">
                         {displayName}
                     </Text>
@@ -114,6 +139,25 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                         <Button as="a" size="sm" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
                             {_t("menus|user_menu|manage_account")}
                         </Button>
+                    )}
+                    {createAccount && (
+                        <Button
+                            className={styles.createAccount}
+                            size="sm"
+                            as="button"
+                            kind="primary"
+                            onClick={createAccount}
+                        >
+                            {_t("menus|user_menu|create_an_account")}
+                        </Button>
+                    )}
+                    {signIn && (
+                        <Text as="span" weight="semibold">
+                            {_t("menus|user_menu|got_an_account")}
+                            <Link as="button" onClick={signIn}>
+                                {_t("menus|user_menu|sign_in")}
+                            </Link>
+                        </Text>
                     )}
                 </section>
                 <Separator />

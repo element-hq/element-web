@@ -34,7 +34,10 @@
     },
     "menus": {
         "user_menu": {
+            "create_an_account": "Create an account",
+            "got_an_account": "Got an account?",
             "manage_account": "Manage account",
+            "sign_in": "Sign in",
             "title": "User menu"
         }
     },

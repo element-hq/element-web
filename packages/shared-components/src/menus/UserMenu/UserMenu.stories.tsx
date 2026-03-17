@@ -9,6 +9,9 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
+import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
+import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-problem";
+import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
@@ -77,7 +80,7 @@ export const LongerName: Story = {
     },
 };
 
-export const AlreadyOpen: Story = {
+export const Open: Story = {
     args: {
         open: true,
         displayName: "Sally Sanderson with a longer name",
@@ -117,4 +120,65 @@ export const Condensed: Story = {
         displayName: "Sally Sanderson with a longer name",
         expanded: false,
     },
+};
+
+export const Guest: Story = {
+    args: {
+        displayName: "Guest",
+        userId: "@guest:attendees.example.org",
+        manageAccountHref: undefined,
+        showAvatar: false,
+        createAccount: fn(),
+        signIn: fn(),
+        actions: [
+            {
+                icon: HomeIcon,
+                label: "Home",
+                onSelect: fn(),
+            },
+            {
+                icon: ChatProblemIcon,
+                label: "Feedback",
+                onSelect: fn(),
+            },
+            {
+                icon: SettingsIcon,
+                label: "Settings",
+                onSelect: fn(),
+            },
+        ],
+    },
+};
+
+export const GuestOpen: Story = {
+    args: {
+        ...Guest.args,
+        open: true,
+    },
+    parameters: {
+        a11y: {
+            /*
+             * Axe's context parameter
+             * See https://github.com/dequelabs/axe-core/blob/develop/doc/API.md#context-parameter
+             * to learn more.
+             */
+            config: {
+                rules: [
+                    {
+                        // Menu contains a header which is invalid
+                        id: "aria-required-children",
+                        enabled: false,
+                    },
+                    {
+                        // Menu pops open by default
+                        id: "aria-hidden-focus",
+                        enabled: false,
+                    },
+                ],
+            },
+        },
+    },
+    // Only used for playwright tests for the menu.
+    // Steals focus if actually opened on the storybook page
+    tags: ["!dev", "!autodocs"],
 };

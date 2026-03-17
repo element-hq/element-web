@@ -27,6 +27,11 @@
             text-wrap: balance;
             text-align: center;
         }
+
+        .createAccount {
+            margin-top: var(--cpd-space-1x);
+            margin-bottom: var(--cpd-space-2x);
+        }
     }
     section.actions {
         margin: var(--cpd-space-2x) 0;

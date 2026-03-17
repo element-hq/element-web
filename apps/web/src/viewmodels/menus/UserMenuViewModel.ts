@@ -34,22 +34,6 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
 
     public getActions(): UserMenuSnapshot["actions"] {
         return [
-            {
-                label: _t("action|sign_in"),
-                onSelect: () => {
-                    this.setOpen(false);
-                    this.dispatcher.dispatch({ action: "start_login" });
-                },
-                guest: true,
-            },
-            {
-                label: _t("action|create_account"),
-                onSelect: () => {
-                    this.setOpen(false);
-                    this.dispatcher.dispatch({ action: "start_registration" });
-                },
-                guest: true,
-            },
             this.hasHomePage
                 ? {
                       label: _t("common|home"),
@@ -71,7 +55,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
                         props: { showMsc4108QrCode: true },
                     });
                 },
-                guest: false,
+                onlyAuthenticated: true,
             },
             {
                 label: _t("room_settings|security|title"),
@@ -83,7 +67,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
                         initialTabId: UserTab.Security,
                     });
                 },
-                guest: false,
+                onlyAuthenticated: true,
             },
             shouldShowFeedback()
                 ? {
@@ -104,18 +88,10 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
                         action: Action.ViewUserSettings,
                     });
                 },
-                guest: false,
             },
         ]
             .filter((item) => item !== null)
-            .filter((item) => {
-                if (this.client.isGuest()) {
-                    // Show all except hidden items to guests
-                    return item.guest !== false;
-                }
-                // Show all except guest-only items to everyone else.
-                return item.guest !== true;
-            });
+            .filter((item) => !this.client.isGuest() || !item.onlyAuthenticated);
     }
 
     public constructor(
@@ -133,10 +109,20 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             userId,
             displayName,
             avatarUrl,
-            manageAccountHref: accountManagementEndpoint,
             expanded: !isPanelCollapsed,
             actions: [],
         });
+        if (client.isGuest()) {
+            this.snapshot.merge({
+                showAvatar: false,
+                createAccount: this.onCreateAccount,
+                signIn: this.onSignIn,
+            });
+        } else if (accountManagementEndpoint) {
+            this.snapshot.merge({
+                manageAccountHref: accountManagementEndpoint,
+            });
+        }
         OwnProfileStore.instance.on(UPDATE_EVENT, this.recalculateProfile);
     }
 
@@ -156,5 +142,15 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
 
     public setExpanded = (expanded: boolean): void => {
         this.snapshot.merge({ expanded });
+    };
+
+    private onCreateAccount = (): void => {
+        this.setOpen(false);
+        this.dispatcher.dispatch({ action: "start_registration" });
+    };
+
+    private onSignIn = (): void => {
+        this.setOpen(false);
+        this.dispatcher.dispatch({ action: "start_login" });
     };
 }
