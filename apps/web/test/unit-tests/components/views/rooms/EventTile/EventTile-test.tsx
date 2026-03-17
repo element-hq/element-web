@@ -198,6 +198,16 @@ describe("EventTile", () => {
     });
 
     describe("EventTile renderingType: ThreadsList", () => {
+        it("renders the sender in the thread list details", async () => {
+            const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
+
+            await waitFor(() => {
+                const sender = container.querySelector(".mx_EventTile_details .mx_DisambiguatedProfile");
+                expect(sender).not.toBeNull();
+                expect(sender).toHaveTextContent("@alice:example.org");
+            });
+        });
+
         it("shows an unread notification badge", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
 
@@ -217,6 +227,24 @@ describe("EventTile", () => {
 
             expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_NotificationBadge_level_highlight")).toHaveLength(1);
+        });
+    });
+
+    describe("EventTile renderingType: Notification", () => {
+        it("renders the room name in the notification details", async () => {
+            const dmRoomMap: DMRoomMap = {
+                getUserIdForRoomId: jest.fn(),
+            } as unknown as DMRoomMap;
+            DMRoomMap.setShared(dmRoomMap);
+            room.name = "Test room";
+
+            const { container } = getComponent({}, TimelineRenderingType.Notification);
+
+            await waitFor(() => {
+                const details = container.getElementsByClassName("mx_EventTile_details")[0];
+                expect(details).toHaveTextContent("@alice:example.org");
+                expect(details).toHaveTextContent("in Test room");
+            });
         });
     });
 

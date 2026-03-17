@@ -48,19 +48,23 @@ import PlatformPeg from "../../../../PlatformPeg";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { getLateEventInfo } from "../../../structures/grouper/LateEventGrouper";
 import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrouper";
+import RoomAvatar from "../../avatars/RoomAvatar";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
+import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
 import { ClickMode, ThreadInfoMode } from "./EventTileModes";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
+import { Avatar } from "./Avatar";
 import { MessageBody } from "./MessageBody";
 import { ActionBar } from "./ActionBar";
 import { ContextMenu } from "./ContextMenu";
 import { Footer } from "./Footer";
 import { MessageStatus } from "./MessageStatus";
 import { ReplyPreview } from "./ReplyPreview";
+import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
 
 export type GetRelationsForEvent = (
@@ -518,6 +522,15 @@ function useEventTileViewProps({
         });
     };
     const footer = <Footer props={props} snapshot={snapshot} tileContentId={tileContentId} />;
+    const sender = <Sender mode={snapshot.senderMode} mxEvent={props.mxEvent} onClick={onSenderProfileClick} />;
+    const avatar = (
+        <Avatar
+            member={avatarMember}
+            size={snapshot.avatarSize}
+            viewUserOnClick={snapshot.avatarMemberUserOnClick}
+            forceHistorical={snapshot.avatarForceHistorical}
+        />
+    );
     const threadInfo =
         snapshot.threadInfoMode === ThreadInfoMode.None ? undefined : (
             <ThreadInfo
@@ -556,13 +569,23 @@ function useEventTileViewProps({
             isTwelveHour={props.isTwelveHour}
         />
     );
+    const notificationRoomLabel = room
+        ? _t("timeline|in_room_name", { room: room.name }, { strong: (sub) => <strong>{sub}</strong> })
+        : undefined;
+    const notificationRoomAvatar = room ? (
+        <div className="mx_EventTile_avatar">
+            <RoomAvatar room={room} size="28px" />
+        </div>
+    ) : undefined;
+    const unreadBadge = room ? (
+        <UnreadNotificationBadge room={room} threadId={props.mxEvent.getId()} forceDot={true} />
+    ) : undefined;
 
     const commonProps: EventTileViewProps = {
         as: props.as,
         rootRef,
         id: tileContentId,
-        mxEvent: props.mxEvent,
-        room,
+        eventId: props.mxEvent.getId() ?? undefined,
         layout: props.layout,
         timelineRenderingType: roomContext.timelineRenderingType,
         classes: snapshot.classes,
@@ -574,12 +597,8 @@ function useEventTileViewProps({
         isRenderingNotification: roomContext.timelineRenderingType === TimelineRenderingType.Notification,
         replyChain,
         actionBar,
-        avatarMember,
-        avatarSize: snapshot.avatarSize,
-        avatarViewUserOnClick: snapshot.avatarMemberUserOnClick,
-        avatarForceHistorical: snapshot.avatarForceHistorical,
-        senderMode: snapshot.senderMode,
-        onSenderProfileClick,
+        avatar,
+        sender,
         messageStatus,
         footer,
         showThreadToolbar: snapshot.showThreadToolbar,
@@ -595,6 +614,9 @@ function useEventTileViewProps({
         encryptionIndicatorTitle: snapshot.encryptionIndicatorTitle,
         sharedKeysUserId: snapshot.sharedKeysUserId,
         sharedKeysRoomId: snapshot.sharedKeysRoomId,
+        notificationRoomLabel,
+        notificationRoomAvatar,
+        unreadBadge,
         onMouseEnter: (): void => vm.setHover(true),
         onMouseLeave: (): void => vm.setHover(false),
         onFocus: (): void => vm.setFocusWithin(true),

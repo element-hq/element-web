@@ -14,20 +14,14 @@ import React, {
     type Ref,
 } from "react";
 
-import type { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
-import { _t } from "../../../../languageHandler";
 import { Layout } from "../../../../settings/enums/Layout";
-import RoomAvatar from "../../avatars/RoomAvatar";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
-import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
-import { Avatar } from "./Avatar";
 import { EncryptionIndicator } from "./EncryptionIndicator";
-import { Sender } from "./Sender";
 import { ThreadToolbar } from "./ThreadToolbar";
 import { Timestamp } from "./Timestamp";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
-import { type EncryptionIndicatorMode, type SenderMode } from "./EventTileModes";
+import { type EncryptionIndicatorMode } from "./EventTileModes";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -44,8 +38,7 @@ export interface EventTileViewProps {
     as?: string;
     rootRef?: Ref<HTMLElement>;
     id: string;
-    mxEvent: MatrixEvent;
-    room?: Room | null;
+    eventId?: string;
     layout?: Layout;
     timelineRenderingType: TimelineRenderingType;
     classes: string;
@@ -56,12 +49,8 @@ export interface EventTileViewProps {
     isOwnEvent: boolean;
     isRenderingNotification: boolean;
     replyChain?: ReactNode;
-    avatarMember?: RoomMember | null;
-    avatarSize?: string | null;
-    avatarViewUserOnClick: boolean;
-    avatarForceHistorical: boolean;
-    senderMode: SenderMode;
-    onSenderProfileClick?: () => void;
+    avatar?: ReactNode;
+    sender?: ReactNode;
     actionBar?: ReactNode;
     messageBody: ReactNode;
     threadInfo?: ReactNode;
@@ -82,6 +71,9 @@ export interface EventTileViewProps {
     encryptionIndicatorTitle?: string;
     sharedKeysUserId?: string;
     sharedKeysRoomId?: string;
+    notificationRoomLabel?: ReactNode;
+    notificationRoomAvatar?: ReactNode;
+    unreadBadge?: ReactNode;
     contextMenu?: ReactNode;
     onMouseEnter: MouseEventHandler<HTMLElement>;
     onMouseLeave: MouseEventHandler<HTMLElement>;
@@ -101,8 +93,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
         as,
         rootRef,
         id,
-        mxEvent,
-        room,
+        eventId,
         layout,
         timelineRenderingType,
         classes,
@@ -113,12 +104,8 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
         isOwnEvent,
         isRenderingNotification,
         replyChain,
-        avatarMember,
-        avatarSize,
-        avatarViewUserOnClick,
-        avatarForceHistorical,
-        senderMode,
-        onSenderProfileClick,
+        avatar,
+        sender,
         actionBar,
         messageBody,
         threadInfo,
@@ -139,6 +126,9 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
         encryptionIndicatorTitle,
         sharedKeysUserId,
         sharedKeysRoomId,
+        notificationRoomLabel,
+        notificationRoomAvatar,
+        unreadBadge,
         contextMenu,
         onMouseEnter,
         onMouseLeave,
@@ -154,15 +144,6 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
     } = props;
 
     const Root = (as ?? "li") as ElementType;
-    const avatar = (
-        <Avatar
-            member={avatarMember}
-            size={avatarSize}
-            viewUserOnClick={avatarViewUserOnClick}
-            forceHistorical={avatarForceHistorical}
-        />
-    );
-    const sender = <Sender mode={senderMode} mxEvent={mxEvent} onClick={onSenderProfileClick} />;
     const timestamp = showTimestamp ? (
         <Timestamp
             showRelative={showRelativeTimestamp}
@@ -217,7 +198,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                     data-has-reply={!!replyChain}
                     data-layout={layout}
                     data-self={isOwnEvent}
-                    data-event-id={mxEvent.getId()}
+                    data-event-id={eventId}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     onFocus={onFocus}
@@ -260,25 +241,16 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                 >
                     <div className="mx_EventTile_details">
                         {sender}
-                        {isRenderingNotification && room ? (
-                            <span className="mx_EventTile_truncated">
-                                {" "}
-                                {_t(
-                                    "timeline|in_room_name",
-                                    { room: room.name },
-                                    { strong: (sub) => <strong>{sub}</strong> },
-                                )}
-                            </span>
+                        {isRenderingNotification && notificationRoomLabel ? (
+                            <span className="mx_EventTile_truncated">{notificationRoomLabel}</span>
                         ) : (
                             ""
                         )}
                         {timestamp}
-                        <UnreadNotificationBadge room={room || undefined} threadId={mxEvent.getId()} forceDot={true} />
+                        {unreadBadge}
                     </div>
-                    {isRenderingNotification && room ? (
-                        <div className="mx_EventTile_avatar">
-                            <RoomAvatar room={room} size="28px" />
-                        </div>
+                    {isRenderingNotification && notificationRoomAvatar ? (
+                        notificationRoomAvatar
                     ) : (
                         avatar
                     )}
@@ -319,7 +291,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                     data-scroll-tokens={scrollToken}
                     data-layout={layout}
                     data-self={isOwnEvent}
-                    data-event-id={mxEvent.getId()}
+                    data-event-id={eventId}
                     data-has-reply={!!replyChain}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}

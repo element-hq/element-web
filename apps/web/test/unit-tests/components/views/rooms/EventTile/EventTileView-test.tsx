@@ -8,26 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { getByLabelText, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import type { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-
-import { mkMessage } from "../../../../../test-utils";
 import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { Layout } from "../../../../../../src/settings/enums/Layout";
-import { EncryptionIndicatorMode, SenderMode } from "../../../../../../src/components/views/rooms/EventTile/EventTileModes";
+import { EncryptionIndicatorMode } from "../../../../../../src/components/views/rooms/EventTile/EventTileModes";
 import { EventTileView, type EventTileViewProps } from "../../../../../../src/components/views/rooms/EventTile/EventTileView";
-
-jest.mock("../../../../../../src/components/views/avatars/RoomAvatar", () => ({
-    __esModule: true,
-    default: ({ room }: { room: Room }) => <div data-testid="room-avatar">{room.name}</div>,
-}));
-
-jest.mock("../../../../../../src/components/views/rooms/NotificationBadge/UnreadNotificationBadge", () => ({
-    UnreadNotificationBadge: () => <div data-testid="unread-badge" />,
-}));
-
-jest.mock("../../../../../../src/components/views/rooms/EventTile/Avatar", () => ({
-    Avatar: () => <div data-testid="avatar" />,
-}));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/EncryptionIndicator", () => ({
     EncryptionIndicator: ({
@@ -43,14 +27,6 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/EncryptionIndi
     }) => (
         <div data-testid="encryption-indicator">
             {icon}:{title}:{sharedUserId}:{roomId}
-        </div>
-    ),
-}));
-
-jest.mock("../../../../../../src/components/views/rooms/EventTile/Sender", () => ({
-    Sender: ({ mode, mxEvent }: { mode: string; mxEvent: MatrixEvent }) => (
-        <div data-testid="sender">
-            {mode}:{mxEvent.getSender()}
         </div>
     ),
 }));
@@ -91,21 +67,16 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadPanelSum
 }));
 
 describe("EventTileView", () => {
-    let mxEvent: MatrixEvent;
-
     function makeProps(overrides: Partial<EventTileViewProps> = {}): EventTileViewProps {
         return {
             id: "event",
-            mxEvent,
-            room: { name: "!roomId:example.org" } as Room,
+            eventId: "$event:example.org",
             timelineRenderingType: TimelineRenderingType.Room,
             classes: "mx_EventTile",
             lineClasses: "mx_EventTile_line",
             isOwnEvent: false,
             isRenderingNotification: false,
-            avatarViewUserOnClick: false,
-            avatarForceHistorical: false,
-            senderMode: SenderMode.Default,
+            sender: <div data-testid="sender">default:@alice:example.org</div>,
             messageBody: <div>Message body</div>,
             showGroupPadlock: false,
             showIrcPadlock: false,
@@ -122,21 +93,18 @@ describe("EventTileView", () => {
         };
     }
 
-    beforeEach(() => {
-        mxEvent = mkMessage({
-            room: "!roomId:example.org",
-            user: "@alice:example.org",
-            msg: "Hello world!",
-            event: true,
-        });
-    });
-
-    it("renders the room name for notifications", () => {
+    it("renders the notification room label slot", () => {
         const { container } = render(
             <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.Notification,
                     isRenderingNotification: true,
+                    notificationRoomLabel: (
+                        <>
+                            {" in "}
+                            <strong>!roomId:example.org</strong>
+                        </>
+                    ),
                 })}
             />,
         );
@@ -146,12 +114,12 @@ describe("EventTileView", () => {
         );
     });
 
-    it("renders the sender for the thread list", () => {
+    it("renders the sender slot for the thread list", () => {
         const { container } = render(
             <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
-                    senderMode: SenderMode.Tooltip,
+                    sender: <div data-testid="sender">tooltip:@alice:example.org</div>,
                 })}
             />,
         );
