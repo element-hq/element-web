@@ -29,6 +29,21 @@ A special case is `%(count)s` as this is also used to determine which pluralisat
 These things are markup tags, they encapsulate sections of translations to be marked up, with links, buttons, emphasis and such.
 You must keep these markers surrounding the equivalent string in your language that needs to be marked up.
 
+### Changing the English source strings
+
+English source strings must **not** be changed through Localazy. If you believe an English string needs rewording:
+
+- **If you are a developer:** Update the string directly in the English translation files, open a pull request, and make sure
+  any failing tests are updated accordingly.
+- **If you are not a developer:** [Open an issue](https://github.com/element-hq/element-web/issues/new) describing which
+  strings should be changed and suggesting improved wording.
+
+> [!CAUTION]
+> If the meaning of a string changes — even if the English wording stays the same or is only slightly modified — a
+> new translation key must be used. Reusing an existing key for a different meaning will silently keep the old translations in other
+> languages, which may no longer be correct. Using a new key ensures the string is flagged as untranslated and will be properly
+> translated by contributors.
+
 ### When will my translations be available?
 
 We automatically pull changes from Localazy 3 times a week, so your translations should be available at https://develop.element.io
