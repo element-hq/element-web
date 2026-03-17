@@ -12,6 +12,7 @@ import classNames from "classnames";
 
 import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../viewmodel";
+import { useI18n } from "../../utils/i18nContext";
 
 type Icon = React.ForwardRefExoticComponent<
     Omit<React.SVGProps<SVGSVGElement>, "ref" | "children"> & React.RefAttributes<SVGSVGElement>
@@ -78,8 +79,9 @@ export type UserMenuViewProps = {
 
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
     const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions } = useViewModel(vm);
+    const { translate: _t } = useI18n();
     const trigger = (
-        <button className={classNames(styles.triggerButton)} aria-label="User menu">
+        <button className={classNames(styles.triggerButton)} aria-label={_t("menus|user_menu|title")}>
             <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
             {expanded ? (
                 <Text type="heading" size="sm" as="span" weight="semibold">
@@ -93,7 +95,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
             <Menu
                 open={open}
                 showTitle={false}
-                title="User menu"
+                title={_t("menus|user_menu|title")}
                 trigger={trigger}
                 onOpenChange={vm.setOpen}
                 align="start"
@@ -110,7 +112,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                     </Text>
                     {manageAccountHref && (
                         <Button as="a" size="sm" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
-                            Manage account
+                            {_t("menus|user_menu|manage_account")}
                         </Button>
                     )}
                 </section>

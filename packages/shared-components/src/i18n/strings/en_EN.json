@@ -32,6 +32,12 @@
     "left_panel": {
         "open_dial_pad": "Open dial pad"
     },
+    "menus": {
+        "user_menu": {
+            "manage_account": "Manage account",
+            "title": "User menu"
+        }
+    },
     "notifications": {
         "all_messages": "All messages",
         "default_settings": "Match default settings",
