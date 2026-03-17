@@ -137,7 +137,7 @@ test.describe("Account user settings tab", () => {
         await app.closeDialog();
 
         // Assert the avatar's initial characters are set
-        const menu = page.getByRole("menu", { name: "User menu" });
+        const menu = await app.openUserMenu();
         await expect(menu.getByRole("img", { name: user.userId }).getByText("A")).toBeVisible(); // Alice
         await expect(page.locator(".mx_RoomView_wrapper .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
     });
