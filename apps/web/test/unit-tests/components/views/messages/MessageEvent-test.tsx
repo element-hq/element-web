@@ -26,11 +26,7 @@ jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
 jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-body" />,
-    MImageBodyInner: class extends require("react").Component {
-        public render(): React.ReactNode {
-            return <div data-testid="image-body-inner" />;
-        }
-    },
+    MImageBodyInner: class {},
 }));
 
 jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
