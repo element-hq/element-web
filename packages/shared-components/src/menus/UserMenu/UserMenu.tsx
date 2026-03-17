@@ -8,6 +8,7 @@
 import React, { type JSX } from "react";
 import { Avatar, Button, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import classNames from "classnames";
 
 import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../viewmodel";
@@ -69,12 +70,16 @@ export declare interface UserMenuViewActions {
 
 export type UserMenuViewProps = {
     vm: ViewModel<UserMenuViewSnapshot, UserMenuViewActions>;
+    /**
+     * Class name for the container
+     */
+    className?: string;
 };
 
-export function UserMenuView({ vm }: UserMenuViewProps): JSX.Element {
+export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
     const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions } = useViewModel(vm);
     const trigger = (
-        <button className={styles.triggerButton} aria-label="User menu">
+        <button className={classNames(styles.triggerButton)} aria-label="User menu">
             <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
             {expanded ? (
                 <Text type="heading" size="sm" as="span" weight="semibold">
@@ -93,7 +98,7 @@ export function UserMenuView({ vm }: UserMenuViewProps): JSX.Element {
                 onOpenChange={vm.setOpen}
                 align="start"
                 side="bottom"
-                className={styles.container}
+                className={classNames(styles.container, className)}
             >
                 <section className={styles.profile}>
                     <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />
