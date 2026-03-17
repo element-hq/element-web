@@ -44,7 +44,7 @@ function getA11yLabel(roomName: string, notification: NotificationDecorationData
  * Snapshot for a room list item.
  * Contains all the data needed to render a room in the list.
  */
-export interface RoomListItemSnapshot {
+export interface RoomListItemViewSnapshot {
     /** Unique identifier for the room (used for list keying) */
     id: string;
     /** The opaque Room object from the client (e.g., matrix-js-sdk Room) */
@@ -81,7 +81,7 @@ export interface RoomListItemSnapshot {
  * Actions interface for room list item operations.
  * Implemented by the room item view model.
  */
-export interface RoomListItemActions {
+export interface RoomListItemViewActions {
     /** Called when the room should be opened */
     onOpenRoom: () => void;
     /** Called when the room should be marked as read */
@@ -105,14 +105,14 @@ export interface RoomListItemActions {
 /**
  * The view model type for a room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
+export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomListItemViewActions>;
 
 /**
  * Props for RoomListItemView component
  */
 export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLButtonElement>, "onFocus"> {
     /** The room item view model */
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
     /** Whether the room is selected */
     isSelected: boolean;
     /** Whether the room should be focused */
