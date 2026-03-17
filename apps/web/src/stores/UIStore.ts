@@ -45,6 +45,7 @@ export default class UIStore extends EventEmitter {
     public static get instance(): UIStore {
         if (!UIStore._instance) {
             UIStore._instance = new UIStore();
+            window.mxUIStore = UIStore._instance;
         }
         return UIStore._instance;
     }
@@ -133,5 +134,3 @@ export default class UIStore extends EventEmitter {
         }, 1000);
     };
 }
-
-window.mxUIStore = UIStore.instance;
