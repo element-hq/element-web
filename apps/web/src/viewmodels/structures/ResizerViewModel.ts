@@ -20,6 +20,8 @@ import whatInput from "what-input";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { AutoCollapseBehaviour } from "./behaviours/AutoCollapseBehaviour";
+import { CallStore, CallStoreEvent } from "../../stores/CallStore";
+import type { Call } from "../../models/Call";
 
 function getInitialState(): ResizerViewSnapshot {
     const shouldStartCollapsed =
@@ -59,6 +61,9 @@ export class ResizerViewModel
                 this.snapshot.merge({ isCollapsed });
             }),
         );
+        this.disposables.trackListener(CallStore.instance, CallStoreEvent.ConnectedCalls, (calls) => {
+            this.onCallConnected(calls as Set<Call>);
+        });
     }
 
     public onLeftPanelResize = debounce((panelSize: PanelSize): void => {
@@ -93,9 +98,7 @@ export class ResizerViewModel
     };
 
     public onSeparatorClick = (): void => {
-        if (this.panelHandle?.isCollapsed()) {
-            this.panelHandle.resize(`100%`);
-        }
+        this.expandPanel();
     };
 
     public onFocus = (): void => {
@@ -118,5 +121,14 @@ export class ResizerViewModel
 
     public onBlur = (): void => {
         if (this.getSnapshot().isFocusedViaKeyboard) this.snapshot.merge({ isFocusedViaKeyboard: false });
+    };
+
+    private onCallConnected = (calls: Set<Call>): void => {
+        if (calls.size > 0 && !this.panelHandle?.isCollapsed()) this.panelHandle?.collapse();
+        if (calls.size === 0 && this.panelHandle?.isCollapsed()) this.expandPanel();
+    };
+
+    private expandPanel = (): void => {
+        if (this.panelHandle?.isCollapsed()) this.panelHandle.resize(`100%`);
     };
 }
