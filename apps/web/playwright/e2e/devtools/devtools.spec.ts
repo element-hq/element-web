@@ -35,6 +35,6 @@ test.describe("Devtools", () => {
         await input.fill("https://example.com");
         await input.press("Enter");
         // expect EW NOT to reload
-        await page.getByText("Saved").isVisible();
+        await expect(page.getByText("Saved")).toBeVisible();
     });
 });

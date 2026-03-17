@@ -119,10 +119,10 @@ export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLBut
     isFocused: boolean;
     /** Callback when item receives focus */
     onFocus: (roomId: string, e: React.FocusEvent) => void;
-    /** Index of this room in the list (for accessibility) */
-    roomIndex: number;
-    /** Total number of rooms in the list (for accessibility) */
-    roomCount: number;
+    /** Whether this is the first item in the list */
+    isFirstItem: boolean;
+    /** Whether this is the last item in the list */
+    isLastItem: boolean;
     /** Function to render the room avatar */
     renderAvatar: (room: Room) => ReactNode;
 }
@@ -136,8 +136,8 @@ export const RoomListItemView = memo(function RoomListItemView({
     isSelected,
     isFocused,
     onFocus,
-    roomIndex,
-    roomCount,
+    isFirstItem,
+    isLastItem,
     renderAvatar,
     ...props
 }: RoomListItemViewProps): JSX.Element {
@@ -153,60 +153,57 @@ export const RoomListItemView = memo(function RoomListItemView({
     // Generate a11y label from notification state and room name
     const a11yLabel = getA11yLabel(item.name, item.notification);
 
-    const content = (
-        <Flex
-            as="button"
-            ref={ref}
-            className={classNames(styles.roomListItem, "mx_RoomListItemView", {
-                [styles.selected]: isSelected,
-                [styles.bold]: item.isBold,
-                [styles.firstItem]: roomIndex === 0,
-                [styles.lastItem]: roomIndex === roomCount - 1,
-                mx_RoomListItemView_selected: isSelected,
-            })}
-            gap="var(--cpd-space-3x)"
-            align="stretch"
-            type="button"
-            role="option"
-            aria-posinset={roomIndex + 1}
-            aria-setsize={roomCount}
-            aria-selected={isSelected}
-            aria-label={a11yLabel}
-            onClick={vm.onOpenRoom}
-            onFocus={(e: React.FocusEvent<HTMLButtonElement>) => onFocus(item.id, e)}
-            tabIndex={isFocused ? 0 : -1}
-            {...props}
-        >
-            <Flex className={styles.container} gap="var(--cpd-space-3x)" align="center">
-                {renderAvatar(item.room)}
-                <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
-                    {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <div className={styles.ellipsis}>
-                        <div className={styles.roomName} title={item.name} data-testid="room-name">
-                            {item.name}
+    return (
+        <RoomListItemContextMenu vm={vm}>
+            <Flex
+                as="button"
+                ref={ref}
+                className={classNames(styles.roomListItem, "mx_RoomListItemView", {
+                    [styles.selected]: isSelected,
+                    [styles.bold]: item.isBold,
+                    [styles.firstItem]: isFirstItem,
+                    [styles.lastItem]: isLastItem,
+                    mx_RoomListItemView_selected: isSelected,
+                })}
+                gap="var(--cpd-space-3x)"
+                align="stretch"
+                type="button"
+                aria-selected={isSelected}
+                aria-label={a11yLabel}
+                onClick={vm.onOpenRoom}
+                onFocus={(e: React.FocusEvent<HTMLButtonElement>) => onFocus(item.id, e)}
+                tabIndex={isFocused ? 0 : -1}
+                {...props}
+            >
+                <Flex className={styles.container} gap="var(--cpd-space-3x)" align="center">
+                    {renderAvatar(item.room)}
+                    <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
+                        {/* We truncate the room name when too long. Title here is to show the full name on hover */}
+                        <div className={styles.ellipsis}>
+                            <div className={styles.roomName} title={item.name} data-testid="room-name">
+                                {item.name}
+                            </div>
+                            {item.messagePreview && (
+                                <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
+                                    {item.messagePreview}
+                                </Text>
+                            )}
                         </div>
-                        {item.messagePreview && (
-                            <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
-                                {item.messagePreview}
-                            </Text>
+                        {(item.showMoreOptionsMenu || item.showNotificationMenu) && (
+                            <RoomListItemHoverMenu
+                                showMoreOptionsMenu={item.showMoreOptionsMenu}
+                                showNotificationMenu={item.showNotificationMenu}
+                                vm={vm}
+                            />
                         )}
-                    </div>
-                    {(item.showMoreOptionsMenu || item.showNotificationMenu) && (
-                        <RoomListItemHoverMenu
-                            showMoreOptionsMenu={item.showMoreOptionsMenu}
-                            showNotificationMenu={item.showNotificationMenu}
-                            vm={vm}
-                        />
-                    )}
 
-                    {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
-                    <div className={styles.notificationDecoration} aria-hidden={true}>
-                        <NotificationDecoration {...item.notification} />
-                    </div>
+                        {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
+                        <div className={styles.notificationDecoration} aria-hidden={true}>
+                            <NotificationDecoration {...item.notification} />
+                        </div>
+                    </Flex>
                 </Flex>
             </Flex>
-        </Flex>
+        </RoomListItemContextMenu>
     );
-
-    return <RoomListItemContextMenu vm={vm}>{content}</RoomListItemContextMenu>;
 });
