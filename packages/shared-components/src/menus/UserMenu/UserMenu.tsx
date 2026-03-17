@@ -9,14 +9,14 @@ import React, { type JSX } from "react";
 import { Avatar, Button, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
-import styles from "./QuickSettingsMenu.module.css";
+import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../viewmodel";
 
 type Icon = React.ForwardRefExoticComponent<
     Omit<React.SVGProps<SVGSVGElement>, "ref" | "children"> & React.RefAttributes<SVGSVGElement>
 >;
 
-export interface QuickSettingsMenuSnapshot {
+export interface UserMenuSnapshot {
     open: boolean;
     expanded?: boolean;
     avatarUrl?: string;
@@ -30,14 +30,14 @@ export interface QuickSettingsMenuSnapshot {
     }[];
 }
 
-export declare interface QuickSettingsMenuViewActions {
+export declare interface UserMenuViewActions {
     setOpen: (open: boolean) => void;
 }
-export type QuickSettingsMenuViewProps = {
-    vm: ViewModel<QuickSettingsMenuSnapshot, QuickSettingsMenuViewActions>;
+export type UserMenuViewProps = {
+    vm: ViewModel<UserMenuSnapshot, UserMenuViewActions>;
 };
 
-export function QuickSettingsMenu({ vm }: QuickSettingsMenuViewProps): JSX.Element {
+export function UserMenu({ vm }: UserMenuViewProps): JSX.Element {
     const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions } = useViewModel(vm);
     const trigger = (
         <button className={styles.triggerButton} aria-label="User menu">

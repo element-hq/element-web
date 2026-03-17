@@ -4,15 +4,16 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
-import type { MockedObject } from "jest-mock";
 import { MatrixError, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { QuickSettingsMenuViewModel } from "../../../src/viewmodels/menus/QuickSettingsMenuViewModel";
+
+import type { MockedObject } from "jest-mock";
+import { UserMenuViewModel } from "../../../src/viewmodels/menus/UserMenuViewModel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import SdkConfig from "../../../src/SdkConfig";
 
-describe("QuickSettingsMenuViewModel", () => {
+describe("UserMenuViewModel", () => {
     let dispatcher: MatrixDispatcher;
     let client: MockedObject<MatrixClient>;
     beforeEach(() => {
@@ -30,7 +31,7 @@ describe("QuickSettingsMenuViewModel", () => {
         SdkContextClass.instance.client = undefined;
     });
     it("should generate a menu options for a logged in client", () => {
-        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should show a link for account management", async () => {
@@ -39,16 +40,16 @@ describe("QuickSettingsMenuViewModel", () => {
         } as any);
         // Wait for readiness as we would do in a real client.
         await SdkContextClass.instance.oidcClientStore.readyPromise;
-        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         expect(vm.getSnapshot().manageAccountHref).toEqual("https://example.org/");
     });
     it("should generate a menu options for a guest", () => {
-        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
     it("should generate a menu options that include feedback", () => {
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
-        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         expect(vm.getSnapshot().actions).toContainEqual({
             label: "Feedback",
             onSelect: expect.anything(),
@@ -57,7 +58,7 @@ describe("QuickSettingsMenuViewModel", () => {
     });
     it("should generate a menu options that includes a home page", () => {
         SdkConfig.put({ embedded_pages: { home_url: "https://example.org" } });
-        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         expect(vm.getSnapshot().actions).toContainEqual({
             label: "Home",
             onSelect: expect.anything(),
@@ -65,14 +66,14 @@ describe("QuickSettingsMenuViewModel", () => {
         });
     });
     it("can toggle menu", () => {
-        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
         expect(vm.getSnapshot().open).toEqual(true);
         vm.setOpen(false);
         expect(vm.getSnapshot().open).toEqual(false);
     });
     it("can toggle expanded state", () => {
-        const vm = new QuickSettingsMenuViewModel(dispatcher, client, true);
+        const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setExpanded(true);
         expect(vm.getSnapshot().expanded).toEqual(true);
         vm.setExpanded(false);

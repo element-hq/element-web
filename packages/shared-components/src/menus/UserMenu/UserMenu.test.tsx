@@ -11,11 +11,11 @@ import { render } from "@test-utils";
 import React from "react";
 import { describe, it, expect } from "vitest";
 
-import * as stories from "./QuickSettingsMenu.stories.tsx";
+import * as stories from "./UserMenu.stories.tsx";
 
 const { Default, LongerName } = composeStories(stories);
 
-describe("QuickSettingsMenu", () => {
+describe("UserMenu", () => {
     it("renders a basic menu", async () => {
         const { container, getByRole } = render(<Default />);
         await userEvent.click(getByRole("button"));

@@ -5,12 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import {
-    _t,
-    BaseViewModel,
-    type QuickSettingsMenuSnapshot,
-    type QuickSettingsMenuViewActions,
-} from "@element-hq/web-shared-components";
+import { _t, BaseViewModel, type UserMenuSnapshot, type UserMenuViewActions } from "@element-hq/web-shared-components";
 import HomeSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/home-solid";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-problem";
@@ -30,18 +25,15 @@ import { getHomePageUrl } from "../../utils/pages";
 import SdkConfig from "../../SdkConfig";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-// Matches maximum size of an avatar in the QuickSettingsMenu
+// Matches maximum size of an avatar in the UserMenu
 const AVATAR_PX = 88;
 
-export class QuickSettingsMenuViewModel
-    extends BaseViewModel<QuickSettingsMenuSnapshot, undefined>
-    implements QuickSettingsMenuViewActions
-{
+export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
     private get hasHomePage(): boolean {
         return !!getHomePageUrl(SdkConfig.get(), this.client);
     }
 
-    public getActions(): QuickSettingsMenuSnapshot["actions"] {
+    public getActions(): UserMenuSnapshot["actions"] {
         if (this.client.isGuest()) {
             return [
                 {

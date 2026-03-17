@@ -10,19 +10,12 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
 
-import {
-    QuickSettingsMenu,
-    type QuickSettingsMenuSnapshot,
-    type QuickSettingsMenuViewActions,
-} from "./QuickSettingsMenu";
+import { UserMenu, type UserMenuSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
 import { BaseViewModel, useCreateAutoDisposedViewModel } from "../../viewmodel";
 
-class MockQuickSettingsViewModel
-    extends BaseViewModel<QuickSettingsMenuSnapshot, undefined>
-    implements QuickSettingsMenuViewActions
-{
-    public constructor(snapshot: QuickSettingsMenuSnapshot) {
+class MockQuickSettingsViewModel extends BaseViewModel<UserMenuSnapshot, undefined> implements UserMenuViewActions {
+    public constructor(snapshot: UserMenuSnapshot) {
         super(undefined, snapshot);
     }
 
@@ -31,14 +24,14 @@ class MockQuickSettingsViewModel
     };
 }
 
-const QuickSettingsMenuWrapper = (snapshot: QuickSettingsMenuSnapshot): JSX.Element => {
+const UserMenuWrapper = (snapshot: UserMenuSnapshot): JSX.Element => {
     const vm = useCreateAutoDisposedViewModel(() => new MockQuickSettingsViewModel(snapshot));
-    return <QuickSettingsMenu vm={vm} />;
+    return <UserMenu vm={vm} />;
 };
 
 const meta = {
-    title: "Menus/QuickSettingsMenu",
-    component: QuickSettingsMenuWrapper,
+    title: "Menus/UserMenu",
+    component: UserMenuWrapper,
     tags: ["autodocs"],
     args: {
         open: false,
@@ -71,7 +64,7 @@ const meta = {
             url: "https://www.figma.com/design/rTaQE2nIUSLav4Tg3nozq7/Compound-Web-Components?node-id=11583-3479&t=DwFpi7Zlq9uJr1SQ-0",
         },
     },
-} satisfies Meta<typeof QuickSettingsMenuWrapper>;
+} satisfies Meta<typeof UserMenuWrapper>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

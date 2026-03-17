@@ -31,6 +31,7 @@ import {
     PlusIcon,
     ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
@@ -79,6 +80,8 @@ import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNav
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
 import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
+import { UserMenuViewModel } from "../../../viewmodels/menus/UserMenuViewModel.ts";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -384,6 +387,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
 );
 
 const SpacePanel: React.FC = () => {
+    const client = useMatrixClientContext();
     const [dragging, setDragging] = useState(false);
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
     const ref = useRef<HTMLDivElement>(null);
@@ -399,6 +403,20 @@ const SpacePanel: React.FC = () => {
     });
 
     const newRoomListEnabled = useSettingValue("feature_new_room_list");
+
+    const userMenuVm = useCreateAutoDisposedViewModel(
+        () => new UserMenuViewModel(defaultDispatcher, client, isPanelCollapsed),
+    );
+
+    useDispatcher(defaultDispatcher, (payload) => {
+        if (payload.action === Action.ToggleUserMenu) {
+            userMenuVm.setOpen(!userMenuVm.getSnapshot().open);
+        }
+    });
+
+    useEffect(() => {
+        userMenuVm.setExpanded(!isPanelCollapsed);
+    }, [userMenuVm, isPanelCollapsed]);
 
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
@@ -438,7 +456,7 @@ const SpacePanel: React.FC = () => {
                         ref={ref}
                         aria-label={_t("common|spaces")}
                     >
-                        <UserMenu isPanelCollapsed={isPanelCollapsed} />
+                        <UserMenu vm={userMenuVm} />
                         <AccessibleButton
                             className={classNames("mx_SpacePanel_toggleCollapse", {
                                 expanded: !isPanelCollapsed,
