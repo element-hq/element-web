@@ -17,7 +17,6 @@ export * from "./crypto/SasEmoji";
 export * from "./event-tiles/EncryptionEventView";
 export * from "./event-tiles/EventTileBubble";
 export * from "./event-tiles/TextualEventView";
-export * from "./event-tiles/UrlPreviewView";
 export * from "./event-tiles/UrlPreviewGroupView";
 export * from "./menus/UserMenu";
 export * from "./message-body/EventContentBody";
