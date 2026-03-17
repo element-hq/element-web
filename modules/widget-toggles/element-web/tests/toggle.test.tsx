@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, type vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { type WidgetApi, type I18nApi } from "@element-hq/element-web-module-api";
 import { type IWidget } from "matrix-widget-api";
@@ -14,38 +14,9 @@ import { TooltipProvider } from "@vector-im/compound-web";
 import userEvent from "@testing-library/user-event";
 
 import { WidgetToggle } from "../src/toggle";
+import { mockI18nApi, mockWidget, mockWidgetApi } from "./mocks";
 
 const roomId = "!room:example.com";
-
-const mockWidget = (overrides: Partial<IWidget> = {}): IWidget => ({
-    id: "widget-1",
-    creatorUserId: "@user:example.com",
-    type: "m.custom",
-    name: "My Widget",
-    url: "https://example.com",
-    ...overrides,
-});
-
-const mockWidgetApi = (overrides: Partial<WidgetApi> = {}): WidgetApi =>
-    ({
-        getAppAvatarUrl: vi.fn().mockReturnValue(null),
-        isAppInContainer: vi.fn().mockReturnValue(false),
-        moveAppToContainer: vi.fn(),
-        ...overrides,
-    }) as unknown as WidgetApi;
-
-const mockI18nApi = (): I18nApi =>
-    ({
-        translate: vi.fn().mockImplementation((key: string, vars?: Record<string, string>) => {
-            let result = key;
-            if (vars) {
-                for (const [k, v] of Object.entries(vars)) {
-                    result = result.replace(`%(${k})s`, v);
-                }
-            }
-            return result;
-        }),
-    }) as unknown as I18nApi;
 
 const wrapper = ({ children }: PropsWithChildren): React.JSX.Element => <TooltipProvider>{children}</TooltipProvider>;
 
