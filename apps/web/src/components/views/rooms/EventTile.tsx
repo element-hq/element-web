@@ -1563,10 +1563,6 @@ function EventTileErrorFallback({ error, layout, mxEvent }: Readonly<EventTileEr
     }, [error, vm]);
 
     useEffect(() => {
-        vm.setMxEvent(mxEvent);
-    }, [mxEvent, vm]);
-
-    useEffect(() => {
         vm.setDeveloperMode(developerMode);
     }, [developerMode, vm]);
 
