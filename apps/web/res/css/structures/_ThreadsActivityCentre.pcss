@@ -70,6 +70,34 @@
     }
 }
 
+.mx_ThreadsActivityCentre_tabs {
+    display: flex;
+    padding: 0 8px;
+    border-bottom: 1px solid $quinary-content;
+
+    .mx_ThreadsActivityCentre_tab {
+        flex: 1;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        padding: 8px 4px;
+        cursor: pointer;
+        font-size: var(--cpd-font-size-body-sm);
+        color: $secondary-content;
+
+        &:hover {
+            color: $primary-content;
+        }
+
+        &--active {
+            color: $primary-content;
+            font-weight: var(--cpd-font-weight-semibold);
+            border-bottom-color: $accent;
+        }
+    }
+}
+
 .mx_ThreadsActivityCentre_rows {
     overflow-y: scroll;
     /* Let some space at the top and the bottom of the pop-up */
@@ -85,6 +113,62 @@
             text-overflow: ellipsis;
             /* Arbitrary size, keep the TAC as the wanted width */
             width: 202px;
+        }
+    }
+
+    .mx_ThreadsActivityCentreThreadRow {
+        /* Override the fixed height from mx_ThreadsActivityCentreRow */
+        height: auto;
+        min-height: 56px;
+
+        /* Override compound's display: grid with a simple left-to-right flex row:
+           [avatar] [small gap] [text content] */
+        display: flex !important;
+        align-items: center;
+        gap: var(--cpd-space-2x); /* 8px between avatar and text */
+
+        /* Compound's .icon class adds margin-inline-end; zero it since gap handles spacing */
+        & > .mx_DecoratedRoomAvatar {
+            margin-inline-end: 0 !important;
+            flex-shrink: 0;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: start;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_roomName {
+            flex: 1;
+            min-width: 0;
+            font-weight: var(--cpd-font-weight-semibold);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_preview {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: var(--cpd-font-size-body-sm);
+            color: $secondary-content;
+        }
+
+        .mx_ThreadsActivityCentreThreadRow_sender {
+            font-weight: var(--cpd-font-weight-semibold);
+            color: $primary-content;
         }
     }
 }
