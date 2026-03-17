@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`EventTileThreadToolbar renders 1`] = `
+exports[`ThreadToolbar renders 1`] = `
 <DocumentFragment>
   <div
     aria-label="Message Actions"

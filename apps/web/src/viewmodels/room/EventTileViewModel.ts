@@ -33,6 +33,12 @@ import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import type LegacyCallEventGrouper from "../../components/structures/LegacyCallEventGrouper";
+import {
+    ClickMode,
+    EventTileEncryptionIndicatorMode,
+    SenderMode,
+    ThreadInfoMode,
+} from "../../components/views/rooms/EventTile/EventTileModes";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { _t } from "../../languageHandler";
 import { ElementCallEventType } from "../../call-types";
@@ -109,15 +115,15 @@ export interface EventTileViewSnapshot {
     avatarSize: string | null;
     avatarMemberUserOnClick: boolean;
     avatarForceHistorical: boolean;
-    senderMode: "hidden" | "default" | "composerInsert" | "tooltip";
+    senderMode: SenderMode;
     isPinned: boolean;
     hasFooter: boolean;
-    e2ePadlockIcon: "none" | "normal" | "warning" | "decryptionFailure";
-    e2ePadlockTitle?: string;
-    e2ePadlockSharedUserId?: string;
-    e2ePadlockRoomId?: string;
-    threadInfoMode: "none" | "summary" | "searchLink" | "searchText";
-    tileClickMode: "none" | "viewRoom" | "showThread";
+    encryptionIndicatorMode: EventTileEncryptionIndicatorMode;
+    encryptionIndicatorTitle?: string;
+    sharedKeysUserId?: string;
+    sharedKeysRoomId?: string;
+    threadInfoMode: ThreadInfoMode;
+    tileClickMode: ClickMode;
     viewRoomMetricsTrigger?: "MessageSearch";
 }
 
@@ -291,10 +297,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         nextSnapshot.senderMode = EventTileViewModel.getSenderMode(this.props, nextSnapshot);
         nextSnapshot.isPinned = EventTileViewModel.getIsPinned(this.props);
         nextSnapshot.hasFooter = EventTileViewModel.getHasFooter(nextSnapshot);
-        nextSnapshot.e2ePadlockIcon = EventTileViewModel.getE2ePadlockIcon(this.props, nextSnapshot);
-        nextSnapshot.e2ePadlockTitle = EventTileViewModel.getE2ePadlockTitle(this.props, nextSnapshot);
-        nextSnapshot.e2ePadlockSharedUserId = EventTileViewModel.getE2ePadlockSharedUserId(this.props, nextSnapshot);
-        nextSnapshot.e2ePadlockRoomId = EventTileViewModel.getE2ePadlockRoomId(this.props);
+        nextSnapshot.encryptionIndicatorMode = EventTileViewModel.getEncryptionIndicatorMode(this.props, nextSnapshot);
+        nextSnapshot.encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(this.props, nextSnapshot);
+        nextSnapshot.sharedKeysUserId = EventTileViewModel.getSharedKeysUserId(this.props, nextSnapshot);
+        nextSnapshot.sharedKeysRoomId = EventTileViewModel.getSharedKeysRoomId(this.props);
         nextSnapshot.threadInfoMode = EventTileViewModel.getThreadInfoMode(this.props, nextSnapshot);
         nextSnapshot.tileClickMode = EventTileViewModel.getTileClickMode(this.props);
         nextSnapshot.viewRoomMetricsTrigger = EventTileViewModel.getViewRoomMetricsTrigger(this.props);
@@ -366,15 +372,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             avatarSize: null,
             avatarMemberUserOnClick: false,
             avatarForceHistorical: false,
-            senderMode: "hidden",
+            senderMode: SenderMode.Hidden,
             isPinned: false,
             hasFooter: false,
-            e2ePadlockIcon: "none",
-            e2ePadlockTitle: undefined,
-            e2ePadlockSharedUserId: undefined,
-            e2ePadlockRoomId: undefined,
-            threadInfoMode: "none",
-            tileClickMode: "none",
+            encryptionIndicatorMode: EventTileEncryptionIndicatorMode.None,
+            encryptionIndicatorTitle: undefined,
+            sharedKeysUserId: undefined,
+            sharedKeysRoomId: undefined,
+            threadInfoMode: ThreadInfoMode.None,
+            tileClickMode: ClickMode.None,
             viewRoomMetricsTrigger: undefined,
         };
         const displayInfo = EventTileViewModel.getDisplayInfo(props);
@@ -411,10 +417,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.senderMode = EventTileViewModel.getSenderMode(props, snapshot);
         snapshot.isPinned = EventTileViewModel.getIsPinned(props);
         snapshot.hasFooter = EventTileViewModel.getHasFooter(snapshot);
-        snapshot.e2ePadlockIcon = EventTileViewModel.getE2ePadlockIcon(props, snapshot);
-        snapshot.e2ePadlockTitle = EventTileViewModel.getE2ePadlockTitle(props, snapshot);
-        snapshot.e2ePadlockSharedUserId = EventTileViewModel.getE2ePadlockSharedUserId(props, snapshot);
-        snapshot.e2ePadlockRoomId = EventTileViewModel.getE2ePadlockRoomId(props);
+        snapshot.encryptionIndicatorMode = EventTileViewModel.getEncryptionIndicatorMode(props, snapshot);
+        snapshot.encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(props, snapshot);
+        snapshot.sharedKeysUserId = EventTileViewModel.getSharedKeysUserId(props, snapshot);
+        snapshot.sharedKeysRoomId = EventTileViewModel.getSharedKeysRoomId(props);
         snapshot.threadInfoMode = EventTileViewModel.getThreadInfoMode(props, snapshot);
         snapshot.tileClickMode = EventTileViewModel.getTileClickMode(props);
         snapshot.viewRoomMetricsTrigger = EventTileViewModel.getViewRoomMetricsTrigger(props);
@@ -634,18 +640,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
     ): EventTileViewSnapshot["senderMode"] {
-        if (!snapshot.showSender) return "hidden";
+        if (!snapshot.showSender) return SenderMode.Hidden;
 
         switch (props.timelineRenderingType) {
             case TimelineRenderingType.Room:
             case TimelineRenderingType.Search:
             case TimelineRenderingType.Pinned:
             case TimelineRenderingType.Thread:
-                return "composerInsert";
+                return SenderMode.ComposerInsert;
             case TimelineRenderingType.ThreadsList:
-                return "tooltip";
+                return SenderMode.Tooltip;
             default:
-                return "default";
+                return SenderMode.Default;
         }
     }
 
@@ -698,21 +704,21 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return snapshot.isPinned;
     }
 
-    private static getE2ePadlockIcon(
+    private static getEncryptionIndicatorMode(
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
-    ): EventTileViewSnapshot["e2ePadlockIcon"] {
+    ): EventTileViewSnapshot["encryptionIndicatorMode"] {
         const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
 
-        if (isLocalRoom(event.getRoomId()!)) return "none";
+        if (isLocalRoom(event.getRoomId()!)) return EventTileEncryptionIndicatorMode.None;
 
         if (event.isDecryptionFailure()) {
             switch (event.decryptionFailureReason) {
                 case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
                 case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
-                    return "none";
+                    return EventTileEncryptionIndicatorMode.None;
                 default:
-                    return "decryptionFailure";
+                    return EventTileEncryptionIndicatorMode.DecryptionFailure;
             }
         }
 
@@ -720,25 +726,27 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             snapshot.shieldReason === EventShieldReason.AUTHENTICITY_NOT_GUARANTEED &&
             props.mxEvent.getKeyForwardingUser()
         ) {
-            return "none";
+            return EventTileEncryptionIndicatorMode.None;
         }
 
         if (snapshot.shieldColour !== EventShieldColour.NONE) {
-            return snapshot.shieldColour === EventShieldColour.GREY ? "normal" : "warning";
+            return snapshot.shieldColour === EventShieldColour.GREY
+                ? EventTileEncryptionIndicatorMode.Normal
+                : EventTileEncryptionIndicatorMode.Warning;
         }
 
         if (props.isRoomEncrypted) {
-            if (event.status === EventStatus.ENCRYPTING) return "none";
-            if (event.status === EventStatus.NOT_SENT) return "none";
-            if (event.isState()) return "none";
-            if (event.isRedacted()) return "none";
-            if (!event.isEncrypted()) return "warning";
+            if (event.status === EventStatus.ENCRYPTING) return EventTileEncryptionIndicatorMode.None;
+            if (event.status === EventStatus.NOT_SENT) return EventTileEncryptionIndicatorMode.None;
+            if (event.isState()) return EventTileEncryptionIndicatorMode.None;
+            if (event.isRedacted()) return EventTileEncryptionIndicatorMode.None;
+            if (!event.isEncrypted()) return EventTileEncryptionIndicatorMode.Warning;
         }
 
-        return "none";
+        return EventTileEncryptionIndicatorMode.None;
     }
 
-    private static getE2ePadlockTitle(
+    private static getEncryptionIndicatorTitle(
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
     ): string | undefined {
@@ -786,7 +794,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return undefined;
     }
 
-    private static getE2ePadlockSharedUserId(
+    private static getSharedKeysUserId(
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
     ): string | undefined {
@@ -797,7 +805,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return props.mxEvent.getKeyForwardingUser() ?? undefined;
     }
 
-    private static getE2ePadlockRoomId(props: EventTileViewModelProps): string | undefined {
+    private static getSharedKeysRoomId(props: EventTileViewModelProps): string | undefined {
         const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
         return event.getRoomId() ?? undefined;
     }
@@ -807,24 +815,24 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot: EventTileViewSnapshot,
     ): EventTileViewSnapshot["threadInfoMode"] {
         if (snapshot.isThreadRoot && snapshot.thread) {
-            return "summary";
+            return ThreadInfoMode.Summary;
         }
 
         if (props.timelineRenderingType === TimelineRenderingType.Search && props.mxEvent.threadRootId) {
-            return props.highlightLink ? "searchLink" : "searchText";
+            return props.highlightLink ? ThreadInfoMode.SearchLink : ThreadInfoMode.SearchText;
         }
 
-        return "none";
+        return ThreadInfoMode.None;
     }
 
     private static getTileClickMode(props: EventTileViewModelProps): EventTileViewSnapshot["tileClickMode"] {
         switch (props.timelineRenderingType) {
             case TimelineRenderingType.Notification:
-                return "viewRoom";
+                return ClickMode.ViewRoom;
             case TimelineRenderingType.ThreadsList:
-                return "showThread";
+                return ClickMode.ShowThread;
             default:
-                return "none";
+                return ClickMode.None;
         }
     }
 

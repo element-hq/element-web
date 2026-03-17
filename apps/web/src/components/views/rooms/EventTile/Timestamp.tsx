@@ -12,7 +12,7 @@ import type { MessageTimestampViewModelProps } from "../../../../viewmodels/mess
 import { MessageTimestampViewModel } from "../../../../viewmodels/message-body/MessageTimestampViewModel";
 import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
-export function EventTileTimestamp(props: MessageTimestampViewModelProps): JSX.Element {
+export function Timestamp(props: MessageTimestampViewModelProps): JSX.Element {
     const viewModel = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
 
     useEffect(() => {

@@ -21,14 +21,15 @@ import { Layout } from "../../../../settings/enums/Layout";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
-import { EventTileAvatar } from "./EventTileAvatar";
-import { EventTileE2ePadlock } from "./EventTileE2ePadlock";
-import { EventTileMsgOption } from "./EventTileMsgOption";
-import { EventTileSenderProfile } from "./EventTileSenderProfile";
-import { EventTileThreadToolbar } from "./EventTileThreadToolbar";
-import { EventTileTimestamp } from "./EventTileTimestamp";
-import { EventTileThreadInfo } from "./EventTileThreadInfo";
-import { EventTileThreadPanelSummary } from "./EventTileThreadPanelSummary";
+import { Avatar } from "./Avatar";
+import { EncryptionIndicator } from "./EncryptionIndicator";
+import { MessageStatus } from "./MessageStatus";
+import { Sender } from "./Sender";
+import { ThreadToolbar } from "./ThreadToolbar";
+import { Timestamp } from "./Timestamp";
+import { ThreadInfo } from "./ThreadInfo";
+import { ThreadPanelSummary } from "./ThreadPanelSummary";
+import { EventTileEncryptionIndicatorMode, SenderMode } from "./EventTileModes";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -61,7 +62,7 @@ export interface EventTileViewProps {
     avatarSize?: string | null;
     avatarViewUserOnClick: boolean;
     avatarForceHistorical: boolean;
-    senderMode: "hidden" | "default" | "composerInsert" | "tooltip";
+    senderMode: SenderMode;
     onSenderProfileClick?: () => void;
     actionBar?: ReactNode;
     messageBody: ReactNode;
@@ -85,10 +86,10 @@ export interface EventTileViewProps {
     showRelativeTimestamp?: boolean;
     showGroupPadlock: boolean;
     showIrcPadlock: boolean;
-    e2ePadlockIcon: "none" | "normal" | "warning" | "decryptionFailure";
-    e2ePadlockTitle?: string;
-    e2ePadlockSharedUserId?: string;
-    e2ePadlockRoomId?: string;
+    encryptionIndicatorMode: EventTileEncryptionIndicatorMode;
+    encryptionIndicatorTitle?: string;
+    sharedKeysUserId?: string;
+    sharedKeysRoomId?: string;
     contextMenu?: ReactNode;
     onMouseEnter: MouseEventHandler<HTMLElement>;
     onMouseLeave: MouseEventHandler<HTMLElement>;
@@ -148,10 +149,10 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
         showRelativeTimestamp,
         showGroupPadlock,
         showIrcPadlock,
-        e2ePadlockIcon,
-        e2ePadlockTitle,
-        e2ePadlockSharedUserId,
-        e2ePadlockRoomId,
+        encryptionIndicatorMode,
+        encryptionIndicatorTitle,
+        sharedKeysUserId,
+        sharedKeysRoomId,
         contextMenu,
         onMouseEnter,
         onMouseLeave,
@@ -168,16 +169,16 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
 
     const Root = (as ?? "li") as ElementType;
     const avatar = (
-        <EventTileAvatar
+        <Avatar
             member={avatarMember}
             size={avatarSize}
             viewUserOnClick={avatarViewUserOnClick}
             forceHistorical={avatarForceHistorical}
         />
     );
-    const sender = <EventTileSenderProfile mode={senderMode} mxEvent={mxEvent} onClick={onSenderProfileClick} />;
+    const sender = <Sender mode={senderMode} mxEvent={mxEvent} onClick={onSenderProfileClick} />;
     const timestamp = showTimestamp ? (
-        <EventTileTimestamp
+        <Timestamp
             showRelative={showRelativeTimestamp}
             showTwelveHour={isTwelveHour}
             ts={timestampTs ?? 0}
@@ -189,7 +190,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
             <span className="mx_MessageTimestamp" />
         ) : undefined
     ) : (
-        <EventTileTimestamp
+        <Timestamp
             showRelative={showRelativeTimestamp}
             showTwelveHour={isTwelveHour}
             ts={timestampTs ?? 0}
@@ -202,19 +203,19 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
     const groupTimestamp = layout !== Layout.IRC ? linkedTimestamp : null;
     const ircTimestamp = layout === Layout.IRC ? linkedTimestamp : null;
     const groupPadlock = showGroupPadlock ? (
-        <EventTileE2ePadlock
-            icon={e2ePadlockIcon}
-            title={e2ePadlockTitle}
-            sharedUserId={e2ePadlockSharedUserId}
-            roomId={e2ePadlockRoomId}
+        <EncryptionIndicator
+            icon={encryptionIndicatorMode}
+            title={encryptionIndicatorTitle}
+            sharedUserId={sharedKeysUserId}
+            roomId={sharedKeysRoomId}
         />
     ) : null;
     const ircPadlock = showIrcPadlock ? (
-        <EventTileE2ePadlock
-            icon={e2ePadlockIcon}
-            title={e2ePadlockTitle}
-            sharedUserId={e2ePadlockSharedUserId}
-            roomId={e2ePadlockRoomId}
+        <EncryptionIndicator
+            icon={encryptionIndicatorMode}
+            title={encryptionIndicatorTitle}
+            sharedUserId={sharedKeysUserId}
+            roomId={sharedKeysRoomId}
         />
     ) : null;
 
@@ -246,7 +247,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                         {messageBody}
                         {actionBar}
                         {linkedTimestamp}
-                        <EventTileMsgOption
+                        <MessageStatus
                             sentReceiptIcon={sentReceiptIcon}
                             sentReceiptLabel={sentReceiptLabel}
                             readReceipts={readReceipts}
@@ -308,16 +309,16 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                     <div className={lineClasses}>
                         <div className="mx_EventTile_body">{messageBody}</div>
                         {threadPanelReplyCount !== undefined && threadPanelPreview !== undefined && (
-                            <EventTileThreadPanelSummary
+                            <ThreadPanelSummary
                                 replyCount={threadPanelReplyCount}
                                 preview={threadPanelPreview}
                             />
                         )}
                     </div>
                     {showThreadToolbar && (
-                        <EventTileThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLinkToThread} />
+                        <ThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLinkToThread} />
                     )}
-                    <EventTileMsgOption
+                    <MessageStatus
                         sentReceiptIcon={sentReceiptIcon}
                         sentReceiptLabel={sentReceiptLabel}
                         readReceipts={readReceipts}
@@ -377,7 +378,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                                         {reactionsRow}
                                     </div>
                                 )}
-                                <EventTileThreadInfo
+                                <ThreadInfo
                                     summary={threadInfoSummary}
                                     href={threadInfoHref}
                                     label={threadInfoLabel}
@@ -394,14 +395,14 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                                     {layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
                                 </div>
                             )}
-                            <EventTileThreadInfo
+                            <ThreadInfo
                                 summary={threadInfoSummary}
                                 href={threadInfoHref}
                                 label={threadInfoLabel}
                             />
                         </>
                     )}
-                    <EventTileMsgOption
+                    <MessageStatus
                         sentReceiptIcon={sentReceiptIcon}
                         sentReceiptLabel={sentReceiptLabel}
                         readReceipts={readReceipts}

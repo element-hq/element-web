@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import MemberAvatar from "../../avatars/MemberAvatar";
 
-export function EventTileAvatar({
+export function Avatar({
     member,
     size,
     viewUserOnClick,

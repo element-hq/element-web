@@ -92,12 +92,12 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
     return [...myReactions.values()];
 };
 
-export interface EventTileReactionsRowProps {
+export interface ReactionsRowProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
 }
 
-export function EventTileReactionsRow({ mxEvent, reactions }: Readonly<EventTileReactionsRowProps>): JSX.Element | null {
+export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));

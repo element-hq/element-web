@@ -14,7 +14,7 @@ import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
 
-export function EventTileThreadToolbar({
+export function ThreadToolbar({
     viewInRoom,
     copyLinkToThread,
 }: {

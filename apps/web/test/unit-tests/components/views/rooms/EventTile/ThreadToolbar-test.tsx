@@ -10,14 +10,14 @@ import { getByLabelText, render, type RenderResult } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React, { type ComponentProps } from "react";
 
-import { EventTileThreadToolbar } from "../../../../../../src/components/views/rooms/EventTile/EventTileThreadToolbar";
+import { ThreadToolbar } from "../../../../../../src/components/views/rooms/EventTile/ThreadToolbar";
 
-describe("EventTileThreadToolbar", () => {
+describe("ThreadToolbar", () => {
     const viewInRoom = jest.fn();
     const copyLink = jest.fn();
 
-    function renderComponent(props: Partial<ComponentProps<typeof EventTileThreadToolbar>> = {}): RenderResult {
-        return render(<EventTileThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLink} {...props} />);
+    function renderComponent(props: Partial<ComponentProps<typeof ThreadToolbar>> = {}): RenderResult {
+        return render(<ThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLink} {...props} />);
     }
 
     afterEach(() => {

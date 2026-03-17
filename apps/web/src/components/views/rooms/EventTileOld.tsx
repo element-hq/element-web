@@ -99,7 +99,7 @@ import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
-import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
+import { ThreadToolbar } from "./EventTile/ThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
@@ -1411,7 +1411,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {this.renderThreadPanelSummary()}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <EventTileThreadToolbar
+                            <ThreadToolbar
                                 viewInRoom={this.viewInRoom}
                                 copyLinkToThread={this.copyLinkToThread}
                             />

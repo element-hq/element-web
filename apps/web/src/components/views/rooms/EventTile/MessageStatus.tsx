@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ReactNode } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
-export function EventTileMsgOption({
+export function MessageStatus({
     sentReceiptIcon,
     sentReceiptLabel,
     readReceipts,

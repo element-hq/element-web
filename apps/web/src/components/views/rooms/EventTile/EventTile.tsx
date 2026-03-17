@@ -32,7 +32,7 @@ import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTil
 import RoomContext, { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { EventTileViewModel } from "../../../../viewmodels/room/EventTileViewModel";
-import { EventTileDecryptionFailureBody } from "./EventTileDecryptionFailureBody";
+import { DecryptionFailureBody } from "./DecryptionFailureBody";
 import { Action } from "../../../../dispatcher/actions";
 import dis from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
@@ -58,7 +58,8 @@ import NotificationBadge from "../NotificationBadge";
 import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
 import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import TileErrorBoundary from "../../messages/TileErrorBoundary";
-import { EventTileReactionsRow } from "./EventTileReactionsRow";
+import { ReactionsRow } from "./ReactionsRow";
+import { ClickMode, ThreadInfoMode } from "./EventTileModes";
 import { shouldDisplayReply } from "../../../../utils/Reply";
 import MessageActionBar from "../../messages/MessageActionBar";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -330,10 +331,10 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
 
         switch (vmSnapshot.tileClickMode) {
-            case "viewRoom":
+            case ClickMode.ViewRoom:
                 viewInRoom(ev as never);
                 break;
-            case "showThread":
+            case ClickMode.ShowThread:
                 dis.dispatch<ShowThreadPayload>({
                     action: Action.ShowThread,
                     rootEvent: props.mxEvent,
@@ -350,7 +351,7 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
             props.mxEvent.isRedacted() ? (
                 <RedactedBody mxEvent={props.mxEvent} />
             ) : props.mxEvent.isDecryptionFailure() ? (
-                <EventTileDecryptionFailureBody mxEvent={props.mxEvent} />
+                <DecryptionFailureBody mxEvent={props.mxEvent} />
             ) : (
                 <EventPreview mxEvent={props.mxEvent} />
             )
@@ -496,7 +497,7 @@ function composeEventTileViewProps({
         <PinnedMessageBadge aria-describedby={props.mxEvent.getId() ?? "event-tile"} tabIndex={0} />
     ) : undefined;
     const threadInfoSummary =
-        snapshot.threadInfoMode === "summary" ? (
+        snapshot.threadInfoMode === ThreadInfoMode.Summary ? (
             <ThreadSummary
                 key={snapshot.threadUpdateKey}
                 mxEvent={props.mxEvent}
@@ -504,9 +505,10 @@ function composeEventTileViewProps({
                 data-testid="thread-summary"
             />
         ) : undefined;
-    const threadInfoHref = snapshot.threadInfoMode === "searchLink" ? props.highlightLink : undefined;
+    const threadInfoHref = snapshot.threadInfoMode === ThreadInfoMode.SearchLink ? props.highlightLink : undefined;
     const threadInfoLabel =
-        snapshot.threadInfoMode === "searchLink" || snapshot.threadInfoMode === "searchText"
+        snapshot.threadInfoMode === ThreadInfoMode.SearchLink ||
+        snapshot.threadInfoMode === ThreadInfoMode.SearchText
             ? _t("timeline|thread_info_basic")
             : undefined;
     const threadPanelReplyCount = snapshot.showThreadPanelSummary && snapshot.thread ? snapshot.thread.length : undefined;
@@ -524,7 +526,7 @@ function composeEventTileViewProps({
             isTwelveHour={props.isTwelveHour}
         />
     ) : undefined;
-    const reactionsRow = props.isRedacted ? undefined : <EventTileReactionsRow mxEvent={props.mxEvent} reactions={snapshot.reactions} />;
+    const reactionsRow = props.isRedacted ? undefined : <ReactionsRow mxEvent={props.mxEvent} reactions={snapshot.reactions} />;
     const hasFooter = Boolean(snapshot.isPinned || reactionsRow);
 
     const commonProps: EventTileViewProps = {
@@ -565,10 +567,10 @@ function composeEventTileViewProps({
         showRelativeTimestamp: snapshot.showRelativeTimestamp,
         showGroupPadlock: snapshot.showGroupPadlock,
         showIrcPadlock: snapshot.showIrcPadlock,
-        e2ePadlockIcon: snapshot.e2ePadlockIcon,
-        e2ePadlockTitle: snapshot.e2ePadlockTitle,
-        e2ePadlockSharedUserId: snapshot.e2ePadlockSharedUserId,
-        e2ePadlockRoomId: snapshot.e2ePadlockRoomId,
+        encryptionIndicatorMode: snapshot.encryptionIndicatorMode,
+        encryptionIndicatorTitle: snapshot.encryptionIndicatorTitle,
+        sharedKeysUserId: snapshot.sharedKeysUserId,
+        sharedKeysRoomId: snapshot.sharedKeysRoomId,
         onMouseEnter: (): void => vm.setHover(true),
         onMouseLeave: (): void => vm.setHover(false),
         onFocus: (): void => vm.setFocusWithin(true),

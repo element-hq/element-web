@@ -9,14 +9,15 @@ import React, { type JSX } from "react";
 
 import { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
+import { EventTileEncryptionIndicatorMode } from "./EventTileModes";
 
-export function EventTileE2ePadlock({
+export function EncryptionIndicator({
     icon,
     title,
     sharedUserId,
     roomId,
 }: {
-    icon: "none" | "normal" | "warning" | "decryptionFailure";
+    icon: EventTileEncryptionIndicatorMode;
     title?: string;
     sharedUserId?: string;
     roomId?: string;
@@ -26,11 +27,11 @@ export function EventTileE2ePadlock({
     }
 
     switch (icon) {
-        case "decryptionFailure":
+        case EventTileEncryptionIndicatorMode.DecryptionFailure:
             return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.DecryptionFailure} />;
-        case "normal":
+        case EventTileEncryptionIndicatorMode.Normal:
             return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.Normal} />;
-        case "warning":
+        case EventTileEncryptionIndicatorMode.Warning:
             return <E2ePadlock title={title ?? ""} icon={E2ePadlockIcon.Warning} />;
         default:
             return null;

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 export { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
 export { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
-export { EventTileThreadToolbar } from "./EventTileThreadToolbar";
+export { ThreadToolbar } from "./ThreadToolbar";
 export {
     default,
     EventTile,

@@ -12,7 +12,7 @@ import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { LocalDeviceVerificationStateContext } from "../../../../contexts/LocalDeviceVerificationStateContext";
 import { DecryptionFailureBodyViewModel } from "../../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 
-export function EventTileDecryptionFailureBody({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
+export function DecryptionFailureBody({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
     const verificationState = useContext(LocalDeviceVerificationStateContext);
     const viewModel = useCreateAutoDisposedViewModel(
         () =>

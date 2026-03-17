@@ -9,22 +9,23 @@ import React, { type JSX } from "react";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SenderProfile from "../../messages/SenderProfile";
+import { SenderMode } from "./EventTileModes";
 
-export function EventTileSenderProfile({
+export function Sender({
     mode,
     mxEvent,
     onClick,
 }: {
-    mode: "hidden" | "default" | "composerInsert" | "tooltip";
+    mode: SenderMode;
     mxEvent: MatrixEvent;
     onClick?: () => void;
 }): JSX.Element | undefined {
     switch (mode) {
-        case "hidden":
+        case SenderMode.Hidden:
             return undefined;
-        case "composerInsert":
+        case SenderMode.ComposerInsert:
             return <SenderProfile onClick={onClick} mxEvent={mxEvent} />;
-        case "tooltip":
+        case SenderMode.Tooltip:
             return <SenderProfile mxEvent={mxEvent} withTooltip />;
         default:
             return <SenderProfile mxEvent={mxEvent} />;
