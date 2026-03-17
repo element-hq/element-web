@@ -7,9 +7,10 @@
 
 export {
     UrlPreviewGroupView,
-    type UrlPreviewViewSnapshot,
+    type UrlPreviewGroupViewSnapshot,
     type UrlPreviewGroupViewProps,
-    type UrlPreviewViewActions,
+    type UrlPreviewGroupViewActions,
+    type UrlPreviewGroupViewModel,
 } from "./UrlPreviewGroupView";
 
-export { type UrlPreviewViewSnapshotPreview } from "./types";
+export { type UrlPreviewGroupViewPreview } from "./types";

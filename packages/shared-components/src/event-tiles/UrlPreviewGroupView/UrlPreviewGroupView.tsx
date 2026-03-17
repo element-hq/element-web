@@ -12,12 +12,12 @@ import classNames from "classnames";
 
 import { useViewModel, type ViewModel } from "../../viewmodel";
 import { useI18n } from "../../utils/i18nContext";
-import type { UrlPreviewViewSnapshotPreview } from "./types";
+import type { UrlPreviewGroupViewPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
 import styles from "./UrlPreviewGroupView.module.css";
 
-export interface UrlPreviewViewSnapshot {
-    previews: Array<UrlPreviewViewSnapshotPreview>;
+export interface UrlPreviewGroupViewSnapshot {
+    previews: Array<UrlPreviewGroupViewPreview>;
     totalPreviewCount: number;
     previewsLimited: boolean;
     overPreviewLimit: boolean;
@@ -25,14 +25,16 @@ export interface UrlPreviewViewSnapshot {
 }
 
 export interface UrlPreviewGroupViewProps {
-    vm: ViewModel<UrlPreviewViewSnapshot> & UrlPreviewViewActions;
+    vm: ViewModel<UrlPreviewGroupViewSnapshot> & UrlPreviewGroupViewActions;
 }
 
-export interface UrlPreviewViewActions {
+export interface UrlPreviewGroupViewActions {
     onTogglePreviewLimit: () => void;
     onHideClick: () => Promise<void>;
-    onImageClick: (preview: UrlPreviewViewSnapshotPreview) => void;
+    onImageClick: (preview: UrlPreviewGroupViewPreview) => void;
 }
+
+export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewActions>;
 
 /**
  * UrlPreviewGroupView renders a list of URL previews for a single event.

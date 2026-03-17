@@ -9,16 +9,16 @@ import React, { type MouseEventHandler, type JSX, useCallback, useMemo } from "r
 import { Tooltip, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 
-import { useI18n } from "../../utils/i18nContext";
+import { useI18n } from "../../../utils/i18nContext";
 import styles from "./LinkPreview.module.css";
-import type { UrlPreviewViewSnapshotPreview } from "./types";
-import { LinkedText } from "../../utils/LinkedText";
+import type { UrlPreviewGroupViewPreview } from "../types";
+import { LinkedText } from "../../../utils/LinkedText";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
 }
 
-export type LinkPreviewProps = UrlPreviewViewSnapshotPreview & LinkPreviewActions;
+export type LinkPreviewProps = UrlPreviewGroupViewPreview & LinkPreviewActions;
 
 /**
  * LinkPreview renders a single preview component for a single link on an event. It is usually rendered as part of
