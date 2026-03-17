@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -52,7 +53,7 @@ const SortingAlgorithmMap: Record<SortingAlgorithm, RoomListSortingAlgorithmChan
 export default class PosthogTrackers {
     private static internalInstance: PosthogTrackers;
 
-    private previewedEventIds = new LruCache<string, true>(1000);
+    private readonly previewedEventIds = new LruCache<string, true>(1000);
 
     public static get instance(): PosthogTrackers {
         if (!PosthogTrackers.internalInstance) {
@@ -151,7 +152,7 @@ export default class PosthogTrackers {
      * @param previews The previews generated from the event.
      */
     public trackUrlPreview(eventId: string, isEncrypted: boolean, previews: UrlPreview[]): void {
-        // Do an approximate check he
+        // Discount any previews that we have already tracked.
         if (this.previewedEventIds.get(eventId)) {
             return;
         }

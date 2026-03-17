@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
@@ -280,7 +281,7 @@ describe("PosthogAnalytics", () => {
         });
     });
 
-    describe("UrlPreviewsEnabled", () => {
+    describe("UrlPreviews", () => {
         let analytics: PosthogAnalytics;
 
         beforeEach(() => {
@@ -300,7 +301,7 @@ describe("PosthogAnalytics", () => {
             SdkConfig.reset();
         });
 
-        it("should set value on change", async () => {
+        it("should set UrlPreviewsEnabled on change", async () => {
             defaultDispatcher.dispatch(
                 {
                     action: Action.SettingUpdated,

@@ -435,7 +435,7 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
         if (previews.length === 0) {
             return;
         }
-        void PosthogTrackers.instance.trackUrlPreview(props.mxEvent.getId()!, props.mxEvent.isEncrypted(), previews);
+        PosthogTrackers.instance.trackUrlPreview(props.mxEvent.getId()!, props.mxEvent.isEncrypted(), previews);
     }, [props.mxEvent, previews]);
 
     return <InnerTextualBody urlPreviewViewModel={vm} {...props} />;
