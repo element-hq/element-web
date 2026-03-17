@@ -47,21 +47,6 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/EncryptionIndi
     ),
 }));
 
-jest.mock("../../../../../../src/components/views/rooms/EventTile/MessageStatus", () => ({
-    MessageStatus: ({
-        sentReceiptIcon,
-        readReceipts,
-    }: {
-        sentReceiptIcon?: React.ReactNode;
-        readReceipts?: React.ReactNode;
-    }) => (
-        <div data-testid="message-status">
-            {sentReceiptIcon ? <div data-testid="sent-receipt">{sentReceiptIcon}</div> : null}
-            {readReceipts ? <div data-testid="read-receipts">{readReceipts}</div> : null}
-        </div>
-    ),
-}));
-
 jest.mock("../../../../../../src/components/views/rooms/EventTile/Sender", () => ({
     Sender: ({ mode, mxEvent }: { mode: string; mxEvent: MatrixEvent }) => (
         <div data-testid="sender">
@@ -122,7 +107,6 @@ describe("EventTileView", () => {
             avatarForceHistorical: false,
             senderMode: SenderMode.Default,
             messageBody: <div>Message body</div>,
-            hasFooter: false,
             showGroupPadlock: false,
             showIrcPadlock: false,
             encryptionIndicatorMode: EncryptionIndicatorMode.None,
@@ -179,9 +163,9 @@ describe("EventTileView", () => {
 
     it("renders thread info summary content", () => {
         render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
-                    threadInfoSummary: <span>Thread summary</span>,
+                    threadInfo: <div data-testid="thread-info-summary">Thread summary</div>,
                 })}
             />,
         );
@@ -191,10 +175,13 @@ describe("EventTileView", () => {
 
     it("renders thread info links", () => {
         render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
-                    threadInfoHref: "#thread",
-                    threadInfoLabel: "In thread",
+                    threadInfo: (
+                        <a data-testid="thread-info-link" href="#thread">
+                            In thread
+                        </a>
+                    ),
                 })}
             />,
         );
@@ -205,9 +192,9 @@ describe("EventTileView", () => {
 
     it("renders thread info text when no link is provided", () => {
         render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
-                    threadInfoLabel: "In thread",
+                    threadInfo: <div data-testid="thread-info-text">In thread</div>,
                 })}
             />,
         );
@@ -217,11 +204,10 @@ describe("EventTileView", () => {
 
     it("renders the pinned message badge for thread tiles", () => {
         render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.Thread,
-                    hasFooter: true,
-                    pinnedMessageBadge: <div>Pinned message</div>,
+                    footer: <div>Pinned message</div>,
                     layout: Layout.Group,
                 })}
             />,
@@ -232,11 +218,10 @@ describe("EventTileView", () => {
 
     it("does not render the pinned message badge for file tiles", () => {
         render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.File,
-                    hasFooter: true,
-                    pinnedMessageBadge: <div>Pinned message</div>,
+                    footer: <div>Pinned message</div>,
                 })}
             />,
         );
@@ -248,11 +233,10 @@ describe("EventTileView", () => {
         "renders the pinned message badge for default timeline layout %s",
         (layout) => {
             render(
-                <EventTileView
+                    <EventTileView
                     {...makeProps({
                         layout,
-                        hasFooter: true,
-                        pinnedMessageBadge: <div>Pinned message</div>,
+                        footer: <div>Pinned message</div>,
                     })}
                 />,
             );
@@ -374,10 +358,13 @@ describe("EventTileView", () => {
 
     it("renders sent receipt status", () => {
         render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
-                    sentReceiptIcon: <span>sent</span>,
-                    sentReceiptLabel: "Sent",
+                    messageStatus: (
+                        <div data-testid="message-status">
+                            <div data-testid="sent-receipt">sent</div>
+                        </div>
+                    ),
                 })}
             />,
         );
@@ -387,9 +374,13 @@ describe("EventTileView", () => {
 
     it("renders read receipts status", () => {
         render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
-                    readReceipts: <span>readers</span>,
+                    messageStatus: (
+                        <div data-testid="message-status">
+                            <div data-testid="read-receipts">readers</div>
+                        </div>
+                    ),
                 })}
             />,
         );

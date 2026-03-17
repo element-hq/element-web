@@ -17,8 +17,7 @@ import React, {
     type Ref,
     type RefObject,
 } from "react";
-import { PinnedMessageBadge, useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
 import {
     type EventStatus,
     type EventType,
@@ -29,42 +28,40 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 
-import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
+import {
+    EventTileViewModel,
+    type EventTileViewModelProps,
+    type EventTileViewSnapshot,
+} from "../../../../viewmodels/room/EventTileViewModel";
 import RoomContext, { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { EventTileViewModel } from "../../../../viewmodels/room/EventTileViewModel";
-import { DecryptionFailureBody } from "./DecryptionFailureBody";
 import { Action } from "../../../../dispatcher/actions";
 import dis from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { type ShowThreadPayload } from "../../../../dispatcher/payloads/ShowThreadPayload";
 import PosthogTrackers from "../../../../PosthogTrackers";
-import RedactedBody from "../../messages/RedactedBody";
-import { EventPreview } from "../EventPreview";
-import ReplyChain from "../../elements/ReplyChain";
-import { haveRendererForEvent, renderTile } from "../../../../events/EventTileFactory";
 import { copyPlaintext } from "../../../../utils/strings";
 import { EventTileView, type EventTileViewProps } from "./EventTileView";
-import { type ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import { _t } from "../../../../languageHandler";
 import PlatformPeg from "../../../../PlatformPeg";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { getLateEventInfo } from "../../../structures/grouper/LateEventGrouper";
-import { aboveRightOf } from "../../../structures/ContextMenu";
 import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrouper";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
-import MessageContextMenu from "../../context_menus/MessageContextMenu";
-import NotificationBadge from "../NotificationBadge";
-import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
-import { ReadReceiptGroup } from "../ReadReceiptGroup";
-import { ReactionsRow } from "./ReactionsRow";
 import { ClickMode, ThreadInfoMode } from "./EventTileModes";
-import { shouldDisplayReply } from "../../../../utils/Reply";
-import MessageActionBar from "../../messages/MessageActionBar";
+import type ReplyChain from "../../elements/ReplyChain";
+import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
+import { MessageBody } from "./MessageBody";
+import { ActionBar } from "./ActionBar";
+import { ContextMenu } from "./ContextMenu";
+import { Footer } from "./Footer";
+import { MessageStatus } from "./MessageStatus";
+import { ReplyPreview } from "./ReplyPreview";
+import { ThreadInfo } from "./ThreadInfo";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -131,49 +128,77 @@ export interface EventTileProps {
     ref?: Ref<EventTileHandle>;
 }
 
-export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
+function buildEventTileViewModelProps(
+    props: EventTileProps,
+    cli: ReturnType<typeof useMatrixClientContext>,
+    roomContext: React.ContextType<typeof RoomContext>,
+): EventTileViewModelProps {
+    return {
+        cli,
+        mxEvent: props.mxEvent,
+        forExport: props.forExport,
+        showReactions: props.showReactions,
+        getRelationsForEvent: props.getRelationsForEvent,
+        readReceipts: props.readReceipts?.map(({ userId, ts }) => ({ userId, ts })),
+        lastSuccessful: props.lastSuccessful,
+        eventSendStatus: props.eventSendStatus,
+        timelineRenderingType: roomContext.timelineRenderingType,
+        isRedacted: props.isRedacted,
+        continuation: props.continuation,
+        last: props.last,
+        lastInSection: props.lastInSection,
+        contextual: props.contextual,
+        isSelectedEvent: props.isSelectedEvent,
+        isTwelveHour: props.isTwelveHour,
+        layout: props.layout,
+        editState: props.editState,
+        permalinkCreator: props.permalinkCreator,
+        alwaysShowTimestamps: props.alwaysShowTimestamps,
+        hideSender: props.hideSender,
+        hideTimestamp: props.hideTimestamp,
+        inhibitInteraction: props.inhibitInteraction,
+        showReadReceipts: props.showReadReceipts,
+        highlightLink: props.highlightLink,
+        isRoomEncrypted: Boolean(roomContext.isRoomEncrypted),
+        callEventGrouper: props.callEventGrouper,
+        showHiddenEvents: roomContext.showHiddenEvents,
+    };
+}
+
+interface UseEventTileViewModelResult {
+    cli: ReturnType<typeof useMatrixClientContext>;
+    roomContext: React.ContextType<typeof RoomContext>;
+    tileContentId: string;
+    rootRef: RefObject<HTMLElement | null>;
+    tileRef: RefObject<EventTileApi | null>;
+    replyChainRef: RefObject<ReplyChain | null>;
+    vm: EventTileViewModel;
+    snapshot: EventTileViewSnapshot;
+}
+
+interface UseEventTileActionsResult {
+    room: Room | null;
+    onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
+    viewInRoom: (evt: ButtonEvent) => void;
+    copyLinkToThread: (evt: ButtonEvent) => Promise<void>;
+    onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+    onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+    onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
+}
+
+function useEventTileViewModel(
+    props: EventTileProps,
+    forwardedRef: Ref<EventTileHandle> | undefined,
+): UseEventTileViewModelResult {
     const roomContext = useContext(RoomContext);
     const cli = useMatrixClientContext();
-    const isRoomEncrypted = Boolean(roomContext.isRoomEncrypted);
     const tileContentId = useId();
     const rootRef = useRef<HTMLElement>(null);
     const tileRef = useRef<EventTileApi>(null);
     const replyChainRef = useRef<ReplyChain>(null);
-    const renderTileProps = props;
+    const viewModelProps = buildEventTileViewModelProps(props, cli, roomContext);
 
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new EventTileViewModel({
-                cli,
-                mxEvent: props.mxEvent,
-                forExport: props.forExport,
-                showReactions: props.showReactions,
-                getRelationsForEvent: props.getRelationsForEvent,
-                readReceipts: props.readReceipts?.map(({ userId, ts }) => ({ userId, ts })),
-                lastSuccessful: props.lastSuccessful,
-                eventSendStatus: props.eventSendStatus,
-                timelineRenderingType: roomContext.timelineRenderingType,
-                isRedacted: props.isRedacted,
-                continuation: props.continuation,
-                last: props.last,
-                lastInSection: props.lastInSection,
-                contextual: props.contextual,
-                isSelectedEvent: props.isSelectedEvent,
-                isTwelveHour: props.isTwelveHour,
-                layout: props.layout,
-                editState: props.editState,
-                permalinkCreator: props.permalinkCreator,
-                alwaysShowTimestamps: props.alwaysShowTimestamps,
-                hideSender: props.hideSender,
-                hideTimestamp: props.hideTimestamp,
-                inhibitInteraction: props.inhibitInteraction,
-                showReadReceipts: props.showReadReceipts,
-                highlightLink: props.highlightLink,
-                isRoomEncrypted,
-                callEventGrouper: props.callEventGrouper,
-                showHiddenEvents: roomContext.showHiddenEvents,
-            }),
-    );
+    const vm = useCreateAutoDisposedViewModel(() => new EventTileViewModel(viewModelProps));
 
     useImperativeHandle(
         forwardedRef,
@@ -189,36 +214,7 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
     );
 
     useEffect(() => {
-        vm.updateProps({
-            cli,
-            mxEvent: props.mxEvent,
-            forExport: props.forExport,
-            showReactions: props.showReactions,
-            getRelationsForEvent: props.getRelationsForEvent,
-            readReceipts: props.readReceipts?.map(({ userId, ts }) => ({ userId, ts })),
-            lastSuccessful: props.lastSuccessful,
-            eventSendStatus: props.eventSendStatus,
-            timelineRenderingType: roomContext.timelineRenderingType,
-            isRedacted: props.isRedacted,
-            continuation: props.continuation,
-            last: props.last,
-            lastInSection: props.lastInSection,
-            contextual: props.contextual,
-            isSelectedEvent: props.isSelectedEvent,
-            isTwelveHour: props.isTwelveHour,
-            layout: props.layout,
-            editState: props.editState,
-            permalinkCreator: props.permalinkCreator,
-            alwaysShowTimestamps: props.alwaysShowTimestamps,
-            hideSender: props.hideSender,
-            hideTimestamp: props.hideTimestamp,
-            inhibitInteraction: props.inhibitInteraction,
-            showReadReceipts: props.showReadReceipts,
-            highlightLink: props.highlightLink,
-            isRoomEncrypted,
-            callEventGrouper: props.callEventGrouper,
-            showHiddenEvents: roomContext.showHiddenEvents,
-        });
+        vm.updateProps(viewModelProps);
     }, [
         cli,
         props.mxEvent,
@@ -244,14 +240,15 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         props.inhibitInteraction,
         props.showReadReceipts,
         props.highlightLink,
-        isRoomEncrypted,
         props.callEventGrouper,
         roomContext.showHiddenEvents,
+        roomContext.isRoomEncrypted,
         roomContext.timelineRenderingType,
+        viewModelProps,
         vm,
     ]);
 
-    const vmSnapshot = useViewModel(vm);
+    const snapshot = useViewModel(vm);
 
     useEffect(() => {
         const rootNode = rootRef.current;
@@ -262,7 +259,29 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         return () => {
             props.resizeObserver?.unobserve(rootNode);
         };
-    }, [props.resizeObserver, props.as, roomContext.timelineRenderingType, vmSnapshot.hasRenderer]);
+    }, [props.resizeObserver, props.as, roomContext.timelineRenderingType, snapshot.hasRenderer]);
+
+    return {
+        cli,
+        roomContext,
+        tileContentId,
+        rootRef,
+        tileRef,
+        replyChainRef,
+        vm,
+        snapshot,
+    };
+}
+
+function useEventTileActions(
+    props: EventTileProps,
+    cli: ReturnType<typeof useMatrixClientContext>,
+    roomContext: React.ContextType<typeof RoomContext>,
+    vm: EventTileViewModel,
+    snapshot: EventTileViewSnapshot,
+): UseEventTileActionsResult {
+    const roomId = props.mxEvent.getRoomId();
+    const room = roomId ? cli.getRoom(roomId) : null;
 
     const onPermalinkClicked = (ev: MouseEvent<HTMLElement>): void => {
         ev.preventDefault();
@@ -271,7 +290,7 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
             event_id: props.mxEvent.getId(),
             highlighted: true,
             room_id: props.mxEvent.getRoomId(),
-            metricsTrigger: vmSnapshot.viewRoomMetricsTrigger,
+            metricsTrigger: snapshot.viewRoomMetricsTrigger,
         });
     };
 
@@ -327,7 +346,7 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         let index = -1;
         if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
 
-        switch (vmSnapshot.tileClickMode) {
+        switch (snapshot.tileClickMode) {
             case ClickMode.ViewRoom:
                 viewInRoom(ev as never);
                 break;
@@ -342,82 +361,85 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         }
     };
 
-    const messageBody: ReactNode =
-        roomContext.timelineRenderingType === TimelineRenderingType.Notification ||
-        roomContext.timelineRenderingType === TimelineRenderingType.ThreadsList ? (
-            props.mxEvent.isRedacted() ? (
-                <RedactedBody mxEvent={props.mxEvent} />
-            ) : props.mxEvent.isDecryptionFailure() ? (
-                <DecryptionFailureBody mxEvent={props.mxEvent} />
-            ) : (
-                <EventPreview mxEvent={props.mxEvent} />
-            )
-        ) : (
-            renderTile(vmSnapshot.tileRenderType, {
-                ...renderTileProps,
-                ref: tileRef,
-                permalinkCreator: props.permalinkCreator,
-                showHiddenEvents: roomContext.showHiddenEvents,
-                isSeeingThroughMessageHiddenForModeration: vmSnapshot.isSeeingThroughMessageHiddenForModeration,
-            })
-        );
+    return {
+        room,
+        onPermalinkClicked,
+        viewInRoom,
+        copyLinkToThread,
+        onContextMenu,
+        onTimestampContextMenu,
+        onListTileClick,
+    };
+}
 
-    const replyChain =
-        haveRendererForEvent(props.mxEvent, cli, roomContext.showHiddenEvents) && shouldDisplayReply(props.mxEvent) ? (
-            <ReplyChain
-                parentEv={props.mxEvent}
-                ref={replyChainRef}
-                forExport={props.forExport}
-                permalinkCreator={props.permalinkCreator}
-                layout={props.layout}
-                alwaysShowTimestamps={props.alwaysShowTimestamps || vmSnapshot.hover || vmSnapshot.focusWithin}
-                isQuoteExpanded={vmSnapshot.isQuoteExpanded}
-                setQuoteExpanded={vm.setQuoteExpanded.bind(vm)}
-                getRelationsForEvent={props.getRelationsForEvent}
-            />
-        ) : undefined;
+export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
+    const {
+        cli,
+        roomContext,
+        tileContentId,
+        rootRef,
+        tileRef,
+        replyChainRef,
+        vm,
+        snapshot: vmSnapshot,
+    } = useEventTileViewModel(props, forwardedRef);
+    const renderTileProps = props;
+    const {
+        room,
+        onPermalinkClicked,
+        viewInRoom,
+        copyLinkToThread,
+        onContextMenu,
+        onTimestampContextMenu,
+        onListTileClick,
+    } = useEventTileActions(props, cli, roomContext, vm, vmSnapshot);
 
-    const actionBar =
-        !vmSnapshot.isEditing && !props.forExport ? (
-            <MessageActionBar
-                mxEvent={props.mxEvent}
-                reactions={vmSnapshot.reactions}
-                permalinkCreator={props.permalinkCreator}
-                getTile={() => tileRef.current}
-                getReplyChain={() => replyChainRef.current}
-                onFocusChange={(focused) => vm.setActionBarFocused(focused)}
-                isQuoteExpanded={vmSnapshot.isQuoteExpanded}
-                toggleThreadExpanded={() => vm.setQuoteExpanded(!vmSnapshot.isQuoteExpanded)}
-                getRelationsForEvent={props.getRelationsForEvent}
-            />
-        ) : undefined;
+    const messageBody: ReactNode = (
+        <MessageBody
+            mxEvent={props.mxEvent}
+            timelineRenderingType={roomContext.timelineRenderingType}
+            snapshot={vmSnapshot}
+            renderTileProps={renderTileProps}
+            tileRef={tileRef}
+            permalinkCreator={props.permalinkCreator}
+            showHiddenEvents={roomContext.showHiddenEvents}
+        />
+    );
+
+    const replyChain = (
+        <ReplyPreview
+            props={props}
+            snapshot={vmSnapshot}
+            cli={cli}
+            showHiddenEvents={roomContext.showHiddenEvents}
+            replyChainRef={replyChainRef}
+            setQuoteExpanded={(expanded) => vm.setQuoteExpanded(expanded)}
+        />
+    );
+
+    const actionBar = (
+        <ActionBar
+            props={props}
+            snapshot={vmSnapshot}
+            tileRef={tileRef}
+            replyChainRef={replyChainRef}
+            onFocusChange={(focused) => vm.setActionBarFocused(focused)}
+            toggleThreadExpanded={() => vm.setQuoteExpanded(!vmSnapshot.isQuoteExpanded)}
+        />
+    );
 
     const contextMenu = vmSnapshot.contextMenu ? (
-        <MessageContextMenu
-            {...aboveRightOf(vmSnapshot.contextMenu.position)}
-            mxEvent={props.mxEvent}
-            permalinkCreator={props.permalinkCreator}
-            eventTileOps={tileRef.current?.getEventTileOps?.()}
-            collapseReplyChain={replyChainRef.current?.canCollapse() ? replyChainRef.current.collapse : undefined}
+        <ContextMenu
+            props={props}
+            contextMenu={vmSnapshot.contextMenu}
+            snapshot={vmSnapshot}
+            tileRef={tileRef}
+            replyChainRef={replyChainRef}
             onFinished={() => vm.setContextMenu(undefined)}
-            rightClick={true}
-            reactions={vmSnapshot.reactions}
-            link={vmSnapshot.contextMenu.link}
-            getRelationsForEvent={props.getRelationsForEvent}
         />
     ) : undefined;
 
-    if (!vmSnapshot.hasRenderer && roomContext.timelineRenderingType !== TimelineRenderingType.Notification) {
-        return (
-            <div ref={rootRef as React.Ref<HTMLDivElement>} className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
-                <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>
-            </div>
-        );
-    }
-
-    const roomId = props.mxEvent.getRoomId();
-    const room = roomId ? cli.getRoom(roomId) : null;
-    const eventTileViewProps = composeEventTileViewProps({
+    const eventTileViewProps = useEventTileViewProps({
         props,
         vm,
         snapshot: vmSnapshot,
@@ -437,10 +459,18 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
         onListTileClick,
     });
 
+    if (!vmSnapshot.hasRenderer && roomContext.timelineRenderingType !== TimelineRenderingType.Notification) {
+        return (
+            <div ref={rootRef as React.Ref<HTMLDivElement>} className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
+                <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>
+            </div>
+        );
+    }
+
     return <EventTileView {...eventTileViewProps} />;
 }
 
-interface ComposeEventTileViewPropsArgs {
+interface UseEventTileViewPropsArgs {
     props: EventTileProps;
     vm: EventTileViewModel;
     snapshot: EventTileViewSnapshot;
@@ -460,7 +490,7 @@ interface ComposeEventTileViewPropsArgs {
     onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
 }
 
-function composeEventTileViewProps({
+function useEventTileViewProps({
     props,
     vm,
     snapshot,
@@ -478,7 +508,7 @@ function composeEventTileViewProps({
     viewInRoom,
     copyLinkToThread,
     onListTileClick,
-}: ComposeEventTileViewPropsArgs): EventTileViewProps {
+}: UseEventTileViewPropsArgs): EventTileViewProps {
     const avatarMember = getAvatarMember(props);
     const onSenderProfileClick = (): void => {
         dis.dispatch<ComposerInsertPayload>({
@@ -487,43 +517,45 @@ function composeEventTileViewProps({
             timelineRenderingType: roomContext.timelineRenderingType,
         });
     };
-    const pinnedMessageBadge = snapshot.isPinned ? (
-        <PinnedMessageBadge aria-describedby={tileContentId} tabIndex={0} />
-    ) : undefined;
-    const threadInfoSummary =
-        snapshot.threadInfoMode === ThreadInfoMode.Summary ? (
-            <ThreadSummary
-                key={snapshot.threadUpdateKey}
-                mxEvent={props.mxEvent}
-                thread={snapshot.thread!}
-                data-testid="thread-summary"
+    const footer = <Footer props={props} snapshot={snapshot} tileContentId={tileContentId} />;
+    const threadInfo =
+        snapshot.threadInfoMode === ThreadInfoMode.None ? undefined : (
+            <ThreadInfo
+                summary={
+                    snapshot.threadInfoMode === ThreadInfoMode.Summary ? (
+                        <ThreadSummary
+                            key={snapshot.threadUpdateKey}
+                            mxEvent={props.mxEvent}
+                            thread={snapshot.thread!}
+                            data-testid="thread-summary"
+                        />
+                    ) : undefined
+                }
+                href={snapshot.threadInfoMode === ThreadInfoMode.SearchLink ? props.highlightLink : undefined}
+                label={
+                    snapshot.threadInfoMode === ThreadInfoMode.SearchLink ||
+                    snapshot.threadInfoMode === ThreadInfoMode.SearchText
+                        ? _t("timeline|thread_info_basic")
+                        : undefined
+                }
             />
-        ) : undefined;
-    const threadInfoHref = snapshot.threadInfoMode === ThreadInfoMode.SearchLink ? props.highlightLink : undefined;
-    const threadInfoLabel =
-        snapshot.threadInfoMode === ThreadInfoMode.SearchLink || snapshot.threadInfoMode === ThreadInfoMode.SearchText
-            ? _t("timeline|thread_info_basic")
-            : undefined;
+        );
     const threadPanelReplyCount =
         snapshot.showThreadPanelSummary && snapshot.thread ? snapshot.thread.length : undefined;
     const threadPanelPreview =
         snapshot.showThreadPanelSummary && snapshot.thread ? (
             <ThreadMessagePreview key={snapshot.threadUpdateKey} thread={snapshot.thread} />
         ) : undefined;
-    const sentReceipt = getSentReceiptDetails(props.eventSendStatus, snapshot);
-    const readReceipts = snapshot.showReadReceipts ? (
-        <ReadReceiptGroup
-            readReceipts={[...(props.readReceipts ?? [])]}
-            readReceiptMap={props.readReceiptMap ?? {}}
+    const messageStatus = (
+        <MessageStatus
+            messageState={props.eventSendStatus}
+            snapshot={snapshot}
+            readReceipts={props.readReceipts}
+            readReceiptMap={props.readReceiptMap}
             checkUnmounting={props.checkUnmounting}
-            suppressAnimation={false}
             isTwelveHour={props.isTwelveHour}
         />
-    ) : undefined;
-    const reactionsRow = props.isRedacted ? undefined : (
-        <ReactionsRow mxEvent={props.mxEvent} reactions={snapshot.reactions} />
     );
-    const hasFooter = Boolean(snapshot.isPinned || snapshot.reactions);
 
     const commonProps: EventTileViewProps = {
         as: props.as,
@@ -548,12 +580,8 @@ function composeEventTileViewProps({
         avatarForceHistorical: snapshot.avatarForceHistorical,
         senderMode: snapshot.senderMode,
         onSenderProfileClick,
-        sentReceiptIcon: sentReceipt?.icon,
-        sentReceiptLabel: sentReceipt?.label,
-        readReceipts,
-        reactionsRow,
-        hasFooter,
-        pinnedMessageBadge,
+        messageStatus,
+        footer,
         showThreadToolbar: snapshot.showThreadToolbar,
         showTimestamp: snapshot.showTimestamp,
         showLinkedTimestamp: snapshot.showLinkedTimestamp,
@@ -595,9 +623,7 @@ function composeEventTileViewProps({
 
     return {
         ...commonProps,
-        threadInfoSummary,
-        threadInfoHref,
-        threadInfoLabel,
+        threadInfo,
         onClick: undefined,
     };
 }
@@ -607,34 +633,4 @@ function getAvatarMember(props: EventTileProps): RoomMember | null {
         return props.mxEvent.target;
     }
     return props.mxEvent.sender;
-}
-
-function getSentReceiptDetails(
-    messageState: EventStatus | undefined,
-    snapshot: EventTileViewSnapshot,
-): { icon: ReactNode; label: string } | undefined {
-    if (!snapshot.shouldShowSentReceipt && !snapshot.shouldShowSendingReceipt) {
-        return undefined;
-    }
-
-    const isSent = !messageState || messageState === "sent";
-    const isFailed = messageState === "not_sent";
-
-    let icon: JSX.Element | undefined;
-    let label: string | undefined;
-    if (messageState === "encrypting") {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_encrypting");
-    } else if (isSent) {
-        icon = <CheckCircleIcon />;
-        label = _t("timeline|send_state_sent");
-    } else if (isFailed) {
-        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-        label = _t("timeline|send_state_failed");
-    } else {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_sending");
-    }
-
-    return icon && label ? { icon, label } : undefined;
 }

@@ -23,11 +23,9 @@ import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
 import { Avatar } from "./Avatar";
 import { EncryptionIndicator } from "./EncryptionIndicator";
-import { MessageStatus } from "./MessageStatus";
 import { Sender } from "./Sender";
 import { ThreadToolbar } from "./ThreadToolbar";
 import { Timestamp } from "./Timestamp";
-import { ThreadInfo } from "./ThreadInfo";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
 import { type EncryptionIndicatorMode, type SenderMode } from "./EventTileModes";
 
@@ -66,18 +64,12 @@ export interface EventTileViewProps {
     onSenderProfileClick?: () => void;
     actionBar?: ReactNode;
     messageBody: ReactNode;
-    threadInfoSummary?: ReactNode;
-    threadInfoHref?: string;
-    threadInfoLabel?: string;
+    threadInfo?: ReactNode;
     threadPanelReplyCount?: number;
     threadPanelPreview?: ReactNode;
     showThreadToolbar?: boolean;
-    sentReceiptIcon?: ReactNode;
-    sentReceiptLabel?: string;
-    readReceipts?: ReactNode;
-    pinnedMessageBadge?: ReactNode;
-    reactionsRow?: ReactNode;
-    hasFooter: boolean;
+    messageStatus?: ReactNode;
+    footer?: ReactNode;
     showTimestamp?: boolean;
     showLinkedTimestamp?: boolean;
     showDummyTimestamp?: boolean;
@@ -129,18 +121,12 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
         onSenderProfileClick,
         actionBar,
         messageBody,
-        threadInfoSummary,
-        threadInfoHref,
-        threadInfoLabel,
+        threadInfo,
         threadPanelReplyCount,
         threadPanelPreview,
         showThreadToolbar,
-        sentReceiptIcon,
-        sentReceiptLabel,
-        readReceipts,
-        pinnedMessageBadge,
-        reactionsRow,
-        hasFooter,
+        messageStatus,
+        footer,
         showTimestamp,
         showLinkedTimestamp,
         showDummyTimestamp,
@@ -247,19 +233,9 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                         {messageBody}
                         {actionBar}
                         {linkedTimestamp}
-                        <MessageStatus
-                            sentReceiptIcon={sentReceiptIcon}
-                            sentReceiptLabel={sentReceiptLabel}
-                            readReceipts={readReceipts}
-                        />
+                        {messageStatus}
                     </div>
-                    {hasFooter && (
-                        <div className="mx_EventTile_footer">
-                            {(layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
-                            {reactionsRow}
-                            {layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
-                        </div>
-                    )}
+                    {footer && <div className="mx_EventTile_footer">{footer}</div>}
                 </Root>
             );
         case TimelineRenderingType.Notification:
@@ -313,11 +289,7 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                         )}
                     </div>
                     {showThreadToolbar && <ThreadToolbar viewInRoom={viewInRoom} copyLinkToThread={copyLinkToThread} />}
-                    <MessageStatus
-                        sentReceiptIcon={sentReceiptIcon}
-                        sentReceiptLabel={sentReceiptLabel}
-                        readReceipts={readReceipts}
-                    />
+                    {messageStatus}
                 </Root>
             );
         case TimelineRenderingType.File:
@@ -367,33 +339,18 @@ export function EventTileView(props: EventTileViewProps): JSX.Element {
                         {actionBar}
                         {layout === Layout.IRC && (
                             <>
-                                {hasFooter && (
-                                    <div className="mx_EventTile_footer">
-                                        {pinnedMessageBadge}
-                                        {reactionsRow}
-                                    </div>
-                                )}
-                                <ThreadInfo summary={threadInfoSummary} href={threadInfoHref} label={threadInfoLabel} />
+                                {footer && <div className="mx_EventTile_footer">{footer}</div>}
+                                {threadInfo}
                             </>
                         )}
                     </div>
                     {layout !== Layout.IRC && (
                         <>
-                            {hasFooter && (
-                                <div className="mx_EventTile_footer">
-                                    {(layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
-                                    {reactionsRow}
-                                    {layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
-                                </div>
-                            )}
-                            <ThreadInfo summary={threadInfoSummary} href={threadInfoHref} label={threadInfoLabel} />
+                            {footer && <div className="mx_EventTile_footer">{footer}</div>}
+                            {threadInfo}
                         </>
                     )}
-                    <MessageStatus
-                        sentReceiptIcon={sentReceiptIcon}
-                        sentReceiptLabel={sentReceiptLabel}
-                        readReceipts={readReceipts}
-                    />
+                    {messageStatus}
                 </Root>
             );
     }

@@ -59,7 +59,7 @@ export type GetRelationsForEvent = (
     eventType: EventType | string,
 ) => Relations | null | undefined;
 
-export interface IReadReceiptProps {
+export interface ReadReceiptProps {
     userId: string;
     ts: number;
 }
@@ -134,7 +134,7 @@ export interface EventTileViewModelProps {
     forExport?: boolean;
     showReactions?: boolean;
     getRelationsForEvent?: GetRelationsForEvent;
-    readReceipts?: IReadReceiptProps[];
+    readReceipts?: ReadReceiptProps[];
     lastSuccessful?: boolean;
     eventSendStatus?: EventStatus;
     timelineRenderingType: TimelineRenderingType;
@@ -162,47 +162,23 @@ export interface EventTileViewModelProps {
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
     private isListeningForReceipts = false;
     private verifyGeneration = 0;
+    private currentCli: MatrixClient | null = null;
+    private currentEvent: MatrixEvent | null = null;
+    private currentRoom: Room | null = null;
+    private isListeningForUserTrust = false;
+    private isListeningForReactions = false;
 
     public constructor(props: EventTileViewModelProps) {
-        super(props, EventTileViewModel.computeSnapshot(props));
+        super(props, EventTileViewModel.deriveSnapshot(props));
 
-        if (!props.forExport) {
-            this.disposables.trackListener(props.cli, CryptoEvent.UserTrustStatusChanged, (...args: unknown[]) =>
-                this.onUserVerificationChanged(args[0] as string, args[1] as UserVerificationStatus),
-            );
-            this.disposables.trackListener(props.mxEvent, MatrixEventEvent.Decrypted, this.onDecrypted);
-            this.disposables.trackListener(props.mxEvent, MatrixEventEvent.Replaced, this.onReplaced);
-            DecryptionFailureTracker.instance.addVisibleEvent(props.mxEvent);
-
-            if (props.showReactions) {
-                this.disposables.trackListener(props.mxEvent, MatrixEventEvent.RelationsCreated, (...args: unknown[]) =>
-                    this.onReactionsCreated(args[0] as string, args[1] as string),
-                );
-            }
-        }
-
-        this.disposables.trackListener(props.mxEvent, ThreadEvent.Update, (...args: unknown[]) =>
-            this.updateThread(args[0] as Thread),
-        );
-
-        const roomId = props.mxEvent.getRoomId();
-        const room = roomId ? props.cli.getRoom(roomId) : null;
-        if (room) {
-            this.disposables.trackListener(room, ThreadEvent.New, (...args: unknown[]) =>
-                this.onNewThread(args[0] as Thread),
-            );
-        }
-
+        this.rebindListeners(null, props);
         this.updateReceiptListener();
         void props.cli.decryptEventIfNeeded(props.mxEvent);
         void this.verifyEvent();
     }
 
     public override dispose(): void {
-        if (this.isListeningForReceipts) {
-            this.props.cli.off(RoomEvent.Receipt, this.onRoomReceipt);
-            this.isListeningForReceipts = false;
-        }
+        this.unbindAllListeners();
         super.dispose();
     }
 
@@ -230,11 +206,13 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     public updateProps(props: EventTileViewModelProps): void {
+        const previousProps = this.props;
         const previousEvent = this.props.mxEvent;
         const previousEventSendStatus = this.props.eventSendStatus;
         const previousShowReactions = this.props.showReactions;
 
         this.props = props;
+        this.rebindListeners(previousProps, props);
         this.updateSnapshot({
             reactions: EventTileViewModel.getReactions(props),
             thread: EventTileViewModel.getThread(props),
@@ -246,9 +224,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             previousShowReactions !== props.showReactions
         ) {
             if (previousEvent !== props.mxEvent) {
-                if (!props.forExport) {
-                    DecryptionFailureTracker.instance.addVisibleEvent(props.mxEvent);
-                }
                 void props.cli.decryptEventIfNeeded(props.mxEvent);
             }
             void this.verifyEvent();
@@ -259,72 +234,111 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.updateSnapshot();
     }
 
-    private updateSnapshot(partial?: Partial<EventTileViewSnapshot>): void {
-        const nextSnapshot = {
-            ...this.snapshot.current,
-            ...partial,
-        };
+    private rebindListeners(previousProps: EventTileViewModelProps | null, nextProps: EventTileViewModelProps): void {
+        if (previousProps?.cli !== nextProps.cli || previousProps?.forExport !== nextProps.forExport) {
+            this.unbindCliListeners();
+            this.bindCliListeners(nextProps);
+        }
 
-        nextSnapshot.shouldShowSentReceipt = this.getShouldShowSentReceipt();
-        nextSnapshot.shouldShowSendingReceipt = this.getShouldShowSendingReceipt();
-        nextSnapshot.isHighlighted = this.getShouldHighlight();
-        nextSnapshot.isSending = EventTileViewModel.getIsSending(this.props);
-        nextSnapshot.isEditing = EventTileViewModel.getIsEditing(this.props);
-        nextSnapshot.isEncryptionFailure = EventTileViewModel.getIsEncryptionFailure(this.props);
-        nextSnapshot.isOwnEvent = EventTileViewModel.getIsOwnEvent(this.props);
-        nextSnapshot.permalink = EventTileViewModel.getPermalink(this.props);
-        nextSnapshot.scrollToken = EventTileViewModel.getScrollToken(this.props);
-        nextSnapshot.isContinuation = EventTileViewModel.getIsContinuation(this.props);
-        nextSnapshot.lineClasses = EventTileViewModel.getLineClasses(this.props);
-        nextSnapshot.showTimestamp = EventTileViewModel.getShowTimestamp(this.props, nextSnapshot);
-        nextSnapshot.hasThread = Boolean(nextSnapshot.thread);
-        nextSnapshot.isThreadRoot = nextSnapshot.thread?.id === this.props.mxEvent.getId();
-        nextSnapshot.threadUpdateKey = EventTileViewModel.getThreadUpdateKey(nextSnapshot.thread);
-        nextSnapshot.hasRenderer = EventTileViewModel.getDisplayInfo(this.props).hasRenderer;
-        nextSnapshot.isBubbleMessage = EventTileViewModel.getDisplayInfo(this.props).isBubbleMessage;
-        nextSnapshot.isInfoMessage = EventTileViewModel.getDisplayInfo(this.props).isInfoMessage;
-        nextSnapshot.isLeftAlignedBubbleMessage = EventTileViewModel.getDisplayInfo(
-            this.props,
-        ).isLeftAlignedBubbleMessage;
-        nextSnapshot.noBubbleEvent = EventTileViewModel.getDisplayInfo(this.props).noBubbleEvent;
-        nextSnapshot.isSeeingThroughMessageHiddenForModeration = EventTileViewModel.getDisplayInfo(
-            this.props,
-        ).isSeeingThroughMessageHiddenForModeration;
-        nextSnapshot.showSender = EventTileViewModel.getShowSender(this.props);
-        nextSnapshot.showThreadToolbar = EventTileViewModel.getShowThreadToolbar(this.props);
-        nextSnapshot.showThreadPanelSummary = EventTileViewModel.getShowThreadPanelSummary(this.props, nextSnapshot);
-        nextSnapshot.showReadReceipts = EventTileViewModel.getShowReadReceipts(this.props, nextSnapshot);
-        nextSnapshot.showGroupPadlock = EventTileViewModel.getShowGroupPadlock(this.props, nextSnapshot);
-        nextSnapshot.showIrcPadlock = EventTileViewModel.getShowIrcPadlock(this.props, nextSnapshot);
-        nextSnapshot.showLinkedTimestamp = EventTileViewModel.getShowLinkedTimestamp(this.props);
-        nextSnapshot.showDummyTimestamp = EventTileViewModel.getShowDummyTimestamp(this.props, nextSnapshot);
-        nextSnapshot.showRelativeTimestamp = EventTileViewModel.getShowRelativeTimestamp(this.props);
-        nextSnapshot.timestampTs = EventTileViewModel.getTimestampTs(this.props, nextSnapshot);
-        nextSnapshot.tileRenderType = EventTileViewModel.getTileRenderType(this.props);
-        nextSnapshot.avatarSize = EventTileViewModel.getAvatarSize(this.props, nextSnapshot);
-        nextSnapshot.avatarMemberUserOnClick = EventTileViewModel.getAvatarMemberUserOnClick(this.props, nextSnapshot);
-        nextSnapshot.avatarForceHistorical = EventTileViewModel.getAvatarForceHistorical(this.props);
-        nextSnapshot.senderMode = EventTileViewModel.getSenderMode(this.props, nextSnapshot);
-        nextSnapshot.isPinned = EventTileViewModel.getIsPinned(this.props);
-        nextSnapshot.hasFooter = EventTileViewModel.getHasFooter(nextSnapshot);
-        nextSnapshot.encryptionIndicatorMode = EventTileViewModel.getEncryptionIndicatorMode(this.props, nextSnapshot);
-        nextSnapshot.encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(this.props, nextSnapshot);
-        nextSnapshot.sharedKeysUserId = EventTileViewModel.getSharedKeysUserId(this.props, nextSnapshot);
-        nextSnapshot.sharedKeysRoomId = EventTileViewModel.getSharedKeysRoomId(this.props);
-        nextSnapshot.threadInfoMode = EventTileViewModel.getThreadInfoMode(this.props, nextSnapshot);
-        nextSnapshot.tileClickMode = EventTileViewModel.getTileClickMode(this.props);
-        nextSnapshot.viewRoomMetricsTrigger = EventTileViewModel.getViewRoomMetricsTrigger(this.props);
-        nextSnapshot.classes = EventTileViewModel.getClasses(this.props, nextSnapshot);
+        if (
+            previousProps?.mxEvent !== nextProps.mxEvent ||
+            previousProps?.showReactions !== nextProps.showReactions ||
+            previousProps?.forExport !== nextProps.forExport
+        ) {
+            this.unbindEventListeners();
+            this.bindEventListeners(nextProps);
+        }
+
+        const nextRoom = EventTileViewModel.getRoom(nextProps);
+        if (this.currentRoom !== nextRoom) {
+            this.unbindRoomListeners();
+            this.bindRoomListeners(nextRoom);
+        }
+
+        if (previousProps?.cli !== nextProps.cli) {
+            this.isListeningForReceipts = false;
+        }
+    }
+
+    private bindCliListeners(props: EventTileViewModelProps): void {
+        this.currentCli = props.cli;
+        if (props.forExport) return;
+
+        props.cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+        this.isListeningForUserTrust = true;
+    }
+
+    private unbindCliListeners(): void {
+        if (this.currentCli && this.isListeningForUserTrust) {
+            this.currentCli.off(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+        }
+        if (this.currentCli && this.isListeningForReceipts) {
+            this.currentCli.off(RoomEvent.Receipt, this.onRoomReceipt);
+        }
+
+        this.currentCli = null;
+        this.isListeningForUserTrust = false;
+        this.isListeningForReceipts = false;
+    }
+
+    private bindEventListeners(props: EventTileViewModelProps): void {
+        this.currentEvent = props.mxEvent;
+        props.mxEvent.on(ThreadEvent.Update, this.onThreadUpdate);
+
+        if (props.forExport) return;
+
+        props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
+        props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
+        DecryptionFailureTracker.instance.addVisibleEvent(props.mxEvent);
+
+        if (props.showReactions) {
+            props.mxEvent.on(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
+            this.isListeningForReactions = true;
+        }
+    }
+
+    private unbindEventListeners(): void {
+        if (!this.currentEvent) return;
+
+        this.currentEvent.off(ThreadEvent.Update, this.onThreadUpdate);
+        this.currentEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
+        this.currentEvent.off(MatrixEventEvent.Replaced, this.onReplaced);
+        if (this.isListeningForReactions) {
+            this.currentEvent.off(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
+        }
+
+        this.currentEvent = null;
+        this.isListeningForReactions = false;
+    }
+
+    private bindRoomListeners(room: Room | null): void {
+        this.currentRoom = room;
+        room?.on(ThreadEvent.New, this.onNewThread);
+    }
+
+    private unbindRoomListeners(): void {
+        this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
+        this.currentRoom = null;
+    }
+
+    private unbindAllListeners(): void {
+        this.unbindRoomListeners();
+        this.unbindEventListeners();
+        this.unbindCliListeners();
+    }
+
+    private updateSnapshot(partial?: Partial<EventTileViewSnapshot>): void {
+        const nextSnapshot = EventTileViewModel.deriveSnapshot(this.props, this.snapshot.current, partial);
 
         if (objectHasDiff(this.snapshot.current, nextSnapshot)) {
             this.snapshot.set(nextSnapshot);
         }
 
-        this.updateReceiptListener();
+        this.updateReceiptListener(nextSnapshot);
     }
 
-    private updateReceiptListener(): void {
-        const shouldListen = this.getShouldShowSentReceipt() || this.getShouldShowSendingReceipt();
+    private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
+        const shouldListen = snapshot.shouldShowSentReceipt || snapshot.shouldShowSendingReceipt;
         if (shouldListen && !this.isListeningForReceipts) {
             this.props.cli.on(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = true;
@@ -334,22 +348,26 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
     }
 
-    private static computeSnapshot(props: EventTileViewModelProps): EventTileViewSnapshot {
+    private static deriveSnapshot(
+        props: EventTileViewModelProps,
+        previousSnapshot?: EventTileViewSnapshot,
+        partial: Partial<EventTileViewSnapshot> = {},
+    ): EventTileViewSnapshot {
         const snapshot: EventTileViewSnapshot = {
             actionBarFocused: false,
             shieldColour: EventShieldColour.NONE,
             shieldReason: null,
-            reactions: EventTileViewModel.getReactions(props),
+            reactions: null,
             hover: false,
             focusWithin: false,
             contextMenu: undefined,
             isQuoteExpanded: false,
-            thread: EventTileViewModel.getThread(props),
+            thread: null,
             threadUpdateKey: "",
             threadNotification: undefined,
-            shouldShowSentReceipt: EventTileViewModel.getShouldShowSentReceipt(props),
-            shouldShowSendingReceipt: EventTileViewModel.getShouldShowSendingReceipt(props),
-            isHighlighted: EventTileViewModel.getShouldHighlight(props),
+            shouldShowSentReceipt: false,
+            shouldShowSendingReceipt: false,
+            isHighlighted: false,
             showTimestamp: false,
             isContinuation: false,
             classes: "",
@@ -358,8 +376,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             isEditing: false,
             isEncryptionFailure: false,
             isOwnEvent: false,
-            permalink: EventTileViewModel.getPermalink(props),
-            scrollToken: EventTileViewModel.getScrollToken(props),
+            permalink: "#",
+            scrollToken: undefined,
             hasThread: false,
             isThreadRoot: false,
             hasRenderer: false,
@@ -392,12 +410,22 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             threadInfoMode: ThreadInfoMode.None,
             tileClickMode: ClickMode.None,
             viewRoomMetricsTrigger: undefined,
+            ...previousSnapshot,
+            ...partial,
         };
+
         const displayInfo = EventTileViewModel.getDisplayInfo(props);
+        snapshot.reactions = partial.reactions ?? previousSnapshot?.reactions ?? EventTileViewModel.getReactions(props);
+        snapshot.thread = partial.thread ?? previousSnapshot?.thread ?? EventTileViewModel.getThread(props);
+        snapshot.shouldShowSentReceipt = EventTileViewModel.getShouldShowSentReceipt(props);
+        snapshot.shouldShowSendingReceipt = EventTileViewModel.getShouldShowSendingReceipt(props);
+        snapshot.isHighlighted = EventTileViewModel.getShouldHighlight(props);
         snapshot.isSending = EventTileViewModel.getIsSending(props);
         snapshot.isEditing = EventTileViewModel.getIsEditing(props);
         snapshot.isEncryptionFailure = EventTileViewModel.getIsEncryptionFailure(props);
         snapshot.isOwnEvent = EventTileViewModel.getIsOwnEvent(props);
+        snapshot.permalink = EventTileViewModel.getPermalink(props);
+        snapshot.scrollToken = EventTileViewModel.getScrollToken(props);
         snapshot.isContinuation = EventTileViewModel.getIsContinuation(props);
         snapshot.lineClasses = EventTileViewModel.getLineClasses(props);
         snapshot.showTimestamp = EventTileViewModel.getShowTimestamp(props, snapshot);
@@ -440,6 +468,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getDisplayInfo(props: EventTileViewModelProps): ReturnType<typeof getEventDisplayInfo> {
         return getEventDisplayInfo(props.cli, props.mxEvent, props.showHiddenEvents, this.shouldHideEvent(props));
+    }
+
+    private static getRoom(props: EventTileViewModelProps): Room | null {
+        const roomId = props.mxEvent.getRoomId();
+        return roomId ? props.cli.getRoom(roomId) : null;
     }
 
     private static isEligibleForSpecialReceipt(props: EventTileViewModelProps): boolean {
@@ -886,10 +919,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         });
     }
 
-    private getShouldShowSentReceipt(): boolean {
-        return EventTileViewModel.getShouldShowSentReceipt(this.props);
-    }
-
     private static getShouldShowSentReceipt(props: EventTileViewModelProps): boolean {
         if (!this.isEligibleForSpecialReceipt(props)) return false;
         if (!props.lastSuccessful) return false;
@@ -901,10 +930,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         if (receipts.some((receipt) => receipt.userId !== myUserId)) return false;
 
         return true;
-    }
-
-    private getShouldShowSendingReceipt(): boolean {
-        return EventTileViewModel.getShouldShowSendingReceipt(this.props);
     }
 
     private static getShouldShowSendingReceipt(props: EventTileViewModelProps): boolean {
@@ -944,10 +969,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         return props.getRelationsForEvent(eventId, "m.annotation", "m.reaction") ?? null;
-    }
-
-    private getShouldHighlight(): boolean {
-        return EventTileViewModel.getShouldHighlight(this.props);
     }
 
     private static getShouldHighlight(props: EventTileViewModelProps): boolean {
@@ -1010,12 +1031,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.updateSnapshot({ thread });
     };
 
+    private onThreadUpdate = (thread: Thread): void => {
+        this.updateThread(thread);
+    };
+
     private onNewThread = (thread: Thread): void => {
         if (thread.id === this.props.mxEvent.getId()) {
             this.updateThread(thread);
-            const roomId = this.props.mxEvent.getRoomId();
-            const room = roomId ? this.props.cli.getRoom(roomId) : null;
-            room?.off(ThreadEvent.New, this.onNewThread);
+            this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
+            this.currentRoom = null;
         }
     };
 
