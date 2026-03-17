@@ -10,7 +10,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       aria-expanded="false"
       aria-haspopup="menu"
       aria-label="User menu"
-      class="_triggerButton_5b77p_45"
+      class="_triggerButton_er2w4_45"
       data-state="closed"
       id="radix-_r_0_"
       type="button"
