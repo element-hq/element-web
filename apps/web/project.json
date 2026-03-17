@@ -34,9 +34,12 @@
             "executor": "nx:run-commands",
             "options": {
                 "commands": [
-                    "pnpm tsc --noEmit --project ./tsconfig.module_system.json",
-                    "pnpm tsc --noEmit",
-                    "pnpm tsc --noEmit -p playwright"
+                    // We indirect via `pnpm exec` to stop knip interpreting the
+                    // commandline and declaring `playwright` and `./tsconfig.module_system.json`
+                    // as unlisted dependencies.
+                    "pnpm exec tsc --noEmit --project ./tsconfig.module_system.json",
+                    "pnpm exec tsc --noEmit",
+                    "pnpm exec tsc --noEmit --project playwright"
                 ],
                 "parallel": false,
                 "cwd": "apps/web"

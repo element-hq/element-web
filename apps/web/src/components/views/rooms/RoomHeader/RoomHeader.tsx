@@ -60,10 +60,12 @@ import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
 
 function RoomHeaderButtons({
     room,
-    additionalButtons,
+    legacyAdditionalButtons,
+    extraButtons,
 }: {
     room: Room;
-    additionalButtons?: ViewRoomOpts["buttons"];
+    legacyAdditionalButtons?: ViewRoomOpts["buttons"];
+    extraButtons?: JSX.Element;
 }): JSX.Element {
     const members = useRoomMembers(room, 2500);
     const memberCount = useRoomMemberCount(room, { throttleWait: 2500, includeInvited: true });
@@ -297,7 +299,9 @@ function RoomHeaderButtons({
         roomContext.mainSplitContentType === MainSplitContentType.Call;
     return (
         <>
-            {additionalButtons?.map((props) => {
+            {extraButtons}
+
+            {legacyAdditionalButtons?.map((props) => {
                 const label = props.label();
 
                 return (
@@ -427,11 +431,15 @@ function historyVisibilityIcon(historyVisibility: HistoryVisibility): JSX.Elemen
 
 export default function RoomHeader({
     room,
-    additionalButtons,
+    extraButtons,
+    legacyAdditionalButtons,
     oobData,
 }: {
     room: Room | LocalRoom;
-    additionalButtons?: ViewRoomOpts["buttons"];
+    // Extra buttons added by a new element web module API module
+    extraButtons?: JSX.Element;
+    // DEPRECATED: Buttons added by a legacy react-sdk module API module.
+    legacyAdditionalButtons?: ViewRoomOpts["buttons"];
     oobData?: IOOBData;
 }): JSX.Element {
     const client = useMatrixClientContext();
@@ -530,7 +538,11 @@ export default function RoomHeader({
                     </button>
                     {/* If the room is local-only then we don't want to show any additional buttons, as it won't work */}
                     {room instanceof LocalRoom === false && (
-                        <RoomHeaderButtons room={room} additionalButtons={additionalButtons} />
+                        <RoomHeaderButtons
+                            room={room}
+                            legacyAdditionalButtons={legacyAdditionalButtons}
+                            extraButtons={extraButtons}
+                        />
                     )}
                 </Flex>
                 {askToJoinEnabled && <RoomKnocksBar room={room} />}

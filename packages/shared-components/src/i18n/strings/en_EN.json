@@ -4,8 +4,10 @@
     },
     "action": {
         "back": "Back",
+        "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "download": "Download",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "go": "Go",
@@ -22,6 +24,7 @@
         "start_chat": "Start chat"
     },
     "common": {
+        "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
@@ -122,6 +125,9 @@
             "more_options": "More Options"
         },
         "room_options": "Room Options",
+        "section_header": {
+            "toggle": "Toggle %(section)s section"
+        },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
@@ -168,6 +174,9 @@
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
         },
+        "m.file": {
+            "error_invalid": "Invalid file"
+        },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",
             "disabled": "Encryption not enabled",
@@ -179,7 +188,15 @@
             "unsupported": "The encryption used by this room isn't supported."
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
-        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "url_preview": {
+            "close": "Close preview",
+            "show_n_more": {
+                "one": "Show %(count)s other preview",
+                "other": "Show %(count)s other previews"
+            },
+            "view_image": "View image"
+        }
     },
     "widget": {
         "context_menu": {

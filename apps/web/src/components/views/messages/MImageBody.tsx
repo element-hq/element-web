@@ -17,7 +17,6 @@ import { type ImageContent } from "matrix-js-sdk/src/types";
 import { Tooltip } from "@vector-im/compound-web";
 import { ImageErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import MFileBody from "./MFileBody";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -37,6 +36,7 @@ import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { isMimeTypeAllowed } from "../../../utils/blobs.ts";
+import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
 
 enum Placeholder {
     NoImage,
@@ -651,20 +651,20 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             this.context.timelineRenderingType === TimelineRenderingType.Thread ||
             this.context.timelineRenderingType === TimelineRenderingType.ThreadsList;
         if (!hasMessageActionBar) {
-            return <MFileBody {...this.props} showGenericPlaceholder={false} />;
+            return renderMBody({ ...this.props, showFileInfo: false }, FileBodyViewFactory);
         }
     }
 
     public render(): React.ReactNode {
         const content = this.props.mxEvent.getContent<ImageContent>();
 
-        // Fall back to MFileBody if we are unable to render this image e.g. in the case of a blob svg
+        // Fall back to file-body view if we are unable to render this image e.g. in the case of a blob svg
         if (
             this.props.mediaEventHelper?.media.isEncrypted &&
             !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
             !content.info?.thumbnail_info
         ) {
-            return <MFileBody {...this.props} />;
+            return renderMBody(this.props, FileBodyViewFactory);
         }
 
         if (this.state.error) {

@@ -469,7 +469,10 @@ describe("<TextualBody />", () => {
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
 
             getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
-            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
+            waitFor(() => {
+                // Asynchronous check since the VM needs to recalcuate.
+                expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
+            });
         });
     });
 });

@@ -25,7 +25,6 @@ import { _t } from "../../languageHandler";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../Livestream";
 import Modal from "../../Modal";
 import SettingsStore from "../../settings/SettingsStore";
-import { Container } from "../../stores/widgets/types";
 import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import { WidgetMessagingStore } from "../../stores/widgets/WidgetMessagingStore";
 import { isAppWidget } from "../../stores/WidgetStore";
@@ -109,7 +108,7 @@ export class WidgetContextMenuViewModel
 
         let showMoveButtons: [boolean, boolean] = [false, false];
         if (showUnpin) {
-            const pinnedWidgets = room ? WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top) : [];
+            const pinnedWidgets = room ? WidgetLayoutStore.instance.getContainerWidgets(room, "top") : [];
             const widgetIndex = pinnedWidgets.findIndex((widget) => widget.id === app.id);
             showMoveButtons = [widgetIndex > 0, widgetIndex < pinnedWidgets.length - 1];
         }
@@ -225,7 +224,7 @@ export class WidgetContextMenuViewModel
     public get onMoveButton(): (direction: number) => void {
         return (direction: number) => {
             if (!this._room) throw new Error("room must be defined");
-            WidgetLayoutStore.instance.moveWithinContainer(this._room, Container.Top, this._app, direction);
+            WidgetLayoutStore.instance.moveWithinContainer(this._room, "top", this._app, direction);
             this.props.onFinished!();
         };
     }
