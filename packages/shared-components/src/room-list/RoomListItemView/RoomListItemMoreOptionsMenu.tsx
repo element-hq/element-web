@@ -20,19 +20,19 @@ import {
 
 import { _t } from "../../utils/i18n";
 import { useViewModel, type ViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItemView";
+import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
 
 /**
  * View model type for room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
+export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomListItemViewActions>;
 
 /**
  * Props for RoomListItemMoreOptionsMenu component
  */
 export interface RoomListItemMoreOptionsMenuProps {
     /** The room item view model */
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
 }
 
 /**
@@ -66,7 +66,7 @@ export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuP
 }
 
 interface MoreOptionContentProps {
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
 }
 
 export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {

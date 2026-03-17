@@ -13,7 +13,7 @@ import { describe, it, expect, vi } from "vitest";
 import { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 import { RoomNotifState } from "./RoomNotifs";
 import { useMockedViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot } from "./RoomListItemView";
+import type { RoomListItemViewSnapshot } from "./RoomListItemView";
 import { defaultSnapshot } from "./default-snapshot";
 
 describe("<RoomListItemNotificationMenu />", () => {
@@ -37,7 +37,7 @@ describe("<RoomListItemNotificationMenu />", () => {
                     showMoreOptionsMenu: false,
                     showNotificationMenu: true,
                     roomNotifState,
-                } as RoomListItemSnapshot,
+                } as RoomListItemViewSnapshot,
                 mockCallbacks,
             );
             return <RoomListItemNotificationMenu vm={vm} />;

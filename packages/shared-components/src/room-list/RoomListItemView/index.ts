@@ -8,9 +8,9 @@
 export { RoomListItemView } from "./RoomListItemView";
 export type {
     Room,
-    RoomListItemSnapshot,
-    RoomItemViewModel,
-    RoomListItemActions,
+    RoomListItemViewSnapshot,
+    RoomListItemViewModel,
+    RoomListItemViewActions,
     RoomListItemViewProps,
 } from "./RoomListItemView";
 export { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
