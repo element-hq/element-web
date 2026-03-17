@@ -407,8 +407,8 @@ importers:
         specifier: 2.5.0
         version: 2.5.0
       '@element-hq/element-call-embedded':
-        specifier: 0.16.3
-        version: 0.16.3
+        specifier: 0.18.0
+        version: 0.18.0
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
         version: 2.2.7(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)
@@ -2013,8 +2013,8 @@ packages:
     resolution: {integrity: sha512-4B4OijXeVNOPZlYA2oEwWOTkzyltLao+xbotHQeqN++Rv27Y6s818+n2Qkp8q+Fxhn0t/5lA5X1Mxktud8eayQ==}
     engines: {node: '>=14.17.0'}
 
-  '@element-hq/element-call-embedded@0.16.3':
-    resolution: {integrity: sha512-OViKJonDaDNVBUW9WdV9mk78/Ruh34C7XsEgt3O8D9z+64C39elbIgllHSoH5S12IRlv9RYrrV37FZLo6QWsDQ==}
+  '@element-hq/element-call-embedded@0.18.0':
+    resolution: {integrity: sha512-Fg2VlORZWkQ9t9OJTcWFXCwVzlHVLtkaiCF0qFTCOZSYYHlA3kXDRM8TagjLkIoOVR6y+9xZldbwejgKYUS9xw==}
 
   '@element-hq/element-web-module-api@1.12.0':
     resolution: {integrity: sha512-fLhHFiL1UbRjolpgera3osHHxhSzfnDGTRhaDEv1UsrHRHwMu3hb/IcyXNqGhLXkJiuX8XoOH0aetaAUqQ0YQA==}
@@ -11978,7 +11978,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.6.3': {}
 
-  '@element-hq/element-call-embedded@0.16.3': {}
+  '@element-hq/element-call-embedded@0.18.0': {}
 
   '@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)':
     dependencies:
