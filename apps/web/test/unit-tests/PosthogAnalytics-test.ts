@@ -205,6 +205,10 @@ describe("PosthogAnalytics", () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
         });
 
+        afterEach(() => {
+            SettingsStore.reset();
+        });
+
         it("should send layout IRC correctly", async () => {
             await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
             defaultDispatcher.dispatch(
@@ -217,7 +221,7 @@ describe("PosthogAnalytics", () => {
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toStrictEqual({
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "IRC",
             });
         });
@@ -234,7 +238,7 @@ describe("PosthogAnalytics", () => {
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toStrictEqual({
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Bubble",
             });
         });
@@ -251,7 +255,7 @@ describe("PosthogAnalytics", () => {
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toStrictEqual({
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Group",
             });
         });
@@ -269,8 +273,47 @@ describe("PosthogAnalytics", () => {
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
-            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toStrictEqual({
+            console.log(mocked(fakePosthog).capture.mock.calls[0]);
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
                 WebLayout: "Compact",
+            });
+        });
+    });
+
+    describe("UrlPreviewsEnabled", () => {
+        let analytics: PosthogAnalytics;
+
+        beforeEach(() => {
+            SdkConfig.put({
+                brand: "Testing",
+                posthog: {
+                    project_api_key: "foo",
+                    api_host: "bar",
+                },
+            });
+
+            analytics = new PosthogAnalytics(fakePosthog);
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+        });
+
+        afterEach(() => {
+            SdkConfig.reset();
+        });
+
+        it("should set value on change", async () => {
+            defaultDispatcher.dispatch(
+                {
+                    action: Action.SettingUpdated,
+                    settingName: "urlPreviewsEnabled",
+                    newValue: true,
+                },
+                true,
+            );
+            analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
+            });
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]!["$set"]).toMatchObject({
+                URLPreviewsEnabled: true,
             });
         });
     });
