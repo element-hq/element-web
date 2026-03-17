@@ -24,6 +24,13 @@ test("Shows the welcome page by default", async ({ page }) => {
     await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
 });
 
+test("Shows the user menu for guests", { tag: ["@screenshot"] }, async ({ page, app }) => {
+    await page.goto("/#/room/!room:id");
+    await page.waitForSelector(".mx_MatrixChat", { timeout: 30000 });
+    const menu = await app.openUserMenu();
+    await expect(menu).toMatchScreenshot("guest-menu.png");
+});
+
 test("Room link correctly loads a room view", async ({ page }) => {
     await page.goto("/#/room/!room:id");
     await page.waitForSelector(".mx_MatrixChat", { timeout: 30000 });

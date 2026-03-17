@@ -33,32 +33,23 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
     }
 
     public getActions(): UserMenuSnapshot["actions"] {
-        if (this.client.isGuest()) {
-            return [
-                {
-                    label: _t("action|sign_in"),
-                    onSelect: () => {
-                        this.setOpen(false);
-                        this.dispatcher.dispatch({ action: "start_login" });
-                    },
-                },
-                {
-                    label: _t("action|create_account"),
-                    onSelect: () => {
-                        this.setOpen(false);
-                        this.dispatcher.dispatch({ action: "start_registration" });
-                    },
-                },
-                {
-                    label: _t("user_menu|settings"),
-                    onSelect: () => {
-                        this.setOpen(false);
-                        this.dispatcher.dispatch({ action: Action.ViewUserSettings });
-                    },
-                },
-            ];
-        }
         return [
+            {
+                label: _t("action|sign_in"),
+                onSelect: () => {
+                    this.setOpen(false);
+                    this.dispatcher.dispatch({ action: "start_login" });
+                },
+                guest: true,
+            },
+            {
+                label: _t("action|create_account"),
+                onSelect: () => {
+                    this.setOpen(false);
+                    this.dispatcher.dispatch({ action: "start_registration" });
+                },
+                guest: true,
+            },
             this.hasHomePage
                 ? {
                       label: _t("common|home"),
@@ -80,6 +71,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
                         props: { showMsc4108QrCode: true },
                     });
                 },
+                guest: false,
             },
             {
                 label: _t("room_settings|security|title"),
@@ -91,6 +83,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
                         initialTabId: UserTab.Security,
                     });
                 },
+                guest: false,
             },
             shouldShowFeedback()
                 ? {
@@ -111,8 +104,18 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
                         action: Action.ViewUserSettings,
                     });
                 },
+                guest: false,
             },
-        ].filter((item) => item !== null);
+        ]
+            .filter((item) => item !== null)
+            .filter((item) => {
+                if (this.client.isGuest()) {
+                    // Show all except hidden items to guests
+                    return item.guest !== false;
+                }
+                // Show all except guest-only items to everyone else.
+                return item.guest !== true;
+            });
     }
 
     public constructor(
