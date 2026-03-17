@@ -140,7 +140,7 @@ describe("InteractiveAuthDialog", function () {
             fireEvent.click(screen.getByText("Single Sign On"));
 
             // no we're on the sso auth screen
-            expect(screen.getByText("Click the button below to confirm your identity.")).toBeInTheDocument();
+            expect(screen.getByText("Click the button below to Confirm your digital identity.")).toBeInTheDocument();
 
             // launch sso
             fireEvent.click(screen.getByText("Confirm"));
