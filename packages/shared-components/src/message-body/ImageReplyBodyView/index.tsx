@@ -5,4 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { ImageReplyBodyView, type ImageReplyBodyViewModel, type ImageReplyBodyViewSnapshot } from "./ImageReplyBodyView";
+export {
+    ImageReplyBodyView,
+    type ImageReplyBodyViewModel,
+    type ImageReplyBodyViewSnapshot,
+} from "./ImageReplyBodyView";

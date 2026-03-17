@@ -11,7 +11,11 @@ import React from "react";
 import { describe, expect, it } from "vitest";
 
 import { MockViewModel } from "../../viewmodel";
-import { ImageReplyBodyView, type ImageReplyBodyViewModel, type ImageReplyBodyViewSnapshot } from "./ImageReplyBodyView";
+import {
+    ImageReplyBodyView,
+    type ImageReplyBodyViewModel,
+    type ImageReplyBodyViewSnapshot,
+} from "./ImageReplyBodyView";
 import * as stories from "./ImageReplyBodyView.stories";
 
 const { Default, Empty, Hidden } = composeStories(stories);
