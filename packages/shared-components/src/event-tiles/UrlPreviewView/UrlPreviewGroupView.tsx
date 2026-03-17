@@ -16,7 +16,7 @@ import type { UrlPreviewViewSnapshotPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
 import styles from "./UrlPreviewGroupView.module.css";
 
-export interface UrlPreviewGroupViewSnapshot {
+export interface UrlPreviewViewSnapshot {
     previews: Array<UrlPreviewViewSnapshotPreview>;
     totalPreviewCount: number;
     previewsLimited: boolean;
@@ -25,10 +25,10 @@ export interface UrlPreviewGroupViewSnapshot {
 }
 
 export interface UrlPreviewGroupViewProps {
-    vm: ViewModel<UrlPreviewGroupViewSnapshot> & UrlPreviewGroupViewActions;
+    vm: ViewModel<UrlPreviewViewSnapshot> & UrlPreviewViewActions;
 }
 
-export interface UrlPreviewGroupViewActions {
+export interface UrlPreviewViewActions {
     onTogglePreviewLimit: () => void;
     onHideClick: () => Promise<void>;
     onImageClick: (preview: UrlPreviewViewSnapshotPreview) => void;

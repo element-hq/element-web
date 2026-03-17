@@ -11,15 +11,11 @@ import { fn } from "storybook/test";
 import imageFile from "../../../static/element.png";
 import tallImageFile from "../../../static/tallImage.png";
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import {
-    UrlPreviewGroupView,
-    type UrlPreviewGroupViewActions,
-    type UrlPreviewGroupViewSnapshot,
-} from "./UrlPreviewGroupView";
+import { UrlPreviewGroupView, type UrlPreviewViewActions, type UrlPreviewViewSnapshot } from "./UrlPreviewGroupView";
 import { useMockedViewModel } from "../../viewmodel";
 import { LinkedTextContext } from "../../utils/LinkedText";
 
-type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
+type UrlPreviewGroupViewProps = UrlPreviewViewSnapshot & UrlPreviewViewActions;
 
 const UrlPreviewGroupViewWrapper = ({
     onHideClick,

@@ -7,8 +7,8 @@
 
 import {
     BaseViewModel,
-    type UrlPreviewGroupViewSnapshot,
-    type UrlPreviewGroupViewActions,
+    type UrlPreviewViewSnapshot,
+    type UrlPreviewViewActions,
     type UrlPreviewViewSnapshotPreview,
 } from "@element-hq/web-shared-components";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
@@ -58,8 +58,8 @@ export enum PreviewVisibility {
  * ViewModel for fetching and rendering URL previews for an individual event.
  */
 export class UrlPreviewViewModel
-    extends BaseViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewViewModelProps>
-    implements UrlPreviewGroupViewActions
+    extends BaseViewModel<UrlPreviewViewSnapshot, UrlPreviewViewModelProps>
+    implements UrlPreviewViewActions
 {
     /**
      * Parse a numeric value from OpenGraph. The OpenGraph spec defines all values as strings

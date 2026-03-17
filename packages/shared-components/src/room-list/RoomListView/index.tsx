@@ -9,7 +9,7 @@ export { RoomListView } from "./RoomListView";
 export type {
     RoomListViewProps,
     RoomListViewModel,
-    RoomListSnapshot,
+    RoomListViewSnapshot,
     RoomListViewActions,
     RoomListSection,
 } from "./RoomListView";
