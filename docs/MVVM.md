@@ -22,14 +22,14 @@ A first documentation and implementation of MVVM was done in [MVVM-v1.md](MVVM-v
 
 Given a feature named `Foo`, the naming convention for each MVVM artifact is:
 
-| Artifact                            | Name              | Example           |
-| ----------------------------------- | ----------------- | ----------------- |
-| View component                      | `FooView`         | `FooView`         |
-| Snapshot interface                  | `FooViewSnapshot` | `FooViewSnapshot` |
-| Actions interface                   | `FooViewActions`  | `FooViewActions`  |
-| ViewModel type alias (in view file) | `FooViewModel`    | `FooViewModel`    |
-| ViewModel class (in `apps/web`)     | `FooViewModel`    | `FooViewModel`    |
-| ViewModel class file                | `FooViewModel.ts` | `FooViewModel.ts` |
+| Artifact                            | Name              |
+| ----------------------------------- | ----------------- |
+| View component                      | `FooView`         |
+| Snapshot interface                  | `FooViewSnapshot` |
+| Actions interface                   | `FooViewActions`  |
+| ViewModel type alias (in view file) | `FooViewModel`    |
+| ViewModel class (in `apps/web`)     | `FooViewModel`    |
+| ViewModel class file                | `FooViewModel.ts` |
 
 #### Model
 
