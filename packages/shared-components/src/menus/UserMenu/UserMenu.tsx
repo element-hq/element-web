@@ -152,7 +152,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                         </Button>
                     )}
                     {signIn && (
-                        <Text as="span" weight="semibold">
+                        <Text as="span" weight="medium">
                             {_t("menus|user_menu|got_an_account")}
                             <Link as="button" onClick={signIn}>
                                 {_t("menus|user_menu|sign_in")}
