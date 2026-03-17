@@ -12,6 +12,7 @@ import whatInput from "what-input";
 import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerViewModel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import UIStore, { UI_EVENTS } from "../../../src/stores/UIStore";
 
 jest.mock("what-input");
 
@@ -73,6 +74,10 @@ describe("LeftPanelResizerViewModel", () => {
         const mockHandle = {
             resize: jest.fn(),
             isCollapsed: jest.fn().mockReturnValue(true),
+            getSize: jest.fn().mockReturnValue({
+                inPixels: 0,
+            }),
+            collapse: jest.fn(),
         } as unknown as PanelImperativeHandle;
         vm.setPanelHandle(mockHandle);
 
@@ -88,5 +93,40 @@ describe("LeftPanelResizerViewModel", () => {
         expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(true);
         vm.onBlur();
         expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(false);
+    });
+
+    describe("Auto collapse", () => {
+        it("should collapse and expand panel when window is resized", () => {
+            jest.useFakeTimers();
+            const vm = new ResizerViewModel();
+            const mockHandle = {
+                resize: jest.fn(),
+                isCollapsed: jest.fn().mockReturnValue(true),
+                getSize: jest.fn().mockReturnValue({
+                    inPixels: 300,
+                }),
+                collapse: jest.fn(),
+            } as unknown as PanelImperativeHandle;
+            vm.setPanelHandle(mockHandle);
+
+            // Window is made smaller
+            UIStore.instance.emit(UI_EVENTS.WidthDecreased, 750);
+            expect(mockHandle.collapse).toHaveBeenCalled();
+
+            // Window is made larger
+            UIStore.instance.emit(UI_EVENTS.WidthIncreased, 800);
+            jest.runAllTimers();
+            expect(mockHandle.resize).toHaveBeenCalled();
+            jest.useRealTimers();
+        });
+
+        it("should not persist collapsed state when window is being resized", () => {
+            const vm = new ResizerViewModel();
+            jest.spyOn(SettingsStore, "setValue");
+            UIStore.instance.isWindowBeingResized = true;
+
+            vm.onLeftPanelResized(100);
+            expect(SettingsStore.setValue).not.toHaveBeenCalled();
+        });
     });
 });
