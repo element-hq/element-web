@@ -15,7 +15,7 @@ import { StaticNotificationState } from "../../../../stores/notifications/Static
 import NotificationBadge from "../NotificationBadge";
 import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import type { IReadReceiptPosition } from "../ReadReceiptMarker";
-import type { ReadReceiptProps } from "./EventTilePresenter";
+import type { ReadReceiptProps } from "./EventTile";
 
 interface MessageStatusProps {
     messageState: EventStatus | undefined;
@@ -26,6 +26,7 @@ interface MessageStatusProps {
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
     isTwelveHour?: boolean;
     checkUnmounting?: () => boolean;
+    suppressReadReceiptAnimation: boolean;
 }
 
 export function MessageStatus({
@@ -37,6 +38,7 @@ export function MessageStatus({
     readReceiptMap,
     checkUnmounting,
     isTwelveHour,
+    suppressReadReceiptAnimation,
 }: MessageStatusProps): JSX.Element | undefined {
     const sentReceipt = getSentReceiptDetails(messageState, shouldShowSentReceipt, shouldShowSendingReceipt);
     const sentReceiptIcon = sentReceipt?.icon;
@@ -46,7 +48,7 @@ export function MessageStatus({
             readReceipts={[...(readReceipts ?? [])]}
             readReceiptMap={readReceiptMap ?? {}}
             checkUnmounting={checkUnmounting}
-            suppressAnimation={false}
+            suppressAnimation={suppressReadReceiptAnimation}
             isTwelveHour={isTwelveHour}
         />
     ) : undefined;

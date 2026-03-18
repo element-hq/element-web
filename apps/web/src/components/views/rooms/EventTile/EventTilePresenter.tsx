@@ -13,6 +13,7 @@ import React, {
     useId,
     useMemo,
     useRef,
+    useState,
     type JSX,
     type MouseEvent,
     type ReactNode,
@@ -29,9 +30,7 @@ import {
 
 import {
     EventTileViewModel,
-    type GetRelationsForEvent,
     type EventTileViewModelProps,
-    type ReadReceiptProps,
     type EventTileViewSnapshot,
 } from "../../../../viewmodels/room/EventTileViewModel";
 import RoomContext, { TimelineRenderingType } from "../../../../contexts/RoomContext";
@@ -64,11 +63,10 @@ import { ActionBar } from "./ActionBar";
 import { ContextMenu } from "./ContextMenu";
 import { Footer } from "./Footer";
 import { MessageStatus } from "./MessageStatus";
+import type { GetRelationsForEvent, ReadReceiptProps } from "./EventTile";
 import { ReplyPreview } from "./ReplyPreview";
 import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
-
-export type { GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
 
 export interface EventTileOps {
     isWidgetHidden(): boolean;
@@ -163,6 +161,7 @@ type UseEventTileViewModelResult = {
     rootRef: RefObject<HTMLElement | null>;
     tileRef: RefObject<EventTileApi | null>;
     replyChainRef: RefObject<ReplyChain | null>;
+    suppressReadReceiptAnimation: boolean;
     vm: EventTileViewModel;
     snapshot: EventTileViewSnapshot;
 };
@@ -201,6 +200,7 @@ type UseEventTileViewPropsArgs = {
     room: Room | null;
     tileContentId: string;
     rootRef: RefObject<HTMLElement | null>;
+    suppressReadReceiptAnimation: boolean;
     renderedContent: EventTileViewRenderContent;
     actions: EventTileViewActions;
 };
@@ -242,6 +242,7 @@ function useEventTileViewModel(
     const rootRef = useRef<HTMLElement>(null);
     const tileRef = useRef<EventTileApi>(null);
     const replyChainRef = useRef<ReplyChain>(null);
+    const [suppressReadReceiptAnimation, setSuppressReadReceiptAnimation] = useState(true);
     const vmReadReceipts = useMemo(() => readReceipts?.map(({ userId, ts }) => ({ userId, ts })), [readReceipts]);
     const viewModelProps = useMemo(
         () =>
@@ -343,6 +344,10 @@ function useEventTileViewModel(
         };
     }, [props.resizeObserver, props.as, roomContext.timelineRenderingType, snapshot.hasRenderer]);
 
+    useEffect(() => {
+        setSuppressReadReceiptAnimation(false);
+    }, []);
+
     return {
         cli,
         roomContext,
@@ -350,6 +355,7 @@ function useEventTileViewModel(
         rootRef,
         tileRef,
         replyChainRef,
+        suppressReadReceiptAnimation,
         vm,
         snapshot,
     };
@@ -473,6 +479,7 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         rootRef,
         tileRef,
         replyChainRef,
+        suppressReadReceiptAnimation,
         vm,
         snapshot: vmSnapshot,
     } = useEventTileViewModel(props, forwardedRef);
@@ -611,6 +618,7 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         room,
         tileContentId,
         rootRef,
+        suppressReadReceiptAnimation,
         renderedContent: {
             actionBar,
             contextMenu,
@@ -646,6 +654,7 @@ function useEventTileViewProps({
     room,
     tileContentId,
     rootRef,
+    suppressReadReceiptAnimation,
     renderedContent,
     actions,
 }: UseEventTileViewPropsArgs): EventTileViewProps {
@@ -743,6 +752,7 @@ function useEventTileViewProps({
                 readReceiptMap={props.readReceiptMap}
                 checkUnmounting={props.checkUnmounting}
                 isTwelveHour={props.isTwelveHour}
+                suppressReadReceiptAnimation={suppressReadReceiptAnimation}
             />
         ),
         [
@@ -754,6 +764,7 @@ function useEventTileViewProps({
             props.readReceiptMap,
             props.checkUnmounting,
             props.isTwelveHour,
+            suppressReadReceiptAnimation,
         ],
     );
     const notificationRoomLabel = useMemo(
