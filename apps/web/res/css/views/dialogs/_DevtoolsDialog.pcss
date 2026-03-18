@@ -187,3 +187,53 @@ Please see LICENSE files in the repository root for full details.
     /* used on focus */
     color: $links !important;
 }
+
+.mx_DevTools_sticky_explorer {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin-top: var(--cpd-space-3x);
+
+        th {
+            text-align: left;
+            padding: var(--cpd-space-2x) var(--cpd-space-3x);
+        }
+
+        th#user_header {
+            width: 35%;
+        }
+        th#sticky_key_header {
+            width: 50%;
+        }
+        th#expires_in_header {
+            width: 15%;
+        }
+
+        tr {
+            cursor: pointer;
+            border-bottom: var(--cpd-border-width-1) solid var(--cpd-color-border-interactive-primary);
+            background: transparent;
+        }
+
+        tr:hover {
+            color: var(--cpd-color-text-secondary);
+            background: var(--cpd-color-bg-action-secondary-hovered);
+        }
+
+        tr:focus-visible {
+            outline: var(--cpd-border-width-2) solid var(--cpd-color-border-focused);
+        }
+
+        td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: var(--cpd-space-2x) var(--cpd-space-3x);
+        }
+
+        td.remaining_time_column {
+            text-align: right;
+        }
+    }
+}

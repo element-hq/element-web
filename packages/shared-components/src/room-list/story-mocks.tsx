@@ -8,7 +8,14 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import { type Room, type RoomItemViewModel, type RoomListItemSnapshot, RoomNotifState } from "./RoomListItemView";
+import {
+    type Room,
+    type RoomListItemViewModel,
+    type RoomListItemViewSnapshot,
+    RoomNotifState,
+} from "./RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderView";
+import { MockViewModel } from "../viewmodel";
 
 /**
  * Mock avatar component for stories
@@ -72,7 +79,7 @@ const roomNames = [
 /**
  * Create a mock room item snapshot for stories
  */
-export const createMockRoomSnapshot = (id: string, name: string, index: number): RoomListItemSnapshot => ({
+export const createMockRoomSnapshot = (id: string, name: string, index: number): RoomListItemViewSnapshot => ({
     id,
     room: { name },
     name,
@@ -100,38 +107,84 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     roomNotifState: RoomNotifState.AllMessages,
 });
 
+export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
+    const snapshot = createMockRoomSnapshot(roomId, name, index);
+    return {
+        getSnapshot: () => snapshot,
+        subscribe: fn(),
+        onOpenRoom: fn(),
+        onMarkAsRead: fn(),
+        onMarkAsUnread: fn(),
+        onToggleFavorite: fn(),
+        onToggleLowPriority: fn(),
+        onInvite: fn(),
+        onCopyRoomLink: fn(),
+        onLeaveRoom: fn(),
+        onSetRoomNotifState: fn(),
+    };
+}
+
 /**
  * Create a mock getRoomItemViewModel function for stories
  */
-export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomItemViewModel) => {
-    const viewModels = new Map<string, RoomItemViewModel>();
+export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomListItemViewModel) => {
+    const viewModels = new Map<string, RoomListItemViewModel>();
     roomIds.forEach((roomId, index) => {
         const name = roomNames[index % roomNames.length];
-        const snapshot = createMockRoomSnapshot(roomId, name, index);
-
-        const mockViewModel = {
-            getSnapshot: () => snapshot,
-            subscribe: fn(),
-            unsubscribe: fn(),
-            onOpenRoom: fn(),
-            onMarkAsRead: fn(),
-            onMarkAsUnread: fn(),
-            onToggleFavorite: fn(),
-            onToggleLowPriority: fn(),
-            onInvite: fn(),
-            onCopyRoomLink: fn(),
-            onLeaveRoom: fn(),
-            onSetRoomNotifState: fn(),
-        };
-        viewModels.set(roomId, mockViewModel);
+        viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index));
     });
 
     return (roomId: string) => viewModels.get(roomId)!;
 };
 
+export const createGetSectionHeaderViewModel = (
+    sectionIds: string[],
+): ((sectionId: string) => RoomListSectionHeaderViewModel) => {
+    const viewModels = new Map<string, RoomListSectionHeaderViewModel>();
+    sectionIds.forEach((sectionId) => {
+        const snapshot = {
+            id: sectionId,
+            title: sectionId[0].toUpperCase() + sectionId.slice(1),
+            isExpanded: true,
+        };
+        const vm = new MockViewModel(snapshot) as unknown as RoomListSectionHeaderViewModel;
+        Object.assign(vm, {
+            onClick: fn(),
+            onFocus: fn(),
+        });
+
+        viewModels.set(sectionId, vm);
+    });
+
+    return (sectionId: string) => viewModels.get(sectionId)!;
+};
+
 /**
  * Mock room IDs for different list sizes
  */
+export const mock10RoomsIds = Array.from({ length: 10 }, (_, i) => `!room${i}:server`);
+export const mock10RoomsSections = [
+    { id: "favourites", roomIds: mock10RoomsIds.slice(0, 3) },
+    { id: "chats", roomIds: mock10RoomsIds.slice(3, 4) },
+    { id: "low-priority", roomIds: mock10RoomsIds.slice(4) },
+];
+
 export const mockRoomIds = Array.from({ length: 20 }, (_, i) => `!room${i}:server`);
-export const smallListRoomIds = mockRoomIds.slice(0, 5);
-export const largeListRoomIds = Array.from({ length: 100 }, (_, i) => `!room${i}:server`);
+export const mockSections = [
+    { id: "favourites", roomIds: mockRoomIds.slice(0, 5) },
+    { id: "chats", roomIds: mockRoomIds.slice(5, 15) },
+    { id: "low-priority", roomIds: mockRoomIds.slice(15) },
+];
+
+export const mockSmallListRoomIds = mockRoomIds.slice(0, 5);
+export const mockSmallListSections = [
+    { id: "favourites", roomIds: mockSmallListRoomIds.slice(0, 2) },
+    { id: "chats", roomIds: mockSmallListRoomIds.slice(2, 0) },
+];
+
+export const mockLargeListRoomIds = Array.from({ length: 100 }, (_, i) => `!room${i}:server`);
+export const mockLargeListSections = [
+    { id: "favourites", roomIds: mockLargeListRoomIds.slice(0, 23) },
+    { id: "chats", roomIds: mockLargeListRoomIds.slice(23, 52) },
+    { id: "low-priority", roomIds: mockLargeListRoomIds.slice(52) },
+];
