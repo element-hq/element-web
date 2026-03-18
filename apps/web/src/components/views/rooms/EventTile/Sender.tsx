@@ -11,11 +11,11 @@ import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SenderProfile from "../../messages/SenderProfile";
 import { SenderMode } from "./constants";
 
-type SenderProps = {
+type SenderProps = Readonly<{
     mode: SenderMode;
     mxEvent: MatrixEvent;
     onClick?: () => void;
-};
+}>;
 
 export function Sender({ mode, mxEvent, onClick }: SenderProps): JSX.Element | undefined {
     switch (mode) {

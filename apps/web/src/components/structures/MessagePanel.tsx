@@ -377,12 +377,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return this.eventTiles[eventId]?.ref?.current ?? undefined;
     }
 
-    public getTileForEventId(eventId?: string): EventTileHandle | undefined {
+    public readonly getTileForEventId = (eventId?: string): EventTileHandle | undefined => {
         if (!this.eventTiles || !eventId) {
             return undefined;
         }
         return this.eventTiles[eventId];
-    }
+    };
 
     /* return true if the content is fully scrolled down right now; else false.
      */

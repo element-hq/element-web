@@ -20,7 +20,7 @@ type ActionBarProps = {
     permalinkCreator?: RoomPermalinkCreator;
     getRelationsForEvent?: GetRelationsForEvent;
     isEditing: boolean;
-    isQuoteExpanded: boolean;
+    isQuoteExpanded?: boolean;
     forExport?: boolean;
     tileRef: React.RefObject<EventTileApi | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;

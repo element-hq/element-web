@@ -66,7 +66,7 @@ interface EventTileInteractionSnapshot {
     hover: boolean;
     focusWithin: boolean;
     contextMenu?: EventTileContextMenu;
-    isQuoteExpanded: boolean;
+    isQuoteExpanded?: boolean;
 }
 
 interface EventTileReceiptSnapshot {
@@ -393,7 +393,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return EventTileViewModel.getReactions(this.props);
     }
 
-    private onRoomReceipt = (_event: MatrixEvent, room: Room): void => {
+    private readonly onRoomReceipt = (_event: MatrixEvent, room: Room): void => {
         const roomId = this.props.mxEvent.getRoomId();
         const tileRoom = roomId ? this.props.cli.getRoom(roomId) : null;
         if (room !== tileRoom) return;
@@ -492,7 +492,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             hover: false,
             focusWithin: false,
             contextMenu: undefined,
-            isQuoteExpanded: false,
+            isQuoteExpanded: undefined,
             thread: null,
             threadUpdateKey: "",
             threadNotification: undefined,
@@ -607,8 +607,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static isEligibleForSpecialReceipt(props: EventTileViewModelProps): boolean {
-        if (props.readReceipts && props.readReceipts.length > 0) return false;
-
         const roomId = props.mxEvent.getRoomId();
         const room = roomId ? props.cli.getRoom(roomId) : null;
         if (!room) return false;

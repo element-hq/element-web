@@ -26,7 +26,7 @@ interface ReplyPreviewProps {
     alwaysShowTimestamps?: boolean;
     hover: boolean;
     focusWithin: boolean;
-    isQuoteExpanded: boolean;
+    isQuoteExpanded?: boolean;
     replyChainRef: React.RefObject<ReplyChain | null>;
     setQuoteExpanded: (expanded: boolean) => void;
 }

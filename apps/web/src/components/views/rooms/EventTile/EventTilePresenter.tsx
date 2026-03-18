@@ -418,17 +418,19 @@ function useEventTileActions(
             evt.preventDefault();
             evt.stopPropagation();
             if (!props.permalinkCreator) return;
-            await copyPlaintext(props.permalinkCreator.forEvent(props.mxEvent.getId()!));
+            const eventId = props.mxEvent.getId();
+            if (!eventId) return;
+            await copyPlaintext(props.permalinkCreator.forEvent(eventId));
         },
         [props.permalinkCreator, props.mxEvent],
     );
 
     const showContextMenu = useCallback(
         (ev: MouseEvent<HTMLElement>, permalink?: string): void => {
-            const clickTarget = ev.target as HTMLElement;
+            const clickTarget = ev.target;
+            if (!(clickTarget instanceof HTMLElement) || clickTarget instanceof HTMLImageElement) return;
             const anchorElement = clickTarget instanceof HTMLAnchorElement ? clickTarget : clickTarget.closest("a");
 
-            if (clickTarget instanceof HTMLImageElement) return;
             if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && anchorElement) return;
             if (props.editState) return;
 
@@ -455,20 +457,21 @@ function useEventTileActions(
 
     const onTimestampContextMenu = useCallback(
         (ev: MouseEvent<HTMLElement>): void => {
-            showContextMenu(ev, props.permalinkCreator?.forEvent(props.mxEvent.getId()!));
+            const eventId = props.mxEvent.getId();
+            showContextMenu(ev, eventId ? props.permalinkCreator?.forEvent(eventId) : undefined);
         },
         [showContextMenu, props.permalinkCreator, props.mxEvent],
     );
 
     const onListTileClick = useCallback(
         (ev: MouseEvent<HTMLElement>): void => {
-            const target = ev.currentTarget as HTMLElement;
+            const target = ev.currentTarget;
             let index = -1;
             if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
 
             switch (snapshot.tileClickMode) {
                 case ClickMode.ViewRoom:
-                    openInRoom(ev as never);
+                    openInRoom(ev);
                     break;
                 case ClickMode.ShowThread:
                     dis.dispatch<ShowThreadPayload>({
@@ -849,7 +852,7 @@ function useEventTileViewProps({
             timelineRenderingType: roomContext.timelineRenderingType,
             rootClassName: snapshot.classes,
             contentClassName: snapshot.lineClasses,
-            ariaLive: props.eventSendStatus !== null ? ("off" as const) : undefined,
+            ariaLive: props.eventSendStatus !== null ? "off" : undefined,
             scrollTokens: snapshot.scrollToken,
             isOwnEvent: snapshot.isOwnEvent,
             content: {
