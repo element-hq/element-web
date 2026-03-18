@@ -149,10 +149,15 @@ export function VideoBodyView({
     const rootClassName = classNames(className, styles.root);
     const resolvedContainerClassName = classNames(containerClassName, styles.container);
 
-    const containerStyle =
-        state === VideoBodyViewState.HIDDEN
-            ? { width: maxWidth, height: maxHeight, aspectRatio }
-            : { maxWidth, maxHeight, aspectRatio };
+    // Reserve the media box on the container itself so the timeline doesn't jump
+    // while the video element or loading state is still settling.
+    const resolvedWidth = maxWidth !== undefined ? `min(100%, ${maxWidth}px)` : undefined;
+    const containerStyle: CSSProperties = {
+        width: resolvedWidth,
+        maxWidth,
+        maxHeight,
+        aspectRatio,
+    };
 
     if (state === VideoBodyViewState.ERROR) {
         return (
@@ -178,8 +183,6 @@ export function VideoBodyView({
         );
     }
 
-    const spaceFiller = <div aria-hidden="true" style={{ width: maxWidth, height: maxHeight }} />;
-
     if (state === VideoBodyViewState.LOADING) {
         return (
             <span className={rootClassName}>
@@ -188,7 +191,6 @@ export function VideoBodyView({
                         <InlineSpinner aria-label="Loading..." role="progressbar" />
                     </div>
                 </div>
-                {spaceFiller}
             </span>
         );
     }
@@ -218,7 +220,6 @@ export function VideoBodyView({
                     onPlay={vm.onPlay}
                 />
             </div>
-            {spaceFiller}
             {children}
         </span>
     );

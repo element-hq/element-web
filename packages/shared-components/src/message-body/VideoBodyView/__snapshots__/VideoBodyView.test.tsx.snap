@@ -31,7 +31,7 @@ exports[`VideoBodyView > matches snapshot for hidden story 1`] = `
   >
     <div
       class="container"
-      style="width: 320px; height: 180px; aspect-ratio: 16 / 9;"
+      style="width: min(100%, 320px); max-width: 320px; max-height: 180px; aspect-ratio: 16 / 9;"
     >
       <button
         class="hiddenButton"
@@ -69,7 +69,7 @@ exports[`VideoBodyView > matches snapshot for ready story 1`] = `
     <div
       class="container"
       data-video-body-view-state="READY"
-      style="max-width: 320px; max-height: 180px; aspect-ratio: 16 / 9;"
+      style="width: min(100%, 320px); max-width: 320px; max-height: 180px; aspect-ratio: 16 / 9;"
     >
       <video
         aria-label="Product demo video"
@@ -82,10 +82,6 @@ exports[`VideoBodyView > matches snapshot for ready story 1`] = `
         src="http://localhost:63315/static/videoBodyDemo.webm"
       />
     </div>
-    <div
-      aria-hidden="true"
-      style="width: 320px; height: 180px;"
-    />
     <div>
       File body slot
     </div>
