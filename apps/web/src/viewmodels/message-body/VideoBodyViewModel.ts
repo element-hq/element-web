@@ -25,23 +25,68 @@ import { type ImageSize, suggestedSize as suggestedVideoSize } from "../../setti
 import { type MediaEventHelper } from "../../utils/MediaEventHelper";
 
 export interface VideoBodyViewModelProps {
+    /**
+     * Video event being rendered.
+     */
     mxEvent: MatrixEvent;
+    /**
+     * Helper for resolving encrypted and unencrypted media sources.
+     */
     mediaEventHelper?: MediaEventHelper;
+    /**
+     * Whether the video is being rendered for export instead of live playback.
+     */
     forExport?: boolean;
+    /**
+     * Whether playback controls and autoplay should be disabled.
+     */
     inhibitInteraction?: boolean;
+    /**
+     * Whether the media should currently be shown instead of the preview button.
+     */
     mediaVisible: boolean;
+    /**
+     * Callback invoked when the hidden-media preview is revealed.
+     */
     onPreviewClick?: () => void;
+    /**
+     * Ref to the underlying video element used for replay after lazy decryption.
+     */
     videoRef: RefObject<HTMLVideoElement | null>;
 }
 
 interface InternalState {
+    /**
+     * Decrypted playable media URL for encrypted videos.
+     */
     decryptedUrl: string | null;
+    /**
+     * Decrypted thumbnail URL for encrypted videos.
+     */
     decryptedThumbnailUrl: string | null;
+    /**
+     * Decrypted media blob cached for download or replay.
+     */
     decryptedBlob: Blob | null;
+    /**
+     * Last media-processing error, if any.
+     */
     error: unknown | null;
+    /**
+     * Whether an on-demand media fetch is in progress.
+     */
     fetchingData: boolean;
+    /**
+     * Whether the blurhash poster is being shown while the real poster loads.
+     */
     posterLoading: boolean;
+    /**
+     * Data URL generated from the blurhash placeholder.
+     */
     blurhashUrl: string | null;
+    /**
+     * Current media sizing preference from settings.
+     */
     imageSize: ImageSize;
 }
 
