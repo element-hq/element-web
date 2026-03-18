@@ -9,6 +9,7 @@ import { EventType, MsgType, type MatrixClient, type MatrixEvent, type Room } fr
 
 import { formatFullDate } from "../../../../../src/DateUtils";
 import { _t } from "../../../../../src/languageHandler";
+import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { RedactedBodyViewModel } from "../../../../../src/viewmodels/message-body/RedactedBodyViewModel";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
 
@@ -56,13 +57,13 @@ describe("RedactedBodyViewModel", () => {
     beforeEach(() => {
         client = stubClient();
         room = mkRoom(client, "!room:example.com");
+        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
         jest.spyOn(client, "getRoom").mockReturnValue(room);
     });
 
     it("builds self-redaction text and tooltip from the event", () => {
         const event = makeRedactedEvent();
         const vm = new RedactedBodyViewModel({
-            client,
             mxEvent: event,
             showTwelveHour: true,
         });
@@ -82,7 +83,6 @@ describe("RedactedBodyViewModel", () => {
         });
 
         const vm = new RedactedBodyViewModel({
-            client,
             mxEvent: event,
             showTwelveHour: false,
         });
@@ -93,7 +93,6 @@ describe("RedactedBodyViewModel", () => {
     it("setShowTwelveHour updates only when the value changes", () => {
         const event = makeRedactedEvent();
         const vm = new RedactedBodyViewModel({
-            client,
             mxEvent: event,
             showTwelveHour: false,
         });
@@ -121,7 +120,6 @@ describe("RedactedBodyViewModel", () => {
             originServerTs: Date.UTC(2023, 0, 1, 12, 0, 0),
         });
         const vm = new RedactedBodyViewModel({
-            client,
             mxEvent: originalEvent,
             showTwelveHour: false,
         });

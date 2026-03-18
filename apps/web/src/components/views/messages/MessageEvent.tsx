@@ -25,7 +25,6 @@ import {
 } from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
-import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import UnknownBody from "./UnknownBody";
@@ -359,12 +358,10 @@ function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element
  * Bridge redacted events into the view model until MessageEvent becomes a function component.
  */
 function RedactedBodyWrapper({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
-    const client = useMatrixClientContext();
     const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new RedactedBodyViewModel({
-                client,
                 mxEvent,
                 showTwelveHour,
             }),

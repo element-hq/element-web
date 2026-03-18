@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     type RedactedBodyViewSnapshot,
@@ -14,12 +14,9 @@ import {
 
 import { formatFullDate } from "../../DateUtils";
 import { _t } from "../../languageHandler";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 export interface RedactedBodyViewModelProps {
-    /**
-     * Matrix client used to resolve room members for redaction text.
-     */
-    client: MatrixClient;
     /**
      * The redacted event being rendered.
      */
@@ -34,14 +31,14 @@ export class RedactedBodyViewModel
     extends BaseViewModel<RedactedBodyViewSnapshot, RedactedBodyViewModelProps>
     implements RedactedBodyViewModelInterface
 {
-    private static readonly computeText = ({ client, mxEvent }: RedactedBodyViewModelProps): string => {
+    private static readonly computeText = ({ mxEvent }: RedactedBodyViewModelProps): string => {
         const redactedBecauseUserId = mxEvent.getUnsigned().redacted_because?.sender;
         if (!redactedBecauseUserId || redactedBecauseUserId === mxEvent.getSender()) {
             return _t("timeline|self_redaction");
         }
 
         const roomId = mxEvent.getRoomId();
-        const room = roomId ? client.getRoom(roomId) : null;
+        const room = roomId ? MatrixClientPeg.get()?.getRoom(roomId) : null;
         const sender = room?.getMember(redactedBecauseUserId);
 
         return _t("timeline|redaction", { name: sender?.name ?? redactedBecauseUserId });
