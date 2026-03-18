@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { EventTileContextMenuState, EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
+import type { EventTileContextMenu, EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import type ReplyChain from "../../elements/ReplyChain";
 import { aboveRightOf } from "../../../structures/ContextMenu";
@@ -15,7 +15,7 @@ import type { EventTileApi, EventTileProps } from "./EventTilePresenter";
 
 interface ContextMenuProps {
     props: EventTileProps;
-    contextMenu: EventTileContextMenuState;
+    contextMenu: EventTileContextMenu;
     snapshot: EventTileViewSnapshot;
     tileRef: React.RefObject<EventTileApi | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;

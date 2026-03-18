@@ -10,6 +10,7 @@ import React, { type JSX } from "react";
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { renderTile } from "../../../../events/EventTileFactory";
+import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import RedactedBody from "../../messages/RedactedBody";
 import { EventPreview } from "../EventPreview";
 import { DecryptionFailureBody } from "./DecryptionFailureBody";
@@ -22,7 +23,7 @@ interface MessageBodyProps {
     isSeeingThroughMessageHiddenForModeration: boolean;
     renderTileProps: EventTileProps;
     tileRef: React.RefObject<EventTileApi | null>;
-    permalinkCreator: EventTileProps["permalinkCreator"];
+    permalinkCreator?: RoomPermalinkCreator;
     showHiddenEvents: boolean;
 }
 

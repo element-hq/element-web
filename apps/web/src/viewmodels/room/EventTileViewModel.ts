@@ -64,100 +64,136 @@ export interface ReadReceiptProps {
     ts: number;
 }
 
-export interface EventTileContextMenuState {
+export interface EventTileContextMenu {
     position: Pick<DOMRect, "top" | "left" | "bottom">;
     link?: string;
 }
 
-export interface EventTileViewSnapshot {
+interface EventTileInteractionSnapshot {
     actionBarFocused: boolean;
-    shieldColour: EventShieldColour;
-    shieldReason: EventShieldReason | null;
-    reactions: Relations | null;
     hover: boolean;
     focusWithin: boolean;
-    contextMenu?: EventTileContextMenuState;
+    contextMenu?: EventTileContextMenu;
     isQuoteExpanded: boolean;
-    thread: Thread | null;
-    threadUpdateKey: string;
-    threadNotification?: NotificationCountType;
+}
+
+interface EventTileReceiptSnapshot {
+    reactions: Relations | null;
     shouldShowSentReceipt: boolean;
     shouldShowSendingReceipt: boolean;
+    showReadReceipts: boolean;
+}
+
+interface EventTileRenderingSnapshot {
     isHighlighted: boolean;
-    showTimestamp: boolean;
     isContinuation: boolean;
     classes: string;
     lineClasses: string;
     isSending: boolean;
     isEditing: boolean;
-    isEncryptionFailure: boolean;
-    isOwnEvent: boolean;
-    permalink: string;
-    scrollToken?: string;
-    hasThread: boolean;
-    isThreadRoot: boolean;
     hasRenderer: boolean;
+    tileRenderType: TimelineRenderingType;
     isBubbleMessage: boolean;
     isInfoMessage: boolean;
     isLeftAlignedBubbleMessage: boolean;
     noBubbleEvent: boolean;
     isSeeingThroughMessageHiddenForModeration: boolean;
-    showSender: boolean;
-    showThreadToolbar: boolean;
-    showThreadPanelSummary: boolean;
-    showReadReceipts: boolean;
-    showGroupPadlock: boolean;
-    showIrcPadlock: boolean;
+    isPinned: boolean;
+    hasFooter: boolean;
+}
+
+interface EventTileTimestampSnapshot {
+    showTimestamp: boolean;
+    permalink: string;
+    scrollToken?: string;
     showLinkedTimestamp: boolean;
     showDummyTimestamp: boolean;
     showRelativeTimestamp: boolean;
     timestampTs: number;
-    tileRenderType: TimelineRenderingType;
-    avatarSize: string | null;
-    avatarMemberUserOnClick: boolean;
-    avatarForceHistorical: boolean;
-    senderMode: SenderMode;
-    isPinned: boolean;
-    hasFooter: boolean;
-    encryptionIndicatorMode: EncryptionIndicatorMode;
-    encryptionIndicatorTitle?: string;
-    sharedKeysUserId?: string;
-    sharedKeysRoomId?: string;
+}
+
+interface EventTileThreadSnapshot {
+    thread: Thread | null;
+    threadUpdateKey: string;
+    threadNotification?: NotificationCountType;
+    hasThread: boolean;
+    isThreadRoot: boolean;
+    showThreadToolbar: boolean;
+    showThreadPanelSummary: boolean;
     threadInfoMode: ThreadInfoMode;
     tileClickMode: ClickMode;
     viewRoomMetricsTrigger?: "MessageSearch";
 }
 
-export interface EventTileViewModelProps {
+interface EventTileSenderSnapshot {
+    isOwnEvent: boolean;
+    showSender: boolean;
+    avatarSize: string | null;
+    avatarMemberUserOnClick: boolean;
+    avatarForceHistorical: boolean;
+    senderMode: SenderMode;
+}
+
+interface EventTileEncryptionSnapshot {
+    shieldColour: EventShieldColour;
+    shieldReason: EventShieldReason | null;
+    isEncryptionFailure: boolean;
+    showGroupPadlock: boolean;
+    showIrcPadlock: boolean;
+    encryptionIndicatorMode: EncryptionIndicatorMode;
+    encryptionIndicatorTitle?: string;
+    sharedKeysUserId?: string;
+    sharedKeysRoomId?: string;
+}
+
+export type EventTileViewSnapshot = EventTileInteractionSnapshot &
+    EventTileReceiptSnapshot &
+    EventTileRenderingSnapshot &
+    EventTileTimestampSnapshot &
+    EventTileThreadSnapshot &
+    EventTileSenderSnapshot &
+    EventTileEncryptionSnapshot;
+
+interface EventTileCoreProps {
     cli: MatrixClient;
     mxEvent: MatrixEvent;
-    forExport?: boolean;
-    showReactions?: boolean;
-    getRelationsForEvent?: GetRelationsForEvent;
-    readReceipts?: ReadReceiptProps[];
-    lastSuccessful?: boolean;
     eventSendStatus?: EventStatus;
+    editState?: EditorStateTransfer;
+    permalinkCreator?: RoomPermalinkCreator;
+    callEventGrouper?: LegacyCallEventGrouper;
+}
+
+interface EventTileRenderingProps {
+    forExport?: boolean;
     timelineRenderingType: TimelineRenderingType;
+    layout?: Layout;
+    isTwelveHour?: boolean;
+    alwaysShowTimestamps?: boolean;
     isRedacted?: boolean;
     continuation?: boolean;
     last?: boolean;
     lastInSection?: boolean;
     contextual?: boolean;
     isSelectedEvent?: boolean;
-    isTwelveHour?: boolean;
-    layout?: Layout;
-    editState?: EditorStateTransfer;
-    permalinkCreator?: RoomPermalinkCreator;
-    alwaysShowTimestamps?: boolean;
+    showHiddenEvents: boolean;
+    isRoomEncrypted: boolean;
     hideSender?: boolean;
     hideTimestamp?: boolean;
     inhibitInteraction?: boolean;
-    showReadReceipts?: boolean;
     highlightLink?: string;
-    isRoomEncrypted: boolean;
-    callEventGrouper?: LegacyCallEventGrouper;
-    showHiddenEvents: boolean;
 }
+
+interface EventTileRelationProps {
+    showReactions?: boolean;
+    getRelationsForEvent?: GetRelationsForEvent;
+    readReceipts?: ReadReceiptProps[];
+    showReadReceipts?: boolean;
+    lastSuccessful?: boolean;
+}
+
+export type EventTileViewModelProps = EventTileCoreProps &
+    EventTileRenderingProps &
+    EventTileRelationProps;
 
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
     private isListeningForReceipts = false;
@@ -194,7 +230,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.updateSnapshot({ actionBarFocused });
     }
 
-    public setContextMenu(contextMenu?: EventTileContextMenuState): void {
+    public setContextMenu(contextMenu?: EventTileContextMenu): void {
         this.updateSnapshot({
             contextMenu,
             actionBarFocused: Boolean(contextMenu),
@@ -351,6 +387,100 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         } else if (!shouldListen && this.isListeningForReceipts) {
             this.currentRoom?.off(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = false;
+        }
+    }
+
+    private getReactions(): Relations | null {
+        return EventTileViewModel.getReactions(this.props);
+    }
+
+    private onRoomReceipt = (_event: MatrixEvent, room: Room): void => {
+        const roomId = this.props.mxEvent.getRoomId();
+        const tileRoom = roomId ? this.props.cli.getRoom(roomId) : null;
+        if (room !== tileRoom) return;
+
+        this.updateSnapshot();
+    };
+
+    private onDecrypted = (): void => {
+        void this.verifyEvent();
+        this.updateSnapshot();
+    };
+
+    private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
+        if (userId === this.props.mxEvent.getSender()) {
+            void this.verifyEvent();
+        }
+    };
+
+    private onReplaced = (): void => {
+        void this.verifyEvent();
+        this.updateSnapshot();
+    };
+
+    private onReactionsCreated = (relationType: string, eventType: string): void => {
+        if (relationType !== "m.annotation" || eventType !== "m.reaction") {
+            return;
+        }
+
+        this.updateSnapshot({
+            reactions: this.getReactions(),
+        });
+    };
+
+    private updateThread = (thread: Thread): void => {
+        this.updateSnapshot({ thread });
+    };
+
+    private onThreadUpdate = (thread: Thread): void => {
+        this.updateThread(thread);
+    };
+
+    private onNewThread = (thread: Thread): void => {
+        if (thread.id === this.props.mxEvent.getId()) {
+            this.updateThread(thread);
+            if (this.currentRoom && this.isListeningForReceipts) {
+                this.currentRoom.off(RoomEvent.Receipt, this.onRoomReceipt);
+            }
+            this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
+            this.currentRoom = null;
+        }
+    };
+
+    private async verifyEvent(): Promise<void> {
+        try {
+            const verifyGeneration = ++this.verifyGeneration;
+            const event = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
+
+            if (!event.isEncrypted() || event.isRedacted()) {
+                this.updateSnapshot({
+                    shieldColour: EventShieldColour.NONE,
+                    shieldReason: null,
+                });
+                return;
+            }
+
+            const encryptionInfo = (await this.props.cli.getCrypto()?.getEncryptionInfoForEvent(event)) ?? null;
+            if (this.isDisposed || verifyGeneration !== this.verifyGeneration) {
+                return;
+            }
+            if (encryptionInfo === null) {
+                this.updateSnapshot({
+                    shieldColour: EventShieldColour.NONE,
+                    shieldReason: null,
+                });
+                return;
+            }
+
+            this.updateSnapshot({
+                shieldColour: encryptionInfo.shieldColour,
+                shieldReason: encryptionInfo.shieldReason,
+            });
+        } catch (error) {
+            logger.error(
+                `Error getting encryption info on event ${this.props.mxEvent.getId()} in room ${this.props.mxEvent.getRoomId()}`,
+                error,
+            );
         }
     }
 
@@ -960,10 +1090,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return `${thread.id}:${thread.length}:${thread.replyToEvent?.getId() ?? ""}`;
     }
 
-    private getReactions(): Relations | null {
-        return EventTileViewModel.getReactions(this.props);
-    }
-
     private static getReactions(props: EventTileViewModelProps): Relations | null {
         if (!props.showReactions || !props.getRelationsForEvent) {
             return null;
@@ -997,95 +1123,5 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         return !!(actions?.tweaks.highlight || previousActions?.tweaks.highlight);
-    }
-
-    private onRoomReceipt = (_event: MatrixEvent, room: Room): void => {
-        const roomId = this.props.mxEvent.getRoomId();
-        const tileRoom = roomId ? this.props.cli.getRoom(roomId) : null;
-        if (room !== tileRoom) return;
-
-        this.updateSnapshot();
-    };
-
-    private onDecrypted = (): void => {
-        void this.verifyEvent();
-        this.updateSnapshot();
-    };
-
-    private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
-        if (userId === this.props.mxEvent.getSender()) {
-            void this.verifyEvent();
-        }
-    };
-
-    private onReplaced = (): void => {
-        void this.verifyEvent();
-        this.updateSnapshot();
-    };
-
-    private onReactionsCreated = (relationType: string, eventType: string): void => {
-        if (relationType !== "m.annotation" || eventType !== "m.reaction") {
-            return;
-        }
-
-        this.updateSnapshot({
-            reactions: this.getReactions(),
-        });
-    };
-
-    private updateThread = (thread: Thread): void => {
-        this.updateSnapshot({ thread });
-    };
-
-    private onThreadUpdate = (thread: Thread): void => {
-        this.updateThread(thread);
-    };
-
-    private onNewThread = (thread: Thread): void => {
-        if (thread.id === this.props.mxEvent.getId()) {
-            this.updateThread(thread);
-            if (this.currentRoom && this.isListeningForReceipts) {
-                this.currentRoom.off(RoomEvent.Receipt, this.onRoomReceipt);
-            }
-            this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
-            this.currentRoom = null;
-        }
-    };
-
-    private async verifyEvent(): Promise<void> {
-        try {
-            const verifyGeneration = ++this.verifyGeneration;
-            const event = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
-
-            if (!event.isEncrypted() || event.isRedacted()) {
-                this.updateSnapshot({
-                    shieldColour: EventShieldColour.NONE,
-                    shieldReason: null,
-                });
-                return;
-            }
-
-            const encryptionInfo = (await this.props.cli.getCrypto()?.getEncryptionInfoForEvent(event)) ?? null;
-            if (this.isDisposed || verifyGeneration !== this.verifyGeneration) {
-                return;
-            }
-            if (encryptionInfo === null) {
-                this.updateSnapshot({
-                    shieldColour: EventShieldColour.NONE,
-                    shieldReason: null,
-                });
-                return;
-            }
-
-            this.updateSnapshot({
-                shieldColour: encryptionInfo.shieldColour,
-                shieldReason: encryptionInfo.shieldReason,
-            });
-        } catch (error) {
-            logger.error(
-                `Error getting encryption info on event ${this.props.mxEvent.getId()} in room ${this.props.mxEvent.getRoomId()}`,
-                error,
-            );
-        }
     }
 }

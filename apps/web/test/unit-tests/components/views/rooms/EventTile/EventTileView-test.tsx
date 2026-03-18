@@ -68,28 +68,68 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadPanelSum
 
 describe("EventTileView", () => {
     function makeProps(overrides: Partial<EventTileViewProps> = {}): EventTileViewProps {
-        return {
-            id: "event",
+        const baseProps: EventTileViewProps = {
+            contentId: "event",
             eventId: "$event:example.org",
             timelineRenderingType: TimelineRenderingType.Room,
-            classes: "mx_EventTile",
-            lineClasses: "mx_EventTile_line",
+            rootClassName: "mx_EventTile",
+            contentClassName: "mx_EventTile_line",
             isOwnEvent: false,
-            isRenderingNotification: false,
-            sender: <div data-testid="sender">default:@alice:example.org</div>,
-            messageBody: <div>Message body</div>,
-            showGroupPadlock: false,
-            showIrcPadlock: false,
-            encryptionIndicatorMode: EncryptionIndicatorMode.None,
-            onMouseEnter: jest.fn(),
-            onMouseLeave: jest.fn(),
-            onFocus: jest.fn(),
-            onBlur: jest.fn(),
-            onContextMenu: jest.fn(),
-            viewInRoom: jest.fn(),
-            copyLinkToThread: jest.fn(),
-            permalink: "#",
+            content: {
+                sender: <div data-testid="sender">default:@alice:example.org</div>,
+                messageBody: <div>Message body</div>,
+            },
+            threads: {
+                openInRoom: jest.fn(),
+                copyLinkToThread: jest.fn(),
+            },
+            timestamp: {
+                permalink: "#",
+            },
+            encryption: {
+                showGroupPadlock: false,
+                showIrcPadlock: false,
+                mode: EncryptionIndicatorMode.None,
+            },
+            notification: {
+                enabled: false,
+            },
+            handlers: {
+                onMouseEnter: jest.fn(),
+                onMouseLeave: jest.fn(),
+                onFocus: jest.fn(),
+                onBlur: jest.fn(),
+                onContextMenu: jest.fn(),
+            },
+        };
+
+        return {
+            ...baseProps,
             ...overrides,
+            content: {
+                ...baseProps.content,
+                ...overrides.content,
+            },
+            threads: {
+                ...baseProps.threads,
+                ...overrides.threads,
+            },
+            timestamp: {
+                ...baseProps.timestamp,
+                ...overrides.timestamp,
+            },
+            encryption: {
+                ...baseProps.encryption,
+                ...overrides.encryption,
+            },
+            notification: {
+                ...baseProps.notification,
+                ...overrides.notification,
+            },
+            handlers: {
+                ...baseProps.handlers,
+                ...overrides.handlers,
+            },
         };
     }
 
@@ -98,13 +138,15 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.Notification,
-                    isRenderingNotification: true,
-                    notificationRoomLabel: (
-                        <>
-                            {" in "}
-                            <strong>!roomId:example.org</strong>
-                        </>
-                    ),
+                    notification: {
+                        enabled: true,
+                        roomLabel: (
+                            <>
+                                {" in "}
+                                <strong>!roomId:example.org</strong>
+                            </>
+                        ),
+                    },
                 })}
             />,
         );
@@ -116,10 +158,12 @@ describe("EventTileView", () => {
 
     it("renders the sender slot for the thread list", () => {
         const { container } = render(
-            <EventTileView
+                <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
-                    sender: <div data-testid="sender">tooltip:@alice:example.org</div>,
+                    content: {
+                        sender: <div data-testid="sender">tooltip:@alice:example.org</div>,
+                    },
                 })}
             />,
         );
@@ -133,7 +177,9 @@ describe("EventTileView", () => {
         render(
                 <EventTileView
                 {...makeProps({
-                    threadInfo: <div data-testid="thread-info-summary">Thread summary</div>,
+                    threads: {
+                        info: <div data-testid="thread-info-summary">Thread summary</div>,
+                    },
                 })}
             />,
         );
@@ -145,11 +191,13 @@ describe("EventTileView", () => {
         render(
                 <EventTileView
                 {...makeProps({
-                    threadInfo: (
-                        <a data-testid="thread-info-link" href="#thread">
-                            In thread
-                        </a>
-                    ),
+                    threads: {
+                        info: (
+                            <a data-testid="thread-info-link" href="#thread">
+                                In thread
+                            </a>
+                        ),
+                    },
                 })}
             />,
         );
@@ -162,7 +210,9 @@ describe("EventTileView", () => {
         render(
                 <EventTileView
                 {...makeProps({
-                    threadInfo: <div data-testid="thread-info-text">In thread</div>,
+                    threads: {
+                        info: <div data-testid="thread-info-text">In thread</div>,
+                    },
                 })}
             />,
         );
@@ -175,7 +225,9 @@ describe("EventTileView", () => {
                 <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.Thread,
-                    footer: <div>Pinned message</div>,
+                    content: {
+                        footer: <div>Pinned message</div>,
+                    },
                     layout: Layout.Group,
                 })}
             />,
@@ -189,7 +241,9 @@ describe("EventTileView", () => {
                 <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.File,
-                    footer: <div>Pinned message</div>,
+                    content: {
+                        footer: <div>Pinned message</div>,
+                    },
                 })}
             />,
         );
@@ -204,7 +258,9 @@ describe("EventTileView", () => {
                     <EventTileView
                     {...makeProps({
                         layout,
-                        footer: <div>Pinned message</div>,
+                        content: {
+                            footer: <div>Pinned message</div>,
+                        },
                     })}
                 />,
             );
@@ -218,8 +274,10 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
-                    showTimestamp: true,
-                    timestampTs: 123,
+                    timestamp: {
+                        show: true,
+                        ts: 123,
+                    },
                 })}
             />,
         );
@@ -231,10 +289,12 @@ describe("EventTileView", () => {
         render(
             <EventTileView
                 {...makeProps({
-                    showTimestamp: true,
-                    showLinkedTimestamp: true,
-                    timestampTs: 123,
-                    permalink: "#event",
+                    timestamp: {
+                        show: true,
+                        showLinked: true,
+                        ts: 123,
+                        permalink: "#event",
+                    },
                 })}
             />,
         );
@@ -247,8 +307,10 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     layout: Layout.IRC,
-                    showLinkedTimestamp: true,
-                    showDummyTimestamp: true,
+                    timestamp: {
+                        showLinked: true,
+                        showPlaceholder: true,
+                    },
                 })}
             />,
         );
@@ -260,11 +322,13 @@ describe("EventTileView", () => {
         render(
             <EventTileView
                 {...makeProps({
-                    showGroupPadlock: true,
-                    encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
-                    encryptionIndicatorTitle: "Warning",
-                    sharedKeysUserId: "@bob:example.org",
-                    sharedKeysRoomId: "!room:example.org",
+                    encryption: {
+                        showGroupPadlock: true,
+                        mode: EncryptionIndicatorMode.Warning,
+                        indicatorTitle: "Warning",
+                        sharedKeysUserId: "@bob:example.org",
+                        sharedKeysRoomId: "!room:example.org",
+                    },
                 })}
             />,
         );
@@ -279,9 +343,11 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     layout: Layout.IRC,
-                    showIrcPadlock: true,
-                    encryptionIndicatorMode: EncryptionIndicatorMode.Normal,
-                    encryptionIndicatorTitle: "Info",
+                    encryption: {
+                        showIrcPadlock: true,
+                        mode: EncryptionIndicatorMode.Normal,
+                        indicatorTitle: "Info",
+                    },
                 })}
             />,
         );
@@ -294,7 +360,9 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
-                    showThreadToolbar: true,
+                    threads: {
+                        showToolbar: true,
+                    },
                 })}
             />,
         );
@@ -310,9 +378,11 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
-                    showThreadToolbar: true,
-                    viewInRoom,
-                    copyLinkToThread,
+                    threads: {
+                        showToolbar: true,
+                        openInRoom: viewInRoom,
+                        copyLinkToThread,
+                    },
                 })}
             />,
         );
@@ -328,11 +398,13 @@ describe("EventTileView", () => {
         render(
                 <EventTileView
                 {...makeProps({
-                    messageStatus: (
-                        <div data-testid="message-status">
-                            <div data-testid="sent-receipt">sent</div>
-                        </div>
-                    ),
+                    content: {
+                        messageStatus: (
+                            <div data-testid="message-status">
+                                <div data-testid="sent-receipt">sent</div>
+                            </div>
+                        ),
+                    },
                 })}
             />,
         );
@@ -344,11 +416,13 @@ describe("EventTileView", () => {
         render(
                 <EventTileView
                 {...makeProps({
-                    messageStatus: (
-                        <div data-testid="message-status">
-                            <div data-testid="read-receipts">readers</div>
-                        </div>
-                    ),
+                    content: {
+                        messageStatus: (
+                            <div data-testid="message-status">
+                                <div data-testid="read-receipts">readers</div>
+                            </div>
+                        ),
+                    },
                 })}
             />,
         );
