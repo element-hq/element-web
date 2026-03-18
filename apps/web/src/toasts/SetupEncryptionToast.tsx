@@ -82,7 +82,7 @@ const shouldShowCloseButton = (state: DeviceStateForToast): boolean => {
 const getSetupCaption = (state: DeviceStateForToast): string => {
     switch (state) {
         case "set_up_recovery":
-            return _t("action|continue");
+            return _t("settings|encryption|recovery|get_recovery_key");
         case "verify_this_session":
             return _t("action|continue");
         case "key_storage_out_of_sync":
