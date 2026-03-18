@@ -1101,8 +1101,6 @@
         "upload_file": "Bestand uploaden"
     },
     "labs": {
-        "automatic_debug_logs": "Automatisch foutenlogboek versturen bij een fout",
-        "automatic_debug_logs_decryption": "Automatisch foutopsporingslogboeken versturen bij decoderingsfouten",
         "beta_feature": "Dit is een bètafunctie",
         "beta_feedback_leave_button": "Om de beta te verlaten, ga naar je instellingen.",
         "beta_feedback_title": "%(featureName)s Bèta-feedback",
@@ -2474,8 +2472,7 @@
             "voice_call_unsupported": "%(senderName)s poogt je te bellen, maar jouw browser ondersteunt dat niet"
         },
         "m.file": {
-            "error_decrypting": "Fout bij het ontsleutelen van de bijlage",
-            "error_invalid": "Ongeldig bestand %(extra)s"
+            "error_decrypting": "Fout bij het ontsleutelen van de bijlage"
         },
         "m.image": {
             "error_decrypting": "Fout bij het ontsleutelen van de afbeelding",
@@ -2793,13 +2790,6 @@
             },
             "one_user": "%(displayName)s is aan het typen…",
             "two_users": "%(names)s en %(lastPerson)s zijn aan het typen…"
-        },
-        "url_preview": {
-            "close": "Voorbeeld sluiten",
-            "show_n_more": {
-                "one": "%(count)s andere preview weergeven",
-                "other": "%(count)s andere previews weergeven"
-            }
         }
     },
     "truncated_list_n_more": {

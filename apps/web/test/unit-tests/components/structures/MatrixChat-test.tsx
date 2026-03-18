@@ -1086,10 +1086,10 @@ describe("<MatrixChat />", () => {
                 getComponent();
 
                 // Then we are asked to verify our device
-                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
+                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
 
                 // Sanity: we are not racing with another screen update, so this heading stays visible
-                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
+                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
             });
             it("should not open app after cancelling device verify if unskippable verification is on", async () => {
                 // See https://github.com/element-hq/element-web/issues/29230
@@ -1106,7 +1106,7 @@ describe("<MatrixChat />", () => {
                 getComponent();
 
                 // When we click "Use another device"
-                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
+                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
                 const verify = screen.getByRole("button", { name: "Use another device" });
                 act(() => verify.click());
 
@@ -1115,7 +1115,7 @@ describe("<MatrixChat />", () => {
                 act(() => closeButton.click());
 
                 // Then we are not allowed in - we are still being asked to verify
-                await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
+                await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
             });
 
             describe("when query params have a loginToken", () => {
@@ -1160,7 +1160,7 @@ describe("<MatrixChat />", () => {
                     );
 
                     // Then we are not allowed in - we are being asked to verify
-                    await screen.findByRole("heading", { name: "Confirm your identity", level: 2 });
+                    await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
                 });
             });
 
@@ -1382,7 +1382,7 @@ describe("<MatrixChat />", () => {
                 await getComponentAndLogin();
 
                 // Complete security begin screen is rendered
-                await screen.findByText("Confirm your identity");
+                await screen.findByText("Confirm your digital identity");
 
                 expect(loginClient.getCrypto()!.userHasCrossSigningKeys).toHaveBeenCalled();
             });

@@ -1191,8 +1191,6 @@
         "upload_file": "Ngarkoni një kartelë"
     },
     "labs": {
-        "automatic_debug_logs": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi",
-        "automatic_debug_logs_decryption": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi",
         "beta_description": "Ç’vjen më pas për %(brand)s? Labs janë mënyra më e mirë për t’i pasur gjërat që herët, për të testuar veçori të reja dhe për të ndihmuar t’u jepet formë para se të hidhen faktikisht në qarkullim.",
         "beta_feature": "Kjo është një veçori beta",
         "beta_feedback_leave_button": "Që të braktisni beta-n, vizitoni rregullimet tuaja.",
@@ -2702,8 +2700,7 @@
             "voice_call_unsupported": "%(senderName)s bëri një thirrje zanore. (e pambuluar nga ky shfletues)"
         },
         "m.file": {
-            "error_decrypting": "Gabim në shfshehtëzim bashkëngjitjeje",
-            "error_invalid": "Kartelë e pavlefshme%(extra)s"
+            "error_decrypting": "Gabim në shfshehtëzim bashkëngjitjeje"
         },
         "m.image": {
             "error": "S’arrihet të shihet figurë, për shkak gabimi",
@@ -3029,14 +3026,7 @@
             "one_user": "%(displayName)s po shtyp …",
             "two_users": "%(names)s dhe %(lastPerson)s të tjerë po shtypin …"
         },
-        "undecryptable_tooltip": "Ky mesazh s’u shfshehtëzua dot",
-        "url_preview": {
-            "close": "Mbylle paraparjen",
-            "show_n_more": {
-                "one": "Shfaq %(count)s paraparje tjetër",
-                "other": "Shfaq %(count)s paraparje të tjera"
-            }
-        }
+        "undecryptable_tooltip": "Ky mesazh s’u shfshehtëzua dot"
     },
     "truncated_list_n_more": {
         "other": "Dhe %(count)s të tjerë…"

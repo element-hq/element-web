@@ -63,10 +63,10 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Go to your account to reset your identity
+        Go to your account to reset your digital identity
       </h2>
       <span>
-        You're about to go to your matrix.org account to reset your identity. Once you have completed reset on your account, please return here and click Retry.
+        You're about to go to your matrix.org account to reset your digital identity. Once you have completed reset on your account, please return here and click Retry.
       </span>
     </div>
     <div
