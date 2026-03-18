@@ -5,37 +5,48 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { memo, type JSX } from "react";
 import { PinnedMessageBadge } from "@element-hq/web-shared-components";
 
+import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
 import { Layout } from "../../../../settings/enums/Layout";
-import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
 import { ReactionsRow } from "./ReactionsRow";
-import type { EventTileProps } from "./EventTilePresenter";
 
 interface FooterProps {
-    props: EventTileProps;
-    snapshot: EventTileViewSnapshot;
+    layout?: Layout;
+    mxEvent: MatrixEvent;
+    isRedacted?: boolean;
+    isPinned: boolean;
+    isOwnEvent: boolean;
+    reactions: Relations | null;
     tileContentId: string;
 }
 
-export function Footer({ props, snapshot, tileContentId }: FooterProps): JSX.Element | undefined {
-    if (!snapshot.isPinned && !snapshot.reactions) {
+export const Footer = memo(function Footer({
+    layout,
+    mxEvent,
+    isRedacted,
+    isPinned,
+    isOwnEvent,
+    reactions,
+    tileContentId,
+}: FooterProps): JSX.Element | undefined {
+    if (!isPinned && !reactions) {
         return undefined;
     }
 
-    const pinnedMessageBadge = snapshot.isPinned ? (
+    const pinnedMessageBadge = isPinned ? (
         <PinnedMessageBadge aria-describedby={tileContentId} tabIndex={0} />
     ) : undefined;
-    const reactionsRow = props.isRedacted ? undefined : (
-        <ReactionsRow mxEvent={props.mxEvent} reactions={snapshot.reactions} />
+    const reactionsRow = isRedacted ? undefined : (
+        <ReactionsRow mxEvent={mxEvent} reactions={reactions} />
     );
 
     return (
         <>
-            {(props.layout === Layout.Group || !snapshot.isOwnEvent) && pinnedMessageBadge}
+            {(layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
             {reactionsRow}
-            {props.layout === Layout.Bubble && snapshot.isOwnEvent && pinnedMessageBadge}
+            {layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
         </>
     );
-}
+});

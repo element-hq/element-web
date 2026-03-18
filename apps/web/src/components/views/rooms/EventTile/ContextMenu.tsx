@@ -7,25 +7,31 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { EventTileContextMenu, EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
+import type { EventTileContextMenu, GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
+import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
+import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import type ReplyChain from "../../elements/ReplyChain";
 import { aboveRightOf } from "../../../structures/ContextMenu";
-import type { EventTileApi, EventTileProps } from "./EventTilePresenter";
+import type { EventTileApi } from "./EventTilePresenter";
 
 interface ContextMenuProps {
-    props: EventTileProps;
+    mxEvent: MatrixEvent;
+    permalinkCreator?: RoomPermalinkCreator;
+    getRelationsForEvent?: GetRelationsForEvent;
+    reactions: Relations | null;
     contextMenu: EventTileContextMenu;
-    snapshot: EventTileViewSnapshot;
     tileRef: React.RefObject<EventTileApi | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFinished: () => void;
 }
 
 export function ContextMenu({
-    props,
+    mxEvent,
+    permalinkCreator,
+    getRelationsForEvent,
+    reactions,
     contextMenu,
-    snapshot,
     tileRef,
     replyChainRef,
     onFinished,
@@ -33,15 +39,15 @@ export function ContextMenu({
     return (
         <MessageContextMenu
             {...aboveRightOf(contextMenu.position)}
-            mxEvent={props.mxEvent}
-            permalinkCreator={props.permalinkCreator}
+            mxEvent={mxEvent}
+            permalinkCreator={permalinkCreator}
             eventTileOps={tileRef.current?.getEventTileOps?.()}
             collapseReplyChain={replyChainRef.current?.canCollapse() ? replyChainRef.current.collapse : undefined}
             onFinished={onFinished}
             rightClick={true}
-            reactions={snapshot.reactions}
+            reactions={reactions}
             link={contextMenu.link}
-            getRelationsForEvent={props.getRelationsForEvent}
+            getRelationsForEvent={getRelationsForEvent}
         />
     );
 }

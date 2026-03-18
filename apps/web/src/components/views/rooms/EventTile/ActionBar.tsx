@@ -7,13 +7,18 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { Relations } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
+import type { GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
+import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import type ReplyChain from "../../elements/ReplyChain";
 import MessageActionBar from "../../messages/MessageActionBar";
-import type { EventTileApi, EventTileProps } from "./EventTilePresenter";
+import type { EventTileApi } from "./EventTilePresenter";
 
 interface ActionBarProps {
-    props: EventTileProps;
+    mxEvent: MatrixEvent;
+    forExport?: boolean;
+    permalinkCreator?: RoomPermalinkCreator;
+    getRelationsForEvent?: GetRelationsForEvent;
     reactions: Relations | null;
     isEditing: boolean;
     isQuoteExpanded: boolean;
@@ -24,7 +29,10 @@ interface ActionBarProps {
 }
 
 export function ActionBar({
-    props,
+    mxEvent,
+    forExport,
+    permalinkCreator,
+    getRelationsForEvent,
     reactions,
     isEditing,
     isQuoteExpanded,
@@ -33,21 +41,21 @@ export function ActionBar({
     onFocusChange,
     toggleThreadExpanded,
 }: ActionBarProps): JSX.Element | undefined {
-    if (isEditing || props.forExport) {
+    if (isEditing || forExport) {
         return undefined;
     }
 
     return (
         <MessageActionBar
-            mxEvent={props.mxEvent}
+            mxEvent={mxEvent}
             reactions={reactions}
-            permalinkCreator={props.permalinkCreator}
+            permalinkCreator={permalinkCreator}
             getTile={() => tileRef.current}
             getReplyChain={() => replyChainRef.current}
             onFocusChange={onFocusChange}
             isQuoteExpanded={isQuoteExpanded}
             toggleThreadExpanded={toggleThreadExpanded}
-            getRelationsForEvent={props.getRelationsForEvent}
+            getRelationsForEvent={getRelationsForEvent}
         />
     );
 }

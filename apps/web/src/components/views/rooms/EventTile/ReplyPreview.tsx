@@ -7,16 +7,23 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { haveRendererForEvent } from "../../../../events/EventTileFactory";
+import type { GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
+import { type Layout } from "../../../../settings/enums/Layout";
+import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { shouldDisplayReply } from "../../../../utils/Reply";
 import ReplyChain from "../../elements/ReplyChain";
-import type { EventTileProps } from "./EventTilePresenter";
 
 interface ReplyPreviewProps {
-    props: EventTileProps;
+    mxEvent: MatrixEvent;
     cli: MatrixClient;
     showHiddenEvents: boolean;
+    forExport?: boolean;
+    permalinkCreator?: RoomPermalinkCreator;
+    layout?: Layout;
+    alwaysShowTimestamps?: boolean;
+    getRelationsForEvent?: GetRelationsForEvent;
     hover: boolean;
     focusWithin: boolean;
     isQuoteExpanded: boolean;
@@ -25,30 +32,35 @@ interface ReplyPreviewProps {
 }
 
 export function ReplyPreview({
-    props,
+    mxEvent,
     cli,
     showHiddenEvents,
+    forExport,
+    permalinkCreator,
+    layout,
+    alwaysShowTimestamps,
+    getRelationsForEvent,
     hover,
     focusWithin,
     isQuoteExpanded,
     replyChainRef,
     setQuoteExpanded,
 }: ReplyPreviewProps): JSX.Element | undefined {
-    if (!haveRendererForEvent(props.mxEvent, cli, showHiddenEvents) || !shouldDisplayReply(props.mxEvent)) {
+    if (!haveRendererForEvent(mxEvent, cli, showHiddenEvents) || !shouldDisplayReply(mxEvent)) {
         return undefined;
     }
 
     return (
         <ReplyChain
-            parentEv={props.mxEvent}
+            parentEv={mxEvent}
             ref={replyChainRef}
-            forExport={props.forExport}
-            permalinkCreator={props.permalinkCreator}
-            layout={props.layout}
-            alwaysShowTimestamps={props.alwaysShowTimestamps || hover || focusWithin}
+            forExport={forExport}
+            permalinkCreator={permalinkCreator}
+            layout={layout}
+            alwaysShowTimestamps={alwaysShowTimestamps || hover || focusWithin}
             isQuoteExpanded={isQuoteExpanded}
             setQuoteExpanded={setQuoteExpanded}
-            getRelationsForEvent={props.getRelationsForEvent}
+            getRelationsForEvent={getRelationsForEvent}
         />
     );
 }

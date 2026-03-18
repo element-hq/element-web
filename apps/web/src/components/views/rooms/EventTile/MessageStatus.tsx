@@ -12,7 +12,6 @@ import { type EventStatus } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
-import type { EventTileViewSnapshot } from "../../../../viewmodels/room/EventTileViewModel";
 import NotificationBadge from "../NotificationBadge";
 import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import type { IReadReceiptPosition } from "../ReadReceiptMarker";
@@ -20,7 +19,9 @@ import type { ReadReceiptProps } from "./EventTilePresenter";
 
 interface MessageStatusProps {
     messageState: EventStatus | undefined;
-    snapshot: EventTileViewSnapshot;
+    shouldShowSentReceipt: boolean;
+    shouldShowSendingReceipt: boolean;
+    showReadReceipts: boolean;
     readReceipts?: ReadReceiptProps[];
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
     checkUnmounting?: () => boolean;
@@ -29,16 +30,18 @@ interface MessageStatusProps {
 
 export function MessageStatus({
     messageState,
-    snapshot,
+    shouldShowSentReceipt,
+    shouldShowSendingReceipt,
+    showReadReceipts,
     readReceipts,
     readReceiptMap,
     checkUnmounting,
     isTwelveHour,
 }: MessageStatusProps): JSX.Element | undefined {
-    const sentReceipt = getSentReceiptDetails(messageState, snapshot);
+    const sentReceipt = getSentReceiptDetails(messageState, shouldShowSentReceipt, shouldShowSendingReceipt);
     const sentReceiptIcon = sentReceipt?.icon;
     const sentReceiptLabel = sentReceipt?.label;
-    const receiptGroup = snapshot.showReadReceipts ? (
+    const receiptGroup = showReadReceipts ? (
         <ReadReceiptGroup
             readReceipts={[...(readReceipts ?? [])]}
             readReceiptMap={readReceiptMap ?? {}}
@@ -71,9 +74,10 @@ export function MessageStatus({
 
 function getSentReceiptDetails(
     messageState: EventStatus | undefined,
-    snapshot: EventTileViewSnapshot,
+    shouldShowSentReceipt: boolean,
+    shouldShowSendingReceipt: boolean,
 ): { icon: ReactNode; label: string } | undefined {
-    if (!snapshot.shouldShowSentReceipt && !snapshot.shouldShowSendingReceipt) {
+    if (!shouldShowSentReceipt && !shouldShowSendingReceipt) {
         return undefined;
     }
 
