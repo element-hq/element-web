@@ -19,6 +19,7 @@ import type { ReadReceiptProps } from "./EventTile";
 
 interface MessageStatusProps {
     messageState: EventStatus | undefined;
+    suppressReadReceiptAnimation: boolean;
     shouldShowSentReceipt: boolean;
     shouldShowSendingReceipt: boolean;
     showReadReceipts: boolean;
@@ -26,19 +27,18 @@ interface MessageStatusProps {
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
     isTwelveHour?: boolean;
     checkUnmounting?: () => boolean;
-    suppressReadReceiptAnimation: boolean;
 }
 
 export function MessageStatus({
     messageState,
+    suppressReadReceiptAnimation,
     shouldShowSentReceipt,
     shouldShowSendingReceipt,
     showReadReceipts,
     readReceipts,
     readReceiptMap,
-    checkUnmounting,
     isTwelveHour,
-    suppressReadReceiptAnimation,
+    checkUnmounting,
 }: MessageStatusProps): JSX.Element | undefined {
     const sentReceipt = getSentReceiptDetails(messageState, shouldShowSentReceipt, shouldShowSendingReceipt);
     const sentReceiptIcon = sentReceipt?.icon;

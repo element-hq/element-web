@@ -7,29 +7,26 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { EventType, Relations, RelationType, RoomMember } from "matrix-js-sdk/src/matrix";
 import { Layout } from "../../../../settings/enums/Layout";
 import TileErrorBoundary from "../../messages/TileErrorBoundary";
 import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } from "./EventTilePresenter";
 
 export type { EventTileHandle, EventTileOps, EventTileApi } from "./EventTilePresenter";
+export type { GetRelationsForEvent, ReadReceiptProps } from "./types";
 
-export type GetRelationsForEvent = (
-    eventId: string,
-    relationType: RelationType | string,
-    eventType: EventType | string,
-) => Relations | null | undefined;
-
-export interface ReadReceiptProps {
-    userId: string;
-    roomMember: RoomMember | null;
-    ts: number;
-}
-
+/**
+ * Props for the exported {@link EventTile} wrapper component.
+ */
 export interface EventTileProps extends EventTilePresenterProps {
+    /**
+     * Wraps the tile in the timeline error boundary when enabled.
+     */
     withErrorBoundary?: boolean;
 }
 
+/**
+ * Renders a timeline event tile and optionally protects it with the tile error boundary.
+ */
 export function EventTile(props: EventTileProps): JSX.Element {
     const { withErrorBoundary = true, layout = Layout.Group, forExport = false, ...rest } = props;
     const tileProps = { ...rest, layout, forExport };

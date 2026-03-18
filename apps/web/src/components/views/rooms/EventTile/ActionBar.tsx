@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
-import type { GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import type ReplyChain from "../../elements/ReplyChain";
 import MessageActionBar from "../../messages/MessageActionBar";
 import type { EventTileApi } from "./EventTilePresenter";
+import type { GetRelationsForEvent } from "./types";
 
 type ActionBarProps = {
     mxEvent: MatrixEvent;

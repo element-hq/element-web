@@ -9,11 +9,11 @@ import React, { type JSX } from "react";
 
 import type { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { haveRendererForEvent } from "../../../../events/EventTileFactory";
-import type { GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
 import { type Layout } from "../../../../settings/enums/Layout";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { shouldDisplayReply } from "../../../../utils/Reply";
 import ReplyChain from "../../elements/ReplyChain";
+import type { GetRelationsForEvent } from "./types";
 
 interface ReplyPreviewProps {
     mxEvent: MatrixEvent;

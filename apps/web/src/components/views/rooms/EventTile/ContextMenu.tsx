@@ -7,13 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { EventTileContextMenu, GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
+import type { EventTileContextMenu } from "../../../../viewmodels/room/EventTileViewModel";
 import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import type ReplyChain from "../../elements/ReplyChain";
 import { aboveRightOf } from "../../../structures/ContextMenu";
 import type { EventTileApi } from "./EventTilePresenter";
+import type { GetRelationsForEvent } from "./types";
 
 type ContextMenuProps = {
     contextMenu: EventTileContextMenu;

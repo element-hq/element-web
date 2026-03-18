@@ -22,7 +22,6 @@ import {
     MsgType,
     type NotificationCountType,
     type Relations,
-    type RelationType,
     type Room,
     RoomEvent,
     ThreadEvent,
@@ -52,18 +51,11 @@ import { objectHasDiff } from "../../utils/objects";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import PinningUtils from "../../utils/PinningUtils";
+import type { GetRelationsForEvent, ReadReceiptProps } from "../../components/views/rooms/EventTile/types";
 
-export type GetRelationsForEvent = (
-    eventId: string,
-    relationType: RelationType | string,
-    eventType: EventType | string,
-) => Relations | null | undefined;
-
-export interface ReadReceiptProps {
-    userId: string;
-    ts: number;
-}
-
+/**
+ * State for the tile context menu anchor and optional permalink target.
+ */
 export interface EventTileContextMenu {
     position: Pick<DOMRect, "top" | "left" | "bottom">;
     link?: string;
@@ -146,6 +138,9 @@ interface EventTileEncryptionSnapshot {
     sharedKeysRoomId?: string;
 }
 
+/**
+ * Fully derived view state consumed by the `EventTile` rendering layer.
+ */
 export type EventTileViewSnapshot = EventTileInteractionSnapshot &
     EventTileReceiptSnapshot &
     EventTileRenderingSnapshot &
@@ -191,10 +186,14 @@ interface EventTileRelationProps {
     lastSuccessful?: boolean;
 }
 
-export type EventTileViewModelProps = EventTileCoreProps &
-    EventTileRenderingProps &
-    EventTileRelationProps;
+/**
+ * Inputs required to derive the `EventTile` view snapshot.
+ */
+export type EventTileViewModelProps = EventTileCoreProps & EventTileRenderingProps & EventTileRelationProps;
 
+/**
+ * Derives the render state and interaction state for a single timeline event tile.
+ */
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
     private isListeningForReceipts = false;
     private verifyGeneration = 0;

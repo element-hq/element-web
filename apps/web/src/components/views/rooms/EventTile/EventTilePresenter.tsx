@@ -21,12 +21,7 @@ import React, {
     type RefObject,
 } from "react";
 import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import {
-    type EventStatus,
-    type MatrixEvent,
-    type Room,
-    type RoomMember,
-} from "matrix-js-sdk/src/matrix";
+import { type EventStatus, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import {
     EventTileViewModel,
@@ -63,21 +58,30 @@ import { ActionBar } from "./ActionBar";
 import { ContextMenu } from "./ContextMenu";
 import { Footer } from "./Footer";
 import { MessageStatus } from "./MessageStatus";
-import type { GetRelationsForEvent, ReadReceiptProps } from "./EventTile";
+import type { GetRelationsForEvent, ReadReceiptProps } from "./types";
 import { ReplyPreview } from "./ReplyPreview";
 import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
 
+/**
+ * Operations exposed by embedded widgets inside an event tile.
+ */
 export interface EventTileOps {
     isWidgetHidden(): boolean;
     unhideWidget(): void;
 }
 
+/**
+ * API exposed by the event tile presenter.
+ */
 export interface EventTileApi {
     getEventTileOps?(): EventTileOps;
     getMediaHelper(): { destroy?(): void } | undefined;
 }
 
+/**
+ * Ref handle for consumers that need direct access to tile actions and the root element.
+ */
 export interface EventTileHandle extends EventTileApi {
     ref: RefObject<HTMLElement | null>;
     forceUpdate(): void;
@@ -131,6 +135,9 @@ interface EventTileEnvironmentProps {
     callEventGrouper?: LegacyCallEventGrouper;
 }
 
+/**
+ * Props consumed by {@link EventTilePresenter} to render a single timeline tile.
+ */
 export type EventTileProps = EventTileCoreProps &
     EventTileRenderingProps &
     EventTileRelationProps &
@@ -371,83 +378,104 @@ function useEventTileActions(
     const roomId = props.mxEvent.getRoomId();
     const room = roomId ? cli.getRoom(roomId) : null;
 
-    const onPermalinkClicked = useCallback((ev: MouseEvent<HTMLElement>): void => {
-        ev.preventDefault();
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            event_id: props.mxEvent.getId(),
-            highlighted: true,
-            room_id: props.mxEvent.getRoomId(),
-            metricsTrigger: snapshot.viewRoomMetricsTrigger,
-        });
-    }, [props.mxEvent, snapshot.viewRoomMetricsTrigger]);
+    const onPermalinkClicked = useCallback(
+        (ev: MouseEvent<HTMLElement>): void => {
+            ev.preventDefault();
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                event_id: props.mxEvent.getId(),
+                highlighted: true,
+                room_id: props.mxEvent.getRoomId(),
+                metricsTrigger: snapshot.viewRoomMetricsTrigger,
+            });
+        },
+        [props.mxEvent, snapshot.viewRoomMetricsTrigger],
+    );
 
-    const openInRoom = useCallback((evt: ButtonEvent): void => {
-        evt.preventDefault();
-        evt.stopPropagation();
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            event_id: props.mxEvent.getId(),
-            highlighted: true,
-            room_id: props.mxEvent.getRoomId(),
-            metricsTrigger: undefined,
-        });
-    }, [props.mxEvent]);
+    const openInRoom = useCallback(
+        (evt: ButtonEvent): void => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                event_id: props.mxEvent.getId(),
+                highlighted: true,
+                room_id: props.mxEvent.getRoomId(),
+                metricsTrigger: undefined,
+            });
+        },
+        [props.mxEvent],
+    );
 
-    const copyLinkToThread = useCallback(async (evt: ButtonEvent): Promise<void> => {
-        evt.preventDefault();
-        evt.stopPropagation();
-        if (!props.permalinkCreator) return;
-        await copyPlaintext(props.permalinkCreator.forEvent(props.mxEvent.getId()!));
-    }, [props.permalinkCreator, props.mxEvent]);
+    const copyLinkToThread = useCallback(
+        async (evt: ButtonEvent): Promise<void> => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            if (!props.permalinkCreator) return;
+            await copyPlaintext(props.permalinkCreator.forEvent(props.mxEvent.getId()!));
+        },
+        [props.permalinkCreator, props.mxEvent],
+    );
 
-    const showContextMenu = useCallback((ev: MouseEvent<HTMLElement>, permalink?: string): void => {
-        const clickTarget = ev.target as HTMLElement;
-        const anchorElement = clickTarget instanceof HTMLAnchorElement ? clickTarget : clickTarget.closest("a");
+    const showContextMenu = useCallback(
+        (ev: MouseEvent<HTMLElement>, permalink?: string): void => {
+            const clickTarget = ev.target as HTMLElement;
+            const anchorElement = clickTarget instanceof HTMLAnchorElement ? clickTarget : clickTarget.closest("a");
 
-        if (clickTarget instanceof HTMLImageElement) return;
-        if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && anchorElement) return;
-        if (props.editState) return;
+            if (clickTarget instanceof HTMLImageElement) return;
+            if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && anchorElement) return;
+            if (props.editState) return;
 
-        ev.preventDefault();
-        ev.stopPropagation();
-        vm.setContextMenu({
-            position: {
-                left: ev.clientX,
-                top: ev.clientY,
-                bottom: ev.clientY,
-            },
-            link: anchorElement?.href || permalink,
-        });
-    }, [props.editState, vm]);
+            ev.preventDefault();
+            ev.stopPropagation();
+            vm.setContextMenu({
+                position: {
+                    left: ev.clientX,
+                    top: ev.clientY,
+                    bottom: ev.clientY,
+                },
+                link: anchorElement?.href || permalink,
+            });
+        },
+        [props.editState, vm],
+    );
 
-    const onContextMenu = useCallback((ev: MouseEvent<HTMLElement>): void => {
-        showContextMenu(ev);
-    }, [showContextMenu]);
+    const onContextMenu = useCallback(
+        (ev: MouseEvent<HTMLElement>): void => {
+            showContextMenu(ev);
+        },
+        [showContextMenu],
+    );
 
-    const onTimestampContextMenu = useCallback((ev: MouseEvent<HTMLElement>): void => {
-        showContextMenu(ev, props.permalinkCreator?.forEvent(props.mxEvent.getId()!));
-    }, [showContextMenu, props.permalinkCreator, props.mxEvent]);
+    const onTimestampContextMenu = useCallback(
+        (ev: MouseEvent<HTMLElement>): void => {
+            showContextMenu(ev, props.permalinkCreator?.forEvent(props.mxEvent.getId()!));
+        },
+        [showContextMenu, props.permalinkCreator, props.mxEvent],
+    );
 
-    const onListTileClick = useCallback((ev: MouseEvent<HTMLElement>): void => {
-        const target = ev.currentTarget as HTMLElement;
-        let index = -1;
-        if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
+    const onListTileClick = useCallback(
+        (ev: MouseEvent<HTMLElement>): void => {
+            const target = ev.currentTarget as HTMLElement;
+            let index = -1;
+            if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
 
-        switch (snapshot.tileClickMode) {
-            case ClickMode.ViewRoom:
-                openInRoom(ev as never);
-                break;
-            case ClickMode.ShowThread:
-                dis.dispatch<ShowThreadPayload>({
-                    action: Action.ShowThread,
-                    rootEvent: props.mxEvent,
-                    push: true,
-                });
-                PosthogTrackers.trackInteraction("WebThreadsPanelThreadItem", ev, index);
-                break;
-        }
-    }, [snapshot.tileClickMode, openInRoom, props.mxEvent]);
+            switch (snapshot.tileClickMode) {
+                case ClickMode.ViewRoom:
+                    openInRoom(ev as never);
+                    break;
+                case ClickMode.ShowThread:
+                    dis.dispatch<ShowThreadPayload>({
+                        action: Action.ShowThread,
+                        rootEvent: props.mxEvent,
+                        push: true,
+                    });
+                    PosthogTrackers.trackInteraction("WebThreadsPanelThreadItem", ev, index);
+                    break;
+            }
+        },
+        [snapshot.tileClickMode, openInRoom, props.mxEvent],
+    );
 
     return useMemo(
         () => ({
@@ -471,6 +499,9 @@ function useEventTileActions(
     );
 }
 
+/**
+ * Headless presenter for a single event tile that wires the view model to the view.
+ */
 export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
     const {
         cli,
@@ -769,7 +800,9 @@ function useEventTileViewProps({
     );
     const notificationRoomLabel = useMemo(
         () =>
-            room ? _t("timeline|in_room_name", { room: room.name }, { strong: (sub) => <strong>{sub}</strong> }) : undefined,
+            room
+                ? _t("timeline|in_room_name", { room: room.name }, { strong: (sub) => <strong>{sub}</strong> })
+                : undefined,
         [room],
     );
     const notificationRoomAvatar = useMemo(
@@ -782,7 +815,8 @@ function useEventTileViewProps({
         [room],
     );
     const unreadBadge = useMemo(
-        () => (room ? <UnreadNotificationBadge room={room} threadId={props.mxEvent.getId()} forceDot={true} /> : undefined),
+        () =>
+            room ? <UnreadNotificationBadge room={room} threadId={props.mxEvent.getId()} forceDot={true} /> : undefined,
         [room, props.mxEvent],
     );
     const handlers = useMemo(
