@@ -166,10 +166,7 @@ export function VideoBodyView({
     if (state === VideoBodyViewState.HIDDEN) {
         return (
             <span className={rootClassName}>
-                <div
-                    className={resolvedContainerClassName}
-                    style={containerStyle}
-                >
+                <div className={resolvedContainerClassName} style={containerStyle}>
                     <button type="button" onClick={vm.onPreviewClick} className={styles.hiddenButton}>
                         <div className={styles.hiddenButtonContent}>
                             <VisibilityOnIcon />
@@ -186,10 +183,7 @@ export function VideoBodyView({
     if (state === VideoBodyViewState.LOADING) {
         return (
             <span className={rootClassName}>
-                <div
-                    className={resolvedContainerClassName}
-                    style={containerStyle}
-                >
+                <div className={resolvedContainerClassName} style={containerStyle}>
                     <div className={styles.loadingContainer}>
                         <InlineSpinner aria-label="Loading..." role="progressbar" />
                     </div>
