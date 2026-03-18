@@ -1,0 +1,76 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TextualBodyView > renders caption messages with url previews 1`] = `
+<div>
+  <div
+    class="root caption mx_MTextBody mx_EventTile_caption"
+  >
+    <div>
+      Caption for the uploaded image.
+    </div>
+    <div
+      style="margin-top: 8px; padding: 8px; border-radius: 8px; background-color: var(--cpd-color-bg-subtle-secondary);"
+    >
+      URL preview
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TextualBodyView > renders emote messages with annotations 1`] = `
+<div>
+  <div
+    class="root emote mx_MEmoteBody mx_EventTile_content"
+    dir="auto"
+  >
+    * 
+    <button
+      class="mx_MEmoteBody_sender emoteSender"
+      type="button"
+    >
+      Alice
+    </button>
+     
+    <div
+      class="mx_EventTile_annotated annotated"
+      dir="auto"
+    >
+      <span>
+        waves enthusiastically
+      </span>
+      <button
+        class="annotation editedMarker"
+        type="button"
+      >
+        <span>
+          (edited)
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TextualBodyView > renders the default message body 1`] = `
+<div>
+  <div
+    class="root text mx_MTextBody mx_EventTile_content"
+  >
+    <div>
+      Hello, this is a textual message.
+    </div>
+  </div>
+</div>
+`;
+
+exports[`TextualBodyView > renders the notice branch 1`] = `
+<div>
+  <div
+    class="root notice mx_MNoticeBody mx_EventTile_content"
+  >
+    <div>
+      This is a notice message.
+    </div>
+  </div>
+</div>
+`;

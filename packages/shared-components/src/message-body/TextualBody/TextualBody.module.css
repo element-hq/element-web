@@ -1,0 +1,72 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.root {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.text,
+.caption {
+    white-space: pre-wrap;
+}
+
+.notice {
+    white-space: pre-wrap;
+    color: var(--cpd-color-text-secondary);
+}
+
+.emote {
+    white-space: pre-wrap;
+    text-align: start;
+}
+
+.annotated {
+    display: flex;
+}
+
+.annotation {
+    user-select: none;
+    display: inline-block;
+    margin-inline-start: 9px;
+    font: var(--cpd-font-body-xs-regular);
+    color: var(--cpd-color-text-secondary);
+}
+
+.editedMarker {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.bodyLink,
+.bodyAction {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.bodyAction {
+    cursor: pointer;
+}
+
+.emoteSender {
+    all: unset;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.editedMarker:focus-visible,
+.bodyAction:focus-visible,
+.emoteSender:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 2px;
+    border-radius: var(--cpd-space-0-5x);
+}
