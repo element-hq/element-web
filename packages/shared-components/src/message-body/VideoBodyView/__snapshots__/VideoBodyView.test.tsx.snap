@@ -68,6 +68,7 @@ exports[`VideoBodyView > matches snapshot for ready story 1`] = `
   >
     <div
       class="container"
+      data-video-body-view-state="READY"
       style="max-width: 320px; max-height: 180px; aspect-ratio: 16 / 9;"
     >
       <video
@@ -78,7 +79,7 @@ exports[`VideoBodyView > matches snapshot for ready story 1`] = `
         crossorigin="anonymous"
         poster="/static/element.png"
         preload="none"
-        src="/static/videoBodyDemo.webm"
+        src="http://localhost:63315/static/videoBodyDemo.webm"
       />
     </div>
     <div
