@@ -102,9 +102,9 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [relationsVersion, setRelationsVersion] = useState(0);
-    const reactionGroups = useMemo(() => getReactionGroups(reactions), [reactions, relationsVersion]);
-    const myReactions = useMemo(() => getMyReactions(reactions, userId), [reactions, userId, relationsVersion]);
+    const [, setRelationsVersion] = useState(0);
+    const reactionGroups = getReactionGroups(reactions);
+    const myReactions = getMyReactions(reactions, userId);
 
     const vm = useCreateAutoDisposedViewModel(
         () =>

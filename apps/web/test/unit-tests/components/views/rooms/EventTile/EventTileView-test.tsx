@@ -8,10 +8,26 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { getByLabelText, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+
 import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { Layout } from "../../../../../../src/settings/enums/Layout";
 import { EncryptionIndicatorMode } from "../../../../../../src/components/views/rooms/EventTile/EventTileModes";
-import { EventTileView, type EventTileViewProps } from "../../../../../../src/components/views/rooms/EventTile/EventTileView";
+import {
+    EventTileView,
+    type EventTileViewProps,
+} from "../../../../../../src/components/views/rooms/EventTile/EventTileView";
+
+type EventTileViewOverrides = Omit<
+    Partial<EventTileViewProps>,
+    "content" | "threads" | "timestamp" | "encryption" | "notification" | "handlers"
+> & {
+    content?: Partial<EventTileViewProps["content"]>;
+    threads?: Partial<EventTileViewProps["threads"]>;
+    timestamp?: Partial<EventTileViewProps["timestamp"]>;
+    encryption?: Partial<EventTileViewProps["encryption"]>;
+    notification?: Partial<EventTileViewProps["notification"]>;
+    handlers?: Partial<EventTileViewProps["handlers"]>;
+};
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/EncryptionIndicator", () => ({
     EncryptionIndicator: ({
@@ -32,25 +48,13 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/EncryptionIndi
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/Timestamp", () => ({
-    Timestamp: ({
-        ts,
-        href,
-    }: {
-        ts: number;
-        href?: string;
-    }) => <span data-testid={href ? "linked-timestamp" : "timestamp"}>{href ? `${href}:${ts}` : ts}</span>,
+    Timestamp: ({ ts, href }: { ts: number; href?: string }) => (
+        <span data-testid={href ? "linked-timestamp" : "timestamp"}>{href ? `${href}:${ts}` : ts}</span>
+    ),
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadInfo", () => ({
-    ThreadInfo: ({
-        summary,
-        href,
-        label,
-    }: {
-        summary?: React.ReactNode;
-        href?: string;
-        label?: string;
-    }) =>
+    ThreadInfo: ({ summary, href, label }: { summary?: React.ReactNode; href?: string; label?: string }) =>
         summary ? (
             <div data-testid="thread-info-summary">{summary}</div>
         ) : href ? (
@@ -63,11 +67,13 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadInfo", (
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadPanelSummary", () => ({
-    ThreadPanelSummary: ({ replyCount }: { replyCount: number }) => <div data-testid="thread-panel-summary">{replyCount}</div>,
+    ThreadPanelSummary: ({ replyCount }: { replyCount: number }) => (
+        <div data-testid="thread-panel-summary">{replyCount}</div>
+    ),
 }));
 
 describe("EventTileView", () => {
-    function makeProps(overrides: Partial<EventTileViewProps> = {}): EventTileViewProps {
+    function makeProps(overrides: EventTileViewOverrides = {}): EventTileViewProps {
         const baseProps: EventTileViewProps = {
             contentId: "event",
             eventId: "$event:example.org",
@@ -158,7 +164,7 @@ describe("EventTileView", () => {
 
     it("renders the sender slot for the thread list", () => {
         const { container } = render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
                     content: {
@@ -175,7 +181,7 @@ describe("EventTileView", () => {
 
     it("renders thread info summary content", () => {
         render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     threads: {
                         info: <div data-testid="thread-info-summary">Thread summary</div>,
@@ -189,7 +195,7 @@ describe("EventTileView", () => {
 
     it("renders thread info links", () => {
         render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     threads: {
                         info: (
@@ -208,7 +214,7 @@ describe("EventTileView", () => {
 
     it("renders thread info text when no link is provided", () => {
         render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     threads: {
                         info: <div data-testid="thread-info-text">In thread</div>,
@@ -222,7 +228,7 @@ describe("EventTileView", () => {
 
     it("renders the pinned message badge for thread tiles", () => {
         render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.Thread,
                     content: {
@@ -238,7 +244,7 @@ describe("EventTileView", () => {
 
     it("does not render the pinned message badge for file tiles", () => {
         render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.File,
                     content: {
@@ -255,7 +261,7 @@ describe("EventTileView", () => {
         "renders the pinned message badge for default timeline layout %s",
         (layout) => {
             render(
-                    <EventTileView
+                <EventTileView
                     {...makeProps({
                         layout,
                         content: {
@@ -396,7 +402,7 @@ describe("EventTileView", () => {
 
     it("renders sent receipt status", () => {
         render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     content: {
                         messageStatus: (
@@ -414,7 +420,7 @@ describe("EventTileView", () => {
 
     it("renders read receipts status", () => {
         render(
-                <EventTileView
+            <EventTileView
                 {...makeProps({
                     content: {
                         messageStatus: (

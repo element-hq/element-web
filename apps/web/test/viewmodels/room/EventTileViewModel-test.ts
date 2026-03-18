@@ -243,7 +243,7 @@ describe("EventTileViewModel", () => {
         it("shows read receipts when enabled and no sending state takes priority", () => {
             const vm = createViewModel({
                 showReadReceipts: true,
-                readReceipts: [{ userId: "@bob:example.org", ts: 1 }],
+                readReceipts: [{ userId: "@bob:example.org", ts: 1, roomMember: null }],
             });
 
             expect(vm.getSnapshot().showReadReceipts).toBe(true);

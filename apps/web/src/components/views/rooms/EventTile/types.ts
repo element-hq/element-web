@@ -22,5 +22,5 @@ export type GetRelationsForEvent = (
 export interface ReadReceiptProps {
     userId: string;
     ts: number;
-    roomMember?: RoomMember | null;
+    roomMember: RoomMember | null;
 }

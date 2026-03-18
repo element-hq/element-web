@@ -62,6 +62,7 @@ import type { GetRelationsForEvent, ReadReceiptProps } from "./types";
 import { ReplyPreview } from "./ReplyPreview";
 import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
+import { type MediaEventHelper } from "../../../../utils/MediaEventHelper";
 
 /**
  * Operations exposed by embedded widgets inside an event tile.
@@ -76,7 +77,7 @@ export interface EventTileOps {
  */
 export interface EventTileApi {
     getEventTileOps?(): EventTileOps;
-    getMediaHelper(): { destroy?(): void } | undefined;
+    getMediaHelper(): MediaEventHelper | undefined;
 }
 
 /**
@@ -250,7 +251,10 @@ function useEventTileViewModel(
     const tileRef = useRef<EventTileApi>(null);
     const replyChainRef = useRef<ReplyChain>(null);
     const [suppressReadReceiptAnimation, setSuppressReadReceiptAnimation] = useState(true);
-    const vmReadReceipts = useMemo(() => readReceipts?.map(({ userId, ts }) => ({ userId, ts })), [readReceipts]);
+    const vmReadReceipts = useMemo(
+        () => readReceipts?.map(({ userId, ts, roomMember }) => ({ userId, ts, roomMember })),
+        [readReceipts],
+    );
     const viewModelProps = useMemo(
         () =>
             buildEventTileViewModelProps(
