@@ -24,7 +24,24 @@ vis.setup({
                 /* Inhibit all animations for the screenshot to be more stable */
                 *, *::before, *::after {
                     animation: none !important;
-                    transition: none !important;
+                }
+                /*
+                 * Mask spinner for video overlay during screenshot generation on playwright tests.
+                 */
+                [data-video-body-view-state="READY"] {
+                    position: relative;
+                }
+                [data-video-body-view-state="READY"]::after {
+                    content: "";
+                    position: absolute;
+                    inset-inline-start: 50%;
+                    inset-block-start: 50%;
+                    width: 112px;
+                    height: 112px;
+                    transform: translate(-50%, -50%);
+                    border-radius: 999px;
+                    background: #ff4fcf;
+                    pointer-events: none;
                 }
                 /* Hide all storybook elements */
                 .sb-wrapper {
