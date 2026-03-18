@@ -15,22 +15,21 @@ import {
 import { formatFullDate } from "../../DateUtils";
 import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import SettingsStore from "../../settings/SettingsStore";
 
 export interface RedactedBodyViewModelProps {
     /**
      * The redacted event being rendered.
      */
     mxEvent: MatrixEvent;
-    /**
-     * Whether timestamps should be formatted using a 12-hour clock.
-     */
-    showTwelveHour: boolean;
 }
 
 export class RedactedBodyViewModel
     extends BaseViewModel<RedactedBodyViewSnapshot, RedactedBodyViewModelProps>
     implements RedactedBodyViewModelInterface
 {
+    private showTwelveHour: boolean;
+
     private static readonly computeText = ({ mxEvent }: RedactedBodyViewModelProps): string => {
         const redactedBecauseUserId = mxEvent.getUnsigned().redacted_because?.sender;
         if (!redactedBecauseUserId || redactedBecauseUserId === mxEvent.getSender()) {
@@ -44,10 +43,7 @@ export class RedactedBodyViewModel
         return _t("timeline|redaction", { name: sender?.name ?? redactedBecauseUserId });
     };
 
-    private static readonly computeTooltip = ({
-        mxEvent,
-        showTwelveHour,
-    }: RedactedBodyViewModelProps): string | undefined => {
+    private static readonly computeTooltip = (mxEvent: MatrixEvent, showTwelveHour: boolean): string | undefined => {
         const redactionTs = mxEvent.getUnsigned().redacted_because?.origin_server_ts;
         if (!redactionTs) {
             return undefined;
@@ -58,13 +54,32 @@ export class RedactedBodyViewModel
         });
     };
 
-    private static readonly computeSnapshot = (props: RedactedBodyViewModelProps): RedactedBodyViewSnapshot => ({
+    private static readonly computeSnapshot = (
+        props: RedactedBodyViewModelProps,
+        showTwelveHour: boolean,
+    ): RedactedBodyViewSnapshot => ({
         text: RedactedBodyViewModel.computeText(props),
-        tooltip: RedactedBodyViewModel.computeTooltip(props),
+        tooltip: RedactedBodyViewModel.computeTooltip(props.mxEvent, showTwelveHour),
     });
 
     public constructor(props: RedactedBodyViewModelProps) {
-        super(props, RedactedBodyViewModel.computeSnapshot(props));
+        const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
+
+        super(props, RedactedBodyViewModel.computeSnapshot(props, showTwelveHour));
+
+        this.showTwelveHour = showTwelveHour;
+
+        const showTwelveHourWatcherRef = SettingsStore.watchSetting(
+            "showTwelveHourTimestamps",
+            null,
+            (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
+                if (this.showTwelveHour === newVal) return;
+
+                this.showTwelveHour = newVal;
+                this.updateTooltip();
+            },
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(showTwelveHourWatcherRef));
     }
 
     public setEvent(mxEvent: MatrixEvent): void {
@@ -73,7 +88,7 @@ export class RedactedBodyViewModel
         this.props = { ...this.props, mxEvent };
 
         const text = RedactedBodyViewModel.computeText(this.props);
-        const tooltip = RedactedBodyViewModel.computeTooltip(this.props);
+        const tooltip = RedactedBodyViewModel.computeTooltip(this.props.mxEvent, this.showTwelveHour);
         const updates: Partial<RedactedBodyViewSnapshot> = {};
 
         if (this.snapshot.current.text !== text) {
@@ -88,12 +103,8 @@ export class RedactedBodyViewModel
         }
     }
 
-    public setShowTwelveHour(showTwelveHour: boolean): void {
-        if (this.props.showTwelveHour === showTwelveHour) return;
-
-        this.props = { ...this.props, showTwelveHour };
-
-        const tooltip = RedactedBodyViewModel.computeTooltip(this.props);
+    private updateTooltip(): void {
+        const tooltip = RedactedBodyViewModel.computeTooltip(this.props.mxEvent, this.showTwelveHour);
         if (this.snapshot.current.tooltip !== tooltip) {
             this.snapshot.merge({ tooltip });
         }

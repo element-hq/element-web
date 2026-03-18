@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, useEffect } from "react";
+import React, { type JSX, createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import {
@@ -155,12 +155,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
-            contentContainer = (
-                <RedactedBodyWrapper
-                    mxEvent={this.props.mxEvent}
-                    showTwelveHour={this.props.isTwelveHour ?? SettingsStore.getValue("showTwelveHourTimestamps")}
-                />
-            );
+            contentContainer = <RedactedBodyWrapper mxEvent={this.props.mxEvent} />;
         } else {
             let contentElements;
             if (this.props.previousEdit) {
@@ -208,21 +203,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
 
 interface RedactedBodyWrapperProps {
     mxEvent: MatrixEvent;
-    showTwelveHour: boolean;
 }
 
-function RedactedBodyWrapper({ mxEvent, showTwelveHour }: Readonly<RedactedBodyWrapperProps>): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new RedactedBodyViewModel({
-                mxEvent,
-                showTwelveHour,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setShowTwelveHour(showTwelveHour);
-    }, [showTwelveHour, vm]);
-
+function RedactedBodyWrapper({ mxEvent }: Readonly<RedactedBodyWrapperProps>): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
     return <RedactedBodyView vm={vm} className="mx_RedactedBody" />;
 }

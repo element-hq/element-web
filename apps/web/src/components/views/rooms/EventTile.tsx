@@ -1625,18 +1625,7 @@ function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JS
  * Bridge redacted events into the view model until EventTile becomes a function component.
  */
 function RedactedBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
-    const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new RedactedBodyViewModel({
-                mxEvent,
-                showTwelveHour,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setShowTwelveHour(showTwelveHour);
-    }, [showTwelveHour, vm]);
+    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
 
     return <RedactedBodyView vm={vm} className="mx_RedactedBody" />;
 }

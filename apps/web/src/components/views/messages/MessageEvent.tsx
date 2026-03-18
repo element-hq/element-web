@@ -358,18 +358,7 @@ function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element
  * Bridge redacted events into the view model until MessageEvent becomes a function component.
  */
 function RedactedBodyWrapper({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
-    const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new RedactedBodyViewModel({
-                mxEvent,
-                showTwelveHour,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setShowTwelveHour(showTwelveHour);
-    }, [showTwelveHour, vm]);
+    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
 
     return <RedactedBodyView vm={vm} ref={ref} className="mx_RedactedBody" />;
 }
