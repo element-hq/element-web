@@ -93,7 +93,7 @@ export const Loading: Story = {
     },
 };
 
-export const Error: Story = {
+export const ErrorState: Story = {
     args: {
         state: VideoBodyViewState.ERROR,
     },

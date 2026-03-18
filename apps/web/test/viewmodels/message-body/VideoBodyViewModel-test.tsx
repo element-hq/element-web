@@ -167,6 +167,7 @@ describe("VideoBodyViewModel", () => {
             mediaVisible: true,
             forExport: true,
         });
+        vm.loadInitialMediaIfVisible();
 
         expect(vm.getSnapshot()).toMatchObject({
             state: VideoBodyViewState.READY,
@@ -216,6 +217,7 @@ describe("VideoBodyViewModel", () => {
             }),
             mediaVisible: true,
         });
+        vm.loadInitialMediaIfVisible();
 
         expect(vm.getSnapshot().state).toBe(VideoBodyViewState.LOADING);
 
@@ -246,6 +248,7 @@ describe("VideoBodyViewModel", () => {
             }),
             mediaVisible: true,
         });
+        vm.loadInitialMediaIfVisible();
 
         await flushPromises();
 
@@ -272,6 +275,7 @@ describe("VideoBodyViewModel", () => {
             }),
             mediaVisible: true,
         });
+        vm.loadInitialMediaIfVisible();
 
         await flushPromises();
 
@@ -295,6 +299,7 @@ describe("VideoBodyViewModel", () => {
             mediaVisible: true,
             videoRef: { current: { play } } as any,
         });
+        vm.loadInitialMediaIfVisible();
 
         await flushPromises();
         await vm.onPlay();
@@ -312,6 +317,7 @@ describe("VideoBodyViewModel", () => {
             }),
             mediaVisible: true,
         });
+        vm.loadInitialMediaIfVisible();
 
         await vm.onPlay();
 
@@ -385,6 +391,7 @@ describe("VideoBodyViewModel", () => {
             }),
             mediaVisible: true,
         });
+        vm.loadInitialMediaIfVisible();
 
         expect(vm.getSnapshot().poster).toBe("data:image/png;base64,blurhash");
 
@@ -410,6 +417,7 @@ describe("VideoBodyViewModel", () => {
             }),
             mediaVisible: true,
         });
+        vm.loadInitialMediaIfVisible();
 
         await flushPromises();
         expect(vm.getSnapshot().src).toBe("data:video/mp4,");

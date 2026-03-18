@@ -19,7 +19,7 @@ import {
     type VideoBodyViewSnapshot,
 } from "./VideoBodyView";
 
-const { Ready, Hidden, Error } = composeStories(stories);
+const { Ready, Hidden, ErrorState } = composeStories(stories);
 
 class TestVideoBodyViewModel extends MockViewModel<VideoBodyViewSnapshot> implements VideoBodyViewActions {
     public onPreviewClick?: VideoBodyViewActions["onPreviewClick"];
@@ -36,7 +36,7 @@ describe("VideoBodyView", () => {
     it.each([
         ["ready", Ready],
         ["hidden", Hidden],
-        ["error", Error],
+        ["error", ErrorState],
     ])("matches snapshot for %s story", (_name, Story) => {
         const { container } = render(<Story />);
         expect(container).toMatchSnapshot();

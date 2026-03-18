@@ -65,8 +65,10 @@ export class VideoBodyViewModel
             this.setImageSize(value as ImageSize);
         });
         this.disposables.track(() => SettingsStore.unwatchSetting(imageSizeWatcherRef));
+    }
 
-        if (props.mediaVisible) {
+    public loadInitialMediaIfVisible(): void {
+        if (this.props.mediaVisible) {
             void this.downloadVideo();
         }
     }
@@ -460,7 +462,7 @@ export class VideoBodyViewModel
                 fetchingData: false,
             };
             this.updateSnapshotFromState();
-            void this.props.videoRef.current?.play();
+            this.props.videoRef.current?.play();
         } catch (error) {
             if (
                 this.isDisposed ||

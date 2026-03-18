@@ -365,6 +365,10 @@ export function VideoBodyViewWrapper({
     );
 
     useEffect(() => {
+        vm.loadInitialMediaIfVisible();
+    }, [vm]);
+
+    useEffect(() => {
         vm.setEvent(mxEvent, mediaEventHelper);
     }, [mxEvent, mediaEventHelper, vm]);
 
