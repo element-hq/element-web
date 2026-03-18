@@ -117,9 +117,7 @@ type PlainTimestampProps = {
     timestamp: EventTileTimestampProps;
 };
 
-const PlainTimestamp = memo(function PlainTimestamp({
-    timestamp,
-}: PlainTimestampProps): JSX.Element | null {
+const PlainTimestamp = memo(function PlainTimestamp({ timestamp }: PlainTimestampProps): JSX.Element | null {
     if (!timestamp.show) return null;
 
     return (
@@ -132,9 +130,7 @@ const PlainTimestamp = memo(function PlainTimestamp({
     );
 });
 
-const LinkedTimestamp = memo(function LinkedTimestamp({
-    timestamp,
-}: PlainTimestampProps): JSX.Element | null {
+const LinkedTimestamp = memo(function LinkedTimestamp({ timestamp }: PlainTimestampProps): JSX.Element | null {
     if (!timestamp.showLinked) return null;
     if (!timestamp.show) {
         return timestamp.showPlaceholder ? <span className="mx_MessageTimestamp" /> : null;
@@ -178,10 +174,7 @@ type FooterThreadMetaProps = {
     info?: ReactNode;
 };
 
-const FooterThreadMeta = memo(function FooterThreadMeta({
-    footer,
-    info,
-}: FooterThreadMetaProps): JSX.Element | null {
+const FooterThreadMeta = memo(function FooterThreadMeta({ footer, info }: FooterThreadMetaProps): JSX.Element | null {
     if (!footer && !info) return null;
 
     return (
@@ -303,11 +296,7 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                         <PlainTimestamp timestamp={timestamp} />
                         {notification.unreadBadge}
                     </div>
-                    {notification.enabled && notification.roomAvatar ? (
-                        notification.roomAvatar
-                    ) : (
-                        content.avatar
-                    )}
+                    {notification.enabled && notification.roomAvatar ? notification.roomAvatar : content.avatar}
                     <EventContentRegion contentClassName={contentClassName} onContextMenu={handlers.onContextMenu}>
                         <div className="mx_EventTile_body">{content.messageBody}</div>
                         <ThreadsPanelRegion {...threads} />
@@ -317,7 +306,12 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
             );
         case TimelineRenderingType.File:
             return (
-                <Root className={rootClassName} aria-live={ariaLive} aria-atomic={true} data-scroll-tokens={scrollTokens}>
+                <Root
+                    className={rootClassName}
+                    aria-live={ariaLive}
+                    aria-atomic={true}
+                    data-scroll-tokens={scrollTokens}
+                >
                     <a
                         className="mx_EventTile_senderDetailsLink"
                         href={timestamp.permalink}
@@ -355,12 +349,14 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                 >
                     {layout === Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
                     {content.sender}
-                    {encryption.showIrcPadlock && <EncryptionIndicator
-                        icon={encryption.mode}
-                        title={encryption.indicatorTitle}
-                        sharedUserId={encryption.sharedKeysUserId}
-                        roomId={encryption.sharedKeysRoomId}
-                    />}
+                    {encryption.showIrcPadlock && (
+                        <EncryptionIndicator
+                            icon={encryption.mode}
+                            title={encryption.indicatorTitle}
+                            sharedUserId={encryption.sharedKeysUserId}
+                            roomId={encryption.sharedKeysRoomId}
+                        />
+                    )}
                     {content.avatar}
                     <EventContentRegion
                         contentId={contentId}
@@ -369,22 +365,20 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                     >
                         {content.contextMenu}
                         {layout !== Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
-                        {encryption.showGroupPadlock && <EncryptionIndicator
-                            icon={encryption.mode}
-                            title={encryption.indicatorTitle}
-                            sharedUserId={encryption.sharedKeysUserId}
-                            roomId={encryption.sharedKeysRoomId}
-                        />}
+                        {encryption.showGroupPadlock && (
+                            <EncryptionIndicator
+                                icon={encryption.mode}
+                                title={encryption.indicatorTitle}
+                                sharedUserId={encryption.sharedKeysUserId}
+                                roomId={encryption.sharedKeysRoomId}
+                            />
+                        )}
                         {content.replyChain}
                         {content.messageBody}
                         {content.actionBar}
-                        {layout === Layout.IRC && (
-                            <FooterThreadMeta footer={content.footer} info={threads.info} />
-                        )}
+                        {layout === Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
                     </EventContentRegion>
-                    {layout !== Layout.IRC && (
-                        <FooterThreadMeta footer={content.footer} info={threads.info} />
-                    )}
+                    {layout !== Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
                     {content.messageStatus}
                 </Root>
             );

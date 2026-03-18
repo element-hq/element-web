@@ -38,9 +38,7 @@ export const Footer = memo(function Footer({
     const pinnedMessageBadge = isPinned ? (
         <PinnedMessageBadge aria-describedby={tileContentId} tabIndex={0} />
     ) : undefined;
-    const reactionsRow = isRedacted ? undefined : (
-        <ReactionsRow mxEvent={mxEvent} reactions={reactions} />
-    );
+    const reactionsRow = isRedacted ? undefined : <ReactionsRow mxEvent={mxEvent} reactions={reactions} />;
 
     return (
         <>
