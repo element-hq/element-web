@@ -5,12 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type RoomListItemSnapshot } from "./RoomListItemView";
+import { type RoomListItemViewSnapshot } from "./RoomListItemView";
 import { RoomNotifState } from "./RoomNotifs";
 
 export const mockRoom = { name: "General" };
 
-export const defaultSnapshot: RoomListItemSnapshot = {
+export const defaultSnapshot: RoomListItemViewSnapshot = {
     id: "!room:server",
     room: mockRoom,
     name: "General",

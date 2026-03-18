@@ -14,8 +14,8 @@ import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/over
 import { describe, vi, expect, it, afterEach } from "vitest";
 
 import {
-    type WidgetContextMenuAction,
-    type WidgetContextMenuSnapshot,
+    type WidgetContextMenuViewActions,
+    type WidgetContextMenuViewSnapshot,
     WidgetContextMenuView,
 } from "./WidgetContextMenuView";
 import * as stories from "./WidgetContextMenuView.stories.tsx";
@@ -52,8 +52,8 @@ describe("<WidgetContextMenuView />", () => {
     const onFinished = vi.fn();
     const onMoveButton = vi.fn();
     class WidgetContextMenuViewModel
-        extends MockViewModel<WidgetContextMenuSnapshot>
-        implements WidgetContextMenuAction
+        extends MockViewModel<WidgetContextMenuViewSnapshot>
+        implements WidgetContextMenuViewActions
     {
         public onKeyDown = onKeyDown;
         public togglePlay = togglePlay;
@@ -68,7 +68,7 @@ describe("<WidgetContextMenuView />", () => {
         public onMoveButton = onMoveButton;
     }
 
-    const defaultValue: WidgetContextMenuSnapshot = {
+    const defaultValue: WidgetContextMenuViewSnapshot = {
         showStreamAudioStreamButton: true,
         showEditButton: true,
         showRevokeButton: true,

@@ -10,7 +10,7 @@ import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, useCa
 import { MsgType } from "matrix-js-sdk/src/matrix";
 import {
     UrlPreviewGroupView,
-    type UrlPreviewViewSnapshotPreview,
+    type UrlPreview,
     useCreateAutoDisposedViewModel,
     EventContentBodyView,
     LINKIFIED_DATA_ATTRIBUTE,
@@ -35,14 +35,14 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type EventTileOps } from "../rooms/EventTile";
-import { UrlPreviewViewModel } from "../../../viewmodels/message-body/UrlPreviewViewModel";
+import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel.ts";
 import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 import ImageView from "../elements/ImageView.tsx";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 
 const logger = rootLogger.getChild("TextualBody");
 
-type Props = IBodyProps & { urlPreviewViewModel: UrlPreviewViewModel };
+type Props = IBodyProps & { urlPreviewViewModel: UrlPreviewGroupViewModel };
 
 class InnerTextualBody extends React.Component<Props> {
     private readonly contentRef = createRef<HTMLDivElement>();
@@ -390,7 +390,7 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
     const [mediaVisible] = useMediaVisible(props.mxEvent);
     const client = useMatrixClientContext();
 
-    const onUrlPreviewImageClicked = useCallback((preview: UrlPreviewViewSnapshotPreview): void => {
+    const onUrlPreviewImageClicked = useCallback((preview: UrlPreview): void => {
         if (!preview.image?.imageFull) {
             // Should never get this far, but doesn't hurt to check.
             return;
@@ -408,7 +408,7 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
-            new UrlPreviewViewModel({
+            new UrlPreviewGroupViewModel({
                 client,
                 mxEvent: props.mxEvent,
                 mediaVisible: mediaVisible,

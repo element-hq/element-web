@@ -161,6 +161,28 @@ describe("DeviceListener", () => {
             expect(unwatchSettingSpy).toHaveBeenCalled();
         });
 
+        it("responds to KeyBackupDecryptionKeyCached events", async () => {
+            // Given a Device Listener
+            const recheck = jest.fn();
+            const deviceListener = await createAndStart();
+            deviceListener.recheck = recheck;
+
+            // When a KeyBackupDecryptionKeyCached event happens
+            mockClient.emit(CryptoEvent.KeyBackupDecryptionKeyCached, "3");
+
+            // Then we rechecked the device information
+            expect(recheck).toHaveBeenCalled();
+
+            // And when we stop our device listener
+            const removeListener = jest.fn(() => {});
+            // @ts-ignore overwriting with a mock
+            mockClient.removeListener = removeListener;
+            deviceListener.stop();
+
+            // Then it should stop listening
+            expect(removeListener).toHaveBeenCalledWith(CryptoEvent.KeyBackupDecryptionKeyCached, expect.any(Function));
+        });
+
         describe("when device client information feature is enabled", () => {
             beforeEach(() => {
                 jest.spyOn(SettingsStore, "getValue").mockImplementation(

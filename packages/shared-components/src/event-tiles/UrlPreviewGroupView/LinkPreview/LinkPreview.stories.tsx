@@ -9,12 +9,12 @@ import React from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import imageFile from "../../../static/element.png";
+import imageFile from "../../../../static/element.png";
 import { LinkPreview } from "./LinkPreview";
-import { LinkedTextContext } from "../../utils/LinkedText";
+import { LinkedTextContext } from "../../../utils/LinkedText";
 
 export default {
-    title: "Event/UrlPreviewView",
+    title: "Event/UrlPreviewGroupView/LinkPreview",
     component: LinkPreview,
     tags: ["autodocs"],
     args: {

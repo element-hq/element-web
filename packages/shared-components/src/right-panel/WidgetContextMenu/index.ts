@@ -5,5 +5,5 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export type { WidgetContextMenuSnapshot, WidgetContextMenuViewModel } from "./WidgetContextMenuView";
+export type { WidgetContextMenuViewSnapshot, WidgetContextMenuViewModel } from "./WidgetContextMenuView";
 export { WidgetContextMenuView } from "./WidgetContextMenuView";

@@ -84,7 +84,7 @@ const getSetupCaption = (state: DeviceStateForToast): string => {
         case "set_up_recovery":
             return _t("action|continue");
         case "verify_this_session":
-            return _t("action|verify");
+            return _t("action|continue");
         case "key_storage_out_of_sync":
             return _t("encryption|enter_recovery_key");
         case "turn_on_key_storage":
