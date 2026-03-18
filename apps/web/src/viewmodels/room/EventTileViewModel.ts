@@ -1044,6 +1044,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private onNewThread = (thread: Thread): void => {
         if (thread.id === this.props.mxEvent.getId()) {
             this.updateThread(thread);
+            if (this.currentRoom && this.isListeningForReceipts) {
+                this.currentRoom.off(RoomEvent.Receipt, this.onRoomReceipt);
+            }
             this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
             this.currentRoom = null;
         }

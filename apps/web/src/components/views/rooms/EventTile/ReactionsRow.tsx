@@ -102,8 +102,9 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [reactionGroups, setReactionGroups] = useState<ReactionGroup[]>(() => getReactionGroups(reactions));
-    const [myReactions, setMyReactions] = useState<MatrixEvent[] | null>(() => getMyReactions(reactions, userId));
+    const [relationsVersion, setRelationsVersion] = useState(0);
+    const reactionGroups = useMemo(() => getReactionGroups(reactions), [reactions, relationsVersion]);
+    const myReactions = useMemo(() => getMyReactions(reactions, userId), [reactions, userId, relationsVersion]);
 
     const vm = useCreateAutoDisposedViewModel(
         () =>
@@ -151,16 +152,10 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     }, [reactionGroups.length, vm]);
 
     useEffect(() => {
-        setReactionGroups(getReactionGroups(reactions));
-        setMyReactions(getMyReactions(reactions, userId));
-    }, [reactions, userId]);
-
-    useEffect(() => {
         if (!reactions) return;
 
         const onRelationsChanged = (): void => {
-            setReactionGroups(getReactionGroups(reactions));
-            setMyReactions(getMyReactions(reactions, userId));
+            setRelationsVersion((version) => version + 1);
         };
 
         reactions.on(RelationsEvent.Add, onRelationsChanged);
@@ -172,7 +167,7 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
             reactions.off(RelationsEvent.Remove, onRelationsChanged);
             reactions.off(RelationsEvent.Redaction, onRelationsChanged);
         };
-    }, [reactions, userId]);
+    }, [reactions]);
 
     useEffect(() => {
         const onDecrypted = (): void => {

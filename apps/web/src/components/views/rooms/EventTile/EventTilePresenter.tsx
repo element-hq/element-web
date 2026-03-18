@@ -134,7 +134,7 @@ export interface EventTileProps {
 }
 
 function buildEventTileViewModelProps(
-    props: EventTileProps,
+    props: Omit<EventTileViewModelProps, "cli" | "timelineRenderingType" | "isRoomEncrypted" | "showHiddenEvents">,
     cli: ReturnType<typeof useMatrixClientContext>,
     roomContext: Pick<
         React.ContextType<typeof RoomContext>,
@@ -142,33 +142,10 @@ function buildEventTileViewModelProps(
     >,
 ): EventTileViewModelProps {
     return {
+        ...props,
         cli,
-        mxEvent: props.mxEvent,
-        forExport: props.forExport,
-        showReactions: props.showReactions,
-        getRelationsForEvent: props.getRelationsForEvent,
-        readReceipts: props.readReceipts?.map(({ userId, ts }) => ({ userId, ts })),
-        lastSuccessful: props.lastSuccessful,
-        eventSendStatus: props.eventSendStatus,
         timelineRenderingType: roomContext.timelineRenderingType,
-        isRedacted: props.isRedacted,
-        continuation: props.continuation,
-        last: props.last,
-        lastInSection: props.lastInSection,
-        contextual: props.contextual,
-        isSelectedEvent: props.isSelectedEvent,
-        isTwelveHour: props.isTwelveHour,
-        layout: props.layout,
-        editState: props.editState,
-        permalinkCreator: props.permalinkCreator,
-        alwaysShowTimestamps: props.alwaysShowTimestamps,
-        hideSender: props.hideSender,
-        hideTimestamp: props.hideTimestamp,
-        inhibitInteraction: props.inhibitInteraction,
-        showReadReceipts: props.showReadReceipts,
-        highlightLink: props.highlightLink,
         isRoomEncrypted: Boolean(roomContext.isRoomEncrypted),
-        callEventGrouper: props.callEventGrouper,
         showHiddenEvents: roomContext.showHiddenEvents,
     };
 }
@@ -231,6 +208,7 @@ function useEventTileViewModel(
     const rootRef = useRef<HTMLElement>(null);
     const tileRef = useRef<EventTileApi>(null);
     const replyChainRef = useRef<ReplyChain>(null);
+    const vmReadReceipts = useMemo(() => readReceipts?.map(({ userId, ts }) => ({ userId, ts })), [readReceipts]);
     const viewModelProps = useMemo(
         () =>
             buildEventTileViewModelProps(
@@ -239,7 +217,7 @@ function useEventTileViewModel(
                     forExport,
                     showReactions,
                     getRelationsForEvent,
-                    readReceipts,
+                    readReceipts: vmReadReceipts,
                     lastSuccessful,
                     eventSendStatus,
                     isRedacted,
@@ -273,7 +251,7 @@ function useEventTileViewModel(
             forExport,
             showReactions,
             getRelationsForEvent,
-            readReceipts,
+            vmReadReceipts,
             lastSuccessful,
             eventSendStatus,
             isRedacted,
@@ -478,7 +456,8 @@ export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTilePro
             />
         ),
         [
-            props,
+            props.mxEvent,
+            props.permalinkCreator,
             renderTileProps,
             tileRef,
             roomContext.timelineRenderingType,
