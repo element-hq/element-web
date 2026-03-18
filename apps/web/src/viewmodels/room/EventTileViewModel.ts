@@ -300,12 +300,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         if (props.forExport) return;
 
         props.cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+        if (this.isListeningForReceipts) {
+            props.cli.on(RoomEvent.Receipt, this.onRoomReceipt);
+        }
         this.isListeningForUserTrust = true;
     }
 
     private unbindCliListeners(): void {
         if (this.currentCli && this.isListeningForUserTrust) {
             this.currentCli.off(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+        }
+        if (this.currentCli && this.isListeningForReceipts) {
+            this.currentCli.off(RoomEvent.Receipt, this.onRoomReceipt);
         }
 
         this.currentCli = null;
@@ -348,16 +354,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private bindRoomListeners(room: Room | null): void {
         this.currentRoom = room;
-        if (room && this.isListeningForReceipts) {
-            room.on(RoomEvent.Receipt, this.onRoomReceipt);
-        }
         room?.on(ThreadEvent.New, this.onNewThread);
     }
 
     private unbindRoomListeners(): void {
-        if (this.currentRoom && this.isListeningForReceipts) {
-            this.currentRoom.off(RoomEvent.Receipt, this.onRoomReceipt);
-        }
         this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
         this.currentRoom = null;
     }
@@ -381,10 +381,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
         const shouldListen = snapshot.shouldShowSentReceipt || snapshot.shouldShowSendingReceipt;
         if (shouldListen && !this.isListeningForReceipts) {
-            this.currentRoom?.on(RoomEvent.Receipt, this.onRoomReceipt);
+            this.currentCli?.on(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = true;
         } else if (!shouldListen && this.isListeningForReceipts) {
-            this.currentRoom?.off(RoomEvent.Receipt, this.onRoomReceipt);
+            this.currentCli?.off(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = false;
         }
     }
@@ -607,6 +607,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static isEligibleForSpecialReceipt(props: EventTileViewModelProps): boolean {
+        if (props.readReceipts && props.readReceipts.length > 0) return false;
+
         const roomId = props.mxEvent.getRoomId();
         const room = roomId ? props.cli.getRoom(roomId) : null;
         if (!room) return false;
