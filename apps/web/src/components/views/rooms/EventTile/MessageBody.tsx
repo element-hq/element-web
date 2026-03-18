@@ -16,26 +16,26 @@ import { EventPreview } from "../EventPreview";
 import { DecryptionFailureBody } from "./DecryptionFailureBody";
 import type { EventTileApi, EventTileProps } from "./EventTilePresenter";
 
-interface MessageBodyProps {
+type MessageBodyProps = {
     mxEvent: MatrixEvent;
+    renderTileProps: EventTileProps;
     timelineRenderingType: TimelineRenderingType;
     tileRenderType: TimelineRenderingType;
-    isSeeingThroughMessageHiddenForModeration: boolean;
-    renderTileProps: EventTileProps;
-    tileRef: React.RefObject<EventTileApi | null>;
-    permalinkCreator?: RoomPermalinkCreator;
     showHiddenEvents: boolean;
-}
+    isSeeingThroughMessageHiddenForModeration: boolean;
+    permalinkCreator?: RoomPermalinkCreator;
+    tileRef: React.RefObject<EventTileApi | null>;
+};
 
 export function MessageBody({
     mxEvent,
+    renderTileProps,
     timelineRenderingType,
     tileRenderType,
-    isSeeingThroughMessageHiddenForModeration,
-    renderTileProps,
-    tileRef,
-    permalinkCreator,
     showHiddenEvents,
+    isSeeingThroughMessageHiddenForModeration,
+    permalinkCreator,
+    tileRef,
 }: MessageBodyProps): JSX.Element | null {
     if (
         timelineRenderingType === TimelineRenderingType.Notification ||

@@ -22,8 +22,8 @@ interface ReplyPreviewProps {
     forExport?: boolean;
     permalinkCreator?: RoomPermalinkCreator;
     layout?: Layout;
-    alwaysShowTimestamps?: boolean;
     getRelationsForEvent?: GetRelationsForEvent;
+    alwaysShowTimestamps?: boolean;
     hover: boolean;
     focusWithin: boolean;
     isQuoteExpanded: boolean;
@@ -38,8 +38,8 @@ export function ReplyPreview({
     forExport,
     permalinkCreator,
     layout,
-    alwaysShowTimestamps,
     getRelationsForEvent,
+    alwaysShowTimestamps,
     hover,
     focusWithin,
     isQuoteExpanded,

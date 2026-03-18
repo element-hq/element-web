@@ -13,22 +13,22 @@ import { Layout } from "../../../../settings/enums/Layout";
 import { ReactionsRow } from "./ReactionsRow";
 
 interface FooterProps {
-    layout?: Layout;
     mxEvent: MatrixEvent;
+    reactions: Relations | null;
     isRedacted?: boolean;
     isPinned: boolean;
     isOwnEvent: boolean;
-    reactions: Relations | null;
+    layout?: Layout;
     tileContentId: string;
 }
 
 export const Footer = memo(function Footer({
-    layout,
     mxEvent,
+    reactions,
     isRedacted,
     isPinned,
     isOwnEvent,
-    reactions,
+    layout,
     tileContentId,
 }: FooterProps): JSX.Element | undefined {
     if (!isPinned && !reactions) {

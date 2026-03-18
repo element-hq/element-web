@@ -14,13 +14,15 @@ import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
 
+type ThreadToolbarProps = {
+    viewInRoom: (evt: ButtonEvent) => void;
+    copyLinkToThread: (evt: ButtonEvent) => void;
+};
+
 export function ThreadToolbar({
     viewInRoom,
     copyLinkToThread,
-}: {
-    viewInRoom: (evt: ButtonEvent) => void;
-    copyLinkToThread: (evt: ButtonEvent) => void;
-}): JSX.Element {
+}: ThreadToolbarProps): JSX.Element {
     return (
         <Toolbar className="mx_MessageActionBar" aria-label={_t("timeline|mab|label")} aria-live="off">
             <RovingAccessibleButton

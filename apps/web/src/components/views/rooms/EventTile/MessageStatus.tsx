@@ -24,8 +24,8 @@ interface MessageStatusProps {
     showReadReceipts: boolean;
     readReceipts?: ReadReceiptProps[];
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
-    checkUnmounting?: () => boolean;
     isTwelveHour?: boolean;
+    checkUnmounting?: () => boolean;
 }
 
 export function MessageStatus({

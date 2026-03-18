@@ -10,17 +10,19 @@ import React, { type JSX } from "react";
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import MemberAvatar from "../../avatars/MemberAvatar";
 
+type AvatarProps = {
+    member?: RoomMember | null;
+    size?: string | null;
+    viewUserOnClick: boolean;
+    forceHistorical: boolean;
+};
+
 export function Avatar({
     member,
     size,
     viewUserOnClick,
     forceHistorical,
-}: {
-    member?: RoomMember | null;
-    size?: string | null;
-    viewUserOnClick: boolean;
-    forceHistorical: boolean;
-}): JSX.Element | undefined {
+}: AvatarProps): JSX.Element | undefined {
     if (!member || size === null || size === undefined) return undefined;
 
     return (

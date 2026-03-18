@@ -35,6 +35,64 @@ import { type EncryptionIndicatorMode } from "./EventTileModes";
 // |    '--------------------------------------'              |
 // '----------------------------------------------------------'
 
+type EventTileContentProps = {
+    sender?: ReactNode;
+    avatar?: ReactNode;
+    replyChain?: ReactNode;
+    messageBody: ReactNode;
+    actionBar?: ReactNode;
+    messageStatus?: ReactNode;
+    footer?: ReactNode;
+    contextMenu?: ReactNode;
+};
+
+type EventTileThreadsProps = {
+    info?: ReactNode;
+    replyCount?: number;
+    preview?: ReactNode;
+    showToolbar?: boolean;
+    openInRoom: (evt: ButtonEvent) => void;
+    copyLinkToThread: (evt: ButtonEvent) => void;
+};
+
+type EventTileTimestampProps = {
+    show?: boolean;
+    showLinked?: boolean;
+    showPlaceholder?: boolean;
+    showRelative?: boolean;
+    isTwelveHour?: boolean;
+    ts?: number;
+    receivedTs?: number;
+    permalink: string;
+    onPermalinkClicked?: MouseEventHandler<HTMLElement>;
+    onContextMenu?: MouseEventHandler<HTMLElement>;
+};
+
+type EventTileEncryptionProps = {
+    showGroupPadlock: boolean;
+    showIrcPadlock: boolean;
+    mode: EncryptionIndicatorMode;
+    indicatorTitle?: string;
+    sharedKeysUserId?: string;
+    sharedKeysRoomId?: string;
+};
+
+type EventTileNotificationProps = {
+    enabled: boolean;
+    roomLabel?: ReactNode;
+    roomAvatar?: ReactNode;
+    unreadBadge?: ReactNode;
+};
+
+type EventTileHandlersProps = {
+    onClick?: MouseEventHandler<HTMLElement>;
+    onMouseEnter: MouseEventHandler<HTMLElement>;
+    onMouseLeave: MouseEventHandler<HTMLElement>;
+    onFocus: FocusEventHandler<HTMLElement>;
+    onBlur: FocusEventHandler<HTMLElement>;
+    onContextMenu: MouseEventHandler<HTMLElement>;
+};
+
 export interface EventTileViewProps {
     as?: string;
     rootRef?: Ref<HTMLElement>;
@@ -47,65 +105,21 @@ export interface EventTileViewProps {
     ariaLive?: "off";
     scrollTokens?: string;
     isOwnEvent: boolean;
-    content: {
-        sender?: ReactNode;
-        avatar?: ReactNode;
-        replyChain?: ReactNode;
-        messageBody: ReactNode;
-        actionBar?: ReactNode;
-        messageStatus?: ReactNode;
-        footer?: ReactNode;
-        contextMenu?: ReactNode;
-    };
-    threads: {
-        info?: ReactNode;
-        replyCount?: number;
-        preview?: ReactNode;
-        showToolbar?: boolean;
-        openInRoom: (evt: ButtonEvent) => void;
-        copyLinkToThread: (evt: ButtonEvent) => void;
-    };
-    timestamp: {
-        show?: boolean;
-        showLinked?: boolean;
-        showPlaceholder?: boolean;
-        ts?: number;
-        receivedTs?: number;
-        showRelative?: boolean;
-        isTwelveHour?: boolean;
-        permalink: string;
-        onPermalinkClicked?: MouseEventHandler<HTMLElement>;
-        onContextMenu?: MouseEventHandler<HTMLElement>;
-    };
-    encryption: {
-        showGroupPadlock: boolean;
-        showIrcPadlock: boolean;
-        mode: EncryptionIndicatorMode;
-        indicatorTitle?: string;
-        sharedKeysUserId?: string;
-        sharedKeysRoomId?: string;
-    };
-    notification: {
-        enabled: boolean;
-        roomLabel?: ReactNode;
-        roomAvatar?: ReactNode;
-        unreadBadge?: ReactNode;
-    };
-    handlers: {
-        onClick?: MouseEventHandler<HTMLElement>;
-        onContextMenu: MouseEventHandler<HTMLElement>;
-        onMouseEnter: MouseEventHandler<HTMLElement>;
-        onMouseLeave: MouseEventHandler<HTMLElement>;
-        onFocus: FocusEventHandler<HTMLElement>;
-        onBlur: FocusEventHandler<HTMLElement>;
-    };
+    content: EventTileContentProps;
+    threads: EventTileThreadsProps;
+    timestamp: EventTileTimestampProps;
+    encryption: EventTileEncryptionProps;
+    notification: EventTileNotificationProps;
+    handlers: EventTileHandlersProps;
 }
+
+type PlainTimestampProps = {
+    timestamp: EventTileTimestampProps;
+};
 
 const PlainTimestamp = memo(function PlainTimestamp({
     timestamp,
-}: {
-    timestamp: EventTileViewProps["timestamp"];
-}): JSX.Element | null {
+}: PlainTimestampProps): JSX.Element | null {
     if (!timestamp.show) return null;
 
     return (
@@ -120,9 +134,7 @@ const PlainTimestamp = memo(function PlainTimestamp({
 
 const LinkedTimestamp = memo(function LinkedTimestamp({
     timestamp,
-}: {
-    timestamp: EventTileViewProps["timestamp"];
-}): JSX.Element | null {
+}: PlainTimestampProps): JSX.Element | null {
     if (!timestamp.showLinked) return null;
     if (!timestamp.show) {
         return timestamp.showPlaceholder ? <span className="mx_MessageTimestamp" /> : null;
@@ -141,17 +153,19 @@ const LinkedTimestamp = memo(function LinkedTimestamp({
     );
 });
 
+type EventContentRegionProps = {
+    contentId?: string;
+    contentClassName: string;
+    onContextMenu: MouseEventHandler<HTMLElement>;
+    children: ReactNode;
+};
+
 const EventContentRegion = memo(function EventContentRegion({
     contentId,
     contentClassName,
     onContextMenu,
     children,
-}: {
-    contentId?: string;
-    contentClassName: string;
-    onContextMenu: MouseEventHandler<HTMLElement>;
-    children: ReactNode;
-}): JSX.Element {
+}: EventContentRegionProps): JSX.Element {
     return (
         <div id={contentId} className={contentClassName} onContextMenu={onContextMenu}>
             {children}
@@ -159,13 +173,15 @@ const EventContentRegion = memo(function EventContentRegion({
     );
 });
 
+type FooterThreadMetaProps = {
+    footer?: ReactNode;
+    info?: ReactNode;
+};
+
 const FooterThreadMeta = memo(function FooterThreadMeta({
     footer,
     info,
-}: {
-    footer?: ReactNode;
-    info?: ReactNode;
-}): JSX.Element | null {
+}: FooterThreadMetaProps): JSX.Element | null {
     if (!footer && !info) return null;
 
     return (

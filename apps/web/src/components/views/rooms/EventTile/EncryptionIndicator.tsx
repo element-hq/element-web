@@ -11,17 +11,19 @@ import { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
 import { EncryptionIndicatorMode } from "./EventTileModes";
 
+type EncryptionIndicatorProps = {
+    icon: EncryptionIndicatorMode;
+    title?: string;
+    sharedUserId?: string;
+    roomId?: string;
+};
+
 export function EncryptionIndicator({
     icon,
     title,
     sharedUserId,
     roomId,
-}: {
-    icon: EncryptionIndicatorMode;
-    title?: string;
-    sharedUserId?: string;
-    roomId?: string;
-}): JSX.Element | null {
+}: EncryptionIndicatorProps): JSX.Element | null {
     if (sharedUserId && roomId) {
         return <E2eMessageSharedIcon keyForwardingUserId={sharedUserId} roomId={roomId} />;
     }

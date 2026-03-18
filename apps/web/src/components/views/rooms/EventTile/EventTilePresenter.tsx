@@ -97,39 +97,39 @@ interface EventTileCoreProps {
 }
 
 interface EventTileRenderingProps {
+    as?: string;
+    layout?: Layout;
+    isTwelveHour?: boolean;
+    forExport?: boolean;
+    alwaysShowTimestamps?: boolean;
     isRedacted?: boolean;
     continuation?: boolean;
     last?: boolean;
     lastInSection?: boolean;
     lastSuccessful?: boolean;
     contextual?: boolean;
-    highlights?: string[];
-    highlightLink?: string;
-    showUrlPreview?: boolean;
     isSelectedEvent?: boolean;
-    forExport?: boolean;
-    isTwelveHour?: boolean;
-    layout?: Layout;
-    as?: string;
-    alwaysShowTimestamps?: boolean;
     hideSender?: boolean;
-    isSeeingThroughMessageHiddenForModeration?: boolean;
     hideTimestamp?: boolean;
     inhibitInteraction?: boolean;
+    isSeeingThroughMessageHiddenForModeration?: boolean;
+    showUrlPreview?: boolean;
+    highlights?: string[];
+    highlightLink?: string;
 }
 
 interface EventTileRelationProps {
-    readReceipts?: ReadReceiptProps[];
-    readReceiptMap?: { [userId: string]: IReadReceiptPosition };
     getRelationsForEvent?: GetRelationsForEvent;
     showReactions?: boolean;
     showReadReceipts?: boolean;
+    readReceipts?: ReadReceiptProps[];
+    readReceiptMap?: { [userId: string]: IReadReceiptPosition };
 }
 
 interface EventTileEditingProps {
-    checkUnmounting?: () => boolean;
     editState?: EditorStateTransfer;
     replacingEventId?: string;
+    checkUnmounting?: () => boolean;
 }
 
 interface EventTileEnvironmentProps {
@@ -161,7 +161,7 @@ function buildEventTileViewModelProps(
     };
 }
 
-interface UseEventTileViewModelResult {
+type UseEventTileViewModelResult = {
     cli: ReturnType<typeof useMatrixClientContext>;
     roomContext: React.ContextType<typeof RoomContext>;
     tileContentId: string;
@@ -170,35 +170,35 @@ interface UseEventTileViewModelResult {
     replyChainRef: RefObject<ReplyChain | null>;
     vm: EventTileViewModel;
     snapshot: EventTileViewSnapshot;
-}
+};
 
-interface UseEventTileActionsResult {
+type UseEventTileActionsResult = {
     room: Room | null;
-    onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
     openInRoom: (evt: ButtonEvent) => void;
     copyLinkToThread: (evt: ButtonEvent) => Promise<void>;
+    onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
+    onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
     onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
     onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
-    onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
-}
+};
 
-interface EventTileViewRenderContent {
-    actionBar?: ReactNode;
-    contextMenu?: ReactNode;
+type EventTileViewRenderContent = {
     replyChain?: ReactNode;
     messageBody: ReactNode;
-}
+    actionBar?: ReactNode;
+    contextMenu?: ReactNode;
+};
 
-interface EventTileViewActions {
-    onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
-    onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
-    onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+type EventTileViewActions = {
     openInRoom: (evt: ButtonEvent) => void;
     copyLinkToThread: (evt: ButtonEvent) => Promise<void>;
+    onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
     onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
-}
+    onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+    onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+};
 
-interface UseEventTileViewPropsArgs {
+type UseEventTileViewPropsArgs = {
     props: EventTileProps;
     vm: EventTileViewModel;
     snapshot: EventTileViewSnapshot;
@@ -208,7 +208,7 @@ interface UseEventTileViewPropsArgs {
     rootRef: RefObject<HTMLElement | null>;
     renderedContent: EventTileViewRenderContent;
     actions: EventTileViewActions;
-}
+};
 
 function useEventTileViewModel(
     props: EventTileProps,

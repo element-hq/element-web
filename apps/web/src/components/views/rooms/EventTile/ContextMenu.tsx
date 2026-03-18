@@ -15,23 +15,23 @@ import type ReplyChain from "../../elements/ReplyChain";
 import { aboveRightOf } from "../../../structures/ContextMenu";
 import type { EventTileApi } from "./EventTilePresenter";
 
-interface ContextMenuProps {
+type ContextMenuProps = {
+    contextMenu: EventTileContextMenu;
     mxEvent: MatrixEvent;
+    reactions: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
     getRelationsForEvent?: GetRelationsForEvent;
-    reactions: Relations | null;
-    contextMenu: EventTileContextMenu;
     tileRef: React.RefObject<EventTileApi | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFinished: () => void;
-}
+};
 
 export function ContextMenu({
+    contextMenu,
     mxEvent,
+    reactions,
     permalinkCreator,
     getRelationsForEvent,
-    reactions,
-    contextMenu,
     tileRef,
     replyChainRef,
     onFinished,

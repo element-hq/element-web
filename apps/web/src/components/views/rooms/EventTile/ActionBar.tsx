@@ -14,28 +14,28 @@ import type ReplyChain from "../../elements/ReplyChain";
 import MessageActionBar from "../../messages/MessageActionBar";
 import type { EventTileApi } from "./EventTilePresenter";
 
-interface ActionBarProps {
+type ActionBarProps = {
     mxEvent: MatrixEvent;
-    forExport?: boolean;
+    reactions: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
     getRelationsForEvent?: GetRelationsForEvent;
-    reactions: Relations | null;
     isEditing: boolean;
     isQuoteExpanded: boolean;
+    forExport?: boolean;
     tileRef: React.RefObject<EventTileApi | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFocusChange: (focused: boolean) => void;
     toggleThreadExpanded: () => void;
-}
+};
 
 export function ActionBar({
     mxEvent,
-    forExport,
+    reactions,
     permalinkCreator,
     getRelationsForEvent,
-    reactions,
     isEditing,
     isQuoteExpanded,
+    forExport,
     tileRef,
     replyChainRef,
     onFocusChange,

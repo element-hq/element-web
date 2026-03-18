@@ -8,15 +8,17 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ReactNode } from "react";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
+type ThreadInfoProps = {
+    summary?: ReactNode;
+    href?: string;
+    label?: string;
+};
+
 export function ThreadInfo({
     summary,
     href,
     label,
-}: {
-    summary?: ReactNode;
-    href?: string;
-    label?: string;
-}): JSX.Element | undefined {
+}: ThreadInfoProps): JSX.Element | undefined {
     if (summary) {
         return <>{summary}</>;
     }

@@ -11,15 +11,17 @@ import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SenderProfile from "../../messages/SenderProfile";
 import { SenderMode } from "./EventTileModes";
 
+type SenderProps = {
+    mode: SenderMode;
+    mxEvent: MatrixEvent;
+    onClick?: () => void;
+};
+
 export function Sender({
     mode,
     mxEvent,
     onClick,
-}: {
-    mode: SenderMode;
-    mxEvent: MatrixEvent;
-    onClick?: () => void;
-}): JSX.Element | undefined {
+}: SenderProps): JSX.Element | undefined {
     switch (mode) {
         case SenderMode.Hidden:
             return undefined;
