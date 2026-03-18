@@ -8,16 +8,28 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 import { Layout } from "../../../../settings/enums/Layout";
+import type { ReadReceiptProps } from "../../../../viewmodels/room/EventTileViewModel";
 import TileErrorBoundary from "../../messages/TileErrorBoundary";
-import { type EventTileProps, UnwrappedEventTile as UnwrappedEventTileComponent } from "./EventTilePresenter";
+import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } from "./EventTilePresenter";
 
-export type { EventTileHandle, EventTileProps, GetRelationsForEvent, ReadReceiptProps, EventTileOps, EventTileApi } from "./EventTilePresenter";
-export { UnwrappedEventTile } from "./EventTilePresenter";
+export type { EventTileHandle, GetRelationsForEvent, EventTileOps, EventTileApi } from "./EventTilePresenter";
+export type { ReadReceiptProps };
+
+export interface EventTileProps extends EventTilePresenterProps {
+    withErrorBoundary?: boolean;
+}
 
 export function EventTile(props: EventTileProps): JSX.Element {
+    const { withErrorBoundary = true, ...tileProps } = props;
+    const tile = <EventTilePresenter {...tileProps} />;
+
+    if (!withErrorBoundary) {
+        return tile;
+    }
+
     return (
-        <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
-            <UnwrappedEventTileComponent {...props} />
+        <TileErrorBoundary mxEvent={tileProps.mxEvent} layout={tileProps.layout ?? Layout.Group}>
+            {tile}
         </TileErrorBoundary>
     );
 }

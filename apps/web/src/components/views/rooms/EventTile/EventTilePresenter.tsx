@@ -31,6 +31,7 @@ import {
     EventTileViewModel,
     type GetRelationsForEvent,
     type EventTileViewModelProps,
+    type ReadReceiptProps,
     type EventTileViewSnapshot,
 } from "../../../../viewmodels/room/EventTileViewModel";
 import RoomContext, { TimelineRenderingType } from "../../../../contexts/RoomContext";
@@ -68,12 +69,6 @@ import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
 
 export type { GetRelationsForEvent } from "../../../../viewmodels/room/EventTileViewModel";
-
-export interface ReadReceiptProps {
-    userId: string;
-    roomMember: RoomMember | null;
-    ts: number;
-}
 
 export interface EventTileOps {
     isWidgetHidden(): boolean;
@@ -470,7 +465,7 @@ function useEventTileActions(
     );
 }
 
-export function UnwrappedEventTile({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
+export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
     const {
         cli,
         roomContext,
