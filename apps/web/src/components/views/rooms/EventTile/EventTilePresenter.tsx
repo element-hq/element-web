@@ -41,6 +41,7 @@ import { EventTileView, type EventTileViewProps } from "./EventTileView";
 import { _t } from "../../../../languageHandler";
 import PlatformPeg from "../../../../PlatformPeg";
 import { type Layout } from "../../../../settings/enums/Layout";
+import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 import { getLateEventInfo } from "../../../structures/grouper/LateEventGrouper";
 import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrouper";
 import RoomAvatar from "../../avatars/RoomAvatar";
@@ -63,6 +64,7 @@ import { ReplyPreview } from "./ReplyPreview";
 import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
 import { type MediaEventHelper } from "../../../../utils/MediaEventHelper";
+import { shouldDisplayReply } from "../../../../utils/Reply";
 
 /**
  * Operations exposed by embedded widgets inside an event tile.
@@ -555,23 +557,24 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
     );
 
     const replyChain = useMemo(
-        () => (
-            <ReplyPreview
-                mxEvent={props.mxEvent}
-                cli={cli}
-                showHiddenEvents={roomContext.showHiddenEvents}
-                forExport={props.forExport}
-                permalinkCreator={props.permalinkCreator}
-                layout={props.layout}
-                alwaysShowTimestamps={props.alwaysShowTimestamps}
-                getRelationsForEvent={props.getRelationsForEvent}
-                hover={vmSnapshot.hover}
-                focusWithin={vmSnapshot.focusWithin}
-                isQuoteExpanded={vmSnapshot.isQuoteExpanded}
-                replyChainRef={replyChainRef}
-                setQuoteExpanded={(expanded) => vm.setQuoteExpanded(expanded)}
-            />
-        ),
+        () =>
+            haveRendererForEvent(props.mxEvent, cli, roomContext.showHiddenEvents) && shouldDisplayReply(props.mxEvent) ? (
+                <ReplyPreview
+                    mxEvent={props.mxEvent}
+                    cli={cli}
+                    showHiddenEvents={roomContext.showHiddenEvents}
+                    forExport={props.forExport}
+                    permalinkCreator={props.permalinkCreator}
+                    layout={props.layout}
+                    alwaysShowTimestamps={props.alwaysShowTimestamps}
+                    getRelationsForEvent={props.getRelationsForEvent}
+                    hover={vmSnapshot.hover}
+                    focusWithin={vmSnapshot.focusWithin}
+                    isQuoteExpanded={vmSnapshot.isQuoteExpanded}
+                    replyChainRef={replyChainRef}
+                    setQuoteExpanded={(expanded) => vm.setQuoteExpanded(expanded)}
+                />
+            ) : undefined,
         [
             props.mxEvent,
             cli,
