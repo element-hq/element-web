@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SenderProfile from "../../messages/SenderProfile";
-import { SenderMode } from "./EventTileModes";
+import { SenderMode } from "./constants";
 
 type SenderProps = {
     mode: SenderMode;

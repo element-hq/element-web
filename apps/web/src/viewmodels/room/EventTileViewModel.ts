@@ -37,7 +37,7 @@ import {
     EncryptionIndicatorMode,
     SenderMode,
     ThreadInfoMode,
-} from "../../components/views/rooms/EventTile/EventTileModes";
+} from "../../components/views/rooms/EventTile/constants";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { _t } from "../../languageHandler";
 import { ElementCallEventType } from "../../call-types";
@@ -877,7 +877,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static getHasFooter(snapshot: EventTileViewSnapshot): boolean {
-        return snapshot.isPinned;
+        return snapshot.isPinned || !!snapshot.reactions;
     }
 
     private static getEncryptionIndicatorMode(

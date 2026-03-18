@@ -46,7 +46,7 @@ import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrou
 import RoomAvatar from "../../avatars/RoomAvatar";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
-import { ClickMode, ThreadInfoMode } from "./EventTileModes";
+import { ClickMode, ThreadInfoMode } from "./constants";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";

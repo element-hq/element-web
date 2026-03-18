@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 
 import { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
-import { EncryptionIndicatorMode } from "./EventTileModes";
+import { EncryptionIndicatorMode } from "./constants";
 
 type EncryptionIndicatorProps = {
     icon: EncryptionIndicatorMode;

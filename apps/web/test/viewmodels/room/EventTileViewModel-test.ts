@@ -30,7 +30,7 @@ import {
     EncryptionIndicatorMode,
     SenderMode,
     ThreadInfoMode,
-} from "../../../src/components/views/rooms/EventTile/EventTileModes";
+} from "../../../src/components/views/rooms/EventTile/constants";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../test-utils";

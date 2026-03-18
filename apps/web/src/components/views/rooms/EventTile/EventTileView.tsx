@@ -22,7 +22,7 @@ import { EncryptionIndicator } from "./EncryptionIndicator";
 import { ThreadToolbar } from "./ThreadToolbar";
 import { Timestamp } from "./Timestamp";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
-import { type EncryptionIndicatorMode } from "./EventTileModes";
+import { type EncryptionIndicatorMode } from "./constants";
 
 // Our component structure for EventTiles on the timeline is:
 //

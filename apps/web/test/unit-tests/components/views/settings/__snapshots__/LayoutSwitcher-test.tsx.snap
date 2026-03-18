@@ -64,7 +64,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 aria-live="off"
                 class="mx_EventTile"
                 data-event-id="$9999999999999999999999999999999999999999999"
-                data-has-reply="false"
+                data-has-reply="true"
                 data-layout="group"
                 data-scroll-tokens="$9999999999999999999999999999999999999999999"
                 data-self="true"
@@ -99,7 +99,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="1"
+                  id="_r_1_"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -169,7 +169,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="Message bubbles"
             class="_label_19upo_59"
-            for="radix-_r_9_"
+            for="radix-_r_a_"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -179,7 +179,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               >
                 <input
                   class="_input_1ug7n_18"
-                  id="radix-_r_9_"
+                  id="radix-_r_a_"
                   name="layout"
                   title=""
                   type="radio"
@@ -205,7 +205,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 aria-live="off"
                 class="mx_EventTile"
                 data-event-id="$9999999999999999999999999999999999999999999"
-                data-has-reply="false"
+                data-has-reply="true"
                 data-layout="bubble"
                 data-scroll-tokens="$9999999999999999999999999999999999999999999"
                 data-self="true"
@@ -240,7 +240,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="2"
+                  id="_r_b_"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -310,7 +310,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           <label
             aria-label="IRC (experimental)"
             class="_label_19upo_59"
-            for="radix-_r_i_"
+            for="radix-_r_k_"
           >
             <div
               class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -320,7 +320,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               >
                 <input
                   class="_input_1ug7n_18"
-                  id="radix-_r_i_"
+                  id="radix-_r_k_"
                   name="layout"
                   title=""
                   type="radio"
@@ -346,7 +346,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 aria-live="off"
                 class="mx_EventTile"
                 data-event-id="$9999999999999999999999999999999999999999999"
-                data-has-reply="false"
+                data-has-reply="true"
                 data-layout="irc"
                 data-scroll-tokens="$9999999999999999999999999999999999999999999"
                 data-self="true"
@@ -384,7 +384,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 </div>
                 <div
                   class="mx_EventTile_line"
-                  id="3"
+                  id="_r_l_"
                 >
                   <div
                     class="mx_MTextBody mx_EventTile_content"
@@ -462,9 +462,9 @@ exports[`<LayoutSwitcher /> should render 1`] = `
               class="_container_udcm8_10"
             >
               <input
-                aria-describedby="radix-_r_s_"
+                aria-describedby="radix-_r_v_"
                 class="_input_udcm8_24"
-                id="radix-_r_r_"
+                id="radix-_r_u_"
                 name="compactLayout"
                 role="switch"
                 title=""
@@ -480,13 +480,13 @@ exports[`<LayoutSwitcher /> should render 1`] = `
           >
             <label
               class="_label_19upo_59"
-              for="radix-_r_r_"
+              for="radix-_r_u_"
             >
               Show compact text and messages
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_s_"
+              id="radix-_r_v_"
             >
               Modern layout must be selected to use this feature.
             </span>

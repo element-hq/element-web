@@ -207,7 +207,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         aria-live="off"
                         class="mx_EventTile"
                         data-event-id="$9999999999999999999999999999999999999999999"
-                        data-has-reply="false"
+                        data-has-reply="true"
                         data-layout="group"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-self="true"
@@ -242,7 +242,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         </div>
                         <div
                           class="mx_EventTile_line"
-                          id="1"
+                          id="_r_4_"
                         >
                           <div
                             class="mx_MTextBody mx_EventTile_content"
@@ -312,7 +312,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Message bubbles"
                     class="_label_19upo_59"
-                    for="radix-_r_c_"
+                    for="radix-_r_d_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -322,7 +322,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1ug7n_18"
-                          id="radix-_r_c_"
+                          id="radix-_r_d_"
                           name="layout"
                           title=""
                           type="radio"
@@ -348,7 +348,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         aria-live="off"
                         class="mx_EventTile"
                         data-event-id="$9999999999999999999999999999999999999999999"
-                        data-has-reply="false"
+                        data-has-reply="true"
                         data-layout="bubble"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-self="true"
@@ -383,7 +383,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         </div>
                         <div
                           class="mx_EventTile_line"
-                          id="2"
+                          id="_r_e_"
                         >
                           <div
                             class="mx_MTextBody mx_EventTile_content"
@@ -453,7 +453,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="IRC (experimental)"
                     class="_label_19upo_59"
-                    for="radix-_r_l_"
+                    for="radix-_r_n_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -463,7 +463,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1ug7n_18"
-                          id="radix-_r_l_"
+                          id="radix-_r_n_"
                           name="layout"
                           title=""
                           type="radio"
@@ -489,7 +489,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         aria-live="off"
                         class="mx_EventTile"
                         data-event-id="$9999999999999999999999999999999999999999999"
-                        data-has-reply="false"
+                        data-has-reply="true"
                         data-layout="irc"
                         data-scroll-tokens="$9999999999999999999999999999999999999999999"
                         data-self="true"
@@ -527,7 +527,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         </div>
                         <div
                           class="mx_EventTile_line"
-                          id="3"
+                          id="_r_o_"
                         >
                           <div
                             class="mx_MTextBody mx_EventTile_content"
@@ -605,9 +605,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       class="_container_udcm8_10"
                     >
                       <input
-                        aria-describedby="radix-_r_v_"
+                        aria-describedby="radix-_r_12_"
                         class="_input_udcm8_24"
-                        id="radix-_r_u_"
+                        id="radix-_r_11_"
                         name="compactLayout"
                         role="switch"
                         title=""
@@ -623,13 +623,13 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="radix-_r_u_"
+                      for="radix-_r_11_"
                     >
                       Show compact text and messages
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_v_"
+                      id="radix-_r_12_"
                     >
                       Modern layout must be selected to use this feature.
                     </span>

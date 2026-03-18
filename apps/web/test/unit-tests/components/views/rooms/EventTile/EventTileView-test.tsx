@@ -11,7 +11,7 @@ import userEvent from "@testing-library/user-event";
 
 import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { Layout } from "../../../../../../src/settings/enums/Layout";
-import { EncryptionIndicatorMode } from "../../../../../../src/components/views/rooms/EventTile/EventTileModes";
+import { EncryptionIndicatorMode } from "../../../../../../src/components/views/rooms/EventTile/constants";
 import {
     EventTileView,
     type EventTileViewProps,
