@@ -558,7 +558,8 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
 
     const replyChain = useMemo(
         () =>
-            haveRendererForEvent(props.mxEvent, cli, roomContext.showHiddenEvents) && shouldDisplayReply(props.mxEvent) ? (
+            haveRendererForEvent(props.mxEvent, cli, roomContext.showHiddenEvents) &&
+            shouldDisplayReply(props.mxEvent) ? (
                 <ReplyPreview
                     mxEvent={props.mxEvent}
                     cli={cli}
