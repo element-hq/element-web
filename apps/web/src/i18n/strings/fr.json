@@ -117,7 +117,7 @@
         "show_advanced": "Afficher les paramètres avancés",
         "show_all": "Tout afficher",
         "sign_in": "Se connecter",
-        "sign_out": "Se déconnecter",
+        "sign_out": "Supprimer cet appareil",
         "skip": "Passer",
         "start": "Commencer",
         "start_chat": "Commencer une conversation privée",
@@ -221,11 +221,11 @@
         "incorrect_password": "Mot de passe incorrect",
         "log_in_new_account": "<a>Connectez-vous</a> à votre nouveau compte.",
         "logout_dialog": {
-            "description": "Voulez-vous vraiment vous déconnecter ?",
+            "description": "Êtes-vous sûr de vouloir supprimer cet appareil ?",
             "megolm_export": "Exporter manuellement les clés",
             "setup_key_backup_title": "Vous perdrez l’accès à vos messages chiffrés",
             "setup_secure_backup_description_1": "Les messages chiffrés sont sécurisés avec un chiffrement de bout en bout. Seuls vous et le(s) destinataire(s) ont les clés pour lire ces messages.",
-            "setup_secure_backup_description_2": "Quand vous vous déconnectez, ces clés seront supprimées de cet appareil, et vous ne pourrez plus lire les messages chiffrés à moins d’avoir les clés de ces messages sur vos autres appareils, ou de les avoir sauvegardées sur le serveur.",
+            "setup_secure_backup_description_2": "Quand vous supprimez cet appareil, vous ne pourrez plus lire les messages chiffrés à moins d’avoir les clés de ces messages sur vos autres appareils, ou de les avoir sauvegardées sur le serveur.",
             "skip_key_backup": "Je ne veux pas de mes messages chiffrés"
         },
         "misconfigured_body": "Demandez à votre administrateur %(brand)s de vérifier que <a>votre configuration</a> ne contient pas d’entrées incorrectes ou en double.",
@@ -298,16 +298,16 @@
         "registration_username_validation": "Utiliser uniquement des lettres minuscules, chiffres, traits d’union et tirets bas",
         "reset_password": {
             "confirm_new_password": "Confirmer le nouveau mot de passe",
-            "devices_logout_success": "Vous avez été déconnecté de tous vos appareils et ne recevrez plus de notification. Pour réactiver les notifications, reconnectez-vous sur chaque appareil.",
-            "other_devices_logout_warning_1": "La déconnexion de vos appareils va supprimer les clés de chiffrement des messages qu’ils possèdent, rendant l’historique des conversations chiffrées illisible.",
-            "other_devices_logout_warning_2": "Si vous voulez garder un accès à votre historique de conversation dans les salons chiffrés, configurez la sauvegarde de clés, ou bien exportez vos clés de messages à partir de l’un de vos autres appareils avant de continuer.",
+            "devices_logout_success": "Tous vos appareils ont été supprimés et ne recevront plus de notifications push. Pour réactiver les notifications, connectez-vous à nouveau sur chaque appareil.",
+            "other_devices_logout_warning_1": "La suppession de vos appareils va supprimer les clés de chiffrement des messages qu’ils possèdent, rendant l’historique des discussions chiffrées illisible.",
+            "other_devices_logout_warning_2": "Si vous voulez garder un accès à votre historique de discussion dans les salons chiffrés, configurez la clé de récupération, ou bien exportez vos clés de messages à partir de l’un de vos autres appareils avant de continuer.",
             "password_not_entered": "Un nouveau mot de passe doit être saisi.",
             "passwords_mismatch": "Les nouveaux mots de passe doivent être identiques.",
             "rate_limit_error": "Trop de tentatives consécutives. Attendez un peu avant de réessayer.",
             "rate_limit_error_with_time": "Trop de tentatives consécutives. Réessayez après %(timeout)s.",
             "reset_successful": "Votre mot de passe a été réinitialisé.",
             "return_to_login": "Retourner à l’écran de connexion",
-            "sign_out_other_devices": "Déconnecter tous les appareils"
+            "sign_out_other_devices": "Supprimer tous les appareils"
         },
         "reset_password_action": "Réinitialiser le mot de passe",
         "reset_password_button": "Mot de passe oublié ?",
@@ -331,7 +331,7 @@
         "server_picker_title_default": "Options serveur",
         "server_picker_title_registration": "Héberger le compte sur",
         "session_logged_out_description": "Par mesure de sécurité, la session a expiré. Merci de vous authentifier à nouveau.",
-        "session_logged_out_title": "Déconnecté",
+        "session_logged_out_title": "Session supprimée",
         "set_email": {
             "description": "Ceci vous permettra de réinitialiser votre mot de passe et de recevoir des notifications.",
             "verification_pending_description": "Veuillez consulter vos e-mails et cliquer sur le lien que vous avez reçu. Puis cliquez sur continuer.",
@@ -371,8 +371,8 @@
             "email_resent": "Ré-envoyé !",
             "fallback_button": "Commencer l’authentification",
             "mas_cross_signing_reset_cta": "Accédez à votre compte",
-            "mas_cross_signing_reset_description": "Réinitialisez votre identité par l’intermédiaire de votre fournisseur de compte, puis revenez et cliquez sur « Réessayer ».",
-            "mas_cross_signing_reset_title": "Accédez à votre compte pour réinitialiser votre identité",
+            "mas_cross_signing_reset_description": "Vous êtes sur le point d'aller sur votre compte %(serverName)s pour réinitialiser votre identité numérique. Une fois la réinitialisation terminée, revenez ici et cliquez sur Réessayer.",
+            "mas_cross_signing_reset_title": "Accédez à votre compte pour réinitialiser votre identité numérique.",
             "msisdn": "Un message a été envoyé à %(msisdn)s",
             "msisdn_token_incorrect": "Jeton incorrect",
             "msisdn_token_prompt": "Merci de saisir le code qu’il contient :",
@@ -694,7 +694,7 @@
         "creating_rooms": "Création des salons…",
         "done_action": "Accéder à mon espace",
         "done_action_first_room": "Rejoindre mon premier salon",
-        "explainer": "Les espaces sont une nouvelle manière de regrouper les salons et les personnes. Quel type d’espace voulez-vous créer ? Vous pouvez changer ceci plus tard.",
+        "explainer": "Les espaces permettent d'organiser et de découvrir des salons. Quel type d'espace souhaitez-vous créer ?",
         "failed_create_initial_rooms": "Échec de la création des salons initiaux de l’espace",
         "failed_invite_users": "Échec de l’invitation des utilisateurs suivants à votre espace : %(csvUsers)s",
         "invite_teammates_by_username": "Inviter par nom d’utilisateur",
@@ -705,20 +705,20 @@
         "name_required": "Veuillez renseigner un nom pour l’espace",
         "personal_space": "Seulement moi",
         "personal_space_description": "Un espace privé pour organiser vos salons",
-        "private_description": "Sur invitation, idéal pour vous-même ou les équipes",
+        "private_description": "Sur invitation, pour vous-même ou les équipes",
         "private_heading": "Votre espace privé",
         "private_only_heading": "Votre Espace",
         "private_personal_description": "Assurez-vous que les bonnes personnes aient accès à %(name)s",
         "private_personal_heading": "Avec qui travaillez-vous ?",
         "private_space": "Moi et mon équipe",
         "private_space_description": "Un espace privé pour vous et votre équipe",
-        "public_description": "Espace ouvert à tous, idéal pour les communautés",
+        "public_description": "Tout le monde peut rejoindre, idéal pour les communautés",
         "public_heading": "Votre espace public",
         "search_public_button": "Rechercher des espaces publics",
-        "setup_rooms_community_description": "Créons un salon pour chacun d’entre eux.",
+        "setup_rooms_community_description": "Commençons par créer quelques salons.",
         "setup_rooms_community_heading": "De quoi voulez-vous discuter dans %(spaceName)s ?",
-        "setup_rooms_description": "Vous pourrez en ajouter plus tard, y compris certains déjà existant.",
-        "setup_rooms_private_description": "Nous allons créer un salon pour chacun d’entre eux.",
+        "setup_rooms_description": "Vous pourrez ajouter ultérieurement d'autres salons à cet espace, y compris des salons existants.",
+        "setup_rooms_private_description": "Commencez par créer quelques salons.",
         "setup_rooms_private_heading": "Sur quels projets travaille votre équipe ?",
         "share_description": "Vous êtes seul pour l’instant, ce sera plus agréable avec de la compagnie.",
         "share_heading": "Partager %(name)s",
@@ -731,7 +731,7 @@
         "subspace_join_rule_invite_only": "Espace privé (uniquement sur invitation)",
         "subspace_join_rule_label": "Visibilité de l’espace",
         "subspace_join_rule_public_description": "Quiconque pourra trouver et rejoindre cet espace, pas seulement les membres de <SpaceName/>.",
-        "subspace_join_rule_restricted_description": "Tous les membres de <SpaceName/> pourront trouver et venir."
+        "subspace_join_rule_restricted_description": "Tout le monde dans <SpaceName/> peut rejoindre."
     },
     "credits": {
         "default_cover_photo": "La <photo>photo d’illustration par défaut</photo> est © <author>Jesús Roncero</author> utilisée selon les termes <terms>CC-BY-SA 4.0</terms>.",
@@ -751,6 +751,7 @@
         "category_other": "Autre",
         "category_room": "Salon",
         "caution_colon": "Attention :",
+        "checking_sticky_events_support": "Vérification de la prise en charge des événements persistants...",
         "client_versions": "Versions des clients",
         "crypto": {
             "4s_public_key_in_account_data": "dans les données du compte",
@@ -773,7 +774,7 @@
             "cross_signing_public_keys_on_device_status": "Clés publiques de signature croisée :",
             "cross_signing_ready": "La signature croisée est prête à être utilisée.",
             "cross_signing_status": "État de la signature croisée :",
-            "cross_signing_untrusted": "Votre compte a une identité de signature croisée dans le coffre secret, mais cette session ne lui fait pas encore confiance.",
+            "cross_signing_untrusted": "Votre compte possède une identité numérique stockée dans le coffre secret mais celle-ci n'est pas encore approuvée par cette session.",
             "crypto_not_available": "Le module cryptographique n'est pas disponible",
             "device_id": "Identifiant de l'appareil",
             "key_backup_active_version": "Version de sauvegarde active :",
@@ -809,13 +810,18 @@
         "edit_setting": "Modifier le paramètre",
         "edit_values": "Modifier les valeurs",
         "empty_string": "<chaîne de caractères vide>",
+        "error_sticky_duration_must_be_a_number": "stickyDuration doit être un nombre",
+        "error_sticky_duration_out_of_range": "stickyDuration doit être compris entre 0 et 36000 millisecondes (1h)",
         "event_content": "Contenu de l’évènement",
         "event_id": "Identifiant d’événement : %(eventId)s",
         "event_sent": "Évènement envoyé !",
         "event_type": "Type d’évènement",
+        "expired": "Expiré",
+        "expires_in": "Expire dans",
         "explore_account_data": "Parcourir les données du compte",
         "explore_room_account_data": "Parcourir les données de compte du salon",
         "explore_room_state": "Parcourir l’état du salon",
+        "explore_sticky_state": "Explorer l'état persistant",
         "failed_to_find_widget": "Erreur lors de la récupération de ce widget.",
         "failed_to_load": "Échec du chargement.",
         "failed_to_save": "Échec lors de la sauvegarde des paramètres.",
@@ -829,6 +835,7 @@
         "main_timeline": "Historique principal",
         "manual_device_verification": "Vérification manuelle de l'appareil",
         "no_receipt_found": "Aucun accusé disponible",
+        "no_sticky_events": "Il n'y a pas d'événements persistants dans ce salon.",
         "notification_state": "L’état des notifications est <strong>%(notificationState)s</strong>",
         "notifications_debug": "Débogage des notifications",
         "number_of_users": "Nombre d’utilisateurs",
@@ -855,6 +862,7 @@
         "send_custom_account_data_event": "Envoyer des événements personnalisés de données du compte",
         "send_custom_room_account_data_event": "Envoyer des événements personnalisés de données du compte du salon",
         "send_custom_state_event": "Envoyer des événements d’état personnalisés",
+        "send_custom_sticky_event": "Envoyer un événement personnalisé persistant",
         "send_custom_timeline_event": "Envoyer des événements d’historique personnalisé",
         "server_info": "Infos du serveur",
         "server_versions": "Versions des serveurs",
@@ -874,6 +882,9 @@
             "other": "<%(count)s espaces>"
         },
         "state_key": "Clé d’état",
+        "sticky_duration": "Durée de persistance (ms)",
+        "sticky_events_not_supported": "Votre serveur d'accueil ne prend pas encore en charge les événements persistants.",
+        "sticky_key": "Clé persistante",
         "thread_root_id": "ID du fil de discussion racine : %(threadRootId)s",
         "threads_timeline": "Historique des fils de discussion",
         "title": "Outils de développement",
@@ -891,10 +902,10 @@
         "user_read_up_to_private_ignore_synthetic": "L’utilisateur a lu jusqu’à (m.read.private;ignoreSynthetic) : ",
         "user_room_membership": "Adhésion : %(membership)s",
         "user_verification_status": {
-            "identity_changed": "Statut de la vérification : <E2EIcon /> Non vérifié, et identité modifiée",
+            "identity_changed": "Statut de la vérification : <E2EIcon /> Non vérifié, et identité numérique changée",
             "unverified": "Statut de la vérification vérification : <E2EIcon /> Non vérifié",
             "verified": "Statut de la vérification : <E2EIcon /> Vérifié",
-            "was_verified": "Statut de la vérifcation vérification : <E2EIcon /> Etait vérifié, mais l'identité a changé."
+            "was_verified": "Statut de la vérifcation vérification : <E2EIcon /> Etait vérifié, mais l'identité numérique a changé."
         },
         "users": "Utilisateurs",
         "value": "Valeur",
@@ -960,7 +971,7 @@
         "event_shield_reason_unverified_identity": "Chiffré par un utilisateur non vérifié.",
         "export_unsupported": "Votre navigateur ne prend pas en charge les extensions cryptographiques nécessaires",
         "forgot_recovery_key": "Clé de récupération oubliée ?",
-        "identity_needs_reset_description": "Vous devez réinitialiser votre identité cryptographique pour garantir l'accès à votre historique de messages.",
+        "identity_needs_reset_description": "Vous devez réinitialiser votre identité numérique pour garantir l'accès à votre historique de discussions.",
         "import_invalid_keyfile": "Fichier de clé %(brand)s non valide",
         "import_invalid_passphrase": "Erreur d’authentification : mot de passe incorrect ?",
         "key_storage_out_of_sync": "Le stockage de vos clés n'est pas synchronisé.",
@@ -980,22 +991,22 @@
             "title": "Nouvelle méthode de récupération",
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
-        "pinned_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus</a>",
-        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>semble avoir changé d'identité. <a>En savoir plus</a>",
+        "pinned_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b> a été réinitialisée.<a>En savoir plus</a>",
+        "pinned_identity_changed_no_displayname": "L' identité numérique de <b>%(userId)s</b> a été réinitialisée.<a>En savoir plus</a>",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase de sécurité et clé de sécurité pour les messages sécurisés ont été supprimées.",
             "description_2": "Si vous l’avez fait accidentellement, vous pouvez configurer les messages sécurisés sur cette session ce qui re-chiffrera l’historique des messages de cette session avec une nouvelle méthode de récupération.",
             "title": "Méthode de récupération supprimée",
             "warning": "Si vous n’avez pas supprimé la méthode de récupération, un attaquant peut être en train d’essayer d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les réglages."
         },
-        "set_up_recovery": "Configurer la récupération",
-        "set_up_recovery_toast_description": "Générez une clé de récupération qui peut être utilisée pour restaurer l'historique de vos messages chiffrés au cas où vous perdriez l'accès à vos appareils.",
+        "set_up_recovery": "Sauvegardez vos discussions",
+        "set_up_recovery_toast_description": "Vos discussions sont automatiquement sauvegardées grâce à un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d'accès à tous vos appareils, vous aurez besoin de votre clé de récupération.",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "setup_secure_backup": {
-            "explainer": "Sauvegardez vos clés avant de vous déconnecter pour éviter de les perdre."
+            "explainer": "Sauvegardez vos clés avant de supprimer cet appareil pour éviter de les perdre."
         },
         "turn_on_key_storage": "Activer le stockage des clés",
-        "turn_on_key_storage_description": "Stockez votre identité cryptographique et vos clés de message en toute sécurité sur le serveur. Cela vous permettra de consulter l'historique de vos messages sur tous les nouveaux appareils.",
+        "turn_on_key_storage_description": "Cela vous permettra de consulter votre historique de conversations sur tous vos nouveaux appareils et est nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.",
         "udd": {
             "interactive_verification_button": "Vérifier de façon interactive avec des émojis",
             "other_ask_verify_text": "Demandez à cet utilisateur de vérifier sa session, ou vérifiez-la manuellement ci-dessous.",
@@ -1019,7 +1030,7 @@
             "complete_description": "Vous avez vérifié cet utilisateur avec succès.",
             "complete_title": "Vérifié !",
             "confirm_identity_description": "Vérifier cet appareil pour configurer votre messagerie sécurisée",
-            "confirm_identity_title": "Confirmez votre identité",
+            "confirm_identity_title": "Confirmez votre identité numérique",
             "confirm_the_emojis": "Confirmez que les émojis ci-dessous correspondent à ceux affichés sur votre autre appareil.",
             "error_starting_description": "Nous n’avons pas pu démarrer une conversation avec l’autre utilisateur.",
             "error_starting_title": "Erreur en démarrant la vérification",
@@ -1103,10 +1114,10 @@
             "waiting_other_user": "En attente de la vérification de %(displayName)s…"
         },
         "verification_requested_toast_title": "Vérification requise",
-        "verified_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
+        "verified_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
         "verified_identity_changed_no_displayname": "L'identité de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus </a>",
-        "verify_toast_description": "D’autres utilisateurs pourraient ne pas lui faire confiance",
-        "verify_toast_title": "Vérifier cette session",
+        "verify_toast_description": "À compter de fin avril 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
+        "verify_toast_title": "Vérifiez cet appareil",
         "withdraw_verification_action": "Révoquer la vérification"
     },
     "error": {
@@ -1131,15 +1142,15 @@
         "non_urgent_echo_failure_toast": "Votre serveur ne répond pas à certaines <a>requêtes</a>.",
         "resource_limits": "Ce serveur d’accueil a dépassé une de ses limites de ressources.",
         "session_restore": {
-            "clear_storage_button": "Effacer le stockage et se déconnecter",
-            "clear_storage_description": "Se déconnecter et supprimer les clés de chiffrement ?",
-            "description_1": "Une erreur est survenue lors de la restauration de la dernière session.",
+            "clear_storage_button": "Supprimer cet appareil",
+            "clear_storage_description": "Supprimer cet appareil avec ses les clés de chiffrement ?",
+            "description_1": "Une erreur est survenue lors de la restauration de la session.",
             "description_2": "Si vous avez utilisé une version plus récente de %(brand)s précédemment, votre session risque d’être incompatible avec cette version. Fermez cette fenêtre et retournez à la version plus récente.",
-            "description_3": "Effacer le stockage de votre navigateur peut résoudre le problème. Ceci vous déconnectera et tous les historiques de conversations chiffrées seront illisibles.",
+            "description_3": "Effacer le stockage de votre navigateur peut résoudre le problème. Ceci supprimera cet appareil et les historiques de conversations chiffrées seront illisibles.",
             "title": "Impossible de restaurer la session"
         },
         "something_went_wrong": "Quelque chose s’est mal déroulé !",
-        "storage_evicted_description_1": "Des données de la session, dont les clés des messages chiffrés, sont manquantes. Déconnectez-vous et reconnectez-vous pour régler ce problème, en restaurant les clés depuis la sauvegarde.",
+        "storage_evicted_description_1": "Certaines données de session, notamment les clés de chiffrement des messages, sont manquantes. Supprimez cet appareil et reconnectez-vous pour résoudre ce problème et restaurer les clés à partir de votre sauvegarde.",
         "storage_evicted_description_2": "Votre navigateur a sûrement supprimé ces données car il restait peu d’espace sur le disque.",
         "storage_evicted_title": "Données de la session manquantes",
         "sync": "Impossible de se connecter au serveur d’accueil. Reconnexion…",
@@ -1495,8 +1506,6 @@
     },
     "labs": {
         "ask_to_join": "Activer demander à venir",
-        "automatic_debug_logs": "Envoyer automatiquement les journaux de débogage en cas d’erreur",
-        "automatic_debug_logs_decryption": "Envoyer automatiquement les journaux de débogage en cas d’erreurs de déchiffrement",
         "beta_description": "Que va-t-il se passer dans %(brand)s ? La section expérimentale est la meilleure manière d’avoir des choses en avance, tester les nouvelles fonctionnalités et d’aider à les affiner avant leur lancement officiel.",
         "beta_feature": "Il s'agit d'une fonctionnalité bêta",
         "beta_feedback_leave_button": "Pour quitter la bêta, consultez les paramètres.",
@@ -1563,7 +1572,7 @@
         "share_history_on_invite_warning": "Cette fonctionnalité est EXPÉRIMENTALE et toutes les précautions de sécurité ne sont pas mises en œuvre. Ne l'activez pas sur les comptes en production.",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
-        "sliding_sync_disabled_notice": "Déconnectez et revenez pour désactiver",
+        "sliding_sync_disabled_notice": "Connectez-vous à nouveau pour désactiver",
         "sliding_sync_server_no_support": "Votre serveur n'est pas pris en charge",
         "under_active_development": "En cours de développement.",
         "unrealiable_e2e": "Non fiable dans les salons chiffrés",
@@ -1988,6 +1997,7 @@
         "error_join_incompatible_version_1": "Désolé, votre serveur d'accueil est trop vieux pour participer ici.",
         "error_join_incompatible_version_2": "Veuillez contacter l’administrateur de votre serveur d’accueil.",
         "error_join_title": "Impossible de rejoindre",
+        "error_join_unknown": "Une erreur inconnue s'est produite",
         "error_jump_to_date": "Le serveur a renvoyé %(statusCode)s avec le code d’erreur %(errorCode)s",
         "error_jump_to_date_connection": "Une erreur réseau s’est produite en tentant de chercher et d’aller à la date choisie. Votre serveur d’accueil est peut-être hors-ligne, ou bien c’est un problème temporaire avec connexion Internet. Veuillez réessayer. Si cela persiste, veuillez contacter l’administrateur de votre serveur d’accueil.",
         "error_jump_to_date_details": "Détails de l’erreur",
@@ -2357,21 +2367,22 @@
             "join_rule_invite_description": "Seules les personnes invitées peuvent venir.",
             "join_rule_knock": "Demander à venir",
             "join_rule_knock_description": "Les personnes ne peuvent pas venir tant que l’accès ne leur est pas autorisé.",
+            "join_rule_public": "Quiconque",
             "join_rule_public_description": "Tout le monde peut joindre",
             "join_rule_restricted": "Membres de l’espace",
-            "join_rule_restricted_description": "Tout le monde dans un espace peut trouver et venir. <a>Modifier les accès des espaces ici.</a>",
-            "join_rule_restricted_description_active_space": "Quiconque dans <spaceName/> peut trouver et rejoindre. Vous pouvez également choisir d’autres espaces.",
-            "join_rule_restricted_description_prompt": "Tout le monde dans un espace peut trouver et venir. Vous pouvez sélectionner plusieurs espaces.",
-            "join_rule_restricted_description_spaces": "Espaces avec accès",
-            "join_rule_restricted_dialog_description": "Choisir quels espaces peuvent accéder à ce salon. Si un espace est sélectionné, ses membres pourront trouver et rejoindre <RoomName/>.",
-            "join_rule_restricted_dialog_empty_warning": "Vous allez supprimer tous les espaces. L’accès se fera sur invitation uniquement par défaut",
+            "join_rule_restricted_description": "Toute personne se trouvant dans un espace autorisé peut rejoindre sans invitation.<a> Gérer les espaces</a>",
+            "join_rule_restricted_description_active_space": "N'importe qui dans<spaceName/> peut joindre.",
+            "join_rule_restricted_description_prompt": "Toute personne présente dans un espace peut rejoindre.",
+            "join_rule_restricted_description_spaces": "Espaces autorisés",
+            "join_rule_restricted_dialog_description": "Espaces où les membres peuvent rejoindre <RoomName/> sans invitation.",
+            "join_rule_restricted_dialog_empty_warning": "Vous supprimez tous les espaces autorisés. L'accès sera par défaut limité aux invitations.",
             "join_rule_restricted_dialog_filter_placeholder": "Rechercher des espaces",
-            "join_rule_restricted_dialog_heading_known": "Autres espaces que vous connaissez",
-            "join_rule_restricted_dialog_heading_other": "Autres espaces ou salons que vous pourriez ne pas connaître",
-            "join_rule_restricted_dialog_heading_room": "Les espaces connus qui contiennent ce salon",
+            "join_rule_restricted_dialog_heading_known": "Vos espaces qui ne contiennent pas ce salon",
+            "join_rule_restricted_dialog_heading_other": "Autres espaces dont vous n'êtes pas membre",
+            "join_rule_restricted_dialog_heading_room": "Vos espaces qui contiennent ce salon",
             "join_rule_restricted_dialog_heading_space": "Les espaces connus qui contiennent cet espace",
             "join_rule_restricted_dialog_heading_unknown": "Ces autres administrateurs du salon en font probablement partie.",
-            "join_rule_restricted_dialog_title": "Sélectionner des espaces",
+            "join_rule_restricted_dialog_title": "Gérer les espaces",
             "join_rule_restricted_n_more": {
                 "other": "& %(count)s de plus",
                 "one": "& %(count)s autres"
@@ -2404,17 +2415,17 @@
         "upload_avatar_label": "Envoyer un avatar",
         "visibility": {
             "alias_section": "Adresse",
-            "error_failed_save": "Échec de la mise à jour de la visibilité de cet espace",
+            "error_failed_save": "Impossible de mettre à jour les paramètres de cet espace.",
             "error_update_guest_access": "Échec de la mise à jour de l’accès visiteur de cet espace",
             "error_update_history_visibility": "Échec de la mise à jour de la visibilité de l’historique pour cet espace",
             "guest_access_disabled": "Vous n'êtes pas autorisé à modifier les accès invités.",
             "guest_access_explainer": "Les visiteurs peuvent rejoindre un espace sans disposer d’un compte. Ceci est utile pour les espaces publiques.",
             "guest_access_label": "Activer l’accès visiteur",
-            "history_visibility_anyone_space": "Aperçu de l’espace",
+            "history_visibility_anyone_space": "Aperçu de l'espace",
             "history_visibility_anyone_space_description": "Permettre aux personnes d’avoir un aperçu de l’espace avant de le rejoindre.",
             "history_visibility_anyone_space_disabled": "Vous n'êtes pas autorisé à modifier la visibilité de l'historique.",
             "history_visibility_anyone_space_recommendation": "Recommandé pour les espaces publics.",
-            "title": "Visibilité"
+            "title": "Sécurité et confidentialité"
         },
         "voip": {
             "call_type_section": "Type d’appel",
@@ -2532,10 +2543,10 @@
                 "breadcrumb_page": "Réinitialiser le chiffrement",
                 "breadcrumb_second_description": "Vous perdrez l’historique de vos messages",
                 "breadcrumb_third_description": "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts",
-                "breadcrumb_title": "Êtes-vous sûr de vouloir réinitialiser votre identité ?",
-                "breadcrumb_title_cant_confirm": "Vous devez réinitialiser votre identité",
-                "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité.",
-                "breadcrumb_title_sync_failed": "Impossible de synchroniser le stockage des clés. Vous devez réinitialiser votre identité.",
+                "breadcrumb_title": "Êtes-vous sûr de vouloir réinitialiser votre identité numérique ?",
+                "breadcrumb_title_cant_confirm": "Vous devez réinitialiser votre identité numérique",
+                "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité numérique.",
+                "breadcrumb_title_sync_failed": "Impossible de synchroniser le stockage des clés. Vous devez réinitialiser votre identité numérique.",
                 "breadcrumb_warning": "Ne faites cela que si vous pensez que votre compte a été compromis.",
                 "details_title": "Détails du chiffrement",
                 "do_not_close_warning": "Ne fermez pas cette fenêtre tant que la réinitialisation n'est pas terminée",
@@ -2551,13 +2562,13 @@
                 "title": "Avancé"
             },
             "confirm_key_storage_off": "Êtes-vous sûr de vouloir désactiver le stockage des clés ?",
-            "confirm_key_storage_off_description": "Si vous vous déconnectez de tous vos appareils, vous perdrez l'historique de vos messages et vous devrez vérifier à nouveau tous vos contacts existants. <a>En savoir plus </a>",
+            "confirm_key_storage_off_description": "Si vous supprimez tous vos appareils, vous perdrez l'historique de vos messages et devrez vérifier à nouveau tous vos contacts existants.<a>En savoir plus</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Désactiver la sauvegarde",
                 "confirm": "Désactiver la sauvegarde",
                 "description": "Désactiver la sauvegarde supprimera votre clé de récupération actuelle et désactivera d’autres mesures de sécurité. Dans ce cas :",
                 "list_first": "Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils",
-                "list_second": "Vous perdrez l'accès à vos messages chiffrés si vous êtes déconnecté de %(brand)s sur tout vos appareils",
+                "list_second": "Vous perdrez l'accès à vos messages chiffrés si vous n'êtes connecté à aucun appareil.",
                 "title": "Êtes-vous certain de vouloir désactiver la sauvegarde ?"
             },
             "device_not_verified_button": "Vérifiez cet appareil",
@@ -2566,7 +2577,7 @@
             "dialog_title": "<strong>Paramètres : </strong> Chiffrement",
             "key_storage": {
                 "allow_key_storage": "Autoriser le stockage des clés",
-                "description": "Stockez votre identité cryptographique et vos clés de message en toute sécurité sur le serveur. Cela vous permettra de consulter l'historique de vos messages sur tous les nouveaux appareils. <a>En savoir plus</a>",
+                "description": "Cela vous permettra de consulter votre historique de discussions sur tous vos nouveaux appareils. Nécessaire pour la sauvegarde de vos discussions et de votre identité numérique.<a>En savoir plus</a>",
                 "title": "Stockage des clés"
             },
             "recovery": {
@@ -2576,14 +2587,14 @@
                 "change_recovery_key": "Changer la clé de récupération",
                 "change_recovery_key_description": "Notez cette nouvelle clé de récupération dans un endroit sûr. Cliquez ensuite sur Continuer pour confirmer la modification.",
                 "change_recovery_key_title": "Changer la clé de récupération ?",
-                "description": "Récupérez votre identité cryptographique et l'historique de vos messages à l'aide d'une clé de récupération si vous avez perdu tous vos appareils existants.",
+                "description": "Vos discussions sont automatiquement sauvegardées grâce à un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d'accès à tous vos appareils, vous aurez besoin de votre clé de récupération.",
                 "enter_key_error": "La clé de récupération que vous avez saisie est incorrecte.",
                 "enter_recovery_key": "Saisir la clé de récupération",
                 "forgot_recovery_key": "Clé de récupération oubliée ?",
                 "key_storage_warning": "Le stockage de vos clés n'est pas synchronisé. Cliquez sur l'un des boutons ci-dessous pour résoudre le problème.",
                 "save_key_description": "Ne partagez cela avec personne !",
                 "save_key_title": "Clé de récupération",
-                "set_up_recovery": "Configurer la sauvegarde",
+                "set_up_recovery": "Obtenir la clé de récupération",
                 "set_up_recovery_confirm_button": "Terminer la configuration",
                 "set_up_recovery_confirm_description": "Saisissez la clé de récupération affichée sur l’écran précédent pour terminer la configuration de la récupération.",
                 "set_up_recovery_confirm_title": "Saisissez votre clé de récupération pour confirmer",
@@ -2591,7 +2602,7 @@
                 "set_up_recovery_save_key_description": "Recopier cette clé de récupération dans un endroit sûr, comme un gestionnaire de mots de passe, une note chiffrée ou un coffre-fort physique.",
                 "set_up_recovery_save_key_title": "Enregistrez votre clé de récupération dans un endroit sûr",
                 "set_up_recovery_secondary_description": "Après avoir cliqué sur continuer, nous allons générer une clé de récupération pour vous.",
-                "title": "Récupération"
+                "title": "Sauvegarde"
             },
             "title": "Chiffrement"
         },
@@ -2881,28 +2892,28 @@
         "send_read_receipts_unsupported": "Votre serveur ne supporte pas la désactivation de l’envoi des accusés de réception.",
         "send_typing_notifications": "Envoyer des notifications de saisie",
         "sessions": {
-            "best_security_note": "Pour une sécurité optimale, vérifiez vos sessions et déconnectez-vous de toute session que vous ne reconnaissez pas ou que vous n’utilisez plus.",
+            "best_security_note": "Pour une sécurité optimale, vérifiez vos sessions et supprimez toutes sessions que vous ne reconnaissez pas ou que vous n’utilisez plus.",
             "browser": "Navigateur",
             "confirm_sign_out": {
-                "one": "Confirmer la déconnexion de cet appareil",
-                "other": "Confirmer la déconnexion de ces appareils"
+                "one": "Confirmer la suppression de cet appareil",
+                "other": "Confirmer la suppression de ces appareils"
             },
             "confirm_sign_out_body": {
-                "one": "Cliquer sur le bouton ci-dessous pour confirmer la déconnexion de cet appareil.",
-                "other": "Cliquer sur le bouton ci-dessous pour confirmer la déconnexion de ces appareils."
+                "one": "Cliquez sur le bouton ci-dessous pour confirmer la suppression de cet appareil.",
+                "other": "Cliquez sur le bouton ci-dessous pour confirmer la suppression de ces périphériques."
             },
             "confirm_sign_out_continue": {
-                "one": "Déconnecter l’appareil",
-                "other": "Déconnecter les appareils"
+                "one": "Supprimer l'appareil",
+                "other": "Supprimer les appareils"
             },
             "confirm_sign_out_sso": {
-                "one": "Confirmez la déconnexion de cet appareil en utilisant l’authentification unique pour prouver votre identité.",
-                "other": "Confirmez la déconnexion de ces appareils en utilisant l’authentification unique pour prouver votre identité."
+                "one": "Confirmez la suppression de cet appareil en utilisant l'Authentification Unique pour prouver votre identitée.",
+                "other": "Confirmez la suppression de ces appareils en utilisant l'Authentification Unique pour prouver votre identitée."
             },
             "current_session": "Cette session",
             "desktop_session": "Session de bureau",
             "details_heading": "Détails de session",
-            "device_unverified_description": "Vérifiez ou déconnectez cette session pour une meilleure sécurité et fiabilité.",
+            "device_unverified_description": "Vérifiez ou supprimez cette session pour une meilleure sécurité et fiabilité.",
             "device_unverified_description_current": "Vérifiez cette session pour renforcer la sécurité de votre messagerie.",
             "device_verified_description": "Cette session est prête pour l’envoi de messages sécurisés.",
             "device_verified_description_current": "Votre session actuelle est prête pour une messagerie sécurisée.",
@@ -2951,11 +2962,11 @@
             "sign_in_with_qr_button": "Afficher le QR code",
             "sign_in_with_qr_description": "Utilisez un code QR pour vous connecter à un autre appareil et configurer votre messagerie sécurisée.",
             "sign_in_with_qr_unsupported": "Non pris en charge par votre fournisseur de compte",
-            "sign_out": "Se déconnecter de cette session",
-            "sign_out_all_other_sessions": "Déconnecter toutes les autres sessions (%(otherSessionsCount)s)",
+            "sign_out": "Supprimer cette session",
+            "sign_out_all_other_sessions": "Supprimer toutes les autres sessions (%(otherSessionsCount)s )",
             "sign_out_confirm_description": {
-                "one": "Voulez-vous vraiment déconnecter %(count)s session ?",
-                "other": "Voulez-vous vraiment déconnecter %(count)s de vos sessions ?"
+                "one": "Voulez-vous vraiment supprimer %(count)s session ?",
+                "other": "Voulez-vous vraiment supprimer %(count)s sessions ?"
             },
             "sign_out_n_sessions": {
                 "one": "Déconnecter %(count)s session",
@@ -2968,15 +2979,15 @@
             "unverified_session_explainer_2": "Vous ne pourrez pas participer aux salons qui ont activé le chiffrement en utilisant cette session.",
             "unverified_session_explainer_3": "Pour de meilleures sécurité et confidentialité, il est recommandé d’utiliser des clients Matrix qui prennent en charge le chiffrement.",
             "unverified_sessions": "Sessions non vérifiées",
-            "unverified_sessions_explainer_1": "Les sessions non vérifiées se sont identifiées avec vos identifiants mais n’ont pas fait de vérification croisée.",
+            "unverified_sessions_explainer_1": "Les sessions non vérifiées sont des sessions pour lesquelles vous vous êtes connecté avec vos identifiants, mais qui n'ont pas été confirmées avec votre identité numérique.",
             "unverified_sessions_explainer_2": "Vous devriez vous tout particulièrement vous assurer que vous connaissez ces sessions, car elles peuvent représenter un usage frauduleux de votre compte.",
             "unverified_sessions_list_description": "Vérifiez vos sessions pour améliorer la sécurité de votre messagerie, ou déconnectez celles que vous ne connaissez pas ou n’utilisez plus.",
             "url": "URL",
             "verified_session": "Session vérifiée",
             "verified_sessions": "Sessions vérifiées",
-            "verified_sessions_explainer_1": "Les sessions vérifiées sont toutes celles qui utilisent ce compte après avoir saisie la phrase de sécurité ou confirmé votre identité à l’aide d’une autre session vérifiée.",
+            "verified_sessions_explainer_1": "Les sessions vérifiées ont confirmé votre identité numérique.",
             "verified_sessions_explainer_2": "Cela veut dire qu’elles disposent de toutes les clés nécessaires pour lire les messages chiffrés, et confirment aux autres utilisateur que vous faites confiance à cette session.",
-            "verified_sessions_list_description": "Pour une meilleure sécurité, déconnectez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.",
+            "verified_sessions_list_description": "Pour une meilleure sécurité, supprimez toutes les sessions que vous ne connaissez pas ou que vous n’utilisez plus.",
             "verify_session": "Vérifier la session",
             "web_session": "session internet"
         },
@@ -3145,7 +3156,7 @@
         "view": "Affiche le salon avec cette adresse",
         "whois": "Affiche des informations à propos de l’utilisateur"
     },
-    "sliding_sync_legacy_no_longer_supported": "L'ancienne fonctionnalité Sliding Sync n'est plus prise en charge : veuillez vous déconnecter puis vous reconnecter pour activer la nouvelle fonctionnalité Sliding Sync",
+    "sliding_sync_legacy_no_longer_supported": "L'ancienne fonctionnalité Sliding Sync n'est plus prise en charge : veuillez vous déconnecter puis vous reconnecter pour activer la nouvelle version de la fonctionnalité Sliding Sync",
     "space": {
         "add_existing_room_space": {
             "create": "Voulez-vous plutôt ajouter un nouveau salon ?",
@@ -3338,7 +3349,7 @@
         "creation_summary_dm": "%(creator)s a créé cette conversation privée.",
         "creation_summary_room": "%(creator)s a créé et configuré le salon.",
         "decryption_failure": {
-            "sender_identity_previously_verified": "L'identité vérifiée de l'expéditeur a changé",
+            "sender_identity_previously_verified": "L'identité numérique vérifiée de l'expéditeur a été réinitialisée.",
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3398,8 +3409,7 @@
             "voice_call_unsupported": "%(senderName)s a passé un appel audio. (non pris en charge par ce navigateur)"
         },
         "m.file": {
-            "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe",
-            "error_invalid": "Fichier invalide"
+            "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe"
         },
         "m.image": {
             "error": "Impossible d’afficher l’image à cause d’une erreur",
@@ -3740,14 +3750,7 @@
             "one_user": "%(displayName)s est en train d'écrire…",
             "two_users": "%(names)s et %(lastPerson)s sont en train d’écrire…"
         },
-        "undecryptable_tooltip": "Ce message n’a pas pu être déchiffré",
-        "url_preview": {
-            "close": "Fermer l’aperçu",
-            "show_n_more": {
-                "one": "Afficher %(count)s autre aperçu",
-                "other": "Afficher %(count)s autres aperçus"
-            }
-        }
+        "undecryptable_tooltip": "Ce message n’a pas pu être déchiffré"
     },
     "truncated_list_n_more": {
         "other": "Et %(count)s autres…"
@@ -3806,7 +3809,7 @@
         "ban_space_everything": "Les bannir de partout où j’ai le droit de le faire",
         "ban_space_specific": "Les bannir de certains endroits où j’ai le droit de le faire",
         "deactivate_confirm_action": "Désactiver l’utilisateur",
-        "deactivate_confirm_description": "Désactiver cet utilisateur le déconnectera et l’empêchera de se reconnecter. De plus, il quittera tous les salons qu’il a rejoints. Cette action ne peut pas être annulée. Voulez-vous vraiment désactiver cet utilisateur ?",
+        "deactivate_confirm_description": "La désactivation de cet utilisateur entraînera la suppression de ses appareils et l\"empêchera de se reconnecter. De plus, il quittera tous les salons auxquels il participe. Cette action est irréversible. Êtes-vous sûr de vouloir désactiver cet utilisateur ?",
         "deactivate_confirm_title": "Désactiver l’utilisateur ?",
         "demote_button": "Rétrograder",
         "demote_self_confirm_description_space": "Vous ne pourrez pas annuler ce changement puisque vous vous rétrogradez. Si vous êtes le dernier utilisateur a privilèges de cet espace, il deviendra impossible d’en reprendre contrôle.",
