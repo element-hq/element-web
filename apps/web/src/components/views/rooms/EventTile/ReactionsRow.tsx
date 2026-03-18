@@ -6,7 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useContext, useEffect, useMemo, useState, type JSX } from "react";
-import { ReactionsRowButtonView, ReactionsRowView, useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
+import {
+    ReactionsRowButtonView,
+    ReactionsRowView,
+    useCreateAutoDisposedViewModel,
+    useViewModel,
+} from "@element-hq/web-shared-components";
 import { uniqBy } from "lodash";
 import { MatrixEventEvent, RelationsEvent, type MatrixEvent, type Relations } from "matrix-js-sdk/src/matrix";
 
@@ -17,7 +22,10 @@ import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
 import { isContentActionable } from "../../../../utils/EventUtils";
 import { ReactionsRowButtonViewModel } from "../../../../viewmodels/message-body/ReactionsRowButtonViewModel";
-import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../../viewmodels/message-body/ReactionsRowViewModel";
+import {
+    MAX_ITEMS_WHEN_LIMITED,
+    ReactionsRowViewModel,
+} from "../../../../viewmodels/message-body/ReactionsRowViewModel";
 
 interface ReactionsRowButtonItemProps {
     mxEvent: MatrixEvent;

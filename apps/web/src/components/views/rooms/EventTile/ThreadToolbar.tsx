@@ -19,10 +19,7 @@ type ThreadToolbarProps = {
     copyLinkToThread: (evt: ButtonEvent) => void;
 };
 
-export function ThreadToolbar({
-    viewInRoom,
-    copyLinkToThread,
-}: ThreadToolbarProps): JSX.Element {
+export function ThreadToolbar({ viewInRoom, copyLinkToThread }: ThreadToolbarProps): JSX.Element {
     return (
         <Toolbar className="mx_MessageActionBar" aria-label={_t("timeline|mab|label")} aria-live="off">
             <RovingAccessibleButton

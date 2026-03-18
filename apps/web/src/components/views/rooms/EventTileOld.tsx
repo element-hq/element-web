@@ -1411,10 +1411,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {this.renderThreadPanelSummary()}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <ThreadToolbar
-                                viewInRoom={this.viewInRoom}
-                                copyLinkToThread={this.copyLinkToThread}
-                            />
+                            <ThreadToolbar viewInRoom={this.viewInRoom} copyLinkToThread={this.copyLinkToThread} />
                         )}
 
                         {msgOption}

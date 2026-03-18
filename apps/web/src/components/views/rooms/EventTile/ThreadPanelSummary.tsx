@@ -13,10 +13,7 @@ type ThreadPanelSummaryProps = {
     preview: ReactNode;
 };
 
-export function ThreadPanelSummary({
-    replyCount,
-    preview,
-}: ThreadPanelSummaryProps): JSX.Element {
+export function ThreadPanelSummary({ replyCount, preview }: ThreadPanelSummaryProps): JSX.Element {
     return (
         <div className="mx_ThreadPanel_replies">
             <ThreadsIcon />

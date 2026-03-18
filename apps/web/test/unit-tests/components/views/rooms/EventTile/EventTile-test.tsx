@@ -30,11 +30,21 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
-import EventTile, { type EventTileHandle, type EventTileProps } from "../../../../../../src/components/views/rooms/EventTile";
+import EventTile, {
+    type EventTileHandle,
+    type EventTileProps,
+} from "../../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
-import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../../../test-utils";
+import {
+    filterConsole,
+    flushPromises,
+    getRoomContext,
+    mkEvent,
+    mkMessage,
+    stubClient,
+} from "../../../../../test-utils";
 import { makeThreadEvent, mkThread } from "../../../../../test-utils/threads";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import dis from "../../../../../../src/dispatcher/dispatcher";
@@ -501,14 +511,20 @@ describe("EventTile", () => {
             const { container, rerender } = render(
                 <WrappedEventTile
                     roomContext={roomContext}
-                    eventTilePropertyOverrides={{ mxEvent: firstEvent, replacingEventId: firstEvent.replacingEventId() }}
+                    eventTilePropertyOverrides={{
+                        mxEvent: firstEvent,
+                        replacingEventId: firstEvent.replacingEventId(),
+                    }}
                 />,
             );
 
             rerender(
                 <WrappedEventTile
                     roomContext={roomContext}
-                    eventTilePropertyOverrides={{ mxEvent: secondEvent, replacingEventId: secondEvent.replacingEventId() }}
+                    eventTilePropertyOverrides={{
+                        mxEvent: secondEvent,
+                        replacingEventId: secondEvent.replacingEventId(),
+                    }}
                 />,
             );
 

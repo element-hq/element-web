@@ -17,11 +17,7 @@ type SenderProps = {
     onClick?: () => void;
 };
 
-export function Sender({
-    mode,
-    mxEvent,
-    onClick,
-}: SenderProps): JSX.Element | undefined {
+export function Sender({ mode, mxEvent, onClick }: SenderProps): JSX.Element | undefined {
     switch (mode) {
         case SenderMode.Hidden:
             return undefined;

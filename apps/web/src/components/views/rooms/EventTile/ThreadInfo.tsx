@@ -14,11 +14,7 @@ type ThreadInfoProps = {
     label?: string;
 };
 
-export function ThreadInfo({
-    summary,
-    href,
-    label,
-}: ThreadInfoProps): JSX.Element | undefined {
+export function ThreadInfo({ summary, href, label }: ThreadInfoProps): JSX.Element | undefined {
     if (summary) {
         return <>{summary}</>;
     }

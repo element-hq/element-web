@@ -17,12 +17,7 @@ type AvatarProps = {
     forceHistorical: boolean;
 };
 
-export function Avatar({
-    member,
-    size,
-    viewUserOnClick,
-    forceHistorical,
-}: AvatarProps): JSX.Element | undefined {
+export function Avatar({ member, size, viewUserOnClick, forceHistorical }: AvatarProps): JSX.Element | undefined {
     if (!member || size === null || size === undefined) return undefined;
 
     return (
