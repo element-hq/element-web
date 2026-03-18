@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { type JSX, createRef, useContext, useEffect } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import React, { type JSX, createRef, useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
     MsgType,
@@ -18,17 +18,33 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
+import {
+    DecryptionFailureBodyView,
+    EventContentBodyView,
+    LINKIFIED_DATA_ATTRIBUTE,
+    TextualBodyView,
+    UrlPreviewGroupView,
+    useCreateAutoDisposedViewModel,
+    type TextualBodyContentElement,
+    type UrlPreview,
+} from "@element-hq/web-shared-components";
 
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
+import Modal from "../../../Modal";
+import dis from "../../../dispatcher/dispatcher";
+import { _t } from "../../../languageHandler";
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
+import { Action } from "../../../dispatcher/actions";
+import QuestionDialog from "../dialogs/QuestionDialog";
+import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
-import TextualBody from "./TextualBody";
 import MImageBody from "./MImageBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MVideoBody from "./MVideoBody";
@@ -39,7 +55,20 @@ import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
+import { TextualBodyViewModel } from "../../../viewmodels/message-body/TextualBodyViewModel";
+import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPreviewGroupViewModel";
 import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
+import RoomContext from "../../../contexts/RoomContext";
+import { getParentEventId } from "../../../utils/Reply";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import ImageView from "../elements/ImageView";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import EditMessageComposer from "../rooms/EditMessageComposer";
+import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
+
+const logger = rootLogger;
+const textualBodyLogger = rootLogger.getChild("TextualBody");
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -62,10 +91,320 @@ export interface IOperableEventTile {
     getEventTileOps(): IEventTileOps | null;
 }
 
+interface TextualBodyWrapperProps extends IBodyProps {
+    onEventTileOpsChange?: (eventTileOps: IEventTileOps | null) => void;
+}
+
+const hasWrapperAroundEventContent = ({
+    mxEvent,
+    replacingEventId,
+    isSeeingThroughMessageHiddenForModeration,
+}: Pick<IBodyProps, "mxEvent" | "replacingEventId" | "isSeeingThroughMessageHiddenForModeration">): boolean =>
+    !!replacingEventId ||
+    !!isSeeingThroughMessageHiddenForModeration ||
+    mxEvent.getContent().msgtype === MsgType.Emote;
+
+const getStarterLink = (mxEvent: IBodyProps["mxEvent"]): string | undefined => {
+    const starterLink = mxEvent.getContent().data?.["org.matrix.neb.starter_link"];
+    return typeof starterLink === "string" ? starterLink : undefined;
+};
+
+function TextualBodyContentWrapper({
+    mxEvent,
+    highlights,
+    highlightLink,
+    showUrlPreview,
+    replacingEventId,
+    isSeeingThroughMessageHiddenForModeration,
+    id,
+    onEventTileOpsChange,
+}: Readonly<TextualBodyWrapperProps>): JSX.Element {
+    const roomContext = useContext(RoomContext);
+    const client = useMatrixClientContext();
+    const [mediaVisible] = useMediaVisible(mxEvent);
+    const bodyRef = useRef<TextualBodyContentElement>(null);
+    const willHaveWrapper = hasWrapperAroundEventContent({
+        mxEvent,
+        replacingEventId,
+        isSeeingThroughMessageHiddenForModeration,
+    });
+    const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
+
+    const onBodyLinkClick = useCallback((event: React.MouseEvent<HTMLDivElement>): void => {
+        let target = event.target as HTMLAnchorElement | null;
+        if (target?.dataset[LINKIFIED_DATA_ATTRIBUTE]) return;
+        if (target?.nodeName !== "A") {
+            target = target?.closest<HTMLAnchorElement>("a") ?? null;
+        }
+        if (!target) return;
+
+        const localHref = tryTransformPermalinkToLocalHref(target.href);
+        if (localHref !== target.href) {
+            event.preventDefault();
+            window.location.assign(localHref);
+        }
+    }, []);
+
+    const onEmoteSenderClick = useCallback((): void => {
+        dis.dispatch({
+            action: Action.ComposerInsert,
+            userId: mxEvent.getSender(),
+            timelineRenderingType: roomContext.timelineRenderingType,
+        });
+    }, [mxEvent, roomContext.timelineRenderingType]);
+
+    const onStarterLinkClick = useCallback(
+        (event: React.MouseEvent<HTMLDivElement>): void => {
+            event.preventDefault();
+
+            const starterLink = getStarterLink(mxEvent);
+            if (!starterLink) {
+                return;
+            }
+
+            const managers = IntegrationManagers.sharedInstance();
+            if (!managers.hasManager()) {
+                managers.openNoManagerDialog();
+                return;
+            }
+
+            const integrationManager = managers.getPrimaryManager();
+            const scalarClient = integrationManager?.getScalarClient();
+            scalarClient?.connect().then(() => {
+                const completeUrl = scalarClient.getStarterLink(starterLink);
+                const integrationsUrl = integrationManager!.uiUrl;
+                const { finished } = Modal.createDialog(QuestionDialog, {
+                    title: _t("timeline|scalar_starter_link|dialog_title"),
+                    description: (
+                        <div>
+                            {_t("timeline|scalar_starter_link|dialog_description", { integrationsUrl })}
+                        </div>
+                    ),
+                    button: _t("action|continue"),
+                });
+
+                finished.then(([confirmed]) => {
+                    if (!confirmed) {
+                        return;
+                    }
+                    const width = window.screen.width > 1024 ? 1024 : window.screen.width;
+                    const height = window.screen.height > 800 ? 800 : window.screen.height;
+                    const left = (window.screen.width - width) / 2;
+                    const top = (window.screen.height - height) / 2;
+                    const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
+                    const wnd = window.open(completeUrl, "_blank", features)!;
+                    wnd.opener = null;
+                });
+            });
+        },
+        [mxEvent],
+    );
+
+    const openHistoryDialog = useCallback((): void => {
+        Modal.createDialog(MessageEditHistoryDialog, { mxEvent });
+    }, [mxEvent]);
+
+    const onUrlPreviewImageClicked = useCallback((preview: UrlPreview): void => {
+        if (!preview.image?.imageFull) {
+            return;
+        }
+
+        Modal.createDialog(
+            ImageView,
+            {
+                src: preview.image.imageFull,
+                width: preview.image.width,
+                height: preview.image.height,
+                name: preview.title,
+                fileSize: preview.image.fileSize,
+                link: preview.link,
+            },
+            "mx_Dialog_lightbox",
+            undefined,
+            true,
+        );
+    }, []);
+
+    const eventContentVm = useCreateAutoDisposedViewModel(
+        () =>
+            new EventContentBodyViewModel({
+                as: willHaveWrapper ? "span" : "div",
+                includeDir: false,
+                mxEvent,
+                content: mxEvent.getContent(),
+                stripReply,
+                linkify: true,
+                highlights,
+                renderTooltipsForAmbiguousLinks: true,
+                renderKeywordPills: true,
+                renderMentionPills: true,
+                renderCodeBlocks: true,
+                renderSpoilers: true,
+                client: roomContext.room?.client ?? null,
+            }),
+    );
+
+    const textualVm = useCreateAutoDisposedViewModel(
+        () =>
+            new TextualBodyViewModel({
+                mxEvent,
+                id,
+                highlightLink,
+                replacingEventId,
+                isSeeingThroughMessageHiddenForModeration,
+                onRootClick: onBodyLinkClick,
+                onBodyActionClick: onStarterLinkClick,
+                onEditedMarkerClick: openHistoryDialog,
+                onEmoteSenderClick,
+            }),
+    );
+
+    const urlPreviewVm = useCreateAutoDisposedViewModel(
+        () =>
+            new UrlPreviewGroupViewModel({
+                client,
+                mxEvent,
+                mediaVisible,
+                onImageClicked: onUrlPreviewImageClicked,
+                visible: showUrlPreview ?? false,
+            }),
+    );
+
+    useEffect(() => {
+        eventContentVm.setEventContent(mxEvent, mxEvent.getContent());
+    }, [eventContentVm, mxEvent]);
+
+    useEffect(() => {
+        eventContentVm.setStripReply(stripReply);
+    }, [eventContentVm, stripReply]);
+
+    useEffect(() => {
+        eventContentVm.setAs(willHaveWrapper ? "span" : "div");
+    }, [eventContentVm, willHaveWrapper]);
+
+    useEffect(() => {
+        eventContentVm.setHighlights(highlights);
+    }, [eventContentVm, highlights]);
+
+    useEffect(() => {
+        textualVm.setEvent(mxEvent);
+    }, [textualVm, mxEvent]);
+
+    useEffect(() => {
+        textualVm.setId(id);
+    }, [textualVm, id]);
+
+    useEffect(() => {
+        textualVm.setHighlightLink(highlightLink);
+    }, [textualVm, highlightLink]);
+
+    useEffect(() => {
+        textualVm.setReplacingEventId(replacingEventId);
+    }, [textualVm, replacingEventId]);
+
+    useEffect(() => {
+        textualVm.setIsSeeingThroughMessageHiddenForModeration(isSeeingThroughMessageHiddenForModeration);
+    }, [textualVm, isSeeingThroughMessageHiddenForModeration]);
+
+    useEffect(() => {
+        textualVm.setHandlers({
+            onRootClick: onBodyLinkClick,
+            onBodyActionClick: onStarterLinkClick,
+            onEditedMarkerClick: openHistoryDialog,
+            onEmoteSenderClick,
+        });
+    }, [textualVm, onBodyLinkClick, onStarterLinkClick, openHistoryDialog, onEmoteSenderClick]);
+
+    useEffect(() => {
+        void (async (): Promise<void> => {
+            try {
+                await urlPreviewVm.updateHidden(showUrlPreview ?? false, mediaVisible);
+            } catch (ex) {
+                textualBodyLogger.warn("UrlPreviewViewModel failed to updateHidden", ex);
+            }
+        })();
+    }, [urlPreviewVm, showUrlPreview, mediaVisible]);
+
+    useEffect(() => {
+        const contentElement = bodyRef.current;
+        if (!contentElement) {
+            return;
+        }
+
+        void (async (): Promise<void> => {
+            try {
+                await urlPreviewVm.updateEventElement(contentElement);
+            } catch (ex) {
+                textualBodyLogger.warn("UrlPreviewViewModel failed to updateEventElement", ex);
+            }
+        })();
+    }, [urlPreviewVm, mxEvent, highlights, willHaveWrapper, replacingEventId, isSeeingThroughMessageHiddenForModeration]);
+
+    const eventTileOps = useMemo<IEventTileOps>(
+        () => ({
+            isWidgetHidden: () => urlPreviewVm.isPreviewHiddenByUser,
+            unhideWidget: () => {
+                void (async (): Promise<void> => {
+                    try {
+                        await urlPreviewVm.onShowClick();
+                    } catch (ex) {
+                        textualBodyLogger.warn("UrlPreviewViewModel failed to onShowClick", ex);
+                    }
+                })();
+            },
+        }),
+        [urlPreviewVm],
+    );
+
+    useEffect(() => {
+        onEventTileOpsChange?.(eventTileOps);
+        return () => {
+            onEventTileOpsChange?.(null);
+        };
+    }, [eventTileOps, onEventTileOpsChange]);
+
+    return (
+        <TextualBodyView
+            vm={textualVm}
+            body={<EventContentBodyView vm={eventContentVm} as={willHaveWrapper ? "span" : "div"} />}
+            bodyRef={bodyRef}
+            urlPreviews={<UrlPreviewGroupView vm={urlPreviewVm} />}
+        />
+    );
+}
+
+function TextualBodyWrapper(props: Readonly<TextualBodyWrapperProps>): JSX.Element {
+    if (props.editState) {
+        return SettingsStore.getValue("feature_wysiwyg_composer") ? (
+            <EditWysiwygComposer editorStateTransfer={props.editState} className="mx_EventTile_content" />
+        ) : (
+            <EditMessageComposer editState={props.editState} className="mx_EventTile_content" />
+        );
+    }
+
+    return <TextualBodyContentWrapper {...props} />;
+}
+
+class TextualBodyBridge extends React.Component<IBodyProps> implements IOperableEventTile {
+    private eventTileOps: IEventTileOps | null = null;
+
+    private readonly setEventTileOps = (eventTileOps: IEventTileOps | null): void => {
+        this.eventTileOps = eventTileOps;
+    };
+
+    public getEventTileOps = (): IEventTileOps | null => {
+        return this.eventTileOps;
+    };
+
+    public render(): React.ReactNode {
+        return <TextualBodyWrapper {...this.props} onEventTileOpsChange={this.setEventTileOps} />;
+    }
+}
+
 const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
-    [MsgType.Text, TextualBody],
-    [MsgType.Notice, TextualBody],
-    [MsgType.Emote, TextualBody],
+    [MsgType.Text, TextualBodyBridge],
+    [MsgType.Notice, TextualBodyBridge],
+    [MsgType.Emote, TextualBodyBridge],
     [MsgType.Image, MImageBody],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyViewFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
@@ -327,7 +666,7 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
 }) => (
     <div className="mx_EventTile_content">
         <WrappedBodyType {...props} />
-        <TextualBody {...{ ...props, ref: undefined }} />
+        <TextualBodyWrapper {...props} />
     </div>
 );
 

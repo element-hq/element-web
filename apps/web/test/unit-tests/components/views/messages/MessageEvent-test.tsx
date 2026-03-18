@@ -15,8 +15,11 @@ import path from "path";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
+import { getRoomContext } from "../../../../test-utils/room";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
+import RoomContext from "../../../../../src/contexts/RoomContext";
 
 jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
@@ -49,9 +52,8 @@ jest.mock("../../../../../src/components/views/messages/MStickerBody", () => ({
     default: () => <div data-testid="sticker-body" />,
 }));
 
-jest.mock("../../../../../src/components/views/messages/TextualBody.tsx", () => ({
-    __esModule: true,
-    default: () => <div data-testid="textual-body" />,
+jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
+    useMediaVisible: () => [true, jest.fn()],
 }));
 
 describe("MessageEvent", () => {
@@ -60,7 +62,13 @@ describe("MessageEvent", () => {
     let event: MatrixEvent;
 
     const renderMessageEvent = (): RenderResult => {
-        return render(<MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />);
+        return render(
+            <MatrixClientContext.Provider value={client}>
+                <RoomContext.Provider value={getRoomContext(room, { room })}>
+                    <MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />
+                </RoomContext.Provider>
+            </MatrixClientContext.Provider>,
+        );
     };
 
     beforeEach(() => {
@@ -107,7 +115,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("image-body");
-            result.getByTestId("textual-body");
+            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
         });
 
         it("should render a TextualBody and a FileBody for mismatched extension", () => {
@@ -115,7 +123,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("file-body");
-            result.getByTestId("textual-body");
+            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
         });
 
         it("should render a TextualBody and an VideoBody", () => {
@@ -123,7 +131,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("video-body");
-            result.getByTestId("textual-body");
+            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
         });
 
         it("should render a TextualBody and a FileBody for non-video mimetype", () => {
@@ -131,7 +139,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("file-body");
-            result.getByTestId("textual-body");
+            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
         });
     });
 });
