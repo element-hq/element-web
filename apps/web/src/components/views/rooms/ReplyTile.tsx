@@ -26,7 +26,7 @@ import { renderReplyTile } from "../../../events/EventTileFactory";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type IBodyProps } from "../messages/IBodyProps";
-import { FileBodyViewFactory, renderMBody } from "../messages/MBodyFactory";
+import { FileBodyFactory, renderMBody } from "../messages/MBodyFactory";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -130,7 +130,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             );
         }
 
-        const ReplyTileFileBody: React.ComponentType<IBodyProps> = (props) => renderMBody(props, FileBodyViewFactory);
+        const ReplyTileFileBody: React.ComponentType<IBodyProps> = (props) => renderMBody(props, FileBodyFactory);
 
         const msgtypeOverrides: Record<string, React.ComponentType<IBodyProps>> = {
             [MsgType.Image]: MImageReplyBody,

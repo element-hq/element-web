@@ -35,7 +35,7 @@ import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
-import { DecryptionFailureBodyFactory, FileBodyViewFactory, RedactedBodyFactory, renderMBody } from "./MBodyFactory";
+import { DecryptionFailureBodyFactory, FileBodyFactory, RedactedBodyFactory, renderMBody } from "./MBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -63,7 +63,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Notice, TextualBody],
     [MsgType.Emote, TextualBody],
     [MsgType.Image, MImageBody],
-    [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyViewFactory)!],
+    [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, MVideoBody],
 ]);

@@ -21,24 +21,14 @@ import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body
 import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 
-interface FileBodyViewProps {
-    /*
-     * Whether file-style message bodies should render their info row/placeholder.
-     * Used by file-body rendering paths (for example FileBodyViewModel via MBodyFactory).
-     */
-    showFileInfo?: boolean;
-}
+type MBodyComponent = React.ComponentType<IBodyProps>;
 
-type MBodyComponent = React.ComponentType<IBodyProps & FileBodyViewProps>;
-
-// Adapter that binds RoomContext data and lifecycle updates to the
-// FileBody view model before rendering the shared view component.
-function FileBodyViewWrapped({
+export function FileBodyFactory({
     mxEvent,
     mediaEventHelper,
     forExport,
     showFileInfo,
-}: IBodyProps & FileBodyViewProps): JSX.Element {
+}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "showFileInfo">): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const refIFrame = useRef<HTMLIFrameElement>(null) as RefObject<HTMLIFrameElement>;
     const refLink = useRef<HTMLAnchorElement>(null) as RefObject<HTMLAnchorElement>;
@@ -68,9 +58,6 @@ function FileBodyViewWrapped({
 
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
-
-// Exported for explicit fallback usage where callers want file-body rendering.
-export const FileBodyViewFactory: MBodyComponent = (props) => <FileBodyViewWrapped {...props} />;
 
 export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
@@ -102,14 +89,11 @@ export function DecryptionFailureBodyFactory({ mxEvent, ref }: Pick<IBodyProps, 
 
 // Message body factory registry.
 // Start small: only m.file currently routes to the new FileBodyView path.
-const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([[MsgType.File, FileBodyViewFactory]]);
+const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([[MsgType.File, FileBodyFactory]]);
 
 // Render a body using the picked factory.
 // Falls back to the provided factory when msgtype has no specific handler.
-export function renderMBody(
-    props: IBodyProps & FileBodyViewProps,
-    fallbackFactory?: MBodyComponent,
-): JSX.Element | null {
+export function renderMBody(props: IBodyProps, fallbackFactory?: MBodyComponent): JSX.Element | null {
     const BodyType = MESSAGE_BODY_TYPES.get(props.mxEvent.getContent().msgtype as string) ?? fallbackFactory;
     if (!BodyType) {
         return null;
