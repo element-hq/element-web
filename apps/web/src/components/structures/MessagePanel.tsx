@@ -47,7 +47,7 @@ import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { type IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
-import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { haveRendererForEvent, isMessageEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
 import { type BaseGrouper } from "./grouper/BaseGrouper";
@@ -78,10 +78,6 @@ export const enum SeparatorKind {
     Date,
     /** Insert a late-event separator when events belong to different late groups. */
     LateEvent,
-}
-
-function isEligibleForSpecialReceipt(event: MatrixEvent): boolean {
-    return event.getType() === EventType.RoomMessage || event.getType() === EventType.RoomMessageEncrypted;
 }
 
 // check if there is a previous event and it has the same sender as this event
@@ -630,6 +626,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !status || status === EventStatus.SENT;
     }
 
+    private isEligibleForSpecialReceipt(event: MatrixEvent): boolean {
+        return isMessageEvent(event) || event.getType() === EventType.RoomMessageEncrypted;
+    }
+
     private getEventTiles(): ReactNode[] {
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
@@ -657,7 +657,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 lastShownEvent = event;
             }
 
-            if (!foundLastSuccessfulEvent && this.isSentState(event) && isEligibleForSpecialReceipt(event)) {
+            if (!foundLastSuccessfulEvent && this.isSentState(event) && this.isEligibleForSpecialReceipt(event)) {
                 foundLastSuccessfulEvent = true;
                 // If we are not sender of this last successful event eligible for special receipt then we stop here
                 // As we do not want to render our sent receipt if there are more receipts below it and events sent
