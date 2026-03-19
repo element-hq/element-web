@@ -34,6 +34,7 @@ import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
+import SettingsStore from "../../settings/SettingsStore";
 
 interface RoomListViewModelProps {
     client: MatrixClient;
@@ -76,7 +77,12 @@ export class RoomListViewModel
         // Get initial rooms
         const roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(undefined);
         const canCreateRoom = hasCreateRoomRights(props.client, activeSpace);
-        const filterIds = [...filterKeyToIdMap.values()];
+
+        // Remove favourite and low priority filters if sections are enabled, as they are redundant with the sections
+        const areSectionsEnabled = SettingsStore.getValue("feature_room_list_sections");
+        const filterIds = [...filterKeyToIdMap.values()].filter(
+            (id) => !areSectionsEnabled || (id !== "favourite" && id !== "low_priority"),
+        );
 
         // By default, all sections are expanded
         const { sections, isFlatList } = computeSections(roomsResult, (tag) => true);
