@@ -332,6 +332,9 @@ test.describe("Room list", () => {
             const roomListView = getRoomList(page);
             const videoRoom = roomListView.getByRole("option", { name: "video room" });
 
+            // Ensure we highlight the video
+            await videoRoom.click();
+
             await expect(videoRoom).toBeVisible();
             await expect(videoRoom).toMatchScreenshot("room-list-item-video.png");
         });
