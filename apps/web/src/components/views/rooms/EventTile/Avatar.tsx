@@ -8,23 +8,34 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
+import { AvatarSize } from "../../../../models/rooms/EventTileModel";
 import MemberAvatar from "../../avatars/MemberAvatar";
 
 type AvatarProps = Readonly<{
     member?: RoomMember | null;
-    size?: string | null;
+    size: AvatarSize;
     viewUserOnClick: boolean;
     forceHistorical: boolean;
 }>;
 
+const avatarSizeByMode: Record<Exclude<AvatarSize, AvatarSize.None>, string> = {
+    [AvatarSize.XSmall]: "14px",
+    [AvatarSize.Small]: "20px",
+    [AvatarSize.Medium]: "24px",
+    [AvatarSize.Large]: "30px",
+    [AvatarSize.XLarge]: "32px",
+};
+
 export function Avatar({ member, size, viewUserOnClick, forceHistorical }: AvatarProps): JSX.Element | undefined {
-    if (!member || size === null || size === undefined) return undefined;
+    if (!member || size === AvatarSize.None) return undefined;
+
+    const pixelSize = avatarSizeByMode[size];
 
     return (
         <div className="mx_EventTile_avatar">
             <MemberAvatar
                 member={member}
-                size={size}
+                size={pixelSize}
                 viewUserOnClick={viewUserOnClick}
                 forceHistorical={forceHistorical}
             />

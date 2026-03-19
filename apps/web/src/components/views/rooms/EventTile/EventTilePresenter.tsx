@@ -22,7 +22,14 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import { EventStatus, EventType, MsgType, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import {
+    EventStatus,
+    EventType,
+    MsgType,
+    type MatrixEvent,
+    type Room,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { DecryptionFailureCode, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
 
 import {
@@ -50,7 +57,7 @@ import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrou
 import RoomAvatar from "../../avatars/RoomAvatar";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
-import { ClickMode, ThreadInfoMode } from "../../../../models/rooms/EventTileModel";
+import { ClickMode, ThreadInfoMode, ThreadPanelMode } from "../../../../models/rooms/EventTileModel";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -259,9 +266,11 @@ function getContentClassName(mxEvent: MatrixEvent): string {
 
     return classNames("mx_EventTile_line", {
         mx_EventTile_mediaLine: isProbablyMedia,
-        mx_EventTile_image: mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Image,
+        mx_EventTile_image:
+            mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Image,
         mx_EventTile_sticker: mxEvent.getType() === EventType.Sticker,
-        mx_EventTile_emote: mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Emote,
+        mx_EventTile_emote:
+            mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Emote,
     });
 }
 
@@ -889,15 +898,22 @@ function useEventTileViewProps({
         [snapshot.threadInfoMode, snapshot.threadUpdateKey, snapshot.thread, props.mxEvent, props.highlightLink],
     );
     const threadPanelReplyCount = useMemo(
-        () => (snapshot.showThreadPanelSummary && snapshot.thread ? snapshot.thread.length : undefined),
-        [snapshot.showThreadPanelSummary, snapshot.thread],
+        () =>
+            (snapshot.threadPanelMode === ThreadPanelMode.Summary ||
+                snapshot.threadPanelMode === ThreadPanelMode.SummaryWithToolbar) &&
+            snapshot.thread
+                ? snapshot.thread.length
+                : undefined,
+        [snapshot.threadPanelMode, snapshot.thread],
     );
     const threadPanelPreview = useMemo(
         () =>
-            snapshot.showThreadPanelSummary && snapshot.thread ? (
+            (snapshot.threadPanelMode === ThreadPanelMode.Summary ||
+                snapshot.threadPanelMode === ThreadPanelMode.SummaryWithToolbar) &&
+            snapshot.thread ? (
                 <ThreadMessagePreview key={snapshot.threadUpdateKey} thread={snapshot.thread} />
             ) : undefined,
-        [snapshot.showThreadPanelSummary, snapshot.thread, snapshot.threadUpdateKey],
+        [snapshot.threadPanelMode, snapshot.thread, snapshot.threadUpdateKey],
     );
     const messageStatus = useMemo(
         () => (
@@ -989,7 +1005,9 @@ function useEventTileViewProps({
                 info: threadInfo,
                 replyCount: threadPanelReplyCount,
                 preview: threadPanelPreview,
-                showToolbar: snapshot.showThreadToolbar,
+                showToolbar:
+                    snapshot.threadPanelMode === ThreadPanelMode.Toolbar ||
+                    snapshot.threadPanelMode === ThreadPanelMode.SummaryWithToolbar,
                 openInRoom: actions.openInRoom,
                 copyLinkToThread: actions.copyLinkToThread,
             },
@@ -1041,7 +1059,7 @@ function useEventTileViewProps({
             threadInfo,
             threadPanelReplyCount,
             threadPanelPreview,
-            snapshot.showThreadToolbar,
+            snapshot.threadPanelMode,
             actions.openInRoom,
             actions.copyLinkToThread,
             snapshot.timestampDisplayMode,

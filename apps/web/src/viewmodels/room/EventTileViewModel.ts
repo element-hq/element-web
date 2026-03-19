@@ -31,12 +31,14 @@ import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import type LegacyCallEventGrouper from "../../components/structures/LegacyCallEventGrouper";
 import {
+    AvatarSize,
     ClickMode,
     EncryptionIndicatorMode,
     PadlockMode,
     SenderMode,
     TimestampDisplayMode,
     TimestampFormatMode,
+    ThreadPanelMode,
     ThreadInfoMode,
 } from "../../models/rooms/EventTileModel";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
@@ -98,8 +100,7 @@ interface EventTileThreadSnapshot {
     threadNotification?: NotificationCountType;
     hasThread: boolean;
     isThreadRoot: boolean;
-    showThreadToolbar: boolean;
-    showThreadPanelSummary: boolean;
+    threadPanelMode: ThreadPanelMode;
     threadInfoMode: ThreadInfoMode;
     tileClickMode: ClickMode;
     openedFromSearch: boolean;
@@ -108,7 +109,7 @@ interface EventTileThreadSnapshot {
 interface EventTileSenderSnapshot {
     isOwnEvent: boolean;
     showSender: boolean;
-    avatarSize: string | null;
+    avatarSize: AvatarSize;
     avatarMemberUserOnClick: boolean;
     avatarForceHistorical: boolean;
     senderMode: SenderMode;
@@ -524,15 +525,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             noBubbleEvent: false,
             isSeeingThroughMessageHiddenForModeration: false,
             showSender: false,
-            showThreadToolbar: false,
-            showThreadPanelSummary: false,
+            threadPanelMode: ThreadPanelMode.None,
             showReadReceipts: false,
             padlockMode: PadlockMode.None,
             timestampDisplayMode: TimestampDisplayMode.Hidden,
             timestampFormatMode: TimestampFormatMode.Absolute,
             timestampTs: props.mxEvent.getTs(),
             tileRenderType: props.timelineRenderingType,
-            avatarSize: null,
+            avatarSize: AvatarSize.None,
             avatarMemberUserOnClick: false,
             avatarForceHistorical: false,
             senderMode: SenderMode.Hidden,
@@ -572,8 +572,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.noBubbleEvent = displayInfo.noBubbleEvent;
         snapshot.isSeeingThroughMessageHiddenForModeration = displayInfo.isSeeingThroughMessageHiddenForModeration;
         snapshot.showSender = EventTileViewModel.getShowSender(props);
-        snapshot.showThreadToolbar = EventTileViewModel.getShowThreadToolbar(props);
-        snapshot.showThreadPanelSummary = EventTileViewModel.getShowThreadPanelSummary(props, snapshot);
+        snapshot.threadPanelMode = EventTileViewModel.getThreadPanelMode(props, snapshot);
         snapshot.showReadReceipts = EventTileViewModel.getShowReadReceipts(props, snapshot);
         snapshot.padlockMode = EventTileViewModel.getPadlockMode(props, snapshot);
         snapshot.timestampDisplayMode = EventTileViewModel.getTimestampDisplayMode(props, snapshot);
@@ -685,16 +684,27 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return !props.hideSender;
     }
 
-    private static getShowThreadToolbar(props: EventTileViewModelProps): boolean {
-        return props.timelineRenderingType === TimelineRenderingType.ThreadsList;
-    }
-
-    private static getShowThreadPanelSummary(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
-        return (
+    private static getThreadPanelMode(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): ThreadPanelMode {
+        const showsToolbar = props.timelineRenderingType === TimelineRenderingType.ThreadsList;
+        const showsSummary =
             (props.timelineRenderingType === TimelineRenderingType.Notification ||
                 props.timelineRenderingType === TimelineRenderingType.ThreadsList) &&
-            Boolean(snapshot.thread)
-        );
+            Boolean(snapshot.thread);
+
+        if (showsToolbar && showsSummary) {
+            return ThreadPanelMode.SummaryWithToolbar;
+        }
+        if (showsToolbar) {
+            return ThreadPanelMode.Toolbar;
+        }
+        if (showsSummary) {
+            return ThreadPanelMode.Summary;
+        }
+
+        return ThreadPanelMode.None;
     }
 
     private static getShowReadReceipts(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
@@ -745,32 +755,32 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return props.timelineRenderingType;
     }
 
-    private static getAvatarSize(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): string | null {
+    private static getAvatarSize(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): AvatarSize {
         // Avatar visibility is driven by timeline context and event type, and stays aligned with
         // the sender-profile rules used by getNeedsSenderProfile/getSenderMode below.
         const eventType = props.mxEvent.getType();
 
         if (props.timelineRenderingType === TimelineRenderingType.Notification) {
-            return "24px";
+            return AvatarSize.Medium;
         }
 
         if (snapshot.isInfoMessage) {
-            return "14px";
+            return AvatarSize.XSmall;
         }
 
         if (
             props.timelineRenderingType === TimelineRenderingType.ThreadsList ||
             (props.timelineRenderingType === TimelineRenderingType.Thread && !props.continuation)
         ) {
-            return "32px";
+            return AvatarSize.XLarge;
         }
 
         if (eventType === EventType.RoomCreate || snapshot.isBubbleMessage) {
-            return null;
+            return AvatarSize.None;
         }
 
         if (props.layout === Layout.IRC) {
-            return "14px";
+            return AvatarSize.XSmall;
         }
 
         if (
@@ -778,21 +788,21 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             eventType === EventType.CallInvite ||
             ElementCallEventType.matches(eventType)
         ) {
-            return null;
+            return AvatarSize.None;
         }
 
         if (props.timelineRenderingType === TimelineRenderingType.File) {
-            return "20px";
+            return AvatarSize.Small;
         }
 
-        return "30px";
+        return AvatarSize.Large;
     }
 
     private static getAvatarMemberUserOnClick(
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
     ): boolean {
-        if (!snapshot.avatarSize) return false;
+        if (snapshot.avatarSize === AvatarSize.None) return false;
         if (!EventTileViewModel.getNeedsSenderProfile(props, snapshot)) return false;
         if (props.inhibitInteraction) return false;
 

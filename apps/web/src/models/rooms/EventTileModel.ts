@@ -19,6 +19,13 @@ export enum ThreadInfoMode {
     SearchText = "searchText",
 }
 
+export enum ThreadPanelMode {
+    None = "none",
+    Toolbar = "toolbar",
+    Summary = "summary",
+    SummaryWithToolbar = "summaryWithToolbar",
+}
+
 export enum ClickMode {
     None = "none",
     ViewRoom = "viewRoom",
@@ -48,4 +55,13 @@ export enum PadlockMode {
     None = "none",
     Group = "group",
     Irc = "irc",
+}
+
+export enum AvatarSize {
+    None = "none",
+    XSmall = "xsmall",
+    Small = "small",
+    Medium = "medium",
+    Large = "large",
+    XLarge = "xlarge",
 }

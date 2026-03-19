@@ -29,6 +29,7 @@ import {
     EncryptionIndicatorMode,
     PadlockMode,
     SenderMode,
+    ThreadPanelMode,
     TimestampDisplayMode,
     ThreadInfoMode,
 } from "../../../src/models/rooms/EventTileModel";
@@ -239,7 +240,7 @@ describe("EventTileViewModel", () => {
         it("shows the thread toolbar in the thread list", () => {
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.ThreadsList });
 
-            expect(vm.getSnapshot().showThreadToolbar).toBe(true);
+            expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.Toolbar);
         });
 
         it("shows read receipts when enabled and no sending state takes priority", () => {
@@ -265,7 +266,24 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.Notification,
             });
 
-            expect(vm.getSnapshot().showThreadPanelSummary).toBe(true);
+            expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.Summary);
+        });
+
+        it("shows the thread summary and toolbar in the thread list when a thread is present", () => {
+            const { rootEvent } = mkThread({
+                room,
+                client,
+                authorId: "@alice:example.org",
+                participantUserIds: ["@bob:example.org"],
+                length: 2,
+            });
+
+            const vm = createViewModel({
+                mxEvent: rootEvent,
+                timelineRenderingType: TimelineRenderingType.ThreadsList,
+            });
+
+            expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.SummaryWithToolbar);
         });
     });
 
@@ -338,26 +356,29 @@ describe("EventTileViewModel", () => {
                 EventShieldReason.MISMATCHED_SENDER,
                 "The sender of the event does not match the owner of the device that sent it.",
             ],
-        ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, _expectedText: string) => {
-            mxEvent = await mkEncryptedMatrixEvent({
-                plainContent: { msgtype: "m.text", body: "msg1" },
-                plainType: "m.room.message",
-                sender: "@alice:example.org",
-                roomId: room.roomId,
-            });
-            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                shieldColour: EventShieldColour.GREY,
-                shieldReason: reasonCode,
-            } as EventEncryptionInfo);
+        ])(
+            "shows the correct reason code for %i (%s)",
+            async (reasonCode: EventShieldReason, _expectedText: string) => {
+                mxEvent = await mkEncryptedMatrixEvent({
+                    plainContent: { msgtype: "m.text", body: "msg1" },
+                    plainType: "m.room.message",
+                    sender: "@alice:example.org",
+                    roomId: room.roomId,
+                });
+                eventToEncryptionInfoMap.set(mxEvent.getId()!, {
+                    shieldColour: EventShieldColour.GREY,
+                    shieldReason: reasonCode,
+                } as EventEncryptionInfo);
 
-            const vm = createViewModel();
-            await flushPromises();
+                const vm = createViewModel();
+                await flushPromises();
 
-            expect(vm.getSnapshot()).toMatchObject({
-                encryptionIndicatorMode: EncryptionIndicatorMode.Normal,
-                shieldReason: reasonCode,
-            });
-        });
+                expect(vm.getSnapshot()).toMatchObject({
+                    encryptionIndicatorMode: EncryptionIndicatorMode.Normal,
+                    shieldReason: reasonCode,
+                });
+            },
+        );
 
         it("exposes shared key metadata for forwarded messages", async () => {
             mxEvent = await mkEncryptedMatrixEvent({
