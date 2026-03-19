@@ -59,7 +59,7 @@ test.describe("Device manager", () => {
         await filteredDeviceListItems.last().click({ force: true });
 
         // sign out from list selection action buttons
-        await tab.getByRole("button", { name: "Sign out", exact: true }).click();
+        await tab.getByRole("button", { name: "Remove this device", exact: true }).click();
         await page.getByRole("dialog").getByTestId("dialog-primary-button").click();
 
         // list updated after sign out
@@ -88,7 +88,7 @@ test.describe("Device manager", () => {
         await expect(firstSession.locator(".mx_DeviceTile h4").getByText(sessionName)).toBeVisible();
 
         // sign out using the device details sign out
-        await firstSession.getByRole("button", { name: "Sign out of this session" }).click();
+        await firstSession.getByRole("button", { name: "Remove this session" }).click();
 
         // confirm the signout
         await page.getByRole("dialog").getByTestId("dialog-primary-button").click();

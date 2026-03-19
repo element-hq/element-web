@@ -61,7 +61,9 @@ test.describe("Key storage out of sync toast", () => {
         await page.getByRole("button", { name: "Forgot recovery key?" }).click();
 
         await expect(
-            page.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+            page.getByRole("heading", {
+                name: "Forgot your recovery key? You’ll need to reset your digital identity.",
+            }),
         ).toBeVisible();
     });
 });
