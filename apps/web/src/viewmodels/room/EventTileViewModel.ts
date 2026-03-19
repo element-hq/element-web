@@ -683,7 +683,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return Boolean(
             props.mxEvent.getTs() &&
             !props.hideTimestamp &&
-            (props.alwaysShowTimestamps ||
+            (props.timelineRenderingType === TimelineRenderingType.ThreadsList ||
+                props.alwaysShowTimestamps ||
                 props.last ||
                 snapshot.hover ||
                 snapshot.focusWithin ||
@@ -756,9 +757,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             return props.layout === Layout.IRC ? TimestampDisplayMode.Placeholder : TimestampDisplayMode.Hidden;
         }
 
-        return props.timelineRenderingType !== TimelineRenderingType.Notification
-            ? TimestampDisplayMode.Linked
-            : TimestampDisplayMode.Plain;
+        return props.timelineRenderingType === TimelineRenderingType.Notification ||
+            props.timelineRenderingType === TimelineRenderingType.ThreadsList
+            ? TimestampDisplayMode.Plain
+            : TimestampDisplayMode.Linked;
     }
 
     private static getTimestampFormatMode(props: EventTileViewModelProps): TimestampFormatMode {

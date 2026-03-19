@@ -313,6 +313,41 @@ describe("EventTileViewModel", () => {
 
             expect(vm.getSnapshot().timestampTs).toBe(101);
         });
+
+        it("shows timestamps by default for thread list tiles", () => {
+            const timestampedEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "timestamped",
+                event: true,
+                ts: 123,
+            });
+            const vm = createViewModel({
+                mxEvent: timestampedEvent,
+                timelineRenderingType: TimelineRenderingType.ThreadsList,
+            });
+
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+        });
+
+        it("uses plain timestamp mode for thread list tiles when timestamps are shown", () => {
+            const timestampedEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "timestamped",
+                event: true,
+                ts: 123,
+            });
+            const vm = createViewModel({
+                mxEvent: timestampedEvent,
+                timelineRenderingType: TimelineRenderingType.ThreadsList,
+            });
+
+            vm.setHover(true);
+
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Plain);
+        });
     });
 
     describe("interaction state", () => {
