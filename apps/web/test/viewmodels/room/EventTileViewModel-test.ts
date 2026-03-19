@@ -151,6 +151,24 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().showReplyPreview).toBe(false);
         });
 
+        it("shows a reply preview for reply events", () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Reply",
+                event: true,
+                relatesTo: {
+                    "m.in_reply_to": {
+                        event_id: "$parent",
+                    },
+                },
+            });
+
+            const vm = createViewModel({ mxEvent });
+
+            expect(vm.getSnapshot().showReplyPreview).toBe(true);
+        });
+
         it("uses the target avatar subject for third-party invite events", () => {
             mxEvent = mkEvent({
                 event: true,
@@ -294,6 +312,78 @@ describe("EventTileViewModel", () => {
             });
 
             expect(vm.getSnapshot().timestampTs).toBe(101);
+        });
+    });
+
+    describe("interaction state", () => {
+        function createTimestampedViewModel(): EventTileViewModel {
+            const timestampedEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "timestamped",
+                event: true,
+                ts: 123,
+            });
+
+            return createViewModel({ mxEvent: timestampedEvent });
+        }
+
+        it("shows and hides timestamps when hover changes", () => {
+            const vm = createTimestampedViewModel();
+
+            expect(vm.getSnapshot().showTimestamp).toBe(false);
+
+            vm.setHover(true);
+            expect(vm.getSnapshot().hover).toBe(true);
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+
+            vm.setHover(false);
+            expect(vm.getSnapshot().hover).toBe(false);
+            expect(vm.getSnapshot().showTimestamp).toBe(false);
+        });
+
+        it("shows timestamps when focus enters the tile", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.setFocusWithin(true);
+
+            expect(vm.getSnapshot().focusWithin).toBe(true);
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+        });
+
+        it("shows timestamps when the action bar is focused", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.setActionBarFocused(true);
+
+            expect(vm.getSnapshot().actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+        });
+
+        it("keeps action bar focus in sync with the context menu state", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.setContextMenuOpen(true);
+
+            expect(vm.getSnapshot().isContextMenuOpen).toBe(true);
+            expect(vm.getSnapshot().actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+
+            vm.setContextMenuOpen(false);
+
+            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
+            expect(vm.getSnapshot().actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().showTimestamp).toBe(false);
+        });
+
+        it("tracks quote expansion state", () => {
+            const vm = createViewModel();
+
+            vm.setQuoteExpanded(true);
+            expect(vm.getSnapshot().isQuoteExpanded).toBe(true);
+
+            vm.setQuoteExpanded(false);
+            expect(vm.getSnapshot().isQuoteExpanded).toBe(false);
         });
     });
 

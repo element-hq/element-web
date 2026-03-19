@@ -53,6 +53,23 @@ import PinningUtils from "../../../../../../src/utils/PinningUtils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
 import { DecryptionFailureTracker } from "../../../../../../src/DecryptionFailureTracker";
 
+jest.mock("../../../../../../src/utils/EventRenderingUtils", () => ({
+    ...jest.requireActual("../../../../../../src/utils/EventRenderingUtils"),
+    getEventDisplayInfo: jest.fn(),
+}));
+
+jest.mock("../../../../../../src/components/views/rooms/EventTile/ReplyPreview", () => ({
+    ReplyPreview: ({ mxEvent }: { mxEvent: MatrixEvent }) => <div data-testid="reply-preview">{mxEvent.getId()}</div>,
+}));
+
+jest.mock("../../../../../../src/components/views/rooms/EventTile/Avatar", () => ({
+    Avatar: ({ member }: { member?: { userId?: string } | null }) =>
+        member ? <div data-testid="avatar-subject">{member.userId}</div> : null,
+}));
+
+const mockGetEventDisplayInfo = jest.requireMock("../../../../../../src/utils/EventRenderingUtils")
+    .getEventDisplayInfo as jest.Mock;
+
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
     let mxEvent: MatrixEvent;
@@ -124,6 +141,15 @@ describe("EventTile", () => {
             user: "@alice:example.org",
             msg: "Hello world!",
             event: true,
+        });
+
+        mockGetEventDisplayInfo.mockReturnValue({
+            hasRenderer: true,
+            isBubbleMessage: false,
+            isInfoMessage: false,
+            isLeftAlignedBubbleMessage: false,
+            noBubbleEvent: false,
+            isSeeingThroughMessageHiddenForModeration: false,
         });
     });
 
@@ -255,6 +281,89 @@ describe("EventTile", () => {
                 expect(details).toHaveTextContent("@alice:example.org");
                 expect(details).toHaveTextContent("in Test room");
             });
+        });
+
+        it("does not render the missing renderer fallback for notifications", () => {
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const { container } = getComponent({}, TimelineRenderingType.Notification);
+
+            expect(container).not.toHaveTextContent("This event could not be displayed");
+        });
+    });
+
+    describe("EventTile presenter wiring", () => {
+        it("renders the missing renderer fallback when the VM selects it", () => {
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const { container } = getComponent();
+
+            expect(container).toHaveTextContent("This event could not be displayed");
+        });
+
+        it("renders a reply preview when the VM says the event is a reply", async () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Reply",
+                event: true,
+                relatesTo: {
+                    "m.in_reply_to": {
+                        event_id: "$parent",
+                    },
+                },
+            });
+
+            const { container } = getComponent({ mxEvent });
+
+            await waitFor(() => expect(getByTestId(container, "reply-preview")).toHaveTextContent(mxEvent.getId()!));
+        });
+
+        it("resolves the avatar subject from the VM for third-party invites", async () => {
+            mxEvent = mkEvent({
+                event: true,
+                type: "m.room.member",
+                user: "@alice:example.org",
+                room: room.roomId,
+                content: {
+                    membership: "invite",
+                    third_party_invite: {
+                        display_name: "Bob",
+                    },
+                },
+            });
+            mxEvent.sender = {
+                userId: "@alice:example.org",
+                membership: "join",
+                name: "@alice:example.org",
+                rawDisplayName: "@alice:example.org",
+                roomId: room.roomId,
+            } as never;
+            mxEvent.target = {
+                userId: "@bob:example.org",
+                membership: "invite",
+                name: "@bob:example.org",
+                rawDisplayName: "@bob:example.org",
+                roomId: room.roomId,
+            } as never;
+
+            const { container } = getComponent({ mxEvent });
+
+            await waitFor(() => expect(getByTestId(container, "avatar-subject")).toHaveTextContent("@bob:example.org"));
         });
     });
 
