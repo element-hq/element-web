@@ -16,13 +16,18 @@ import React, {
 } from "react";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
+import {
+    PadlockMode,
+    type EncryptionIndicatorMode,
+    TimestampDisplayMode,
+    TimestampFormatMode,
+} from "../../../../models/rooms/EventTileModel";
 import { Layout } from "../../../../settings/enums/Layout";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { EncryptionIndicator } from "./EncryptionIndicator";
 import { ThreadToolbar } from "./ThreadToolbar";
 import { Timestamp } from "./Timestamp";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
-import { type EncryptionIndicatorMode } from "./constants";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -56,10 +61,8 @@ type EventTileThreadsProps = {
 };
 
 type EventTileTimestampProps = {
-    show?: boolean;
-    showLinked?: boolean;
-    showPlaceholder?: boolean;
-    showRelative?: boolean;
+    displayMode: TimestampDisplayMode;
+    formatMode: TimestampFormatMode;
     isTwelveHour?: boolean;
     ts?: number;
     receivedTs?: number;
@@ -69,8 +72,7 @@ type EventTileTimestampProps = {
 };
 
 type EventTileEncryptionProps = {
-    showGroupPadlock: boolean;
-    showIrcPadlock: boolean;
+    padlockMode: PadlockMode;
     mode: EncryptionIndicatorMode;
     indicatorTitle?: string;
     sharedKeysUserId?: string;
@@ -118,11 +120,11 @@ type PlainTimestampProps = {
 };
 
 const PlainTimestamp = memo(function PlainTimestamp({ timestamp }: PlainTimestampProps): JSX.Element | null {
-    if (!timestamp.show) return null;
+    if (timestamp.displayMode !== TimestampDisplayMode.Plain) return null;
 
     return (
         <Timestamp
-            showRelative={timestamp.showRelative}
+            showRelative={timestamp.formatMode === TimestampFormatMode.Relative}
             showTwelveHour={timestamp.isTwelveHour}
             ts={timestamp.ts ?? 0}
             receivedTs={timestamp.receivedTs}
@@ -131,14 +133,16 @@ const PlainTimestamp = memo(function PlainTimestamp({ timestamp }: PlainTimestam
 });
 
 const LinkedTimestamp = memo(function LinkedTimestamp({ timestamp }: PlainTimestampProps): JSX.Element | null {
-    if (!timestamp.showLinked) return null;
-    if (!timestamp.show) {
-        return timestamp.showPlaceholder ? <span className="mx_MessageTimestamp" /> : null;
+    if (timestamp.displayMode === TimestampDisplayMode.Hidden || timestamp.displayMode === TimestampDisplayMode.Plain) {
+        return null;
+    }
+    if (timestamp.displayMode === TimestampDisplayMode.Placeholder) {
+        return <span className="mx_MessageTimestamp" />;
     }
 
     return (
         <Timestamp
-            showRelative={timestamp.showRelative}
+            showRelative={timestamp.formatMode === TimestampFormatMode.Relative}
             showTwelveHour={timestamp.isTwelveHour}
             ts={timestamp.ts ?? 0}
             receivedTs={timestamp.receivedTs}
@@ -349,7 +353,7 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                 >
                     {layout === Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
                     {content.sender}
-                    {encryption.showIrcPadlock && (
+                    {encryption.padlockMode === PadlockMode.Irc && (
                         <EncryptionIndicator
                             icon={encryption.mode}
                             title={encryption.indicatorTitle}
@@ -365,7 +369,7 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                     >
                         {content.contextMenu}
                         {layout !== Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
-                        {encryption.showGroupPadlock && (
+                        {encryption.padlockMode === PadlockMode.Group && (
                             <EncryptionIndicator
                                 icon={encryption.mode}
                                 title={encryption.indicatorTitle}

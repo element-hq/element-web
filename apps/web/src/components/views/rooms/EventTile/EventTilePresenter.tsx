@@ -20,8 +20,10 @@ import React, {
     type Ref,
     type RefObject,
 } from "react";
+import classNames from "classnames";
 import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import { type EventStatus, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventStatus, EventType, MsgType, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { DecryptionFailureCode, EventShieldColour, EventShieldReason } from "matrix-js-sdk/src/crypto-api";
 
 import {
     EventTileViewModel,
@@ -40,6 +42,7 @@ import { copyPlaintext } from "../../../../utils/strings";
 import { EventTileView, type EventTileViewProps } from "./EventTileView";
 import { _t } from "../../../../languageHandler";
 import PlatformPeg from "../../../../PlatformPeg";
+import { ElementCallEventType } from "../../../../call-types";
 import { type Layout } from "../../../../settings/enums/Layout";
 import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 import { getLateEventInfo } from "../../../structures/grouper/LateEventGrouper";
@@ -47,7 +50,7 @@ import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrou
 import RoomAvatar from "../../avatars/RoomAvatar";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
-import { ClickMode, ThreadInfoMode } from "./constants";
+import { ClickMode, ThreadInfoMode } from "../../../../models/rooms/EventTileModel";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -56,7 +59,7 @@ import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import { Avatar } from "./Avatar";
 import { MessageBody } from "./MessageBody";
 import { ActionBar } from "./ActionBar";
-import { ContextMenu } from "./ContextMenu";
+import { ContextMenu, type ContextMenuState } from "./ContextMenu";
 import { Footer } from "./Footer";
 import { MessageStatus } from "./MessageStatus";
 import type { GetRelationsForEvent, ReadReceiptProps } from "./types";
@@ -64,6 +67,7 @@ import { ReplyPreview } from "./ReplyPreview";
 import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
 import { type MediaEventHelper } from "../../../../utils/MediaEventHelper";
+import { MediaEventHelper as TileMediaEventHelper } from "../../../../utils/MediaEventHelper";
 import { shouldDisplayReply } from "../../../../utils/Reply";
 
 /**
@@ -172,6 +176,8 @@ type UseEventTileViewModelResult = {
     tileRef: RefObject<EventTileApi | null>;
     replyChainRef: RefObject<ReplyChain | null>;
     suppressReadReceiptAnimation: boolean;
+    contextMenuState?: ContextMenuState;
+    setContextMenuState: React.Dispatch<React.SetStateAction<ContextMenuState | undefined>>;
     vm: EventTileViewModel;
     snapshot: EventTileViewSnapshot;
 };
@@ -215,6 +221,99 @@ type UseEventTileViewPropsArgs = {
     actions: EventTileViewActions;
 };
 
+function getRootClassName(
+    props: EventTileProps,
+    snapshot: EventTileViewSnapshot,
+    timelineRenderingType: TimelineRenderingType,
+): string {
+    const msgtype = props.mxEvent.getContent().msgtype;
+    const eventType = props.mxEvent.getType();
+    const isRenderingNotification = timelineRenderingType === TimelineRenderingType.Notification;
+
+    return classNames({
+        mx_EventTile_bubbleContainer: snapshot.isBubbleMessage,
+        mx_EventTile_leftAlignedBubble: snapshot.isLeftAlignedBubbleMessage,
+        mx_EventTile: true,
+        mx_EventTile_isEditing: snapshot.isEditing,
+        mx_EventTile_info: snapshot.isInfoMessage,
+        mx_EventTile_12hr: props.isTwelveHour,
+        mx_EventTile_sending: !snapshot.isEditing && snapshot.isSending,
+        mx_EventTile_highlight: snapshot.isHighlighted,
+        mx_EventTile_selected: props.isSelectedEvent || snapshot.isContextMenuOpen,
+        mx_EventTile_continuation:
+            snapshot.isContinuation || eventType === EventType.CallInvite || ElementCallEventType.matches(eventType),
+        mx_EventTile_last: props.last,
+        mx_EventTile_lastInSection: props.lastInSection,
+        mx_EventTile_contextual: props.contextual,
+        mx_EventTile_actionBarFocused: snapshot.actionBarFocused,
+        mx_EventTile_bad: snapshot.isEncryptionFailure,
+        mx_EventTile_emote: msgtype === MsgType.Emote,
+        mx_EventTile_noSender: !snapshot.showSender,
+        mx_EventTile_clamp: timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
+        mx_EventTile_noBubble: snapshot.noBubbleEvent,
+    });
+}
+
+function getContentClassName(mxEvent: MatrixEvent): string {
+    const isProbablyMedia = TileMediaEventHelper.isEligible(mxEvent);
+
+    return classNames("mx_EventTile_line", {
+        mx_EventTile_mediaLine: isProbablyMedia,
+        mx_EventTile_image: mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Image,
+        mx_EventTile_sticker: mxEvent.getType() === EventType.Sticker,
+        mx_EventTile_emote: mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Emote,
+    });
+}
+
+function getEncryptionIndicatorTitle(
+    props: EventTileProps,
+    snapshot: EventTileViewSnapshot,
+    isRoomEncrypted: boolean,
+): string | undefined {
+    const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
+
+    if (event.isDecryptionFailure()) {
+        switch (event.decryptionFailureReason) {
+            case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+            case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                return undefined;
+            default:
+                return _t("timeline|undecryptable_tooltip");
+        }
+    }
+
+    if (snapshot.shieldColour !== EventShieldColour.NONE) {
+        switch (snapshot.shieldReason) {
+            case EventShieldReason.UNVERIFIED_IDENTITY:
+                return _t("encryption|event_shield_reason_unverified_identity");
+            case EventShieldReason.UNSIGNED_DEVICE:
+                return _t("encryption|event_shield_reason_unsigned_device");
+            case EventShieldReason.UNKNOWN_DEVICE:
+                return _t("encryption|event_shield_reason_unknown_device");
+            case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
+                return _t("encryption|event_shield_reason_authenticity_not_guaranteed");
+            case EventShieldReason.MISMATCHED_SENDER_KEY:
+                return _t("encryption|event_shield_reason_mismatched_sender_key");
+            case EventShieldReason.SENT_IN_CLEAR:
+                return _t("common|unencrypted");
+            case EventShieldReason.VERIFICATION_VIOLATION:
+                return _t("timeline|decryption_failure|sender_identity_previously_verified");
+            case EventShieldReason.MISMATCHED_SENDER:
+                return _t("encryption|event_shield_reason_mismatched_sender");
+            default:
+                return _t("error|unknown");
+        }
+    }
+
+    if (isRoomEncrypted && !event.isEncrypted() && !event.isState() && !event.isRedacted()) {
+        if (event.status === EventStatus.ENCRYPTING) return undefined;
+        if (event.status === EventStatus.NOT_SENT) return undefined;
+        return _t("common|unencrypted");
+    }
+
+    return undefined;
+}
+
 function useEventTileViewModel(
     props: EventTileProps,
     forwardedRef: Ref<EventTileHandle> | undefined,
@@ -253,6 +352,7 @@ function useEventTileViewModel(
     const tileRef = useRef<EventTileApi>(null);
     const replyChainRef = useRef<ReplyChain>(null);
     const [suppressReadReceiptAnimation, setSuppressReadReceiptAnimation] = useState(true);
+    const [contextMenuState, setContextMenuState] = useState<ContextMenuState>();
     const vmReadReceipts = useMemo(
         () => readReceipts?.map(({ userId, ts, roomMember }) => ({ userId, ts, roomMember })),
         [readReceipts],
@@ -369,6 +469,8 @@ function useEventTileViewModel(
         tileRef,
         replyChainRef,
         suppressReadReceiptAnimation,
+        contextMenuState,
+        setContextMenuState,
         vm,
         snapshot,
     };
@@ -378,6 +480,7 @@ function useEventTileActions(
     props: EventTileProps,
     cli: ReturnType<typeof useMatrixClientContext>,
     roomContext: React.ContextType<typeof RoomContext>,
+    setContextMenuState: React.Dispatch<React.SetStateAction<ContextMenuState | undefined>>,
     vm: EventTileViewModel,
     snapshot: EventTileViewSnapshot,
 ): UseEventTileActionsResult {
@@ -436,7 +539,7 @@ function useEventTileActions(
 
             ev.preventDefault();
             ev.stopPropagation();
-            vm.setContextMenu({
+            setContextMenuState({
                 position: {
                     left: ev.clientX,
                     top: ev.clientY,
@@ -444,8 +547,9 @@ function useEventTileActions(
                 },
                 link: anchorElement?.href || permalink,
             });
+            vm.setContextMenuOpen(true);
         },
-        [props.editState, vm],
+        [props.editState, setContextMenuState, vm],
     );
 
     const onContextMenu = useCallback(
@@ -520,6 +624,8 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         tileRef,
         replyChainRef,
         suppressReadReceiptAnimation,
+        contextMenuState,
+        setContextMenuState,
         vm,
         snapshot: vmSnapshot,
     } = useEventTileViewModel(props, forwardedRef);
@@ -532,7 +638,7 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         onContextMenu,
         onTimestampContextMenu,
         onListTileClick,
-    } = useEventTileActions(props, cli, roomContext, vm, vmSnapshot);
+    } = useEventTileActions(props, cli, roomContext, setContextMenuState, vm, vmSnapshot);
 
     const messageBody: ReactNode = useMemo(
         () => (
@@ -628,16 +734,19 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
 
     const contextMenu = useMemo(
         () =>
-            vmSnapshot.contextMenu ? (
+            contextMenuState && vmSnapshot.isContextMenuOpen ? (
                 <ContextMenu
                     mxEvent={props.mxEvent}
                     permalinkCreator={props.permalinkCreator}
                     getRelationsForEvent={props.getRelationsForEvent}
                     reactions={vmSnapshot.reactions}
-                    contextMenu={vmSnapshot.contextMenu}
+                    contextMenu={contextMenuState}
                     tileRef={tileRef}
                     replyChainRef={replyChainRef}
-                    onFinished={() => vm.setContextMenu(undefined)}
+                    onFinished={() => {
+                        setContextMenuState(undefined);
+                        vm.setContextMenuOpen(false);
+                    }}
                 />
             ) : undefined,
         [
@@ -645,9 +754,11 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
             props.permalinkCreator,
             props.getRelationsForEvent,
             vmSnapshot.reactions,
-            vmSnapshot.contextMenu,
+            vmSnapshot.isContextMenuOpen,
+            contextMenuState,
             tileRef,
             replyChainRef,
+            setContextMenuState,
             vm,
         ],
     );
@@ -700,6 +811,11 @@ function useEventTileViewProps({
     renderedContent,
     actions,
 }: UseEventTileViewPropsArgs): EventTileViewProps {
+    const rootClassName = useMemo(
+        () => getRootClassName(props, snapshot, roomContext.timelineRenderingType),
+        [props, snapshot, roomContext.timelineRenderingType],
+    );
+    const contentClassName = useMemo(() => getContentClassName(props.mxEvent), [props.mxEvent]);
     const avatarMember = getAvatarMember(props);
     const onSenderProfileClick = useCallback((): void => {
         dis.dispatch<ComposerInsertPayload>({
@@ -841,6 +957,10 @@ function useEventTileViewProps({
         }),
         [actions.onContextMenu, vm],
     );
+    const encryptionIndicatorTitle = useMemo(
+        () => getEncryptionIndicatorTitle(props, snapshot, Boolean(roomContext.isRoomEncrypted)),
+        [props, snapshot, roomContext.isRoomEncrypted],
+    );
 
     const commonProps: EventTileViewProps = useMemo(
         () => ({
@@ -850,8 +970,8 @@ function useEventTileViewProps({
             eventId: props.mxEvent.getId() ?? undefined,
             layout: props.layout,
             timelineRenderingType: roomContext.timelineRenderingType,
-            rootClassName: snapshot.classes,
-            contentClassName: snapshot.lineClasses,
+            rootClassName,
+            contentClassName,
             ariaLive: props.eventSendStatus !== null ? "off" : undefined,
             scrollTokens: snapshot.scrollToken,
             isOwnEvent: snapshot.isOwnEvent,
@@ -874,22 +994,19 @@ function useEventTileViewProps({
                 copyLinkToThread: actions.copyLinkToThread,
             },
             timestamp: {
-                show: snapshot.showTimestamp,
-                showLinked: snapshot.showLinkedTimestamp,
-                showPlaceholder: snapshot.showDummyTimestamp,
+                displayMode: snapshot.timestampDisplayMode,
+                formatMode: snapshot.timestampFormatMode,
                 ts: snapshot.timestampTs,
                 receivedTs: getLateEventInfo(props.mxEvent)?.received_ts,
-                showRelative: snapshot.showRelativeTimestamp,
                 isTwelveHour: props.isTwelveHour,
                 permalink: snapshot.permalink,
                 onPermalinkClicked: actions.onPermalinkClicked,
                 onContextMenu: actions.onTimestampContextMenu,
             },
             encryption: {
-                showGroupPadlock: snapshot.showGroupPadlock,
-                showIrcPadlock: snapshot.showIrcPadlock,
+                padlockMode: snapshot.padlockMode,
                 mode: snapshot.encryptionIndicatorMode,
-                indicatorTitle: snapshot.encryptionIndicatorTitle,
+                indicatorTitle: encryptionIndicatorTitle,
                 sharedKeysUserId: snapshot.sharedKeysUserId,
                 sharedKeysRoomId: snapshot.sharedKeysRoomId,
             },
@@ -908,8 +1025,8 @@ function useEventTileViewProps({
             props.mxEvent,
             props.layout,
             roomContext.timelineRenderingType,
-            snapshot.classes,
-            snapshot.lineClasses,
+            rootClassName,
+            contentClassName,
             props.eventSendStatus,
             snapshot.scrollToken,
             snapshot.isOwnEvent,
@@ -927,19 +1044,16 @@ function useEventTileViewProps({
             snapshot.showThreadToolbar,
             actions.openInRoom,
             actions.copyLinkToThread,
-            snapshot.showTimestamp,
-            snapshot.showLinkedTimestamp,
-            snapshot.showDummyTimestamp,
+            snapshot.timestampDisplayMode,
+            snapshot.timestampFormatMode,
             snapshot.timestampTs,
-            snapshot.showRelativeTimestamp,
             props.isTwelveHour,
             snapshot.permalink,
             actions.onPermalinkClicked,
             actions.onTimestampContextMenu,
-            snapshot.showGroupPadlock,
-            snapshot.showIrcPadlock,
+            snapshot.padlockMode,
             snapshot.encryptionIndicatorMode,
-            snapshot.encryptionIndicatorTitle,
+            encryptionIndicatorTitle,
             snapshot.sharedKeysUserId,
             snapshot.sharedKeysRoomId,
             notificationRoomLabel,

@@ -5,8 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { E2ePadlockIcon } from "./E2ePadlock";
-
 export enum SenderMode {
     Hidden = "hidden",
     Default = "default",
@@ -29,7 +27,25 @@ export enum ClickMode {
 
 export enum EncryptionIndicatorMode {
     None = "none",
-    Normal = E2ePadlockIcon.Normal,
-    Warning = E2ePadlockIcon.Warning,
-    DecryptionFailure = E2ePadlockIcon.DecryptionFailure,
+    Normal = "normal",
+    Warning = "warning",
+    DecryptionFailure = "decryptionFailure",
+}
+
+export enum TimestampDisplayMode {
+    Hidden = "hidden",
+    Plain = "plain",
+    Linked = "linked",
+    Placeholder = "placeholder",
+}
+
+export enum TimestampFormatMode {
+    Absolute = "absolute",
+    Relative = "relative",
+}
+
+export enum PadlockMode {
+    None = "none",
+    Group = "group",
+    Irc = "irc",
 }

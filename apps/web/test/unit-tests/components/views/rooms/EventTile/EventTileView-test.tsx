@@ -10,8 +10,13 @@ import { getByLabelText, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
+import {
+    EncryptionIndicatorMode,
+    PadlockMode,
+    TimestampDisplayMode,
+    TimestampFormatMode,
+} from "../../../../../../src/models/rooms/EventTileModel";
 import { Layout } from "../../../../../../src/settings/enums/Layout";
-import { EncryptionIndicatorMode } from "../../../../../../src/components/views/rooms/EventTile/constants";
 import {
     EventTileView,
     type EventTileViewProps,
@@ -90,11 +95,12 @@ describe("EventTileView", () => {
                 copyLinkToThread: jest.fn(),
             },
             timestamp: {
+                displayMode: TimestampDisplayMode.Linked,
+                formatMode: TimestampFormatMode.Absolute,
                 permalink: "#",
             },
             encryption: {
-                showGroupPadlock: false,
-                showIrcPadlock: false,
+                padlockMode: PadlockMode.None,
                 mode: EncryptionIndicatorMode.None,
             },
             notification: {
@@ -281,7 +287,7 @@ describe("EventTileView", () => {
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
                     timestamp: {
-                        show: true,
+                        displayMode: TimestampDisplayMode.Plain,
                         ts: 123,
                     },
                 })}
@@ -296,8 +302,7 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     timestamp: {
-                        show: true,
-                        showLinked: true,
+                        displayMode: TimestampDisplayMode.Linked,
                         ts: 123,
                         permalink: "#event",
                     },
@@ -314,8 +319,7 @@ describe("EventTileView", () => {
                 {...makeProps({
                     layout: Layout.IRC,
                     timestamp: {
-                        showLinked: true,
-                        showPlaceholder: true,
+                        displayMode: TimestampDisplayMode.Placeholder,
                     },
                 })}
             />,
@@ -329,7 +333,7 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     encryption: {
-                        showGroupPadlock: true,
+                        padlockMode: PadlockMode.Group,
                         mode: EncryptionIndicatorMode.Warning,
                         indicatorTitle: "Warning",
                         sharedKeysUserId: "@bob:example.org",
@@ -350,7 +354,7 @@ describe("EventTileView", () => {
                 {...makeProps({
                     layout: Layout.IRC,
                     encryption: {
-                        showIrcPadlock: true,
+                        padlockMode: PadlockMode.Irc,
                         mode: EncryptionIndicatorMode.Normal,
                         indicatorTitle: "Info",
                     },

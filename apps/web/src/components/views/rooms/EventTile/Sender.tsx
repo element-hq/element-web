@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { SenderMode } from "../../../../models/rooms/EventTileModel";
 import SenderProfile from "../../messages/SenderProfile";
-import { SenderMode } from "./constants";
 
 type SenderProps = Readonly<{
     mode: SenderMode;

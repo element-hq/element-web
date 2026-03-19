@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import classNames from "classnames";
 import {
     CryptoEvent,
     DecryptionFailureCode,
@@ -19,7 +18,6 @@ import {
     type MatrixClient,
     type MatrixEvent,
     MatrixEventEvent,
-    MsgType,
     type NotificationCountType,
     type Relations,
     type Room,
@@ -35,17 +33,18 @@ import type LegacyCallEventGrouper from "../../components/structures/LegacyCallE
 import {
     ClickMode,
     EncryptionIndicatorMode,
+    PadlockMode,
     SenderMode,
+    TimestampDisplayMode,
+    TimestampFormatMode,
     ThreadInfoMode,
-} from "../../components/views/rooms/EventTile/constants";
+} from "../../models/rooms/EventTileModel";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
-import { _t } from "../../languageHandler";
 import { ElementCallEventType } from "../../call-types";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { isMessageEvent } from "../../events/EventTileFactory";
 import { Layout } from "../../settings/enums/Layout";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
-import { MediaEventHelper } from "../../utils/MediaEventHelper";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { objectHasDiff } from "../../utils/objects";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
@@ -53,19 +52,11 @@ import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import PinningUtils from "../../utils/PinningUtils";
 import type { GetRelationsForEvent, ReadReceiptProps } from "../../components/views/rooms/EventTile/types";
 
-/**
- * State for the tile context menu anchor and optional permalink target.
- */
-export interface EventTileContextMenu {
-    position: Pick<DOMRect, "top" | "left" | "bottom">;
-    link?: string;
-}
-
 interface EventTileInteractionSnapshot {
     actionBarFocused: boolean;
     hover: boolean;
     focusWithin: boolean;
-    contextMenu?: EventTileContextMenu;
+    isContextMenuOpen: boolean;
     isQuoteExpanded?: boolean;
 }
 
@@ -79,8 +70,6 @@ interface EventTileReceiptSnapshot {
 interface EventTileRenderingSnapshot {
     isHighlighted: boolean;
     isContinuation: boolean;
-    classes: string;
-    lineClasses: string;
     isSending: boolean;
     isEditing: boolean;
     hasRenderer: boolean;
@@ -98,9 +87,8 @@ interface EventTileTimestampSnapshot {
     showTimestamp: boolean;
     permalink: string;
     scrollToken?: string;
-    showLinkedTimestamp: boolean;
-    showDummyTimestamp: boolean;
-    showRelativeTimestamp: boolean;
+    timestampDisplayMode: TimestampDisplayMode;
+    timestampFormatMode: TimestampFormatMode;
     timestampTs: number;
 }
 
@@ -130,10 +118,8 @@ interface EventTileEncryptionSnapshot {
     shieldColour: EventShieldColour;
     shieldReason: EventShieldReason | null;
     isEncryptionFailure: boolean;
-    showGroupPadlock: boolean;
-    showIrcPadlock: boolean;
+    padlockMode: PadlockMode;
     encryptionIndicatorMode: EncryptionIndicatorMode;
-    encryptionIndicatorTitle?: string;
     sharedKeysUserId?: string;
     sharedKeysRoomId?: string;
 }
@@ -229,10 +215,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.updateSnapshot({ actionBarFocused });
     }
 
-    public setContextMenu(contextMenu?: EventTileContextMenu): void {
+    public setContextMenuOpen(isContextMenuOpen: boolean): void {
         this.updateSnapshot({
-            contextMenu,
-            actionBarFocused: Boolean(contextMenu),
+            isContextMenuOpen,
+            actionBarFocused: isContextMenuOpen,
         });
     }
 
@@ -513,7 +499,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             reactions: null,
             hover: false,
             focusWithin: false,
-            contextMenu: undefined,
+            isContextMenuOpen: false,
             isQuoteExpanded: undefined,
             thread: null,
             threadUpdateKey: "",
@@ -523,8 +509,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             isHighlighted: false,
             showTimestamp: false,
             isContinuation: false,
-            classes: "",
-            lineClasses: "",
             isSending: false,
             isEditing: false,
             isEncryptionFailure: false,
@@ -543,11 +527,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             showThreadToolbar: false,
             showThreadPanelSummary: false,
             showReadReceipts: false,
-            showGroupPadlock: false,
-            showIrcPadlock: false,
-            showLinkedTimestamp: false,
-            showDummyTimestamp: false,
-            showRelativeTimestamp: false,
+            padlockMode: PadlockMode.None,
+            timestampDisplayMode: TimestampDisplayMode.Hidden,
+            timestampFormatMode: TimestampFormatMode.Absolute,
             timestampTs: props.mxEvent.getTs(),
             tileRenderType: props.timelineRenderingType,
             avatarSize: null,
@@ -557,7 +539,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             isPinned: false,
             hasFooter: false,
             encryptionIndicatorMode: EncryptionIndicatorMode.None,
-            encryptionIndicatorTitle: undefined,
             sharedKeysUserId: undefined,
             sharedKeysRoomId: undefined,
             threadInfoMode: ThreadInfoMode.None,
@@ -580,7 +561,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.permalink = EventTileViewModel.getPermalink(props);
         snapshot.scrollToken = EventTileViewModel.getScrollToken(props);
         snapshot.isContinuation = EventTileViewModel.getIsContinuation(props);
-        snapshot.lineClasses = EventTileViewModel.getLineClasses(props);
         snapshot.showTimestamp = EventTileViewModel.getShowTimestamp(props, snapshot);
         snapshot.hasThread = Boolean(snapshot.thread);
         snapshot.isThreadRoot = snapshot.thread?.id === props.mxEvent.getId();
@@ -595,11 +575,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.showThreadToolbar = EventTileViewModel.getShowThreadToolbar(props);
         snapshot.showThreadPanelSummary = EventTileViewModel.getShowThreadPanelSummary(props, snapshot);
         snapshot.showReadReceipts = EventTileViewModel.getShowReadReceipts(props, snapshot);
-        snapshot.showGroupPadlock = EventTileViewModel.getShowGroupPadlock(props, snapshot);
-        snapshot.showIrcPadlock = EventTileViewModel.getShowIrcPadlock(props, snapshot);
-        snapshot.showLinkedTimestamp = EventTileViewModel.getShowLinkedTimestamp(props);
-        snapshot.showDummyTimestamp = EventTileViewModel.getShowDummyTimestamp(props, snapshot);
-        snapshot.showRelativeTimestamp = EventTileViewModel.getShowRelativeTimestamp(props);
+        snapshot.padlockMode = EventTileViewModel.getPadlockMode(props, snapshot);
+        snapshot.timestampDisplayMode = EventTileViewModel.getTimestampDisplayMode(props, snapshot);
+        snapshot.timestampFormatMode = EventTileViewModel.getTimestampFormatMode(props);
         snapshot.timestampTs = EventTileViewModel.getTimestampTs(props, snapshot);
         snapshot.tileRenderType = EventTileViewModel.getTileRenderType(props);
         snapshot.avatarSize = EventTileViewModel.getAvatarSize(props, snapshot);
@@ -609,13 +587,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.isPinned = EventTileViewModel.getIsPinned(props);
         snapshot.hasFooter = EventTileViewModel.getHasFooter(snapshot);
         snapshot.encryptionIndicatorMode = EventTileViewModel.getEncryptionIndicatorMode(props, snapshot);
-        snapshot.encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(props, snapshot);
         snapshot.sharedKeysUserId = EventTileViewModel.getSharedKeysUserId(props, snapshot);
         snapshot.sharedKeysRoomId = EventTileViewModel.getSharedKeysRoomId(props);
         snapshot.threadInfoMode = EventTileViewModel.getThreadInfoMode(props, snapshot);
         snapshot.tileClickMode = EventTileViewModel.getTileClickMode(props);
         snapshot.openedFromSearch = EventTileViewModel.getOpenedFromSearch(props);
-        snapshot.classes = EventTileViewModel.getClasses(props, snapshot);
         return snapshot;
     }
 
@@ -647,21 +623,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static shouldHideEvent(props: EventTileViewModelProps): boolean {
         return props.callEventGrouper?.hangupReason === CallErrorCode.Replaced;
-    }
-
-    private static getLineClasses(props: EventTileViewModelProps): string {
-        const isProbablyMedia = MediaEventHelper.isEligible(props.mxEvent);
-
-        return classNames("mx_EventTile_line", {
-            mx_EventTile_mediaLine: isProbablyMedia,
-            mx_EventTile_image:
-                props.mxEvent.getType() === EventType.RoomMessage &&
-                props.mxEvent.getContent().msgtype === MsgType.Image,
-            mx_EventTile_sticker: props.mxEvent.getType() === EventType.Sticker,
-            mx_EventTile_emote:
-                props.mxEvent.getType() === EventType.RoomMessage &&
-                props.mxEvent.getContent().msgtype === MsgType.Emote,
-        });
     }
 
     private static getIsSending(props: EventTileViewModelProps): boolean {
@@ -716,7 +677,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 snapshot.hover ||
                 snapshot.focusWithin ||
                 snapshot.actionBarFocused ||
-                Boolean(snapshot.contextMenu)),
+                snapshot.isContextMenuOpen),
         );
     }
 
@@ -740,24 +701,28 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return !snapshot.shouldShowSentReceipt && !snapshot.shouldShowSendingReceipt && Boolean(props.showReadReceipts);
     }
 
-    private static getShowGroupPadlock(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
-        return props.layout !== Layout.IRC && !snapshot.isBubbleMessage;
+    private static getPadlockMode(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): PadlockMode {
+        if (snapshot.isBubbleMessage) return PadlockMode.None;
+        return props.layout === Layout.IRC ? PadlockMode.Irc : PadlockMode.Group;
     }
 
-    private static getShowIrcPadlock(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
-        return props.layout === Layout.IRC && !snapshot.isBubbleMessage;
+    private static getTimestampDisplayMode(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): TimestampDisplayMode {
+        if (!snapshot.showTimestamp) {
+            return props.layout === Layout.IRC ? TimestampDisplayMode.Placeholder : TimestampDisplayMode.Hidden;
+        }
+
+        return props.timelineRenderingType !== TimelineRenderingType.Notification
+            ? TimestampDisplayMode.Linked
+            : TimestampDisplayMode.Plain;
     }
 
-    private static getShowLinkedTimestamp(props: EventTileViewModelProps): boolean {
-        return props.timelineRenderingType !== TimelineRenderingType.Notification;
-    }
-
-    private static getShowDummyTimestamp(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
-        return props.layout === Layout.IRC && !snapshot.showTimestamp;
-    }
-
-    private static getShowRelativeTimestamp(props: EventTileViewModelProps): boolean {
-        return props.timelineRenderingType === TimelineRenderingType.ThreadsList;
+    private static getTimestampFormatMode(props: EventTileViewModelProps): TimestampFormatMode {
+        return props.timelineRenderingType === TimelineRenderingType.ThreadsList
+            ? TimestampFormatMode.Relative
+            : TimestampFormatMode.Absolute;
     }
 
     private static getTimestampTs(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): number {
@@ -951,55 +916,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return EncryptionIndicatorMode.None;
     }
 
-    private static getEncryptionIndicatorTitle(
-        props: EventTileViewModelProps,
-        snapshot: EventTileViewSnapshot,
-    ): string | undefined {
-        // Keep tooltip text in sync with the indicator mode, using the most specific crypto reason available.
-        const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
-
-        if (event.isDecryptionFailure()) {
-            switch (event.decryptionFailureReason) {
-                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
-                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
-                    return undefined;
-                default:
-                    return _t("timeline|undecryptable_tooltip");
-            }
-        }
-
-        if (snapshot.shieldColour !== EventShieldColour.NONE) {
-            switch (snapshot.shieldReason) {
-                case EventShieldReason.UNVERIFIED_IDENTITY:
-                    return _t("encryption|event_shield_reason_unverified_identity");
-                case EventShieldReason.UNSIGNED_DEVICE:
-                    return _t("encryption|event_shield_reason_unsigned_device");
-                case EventShieldReason.UNKNOWN_DEVICE:
-                    return _t("encryption|event_shield_reason_unknown_device");
-                case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
-                    return _t("encryption|event_shield_reason_authenticity_not_guaranteed");
-                case EventShieldReason.MISMATCHED_SENDER_KEY:
-                    return _t("encryption|event_shield_reason_mismatched_sender_key");
-                case EventShieldReason.SENT_IN_CLEAR:
-                    return _t("common|unencrypted");
-                case EventShieldReason.VERIFICATION_VIOLATION:
-                    return _t("timeline|decryption_failure|sender_identity_previously_verified");
-                case EventShieldReason.MISMATCHED_SENDER:
-                    return _t("encryption|event_shield_reason_mismatched_sender");
-                default:
-                    return _t("error|unknown");
-            }
-        }
-
-        if (props.isRoomEncrypted && !event.isEncrypted() && !event.isState() && !event.isRedacted()) {
-            if (event.status === EventStatus.ENCRYPTING) return undefined;
-            if (event.status === EventStatus.NOT_SENT) return undefined;
-            return _t("common|unencrypted");
-        }
-
-        return undefined;
-    }
-
     private static getSharedKeysUserId(
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
@@ -1041,38 +957,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getOpenedFromSearch(props: EventTileViewModelProps): boolean {
         return props.timelineRenderingType === TimelineRenderingType.Search;
-    }
-
-    private static getClasses(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): string {
-        const msgtype = props.mxEvent.getContent().msgtype;
-        const eventType = props.mxEvent.getType();
-        const isRenderingNotification = props.timelineRenderingType === TimelineRenderingType.Notification;
-
-        return classNames({
-            mx_EventTile_bubbleContainer: snapshot.isBubbleMessage,
-            mx_EventTile_leftAlignedBubble: snapshot.isLeftAlignedBubbleMessage,
-            mx_EventTile: true,
-            mx_EventTile_isEditing: snapshot.isEditing,
-            mx_EventTile_info: snapshot.isInfoMessage,
-            mx_EventTile_12hr: props.isTwelveHour,
-            mx_EventTile_sending: !snapshot.isEditing && snapshot.isSending,
-            mx_EventTile_highlight: snapshot.isHighlighted,
-            mx_EventTile_selected: props.isSelectedEvent || snapshot.contextMenu,
-            mx_EventTile_continuation:
-                snapshot.isContinuation ||
-                eventType === EventType.CallInvite ||
-                ElementCallEventType.matches(eventType),
-            mx_EventTile_last: props.last,
-            mx_EventTile_lastInSection: props.lastInSection,
-            mx_EventTile_contextual: props.contextual,
-            mx_EventTile_actionBarFocused: snapshot.actionBarFocused,
-            mx_EventTile_bad: snapshot.isEncryptionFailure,
-            mx_EventTile_emote: msgtype === MsgType.Emote,
-            mx_EventTile_noSender: !snapshot.showSender,
-            mx_EventTile_clamp:
-                props.timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
-            mx_EventTile_noBubble: snapshot.noBubbleEvent,
-        });
     }
 
     private static getShouldShowSentReceipt(props: EventTileViewModelProps): boolean {

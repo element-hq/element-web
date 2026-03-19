@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
+import { EncryptionIndicatorMode } from "../../../../models/rooms/EventTileModel";
 import { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
-import { EncryptionIndicatorMode } from "./constants";
 
 type EncryptionIndicatorProps = {
     icon: EncryptionIndicatorMode;

@@ -24,13 +24,15 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { EventTileViewModel, type EventTileViewModelProps } from "../../../src/viewmodels/room/EventTileViewModel";
 import {
     ClickMode,
     EncryptionIndicatorMode,
+    PadlockMode,
     SenderMode,
+    TimestampDisplayMode,
     ThreadInfoMode,
-} from "../../../src/components/views/rooms/EventTile/constants";
+} from "../../../src/models/rooms/EventTileModel";
+import { EventTileViewModel, type EventTileViewModelProps } from "../../../src/viewmodels/room/EventTileViewModel";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../test-utils";
@@ -185,12 +187,14 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel({ mxEvent: timestampedEvent, alwaysShowTimestamps: true });
 
             expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Linked);
         });
 
         it("suppresses timestamps when hideTimestamp is set", () => {
             const vm = createViewModel({ alwaysShowTimestamps: true, hideTimestamp: true });
 
             expect(vm.getSnapshot().showTimestamp).toBe(false);
+            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Hidden);
         });
 
         it("uses the latest reply timestamp for thread list tiles", () => {
@@ -223,15 +227,13 @@ describe("EventTileViewModel", () => {
         it("shows the group padlock for non-IRC layouts", () => {
             const vm = createViewModel({ layout: Layout.Group });
 
-            expect(vm.getSnapshot().showGroupPadlock).toBe(true);
-            expect(vm.getSnapshot().showIrcPadlock).toBe(false);
+            expect(vm.getSnapshot().padlockMode).toBe(PadlockMode.Group);
         });
 
         it("shows the IRC padlock for IRC layout", () => {
             const vm = createViewModel({ layout: Layout.IRC });
 
-            expect(vm.getSnapshot().showGroupPadlock).toBe(false);
-            expect(vm.getSnapshot().showIrcPadlock).toBe(true);
+            expect(vm.getSnapshot().padlockMode).toBe(PadlockMode.Irc);
         });
 
         it("shows the thread toolbar in the thread list", () => {
@@ -296,7 +298,7 @@ describe("EventTileViewModel", () => {
 
             expect(vm.getSnapshot()).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
-                encryptionIndicatorTitle: "Encrypted by a device not verified by its owner.",
+                shieldReason: EventShieldReason.UNSIGNED_DEVICE,
             });
         });
 
@@ -317,7 +319,6 @@ describe("EventTileViewModel", () => {
 
             expect(vm.getSnapshot()).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.None,
-                encryptionIndicatorTitle: undefined,
             });
         });
 
@@ -337,7 +338,7 @@ describe("EventTileViewModel", () => {
                 EventShieldReason.MISMATCHED_SENDER,
                 "The sender of the event does not match the owner of the device that sent it.",
             ],
-        ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
+        ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, _expectedText: string) => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
@@ -354,7 +355,7 @@ describe("EventTileViewModel", () => {
 
             expect(vm.getSnapshot()).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.Normal,
-                encryptionIndicatorTitle: expectedText,
+                shieldReason: reasonCode,
             });
         });
 
@@ -406,7 +407,6 @@ describe("EventTileViewModel", () => {
 
                 expect(vm.getSnapshot()).toMatchObject({
                     encryptionIndicatorMode: EncryptionIndicatorMode.DecryptionFailure,
-                    encryptionIndicatorTitle: "This message could not be decrypted",
                 });
             });
 
@@ -460,7 +460,6 @@ describe("EventTileViewModel", () => {
 
             expect(vm.getSnapshot()).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
-                encryptionIndicatorTitle: "Not encrypted",
             });
         });
     });
