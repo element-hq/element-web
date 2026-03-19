@@ -211,26 +211,26 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     public setHover(hover: boolean): void {
-        this.updateSnapshot({ hover });
+        this.updateInteractionSnapshot({ hover });
     }
 
     public setFocusWithin(focusWithin: boolean): void {
-        this.updateSnapshot({ focusWithin });
+        this.updateInteractionSnapshot({ focusWithin });
     }
 
     public setActionBarFocused(actionBarFocused: boolean): void {
-        this.updateSnapshot({ actionBarFocused });
+        this.updateInteractionSnapshot({ actionBarFocused });
     }
 
     public setContextMenuOpen(isContextMenuOpen: boolean): void {
-        this.updateSnapshot({
+        this.updateInteractionSnapshot({
             isContextMenuOpen,
             actionBarFocused: isContextMenuOpen,
         });
     }
 
     public setQuoteExpanded(isQuoteExpanded: boolean): void {
-        this.updateSnapshot({ isQuoteExpanded });
+        this.updateInteractionSnapshot({ isQuoteExpanded });
     }
 
     public updateProps(props: EventTileViewModelProps): void {
@@ -384,6 +384,21 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         this.updateReceiptListener(nextSnapshot);
+    }
+
+    private updateInteractionSnapshot(partial: Partial<EventTileInteractionSnapshot>): void {
+        const currentSnapshot = this.snapshot.current;
+        const nextSnapshot: EventTileViewSnapshot = {
+            ...currentSnapshot,
+            ...partial,
+        };
+
+        nextSnapshot.showTimestamp = EventTileViewModel.getShowTimestamp(this.props, nextSnapshot);
+        nextSnapshot.timestampDisplayMode = EventTileViewModel.getTimestampDisplayMode(this.props, nextSnapshot);
+
+        if (objectHasDiff(currentSnapshot, nextSnapshot)) {
+            this.snapshot.set(nextSnapshot);
+        }
     }
 
     private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {

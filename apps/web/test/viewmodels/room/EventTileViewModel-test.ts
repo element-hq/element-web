@@ -169,6 +169,16 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().showReplyPreview).toBe(true);
         });
 
+        it("does not recompute display info for hover-only updates", () => {
+            const vm = createViewModel();
+            const initialDisplayInfoCalls = mockGetEventDisplayInfo.mock.calls.length;
+
+            vm.setHover(true);
+            vm.setHover(false);
+
+            expect(mockGetEventDisplayInfo).toHaveBeenCalledTimes(initialDisplayInfoCalls);
+        });
+
         it("uses the target avatar subject for third-party invite events", () => {
             mxEvent = mkEvent({
                 event: true,

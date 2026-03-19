@@ -9,20 +9,24 @@ import React, { type JSX } from "react";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
-import { renderTile } from "../../../../events/EventTileFactory";
+import { renderTile, type EventTileTypeProps } from "../../../../events/EventTileFactory";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import RedactedBody from "../../messages/RedactedBody";
 import { EventPreview } from "../EventPreview";
 import { DecryptionFailureBody } from "./DecryptionFailureBody";
-import type { EventTileProps } from "./EventTilePresenter";
 import type { EventTileOps } from "./types";
+
+export type MessageBodyRenderTileProps = Omit<
+    EventTileTypeProps,
+    "ref" | "permalinkCreator" | "showHiddenEvents" | "isSeeingThroughMessageHiddenForModeration"
+>;
 
 /**
  * Props used to render the event body content for a single tile.
  */
 export type MessageBodyProps = {
     mxEvent: MatrixEvent;
-    renderTileProps: EventTileProps;
+    renderTileProps: MessageBodyRenderTileProps;
     timelineRenderingType: TimelineRenderingType;
     tileRenderType: TimelineRenderingType;
     showHiddenEvents: boolean;

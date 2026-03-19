@@ -32,4 +32,31 @@ describe("TextualEventViewModel", () => {
 
         expect(cb).toHaveBeenCalledTimes(1);
     });
+
+    it("should rebind sentinel listeners when props change", () => {
+        const firstEvent = new MatrixEvent({});
+        const secondEvent = new MatrixEvent({});
+        stubClient();
+
+        const vm = new TextualEventViewModel({
+            showHiddenEvents: false,
+            mxEvent: firstEvent,
+        });
+
+        const cb = jest.fn();
+
+        vm.subscribe(cb);
+        vm.updateProps({
+            showHiddenEvents: false,
+            mxEvent: secondEvent,
+        });
+
+        cb.mockClear();
+
+        firstEvent.emit(MatrixEventEvent.SentinelUpdated);
+        expect(cb).not.toHaveBeenCalled();
+
+        secondEvent.emit(MatrixEventEvent.SentinelUpdated);
+        expect(cb).toHaveBeenCalledTimes(1);
+    });
 });

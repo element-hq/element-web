@@ -7,11 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import type { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { haveRendererForEvent } from "../../../../events/EventTileFactory";
+import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type Layout } from "../../../../settings/enums/Layout";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
-import { shouldDisplayReply } from "../../../../utils/Reply";
 import ReplyChain from "../../elements/ReplyChain";
 import type { GetRelationsForEvent } from "./types";
 
@@ -20,8 +18,6 @@ import type { GetRelationsForEvent } from "./types";
  */
 export interface ReplyPreviewProps {
     mxEvent: MatrixEvent;
-    cli: MatrixClient;
-    showHiddenEvents: boolean;
     forExport?: boolean;
     permalinkCreator?: RoomPermalinkCreator;
     layout?: Layout;
@@ -36,8 +32,6 @@ export interface ReplyPreviewProps {
 
 export function ReplyPreview({
     mxEvent,
-    cli,
-    showHiddenEvents,
     forExport,
     permalinkCreator,
     layout,
@@ -49,10 +43,6 @@ export function ReplyPreview({
     replyChainRef,
     setQuoteExpanded,
 }: ReplyPreviewProps): JSX.Element | undefined {
-    if (!haveRendererForEvent(mxEvent, cli, showHiddenEvents) || !shouldDisplayReply(mxEvent)) {
-        return undefined;
-    }
-
     return (
         <ReplyChain
             parentEv={mxEvent}

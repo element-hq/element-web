@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type JSX, useEffect } from "react";
 import {
     type MatrixEvent,
     EventType,
@@ -81,9 +81,17 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-export const TextualEventFactory: Factory = (ref, props) => {
-    const vm = new TextualEventViewModel(props);
+function TextualEventWrappedView(props: FactoryProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new TextualEventViewModel(props));
+
+    useEffect(() => {
+        vm.updateProps(props);
+    }, [props, vm]);
+
     return <TextualEventView vm={vm} />;
+}
+export const TextualEventFactory: Factory = (_ref, props) => {
+    return <TextualEventWrappedView {...props} />;
 };
 function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const cli = useMatrixClientContext();
