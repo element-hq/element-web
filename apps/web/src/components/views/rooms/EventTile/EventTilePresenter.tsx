@@ -16,7 +16,6 @@ import React, {
     useState,
     type JSX,
     type MouseEvent,
-    type ReactNode,
     type Ref,
     type RefObject,
 } from "react";
@@ -68,40 +67,25 @@ import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/Comp
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
-import { Avatar } from "./Avatar";
-import { MessageBody } from "./MessageBody";
-import { ActionBar } from "./ActionBar";
-import { ContextMenu, type ContextMenuState } from "./ContextMenu";
-import { Footer } from "./Footer";
-import { MessageStatus } from "./MessageStatus";
-import type { GetRelationsForEvent, ReadReceiptProps } from "./types";
-import { ReplyPreview } from "./ReplyPreview";
-import { Sender } from "./Sender";
+import type { MessageBodyProps } from "./MessageBody";
+import { type ActionBarProps } from "./ActionBar";
+import { type ContextMenuProps, type ContextMenuState } from "./ContextMenu";
+import type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
+import { type ReplyPreviewProps } from "./ReplyPreview";
 import { ThreadInfo } from "./ThreadInfo";
-import { type MediaEventHelper } from "../../../../utils/MediaEventHelper";
 import { MediaEventHelper as TileMediaEventHelper } from "../../../../utils/MediaEventHelper";
-
-/**
- * Operations exposed by embedded widgets inside an event tile.
- */
-export interface EventTileOps {
-    isWidgetHidden(): boolean;
-    unhideWidget(): void;
-}
-
-/**
- * API exposed by the event tile presenter.
- */
-export interface EventTileApi {
-    getEventTileOps?(): EventTileOps;
-    getMediaHelper(): MediaEventHelper | undefined;
-}
 
 /**
  * Ref handle for consumers that need direct access to tile actions and the root element.
  */
-export interface EventTileHandle extends EventTileApi {
+export interface EventTileHandle extends EventTileOps {
+    /**
+     * Ref to the tile's root DOM element.
+     */
     ref: RefObject<HTMLElement | null>;
+    /**
+     * Recomputes derived tile state without changing props.
+     */
     forceUpdate(): void;
 }
 
@@ -184,7 +168,7 @@ type UseEventTileViewModelResult = {
     roomContext: React.ContextType<typeof RoomContext>;
     tileContentId: string;
     rootRef: RefObject<HTMLElement | null>;
-    tileRef: RefObject<EventTileApi | null>;
+    tileRef: RefObject<EventTileOps | null>;
     replyChainRef: RefObject<ReplyChain | null>;
     suppressReadReceiptAnimation: boolean;
     contextMenuState?: ContextMenuState;
@@ -204,10 +188,9 @@ type UseEventTileActionsResult = {
 };
 
 type EventTileViewRenderContent = {
-    replyChain?: ReactNode;
-    messageBody: ReactNode;
-    actionBar?: ReactNode;
-    contextMenu?: ReactNode;
+    replyChain?: ReplyPreviewProps;
+    actionBar?: ActionBarProps;
+    contextMenu?: ContextMenuProps;
 };
 
 type EventTileViewActions = {
@@ -227,6 +210,7 @@ type UseEventTileViewPropsArgs = {
     room: Room | null;
     tileContentId: string;
     rootRef: RefObject<HTMLElement | null>;
+    tileRef: RefObject<EventTileOps | null>;
     suppressReadReceiptAnimation: boolean;
     renderedContent: EventTileViewRenderContent;
     actions: EventTileViewActions;
@@ -362,7 +346,7 @@ function useEventTileViewModel(
     const { showHiddenEvents, isRoomEncrypted, timelineRenderingType } = roomContext;
     const tileContentId = useId();
     const rootRef = useRef<HTMLElement>(null);
-    const tileRef = useRef<EventTileApi>(null);
+    const tileRef = useRef<EventTileOps>(null);
     const replyChainRef = useRef<ReplyChain>(null);
     const [suppressReadReceiptAnimation, setSuppressReadReceiptAnimation] = useState(true);
     const [contextMenuState, setContextMenuState] = useState<ContextMenuState>();
@@ -445,10 +429,9 @@ function useEventTileViewModel(
         (): EventTileHandle => ({
             ref: rootRef,
             forceUpdate: () => vm.refreshDerivedState(),
-            get getEventTileOps(): EventTileHandle["getEventTileOps"] {
-                return tileRef.current?.getEventTileOps?.bind(tileRef.current);
-            },
-            getMediaHelper: () => tileRef.current?.getMediaHelper(),
+            isWidgetHidden: () => tileRef.current?.isWidgetHidden?.() ?? false,
+            unhideWidget: () => tileRef.current?.unhideWidget?.(),
+            getMediaHelper: () => tileRef.current?.getMediaHelper?.(),
         }),
         [vm],
     );
@@ -642,7 +625,6 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         vm,
         snapshot: vmSnapshot,
     } = useEventTileViewModel(props, forwardedRef);
-    const renderTileProps = props;
     const {
         room,
         onPermalinkClicked,
@@ -653,50 +635,25 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         onListTileClick,
     } = useEventTileActions(props, cli, roomContext, setContextMenuState, vm, vmSnapshot);
 
-    const messageBody: ReactNode = useMemo(
-        () => (
-            <MessageBody
-                mxEvent={props.mxEvent}
-                timelineRenderingType={roomContext.timelineRenderingType}
-                tileRenderType={vmSnapshot.tileRenderType}
-                isSeeingThroughMessageHiddenForModeration={vmSnapshot.isSeeingThroughMessageHiddenForModeration}
-                renderTileProps={renderTileProps}
-                tileRef={tileRef}
-                permalinkCreator={props.permalinkCreator}
-                showHiddenEvents={roomContext.showHiddenEvents}
-            />
-        ),
-        [
-            props.mxEvent,
-            props.permalinkCreator,
-            renderTileProps,
-            tileRef,
-            roomContext.timelineRenderingType,
-            roomContext.showHiddenEvents,
-            vmSnapshot.tileRenderType,
-            vmSnapshot.isSeeingThroughMessageHiddenForModeration,
-        ],
-    );
-
     const replyChain = useMemo(
-        () =>
-            vmSnapshot.showReplyPreview ? (
-                <ReplyPreview
-                    mxEvent={props.mxEvent}
-                    cli={cli}
-                    showHiddenEvents={roomContext.showHiddenEvents}
-                    forExport={props.forExport}
-                    permalinkCreator={props.permalinkCreator}
-                    layout={props.layout}
-                    alwaysShowTimestamps={props.alwaysShowTimestamps}
-                    getRelationsForEvent={props.getRelationsForEvent}
-                    hover={vmSnapshot.hover}
-                    focusWithin={vmSnapshot.focusWithin}
-                    isQuoteExpanded={vmSnapshot.isQuoteExpanded}
-                    replyChainRef={replyChainRef}
-                    setQuoteExpanded={(expanded) => vm.setQuoteExpanded(expanded)}
-                />
-            ) : undefined,
+        (): ReplyPreviewProps | undefined =>
+            vmSnapshot.showReplyPreview
+                ? {
+                      mxEvent: props.mxEvent,
+                      cli,
+                      showHiddenEvents: roomContext.showHiddenEvents,
+                      forExport: props.forExport,
+                      permalinkCreator: props.permalinkCreator,
+                      layout: props.layout,
+                      alwaysShowTimestamps: props.alwaysShowTimestamps,
+                      getRelationsForEvent: props.getRelationsForEvent,
+                      hover: vmSnapshot.hover,
+                      focusWithin: vmSnapshot.focusWithin,
+                      isQuoteExpanded: vmSnapshot.isQuoteExpanded,
+                      replyChainRef,
+                      setQuoteExpanded: (expanded) => vm.setQuoteExpanded(expanded),
+                  }
+                : undefined,
         [
             vmSnapshot.showReplyPreview,
             props.mxEvent,
@@ -716,21 +673,19 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
     );
 
     const actionBar = useMemo(
-        () => (
-            <ActionBar
-                mxEvent={props.mxEvent}
-                forExport={props.forExport}
-                permalinkCreator={props.permalinkCreator}
-                getRelationsForEvent={props.getRelationsForEvent}
-                reactions={vmSnapshot.reactions}
-                isEditing={vmSnapshot.isEditing}
-                isQuoteExpanded={vmSnapshot.isQuoteExpanded}
-                tileRef={tileRef}
-                replyChainRef={replyChainRef}
-                onFocusChange={(focused) => vm.setActionBarFocused(focused)}
-                toggleThreadExpanded={() => vm.setQuoteExpanded(!vmSnapshot.isQuoteExpanded)}
-            />
-        ),
+        (): ActionBarProps => ({
+            mxEvent: props.mxEvent,
+            forExport: props.forExport,
+            permalinkCreator: props.permalinkCreator,
+            getRelationsForEvent: props.getRelationsForEvent,
+            reactions: vmSnapshot.reactions,
+            isEditing: vmSnapshot.isEditing,
+            isQuoteExpanded: vmSnapshot.isQuoteExpanded,
+            tileRef,
+            replyChainRef,
+            onFocusChange: (focused) => vm.setActionBarFocused(focused),
+            toggleThreadExpanded: () => vm.setQuoteExpanded(!vmSnapshot.isQuoteExpanded),
+        }),
         [
             props.mxEvent,
             props.forExport,
@@ -746,22 +701,22 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
     );
 
     const contextMenu = useMemo(
-        () =>
-            contextMenuState && vmSnapshot.isContextMenuOpen ? (
-                <ContextMenu
-                    mxEvent={props.mxEvent}
-                    permalinkCreator={props.permalinkCreator}
-                    getRelationsForEvent={props.getRelationsForEvent}
-                    reactions={vmSnapshot.reactions}
-                    contextMenu={contextMenuState}
-                    tileRef={tileRef}
-                    replyChainRef={replyChainRef}
-                    onFinished={() => {
-                        setContextMenuState(undefined);
-                        vm.setContextMenuOpen(false);
-                    }}
-                />
-            ) : undefined,
+        (): ContextMenuProps | undefined =>
+            contextMenuState && vmSnapshot.isContextMenuOpen
+                ? {
+                      mxEvent: props.mxEvent,
+                      permalinkCreator: props.permalinkCreator,
+                      getRelationsForEvent: props.getRelationsForEvent,
+                      reactions: vmSnapshot.reactions,
+                      contextMenu: contextMenuState,
+                      tileRef,
+                      replyChainRef,
+                      onFinished: () => {
+                          setContextMenuState(undefined);
+                          vm.setContextMenuOpen(false);
+                      },
+                  }
+                : undefined,
         [
             props.mxEvent,
             props.permalinkCreator,
@@ -784,12 +739,12 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         room,
         tileContentId,
         rootRef,
+        tileRef,
         suppressReadReceiptAnimation,
         renderedContent: {
             actionBar,
             contextMenu,
             replyChain,
-            messageBody,
         },
         actions: {
             onContextMenu,
@@ -820,6 +775,7 @@ function useEventTileViewProps({
     room,
     tileContentId,
     rootRef,
+    tileRef,
     suppressReadReceiptAnimation,
     renderedContent,
     actions,
@@ -837,45 +793,6 @@ function useEventTileViewProps({
             timelineRenderingType: roomContext.timelineRenderingType,
         });
     }, [props.mxEvent, roomContext.timelineRenderingType]);
-    const footer = useMemo(
-        () =>
-            snapshot.hasFooter ? (
-                <Footer
-                    layout={props.layout}
-                    mxEvent={props.mxEvent}
-                    isRedacted={props.isRedacted}
-                    isPinned={snapshot.isPinned}
-                    isOwnEvent={snapshot.isOwnEvent}
-                    reactions={snapshot.reactions}
-                    tileContentId={tileContentId}
-                />
-            ) : undefined,
-        [
-            props.layout,
-            props.mxEvent,
-            props.isRedacted,
-            snapshot.hasFooter,
-            snapshot.isPinned,
-            snapshot.isOwnEvent,
-            snapshot.reactions,
-            tileContentId,
-        ],
-    );
-    const sender = useMemo(
-        () => <Sender mode={snapshot.senderMode} mxEvent={props.mxEvent} onClick={onSenderProfileClick} />,
-        [snapshot.senderMode, props.mxEvent, onSenderProfileClick],
-    );
-    const avatar = useMemo(
-        () => (
-            <Avatar
-                member={avatarMember}
-                size={snapshot.avatarSize}
-                viewUserOnClick={snapshot.avatarMemberUserOnClick}
-                forceHistorical={snapshot.avatarForceHistorical}
-            />
-        ),
-        [avatarMember, snapshot.avatarSize, snapshot.avatarMemberUserOnClick, snapshot.avatarForceHistorical],
-    );
     const threadInfo = useMemo(
         () =>
             snapshot.threadInfoMode === ThreadInfoMode.None ? undefined : (
@@ -919,32 +836,6 @@ function useEventTileViewProps({
             ) : undefined,
         [snapshot.threadPanelMode, snapshot.thread, snapshot.threadUpdateKey],
     );
-    const messageStatus = useMemo(
-        () => (
-            <MessageStatus
-                messageState={props.eventSendStatus}
-                shouldShowSentReceipt={snapshot.shouldShowSentReceipt}
-                shouldShowSendingReceipt={snapshot.shouldShowSendingReceipt}
-                showReadReceipts={snapshot.showReadReceipts}
-                readReceipts={props.readReceipts}
-                readReceiptMap={props.readReceiptMap}
-                checkUnmounting={props.checkUnmounting}
-                isTwelveHour={props.isTwelveHour}
-                suppressReadReceiptAnimation={suppressReadReceiptAnimation}
-            />
-        ),
-        [
-            props.eventSendStatus,
-            snapshot.shouldShowSentReceipt,
-            snapshot.shouldShowSendingReceipt,
-            snapshot.showReadReceipts,
-            props.readReceipts,
-            props.readReceiptMap,
-            props.checkUnmounting,
-            props.isTwelveHour,
-            suppressReadReceiptAnimation,
-        ],
-    );
     const notificationRoomLabel = useMemo(
         () =>
             room
@@ -981,6 +872,26 @@ function useEventTileViewProps({
         () => getEncryptionIndicatorTitle(props, snapshot, Boolean(roomContext.isRoomEncrypted)),
         [props, snapshot, roomContext.isRoomEncrypted],
     );
+    const messageBody: MessageBodyProps = useMemo(
+        () => ({
+            mxEvent: props.mxEvent,
+            timelineRenderingType: roomContext.timelineRenderingType,
+            tileRenderType: snapshot.tileRenderType,
+            isSeeingThroughMessageHiddenForModeration: snapshot.isSeeingThroughMessageHiddenForModeration,
+            renderTileProps: props,
+            tileRef,
+            permalinkCreator: props.permalinkCreator,
+            showHiddenEvents: roomContext.showHiddenEvents,
+        }),
+        [
+            props,
+            tileRef,
+            roomContext.timelineRenderingType,
+            roomContext.showHiddenEvents,
+            snapshot.tileRenderType,
+            snapshot.isSeeingThroughMessageHiddenForModeration,
+        ],
+    );
 
     const commonProps: EventTileViewProps = useMemo(
         () => ({
@@ -996,13 +907,41 @@ function useEventTileViewProps({
             scrollTokens: snapshot.scrollToken,
             isOwnEvent: snapshot.isOwnEvent,
             content: {
-                sender,
-                avatar,
+                sender: {
+                    mode: snapshot.senderMode,
+                    mxEvent: props.mxEvent,
+                    onClick: onSenderProfileClick,
+                },
+                avatar: {
+                    member: avatarMember,
+                    size: snapshot.avatarSize,
+                    viewUserOnClick: snapshot.avatarMemberUserOnClick,
+                    forceHistorical: snapshot.avatarForceHistorical,
+                },
                 replyChain: renderedContent.replyChain,
-                messageStatus,
-                messageBody: renderedContent.messageBody,
+                messageStatus: {
+                    messageState: props.eventSendStatus,
+                    shouldShowSentReceipt: snapshot.shouldShowSentReceipt,
+                    shouldShowSendingReceipt: snapshot.shouldShowSendingReceipt,
+                    showReadReceipts: snapshot.showReadReceipts,
+                    readReceipts: props.readReceipts,
+                    readReceiptMap: props.readReceiptMap,
+                    checkUnmounting: props.checkUnmounting,
+                    isTwelveHour: props.isTwelveHour,
+                    suppressReadReceiptAnimation,
+                },
+                messageBody,
                 actionBar: renderedContent.actionBar,
-                footer,
+                footer: {
+                    enabled: snapshot.hasFooter,
+                    layout: props.layout,
+                    mxEvent: props.mxEvent,
+                    isRedacted: props.isRedacted,
+                    isPinned: snapshot.isPinned,
+                    isOwnEvent: snapshot.isOwnEvent,
+                    reactions: snapshot.reactions,
+                    tileContentId,
+                },
                 contextMenu: renderedContent.contextMenu,
             },
             threads: {
@@ -1052,13 +991,27 @@ function useEventTileViewProps({
             props.eventSendStatus,
             snapshot.scrollToken,
             snapshot.isOwnEvent,
-            sender,
-            avatar,
+            snapshot.senderMode,
+            onSenderProfileClick,
+            avatarMember,
+            snapshot.avatarSize,
+            snapshot.avatarMemberUserOnClick,
+            snapshot.avatarForceHistorical,
             renderedContent.replyChain,
-            messageStatus,
-            renderedContent.messageBody,
+            snapshot.shouldShowSentReceipt,
+            snapshot.shouldShowSendingReceipt,
+            snapshot.showReadReceipts,
+            props.readReceipts,
+            props.readReceiptMap,
+            props.checkUnmounting,
+            props.isTwelveHour,
+            suppressReadReceiptAnimation,
+            messageBody,
             renderedContent.actionBar,
-            footer,
+            snapshot.hasFooter,
+            props.isRedacted,
+            snapshot.isPinned,
+            snapshot.reactions,
             renderedContent.contextMenu,
             threadInfo,
             threadPanelReplyCount,
@@ -1069,7 +1022,6 @@ function useEventTileViewProps({
             snapshot.timestampDisplayMode,
             snapshot.timestampFormatMode,
             snapshot.timestampTs,
-            props.isTwelveHour,
             snapshot.permalink,
             actions.onPermalinkClicked,
             actions.onTimestampContextMenu,

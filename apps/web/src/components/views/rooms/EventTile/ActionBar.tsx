@@ -11,10 +11,12 @@ import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import type ReplyChain from "../../elements/ReplyChain";
 import MessageActionBar from "../../messages/MessageActionBar";
-import type { EventTileApi } from "./EventTilePresenter";
-import type { GetRelationsForEvent } from "./types";
+import type { EventTileOps, GetRelationsForEvent } from "./types";
 
-type ActionBarProps = {
+/**
+ * Props used to render the interactive message action bar for a tile.
+ */
+export type ActionBarProps = {
     mxEvent: MatrixEvent;
     reactions: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
@@ -22,7 +24,7 @@ type ActionBarProps = {
     isEditing: boolean;
     isQuoteExpanded?: boolean;
     forExport?: boolean;
-    tileRef: React.RefObject<EventTileApi | null>;
+    tileRef: React.RefObject<EventTileOps | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFocusChange: (focused: boolean) => void;
     toggleThreadExpanded: () => void;

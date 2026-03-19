@@ -12,21 +12,23 @@ import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalin
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import type ReplyChain from "../../elements/ReplyChain";
 import { aboveRightOf } from "../../../structures/ContextMenu";
-import type { EventTileApi } from "./EventTilePresenter";
-import type { GetRelationsForEvent } from "./types";
+import type { EventTileOps, GetRelationsForEvent } from "./types";
 
 export interface ContextMenuState {
     position: Pick<DOMRect, "top" | "left" | "bottom">;
     link?: string;
 }
 
-type ContextMenuProps = {
+/**
+ * Props used to render the event tile context menu at a captured pointer position.
+ */
+export type ContextMenuProps = {
     contextMenu: ContextMenuState;
     mxEvent: MatrixEvent;
     reactions: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
     getRelationsForEvent?: GetRelationsForEvent;
-    tileRef: React.RefObject<EventTileApi | null>;
+    tileRef: React.RefObject<EventTileOps | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFinished: () => void;
 };
@@ -46,7 +48,7 @@ export function ContextMenu({
             {...aboveRightOf(contextMenu.position)}
             mxEvent={mxEvent}
             permalinkCreator={permalinkCreator}
-            eventTileOps={tileRef.current?.getEventTileOps?.()}
+            eventTileOps={tileRef.current ?? undefined}
             collapseReplyChain={replyChainRef.current?.canCollapse() ? replyChainRef.current.collapse : undefined}
             onFinished={onFinished}
             rightClick={true}

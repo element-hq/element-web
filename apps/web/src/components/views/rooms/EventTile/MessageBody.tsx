@@ -14,9 +14,13 @@ import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalin
 import RedactedBody from "../../messages/RedactedBody";
 import { EventPreview } from "../EventPreview";
 import { DecryptionFailureBody } from "./DecryptionFailureBody";
-import type { EventTileApi, EventTileProps } from "./EventTilePresenter";
+import type { EventTileProps } from "./EventTilePresenter";
+import type { EventTileOps } from "./types";
 
-type MessageBodyProps = {
+/**
+ * Props used to render the event body content for a single tile.
+ */
+export type MessageBodyProps = {
     mxEvent: MatrixEvent;
     renderTileProps: EventTileProps;
     timelineRenderingType: TimelineRenderingType;
@@ -24,7 +28,7 @@ type MessageBodyProps = {
     showHiddenEvents: boolean;
     isSeeingThroughMessageHiddenForModeration: boolean;
     permalinkCreator?: RoomPermalinkCreator;
-    tileRef: React.RefObject<EventTileApi | null>;
+    tileRef: React.RefObject<EventTileOps | null>;
 };
 
 export function MessageBody({

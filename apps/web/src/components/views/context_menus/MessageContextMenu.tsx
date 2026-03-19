@@ -289,7 +289,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onUnhidePreviewClick = (): void => {
-        this.props.eventTileOps?.unhideWidget();
+        this.props.eventTileOps?.unhideWidget?.();
         this.closeMenu();
     };
 
@@ -488,7 +488,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         );
 
         let unhidePreviewButton: JSX.Element | undefined;
-        if (eventTileOps?.isWidgetHidden()) {
+        if (eventTileOps?.isWidgetHidden?.()) {
             unhidePreviewButton = (
                 <IconizedContextMenuOption
                     icon={<VisibilityOnIcon />}

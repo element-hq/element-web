@@ -828,6 +828,23 @@ describe("EventTile", () => {
         expect(screen.getByText("Pinned message")).toBeInTheDocument();
     });
 
+    it("exposes the expected forwarded tile ref shape", () => {
+        const ref = React.createRef<EventTileHandle>();
+
+        getComponent({ ref });
+
+        expect(ref.current).toMatchObject({
+            ref: expect.any(Object),
+            forceUpdate: expect.any(Function),
+            isWidgetHidden: expect.any(Function),
+            unhideWidget: expect.any(Function),
+            getMediaHelper: expect.any(Function),
+        });
+        expect(ref.current?.ref.current).toBeInstanceOf(HTMLElement);
+        expect(ref.current?.isWidgetHidden?.()).toBe(false);
+        expect(ref.current?.getMediaHelper?.()).toBeUndefined();
+    });
+
     it.each([
         [EventStatus.NOT_SENT, "Failed to send"],
         [EventStatus.SENDING, "Sending your message…"],

@@ -11,8 +11,8 @@ import { Layout } from "../../../../settings/enums/Layout";
 import TileErrorBoundary from "../../messages/TileErrorBoundary";
 import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } from "./EventTilePresenter";
 
-export type { EventTileHandle, EventTileOps, EventTileApi } from "./EventTilePresenter";
-export type { GetRelationsForEvent, ReadReceiptProps } from "./types";
+export type { EventTileHandle } from "./EventTilePresenter";
+export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
 
 /**
  * Props for the exported {@link EventTile} wrapper component.

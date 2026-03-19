@@ -25,7 +25,7 @@ import {
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { type EventTileApi, type EventTileProps } from "../components/views/rooms/EventTile";
+import { type EventTileOps, type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
@@ -66,7 +66,7 @@ export interface EventTileTypeProps extends Pick<
     | "isSeeingThroughMessageHiddenForModeration"
     | "inhibitInteraction"
 > {
-    ref?: React.RefObject<EventTileApi | null>;
+    ref?: React.RefObject<EventTileOps | null>;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;

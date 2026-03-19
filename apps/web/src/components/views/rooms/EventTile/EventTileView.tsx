@@ -14,11 +14,15 @@ import React, {
     type ReactNode,
     type Ref,
 } from "react";
+import { type EventStatus, type MatrixEvent, type Relations, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
+import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import {
     PadlockMode,
+    type AvatarSize,
     type EncryptionIndicatorMode,
+    type SenderMode,
     TimestampDisplayMode,
     TimestampFormatMode,
 } from "../../../../models/rooms/EventTileModel";
@@ -28,6 +32,15 @@ import { EncryptionIndicator } from "./EncryptionIndicator";
 import { ThreadToolbar } from "./ThreadToolbar";
 import { Timestamp } from "./Timestamp";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
+import { Sender } from "./Sender";
+import { Avatar } from "./Avatar";
+import { Footer } from "./Footer";
+import { MessageStatus } from "./MessageStatus";
+import { MessageBody, type MessageBodyProps } from "./MessageBody";
+import { ReplyPreview, type ReplyPreviewProps } from "./ReplyPreview";
+import { ContextMenu, type ContextMenuProps } from "./ContextMenu";
+import { ActionBar, type ActionBarProps } from "./ActionBar";
+import type { ReadReceiptProps } from "./types";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -41,15 +54,45 @@ import { ThreadPanelSummary } from "./ThreadPanelSummary";
 // '----------------------------------------------------------'
 
 type EventTileContentProps = {
-    sender?: ReactNode;
-    avatar?: ReactNode;
-    replyChain?: ReactNode;
-    messageBody: ReactNode;
-    actionBar?: ReactNode;
-    messageStatus?: ReactNode;
-    footer?: ReactNode;
-    contextMenu?: ReactNode;
+    sender?: {
+        mode: SenderMode;
+        mxEvent: MatrixEvent;
+        onClick?: () => void;
+    };
+    avatar?: {
+        member?: RoomMember | null;
+        size: AvatarSize;
+        viewUserOnClick: boolean;
+        forceHistorical: boolean;
+    };
+    replyChain?: ReplyPreviewProps;
+    messageBody: MessageBodyProps;
+    actionBar?: ActionBarProps;
+    messageStatus?: {
+        messageState: EventStatus | undefined;
+        suppressReadReceiptAnimation: boolean;
+        shouldShowSentReceipt: boolean;
+        shouldShowSendingReceipt: boolean;
+        showReadReceipts: boolean;
+        readReceipts?: ReadReceiptProps[];
+        readReceiptMap?: { [userId: string]: IReadReceiptPosition };
+        isTwelveHour?: boolean;
+        checkUnmounting?: () => boolean;
+    };
+    footer?: {
+        enabled: boolean;
+        mxEvent: MatrixEvent;
+        reactions: Relations | null;
+        isRedacted?: boolean;
+        isPinned: boolean;
+        isOwnEvent: boolean;
+        layout?: Layout;
+        tileContentId: string;
+    };
+    contextMenu?: ContextMenuProps;
 };
+
+type EventTileFooterProps = NonNullable<EventTileContentProps["footer"]>;
 
 type EventTileThreadsProps = {
     info?: ReactNode;
@@ -174,16 +217,28 @@ const EventContentRegion = memo(function EventContentRegion({
 });
 
 type FooterThreadMetaProps = {
-    footer?: ReactNode;
+    footer?: EventTileFooterProps;
     info?: ReactNode;
 };
 
 const FooterThreadMeta = memo(function FooterThreadMeta({ footer, info }: FooterThreadMetaProps): JSX.Element | null {
-    if (!footer && !info) return null;
+    if (!footer?.enabled && !info) return null;
 
     return (
         <>
-            {footer && <div className="mx_EventTile_footer">{footer}</div>}
+            {footer?.enabled && (
+                <div className="mx_EventTile_footer">
+                    <Footer
+                        layout={footer.layout}
+                        mxEvent={footer.mxEvent}
+                        isRedacted={footer.isRedacted}
+                        isPinned={footer.isPinned}
+                        isOwnEvent={footer.isOwnEvent}
+                        reactions={footer.reactions}
+                        tileContentId={footer.tileContentId}
+                    />
+                </div>
+            )}
             {info}
         </>
     );
@@ -232,6 +287,22 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
     } = props;
 
     const Root = (as ?? "li") as ElementType;
+    const sender = content.sender ? (
+        <Sender mode={content.sender.mode} mxEvent={content.sender.mxEvent} onClick={content.sender.onClick} />
+    ) : undefined;
+    const avatar = content.avatar ? (
+        <Avatar
+            member={content.avatar.member}
+            size={content.avatar.size}
+            viewUserOnClick={content.avatar.viewUserOnClick}
+            forceHistorical={content.avatar.forceHistorical}
+        />
+    ) : undefined;
+    const replyChain = content.replyChain ? <ReplyPreview {...content.replyChain} /> : undefined;
+    const actionBar = content.actionBar ? <ActionBar {...content.actionBar} /> : undefined;
+    const messageStatus = content.messageStatus ? <MessageStatus {...content.messageStatus} /> : undefined;
+    const messageBody = <MessageBody {...content.messageBody} />;
+    const contextMenu = content.contextMenu ? <ContextMenu {...content.contextMenu} /> : undefined;
 
     switch (timelineRenderingType) {
         case TimelineRenderingType.Thread:
@@ -252,20 +323,20 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                     onBlur={handlers.onBlur}
                 >
                     <div className="mx_EventTile_senderDetails">
-                        {content.avatar}
-                        {content.sender}
+                        {avatar}
+                        {sender}
                     </div>
                     <EventContentRegion
                         contentId={contentId}
                         contentClassName={contentClassName}
                         onContextMenu={handlers.onContextMenu}
                     >
-                        {content.contextMenu}
-                        {content.replyChain}
-                        {content.messageBody}
-                        {content.actionBar}
+                        {contextMenu}
+                        {replyChain}
+                        {messageBody}
+                        {actionBar}
                         <LinkedTimestamp timestamp={timestamp} />
-                        {content.messageStatus}
+                        {messageStatus}
                     </EventContentRegion>
                     <FooterThreadMeta footer={content.footer} />
                 </Root>
@@ -283,7 +354,7 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                     data-layout={layout}
                     data-shape={timelineRenderingType}
                     data-self={isOwnEvent}
-                    data-has-reply={!!content.replyChain}
+                    data-has-reply={!!replyChain}
                     onMouseEnter={handlers.onMouseEnter}
                     onMouseLeave={handlers.onMouseLeave}
                     onFocus={handlers.onFocus}
@@ -291,7 +362,7 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                     onClick={handlers.onClick}
                 >
                     <div className="mx_EventTile_details">
-                        {content.sender}
+                        {sender}
                         {notification.enabled && notification.roomLabel ? (
                             <span className="mx_EventTile_truncated">{notification.roomLabel}</span>
                         ) : (
@@ -300,12 +371,12 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                         <PlainTimestamp timestamp={timestamp} />
                         {notification.unreadBadge}
                     </div>
-                    {notification.enabled && notification.roomAvatar ? notification.roomAvatar : content.avatar}
+                    {notification.enabled && notification.roomAvatar ? notification.roomAvatar : avatar}
                     <EventContentRegion contentClassName={contentClassName} onContextMenu={handlers.onContextMenu}>
-                        <div className="mx_EventTile_body">{content.messageBody}</div>
+                        <div className="mx_EventTile_body">{messageBody}</div>
                         <ThreadsPanelRegion {...threads} />
                     </EventContentRegion>
-                    {content.messageStatus}
+                    {messageStatus}
                 </Root>
             );
         case TimelineRenderingType.File:
@@ -322,14 +393,14 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                         onClick={timestamp.onPermalinkClicked}
                     >
                         <div className="mx_EventTile_senderDetails" onContextMenu={timestamp.onContextMenu}>
-                            {content.avatar}
-                            {content.sender}
+                            {avatar}
+                            {sender}
                             <PlainTimestamp timestamp={timestamp} />
                         </div>
                     </a>
                     <EventContentRegion contentClassName={contentClassName} onContextMenu={handlers.onContextMenu}>
-                        {content.contextMenu}
-                        {content.messageBody}
+                        {contextMenu}
+                        {messageBody}
                     </EventContentRegion>
                 </Root>
             );
@@ -345,14 +416,14 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                     data-layout={layout}
                     data-self={isOwnEvent}
                     data-event-id={eventId}
-                    data-has-reply={!!content.replyChain}
+                    data-has-reply={!!replyChain}
                     onMouseEnter={handlers.onMouseEnter}
                     onMouseLeave={handlers.onMouseLeave}
                     onFocus={handlers.onFocus}
                     onBlur={handlers.onBlur}
                 >
                     {layout === Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
-                    {content.sender}
+                    {sender}
                     {encryption.padlockMode === PadlockMode.Irc && (
                         <EncryptionIndicator
                             icon={encryption.mode}
@@ -361,13 +432,13 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                             roomId={encryption.sharedKeysRoomId}
                         />
                     )}
-                    {content.avatar}
+                    {avatar}
                     <EventContentRegion
                         contentId={contentId}
                         contentClassName={contentClassName}
                         onContextMenu={handlers.onContextMenu}
                     >
-                        {content.contextMenu}
+                        {contextMenu}
                         {layout !== Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
                         {encryption.padlockMode === PadlockMode.Group && (
                             <EncryptionIndicator
@@ -377,13 +448,13 @@ function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
                                 roomId={encryption.sharedKeysRoomId}
                             />
                         )}
-                        {content.replyChain}
-                        {content.messageBody}
-                        {content.actionBar}
+                        {replyChain}
+                        {messageBody}
+                        {actionBar}
                         {layout === Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
                     </EventContentRegion>
                     {layout !== Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
-                    {content.messageStatus}
+                    {messageStatus}
                 </Root>
             );
     }

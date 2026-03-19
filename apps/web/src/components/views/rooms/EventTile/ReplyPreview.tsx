@@ -15,7 +15,10 @@ import { shouldDisplayReply } from "../../../../utils/Reply";
 import ReplyChain from "../../elements/ReplyChain";
 import type { GetRelationsForEvent } from "./types";
 
-interface ReplyPreviewProps {
+/**
+ * Props used to render the reply preview shown ahead of the main event body.
+ */
+export interface ReplyPreviewProps {
     mxEvent: MatrixEvent;
     cli: MatrixClient;
     showHiddenEvents: boolean;

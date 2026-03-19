@@ -13,6 +13,7 @@ import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContex
 import {
     EncryptionIndicatorMode,
     PadlockMode,
+    SenderMode,
     TimestampDisplayMode,
     TimestampFormatMode,
 } from "../../../../../../src/models/rooms/EventTileModel";
@@ -77,8 +78,56 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadPanelSum
     ),
 }));
 
+jest.mock("../../../../../../src/components/views/messages/SenderProfile", () => ({
+    __esModule: true,
+    default: ({
+        mxEvent,
+        withTooltip,
+        onClick,
+    }: {
+        mxEvent: { getSender?: () => string };
+        withTooltip?: boolean;
+        onClick?: () => void;
+    }) => (
+        <button data-testid="sender" onClick={onClick}>
+            {withTooltip ? "tooltip" : "default"}:{mxEvent.getSender?.() ?? ""}
+        </button>
+    ),
+}));
+
+jest.mock("../../../../../../src/components/views/rooms/EventTile/MessageBody", () => ({
+    MessageBody: () => <div>Message body</div>,
+}));
+
+jest.mock("@element-hq/web-shared-components", () => ({
+    ...jest.requireActual("@element-hq/web-shared-components"),
+    PinnedMessageBadge: () => <div>Pinned message</div>,
+}));
+
+jest.mock("../../../../../../src/components/views/rooms/EventTile/ReactionsRow", () => ({
+    ReactionsRow: () => <div data-testid="reactions-row">Reactions</div>,
+}));
+
+jest.mock("../../../../../../src/components/views/rooms/EventTile/MessageStatus", () => ({
+    MessageStatus: ({
+        shouldShowSentReceipt,
+        showReadReceipts,
+    }: {
+        shouldShowSentReceipt: boolean;
+        showReadReceipts: boolean;
+    }) => (
+        <div data-testid="message-status">
+            {shouldShowSentReceipt ? <div data-testid="sent-receipt">sent</div> : null}
+            {showReadReceipts ? <div data-testid="read-receipts">readers</div> : null}
+        </div>
+    ),
+}));
+
 describe("EventTileView", () => {
     function makeProps(overrides: EventTileViewOverrides = {}): EventTileViewProps {
+        const mxEvent = {
+            getSender: () => "@alice:example.org",
+        } as any;
         const baseProps: EventTileViewProps = {
             contentId: "event",
             eventId: "$event:example.org",
@@ -87,8 +136,19 @@ describe("EventTileView", () => {
             contentClassName: "mx_EventTile_line",
             isOwnEvent: false,
             content: {
-                sender: <div data-testid="sender">default:@alice:example.org</div>,
-                messageBody: <div>Message body</div>,
+                sender: {
+                    mode: SenderMode.Default,
+                    mxEvent,
+                },
+                messageBody: {
+                    mxEvent,
+                    renderTileProps: { mxEvent } as any,
+                    timelineRenderingType: TimelineRenderingType.Room,
+                    tileRenderType: TimelineRenderingType.Room,
+                    showHiddenEvents: false,
+                    isSeeingThroughMessageHiddenForModeration: false,
+                    tileRef: { current: null },
+                },
             },
             threads: {
                 openInRoom: jest.fn(),
@@ -174,7 +234,12 @@ describe("EventTileView", () => {
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
                     content: {
-                        sender: <div data-testid="sender">tooltip:@alice:example.org</div>,
+                        sender: {
+                            mode: SenderMode.Tooltip,
+                            mxEvent: {
+                                getSender: () => "@alice:example.org",
+                            } as any,
+                        },
                     },
                 })}
             />,
@@ -183,6 +248,25 @@ describe("EventTileView", () => {
         expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
             "tooltip:@alice:example.org",
         );
+    });
+
+    it("does not render a sender when the sender mode is hidden", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    content: {
+                        sender: {
+                            mode: SenderMode.Hidden,
+                            mxEvent: {
+                                getSender: () => "@alice:example.org",
+                            } as any,
+                        },
+                    },
+                })}
+            />,
+        );
+
+        expect(screen.queryByTestId("sender")).toBeNull();
     });
 
     it("renders thread info summary content", () => {
@@ -238,7 +322,14 @@ describe("EventTileView", () => {
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.Thread,
                     content: {
-                        footer: <div>Pinned message</div>,
+                        footer: {
+                            enabled: true,
+                            mxEvent: {} as any,
+                            reactions: null,
+                            isPinned: true,
+                            isOwnEvent: false,
+                            tileContentId: "event",
+                        },
                     },
                     layout: Layout.Group,
                 })}
@@ -248,13 +339,41 @@ describe("EventTileView", () => {
         expect(screen.getByText("Pinned message")).toBeInTheDocument();
     });
 
+    it("renders reactions in the footer when provided", () => {
+        render(
+            <EventTileView
+                {...makeProps({
+                    content: {
+                        footer: {
+                            enabled: true,
+                            mxEvent: {} as any,
+                            reactions: {} as any,
+                            isPinned: false,
+                            isOwnEvent: false,
+                            tileContentId: "event",
+                        },
+                    },
+                })}
+            />,
+        );
+
+        expect(screen.getByTestId("reactions-row")).toBeInTheDocument();
+    });
+
     it("does not render the pinned message badge for file tiles", () => {
         render(
             <EventTileView
                 {...makeProps({
                     timelineRenderingType: TimelineRenderingType.File,
                     content: {
-                        footer: <div>Pinned message</div>,
+                        footer: {
+                            enabled: true,
+                            mxEvent: {} as any,
+                            reactions: null,
+                            isPinned: true,
+                            isOwnEvent: false,
+                            tileContentId: "event",
+                        },
                     },
                 })}
             />,
@@ -271,7 +390,14 @@ describe("EventTileView", () => {
                     {...makeProps({
                         layout,
                         content: {
-                            footer: <div>Pinned message</div>,
+                            footer: {
+                                enabled: true,
+                                mxEvent: {} as any,
+                                reactions: null,
+                                isPinned: true,
+                                isOwnEvent: false,
+                                tileContentId: "event",
+                            },
                         },
                     })}
                 />,
@@ -409,11 +535,13 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     content: {
-                        messageStatus: (
-                            <div data-testid="message-status">
-                                <div data-testid="sent-receipt">sent</div>
-                            </div>
-                        ),
+                        messageStatus: {
+                            messageState: undefined,
+                            suppressReadReceiptAnimation: false,
+                            shouldShowSentReceipt: true,
+                            shouldShowSendingReceipt: false,
+                            showReadReceipts: false,
+                        },
                     },
                 })}
             />,
@@ -427,11 +555,13 @@ describe("EventTileView", () => {
             <EventTileView
                 {...makeProps({
                     content: {
-                        messageStatus: (
-                            <div data-testid="message-status">
-                                <div data-testid="read-receipts">readers</div>
-                            </div>
-                        ),
+                        messageStatus: {
+                            messageState: undefined,
+                            suppressReadReceiptAnimation: false,
+                            shouldShowSentReceipt: false,
+                            shouldShowSendingReceipt: false,
+                            showReadReceipts: true,
+                        },
                     },
                 })}
             />,

@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { EventType, Relations, RelationType, RoomMember } from "matrix-js-sdk/src/matrix";
+import type { MediaEventHelper } from "../../../../utils/MediaEventHelper";
 
 /**
  * Resolves aggregated relations for an event, such as reactions or edits.
@@ -24,3 +25,21 @@ export interface ReadReceiptProps {
     ts: number;
     roomMember: RoomMember | null;
 }
+
+/**
+ * Shared imperative operations exposed by event tile implementations.
+ */
+export type EventTileOps = {
+    /**
+     * Returns whether an embedded widget preview is currently hidden.
+     */
+    isWidgetHidden?(): boolean;
+    /**
+     * Restores a previously hidden embedded widget preview.
+     */
+    unhideWidget?(): void;
+    /**
+     * Returns the media helper for eligible media events when one is available.
+     */
+    getMediaHelper?(): MediaEventHelper | undefined;
+};

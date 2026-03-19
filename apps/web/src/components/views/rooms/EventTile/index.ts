@@ -6,11 +6,5 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export { EventTile as default, EventTile } from "./EventTile";
-export type {
-    EventTileApi,
-    EventTileHandle,
-    EventTileOps,
-    EventTileProps,
-    GetRelationsForEvent,
-    ReadReceiptProps,
-} from "./EventTile";
+export type { EventTileHandle, EventTileProps } from "./EventTile";
+export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
