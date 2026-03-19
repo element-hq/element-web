@@ -299,6 +299,24 @@ describe("EventTile", () => {
         });
     });
 
+    describe("EventTile renderingType: File", () => {
+        it("renders the timestamp in the sender details when enabled", async () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Hello world!",
+                event: true,
+                ts: 123,
+            });
+
+            const { container } = getComponent({ mxEvent, alwaysShowTimestamps: true }, TimelineRenderingType.File);
+
+            await waitFor(() => {
+                expect(container.getElementsByClassName("mx_MessageTimestamp")).toHaveLength(1);
+            });
+        });
+    });
+
     describe("EventTile presenter wiring", () => {
         it("renders the missing renderer fallback when the VM selects it", () => {
             mockGetEventDisplayInfo.mockReturnValue({

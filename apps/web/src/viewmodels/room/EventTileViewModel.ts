@@ -596,7 +596,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.avatarForceHistorical = EventTileViewModel.getAvatarForceHistorical(props);
         snapshot.senderMode = EventTileViewModel.getSenderMode(props, snapshot);
         snapshot.isPinned = EventTileViewModel.getIsPinned(props);
-        snapshot.hasFooter = EventTileViewModel.getHasFooter(snapshot);
+        snapshot.hasFooter = EventTileViewModel.getHasFooter(props, snapshot);
         snapshot.encryptionIndicatorMode = EventTileViewModel.getEncryptionIndicatorMode(props, snapshot);
         snapshot.sharedKeysUserId = EventTileViewModel.getSharedKeysUserId(props, snapshot);
         snapshot.sharedKeysRoomId = EventTileViewModel.getSharedKeysRoomId(props);
@@ -683,8 +683,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return Boolean(
             props.mxEvent.getTs() &&
             !props.hideTimestamp &&
-            (props.timelineRenderingType === TimelineRenderingType.ThreadsList ||
-                props.alwaysShowTimestamps ||
+            (props.alwaysShowTimestamps ||
                 props.last ||
                 snapshot.hover ||
                 snapshot.focusWithin ||
@@ -758,6 +757,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         return props.timelineRenderingType === TimelineRenderingType.Notification ||
+            props.timelineRenderingType === TimelineRenderingType.File ||
             props.timelineRenderingType === TimelineRenderingType.ThreadsList
             ? TimestampDisplayMode.Plain
             : TimestampDisplayMode.Linked;
@@ -913,8 +913,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return PinningUtils.isPinned(props.cli, props.mxEvent);
     }
 
-    private static getHasFooter(snapshot: EventTileViewSnapshot): boolean {
-        return snapshot.isPinned || !!snapshot.reactions;
+    private static getHasFooter(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
+        return snapshot.isPinned || (!props.isRedacted && !!snapshot.reactions);
     }
 
     private static getEncryptionIndicatorMode(

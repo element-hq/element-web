@@ -314,7 +314,7 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().timestampTs).toBe(101);
         });
 
-        it("shows timestamps by default for thread list tiles", () => {
+        it("does not show timestamps by default for thread list tiles", () => {
             const timestampedEvent = mkMessage({
                 room: room.roomId,
                 user: "@alice:example.org",
@@ -327,7 +327,8 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.ThreadsList,
             });
 
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().showTimestamp).toBe(false);
+            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Hidden);
         });
 
         it("uses plain timestamp mode for thread list tiles when timestamps are shown", () => {
@@ -344,6 +345,24 @@ describe("EventTileViewModel", () => {
             });
 
             vm.setHover(true);
+
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Plain);
+        });
+
+        it("uses plain timestamp mode for file tiles when timestamps are shown", () => {
+            const timestampedEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "timestamped",
+                event: true,
+                ts: 123,
+            });
+            const vm = createViewModel({
+                mxEvent: timestampedEvent,
+                timelineRenderingType: TimelineRenderingType.File,
+                alwaysShowTimestamps: true,
+            });
 
             expect(vm.getSnapshot().showTimestamp).toBe(true);
             expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Plain);
@@ -482,6 +501,16 @@ describe("EventTileViewModel", () => {
             });
 
             expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.SummaryWithToolbar);
+        });
+
+        it("does not show a footer for redacted events with reactions", () => {
+            const vm = createViewModel({
+                isRedacted: true,
+                showReactions: true,
+                getRelationsForEvent: jest.fn().mockReturnValue({} as never),
+            });
+
+            expect(vm.getSnapshot().hasFooter).toBe(false);
         });
     });
 
