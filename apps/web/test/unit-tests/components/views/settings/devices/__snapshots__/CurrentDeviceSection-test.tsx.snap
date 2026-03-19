@@ -120,7 +120,7 @@ HTMLCollection [
         <span
           class="mx_DeviceDetails_signOutButtonContent"
         >
-          Sign out of this session
+          Remove this session
         </span>
       </div>
     </section>

@@ -12,12 +12,20 @@ import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type Room, type RoomItemViewModel } from "../RoomListItemView";
+import { type Room, type RoomListItemViewModel } from "../RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "../RoomListSectionHeaderView";
+
+export type RoomListSection = {
+    /** Unique identifier for the section */
+    id: string;
+    /** Array of room IDs that belong to this section */
+    roomIds: string[];
+};
 
 /**
  * Snapshot for the room list view
  */
-export type RoomListSnapshot = {
+export type RoomListViewSnapshot = {
     /** Whether the rooms are currently loading */
     isLoadingRooms: boolean;
     /** Whether the room list is empty */
@@ -28,14 +36,16 @@ export type RoomListSnapshot = {
     activeFilterId?: FilterId;
     /** Room list state */
     roomListState: RoomListViewState;
-    /** Array of room IDs for virtualization */
-    roomIds: string[];
+    /** Array of sections in the room list */
+    sections: RoomListSection[];
     /** Optional description for the empty state */
     emptyStateDescription?: string;
     /** Optional action element for the empty state */
     emptyStateAction?: ReactNode;
     /** Whether the user can create rooms */
     canCreateRoom?: boolean;
+    /** Whether the room list is displayed as a flat list */
+    isFlatList: boolean;
 };
 
 /**
@@ -49,15 +59,17 @@ export interface RoomListViewActions {
     /** Called to create a new room */
     createRoom: () => void;
     /** Get view model for a specific room (virtualization API) */
-    getRoomItemViewModel: (roomId: string) => RoomItemViewModel;
+    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
+    /** Get view model for a specific section header (virtualization API) */
+    getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
 }
 
 /**
  * The view model type for the room list view
  */
-export type RoomListViewModel = ViewModel<RoomListSnapshot, RoomListViewActions>;
+export type RoomListViewModel = ViewModel<RoomListViewSnapshot, RoomListViewActions>;
 
 /**
  * Props for RoomListView component

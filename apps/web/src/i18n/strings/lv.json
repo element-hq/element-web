@@ -1225,8 +1225,6 @@
     },
     "labs": {
         "ask_to_join": "Iespējot aicinājumus pievienoties",
-        "automatic_debug_logs": "Automātiski nosūtīt atkļūdošanas žurnālus par jebkuru kļūdu",
-        "automatic_debug_logs_decryption": "Automātiski nosūtīt atkļūdošanas žurnālus par atšifrēšanas kļūdām",
         "beta_description": "Kas gaidāms %(brand)s? Laboratorijas ir labākais veids, kā agri iegūt un izmēģināt jaunas iespējas un palīdzēt tās pilnveidot, pirms tās tiek izlaistas.",
         "beta_feature": "Šī ir beta funkcija",
         "beta_feedback_leave_button": "Lai izietu no beta versijas, atveriet iestatījumus.",
@@ -2822,8 +2820,7 @@
             "voice_call_unsupported": "%(senderName)s uzsāka balss zvanu. (Netiek atbalstīts šajā pārlūkā)"
         },
         "m.file": {
-            "error_decrypting": "Kļūda pielikuma atšifrēšanā",
-            "error_invalid": "Nederīga datne %(extra)s"
+            "error_decrypting": "Kļūda pielikuma atšifrēšanā"
         },
         "m.image": {
             "error": "Nevar parādīt attēlu kļūdas dēļ",
@@ -3192,14 +3189,7 @@
             "one_user": "%(displayName)s raksta…",
             "two_users": "%(names)s un %(lastPerson)s raksta…"
         },
-        "undecryptable_tooltip": "Šo ziņu nevarēja atšifrēt",
-        "url_preview": {
-            "close": "Aizvērt priekšskatījumu",
-            "show_n_more": {
-                "one": "Rādīt %(count)s citu priekšskatījumu",
-                "other": "Rādīt %(count)s citus priekšskatījumus"
-            }
-        }
+        "undecryptable_tooltip": "Šo ziņu nevarēja atšifrēt"
     },
     "truncated_list_n_more": {
         "other": "Un par %(count)s vairāk..."

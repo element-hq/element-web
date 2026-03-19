@@ -125,6 +125,9 @@
             "more_options": "More Options"
         },
         "room_options": "Room Options",
+        "section_header": {
+            "toggle": "Toggle %(section)s section"
+        },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
@@ -162,7 +165,7 @@
             "historical_event_no_key_backup": "Historical messages are not available on this device",
             "historical_event_unverified_device": "You need to verify this device for access to historical messages",
             "historical_event_user_not_joined": "You don't have access to this message",
-            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_identity_previously_verified": "Sender's verified digital identity was reset",
             "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
