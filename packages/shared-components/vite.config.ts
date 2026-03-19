@@ -39,6 +39,9 @@ export default defineConfig({
                 globals: {
                     "react": "react",
                     "react-dom": "ReactDom",
+                    "@vector-im/compound-design-tokens": "compoundDesignTokens",
+                    "@vector-im/compound-web": "compoundWeb",
+                    "react-virtuoso": "reactVirtuoso",
                 },
             },
         },

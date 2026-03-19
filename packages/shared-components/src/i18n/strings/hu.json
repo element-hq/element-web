@@ -3,10 +3,12 @@
         "seek_bar_label": "Hang keresősávja"
     },
     "action": {
+        "back": "Vissza",
         "delete": "Törlés",
         "dismiss": "Eltüntetés",
         "edit": "Szerkesztés",
         "explore_rooms": "Szobák felderítése",
+        "go": "Kezdés",
         "invite": "Meghívás",
         "new_conversation": "Új beszélgetés",
         "new_room": "Új szoba",
@@ -42,6 +44,10 @@
             "shared": "Az új tagok látják az előzményeket",
             "world_readable": "Bárki láthatja az előzményeket"
         },
+        "jump_to_date": "Ugrás időpontra",
+        "jump_to_date_beginning": "A szoba kezdete",
+        "jump_to_date_prompt": "Idő kiválasztása az ugráshoz",
+        "pinned_message_badge": "Kitűzött üzenet",
         "status_bar": {
             "delete_all": "Összes törlése",
             "exceeded_resource_limit_description": "A szolgáltatás további használatához vegye fel a kapcsolatot a szolgáltatóval.",
@@ -153,7 +159,7 @@
             "historical_event_no_key_backup": "A korábbi üzenetek nem érhetők el ezen az eszközön",
             "historical_event_unverified_device": "Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez",
             "historical_event_user_not_joined": "Nincs hozzáférése ehhez az üzenethez",
-            "sender_identity_previously_verified": "A feladó ellenőrzött személyazonossága megváltozott",
+            "sender_identity_previously_verified": "A feladó ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva",
             "sender_unsigned_device": "Nem biztonságos eszközről küldve.",
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },

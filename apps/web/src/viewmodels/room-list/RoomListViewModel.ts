@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     BaseViewModel,
-    type RoomListSnapshot,
+    type RoomListViewSnapshot,
     type FilterId,
     type RoomListViewActions,
     type RoomListViewState,
@@ -27,7 +27,7 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 
-interface RoomListViewViewModelProps {
+interface RoomListViewModelProps {
     client: MatrixClient;
 }
 
@@ -41,8 +41,8 @@ const filterKeyToIdMap: Map<FilterKey, FilterId> = new Map([
     [FilterKey.LowPriorityFilter, "low_priority"],
 ]);
 
-export class RoomListViewViewModel
-    extends BaseViewModel<RoomListSnapshot, RoomListViewViewModelProps>
+export class RoomListViewModel
+    extends BaseViewModel<RoomListViewSnapshot, RoomListViewModelProps>
     implements RoomListViewActions
 {
     // State tracking
@@ -54,7 +54,7 @@ export class RoomListViewViewModel
     private roomItemViewModels = new Map<string, RoomListItemViewModel>();
     private roomsMap = new Map<string, Room>();
 
-    public constructor(props: RoomListViewViewModelProps) {
+    public constructor(props: RoomListViewModelProps) {
         const activeSpace = SpaceStore.instance.activeSpaceRoom;
 
         // Get initial rooms

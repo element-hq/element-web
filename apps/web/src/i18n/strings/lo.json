@@ -1072,8 +1072,6 @@
         "upload_file": "ອັບໂຫຼດໄຟລ໌"
     },
     "labs": {
-        "automatic_debug_logs": "ສົ່ງບັນທຶກ ບັນຫາບັກ ໂດຍອັດຕະໂນມັດກ່ຽວກັບຂໍ້ຜິດພາດໃດໆ",
-        "automatic_debug_logs_decryption": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດໃນຄວາມຜິດພາດການຖອດລະຫັດ",
         "beta_feature": "ນີ້ແມ່ນຄຸນສົມບັດເບຕ້າ",
         "beta_feedback_leave_button": "ເພື່ອອອກຈາກເບຕ້າ, ໃຫ້ເຂົ້າໄປທີ່ການຕັ້ງຄ່າຂອງທ່ານ.",
         "beta_feedback_title": "%(featureName)s ຄຳຕິຊົມເບຕ້າ",
@@ -2327,8 +2325,7 @@
             "voice_call_unsupported": "%(senderName)s ການໂທດ້ວຍສຽງ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)"
         },
         "m.file": {
-            "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ",
-            "error_invalid": "ໄຟລ໌ບໍ່ຖືກຕ້ອງ%(extra)s"
+            "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ"
         },
         "m.image": {
             "error_decrypting": "ການຖອດລະຫັດຮູບພາບຜິດພາດ",
@@ -2647,13 +2644,6 @@
             },
             "one_user": "%(displayName)s ກຳລັງພິມ…",
             "two_users": "%(names)s ແລະ %(lastPerson)s ກຳລັງພິມ…"
-        },
-        "url_preview": {
-            "close": "ປິດຕົວຢ່າງ",
-            "show_n_more": {
-                "one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
-                "other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s"
-            }
         }
     },
     "truncated_list_n_more": {

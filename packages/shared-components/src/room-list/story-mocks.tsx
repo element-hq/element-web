@@ -8,7 +8,12 @@
 import React from "react";
 import { fn } from "storybook/test";
 
-import { type Room, type RoomItemViewModel, type RoomListItemSnapshot, RoomNotifState } from "./RoomListItemView";
+import {
+    type Room,
+    type RoomListItemViewModel,
+    type RoomListItemViewSnapshot,
+    RoomNotifState,
+} from "./RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderView";
 import { MockViewModel } from "../viewmodel";
 
@@ -74,7 +79,7 @@ const roomNames = [
 /**
  * Create a mock room item snapshot for stories
  */
-export const createMockRoomSnapshot = (id: string, name: string, index: number): RoomListItemSnapshot => ({
+export const createMockRoomSnapshot = (id: string, name: string, index: number): RoomListItemViewSnapshot => ({
     id,
     room: { name },
     name,
@@ -102,7 +107,7 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     roomNotifState: RoomNotifState.AllMessages,
 });
 
-export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomItemViewModel {
+export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
     const snapshot = createMockRoomSnapshot(roomId, name, index);
     return {
         getSnapshot: () => snapshot,
@@ -122,8 +127,8 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
 /**
  * Create a mock getRoomItemViewModel function for stories
  */
-export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomItemViewModel) => {
-    const viewModels = new Map<string, RoomItemViewModel>();
+export const createGetRoomItemViewModel = (roomIds: string[]): ((roomId: string) => RoomListItemViewModel) => {
+    const viewModels = new Map<string, RoomListItemViewModel>();
     roomIds.forEach((roomId, index) => {
         const name = roomNames[index % roomNames.length];
         viewModels.set(roomId, createMockRoomItemViewModel(roomId, name, index));
