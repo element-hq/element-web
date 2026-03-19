@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { type JSX, createRef, useContext, useEffect } from "react";
+import React, { createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -18,13 +18,7 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import {
-    useCreateAutoDisposedViewModel,
-    DecryptionFailureBodyView,
-    RedactedBodyView,
-} from "@element-hq/web-shared-components";
 
-import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import UnknownBody from "./UnknownBody";
@@ -41,9 +35,7 @@ import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
-import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
-import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
-import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
+import { DecryptionFailureBodyFactory, FileBodyViewFactory, RedactedBodyFactory, renderMBody } from "./MBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -250,11 +242,11 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType: React.ComponentType<IBodyProps> = RedactedBodyWrapper;
+        let BodyType: React.ComponentType<IBodyProps> = RedactedBodyFactory;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (this.props.mxEvent.isDecryptionFailure()) {
-                BodyType = DecryptionFailureBodyWrapper;
+                BodyType = DecryptionFailureBodyFactory;
             } else if (type && this.evTypes.has(type)) {
                 BodyType = this.evTypes.get(type)!;
             } else if (msgtype && this.bodyTypes.has(msgtype)) {
@@ -334,31 +326,3 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
         <TextualBody {...{ ...props, ref: undefined }} />
     </div>
 );
-
-/**
- * Bridge decryption-failure events into the view model using current local verification state.
- * This wrapper can be removed after MessageEvent has been changed to a function component.
- */
-function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element {
-    const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new DecryptionFailureBodyViewModel({
-                decryptionFailureCode: mxEvent.decryptionFailureReason,
-                verificationState,
-            }),
-    );
-    useEffect(() => {
-        vm.setVerificationState(verificationState);
-    }, [verificationState, vm]);
-    return <DecryptionFailureBodyView vm={vm} ref={ref} className="mx_DecryptionFailureBody mx_EventTile_content" />;
-}
-
-/**
- * Bridge redacted events into the view model until MessageEvent becomes a function component.
- */
-function RedactedBodyWrapper({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
-
-    return <RedactedBodyView vm={vm} ref={ref} className="mx_RedactedBody" />;
-}

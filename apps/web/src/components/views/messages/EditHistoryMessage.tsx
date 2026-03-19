@@ -9,14 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import {
-    EventContentBodyView,
-    RedactedBodyView,
-    useCreateAutoDisposedViewModel,
-} from "@element-hq/web-shared-components";
+import { EventContentBodyView } from "@element-hq/web-shared-components";
 
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
-import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
@@ -26,6 +21,7 @@ import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { RedactedBodyFactory } from "./MBodyFactory";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -155,7 +151,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
-            contentContainer = <RedactedBodyWrapper mxEvent={this.props.mxEvent} />;
+            contentContainer = <RedactedBodyFactory mxEvent={this.props.mxEvent} />;
         } else {
             let contentElements;
             if (this.props.previousEdit) {
@@ -199,13 +195,4 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             </li>
         );
     }
-}
-
-interface RedactedBodyWrapperProps {
-    mxEvent: MatrixEvent;
-}
-
-function RedactedBodyWrapper({ mxEvent }: Readonly<RedactedBodyWrapperProps>): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
-    return <RedactedBodyView vm={vm} className="mx_RedactedBody" />;
 }

@@ -36,7 +36,9 @@ jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
 
 jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
+    DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
     FileBodyViewFactory: () => <div data-testid="file-body" />,
+    RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
     renderMBody: () => <div data-testid="file-body" />,
 }));
 

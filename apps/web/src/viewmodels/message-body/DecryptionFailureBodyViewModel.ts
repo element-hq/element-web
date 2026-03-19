@@ -84,4 +84,13 @@ export class DecryptionFailureBodyViewModel
         this.props.verificationState = verificationState;
         this.snapshot.merge({ isLocalDeviceVerified: verificationState });
     }
+
+    public setDecryptionFailureCode(decryptionFailureCode: DecryptionFailureCode | null): void {
+        if (this.props.decryptionFailureCode === decryptionFailureCode) return;
+
+        this.props.decryptionFailureCode = decryptionFailureCode;
+        this.snapshot.merge({
+            decryptionFailureReason: DecryptionFailureBodyViewModel.getDecryptionReasonFromCode(decryptionFailureCode),
+        });
+    }
 }
