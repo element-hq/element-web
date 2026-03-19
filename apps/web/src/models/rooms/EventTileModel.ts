@@ -32,6 +32,11 @@ export enum ClickMode {
     ShowThread = "showThread",
 }
 
+export enum EventTileRenderMode {
+    Rendered = "rendered",
+    MissingRendererFallback = "missingRendererFallback",
+}
+
 export enum EncryptionIndicatorMode {
     None = "none",
     Normal = "normal",
@@ -64,4 +69,10 @@ export enum AvatarSize {
     Medium = "medium",
     Large = "large",
     XLarge = "xlarge",
+}
+
+export enum AvatarSubject {
+    None = "none",
+    Sender = "sender",
+    Target = "target",
 }

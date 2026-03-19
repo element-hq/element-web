@@ -25,7 +25,9 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import {
+    AvatarSubject,
     ClickMode,
+    EventTileRenderMode,
     EncryptionIndicatorMode,
     PadlockMode,
     SenderMode,
@@ -38,6 +40,14 @@ import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../test-utils";
 import { mkThread } from "../../test-utils/threads";
+
+jest.mock("../../../src/utils/EventRenderingUtils", () => ({
+    ...jest.requireActual("../../../src/utils/EventRenderingUtils"),
+    getEventDisplayInfo: jest.fn(),
+}));
+
+const mockGetEventDisplayInfo = jest.requireMock("../../../src/utils/EventRenderingUtils")
+    .getEventDisplayInfo as jest.Mock;
 
 describe("EventTileViewModel", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -84,6 +94,15 @@ describe("EventTileViewModel", () => {
             msg: "Hello world!",
             event: true,
         });
+
+        mockGetEventDisplayInfo.mockReturnValue({
+            hasRenderer: true,
+            isBubbleMessage: false,
+            isInfoMessage: false,
+            isLeftAlignedBubbleMessage: false,
+            noBubbleEvent: false,
+            isSeeingThroughMessageHiddenForModeration: false,
+        });
     });
 
     afterEach(() => {
@@ -124,6 +143,60 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Search });
 
             expect(vm.getSnapshot().openedFromSearch).toBe(true);
+        });
+
+        it("does not show a reply preview for non-reply events", () => {
+            const vm = createViewModel();
+
+            expect(vm.getSnapshot().showReplyPreview).toBe(false);
+        });
+
+        it("uses the target avatar subject for third-party invite events", () => {
+            mxEvent = mkEvent({
+                event: true,
+                type: "m.room.member",
+                user: "@alice:example.org",
+                room: room.roomId,
+                content: {
+                    third_party_invite: {
+                        display_name: "Bob",
+                    },
+                },
+            });
+
+            const vm = createViewModel({ mxEvent });
+
+            expect(vm.getSnapshot().avatarSubject).toBe(AvatarSubject.Target);
+        });
+
+        it("uses the missing renderer fallback mode for non-notification tiles without a renderer", () => {
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const vm = createViewModel();
+
+            expect(vm.getSnapshot().renderMode).toBe(EventTileRenderMode.MissingRendererFallback);
+        });
+
+        it("keeps notification tiles in rendered mode even without a renderer", () => {
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Notification });
+
+            expect(vm.getSnapshot().renderMode).toBe(EventTileRenderMode.Rendered);
         });
     });
 

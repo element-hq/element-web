@@ -31,8 +31,10 @@ import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import type LegacyCallEventGrouper from "../../components/structures/LegacyCallEventGrouper";
 import {
+    AvatarSubject,
     AvatarSize,
     ClickMode,
+    EventTileRenderMode,
     EncryptionIndicatorMode,
     PadlockMode,
     SenderMode,
@@ -49,6 +51,7 @@ import { Layout } from "../../settings/enums/Layout";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { objectHasDiff } from "../../utils/objects";
+import { shouldDisplayReply } from "../../utils/Reply";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import PinningUtils from "../../utils/PinningUtils";
@@ -74,6 +77,8 @@ interface EventTileRenderingSnapshot {
     isContinuation: boolean;
     isSending: boolean;
     isEditing: boolean;
+    showReplyPreview: boolean;
+    renderMode: EventTileRenderMode;
     hasRenderer: boolean;
     tileRenderType: TimelineRenderingType;
     isBubbleMessage: boolean;
@@ -109,6 +114,7 @@ interface EventTileThreadSnapshot {
 interface EventTileSenderSnapshot {
     isOwnEvent: boolean;
     showSender: boolean;
+    avatarSubject: AvatarSubject;
     avatarSize: AvatarSize;
     avatarMemberUserOnClick: boolean;
     avatarForceHistorical: boolean;
@@ -512,6 +518,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             isContinuation: false,
             isSending: false,
             isEditing: false,
+            showReplyPreview: false,
+            renderMode: EventTileRenderMode.Rendered,
             isEncryptionFailure: false,
             isOwnEvent: false,
             permalink: "#",
@@ -525,6 +533,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             noBubbleEvent: false,
             isSeeingThroughMessageHiddenForModeration: false,
             showSender: false,
+            avatarSubject: AvatarSubject.None,
             threadPanelMode: ThreadPanelMode.None,
             showReadReceipts: false,
             padlockMode: PadlockMode.None,
@@ -556,6 +565,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.isHighlighted = EventTileViewModel.getShouldHighlight(props);
         snapshot.isSending = EventTileViewModel.getIsSending(props);
         snapshot.isEditing = EventTileViewModel.getIsEditing(props);
+        snapshot.showReplyPreview = EventTileViewModel.getShowReplyPreview(props);
         snapshot.isEncryptionFailure = EventTileViewModel.getIsEncryptionFailure(props);
         snapshot.isOwnEvent = EventTileViewModel.getIsOwnEvent(props);
         snapshot.permalink = EventTileViewModel.getPermalink(props);
@@ -566,6 +576,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.isThreadRoot = snapshot.thread?.id === props.mxEvent.getId();
         snapshot.threadUpdateKey = EventTileViewModel.getThreadUpdateKey(snapshot.thread);
         snapshot.hasRenderer = displayInfo.hasRenderer;
+        snapshot.renderMode = EventTileViewModel.getRenderMode(props, displayInfo.hasRenderer);
         snapshot.isBubbleMessage = displayInfo.isBubbleMessage;
         snapshot.isInfoMessage = displayInfo.isInfoMessage;
         snapshot.isLeftAlignedBubbleMessage = displayInfo.isLeftAlignedBubbleMessage;
@@ -580,6 +591,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.timestampTs = EventTileViewModel.getTimestampTs(props, snapshot);
         snapshot.tileRenderType = EventTileViewModel.getTileRenderType(props);
         snapshot.avatarSize = EventTileViewModel.getAvatarSize(props, snapshot);
+        snapshot.avatarSubject = EventTileViewModel.getAvatarSubject(props, snapshot);
         snapshot.avatarMemberUserOnClick = EventTileViewModel.getAvatarMemberUserOnClick(props, snapshot);
         snapshot.avatarForceHistorical = EventTileViewModel.getAvatarForceHistorical(props);
         snapshot.senderMode = EventTileViewModel.getSenderMode(props, snapshot);
@@ -682,6 +694,26 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getShowSender(props: EventTileViewModelProps): boolean {
         return !props.hideSender;
+    }
+
+    private static getShowReplyPreview(props: EventTileViewModelProps): boolean {
+        return !this.shouldHideEvent(props) && shouldDisplayReply(props.mxEvent);
+    }
+
+    private static getAvatarSubject(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): AvatarSubject {
+        if (snapshot.avatarSize === AvatarSize.None) {
+            return AvatarSubject.None;
+        }
+
+        return props.mxEvent.getContent().third_party_invite ? AvatarSubject.Target : AvatarSubject.Sender;
+    }
+
+    private static getRenderMode(props: EventTileViewModelProps, hasRenderer: boolean): EventTileRenderMode {
+        if (!hasRenderer && props.timelineRenderingType !== TimelineRenderingType.Notification) {
+            return EventTileRenderMode.MissingRendererFallback;
+        }
+
+        return EventTileRenderMode.Rendered;
     }
 
     private static getThreadPanelMode(

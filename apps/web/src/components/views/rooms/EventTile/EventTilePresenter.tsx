@@ -51,13 +51,18 @@ import { _t } from "../../../../languageHandler";
 import PlatformPeg from "../../../../PlatformPeg";
 import { ElementCallEventType } from "../../../../call-types";
 import { type Layout } from "../../../../settings/enums/Layout";
-import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 import { getLateEventInfo } from "../../../structures/grouper/LateEventGrouper";
 import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrouper";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
-import { ClickMode, ThreadInfoMode, ThreadPanelMode } from "../../../../models/rooms/EventTileModel";
+import {
+    AvatarSubject,
+    ClickMode,
+    EventTileRenderMode,
+    ThreadInfoMode,
+    ThreadPanelMode,
+} from "../../../../models/rooms/EventTileModel";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -75,7 +80,6 @@ import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
 import { type MediaEventHelper } from "../../../../utils/MediaEventHelper";
 import { MediaEventHelper as TileMediaEventHelper } from "../../../../utils/MediaEventHelper";
-import { shouldDisplayReply } from "../../../../utils/Reply";
 
 /**
  * Operations exposed by embedded widgets inside an event tile.
@@ -676,8 +680,7 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
 
     const replyChain = useMemo(
         () =>
-            haveRendererForEvent(props.mxEvent, cli, roomContext.showHiddenEvents) &&
-            shouldDisplayReply(props.mxEvent) ? (
+            vmSnapshot.showReplyPreview ? (
                 <ReplyPreview
                     mxEvent={props.mxEvent}
                     cli={cli}
@@ -695,6 +698,7 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
                 />
             ) : undefined,
         [
+            vmSnapshot.showReplyPreview,
             props.mxEvent,
             cli,
             roomContext.showHiddenEvents,
@@ -797,7 +801,7 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         },
     });
 
-    if (!vmSnapshot.hasRenderer && roomContext.timelineRenderingType !== TimelineRenderingType.Notification) {
+    if (vmSnapshot.renderMode === EventTileRenderMode.MissingRendererFallback) {
         return (
             <div ref={rootRef as React.Ref<HTMLDivElement>} className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
                 <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>
@@ -825,7 +829,7 @@ function useEventTileViewProps({
         [props, snapshot, roomContext.timelineRenderingType],
     );
     const contentClassName = useMemo(() => getContentClassName(props.mxEvent), [props.mxEvent]);
-    const avatarMember = getAvatarMember(props);
+    const avatarMember = getAvatarMember(props, snapshot.avatarSubject);
     const onSenderProfileClick = useCallback((): void => {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
@@ -1099,9 +1103,14 @@ function useEventTileViewProps({
     };
 }
 
-function getAvatarMember(props: EventTileProps): RoomMember | null {
-    if (props.mxEvent.getContent().third_party_invite) {
-        return props.mxEvent.target;
+function getAvatarMember(props: EventTileProps, avatarSubject: AvatarSubject): RoomMember | null {
+    switch (avatarSubject) {
+        case AvatarSubject.Target:
+            return props.mxEvent.target;
+        case AvatarSubject.Sender:
+            return props.mxEvent.sender;
+        case AvatarSubject.None:
+        default:
+            return null;
     }
-    return props.mxEvent.sender;
 }
