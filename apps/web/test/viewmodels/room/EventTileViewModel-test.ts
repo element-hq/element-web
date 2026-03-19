@@ -117,10 +117,10 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().senderMode).toBe(SenderMode.Hidden);
         });
 
-        it("sets the message search metrics trigger in search view", () => {
+        it("marks tiles as opened from search in search view", () => {
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Search });
 
-            expect(vm.getSnapshot().viewRoomMetricsTrigger).toBe("MessageSearch");
+            expect(vm.getSnapshot().openedFromSearch).toBe(true);
         });
     });
 

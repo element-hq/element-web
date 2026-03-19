@@ -114,7 +114,7 @@ interface EventTileThreadSnapshot {
     showThreadPanelSummary: boolean;
     threadInfoMode: ThreadInfoMode;
     tileClickMode: ClickMode;
-    viewRoomMetricsTrigger?: "MessageSearch";
+    openedFromSearch: boolean;
 }
 
 interface EventTileSenderSnapshot {
@@ -271,6 +271,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private rebindListeners(previousProps: EventTileViewModelProps | null, nextProps: EventTileViewModelProps): void {
         if (previousProps?.cli !== nextProps.cli || previousProps?.forExport !== nextProps.forExport) {
+            // Client-scoped listeners must move when we swap MatrixClient instances or stop/start live rendering.
             this.unbindCliListeners();
             this.bindCliListeners(nextProps);
         }
@@ -280,17 +281,20 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             previousProps?.showReactions !== nextProps.showReactions ||
             previousProps?.forExport !== nextProps.forExport
         ) {
+            // Event-scoped listeners depend on the current event, whether reactions are shown, and export mode.
             this.unbindEventListeners();
             this.bindEventListeners(nextProps);
         }
 
         const nextRoom = EventTileViewModel.getRoom(nextProps);
         if (this.currentRoom !== nextRoom) {
+            // Room-scoped listeners follow the room that owns the tile's event.
             this.unbindRoomListeners();
             this.bindRoomListeners(nextRoom);
         }
 
         if (previousProps?.cli !== nextProps.cli) {
+            // Force receipt subscription to be re-evaluated against the newly bound client.
             this.isListeningForReceipts = false;
         }
     }
@@ -299,8 +303,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.currentCli = props.cli;
         if (props.forExport) return;
 
+        // Re-verify the encryption shield when the sender's trust state changes.
         props.cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
         if (this.isListeningForReceipts) {
+            // Refresh sent/sending receipt state for tiles that currently display delivery receipts.
             props.cli.on(RoomEvent.Receipt, this.onRoomReceipt);
         }
         this.isListeningForUserTrust = true;
@@ -308,9 +314,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private unbindCliListeners(): void {
         if (this.currentCli && this.isListeningForUserTrust) {
+            // Drop trust updates before switching clients or exporting to avoid duplicate handlers.
             this.currentCli.off(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
         }
         if (this.currentCli && this.isListeningForReceipts) {
+            // Receipt listeners are opt-in and should only stay attached while this tile needs them.
             this.currentCli.off(RoomEvent.Receipt, this.onRoomReceipt);
         }
 
@@ -320,15 +328,19 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private bindEventListeners(props: EventTileViewModelProps): void {
         this.currentEvent = props.mxEvent;
+        // Keep thread summary data current as replies are added or thread metadata changes.
         props.mxEvent.on(ThreadEvent.Update, this.onThreadUpdate);
 
         if (props.forExport) return;
 
+        // Recompute rendering and encryption state once an encrypted event finishes decrypting.
         props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
+        // Update the tile if this event gets edited and its replacement changes what should be rendered.
         props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
         DecryptionFailureTracker.instance.addVisibleEvent(props.mxEvent);
 
         if (props.showReactions) {
+            // Refresh the reaction summary when new reaction relations are attached to the event.
             props.mxEvent.on(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
             this.isListeningForReactions = true;
         }
@@ -337,6 +349,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private unbindEventListeners(): void {
         if (!this.currentEvent) return;
 
+        // Remove all listeners tied to the previous event before following a new event instance.
         this.currentEvent.off(ThreadEvent.Update, this.onThreadUpdate);
         this.currentEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.currentEvent.off(MatrixEventEvent.Replaced, this.onReplaced);
@@ -354,10 +367,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private bindRoomListeners(room: Room | null): void {
         this.currentRoom = room;
+        // Pick up the thread object later if this event becomes recognized as a thread root after initial render.
         room?.on(ThreadEvent.New, this.onNewThread);
     }
 
     private unbindRoomListeners(): void {
+        // Stop watching the old room once the tile moves to a different room context.
         this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
         this.currentRoom = null;
     }
@@ -381,9 +396,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
         const shouldListen = snapshot.shouldShowSentReceipt || snapshot.shouldShowSendingReceipt;
         if (shouldListen && !this.isListeningForReceipts) {
+            // Only subscribe to room receipts while this tile renders sent/sending receipt affordances.
             this.currentCli?.on(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = true;
         } else if (!shouldListen && this.isListeningForReceipts) {
+            // Drop the receipt listener once receipt state is no longer visible for this tile.
             this.currentCli?.off(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = false;
         }
@@ -479,6 +496,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
     }
 
+    /**
+     * Builds the full tile view state from current props plus any listener-driven partial updates.
+     * Merge order matters here: defaults are seeded first, then previous/partial state is preserved,
+     * and finally the derived fields are recomputed from the latest props.
+     */
     private static deriveSnapshot(
         props: EventTileViewModelProps,
         previousSnapshot?: EventTileViewSnapshot,
@@ -540,7 +562,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             sharedKeysRoomId: undefined,
             threadInfoMode: ThreadInfoMode.None,
             tileClickMode: ClickMode.None,
-            viewRoomMetricsTrigger: undefined,
+            openedFromSearch: false,
             ...previousSnapshot,
             ...partial,
         };
@@ -592,7 +614,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.sharedKeysRoomId = EventTileViewModel.getSharedKeysRoomId(props);
         snapshot.threadInfoMode = EventTileViewModel.getThreadInfoMode(props, snapshot);
         snapshot.tileClickMode = EventTileViewModel.getTileClickMode(props);
-        snapshot.viewRoomMetricsTrigger = EventTileViewModel.getViewRoomMetricsTrigger(props);
+        snapshot.openedFromSearch = EventTileViewModel.getOpenedFromSearch(props);
         snapshot.classes = EventTileViewModel.getClasses(props, snapshot);
         return snapshot;
     }
@@ -607,6 +629,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static isEligibleForSpecialReceipt(props: EventTileViewModelProps): boolean {
+        // "Special" receipts are the custom sent/sending indicators for the current user's own message,
+        // used when there are no explicit read receipts to show instead.
         if (props.readReceipts && props.readReceipts.length > 0) return false;
 
         const roomId = props.mxEvent.getRoomId();
@@ -641,7 +665,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static getIsSending(props: EventTileViewModelProps): boolean {
-        return ["sending", "queued", "encrypting"].includes(props.eventSendStatus ?? "");
+        return (
+            !!props.eventSendStatus &&
+            [EventStatus.SENDING, EventStatus.QUEUED, EventStatus.ENCRYPTING].includes(props.eventSendStatus)
+        );
     }
 
     private static getIsEditing(props: EventTileViewModelProps): boolean {
@@ -667,6 +694,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static getIsContinuation(props: EventTileViewModelProps): boolean {
+        // Continuation layout is only meaningful in views that visually group adjacent events.
         if (
             props.timelineRenderingType !== TimelineRenderingType.Room &&
             props.timelineRenderingType !== TimelineRenderingType.Search &&
@@ -753,6 +781,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static getAvatarSize(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): string | null {
+        // Avatar visibility is driven by timeline context and event type, and stays aligned with
+        // the sender-profile rules used by getNeedsSenderProfile/getSenderMode below.
         const eventType = props.mxEvent.getType();
 
         if (props.timelineRenderingType === TimelineRenderingType.Notification) {
@@ -810,10 +840,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return props.mxEvent.getType() === EventType.RoomMember;
     }
 
-    private static getSenderMode(
-        props: EventTileViewModelProps,
-        snapshot: EventTileViewSnapshot,
-    ): EventTileViewSnapshot["senderMode"] {
+    private static getSenderMode(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): SenderMode {
         if (!snapshot.showSender || !EventTileViewModel.getNeedsSenderProfile(props, snapshot)) {
             return SenderMode.Hidden;
         }
@@ -832,6 +859,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static getNeedsSenderProfile(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
+        // This gates whether the sender is shown as an interactive profile-bearing identity at all.
         const eventType = props.mxEvent.getType();
 
         if (props.timelineRenderingType === TimelineRenderingType.Notification) {
@@ -883,7 +911,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private static getEncryptionIndicatorMode(
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
-    ): EventTileViewSnapshot["encryptionIndicatorMode"] {
+    ): EncryptionIndicatorMode {
+        // Collapse crypto and shield state into the UI-level indicator the tile should render.
         const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
 
         if (isLocalRoom(event.getRoomId()!)) return EncryptionIndicatorMode.None;
@@ -926,6 +955,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
     ): string | undefined {
+        // Keep tooltip text in sync with the indicator mode, using the most specific crypto reason available.
         const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
 
         if (event.isDecryptionFailure()) {
@@ -986,10 +1016,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return event.getRoomId() ?? undefined;
     }
 
-    private static getThreadInfoMode(
-        props: EventTileViewModelProps,
-        snapshot: EventTileViewSnapshot,
-    ): EventTileViewSnapshot["threadInfoMode"] {
+    private static getThreadInfoMode(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): ThreadInfoMode {
         if (snapshot.isThreadRoot && snapshot.thread) {
             return ThreadInfoMode.Summary;
         }
@@ -1001,7 +1028,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return ThreadInfoMode.None;
     }
 
-    private static getTileClickMode(props: EventTileViewModelProps): EventTileViewSnapshot["tileClickMode"] {
+    private static getTileClickMode(props: EventTileViewModelProps): ClickMode {
         switch (props.timelineRenderingType) {
             case TimelineRenderingType.Notification:
                 return ClickMode.ViewRoom;
@@ -1012,10 +1039,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
     }
 
-    private static getViewRoomMetricsTrigger(
-        props: EventTileViewModelProps,
-    ): EventTileViewSnapshot["viewRoomMetricsTrigger"] {
-        return props.timelineRenderingType === TimelineRenderingType.Search ? "MessageSearch" : undefined;
+    private static getOpenedFromSearch(props: EventTileViewModelProps): boolean {
+        return props.timelineRenderingType === TimelineRenderingType.Search;
     }
 
     private static getClasses(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): string {
@@ -1051,6 +1076,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static getShouldShowSentReceipt(props: EventTileViewModelProps): boolean {
+        // Show the custom "sent" receipt only for the current user's most recent eligible message.
         if (!this.isEligibleForSpecialReceipt(props)) return false;
         if (!props.lastSuccessful) return false;
         if (props.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
@@ -1064,12 +1090,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private static getShouldShowSendingReceipt(props: EventTileViewModelProps): boolean {
+        // Show the custom "sending" receipt while that same eligible message is still pending send.
         if (!this.isEligibleForSpecialReceipt(props)) return false;
         if (!props.eventSendStatus || props.eventSendStatus === EventStatus.SENT) return false;
         return true;
     }
 
     private static getThread(props: EventTileViewModelProps): Thread | null {
+        // Thread lookup can lag behind event creation, so try both the event-attached thread and the room index.
         let thread = props.mxEvent.getThread() ?? undefined;
         if (!thread) {
             const roomId = props.mxEvent.getRoomId();

@@ -392,10 +392,10 @@ function useEventTileActions(
                 event_id: props.mxEvent.getId(),
                 highlighted: true,
                 room_id: props.mxEvent.getRoomId(),
-                metricsTrigger: snapshot.viewRoomMetricsTrigger,
+                metricsTrigger: snapshot.openedFromSearch ? "MessageSearch" : undefined,
             });
         },
-        [props.mxEvent, snapshot.viewRoomMetricsTrigger],
+        [props.mxEvent, snapshot.openedFromSearch],
     );
 
     const openInRoom = useCallback(
