@@ -61,7 +61,9 @@ describe("RedactedBodyViewModel", () => {
         room = mkRoom(client, "!room:example.com");
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
         jest.spyOn(client, "getRoom").mockReturnValue(room);
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => settingName === "showTwelveHourTimestamps");
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            (settingName) => settingName === "showTwelveHourTimestamps",
+        );
         jest.spyOn(SettingsStore, "watchSetting").mockImplementation((_settingName, _roomId, callbackFn) => {
             showTwelveHourSettingWatcher = callbackFn as (...args: any[]) => void;
             return "mock-show-twelve-hour-watcher";
