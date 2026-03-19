@@ -42,5 +42,3 @@ export function EventTile(props: EventTileProps): JSX.Element {
         </TileErrorBoundary>
     );
 }
-
-export default EventTile;
