@@ -1235,8 +1235,6 @@
         "upload_file": "Lähetä tiedosto"
     },
     "labs": {
-        "automatic_debug_logs": "Lähetä vianjäljityslokit automaattisesti minkä tahansa virheen tapahtuessa",
-        "automatic_debug_logs_decryption": "Lähetä vianjäljityslokit automaattisesti salauksen purkuun liittyvien virheiden tapahtuessa",
         "beta_description": "Mitä uutta %(brand)s sisältää seuraavaksi? Laboratoriot ovat paras tapa tutustua asioihin aikaisin, testata uusia ominaisuuksia ja auttaa muokkaamaan niitä ennen julkaisua.",
         "beta_feature": "Tämä on beetaominaisuus",
         "beta_feedback_leave_button": "Poistu beetasta asetuksista.",
@@ -2855,8 +2853,7 @@
             "voice_call_unsupported": "%(senderName)s soitti äänipuhelun. (selaimesi ei tue äänipuheluita)"
         },
         "m.file": {
-            "error_decrypting": "Virhe purettaessa liitteen salausta",
-            "error_invalid": "Virheellinen tiedosto"
+            "error_decrypting": "Virhe purettaessa liitteen salausta"
         },
         "m.image": {
             "error": "Kuvan näyttäminen epäonnistui virheen vuoksi",
@@ -3182,14 +3179,7 @@
             "one_user": "%(displayName)s kirjoittaa…",
             "two_users": "%(names)s ja %(lastPerson)s kirjoittavat…"
         },
-        "undecryptable_tooltip": "Tämän viestin salausta ei voitu purkaa",
-        "url_preview": {
-            "close": "Sulje esikatselu",
-            "show_n_more": {
-                "one": "Näytä %(count)s muu esikatselu",
-                "other": "Näytä %(count)s muuta esikatselua"
-            }
-        }
+        "undecryptable_tooltip": "Tämän viestin salausta ei voitu purkaa"
     },
     "truncated_list_n_more": {
         "other": "Ja %(count)s muuta..."

@@ -55,7 +55,7 @@ exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
   <span
     class="mx_DeviceDetails_signOutButtonContent"
   >
-    Sign out of this session
+    Remove this session
   </span>
 </div>
 `;
@@ -70,7 +70,7 @@ exports[`<SessionManagerTab /> Sign out for an OIDC-aware server Signs out of cu
   <span
     class="mx_DeviceDetails_signOutButtonContent"
   >
-    Sign out of this session
+    Remove this session
   </span>
 </div>
 `;

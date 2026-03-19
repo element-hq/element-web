@@ -75,7 +75,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         );
         const locator = await app.settings.openUserMenu();
         await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
-        await page.getByRole("button", { name: "Sign out", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
         await revokeAccessTokenPromise;
         await revokeRefreshTokenPromise;
     });
@@ -99,7 +99,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             await page.goto("http://localhost:8080");
             await expect(
-                page.getByText("For security, this session has been signed out. Please sign in again."),
+                page.getByText("For security, this session has been removed. Please sign in again."),
             ).toBeVisible();
             //await expect(page).toMatchScreenshot("token-expired.png", { includeDialogBackground: true });
 
@@ -124,7 +124,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Allow the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);
         await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
-        await page.getByRole("button", { name: "Sign out" }).click();
+        await page.getByRole("button", { name: "Remove this device" }).click();
         await expect(page).toHaveURL(/\/#\/login$/);
 
         // Log in again
@@ -133,7 +133,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.getByRole("button", { name: "Continue" }).click();
 
         // We should be in
-        await expect(page.getByText("Confirm your identity")).toBeVisible();
+        await expect(page.getByText("Confirm your digital identity")).toBeVisible();
     });
 
     test.describe("with force_verification on", () => {
@@ -157,7 +157,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await expect(page.getByText(userId, { exact: true })).toBeVisible();
             await page.waitForTimeout(2000);
             await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
-            await page.getByRole("button", { name: "Sign out" }).click();
+            await page.getByRole("button", { name: "Remove this device" }).click();
             await expect(page).toHaveURL(/\/#\/login$/);
 
             // Log in again
@@ -166,7 +166,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await page.getByRole("button", { name: "Continue" }).click();
 
             // We should be being warned that we need to verify (but we can't)
-            await expect(page.getByText("Confirm your identity")).toBeVisible();
+            await expect(page.getByText("Confirm your digital identity")).toBeVisible();
 
             // And there should be no way to close this prompt
             await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
@@ -205,7 +205,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                     .getByRole("menu", { name: "User menu" })
                     .getByRole("menuitem", { name: "All settings" })
                     .click();
-                await page.getByRole("button", { name: "Sign out" }).click();
+                await page.getByRole("button", { name: "Remove this device" }).click();
                 await expect(page).toHaveURL(/\/#\/login$/);
 
                 // Log in again

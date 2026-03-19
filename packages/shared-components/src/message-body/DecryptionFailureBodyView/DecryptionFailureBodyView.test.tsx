@@ -118,7 +118,7 @@ describe("DecryptionFailureBodyView", () => {
             const { container } = customRender(DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED, verified);
 
             // Then
-            expect(container).toHaveTextContent("Sender's verified identity was reset");
+            expect(container).toHaveTextContent("Sender's verified digital identity was reset");
             expect(container).toMatchSnapshot();
         },
     );

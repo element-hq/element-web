@@ -254,11 +254,11 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
     await page.getByRole("button", { name: "User menu" }).click();
 
     await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
-    await page.getByRole("button", { name: "Sign out" }).click();
+    await page.getByRole("button", { name: "Remove this device" }).click();
     if (discardKeys) {
         await page.getByRole("button", { name: "I don't want my encrypted messages" }).click();
     } else {
-        await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Sign out" }).click();
+        await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Remove this device" }).click();
     }
 
     // Wait for the login page to load
@@ -317,7 +317,7 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
         await encryptionTab.getByRole("switch", { name: "Allow key storage" }).click();
     }
 
-    await encryptionTab.getByRole("button", { name: "Set up recovery" }).click();
+    await encryptionTab.getByRole("button", { name: "Get recovery key" }).click();
     await encryptionTab.getByRole("button", { name: "Continue" }).click();
 
     const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();

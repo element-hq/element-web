@@ -23,8 +23,9 @@ test.describe("Logout tests", () => {
         await sendMessageInCurrentRoom(page, "Hello secret world");
 
         const locator = await app.settings.openUserMenu();
+
         await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
-        await page.getByRole("button", { name: "Sign out", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
 
         const currentDialogLocator = page.locator(".mx_Dialog");
 
@@ -43,11 +44,11 @@ test.describe("Logout tests", () => {
 
         const locator = await app.settings.openUserMenu();
         await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
-        await page.getByRole("button", { name: "Sign out", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
 
         const currentDialogLocator = page.locator(".mx_Dialog");
 
-        await expect(currentDialogLocator.getByText("Are you sure you want to sign out?")).toBeVisible();
+        await expect(currentDialogLocator.getByText("Are you sure you want to Remove this device?")).toBeVisible();
     });
 
     test("Logout directly if the user has no room keys", async ({ page, app }) => {
@@ -57,7 +58,7 @@ test.describe("Logout tests", () => {
 
         const locator = await app.settings.openUserMenu();
         await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
-        await page.getByRole("button", { name: "Sign out", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
 
         // Should have logged out directly
         await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
