@@ -141,7 +141,7 @@ export const RoomListPrimaryFilters = memo(function RoomListPrimaryFilters({
                                 index === 0 || index === visibleFilterIds.length - 1
                                     ? (node) => {
                                           if (node && index === 0) {
-                                              setCollapsedHeight(`${Math.max(Math.ceil(node.getBoundingClientRect().height), 50)}px`);
+                                              setCollapsedHeight(`${Math.max(node.getBoundingClientRect().height, 49.5)}px`);
                                           }
                                       }
                                     : undefined
