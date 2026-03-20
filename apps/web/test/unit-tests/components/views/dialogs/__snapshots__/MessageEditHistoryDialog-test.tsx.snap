@@ -86,7 +86,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_LegacyActionBar"
+                    class="mx_ThreadActionBar"
                   >
                     <div
                       class="mx_AccessibleButton"
@@ -224,7 +224,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_LegacyActionBar"
+                    class="mx_ThreadActionBar"
                   >
                     <div
                       class="mx_AccessibleButton"
@@ -278,7 +278,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_LegacyActionBar"
+                    class="mx_ThreadActionBar"
                   >
                     <div
                       class="mx_AccessibleButton"
@@ -314,7 +314,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_LegacyActionBar"
+                    class="mx_ThreadActionBar"
                   >
                     <div
                       class="mx_AccessibleButton"

@@ -138,7 +138,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         } else {
             // disabled remove button when not allowed
             return (
-                <div className="mx_LegacyActionBar">
+                <div className="mx_ThreadActionBar">
                     {redactButton}
                     {viewSourceButton}
                 </div>

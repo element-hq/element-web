@@ -5,12 +5,12 @@ exports[`EventTileThreadToolbar renders 1`] = `
   <div
     aria-label="Message Actions"
     aria-live="off"
-    class="mx_LegacyActionBar"
+    class="mx_ThreadActionBar"
     role="toolbar"
   >
     <div
       aria-label="View in room"
-      class="mx_AccessibleButton mx_LegacyActionBar_iconButton"
+      class="mx_AccessibleButton mx_ThreadActionBar_iconButton"
       role="button"
       tabindex="0"
     >
@@ -28,7 +28,7 @@ exports[`EventTileThreadToolbar renders 1`] = `
     </div>
     <div
       aria-label="Copy link to thread"
-      class="mx_AccessibleButton mx_LegacyActionBar_iconButton"
+      class="mx_AccessibleButton mx_ThreadActionBar_iconButton"
       role="button"
       tabindex="-1"
     >
