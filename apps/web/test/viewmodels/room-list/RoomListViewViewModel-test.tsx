@@ -182,7 +182,7 @@ describe("RoomListViewViewModel", () => {
         });
 
         it("should clear roomsMap when space changes and repopulate with new rooms", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const newSpaceRoom = mkStubRoom("!spaceroom:server", "Space Room", matrixClient);
 
@@ -362,7 +362,7 @@ describe("RoomListViewViewModel", () => {
         });
 
         it("should not throw when requesting view model for a room removed from the list but still in roomsMap", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Normal list update removes room2 from the list
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
@@ -376,7 +376,7 @@ describe("RoomListViewViewModel", () => {
         });
 
         it("should throw when requesting view model for a room from old space after space change", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const spaceRoom = mkStubRoom("!newroom:server", "New Room", matrixClient);
 
@@ -395,7 +395,7 @@ describe("RoomListViewViewModel", () => {
         });
 
         it("should recover when roomsMap is stale but roomsResult has the room", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Manually clear roomsMap to simulate stale cache, but keep roomsResult intact
             (viewModel as any).roomsMap.clear();
