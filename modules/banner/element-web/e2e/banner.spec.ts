@@ -26,7 +26,7 @@ test.describe("Banner", () => {
             for (const path of ["logo.svg", "app1.png", "app2.png", "opendesk/"]) {
                 await context.route(`/${path}*`, async (route) => {
                     const file = new URL(route.request().url()).pathname;
-                    await route.fulfill({ path: `${moduleDir}/tests/fixture/${file}` });
+                    await route.fulfill({ path: `${moduleDir}/e2e/fixture/${file}` });
                 });
             }
 
@@ -107,13 +107,13 @@ test.describe("Banner", () => {
                 await context.route("http://localhost:8080/ics/navigation.json*", async (route) => {
                     await navigationJsonResolver.promise;
                     await route.fulfill({
-                        path: `${moduleDir}/tests/fixture/navigation.json`,
+                        path: `${moduleDir}/e2e/fixture/navigation.json`,
                         contentType: "application/json",
                     });
                 });
                 await context.route("http://localhost:8080/ics/silent", async (route) => {
                     await route.fulfill({
-                        path: `${moduleDir}/tests/fixture/silent/index.html`,
+                        path: `${moduleDir}/e2e/fixture/silent/index.html`,
                         contentType: "text/html",
                     });
                 });
