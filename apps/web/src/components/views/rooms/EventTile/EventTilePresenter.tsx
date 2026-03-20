@@ -56,6 +56,7 @@ import RoomAvatar from "../../avatars/RoomAvatar";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
 import {
+    AvatarSize,
     AvatarSubject,
     ClickMode,
     EventTileRenderMode,
@@ -975,7 +976,7 @@ function useEventTileViewProps({
         () =>
             room ? (
                 <div className="mx_EventTile_avatar">
-                    <RoomAvatar room={room} size="28px" />
+                    <RoomAvatar room={room} size={AvatarSize.Medium} />
                 </div>
             ) : undefined,
         [room],

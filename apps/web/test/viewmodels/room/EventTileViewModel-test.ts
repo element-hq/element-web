@@ -197,6 +197,31 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().avatarSubject).toBe(AvatarSubject.Target);
         });
 
+        it("keeps avatar clicks enabled for info-message avatars in room timelines", () => {
+            mxEvent = mkEvent({
+                event: true,
+                type: "m.room.member",
+                user: "@alice:example.org",
+                room: room.roomId,
+                content: {
+                    membership: "join",
+                },
+            });
+
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: true,
+                isBubbleMessage: false,
+                isInfoMessage: true,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const vm = createViewModel({ mxEvent });
+
+            expect(vm.getSnapshot().avatarMemberUserOnClick).toBe(true);
+        });
+
         it("uses the missing renderer fallback mode for non-notification tiles without a renderer", () => {
             mockGetEventDisplayInfo.mockReturnValue({
                 hasRenderer: false,

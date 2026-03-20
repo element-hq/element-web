@@ -946,7 +946,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot: EventTileViewSnapshot,
     ): boolean {
         if (snapshot.avatarSize === AvatarSize.None) return false;
-        if (!EventTileViewModel.getNeedsSenderProfile(props, snapshot)) return false;
         if (props.inhibitInteraction) return false;
 
         return ![TimelineRenderingType.ThreadsList, TimelineRenderingType.Notification].includes(
