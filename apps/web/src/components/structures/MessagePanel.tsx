@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, type TransitionEvent } from "react";
+import React, { type JSX, createRef, isValidElement, type ReactNode, type TransitionEvent } from "react";
 import classNames from "classnames";
 import {
     type Room,
@@ -41,6 +41,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
 import ScrollPanel, { type IScrollState } from "./ScrollPanel";
+import VirtualizedScrollPanel from "./VirtualizedScrollPanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -220,6 +221,42 @@ interface IReadReceiptForUser {
     lastShownEventId: string;
     receipt: IReadReceiptProps;
 }
+
+interface IOpaqueTimelineRow {
+    kind: "opaque";
+    key: string;
+    node: ReactNode;
+}
+
+interface IDateSeparatorTimelineRow {
+    kind: "date-separator";
+    key: string;
+    roomId: string;
+    ts: number;
+}
+
+interface ILateEventSeparatorTimelineRow {
+    kind: "late-event-separator";
+    key: string;
+    text: string;
+}
+
+interface IEventTimelineRow {
+    kind: "event";
+    key: string;
+    eventId: string;
+    event: MatrixEvent;
+    isEditing: boolean;
+    continuation: boolean;
+    readReceipts?: IReadReceiptProps[];
+    last: boolean;
+    lastInSection: boolean;
+    lastSuccessful?: boolean;
+    highlight: boolean;
+    callEventGrouper?: LegacyCallEventGrouper;
+}
+
+type TimelineRow = IOpaqueTimelineRow | IDateSeparatorTimelineRow | ILateEventSeparatorTimelineRow | IEventTimelineRow;
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -627,7 +664,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !status || status === EventStatus.SENT;
     }
 
-    private getEventTiles(): ReactNode[] {
+    private getTimelineRows(): TimelineRow[] {
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
         // differently for the last event in the list. (eg show timestamp)
@@ -673,7 +710,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
         }
 
-        const ret: ReactNode[] = [];
+        const ret: TimelineRow[] = [];
         let prevEvent: MatrixEvent | null = null; // the last event we showed
 
         // Note: the EventTile might still render a "sent/sending receipt" independent of
@@ -700,7 +737,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 } else {
                     // not part of group, so get the group tiles, close the
                     // group, and continue like a normal event
-                    ret.push(...grouper.getTiles());
+                    ret.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
                     prevEvent = grouper.getNewPrevEvent();
                     grouper = null;
                 }
@@ -726,40 +763,35 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     // otherwise React will auto-generate keys, and we will end up
                     // replacing all the DOM elements every time we paginate.
                     ret.push(
-                        ...this.getTilesForEvent(
-                            prevEvent,
-                            wrappedEvent,
-                            last,
-                            false,
-                            nextEventAndShouldShow,
-                            nextTile,
-                        ),
+                        ...this.getRowsForEvent(prevEvent, wrappedEvent, last, false, nextEventAndShouldShow, nextTile),
                     );
                     prevEvent = event;
                 }
 
                 const readMarker = this.readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
-                if (readMarker) ret.push(readMarker);
+                if (readMarker) {
+                    ret.push(...this.wrapOpaqueTimelineRows([readMarker], `read-marker-${eventId}`));
+                }
             }
         }
 
         if (grouper) {
-            ret.push(...grouper.getTiles());
+            ret.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
         }
 
         return ret;
     }
 
-    public getTilesForEvent(
+    public getRowsForEvent(
         prevEvent: MatrixEvent | null,
         wrappedEvent: WrappedEvent,
         last = false,
         isGrouped = false,
         nextEvent: WrappedEvent | null = null,
         nextEventWithTile: MatrixEvent | null = null,
-    ): ReactNode[] {
+    ): TimelineRow[] {
         const mxEv = wrappedEvent.event;
-        const ret: ReactNode[] = [];
+        const ret: TimelineRow[] = [];
 
         const isEditing = this.props.editState?.getEvent().getId() === mxEv.getId();
         // local echoes have a fake date, which could even be yesterday. Treat them as 'today' for the date separators.
@@ -770,22 +802,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         if (!isGrouped && this.props.room) {
             if (wantsSeparator === SeparatorKind.Date) {
                 const separatorRoomId = this.props.room.roomId;
-                ret.push(
-                    <li key={`${separatorRoomId}-${ts1}`}>
-                        <DateSeparatorWrapper key={`${separatorRoomId}-${ts1}`} roomId={separatorRoomId} ts={ts1} />
-                    </li>,
-                );
+                ret.push({
+                    kind: "date-separator",
+                    key: `${separatorRoomId}-${ts1}`,
+                    roomId: separatorRoomId,
+                    ts: ts1,
+                });
             } else if (wantsSeparator === SeparatorKind.LateEvent) {
                 const text = _t("timeline|late_event_separator", {
                     dateTime: formatDate(mxEv.getDate() ?? new Date()),
                 });
-                ret.push(
-                    <li key={ts1}>
-                        <TimelineSeparator key={ts1} label={text} className="mx_TimelineSeparator">
-                            {text}
-                        </TimelineSeparator>
-                    </li>,
-                );
+                ret.push({
+                    kind: "late-event-separator",
+                    key: String(ts1),
+                    text,
+                });
             }
         }
 
@@ -813,40 +844,100 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         const callEventGrouper = this.props.callEventGroupers.get(mxEv.getContent().call_id);
         // use txnId as key if available so that we don't remount during sending
-        ret.push(
-            <EventTile
-                key={mxEv.getTxnId() || eventId}
-                as="li"
-                ref={this.collectEventTile.bind(this, eventId)}
-                alwaysShowTimestamps={this.props.alwaysShowTimestamps}
-                mxEvent={mxEv}
-                continuation={continuation}
-                isRedacted={mxEv.isRedacted()}
-                replacingEventId={mxEv.replacingEventId()}
-                editState={isEditing ? this.props.editState : undefined}
-                resizeObserver={this.resizeObserver}
-                readReceipts={readReceipts}
-                readReceiptMap={this.readReceiptMap}
-                showUrlPreview={this.props.showUrlPreview}
-                checkUnmounting={this.isUnmounting}
-                eventSendStatus={mxEv.getAssociatedStatus() ?? undefined}
-                isTwelveHour={this.props.isTwelveHour}
-                permalinkCreator={this.props.permalinkCreator}
-                last={last}
-                lastInSection={lastInSection}
-                lastSuccessful={wrappedEvent.lastSuccessfulWeSent}
-                isSelectedEvent={highlight}
-                getRelationsForEvent={this.props.getRelationsForEvent}
-                showReactions={this.props.showReactions}
-                layout={this.props.layout}
-                showReadReceipts={this.props.showReadReceipts}
-                callEventGrouper={callEventGrouper}
-                hideSender={this.state.hideSender}
-            />,
-        );
+        ret.push({
+            kind: "event",
+            key: mxEv.getTxnId() || eventId,
+            eventId,
+            event: mxEv,
+            isEditing,
+            continuation,
+            readReceipts: readReceipts ?? undefined,
+            last,
+            lastInSection,
+            lastSuccessful: wrappedEvent.lastSuccessfulWeSent,
+            highlight,
+            callEventGrouper,
+        });
 
         return ret;
     }
+
+    public getTilesForEvent(
+        prevEvent: MatrixEvent | null,
+        wrappedEvent: WrappedEvent,
+        last = false,
+        isGrouped = false,
+        nextEvent: WrappedEvent | null = null,
+        nextEventWithTile: MatrixEvent | null = null,
+    ): ReactNode[] {
+        return this.getRowsForEvent(prevEvent, wrappedEvent, last, isGrouped, nextEvent, nextEventWithTile).map(
+            this.renderTimelineRow,
+        );
+    }
+
+    private wrapOpaqueTimelineRows(nodes: ReactNode[], fallbackPrefix: string): TimelineRow[] {
+        return nodes.map((node, index) => {
+            const key = isValidElement(node) && node.key !== null ? String(node.key) : `${fallbackPrefix}-${index}`;
+            return {
+                kind: "opaque",
+                key,
+                node,
+            };
+        });
+    }
+
+    private renderTimelineRow = (row: TimelineRow): ReactNode => {
+        switch (row.kind) {
+            case "opaque":
+                return row.node;
+            case "date-separator":
+                return (
+                    <li key={row.key}>
+                        <DateSeparatorWrapper roomId={row.roomId} ts={row.ts} />
+                    </li>
+                );
+            case "late-event-separator":
+                return (
+                    <li key={row.key}>
+                        <TimelineSeparator label={row.text} className="mx_TimelineSeparator">
+                            {row.text}
+                        </TimelineSeparator>
+                    </li>
+                );
+            case "event":
+                return (
+                    <EventTile
+                        key={row.key}
+                        as="li"
+                        ref={this.collectEventTile.bind(this, row.eventId)}
+                        alwaysShowTimestamps={this.props.alwaysShowTimestamps}
+                        mxEvent={row.event}
+                        continuation={row.continuation}
+                        isRedacted={row.event.isRedacted()}
+                        replacingEventId={row.event.replacingEventId()}
+                        editState={row.isEditing ? this.props.editState : undefined}
+                        resizeObserver={this.resizeObserver}
+                        readReceipts={row.readReceipts}
+                        readReceiptMap={this.readReceiptMap}
+                        showUrlPreview={this.props.showUrlPreview}
+                        checkUnmounting={this.isUnmounting}
+                        eventSendStatus={row.event.getAssociatedStatus() ?? undefined}
+                        isTwelveHour={this.props.isTwelveHour}
+                        permalinkCreator={this.props.permalinkCreator}
+                        last={row.last}
+                        lastInSection={row.lastInSection}
+                        lastSuccessful={row.lastSuccessful}
+                        isSelectedEvent={row.highlight}
+                        getRelationsForEvent={this.props.getRelationsForEvent}
+                        showReactions={this.props.showReactions}
+                        layout={this.props.layout}
+                        showReadReceipts={this.props.showReadReceipts}
+                        callEventGrouper={row.callEventGrouper}
+                        hideSender={this.state.hideSender}
+                    />
+                );
+        }
+    };
 
     public wantsSeparator(prevEvent: MatrixEvent | null, mxEvent: MatrixEvent): SeparatorKind {
         if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
@@ -1076,10 +1167,19 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const classes = classNames(this.props.className, {
             mx_MessagePanel_narrow: this.context.narrow,
         });
+        const PanelComponent = SettingsStore.getValue("feature_new_message_panel")
+            ? VirtualizedScrollPanel
+            : ScrollPanel;
+        const timelineRows = this.getTimelineRows();
+        const renderedRows: ReactNode[] = [];
+        if (topSpinner) renderedRows.push(topSpinner);
+        renderedRows.push(...timelineRows.map(this.renderTimelineRow));
+        if (whoIsTyping) renderedRows.push(React.cloneElement(whoIsTyping, { key: "_whoIsTyping" }));
+        if (bottomSpinner) renderedRows.push(bottomSpinner);
 
         return (
             <ErrorBoundary>
-                <ScrollPanel
+                <PanelComponent
                     ref={this.scrollPanel}
                     className={classes}
                     onScroll={this.props.onScroll}
@@ -1089,11 +1189,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     stickyBottom={this.props.stickyBottom}
                     fixedChildren={ircResizer}
                 >
-                    {topSpinner}
-                    {this.getEventTiles()}
-                    {whoIsTyping}
-                    {bottomSpinner}
-                </ScrollPanel>
+                    {renderedRows}
+                </PanelComponent>
             </ErrorBoundary>
         );
     }
