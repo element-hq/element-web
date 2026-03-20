@@ -12,14 +12,14 @@ ARG JS_SDK_BRANCH="master"
 WORKDIR /src
 
 # Install dependencies
-COPY --parents .git package.json pnpm-lock.yaml pnpm-workspace.yaml patches scripts **/package.json /src/
+COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml patches scripts **/package.json /src/
 RUN corepack enable
-RUN /src/scripts/docker-link-repos.sh
+RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
 RUN pnpm install
 
 # Build
-COPY --link --exclude=apps/web/docker . /src
-RUN /src/scripts/docker-package.sh
+COPY --link --exclude=.git --exclude=apps/web/docker . /src
+RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
