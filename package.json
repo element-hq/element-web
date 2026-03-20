@@ -88,7 +88,7 @@
         "app-builder-lib": "26.8.2",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
-        "electron": "40.8.2",
+        "electron": "41.0.2",
         "electron-builder": "26.8.2",
         "electron-builder-squirrel-windows": "26.8.2",
         "electron-devtools-installer": "^4.0.0",
