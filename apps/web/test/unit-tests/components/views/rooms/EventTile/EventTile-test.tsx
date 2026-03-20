@@ -383,7 +383,6 @@ describe("EventTile", () => {
 
             await waitFor(() => expect(getByTestId(container, "avatar-subject")).toHaveTextContent("@bob:example.org"));
         });
-
     });
 
     describe("EventTile renderingType: Pinned", () => {
