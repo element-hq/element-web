@@ -37,10 +37,7 @@ type EditedMarkerSnapshot = Pick<
     TextualBodyViewSnapshot,
     "showEditedMarker" | "editedMarkerText" | "editedMarkerTooltip" | "editedMarkerCaption"
 >;
-type PendingModerationSnapshot = Pick<
-    TextualBodyViewSnapshot,
-    "showPendingModerationMarker" | "pendingModerationText"
->;
+type PendingModerationSnapshot = Pick<TextualBodyViewSnapshot, "showPendingModerationMarker" | "pendingModerationText">;
 type EventDependentSnapshot = Pick<TextualBodyViewSnapshot, "kind" | "emoteSenderName"> &
     BodyWrapperSnapshot &
     EditedMarkerSnapshot &
@@ -126,7 +123,9 @@ export class TextualBodyViewModel
         const visibility = props.mxEvent.messageVisibility();
         switch (visibility.visible) {
             case true:
-                throw new Error("TextualBodyViewModel pending moderation marker should only be applied to hidden messages");
+                throw new Error(
+                    "TextualBodyViewModel pending moderation marker should only be applied to hidden messages",
+                );
             case false: {
                 const text = visibility.reason
                     ? _t("timeline|pending_moderation_reason", { reason: visibility.reason })
