@@ -110,7 +110,7 @@ jobs:
                     - name: Shared Components
                       path: "packages/shared-components"
         name: "i18n Check (${{ matrix.name }})"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@abf186831e2acb3e98fca13a0711a3fa1364d2b1
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         permissions:
             pull-requests: read
         with:
