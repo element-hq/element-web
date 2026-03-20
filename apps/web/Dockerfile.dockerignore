@@ -1,0 +1,27 @@
+# Exclude a bunch of stuff which can make the build context a larger than it needs to be
+**/test/
+**/*.stories.tsx
+**/*.test.tsx?
+**/lib/
+**/dist/
+**/node_modules/
+**/coverage/
+**/.pnpm-store
+**/tsconfig.node.tsbuildinfo
+**/*.md
+**/*.rst
+
+.idea/
+.tmp/
+.nx/
+.link-config
+
+apps/web/config.json*
+apps/web/webpack-stats.json
+apps/web/playwright/
+apps/web/webapp/
+apps/web/debian/
+
+packages/shared-components/__vis__/
+packages/shared-components/storybook-static/
+packages/shared-components/typedoc/
