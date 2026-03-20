@@ -180,6 +180,25 @@ describe("RoomListViewViewModel", () => {
             expect(disposeSpy1).toHaveBeenCalled();
             expect(disposeSpy2).toHaveBeenCalled();
         });
+
+        it("should clear roomsMap when space changes and repopulate with new rooms", () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+
+            const newSpaceRoom = mkStubRoom("!spaceroom:server", "Space Room", matrixClient);
+
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "!space:server",
+                rooms: [newSpaceRoom],
+            });
+            jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
+
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            // New space room should be accessible
+            expect(() => viewModel.getRoomItemViewModel("!spaceroom:server")).not.toThrow();
+            // Old rooms from the home space should not be accessible
+            expect(() => viewModel.getRoomItemViewModel("!room1:server")).toThrow();
+        });
     });
 
     describe("Active room tracking", () => {
@@ -340,6 +359,49 @@ describe("RoomListViewViewModel", () => {
             expect(() => {
                 viewModel.getRoomItemViewModel("!nonexistent:server");
             }).toThrow();
+        });
+
+        it("should not throw when requesting view model for a room removed from the list but still in roomsMap", () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+
+            // Normal list update removes room2 from the list
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "home",
+                rooms: [room1, room3],
+            });
+
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            expect(() => viewModel.getRoomItemViewModel("!room2:server")).not.toThrow();
+        });
+
+        it("should throw when requesting view model for a room from old space after space change", () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+
+            const spaceRoom = mkStubRoom("!newroom:server", "New Room", matrixClient);
+
+            // Space change: new space only has spaceRoom
+            jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                spaceId: "!space:server",
+                rooms: [spaceRoom],
+            });
+            jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
+
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            expect(() => viewModel.getRoomItemViewModel("!room1:server")).toThrow(
+                "Room !room1:server not found in roomsMap",
+            );
+        });
+
+        it("should recover when roomsMap is stale but roomsResult has the room", () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+
+            // Manually clear roomsMap to simulate stale cache, but keep roomsResult intact
+            (viewModel as any).roomsMap.clear();
+
+            // getRoomItemViewModel should retry by re-populating roomsMap from roomsResult
+            expect(() => viewModel.getRoomItemViewModel("!room1:server")).not.toThrow();
         });
 
         it("should dispose view models for rooms no longer visible", () => {
