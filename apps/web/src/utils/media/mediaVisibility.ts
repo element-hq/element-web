@@ -11,6 +11,13 @@ import { type MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_p
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 
+/**
+ * Determine whether a room should be treated as private when applying media preview defaults.
+ *
+ * @param client - Matrix client used to resolve the room and its current join rule.
+ * @param roomId - Room to inspect. If omitted or unknown, the room is treated as non-private.
+ * @returns `true` when the room's join rule restricts membership, otherwise `false`.
+ */
 function isRoomPrivate(client: MatrixClient, roomId?: string): boolean {
     const room = roomId ? client.getRoom(roomId) : undefined;
     const joinRule = room?.currentState.getJoinRule();
@@ -25,6 +32,22 @@ function isRoomPrivate(client: MatrixClient, roomId?: string): boolean {
     }
 }
 
+/**
+ * Resolve whether media for a single event should be shown.
+ *
+ * Precedence is:
+ * 1. An explicit per-event override stored in `showMediaEventIds`
+ * 2. Always show media in events sent by the current user
+ * 3. Fall back to the room-level `mediaPreviewConfig` policy
+ *
+ * @param mediaPreviewSetting - Effective room-level media preview configuration.
+ * @param eventVisibility - Per-event visibility overrides keyed by event ID.
+ * @param userId - Current user ID, used to always show media sent by the local user.
+ * @param eventId - Event being evaluated. Used to look up any explicit override.
+ * @param sender - Sender of the event being evaluated.
+ * @param roomIsPrivate - Whether the event's room should use the private-room preview behavior.
+ * @returns `true` when media should be displayed for the event, otherwise `false`.
+ */
 export function computeMediaVisibility(
     mediaPreviewSetting: MediaPreviewConfig,
     eventVisibility: Record<string, boolean>,
@@ -56,6 +79,13 @@ export function computeMediaVisibility(
     }
 }
 
+/**
+ * Compute the effective media visibility for a Matrix event using the current settings state.
+ *
+ * @param mxEvent - Event whose media visibility should be evaluated.
+ * @param client - Matrix client used to resolve the current user and room metadata.
+ * @returns `true` when media should be shown for the event, otherwise `false`.
+ */
 export function getMediaVisibility(mxEvent: MatrixEvent, client: MatrixClient): boolean {
     const eventId = mxEvent.getId();
     const roomId = mxEvent.getRoomId();
@@ -72,6 +102,13 @@ export function getMediaVisibility(mxEvent: MatrixEvent, client: MatrixClient): 
     );
 }
 
+/**
+ * Persist a per-event override for whether media should be displayed on this device.
+ *
+ * @param mxEvent - Event whose media visibility override should be updated.
+ * @param visible - Whether media for the event should be shown.
+ * @returns A promise that resolves once the device-scoped setting has been updated.
+ */
 export async function setMediaVisibility(mxEvent: MatrixEvent, visible: boolean): Promise<void> {
     const eventId = mxEvent.getId();
     if (!eventId) return;
