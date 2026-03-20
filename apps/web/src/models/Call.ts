@@ -659,7 +659,7 @@ export class ElementCall extends Call {
     ): void {
         const room = client.getRoom(roomId);
         if (!room) {
-            // If the room isn't known, or the room is a video room then skip setting an intent.
+            // If the room isn't known then skip setting an intent.
             return;
         } else if (isVideoRoom(room)) {
             // Video rooms already exist, so just treat as if we're joining a group call.
@@ -668,35 +668,27 @@ export class ElementCall extends Call {
             params.append("returnToLobby", "true");
             // Never skip the lobby, we always want to give the caller a chance to explicitly join.
             params.append("skipLobby", "false");
-            // Never preload, as per below warning.
-            params.append("preload", "false");
             return;
         }
+
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
         const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
         const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
-        // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
-        // preload by default so we override here. This can be removed when that package
-        // is released and upgraded.
         if (isDM) {
             if (hasCallStarted) {
                 params.append(
                     "intent",
                     voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM,
                 );
-                params.append("preload", "false");
             } else {
                 params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
-                params.append("preload", "false");
             }
         } else {
             // Group chats do not have a voice option.
             if (hasCallStarted) {
                 params.append("intent", ElementCallIntent.JoinExisting);
-                params.append("preload", "false");
             } else {
                 params.append("intent", ElementCallIntent.StartCall);
-                params.append("preload", "false");
             }
         }
     }
