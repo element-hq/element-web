@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect as baseExpect, type ExpectMatcherState, type MatcherReturnType } from "@playwright/test";
 
-import type AxeBuilder from "@axe-core/playwright";
+import type { AxeBuilder } from "@axe-core/playwright";
 
 export type Expectations = {
     /**
