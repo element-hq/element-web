@@ -76,7 +76,7 @@ jobs:
               env:
                   CI_PACKAGE: true
               working-directory: apps/web
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
+              run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
