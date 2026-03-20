@@ -77,7 +77,7 @@ patchedDependencies:
     hash: 040623e87b1c8b676c2a705513c0276c0704dd1b23fc3a1bb77cde8128b64b5f
     path: patches/jsdom.patch
   knip:
-    hash: 5f6aaaa07ba1cb3f8934c51e130a6d5aaf7cca32b398cb57dfdb313c387bfff1
+    hash: 873a4dc88d16b775314860cbae8af05be293a2e1a3f86d78562885e78256f2ee
     path: patches/knip.patch
   linkify-html:
     hash: 1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2
@@ -119,7 +119,7 @@ importers:
         version: 9.1.7
       knip:
         specifier: ^5.36.2
-        version: 5.87.0(patch_hash=5f6aaaa07ba1cb3f8934c51e130a6d5aaf7cca32b398cb57dfdb313c387bfff1)(@types/node@22.19.15)(typescript@5.9.3)
+        version: 5.87.0(patch_hash=873a4dc88d16b775314860cbae8af05be293a2e1a3f86d78562885e78256f2ee)(@types/node@22.19.15)(typescript@5.9.3)
       lint-staged:
         specifier: ^16.0.0
         version: 16.4.0
@@ -278,7 +278,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f3eefd2f3257a60e07729824c09133d6981a3591
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -7987,8 +7987,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f3eefd2f3257a60e07729824c09133d6981a3591:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f3eefd2f3257a60e07729824c09133d6981a3591}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99}
     version: 41.1.0
     engines: {node: '>=22.0.0'}
 
@@ -19060,7 +19060,7 @@ snapshots:
 
   kind-of@6.0.3: {}
 
-  knip@5.87.0(patch_hash=5f6aaaa07ba1cb3f8934c51e130a6d5aaf7cca32b398cb57dfdb313c387bfff1)(@types/node@22.19.15)(typescript@5.9.3):
+  knip@5.87.0(patch_hash=873a4dc88d16b775314860cbae8af05be293a2e1a3f86d78562885e78256f2ee)(@types/node@22.19.15)(typescript@5.9.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@types/node': 22.19.15
@@ -19299,7 +19299,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f3eefd2f3257a60e07729824c09133d6981a3591:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0

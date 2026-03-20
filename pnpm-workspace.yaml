@@ -30,3 +30,4 @@ packageExtensions:
         dependencies:
             # Fix missing type dependency
             "@types/picomatch": 4.0.2
+ignorePatchFailures: false
