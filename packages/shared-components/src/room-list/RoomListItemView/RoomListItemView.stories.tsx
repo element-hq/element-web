@@ -160,6 +160,42 @@ export const WithMention: Story = {
     },
 };
 
+export const WithVoiceCall: Story = {
+    args: {
+        isBold: true,
+        notification: {
+            hasAnyNotificationOrActivity: true,
+            isUnsentMessage: false,
+            invited: false,
+            isMention: false,
+            isActivityNotification: false,
+            isNotification: false,
+            hasUnreadCount: false,
+            count: 0,
+            muted: false,
+            callType: "voice",
+        },
+    },
+};
+
+export const WithVideoCall: Story = {
+    args: {
+        isBold: true,
+        notification: {
+            hasAnyNotificationOrActivity: true,
+            isUnsentMessage: false,
+            invited: false,
+            isMention: false,
+            isActivityNotification: false,
+            isNotification: false,
+            hasUnreadCount: false,
+            count: 0,
+            muted: false,
+            callType: "video",
+        },
+    },
+};
+
 export const Invitation: Story = {
     args: {
         name: "Secret Project",
