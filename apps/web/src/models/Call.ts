@@ -592,6 +592,8 @@ export class JitsiCall extends Call {
 export enum ElementCallIntent {
     StartCall = "start_call",
     JoinExisting = "join_existing",
+    StartCallVoice = "start_call_voice",
+    JoinExistingVoice = "join_existing_voice",
     StartCallDM = "start_call_dm",
     StartCallDMVoice = "start_call_dm_voice",
     JoinExistingDM = "join_existing_dm",
@@ -685,11 +687,13 @@ export class ElementCall extends Call {
                 params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
             }
         } else {
-            // Group chats do not have a voice option.
             if (hasCallStarted) {
-                params.append("intent", ElementCallIntent.JoinExisting);
+                params.append(
+                    "intent",
+                    voiceOnly ? ElementCallIntent.JoinExistingVoice : ElementCallIntent.JoinExisting,
+                );
             } else {
-                params.append("intent", ElementCallIntent.StartCall);
+                params.append("intent", voiceOnly ? ElementCallIntent.StartCallVoice : ElementCallIntent.StartCall);
             }
         }
     }

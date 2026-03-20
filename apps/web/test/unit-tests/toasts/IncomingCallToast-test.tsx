@@ -153,12 +153,13 @@ describe("IncomingCallToast", () => {
         ]);
         renderToast();
 
-        screen.getByText("Video call started");
+        screen.getByText("Group call started");
         screen.getByText("Video");
         screen.getByLabelText("3 people joined");
 
         screen.getByRole("button", { name: "Join" });
-        screen.getByRole("button", { name: "Close" });
+        screen.getByRole("button", { name: "Ignore" });
+        screen.getByRole("button", { name: "Expand" });
     });
 
     it("start ringing on ring notify event", () => {
@@ -176,21 +177,22 @@ describe("IncomingCallToast", () => {
         call.destroy();
         renderToast();
 
-        screen.getByText("Video call started");
+        screen.getByText("Group call started");
         screen.getByText("Video");
 
         screen.getByRole("button", { name: "Join" });
-        screen.getByRole("button", { name: "Decline" });
-        screen.getByRole("button", { name: "Close" });
+        screen.getByRole("button", { name: "Ignore" });
+        screen.getByRole("button", { name: "Expand" });
     });
 
-    it("opens the call directly and closes the toast when pressing on the join button", async () => {
+    it("joins with video and closes the toast", async () => {
         const callId = renderToast();
 
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
-        // click on the avatar (which is the example used for pressing on any area other than the buttons)
+        screen.getByRole("switch", { name: "Join with video", checked: true });
+
         fireEvent.click(screen.getByRole("button", { name: "Join" }));
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
@@ -208,23 +210,23 @@ describe("IncomingCallToast", () => {
         defaultDispatcher.unregister(dispatcherRef);
     });
 
-    it("opens the call lobby and closes the toast when configured like that", async () => {
+    it("joins without video and closes the toast", async () => {
         const callId = renderToast();
 
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
         fireEvent.click(screen.getByRole("switch", {}));
+        screen.getByRole("switch", { name: "Join with video", checked: false });
 
-        // click on the avatar (which is the example used for pressing on any area other than the buttons)
         fireEvent.click(screen.getByRole("button", { name: "Join" }));
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewRoom,
                 room_id: room.roomId,
-                skipLobby: false,
+                skipLobby: true,
                 view_call: true,
-                voiceOnly: false,
+                voiceOnly: true,
             }),
         );
         await waitFor(() =>
@@ -276,13 +278,22 @@ describe("IncomingCallToast", () => {
         defaultDispatcher.unregister(dispatcherRef);
     });
 
-    it("closes the toast", async () => {
+    it("expands to show the call lobby", async () => {
         const callId = renderToast();
 
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
-        fireEvent.click(screen.getByRole("button", { name: "Close" }));
+        fireEvent.click(screen.getByRole("button", { name: "Expand" }));
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                skipLobby: false,
+                view_call: true,
+                voiceOnly: false,
+            }),
+        );
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId)),
         );
@@ -401,7 +412,7 @@ describe("IncomingCallToast", () => {
         );
     });
 
-    it("sends a decline event when clicking the decline button and only dismiss after sending", async () => {
+    it("sends a decline event when clicking the ignore button and only dismiss after sending", async () => {
         const callId = renderToast();
 
         const { promise, resolve } = Promise.withResolvers<ISendEventResponse>();
@@ -409,7 +420,7 @@ describe("IncomingCallToast", () => {
             return promise;
         });
 
-        fireEvent.click(screen.getByRole("button", { name: "Decline" }));
+        fireEvent.click(screen.getByRole("button", { name: "Ignore" }));
 
         expect(toastStore.dismissToast).not.toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId));
         expect(client.sendRtcDecline).toHaveBeenCalledWith("!1:example.org", "$notificationEventId");

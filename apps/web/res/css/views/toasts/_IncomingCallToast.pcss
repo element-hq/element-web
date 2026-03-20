@@ -9,64 +9,50 @@ Please see LICENSE files in the repository root for full details.
 .mx_IncomingCallToast {
     position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     pointer-events: initial; /* restore pointer events so the user can accept/decline */
-
-    $closeButtonSize: var(--cpd-space-4x);
 
     .mx_IncomingCallToast_content {
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-4x);
-        padding: var(--cpd-space-3x);
         width: 100%;
         overflow: hidden;
 
-        .mx_IncomingCallToast_message {
-            font-size: var(--cpd-font-size-body-lg);
-            line-height: var(--cpd-font-size-heading-sm);
-            width: calc(100% - $closeButtonSize - 2 * var(--cpd-space-1x));
-            font-weight: var(--cpd-font-weight-semibold);
+        .mx_IncomingCallToast_title {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: var(--cpd-space-2x);
+
+            h2 {
+                margin: 0;
+            }
+
+            .mx_IncomingCallToast_expandButton {
+                padding: var(--cpd-space-1x);
+                color: var(--cpd-color-icon-secondary);
+                transition: color 0.1s;
+
+                &:hover {
+                    color: var(--cpd-color-icon-primary);
+                }
+
+                & > svg {
+                    display: block;
+                }
+            }
         }
 
         .mx_IncomingCallToast_buttons {
             display: flex;
             gap: var(--cpd-space-2x);
+            padding-block-start: var(--cpd-space-2x);
         }
 
         .mx_IncomingCallToast_actionButton {
-            position: relative;
-
-            align-self: flex-end;
-
             box-sizing: border-box;
-            min-width: 120px;
-
-            padding: var(--cpd-space-1x) 0;
-            padding-right: var(--cpd-space-4x);
-            line-height: var(--cpd-space-6x);
-        }
-    }
-
-    .mx_IncomingCallToast_closeButton {
-        position: absolute;
-
-        right: 0;
-
-        display: flex;
-        height: $closeButtonSize;
-        width: $closeButtonSize;
-
-        svg {
-            height: inherit;
-            width: inherit;
-            color: $secondary-content;
-        }
-    }
-    .mx_IncomingCallToast_toggleWithLabel {
-        display: flex;
-        span {
-            flex-grow: 1;
+            min-width: 131px;
         }
     }
 }
