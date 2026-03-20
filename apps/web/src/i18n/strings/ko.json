@@ -1481,8 +1481,6 @@
     },
     "labs": {
         "ask_to_join": "참가 요청 허용",
-        "automatic_debug_logs": "오류 발생 시 자동으로 디버그 로그를 전송합니다",
-        "automatic_debug_logs_decryption": "복호화 오류 시 디버그 로그 자동 전송",
         "beta_description": "%(brand)s 의 다음 단계는 무엇일까요? Labs는 새로운 기능을 가장 먼저 접하고 테스트해 볼 수 있는 최고의 방법이며, 정식 출시 전에 기능 개발에 기여할 수 있는 기회입니다.",
         "beta_feature": "이것은 베타 기능입니다",
         "beta_feedback_leave_button": "베타를 종료하려면 설정을 방문하세요.",
@@ -3338,8 +3336,7 @@
             "voice_call_unsupported": "%(senderName)s님이 음성 통화를 시작했습니다. (이 브라우저에서는 지원되지 않음)"
         },
         "m.file": {
-            "error_decrypting": "첨부 파일 복호화 중 오류",
-            "error_invalid": "잘못된 파일입니다."
+            "error_decrypting": "첨부 파일 복호화 중 오류"
         },
         "m.image": {
             "error": "오류로 인해 이미지를 표시할 수 없습니다",
@@ -3643,13 +3640,7 @@
             "one_user": "%(displayName)s님이 적고 있습니다 …",
             "two_users": "%(names)s님과 %(lastPerson)s님이 적고 있습니다 …"
         },
-        "undecryptable_tooltip": "이 메일은 복호화할 수 없습니다.",
-        "url_preview": {
-            "close": "미리보기 닫기",
-            "show_n_more": {
-                "other": "%(count)s 개의 다른 미리보기를 표시"
-            }
-        }
+        "undecryptable_tooltip": "이 메일은 복호화할 수 없습니다."
     },
     "truncated_list_n_more": {
         "other": "외 %(count)s개 더..."

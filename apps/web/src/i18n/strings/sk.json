@@ -1509,8 +1509,6 @@
     },
     "labs": {
         "ask_to_join": "Umožniť požiadať o pripojenie",
-        "automatic_debug_logs": "Automatické odosielanie záznamov ladenia pri akejkoľvek chybe",
-        "automatic_debug_logs_decryption": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
         "beta_description": "Čo vás čaká v aplikácii %(brand)s? Laboratóriá sú najlepším spôsobom, ako získať funkcie v predstihu, otestovať nové funkcie a pomôcť ich vytvoriť ešte pred ich skutočným spustením.",
         "beta_feature": "Toto je funkcia vo verzii beta",
         "beta_feedback_leave_button": "Ak chcete opustiť beta verziu, navštívte svoje nastavenia.",
@@ -3437,8 +3435,7 @@
             "voice_call_unsupported": "%(senderName)s uskutočnil telefonát. (Nepodporované týmto prehliadačom)"
         },
         "m.file": {
-            "error_decrypting": "Chyba pri dešifrovaní prílohy",
-            "error_invalid": "Neplatný súbor"
+            "error_decrypting": "Chyba pri dešifrovaní prílohy"
         },
         "m.image": {
             "error": "Nie je možné zobraziť obrázok kvôli chybe",
@@ -3811,14 +3808,7 @@
             "one_user": "%(displayName)s píše …",
             "two_users": "%(names)s a %(lastPerson)s píšu …"
         },
-        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať",
-        "url_preview": {
-            "close": "Zatvoriť náhľad",
-            "show_n_more": {
-                "one": "Zobraziť %(count)s ďalší náhľad",
-                "other": "Zobraziť %(count)s ďalších náhľadov"
-            }
-        }
+        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať"
     },
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"
