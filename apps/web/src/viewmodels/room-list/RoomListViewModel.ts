@@ -25,6 +25,7 @@ import RoomListStoreV3, {
     CHATS_TAG,
     RoomListStoreV3Event,
     type RoomsResult,
+    type Section,
 } from "../../stores/room-list-v3/RoomListStoreV3";
 import { FilterEnum } from "../../stores/room-list-v3/skip-list/filters";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
@@ -35,6 +36,18 @@ import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
 import SettingsStore from "../../settings/SettingsStore";
+
+/**
+ * Tracks the position of the active room within a specific section.
+ * Used to implement sticky room behaviour so the selected room doesn't
+ * jump around when the room list is re-sorted.
+ */
+interface StickyRoomPosition {
+    /** The tag of the section the room belongs to. */
+    sectionTag: string;
+    /** The index of the room within that section. */
+    indexInSection: number;
+}
 
 interface RoomListViewModelProps {
     client: MatrixClient;
@@ -63,7 +76,7 @@ export class RoomListViewModel
     // State tracking
     private activeFilter: FilterEnum | undefined = undefined;
     private roomsResult: RoomsResult;
-    private lastActiveRoomIndex: number | undefined = undefined;
+    private lastActiveRoomPosition: StickyRoomPosition | undefined = undefined;
 
     // Child view model management
     private roomItemViewModels = new Map<string, RoomListItemViewModel>();
@@ -387,54 +400,70 @@ export class RoomListViewModel
     }
 
     /**
-     * Apply sticky room logic to keep the active room at the same index position.
+     * Find the position of a room within the sections list.
+     * Returns undefined if the room is not found.
+     */
+    private findRoomPosition(sections: Section[], roomId: string): StickyRoomPosition | undefined {
+        for (const section of sections) {
+            const idx = section.rooms.findIndex((room) => room.roomId === roomId);
+            if (idx !== -1) return { sectionTag: section.tag, indexInSection: idx };
+        }
+        return undefined;
+    }
+
+    /**
+     * Apply sticky room logic to keep the active room at the same position within its section.
      * When the room list updates, this prevents the selected room from jumping around in the UI.
      *
      * @param isRoomChange - Whether this update is due to a room change (not a list update)
      * @param roomId - The room ID to apply sticky logic for (can be null/undefined)
-     * @returns The modified rooms array with sticky positioning applied
+     * @returns The modified sections array with sticky positioning applied
      */
-    // private applyStickyRoom(isRoomChange: boolean, roomId: string | null | undefined): Room[] {
-    //     const rooms = this.roomsResult.rooms;
+    private applyStickyRoom(isRoomChange: boolean, roomId: string | null | undefined): Section[] {
+        const sections = this.roomsResult.sections;
 
-    //     if (!roomId) {
-    //         return rooms;
-    //     }
+        // When opening another room, the index should obviously change
+        if (!roomId || isRoomChange) return sections;
 
-    //     const newIndex = rooms.findIndex((room) => room.roomId === roomId);
-    //     const oldIndex = this.lastActiveRoomIndex;
+        // If there was no previously tracked position, nothing to stick to
+        const oldPosition = this.lastActiveRoomPosition;
+        if (!oldPosition) return sections;
 
-    //     // When opening another room, the index should obviously change
-    //     if (isRoomChange) {
-    //         return rooms;
-    //     }
+        const newPosition = this.findRoomPosition(sections, roomId);
 
-    //     // If oldIndex is undefined, then there was no active room before
-    //     // Similarly, if newIndex is -1, the active room is not in the current list
-    //     if (newIndex === -1 || oldIndex === undefined) {
-    //         return rooms;
-    //     }
+        // If the room is no longer in the list, nothing to do
+        if (!newPosition) return sections;
 
-    //     // If the index hasn't changed, we have nothing to do
-    //     if (newIndex === oldIndex) {
-    //         return rooms;
-    //     }
+        // If the room moved to a different section, this is an intentional structural
+        // change (e.g. favourited/unfavourited), so don't apply sticky logic
+        if (newPosition.sectionTag !== oldPosition.sectionTag) return sections;
 
-    //     // If the old index falls out of the bounds of the rooms array
-    //     // (usually because rooms were removed), we can no longer place
-    //     // the active room in the same old index
-    //     if (oldIndex > rooms.length - 1) {
-    //         return rooms;
-    //     }
+        // If the index within the section hasn't changed, nothing to do
+        if (newPosition.indexInSection === oldPosition.indexInSection) return sections;
 
-    //     // Making the active room sticky is as simple as removing it from
-    //     // its new index and placing it in the old index
-    //     const newRooms = [...rooms];
-    //     const [stickyRoom] = newRooms.splice(newIndex, 1);
-    //     newRooms.splice(oldIndex, 0, stickyRoom);
+        // Find the target section and apply the sticky swap within it
+        return sections.map((section) => {
+            // Different section - no change
+            if (section.tag !== oldPosition.sectionTag) return section;
 
-    //     return newRooms;
-    // }
+            const sectionRooms = section.rooms;
+
+            // If the old index falls out of the bounds of the section
+            // (usually because rooms were removed), we can no longer place
+            // the active room in the same old position
+            if (oldPosition.indexInSection > sectionRooms.length - 1) {
+                return section;
+            }
+
+            // Making the active room sticky is as simple as removing it from
+            // its new index and placing it in the old index within the section
+            const newRooms = [...sectionRooms];
+            const [stickyRoom] = newRooms.splice(newPosition.indexInSection, 1);
+            newRooms.splice(oldPosition.indexInSection, 0, stickyRoom);
+
+            return { ...section, rooms: newRooms };
+        });
+    }
 
     private async updateRoomListData(
         isRoomChange: boolean = false,
@@ -444,15 +473,14 @@ export class RoomListViewModel
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
         const roomId = roomIdOverride ?? SdkContextClass.instance.roomViewStore.getRoomId();
 
-        // TODO to implement for sections
-        // Apply sticky room logic to keep selected room at same position
-        //const stickyRooms = this.applyStickyRoom(isRoomChange, roomId);
+        // Apply sticky room logic to keep selected room at same position within its section
+        const stickySections = this.applyStickyRoom(isRoomChange, roomId);
 
-        // Update roomsResult with sticky rooms
-        // this.roomsResult = {
-        //     ...this.roomsResult,
-        //     rooms: stickyRooms,
-        // };
+        // Update roomsResult with the sticky-adjusted sections
+        this.roomsResult = {
+            ...this.roomsResult,
+            sections: stickySections,
+        };
 
         // Rebuild roomsMap with the reordered rooms
         this.updateRoomsMap(this.roomsResult);
@@ -460,8 +488,8 @@ export class RoomListViewModel
         // Calculate the active room index after applying sticky logic
         const activeRoomIndex = this.getActiveRoomIndex(roomId);
 
-        // Track the current active room index for future sticky calculations
-        this.lastActiveRoomIndex = activeRoomIndex;
+        // Track the current active room position for future sticky calculations
+        this.lastActiveRoomPosition = roomId ? this.findRoomPosition(this.roomsResult.sections, roomId) : undefined;
 
         // Build the complete state atomically to ensure consistency
         // roomIds and roomListState must always be in sync
