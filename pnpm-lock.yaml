@@ -4192,6 +4192,12 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
+  ts-api-utils@2.5.0:
+    resolution: {integrity: sha512-OJ/ibxhPlqrMM0UiNHJ/0CKQkoKF243/AEmplt3qpRgkW8VG7IfOS41h7V8TjITqdByHzrjcS/2si+y4lIh8NA==}
+    engines: {node: '>=18.12'}
+    peerDependencies:
+      typescript: '>=4.8.4'
+
   ts-declaration-location@1.0.7:
     resolution: {integrity: sha512-EDyGAwH1gO0Ausm9gV6T2nUvBgXT5kGoCMJPllOaooZ+4VvJiKBdZE7wK18N1deEowhcUptS+5GXZK8U/fvpwA==}
     peerDependencies:
@@ -6294,7 +6300,7 @@ snapshots:
       minimatch: 10.2.4
       semver: 7.7.4
       tinyglobby: 0.2.15
-      ts-api-utils: 2.4.0(typescript@5.9.3)
+      ts-api-utils: 2.5.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -9323,6 +9329,10 @@ snapshots:
       utf8-byte-length: 1.0.5
 
   ts-api-utils@2.4.0(typescript@5.9.3):
+    dependencies:
+      typescript: 5.9.3
+
+  ts-api-utils@2.5.0(typescript@5.9.3):
     dependencies:
       typescript: 5.9.3
 
