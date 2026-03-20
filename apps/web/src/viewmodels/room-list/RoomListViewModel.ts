@@ -201,7 +201,7 @@ export class RoomListViewModel
      * The view should call this only for visible rooms from the roomIds list.
      * @throws Error if room is not found in roomsMap (indicates a programming error)
      */
-    public getRoomItemViewModel(roomId: string): RoomListItemViewModel {
+    public getRoomItemViewModel(roomId: string): RoomListItemViewModel | undefined {
         // Check if we have a view model for this room
         let viewModel = this.roomItemViewModels.get(roomId);
 
@@ -213,7 +213,11 @@ export class RoomListViewModel
                 room = this.roomsMap.get(roomId);
             }
 
-            if (!room) throw new Error(`Room ${roomId} not found in roomsMap`);
+            if (!room) {
+                // Race condition: the room list has changed but the view hasn't re-rendered yet.
+                // Return undefined so the view can skip rendering this item.
+                return undefined;
+            }
 
             // Create new view model
             viewModel = new RoomListItemViewModel({

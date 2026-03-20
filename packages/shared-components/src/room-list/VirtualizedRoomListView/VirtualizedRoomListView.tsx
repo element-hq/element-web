@@ -160,6 +160,12 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             const isSelected = activeRoomIndex === index;
             const roomItemVM = vm.getRoomItemViewModel(roomId);
 
+            // Race condition: the room list has changed but the virtualized list
+            // hasn't re-rendered yet. Return an empty placeholder until next render.
+            if (!roomItemVM) {
+                return <React.Fragment key={`stale-${index}`} />;
+            }
+
             // Item is focused when the list has focus AND this item's key matches tabIndexKey
             // This matches the old RoomList implementation's roving tabindex pattern
             const isFocused = context.focused && context.tabIndexKey === roomId;

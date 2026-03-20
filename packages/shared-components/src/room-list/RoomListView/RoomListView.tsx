@@ -59,7 +59,7 @@ export interface RoomListViewActions {
     /** Called to create a new room */
     createRoom: () => void;
     /** Get view model for a specific room (virtualization API) */
-    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel;
+    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel | undefined;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
     /** Get view model for a specific section header (virtualization API) */

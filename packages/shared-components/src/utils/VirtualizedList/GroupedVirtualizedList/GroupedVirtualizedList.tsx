@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useMemo } from "react";
+import React, { type JSX, useCallback, useMemo, useRef } from "react";
 import { GroupedVirtuoso } from "react-virtuoso";
 
 import { useVirtualizedList, type VirtualizedListContext, type VirtualizedListProps } from "../virtualized-list";
@@ -215,10 +215,24 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         [onFocusForGetItemComponent],
     );
 
+    // Keep a ref to items so the callback always sees the latest array,
+    // even when GroupedVirtuoso fires itemContent with a stale index
+    // during a transition between old and new groupCounts.
+    const itemsRef = useRef(items);
+    itemsRef.current = items;
+
     const getItemComponentInternal = useCallback(
-        (index: number, groupIndex: number, _item: unknown, context: VirtualizedListContext<Context>): JSX.Element =>
-            getItemComponent(index, items[index], context, onFocusForItem, groupIndex),
-        [items, getItemComponent, onFocusForItem],
+        (index: number, groupIndex: number, _item: unknown, context: VirtualizedListContext<Context>): JSX.Element => {
+            const item = itemsRef.current[index];
+            if (item === undefined) {
+                // Race condition: virtuoso is rendering with a stale index that no longer
+                // exists in the current items array. Return an empty placeholder that will
+                // be replaced on the next render cycle once virtuoso reconciles.
+                return <React.Fragment key={`stale-${index}`} />;
+            }
+            return getItemComponent(index, item, context, onFocusForItem, groupIndex);
+        },
+        [getItemComponent, onFocusForItem],
     );
 
     const getGroupHeaderComponentInternal = useCallback(
