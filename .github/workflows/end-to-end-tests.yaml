@@ -36,7 +36,7 @@ env:
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
     # Use 6 runners in the default case, but 4 when running on a schedule where we run all 5 projects (20 runners total)
-    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 6 }}
+    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 10 }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
 permissions: {} # No permissions required
@@ -98,7 +98,7 @@ jobs:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
         needs: build
         if: inputs.skip != true
-        runs-on: ubuntu-24.04
+        runs-on: dind-test
         permissions:
             actions: read
             issues: read
