@@ -70,7 +70,7 @@ const commonLaunchOptions = {
     args: ["--font-render-hinting=none", "--disable-font-subpixel-positioning", "--disable-lcd-text"],
 };
 
-const config = defineConfig({
+export default defineConfig({
     test: {
         coverage: {
             provider: "v8",
@@ -161,5 +161,3 @@ const config = defineConfig({
         },
     },
 });
-
-export default config;
