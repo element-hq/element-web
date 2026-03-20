@@ -25,7 +25,7 @@
         "pretty-format@30>react-is": "19.2.4",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
-        "oidc-client-ts": "3.4.1",
+        "oidc-client-ts": "3.5.0",
         "jwt-decode": "4.0.0",
         "caniuse-lite": "1.0.30001780",
         "markdown-it": "14.1.1",
@@ -34,7 +34,7 @@
         "wrap-ansi": "npm:wrap-ansi@^10.0.0",
         "matrix-widget-api": "^1.17.0",
         "qs": "6.15.0",
-        "serialize-javascript": "7.0.3"
+        "serialize-javascript": "7.0.4"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
@@ -45,11 +45,11 @@
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "^5.36.2",
+        "knip": "5.87.0",
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
         "minimist": "^1.2.6",
-        "nx": "22.5.3",
+        "nx": "22.5.4",
         "prettier": "3.8.1",
         "typescript": "catalog:",
         "yaml": "^2.3.3"
