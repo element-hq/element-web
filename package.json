@@ -72,7 +72,8 @@
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
             "jsdom": "patches/jsdom.patch",
             "rollup": "patches/rollup.patch",
-            "knip": "patches/knip.patch"
+            "knip": "patches/knip.patch",
+            "postcss-mixins": "patches/postcss-mixins.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {

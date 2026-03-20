@@ -82,6 +82,9 @@ patchedDependencies:
   linkify-html:
     hash: 1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2
     path: patches/linkify-html.patch
+  postcss-mixins:
+    hash: 30fc882486b610a1c252340c87a99f1030c50e698a3c57c837eff7232e29d6d0
+    path: patches/postcss-mixins.patch
   react-blurhash:
     hash: 58bc7f075478017ce27bcc252e8509876390db106246bd5b0a7446642cc4b505
     path: patches/react-blurhash.patch
@@ -278,7 +281,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/897afe153a7535f3988023eb4638b135dd7a8e7a
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -663,7 +666,7 @@ importers:
         version: 8.2.1(postcss@8.5.8)(typescript@5.9.3)(webpack@5.105.3)
       postcss-mixins:
         specifier: 12.1.2
-        version: 12.1.2(postcss@8.5.8)
+        version: 12.1.2(patch_hash=30fc882486b610a1c252340c87a99f1030c50e698a3c57c837eff7232e29d6d0)(postcss@8.5.8)
       postcss-nested:
         specifier: 7.0.2
         version: 7.0.2(postcss@8.5.8)
@@ -7825,8 +7828,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/897afe153a7535f3988023eb4638b135dd7a8e7a:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/897afe153a7535f3988023eb4638b135dd7a8e7a}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99}
     version: 41.1.0
     engines: {node: '>=22.0.0'}
 
@@ -18727,7 +18730,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/897afe153a7535f3988023eb4638b135dd7a8e7a:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/45b1e738423c2173e060ae2149f7c76ae8d73f99:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
@@ -19620,7 +19623,7 @@ snapshots:
       postcss: 8.5.8
       postcss-selector-parser: 7.1.1
 
-  postcss-mixins@12.1.2(postcss@8.5.8):
+  postcss-mixins@12.1.2(patch_hash=30fc882486b610a1c252340c87a99f1030c50e698a3c57c837eff7232e29d6d0)(postcss@8.5.8):
     dependencies:
       postcss: 8.5.8
       postcss-js: 4.1.0(postcss@8.5.8)
