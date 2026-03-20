@@ -835,58 +835,18 @@ export class ElementCall extends Call {
         );
     }
 
-    /**
-     * Get the correct intent for a widget, so that Element Call presents the correct
-     * default config.
-     * @param client The matrix client.
-     * @param roomId
-     * @param voiceOnly Should the call be voice-only, or video (default).
-     */
-    public static getWidgetIntent(client: MatrixClient, roomId: string, voiceOnly?: boolean): ElementCallIntent {
-        const room = client.getRoom(roomId);
-        if (room !== null && !isVideoRoom(room)) {
-            const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
-            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
-            if (isDM) {
-                if (hasCallStarted) {
-                    return voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM;
-                } else {
-                    return voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM;
-                }
-            } else {
-                if (hasCallStarted) {
-                    return ElementCallIntent.JoinExisting;
-                } else {
-                    return ElementCallIntent.StartCall;
-                }
-            }
-        }
-        // If unknown, default to joining an existing call.
-        return ElementCallIntent.JoinExisting;
-    }
-
     private static getWidgetData(
         client: MatrixClient,
         roomId: string,
         currentData: IWidgetData,
         overwriteData: IWidgetData,
-        voiceOnly?: boolean,
     ): IWidgetData {
-        let perParticipantE2EE = false;
-        if (
-            client.getRoom(roomId)?.hasEncryptionStateEvent() &&
-            !SettingsStore.getValue("feature_disable_call_per_sender_encryption")
-        )
-            perParticipantE2EE = true;
-
-        const intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
-
         return {
             ...currentData,
             ...overwriteData,
-            intent,
-            perParticipantE2EE,
+            perParticipantE2EE:
+                client.getRoom(roomId)?.hasEncryptionStateEvent() &&
+                !SettingsStore.getValue("feature_disable_call_per_sender_encryption"),
         };
     }
 
