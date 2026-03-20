@@ -76,71 +76,101 @@ import { ThreadInfo } from "./ThreadInfo";
 import { MediaEventHelper as TileMediaEventHelper } from "../../../../utils/MediaEventHelper";
 import { haveRendererForEvent } from "../../../../events/EventTileFactory";
 
-/**
- * Ref handle for consumers that need direct access to tile actions and the root element.
- */
+/** Ref handle for direct access to tile actions and the root element. */
 export interface EventTileHandle extends EventTileOps {
-    /**
-     * Ref to the tile's root DOM element.
-     */
+    /** Ref to the tile root DOM element. */
     ref: RefObject<HTMLElement | null>;
-    /**
-     * Recomputes derived tile state without changing props.
-     */
+    /** Recomputes derived tile state without changing props. */
     forceUpdate(): void;
 }
 
+/** Core event identity and imperative ref inputs for the presenter. */
 interface EventTileCoreProps {
+    /** The Matrix event represented by this tile. */
     mxEvent: MatrixEvent;
+    /** Optional send-status override for locally pending events. */
     eventSendStatus?: EventStatus;
+    /** Optional ref used to expose the tile handle to callers. */
     ref?: Ref<EventTileHandle>;
 }
 
+/** Rendering flags and layout options that shape tile presentation. */
 interface EventTileRenderingProps {
+    /** Optional root element tag name override. */
     as?: string;
+    /** The active room layout variant. */
     layout?: Layout;
+    /** Whether timestamps should use a twelve-hour clock. */
     isTwelveHour?: boolean;
+    /** Whether the tile is being rendered for export rather than live interaction. */
     forExport?: boolean;
+    /** Whether timestamps should remain visible even when the tile is idle. */
     alwaysShowTimestamps?: boolean;
+    /** Whether the event should be treated as redacted for rendering purposes. */
     isRedacted?: boolean;
+    /** Whether the tile continues the previous sender block visually. */
     continuation?: boolean;
+    /** Whether this is the last visible tile in the current list. */
     last?: boolean;
+    /** Whether this is the last tile in its grouped section. */
     lastInSection?: boolean;
+    /** Whether this event is the most recent successfully sent event. */
     lastSuccessful?: boolean;
+    /** Whether the tile is shown in a contextual timeline. */
     contextual?: boolean;
+    /** Whether this tile corresponds to the selected event. */
     isSelectedEvent?: boolean;
+    /** Whether sender information should be hidden. */
     hideSender?: boolean;
+    /** Whether timestamp rendering should be hidden. */
     hideTimestamp?: boolean;
+    /** Whether interactive affordances should be disabled. */
     inhibitInteraction?: boolean;
+    /** Whether moderation-hidden content is currently being revealed. */
     isSeeingThroughMessageHiddenForModeration?: boolean;
+    /** Whether URL preview rendering should be enabled for supported events. */
     showUrlPreview?: boolean;
+    /** Highlight tokens to emphasize within the message body. */
     highlights?: string[];
+    /** Link target used to highlight matching content inside the tile. */
     highlightLink?: string;
 }
 
+/** Relation and receipt inputs used to enrich tile rendering. */
 interface EventTileRelationProps {
+    /** Optional relation lookup function for the current event. */
     getRelationsForEvent?: GetRelationsForEvent;
+    /** Whether reactions should be shown. */
     showReactions?: boolean;
+    /** Whether read receipts should be shown when available. */
     showReadReceipts?: boolean;
+    /** Read receipt entries available for the tile. */
     readReceipts?: ReadReceiptProps[];
+    /** Precomputed read receipt positions keyed by user ID. */
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
 }
 
+/** Editing-related inputs for tiles that participate in composer state. */
 interface EventTileEditingProps {
+    /** Current edit-state transfer object associated with the event. */
     editState?: EditorStateTransfer;
+    /** Event ID of the replacement event currently being composed. */
     replacingEventId?: string;
+    /** Optional callback used by child components to detect unmounting during async work. */
     checkUnmounting?: () => boolean;
 }
 
+/** Optional environment helpers supplied by the surrounding room view. */
 interface EventTileEnvironmentProps {
+    /** Optional resize observer used to monitor the rendered tile root. */
     resizeObserver?: ResizeObserver;
+    /** Optional permalink helper used to generate event links. */
     permalinkCreator?: RoomPermalinkCreator;
+    /** Optional helper used to group legacy call events. */
     callEventGrouper?: LegacyCallEventGrouper;
 }
 
-/**
- * Props consumed by {@link EventTilePresenter} to render a single timeline tile.
- */
+/** Props consumed by {@link EventTilePresenter}. */
 export type EventTileProps = EventTileCoreProps &
     EventTileRenderingProps &
     EventTileRelationProps &
@@ -164,56 +194,99 @@ function buildEventTileViewModelProps(
     };
 }
 
+/** Result returned from `useEventTileViewModel`. */
 type UseEventTileViewModelResult = {
+    /** The current Matrix client instance. */
     cli: ReturnType<typeof useMatrixClientContext>;
+    /** Room-level timeline context for the current render tree. */
     roomContext: React.ContextType<typeof RoomContext>;
+    /** Stable ID assigned to the tile content region. */
     tileContentId: string;
+    /** Ref to the tile root element. */
     rootRef: RefObject<HTMLElement | null>;
+    /** Ref to imperative tile operations. */
     tileRef: RefObject<EventTileOps | null>;
+    /** Ref to the reply chain preview when rendered. */
     replyChainRef: RefObject<ReplyChain | null>;
+    /** Whether initial read receipt animations should be suppressed. */
     suppressReadReceiptAnimation: boolean;
+    /** Current context menu state, if the menu is open. */
     contextMenuState?: ContextMenuState;
+    /** Setter for the current context menu state. */
     setContextMenuState: React.Dispatch<React.SetStateAction<ContextMenuState | undefined>>;
+    /** The event tile view model instance. */
     vm: EventTileViewModel;
+    /** The current derived tile snapshot. */
     snapshot: EventTileViewSnapshot;
 };
 
+/** Event handlers and room data returned from `useEventTileActions`. */
 type UseEventTileActionsResult = {
+    /** The room that owns the event, if it can be resolved from the client. */
     room: Room | null;
+    /** Opens the event in the full room timeline. */
     openInRoom: (evt: ButtonEvent) => void;
+    /** Copies a permalink to the event thread when available. */
     copyLinkToThread: (evt: ButtonEvent) => Promise<void>;
+    /** Handles timestamp permalink clicks. */
     onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
+    /** Handles clicks on list-style tiles. */
     onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
+    /** Handles context menu requests from the main tile body. */
     onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+    /** Handles context menu requests from the timestamp element. */
     onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
 };
 
+/** Presenter-owned child content injected into {@link EventTileView}. */
 type EventTileViewRenderContent = {
+    /** Reply chain preview props when reply UI should be rendered. */
     replyChain?: ReplyPreviewProps;
+    /** Action bar props for the tile controls. */
     actionBar?: ActionBarProps;
+    /** Context menu props when the menu is open. */
     contextMenu?: ContextMenuProps;
 };
 
+/** Event handlers passed through to {@link EventTileView}. */
 type EventTileViewActions = {
+    /** Opens the event in the owning room. */
     openInRoom: (evt: ButtonEvent) => void;
+    /** Copies a permalink to the thread for this event. */
     copyLinkToThread: (evt: ButtonEvent) => Promise<void>;
+    /** Handles clicks on the timestamp permalink. */
     onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
+    /** Handles list tile click behavior. */
     onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
+    /** Handles context menu requests from the tile body. */
     onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+    /** Handles context menu requests from the timestamp. */
     onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
 };
 
+/** Inputs required to build the final {@link EventTileViewProps} object. */
 type UseEventTileViewPropsArgs = {
+    /** Presenter props for the current tile. */
     props: EventTileProps;
+    /** The event tile view model instance. */
     vm: EventTileViewModel;
+    /** The current derived tile snapshot. */
     snapshot: EventTileViewSnapshot;
+    /** Room timeline context for the current render tree. */
     roomContext: React.ContextType<typeof RoomContext>;
+    /** The room containing the event, if resolved. */
     room: Room | null;
+    /** Stable ID assigned to the content region. */
     tileContentId: string;
+    /** Ref to the tile root element. */
     rootRef: RefObject<HTMLElement | null>;
+    /** Ref to imperative tile operations. */
     tileRef: RefObject<EventTileOps | null>;
+    /** Whether initial read receipt animations should be suppressed. */
     suppressReadReceiptAnimation: boolean;
+    /** Presenter-owned child content to inject into the view. */
     renderedContent: EventTileViewRenderContent;
+    /** Event handlers to wire into the view. */
     actions: EventTileViewActions;
 };
 
@@ -614,9 +687,7 @@ function useEventTileActions(
     );
 }
 
-/**
- * Headless presenter for a single event tile that wires the view model to the view.
- */
+/** Headless presenter that wires {@link EventTileViewModel} to {@link EventTileView}. */
 export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
     const {
         cli,

@@ -57,83 +57,141 @@ import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import PinningUtils from "../../utils/PinningUtils";
 import type { GetRelationsForEvent, ReadReceiptProps } from "../../components/views/rooms/EventTile/types";
 
+/** Interaction-only state that changes in response to pointer and focus events. */
 interface EventTileInteractionSnapshot {
+    /** Whether the tile action bar should be presented as focused. */
     actionBarFocused: boolean;
+    /** Whether the tile is currently hovered. */
     hover: boolean;
+    /** Whether focus is currently inside the tile subtree. */
     focusWithin: boolean;
+    /** Whether the tile context menu is currently open. */
     isContextMenuOpen: boolean;
+    /** Whether the reply quote preview is expanded. */
     isQuoteExpanded?: boolean;
 }
 
+/** Derived receipt and reaction state for the tile footer. */
 interface EventTileReceiptSnapshot {
+    /** The reaction aggregation for the event, if reactions are being tracked. */
     reactions: Relations | null;
+    /** Whether the tile should show the sent receipt state. */
     shouldShowSentReceipt: boolean;
+    /** Whether the tile should show the sending receipt state. */
     shouldShowSendingReceipt: boolean;
+    /** Whether read receipts should be rendered for this tile. */
     showReadReceipts: boolean;
 }
 
+/** Rendering decisions that shape the tile body and footer layout. */
 interface EventTileRenderingSnapshot {
+    /** Whether the event should render with highlighted styling. */
     isHighlighted: boolean;
+    /** Whether the tile is a continuation of the previous sender block. */
     isContinuation: boolean;
+    /** Whether the event is still in a local sending state. */
     isSending: boolean;
+    /** Whether the event is currently being edited. */
     isEditing: boolean;
+    /** Whether the tile should show a reply preview above the event content. */
     showReplyPreview: boolean;
+    /** The event renderer mode chosen for the tile body. */
     renderMode: EventTileRenderMode;
+    /** Whether a dedicated renderer exists for the event content. */
     hasRenderer: boolean;
+    /** The high-level timeline rendering type for the tile. */
     tileRenderType: TimelineRenderingType;
+    /** Whether the event should render as a bubble-style message. */
     isBubbleMessage: boolean;
+    /** Whether the event should render as an informational message. */
     isInfoMessage: boolean;
+    /** Whether the bubble should be left-aligned instead of sender-aligned. */
     isLeftAlignedBubbleMessage: boolean;
+    /** Whether the event should suppress bubble styling entirely. */
     noBubbleEvent: boolean;
+    /** Whether hidden-for-moderation content is currently being revealed through the tile UI. */
     isSeeingThroughMessageHiddenForModeration: boolean;
+    /** Whether the event is currently pinned in the room. */
     isPinned: boolean;
+    /** Whether the tile should render footer content. */
     hasFooter: boolean;
 }
 
+/** Timestamp and permalink data derived for the tile header or footer. */
 interface EventTileTimestampSnapshot {
+    /** Whether the timestamp should currently be visible. */
     showTimestamp: boolean;
+    /** The permalink for this event, or an empty string when unavailable. */
     permalink: string;
+    /** The search scroll token used to restore search context for the event. */
     scrollToken?: string;
+    /** The visual timestamp presentation mode. */
     timestampDisplayMode: TimestampDisplayMode;
+    /** The formatting style used when rendering the timestamp. */
     timestampFormatMode: TimestampFormatMode;
+    /** The timestamp value, in milliseconds since the Unix epoch. */
     timestampTs: number;
 }
 
+/** Thread-related state derived from the event and current room context. */
 interface EventTileThreadSnapshot {
+    /** The thread associated with the event, if any. */
     thread: Thread | null;
+    /** A stable change key used to invalidate thread-dependent rendering. */
     threadUpdateKey: string;
+    /** The thread notification type to surface for this tile. */
     threadNotification?: NotificationCountType;
+    /** Whether the event is associated with a thread. */
     hasThread: boolean;
+    /** Whether the event is the root event of a thread. */
     isThreadRoot: boolean;
+    /** The thread panel layout mode to render below the tile. */
     threadPanelMode: ThreadPanelMode;
+    /** The thread metadata mode to render inline with the tile. */
     threadInfoMode: ThreadInfoMode;
+    /** The primary click action exposed by the tile. */
     tileClickMode: ClickMode;
+    /** Whether the tile was opened from a search result context. */
     openedFromSearch: boolean;
 }
 
+/** Sender and avatar presentation derived for the tile. */
 interface EventTileSenderSnapshot {
+    /** Whether the event sender is the current user. */
     isOwnEvent: boolean;
+    /** Whether sender information should be shown. */
     showSender: boolean;
+    /** Which entity the avatar should represent. */
     avatarSubject: AvatarSubject;
+    /** The avatar size to render. */
     avatarSize: AvatarSize;
+    /** Whether clicking the avatar should target the member or user affordance. */
     avatarMemberUserOnClick: boolean;
+    /** Whether avatar lookup should prefer historical membership data. */
     avatarForceHistorical: boolean;
+    /** The sender presentation mode to use. */
     senderMode: SenderMode;
 }
 
+/** Encryption and room-security presentation state for the tile. */
 interface EventTileEncryptionSnapshot {
+    /** The verification shield color derived for the event. */
     shieldColour: EventShieldColour;
+    /** The verification or warning reason associated with the shield. */
     shieldReason: EventShieldReason | null;
+    /** Whether the event is currently in a decryption failure state. */
     isEncryptionFailure: boolean;
+    /** The padlock badge mode to render for room context. */
     padlockMode: PadlockMode;
+    /** The encryption indicator mode to show in the tile chrome. */
     encryptionIndicatorMode: EncryptionIndicatorMode;
+    /** The user ID that shared keys for the event, when available. */
     sharedKeysUserId?: string;
+    /** The room ID associated with the shared keys, when available. */
     sharedKeysRoomId?: string;
 }
 
-/**
- * Fully derived view state consumed by the `EventTile` rendering layer.
- */
+/** Fully derived view state consumed by the `EventTile` rendering layer. */
 export type EventTileViewSnapshot = EventTileInteractionSnapshot &
     EventTileReceiptSnapshot &
     EventTileRenderingSnapshot &
@@ -142,51 +200,78 @@ export type EventTileViewSnapshot = EventTileInteractionSnapshot &
     EventTileSenderSnapshot &
     EventTileEncryptionSnapshot;
 
+/** Core event and service dependencies required by the view model. */
 interface EventTileCoreProps {
+    /** The Matrix client used for decryption, receipts, and room lookups. */
     cli: MatrixClient;
+    /** The Matrix event represented by this tile. */
     mxEvent: MatrixEvent;
+    /** The local send status override for the event, when applicable. */
     eventSendStatus?: EventStatus;
+    /** The current composer edit state associated with the event. */
     editState?: EditorStateTransfer;
+    /** Optional permalink helper used to generate event links. */
     permalinkCreator?: RoomPermalinkCreator;
+    /** Optional helper used to group legacy call events. */
     callEventGrouper?: LegacyCallEventGrouper;
 }
 
+/** Rendering flags and layout context that influence tile presentation. */
 interface EventTileRenderingProps {
+    /** Whether the tile is being rendered for export rather than live interaction. */
     forExport?: boolean;
+    /** The timeline rendering mode for the current room view. */
     timelineRenderingType: TimelineRenderingType;
+    /** The active room layout variant. */
     layout?: Layout;
+    /** Whether timestamps should use a twelve-hour clock. */
     isTwelveHour?: boolean;
+    /** Whether timestamps should always be visible regardless of hover state. */
     alwaysShowTimestamps?: boolean;
+    /** Whether the event should be treated as redacted for rendering purposes. */
     isRedacted?: boolean;
+    /** Whether this tile visually continues the previous event group. */
     continuation?: boolean;
+    /** Whether this is the last visible tile in the current list. */
     last?: boolean;
+    /** Whether this is the last tile in its grouped section. */
     lastInSection?: boolean;
+    /** Whether the tile is being rendered in a contextual timeline. */
     contextual?: boolean;
+    /** Whether this tile corresponds to the currently selected event. */
     isSelectedEvent?: boolean;
+    /** Whether hidden events should still be rendered. */
     showHiddenEvents: boolean;
+    /** Whether the room containing the event is encrypted. */
     isRoomEncrypted: boolean;
+    /** Whether sender information should be suppressed. */
     hideSender?: boolean;
+    /** Whether timestamp rendering should be suppressed. */
     hideTimestamp?: boolean;
+    /** Whether interactive affordances should be disabled. */
     inhibitInteraction?: boolean;
+    /** A link target used to highlight matching content inside the tile. */
     highlightLink?: string;
 }
 
+/** Optional relation and receipt inputs used to enrich tile footer state. */
 interface EventTileRelationProps {
+    /** Whether reaction aggregation should be computed and displayed. */
     showReactions?: boolean;
+    /** Optional relation lookup function for the event. */
     getRelationsForEvent?: GetRelationsForEvent;
+    /** Read receipt data available for the tile. */
     readReceipts?: ReadReceiptProps[];
+    /** Whether read receipts should be rendered when available. */
     showReadReceipts?: boolean;
+    /** Whether this event is the most recent successfully sent event. */
     lastSuccessful?: boolean;
 }
 
-/**
- * Inputs required to derive the `EventTile` view snapshot.
- */
+/** Inputs required to derive the `EventTile` view snapshot. */
 export type EventTileViewModelProps = EventTileCoreProps & EventTileRenderingProps & EventTileRelationProps;
 
-/**
- * Derives the render state and interaction state for a single timeline event tile.
- */
+/** Derives and maintains render state for a single timeline event tile. */
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
     private isListeningForReceipts = false;
     private verifyGeneration = 0;
@@ -196,6 +281,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private isListeningForUserTrust = false;
     private isListeningForReactions = false;
 
+    /** Creates a view model for a single event tile. */
     public constructor(props: EventTileViewModelProps) {
         super(props, EventTileViewModel.deriveSnapshot(props));
 
@@ -205,23 +291,28 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         void this.verifyEvent();
     }
 
+    /** Releases all Matrix listeners owned by this view model. */
     public override dispose(): void {
         this.unbindAllListeners();
         super.dispose();
     }
 
+    /** Updates whether the tile is currently hovered. */
     public setHover(hover: boolean): void {
         this.updateInteractionSnapshot({ hover });
     }
 
+    /** Updates whether focus is currently inside the tile. */
     public setFocusWithin(focusWithin: boolean): void {
         this.updateInteractionSnapshot({ focusWithin });
     }
 
+    /** Updates whether the action bar is considered focused. */
     public setActionBarFocused(actionBarFocused: boolean): void {
         this.updateInteractionSnapshot({ actionBarFocused });
     }
 
+    /** Updates whether the tile's context menu is open. */
     public setContextMenuOpen(isContextMenuOpen: boolean): void {
         this.updateInteractionSnapshot({
             isContextMenuOpen,
@@ -229,10 +320,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         });
     }
 
+    /** Updates whether the quoted reply preview is expanded. */
     public setQuoteExpanded(isQuoteExpanded: boolean): void {
         this.updateInteractionSnapshot({ isQuoteExpanded });
     }
 
+    /** Replaces the model props and refreshes affected listeners and derived state. */
     public updateProps(props: EventTileViewModelProps): void {
         const previousProps = this.props;
         const previousEvent = this.props.mxEvent;
@@ -258,6 +351,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
     }
 
+    /** Recomputes the full derived snapshot from the current props and live event state. */
     public refreshDerivedState(): void {
         this.updateSnapshot();
     }

@@ -14,19 +14,13 @@ import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } fr
 export type { EventTileHandle } from "./EventTilePresenter";
 export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
 
-/**
- * Props for the exported {@link EventTile} wrapper component.
- */
+/** Props for {@link EventTile}. */
 export interface EventTileProps extends EventTilePresenterProps {
-    /**
-     * Wraps the tile in the timeline error boundary when enabled.
-     */
+    /** Wraps the tile in {@link TileErrorBoundary}. Defaults to `true`. */
     withErrorBoundary?: boolean;
 }
 
-/**
- * Renders a timeline event tile and optionally protects it with the tile error boundary.
- */
+/** Renders a single timeline event tile via {@link EventTilePresenter}. */
 export function EventTile(props: EventTileProps): JSX.Element {
     const { withErrorBoundary = true, layout = Layout.Group, forExport = false, ...rest } = props;
     const tileProps = { ...rest, layout, forExport };
