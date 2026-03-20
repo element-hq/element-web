@@ -44,6 +44,7 @@ export default defineConfig({
             reporter: "lcov",
         },
         reporters: [
+            ["default", { summary: false }],
             [
                 "vitest-sonar-reporter",
                 {

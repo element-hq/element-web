@@ -44,6 +44,15 @@ export interface SpacePanelItemProps {
 }
 
 /**
+ * A callback that returns a JSX element representing the buttons.
+ *
+ * @alpha
+ * @param roomId - The ID of the room for which the header is being rendered.
+ * @returns A JSX element representing the buttons to be rendered in the room header, or undefined if no buttons should be rendered.
+ */
+export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;
+
+/**
  * API for inserting extra UI into Element Web.
  * @alpha Subject to change.
  */
@@ -67,4 +76,11 @@ export interface ExtrasApi {
      * @param cb - A callback that returns the list of visible room IDs.
      */
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
+
+    /**
+     * Adds a callback to get extra buttons in the room header (which can vary depending on the room being displayed).
+     *
+     * @param cb - A callback that returns a JSX element representing the buttons (see {@link RoomHeaderButtonsCallback}).
+     */
+    addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
 }
