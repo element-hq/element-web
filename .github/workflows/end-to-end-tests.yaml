@@ -146,7 +146,7 @@ jobs:
                   node-version: "lts/*"
 
             - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+              run: pnpm install --frozen-lockfile && sudo apt install fonts-dejavu
 
             - name: Get installed Playwright version
               id: playwright
