@@ -1,9 +1,8 @@
-**
-
 # Exclude a bunch of stuff which can make the build context a larger than it needs to be
 **/test/
 **/*.stories.tsx
-**/*.test.tsx?
+**/*.test.ts
+**/*.test.tsx
 **/lib/
 **/dist/
 **/node_modules/
