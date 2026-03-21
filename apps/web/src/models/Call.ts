@@ -114,10 +114,9 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     }
 
     protected set callType(callType: CallType) {
-        if (this._callType !== callType) {
-            this.emit(CallEvent.CallTypeChanged, callType);
-        }
+        const prevCallType = this._callType;
         this._callType = callType;
+        if (callType !== prevCallType) this.emit(CallEvent.CallTypeChanged, callType);
     }
 
     /**
