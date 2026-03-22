@@ -16,7 +16,7 @@ import {
 } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
-import { _t } from "../../utils/I18nApi";
+import { _t } from "../../utils/i18n";
 import styles from "./NetworkProxyView.module.css";
 
 /**

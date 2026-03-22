@@ -2765,6 +2765,22 @@
             "show_media": "Always show"
         },
         "not_supported": "Your server does not implement this feature.",
+        "network_proxy": {
+            "connection_mode": "Connection mode",
+            "manual_configuration": "Manual configuration",
+            "mode_custom_selected": "Manual proxy configuration is enabled.",
+            "mode_direct_selected": "Direct connection is enabled. No proxy will be used.",
+            "mode_system_selected": "Using the system proxy configuration.",
+            "no_proxy_direct": "No proxy (direct connection)",
+            "no_proxy_for_comma_separated": "No proxy for",
+            "port": "Port",
+            "proxy_config_encrypted_system_storage": "Proxy password is stored in the system credential store when available.",
+            "proxy_host": "Proxy host",
+            "proxy_settings_updates_warning": "Changes apply to new network requests after saving.",
+            "settings_button": "Configure proxy",
+            "title": "Network Proxy",
+            "use_system_proxy": "Use system proxy"
+        },
         "notifications": {
             "default_setting_description": "This setting will be applied by default to all your rooms.",
             "default_setting_section": "I want to be notified for (Default Setting)",

@@ -1463,4 +1463,9 @@ export const SETTINGS: Settings = {
         displayName: _td("devtools|settings|elementCallUrl"),
         default: "",
     },
+    "desktopProxyConfig": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("settings|network_proxy|title"),
+        default: { mode: "system" } as ProxyConfig,
+    },
 };
