@@ -1507,8 +1507,6 @@
     },
     "labs": {
         "ask_to_join": "Galluogi gofyn i ymuno",
-        "automatic_debug_logs": "Anfon logiau dadfygio yn awtomatig ar unrhyw wall",
-        "automatic_debug_logs_decryption": "Anfon logiau dadgryptio yn awtomatig ar wallau dadgryptio",
         "beta_description": "Beth sydd nesaf i %(brand)s? Labs yw'r ffordd orau o gael pethau'n gynnar, profi nodweddion newydd a helpu i'w siapio cyn iddynt gael eu lansio.",
         "beta_feature": "Mae hon yn nodwedd beta",
         "beta_feedback_leave_button": "I adael y beta, ewch i'ch gosodiadau.",
@@ -3400,8 +3398,7 @@
             "voice_call_unsupported": "Gosododd %(senderName)s alwad llais. (heb ei gefnogi gan y porwr hwn)"
         },
         "m.file": {
-            "error_decrypting": "Gwall wrth ddadgryptio atodiad",
-            "error_invalid": "Ffeil annilys"
+            "error_decrypting": "Gwall wrth ddadgryptio atodiad"
         },
         "m.image": {
             "error": "Methu dangos delwedd oherwydd gwall",
@@ -3749,13 +3746,7 @@
             "one_user": "Mae %(displayName)s yn teipio…",
             "two_users": "Mae %(materes)s a %(lastPerson)s yn teipio…"
         },
-        "undecryptable_tooltip": "Nid oedd modd dadgryptio'r neges hon",
-        "url_preview": {
-            "close": "Cau rhagolwg",
-            "show_n_more": {
-                "Dangos %(count)s rhagolwg arall": "other"
-            }
-        }
+        "undecryptable_tooltip": "Nid oedd modd dadgryptio'r neges hon"
     },
     "truncated_list_n_more": {
         "A %(count)s yn rhagor...": "other"

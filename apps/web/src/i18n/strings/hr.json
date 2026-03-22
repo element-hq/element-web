@@ -1508,8 +1508,6 @@
     },
     "labs": {
         "ask_to_join": "Omogući traženje pridruživanja",
-        "automatic_debug_logs": "Automatsko slanje zapisnika o svakoj pogrešci",
-        "automatic_debug_logs_decryption": "Automatsko slanje zapisnika o otklanjanju pogrešaka dešifriranja",
         "beta_description": "Što je sljedeće za %(brand)s? Labs su najbolji način da među prvima isprobate novosti, testirate nove značajke i pomognete ih oblikovati prije nego što službeno postanu dostupne.",
         "beta_feature": "Ovo je beta značajka",
         "beta_feedback_leave_button": "Da biste napustili beta inačicu, idite na postavke.",
@@ -3442,8 +3440,7 @@
             "voice_call_unsupported": "%(senderName)s uputio/la je glasovni poziv. (Ne podržava ovaj preglednik.)"
         },
         "m.file": {
-            "error_decrypting": "Pogreška pri dešifriranju privitka",
-            "error_invalid": "Nevažeća datoteka"
+            "error_decrypting": "Pogreška pri dešifriranju privitka"
         },
         "m.image": {
             "error": "Nije moguće prikazati sliku zbog pogreške",
@@ -3821,15 +3818,7 @@
             "one_user": "%(displayName)s tipka…",
             "two_users": "%(names)s i %(lastPerson)s tipkaju…"
         },
-        "undecryptable_tooltip": "Ova se poruka nije mogla dešifrirati",
-        "url_preview": {
-            "close": "Zatvori pretpregled",
-            "show_n_more": {
-                "one": "Prikaži %(count)s drugi pregled",
-                "few": "Prikaži %(count)s druga pregleda",
-                "other": "Prikaži %(count)s drugih pregleda"
-            }
-        }
+        "undecryptable_tooltip": "Ova se poruka nije mogla dešifrirati"
     },
     "truncated_list_n_more": {
         "one": "I još %(count)s...",

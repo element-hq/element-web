@@ -11,6 +11,7 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
+            ignoreBinaries: ["awk"],
         },
         "apps/web": {
             entry: [

@@ -2086,8 +2086,7 @@
             "voice_call_unsupported": "%(senderName)s ekigis voĉvokon. (mankas subteno en ĉi tiu foliumilo)"
         },
         "m.file": {
-            "error_decrypting": "Malĉifro de aldonaĵo eraris",
-            "error_invalid": "Malvalida dosiero%(extra)s"
+            "error_decrypting": "Malĉifro de aldonaĵo eraris"
         },
         "m.image": {
             "error_decrypting": "Malĉifro de bildo eraris",
@@ -2352,13 +2351,6 @@
             },
             "one_user": "%(displayName)s tajpas…",
             "two_users": "%(names)s kaj %(lastPerson)s tajpas…"
-        },
-        "url_preview": {
-            "close": "Fermi antaŭrigardon",
-            "show_n_more": {
-                "one": "Montri %(count)s alian antaŭrigardon",
-                "other": "Montri %(count)s aliajn antaŭrigardojn"
-            }
         }
     },
     "truncated_list_n_more": {

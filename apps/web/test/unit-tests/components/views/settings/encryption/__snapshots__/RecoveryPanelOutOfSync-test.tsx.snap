@@ -12,12 +12,12 @@ exports[`<RecoveyPanelOutOfSync /> should render 1`] = `
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
       >
-        Recovery
+        Backup
       </h2>
       <div
         class="mx_SettingsSubheader"
       >
-        Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
+        Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.
         <span
           class="mx_SettingsSubheader_error"
         >

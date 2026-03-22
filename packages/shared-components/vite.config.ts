@@ -8,7 +8,7 @@
 
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig, esmExternalRequirePlugin } from "vite";
 import dts from "vite-plugin-dts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -22,22 +22,20 @@ export default defineConfig({
             fileName: "element-web-shared-components",
         },
         outDir: "dist",
-        rollupOptions: {
+        rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
-            external: [
-                "react",
-                "react-dom",
-                "@vector-im/compound-design-tokens",
-                "@vector-im/compound-web",
-                "react-virtuoso",
+            external: ["@vector-im/compound-design-tokens", "@vector-im/compound-web", "react-virtuoso"],
+            plugins: [
+                esmExternalRequirePlugin({
+                    external: ["react", "react-dom"],
+                }),
             ],
             output: {
                 // Provide global variables to use in the UMD build
                 // for externalized deps
                 globals: {
                     "react": "react",
-                    "react-dom": "ReactDom",
                     "@vector-im/compound-design-tokens": "compoundDesignTokens",
                     "@vector-im/compound-web": "compoundWeb",
                     "react-virtuoso": "reactVirtuoso",
