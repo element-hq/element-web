@@ -18,7 +18,7 @@ import { RoomAvatarView } from "../../avatars/RoomAvatarView";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import { Landmark, LandmarkNavigation } from "../../../../accessibility/LandmarkNavigation";
-import { RoomListViewModel } from "../../../../viewmodels/room-list/RoomListViewModel";
+import { RoomListViewViewModel } from "../../../../viewmodels/room-list/RoomListViewViewModel";
 
 /**
  * RoomListView component using shared components with proper MVVM pattern.
@@ -27,7 +27,7 @@ export function RoomListView(): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
     // Create and auto-dispose ViewModel instance
-    const vm = useCreateAutoDisposedViewModel(() => new RoomListViewModel({ client: matrixClient }));
+    const vm = useCreateAutoDisposedViewModel(() => new RoomListViewViewModel({ client: matrixClient }));
 
     // Render avatar for each room - memoized to prevent re-renders
     const renderAvatar = useCallback((room: SharedRoom): ReactNode => {
