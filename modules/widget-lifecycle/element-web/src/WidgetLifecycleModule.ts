@@ -23,7 +23,7 @@ type ModuleApi = Pick<Api, "config" | "widgetLifecycle">;
  * requests based on URL-pattern rules defined in config.json.
  */
 export default class WidgetLifecycleModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0";
+    public static readonly moduleApiVersion = "^1.10.0";
 
     private config: WidgetLifecycleModuleConfig = {};
 
