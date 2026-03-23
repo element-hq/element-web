@@ -62,11 +62,11 @@ describe("<ManageEventIndexDialog />", () => {
         setUpDefaults("language");
         const onFinished = jest.fn();
         const setValueSpy = jest.spyOn(SettingsStore, "setValue");
+        const initEventIndexSpy = jest.spyOn(EventIndexPeg, "initEventIndex").mockResolvedValue(true);
 
-        jest.spyOn(Modal, "createDialog").mockImplementation((_Component, props?: any) => {
-            props?.onFinished(true);
-            return {} as any;
-        });
+        jest.spyOn(Modal, "createDialog").mockReturnValue({
+            finished: Promise.resolve([true]),
+        } as any);
 
         render(<ManageEventIndexDialog onFinished={onFinished} />);
         await flushPromises();
@@ -76,6 +76,7 @@ describe("<ManageEventIndexDialog />", () => {
         await flushPromises();
 
         expect(setValueSpy).toHaveBeenCalledWith("tokenizerMode", null, SettingLevel.DEVICE, "ngram");
+        expect(initEventIndexSpy).toHaveBeenCalled();
         expect(onFinished).toHaveBeenCalled();
     });
 
@@ -84,10 +85,9 @@ describe("<ManageEventIndexDialog />", () => {
         const onFinished = jest.fn();
         const setValueSpy = jest.spyOn(SettingsStore, "setValue");
 
-        jest.spyOn(Modal, "createDialog").mockImplementation((_Component, props?: any) => {
-            props?.onFinished(false);
-            return {} as any;
-        });
+        jest.spyOn(Modal, "createDialog").mockReturnValue({
+            finished: Promise.resolve([false]),
+        } as any);
 
         render(<ManageEventIndexDialog onFinished={onFinished} />);
         await flushPromises();

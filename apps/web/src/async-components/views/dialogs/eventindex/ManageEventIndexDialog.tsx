@@ -144,35 +144,32 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         if (this.state.tokenizerMode !== this.state.initialTokenizerMode) {
             // Show confirmation dialog
             const ConfirmTokenizerChangeDialog = (await import("./ConfirmTokenizerChangeDialog")).default;
-            Modal.createDialog(
+            const { finished } = Modal.createDialog(
                 ConfirmTokenizerChangeDialog,
-                {
-                    onFinished: async (confirmed?: boolean) => {
-                        if (confirmed) {
-                            // Save the tokenizer mode setting
-                            SettingsStore.setValue(
-                                "tokenizerMode",
-                                null,
-                                SettingLevel.DEVICE,
-                                this.state.tokenizerMode,
-                            );
-                        } else {
-                            // User cancelled - revert tokenizer mode to initial value
-                            this.setState((prevState) => ({ tokenizerMode: prevState.initialTokenizerMode }));
-                            SettingsStore.setValue(
-                                "tokenizerMode",
-                                null,
-                                SettingLevel.DEVICE,
-                                this.state.initialTokenizerMode,
-                            );
-                        }
-                        this.props.onFinished();
-                    },
-                },
+                {},
                 undefined,
                 /* priority = */ false,
                 /* static = */ true,
             );
+
+            const [confirmed] = await finished;
+
+            if (confirmed) {
+                // Save the tokenizer mode setting
+                await SettingsStore.setValue("tokenizerMode", null, SettingLevel.DEVICE, this.state.tokenizerMode);
+                await EventIndexPeg.initEventIndex();
+            } else {
+                // User cancelled - revert tokenizer mode to initial value
+                this.setState((prevState) => ({ tokenizerMode: prevState.initialTokenizerMode }));
+                await SettingsStore.setValue(
+                    "tokenizerMode",
+                    null,
+                    SettingLevel.DEVICE,
+                    this.state.initialTokenizerMode,
+                );
+            }
+
+            this.props.onFinished();
         } else {
             // No change, just close the dialog
             this.props.onFinished();
