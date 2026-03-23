@@ -1689,7 +1689,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 !haveRendererForEvent(ev, MatrixClientPeg.safeGet(), this.context?.showHiddenEvents) ||
                 shouldHideEvent(ev, this.context);
 
-            if (isWithoutTile || !node) {
+            if (isWithoutTile) {
                 // don't start counting if the event should be ignored,
                 // but continue counting if we were already so the offset
                 // to the previous invisble event that didn't need to be ignored
@@ -1697,6 +1697,11 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 if (!shouldIgnore || (shouldIgnore && adjacentInvisibleEventCount !== 0)) {
                     ++adjacentInvisibleEventCount;
                 }
+                continue;
+            }
+
+            if (!node) {
+                adjacentInvisibleEventCount = 0;
                 continue;
             }
 

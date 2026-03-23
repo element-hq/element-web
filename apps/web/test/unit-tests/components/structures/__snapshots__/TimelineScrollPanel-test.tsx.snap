@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`Virtualized MessagePanel should handle large numbers of hidden events quickly 1`] = `
+exports[`TimelineScrollPanel should handle large numbers of hidden events quickly 1`] = `
 <DocumentFragment>
   <div
     class="mx_AutoHideScrollbar mx_ScrollPanel cls"
@@ -19,7 +19,7 @@ exports[`Virtualized MessagePanel should handle large numbers of hidden events q
 </DocumentFragment>
 `;
 
-exports[`Virtualized MessagePanel should handle lots of membership events quickly 1`] = `
+exports[`TimelineScrollPanel should handle lots of membership events quickly 1`] = `
 <DocumentFragment>
   <div
     class="mx_AutoHideScrollbar mx_ScrollPanel cls"
@@ -133,7 +133,7 @@ exports[`Virtualized MessagePanel should handle lots of membership events quickl
 </DocumentFragment>
 `;
 
-exports[`Virtualized MessagePanel should handle lots of room creation events quickly 1`] = `
+exports[`TimelineScrollPanel should handle lots of room creation events quickly 1`] = `
 <DocumentFragment>
   <div
     class="mx_AutoHideScrollbar mx_ScrollPanel cls"

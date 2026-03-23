@@ -40,8 +40,8 @@ import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResiz
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
-import ScrollPanel, { type IScrollState } from "./ScrollPanel";
-import VirtualizedScrollPanel from "./VirtualizedScrollPanel";
+import ScrollPanel, { type IScrollHandle, type IScrollState } from "./ScrollPanel";
+import TimelineScrollPanel from "./TimelineScrollPanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -241,6 +241,16 @@ interface ILateEventSeparatorTimelineRow {
     text: string;
 }
 
+interface ISpinnerTimelineRow {
+    kind: "spinner";
+    key: string;
+}
+
+interface ITypingIndicatorTimelineRow {
+    kind: "typing-indicator";
+    key: string;
+}
+
 interface IEventTimelineRow {
     kind: "event";
     key: string;
@@ -256,7 +266,13 @@ interface IEventTimelineRow {
     callEventGrouper?: LegacyCallEventGrouper;
 }
 
-type TimelineRow = IOpaqueTimelineRow | IDateSeparatorTimelineRow | ILateEventSeparatorTimelineRow | IEventTimelineRow;
+type TimelineRow =
+    | IOpaqueTimelineRow
+    | IDateSeparatorTimelineRow
+    | ILateEventSeparatorTimelineRow
+    | ISpinnerTimelineRow
+    | ITypingIndicatorTimelineRow
+    | IEventTimelineRow;
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -310,7 +326,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     private readMarkerNode = createRef<HTMLLIElement>();
     private whoIsTyping = createRef<WhoIsTypingTile>();
-    public scrollPanel = createRef<ScrollPanel>();
+    public scrollPanel: { current: IScrollHandle | null } = { current: null };
 
     private showTypingNotificationsWatcherRef?: string;
     private eventTiles: Record<string, UnwrappedEventTile> = {};
@@ -665,6 +681,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     private getTimelineRows(): TimelineRow[] {
+        const ret: TimelineRow[] = [];
+        if (this.props.backPaginating) {
+            ret.push({
+                kind: "spinner",
+                key: "_topSpinner",
+            });
+        }
+
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
         // differently for the last event in the list. (eg show timestamp)
@@ -710,7 +734,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
         }
 
-        const ret: TimelineRow[] = [];
         let prevEvent: MatrixEvent | null = null; // the last event we showed
 
         // Note: the EventTile might still render a "sent/sending receipt" independent of
@@ -777,6 +800,24 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         if (grouper) {
             ret.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
+        }
+
+        if (
+            this.props.room &&
+            this.state.showTypingNotifications &&
+            this.context.timelineRenderingType === TimelineRenderingType.Room
+        ) {
+            ret.push({
+                kind: "typing-indicator",
+                key: "_whoIsTyping",
+            });
+        }
+
+        if (this.props.forwardPaginating) {
+            ret.push({
+                kind: "spinner",
+                key: "_bottomSpinner",
+            });
         }
 
         return ret;
@@ -903,6 +944,22 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                             {row.text}
                         </TimelineSeparator>
                     </li>
+                );
+            case "spinner":
+                return (
+                    <li key={row.key}>
+                        <Spinner />
+                    </li>
+                );
+            case "typing-indicator":
+                return (
+                    <WhoIsTypingTile
+                        key={row.key}
+                        room={this.props.room!}
+                        onShown={this.onTypingShown}
+                        onHidden={this.onTypingHidden}
+                        ref={this.whoIsTyping}
+                    />
                 );
             case "event":
                 return (
@@ -1064,8 +1121,16 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return receiptsByEvent;
     }
 
-    private collectEventTile = (eventId: string, node: UnwrappedEventTile): void => {
-        this.eventTiles[eventId] = node;
+    private collectEventTile = (eventId: string, node: UnwrappedEventTile | null): void => {
+        if (node) {
+            this.eventTiles[eventId] = node;
+        } else {
+            delete this.eventTiles[eventId];
+        }
+    };
+
+    private getScrollPanel = (panel: IScrollHandle | null): void => {
+        this.scrollPanel.current = panel;
     };
 
     // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
@@ -1122,40 +1187,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        let topSpinner;
-        let bottomSpinner;
-        if (this.props.backPaginating) {
-            topSpinner = (
-                <li key="_topSpinner">
-                    <Spinner />
-                </li>
-            );
-        }
-        if (this.props.forwardPaginating) {
-            bottomSpinner = (
-                <li key="_bottomSpinner">
-                    <Spinner />
-                </li>
-            );
-        }
-
         const style = this.props.hidden ? { display: "none" } : {};
-
-        let whoIsTyping;
-        if (
-            this.props.room &&
-            this.state.showTypingNotifications &&
-            this.context.timelineRenderingType === TimelineRenderingType.Room
-        ) {
-            whoIsTyping = (
-                <WhoIsTypingTile
-                    room={this.props.room}
-                    onShown={this.onTypingShown}
-                    onHidden={this.onTypingHidden}
-                    ref={this.whoIsTyping}
-                />
-            );
-        }
 
         let ircResizer: JSX.Element | undefined;
         if (this.props.layout == Layout.IRC) {
@@ -1167,30 +1199,27 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const classes = classNames(this.props.className, {
             mx_MessagePanel_narrow: this.context.narrow,
         });
-        const PanelComponent = SettingsStore.getValue("feature_new_message_panel")
-            ? VirtualizedScrollPanel
-            : ScrollPanel;
         const timelineRows = this.getTimelineRows();
-        const renderedRows: ReactNode[] = [];
-        if (topSpinner) renderedRows.push(topSpinner);
-        renderedRows.push(...timelineRows.map(this.renderTimelineRow));
-        if (whoIsTyping) renderedRows.push(React.cloneElement(whoIsTyping, { key: "_whoIsTyping" }));
-        if (bottomSpinner) renderedRows.push(bottomSpinner);
+
+        const panelProps = {
+            ref: this.getScrollPanel,
+            className: classes,
+            onScroll: this.props.onScroll,
+            onFillRequest: this.props.onFillRequest,
+            onUnfillRequest: this.props.onUnfillRequest,
+            style,
+            stickyBottom: this.props.stickyBottom,
+            fixedChildren: ircResizer,
+            children: timelineRows.map(this.renderTimelineRow),
+        };
 
         return (
             <ErrorBoundary>
-                <PanelComponent
-                    ref={this.scrollPanel}
-                    className={classes}
-                    onScroll={this.props.onScroll}
-                    onFillRequest={this.props.onFillRequest}
-                    onUnfillRequest={this.props.onUnfillRequest}
-                    style={style}
-                    stickyBottom={this.props.stickyBottom}
-                    fixedChildren={ircResizer}
-                >
-                    {renderedRows}
-                </PanelComponent>
+                {SettingsStore.getValue("feature_new_message_panel") ? (
+                    <TimelineScrollPanel {...panelProps} />
+                ) : (
+                    <ScrollPanel {...panelProps} />
+                )}
             </ErrorBoundary>
         );
     }

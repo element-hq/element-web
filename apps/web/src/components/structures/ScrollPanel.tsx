@@ -33,7 +33,7 @@ const debuglog = (...args: any[]): void => {
     }
 };
 
-interface IProps {
+export interface IScrollPanelProps {
     /* stickyBottom: if set to true, then once the user hits the bottom of
      * the list, any new children added to the list will cause the list to
      * scroll down to show the new element, rather than preserving the
@@ -144,12 +144,52 @@ export interface IScrollState {
     pixelOffset?: number;
 }
 
+/**
+ * This interface captures the behaviour relied on by `MessagePanel`
+ * and related timeline components, allowing alternative panel
+ * implementations to satisfy the same contract.
+ */
+export interface IScrollHandle {
+    /** Returns whether the viewport is currently scrolled to the live bottom. */
+    isAtBottom(): boolean;
+
+    /** Returns the saved scroll anchoring state used to restore the viewport position. */
+    getScrollState(): IScrollState;
+
+    /** Jumps the viewport to the start of the scrollable content. */
+    scrollToTop(): void;
+
+    /** Jumps the viewport to the end of the scrollable content. */
+    scrollToBottom(): void;
+
+    /** Scrolls the row identified by `scrollToken` into view with an optional offset. */
+    scrollToToken(scrollToken: string, pixelOffset?: number, offsetBase?: number): void;
+
+    /** Applies the panel's keyboard scrolling behavior for timeline navigation keys. */
+    handleScrollKey(ev: React.KeyboardEvent | KeyboardEvent): void;
+
+    /** Re-evaluates scroll anchoring, sticky-bottom behavior, and pagination triggers. */
+    checkScroll(isFromPropsUpdate?: boolean): void;
+
+    /** Captures the current bottom offset so later shrinking can be compensated for. */
+    preventShrinking(): void;
+
+    /** Clears any active shrinking-prevention state and padding adjustments. */
+    clearPreventShrinking(): void;
+
+    /** Refreshes shrinking-prevention padding after timeline content changes. */
+    updatePreventShrinking(): void;
+
+    /** The scrollable DOM element backing the panel, if mounted. */
+    divScroll: HTMLDivElement | null;
+}
+
 interface IPreventShrinkingState {
     offsetFromBottom: number;
     offsetNode: HTMLElement;
 }
 
-export default class ScrollPanel extends React.Component<IProps> {
+export default class ScrollPanel extends React.Component<IScrollPanelProps> implements IScrollHandle {
     // noinspection JSUnusedLocalSymbols
     public static defaultProps = {
         stickyBottom: true,
@@ -187,7 +227,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     public static contextType = SDKContext;
     declare public context: React.ContextType<typeof SDKContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+    public constructor(props: IScrollPanelProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
 
         this.resetScrollState();

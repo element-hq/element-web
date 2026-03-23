@@ -11,11 +11,11 @@ import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "ma
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render, within } from "jest-matrix-react";
 
-import MessagePanel, { shouldFormContinuation } from "../../../../src/components/structures/MessagePanel";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import RoomContext, { type RoomContextType, TimelineRenderingType } from "../../../../src/contexts/RoomContext";
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import * as TestUtilsMatrix from "../../../test-utils";
+import MessagePanel, { shouldFormContinuation } from "../../../../src/components/structures/MessagePanel.tsx";
+import SettingsStore from "../../../../src/settings/SettingsStore.ts";
+import RoomContext, { type RoomContextType, TimelineRenderingType } from "../../../../src/contexts/RoomContext.ts";
+import DMRoomMap from "../../../../src/utils/DMRoomMap.ts";
+import * as TestUtilsMatrix from "../../../test-utils/index.ts";
 import {
     clientAndSDKContextRenderOptions,
     createTestClient,
@@ -25,9 +25,9 @@ import {
     mockClientMethodsEvents,
     mockClientMethodsUser,
     mockClientPushProcessor,
-} from "../../../test-utils";
-import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+} from "../../../test-utils/index.ts";
+import type ResizeNotifier from "../../../../src/utils/ResizeNotifier.ts";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg.ts";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 
@@ -37,7 +37,7 @@ jest.mock("../../../../src/utils/beacon", () => ({
 
 const roomId = "!roomId:server_name";
 
-describe("Virtualized MessagePanel", function () {
+describe("TimelineScrollPanel", function () {
     const events = mkEvents();
     const userId = "@me:here";
     const client = getMockClientWithEventEmitter({
