@@ -16,8 +16,8 @@ import {
     type WidgetContextMenuViewSnapshot,
     WidgetContextMenuView,
 } from "./WidgetContextMenuView";
-import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
-import { withViewDocs } from "../../../.storybook/withViewDocs";
+import { useMockedViewModel } from "../../../core/viewmodel/useMockedViewModel";
+import { withViewDocs } from "../../../../.storybook/withViewDocs";
 
 type WidgetContextMenuViewModelProps = WidgetContextMenuViewSnapshot & WidgetContextMenuViewActions;
 
