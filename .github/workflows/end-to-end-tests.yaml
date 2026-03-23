@@ -98,11 +98,12 @@ jobs:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
         needs: build
         if: inputs.skip != true
-        runs-on: dind-l
+        runs-on: dind-2xl
         permissions:
             actions: read
             issues: read
             pull-requests: read
+        container: ghcr.io/element-hq/element-web/playwright-server:1.58.2
         strategy:
             fail-fast: false
             matrix:
@@ -163,14 +164,6 @@ jobs:
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               working-directory: apps/web
               run: pnpm playwright install --no-shell
-
-            - name: Install system dependencies for self-hosted runner
-              if: runner.environment == 'self-hosted'
-              working-directory: apps/web
-              run: |
-                  sudo pnpm playwright install-deps
-                  sudo apt-get update
-                  sudo apt-get -y install fonts-dejavu
 
             - name: Install system dependencies for WebKit
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
