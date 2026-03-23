@@ -111,7 +111,7 @@ export const usePresence = (room: Room, member: RoomMember | null): Presence | n
     useEventEmitter(room.client, UserEvent.Presence, (_event: unknown, user: User) => {
         if (user?.userId === member?.userId) updatePresence();
     });
-    useEffect(updatePresence, [member]);
+    useEffect(updatePresence, [room, member]);
 
     if (getJoinedNonFunctionalMembers(room).length !== 2 || !isPresenceEnabled(room.client)) return null;
     return presence;
