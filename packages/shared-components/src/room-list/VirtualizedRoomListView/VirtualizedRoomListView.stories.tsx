@@ -11,7 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "../RoomListItemView";
 import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
-import type { RoomListSnapshot, RoomListViewActions } from "../RoomListView";
+import type { RoomListViewSnapshot, RoomListViewActions } from "../RoomListView";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import type { FilterId } from "../RoomListPrimaryFilters";
@@ -23,7 +23,8 @@ import {
     mock10RoomsSections,
 } from "../story-mocks";
 
-type RoomListStoryProps = RoomListSnapshot & RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
+type RoomListStoryProps = RoomListViewSnapshot &
+    RoomListViewActions & { renderAvatar: (room: Room) => React.ReactElement };
 
 // Wrapper component that creates a mocked ViewModel
 const RoomListWrapperImpl = ({

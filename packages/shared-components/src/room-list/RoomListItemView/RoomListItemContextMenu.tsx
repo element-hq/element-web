@@ -9,14 +9,14 @@ import React, { type JSX, type PropsWithChildren } from "react";
 import { ContextMenu } from "@vector-im/compound-web";
 
 import { _t } from "../../utils/i18n";
-import { MoreOptionContent, type RoomItemViewModel } from "./RoomListItemMoreOptionsMenu";
+import { MoreOptionContent, type RoomListItemViewModel } from "./RoomListItemMoreOptionsMenu";
 
 /**
  * Props for RoomListItemContextMenu component
  */
 export interface RoomListItemContextMenuProps {
     /** The room item view model */
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
 }
 
 /**

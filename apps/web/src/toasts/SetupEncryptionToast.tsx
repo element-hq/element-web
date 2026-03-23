@@ -124,12 +124,22 @@ const getSecondaryButtonLabel = (state: DeviceStateForToast): string => {
     }
 };
 
-const getDescription = (state: DeviceStateForToast): string => {
+const getDescription = (state: DeviceStateForToast): string | React.ReactNode => {
     switch (state) {
         case "set_up_recovery":
             return _t("encryption|set_up_recovery_toast_description");
         case "verify_this_session":
-            return _t("encryption|verify_toast_description");
+            return _t("encryption|verify_toast_description", undefined, {
+                a: (sub) => (
+                    <a
+                        href="https://docs.element.io/latest/element-support/device-verification/how-to-verify-devices/"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                    >
+                        {sub}
+                    </a>
+                ),
+            });
         case "key_storage_out_of_sync":
             return _t("encryption|key_storage_out_of_sync_description");
         case "turn_on_key_storage":

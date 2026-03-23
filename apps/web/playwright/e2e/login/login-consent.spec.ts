@@ -185,7 +185,9 @@ test.describe("Login", () => {
                 await page.goto("/");
                 await login(page, homeserver, credentials);
 
-                await expect(page.getByRole("heading", { name: "Confirm your identity", level: 2 })).toBeVisible();
+                await expect(
+                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                ).toBeVisible();
 
                 await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
             });
@@ -218,7 +220,9 @@ test.describe("Login", () => {
                     await page.goto("/");
                     await login(page, homeserver, credentials);
 
-                    await expect(page.getByRole("heading", { name: "Confirm your identity", level: 2 })).toBeVisible();
+                    await expect(
+                        page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                    ).toBeVisible();
 
                     await expect(page.getByRole("button", { name: "Skip verification for now" })).toBeVisible();
                 });
@@ -253,7 +257,7 @@ test.describe("Login", () => {
                     await page.goto("/");
                     await login(page, homeserver, credentials);
 
-                    const h2 = page.getByRole("heading", { name: "Confirm your identity", level: 2 });
+                    const h2 = page.getByRole("heading", { name: "Confirm your digital identity", level: 2 });
                     await expect(h2).toBeVisible();
 
                     await expect(h2.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
@@ -273,7 +277,7 @@ test.describe("Login", () => {
                     // Load the page and see that we are asked to verify
                     await page.goto("/#/welcome");
                     await login(page, homeserver, credentials);
-                    let h2 = page.getByRole("heading", { name: "Confirm your identity", level: 2 });
+                    let h2 = page.getByRole("heading", { name: "Confirm your digital identity", level: 2 });
                     await expect(h2).toBeVisible();
 
                     // Click "Use another device"
@@ -283,7 +287,7 @@ test.describe("Login", () => {
                     await page.getByRole("button", { name: "Close dialog" }).click();
 
                     // Check that we are still being asked to verify
-                    h2 = page.getByRole("heading", { name: "Confirm your identity", level: 2 });
+                    h2 = page.getByRole("heading", { name: "Confirm your digital identity", level: 2 });
                     await expect(h2).toBeVisible();
                 });
             });
@@ -302,7 +306,9 @@ test.describe("Login", () => {
                 await page.goto("/");
                 await login(page, homeserver, credentials);
 
-                await expect(page.getByRole("heading", { name: "Confirm your identity", level: 2 })).toBeVisible();
+                await expect(
+                    page.getByRole("heading", { name: "Confirm your digital identity", level: 2 }),
+                ).toBeVisible();
 
                 // Start the reset process
                 await page.getByRole("button", { name: "Can't confirm?" }).click();
@@ -335,7 +341,10 @@ test.describe("Login", () => {
             // Allow the outstanding requests queue to settle before logging out
             await page.waitForTimeout(2000);
 
-            await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
+            await page
+                .locator(".mx_UserMenu_contextMenu")
+                .getByRole("menuitem", { name: "Remove this device" })
+                .click();
             await expect(page).toHaveURL(/\/#\/login$/);
         });
     });

@@ -17,7 +17,7 @@ import {
     getContainerAccessibleProps,
     type VirtualizedListContext,
 } from "../../utils/VirtualizedList";
-import type { RoomListSnapshot, RoomListViewModel } from "../RoomListView";
+import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList } from "../../utils/VirtualizedList";
 import { RoomListSectionHeaderView } from "../RoomListSectionHeaderView";
 import { RoomListItemAccessibilityWrapper } from "../RoomListItemAccessibilityWrapper";
@@ -28,7 +28,7 @@ import { RoomListItemAccessibilityWrapper } from "../RoomListItemAccessibilityWr
 export type FilterKey = string;
 
 /**
- * State for the room list data (nested within RoomListSnapshot)
+ * State for the room list data (nested within RoomListViewSnapshot)
  */
 export interface RoomListViewState {
     /** Optional active room index for keyboard navigation */
@@ -74,7 +74,7 @@ type Context = {
     /** Active room index for keyboard navigation */
     activeRoomIndex: number | undefined;
     /** Sections of the room list */
-    sections: RoomListSnapshot["sections"];
+    sections: RoomListViewSnapshot["sections"];
     /** Total number of rooms in the list */
     roomCount: number;
     /** Number of sections in the list */

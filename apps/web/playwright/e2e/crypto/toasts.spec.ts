@@ -8,8 +8,18 @@
 import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
 import { test, expect } from "../../element-web-test";
-import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElementAndVerify } from "./utils";
+import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement, logIntoElementAndVerify } from "./utils";
 import { type Bot } from "../../pages/bot";
+
+// Mask the background of the screenshot to avoid failing the test just because some
+// other component has changed its rendering.
+const screenshotOptions = {
+    css: `
+        .mx_ToastContainer {
+            background-color: magenta !important;
+        }
+    `,
+};
 
 test.describe("Key storage out of sync toast", () => {
     let recoveryKey: GeneratedSecretStorageKey;
@@ -37,15 +47,10 @@ test.describe("Key storage out of sync toast", () => {
         // playwright only evaluates the 'first()' call initially, not subsequent times it checks, so
         // it would always be checking the same toast, even if another one is now the first.
         await expect(page.getByRole("alert")).toHaveCount(2);
-        // Mask the background of the screenshot to avoid failing the test just because some
-        // other component have changed its rendering.
-        await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png", {
-            css: `
-                    .mx_ToastContainer {
-                        background-color: magenta !important;
-                    }
-                `,
-        });
+        await expect(page.getByRole("alert").first()).toMatchScreenshot(
+            "key-storage-out-of-sync-toast.png",
+            screenshotOptions,
+        );
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
 
@@ -61,7 +66,9 @@ test.describe("Key storage out of sync toast", () => {
         await page.getByRole("button", { name: "Forgot recovery key?" }).click();
 
         await expect(
-            page.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+            page.getByRole("heading", {
+                name: "Forgot your recovery key? You’ll need to reset your digital identity.",
+            }),
         ).toBeVisible();
     });
 });
@@ -178,4 +185,39 @@ test.describe("'Turn on key storage' toast", () => {
         // Then the toast is gone
         await toasts.assertNoToasts();
     });
+});
+
+test.describe("Verify this device toast", () => {
+    test(
+        "The toast is displayed if we are not verified",
+        { tag: "@screenshot" },
+        async ({ page, credentials, homeserver }) => {
+            // Ensure the user already has a device, and an encrypted toom, so
+            // we need to verify when we log in
+            const { botClient } = await createBot(page, homeserver, credentials, true);
+            await botClient.createRoom({
+                initial_state: [
+                    {
+                        type: "m.room.encryption",
+                        state_key: "",
+                        content: { algorithm: "m.megolm.v1.aes-sha2" },
+                    },
+                ],
+            });
+
+            // Log in without verifying
+            await logIntoElement(page, credentials);
+            const authPage = page.locator(".mx_AuthPage");
+            await authPage.getByRole("button", { name: "Skip verification for now" }).click();
+            await authPage.getByRole("button", { name: "I'll verify later" }).click();
+            await page.waitForSelector(".mx_MatrixChat");
+
+            await expect(page.getByRole("heading", { name: "Verify this device" })).toBeVisible();
+
+            await expect(page.locator(".mx_ToastContainer")).toMatchScreenshot(
+                "verify-this-device.png",
+                screenshotOptions,
+            );
+        },
+    );
 });

@@ -117,7 +117,7 @@
         "show_advanced": "Show advanced",
         "show_all": "Show all",
         "sign_in": "Sign in",
-        "sign_out": "Sign out",
+        "sign_out": "Remove this device",
         "skip": "Skip",
         "start": "Start",
         "start_chat": "Start chat",
@@ -221,11 +221,11 @@
         "incorrect_password": "Incorrect password",
         "log_in_new_account": "<a>Log in</a> to your new account.",
         "logout_dialog": {
-            "description": "Are you sure you want to sign out?",
+            "description": "Are you sure you want to remove this device?",
             "megolm_export": "Manually export keys",
             "setup_key_backup_title": "You'll lose access to your encrypted messages",
             "setup_secure_backup_description_1": "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
-            "setup_secure_backup_description_2": "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
+            "setup_secure_backup_description_2": "When you remove this device you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
             "skip_key_backup": "I don't want my encrypted messages"
         },
         "misconfigured_body": "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
@@ -298,16 +298,16 @@
         "registration_username_validation": "Use lowercase letters, numbers, dashes and underscores only",
         "reset_password": {
             "confirm_new_password": "Confirm new password",
-            "devices_logout_success": "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.",
-            "other_devices_logout_warning_1": "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
-            "other_devices_logout_warning_2": "If you want to retain access to your chat history in encrypted rooms, set up Key Backup or export your message keys from one of your other devices before proceeding.",
+            "devices_logout_success": "All your devices have been removed and will no longer receive push notifications. To re-enable notifications, sign in again on each device.",
+            "other_devices_logout_warning_1": "Removing your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
+            "other_devices_logout_warning_2": "If you want to retain access to your chat history in encrypted rooms, get a recovery key or export your message keys from one of your other devices before proceeding.",
             "password_not_entered": "A new password must be entered.",
             "passwords_mismatch": "New passwords must match each other.",
             "rate_limit_error": "Too many attempts in a short time. Wait some time before trying again.",
             "rate_limit_error_with_time": "Too many attempts in a short time. Retry after %(timeout)s.",
             "reset_successful": "Your password has been reset.",
             "return_to_login": "Return to login screen",
-            "sign_out_other_devices": "Sign out of all devices"
+            "sign_out_other_devices": "Remove other devices"
         },
         "reset_password_action": "Reset password",
         "reset_password_button": "Forgot password?",
@@ -330,8 +330,8 @@
         "server_picker_title": "Sign into your homeserver",
         "server_picker_title_default": "Server Options",
         "server_picker_title_registration": "Host account on",
-        "session_logged_out_description": "For security, this session has been signed out. Please sign in again.",
-        "session_logged_out_title": "Signed Out",
+        "session_logged_out_description": "For security, this session has been removed. Please sign in again.",
+        "session_logged_out_title": "Session removed",
         "set_email": {
             "description": "This will allow you to reset your password and receive notifications.",
             "verification_pending_description": "Please check your email and click on the link it contains. Once this is done, click continue.",
@@ -371,8 +371,8 @@
             "email_resent": "Resent!",
             "fallback_button": "Start authentication",
             "mas_cross_signing_reset_cta": "Continue to account",
-            "mas_cross_signing_reset_description": "You're about to go to your %(serverName)s account to reset your identity. Once you have completed reset on your account, please return here and click Retry.",
-            "mas_cross_signing_reset_title": "Go to your account to reset your identity",
+            "mas_cross_signing_reset_description": "You're about to go to your %(serverName)s account to reset your digital identity. Once you have completed reset on your account, please return here and click Retry.",
+            "mas_cross_signing_reset_title": "Go to your account to reset your digital identity",
             "msisdn": "A text message has been sent to %(msisdn)s",
             "msisdn_token_incorrect": "Token incorrect",
             "msisdn_token_prompt": "Please enter the code it contains:",
@@ -774,7 +774,7 @@
             "cross_signing_public_keys_on_device_status": "Cross-signing public keys:",
             "cross_signing_ready": "Cross-signing is ready for use.",
             "cross_signing_status": "Cross-signing status:",
-            "cross_signing_untrusted": "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.",
+            "cross_signing_untrusted": "Your account has a digital identity in secret storage, but it is not yet trusted by this session.",
             "crypto_not_available": "Cryptographic module is not available",
             "device_id": "Device ID",
             "key_backup_active_version": "Active backup version:",
@@ -902,10 +902,10 @@
         "user_read_up_to_private_ignore_synthetic": "User read up to (m.read.private;ignoreSynthetic): ",
         "user_room_membership": "Membership: %(membership)s",
         "user_verification_status": {
-            "identity_changed": "Verification status: <E2EIcon /> Unverified, and identity changed",
+            "identity_changed": "Verification status: <E2EIcon /> Unverified, and digital identity changed",
             "unverified": "Verification status: <E2EIcon /> Unverified",
             "verified": "Verification status: <E2EIcon /> Verified",
-            "was_verified": "Verification status: <E2EIcon /> Was verified, but identity changed"
+            "was_verified": "Verification status: <E2EIcon /> Was verified, but digital identity changed"
         },
         "users": "Users",
         "value": "Value",
@@ -971,7 +971,7 @@
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
         "forgot_recovery_key": "Forgot recovery key?",
-        "identity_needs_reset_description": "You have to reset your cryptographic identity in order to ensure access to your message history",
+        "identity_needs_reset_description": "You have to reset your digital identity in order to ensure access to your chat history",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
         "key_storage_out_of_sync": "Your key storage is out of sync.",
@@ -991,22 +991,22 @@
             "title": "New Recovery Method",
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
-        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
-        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity was reset. <a>Learn more</a>",
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
             "title": "Recovery Method Removed",
             "warning": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
-        "set_up_recovery": "Set up recovery",
-        "set_up_recovery_toast_description": "Generate a recovery key that can be used to restore your encrypted message history in case you lose access to your devices.",
+        "set_up_recovery": "Back up your chats",
+        "set_up_recovery_toast_description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
         "set_up_toast_title": "Set up Secure Backup",
         "setup_secure_backup": {
-            "explainer": "Back up your keys before signing out to avoid losing them."
+            "explainer": "Back up your keys before removing this device to avoid losing them."
         },
         "turn_on_key_storage": "Turn on key storage",
-        "turn_on_key_storage_description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices.",
+        "turn_on_key_storage_description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity.",
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
@@ -1030,7 +1030,7 @@
             "complete_description": "You've successfully verified this user.",
             "complete_title": "Verified!",
             "confirm_identity_description": "Verify this device to set up secure messaging",
-            "confirm_identity_title": "Confirm your identity",
+            "confirm_identity_title": "Confirm your digital identity",
             "confirm_the_emojis": "Confirm that the emojis below match those shown on your other device.",
             "error_starting_description": "We were unable to start a chat with the other user.",
             "error_starting_title": "Error starting verification",
@@ -1114,10 +1114,10 @@
             "waiting_other_user": "Waiting for %(displayName)s to verify…"
         },
         "verification_requested_toast_title": "Verification requested",
-        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
-        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "Other users may not trust it",
-        "verify_toast_title": "Verify this session",
+        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
+        "verify_toast_description": "As of end of April 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },
     "error": {
@@ -1142,15 +1142,15 @@
         "non_urgent_echo_failure_toast": "Your server isn't responding to some <a>requests</a>.",
         "resource_limits": "This homeserver has exceeded one of its resource limits.",
         "session_restore": {
-            "clear_storage_button": "Clear Storage and Sign Out",
-            "clear_storage_description": "Sign out and remove encryption keys?",
-            "description_1": "We encountered an error trying to restore your previous session.",
+            "clear_storage_button": "Remove this device",
+            "clear_storage_description": "Remove this device together with its encryption keys?",
+            "description_1": "We encountered an error trying to restore your session.",
             "description_2": "If you have previously used a more recent version of %(brand)s, your session may be incompatible with this version. Close this window and return to the more recent version.",
-            "description_3": "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.",
+            "description_3": "Clearing your browser's storage may fix the problem, but will remove this device and cause any encrypted chat history to become unreadable.",
             "title": "Unable to restore session"
         },
         "something_went_wrong": "Something went wrong!",
-        "storage_evicted_description_1": "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.",
+        "storage_evicted_description_1": "Some session data, including encrypted message keys, is missing. Remove this device and sign in again to fix this, restoring keys from backup.",
         "storage_evicted_description_2": "Your browser likely removed this data when running low on disk space.",
         "storage_evicted_title": "Missing session data",
         "sync": "Unable to connect to Homeserver. Retrying…",
@@ -1572,7 +1572,7 @@
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
-        "sliding_sync_disabled_notice": "Log out and back in to disable",
+        "sliding_sync_disabled_notice": "Sign in again to disable",
         "sliding_sync_server_no_support": "Your server lacks support",
         "under_active_development": "Under active development.",
         "unrealiable_e2e": "Unreliable in encrypted rooms",
@@ -1998,7 +1998,7 @@
         "error_join_incompatible_version_1": "Sorry, your homeserver is too old to participate here.",
         "error_join_incompatible_version_2": "Please contact your homeserver administrator.",
         "error_join_title": "Failed to join",
-        "error_join_unknown": "An unknonw error occured.",
+        "error_join_unknown": "An unknown error occured.",
         "error_jump_to_date": "Server returned %(statusCode)s with error code %(errorCode)s",
         "error_jump_to_date_connection": "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.",
         "error_jump_to_date_details": "Error details",
@@ -2544,10 +2544,10 @@
                 "breadcrumb_page": "Reset encryption",
                 "breadcrumb_second_description": "You will lose any message history that’s stored only on the server",
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
-                "breadcrumb_title": "Are you sure you want to reset your identity?",
-                "breadcrumb_title_cant_confirm": "You need to reset your identity",
-                "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
-                "breadcrumb_title_sync_failed": "Failed to sync key storage. You need to reset your identity.",
+                "breadcrumb_title": "Are you sure you want to reset your digital identity?",
+                "breadcrumb_title_cant_confirm": "You need to reset your digital identity",
+                "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your digital identity.",
+                "breadcrumb_title_sync_failed": "Failed to sync key storage. You need to reset your digital identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
                 "do_not_close_warning": "Do not close this window until the reset is finished",
@@ -2563,13 +2563,13 @@
                 "title": "Advanced"
             },
             "confirm_key_storage_off": "Are you sure you want to keep key storage turned off?",
-            "confirm_key_storage_off_description": "If you sign out of all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
+            "confirm_key_storage_off_description": "If you remove all your devices you will lose your message history and will need to verify all your existing contacts again. <a>Learn more</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Delete key storage",
                 "confirm": "Delete key storage",
                 "description": "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:",
                 "list_first": "You will not have encrypted message history on new devices",
-                "list_second": "You will lose access to your encrypted messages if you are signed out of %(brand)s everywhere",
+                "list_second": "You will lose access to your encrypted messages if you're not signed in to any devices",
                 "title": "Are you sure you want to turn off key storage and delete it?"
             },
             "device_not_verified_button": "Verify this device",
@@ -2578,7 +2578,7 @@
             "dialog_title": "<strong>Settings:</strong> Encryption",
             "key_storage": {
                 "allow_key_storage": "Allow key storage",
-                "description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
+                "description": "This will allow you to view your chat history on any new devices and is required for backup of chats and digital identity. <a>Learn more</a>",
                 "title": "Key storage"
             },
             "recovery": {
@@ -2588,14 +2588,14 @@
                 "change_recovery_key": "Change recovery key",
                 "change_recovery_key_description": "Write down this new recovery key somewhere safe. Then click Continue to confirm the change.",
                 "change_recovery_key_title": "Change recovery key?",
-                "description": "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.",
+                "description": "Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",
                 "forgot_recovery_key": "Forgot recovery key?",
                 "key_storage_warning": "Your key storage is out of sync. Click one of the buttons below to fix the problem.",
                 "save_key_description": "Do not share this with anyone!",
                 "save_key_title": "Recovery key",
-                "set_up_recovery": "Set up recovery",
+                "set_up_recovery": "Get recovery key",
                 "set_up_recovery_confirm_button": "Finish set up",
                 "set_up_recovery_confirm_description": "Enter the recovery key shown on the previous screen to finish setting up recovery.",
                 "set_up_recovery_confirm_title": "Enter your recovery key to confirm",
@@ -2603,7 +2603,7 @@
                 "set_up_recovery_save_key_description": "Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.",
                 "set_up_recovery_save_key_title": "Save your recovery key somewhere safe",
                 "set_up_recovery_secondary_description": "After clicking continue, we’ll generate a recovery key for you.",
-                "title": "Recovery"
+                "title": "Backup"
             },
             "title": "Encryption"
         },
@@ -2893,28 +2893,28 @@
         "send_read_receipts_unsupported": "Your server doesn't support disabling sending read receipts.",
         "send_typing_notifications": "Send typing notifications",
         "sessions": {
-            "best_security_note": "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.",
+            "best_security_note": "For best security, verify your sessions and remove any session that you don't recognize or use anymore.",
             "browser": "Browser",
             "confirm_sign_out": {
-                "one": "Confirm signing out this device",
-                "other": "Confirm signing out these devices"
+                "one": "Confirm removing this device",
+                "other": "Confirm removing these devices"
             },
             "confirm_sign_out_body": {
-                "one": "Click the button below to confirm signing out this device.",
-                "other": "Click the button below to confirm signing out these devices."
+                "one": "Click the button below to confirm removing this device.",
+                "other": "Click the button below to confirm removing these devices."
             },
             "confirm_sign_out_continue": {
-                "one": "Sign out device",
-                "other": "Sign out devices"
+                "one": "Remove device",
+                "other": "Remove devices"
             },
             "confirm_sign_out_sso": {
-                "one": "Confirm logging out this device by using Single Sign On to prove your identity.",
-                "other": "Confirm logging out these devices by using Single Sign On to prove your identity."
+                "one": "Confirm removing this device by using Single Sign On to prove your identity.",
+                "other": "Confirm removing these devices by using Single Sign On to prove your identity."
             },
             "current_session": "Current session",
             "desktop_session": "Desktop session",
             "details_heading": "Session details",
-            "device_unverified_description": "Verify or sign out from this session for best security and reliability.",
+            "device_unverified_description": "Verify or remove this session for best security and reliability.",
             "device_unverified_description_current": "Verify your current session for enhanced secure messaging.",
             "device_verified_description": "This session is ready for secure messaging.",
             "device_verified_description_current": "Your current session is ready for secure messaging.",
@@ -2932,7 +2932,7 @@
             "inactive_sessions": "Inactive sessions",
             "inactive_sessions_explainer_1": "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.",
             "inactive_sessions_explainer_2": "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.",
-            "inactive_sessions_list_description": "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
+            "inactive_sessions_list_description": "Consider removing old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
             "ip": "IP address",
             "last_activity": "Last activity",
             "manage": "Manage this session",
@@ -2963,15 +2963,15 @@
             "sign_in_with_qr_button": "Show QR code",
             "sign_in_with_qr_description": "Use a QR code to sign in to another device and set up secure messaging.",
             "sign_in_with_qr_unsupported": "Not supported by your account provider",
-            "sign_out": "Sign out of this session",
-            "sign_out_all_other_sessions": "Sign out of all other sessions (%(otherSessionsCount)s)",
+            "sign_out": "Remove this session",
+            "sign_out_all_other_sessions": "Remove all other sessions (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Are you sure you want to sign out of %(count)s session?",
-                "other": "Are you sure you want to sign out of %(count)s sessions?"
+                "one": "Are you sure you want to remove %(count)s session?",
+                "other": "Are you sure you want to remove %(count)s sessions?"
             },
             "sign_out_n_sessions": {
-                "one": "Sign out of %(count)s session",
-                "other": "Sign out of %(count)s sessions"
+                "one": "Remove %(count)s session",
+                "other": "Remove %(count)s sessions"
             },
             "title": "Sessions",
             "unknown_session": "Unknown session type",
@@ -2980,15 +2980,15 @@
             "unverified_session_explainer_2": "You won't be able to participate in rooms where encryption is enabled when using this session.",
             "unverified_session_explainer_3": "For best security and privacy, it is recommended to use Matrix clients that support encryption.",
             "unverified_sessions": "Unverified sessions",
-            "unverified_sessions_explainer_1": "Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.",
+            "unverified_sessions_explainer_1": "Unverified sessions are sessions that have been signed in with your credentials but have not been confirmed with your digital identity.",
             "unverified_sessions_explainer_2": "You should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.",
-            "unverified_sessions_list_description": "Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.",
+            "unverified_sessions_list_description": "Verify your sessions for enhanced secure messaging or remove from those you don't recognize or use anymore.",
             "url": "URL",
             "verified_session": "Verified session",
             "verified_sessions": "Verified sessions",
-            "verified_sessions_explainer_1": "Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.",
+            "verified_sessions_explainer_1": "Verified sessions have been confirmed your digital identity.",
             "verified_sessions_explainer_2": "This means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.",
-            "verified_sessions_list_description": "For best security, sign out from any session that you don't recognize or use anymore.",
+            "verified_sessions_list_description": "For best security, remove any session that you don't recognize or use anymore.",
             "verify_session": "Verify session",
             "web_session": "Web session"
         },
@@ -3157,7 +3157,7 @@
         "view": "Views room with given address",
         "whois": "Displays information about a user"
     },
-    "sliding_sync_legacy_no_longer_supported": "Legacy sliding sync is no longer supported: please log out and back in to enable the new sliding sync flag",
+    "sliding_sync_legacy_no_longer_supported": "Legacy sliding sync is no longer supported: please sign in again to enable the new sliding sync flag",
     "space": {
         "add_existing_room_space": {
             "create": "Want to add a new room instead?",
@@ -3350,7 +3350,7 @@
         "creation_summary_dm": "%(creator)s created this DM.",
         "creation_summary_room": "%(creator)s created and configured the room.",
         "decryption_failure": {
-            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_identity_previously_verified": "Sender's verified digital identity was reset",
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3488,8 +3488,10 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepted the invitation for %(displayName)s",
             "accepted_invite": "%(targetName)s accepted an invitation",
-            "ban": "%(senderName)s banned %(targetName)s",
-            "ban_reason": "%(senderName)s banned %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s banned a user",
+            "ban_reason": "%(senderName)s banned a user: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s banned <user/>: %(reason)s",
+            "ban_spoiler": "%(senderName)s banned <user/>",
             "change_avatar": "%(senderName)s changed their profile picture",
             "change_name": "%(oldDisplayName)s changed their display name to %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s changed their display name and profile picture",
@@ -3810,7 +3812,7 @@
         "ban_space_everything": "Ban them from everything I'm able to",
         "ban_space_specific": "Ban them from specific things I'm able to",
         "deactivate_confirm_action": "Deactivate user",
-        "deactivate_confirm_description": "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
+        "deactivate_confirm_description": "Deactivating this user will remove their devices and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
         "deactivate_confirm_title": "Deactivate user?",
         "demote_button": "Demote",
         "demote_self_confirm_description_space": "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.",

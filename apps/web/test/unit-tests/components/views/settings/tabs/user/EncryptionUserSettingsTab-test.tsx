@@ -71,7 +71,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     it("should display the recovery panel when key storage is enabled", async () => {
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
         renderComponent();
-        await waitFor(() => expect(screen.getByText("Recovery")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Backup")).toBeInTheDocument());
     });
 
     it("should not display the recovery panel when key storage is not enabled", async () => {
@@ -92,7 +92,9 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         await user.click(screen.getByRole("button", { name: "Forgot recovery key?" }));
         expect(
-            screen.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+            screen.getByRole("heading", {
+                name: "Forgot your recovery key? You’ll need to reset your digital identity.",
+            }),
         ).toBeVisible();
     });
 
@@ -117,11 +119,11 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         const { asFragment } = renderComponent();
         await waitFor(() => {
-            const button = screen.getByRole("button", { name: "Set up recovery" });
+            const button = screen.getByRole("button", { name: "Get recovery key" });
             expect(button).toBeInTheDocument();
             user.click(button);
         });
-        await waitFor(() => expect(screen.getByText("Set up recovery")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Get recovery key")).toBeInTheDocument());
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -137,7 +139,7 @@ describe("<EncryptionUserSettingsTab />", () => {
             user.click(button);
         });
         await waitFor(() =>
-            expect(screen.getByText("Are you sure you want to reset your identity?")).toBeInTheDocument(),
+            expect(screen.getByText("Are you sure you want to reset your digital identity?")).toBeInTheDocument(),
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -149,7 +151,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         expect(
             await screen.findByRole("heading", {
-                name: "Forgot your recovery key? You’ll need to reset your identity.",
+                name: "Forgot your recovery key? You’ll need to reset your digital identity.",
             }),
         ).toBeVisible();
     });
@@ -161,7 +163,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         expect(
             await screen.findByRole("heading", {
-                name: "Failed to sync key storage. You need to reset your identity.",
+                name: "Failed to sync key storage. You need to reset your digital identity.",
             }),
         ).toBeVisible();
     });
@@ -171,7 +173,7 @@ describe("<EncryptionUserSettingsTab />", () => {
 
         renderComponent();
 
-        await expect(await screen.findByRole("heading", { name: "Recovery" })).toBeVisible();
+        await expect(await screen.findByRole("heading", { name: "Backup" })).toBeVisible();
 
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
 
@@ -180,7 +182,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         });
 
         await waitFor(() => {
-            expect(screen.queryByRole("heading", { name: "Recovery" })).toBeNull();
+            expect(screen.queryByRole("heading", { name: "Backup" })).toBeNull();
         });
     });
 
@@ -192,7 +194,9 @@ describe("<EncryptionUserSettingsTab />", () => {
         renderComponent({ initialState: "reset_identity_forgot" });
 
         expect(
-            screen.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+            screen.getByRole("heading", {
+                name: "Forgot your recovery key? You’ll need to reset your digital identity.",
+            }),
         ).toBeVisible();
 
         await user.click(screen.getByRole("button", { name: "Back" }));
@@ -211,6 +215,6 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(asFragment()).toMatchSnapshot();
 
         await user.click(screen.getByRole("button", { name: "Continue with reset" }));
-        expect(screen.getByRole("heading", { name: "You need to reset your identity" })).toBeVisible();
+        expect(screen.getByRole("heading", { name: "You need to reset your digital identity" })).toBeVisible();
     });
 });
