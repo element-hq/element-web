@@ -562,11 +562,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     };
 
     private decryptEventIfNeeded(): void {
-        this.props.cli.decryptEventIfNeeded(this.props.mxEvent).catch((error) => {
-            logger.error(
-                `Error decrypting event ${this.props.mxEvent.getId()} in room ${this.props.mxEvent.getRoomId()}`,
-                error,
-            );
+        this.props.cli.decryptEventIfNeeded(this.props.mxEvent)?.catch(() => {
+            // Match the previous fire-and-forget behaviour without assuming a Promise is always returned.
         });
     }
 

@@ -447,6 +447,7 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
                     data-shape={timelineRenderingType}
                     data-self={isOwnEvent}
                     data-has-reply={!!replyChain}
+                    data-event-id={eventId}
                     onMouseEnter={handlers.onMouseEnter}
                     onMouseLeave={handlers.onMouseLeave}
                     onFocus={handlers.onFocus}
@@ -478,6 +479,7 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
                     aria-live={ariaLive}
                     aria-atomic={true}
                     data-scroll-tokens={scrollTokens}
+                    data-event-id={eventId}
                 >
                     <a
                         className="mx_EventTile_senderDetailsLink"
