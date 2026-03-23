@@ -10,7 +10,6 @@ export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./core/avatar/AvatarWithDetails";
-export * from "./composer/Banner";
 export * from "./crypto/SasEmoji";
 export * from "./event-tiles/UrlPreviewGroupView";
 export * from "./message-body/EventContentBody";
@@ -20,6 +19,8 @@ export * from "./core/pill-input/PillInput";
 export * from "./room/RoomStatusBar";
 export * from "./room/WidgetPip";
 export * from "./room/HistoryVisibilityBadge";
+export * from "./room/composer/Banner";
+export * from "./room/right-panel/WidgetContextMenuView";
 export * from "./room/timeline/DateSeparatorView";
 export * from "./room/timeline/TimelineSeparator";
 export * from "./room/timeline/event-tile/EventTileView/DisambiguatedProfile";
@@ -47,7 +48,6 @@ export * from "./room-list/VirtualizedRoomListView/RoomListItemAccessibilityWrap
 export * from "./core/utils/Box";
 export * from "./core/utils/Flex";
 export * from "./core/utils/LinkedText";
-export * from "./right-panel/WidgetContextMenu";
 export * from "./core/utils/VirtualizedList";
 
 // Utils
