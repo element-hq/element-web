@@ -222,6 +222,12 @@ interface IReadReceiptForUser {
     receipt: IReadReceiptProps;
 }
 
+interface TimelineEventsMetadata {
+    events: WrappedEvent[];
+    lastShownEvent?: MatrixEvent;
+    lastShownNonLocalEchoIndex: number;
+}
+
 interface IOpaqueTimelineRow {
     kind: "opaque";
     key: string;
@@ -680,31 +686,20 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !status || status === EventStatus.SENT;
     }
 
-    private getTimelineRows(): TimelineRow[] {
-        const ret: TimelineRow[] = [];
-        if (this.props.backPaginating) {
-            ret.push({
-                kind: "spinner",
-                key: "_topSpinner",
-            });
-        }
-
-        // first figure out which is the last event in the list which we're
-        // actually going to show; this allows us to behave slightly
-        // differently for the last event in the list. (eg show timestamp)
-        //
-        // we also need to figure out which is the last event we show which isn't
-        // a local echo, to manage the read-marker.
-        let lastShownEvent: MatrixEvent | undefined;
-        const events: WrappedEvent[] = this.props.events.map((event) => {
+    private getWrappedEvents(): WrappedEvent[] {
+        return this.props.events.map((event) => {
             return { event, shouldShow: this.shouldShowEvent(event) };
         });
+    }
 
+    private getTimelineEventsMetadata(events: WrappedEvent[]): TimelineEventsMetadata {
+        let lastShownEvent: MatrixEvent | undefined;
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
 
         let foundLastSuccessfulEvent = false;
         let lastShownNonLocalEchoIndex = -1;
-        // Find the indices of the last successful event we sent and the last non-local-echo events shown
+
+        // Find the indices of the last successful event we sent and the last non-local-echo event shown.
         for (let i = events.length - 1; i >= 0; i--) {
             const { event, shouldShow } = events[i];
             if (!shouldShow) {
@@ -734,8 +729,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
         }
 
-        let prevEvent: MatrixEvent | null = null; // the last event we showed
+        return {
+            events,
+            lastShownEvent,
+            lastShownNonLocalEchoIndex,
+        };
+    }
 
+    private initialiseReadReceiptsByEvent(events: WrappedEvent[]): void {
         // Note: the EventTile might still render a "sent/sending receipt" independent of
         // this information. When not providing read receipt information, the tile is likely
         // to assume that sent receipts are to be shown more often.
@@ -743,7 +744,48 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         if (this.props.showReadReceipts) {
             this.readReceiptsByEvent = this.getReadReceiptsByShownEvent(events);
         }
+    }
 
+    private getTimelinePrefixRows(): TimelineRow[] {
+        const rows: TimelineRow[] = [];
+        if (this.props.backPaginating) {
+            rows.push({
+                kind: "spinner",
+                key: "_topSpinner",
+            });
+        }
+
+        return rows;
+    }
+
+    private getTimelineSuffixRows(): TimelineRow[] {
+        const rows: TimelineRow[] = [];
+
+        if (
+            this.props.room &&
+            this.state.showTypingNotifications &&
+            this.context.timelineRenderingType === TimelineRenderingType.Room
+        ) {
+            rows.push({
+                kind: "typing-indicator",
+                key: "_whoIsTyping",
+            });
+        }
+
+        if (this.props.forwardPaginating) {
+            rows.push({
+                kind: "spinner",
+                key: "_bottomSpinner",
+            });
+        }
+
+        return rows;
+    }
+
+    private buildEventTimelineRows(metadata: TimelineEventsMetadata): TimelineRow[] {
+        const { events, lastShownEvent, lastShownNonLocalEchoIndex } = metadata;
+        const rows: TimelineRow[] = [];
+        let prevEvent: MatrixEvent | null = null;
         let grouper: BaseGrouper | null = null;
 
         for (let i = 0; i < events.length; i++) {
@@ -757,35 +799,20 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 if (grouper.shouldGroup(wrappedEvent)) {
                     grouper.add(wrappedEvent);
                     continue;
-                } else {
-                    // not part of group, so get the group tiles, close the
-                    // group, and continue like a normal event
-                    ret.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
-                    prevEvent = grouper.getNewPrevEvent();
-                    grouper = null;
                 }
+
+                rows.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
+                prevEvent = grouper.getNewPrevEvent();
+                grouper = null;
             }
 
-            for (const Grouper of groupers) {
-                if (Grouper.canStartGroup(this, wrappedEvent) && !this.props.disableGrouping) {
-                    grouper = new Grouper(
-                        this,
-                        wrappedEvent,
-                        prevEvent,
-                        lastShownEvent,
-                        nextEventAndShouldShow,
-                        nextTile,
-                    );
-                    break; // break on first grouper
-                }
-            }
+            grouper = this.tryStartGrouper(wrappedEvent, prevEvent, lastShownEvent, nextEventAndShouldShow, nextTile);
 
             if (!grouper) {
                 if (shouldShow) {
-                    // make sure we unpack the array returned by getTilesForEvent,
-                    // otherwise React will auto-generate keys, and we will end up
-                    // replacing all the DOM elements every time we paginate.
-                    ret.push(
+                    // Make sure we unpack the returned rows, otherwise React will auto-generate keys
+                    // and replace DOM elements whenever we paginate.
+                    rows.push(
                         ...this.getRowsForEvent(prevEvent, wrappedEvent, last, false, nextEventAndShouldShow, nextTile),
                     );
                     prevEvent = event;
@@ -793,34 +820,44 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
                 const readMarker = this.readMarkerForEvent(eventId, i >= lastShownNonLocalEchoIndex);
                 if (readMarker) {
-                    ret.push(...this.wrapOpaqueTimelineRows([readMarker], `read-marker-${eventId}`));
+                    rows.push(...this.wrapOpaqueTimelineRows([readMarker], `read-marker-${eventId}`));
                 }
             }
         }
 
         if (grouper) {
-            ret.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
+            rows.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
         }
 
-        if (
-            this.props.room &&
-            this.state.showTypingNotifications &&
-            this.context.timelineRenderingType === TimelineRenderingType.Room
-        ) {
-            ret.push({
-                kind: "typing-indicator",
-                key: "_whoIsTyping",
-            });
+        return rows;
+    }
+
+    private tryStartGrouper(
+        wrappedEvent: WrappedEvent,
+        prevEvent: MatrixEvent | null,
+        lastShownEvent: MatrixEvent | undefined,
+        nextEventAndShouldShow: WrappedEvent | null,
+        nextTile: MatrixEvent | null,
+    ): BaseGrouper | null {
+        for (const Grouper of groupers) {
+            if (Grouper.canStartGroup(this, wrappedEvent) && !this.props.disableGrouping) {
+                return new Grouper(this, wrappedEvent, prevEvent, lastShownEvent, nextEventAndShouldShow, nextTile);
+            }
         }
 
-        if (this.props.forwardPaginating) {
-            ret.push({
-                kind: "spinner",
-                key: "_bottomSpinner",
-            });
-        }
+        return null;
+    }
 
-        return ret;
+    private getTimelineRows(): TimelineRow[] {
+        const events = this.getWrappedEvents();
+        const metadata = this.getTimelineEventsMetadata(events);
+        this.initialiseReadReceiptsByEvent(metadata.events);
+
+        return [
+            ...this.getTimelinePrefixRows(),
+            ...this.buildEventTimelineRows(metadata),
+            ...this.getTimelineSuffixRows(),
+        ];
     }
 
     public getRowsForEvent(
