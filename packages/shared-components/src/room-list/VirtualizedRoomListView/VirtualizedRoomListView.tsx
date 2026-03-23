@@ -9,7 +9,7 @@ import React, { useCallback, useMemo, useRef, type JSX, type ReactNode } from "r
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
-import { type Room } from "../RoomListItemView";
+import { type Room } from "../RoomListView/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
 import { _t } from "../../core/i18n/i18n";
 import {
@@ -19,8 +19,8 @@ import {
 } from "../../core/utils/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList } from "../../core/utils/VirtualizedList";
-import { RoomListSectionHeaderView } from "../RoomListSectionHeaderView";
-import { RoomListItemAccessibilityWrapper } from "../RoomListItemAccessibilityWrapper";
+import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
+import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
 
 /**
  * Filter key type - opaque string type for filter identifiers
