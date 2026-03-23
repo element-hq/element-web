@@ -1,0 +1,238 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<SeparatorView /> > renders Default story 1`] = `
+<div>
+  <div
+    style="height: 600px;"
+  >
+    <div
+      data-group="true"
+      data-testid="_r_0_"
+      id="_r_0_"
+      style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
+    >
+      <div
+        data-panel="true"
+        data-testid="_r_1_"
+        id="_r_1_"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 0 1 0px; overflow: visible;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            tabindex="0"
+          >
+            LEFT CONTENT
+          </div>
+        </div>
+      </div>
+      <div
+        aria-controls="_r_1_"
+        aria-label="Click or drag to expand"
+        aria-orientation="vertical"
+        aria-valuemax="99.502"
+        aria-valuemin="0"
+        aria-valuenow="0"
+        class="separator Separator visible"
+        data-separator="inactive"
+        data-testid="_r_2_"
+        id="_r_2_"
+        role="separator"
+        style="flex: 0 0 auto; touch-action: none;"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="12px"
+          transform="rotate(90)"
+          viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 15a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 14q0-.424.287-.713A.97.97 0 0 1 5 13h14q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 19 15zm0-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 10q0-.424.287-.713A.97.97 0 0 1 5 9h14q.424 0 .712.287Q20 9.576 20 10t-.288.713A.97.97 0 0 1 19 11z"
+          />
+        </svg>
+      </div>
+      <div
+        data-panel="true"
+        data-testid="_r_7_"
+        id="_r_7_"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 100 1 0px; overflow: visible;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            MAIN CONTENT
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
+<div>
+  <div
+    style="height: 600px;"
+  >
+    <div
+      data-group="true"
+      data-testid="_r_g_"
+      id="_r_g_"
+      style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
+    >
+      <div
+        data-panel="true"
+        data-testid="_r_h_"
+        id="_r_h_"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 49.751 1 0px; overflow: visible;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            tabindex="0"
+          >
+            LEFT CONTENT
+          </div>
+        </div>
+      </div>
+      <div
+        aria-controls="_r_h_"
+        aria-label="Click or drag to expand"
+        aria-orientation="vertical"
+        aria-valuemax="99.502"
+        aria-valuemin="0"
+        aria-valuenow="49.751"
+        class="separator Separator visible"
+        data-separator="inactive"
+        data-testid="_r_i_"
+        id="_r_i_"
+        role="separator"
+        style="flex: 0 0 auto; touch-action: none;"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="12px"
+          transform="rotate(90)"
+          viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 15a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 14q0-.424.287-.713A.97.97 0 0 1 5 13h14q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 19 15zm0-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 10q0-.424.287-.713A.97.97 0 0 1 5 9h14q.424 0 .712.287Q20 9.576 20 10t-.288.713A.97.97 0 0 1 19 11z"
+          />
+        </svg>
+      </div>
+      <div
+        data-panel="true"
+        data-testid="_r_n_"
+        id="_r_n_"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 50.249 1 0px; overflow: visible;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            MAIN CONTENT
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
+<div>
+  <div
+    style="height: 600px;"
+  >
+    <div
+      data-group="true"
+      data-testid="_r_8_"
+      id="_r_8_"
+      style="height: 100%; width: 100%; overflow: hidden; display: flex; flex-flow: row; touch-action: pan-y;"
+    >
+      <div
+        data-panel="true"
+        data-testid="_r_9_"
+        id="_r_9_"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 48.309 1 0px; overflow: visible;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+            tabindex="0"
+          >
+            LEFT CONTENT
+          </div>
+        </div>
+      </div>
+      <div
+        aria-controls="_r_9_"
+        aria-label="Click or drag to expand"
+        aria-orientation="vertical"
+        aria-valuemax="96.618"
+        aria-valuemin="0"
+        aria-valuenow="48.309"
+        class="separator Separator"
+        data-separator="inactive"
+        data-testid="_r_a_"
+        id="_r_a_"
+        role="separator"
+        style="flex: 0 0 auto; touch-action: none;"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="12px"
+          transform="rotate(90)"
+          viewBox="3.999704360961914 8.999704360961914 16.000295639038086 6.000591278076172"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 15a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 14q0-.424.287-.713A.97.97 0 0 1 5 13h14q.424 0 .712.287.288.288.288.713 0 .424-.288.713A.97.97 0 0 1 19 15zm0-4a.97.97 0 0 1-.713-.287A.97.97 0 0 1 4 10q0-.424.287-.713A.97.97 0 0 1 5 9h14q.424 0 .712.287Q20 9.576 20 10t-.288.713A.97.97 0 0 1 19 11z"
+          />
+        </svg>
+      </div>
+      <div
+        data-panel="true"
+        data-testid="_r_f_"
+        id="_r_f_"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 51.691 1 0px; overflow: visible;"
+      >
+        <div
+          style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            MAIN CONTENT
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

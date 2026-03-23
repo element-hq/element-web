@@ -25,16 +25,16 @@
         "pretty-format@30>react-is": "19.2.4",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
-        "oidc-client-ts": "3.4.1",
+        "oidc-client-ts": "3.5.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001774",
+        "caniuse-lite": "1.0.30001780",
         "markdown-it": "14.1.1",
         "testcontainers": "^11.0.0",
         "wrap-ansi-cjs": "npm:wrap-ansi@^10.0.0",
         "wrap-ansi": "npm:wrap-ansi@^10.0.0",
         "matrix-widget-api": "^1.17.0",
         "qs": "6.15.0",
-        "serialize-javascript": "7.0.3"
+        "serialize-javascript": "7.0.4"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
@@ -45,11 +45,11 @@
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "^5.36.2",
+        "knip": "5.87.0",
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
         "minimist": "^1.2.6",
-        "nx": "22.5.3",
+        "nx": "22.5.4",
         "prettier": "3.8.1",
         "typescript": "catalog:",
         "yaml": "^2.3.3"
@@ -72,7 +72,8 @@
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
             "jsdom": "patches/jsdom.patch",
             "rollup": "patches/rollup.patch",
-            "knip": "patches/knip.patch"
+            "knip": "patches/knip.patch",
+            "postcss-mixins": "patches/postcss-mixins.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
@@ -89,6 +90,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
+    "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
     "private": true
 }
