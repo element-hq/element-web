@@ -77,8 +77,8 @@ export class AutoCollapseBehaviour {
     }
 
     private onWindowWidthDecreased = throttle((currentWindowWidth: number): void => {
-        // If the panel is already auto-collapsed, we have nothing else left to do.
-        if (this.isAutoCollapsed) return;
+        // If the panel is already collapsed, we have nothing else left to do.
+        if (this.isAutoCollapsed || this.panelHandle?.isCollapsed()) return;
 
         if (currentWindowWidth <= AUTO_COLLAPSE_WIDTH) {
             this.isAutoCollapsed = true;

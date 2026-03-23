@@ -101,7 +101,7 @@ describe("LeftPanelResizerViewModel", () => {
             const vm = new ResizerViewModel();
             const mockHandle = {
                 resize: jest.fn(),
-                isCollapsed: jest.fn().mockReturnValue(true),
+                isCollapsed: jest.fn().mockReturnValue(false),
                 getSize: jest.fn().mockReturnValue({
                     inPixels: 300,
                 }),
