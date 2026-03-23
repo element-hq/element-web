@@ -11,6 +11,16 @@ import { test, expect } from "../../element-web-test";
 import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement, logIntoElementAndVerify } from "./utils";
 import { type Bot } from "../../pages/bot";
 
+// Mask the background of the screenshot to avoid failing the test just because some
+// other component have changed its rendering.
+const screenshotOptions = {
+    css: `
+                    .mx_ToastContainer {
+                        background-color: magenta !important;
+                    }
+                `,
+};
+
 test.describe("Key storage out of sync toast", () => {
     let recoveryKey: GeneratedSecretStorageKey;
 
@@ -37,15 +47,10 @@ test.describe("Key storage out of sync toast", () => {
         // playwright only evaluates the 'first()' call initially, not subsequent times it checks, so
         // it would always be checking the same toast, even if another one is now the first.
         await expect(page.getByRole("alert")).toHaveCount(2);
-        // Mask the background of the screenshot to avoid failing the test just because some
-        // other component have changed its rendering.
-        await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png", {
-            css: `
-                    .mx_ToastContainer {
-                        background-color: magenta !important;
-                    }
-                `,
-        });
+        await expect(page.getByRole("alert").first()).toMatchScreenshot(
+            "key-storage-out-of-sync-toast.png",
+            screenshotOptions,
+        );
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
 
@@ -209,7 +214,10 @@ test.describe("Verify this device toast", () => {
 
             await expect(page.getByRole("heading", { name: "Verify this device" })).toBeVisible();
 
-            await expect(page.locator(".mx_ToastContainer")).toMatchScreenshot("verify-this-device.png");
+            await expect(page.locator(".mx_ToastContainer")).toMatchScreenshot(
+                "verify-this-device.png",
+                screenshotOptions,
+            );
         },
     );
 });
