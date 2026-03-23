@@ -9,13 +9,13 @@ import React from "react";
 import { Markdown } from "@storybook/addon-docs/blocks";
 
 import type { Meta } from "@storybook/react-vite";
-import LinkifyMatrixOpaqueIdType from "../../typedoc/enumerations/LinkifyMatrixOpaqueIdType.md?raw";
-import findLinksInString from "../../typedoc/functions/findLinksInString.md?raw";
-import isLinkable from "../../typedoc/functions/isLinkable.md?raw";
-import linkifyHtml from "../../typedoc/functions/linkifyHtml.md?raw";
-import linkifyString from "../../typedoc/functions/linkifyString.md?raw";
-import generateLinkedTextOptions from "../../typedoc/functions/generateLinkedTextOptions.md?raw";
-import LinkedTextOptions from "../../typedoc/interfaces/LinkedTextOptions.md?raw";
+import LinkifyMatrixOpaqueIdType from "../../../typedoc/enumerations/LinkifyMatrixOpaqueIdType.md?raw";
+import findLinksInString from "../../../typedoc/functions/findLinksInString.md?raw";
+import isLinkable from "../../../typedoc/functions/isLinkable.md?raw";
+import linkifyHtml from "../../../typedoc/functions/linkifyHtml.md?raw";
+import linkifyString from "../../../typedoc/functions/linkifyString.md?raw";
+import generateLinkedTextOptions from "../../../typedoc/functions/generateLinkedTextOptions.md?raw";
+import LinkedTextOptions from "../../../typedoc/interfaces/LinkedTextOptions.md?raw";
 
 const meta = {
     title: "utils/linkify",
