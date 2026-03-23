@@ -14,10 +14,10 @@ import {
     type AudioPlayerViewModel as AudioPlayerViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-import { type Playback } from "../../audio/Playback";
-import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { getKeyBindingsManager } from "../../KeyBindingsManager";
-import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
+import { type Playback } from "../../../../../audio/Playback";
+import { UPDATE_EVENT } from "../../../../../stores/AsyncStore";
+import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts";
 
 /**
  * The number of seconds to skip when the user presses the left or right arrow keys.

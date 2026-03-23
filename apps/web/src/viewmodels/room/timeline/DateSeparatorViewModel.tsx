@@ -15,19 +15,19 @@ import React from "react";
 import { Direction, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../DateUtils";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
-import dispatcher from "../../dispatcher/dispatcher";
-import { Action } from "../../dispatcher/actions";
-import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { _t, getUserLanguage } from "../../languageHandler";
-import Modal from "../../Modal";
-import SettingsStore from "../../settings/SettingsStore";
-import { UIFeature } from "../../settings/UIFeature";
-import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import BugReportDialog from "../../components/views/dialogs/BugReportDialog";
-import AccessibleButton from "../../components/views/elements/AccessibleButton";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import dispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { _t, getUserLanguage } from "../../../languageHandler";
+import Modal from "../../../Modal";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
+import ErrorDialog from "../../../components/views/dialogs/ErrorDialog";
+import BugReportDialog from "../../../components/views/dialogs/BugReportDialog";
+import AccessibleButton from "../../../components/views/elements/AccessibleButton";
+import { SdkContextClass } from "../../../contexts/SDKContext";
 
 export interface DateSeparatorViewModelProps {
     /**

@@ -15,11 +15,11 @@ import {
 } from "@element-hq/web-shared-components";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
-import DMRoomMap from "../../utils/DMRoomMap";
-import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../utils/crypto";
-import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
-import { objectHasDiff } from "../../utils/objects";
+import DMRoomMap from "../../../../utils/DMRoomMap";
+import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../utils/crypto";
+import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
+import { isRoomEncrypted } from "../../../../hooks/useIsEncrypted";
+import { objectHasDiff } from "../../../../utils/objects";
 
 export interface EncryptionEventViewModelProps {
     /** Caller-provided client. */

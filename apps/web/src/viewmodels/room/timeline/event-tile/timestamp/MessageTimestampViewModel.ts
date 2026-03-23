@@ -12,8 +12,8 @@ import {
     type MessageTimestampViewModel as MessageTimestampViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from "../../DateUtils";
-import { objectHasDiff } from "../../utils/objects";
+import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from "../../../../../DateUtils";
+import { objectHasDiff } from "../../../../../utils/objects";
 
 export interface MessageTimestampViewModelProps {
     /**

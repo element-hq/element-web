@@ -12,9 +12,9 @@ import {
 } from "@element-hq/web-shared-components";
 import { type MouseEvent } from "react";
 
-import { _t } from "../../languageHandler";
-import { getUserNameColorClass } from "../../utils/FormattingUtils";
-import UserIdentifier from "../../customisations/UserIdentifier";
+import { _t } from "../../../../languageHandler";
+import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
+import UserIdentifier from "../../../../customisations/UserIdentifier";
 
 /**
  * Information about a member for disambiguation purposes.

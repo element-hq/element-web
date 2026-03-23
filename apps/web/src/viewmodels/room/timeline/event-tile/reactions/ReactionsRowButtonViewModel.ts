@@ -12,10 +12,10 @@ import {
     type ReactionsRowButtonViewModel as ReactionsRowButtonViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-import { mediaFromMxc } from "../../customisations/Media";
-import { _t } from "../../languageHandler";
-import { formatList } from "../../utils/FormattingUtils";
-import dis from "../../dispatcher/dispatcher";
+import { mediaFromMxc } from "../../../../../customisations/Media";
+import { _t } from "../../../../../languageHandler";
+import { formatList } from "../../../../../utils/FormattingUtils";
+import dis from "../../../../../dispatcher/dispatcher";
 import { ReactionsRowButtonTooltipViewModel } from "./ReactionsRowButtonTooltipViewModel";
 import { REACTION_SHORTCODE_KEY } from "./reactionShortcode";
 

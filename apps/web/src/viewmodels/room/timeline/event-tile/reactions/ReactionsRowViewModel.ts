@@ -12,7 +12,7 @@ import {
     type ReactionsRowViewModel as ReactionsRowViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-import { _t } from "../../languageHandler";
+import { _t } from "../../../../../languageHandler";
 
 export const MAX_ITEMS_WHEN_LIMITED = 8;
 
