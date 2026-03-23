@@ -55,6 +55,15 @@ Please see LICENSE files in the repository root for full details.
 }
 
 /**
+ * Disable pointer events inside the persistentElement container when the room-list is being resized.
+ * This is necessary to avoid the pointer events from being hijacked by the content rendered inside
+ * that div.
+ */
+:root:has(.mx_Separator[data-separator="active"]) #mx_PersistedElement_container {
+    pointer-events: none;
+}
+
+/**
  * We need to increase the specificity of the selector to override the
  * custom property set by the design tokens package
  */

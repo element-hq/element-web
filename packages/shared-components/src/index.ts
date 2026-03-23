@@ -49,6 +49,7 @@ export * from "./core/utils/Box";
 export * from "./core/utils/Flex";
 export * from "./core/utils/LinkedText";
 export * from "./core/utils/VirtualizedList";
+export * from "./resize";
 
 // Utils
 export * from "./core/i18n/i18n";
