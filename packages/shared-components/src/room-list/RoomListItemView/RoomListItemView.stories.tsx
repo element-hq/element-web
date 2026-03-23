@@ -11,7 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "./RoomListItemView";
 import { RoomListItemView, type RoomListItemViewSnapshot, type RoomListItemViewActions } from "./RoomListItemView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
 import { renderAvatar } from "../story-mocks";

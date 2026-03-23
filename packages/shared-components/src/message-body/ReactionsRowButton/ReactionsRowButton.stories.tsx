@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { type ReactionsRowButtonTooltipViewSnapshot } from "../ReactionsRowButtonTooltip";
 import {
     ReactionsRowButtonView,

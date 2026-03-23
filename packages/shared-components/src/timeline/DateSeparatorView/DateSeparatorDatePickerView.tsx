@@ -8,9 +8,9 @@
 import React, { type JSX, useId, useRef, useState } from "react";
 import { Root, Submit, Field, TextControl, MenuItem } from "@vector-im/compound-web";
 
-import { formatDateForInput } from "../../utils/DateUtils";
-import { useI18n } from "../../utils/i18nContext";
-import { useViewModel } from "../../viewmodel";
+import { formatDateForInput } from "../../core/utils/DateUtils";
+import { useI18n } from "../../core/i18n/i18nContext";
+import { useViewModel } from "../../core/viewmodel";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
 import styles from "./DateSeparatorDatePickerView.module.css";
 

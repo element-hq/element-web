@@ -7,14 +7,14 @@
 
 import React, { type ChangeEventHandler, type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { MediaBody } from "../../message-body/MediaBody";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../core/utils/Flex";
 import styles from "./AudioPlayerView.module.css";
 import { PlayPauseButton } from "../PlayPauseButton";
 import { type PlaybackState } from "../playback";
-import { useI18n } from "../../utils/i18nContext";
-import { formatBytes } from "../../utils/FormattingUtils";
+import { useI18n } from "../../core/i18n/i18nContext";
+import { formatBytes } from "../../core/utils/FormattingUtils";
 import { Clock } from "../Clock";
 import { SeekBar } from "../SeekBar";
 

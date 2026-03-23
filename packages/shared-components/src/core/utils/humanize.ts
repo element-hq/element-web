@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type I18nApi } from "@element-hq/element-web-module-api";
 
-import { _t as _tFromModule } from "./i18n";
+import { _t as _tFromModule } from "../i18n/i18n";
 
 // These are the constants we use for when to break the text
 const MILLISECONDS_RECENT = 15000;
