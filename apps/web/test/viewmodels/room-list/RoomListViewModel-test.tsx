@@ -9,9 +9,9 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { createTestClient, flushPromises, mkStubRoom, stubClient } from "../../test-utils";
-import RoomListStoreV3, { RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3, { CHATS_TAG, RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
-import { FilterKey } from "../../../src/stores/room-list-v3/skip-list/filters";
+import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
@@ -46,7 +46,7 @@ describe("RoomListViewModel", () => {
 
         jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
             spaceId: "home",
-            rooms: [room1, room2, room3],
+            sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
         });
 
         jest.spyOn(RoomListStoreV3.instance, "isLoadingRooms", "get").mockReturnValue(false);
@@ -77,12 +77,12 @@ describe("RoomListViewModel", () => {
         it("should initialize with empty room list", () => {
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
-                rooms: [],
+                sections: [{ tag: CHATS_TAG, rooms: [] }],
             });
 
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([]);
+            expect(viewModel.getSnapshot().sections).toEqual([]);
             expect(viewModel.getSnapshot().isRoomListEmpty).toBe(true);
         });
 
@@ -101,7 +101,7 @@ describe("RoomListViewModel", () => {
             const newRoom = mkStubRoom("!room4:server", "Room 4", matrixClient);
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
-                rooms: [room1, room2, room3, newRoom],
+                sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3, newRoom] }],
             });
 
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
@@ -136,7 +136,7 @@ describe("RoomListViewModel", () => {
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
             // View model should be still valid
-            expect(room1VM.isDisposed).toBe(false);
+            expect(room1VM!.isDisposed).toBe(false);
         });
     });
 
@@ -148,7 +148,7 @@ describe("RoomListViewModel", () => {
 
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
-                rooms: spaceRoomList,
+                sections: [{ tag: CHATS_TAG, rooms: spaceRoomList }],
             });
 
             jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockReturnValue("!room1:server");
@@ -163,8 +163,8 @@ describe("RoomListViewModel", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
             // Get view models for visible rooms
-            const vm1 = viewModel.getRoomItemViewModel("!room1:server");
-            const vm2 = viewModel.getRoomItemViewModel("!room2:server");
+            const vm1 = viewModel.getRoomItemViewModel("!room1:server")!;
+            const vm2 = viewModel.getRoomItemViewModel("!room2:server")!;
 
             const disposeSpy1 = jest.spyOn(vm1, "dispose");
             const disposeSpy2 = jest.spyOn(vm2, "dispose");
@@ -172,7 +172,7 @@ describe("RoomListViewModel", () => {
             // Change space
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
-                rooms: [room3],
+                sections: [{ tag: CHATS_TAG, rooms: [room3] }],
             });
 
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
@@ -188,7 +188,7 @@ describe("RoomListViewModel", () => {
 
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
-                rooms: [newSpaceRoom],
+                sections: [{ tag: CHATS_TAG, rooms: [newSpaceRoom] }],
             });
             jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
 
@@ -197,7 +197,7 @@ describe("RoomListViewModel", () => {
             // New space room should be accessible
             expect(() => viewModel.getRoomItemViewModel("!spaceroom:server")).not.toThrow();
             // Old rooms from the home space should not be accessible
-            expect(() => viewModel.getRoomItemViewModel("!room1:server")).toThrow();
+            expect(viewModel.getRoomItemViewModel("!room1:server")).toBeUndefined();
         });
     });
 
@@ -252,7 +252,7 @@ describe("RoomListViewModel", () => {
             // Simulate room list update that would move room2 to front
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
-                rooms: [room2, room1, room3], // room2 moved to front
+                sections: [{ tag: CHATS_TAG, rooms: [room2, room1, room3] }], // room2 moved to front
             });
 
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
@@ -295,8 +295,8 @@ describe("RoomListViewModel", () => {
 
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
-                rooms: [room1],
-                filterKeys: [FilterKey.UnreadFilter],
+                sections: [{ tag: CHATS_TAG, rooms: [room1] }],
+                filterKeys: [FilterEnum.UnreadFilter],
             });
 
             viewModel.onToggleFilter("unread");
@@ -311,8 +311,8 @@ describe("RoomListViewModel", () => {
             // Turn filter on
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
-                rooms: [room1],
-                filterKeys: [FilterKey.UnreadFilter],
+                sections: [{ tag: CHATS_TAG, rooms: [room1] }],
+                filterKeys: [FilterEnum.UnreadFilter],
             });
             viewModel.onToggleFilter("unread");
 
@@ -321,7 +321,7 @@ describe("RoomListViewModel", () => {
             // Turn filter off
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
-                rooms: [room1, room2, room3],
+                sections: [{ tag: CHATS_TAG, rooms: [room1, room2, room3] }],
             });
             viewModel.onToggleFilter("unread");
 
@@ -341,7 +341,7 @@ describe("RoomListViewModel", () => {
             const itemViewModel = viewModel.getRoomItemViewModel("!room1:server");
 
             expect(itemViewModel).toBeDefined();
-            expect(itemViewModel.getSnapshot().room).toBe(room1);
+            expect(itemViewModel!.getSnapshot().room).toBe(room1);
         });
 
         it("should reuse existing room item view model", () => {
@@ -353,12 +353,10 @@ describe("RoomListViewModel", () => {
             expect(itemViewModel1).toBe(itemViewModel2);
         });
 
-        it("should throw error when requesting view model for non-existent room", () => {
+        it("should return undefined for non-existent room", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            expect(() => {
-                viewModel.getRoomItemViewModel("!nonexistent:server");
-            }).toThrow();
+            expect(viewModel.getRoomItemViewModel("!nonexistent:server")).toBeUndefined();
         });
 
         it("should not throw when requesting view model for a room removed from the list but still in roomsMap", () => {
@@ -367,7 +365,7 @@ describe("RoomListViewModel", () => {
             // Normal list update removes room2 from the list
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "home",
-                rooms: [room1, room3],
+                sections: [{ tag: CHATS_TAG, rooms: [room1, room3] }],
             });
 
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
@@ -375,7 +373,7 @@ describe("RoomListViewModel", () => {
             expect(() => viewModel.getRoomItemViewModel("!room2:server")).not.toThrow();
         });
 
-        it("should throw when requesting view model for a room from old space after space change", () => {
+        it("should return undefined for a room from old space after space change", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
             const spaceRoom = mkStubRoom("!newroom:server", "New Room", matrixClient);
@@ -383,15 +381,13 @@ describe("RoomListViewModel", () => {
             // Space change: new space only has spaceRoom
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
                 spaceId: "!space:server",
-                rooms: [spaceRoom],
+                sections: [{ tag: CHATS_TAG, rooms: [spaceRoom] }],
             });
             jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
 
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
-            expect(() => viewModel.getRoomItemViewModel("!room1:server")).toThrow(
-                "Room !room1:server not found in roomsMap",
-            );
+            expect(viewModel.getRoomItemViewModel("!room1:server")).toBeUndefined();
         });
 
         it("should recover when roomsMap is stale but roomsResult has the room", () => {
@@ -407,9 +403,9 @@ describe("RoomListViewModel", () => {
         it("should dispose view models for rooms no longer visible", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            const vm1 = viewModel.getRoomItemViewModel("!room1:server");
-            const vm2 = viewModel.getRoomItemViewModel("!room2:server");
-            const vm3 = viewModel.getRoomItemViewModel("!room3:server");
+            const vm1 = viewModel.getRoomItemViewModel("!room1:server")!;
+            const vm2 = viewModel.getRoomItemViewModel("!room2:server")!;
+            const vm3 = viewModel.getRoomItemViewModel("!room3:server")!;
 
             const disposeSpy1 = jest.spyOn(vm1, "dispose");
             const disposeSpy3 = jest.spyOn(vm3, "dispose");
@@ -593,8 +589,8 @@ describe("RoomListViewModel", () => {
         it("should dispose all room item view models on dispose", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
-            const vm1 = viewModel.getRoomItemViewModel("!room1:server");
-            const vm2 = viewModel.getRoomItemViewModel("!room2:server");
+            const vm1 = viewModel.getRoomItemViewModel("!room1:server")!;
+            const vm2 = viewModel.getRoomItemViewModel("!room2:server")!;
 
             const disposeSpy1 = jest.spyOn(vm1, "dispose");
             const disposeSpy2 = jest.spyOn(vm2, "dispose");
