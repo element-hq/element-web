@@ -12,6 +12,7 @@ import { test, expect } from "../../../element-web-test";
 test.describe("Room list panel", () => {
     test.use({
         labsFlags: ["feature_new_room_list"],
+        displayName: "Eve",
     });
 
     /**
@@ -44,7 +45,6 @@ test.describe("Room list panel", () => {
 
     test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
         await page.setViewportSize({ width: 575, height: 600 });
-        const roomListPanel = getRoomListView(page);
-        await expect(roomListPanel).toMatchScreenshot("room-list-panel-smallscreen.png");
+        await expect(page).toMatchScreenshot("room-list-panel-smallscreen.png");
     });
 });

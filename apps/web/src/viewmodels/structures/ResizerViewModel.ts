@@ -19,9 +19,12 @@ import whatInput from "what-input";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { AutoCollapseBehaviour } from "./behaviours/AutoCollapseBehaviour";
 
 function getInitialState(): ResizerViewSnapshot {
-    if (SettingsStore.getValue("RoomList.isPanelCollapsed")) {
+    const shouldStartCollapsed =
+        SettingsStore.getValue("RoomList.isPanelCollapsed") || AutoCollapseBehaviour.shouldStartCollapsed();
+    if (shouldStartCollapsed) {
         return {
             isCollapsed: true,
             initialSize: 0,
@@ -47,16 +50,31 @@ export class ResizerViewModel
      */
     private panelHandle?: PanelImperativeHandle;
 
+    private readonly autoCollapseBehaviour: AutoCollapseBehaviour;
+
     public constructor() {
         super(undefined, getInitialState());
+        this.autoCollapseBehaviour = this.disposables.track(
+            new AutoCollapseBehaviour((isCollapsed) => {
+                this.snapshot.merge({ isCollapsed });
+            }),
+        );
     }
 
     public onLeftPanelResize = debounce((panelSize: PanelSize): void => {
+        if (this.autoCollapseBehaviour.isAutoCollapsed) return;
         const newSize = panelSize.inPixels;
         this.snapshot.merge({ isCollapsed: newSize === 0 });
     }, 50);
 
     public onLeftPanelResized = (newSize: number): void => {
+        // When the window is resized, the panel is resized in various ways.
+        // These transient changes should not be persisted in settings.
+        // So early return if that is the case.
+        if (this.autoCollapseBehaviour.isResizeInProgress) return;
+
+        this.autoCollapseBehaviour.onLeftPanelResized();
+
         const isCollapsed = newSize === 0;
         // Store the size if the panel isn't collapsed.
         if (!isCollapsed) {
@@ -71,6 +89,7 @@ export class ResizerViewModel
 
     public setPanelHandle = (handle: PanelImperativeHandle): void => {
         this.panelHandle = handle;
+        this.autoCollapseBehaviour.setHandle(handle);
     };
 
     public onSeparatorClick = (): void => {
