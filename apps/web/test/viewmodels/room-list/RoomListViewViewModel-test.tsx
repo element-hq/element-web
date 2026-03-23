@@ -16,7 +16,7 @@ import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListViewModel";
+import { RoomListViewViewModel } from "../../../src/viewmodels/room-list/RoomListViewViewModel";
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
@@ -25,12 +25,12 @@ jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasAccessToNotificationMenu: jest.fn().mockReturnValue(true),
 }));
 
-describe("RoomListViewModel", () => {
+describe("RoomListViewViewModel", () => {
     let matrixClient: MatrixClient;
     let room1: Room;
     let room2: Room;
     let room3: Room;
-    let viewModel: RoomListViewModel;
+    let viewModel: RoomListViewViewModel;
 
     beforeEach(() => {
         matrixClient = createTestClient();
@@ -63,7 +63,7 @@ describe("RoomListViewModel", () => {
 
     describe("Initialization", () => {
         it("should initialize with correct snapshot", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const snapshot = viewModel.getSnapshot();
             expect(snapshot.sections[0].roomIds).toEqual(["!room1:server", "!room2:server", "!room3:server"]);
@@ -80,7 +80,7 @@ describe("RoomListViewModel", () => {
                 rooms: [],
             });
 
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             expect(viewModel.getSnapshot().sections[0].roomIds).toEqual([]);
             expect(viewModel.getSnapshot().isRoomListEmpty).toBe(true);
@@ -88,7 +88,7 @@ describe("RoomListViewModel", () => {
 
         it("should set canCreateRoom based on user rights", () => {
             mocked(hasCreateRoomRights).mockReturnValue(true);
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             expect(viewModel.getSnapshot().canCreateRoom).toBe(true);
         });
@@ -96,7 +96,7 @@ describe("RoomListViewModel", () => {
 
     describe("Room list updates", () => {
         it("should update room list when ListsUpdate event fires", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const newRoom = mkStubRoom("!room4:server", "Room 4", matrixClient);
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
@@ -116,7 +116,7 @@ describe("RoomListViewModel", () => {
 
         it("should update loading state when ListsLoaded event fires", () => {
             jest.spyOn(RoomListStoreV3.instance, "isLoadingRooms", "get").mockReturnValue(true);
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             expect(viewModel.getSnapshot().isLoadingRooms).toBe(true);
 
@@ -127,7 +127,7 @@ describe("RoomListViewModel", () => {
 
         // This test ensures that the room list item vms are preserved when the room list is changing
         it("should keep existing view model when ListsUpdate event fires", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Create view model for room1
             const room1VM = viewModel.getRoomItemViewModel("!room1:server");
@@ -142,7 +142,7 @@ describe("RoomListViewModel", () => {
 
     describe("Space switching", () => {
         it("should update room list when space changes", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const spaceRoomList = [room1, room2];
 
@@ -160,7 +160,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should clear view models when space changes", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Get view models for visible rooms
             const vm1 = viewModel.getRoomItemViewModel("!room1:server");
@@ -182,7 +182,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should clear roomsMap when space changes and repopulate with new rooms", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const newSpaceRoom = mkStubRoom("!spaceroom:server", "Space Room", matrixClient);
 
@@ -203,7 +203,7 @@ describe("RoomListViewModel", () => {
 
     describe("Active room tracking", () => {
         it("should update active room index when room is selected", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
@@ -219,7 +219,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should return undefined active room index when no room is selected", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
@@ -237,7 +237,7 @@ describe("RoomListViewModel", () => {
 
     describe("Sticky room behavior", () => {
         it("should keep selected room at same index when room list updates", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Select room at index 1
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
@@ -263,7 +263,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should not apply sticky behavior when user changes rooms", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Select room at index 1
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
@@ -289,7 +289,7 @@ describe("RoomListViewModel", () => {
 
     describe("Filters", () => {
         it("should toggle filter on", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             expect(viewModel.getSnapshot().activeFilterId).toBeUndefined();
 
@@ -306,7 +306,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should toggle filter off", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Turn filter on
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
@@ -336,7 +336,7 @@ describe("RoomListViewModel", () => {
 
     describe("Room item view models", () => {
         it("should create room item view model on demand", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const itemViewModel = viewModel.getRoomItemViewModel("!room1:server");
 
@@ -345,7 +345,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should reuse existing room item view model", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const itemViewModel1 = viewModel.getRoomItemViewModel("!room1:server");
             const itemViewModel2 = viewModel.getRoomItemViewModel("!room1:server");
@@ -354,7 +354,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should throw error when requesting view model for non-existent room", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             expect(() => {
                 viewModel.getRoomItemViewModel("!nonexistent:server");
@@ -362,7 +362,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should not throw when requesting view model for a room removed from the list but still in roomsMap", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Normal list update removes room2 from the list
             jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
@@ -376,7 +376,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should throw when requesting view model for a room from old space after space change", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const spaceRoom = mkStubRoom("!newroom:server", "New Room", matrixClient);
 
@@ -395,7 +395,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should recover when roomsMap is stale but roomsResult has the room", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             // Manually clear roomsMap to simulate stale cache, but keep roomsResult intact
             (viewModel as any).roomsMap.clear();
@@ -405,7 +405,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should dispose view models for rooms no longer visible", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const vm1 = viewModel.getRoomItemViewModel("!room1:server");
             const vm2 = viewModel.getRoomItemViewModel("!room2:server");
@@ -428,7 +428,7 @@ describe("RoomListViewModel", () => {
 
     describe("Room creation", () => {
         it("should dispatch CreateChat action when createChatRoom is called", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const dispatchSpy = jest.spyOn(dispatcher, "fire");
 
@@ -438,7 +438,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should dispatch CreateRoom action without parent space", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -453,7 +453,7 @@ describe("RoomListViewModel", () => {
             const spaceRoom = mkStubRoom("!space:server", "Space", matrixClient);
             jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(spaceRoom);
 
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
 
@@ -473,7 +473,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should navigate to next room when delta is 1", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
@@ -496,7 +496,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should navigate to previous room when delta is -1", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room2:server");
 
@@ -519,7 +519,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should wrap around to last room when navigating backwards from first room", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!room1:server");
 
@@ -542,7 +542,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should not navigate when current room is not found", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!unknown:server");
 
@@ -566,7 +566,7 @@ describe("RoomListViewModel", () => {
         });
 
         it("should not navigate when no room is selected", async () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(null);
 
@@ -591,7 +591,7 @@ describe("RoomListViewModel", () => {
 
     describe("Cleanup", () => {
         it("should dispose all room item view models on dispose", () => {
-            viewModel = new RoomListViewModel({ client: matrixClient });
+            viewModel = new RoomListViewViewModel({ client: matrixClient });
 
             const vm1 = viewModel.getRoomItemViewModel("!room1:server");
             const vm2 = viewModel.getRoomItemViewModel("!room2:server");
