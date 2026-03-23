@@ -18,6 +18,8 @@ import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListViewModel";
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
+import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -599,6 +601,275 @@ describe("RoomListViewModel", () => {
 
             expect(disposeSpy1).toHaveBeenCalled();
             expect(disposeSpy2).toHaveBeenCalled();
+        });
+
+        describe("Sections (feature_room_list_sections)", () => {
+            let favRoom1: Room;
+            let favRoom2: Room;
+            let lowPriorityRoom: Room;
+            let regularRoom1: Room;
+            let regularRoom2: Room;
+
+            beforeEach(() => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                    if (setting === "feature_room_list_sections") return true;
+                    return false;
+                });
+
+                favRoom1 = mkStubRoom("!fav1:server", "Fav 1", matrixClient);
+                favRoom2 = mkStubRoom("!fav2:server", "Fav 2", matrixClient);
+                lowPriorityRoom = mkStubRoom("!low1:server", "Low 1", matrixClient);
+                regularRoom1 = mkStubRoom("!reg1:server", "Reg 1", matrixClient);
+                regularRoom2 = mkStubRoom("!reg2:server", "Reg 2", matrixClient);
+
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1, regularRoom2] },
+                        { tag: DefaultTagID.LowPriority, rooms: [lowPriorityRoom] },
+                    ],
+                });
+            });
+
+            it("should initialize with multiple sections", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.sections).toHaveLength(3);
+                expect(snapshot.sections[0].id).toBe(DefaultTagID.Favourite);
+                expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server", "!fav2:server"]);
+                expect(snapshot.sections[1].id).toBe(CHATS_TAG);
+                expect(snapshot.sections[1].roomIds).toEqual(["!reg1:server", "!reg2:server"]);
+                expect(snapshot.sections[2].id).toBe(DefaultTagID.LowPriority);
+                expect(snapshot.sections[2].roomIds).toEqual(["!low1:server"]);
+            });
+
+            it("should not be a flat list when multiple sections exist", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                expect(viewModel.getSnapshot().isFlatList).toBe(false);
+            });
+
+            it("should be a flat list when only chats section has rooms", () => {
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                });
+
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                expect(viewModel.getSnapshot().isFlatList).toBe(true);
+                expect(viewModel.getSnapshot().sections).toHaveLength(1);
+                expect(viewModel.getSnapshot().sections[0].id).toBe(CHATS_TAG);
+            });
+
+            it("should exclude favourite and low_priority from filter list", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.filterIds).not.toContain("favourite");
+                expect(snapshot.filterIds).not.toContain("low_priority");
+                // Other filters should still be present
+                expect(snapshot.filterIds).toContain("unread");
+                expect(snapshot.filterIds).toContain("people");
+            });
+
+            it("should omit empty sections from snapshot", () => {
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                });
+
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.sections).toHaveLength(1);
+                expect(snapshot.sections[0].id).toBe(CHATS_TAG);
+            });
+
+            it("should create section header view models on demand", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const headerVM = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                expect(headerVM).toBeDefined();
+                expect(headerVM.getSnapshot().id).toBe(DefaultTagID.Favourite);
+                expect(headerVM.getSnapshot().isExpanded).toBe(true);
+            });
+
+            it("should reuse section header view models", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const headerVM1 = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                const headerVM2 = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                expect(headerVM1).toBe(headerVM2);
+            });
+
+            it("should hide room IDs when a section is collapsed", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Collapse the favourite section
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                favHeader.onClick();
+                expect(favHeader.isExpanded).toBe(false);
+
+                const snapshot = viewModel.getSnapshot();
+                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection).toBeDefined();
+                // Collapsed sections have an empty roomIds list
+                expect(favSection!.roomIds).toEqual([]);
+
+                // Other sections remain unaffected
+                const chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!reg1:server", "!reg2:server"]);
+            });
+
+            it("should restore room IDs when a section is re-expanded", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+
+                // Collapse then re-expand
+                favHeader.onClick();
+                favHeader.onClick();
+                expect(favHeader.isExpanded).toBe(true);
+
+                const snapshot = viewModel.getSnapshot();
+                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection!.roomIds).toEqual(["!fav1:server", "!fav2:server"]);
+            });
+
+            it("should update sections when room list changes", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                const newFav = mkStubRoom("!fav3:server", "Fav 3", matrixClient);
+
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2, newFav] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1, regularRoom2] },
+                        { tag: DefaultTagID.LowPriority, rooms: [lowPriorityRoom] },
+                    ],
+                });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server", "!fav2:server", "!fav3:server"]);
+            });
+
+            it("should preserve section collapse state across list updates", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Collapse favourites
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                favHeader.onClick();
+
+                // Trigger a list update
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                const snapshot = viewModel.getSnapshot();
+                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection!.roomIds).toEqual([]);
+            });
+
+            it("should preserve section collapse state across space changes", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Collapse favourites
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                favHeader.onClick();
+
+                // Switch to a different space with its own rooms
+                const spaceFav = mkStubRoom("!spacefav:server", "Space Fav", matrixClient);
+                const spaceReg = mkStubRoom("!spacereg:server", "Space Reg", matrixClient);
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "!space:server",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [spaceFav] },
+                        { tag: CHATS_TAG, rooms: [spaceReg] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                });
+                jest.spyOn(SpaceStore.instance, "getLastSelectedRoomIdForSpace").mockReturnValue(null);
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                const snapshot = viewModel.getSnapshot();
+                // Favourites should still be collapsed even after the space change
+                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection).toBeDefined();
+                expect(favSection!.roomIds).toEqual([]);
+
+                // Other sections should remain expanded
+                const chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
+            });
+
+            it("should apply filters across all sections", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Only favRoom1 is unread
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1] },
+                        { tag: CHATS_TAG, rooms: [] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                    filterKeys: [FilterEnum.UnreadFilter],
+                });
+
+                viewModel.onToggleFilter("unread");
+
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.activeFilterId).toBe("unread");
+                // Only the favourite section should remain (chats and low priority are empty)
+                expect(snapshot.sections).toHaveLength(1);
+                expect(snapshot.sections[0].id).toBe(DefaultTagID.Favourite);
+                expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server"]);
+            });
+
+            it("should apply sticky room within the correct section", async () => {
+                stubClient();
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Select favRoom1 (index 0 globally, index 0 in favourites section)
+                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!fav1:server");
+                dispatcher.dispatch({
+                    action: Action.ActiveRoomChanged,
+                    newRoomId: "!fav1:server",
+                });
+                await flushPromises();
+
+                expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
+
+                // Room list update moves favRoom1 to second position within favourites
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom2, favRoom1] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1, regularRoom2] },
+                        { tag: DefaultTagID.LowPriority, rooms: [lowPriorityRoom] },
+                    ],
+                });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                // Sticky room should keep favRoom1 at index 0 within the favourites section
+                const snapshot = viewModel.getSnapshot();
+                expect(snapshot.sections[0].roomIds[0]).toBe("!fav1:server");
+                expect(snapshot.roomListState.activeRoomIndex).toBe(0);
+            });
         });
     });
 });
