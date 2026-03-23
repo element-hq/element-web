@@ -15,10 +15,10 @@ import { type Bot } from "../../pages/bot";
 // other component has changed its rendering.
 const screenshotOptions = {
     css: `
-                    .mx_ToastContainer {
-                        background-color: magenta !important;
-                    }
-                `,
+        .mx_ToastContainer {
+            background-color: magenta !important;
+        }
+    `,
 };
 
 test.describe("Key storage out of sync toast", () => {
