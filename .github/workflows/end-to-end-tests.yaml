@@ -171,6 +171,10 @@ jobs:
               working-directory: apps/web
               run: pnpm playwright install-deps webkit
 
+            - run: echo $DOCKER_HOST
+            - run: ls -lah /run/docker/docker.sock
+            - run: ls -lah /var/run/docker.sock
+
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
               working-directory: apps/web
@@ -181,6 +185,7 @@ jobs:
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
               env:
                   SHARD: ${{ format('{0}/{1}', matrix.runner, needs.build.outputs.num-runners) }}
+                  DEBUG: testcontainers
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
