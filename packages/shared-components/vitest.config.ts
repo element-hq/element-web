@@ -5,20 +5,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defineConfig } from "vitest/config";
+import { defineConfig, ViteUserConfig } from "vitest/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import { storybookVis } from "storybook-addon-vis/vitest-plugin";
 import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { InlineConfig } from "vite";
 import { Reporter } from "vitest/reporters";
 import { env } from "process";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
-const reporters: NonNullable<InlineConfig["test"]>["reporters"] = [["default"]];
+const reporters: NonNullable<ViteUserConfig["test"]>["reporters"] = [["default"]];
 const slowTestReporter: Reporter = {
     onTestRunEnd(testModules, unhandledErrors, reason) {
         const tests = testModules
@@ -127,7 +126,8 @@ export default defineConfig({
             },
             {
                 extends: true,
-                plugins: [nodePolyfills({ include: ["util"], globals: { global: false } })],
+                // as any is workaround for https://github.com/davidmyersdev/vite-plugin-node-polyfills/issues/150
+                plugins: [nodePolyfills({ include: ["util"], globals: { global: false } }) as any],
                 test: {
                     name: "unit",
                     browser: {
