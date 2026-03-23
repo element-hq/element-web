@@ -12,7 +12,7 @@ import { createBot, deleteCachedSecrets, disableKeyBackup, logIntoElement, logIn
 import { type Bot } from "../../pages/bot";
 
 // Mask the background of the screenshot to avoid failing the test just because some
-// other component have changed its rendering.
+// other component has changed its rendering.
 const screenshotOptions = {
     css: `
                     .mx_ToastContainer {
