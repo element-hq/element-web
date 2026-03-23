@@ -146,10 +146,7 @@ jobs:
                   node-version: "lts/*"
 
             - name: Install dependencies
-              run: |
-                  pnpm install --frozen-lockfile
-                  sudo apt-get update
-                  sudo apt-get -y install fonts-dejavu libnspr4
+              run: pnpm install --frozen-lockfile
 
             - name: Get installed Playwright version
               id: playwright
@@ -165,7 +162,15 @@ jobs:
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               working-directory: apps/web
-              run: pnpm playwright install --with-deps --no-shell
+              run: pnpm playwright install --no-shell
+
+            - name: Install system dependencies for self-hosted runner
+              if: runner.environment == 'self-hosted'
+              working-directory: apps/web
+              run: |
+                  sudo pnpm playwright install-deps
+                  sudo apt-get update
+                  sudo apt-get -y install fonts-dejavu
 
             - name: Install system dependencies for WebKit
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
