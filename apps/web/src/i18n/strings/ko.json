@@ -115,7 +115,7 @@
         "show_advanced": "고급 보이기",
         "show_all": "전체 보기",
         "sign_in": "로그인",
-        "sign_out": "로그아웃",
+        "sign_out": "이 기기 로그아웃",
         "skip": "건너뛰기",
         "start": "시작하기",
         "start_chat": "대화 시작",
@@ -219,11 +219,11 @@
         "incorrect_password": "맞지 않는 비밀번호",
         "log_in_new_account": "새 계정으로 <a>로그인</a>하기.",
         "logout_dialog": {
-            "description": "로그아웃하겠습니까?",
+            "description": "정말로 이 기기를 제거하시겠습니까?",
             "megolm_export": "수동으로 키 내보내기",
             "setup_key_backup_title": "암호화된 메시지에 접근할 수 없게 됩니다",
             "setup_secure_backup_description_1": "암호화된 메시지는 종단간 암호화로 보호됩니다. 오직 당신과 상대방만 이 메시지를 읽을 수 있는 키를 갖습니다.",
-            "setup_secure_backup_description_2": "로그아웃하면 이 키들은 이 기기에서 삭제됩니다. 즉, 다른 기기에 해당 키가 있거나 서버에 백업해 두지 않는 한 암호화된 메시지를 읽을 수 없게 됩니다.",
+            "setup_secure_backup_description_2": "이 기기를 제거하면 다른 기기에 암호화 키가 있거나 서버에 백업해 두지 않은 경우, 암호화된 메시지를 읽을 수 없게 됩니다.",
             "skip_key_backup": "저는 제 암호화된 메시지를 원하지 않아요"
         },
         "misconfigured_body": "%(brand)s 관리자에게 <a>당신의 설정</a>에 잘못되거나 중복된 항목이 있는지 확인하도록 요청하세요.",
@@ -296,9 +296,9 @@
         "registration_username_validation": "소문자, 숫자, 가로선, 밑줄선만 사용할 수 있음",
         "reset_password": {
             "confirm_new_password": "새로운 비밀번호 확인",
-            "devices_logout_success": "모든 기기에서 로그아웃되었으며 더 이상 푸시 알림을 받지 못합니다. 알림을 다시 활성화하려면 각 기기에서 다시 로그인하세요.",
-            "other_devices_logout_warning_1": "기기에서 로그아웃하면 기기에 저장된 메시지 암호화 키가 삭제되어 암호화된 채팅 기록을 읽을 수 없게 됩니다.",
-            "other_devices_logout_warning_2": "암호화된 방의 채팅 기록에 계속 접근하려면 진행하기 전에 키 백업을 설정하거나 다른 기기에서 메시지 키를 내보내십시오.",
+            "devices_logout_success": "모든 기기에서 로그아웃되었으며, 더 이상 푸시 알림이 전송되지 않습니다. 알림을 다시 받으려면 각 기기에서 다시 로그인해 주세요.",
+            "other_devices_logout_warning_1": "기기를 제거하면 해당 기기에 저장된 메시지 암호화 키가 삭제되어, 암호화된 대화 기록을 읽을 수 없게 됩니다.",
+            "other_devices_logout_warning_2": "암호화된 대화방의 기록을 계속 확인하려면, 진행하기 전에 다른 기기에서 복구 키를 받거나 메시지 키를 내보내세요.",
             "password_not_entered": "새 비밀번호를 입력해주세요.",
             "passwords_mismatch": "새 비밀번호는 서로 같아야 합니다.",
             "rate_limit_error": "짧은 시간 내에 너무 많은 시도가 이루어졌습니다. 다시 시도하기 전에 잠시 기다려 주세요.",
@@ -328,8 +328,8 @@
         "server_picker_title": "홈 서버에 로그인하세요",
         "server_picker_title_default": "서버 옵션",
         "server_picker_title_registration": "호스트 계정",
-        "session_logged_out_description": "안전을 위해서 이 세션에서 로그아웃했습니다. 다시 로그인해주세요.",
-        "session_logged_out_title": "로그아웃함",
+        "session_logged_out_description": "보안을 위해 이 세션이 제거되었습니다. 다시 로그인해 주세요.",
+        "session_logged_out_title": "세션이 제거되었습니다",
         "set_email": {
             "description": "이렇게 하면 비밀번호를 다시 설정하고 알림을 받을 수 있습니다.",
             "verification_pending_description": "이메일을 확인하고 안의 링크를 클릭합니다. 모두 마치고 나서, 계속하기를 누르세요.",
@@ -369,8 +369,8 @@
             "email_resent": "재전송 완료!",
             "fallback_button": "인증 시작",
             "mas_cross_signing_reset_cta": "계정으로 계속하기",
-            "mas_cross_signing_reset_description": "이제 신원 재설정을 위해 회원님의 %(serverName)s 계정으로 이동합니다. 계정에서 재설정을 완료하신 뒤, 이 화면으로 다시 돌아와 '재시도' 버튼을 클릭해 주세요.",
-            "mas_cross_signing_reset_title": "계정으로 이동하여 신원을 재설정하세요.",
+            "mas_cross_signing_reset_description": "디지털 신원을 초기화하기 위해 %(serverName)s 계정 페이지로 이동합니다. 초기화를 완료한 후, 다시 여기로 돌아와 '다시 시도'를 클릭해 주세요.",
+            "mas_cross_signing_reset_title": "계정으로 이동하여 디지털 신원을 초기화하세요",
             "msisdn": "%(msisdn)s님에게 문자 메시지를 보냈습니다",
             "msisdn_token_incorrect": "토큰이 맞지 않음",
             "msisdn_token_prompt": "들어있던 코드를 입력해주세요:",
@@ -768,7 +768,7 @@
             "cross_signing_public_keys_on_device_status": "교차 서명 공개 키:",
             "cross_signing_ready": "교차서명을 사용할 준비가 되었습니다.",
             "cross_signing_status": "교차 서명 상태:",
-            "cross_signing_untrusted": "귀하의 계정은 비밀 저장소에 교차 서명 ID를 저장하고 있지만, 아직 이 세션에서 신뢰되지 않았습니다.",
+            "cross_signing_untrusted": "계정의 비밀 저장소에 디지털 신원이 저장되어 있으나, 현재 세션에서 아직 신뢰하도록 설정되지 않았습니다.",
             "crypto_not_available": "암호화 모듈을 사용할 수 없습니다.",
             "device_id": "기기 ID",
             "key_backup_active_version": "활성 백업 버전:",
@@ -884,10 +884,10 @@
         "user_read_up_to_private_ignore_synthetic": "사용자가 읽은 위치 (m.read.private; ignoreSynthetic):",
         "user_room_membership": "회원:%(membership)s",
         "user_verification_status": {
-            "identity_changed": "검증 상태: <E2EIcon /> 미검증, 신원 변경됨",
+            "identity_changed": "인증 상태: <E2EIcon /> 미인증 (디지털 신원 변경됨)",
             "unverified": "검증 상태: <E2EIcon /> 미검증",
             "verified": "검증 상태: <E2EIcon /> 검증됨",
-            "was_verified": "검증 상태: <E2EIcon /> 검증되었으나 신원이 변경됨"
+            "was_verified": "인증 상태: <E2EIcon /> 이전에 인증되었으나, 디지털 신원이 재설정되었습니다"
         },
         "users": "사용자",
         "value": "Value",
@@ -973,22 +973,22 @@
             "title": "새 복구 방식",
             "warning": "새 복구 방식을 설정하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요."
         },
-        "pinned_identity_changed": "%(displayName)s (<b>%(userId)s</b>)의 신원이 재설정되었습니다. <a>자세히 알아보기</a>",
-        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'의 신원이 재설정되었습니다. <a>자세히 알아보기</a>",
+        "pinned_identity_changed": "%(displayName)s(<b>%(userId)s</b>)님의 디지털 신원이 초기화되었습니다. <a>자세히 보기</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>님의 디지털 신원이 초기화되었습니다. <a>자세히 보기</a>",
         "recovery_method_removed": {
             "description_1": "이번 세션에서 보안 문구와 보안 메시지용 키가 제거된 것으로 감지되었습니다.",
             "description_2": "실수로 이 작업을 수행한 경우, 해당 세션에서 보안 메시지를 설정하면 새 복구 방법으로 해당 세션의 메시지 기록을 재암호화할 수 있습니다.",
             "title": "복구 방식 제거됨",
             "warning": "이 복구 방식을 제거하지 않으면, 공격자가 계정에 접근을 시도할 지도 모릅니다. 설정에서 계정 비밀번호를 바꾸고 즉시 새 복구 방식을 설정하세요."
         },
-        "set_up_recovery": "복구 설정",
-        "set_up_recovery_toast_description": "장치에 대한 접근 권한을 잃어버린 경우 암호화된 메시지 기록을 복원하는 데 사용할 수 있는 복구 키를 생성하십시오.",
+        "set_up_recovery": "대화 백업하기",
+        "set_up_recovery_toast_description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
         "set_up_toast_title": "보안 백업 설정",
         "setup_secure_backup": {
-            "explainer": "잃어버리지 않도록 로그아웃하기 전에 키를 백업하세요."
+            "explainer": "키를 잃어버리지 않도록 이 기기에서 로그아웃하기 전에 미리 백업해 두세요."
         },
         "turn_on_key_storage": "키 저장 기능 켜기",
-        "turn_on_key_storage_description": "암호화 신원 및 메시지 키를 서버에 안전하게 저장하십시오. 이렇게 하면 새 기기에서도 메시지 기록을 확인할 수 있습니다.",
+        "turn_on_key_storage_description": "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업에 반드시 필요합니다.",
         "udd": {
             "interactive_verification_button": "이모지를 통한 상호 인증",
             "other_ask_verify_text": "이 사용자에게 세션 확인을 요청하거나, 아래에서 수동으로 확인하십시오.",
@@ -1012,7 +1012,7 @@
             "complete_description": "성공적으로 이 사용자를 인증했습니다.",
             "complete_title": "인증되었습니다!",
             "confirm_identity_description": "보안 메시징을 설정하려면 이 장치를 확인하세요.",
-            "confirm_identity_title": "본인 인증",
+            "confirm_identity_title": "디지털 신원 확인",
             "confirm_the_emojis": "아래 이모티콘이 다른 기기에서 표시되는 것과 일치하는지 확인하세요.",
             "error_starting_description": "다른 사용자와 채팅을 시작할 수 없었습니다.",
             "error_starting_title": "검증 시작 중 오류 발생",
@@ -1096,10 +1096,10 @@
             "waiting_other_user": "%(displayName)s 의 확인을 기다리는 중…"
         },
         "verification_requested_toast_title": "검증이 요청되었습니다",
-        "verified_identity_changed": "%(displayName)s (<b>%(userId)s</b>)의 신원이 재설정되었습니다. <a>자세히 알아보기</a>",
-        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>의 신원이 재설정되었습니다.<a> 자세히 알아보기</a>",
-        "verify_toast_description": "다른 사용자들은 그것을 신뢰하지 않을 수 있습니다",
-        "verify_toast_title": "이 세션 검증",
+        "verified_identity_changed": "%(displayName)s(<b>%(userId)s</b>)님의 디지털 신원이 초기화되었습니다. <a>자세히 보기</a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>님의 디지털 신원이 초기화되었습니다. <a>자세히 보기</a>",
+        "verify_toast_description": "2026년 4월 말부터 인증되지 않은 기기는 메시지를 주고받을 수 없습니다. <a>자세히 보기</a>",
+        "verify_toast_title": "이 기기 인증하기",
         "withdraw_verification_action": "인증 취소"
     },
     "error": {
@@ -1124,15 +1124,15 @@
         "non_urgent_echo_failure_toast": "서버가 일부 <a>요청</a>에 응답하지 않습니다.",
         "resource_limits": "이 홈서버가 리소스 한도를 초과했습니다.",
         "session_restore": {
-            "clear_storage_button": "저장소를 지우고 로그아웃",
-            "clear_storage_description": "로그아웃하고 암호화 키를 제거합니까?",
-            "description_1": "이전 활동을 복구하는 중 에러가 발생했습니다.",
+            "clear_storage_button": "이 기기 로그아웃",
+            "clear_storage_description": "이 기기에서 로그아웃하며 암호화 키도 함께 삭제하시겠습니까?",
+            "description_1": "세션을 복원하는 과정에서 오류가 발생했습니다.",
             "description_2": "이전에 최근 버전의 %(brand)s을 썼다면, 세션이 이 버전과 맞지 않을 것입니다. 창을 닫고 최근 버전으로 돌아가세요.",
-            "description_3": "브라우저의 저장소를 청소한다면 문제가 해결될 수도 있지만, 암호화된 대화 기록을 읽을 수 없게 됩니다.",
+            "description_3": "브라우저 저장소를 비우면 문제가 해결될 수 있으나, 이 기기에서 로그아웃되며 암호화된 대화 기록을 더 이상 읽을 수 없게 됩니다.",
             "title": "세션을 복구할 수 없음"
         },
         "something_went_wrong": "문제가 생겼습니다!",
-        "storage_evicted_description_1": "암호화된 메시지 키를 포함한 일부 세션 데이터가 누락되었습니다. 백업에서 키를 복구하면서 로그아웃하고 로그인하면 이를 고칠 수 있습니다.",
+        "storage_evicted_description_1": "암호화 메시지 키를 포함한 일부 세션 데이터가 누락되었습니다. 이 문제를 해결하려면 이 기기에서 로그아웃한 후 다시 로그인하여 백업에서 키를 복구하세요.",
         "storage_evicted_description_2": "디스크 공간이 부족한 경우 브라우저에서 이 데이터를 제거했을 수 있습니다.",
         "storage_evicted_title": "누락된 세션 데이터",
         "sync": "홈 서버에 연결할 수 없습니다. 재시도 중…",
@@ -1547,7 +1547,7 @@
         "share_history_on_invite_warning": "이 기능은 실험용 기능으로, 모든 보안 조치가 구현되어 있지는 않습니다. 실제 운영 계정에서는 활성화하지 마십시오.",
         "sliding_sync": "슬라이딩 동기화 모드",
         "sliding_sync_description": "개발 진행 중인 기능이며 비활성화는 불가능합니다. 현재 Element Call 기능은 지원하지 않습니다.",
-        "sliding_sync_disabled_notice": "비활성화하려면 로그아웃 후 다시 로그인하세요.",
+        "sliding_sync_disabled_notice": "기능을 해제하려면 다시 로그인하세요",
         "sliding_sync_server_no_support": "서버에서 지원하지 않는 기능입니다.",
         "under_active_development": "활발한 개발 중입니다.",
         "unrealiable_e2e": "암호화된 방에서는 신뢰할 수 없음",
@@ -2482,10 +2482,10 @@
                 "breadcrumb_page": "암호화 재설정",
                 "breadcrumb_second_description": "서버에만 저장된 모든 메시지 기록이 손실됩니다.",
                 "breadcrumb_third_description": "기존 장치와 연락처를 모두 다시 확인해야 합니다.",
-                "breadcrumb_title": "정말로 신원을 재설정하시겠습니까?",
-                "breadcrumb_title_cant_confirm": "본인 인증 정보를 재설정해야 합니다.",
-                "breadcrumb_title_forgot": "복구 키를 잊으셨나요? 신원을 재설정해야 합니다.",
-                "breadcrumb_title_sync_failed": "키 저장소 동기화에 실패했습니다. 신원을 재설정해야 합니다.",
+                "breadcrumb_title": "정말로 디지털 신원을 초기화하시겠습니까?",
+                "breadcrumb_title_cant_confirm": "디지털 신원을 재설정해야 합니다",
+                "breadcrumb_title_forgot": "복구 키를 잊어버리셨나요? 디지털 신원을 초기화해야 합니다.",
+                "breadcrumb_title_sync_failed": "키 저장소 동기화에 실패했습니다. 디지털 신원을 초기화해야 합니다.",
                 "breadcrumb_warning": "계정이 해킹당했다고 생각될 때만 이 작업을 수행하십시오.",
                 "details_title": "암호화 세부 정보",
                 "do_not_close_warning": "재설정이 완료될 때까지 이 창을 닫지 마십시오",
@@ -2501,13 +2501,13 @@
                 "title": "고급 설정"
             },
             "confirm_key_storage_off": "키 저장 기능을 꺼진 상태로 유지하시겠습니까?",
-            "confirm_key_storage_off_description": "모든 기기에서 로그아웃하면 메시지 기록이 삭제되며 기존 연락처를 다시 모두 인증해야 합니다. <a>자세히 알아보기</a>",
+            "confirm_key_storage_off_description": "모든 기기를 제거(로그아웃)하면 대화 기록이 손실되며, 기존의 모든 연락처를 다시 인증해야 합니다. <a>자세히 보기</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "키 저장소 삭제",
                 "confirm": "키 저장소 삭제",
                 "description": "키 저장소를 삭제하면 서버에서 암호화 신원 및 메시지 키가 제거되며 다음 보안 기능이 비활성화됩니다:",
                 "list_first": "새 기기에서는 암호화된 메시지 기록을 확인할 수 없습니다.",
-                "list_second": "%(brand)s에서 모든 기기에서 로그아웃하면 암호화된 메시지 접근 권한을 잃게 됩니다",
+                "list_second": "모든 기기에서 로그아웃하면 암호화된 메시지를 읽을 수 없게 됩니다.",
                 "title": "정말로 키 저장소를 비활성화하고 삭제하시겠습니까?"
             },
             "device_not_verified_button": "이 장치를 확인하십시오",
@@ -2516,7 +2516,7 @@
             "dialog_title": "<strong>설정:</strong> 암호화",
             "key_storage": {
                 "allow_key_storage": "키 저장 허용",
-                "description": "암호화 신원 및 메시지 키를 서버에 안전하게 저장하세요. 이렇게 하면 새 기기에서도 메시지 기록을 확인할 수 있습니다. <a>자세히 알아보기</a>",
+                "description": "이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업에 반드시 필요합니다. <a>자세히 보기</a>",
                 "title": "키 저장소"
             },
             "recovery": {
@@ -2526,14 +2526,14 @@
                 "change_recovery_key": "복구 키 변경",
                 "change_recovery_key_description": "이 새로운 복구 키를 안전한 곳에 기록해 두십시오. 그런 다음 계속을 클릭하여 변경 사항을 확인하십시오.",
                 "change_recovery_key_title": "복구 키 변경하시겠습니까?",
-                "description": "기존의 모든 기기를 분실한 경우, 복구 키를 사용하여 암호화 ID와 메시지 기록을 복구할 수 있습니다.",
+                "description": "대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기에 접속할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다.",
                 "enter_key_error": "입력하신 복구 키가 올바르지 않습니다.",
                 "enter_recovery_key": "복구 키 확인",
                 "forgot_recovery_key": "복구 키를 잊으셨나요?",
                 "key_storage_warning": "키 저장소가 동기화되지 않았습니다. 아래 버튼 중 하나를 클릭하여 문제를 해결하세요.",
                 "save_key_description": "이 내용을 누구와도 공유하지 마십시오!",
                 "save_key_title": "복구 키",
-                "set_up_recovery": "복구 설정",
+                "set_up_recovery": "복구 키 받기",
                 "set_up_recovery_confirm_button": "설정 완료",
                 "set_up_recovery_confirm_description": "복구 설정을 완료하려면 이전 화면에 표시된 복구 키를 입력하십시오.",
                 "set_up_recovery_confirm_title": "복구 키를 입력하여 확인하십시오",
@@ -2541,7 +2541,7 @@
                 "set_up_recovery_save_key_description": "이 복구 키를 암호 관리자, 암호화된 메모 또는 물리적 금고와 같은 안전한 곳에 기록해 두십시오.",
                 "set_up_recovery_save_key_title": "복구 키를 안전한 곳에 보관하세요.",
                 "set_up_recovery_secondary_description": "계속을 클릭하면 복구 키를 생성해 드립니다.",
-                "title": "복구"
+                "title": "백업"
             },
             "title": "암호화"
         },
@@ -2829,24 +2829,24 @@
         "send_read_receipts_unsupported": "귀하의 서버는 읽음 확인 전송 비활성화를 지원하지 않습니다.",
         "send_typing_notifications": "입력 알림 보내기",
         "sessions": {
-            "best_security_note": "보안을 위해 세션을 확인하고, 인식하지 못하거나 더 이상 사용하지 않는 세션에서는 로그아웃하십시오.",
+            "best_security_note": "최상의 보안을 위해 세션을 인증하고, 인식하지 못하거나 더 이상 사용하지 않는 세션은 제거하세요.",
             "browser": "브라우저",
             "confirm_sign_out": {
-                "other": "이 기기들의 로그아웃을 확인하세요"
+                "other": "이 기기들을 제거하시겠습니까?"
             },
             "confirm_sign_out_body": {
-                "other": "아래 버튼을 클릭하여 해당 기기에서 로그아웃을 확인하세요."
+                "other": "아래 버튼을 클릭하여 기기 제거를 확정해 주세요."
             },
             "confirm_sign_out_continue": {
-                "other": "기기 로그아웃"
+                "other": "기기 제거"
             },
             "confirm_sign_out_sso": {
-                "other": "단일 로그인(SSO)을 사용하여 본인임을 확인하고 해당 기기에서 로그아웃을 확인하십시오."
+                "other": "본인 인증을 위해 싱글 사인온(SSO)을 사용하여 기기 제거를 확정해 주세요."
             },
             "current_session": "현재 세션",
             "desktop_session": "데스크톱 세션",
             "details_heading": "세션 세부 정보",
-            "device_unverified_description": "최상의 보안 및 안정성을 위해 이 세션을 확인하거나 로그아웃하십시오.",
+            "device_unverified_description": "최상의 보안과 신뢰성을 위해 이 세션을 인증하거나 제거해 주세요.",
             "device_unverified_description_current": "보안 메시징 강화를 위해 현재 세션을 확인하십시오.",
             "device_verified_description": "이 세션은 보안 메시징을 사용할 준비가 되었습니다.",
             "device_verified_description_current": "현재 세션에서 보안 메세지를 사용할 수 있습니다.",
@@ -2864,7 +2864,7 @@
             "inactive_sessions": "비활성 세션",
             "inactive_sessions_explainer_1": "비활성 세션은 일정 기간 사용하지 않은 세션이지만, 계속해서 암호화 키를 수신합니다.",
             "inactive_sessions_explainer_2": "비활성 세션을 제거하면 보안성과 성능이 향상되며, 새로운 세션이 의심스러운지 식별하기가 더 쉬워집니다.",
-            "inactive_sessions_list_description": "더 이상 사용하지 않는 오래된 세션(%(inactiveAgeDays)s 일 이상 경과)에서 로그아웃하는 것을 고려해 보세요.",
+            "inactive_sessions_list_description": "더 이상 사용하지 않는 오래된 세션(%(inactiveAgeDays)s일 이상 경과)은 제거하는 것이 좋습니다.",
             "ip": "IP 주소",
             "last_activity": "최근 활동",
             "manage": "이 세션 관리",
@@ -2894,13 +2894,13 @@
             "sign_in_with_qr_button": "QR 코드 보기",
             "sign_in_with_qr_description": "QR 코드를 사용하여 다른 기기에 로그인하고 보안 메시징을 설정하세요.",
             "sign_in_with_qr_unsupported": "귀하의 계정 제공업체에서 지원하지 않습니다.",
-            "sign_out": "이 세션에서 로그아웃합니다",
-            "sign_out_all_other_sessions": "다른 모든 기기에서 로그아웃 (%(otherSessionsCount)s)",
+            "sign_out": "이 세션 제거",
+            "sign_out_all_other_sessions": "다른 모든 세션 제거 (%(otherSessionsCount)s개)",
             "sign_out_confirm_description": {
-                "other": "%(count)s 세션에서 로그아웃하시겠습니까?"
+                "other": "정말로 세션 %(count)s개를 제거하시겠습니까?"
             },
             "sign_out_n_sessions": {
-                "other": "%(count)s개 세션에서 로그아웃"
+                "other": "세션 %(count)s개 제거"
             },
             "title": "세션목록",
             "unknown_session": "알 수 없는 세션 유형",
@@ -2909,15 +2909,15 @@
             "unverified_session_explainer_2": "이 세션을 사용할 때 암호화가 활성화된 방에는 참여할 수 없습니다.",
             "unverified_session_explainer_3": "최상의 보안 및 개인정보 보호를 위해 암호화를 지원하는 Matrix 클라이언트를 사용하는 것이 권장됩니다.",
             "unverified_sessions": "검증되지 않은 세션들",
-            "unverified_sessions_explainer_1": "미확인 세션은 사용자의 자격 증명으로 로그인했으나 교차 검증되지 않은 세션을 의미합니다.",
+            "unverified_sessions_explainer_1": "인증되지 않은 세션은 계정 정보로 로그인되었으나, 디지털 신원이 아직 확인되지 않은 세션입니다.",
             "unverified_sessions_explainer_2": "특히 이러한 세션을 반드시 확인해야 합니다. 이는 귀하의 계정이 무단으로 사용되고 있을 수 있음을 나타낼 수 있기 때문입니다.",
-            "unverified_sessions_list_description": "보안 메시징 기능을 강화하려면 세션을 확인하거나, 더 이상 사용하지 않거나 알 수 없는 세션에서 로그아웃하세요.",
+            "unverified_sessions_list_description": "더 안전한 메시지 교신을 위해 세션을 인증하세요. 인식하지 못하거나 더 이상 사용하지 않는 세션은 제거해 주세요.",
             "url": "URL",
             "verified_session": "검증된 세션",
             "verified_sessions": "검증된 세션들",
-            "verified_sessions_explainer_1": "인증된 세션은 암호를 입력하거나 다른 검증된 세션으로 본인임을 확인한 후 이 계정을 사용하는 모든 곳을 의미합니다.",
+            "verified_sessions_explainer_1": "인증된 세션은 사용자의 디지털 신원을 확인한 세션입니다.",
             "verified_sessions_explainer_2": "이는 암호화된 메시지를 해독하는 데 필요한 모든 키를 보유하고 있으며, 다른 사용자에게 본 세션을 신뢰한다는 점을 확인할 수 있음을 의미합니다.",
-            "verified_sessions_list_description": "보안을 위해, 더 이상 사용하지 않거나 본인이 아닌 세션에서는 로그아웃하십시오.",
+            "verified_sessions_list_description": "최상의 보안을 위해, 인식하지 못하거나 더 이상 사용하지 않는 세션은 모두 제거하세요.",
             "verify_session": "세션 확인",
             "web_session": "웹 세션"
         },
@@ -3086,7 +3086,7 @@
         "view": "주어진 주소로 방 보기",
         "whois": "사용자에 대한 정보를 표시합니다"
     },
-    "sliding_sync_legacy_no_longer_supported": "레거시 슬라이딩 동기화는 더 이상 지원되지 않습니다: 새 슬라이딩 동기화 플래그를 활성화하려면 로그아웃 후 다시 로그인하십시오",
+    "sliding_sync_legacy_no_longer_supported": "기존 슬라이딩 싱크 방식은 더 이상 지원되지 않습니다. 새로운 슬라이딩 싱크 설정을 활성화하려면 다시 로그인해 주세요.",
     "space": {
         "add_existing_room_space": {
             "create": "대신 새 방을 추가하시겠습니까?",
@@ -3276,7 +3276,7 @@
         "creation_summary_dm": "%(creator)s 이 DM을 생성했습니다.",
         "creation_summary_room": "%(creator)s님이 방을 만드고 설정했습니다.",
         "decryption_failure": {
-            "sender_identity_previously_verified": "발신자의 확인된 신원이 재설정되었습니다.",
+            "sender_identity_previously_verified": "보낸 사람의 인증된 디지털 신원이 초기화되었습니다",
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3411,8 +3411,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s님이 %(displayName)s님의 초대를 수락했습니다.",
             "accepted_invite": "%(targetName)s님이 초대를 수락했습니다.",
-            "ban": "%(senderName)s 님이 %(targetName)s 님을 차단했습니다.",
-            "ban_reason": "%(senderName)s 님이 %(targetName)s 님을 차단했습니다: %(reason)s",
+            "ban": "%(senderName)s님이 사용자를 차단했습니다",
+            "ban_reason": "%(senderName)s님이 사용자를 차단했습니다: %(reason)s",
             "change_avatar": "%(senderName)s님이 프로필 사진을 변경했습니다",
             "change_name": "%(oldDisplayName)s님이 표시이름을 %(displayName)s(으)로 변경했습니다",
             "change_name_avatar": "%(oldDisplayName)s님이 디스플레이 이름과 프로필 사진을 변경했습니다",
@@ -3698,7 +3698,7 @@
         "ban_space_everything": "내가 할 수 있는 모든 것에서 그들을 금지하라",
         "ban_space_specific": "내가 할 수 있는 특정 것들로부터 그들을 금지합니다.",
         "deactivate_confirm_action": "사용자 비활성화",
-        "deactivate_confirm_description": "사용자를 비활성화하면 사용자는 로그아웃되며 다시 로그인할 수 없게 됩니다. 또한 사용자는 모든 방에서 떠나게 됩니다. 이 작업은 돌이킬 수 없습니다. 이 사용자를 비활성화하겠습니까?",
+        "deactivate_confirm_description": "이 사용자를 비활성화하면 모든 기기에서 로그아웃(제거)되며 다시 로그인할 수 없게 됩니다. 또한 참여 중인 모든 대화방에서 나가게 됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 이 사용자를 비활성화하시겠습니까?",
         "deactivate_confirm_title": "사용자를 비활성화합니까?",
         "demote_button": "강등",
         "demote_self_confirm_description_space": "이 변경 사항은 되돌릴 수 없습니다. 본인이 권한을 강등하는 행위이며, 해당 스페이스에서 마지막으로 권한을 가진 사용자라면 권한을 되찾는 것이 불가능해집니다.",
