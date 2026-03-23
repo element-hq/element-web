@@ -13,8 +13,8 @@ import {
     type RoomListItemViewModel,
     type RoomListItemViewSnapshot,
     RoomNotifState,
-} from "./RoomListItemView";
-import { type RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderView";
+} from "./RoomListView/RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "./VirtualizedRoomListView/RoomListSectionHeaderView";
 import { MockViewModel } from "../core/viewmodel";
 
 /**

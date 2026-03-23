@@ -12,8 +12,8 @@ import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type Room, type RoomListItemViewModel } from "../RoomListItemView";
-import { type RoomListSectionHeaderViewModel } from "../RoomListSectionHeaderView";
+import { type Room, type RoomListItemViewModel } from "./RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/RoomListSectionHeaderView";
 
 export type RoomListSection = {
     /** Unique identifier for the section */

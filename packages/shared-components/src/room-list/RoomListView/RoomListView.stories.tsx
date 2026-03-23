@@ -9,9 +9,9 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Room } from "../RoomListItemView";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import { RoomListView, type RoomListViewSnapshot, type RoomListViewActions } from "./RoomListView";
+import type { Room } from "./RoomListItemView";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
