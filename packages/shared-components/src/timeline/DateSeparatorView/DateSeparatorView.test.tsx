@@ -12,7 +12,7 @@ import { describe, it, expect } from "vitest";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { BaseViewModel } from "../../viewmodel/BaseViewModel";
+import { BaseViewModel } from "../../core/viewmodel/BaseViewModel";
 import { DateSeparatorView, type DateSeparatorViewModel, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
 import * as stories from "./DateSeparatorView.stories";
 

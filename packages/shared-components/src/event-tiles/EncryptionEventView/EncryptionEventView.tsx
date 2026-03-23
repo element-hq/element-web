@@ -9,9 +9,9 @@ import React, { type JSX } from "react";
 import { LockSolidIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import classNames from "classnames";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import styles from "./EncryptionEventView.module.css";
-import { useI18n } from "../../utils/i18nContext";
+import { useI18n } from "../../core/i18n/i18nContext";
 import { EventTileBubble } from "../EventTileBubble";
 
 export enum EncryptionEventState {

@@ -10,10 +10,10 @@ import React, { type JSX } from "react";
 import { BlockIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { type I18nApi } from "@element-hq/element-web-module-api";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../viewmodel/useViewModel";
+import { type ViewModel } from "../../core/viewmodel/ViewModel";
+import { useViewModel } from "../../core/viewmodel/useViewModel";
 import styles from "./DecryptionFailureBodyView.module.css";
-import { useI18n } from "../../utils/i18nContext";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 /**
  * A reason code for a failure to decrypt an event.

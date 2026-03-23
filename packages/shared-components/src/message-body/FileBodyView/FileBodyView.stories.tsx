@@ -16,7 +16,7 @@ import {
     type FileBodyViewActions,
     type FileBodyViewSnapshot,
 } from "./FileBodyView";
-import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type FileBodyViewProps = FileBodyViewSnapshot & FileBodyViewActions;
