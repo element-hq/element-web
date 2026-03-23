@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type TranslationKey as _TranslationKey } from "matrix-web-i18n";
 
-import type Translations from "../core/i18n/strings/en_EN.json";
+import type Translations from "../i18n/strings/en_EN.json";
 
 declare global {
     type TranslationKey = _TranslationKey<typeof Translations>;
