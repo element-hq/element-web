@@ -149,7 +149,7 @@ jobs:
               run: |
                   pnpm install --frozen-lockfile
                   sudo apt-get update
-                  sudo apt-get -y install fonts-dejavu
+                  sudo apt-get -y install fonts-dejavu libnspr4
 
             - name: Get installed Playwright version
               id: playwright
