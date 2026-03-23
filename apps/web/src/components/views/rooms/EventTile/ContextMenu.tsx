@@ -22,7 +22,7 @@ export interface ContextMenuState {
 /**
  * Props used to render the event tile context menu at a captured pointer position.
  */
-export type ContextMenuProps = {
+export type ContextMenuProps = Readonly<{
     contextMenu: ContextMenuState;
     mxEvent: MatrixEvent;
     reactions: Relations | null;
@@ -31,7 +31,7 @@ export type ContextMenuProps = {
     tileRef: React.RefObject<EventTileOps | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFinished: () => void;
-};
+}>;
 
 export function ContextMenu({
     contextMenu,

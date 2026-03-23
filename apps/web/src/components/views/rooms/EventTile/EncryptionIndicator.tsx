@@ -11,12 +11,12 @@ import { EncryptionIndicatorMode } from "../../../../models/rooms/EventTileModel
 import { E2eMessageSharedIcon } from "./E2eMessageSharedIcon";
 import { E2ePadlock, E2ePadlockIcon } from "./E2ePadlock";
 
-type EncryptionIndicatorProps = {
+type EncryptionIndicatorProps = Readonly<{
     icon: EncryptionIndicatorMode;
     title?: string;
     sharedUserId?: string;
     roomId?: string;
-};
+}>;
 
 export function EncryptionIndicator({
     icon,

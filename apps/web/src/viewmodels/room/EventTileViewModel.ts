@@ -287,7 +287,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
         this.rebindListeners(null, props);
         this.updateReceiptListener();
-        void props.cli.decryptEventIfNeeded(props.mxEvent);
+        this.decryptEventIfNeeded();
         void this.verifyEvent();
     }
 
@@ -345,7 +345,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             previousShowReactions !== props.showReactions
         ) {
             if (previousEvent !== props.mxEvent) {
-                void props.cli.decryptEventIfNeeded(props.mxEvent);
+                this.decryptEventIfNeeded();
             }
             void this.verifyEvent();
         }
@@ -520,23 +520,23 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.updateSnapshot();
     };
 
-    private onDecrypted = (): void => {
+    private readonly onDecrypted = (): void => {
         void this.verifyEvent();
         this.updateSnapshot();
     };
 
-    private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
+    private readonly onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
         if (userId === this.props.mxEvent.getSender()) {
             void this.verifyEvent();
         }
     };
 
-    private onReplaced = (): void => {
+    private readonly onReplaced = (): void => {
         void this.verifyEvent();
         this.updateSnapshot();
     };
 
-    private onReactionsCreated = (relationType: string, eventType: string): void => {
+    private readonly onReactionsCreated = (relationType: string, eventType: string): void => {
         if (relationType !== "m.annotation" || eventType !== "m.reaction") {
             return;
         }
@@ -546,20 +546,29 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         });
     };
 
-    private updateThread = (thread: Thread): void => {
+    private readonly updateThread = (thread: Thread): void => {
         this.updateSnapshot({ thread });
     };
 
-    private onThreadUpdate = (thread: Thread): void => {
+    private readonly onThreadUpdate = (thread: Thread): void => {
         this.updateThread(thread);
     };
 
-    private onNewThread = (thread: Thread): void => {
+    private readonly onNewThread = (thread: Thread): void => {
         if (thread.id === this.props.mxEvent.getId()) {
             this.updateThread(thread);
             this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
         }
     };
+
+    private decryptEventIfNeeded(): void {
+        this.props.cli.decryptEventIfNeeded(this.props.mxEvent).catch((error) => {
+            logger.error(
+                `Error decrypting event ${this.props.mxEvent.getId()} in room ${this.props.mxEvent.getRoomId()}`,
+                error,
+            );
+        });
+    }
 
     private async verifyEvent(): Promise<void> {
         try {
@@ -1035,13 +1044,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         if (isLocalRoom(event.getRoomId()!)) return EncryptionIndicatorMode.None;
 
         if (event.isDecryptionFailure()) {
-            switch (event.decryptionFailureReason) {
-                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
-                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
-                    return EncryptionIndicatorMode.None;
-                default:
-                    return EncryptionIndicatorMode.DecryptionFailure;
-            }
+            return EventTileViewModel.getDecryptionFailureIndicatorMode(event.decryptionFailureReason);
         }
 
         if (
@@ -1057,15 +1060,32 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 : EncryptionIndicatorMode.Warning;
         }
 
-        if (props.isRoomEncrypted) {
-            if (event.status === EventStatus.ENCRYPTING) return EncryptionIndicatorMode.None;
-            if (event.status === EventStatus.NOT_SENT) return EncryptionIndicatorMode.None;
-            if (event.isState()) return EncryptionIndicatorMode.None;
-            if (event.isRedacted()) return EncryptionIndicatorMode.None;
-            if (!event.isEncrypted()) return EncryptionIndicatorMode.Warning;
+        if (!props.isRoomEncrypted || EventTileViewModel.shouldSuppressRoomEncryptionIndicator(event)) {
+            return EncryptionIndicatorMode.None;
         }
 
-        return EncryptionIndicatorMode.None;
+        return event.isEncrypted() ? EncryptionIndicatorMode.None : EncryptionIndicatorMode.Warning;
+    }
+
+    private static getDecryptionFailureIndicatorMode(
+        reason: DecryptionFailureCode | null | undefined,
+    ): EncryptionIndicatorMode {
+        switch (reason) {
+            case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+            case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                return EncryptionIndicatorMode.None;
+            default:
+                return EncryptionIndicatorMode.DecryptionFailure;
+        }
+    }
+
+    private static shouldSuppressRoomEncryptionIndicator(event: MatrixEvent): boolean {
+        return (
+            event.status === EventStatus.ENCRYPTING ||
+            event.status === EventStatus.NOT_SENT ||
+            event.isState() ||
+            event.isRedacted()
+        );
     }
 
     private static getSharedKeysUserId(

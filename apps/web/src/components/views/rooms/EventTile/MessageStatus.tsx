@@ -17,7 +17,7 @@ import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import type { IReadReceiptPosition } from "../ReadReceiptMarker";
 import type { ReadReceiptProps } from "./EventTile";
 
-interface MessageStatusProps {
+type MessageStatusProps = Readonly<{
     messageState: EventStatus | undefined;
     suppressReadReceiptAnimation: boolean;
     shouldShowSentReceipt: boolean;
@@ -27,7 +27,7 @@ interface MessageStatusProps {
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
     isTwelveHour?: boolean;
     checkUnmounting?: () => boolean;
-}
+}>;
 
 export function MessageStatus({
     messageState,

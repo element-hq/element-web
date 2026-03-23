@@ -16,7 +16,7 @@ import type { GetRelationsForEvent } from "./types";
 /**
  * Props used to render the reply preview shown ahead of the main event body.
  */
-export interface ReplyPreviewProps {
+export type ReplyPreviewProps = Readonly<{
     mxEvent: MatrixEvent;
     forExport?: boolean;
     permalinkCreator?: RoomPermalinkCreator;
@@ -28,7 +28,7 @@ export interface ReplyPreviewProps {
     isQuoteExpanded?: boolean;
     replyChainRef: React.RefObject<ReplyChain | null>;
     setQuoteExpanded: (expanded: boolean) => void;
-}
+}>;
 
 export function ReplyPreview({
     mxEvent,

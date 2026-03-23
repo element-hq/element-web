@@ -24,7 +24,7 @@ export type MessageBodyRenderTileProps = Omit<
 /**
  * Props used to render the event body content for a single tile.
  */
-export type MessageBodyProps = {
+export type MessageBodyProps = Readonly<{
     mxEvent: MatrixEvent;
     renderTileProps: MessageBodyRenderTileProps;
     timelineRenderingType: TimelineRenderingType;
@@ -33,7 +33,7 @@ export type MessageBodyProps = {
     isSeeingThroughMessageHiddenForModeration: boolean;
     permalinkCreator?: RoomPermalinkCreator;
     tileRef: React.RefObject<EventTileOps | null>;
-};
+}>;
 
 export function MessageBody({
     mxEvent,

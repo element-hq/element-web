@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ReactNode } from "react";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-type ThreadPanelSummaryProps = {
+type ThreadPanelSummaryProps = Readonly<{
     replyCount: number;
     preview: ReactNode;
-};
+}>;
 
 export function ThreadPanelSummary({ replyCount, preview }: ThreadPanelSummaryProps): JSX.Element {
     return (

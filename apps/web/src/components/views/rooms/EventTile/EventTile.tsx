@@ -21,7 +21,7 @@ export interface EventTileProps extends EventTilePresenterProps {
 }
 
 /** Renders a single timeline event tile via {@link EventTilePresenter}. */
-export function EventTile(props: EventTileProps): JSX.Element {
+export function EventTile(props: Readonly<EventTileProps>): JSX.Element {
     const { withErrorBoundary = true, layout = Layout.Group, forExport = false, ...rest } = props;
     const tileProps = { ...rest, layout, forExport };
     const tile = <EventTilePresenter {...tileProps} />;

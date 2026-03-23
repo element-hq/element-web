@@ -81,7 +81,7 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-function TextualEventWrappedView(props: FactoryProps): JSX.Element {
+function TextualEventWrappedView(props: Readonly<FactoryProps>): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new TextualEventViewModel(props));
 
     useEffect(() => {

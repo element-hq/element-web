@@ -14,10 +14,10 @@ import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
 import { type ButtonEvent } from "../../elements/AccessibleButton";
 
-type ThreadToolbarProps = {
+type ThreadToolbarProps = Readonly<{
     viewInRoom: (evt: ButtonEvent) => void;
     copyLinkToThread: (evt: ButtonEvent) => void;
-};
+}>;
 
 export function ThreadToolbar({ viewInRoom, copyLinkToThread }: ThreadToolbarProps): JSX.Element {
     return (

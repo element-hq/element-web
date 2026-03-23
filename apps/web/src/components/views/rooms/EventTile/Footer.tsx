@@ -12,7 +12,7 @@ import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
 import { Layout } from "../../../../settings/enums/Layout";
 import { ReactionsRow } from "./ReactionsRow";
 
-interface FooterProps {
+type FooterProps = Readonly<{
     mxEvent: MatrixEvent;
     reactions: Relations | null;
     isRedacted?: boolean;
@@ -20,7 +20,7 @@ interface FooterProps {
     isOwnEvent: boolean;
     layout?: Layout;
     tileContentId: string;
-}
+}>;
 
 export const Footer = memo(function Footer({
     mxEvent,

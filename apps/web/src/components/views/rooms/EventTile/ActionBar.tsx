@@ -16,7 +16,7 @@ import type { EventTileOps, GetRelationsForEvent } from "./types";
 /**
  * Props used to render the interactive message action bar for a tile.
  */
-export type ActionBarProps = {
+export type ActionBarProps = Readonly<{
     mxEvent: MatrixEvent;
     reactions: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
@@ -28,7 +28,7 @@ export type ActionBarProps = {
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFocusChange: (focused: boolean) => void;
     toggleThreadExpanded: () => void;
-};
+}>;
 
 export function ActionBar({
     mxEvent,

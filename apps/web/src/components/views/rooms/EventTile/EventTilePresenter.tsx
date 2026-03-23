@@ -1174,7 +1174,7 @@ function useEventTileViewProps({
             timelineRenderingType: roomContext.timelineRenderingType,
             rootClassName,
             contentClassName,
-            ariaLive: props.eventSendStatus !== null ? "off" : undefined,
+            ariaLive: props.eventSendStatus === null ? undefined : "off",
             scrollTokens: snapshot.scrollToken,
             isOwnEvent: snapshot.isOwnEvent,
             content,
