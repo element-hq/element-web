@@ -228,36 +228,36 @@ interface TimelineEventsMetadata {
     lastShownNonLocalEchoIndex: number;
 }
 
-interface IOpaqueTimelineRow {
+interface OpaqueTimelineRow {
     kind: "opaque";
     key: string;
     node: ReactNode;
 }
 
-interface IDateSeparatorTimelineRow {
+interface DateSeparatorTimelineRow {
     kind: "date-separator";
     key: string;
     roomId: string;
     ts: number;
 }
 
-interface ILateEventSeparatorTimelineRow {
+interface LateEventSeparatorTimelineRow {
     kind: "late-event-separator";
     key: string;
     text: string;
 }
 
-interface ISpinnerTimelineRow {
+interface SpinnerTimelineRow {
     kind: "spinner";
     key: string;
 }
 
-interface ITypingIndicatorTimelineRow {
+interface TypingIndicatorTimelineRow {
     kind: "typing-indicator";
     key: string;
 }
 
-interface IEventTimelineRow {
+interface EventTimelineRow {
     kind: "event";
     key: string;
     eventId: string;
@@ -273,12 +273,12 @@ interface IEventTimelineRow {
 }
 
 type TimelineRow =
-    | IOpaqueTimelineRow
-    | IDateSeparatorTimelineRow
-    | ILateEventSeparatorTimelineRow
-    | ISpinnerTimelineRow
-    | ITypingIndicatorTimelineRow
-    | IEventTimelineRow;
+    | OpaqueTimelineRow
+    | DateSeparatorTimelineRow
+    | LateEventSeparatorTimelineRow
+    | SpinnerTimelineRow
+    | TypingIndicatorTimelineRow
+    | EventTimelineRow;
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -695,7 +695,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private getTimelineEventsMetadata(events: WrappedEvent[]): TimelineEventsMetadata {
         let lastShownEvent: MatrixEvent | undefined;
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
-
         let foundLastSuccessfulEvent = false;
         let lastShownNonLocalEchoIndex = -1;
 
@@ -706,23 +705,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 continue;
             }
 
-            if (lastShownEvent === undefined) {
-                lastShownEvent = event;
-            }
-
-            if (!foundLastSuccessfulEvent && this.isSentState(event) && isEligibleForSpecialReceipt(event)) {
-                foundLastSuccessfulEvent = true;
-                // If we are not sender of this last successful event eligible for special receipt then we stop here
-                // As we do not want to render our sent receipt if there are more receipts below it and events sent
-                // by other users get a synthetic read receipt for their sent events.
-                if (event.getSender() === userId) {
-                    events[i].lastSuccessfulWeSent = true;
-                }
-            }
-
-            if (lastShownNonLocalEchoIndex < 0 && !event.status) {
-                lastShownNonLocalEchoIndex = i;
-            }
+            lastShownEvent ??= event;
+            ({ foundLastSuccessfulEvent, lastShownNonLocalEchoIndex } = this.updateTimelineMetadata(
+                event,
+                events[i],
+                i,
+                userId,
+                foundLastSuccessfulEvent,
+                lastShownNonLocalEchoIndex,
+            ));
 
             if (lastShownNonLocalEchoIndex >= 0 && foundLastSuccessfulEvent) {
                 break;
@@ -734,6 +725,31 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             lastShownEvent,
             lastShownNonLocalEchoIndex,
         };
+    }
+
+    private updateTimelineMetadata(
+        event: MatrixEvent,
+        wrappedEvent: WrappedEvent,
+        index: number,
+        userId: string,
+        foundLastSuccessfulEvent: boolean,
+        lastShownNonLocalEchoIndex: number,
+    ): { foundLastSuccessfulEvent: boolean; lastShownNonLocalEchoIndex: number } {
+        if (!foundLastSuccessfulEvent && this.isSentState(event) && isEligibleForSpecialReceipt(event)) {
+            foundLastSuccessfulEvent = true;
+            // If we are not sender of this last successful event eligible for special receipt then we stop here
+            // As we do not want to render our sent receipt if there are more receipts below it and events sent
+            // by other users get a synthetic read receipt for their sent events.
+            if (event.getSender() === userId) {
+                wrappedEvent.lastSuccessfulWeSent = true;
+            }
+        }
+
+        if (lastShownNonLocalEchoIndex < 0 && !event.status) {
+            lastShownNonLocalEchoIndex = index;
+        }
+
+        return { foundLastSuccessfulEvent, lastShownNonLocalEchoIndex };
     }
 
     private initialiseReadReceiptsByEvent(events: WrappedEvent[]): void {
@@ -964,7 +980,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         });
     }
 
-    private renderTimelineRow = (row: TimelineRow): ReactNode => {
+    private readonly renderTimelineRow = (row: TimelineRow): ReactNode => {
         switch (row.kind) {
             case "opaque":
                 return row.node;
@@ -1158,7 +1174,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return receiptsByEvent;
     }
 
-    private collectEventTile = (eventId: string, node: UnwrappedEventTile | null): void => {
+    private readonly collectEventTile = (eventId: string, node: UnwrappedEventTile | null): void => {
         if (node) {
             this.eventTiles[eventId] = node;
         } else {
@@ -1166,7 +1182,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     };
 
-    private getScrollPanel = (panel: IScrollHandle | null): void => {
+    private readonly getScrollPanel = (panel: IScrollHandle | null): void => {
         this.scrollPanel.current = panel;
     };
 
