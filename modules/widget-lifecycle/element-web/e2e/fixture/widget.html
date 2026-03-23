@@ -1,0 +1,76 @@
+<!--
+    Minimal fixture widget used by e2e tests to exercise the Matrix Widget API lifecycle:
+      1. Element requests capabilities  → widget declares what it needs
+      2. Element notifies approval      → widget requests an OpenID token
+      3. Element grants the token       → widget resolves the user's Matrix ID and displays it
+
+    The `caps` query parameter controls which capabilities the widget requests (comma-separated).
+    Pass `caps=none` to request none. Defaults to m.room.topic if omitted.
+    The `hsUrl` query parameter is required for the OpenID userinfo lookup in step 3.
+-->
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Demo Widget</title>
+        <script>
+            const getCapabilities = () => {
+                const caps = new URLSearchParams(window.location.search).get("caps");
+                if (!caps) {
+                    return ["org.matrix.msc2762.receive.state_event:m.room.topic"];
+                }
+                if (caps === "none") return [];
+                return caps
+                    .split(",")
+                    .map((cap) => cap.trim())
+                    .filter(Boolean);
+            };
+
+            let sendEventCount = 0;
+            window.onmessage = async (ev) => {
+                if (ev.data.action === "capabilities") {
+                    // Step 1: Element is asking what capabilities this widget needs.
+                    window.parent.postMessage(
+                        Object.assign(
+                            {
+                                response: {
+                                    capabilities: getCapabilities(),
+                                },
+                            },
+                            ev.data,
+                        ),
+                        "*",
+                    );
+                } else if (ev.data.action === "notify_capabilities") {
+                    // Step 2: Capabilities have been approved. Request an OpenID token
+                    // so we can identify the current user in step 3.
+                    window.parent.postMessage(
+                        {
+                            api: "fromWidget",
+                            widgetId: ev.data.widgetId,
+                            requestId: "widget-" + sendEventCount,
+                            action: "get_openid",
+                            data: {},
+                        },
+                        "*",
+                    );
+                } else if (ev.data.action === "get_openid" && ev.data.response?.state === "allowed") {
+                    // Step 3: Token granted — exchange it for the user's Matrix ID and display it.
+                    // Tests assert on this heading to verify identity was passed through correctly.
+                    const { access_token } = ev.data.response;
+
+                    const hsUrl = new URLSearchParams(window.location.search).get("hsUrl");
+                    const response = await fetch(
+                        `${hsUrl}/_matrix/federation/v1/openid/userinfo?access_token=${access_token}`,
+                    );
+                    const { sub } = await response.json();
+
+                    const titleElement = document.getElementById("title");
+                    titleElement.innerText = `Hello ${sub}!`;
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <h1 id="title">Hello unknown!</h1>
+    </body>
+</html>
