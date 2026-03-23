@@ -357,7 +357,7 @@ const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
     );
 });
 
-function EventTileViewComponent(props: EventTileViewProps): JSX.Element {
+function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Element {
     const {
         as,
         rootRef,
