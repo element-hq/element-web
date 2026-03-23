@@ -12,18 +12,18 @@ import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import {
     WidgetContextMenuViewModel,
     type WidgetContextMenuViewModelProps,
-} from "../../../src/viewmodels/right-panel/WidgetContextMenuViewModel";
-import { stubClient } from "../../test-utils";
-import WidgetUtils from "../../../src/utils/WidgetUtils";
-import { type IApp } from "../../../src/utils/WidgetUtils-types";
-import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
-import * as livestream from "../../../src/Livestream";
-import Modal from "../../../src/Modal";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
-import * as widgetStore from "../../../src/stores/WidgetStore";
-import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
-import { type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging";
+} from "../../../../src/viewmodels/room/right-panel/WidgetContextMenuViewModel";
+import { stubClient } from "../../../test-utils";
+import WidgetUtils from "../../../../src/utils/WidgetUtils";
+import { type IApp } from "../../../../src/utils/WidgetUtils-types";
+import { WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
+import * as livestream from "../../../../src/Livestream";
+import Modal from "../../../../src/Modal";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import * as widgetStore from "../../../../src/stores/WidgetStore";
+import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
+import { type WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
 
 describe("WidgetContextMenuViewModel", () => {
     const widgetId = "w1";

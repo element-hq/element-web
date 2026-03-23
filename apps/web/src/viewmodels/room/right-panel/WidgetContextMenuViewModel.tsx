@@ -17,22 +17,22 @@ import {
 } from "@element-hq/web-shared-components";
 import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
-import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
-import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
-import { _t } from "../../languageHandler";
-import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../Livestream";
-import Modal from "../../Modal";
-import SettingsStore from "../../settings/SettingsStore";
-import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
-import { WidgetMessagingStore } from "../../stores/widgets/WidgetMessagingStore";
-import { isAppWidget } from "../../stores/WidgetStore";
-import WidgetUtils from "../../utils/WidgetUtils";
-import { WidgetType } from "../../widgets/WidgetType";
-import { ModuleRunner } from "../../modules/ModuleRunner";
-import { ElementWidget, type WidgetMessaging } from "../../stores/widgets/WidgetMessaging";
-import dis from "../../dispatcher/dispatcher";
+import ErrorDialog from "../../../components/views/dialogs/ErrorDialog";
+import QuestionDialog from "../../../components/views/dialogs/QuestionDialog";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
+import { _t } from "../../../languageHandler";
+import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
+import Modal from "../../../Modal";
+import SettingsStore from "../../../settings/SettingsStore";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
+import { isAppWidget } from "../../../stores/WidgetStore";
+import WidgetUtils from "../../../utils/WidgetUtils";
+import { WidgetType } from "../../../widgets/WidgetType";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { ElementWidget, type WidgetMessaging } from "../../../stores/widgets/WidgetMessaging";
+import dis from "../../../dispatcher/dispatcher";
 
 const checkRevokeButtonState = (
     cli: MatrixClient,
