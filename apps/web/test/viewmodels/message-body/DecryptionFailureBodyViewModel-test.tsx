@@ -8,7 +8,7 @@
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 import { DecryptionFailureReason } from "@element-hq/web-shared-components";
 
-import { DecryptionFailureBodyViewModel } from "../../../src/viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { DecryptionFailureBodyViewModel } from "../../../src/viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
 
 describe("DecryptionFailureBodyViewModel", () => {
     it("should return the snapshot", () => {

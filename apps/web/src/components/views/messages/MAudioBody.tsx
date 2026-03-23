@@ -19,7 +19,7 @@ import { type IBodyProps } from "./IBodyProps";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
-import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
+import { AudioPlayerViewModel } from "../../../viewmodels/room/timeline/event-tile/body/AudioPlayerViewModel";
 import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
 
 interface IState {

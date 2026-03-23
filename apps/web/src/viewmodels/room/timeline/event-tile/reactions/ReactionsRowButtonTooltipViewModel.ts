@@ -12,9 +12,9 @@ import {
     type ReactionsRowButtonTooltipViewModel as ReactionsRowButtonTooltipViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-import { _t } from "../../languageHandler";
-import { formatList } from "../../utils/FormattingUtils";
-import { unicodeToShortcode } from "../../HtmlUtils";
+import { _t } from "../../../../../languageHandler";
+import { formatList } from "../../../../../utils/FormattingUtils";
+import { unicodeToShortcode } from "../../../../../HtmlUtils";
 import { REACTION_SHORTCODE_KEY } from "./reactionShortcode";
 
 export interface ReactionsRowButtonTooltipViewModelProps {
