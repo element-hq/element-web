@@ -91,10 +91,7 @@ export class TileErrorViewModel
     public setDeveloperMode(developerMode: boolean): void {
         if (this.props.developerMode === developerMode) return;
 
-        this.props = {
-            ...this.props,
-            developerMode,
-        };
+        this.props.developerMode = developerMode
 
         const nextViewSourceCtaLabel = getViewSourceCtaLabel(developerMode);
         if (this.snapshot.current.viewSourceCtaLabel !== nextViewSourceCtaLabel) {
