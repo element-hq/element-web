@@ -52,7 +52,7 @@ export default defineConfig({
         dts({
             rollupTypes: true,
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.test.{ts,tsx}"],
+            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
             copyDtsFiles: true,
         }),
     ],
