@@ -28,11 +28,7 @@ const TileErrorViewWrapperImpl = ({
         onViewSourceClick: onViewSourceClick ?? fn(),
     });
 
-    return (
-        <ul>
-            <TileErrorView vm={vm} className={className} />
-        </ul>
-    );
+    return <TileErrorView vm={vm} className={className} />;
 };
 
 const TileErrorViewWrapper = withViewDocs(TileErrorViewWrapperImpl, TileErrorView);
@@ -41,6 +37,13 @@ const meta = {
     title: "MessageBody/TileErrorView",
     component: TileErrorViewWrapper,
     tags: ["autodocs"],
+    decorators: [
+        (Story): JSX.Element => (
+            <ul>
+                <Story />
+            </ul>
+        ),
+    ],
     args: {
         message: "Can't load this message",
         eventType: "m.room.message",
