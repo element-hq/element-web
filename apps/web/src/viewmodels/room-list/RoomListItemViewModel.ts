@@ -83,7 +83,7 @@ export class RoomListItemViewModel
         });
 
         // Subscribe to call state changes
-        this.disposables.trackListener(CallStore.instance, CallStoreEvent.ConnectedCalls, this.onCallStateChanged);
+        this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallStateChanged);
         // If there is an active call for this room, listen to participant changes
         this.listenToCallParticipants();
 
