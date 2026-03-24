@@ -8,8 +8,6 @@ on:
                 required: false
             APPLE_ID_PASSWORD:
                 required: false
-            APPLE_TEAM_ID:
-                required: false
             APPLE_CSC_KEY_PASSWORD:
                 required: false
             APPLE_CSC_LINK:
@@ -26,7 +24,7 @@ on:
             sign:
                 type: string
                 required: false
-                description: "Whether to sign & notarise the build, requires 'packages.element.io' environment"
+                description: "Whether to sign & notarise the build, requires 'Desktop Apple' environment"
             base-url:
                 type: string
                 required: false
@@ -73,7 +71,7 @@ jobs:
     build:
         name: Build macOS Universal
         runs-on: macos-15 # M1
-        environment: ${{ inputs.sign && 'packages.element.io' || '' }}
+        environment: ${{ inputs.sign && 'Desktop Apple' || '' }}
         steps:
             - uses: maxim-lobanov/setup-xcode@60606e260d2fc5762a71e64e74b2174e8ea3c8bd # v1
               with:
@@ -137,7 +135,7 @@ jobs:
               run: |
                   pnpm run build:universal --publish never -m ${TARGETS}
               env:
-                  APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+                  APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
                   APPLE_ID: ${{ secrets.APPLE_ID }}
                   APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
                   CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}

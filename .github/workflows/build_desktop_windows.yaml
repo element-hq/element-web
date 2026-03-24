@@ -33,7 +33,7 @@ on:
             sign:
                 type: string
                 required: false
-                description: "Whether to sign & notarise the build, requires 'packages.element.io' environment"
+                description: "Whether to sign & notarise the build, requires 'Desktop eSigner' environment"
             blob_report:
                 type: boolean
                 required: false
@@ -81,7 +81,7 @@ jobs:
     build:
         name: Build Windows ${{ inputs.arch }}
         runs-on: windows-2025
-        environment: ${{ inputs.sign && 'packages.element.io' || '' }}
+        environment: ${{ inputs.sign && 'Desktop eSigner' || '' }}
         env:
             SIGNTOOL_PATH: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/signtool.exe"
         steps:

@@ -77,6 +77,7 @@ jobs:
             # it to be enabled to test Electron apps, so turn it back on.
             - name: Set EnableNodeCliInspectArguments fuse enabled
               run: $RUN_AS npx @electron/fuses write --app "$EXECUTABLE" EnableNodeCliInspectArguments=on
+              working-directory: apps/desktop
               shell: bash
               env:
                   # We need sudo on Linux as it is installed in /opt/

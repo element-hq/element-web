@@ -78,7 +78,8 @@
             "jsdom": "patches/jsdom.patch",
             "rollup": "patches/rollup.patch",
             "knip": "patches/knip.patch",
-            "postcss-mixins": "patches/postcss-mixins.patch"
+            "postcss-mixins": "patches/postcss-mixins.patch",
+            "app-builder-lib": "patches/app-builder-lib.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
