@@ -143,6 +143,9 @@ export class VideoBodyViewModel
         return `${w}/${h}`;
     }
 
+    /**
+     * Compute the rendered video dimensions from the event metadata and current image-size setting.
+     */
     private static getDimensions(mxEvent: MatrixEvent, imageSize: ImageSize): Required<{ w?: number; h?: number }> {
         const { w, h } = (mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined) ?? {};
         return suggestedVideoSize(imageSize, { w, h });
