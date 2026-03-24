@@ -18,10 +18,7 @@ import {
 } from "./TileErrorView";
 
 type WrapperProps = TileErrorViewSnapshot &
-    Partial<TileErrorViewActions> & {
-        className?: string;
-        layout?: TileErrorViewLayout;
-    };
+    Partial<TileErrorViewActions> & Omit<TileErrorViewProps, "vm">;
 
 const TileErrorViewWrapper = ({
     className,
