@@ -64,6 +64,7 @@
         "lodash": "npm:lodash-es@^4.17.21",
         "matrix-web-i18n": "catalog:",
         "react-merge-refs": "^3.0.2",
+        "react-resizable-panels": "^4.6.5",
         "react-virtuoso": "^4.14.0",
         "temporal-polyfill": "^0.3.0"
     },
