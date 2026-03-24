@@ -61,6 +61,14 @@ interface TileErrorViewProps {
     layout?: TileErrorViewLayout;
 }
 
+/**
+ * Renders a timeline tile fallback when message content cannot be displayed.
+ *
+ * The component shows the fallback error message from the view model, optionally
+ * appends the event type in parentheses, and can render bug-report and view-source
+ * actions when their labels are provided. The `layout` prop lets the host choose
+ * the timeline presentation variant.
+ */
 export function TileErrorView({ vm, className, layout = "group" }: Readonly<TileErrorViewProps>): JSX.Element {
     const { message, eventType, bugReportCtaLabel, viewSourceCtaLabel } = useViewModel(vm);
 
