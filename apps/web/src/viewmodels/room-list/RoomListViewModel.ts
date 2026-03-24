@@ -76,6 +76,10 @@ export class RoomListViewModel
     // State tracking
     private activeFilter: FilterEnum | undefined = undefined;
     private roomsResult: RoomsResult;
+    /**
+     * List of sections to display in the room list, derived from roomsResult and section header view model expansion state.
+     */
+    private sections: Section[] = [];
     private lastActiveRoomPosition: StickyRoomPosition | undefined = undefined;
 
     // Child view model management
@@ -116,11 +120,12 @@ export class RoomListViewModel
                 filterKeys: undefined,
             },
             isFlatList,
-            sections,
+            sections: toRoomListSection(sections),
             canCreateRoom,
         });
 
         this.roomsResult = roomsResult;
+        this.sections = sections;
 
         // Build initial roomsMap from roomsResult
         this.updateRoomsMap(roomsResult);
@@ -301,7 +306,7 @@ export class RoomListViewModel
         if (!currentRoomId) return;
 
         const { delta, unread } = payload;
-        const rooms = this.roomsResult.sections.flatMap((section) => section.rooms);
+        const rooms = this.sections.flatMap((section) => section.rooms);
 
         const filteredRooms = unread
             ? // Filter the rooms to only include unread ones and the active room
@@ -393,9 +398,7 @@ export class RoomListViewModel
             return undefined;
         }
 
-        const index = this.roomsResult.sections
-            .flatMap((section) => section.rooms)
-            .findIndex((room) => room.roomId === roomId);
+        const index = this.sections.flatMap((section) => section.rooms).findIndex((room) => room.roomId === roomId);
         return index >= 0 ? index : undefined;
     }
 
@@ -485,18 +488,18 @@ export class RoomListViewModel
         // Rebuild roomsMap with the reordered rooms
         this.updateRoomsMap(this.roomsResult);
 
-        // Calculate the active room index after applying sticky logic
-        const activeRoomIndex = this.getActiveRoomIndex(roomId);
-
         // Track the current active room position for future sticky calculations
         this.lastActiveRoomPosition = roomId ? this.findRoomPosition(this.roomsResult.sections, roomId) : undefined;
 
         // Build the complete state atomically to ensure consistency
-        // roomIds and roomListState must always be in sync
         const { sections, isFlatList } = computeSections(
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
+        this.sections = sections;
+
+        // Calculate the active room index from the computed sections (which exclude collapsed sections' rooms)
+        const activeRoomIndex = this.getActiveRoomIndex(roomId);
 
         // Update filter keys - only update if they have actually changed to prevent unnecessary re-renders of the room list
         const previousFilterKeys = this.snapshot.current.roomListState.filterKeys;
@@ -511,13 +514,16 @@ export class RoomListViewModel
         const isRoomListEmpty = this.roomsResult.sections.every((section) => section.rooms.length === 0);
         const isLoadingRooms = RoomListStoreV3.instance.isLoadingRooms;
 
+        const viewSections = toRoomListSection(this.sections);
+        const previousSections = this.snapshot.current.sections;
+
         // Single atomic snapshot update
         this.snapshot.merge({
             isLoadingRooms,
             isRoomListEmpty,
             activeFilterId,
             roomListState,
-            sections,
+            sections: keepIfSame(previousSections, viewSections),
             isFlatList,
         });
     }
@@ -545,25 +551,31 @@ export class RoomListViewModel
  * Compute the sections to display in the room list based on the rooms result and section expansion state.
  * @param roomsResult - The current rooms result containing sections and rooms
  * @param isSectionExpanded - A function that takes a section tag and returns whether that section is currently expanded
- * @returns An object containing the computed sections with room IDs (empty if section is collapsed) and a boolean indicating if the list should be displayed as a flat list (only one section with all rooms)
+ * @returns An object containing the computed sections (with rooms removed for collapsed sections) and a boolean indicating if this is a flat list (only one section with all rooms)
  */
 function computeSections(
     roomsResult: RoomsResult,
     isSectionExpanded: (tag: string) => boolean,
-): { sections: RoomListSection[]; isFlatList: boolean } {
+): { sections: Section[]; isFlatList: boolean } {
     const sections = roomsResult.sections
-        .map(({ tag, rooms }) => ({
-            id: tag,
-            roomIds: rooms.map((room) => room.roomId),
-        }))
         // Only include sections that have rooms
-        .filter((section) => section.roomIds.length > 0)
+        .filter((section) => section.rooms.length > 0)
         // Remove roomIds for sections that are currently collapsed according to their section header view model
         .map((section) => ({
             ...section,
-            roomIds: isSectionExpanded(section.id) ? section.roomIds : [],
+            rooms: isSectionExpanded(section.tag) ? section.rooms : [],
         }));
-    const isFlatList = sections.length === 1 && sections[0].id === CHATS_TAG;
+    const isFlatList = sections.length === 1 && sections[0].tag === CHATS_TAG;
 
     return { sections, isFlatList };
+}
+
+/**
+ * Convert from the internal Section type used in the view model to the RoomListSection type used in the snapshot.
+ */
+function toRoomListSection(sections: Section[]): RoomListSection[] {
+    return sections.map(({ tag, rooms }) => ({
+        id: tag,
+        roomIds: rooms.map((room) => room.roomId),
+    }));
 }

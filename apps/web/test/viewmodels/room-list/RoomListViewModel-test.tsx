@@ -7,6 +7,7 @@
 
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import { waitFor } from "jest-matrix-react";
 
 import { createTestClient, flushPromises, mkStubRoom, stubClient } from "../../test-utils";
 import RoomListStoreV3, { CHATS_TAG, RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
@@ -730,6 +731,29 @@ describe("RoomListViewModel", () => {
                 // Other sections remain unaffected
                 const chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
                 expect(chatsSection!.roomIds).toEqual(["!reg1:server", "!reg2:server"]);
+            });
+
+            it("should compute activeRoomIndex relative to visible rooms when a section is collapsed", async () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Collapse the favourite section (which has 2 rooms: fav1, fav2)
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                favHeader.onClick();
+                expect(favHeader.isExpanded).toBe(false);
+
+                // Select regularRoom1, which is the first room in the chats section
+                jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!reg1:server");
+                dispatcher.dispatch({
+                    action: Action.ActiveRoomChanged,
+                    newRoomId: "!reg1:server",
+                });
+
+                await waitFor(() => {
+                    const snapshot = viewModel.getSnapshot();
+                    // The favourite section is collapsed so its 2 rooms are not visible.
+                    // regularRoom1 should be at index 0 in the visible list, not index 2.
+                    expect(snapshot.roomListState.activeRoomIndex).toBe(0);
+                });
             });
 
             it("should restore room IDs when a section is re-expanded", () => {
