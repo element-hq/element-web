@@ -53,6 +53,13 @@ function getViewSourceCtaLabel(developerMode: boolean): string | undefined {
     return developerMode ? _t("action|view_source") : undefined;
 }
 
+/**
+ * ViewModel for the tile error fallback, providing the snapshot shown when a tile fails to render.
+ *
+ * The snapshot includes the fallback message, the event type, and optional bug-report
+ * and view-source action labels. The view model also exposes click handlers for those
+ * actions, opening the bug-report or view-source dialog when available.
+ */
 export class TileErrorViewModel
     extends BaseViewModel<TileErrorViewSnapshotInterface, TileErrorViewModelProps>
     implements TileErrorViewModelInterface
