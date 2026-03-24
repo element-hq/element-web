@@ -1,5 +1,0 @@
-*                         @element-hq/element-web-reviewers
-/.github/workflows/**     @element-hq/element-web-team
-/package.json             @element-hq/element-web-team
-/pnpm-lock.yaml           @element-hq/element-web-team
-/src/i18n/strings
