@@ -98,6 +98,12 @@
     }
 }
 
+.mx_ThreadsActivityCentre_menu {
+    /* Override compound's default 320px cap */
+    max-inline-size: 640px !important;
+    inline-size: 640px !important;
+}
+
 .mx_ThreadsActivityCentre_rows {
     overflow-y: scroll;
     /* Let some space at the top and the bottom of the pop-up */
@@ -111,8 +117,6 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            /* Arbitrary size, keep the TAC as the wanted width */
-            width: 202px;
         }
     }
 
@@ -131,6 +135,24 @@
         & > .mx_DecoratedRoomAvatar {
             margin-inline-end: 0 !important;
             flex-shrink: 0;
+        }
+
+        /* Push compound's nav-hint chevron to the trailing edge of the flex row */
+        & > svg {
+            order: 999;
+            flex-shrink: 0;
+        }
+
+        /* Notification dot sits at the trailing edge; chevron replaces it on hover */
+        & > .mx_NotificationBadge {
+            order: 998;
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        /* Override compound's hide rule for the text content only — the dot stays hidden */
+        &:hover > svg ~ .mx_ThreadsActivityCentreThreadRow_content {
+            display: flex !important;
         }
 
         .mx_ThreadsActivityCentreThreadRow_content {
