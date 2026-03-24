@@ -162,6 +162,9 @@ export class VideoBodyViewModel
         return media.srcHttp ?? undefined;
     }
 
+    /**
+     * Resolve the best thumbnail or poster URL for the current video state.
+     */
     private static getThumbnailUrl(props: VideoBodyViewModelProps, state: InternalState): string | null {
         if (props.forExport) {
             return null;
