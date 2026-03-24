@@ -1,4 +1,4 @@
-![Build](https://github.com/vector-im/element-desktop/actions/workflows/build.yaml/badge.svg)
+![Build](https://github.com/vector-im/element-desktop/actions/workflows/build_desktop_and_deploy.yaml/badge.svg)
 ![Static Analysis](https://github.com/vector-im/element-desktop/actions/workflows/static_analysis.yaml/badge.svg)
 [![Localazy](https://img.shields.io/endpoint?url=https%3A%2F%2Fconnect.localazy.com%2Fstatus%2Felement-web%2Fdata%3Fcontent%3Dall%26title%3Dlocalazy%26logo%3Dtrue)](https://localazy.com/p/element-web)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-desktop&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-desktop)
@@ -52,10 +52,7 @@ If you only want to run the app locally and don't need to build packages, you ca
 provide the `webapp` directory directly:
 
 ```
-# Assuming you've checked out and built a copy of element-web in ../element-web.
-# Note that you will not be able to `pnpm build` after this, but `pnpm start`
-# will work fine.
-ln -s ../element-web/webapp ./
+ln -s ../web/webapp ./
 ```
 
 [TODO: add support for fetching develop builds, arbitrary URLs and arbitrary paths]

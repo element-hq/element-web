@@ -71,25 +71,6 @@ the default for PRs labelled with `T-Task`):
 
 _Remove outdated comment from `Ungulates.ts`_
 
-```
-Notes: none
-```
-
-Sometimes, you're fixing a bug in a downstream project, in which case you want
-an entry in that project's changelog. You can do that too:
-
-_Fix another herding bug_
-
-```
-Notes: Fix a bug where the `herd()` function would only work on Tuesdays
-element-web notes: Fix a bug where the 'Herd' button only worked on Tuesdays
-```
-
-This example is for Element Web. You can specify:
-
-- element-web
-- element-desktop
-
 If your PR introduces a breaking change, use the `Notes` section in the same
 way, additionally adding the `X-Breaking-Change` label (see below). There's no need
 to specify in the notes that it's a breaking change - this will be added

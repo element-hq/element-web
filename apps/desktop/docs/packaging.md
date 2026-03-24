@@ -1,11 +1,11 @@
 ## Packaging nightlies
 
-Element Desktop nightly builds are build automatically by the [Github Actions workflow](https://github.com/vector-im/element-desktop/blob/develop/.github/workflows/build_and_deploy.yaml).
+Element Desktop nightly builds are build automatically by the [Github Actions workflow](https://github.com/vector-im/element-web/blob/develop/.github/workflows/build_desktop_and_deploy.yaml).
 The schedule is currently set for once a day at 9am UTC. It will deploy to packages.element.io upon completion.
 
 ## Triggering a manual nightly build
 
-Simply go to https://github.com/vector-im/element-desktop/actions/workflows/build_and_deploy.yaml
+Simply go to https://github.com/vector-im/element-web/actions/workflows/build_desktop_and_deploy.yaml
 
 1. Click `Run workflow`
 1. Feel free to make changes to the checkboxes depending on the circumstances

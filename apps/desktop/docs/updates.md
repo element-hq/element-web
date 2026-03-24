@@ -2,7 +2,7 @@ The Desktop app is capable of self-updating on macOS and Windows.
 The update server base url is configurable as `update_base_url` in config.json and can be served by a static file host,
 CDN or object storage.
 
-Currently all packaging & deployment is handled by [Github actions](https://github.com/vector-im/element-desktop/blob/develop/.github/workflows/build_and_deploy.yaml)
+Currently all packaging & deployment is handled by [Github actions](https://github.com/vector-im/element-web/blob/develop/.github/workflows/build_desktop_and_deploy.yaml)
 
 # Windows
 
