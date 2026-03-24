@@ -11,6 +11,7 @@ jobs:
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
         with:
+            # This relates to the directory in which to reset dependencies, only web needs this
             dir: apps/web
             dependencies: |
                 matrix-js-sdk
