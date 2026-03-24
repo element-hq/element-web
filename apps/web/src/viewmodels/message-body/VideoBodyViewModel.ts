@@ -148,6 +148,9 @@ export class VideoBodyViewModel
         return suggestedVideoSize(imageSize, { w, h });
     }
 
+    /**
+     * Resolve the current playable video source URL for the event.
+     */
     private static getContentUrl(props: VideoBodyViewModelProps, state: InternalState): string | undefined {
         const content = props.mxEvent.getContent<MediaEventContent>();
         if (props.forExport) {
