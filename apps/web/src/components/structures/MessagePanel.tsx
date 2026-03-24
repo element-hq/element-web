@@ -20,11 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 import {
     DateSeparatorView,
-    MockViewModel,
     ReadMarker,
-    type ReadMarkerActions,
-    type ReadMarkerModel,
-    type ReadMarkerSnapshot,
     TimelineSeparator,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -72,21 +68,6 @@ const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
-}
-
-interface StaticReadMarkerModelProps extends ReadMarkerSnapshot, ReadMarkerActions {}
-
-function createReadMarkerModel(props: StaticReadMarkerModelProps): ReadMarkerModel {
-    const { eventId, kind, showLine, onCurrentMarkerRef, onGhostLineRef, onGhostTransitionEnd } = props;
-    const vm = new MockViewModel<ReadMarkerSnapshot>({ eventId, kind, showLine }) as ReadMarkerModel;
-
-    Object.assign(vm, {
-        onCurrentMarkerRef,
-        onGhostLineRef,
-        onGhostTransitionEnd,
-    });
-
-    return vm;
 }
 
 /**
@@ -533,12 +514,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             return (
                 <ReadMarker
                     key={"readMarker_" + eventId}
-                    vm={createReadMarkerModel({
-                        eventId,
-                        kind: "current",
-                        showLine,
-                        onCurrentMarkerRef: this.collectReadMarker,
-                    })}
+                    eventId={eventId}
+                    kind="current"
+                    showLine={showLine}
+                    onCurrentMarkerRef={this.collectReadMarker}
                     className="mx_MessagePanel_myReadMarker"
                 />
             );
@@ -559,13 +538,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             return (
                 <ReadMarker
                     key={"_readuptoghost_" + eventId}
-                    vm={createReadMarkerModel({
-                        eventId,
-                        kind: "ghost",
-                        showLine: true,
-                        onGhostLineRef: this.collectGhostReadMarker,
-                        onGhostTransitionEnd: this.onGhostTransitionEnd,
-                    })}
+                    eventId={eventId}
+                    kind="ghost"
+                    showLine={true}
+                    onGhostLineRef={this.collectGhostReadMarker}
+                    onGhostTransitionEnd={this.onGhostTransitionEnd}
                     className="mx_MessagePanel_myReadMarker"
                 />
             );

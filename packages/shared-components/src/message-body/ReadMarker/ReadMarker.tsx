@@ -8,12 +8,11 @@
 import React, { type JSX, type RefCallback, type TransitionEventHandler } from "react";
 import classNames from "classnames";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./ReadMarker.module.css";
 
 export type ReadMarkerKind = "current" | "ghost";
 
-export interface ReadMarkerSnapshot {
+export interface ReadMarkerProps {
     /**
      * The event ID this marker is associated with.
      */
@@ -27,9 +26,6 @@ export interface ReadMarkerSnapshot {
      * Hidden active markers still render the host `<li>` to preserve layout calculations.
      */
     showLine?: boolean;
-}
-
-export interface ReadMarkerActions {
     /**
      * Ref callback for the active read marker `<li>`.
      */
@@ -42,27 +38,27 @@ export interface ReadMarkerActions {
      * Transition-end handler for the ghost marker `<hr>`.
      */
     onGhostTransitionEnd?: TransitionEventHandler<HTMLHRElement>;
-}
-
-export type ReadMarkerModel = ViewModel<ReadMarkerSnapshot, ReadMarkerActions>;
-
-interface ReadMarkerProps {
-    vm: ReadMarkerModel;
     /**
      * Optional CSS className for the outer list item.
      */
     className?: string;
 }
 
-export function ReadMarker({ vm, className }: Readonly<ReadMarkerProps>): JSX.Element {
-    const { eventId, kind, showLine = true } = useViewModel(vm);
-
+export function ReadMarker({
+    eventId,
+    kind,
+    showLine = true,
+    onCurrentMarkerRef,
+    onGhostLineRef,
+    onGhostTransitionEnd,
+    className,
+}: Readonly<ReadMarkerProps>): JSX.Element {
     const line =
         kind === "ghost" ? (
             <hr
                 className={styles.line}
-                ref={vm.onGhostLineRef}
-                onTransitionEnd={vm.onGhostTransitionEnd}
+                ref={onGhostLineRef}
+                onTransitionEnd={onGhostTransitionEnd}
                 data-eventid={eventId}
             />
         ) : showLine ? (
@@ -72,7 +68,7 @@ export function ReadMarker({ vm, className }: Readonly<ReadMarkerProps>): JSX.El
     return (
         <li
             className={classNames(className, styles.readMarker)}
-            ref={kind === "current" ? vm.onCurrentMarkerRef : undefined}
+            ref={kind === "current" ? onCurrentMarkerRef : undefined}
             data-scroll-tokens={kind === "current" ? eventId : undefined}
         >
             {line}

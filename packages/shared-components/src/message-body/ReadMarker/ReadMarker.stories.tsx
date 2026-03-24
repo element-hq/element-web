@@ -9,27 +9,24 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMockedViewModel } from "../../viewmodel";
-import { ReadMarker, type ReadMarkerActions, type ReadMarkerSnapshot } from "./ReadMarker";
-
-type ReadMarkerStoryProps = ReadMarkerSnapshot & ReadMarkerActions & { className?: string };
+import { ReadMarker, type ReadMarkerProps } from "./ReadMarker";
 
 const ReadMarkerWrapper = ({
     className,
     onCurrentMarkerRef,
     onGhostLineRef,
     onGhostTransitionEnd,
-    ...snapshotProps
-}: Readonly<ReadMarkerStoryProps>): JSX.Element => {
-    const vm = useMockedViewModel(snapshotProps, {
-        onCurrentMarkerRef: onCurrentMarkerRef ?? fn(),
-        onGhostLineRef: onGhostLineRef ?? fn(),
-        onGhostTransitionEnd: onGhostTransitionEnd ?? fn(),
-    });
-
+    ...props
+}: Readonly<ReadMarkerProps>): JSX.Element => {
     return (
         <ul>
-            <ReadMarker vm={vm} className={className} />
+            <ReadMarker
+                {...props}
+                className={className}
+                onCurrentMarkerRef={onCurrentMarkerRef ?? fn()}
+                onGhostLineRef={onGhostLineRef ?? fn()}
+                onGhostTransitionEnd={onGhostTransitionEnd ?? fn()}
+            />
         </ul>
     );
 };

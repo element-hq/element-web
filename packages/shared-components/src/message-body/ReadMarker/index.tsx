@@ -8,7 +8,5 @@
 export {
     ReadMarker,
     type ReadMarkerKind,
-    type ReadMarkerActions,
-    type ReadMarkerModel,
-    type ReadMarkerSnapshot,
+    type ReadMarkerProps,
 } from "./ReadMarker";
