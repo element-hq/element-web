@@ -21,6 +21,7 @@ export * from "./message-body/EventContentBody";
 export * from "./message-body/MediaBody";
 export * from "./message-body/MessageTimestampView";
 export * from "./message-body/DecryptionFailureBodyView";
+export * from "./message-body/RedactedBodyView";
 export * from "./message-body/FileBodyView";
 export * from "./message-body/PinnedMessageBadge";
 export * from "./message-body/VideoBodyView";
@@ -50,6 +51,7 @@ export * from "./utils/Flex";
 export * from "./utils/LinkedText";
 export * from "./right-panel/WidgetContextMenu";
 export * from "./utils/VirtualizedList";
+export * from "./resize";
 
 // Utils
 export * from "./utils/i18n";

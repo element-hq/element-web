@@ -18,16 +18,10 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import {
-    DecryptionFailureBodyView,
-    useCreateAutoDisposedViewModel,
-    VideoBodyView,
-} from "@element-hq/web-shared-components";
+import { useCreateAutoDisposedViewModel, VideoBodyView } from "@element-hq/web-shared-components";
 
-import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
-import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -41,11 +35,10 @@ import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
-import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
-import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { DecryptionFailureBodyFactory, FileBodyFactory, RedactedBodyFactory, renderMBody } from "./MBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -73,7 +66,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Notice, TextualBody],
     [MsgType.Emote, TextualBody],
     [MsgType.Image, MImageBody],
-    [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyViewFactory)!],
+    [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyViewWrapper],
 ]);
@@ -252,11 +245,11 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType: React.ComponentType<IBodyProps> = RedactedBody;
+        let BodyType: React.ComponentType<IBodyProps> = RedactedBodyFactory;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (this.props.mxEvent.isDecryptionFailure()) {
-                BodyType = DecryptionFailureBodyWrapper;
+                BodyType = DecryptionFailureBodyFactory;
             } else if (type && this.evTypes.has(type)) {
                 BodyType = this.evTypes.get(type)!;
             } else if (msgtype && this.bodyTypes.has(msgtype)) {
@@ -395,11 +388,10 @@ export function VideoBodyViewWrapper({
         roomContext.timelineRenderingType !== TimelineRenderingType.Search;
 
     const fileBody = showFileBody ? (
-        <FileBodyViewFactory
+        <FileBodyFactory
             mxEvent={mxEvent}
             mediaEventHelper={mediaEventHelper}
             forExport={forExport}
-            inhibitInteraction={inhibitInteraction}
             showFileInfo={false}
         />
     ) : null;
@@ -414,23 +406,4 @@ export function VideoBodyViewWrapper({
             {fileBody}
         </VideoBodyView>
     );
-}
-
-/**
- * Bridge decryption-failure events into the view model using current local verification state.
- * This wrapper can be removed after MessageEvent has been changed to a function component.
- */
-function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element {
-    const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new DecryptionFailureBodyViewModel({
-                decryptionFailureCode: mxEvent.decryptionFailureReason,
-                verificationState,
-            }),
-    );
-    useEffect(() => {
-        vm.setVerificationState(verificationState);
-    }, [verificationState, vm]);
-    return <DecryptionFailureBodyView vm={vm} ref={ref} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }

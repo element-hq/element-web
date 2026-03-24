@@ -17,6 +17,7 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
 jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
@@ -30,7 +31,9 @@ jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
 
 jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
-    FileBodyViewFactory: () => <div data-testid="file-body" />,
+    DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
+    FileBodyFactory: () => <div data-testid="file-body" />,
+    RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
     renderMBody: () => <div data-testid="file-body" />,
 }));
 
@@ -59,16 +62,59 @@ describe("MessageEvent", () => {
     let client: MatrixClient;
     let event: MatrixEvent;
 
+    const makeRedactedBecauseEvent = ({ sender, originServerTs }: { sender: string; originServerTs: number }) => ({
+        content: {},
+        event_id: "$redaction:example.com",
+        origin_server_ts: originServerTs,
+        redacts: "$message:example.com",
+        room_id: room.roomId,
+        sender,
+        type: EventType.RoomRedaction,
+        unsigned: {},
+    });
+
     const renderMessageEvent = (): RenderResult => {
-        return render(<MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />);
+        return render(
+            <MatrixClientContext.Provider value={client}>
+                <MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />
+            </MatrixClientContext.Provider>,
+        );
     };
 
     beforeEach(() => {
         client = stubClient();
         room = mkRoom(client, "!room:example.com");
+        jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(SettingsStore, "getValue");
         jest.spyOn(SettingsStore, "watchSetting");
         jest.spyOn(SettingsStore, "unwatchSetting").mockImplementation(jest.fn());
+    });
+
+    it("renders the shared redacted body for redacted events", () => {
+        jest.spyOn(room, "getMember").mockReturnValue({ name: "Moderator" } as any);
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@alice:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: MsgType.Text,
+                body: "Secret",
+            },
+            unsigned: {
+                redacted_because: makeRedactedBecauseEvent({
+                    sender: "@moderator:example.com",
+                    originServerTs: Date.UTC(2022, 10, 17, 15, 58, 32),
+                }),
+            },
+        });
+        jest.spyOn(event, "isRedacted").mockReturnValue(true);
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText("Message deleted by Moderator")).toBeInTheDocument();
+        expect(result.container.querySelector(".mx_RedactedBody")).not.toBeNull();
+        expect(result.queryByTestId("textual-body")).toBeNull();
     });
 
     describe("when an image with a caption is sent", () => {
