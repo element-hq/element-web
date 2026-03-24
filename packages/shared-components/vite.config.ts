@@ -25,7 +25,12 @@ export default defineConfig({
         rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
-            external: ["@vector-im/compound-design-tokens", "@vector-im/compound-web", "react-virtuoso"],
+            external: [
+                "@vector-im/compound-design-tokens",
+                "@vector-im/compound-web",
+                "react-virtuoso",
+                "react-resizable-panels",
+            ],
             plugins: [
                 esmExternalRequirePlugin({
                     external: ["react", "react-dom"],
