@@ -5,8 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export {
-    ReadMarker,
-    type ReadMarkerKind,
-    type ReadMarkerProps,
-} from "./ReadMarker";
+export { ReadMarker, type ReadMarkerKind, type ReadMarkerProps } from "./ReadMarker";
