@@ -222,7 +222,7 @@ export interface Settings {
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
-    "feature_new_message_panel": IFeature;
+    "feature_new_timeline": IFeature;
     "feature_new_room_list": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
@@ -685,11 +685,11 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         default: false,
     },
-    "feature_new_message_panel": {
+    "feature_new_timeline": {
         isFeature: true,
         labsGroup: LabGroup.Ui,
-        displayName: _td("labs|new_message_panel"),
-        description: _td("labs|new_message_panel_description"),
+        displayName: _td("labs|new_timeline"),
+        description: _td("labs|new_timeline_description"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,

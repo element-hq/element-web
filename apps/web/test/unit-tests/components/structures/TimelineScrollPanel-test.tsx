@@ -101,7 +101,7 @@ describe("TimelineScrollPanel", function () {
         jest.clearAllMocks();
         // HACK: We assume all settings want to be disabled
         jest.spyOn(SettingsStore, "getValue").mockImplementation((arg) => {
-            return arg === "showDisplaynameChanges" || arg === "feature_new_message_panel";
+            return arg === "showDisplaynameChanges" || arg === "feature_new_timeline";
         });
 
         sdkContext = new SdkContextClass();

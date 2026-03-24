@@ -1268,7 +1268,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         return (
             <ErrorBoundary>
-                {SettingsStore.getValue("feature_new_message_panel") ? (
+                {SettingsStore.getValue("feature_new_timeline") ? (
                     <TimelineScrollPanel {...panelProps} />
                 ) : (
                     <ScrollPanel {...panelProps} />
