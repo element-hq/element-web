@@ -11,15 +11,18 @@ import {
     DecryptionFailureBodyView,
     FileBodyView,
     RedactedBodyView,
+    VideoBodyView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
 import { type IBodyProps } from "./IBodyProps";
-import RoomContext from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
+import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -59,6 +62,78 @@ export function FileBodyFactory({
     return <FileBodyView vm={vm} refIFrame={refIFrame} refLink={refLink} className="mx_MFileBody" />;
 }
 
+export function VideoBodyFactory({
+    mxEvent,
+    mediaEventHelper,
+    forExport,
+    inhibitInteraction,
+}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "inhibitInteraction">): JSX.Element {
+    const { timelineRenderingType } = useContext(RoomContext);
+    const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new VideoBodyViewModel({
+                mxEvent,
+                mediaEventHelper,
+                forExport,
+                inhibitInteraction,
+                mediaVisible,
+                onPreviewClick: (): void => setMediaVisible(true),
+                videoRef,
+            }),
+    );
+
+    useEffect(() => {
+        vm.loadInitialMediaIfVisible();
+    }, [vm]);
+
+    useEffect(() => {
+        vm.setEvent(mxEvent, mediaEventHelper);
+    }, [mxEvent, mediaEventHelper, vm]);
+
+    useEffect(() => {
+        vm.setForExport(forExport);
+    }, [forExport, vm]);
+
+    useEffect(() => {
+        vm.setInhibitInteraction(inhibitInteraction);
+    }, [inhibitInteraction, vm]);
+
+    useEffect(() => {
+        vm.setMediaVisible(mediaVisible);
+    }, [mediaVisible, vm]);
+
+    useEffect(() => {
+        vm.setOnPreviewClick((): void => setMediaVisible(true));
+    }, [setMediaVisible, vm]);
+
+    const showFileBody =
+        !forExport &&
+        timelineRenderingType !== TimelineRenderingType.Room &&
+        timelineRenderingType !== TimelineRenderingType.Pinned &&
+        timelineRenderingType !== TimelineRenderingType.Search;
+
+    return (
+        <VideoBodyView
+            vm={vm}
+            className="mx_MVideoBody"
+            containerClassName="mx_MVideoBody_container"
+            videoRef={videoRef}
+        >
+            {showFileBody ? (
+                <FileBodyFactory
+                    mxEvent={mxEvent}
+                    mediaEventHelper={mediaEventHelper}
+                    forExport={forExport}
+                    showFileInfo={false}
+                />
+            ) : null}
+        </VideoBodyView>
+    );
+}
+
 export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
 
@@ -87,9 +162,11 @@ export function DecryptionFailureBodyFactory({ mxEvent, ref }: Pick<IBodyProps, 
     return <DecryptionFailureBodyView vm={vm} ref={ref} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }
 
-// Message body factory registry.
-// Start small: only m.file currently routes to the new FileBodyView path.
-const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([[MsgType.File, FileBodyFactory]]);
+// Message body factory registry for bodies that already route through view-model-backed wrappers.
+const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
+    [MsgType.File, FileBodyFactory],
+    [MsgType.Video, VideoBodyFactory],
+]);
 
 // Render a body using the picked factory.
 // Falls back to the provided factory when msgtype has no specific handler.

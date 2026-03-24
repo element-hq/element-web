@@ -23,7 +23,7 @@ import {
     mockClientMethodsUser,
     withClientContextRenderOptions,
 } from "../../../../test-utils";
-import { VideoBodyViewWrapper } from "../../../../../src/components/views/messages/MessageEvent";
+import { VideoBodyFactory } from "../../../../../src/components/views/messages/MBodyFactory";
 import type { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
@@ -33,7 +33,7 @@ jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
 }));
 
-describe("VideoBodyViewWrapper", () => {
+describe("VideoBodyFactory", () => {
     const ourUserId = "@user:server";
     const senderUserId = "@other_use:server";
     const deviceId = "DEADB33F";
@@ -124,7 +124,7 @@ describe("VideoBodyViewWrapper", () => {
 
         const { container } = render(
             <MatrixClientContext.Provider value={cli}>
-                <VideoBodyViewWrapper {...defaultProps} />
+                <VideoBodyFactory {...defaultProps} />
             </MatrixClientContext.Provider>,
             withClientContextRenderOptions(cli),
         );
@@ -134,7 +134,7 @@ describe("VideoBodyViewWrapper", () => {
     it("should show poster for encrypted media before downloading it", async () => {
         fetchMock.getOnce(thumbUrl, { status: 200 });
         render(
-            <VideoBodyViewWrapper
+            <VideoBodyFactory
                 mxEvent={encryptedMediaEvent}
                 mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
             />,
@@ -163,7 +163,7 @@ describe("VideoBodyViewWrapper", () => {
             fetchMock.getOnce(thumbUrl, { status: 200 });
 
             render(
-                <VideoBodyViewWrapper
+                <VideoBodyFactory
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
@@ -179,7 +179,7 @@ describe("VideoBodyViewWrapper", () => {
             fetchMock.getOnce(thumbUrl, { status: 200 });
 
             render(
-                <VideoBodyViewWrapper
+                <VideoBodyFactory
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
@@ -218,7 +218,7 @@ describe("VideoBodyViewWrapper", () => {
                 },
             });
             render(
-                <VideoBodyViewWrapper
+                <VideoBodyFactory
                     mxEvent={ourEncryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(ourEncryptedMediaEvent)}
                 />,

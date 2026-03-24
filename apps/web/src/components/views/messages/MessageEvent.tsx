@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { type JSX, createRef, useContext, useEffect, useRef } from "react";
+import React, { createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -18,7 +18,6 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { useCreateAutoDisposedViewModel, VideoBodyView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
@@ -35,10 +34,13 @@ import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
-import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
-import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import { useMediaVisible } from "../../../hooks/useMediaVisible";
-import { DecryptionFailureBodyFactory, FileBodyFactory, RedactedBodyFactory, renderMBody } from "./MBodyFactory";
+import {
+    DecryptionFailureBodyFactory,
+    FileBodyFactory,
+    RedactedBodyFactory,
+    VideoBodyFactory,
+    renderMBody,
+} from "./MBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -68,7 +70,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Image, MImageBody],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
-    [MsgType.Video, VideoBodyViewWrapper],
+    [MsgType.Video, VideoBodyFactory],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
@@ -263,8 +265,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
 
             if (
-                ((BodyType === MImageBody || BodyType === VideoBodyViewWrapper) &&
-                    !this.validateImageOrVideoMimetype(content)) ||
+                ((BodyType === MImageBody || BodyType === VideoBodyFactory) && !this.validateImageOrVideoMimetype(content)) ||
                 (BodyType === MStickerBody && !this.validateStickerMimetype(content))
             ) {
                 BodyType = this.bodyTypes.get(MsgType.File)!;
@@ -330,80 +331,3 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
         <TextualBody {...{ ...props, ref: undefined }} />
     </div>
 );
-
-/**
- * Bridge video events into the shared view using a local wrapper until MessageEvent becomes a function component.
- */
-export function VideoBodyViewWrapper({
-    mxEvent,
-    mediaEventHelper,
-    forExport,
-    inhibitInteraction,
-}: IBodyProps): JSX.Element {
-    const roomContext = useContext(RoomContext);
-    const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new VideoBodyViewModel({
-                mxEvent,
-                mediaEventHelper,
-                forExport,
-                inhibitInteraction,
-                mediaVisible,
-                onPreviewClick: (): void => setMediaVisible(true),
-                videoRef,
-            }),
-    );
-
-    useEffect(() => {
-        vm.loadInitialMediaIfVisible();
-    }, [vm]);
-
-    useEffect(() => {
-        vm.setEvent(mxEvent, mediaEventHelper);
-    }, [mxEvent, mediaEventHelper, vm]);
-
-    useEffect(() => {
-        vm.setForExport(forExport);
-    }, [forExport, vm]);
-
-    useEffect(() => {
-        vm.setInhibitInteraction(inhibitInteraction);
-    }, [inhibitInteraction, vm]);
-
-    useEffect(() => {
-        vm.setMediaVisible(mediaVisible);
-    }, [mediaVisible, vm]);
-
-    useEffect(() => {
-        vm.setOnPreviewClick((): void => setMediaVisible(true));
-    }, [setMediaVisible, vm]);
-
-    const showFileBody =
-        !forExport &&
-        roomContext.timelineRenderingType !== TimelineRenderingType.Room &&
-        roomContext.timelineRenderingType !== TimelineRenderingType.Pinned &&
-        roomContext.timelineRenderingType !== TimelineRenderingType.Search;
-
-    const fileBody = showFileBody ? (
-        <FileBodyFactory
-            mxEvent={mxEvent}
-            mediaEventHelper={mediaEventHelper}
-            forExport={forExport}
-            showFileInfo={false}
-        />
-    ) : null;
-
-    return (
-        <VideoBodyView
-            vm={vm}
-            className="mx_MVideoBody"
-            containerClassName="mx_MVideoBody_container"
-            videoRef={videoRef}
-        >
-            {fileBody}
-        </VideoBodyView>
-    );
-}
