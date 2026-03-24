@@ -1,0 +1,28 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.separator {
+    display: flex;
+    align-items: center;
+    /* Hide the separator by default */
+    width: 0px;
+    opacity: 0;
+    /* Necessary to avoid weird focus outlines (doubled on one side, absent on one side etc...) */
+    outline-offset: -2px;
+}
+
+.separator[data-separator="hover"],
+.separator:focus-visible {
+    background: var(--cpd-color-bg-action-tertiary-hovered);
+}
+
+.visible {
+    /* Show the separator when the left panel is collapsed */
+    opacity: 100%;
+    width: 12px;
+    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
+}
