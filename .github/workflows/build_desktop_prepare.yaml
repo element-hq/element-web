@@ -79,7 +79,7 @@ jobs:
                   pnpm --cwd element-web install --frozen-lockfile
                   pnpm --cwd element-web run build
                   mv element-web/webapp .
-                  pnpm asar-webapp
+                  pnpm run asar-webapp
               env:
                   # These must be set for branch-match.sh to get the right branch
                   REPOSITORY: ${{ github.repository }}

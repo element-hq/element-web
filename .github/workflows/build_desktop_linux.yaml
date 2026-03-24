@@ -164,7 +164,7 @@ jobs:
                     -e SQLCIPHER_BUNDLED \
                     -e CI=1 \
                     $HAK_DOCKER_IMAGE \
-                    pnpm build:native
+                    pnpm run build:native
 
             - name: Fix permissions
               working-directory: apps/desktop
@@ -192,7 +192,7 @@ jobs:
 
             - name: Build App
               working-directory: apps/desktop
-              run: pnpm build --publish never $BUILD_ARGS -l $TARGETS
+              run: pnpm run build --publish never $BUILD_ARGS -l $TARGETS
               env:
                   VARIANT_PATH: variant.json
                   # Only set for Nightly builds

@@ -78,7 +78,7 @@ jobs:
         strategy:
             matrix:
                 arch: [x64, arm64]
-        uses: ./.github/workflows/build_windows.yaml
+        uses: ./.github/workflows/build_desktop_windows.yaml
         secrets: inherit # zizmor: ignore[secrets-inherit]
         with:
             sign: true
@@ -89,7 +89,7 @@ jobs:
         if: github.event_name != 'workflow_dispatch' || inputs.macos
         needs: prepare
         name: macOS
-        uses: ./.github/workflows/build_macos.yaml
+        uses: ./.github/workflows/build_desktop_macos.yaml
         secrets: inherit # zizmor: ignore[secrets-inherit]
         with:
             sign: true
@@ -104,7 +104,7 @@ jobs:
             matrix:
                 arch: [amd64, arm64]
                 sqlcipher: [static]
-        uses: ./.github/workflows/build_linux.yaml
+        uses: ./.github/workflows/build_desktop_linux.yaml
         with:
             arch: ${{ matrix.arch }}
             sqlcipher: ${{ matrix.sqlcipher }}

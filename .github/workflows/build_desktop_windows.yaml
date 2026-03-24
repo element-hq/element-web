@@ -194,7 +194,7 @@ jobs:
               working-directory: apps/desktop
               run: |
                   refreshenv
-                  pnpm build:native --target $env:TARGET
+                  pnpm run build:native --target $env:TARGET
               env:
                   TARGET: ${{ steps.config.outputs.target }}
 
@@ -244,7 +244,7 @@ jobs:
 
             - name: Build App
               working-directory: apps/desktop
-              run: pnpm build --publish never $BUILD_ARGS -w $TARGETS
+              run: pnpm run build --publish never $BUILD_ARGS -w $TARGETS
               shell: bash
               env:
                   VARIANT_PATH: variant.json

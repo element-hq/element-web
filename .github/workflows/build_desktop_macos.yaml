@@ -128,14 +128,14 @@ jobs:
             - name: Build Natives
               if: steps.cache.outputs.cache-hit != 'true'
               working-directory: apps/desktop
-              run: pnpm build:native:universal
+              run: pnpm run build:native:universal
 
             # We split these because electron-builder gets upset if we set CSC_LINK even to an empty string
             - name: "[Signed] Build App"
               if: inputs.sign != ''
               working-directory: apps/desktop
               run: |
-                  pnpm build:universal --publish never -m ${TARGETS}
+                  pnpm run build:universal --publish never -m ${TARGETS}
               env:
                   APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
                   APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -160,7 +160,7 @@ jobs:
               if: inputs.sign == ''
               working-directory: apps/desktop
               run: |
-                  pnpm build:universal --publish never -m ${TARGETS}
+                  pnpm run build:universal --publish never -m ${TARGETS}
               env:
                   CSC_IDENTITY_AUTO_DISCOVERY: false
                   VARIANT_PATH: variant.json
