@@ -95,20 +95,6 @@ export class TileErrorViewModel
         }
     }
 
-    public setMxEvent(mxEvent: MatrixEvent): void {
-        if (this.props.mxEvent === mxEvent) return;
-
-        this.props = {
-            ...this.props,
-            mxEvent,
-        };
-
-        const nextEventType = mxEvent.getType();
-        if (this.snapshot.current.eventType !== nextEventType) {
-            this.snapshot.merge({ eventType: nextEventType });
-        }
-    }
-
     public setError(error: Error): void {
         if (this.props.error === error) return;
 

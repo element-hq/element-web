@@ -78,17 +78,6 @@ describe("TileErrorViewModel", () => {
         expect(vm.getSnapshot().viewSourceCtaLabel).toBeUndefined();
     });
 
-    it("updates the event type when the event changes", () => {
-        const vm = createVm();
-        const listener = jest.fn();
-        vm.subscribe(listener);
-
-        vm.setMxEvent(createEvent("m.room.redaction"));
-
-        expect(vm.getSnapshot().eventType).toBe("m.room.redaction");
-        expect(listener).toHaveBeenCalledTimes(1);
-    });
-
     it("updates the layout when the host timeline layout changes", () => {
         const vm = createVm();
         const listener = jest.fn();
@@ -109,7 +98,7 @@ describe("TileErrorViewModel", () => {
 
         vm.setDeveloperMode(true);
         vm.setError(error);
-        vm.setMxEvent(mxEvent);
+        vm.setLayout("group");
 
         expect(listener).not.toHaveBeenCalled();
     });
@@ -130,17 +119,15 @@ describe("TileErrorViewModel", () => {
     });
 
     it("opens the view source dialog with the current event", () => {
-        const originalEvent = createEvent();
-        const updatedEvent = createEvent("m.room.redaction");
-        const vm = createVm({ mxEvent: originalEvent });
+        const mxEvent = createEvent("m.room.redaction");
+        const vm = createVm({ mxEvent });
 
-        vm.setMxEvent(updatedEvent);
         vm.onViewSourceClick({} as any);
 
         expect(Modal.createDialog).toHaveBeenCalledWith(
             ViewSource,
             {
-                mxEvent: updatedEvent,
+                mxEvent,
             },
             "mx_Dialog_viewsource",
         );
