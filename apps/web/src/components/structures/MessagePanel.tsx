@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode, type TransitionEvent } from "react";
+import React, { type JSX, createRef, type ReactNode, type TransitionEventHandler } from "react";
 import classNames from "classnames";
 import {
     type Room,
@@ -20,6 +20,11 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 import {
     DateSeparatorView,
+    MockViewModel,
+    ReadMarkerView,
+    type ReadMarkerViewActions,
+    type ReadMarkerViewModel,
+    type ReadMarkerViewSnapshot,
     TimelineSeparator,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -67,6 +72,21 @@ const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
 function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new DateSeparatorViewModel({ roomId, ts }));
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
+}
+
+interface StaticReadMarkerViewModelProps extends ReadMarkerViewSnapshot, ReadMarkerViewActions {}
+
+function createReadMarkerViewModel(props: StaticReadMarkerViewModelProps): ReadMarkerViewModel {
+    const { eventId, kind, showLine, onCurrentMarkerRef, onGhostLineRef, onGhostTransitionEnd } = props;
+    const vm = new MockViewModel<ReadMarkerViewSnapshot>({ eventId, kind, showLine }) as ReadMarkerViewModel;
+
+    Object.assign(vm, {
+        onCurrentMarkerRef,
+        onGhostLineRef,
+        onGhostTransitionEnd,
+    });
+
+    return vm;
 }
 
 /**
@@ -271,7 +291,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private readonly _showHiddenEvents: boolean;
     private unmounted = false;
 
-    private readMarkerNode = createRef<HTMLLIElement>();
+    private readMarkerNode: HTMLLIElement | null = null;
     private whoIsTyping = createRef<WhoIsTypingTile>();
     public scrollPanel = createRef<ScrollPanel>();
 
@@ -403,7 +423,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     //   0: read marker is within the window
     //  +1: read marker is below the window
     public getReadMarkerPosition(): number | null {
-        const readMarker = this.readMarkerNode.current;
+        const readMarker = this.readMarkerNode;
         const messageWrapper = this.scrollPanel.current?.divScroll;
 
         if (!readMarker || !messageWrapper) {
@@ -507,29 +527,20 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     public readMarkerForEvent(eventId: string, isLastEvent: boolean): ReactNode {
         if (this.context.timelineRenderingType === TimelineRenderingType.File) return null;
 
-        const visible = !isLastEvent && this.props.readMarkerVisible;
+        const showLine = !isLastEvent && !!this.props.readMarkerVisible;
 
         if (this.props.readMarkerEventId === eventId) {
-            let hr;
-            // if the read marker comes at the end of the timeline (except
-            // for local echoes, which are excluded from RMs, because they
-            // don't have useful event ids), we don't want to show it, but
-            // we still want to create the <li/> for it so that the
-            // algorithms which depend on its position on the screen aren't
-            // confused.
-            if (visible) {
-                hr = <hr style={{ opacity: 1, width: "99%" }} />;
-            }
-
             return (
-                <li
+                <ReadMarkerView
                     key={"readMarker_" + eventId}
-                    ref={this.readMarkerNode}
+                    vm={createReadMarkerViewModel({
+                        eventId,
+                        kind: "current",
+                        showLine,
+                        onCurrentMarkerRef: this.collectReadMarker,
+                    })}
                     className="mx_MessagePanel_myReadMarker"
-                    data-scroll-tokens={eventId}
-                >
-                    {hr}
-                </li>
+                />
             );
         } else if (this.state.ghostReadMarkers.includes(eventId)) {
             // We render 'ghost' read markers in the DOM while they
@@ -542,28 +553,32 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             // case is a little more complex because only some of the items
             // transition (ie. the read markers do but the event tiles do not)
             // and TransitionGroup requires that all its children are Transitions.
-            const hr = (
-                <hr
-                    ref={this.collectGhostReadMarker}
-                    onTransitionEnd={this.onGhostTransitionEnd}
-                    data-eventid={eventId}
-                />
-            );
-
             // give it a key which depends on the event id. That will ensure that
             // we get a new DOM node (restarting the animation) when the ghost
             // moves to a different event.
             return (
-                <li key={"_readuptoghost_" + eventId} className="mx_MessagePanel_myReadMarker">
-                    {hr}
-                </li>
+                <ReadMarkerView
+                    key={"_readuptoghost_" + eventId}
+                    vm={createReadMarkerViewModel({
+                        eventId,
+                        kind: "ghost",
+                        showLine: true,
+                        onGhostLineRef: this.collectGhostReadMarker,
+                        onGhostTransitionEnd: this.onGhostTransitionEnd,
+                    })}
+                    className="mx_MessagePanel_myReadMarker"
+                />
             );
         }
 
         return null;
     }
 
-    private collectGhostReadMarker = (node: HTMLElement | null): void => {
+    private collectReadMarker = (node: HTMLLIElement | null): void => {
+        this.readMarkerNode = node;
+    };
+
+    private collectGhostReadMarker = (node: HTMLHRElement | null): void => {
         if (node) {
             // now the element has appeared, change the style which will trigger the CSS transition
             requestAnimationFrame(() => {
@@ -573,7 +588,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     };
 
-    private onGhostTransitionEnd = (ev: TransitionEvent): void => {
+    private onGhostTransitionEnd: TransitionEventHandler<HTMLHRElement> = (ev): void => {
         // we can now clean up the ghost element
         const finishedEventId = (ev.target as HTMLElement).dataset.eventid;
         this.setState({
