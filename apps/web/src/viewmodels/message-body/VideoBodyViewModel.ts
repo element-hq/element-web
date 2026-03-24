@@ -94,6 +94,9 @@ type VideoInfoWithBlurhash = VideoInfo & {
     [BLURHASH_FIELD]?: string;
 };
 
+/**
+ * View model for the video message body, encapsulating media-loading and playback state.
+ */
 export class VideoBodyViewModel
     extends BaseViewModel<VideoBodyViewSnapshot, VideoBodyViewModelProps>
     implements VideoBodyViewModelInterface
