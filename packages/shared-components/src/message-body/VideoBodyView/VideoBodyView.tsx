@@ -20,6 +20,9 @@ import { InlineSpinner } from "@vector-im/compound-web";
 import { type ViewModel, useViewModel } from "../../viewmodel";
 import styles from "./VideoBodyView.module.css";
 
+/**
+ * Render states for the shared video body view.
+ */
 export enum VideoBodyViewState {
     ERROR = "ERROR",
     HIDDEN = "HIDDEN",
