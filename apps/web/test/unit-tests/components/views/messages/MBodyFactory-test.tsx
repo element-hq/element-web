@@ -19,7 +19,11 @@ import {
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { FileBodyFactory, VideoBodyFactory, renderMBody } from "../../../../../src/components/views/messages/MBodyFactory";
+import {
+    FileBodyFactory,
+    VideoBodyFactory,
+    renderMBody,
+} from "../../../../../src/components/views/messages/MBodyFactory";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 

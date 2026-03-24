@@ -265,7 +265,8 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
 
             if (
-                ((BodyType === MImageBody || BodyType === VideoBodyFactory) && !this.validateImageOrVideoMimetype(content)) ||
+                ((BodyType === MImageBody || BodyType === VideoBodyFactory) &&
+                    !this.validateImageOrVideoMimetype(content)) ||
                 (BodyType === MStickerBody && !this.validateStickerMimetype(content))
             ) {
                 BodyType = this.bodyTypes.get(MsgType.File)!;
