@@ -1,24 +1,27 @@
 diff --git a/out/node-module-collector/moduleManager.js b/out/node-module-collector/moduleManager.js
-index f483d9387a3270afc884b8478f19dd2825477a04..a6b2a28befda5881e45368a07ae793f64f4aed41 100644
+index f483d9387a3270afc884b8478f19dd2825477a04..a718d92825b4813bc27eb10775a70d8e0731fcf7 100644
 --- a/out/node-module-collector/moduleManager.js
 +++ b/out/node-module-collector/moduleManager.js
-@@ -115,8 +115,7 @@ class ModuleManager {
+@@ -5,6 +5,7 @@ const builder_util_1 = require("builder-util");
+ const fs = require("fs-extra");
+ const path = require("path");
+ const semver = require("semver");
++const searchModule = require("../electron/search-module");
+ var LogMessageByKey;
+ (function (LogMessageByKey) {
+     LogMessageByKey["PKG_DUPLICATE_REF"] = "duplicate dependency references";
+@@ -115,8 +116,12 @@ class ModuleManager {
                  return { packageDir: path.dirname(direct), packageJson: json };
              }
          }
 -        // 2) upward hoisted search, then 3) downward non-hoisted search
 -        return (await this.upwardSearch(parentDir, pkgName, requiredRange)) || (await this.downwardSearch(parentDir, pkgName, requiredRange)) || null;
-+        return (await this.upwardSearch(parentDir, pkgName, requiredRange)) || null;
++        // 2) upward hoisted search, then 3) downward non-hoisted search, then 4) downward from workspace root
++        const workspaceRoot = await searchModule.getProjectRootPath(parentDir);
++        return (await this.upwardSearch(parentDir, pkgName, requiredRange)) ||
++            (await this.downwardSearch(parentDir, pkgName, requiredRange)) ||
++            (await this.downwardSearch(workspaceRoot, pkgName, requiredRange)) ||
++            null;
      }
      semverSatisfies(found, range) {
          if ((0, builder_util_1.isEmptyOrSpaces)(range) || range === "*") {
-@@ -157,6 +156,9 @@ class ModuleManager {
-         let current = path.resolve(parentDir);
-         const root = path.parse(current).root;
-         while (true) {
-+            const pkg = await this.downwardSearch(current, pkgName, requiredRange);
-+            if (pkg) return pkg;
-+
-             const candidate = path.join(current, "node_modules", pkgName, "package.json");
-             if (await this.exists[candidate]) {
-                 const json = await this.json[candidate];
