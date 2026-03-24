@@ -288,7 +288,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.rebindListeners(null, props);
         this.updateReceiptListener();
         this.decryptEventIfNeeded();
-        void this.verifyEvent();
     }
 
     /** Releases all Matrix listeners owned by this view model. */
@@ -347,13 +346,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             if (previousEvent !== props.mxEvent) {
                 this.decryptEventIfNeeded();
             }
-            void this.verifyEvent();
+            this.refreshVerification();
         }
     }
 
     /** Recomputes the full derived snapshot from the current props and live event state. */
     public refreshDerivedState(): void {
         this.updateSnapshot();
+    }
+
+    /** Re-runs event verification and updates the encryption shield state when the async check completes. */
+    public refreshVerification(): void {
+        void this.verifyEvent();
     }
 
     private rebindListeners(previousProps: EventTileViewModelProps | null, nextProps: EventTileViewModelProps): void {
@@ -521,18 +525,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     };
 
     private readonly onDecrypted = (): void => {
-        void this.verifyEvent();
+        this.refreshVerification();
         this.updateSnapshot();
     };
 
     private readonly onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
         if (userId === this.props.mxEvent.getSender()) {
-            void this.verifyEvent();
+            this.refreshVerification();
         }
     };
 
     private readonly onReplaced = (): void => {
-        void this.verifyEvent();
+        this.refreshVerification();
         this.updateSnapshot();
     };
 
@@ -1038,7 +1042,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         // Collapse crypto and shield state into the UI-level indicator the tile should render.
         const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
 
-        if (isLocalRoom(event.getRoomId()!)) return EncryptionIndicatorMode.None;
+        if (isLocalRoom(event.getRoomId())) return EncryptionIndicatorMode.None;
 
         if (event.isDecryptionFailure()) {
             return EventTileViewModel.getDecryptionFailureIndicatorMode(event.decryptionFailureReason);

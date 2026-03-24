@@ -291,44 +291,6 @@ type UseEventTileViewPropsArgs = {
     actions: EventTileViewActions;
 };
 
-function getRootClassName(
-    mxEvent: MatrixEvent,
-    isTwelveHour: boolean | undefined,
-    isSelectedEvent: boolean | undefined,
-    last: boolean | undefined,
-    lastInSection: boolean | undefined,
-    contextual: boolean | undefined,
-    snapshot: EventTileViewSnapshot,
-    timelineRenderingType: TimelineRenderingType,
-): string {
-    const msgtype = mxEvent.getContent().msgtype;
-    const eventType = mxEvent.getType();
-    const isRenderingNotification = timelineRenderingType === TimelineRenderingType.Notification;
-
-    return classNames({
-        mx_EventTile_bubbleContainer: snapshot.isBubbleMessage,
-        mx_EventTile_leftAlignedBubble: snapshot.isLeftAlignedBubbleMessage,
-        mx_EventTile: true,
-        mx_EventTile_isEditing: snapshot.isEditing,
-        mx_EventTile_info: snapshot.isInfoMessage,
-        mx_EventTile_12hr: isTwelveHour,
-        mx_EventTile_sending: !snapshot.isEditing && snapshot.isSending,
-        mx_EventTile_highlight: snapshot.isHighlighted,
-        mx_EventTile_selected: isSelectedEvent || snapshot.isContextMenuOpen,
-        mx_EventTile_continuation:
-            snapshot.isContinuation || eventType === EventType.CallInvite || ElementCallEventType.matches(eventType),
-        mx_EventTile_last: last,
-        mx_EventTile_lastInSection: lastInSection,
-        mx_EventTile_contextual: contextual,
-        mx_EventTile_actionBarFocused: snapshot.actionBarFocused,
-        mx_EventTile_bad: snapshot.isEncryptionFailure,
-        mx_EventTile_emote: msgtype === MsgType.Emote,
-        mx_EventTile_noSender: !snapshot.showSender,
-        mx_EventTile_clamp: timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
-        mx_EventTile_noBubble: snapshot.noBubbleEvent,
-    });
-}
-
 function getContentClassName(mxEvent: MatrixEvent): string {
     const isProbablyMedia = TileMediaEventHelper.isEligible(mxEvent);
 
@@ -503,6 +465,10 @@ function useEventTileViewModel(
     );
 
     const vm = useCreateAutoDisposedViewModel(() => new EventTileViewModel(viewModelProps));
+
+    useEffect(() => {
+        vm.refreshVerification();
+    }, [vm]);
 
     useImperativeHandle(
         forwardedRef,
@@ -890,29 +856,46 @@ function useEventTileViewProps({
             props.inhibitInteraction,
         ],
     );
-    const rootClassName = useMemo(
-        () =>
-            getRootClassName(
-                props.mxEvent,
-                props.isTwelveHour,
-                props.isSelectedEvent,
-                props.last,
-                props.lastInSection,
-                props.contextual,
-                snapshot,
-                roomContext.timelineRenderingType,
-            ),
-        [
-            props.mxEvent,
-            props.isTwelveHour,
-            props.isSelectedEvent,
-            props.last,
-            props.lastInSection,
-            props.contextual,
-            snapshot,
-            roomContext.timelineRenderingType,
-        ],
-    );
+    const rootClassName = useMemo(() => {
+        const eventType = props.mxEvent.getType();
+        const msgtype = props.mxEvent.getContent().msgtype;
+        const isRenderingNotification = roomContext.timelineRenderingType === TimelineRenderingType.Notification;
+
+        return classNames({
+            mx_EventTile_bubbleContainer: snapshot.isBubbleMessage,
+            mx_EventTile_leftAlignedBubble: snapshot.isLeftAlignedBubbleMessage,
+            mx_EventTile: true,
+            mx_EventTile_isEditing: snapshot.isEditing,
+            mx_EventTile_info: snapshot.isInfoMessage,
+            mx_EventTile_12hr: props.isTwelveHour,
+            mx_EventTile_sending: !snapshot.isEditing && snapshot.isSending,
+            mx_EventTile_highlight: snapshot.isHighlighted,
+            mx_EventTile_selected: props.isSelectedEvent || snapshot.isContextMenuOpen,
+            mx_EventTile_continuation:
+                snapshot.isContinuation ||
+                eventType === EventType.CallInvite ||
+                ElementCallEventType.matches(eventType),
+            mx_EventTile_last: props.last,
+            mx_EventTile_lastInSection: props.lastInSection,
+            mx_EventTile_contextual: props.contextual,
+            mx_EventTile_actionBarFocused: snapshot.actionBarFocused,
+            mx_EventTile_bad: snapshot.isEncryptionFailure,
+            mx_EventTile_emote: msgtype === MsgType.Emote,
+            mx_EventTile_noSender: !snapshot.showSender,
+            mx_EventTile_clamp:
+                roomContext.timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
+            mx_EventTile_noBubble: snapshot.noBubbleEvent,
+        });
+    }, [
+        props.mxEvent,
+        props.isTwelveHour,
+        props.isSelectedEvent,
+        props.last,
+        props.lastInSection,
+        props.contextual,
+        snapshot,
+        roomContext.timelineRenderingType,
+    ]);
     const contentClassName = useMemo(() => getContentClassName(props.mxEvent), [props.mxEvent]);
     const avatarMember = useMemo(() => getAvatarMember(props, snapshot.avatarSubject), [props, snapshot.avatarSubject]);
     const onSenderProfileClick = useCallback((): void => {

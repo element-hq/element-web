@@ -70,6 +70,7 @@ describe("EventTileViewModel", () => {
 
     function createViewModel(overrides: Partial<EventTileViewModelProps> = {}): EventTileViewModel {
         const vm = new EventTileViewModel(makeProps(overrides));
+        vm.refreshVerification();
         createdViewModels.push(vm);
         return vm;
     }
