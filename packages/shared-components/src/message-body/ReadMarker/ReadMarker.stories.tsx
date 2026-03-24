@@ -10,11 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel";
-import {
-    ReadMarker,
-    type ReadMarkerActions,
-    type ReadMarkerSnapshot,
-} from "./ReadMarker";
+import { ReadMarker, type ReadMarkerActions, type ReadMarkerSnapshot } from "./ReadMarker";
 
 type ReadMarkerStoryProps = ReadMarkerSnapshot & ReadMarkerActions & { className?: string };
 

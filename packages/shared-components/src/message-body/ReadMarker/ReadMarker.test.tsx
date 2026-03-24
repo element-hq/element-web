@@ -11,12 +11,7 @@ import React from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import { MockViewModel } from "../../viewmodel";
-import {
-    ReadMarker,
-    type ReadMarkerActions,
-    type ReadMarkerModel,
-    type ReadMarkerSnapshot,
-} from "./ReadMarker";
+import { ReadMarker, type ReadMarkerActions, type ReadMarkerModel, type ReadMarkerSnapshot } from "./ReadMarker";
 import * as stories from "./ReadMarker.stories";
 
 const { Current, HiddenCurrent, Ghost } = composeStories(stories);
@@ -60,8 +55,7 @@ describe("ReadMarker", () => {
         const onGhostLineRef = vi.fn();
         const onGhostTransitionEnd = vi.fn();
 
-        class GhostReadMarkerModel extends MockViewModel<ReadMarkerSnapshot> implements ReadMarkerActions
-        {
+        class GhostReadMarkerModel extends MockViewModel<ReadMarkerSnapshot> implements ReadMarkerActions {
             public onGhostLineRef = onGhostLineRef;
             public onGhostTransitionEnd = onGhostTransitionEnd;
         }
@@ -87,8 +81,7 @@ describe("ReadMarker", () => {
     it("wires the current marker ref", () => {
         const onCurrentMarkerRef = vi.fn();
 
-        class CurrentReadMarkerModel extends MockViewModel<ReadMarkerSnapshot> implements ReadMarkerActions
-        {
+        class CurrentReadMarkerModel extends MockViewModel<ReadMarkerSnapshot> implements ReadMarkerActions {
             public onCurrentMarkerRef = onCurrentMarkerRef;
         }
 
