@@ -18,6 +18,19 @@ If you do MVVM right, your view should be dumb i.e it gets data from the view mo
 
 A first documentation and implementation of MVVM was done in [MVVM-v1.md](MVVM-v1.md). This v1 version is now deprecated and this document describes the current implementation.
 
+#### Naming conventions
+
+Given a feature named `Foo`, the naming convention for each MVVM artifact is:
+
+| Artifact                            | Name              |
+| ----------------------------------- | ----------------- |
+| View component                      | `FooView`         |
+| Snapshot interface                  | `FooViewSnapshot` |
+| Actions interface                   | `FooViewActions`  |
+| ViewModel type alias (in view file) | `FooViewModel`    |
+| ViewModel class (in `apps/web`)     | `FooViewModel`    |
+| ViewModel class file                | `FooViewModel.ts` |
+
 #### Model
 
 This is anywhere your data or business logic comes from. If your view model is accessing something simple exposed from `matrix-js-sdk`, then the sdk is your model. If you're using something more high level in element-web to get your data/logic (eg: `MemberListStore`), then that becomes your model.

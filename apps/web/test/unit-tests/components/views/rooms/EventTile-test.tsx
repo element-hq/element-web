@@ -328,7 +328,7 @@ describe("EventTile", () => {
             ],
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
             [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
-            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity was reset"],
+            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified digital identity was reset"],
             [
                 EventShieldReason.MISMATCHED_SENDER,
                 "The sender of the event does not match the owner of the device that sent it.",

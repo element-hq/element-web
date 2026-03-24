@@ -71,7 +71,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   <h2
                     class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
                   >
-                    Confirm your identity
+                    Confirm your digital identity
                   </h2>
                 </div>
                 <div
@@ -146,7 +146,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                     role="button"
                     tabindex="0"
                   >
-                    Sign out
+                    Remove this device
                   </button>
                 </div>
               </div>
@@ -263,7 +263,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   <h2
                     class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
                   >
-                    Confirm your identity
+                    Confirm your digital identity
                   </h2>
                 </div>
                 <div
@@ -327,7 +327,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                     role="button"
                     tabindex="0"
                   >
-                    Sign out
+                    Remove this device
                   </button>
                 </div>
               </div>

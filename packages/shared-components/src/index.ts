@@ -16,7 +16,7 @@ export * from "./crypto/SasEmoji";
 export * from "./event-tiles/EncryptionEventView";
 export * from "./event-tiles/EventTileBubble";
 export * from "./event-tiles/TextualEventView";
-export * from "./event-tiles/UrlPreviewView";
+export * from "./event-tiles/UrlPreviewGroupView";
 export * from "./message-body/EventContentBody";
 export * from "./message-body/MediaBody";
 export * from "./message-body/MessageTimestampView";
@@ -50,6 +50,7 @@ export * from "./utils/Flex";
 export * from "./utils/LinkedText";
 export * from "./right-panel/WidgetContextMenu";
 export * from "./utils/VirtualizedList";
+export * from "./resize";
 
 // Utils
 export * from "./utils/i18n";

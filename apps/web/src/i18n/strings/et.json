@@ -1495,8 +1495,6 @@
     },
     "labs": {
         "ask_to_join": "Võta kasutusele liitumine kasutaja sooviavalduse alusel",
-        "automatic_debug_logs": "Iga vea puhul saada silumislogid automaatselt arendajatele",
-        "automatic_debug_logs_decryption": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele",
         "beta_description": "Mida %(brand)s tulevikus teha oskab? Arendusjärgus funktsionaalsuste loendist leiad võimalusi, mis varsti on kõigile saadaval, kuid sa saad neid juba katsetada ning ka mõjutada missuguseks nad lõplikukt kujunevad.",
         "beta_feature": "See on veel katsetamisjärgus funktsionaalsus",
         "beta_feedback_leave_button": "Beetaversiooni saad välja lülitada rakenduse seadistustest.",
@@ -3398,8 +3396,7 @@
             "voice_call_unsupported": "%(senderName)s alustas häälkõnet. (sellel brauseril puudub niisuguste kõnede tugi)"
         },
         "m.file": {
-            "error_decrypting": "Viga manuse dekrüptimisel",
-            "error_invalid": "Vigane fail"
+            "error_decrypting": "Viga manuse dekrüptimisel"
         },
         "m.image": {
             "error": "Vea tõttu ei ole võimalik pilti kuvada",
@@ -3740,14 +3737,7 @@
             "one_user": "%(displayName)s kirjutab midagi…",
             "two_users": "%(names)s ja %(lastPerson)s kirjutavad midagi…"
         },
-        "undecryptable_tooltip": "Seda sõnumit ei õnnestunud dekrüptida",
-        "url_preview": {
-            "close": "Sulge eelvaade",
-            "show_n_more": {
-                "other": "Näita %(count)s muud eelvaadet",
-                "one": "Näita veel %(count)s eelvaadet"
-            }
-        }
+        "undecryptable_tooltip": "Seda sõnumit ei õnnestunud dekrüptida"
     },
     "truncated_list_n_more": {
         "other": "Ja %(count)s muud..."

@@ -29,7 +29,7 @@ test.describe("logout with logout_redirect_url", () => {
         // give a change for the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);
 
-        await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
+        await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Remove this device" }).click();
         await expect(page).toHaveURL(/\/decoder-ring\/$/);
     });
 });
