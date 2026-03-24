@@ -104,10 +104,9 @@ export class VideoBodyViewModel
     private state: InternalState;
 
     public constructor(props: VideoBodyViewModelProps) {
-        super(props, VideoBodyViewModel.computeSnapshot(props, VideoBodyViewModel.createInitialState()));
-
-        this.state = VideoBodyViewModel.createInitialState();
-        this.snapshot.set(VideoBodyViewModel.computeSnapshot(this.props, this.state));
+        const initialState = VideoBodyViewModel.createInitialState();
+        super(props, VideoBodyViewModel.computeSnapshot(props, initialState));
+        this.state = initialState;
 
         const imageSizeWatcherRef = SettingsStore.watchSetting("Images.size", null, (_s, _r, _l, _nvl, value) => {
             this.setImageSize(value as ImageSize);
