@@ -75,7 +75,8 @@ export class ResizerViewModel
 
     public onSeparatorClick = (): void => {
         if (this.panelHandle?.isCollapsed()) {
-            this.panelHandle.resize(`100%`);
+            const lastSize = SettingsStore.getValue("RoomList.panelSize");
+            this.panelHandle.resize(`${lastSize}%`);
         }
     };
 
