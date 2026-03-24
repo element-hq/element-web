@@ -202,11 +202,7 @@ export function VideoBodyView({
 
     return (
         <span className={rootClassName}>
-            <div
-                className={resolvedContainerClassName}
-                style={containerStyle}
-                data-video-body-view-state={VideoBodyViewState.READY}
-            >
+            <div className={resolvedContainerClassName} style={containerStyle} data-video-body-mask-target="">
                 {/* Captions will be supplied from app-side data once the VM wiring is in place. */}
                 {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                 <video

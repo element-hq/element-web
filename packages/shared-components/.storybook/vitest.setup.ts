@@ -28,10 +28,10 @@ vis.setup({
                 /*
                  * Mask spinner for video overlay during screenshot generation on playwright tests.
                  */
-                [data-video-body-view-state="READY"] {
+                [data-video-body-mask-target] {
                     position: relative;
                 }
-                [data-video-body-view-state="READY"]::after {
+                [data-video-body-mask-target]::after {
                     content: "";
                     position: absolute;
                     inset-inline-start: 50%;
