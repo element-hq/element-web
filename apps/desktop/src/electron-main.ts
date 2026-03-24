@@ -70,7 +70,7 @@ if (argv["help"]) {
     console.log("  --no-update:          Disable automatic updating.");
     console.log("  --hidden:             Start the application hidden in the system tray.");
     console.log("  --help:               Displays this help message.");
-    console.log("And more such as --proxy, see:" + "https://electronjs.org/docs/api/command-line-switches");
+    console.log("And more such as --proxy, see: https://electronjs.org/docs/api/command-line-switches");
     app.exit();
 }
 

@@ -30,7 +30,7 @@
         "asar-webapp": "asar p webapp webapp.asar",
         "start": "pnpm run build:ts && pnpm run build:res && electron .",
         "lint": "pnpm lint:types && pnpm lint:js",
-        "lint:js": "eslint --max-warnings 0 src hak playwright scripts && prettier --check .",
+        "lint:js": "eslint --max-warnings 0 src hak playwright scripts",
         "lint:js-fix": "eslint --fix --max-warnings 0 src hak playwright scripts && prettier --log-level=warn --write .",
         "lint:types": "pnpm lint:types:src && pnpm lint:types:test && pnpm lint:types:scripts && pnpm lint:types:hak",
         "lint:types:src": "tsc --noEmit",

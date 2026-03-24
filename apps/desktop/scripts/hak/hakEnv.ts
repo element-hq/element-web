@@ -14,7 +14,7 @@ import childProcess, { type SpawnOptions } from "node:child_process";
 import { type Arch, type Target, TARGETS, getHost, isHostId, type TargetId } from "./target.js";
 
 async function getRuntimeVersion(projectRoot: string): Promise<string> {
-    const electronVersion = await getElectronVersionFromInstalled(projectRoot);
+    const electronVersion = await getElectronVersionFromInstalled(path.join(projectRoot, "..", ".."));
     if (!electronVersion) {
         throw new Error("Can't determine Electron version");
     }
