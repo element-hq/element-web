@@ -49,6 +49,9 @@ function getBugReportCtaLabel(): string | undefined {
         : _t("bug_reporting|submit_debug_logs");
 }
 
+/**
+ * Returns the localized view-source action label when developer mode is enabled.
+ */
 function getViewSourceCtaLabel(developerMode: boolean): string | undefined {
     return developerMode ? _t("action|view_source") : undefined;
 }
