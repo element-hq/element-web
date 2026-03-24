@@ -36,7 +36,7 @@ import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { isMimeTypeAllowed } from "../../../utils/blobs.ts";
-import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
+import { FileBodyFactory, renderMBody } from "./MBodyFactory";
 
 enum Placeholder {
     NoImage,
@@ -651,7 +651,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             this.context.timelineRenderingType === TimelineRenderingType.Thread ||
             this.context.timelineRenderingType === TimelineRenderingType.ThreadsList;
         if (!hasMessageActionBar) {
-            return renderMBody({ ...this.props, showFileInfo: false }, FileBodyViewFactory);
+            return renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory);
         }
     }
 
@@ -664,7 +664,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
             !content.info?.thumbnail_info
         ) {
-            return renderMBody(this.props, FileBodyViewFactory);
+            return renderMBody(this.props, FileBodyFactory);
         }
 
         if (this.state.error) {
