@@ -23,12 +23,14 @@ import styles from "./VideoBodyView.module.css";
 /**
  * Render states for the shared video body view.
  */
-export enum VideoBodyViewState {
-    ERROR = "ERROR",
-    HIDDEN = "HIDDEN",
-    LOADING = "LOADING",
-    READY = "READY",
-}
+export const VideoBodyViewState = {
+    ERROR: "ERROR",
+    HIDDEN: "HIDDEN",
+    LOADING: "LOADING",
+    READY: "READY",
+} as const;
+
+export type VideoBodyViewState = (typeof VideoBodyViewState)[keyof typeof VideoBodyViewState];
 
 export interface VideoBodyViewSnapshot {
     /**
