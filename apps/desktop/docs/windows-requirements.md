@@ -2,7 +2,7 @@
 
 ## Requirements to build native modules
 
-We rely on Github Actions `windows-2022` plus a few extra utilities as per [the workflow](https://github.com/vector-im/element-desktop/blob/develop/.github/workflows/build_windows.yaml).
+We rely on Github Actions `windows-2022` plus a few extra utilities as per [the workflow](https://github.com/vector-im/element-web/blob/develop/.github/workflows/build_desktop_windows.yaml).
 
 If you want to build native modules, make sure that the following tools are installed on your system.
 
