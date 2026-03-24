@@ -9,7 +9,7 @@ concurrency:
 permissions: {} # No permissions required
 jobs:
     fetch:
-        uses: ./.github/workflows/build_prepare.yaml
+        uses: ./.github/workflows/build_desktop_prepare.yaml
         permissions:
             contents: read
         with:

@@ -110,13 +110,14 @@ jobs:
 
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
-                  repository: element-hq/element-desktop
+                  repository: element-hq/element-web
                   ref: ${{ inputs.ref }}
                   persist-credentials: false
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   name: ${{ inputs.prepare-artifact-name }}
+                  path: apps/desktop/
 
             - name: Cache .hak
               id: cache
@@ -124,7 +125,7 @@ jobs:
               with:
                   key: ${{ runner.os }}-${{ inputs.arch }}-${{ hashFiles('hakHash', 'electronVersion') }}
                   path: |
-                      ./.hak
+                      apps/desktop/.hak
 
             # ActiveTCL package on choco is from 2015,
             # this one is newer but includes more than we need
@@ -154,14 +155,16 @@ jobs:
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
-                  node-version-file: .node-version
+                  node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
 
             - name: Install Deps
+              working-directory: apps/desktop
               run: "pnpm install --frozen-lockfile"
 
             - name: Insert config snippet
               if: steps.config.outputs.extra_config != ''
+              working-directory: apps/desktop
               shell: bash
               run: |
                   mkdir config-edit
@@ -188,6 +191,7 @@ jobs:
 
             - name: Build Natives
               if: steps.cache.outputs.cache-hit != 'true'
+              working-directory: apps/desktop
               run: |
                   refreshenv
                   pnpm build:native --target $env:TARGET
@@ -239,6 +243,7 @@ jobs:
                   MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
 
             - name: Build App
+              working-directory: apps/desktop
               run: pnpm build --publish never $BUILD_ARGS -w $TARGETS
               shell: bash
               env:
@@ -260,6 +265,7 @@ jobs:
                   Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
 
             - name: Check app was signed successfully
+              working-directory: apps/desktop
               run: |
                   Set-StrictMode -Version 'Latest'
                   Get-ChildItem `
@@ -272,15 +278,17 @@ jobs:
               with:
                   name: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
                   path: |
-                      dist
+                      apps/desktop/dist
                   retention-days: 1
 
             - name: Assert executable is present
+              working-directory: apps/desktop
               run: |
                   Test-Path './dist/win-*unpacked/Element*.exe'
 
             - name: Assert all Squirrel files are present
               if: contains(inputs.targets, 'squirrel')
+              working-directory: apps/desktop
               run: |
                   Test-Path './dist/squirrel-windows*/Element Setup*.exe'
                   Test-Path './dist/squirrel-windows*/element-desktop-*-full.nupkg'
@@ -288,6 +296,7 @@ jobs:
 
             - name: Assert MSI is present
               if: contains(inputs.targets, 'msi')
+              working-directory: apps/desktop
               run: |
                   Test-Path './dist/Element*.msi'
 
@@ -295,7 +304,7 @@ jobs:
         name: Test Windows ${{ inputs.arch }}
         needs: build
         if: inputs.test
-        uses: ./.github/workflows/build_test.yaml
+        uses: ./.github/workflows/build_desktop_test.yaml
         with:
             project: win-${{ inputs.arch }}
             artifact: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}

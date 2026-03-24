@@ -61,15 +61,17 @@ jobs:
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
-                  node-version-file: .node-version
+                  node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
 
             - name: Install Deps
+              working-directory: apps/desktop
               run: "pnpm install --frozen-lockfile"
 
             - name: Fetch Element Web (matching branch)
               id: branch-matching
               if: inputs.branch-matching
+              working-directory: apps/desktop
               continue-on-error: true
               run: |
                   scripts/branch-match.sh
@@ -86,18 +88,21 @@ jobs:
 
             - name: Fetch Element Web (${{ inputs.version }})
               if: steps.branch-matching.outcome == 'failure' || steps.branch-matching.outcome == 'skipped'
+              working-directory: apps/desktop
               run: pnpm run fetch --noverify -d ${CONFIG} ${VERSION}
               env:
                   CONFIG: ${{ inputs.config }}
                   VERSION: ${{ inputs.version }}
 
             - name: Copy variant config
+              working-directory: apps/desktop
               run: cp "$CONFIG_DIR/build.json" variant.json
               env:
                   CONFIG_DIR: ${{ inputs.config }}
 
             # We split this out to save the build_* scripts having to do it to make use of `hashFiles` in the cache action
             - name: Generate cache hash files
+              working-directory: apps/desktop
               run: |
                   set -ex
                   # Add --no-sandbox as otherwise it fails because the helper isn't setuid root. It's only getting the version.
@@ -130,6 +135,7 @@ jobs:
 
             - name: Check version
               id: package
+              working-directory: apps/desktop
               run: |
                   echo "version=$(cat package.json | jq -r .version)" >> $GITHUB_OUTPUT
 
@@ -144,6 +150,7 @@ jobs:
 
             - name: "[Release] Write changelog"
               if: ${{ !inputs.nightly && inputs.version != 'develop' }}
+              working-directory: apps/desktop
               run: |
                   TIME=$(date -d "$PUBLISHED_AT" -R)
                   echo "element-desktop ($VERSION) default; urgency=medium" >> changelog.Debian
@@ -158,6 +165,7 @@ jobs:
 
             - name: "[Nightly] Write summary"
               if: inputs.nightly
+              working-directory: apps/desktop
               run: |
                   BUNDLE_HASH=$(npx asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
                   WEBAPP_VERSION=$(./scripts/get-version.ts)
@@ -179,8 +187,8 @@ jobs:
                   name: webapp
                   retention-days: 1
                   path: |
-                      webapp.asar
-                      electronVersion
-                      hakHash
-                      changelog.Debian
-                      variant.json
+                      apps/desktop/webapp.asar
+                      apps/desktop/electronVersion
+                      apps/desktop/hakHash
+                      apps/desktop/changelog.Debian
+                      apps/desktop/variant.json

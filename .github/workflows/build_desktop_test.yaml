@@ -38,24 +38,26 @@ jobs:
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
-                  repository: ${{ github.repository == 'element-hq/element-web-pro' && 'element-hq/element-desktop' || github.repository }}
+                  repository: ${{ github.repository == 'element-hq/element-web-pro' && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
-                  node-version-file: .node-version
+                  node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
 
             - name: Install Deps
+              working-directory: apps/desktop
               run: "pnpm install --frozen-lockfile"
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   name: ${{ inputs.artifact }}
-                  path: dist
+                  path: apps/desktop/dist
 
             - name: Prepare for tests
+              working-directory: apps/desktop
               # This is set by the caller of the reusable workflow, they have the ability to run the command they specify
               # directly without our help so this is fine.
               run: ${{ inputs.prepare_cmd }} # zizmor: ignore[template-injection]
@@ -63,6 +65,7 @@ jobs:
 
             - name: Expand executable path
               id: executable
+              working-directory: apps/desktop
               shell: bash
               env:
                   EXECUTABLE: ${{ inputs.executable }}
@@ -84,7 +87,7 @@ jobs:
               uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
               timeout-minutes: 20
               with:
-                  run: pnpm test --project=${{ inputs.project }} ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} ${{ inputs.blob_report == false && '--reporter=html' || '' }} ${{ inputs.args }}
+                  run: pnpm -C apps/desktop test --project=${{ inputs.project }} ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} ${{ inputs.blob_report == false && '--reporter=html' || '' }} ${{ inputs.args }}
               env:
                   ELEMENT_DESKTOP_EXECUTABLE: ${{ steps.executable.outputs.path }}
 
@@ -93,7 +96,7 @@ jobs:
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: blob-report-${{ inputs.artifact }}
-                  path: blob-report
+                  path: apps/desktop/blob-report
                   retention-days: 1
 
             - name: Upload HTML report
@@ -101,5 +104,5 @@ jobs:
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: ${{ inputs.artifact }}-test
-                  path: playwright-report
+                  path: apps/desktop/playwright-report
                   retention-days: 14

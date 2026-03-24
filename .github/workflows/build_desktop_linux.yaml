@@ -33,7 +33,7 @@ on:
                     + webapp.asar - the asar archive of the webapp to embed in the desktop app
                     + electronVersion - the version of electron to use for cache keying
                     + hakHash - the hash of the .hak directory to use for cache keying
-                    + changelog.Debian - the changelog file to embed in the Debian package  
+                    + changelog.Debian - the changelog file to embed in the Debian package
                     + variant.json - the variant configuration to use for the build
 
                     The artifact can also contain any additional files which will be applied as overrides to the checkout root before building,
@@ -107,13 +107,14 @@ jobs:
 
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
-                  repository: element-hq/element-desktop
+                  repository: element-hq/element-web
                   ref: ${{ inputs.ref }}
                   persist-credentials: false
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   name: ${{ inputs.prepare-artifact-name }}
+                  path: apps/desktop
 
             - name: Cache .hak
               id: cache
@@ -121,34 +122,36 @@ jobs:
               with:
                   key: ${{ runner.os }}-${{ github.ref_name }}-${{ inputs.sqlcipher }}-${{ inputs.arch }}-${{ hashFiles('hakHash', 'electronVersion', 'dockerbuild/*') }}
                   path: |
-                      ./.hak
+                      apps/desktop/.hak
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
-                  node-version-file: .node-version
+                  node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
               env:
                   # Workaround for https://github.com/actions/setup-node/issues/317
                   FORCE_COLOR: 0
 
             - name: Install Deps
+              working-directory: apps/desktop
               run: pnpm install --frozen-lockfile
 
             - name: "Get modified files"
               id: changed_files
-              if: steps.cache.outputs.cache-hit != 'true' && github.event_name == 'pull_request' && github.repository == 'element-hq/element-desktop'
+              if: steps.cache.outputs.cache-hit != 'true' && github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
               uses: tj-actions/changed-files@823fcebdb31bb35fdf2229d9f769b400309430d0 # v46
               with:
                   files: |
-                      dockerbuild/**
+                      apps/desktop/dockerbuild/**
 
             # This allows contributors to test changes to the dockerbuild image within a pull request
             - name: Build docker image
               uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
               if: steps.changed_files.outputs.any_modified == 'true'
               with:
-                  file: dockerbuild/Dockerfile
+                  file: apps/desktop/dockerbuild/Dockerfile
+                  context: apps/desktop
                   load: true
                   platforms: linux/${{ inputs.arch }}
                   tags: ${{ env.HAK_DOCKER_IMAGE }}
@@ -157,13 +160,14 @@ jobs:
               if: steps.cache.outputs.cache-hit != 'true'
               run: |
                   docker run \
-                    -v ${{ github.workspace }}:/work -w /work \
+                    -v ${{ github.workspace }}/apps/desktop:/work -w /work \
                     -e SQLCIPHER_BUNDLED \
                     -e CI=1 \
                     $HAK_DOCKER_IMAGE \
                     pnpm build:native
 
             - name: Fix permissions
+              working-directory: apps/desktop
               run: |
                   # For .hak
                   sudo chown -R $USER:$USER .hak
@@ -171,6 +175,7 @@ jobs:
                   sudo chmod +x node_modules/7zip-bin/linux/*/7za
 
             - name: Check native libraries in hak dependencies
+              working-directory: apps/desktop
               run: |
                   shopt -s globstar
 
@@ -179,12 +184,14 @@ jobs:
                   done
 
             - name: Generate debian files and arguments
+              working-directory: apps/desktop
               run: |
                   if [ -f changelog.Debian ]; then
                       echo "ED_DEBIAN_CHANGELOG=changelog.Debian" >> $GITHUB_ENV
                   fi
 
             - name: Build App
+              working-directory: apps/desktop
               run: pnpm build --publish never $BUILD_ARGS -l $TARGETS
               env:
                   VARIANT_PATH: variant.json
@@ -196,6 +203,7 @@ jobs:
                   TARGETS: ${{ inputs.targets }}
 
             - name: Check native libraries
+              working-directory: apps/desktop
               run: |
                   set -x
                   shopt -s globstar
@@ -227,12 +235,13 @@ jobs:
               with:
                   name: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
                   path: |
-                      dist
-                      !dist/*-unpacked/**
+                      apps/desktop/dist
+                      !apps/desktop/dist/*-unpacked/**
                   retention-days: 1
 
             - name: Assert deb is present and valid
               if: contains(inputs.targets, 'deb')
+              working-directory: apps/desktop
               run: |
                   test -f ./dist/element-desktop*$ARCH.deb
 
@@ -245,6 +254,7 @@ jobs:
 
             - name: Assert tar.gz is present
               if: contains(inputs.targets, 'tar.gz')
+              working-directory: apps/desktop
               run: |
                   test -f ./dist/element-desktop*.tar.gz
 
@@ -257,7 +267,7 @@ jobs:
         name: Test Linux ${{ inputs.arch }} SQLCipher ${{ inputs.sqlcipher }}
         needs: build
         if: inputs.test && contains(inputs.targets, 'deb')
-        uses: ./.github/workflows/build_test.yaml
+        uses: ./.github/workflows/build_desktop_test.yaml
         with:
             project: linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
             artifact: ${{ inputs.artifact-prefix }}linux-${{ inputs.arch }}-sqlcipher-${{ inputs.sqlcipher }}
