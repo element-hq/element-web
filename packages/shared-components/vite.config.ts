@@ -44,6 +44,7 @@ export default defineConfig({
                     "@vector-im/compound-design-tokens": "compoundDesignTokens",
                     "@vector-im/compound-web": "compoundWeb",
                     "react-virtuoso": "reactVirtuoso",
+                    "react-resizable-panels": "reactResizablePanels",
                 },
             },
         },
