@@ -18,7 +18,7 @@ coverage
 /apps/web/src/modules.ts
 /apps/web/src/modules.js
 src/i18n/strings
-/apps/web//build_config.yaml
+/apps/web/build_config.yaml
 # Raises an error because it contains a template var breaking the script tag
 /apps/web/src/vector/index.html
 /apps/web/src/vector/modernizr.cjs
@@ -44,6 +44,13 @@ package-lock.json
 /apps/web/playwright/html-report/
 /apps/web/playwright/logs/
 /apps/web/playwright/snapshots/
+
+/apps/desktop/build/
+/apps/desktop/dockerbuild/
+/apps/desktop/lib/
+/apps/desktop/webapp
+/apps/desktop/playwright/html-report
+/apps/desktop/playwright/test-results
 
 # Shared components generated files
 /packages/shared-components/dist/
