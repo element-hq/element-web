@@ -1,29 +1,27 @@
 {
-  "fill" : "automatic",
-  "groups" : [
-    {
-      "layers" : [
+    "fill": "automatic",
+    "groups": [
         {
-          "glass" : false,
-          "image-name" : "element.png",
-          "name" : "element"
+            "layers": [
+                {
+                    "glass": false,
+                    "image-name": "element.png",
+                    "name": "element"
+                }
+            ],
+            "name": "Figma",
+            "shadow": {
+                "kind": "none",
+                "opacity": 0.5
+            },
+            "specular": false,
+            "translucency": {
+                "enabled": false,
+                "value": 0.5
+            }
         }
-      ],
-      "name" : "Figma",
-      "shadow" : {
-        "kind" : "none",
-        "opacity" : 0.5
-      },
-      "specular" : false,
-      "translucency" : {
-        "enabled" : false,
-        "value" : 0.5
-      }
+    ],
+    "supported-platforms": {
+        "squares": ["macOS"]
     }
-  ],
-  "supported-platforms" : {
-    "squares" : [
-      "macOS"
-    ]
-  }
 }
