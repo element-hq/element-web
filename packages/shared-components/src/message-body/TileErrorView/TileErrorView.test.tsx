@@ -58,6 +58,7 @@ describe("TileErrorView", () => {
 
         const vm = new TestTileErrorViewModel(
             {
+                layout: "group",
                 message: "Can't load this message",
                 eventType: "m.room.message",
                 bugReportCtaLabel: "Submit debug logs",
@@ -80,6 +81,7 @@ describe("TileErrorView", () => {
 
     it("applies a custom className to the root element", () => {
         const vm = new MockViewModel<TileErrorViewSnapshot>({
+            layout: "group",
             message: "Can't load this message",
         }) as TileErrorViewModel;
 

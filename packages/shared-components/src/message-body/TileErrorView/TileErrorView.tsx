@@ -16,6 +16,10 @@ export type TileErrorViewLayout = "bubble" | "group" | "irc";
 
 export interface TileErrorViewSnapshot {
     /**
+     * Layout variant used by the host timeline.
+     */
+    layout?: TileErrorViewLayout;
+    /**
      * Primary fallback text shown when a tile fails to render.
      */
     message: string;
@@ -55,10 +59,6 @@ interface TileErrorViewProps {
      * Optional host-level class names.
      */
     className?: string;
-    /**
-     * Layout variant used by the host timeline.
-     */
-    layout?: TileErrorViewLayout;
 }
 
 /**
@@ -66,11 +66,11 @@ interface TileErrorViewProps {
  *
  * The component shows the fallback error message from the view model, optionally
  * appends the event type in parentheses, and can render bug-report and view-source
- * actions when their labels are provided. The `layout` prop lets the host choose
- * the timeline presentation variant.
+ * actions when their labels are provided. The layout in the view-model snapshot
+ * selects the timeline presentation variant.
  */
-export function TileErrorView({ vm, className, layout = "group" }: Readonly<TileErrorViewProps>): JSX.Element {
-    const { message, eventType, bugReportCtaLabel, viewSourceCtaLabel } = useViewModel(vm);
+export function TileErrorView({ vm, className }: Readonly<TileErrorViewProps>): JSX.Element {
+    const { message, eventType, bugReportCtaLabel, viewSourceCtaLabel, layout = "group" } = useViewModel(vm);
 
     return (
         <li

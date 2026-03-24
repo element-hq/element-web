@@ -1556,23 +1556,23 @@ interface EventTileErrorFallbackProps {
 
 function EventTileErrorFallback({ error, layout, mxEvent }: Readonly<EventTileErrorFallbackProps>): JSX.Element {
     const developerMode = useSettingValue("developerMode");
-    const vm = useCreateAutoDisposedViewModel(() => new TileErrorViewModel({ error, mxEvent, developerMode }));
+    const vm = useCreateAutoDisposedViewModel(
+        () => new TileErrorViewModel({ error, layout: layout as TileErrorViewLayout, mxEvent, developerMode }),
+    );
 
     useEffect(() => {
         vm.setError(error);
     }, [error, vm]);
 
     useEffect(() => {
+        vm.setLayout(layout as TileErrorViewLayout);
+    }, [layout, vm]);
+
+    useEffect(() => {
         vm.setDeveloperMode(developerMode);
     }, [developerMode, vm]);
 
-    return (
-        <TileErrorView
-            vm={vm}
-            className="mx_EventTile mx_EventTile_info mx_EventTile_content"
-            layout={layout as TileErrorViewLayout}
-        />
-    );
+    return <TileErrorView vm={vm} className="mx_EventTile mx_EventTile_info mx_EventTile_content" />;
 }
 
 interface EventTileErrorBoundaryProps {

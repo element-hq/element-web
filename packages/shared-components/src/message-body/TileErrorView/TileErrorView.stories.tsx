@@ -5,24 +5,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { type ComponentProps, type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel";
-import {
-    TileErrorView,
-    type TileErrorViewActions,
-    type TileErrorViewLayout,
-    type TileErrorViewSnapshot,
-} from "./TileErrorView";
+import { TileErrorView, type TileErrorViewActions, type TileErrorViewSnapshot } from "./TileErrorView";
 
 type WrapperProps = TileErrorViewSnapshot &
-    Partial<TileErrorViewActions> & Omit<TileErrorViewProps, "vm">;
+    Partial<TileErrorViewActions> &
+    Omit<ComponentProps<typeof TileErrorView>, "vm">;
 
 const TileErrorViewWrapper = ({
     className,
-    layout,
     onBugReportClick,
     onViewSourceClick,
     ...snapshotProps
@@ -34,7 +29,7 @@ const TileErrorViewWrapper = ({
 
     return (
         <ul>
-            <TileErrorView vm={vm} className={className} layout={layout} />
+            <TileErrorView vm={vm} className={className} />
         </ul>
     );
 };

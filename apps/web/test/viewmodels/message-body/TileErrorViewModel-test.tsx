@@ -33,6 +33,7 @@ describe("TileErrorViewModel", () => {
         const mxEvent = overrides.mxEvent ?? createEvent();
 
         return new TileErrorViewModel({
+            layout: "group",
             developerMode: true,
             error,
             mxEvent,
@@ -55,6 +56,7 @@ describe("TileErrorViewModel", () => {
         const vm = createVm();
 
         expect(vm.getSnapshot()).toEqual({
+            layout: "group",
             message: "Can't load this message",
             eventType: "m.room.message",
             bugReportCtaLabel: "Submit debug logs",
@@ -84,6 +86,17 @@ describe("TileErrorViewModel", () => {
         vm.setMxEvent(createEvent("m.room.redaction"));
 
         expect(vm.getSnapshot().eventType).toBe("m.room.redaction");
+        expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it("updates the layout when the host timeline layout changes", () => {
+        const vm = createVm();
+        const listener = jest.fn();
+        vm.subscribe(listener);
+
+        vm.setLayout("bubble");
+
+        expect(vm.getSnapshot().layout).toBe("bubble");
         expect(listener).toHaveBeenCalledTimes(1);
     });
 
