@@ -1,0 +1,88 @@
+name: Build and Test
+on:
+    pull_request: {}
+    push:
+        branches: [develop, staging, master]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+permissions: {} # No permissions required
+jobs:
+    fetch:
+        uses: ./.github/workflows/build_prepare.yaml
+        permissions:
+            contents: read
+        with:
+            config: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'element.io/nightly' || 'element.io/release' }}
+            version: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'develop' || '' }}
+            branch-matching: true
+
+    windows:
+        needs: fetch
+        name: Windows
+        uses: ./.github/workflows/build_windows.yaml
+        strategy:
+            matrix:
+                arch: [x64, ia32, arm64]
+        with:
+            arch: ${{ matrix.arch }}
+            blob_report: true
+
+    linux:
+        needs: fetch
+        name: "Linux (${{ matrix.arch }}) (sqlcipher: ${{ matrix.sqlcipher }})"
+        uses: ./.github/workflows/build_linux.yaml
+        strategy:
+            matrix:
+                sqlcipher: [system, static]
+                arch: [amd64, arm64]
+        with:
+            sqlcipher: ${{ matrix.sqlcipher }}
+            arch: ${{ matrix.arch }}
+            blob_report: true
+
+    macos:
+        needs: fetch
+        name: macOS
+        uses: ./.github/workflows/build_macos.yaml
+        with:
+            blob_report: true
+
+    tests-done:
+        needs: [windows, linux, macos]
+        runs-on: ubuntu-24.04
+        if: ${{ !cancelled() }}
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              with:
+                  cache: "pnpm"
+                  node-version: "lts/*"
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Download blob reports from GitHub Actions Artifacts
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  pattern: blob-report-*
+                  path: all-blob-reports
+                  merge-multiple: true
+
+            - name: Merge into HTML Report
+              run: pnpm playwright merge-reports -c ./playwright.config.ts --reporter=html ./all-blob-reports
+
+            - name: Upload HTML report
+              if: always()
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              with:
+                  name: html-report
+                  path: playwright-report
+                  retention-days: 14
+
+            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+              run: exit 1

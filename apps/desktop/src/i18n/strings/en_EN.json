@@ -1,0 +1,92 @@
+{
+    "action": {
+        "cancel": "Cancel",
+        "close": "Close",
+        "close_brand": "Close %(brand)s",
+        "copy": "Copy",
+        "cut": "Cut",
+        "delete": "Delete",
+        "edit": "Edit",
+        "minimise": "Minimize",
+        "paste": "Paste",
+        "paste_match_style": "Paste and Match Style",
+        "quit": "Quit",
+        "redo": "Redo",
+        "select_all": "Select All",
+        "show_hide": "Show/Hide",
+        "undo": "Undo",
+        "zoom_in": "Zoom In",
+        "zoom_out": "Zoom Out"
+    },
+    "common": {
+        "about": "About",
+        "brand_help": "%(brand)s Help",
+        "help": "Help",
+        "no": "No",
+        "preferences": "Preferences",
+        "yes": "Yes"
+    },
+    "confirm_quit": "Are you sure you want to quit?",
+    "edit_menu": {
+        "speech": "Speech",
+        "speech_start_speaking": "Start Speaking",
+        "speech_stop_speaking": "Stop Speaking"
+    },
+    "eol": {
+        "no_more_updates": "You are running an unsupported version of macOS. Please upgrade to receive %(brand)s updates.",
+        "title": "System unsupported",
+        "warning": "You are running an unsupported version of macOS. Please upgrade to ensure %(brand)s keeps working."
+    },
+    "file_menu": {
+        "label": "File"
+    },
+    "icon_overlay": {
+        "description_error": "Error",
+        "description_notifications": {
+            "one": "You have %(count)s unread notification.",
+            "other": "You have %(count)s unread notifications."
+        }
+    },
+    "menu": {
+        "hide": "Hide",
+        "hide_others": "Hide Others",
+        "services": "Services",
+        "unhide": "Unhide"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Add to dictionary",
+        "copy_email": "Copy email address",
+        "copy_image": "Copy image",
+        "copy_image_url": "Copy image address",
+        "copy_link_url": "Copy link address",
+        "save_image_as": "Save image as...",
+        "save_image_as_error_description": "The image failed to save",
+        "save_image_as_error_title": "Failed to save image"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Clear data and reload?",
+            "backend_changed_detail": "Unable to access secret from system keyring, it appears to have changed.",
+            "backend_changed_title": "Failed to load database",
+            "backend_no_encryption": "Your system has a supported keyring but encryption is not available.",
+            "backend_no_encryption_detail": "Electron has detected that encryption is not available on your keyring %(backend)s. Please ensure that you have the keyring installed. If you do have the keyring installed, please reboot and try again. Optionally, you can allow %(brand)s to use a weaker form of encryption.",
+            "backend_no_encryption_title": "No encryption support",
+            "unsupported_keyring": "Your system has an unsupported keyring meaning the database cannot be opened.",
+            "unsupported_keyring_detail": "Electron's keyring detection did not find a supported backend. You can attempt to manually configure the backend by starting %(brand)s with a command-line argument, a one-time operation. See %(link)s.",
+            "unsupported_keyring_title": "System unsupported",
+            "unsupported_keyring_use_basic_text": "Use weaker encryption",
+            "unsupported_keyring_use_plaintext": "Use no encryption"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Actual Size",
+        "toggle_developer_tools": "Toggle Developer Tools",
+        "toggle_full_screen": "Toggle Full Screen",
+        "view": "View"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Bring All to Front",
+        "label": "Window",
+        "zoom": "Zoom"
+    }
+}

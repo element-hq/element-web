@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "target": "es2022",
+        "module": "es2022",
+        "lib": ["es2022", "dom"]
+    },
+    "include": ["**/*.ts"]
+}

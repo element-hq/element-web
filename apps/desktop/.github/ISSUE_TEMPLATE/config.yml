@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Bug report for the Element flatpak app
+      url: https://github.com/flathub/im.riot.Riot/issues
+      about: Please file bugs with the Flatpak application on the respective repository.
+    - name: Bug report for Element Desktop
+      url: https://github.com/element-hq/element-web/issues/new/choose
+      about: Please file all Element Desktop bugs in element-web.

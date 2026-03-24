@@ -1,0 +1,305 @@
+# This workflow relies on actions/cache to store the hak dependency artifacts as they take a long time to build
+# Due to this extra care must be taken to only ever run all build_* scripts against the same branch to ensure
+# the correct cache scoping, and additional care must be taken to not run untrusted actions on the develop branch.
+
+# Windows GHA runner by default uses the pwsh shell which breaks codeSigningCert in the workflow
+# We always sign using eSignerCKA to ensure it keeps working, but aside from release & nightlies we use demo credentials
+# which do not yield trusted signatures.
+defaults:
+    run:
+        shell: powershell
+on:
+    workflow_call:
+        secrets:
+            ESIGNER_USER_NAME:
+                required: false
+            ESIGNER_USER_PASSWORD:
+                required: false
+            ESIGNER_USER_TOTP:
+                required: false
+        inputs:
+            ref:
+                type: string
+                required: false
+                description: "The git ref to checkout, defaults to the default branch"
+            arch:
+                type: string
+                required: true
+                description: "The architecture to build for, one of 'x64' | 'ia32' | 'arm64'"
+            version:
+                type: string
+                required: false
+                description: "Version string to override the one in package.json, used for non-release builds"
+            sign:
+                type: string
+                required: false
+                description: "Whether to sign & notarise the build, requires 'packages.element.io' environment"
+            blob_report:
+                type: boolean
+                required: false
+                description: "Whether to run the blob report"
+            prepare-artifact-name:
+                type: string
+                required: false
+                description: |
+                    The name of the prepare artifact to use, defaults to 'webapp'.
+                    The artifact must contain the following:
+                    + webapp.asar - the asar archive of the webapp to embed in the desktop app
+                    + electronVersion - the version of electron to use for cache keying
+                    + hakHash - the hash of the .hak directory to use for cache keying
+                    + variant.json - the variant configuration to use for the build
+
+
+                    The artifact can also contain any additional files which will be applied as overrides to the checkout root before building,
+                    for example icons in the `build/` directory to override the app icons.
+                default: "webapp"
+            test:
+                type: boolean
+                required: false
+                default: true
+                description: "Whether to run the test stage after building"
+            test-runs-on:
+                type: string
+                required: false
+                description: "The runner image to use for testing, normally set for you, may be needed for running in private repos."
+            test-args:
+                type: string
+                required: false
+                description: "Additional arguments to pass to playwright"
+            artifact-prefix:
+                type: string
+                required: false
+                description: "An optional prefix to add to the artifact name, useful for distinguishing builds in private repos."
+                default: ""
+            targets:
+                type: string
+                required: false
+                description: "List of targets to build"
+                default: "squirrel msi"
+permissions: {} # No permissions required
+jobs:
+    build:
+        name: Build Windows ${{ inputs.arch }}
+        runs-on: windows-2025
+        environment: ${{ inputs.sign && 'packages.element.io' || '' }}
+        env:
+            SIGNTOOL_PATH: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/signtool.exe"
+        steps:
+            - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
+              id: config
+              with:
+                  key: "${{ inputs.arch }}"
+                  export_to: output
+                  map: |
+                      {
+                        "x64": {
+                          "target": "x86_64-pc-windows-msvc"
+                        },
+                        "arm64": {
+                          "target": "aarch64-pc-windows-msvc",
+                          "build-args": "--arm64",
+                          "arch": "amd64_arm64"
+                        },
+                        "ia32": {
+                          "target": "i686-pc-windows-msvc",
+                          "build-args": "--ia32",
+                          "arch": "x86",
+                          "extra_config": "{\"user_notice\": {\"title\": \"Your desktop environment is unsupported.\",\"description\": \"Support for 32-bit Windows installations has ended. Transition to the web or mobile app for continued access.\"}}"
+                        }
+                      }
+
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  repository: element-hq/element-desktop
+                  ref: ${{ inputs.ref }}
+                  persist-credentials: false
+
+            - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  name: ${{ inputs.prepare-artifact-name }}
+
+            - name: Cache .hak
+              id: cache
+              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              with:
+                  key: ${{ runner.os }}-${{ inputs.arch }}-${{ hashFiles('hakHash', 'electronVersion') }}
+                  path: |
+                      ./.hak
+
+            # ActiveTCL package on choco is from 2015,
+            # this one is newer but includes more than we need
+            - name: Choco install tclsh
+              if: steps.cache.outputs.cache-hit != 'true'
+              shell: pwsh
+              run: |
+                  choco install -y magicsplat-tcl-tk --no-progress
+                  echo "${HOME}/AppData/Local/Apps/Tcl86/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+            - name: Choco install NetWide Assembler
+              if: steps.cache.outputs.cache-hit != 'true'
+              shell: pwsh
+              run: |
+                  choco install -y nasm --no-progress
+                  echo "C:/Program Files/NASM" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+            - name: Install Rust
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: |
+                  rustup toolchain install stable --profile minimal --no-self-update
+                  rustup default stable
+                  rustup target add $env:TARGET
+              env:
+                  TARGET: ${{ steps.config.outputs.target }}
+
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              with:
+                  node-version-file: .node-version
+                  cache: "pnpm"
+
+            - name: Install Deps
+              run: "pnpm install --frozen-lockfile"
+
+            - name: Insert config snippet
+              if: steps.config.outputs.extra_config != ''
+              shell: bash
+              run: |
+                  mkdir config-edit
+                  pnpm asar extract webapp.asar config-edit
+                  cd config-edit
+                  mv config.json old-config.json
+                  echo '${{ steps.config.outputs.extra_config }}' | jq -s '.[0] * .[1]' old-config.json - > config.json
+                  rm old-config.json
+                  cd ..
+                  rm webapp.asar
+                  pnpm asar pack config-edit/ webapp.asar
+
+            - name: Set up sqlcipher macros
+              if: steps.cache.outputs.cache-hit != 'true' && contains(inputs.arch, 'arm')
+              shell: pwsh
+              run: |
+                  echo "NCC=${{ github.workspace }}\scripts\cl.bat" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+            - name: Set up build tools
+              if: steps.cache.outputs.cache-hit != 'true'
+              uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+              with:
+                  arch: ${{ steps.config.outputs.arch || inputs.arch }}
+
+            - name: Build Natives
+              if: steps.cache.outputs.cache-hit != 'true'
+              run: |
+                  refreshenv
+                  pnpm build:native --target $env:TARGET
+              env:
+                  TARGET: ${{ steps.config.outputs.target }}
+
+            - name: Install and configure eSigner CKA
+              run: |
+                  Set-StrictMode -Version 'Latest'
+
+                  # Download, extract, and rename
+                  Invoke-WebRequest -OutFile eSigner_CKA.zip "$env:ESIGNER_URL"
+                  Expand-Archive -Path eSigner_CKA.zip -DestinationPath .
+                  Get-ChildItem -Path * -Include "*_build_*.exe" | Rename-Item -NewName eSigner_CKA.exe
+
+                  # Install
+                  New-Item -ItemType Directory -Force -Path "$env:INSTALL_DIR"
+                  ./eSigner_CKA.exe /CURRENTUSER /VERYSILENT /SUPPRESSMSGBOXES /DIR="${{ env.INSTALL_DIR }}" | Out-Null
+
+                  # Disable logger
+                  $LogConfig = Get-Content -Path ${{ env.INSTALL_DIR }}/log4net.config
+                  $LogConfig[0] = '<log4net threshold="OFF">'
+                  $LogConfig | Set-Content -Path ${{ env.INSTALL_DIR }}/log4net.config
+
+                  # Configure - default credentials from https://www.ssl.com/guide/esigner-demo-credentials-and-certificates/
+                  ${{ env.INSTALL_DIR }}/eSignerCKATool.exe config `
+                      -mode "$env:ESIGNER_MODE" `
+                      -user "${{ secrets.ESIGNER_USER_NAME || 'esigner_demo' }}" `
+                      -pass "${{ secrets.ESIGNER_USER_PASSWORD || 'esignerDemo#1' }}" `
+                      -totp "${{ secrets.ESIGNER_USER_TOTP || 'RDXYgV9qju+6/7GnMf1vCbKexXVJmUVr+86Wq/8aIGg=' }}" `
+                      -key "${{ env.MASTER_KEY_FILE }}" -r
+                  ${{ env.INSTALL_DIR }}/eSignerCKATool.exe unload
+                  ${{ env.INSTALL_DIR }}/eSignerCKATool.exe load
+
+                  # Find certificate
+                  $CodeSigningCert = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert | Select-Object -First 1
+                  echo Certificate: $CodeSigningCert
+
+                  # Extract thumbprint and subject name
+                  $Thumbprint = $CodeSigningCert.Thumbprint
+                  $SubjectName = ($CodeSigningCert.Subject -replace ", ?", "`n" | ConvertFrom-StringData).CN
+
+                  echo "ED_SIGNTOOL_THUMBPRINT=$Thumbprint" >> $env:GITHUB_ENV
+                  echo "ED_SIGNTOOL_SUBJECT_NAME=$SubjectName" >> $env:GITHUB_ENV
+              env:
+                  ESIGNER_MODE: ${{ vars.ESIGNER_MODE || 'sandbox' }}
+                  ESIGNER_URL: https://github.com/SSLcom/eSignerCKA/releases/download/v1.0.6/SSL.COM-eSigner-CKA_1.0.6.zip
+                  INSTALL_DIR: C:\Users\runneradmin\eSignerCKA
+                  MASTER_KEY_FILE: C:\Users\runneradmin\eSignerCKA\master.key
+
+            - name: Build App
+              run: pnpm build --publish never $BUILD_ARGS -w $TARGETS
+              shell: bash
+              env:
+                  VARIANT_PATH: variant.json
+                  # Only set for Nightly builds
+                  # The windows packager relies on parsing this as semver, so we have to make it look like one.
+                  # This will give our update packages really stupid names, but we probably can't change that either
+                  # because squirrel windows parses them for the version too. We don't really care: nobody sees them.
+                  # We just give the installer a static name, so you'll just see this in the 'about' dialog.
+                  # Turns out if you use 0.0.0 here it makes Squirrel windows crash, so we use 0.0.1.
+                  VERSION: ${{ inputs.version && format('0.0.1-nightly.{0}', inputs.version) || '' }}
+                  BUILD_ARGS: ${{ steps.config.outputs.build-args }}
+                  TARGETS: ${{ inputs.targets }}
+
+            - name: Trust eSigner sandbox cert
+              if: inputs.sign == ''
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Import-Certificate -CertStoreLocation Cert:\LocalMachine\Root -FilePath .github/SSLcom-sandbox.crt
+
+            - name: Check app was signed successfully
+              run: |
+                  Set-StrictMode -Version 'Latest'
+                  Get-ChildItem `
+                      -Recurse dist `
+                      -Include *.exe, *.msi `
+                  | ForEach-Object -Process {. $env:SIGNTOOL_PATH verify /pa $_.FullName; if(!$?) { throw }}
+
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              with:
+                  name: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
+                  path: |
+                      dist
+                  retention-days: 1
+
+            - name: Assert executable is present
+              run: |
+                  Test-Path './dist/win-*unpacked/Element*.exe'
+
+            - name: Assert all Squirrel files are present
+              if: contains(inputs.targets, 'squirrel')
+              run: |
+                  Test-Path './dist/squirrel-windows*/Element Setup*.exe'
+                  Test-Path './dist/squirrel-windows*/element-desktop-*-full.nupkg'
+                  Test-Path './dist/squirrel-windows*/RELEASES'
+
+            - name: Assert MSI is present
+              if: contains(inputs.targets, 'msi')
+              run: |
+                  Test-Path './dist/Element*.msi'
+
+    test:
+        name: Test Windows ${{ inputs.arch }}
+        needs: build
+        if: inputs.test
+        uses: ./.github/workflows/build_test.yaml
+        with:
+            project: win-${{ inputs.arch }}
+            artifact: ${{ inputs.artifact-prefix }}win-${{ inputs.arch }}
+            runs-on: ${{ inputs.test-runs-on || (inputs.arch == 'arm64' && 'windows-11-arm' || 'windows-2022') }}
+            executable: ./dist/win*-unpacked/Element*.exe
+            blob_report: ${{ inputs.blob_report }}
+            args: ${{ inputs.test-args }}

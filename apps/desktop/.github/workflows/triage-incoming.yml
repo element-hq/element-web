@@ -1,0 +1,16 @@
+name: Move new issues into Issue triage board
+
+on:
+    issues:
+        types: [opened]
+
+permissions: {} # Uses ELEMENT_BOT_TOKEN
+
+jobs:
+    automate-project-columns-next:
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/120
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

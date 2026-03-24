@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "moduleResolution": "node16",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "target": "es2022",
+        "module": "node16",
+        "sourceMap": false,
+        "strict": true,
+        "lib": ["es2021"]
+    },
+    "include": ["../src/@types", "./**/*.ts"]
+}

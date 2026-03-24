@@ -1,0 +1,105 @@
+# This action helps run Playwright tests within one of the build_* stages.
+on:
+    workflow_call:
+        inputs:
+            runs-on:
+                type: string
+                required: true
+                description: "The runner image to use"
+            artifact:
+                type: string
+                required: true
+                description: "The name of the artifact to download"
+            project:
+                type: string
+                required: true
+                description: "The Playwright project to use for testing"
+            executable:
+                type: string
+                required: true
+                description: "Path to the executable to test"
+            prepare_cmd:
+                type: string
+                required: false
+                description: "Command to run to prepare the executable or environment for testing"
+            blob_report:
+                type: boolean
+                default: false
+                description: "Whether to upload a blob report instead of the HTML report"
+            args:
+                type: string
+                required: false
+                description: "Additional arguments to pass to playwright, for e.g. skipping specific tests"
+permissions: {}
+jobs:
+    test:
+        name: Test ${{ inputs.project }}
+        runs-on: ${{ inputs.runs-on }}
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  repository: ${{ github.repository == 'element-hq/element-web-pro' && 'element-hq/element-desktop' || github.repository }}
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              with:
+                  node-version-file: .node-version
+                  cache: "pnpm"
+
+            - name: Install Deps
+              run: "pnpm install --frozen-lockfile"
+
+            - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  name: ${{ inputs.artifact }}
+                  path: dist
+
+            - name: Prepare for tests
+              # This is set by the caller of the reusable workflow, they have the ability to run the command they specify
+              # directly without our help so this is fine.
+              run: ${{ inputs.prepare_cmd }} # zizmor: ignore[template-injection]
+              if: inputs.prepare_cmd
+
+            - name: Expand executable path
+              id: executable
+              shell: bash
+              env:
+                  EXECUTABLE: ${{ inputs.executable }}
+              run: |
+                  FILES=($EXECUTABLE)
+                  echo "path=${FILES[0]}" >> $GITHUB_OUTPUT
+
+            # We previously disabled the `EnableNodeCliInspectArguments` fuse, but Playwright requires
+            # it to be enabled to test Electron apps, so turn it back on.
+            - name: Set EnableNodeCliInspectArguments fuse enabled
+              run: $RUN_AS npx @electron/fuses write --app "$EXECUTABLE" EnableNodeCliInspectArguments=on
+              shell: bash
+              env:
+                  # We need sudo on Linux as it is installed in /opt/
+                  RUN_AS: ${{ runner.os == 'Linux' && 'sudo' || '' }}
+                  EXECUTABLE: ${{ steps.executable.outputs.path }}
+
+            - name: Run tests
+              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
+              timeout-minutes: 20
+              with:
+                  run: pnpm test --project=${{ inputs.project }} ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} ${{ inputs.blob_report == false && '--reporter=html' || '' }} ${{ inputs.args }}
+              env:
+                  ELEMENT_DESKTOP_EXECUTABLE: ${{ steps.executable.outputs.path }}
+
+            - name: Upload blob report
+              if: always() && inputs.blob_report
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              with:
+                  name: blob-report-${{ inputs.artifact }}
+                  path: blob-report
+                  retention-days: 1
+
+            - name: Upload HTML report
+              if: always() && inputs.blob_report == false
+              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              with:
+                  name: ${{ inputs.artifact }}-test
+                  path: playwright-report
+                  retention-days: 14

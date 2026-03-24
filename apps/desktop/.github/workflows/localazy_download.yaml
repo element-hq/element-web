@@ -1,0 +1,14 @@
+name: Localazy Download
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "0 6 * * 1,3,5" # Every Monday, Wednesday and Friday at 6am UTC
+permissions:
+    pull-requests: write # needed to auto-approve PRs
+jobs:
+    download:
+        uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_download.yaml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
+        with:
+            packageManager: pnpm
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
