@@ -178,12 +178,6 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0
     devDependencies:
-      '@action-validator/cli':
-        specifier: ^0.6.0
-        version: 0.6.0(@action-validator/core@0.6.0)
-      '@action-validator/core':
-        specifier: ^0.6.0
-        version: 0.6.0
       '@babel/core':
         specifier: ^7.18.10
         version: 7.29.0
@@ -268,15 +262,6 @@ importers:
       glob:
         specifier: ^13.0.0
         version: 13.0.6
-      husky:
-        specifier: ^9.1.6
-        version: 9.1.7
-      knip:
-        specifier: ^5.0.0
-        version: 5.87.0(patch_hash=873a4dc88d16b775314860cbae8af05be293a2e1a3f86d78562885e78256f2ee)(@types/node@18.19.130)(typescript@5.9.3)
-      lint-staged:
-        specifier: ^16.0.0
-        version: 16.3.0
       matrix-web-i18n:
         specifier: 'catalog:'
         version: 3.6.0
