@@ -21,10 +21,10 @@ import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 import {
     DateSeparatorView,
     MockViewModel,
-    ReadMarkerView,
-    type ReadMarkerViewActions,
-    type ReadMarkerViewModel,
-    type ReadMarkerViewSnapshot,
+    ReadMarker,
+    type ReadMarkerActions,
+    type ReadMarkerModel,
+    type ReadMarkerSnapshot,
     TimelineSeparator,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -74,11 +74,11 @@ function DateSeparatorWrapper({ roomId, ts }: { roomId: string; ts: number }): J
     return <DateSeparatorView vm={vm} className="mx_TimelineSeparator" />;
 }
 
-interface StaticReadMarkerViewModelProps extends ReadMarkerViewSnapshot, ReadMarkerViewActions {}
+interface StaticReadMarkerModelProps extends ReadMarkerSnapshot, ReadMarkerActions {}
 
-function createReadMarkerViewModel(props: StaticReadMarkerViewModelProps): ReadMarkerViewModel {
+function createReadMarkerModel(props: StaticReadMarkerModelProps): ReadMarkerModel {
     const { eventId, kind, showLine, onCurrentMarkerRef, onGhostLineRef, onGhostTransitionEnd } = props;
-    const vm = new MockViewModel<ReadMarkerViewSnapshot>({ eventId, kind, showLine }) as ReadMarkerViewModel;
+    const vm = new MockViewModel<ReadMarkerSnapshot>({ eventId, kind, showLine }) as ReadMarkerModel;
 
     Object.assign(vm, {
         onCurrentMarkerRef,
@@ -531,9 +531,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         if (this.props.readMarkerEventId === eventId) {
             return (
-                <ReadMarkerView
+                <ReadMarker
                     key={"readMarker_" + eventId}
-                    vm={createReadMarkerViewModel({
+                    vm={createReadMarkerModel({
                         eventId,
                         kind: "current",
                         showLine,
@@ -557,9 +557,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             // we get a new DOM node (restarting the animation) when the ghost
             // moves to a different event.
             return (
-                <ReadMarkerView
+                <ReadMarker
                     key={"_readuptoghost_" + eventId}
-                    vm={createReadMarkerViewModel({
+                    vm={createReadMarkerModel({
                         eventId,
                         kind: "ghost",
                         showLine: true,

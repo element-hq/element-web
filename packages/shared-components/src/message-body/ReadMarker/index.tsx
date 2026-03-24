@@ -6,9 +6,9 @@
  */
 
 export {
-    ReadMarkerView,
+    ReadMarker,
     type ReadMarkerKind,
-    type ReadMarkerViewActions,
-    type ReadMarkerViewModel,
-    type ReadMarkerViewSnapshot,
-} from "./ReadMarkerView";
+    type ReadMarkerActions,
+    type ReadMarkerModel,
+    type ReadMarkerSnapshot,
+} from "./ReadMarker";

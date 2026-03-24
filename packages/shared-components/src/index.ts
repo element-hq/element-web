@@ -19,7 +19,7 @@ export * from "./event-tiles/TextualEventView";
 export * from "./message-body/EventContentBody";
 export * from "./message-body/MediaBody";
 export * from "./message-body/MessageTimestampView";
-export * from "./message-body/ReadMarkerView";
+export * from "./message-body/ReadMarker";
 export * from "./message-body/DecryptionFailureBodyView";
 export * from "./message-body/ReactionsRowButtonTooltip";
 export * from "./message-body/ReactionsRowButton";

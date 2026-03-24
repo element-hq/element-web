@@ -12,16 +12,16 @@ import { describe, expect, it, vi } from "vitest";
 
 import { MockViewModel } from "../../viewmodel";
 import {
-    ReadMarkerView,
-    type ReadMarkerViewActions,
-    type ReadMarkerViewModel,
-    type ReadMarkerViewSnapshot,
-} from "./ReadMarkerView";
-import * as stories from "./ReadMarkerView.stories";
+    ReadMarker,
+    type ReadMarkerActions,
+    type ReadMarkerModel,
+    type ReadMarkerSnapshot,
+} from "./ReadMarker";
+import * as stories from "./ReadMarker.stories";
 
 const { Current, HiddenCurrent, Ghost } = composeStories(stories);
 
-describe("ReadMarkerView", () => {
+describe("ReadMarker", () => {
     it("renders the current read marker", () => {
         const { container } = render(<Current />);
         expect(container).toMatchSnapshot();
@@ -39,15 +39,15 @@ describe("ReadMarkerView", () => {
     });
 
     it("applies custom className to the list item", () => {
-        const vm = new MockViewModel<ReadMarkerViewSnapshot>({
+        const vm = new MockViewModel<ReadMarkerSnapshot>({
             eventId: "$event",
             kind: "current",
             showLine: true,
-        }) as ReadMarkerViewModel;
+        }) as ReadMarkerModel;
 
         render(
             <ul>
-                <ReadMarkerView vm={vm} className="custom-read-marker compatibility-class" />
+                <ReadMarker vm={vm} className="custom-read-marker compatibility-class" />
             </ul>,
         );
 
@@ -60,22 +60,20 @@ describe("ReadMarkerView", () => {
         const onGhostLineRef = vi.fn();
         const onGhostTransitionEnd = vi.fn();
 
-        class GhostReadMarkerViewModel
-            extends MockViewModel<ReadMarkerViewSnapshot>
-            implements ReadMarkerViewActions
+        class GhostReadMarkerModel extends MockViewModel<ReadMarkerSnapshot> implements ReadMarkerActions
         {
             public onGhostLineRef = onGhostLineRef;
             public onGhostTransitionEnd = onGhostTransitionEnd;
         }
 
-        const vm = new GhostReadMarkerViewModel({
+        const vm = new GhostReadMarkerModel({
             eventId: "$ghost",
             kind: "ghost",
-        }) as ReadMarkerViewModel;
+        }) as ReadMarkerModel;
 
         render(
             <ul>
-                <ReadMarkerView vm={vm} />
+                <ReadMarker vm={vm} />
             </ul>,
         );
 
@@ -89,22 +87,20 @@ describe("ReadMarkerView", () => {
     it("wires the current marker ref", () => {
         const onCurrentMarkerRef = vi.fn();
 
-        class CurrentReadMarkerViewModel
-            extends MockViewModel<ReadMarkerViewSnapshot>
-            implements ReadMarkerViewActions
+        class CurrentReadMarkerModel extends MockViewModel<ReadMarkerSnapshot> implements ReadMarkerActions
         {
             public onCurrentMarkerRef = onCurrentMarkerRef;
         }
 
-        const vm = new CurrentReadMarkerViewModel({
+        const vm = new CurrentReadMarkerModel({
             eventId: "$current",
             kind: "current",
             showLine: true,
-        }) as ReadMarkerViewModel;
+        }) as ReadMarkerModel;
 
         render(
             <ul>
-                <ReadMarkerView vm={vm} />
+                <ReadMarker vm={vm} />
             </ul>,
         );
 

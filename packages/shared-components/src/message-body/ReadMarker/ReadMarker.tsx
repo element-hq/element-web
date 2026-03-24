@@ -9,11 +9,11 @@ import React, { type JSX, type RefCallback, type TransitionEventHandler } from "
 import classNames from "classnames";
 
 import { type ViewModel, useViewModel } from "../../viewmodel";
-import styles from "./ReadMarkerView.module.css";
+import styles from "./ReadMarker.module.css";
 
 export type ReadMarkerKind = "current" | "ghost";
 
-export interface ReadMarkerViewSnapshot {
+export interface ReadMarkerSnapshot {
     /**
      * The event ID this marker is associated with.
      */
@@ -29,7 +29,7 @@ export interface ReadMarkerViewSnapshot {
     showLine?: boolean;
 }
 
-export interface ReadMarkerViewActions {
+export interface ReadMarkerActions {
     /**
      * Ref callback for the active read marker `<li>`.
      */
@@ -44,17 +44,17 @@ export interface ReadMarkerViewActions {
     onGhostTransitionEnd?: TransitionEventHandler<HTMLHRElement>;
 }
 
-export type ReadMarkerViewModel = ViewModel<ReadMarkerViewSnapshot, ReadMarkerViewActions>;
+export type ReadMarkerModel = ViewModel<ReadMarkerSnapshot, ReadMarkerActions>;
 
-interface ReadMarkerViewProps {
-    vm: ReadMarkerViewModel;
+interface ReadMarkerProps {
+    vm: ReadMarkerModel;
     /**
      * Optional CSS className for the outer list item.
      */
     className?: string;
 }
 
-export function ReadMarkerView({ vm, className }: Readonly<ReadMarkerViewProps>): JSX.Element {
+export function ReadMarker({ vm, className }: Readonly<ReadMarkerProps>): JSX.Element {
     const { eventId, kind, showLine = true } = useViewModel(vm);
 
     const line =

@@ -11,14 +11,14 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../viewmodel";
 import {
-    ReadMarkerView,
-    type ReadMarkerViewActions,
-    type ReadMarkerViewSnapshot,
-} from "./ReadMarkerView";
+    ReadMarker,
+    type ReadMarkerActions,
+    type ReadMarkerSnapshot,
+} from "./ReadMarker";
 
-type ReadMarkerStoryProps = ReadMarkerViewSnapshot & ReadMarkerViewActions & { className?: string };
+type ReadMarkerStoryProps = ReadMarkerSnapshot & ReadMarkerActions & { className?: string };
 
-const ReadMarkerViewWrapper = ({
+const ReadMarkerWrapper = ({
     className,
     onCurrentMarkerRef,
     onGhostLineRef,
@@ -33,21 +33,21 @@ const ReadMarkerViewWrapper = ({
 
     return (
         <ul>
-            <ReadMarkerView vm={vm} className={className} />
+            <ReadMarker vm={vm} className={className} />
         </ul>
     );
 };
 
 const meta = {
-    title: "MessageBody/ReadMarkerView",
-    component: ReadMarkerViewWrapper,
+    title: "MessageBody/ReadMarker",
+    component: ReadMarkerWrapper,
     tags: ["autodocs"],
     args: {
         eventId: "$event",
         kind: "current",
         showLine: true,
     },
-} satisfies Meta<typeof ReadMarkerViewWrapper>;
+} satisfies Meta<typeof ReadMarkerWrapper>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

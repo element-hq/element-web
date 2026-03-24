@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ReadMarkerView > renders the current read marker 1`] = `
+exports[`ReadMarker > renders the current read marker 1`] = `
 <div>
   <ul>
     <li
@@ -15,7 +15,7 @@ exports[`ReadMarkerView > renders the current read marker 1`] = `
 </div>
 `;
 
-exports[`ReadMarkerView > renders the ghost read marker 1`] = `
+exports[`ReadMarker > renders the ghost read marker 1`] = `
 <div>
   <ul>
     <li
@@ -30,7 +30,7 @@ exports[`ReadMarkerView > renders the ghost read marker 1`] = `
 </div>
 `;
 
-exports[`ReadMarkerView > renders the hidden current read marker without a line 1`] = `
+exports[`ReadMarker > renders the hidden current read marker without a line 1`] = `
 <div>
   <ul>
     <li
