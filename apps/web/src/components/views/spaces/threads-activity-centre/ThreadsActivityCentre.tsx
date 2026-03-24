@@ -76,6 +76,7 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
             }}
         >
             <Menu
+                className="mx_ThreadsActivityCentre_menu"
                 align="start"
                 side="top"
                 open={open}
@@ -93,33 +94,7 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                     />
                 }
             >
-                {/* Tab toggle: Rooms | All threads | My threads */}
-                <div className="mx_ThreadsActivityCentre_tabs" role="tablist">
-                    <button
-                        role="tab"
-                        aria-selected={view === TACView.Rooms}
-                        className={`mx_ThreadsActivityCentre_tab ${view === TACView.Rooms ? "mx_ThreadsActivityCentre_tab--active" : ""}`}
-                        onClick={() => setView(TACView.Rooms)}
-                    >
-                        {_t("threads_activity_centre|rooms_tab")}
-                    </button>
-                    <button
-                        role="tab"
-                        aria-selected={view === TACView.AllThreads}
-                        className={`mx_ThreadsActivityCentre_tab ${view === TACView.AllThreads ? "mx_ThreadsActivityCentre_tab--active" : ""}`}
-                        onClick={() => setView(TACView.AllThreads)}
-                    >
-                        {_t("threads_activity_centre|all_threads_tab")}
-                    </button>
-                    <button
-                        role="tab"
-                        aria-selected={view === TACView.MyThreads}
-                        className={`mx_ThreadsActivityCentre_tab ${view === TACView.MyThreads ? "mx_ThreadsActivityCentre_tab--active" : ""}`}
-                        onClick={() => setView(TACView.MyThreads)}
-                    >
-                        {_t("threads_activity_centre|my_threads_tab")}
-                    </button>
-                </div>
+
                 {/* Make the content of the pop-up scrollable */}
                 <div className="mx_ThreadsActivityCentre_rows">
                     {view === TACView.Rooms && (
@@ -165,6 +140,33 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
                             )}
                         </>
                     )}
+                </div>
+                                {/* Tab toggle: Rooms | All threads | My threads */}
+                <div className="mx_ThreadsActivityCentre_tabs" role="tablist">
+                    <button
+                        role="tab"
+                        aria-selected={view === TACView.Rooms}
+                        className={`mx_ThreadsActivityCentre_tab ${view === TACView.Rooms ? "mx_ThreadsActivityCentre_tab--active" : ""}`}
+                        onClick={() => setView(TACView.Rooms)}
+                    >
+                        {_t("threads_activity_centre|rooms_tab")}
+                    </button>
+                    <button
+                        role="tab"
+                        aria-selected={view === TACView.AllThreads}
+                        className={`mx_ThreadsActivityCentre_tab ${view === TACView.AllThreads ? "mx_ThreadsActivityCentre_tab--active" : ""}`}
+                        onClick={() => setView(TACView.AllThreads)}
+                    >
+                        {_t("threads_activity_centre|all_threads_tab")}
+                    </button>
+                    <button
+                        role="tab"
+                        aria-selected={view === TACView.MyThreads}
+                        className={`mx_ThreadsActivityCentre_tab ${view === TACView.MyThreads ? "mx_ThreadsActivityCentre_tab--active" : ""}`}
+                        onClick={() => setView(TACView.MyThreads)}
+                    >
+                        {_t("threads_activity_centre|my_threads_tab")}
+                    </button>
                 </div>
             </Menu>
         </div>
@@ -246,9 +248,7 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
         <MenuItem
             className="mx_ThreadsActivityCentreRow mx_ThreadsActivityCentreThreadRow"
             // label={null} renders no label span; aria-label provides the accessible name.
-            // hideChevron prevents compound's nav-hint from hiding our content on hover.
             label={null}
-            hideChevron
             aria-label={senderName ? `${room.name}: ${senderName}: ${previewText}` : room.name}
             Icon={<DecoratedRoomAvatar room={room} size="32px" />}
             onSelect={(event: Event) => {
@@ -278,7 +278,6 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
             <div className="mx_ThreadsActivityCentreThreadRow_content">
                 <div className="mx_ThreadsActivityCentreThreadRow_header">
                     <span className="mx_ThreadsActivityCentreThreadRow_roomName">{room.name}</span>
-                    <StatelessNotificationBadge level={notificationLevel} count={0} symbol={null} forceDot={true} />
                 </div>
                 {(senderName || previewText) && (
                     <span className="mx_ThreadsActivityCentreThreadRow_preview">
@@ -289,6 +288,7 @@ function ThreadsActivityCentreThreadRow({ threadData, onClick }: ThreadsActivity
                     </span>
                 )}
             </div>
+            <StatelessNotificationBadge level={notificationLevel} count={0} symbol={null} forceDot={true} />
         </MenuItem>
     );
 }
