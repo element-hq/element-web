@@ -19,7 +19,7 @@
         "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
         "lint:knip": "knip",
         "install:git-hooks": "husky",
-        "postinstall": "node scripts/pnpm-link.ts"
+        "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall"
     },
     "resolutions": {
         "pretty-format@30>react-is": "19.2.4",
@@ -30,11 +30,14 @@
         "caniuse-lite": "1.0.30001780",
         "markdown-it": "14.1.1",
         "testcontainers": "^11.0.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^10.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^10.0.0",
         "matrix-widget-api": "^1.17.0",
         "qs": "6.15.0",
-        "serialize-javascript": "7.0.4"
+        "serialize-javascript": "7.0.4",
+        "atomically": "2.1.1",
+        "@types/node": "18.19.130",
+        "config-file-ts": "0.2.8-rc1",
+        "node-abi": "4.27.0",
+        "@types/pg-pool": "2.0.7"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
@@ -56,7 +59,8 @@
     },
     "pnpm": {
         "onlyBuiltDependencies": [
-            "matrix-js-sdk"
+            "matrix-js-sdk",
+            "electron"
         ],
         "ignoredBuiltDependencies": [
             "@sentry/cli",
@@ -67,6 +71,7 @@
             "react-blurhash": "patches/react-blurhash.patch",
             "linkify-html": "patches/linkify-html.patch",
             "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
+            "@types/auto-launch": "patches/@types__auto-launch.patch",
             "@types/mdx": "patches/@types__mdx.patch",
             "await-lock": "patches/await-lock.patch",
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",

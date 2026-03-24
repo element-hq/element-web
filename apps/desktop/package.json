@@ -12,7 +12,7 @@
     "homepage": "https://element.io",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vector-im/element-desktop"
+        "url": "https://github.com/vector-im/element-web"
     },
     "license": "SEE LICENSE IN README.md",
     "type": "module",
@@ -57,7 +57,7 @@
         "test:open": "pnpm test --ui",
         "test:screenshots:build": "docker build playwright -t element-desktop-playwright --platform linux/amd64",
         "test:screenshots:run": "docker run --rm --network host -v $(pwd):/work/element-desktop -v element-desktop-playwright:/work/element-desktop/node_modules -v /var/run/docker.sock:/var/run/docker.sock --platform linux/amd64 -it element-desktop-playwright",
-        "postinstall": "electron-builder install-app-deps"
+        "sane-postinstall": "electron-builder install-app-deps"
     },
     "dependencies": {
         "@sentry/electron": "^7.0.0",
@@ -76,7 +76,7 @@
         "@babel/preset-env": "^7.18.10",
         "@babel/preset-typescript": "^7.18.6",
         "@electron/asar": "4.1.0",
-        "@playwright/test": "1.58.2",
+        "@playwright/test": "catalog:",
         "@stylistic/eslint-plugin": "^5.0.0",
         "@types/auto-launch": "^5.0.1",
         "@types/counterpart": "^0.18.1",
@@ -103,7 +103,7 @@
         "husky": "^9.1.6",
         "knip": "^5.0.0",
         "lint-staged": "^16.0.0",
-        "matrix-web-i18n": "3.6.0",
+        "matrix-web-i18n": "catalog:",
         "mkdirp": "^3.0.0",
         "pacote": "^21.0.0",
         "prettier": "^3.0.0",
@@ -114,29 +114,6 @@
     },
     "hakDependencies": {
         "matrix-seshat": "^4.0.1"
-    },
-    "resolutions": {
-        "atomically": "2.1.1",
-        "@types/node": "18.19.130",
-        "config-file-ts": "0.2.8-rc1",
-        "node-abi": "4.27.0",
-        "@types/pg-pool": "2.0.7"
-    },
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "electron"
-        ],
-        "patchedDependencies": {
-            "@types/auto-launch": "patches/@types__auto-launch.patch"
-        },
-        "peerDependencyRules": {
-            "allowedVersions": {
-                "eslint": "8"
-            }
-        },
-        "allowedDeprecatedVersions": {
-            "eslint": "8"
-        }
     },
     "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
 }
