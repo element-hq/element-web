@@ -134,6 +134,9 @@ export class VideoBodyViewModel
         };
     }
 
+    /**
+     * Derive the aspect ratio for the video frame from the event metadata, when available.
+     */
     private static getAspectRatio(mxEvent: MatrixEvent): string | undefined {
         const { w, h } = (mxEvent.getContent<MediaEventContent>().info as VideoInfoWithBlurhash | undefined) ?? {};
         if (!w || !h) {
