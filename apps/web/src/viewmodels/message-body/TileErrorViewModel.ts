@@ -85,10 +85,7 @@ export class TileErrorViewModel
     public setError(error: Error): void {
         if (this.props.error === error) return;
 
-        this.props = {
-            ...this.props,
-            error,
-        };
+        this.props.error = error
     }
 
     public setDeveloperMode(developerMode: boolean): void {
