@@ -5,7 +5,8 @@
         "target": "es2022",
         "sourceMap": false,
         "strict": true,
-        "lib": ["es2022"]
+        "lib": ["es2022"],
+        "types": ["node"]
     },
     "include": ["../scripts/@types/*.d.ts", "./**/*.ts"]
 }

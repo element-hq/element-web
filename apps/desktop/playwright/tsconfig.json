@@ -5,7 +5,8 @@
         "esModuleInterop": true,
         "target": "es2022",
         "module": "es2022",
-        "lib": ["es2022", "dom"]
+        "lib": ["es2022", "dom"],
+        "types": ["node"]
     },
     "include": ["**/*.ts"]
 }
