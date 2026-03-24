@@ -42,7 +42,7 @@ test.describe("Dehydration", () => {
         await page.getByRole("button", { name: "Continue" }).click();
 
         // Set up recovery
-        await page.getByRole("button", { name: "Set up recovery" }).click();
+        await page.getByRole("button", { name: "Get recovery key" }).click();
         await page.getByRole("button", { name: "Continue" }).click();
         const recoveryKey = await page.getByTestId("recoveryKey").innerText();
         await page.getByRole("button", { name: "Continue" }).click();
@@ -59,14 +59,14 @@ test.describe("Dehydration", () => {
         await expect(sessionsTab.getByText("Dehydrated device")).not.toBeVisible();
     });
 
-    test("'Set up recovery' creates dehydrated device", async ({ app, credentials, page }) => {
+    test("'Get recovery key' creates dehydrated device", async ({ app, credentials, page }) => {
         await logIntoElement(page, credentials);
 
         const settingsDialogLocator = await app.settings.openUserSettings("Encryption");
-        await settingsDialogLocator.getByRole("button", { name: "Set up recovery" }).click();
+        await settingsDialogLocator.getByRole("button", { name: "Get recovery key" }).click();
 
         // First it displays an informative panel about the recovery key
-        await expect(settingsDialogLocator.getByRole("heading", { name: "Set up recovery" })).toBeVisible();
+        await expect(settingsDialogLocator.getByRole("heading", { name: "Get recovery key" })).toBeVisible();
         await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
 
         // Next, it displays the new recovery key. We click on the copy button.
@@ -86,7 +86,7 @@ test.describe("Dehydration", () => {
         await expectDehydratedDeviceEnabled(app);
     });
 
-    test("Reset identity during login and set up recovery re-creates dehydrated device", async ({
+    test("Reset identity during login and back up your chats re-creates dehydrated device", async ({
         page,
         homeserver,
         app,
@@ -108,7 +108,7 @@ test.describe("Dehydration", () => {
         // Oh no, we forgot our recovery key - reset our identity
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Can't confirm" }).click();
         await expect(
-            page.getByRole("heading", { name: "Are you sure you want to reset your identity?" }),
+            page.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
         ).toBeVisible();
         await page.getByRole("button", { name: "Continue", exact: true }).click();
         await page.getByPlaceholder("Password").fill(credentials.password);
@@ -116,7 +116,7 @@ test.describe("Dehydration", () => {
 
         // And set up recovery
         const settings = await app.settings.openUserSettings("Encryption");
-        await settings.getByRole("button", { name: "Set up recovery" }).click();
+        await settings.getByRole("button", { name: "Get recovery key" }).click();
         await settings.getByRole("button", { name: "Continue" }).click();
         const recoveryKey = await settings.getByTestId("recoveryKey").innerText();
         await settings.getByRole("button", { name: "Continue" }).click();
@@ -133,10 +133,10 @@ test.describe("Dehydration", () => {
         // Create a dehydrated device by setting up recovery (see "'Set up
         // recovery' creates dehydrated device" test above)
         const settingsDialogLocator = await app.settings.openUserSettings("Encryption");
-        await settingsDialogLocator.getByRole("button", { name: "Set up recovery" }).click();
+        await settingsDialogLocator.getByRole("button", { name: "Get recovery key" }).click();
 
         // First it displays an informative panel about the recovery key
-        await expect(settingsDialogLocator.getByRole("heading", { name: "Set up recovery" })).toBeVisible();
+        await expect(settingsDialogLocator.getByRole("heading", { name: "Get recovery key" })).toBeVisible();
         await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
 
         // Next, it displays the new recovery key. We click on the copy button.

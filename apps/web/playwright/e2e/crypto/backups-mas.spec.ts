@@ -57,7 +57,7 @@ test.describe("Encryption state after registration", () => {
         await page.getByRole("textbox", { name: "Name" }).fill("test room");
         await page.getByRole("button", { name: "Create room" }).click();
 
-        await expect(page.getByRole("heading", { name: "Set up recovery" })).toBeVisible();
+        await expect(page.getByRole("heading", { name: "Back up your chats" })).toBeVisible();
     });
 });
 
