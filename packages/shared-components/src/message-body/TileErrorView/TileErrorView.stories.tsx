@@ -9,6 +9,7 @@ import React, { type ComponentProps, type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { useMockedViewModel } from "../../viewmodel";
 import { TileErrorView, type TileErrorViewActions, type TileErrorViewSnapshot } from "./TileErrorView";
 
@@ -16,7 +17,7 @@ type WrapperProps = TileErrorViewSnapshot &
     Partial<TileErrorViewActions> &
     Omit<ComponentProps<typeof TileErrorView>, "vm">;
 
-const TileErrorViewWrapper = ({
+const TileErrorViewWrapperImpl = ({
     className,
     onBugReportClick,
     onViewSourceClick,
@@ -33,6 +34,8 @@ const TileErrorViewWrapper = ({
         </ul>
     );
 };
+
+const TileErrorViewWrapper = withViewDocs(TileErrorViewWrapperImpl, TileErrorView);
 
 const meta = {
     title: "MessageBody/TileErrorView",
