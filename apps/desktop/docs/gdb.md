@@ -13,7 +13,7 @@ you will need debug symbols.
 2. Figure out which version of Electron your Element-Desktop is based on. The
    best way to do this is to figure out the version of Element-Desktop, then
    look at
-   [`package.json`](https://github.com/element-hq/element-desktop/blob/develop/package.json)
+   [`package.json`](https://github.com/element-hq/element-web/blob/develop/apps/desktop/package.json)
    for the corresponding version. There will be an entry within `dependencies` of
    `electron`: the value will tell you the version of Electron that was used for that version of Element-Desktop.
 

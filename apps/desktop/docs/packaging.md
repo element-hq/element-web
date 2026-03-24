@@ -13,16 +13,7 @@ Simply go to https://github.com/vector-im/element-desktop/actions/workflows/buil
 
 ## Packaging releases
 
-**Don't do this for RCs! We don't build Element Desktop for RCs.**
-
-For releasing Element Desktop, we assume the following prerequisites:
-
-- a tag of `element-desktop` repo with the Element Desktop version to be released set in `package.json`.
-- an Element Web tarball published to GitHub with a matching version number.
-
-**Both of these are done automatically when you run the release automation.**
-
-The packaging is kicked off automagically for you when a Github Release for Element Desktop is published.
+The packaging is kicked off automagically for you when a Github Release for Element Web is published.
 
 ### More detail on the github actions
 

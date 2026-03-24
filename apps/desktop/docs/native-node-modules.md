@@ -33,13 +33,13 @@ pnpm link docker/node_modules/matrix-seshat
 
 ... and build the app with `pnpm build` or run it with `pnpm start`.
 
-(See also https://github.com/element-hq/element-desktop#docker.)
+(See also https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#docker.)
 
 ## Building
 
 Install the pre-requisites for your system:
 
-- [Windows pre-requisites](https://github.com/vector-im/element-desktop/blob/develop/docs/windows-requirements.md)
+- [Windows pre-requisites](https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/windows-requirements.md)
 - Linux: TODO. Using the docker environment as above is recommended.
 - OS X: TODO
 
