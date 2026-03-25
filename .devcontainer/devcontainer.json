@@ -1,6 +1,6 @@
 {
     "name": "element-web designer prototyping",
-    "image": "mcr.microsoft.com/devcontainers/javascript-node:1",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
     "hostRequirements": {
         "cpus": 4,
         "memory": "8gb",
