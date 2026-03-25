@@ -21,7 +21,7 @@ const projects = [
 
 const tag = ["@desktop"];
 if (process.env.PW_TAG) {
-    tag.push(process.env.PW_TAG);
+    tag.push(`@${process.env.PW_TAG}`);
 }
 
 export default defineConfig({
