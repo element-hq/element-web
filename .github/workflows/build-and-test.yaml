@@ -101,7 +101,7 @@ jobs:
                       core.setOutput("matrix", JSON.stringify(matrix));
 
     playwright_ew:
-        name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
+        name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build_ew.outputs.num-runners }}"
         needs: build_ew
         if: inputs.skip != true
         runs-on: ubuntu-24.04
@@ -113,7 +113,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
-                runner: ${{ fromJSON(needs.build.outputs.runners-matrix) }}
+                runner: ${{ fromJSON(needs.build_ew.outputs.runners-matrix) }}
                 project:
                     - Chrome
                     - Firefox
@@ -185,7 +185,7 @@ jobs:
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
               env:
-                  SHARD: ${{ format('{0}/{1}', matrix.runner, needs.build.outputs.num-runners) }}
+                  SHARD: ${{ format('{0}/{1}', matrix.runner, needs.build_ew.outputs.num-runners) }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
