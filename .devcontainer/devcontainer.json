@@ -6,10 +6,10 @@
         "memory": "8gb",
         "storage": "32gb"
     },
-    "postCreateCommand": "pnpm install --frozen-lockfile && git checkout -b design/${GITHUB_USER}/$(date +%Y%m%d) 2>/dev/null || true",
+    "postCreateCommand": "pnpm install --frozen-lockfile && pnpm --filter @element-hq/web-shared-components run build && git checkout -b design/${GITHUB_USER}/$(date +%Y%m%d) 2>/dev/null || true",
     "postAttachCommand": {
         "install-vsix": "node .devcontainer/storybook-launcher/build-vsix.mjs && code --install-extension $(ls .devcontainer/storybook-launcher/*.vsix | head -1) --force 2>/dev/null",
-        "element-web": "cp -n apps/web/config.sample.json apps/web/config.json && pnpm install --frozen-lockfile && cd apps/web && pnpm start",
+        "element-web": "cp -n apps/web/config.sample.json apps/web/config.json && cd apps/web && pnpm start",
         "storybook": "pnpm run storybook:design"
     },
     "forwardPorts": [6007, 8080],
