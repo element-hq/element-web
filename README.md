@@ -72,7 +72,7 @@ Element can also be run as a desktop app, wrapped in Electron. You can download 
 pre-built version from <https://element.io/get-started> or, if you prefer,
 build it yourself.
 
-To build it yourself, follow the instructions at <https://github.com/element-hq/element-desktop>.
+To build it yourself, follow the instructions at <https://github.com/element-hq/element-web/tree/develop/apps/desktop>.
 
 Many thanks to @aviraldg for the initial work on the Electron integration.
 

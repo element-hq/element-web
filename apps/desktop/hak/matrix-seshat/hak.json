@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "check": "check.ts",
+        "build": "build.ts"
+    },
+    "copy": "index.node"
+}
