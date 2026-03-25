@@ -31,6 +31,7 @@ import { UIComponent } from "../../settings/UIFeature";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { clearRoomNotification, setMarkedUnreadState } from "../../utils/notifications";
 import { tagRoom } from "../../utils/room/tagRoom";
+import { keepIfSame } from "../../utils/keepIfSame";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
@@ -166,8 +167,12 @@ export class RoomListItemViewModel
      */
     private updateItem(): void {
         const newItem = RoomListItemViewModel.generateItemSync(this.props.room, this.props.client, this.notifState);
-        // Preserve message preview - it's managed separately by loadAndSetMessagePreview
-        this.snapshot.set({ ...newItem, messagePreview: this.snapshot.current.messagePreview });
+        this.snapshot.merge({
+            ...newItem,
+            notification: keepIfSame(this.snapshot.current.notification, newItem.notification),
+            // Preserve message preview - it's managed separately by loadAndSetMessagePreview
+            messagePreview: this.snapshot.current.messagePreview,
+        });
     }
 
     private getMessagePreviewTag(): string {
