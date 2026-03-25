@@ -1,7 +1,7 @@
 name: CD # Continuous Delivery
 on:
     push:
-        branches: [develop]
+        branches: [master, staging, develop]
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 
 permissions: {}
@@ -27,11 +27,6 @@ jobs:
                   # see https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/
                   filter: tree:0
                   persist-credentials: false
-
-            - name: Prepare nx
-              uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4
-              with:
-                  main-branch-name: develop
 
             - name: Install Cosign
               uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
@@ -59,7 +54,7 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - run: pnpm nx affected -t docker:build
+            - run: pnpm nx run-many -t docker:build
               env:
                   INPUT_PUSH: true
                   INPUT_LOAD: false
