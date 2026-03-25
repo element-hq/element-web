@@ -3,19 +3,34 @@ import { getFigmaComponents, getFigmaFile, getFigmaNode } from "./figma-api.mjs"
 const tools = [
     {
         name: "get_figma_file",
-        description: "Fetch the active Figma file and return a simplified page and frame outline.",
+        description:
+            "Fetch a Figma file and return a simplified page and frame outline. " +
+            "Pass a fileKey directly, or omit it to use the FIGMA_FILE environment variable.",
         inputSchema: {
             type: "object",
-            properties: {},
+            properties: {
+                fileKey: {
+                    type: "string",
+                    description:
+                        "The Figma file key (the alphanumeric ID from a Figma URL, e.g. 'abc123DEF' from figma.com/design/abc123DEF/…). Optional if FIGMA_FILE is set.",
+                },
+            },
             additionalProperties: false,
         },
     },
     {
         name: "get_figma_node",
-        description: "Fetch a specific Figma node by id and return a simplified layout tree.",
+        description:
+            "Fetch a specific Figma node by id and return a simplified layout tree. " +
+            "Pass a fileKey directly, or omit it to use the FIGMA_FILE environment variable.",
         inputSchema: {
             type: "object",
             properties: {
+                fileKey: {
+                    type: "string",
+                    description:
+                        "The Figma file key. Optional if FIGMA_FILE is set.",
+                },
                 nodeId: {
                     type: "string",
                     description: "The Figma node id to fetch, for example 12:34.",
@@ -33,10 +48,17 @@ const tools = [
     },
     {
         name: "get_figma_components",
-        description: "List components defined in the active Figma file.",
+        description:
+            "List components defined in a Figma file. " +
+            "Pass a fileKey directly, or omit it to use the FIGMA_FILE environment variable.",
         inputSchema: {
             type: "object",
             properties: {
+                fileKey: {
+                    type: "string",
+                    description:
+                        "The Figma file key. Optional if FIGMA_FILE is set.",
+                },
                 limit: {
                     type: "integer",
                     minimum: 1,
@@ -77,11 +99,11 @@ function sendError(id, code, message) {
 async function callTool(name, arguments_) {
     switch (name) {
         case "get_figma_file":
-            return getFigmaFile();
+            return getFigmaFile(arguments_?.fileKey);
         case "get_figma_node":
-            return getFigmaNode(arguments_?.nodeId, arguments_?.depth ?? 3);
+            return getFigmaNode(arguments_?.nodeId, arguments_?.depth ?? 3, arguments_?.fileKey);
         case "get_figma_components":
-            return getFigmaComponents(arguments_?.limit);
+            return getFigmaComponents(arguments_?.limit, arguments_?.fileKey);
         default:
             throw new Error(`Unknown tool: ${name}`);
     }

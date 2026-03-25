@@ -5,8 +5,15 @@ function printSection(title) {
     console.log("-".repeat(title.length));
 }
 
+// Accept an optional file key as a CLI argument, e.g. `pnpm figma:connect AbCdEfGhIjK`
+const fileKeyArg = process.argv[2] || undefined;
+
 try {
-    const [me, file, components] = await Promise.all([getFigmaMe(), getFigmaFile(), getFigmaComponents(20)]);
+    const [me, file, components] = await Promise.all([
+        getFigmaMe(),
+        getFigmaFile(fileKeyArg),
+        getFigmaComponents(20, fileKeyArg),
+    ]);
 
     printSection("Figma authentication");
     console.log(`User: ${me.email ?? me.handle ?? me.id}`);

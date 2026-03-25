@@ -9,6 +9,21 @@ function requireEnv(name) {
     return value;
 }
 
+function resolveFileKey(fileKey) {
+    if (fileKey) {
+        return fileKey;
+    }
+
+    const envValue = process.env.FIGMA_FILE;
+    if (envValue) {
+        return envValue;
+    }
+
+    throw new Error(
+        "No Figma file key provided. Either pass a fileKey parameter or set the FIGMA_FILE environment variable.",
+    );
+}
+
 async function figmaRequest(pathname, searchParams) {
     const token = requireEnv("FIGMA_TOKEN");
     const url = new URL(`${FIGMA_API_ROOT}${pathname}`);
@@ -170,8 +185,8 @@ export async function getFigmaMe() {
     return figmaRequest("/me");
 }
 
-export async function getFigmaFile() {
-    const fileKey = requireEnv("FIGMA_FILE");
+export async function getFigmaFile(fileKey) {
+    fileKey = resolveFileKey(fileKey);
     const file = await figmaRequest(`/files/${fileKey}`);
 
     return {
@@ -186,8 +201,8 @@ export async function getFigmaFile() {
     };
 }
 
-export async function getFigmaNode(nodeId, depth = 3) {
-    const fileKey = requireEnv("FIGMA_FILE");
+export async function getFigmaNode(nodeId, depth = 3, fileKey) {
+    fileKey = resolveFileKey(fileKey);
     const response = await figmaRequest(`/files/${fileKey}/nodes`, {
         ids: nodeId,
         depth,
@@ -205,8 +220,8 @@ export async function getFigmaNode(nodeId, depth = 3) {
     };
 }
 
-export async function getFigmaComponents(limit) {
-    const fileKey = requireEnv("FIGMA_FILE");
+export async function getFigmaComponents(limit, fileKey) {
+    fileKey = resolveFileKey(fileKey);
     const response = await figmaRequest(`/files/${fileKey}/components`);
     const components = Object.values(response.meta?.components ?? {})
         .map((component) =>

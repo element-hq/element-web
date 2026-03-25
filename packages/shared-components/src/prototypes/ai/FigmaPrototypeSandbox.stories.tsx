@@ -35,32 +35,24 @@ const SETUP_STEPS: StepData[] = [
     },
     {
         number: 2,
-        title: "Store your secrets in this Codespace",
+        title: "Store your token in this Codespace",
         description:
-            "Add two Codespace secrets so the Figma MCP tools are available automatically every time this environment starts. Navigate to GitHub \u2192 Settings \u2192 Codespaces \u2192 Secrets, then add each secret and allow this repository.",
-        code: "FIGMA_TOKEN  \u2014 your personal access token\nFIGMA_FILE   \u2014 the file ID from the Figma URL",
+            "Add one Codespace secret called FIGMA_TOKEN so the Figma MCP tools work automatically every time this environment starts. Navigate to GitHub \u2192 Settings \u2192 Codespaces \u2192 Secrets, add the secret, and allow this repository.",
+        code: "FIGMA_TOKEN  \u2014 your personal access token",
         action: {
             label: "Open Codespaces secrets",
             url: "https://github.com/settings/codespaces",
         },
-        hint: "The file ID is the alphanumeric string between /design/ and the next / in a Figma share URL.",
+        hint: "You only need the token \u2014 the Designer agent extracts the file ID from whatever Figma URL you share.",
     },
     {
         number: 3,
-        title: "Verify the connection",
+        title: "Paste a Figma URL and go",
         description:
-            "Run the validation command in the integrated terminal. A successful run lists your file\u2019s pages and top-level components, confirming Copilot can reach Figma.",
-        code: "pnpm figma:connect",
-        hint: "Press Ctrl+\` (backtick) to open the terminal if it is not already visible at the bottom of the screen.",
-    },
-    {
-        number: 4,
-        title: "Ask Copilot to build a prototype",
-        description:
-            "Open Copilot Chat (\u2318\u21e7I on Mac \u00b7 Ctrl+Shift+I on Windows/Linux), switch to Agent mode, then describe the frame you want to translate into a story.",
+            "Open Copilot Chat (\u2318\u21e7I on Mac \u00b7 Ctrl+Shift+I on Windows/Linux), select the Designer agent from the agent picker, then paste any Figma URL. The agent validates the connection, inspects the file, and builds the story for you.",
         prompt:
-            "Use get_figma_file to inspect my design file, then create a new Storybook story under AI Prototypes that recreates the layout with shared-components.",
-        hint: "Your story appears in this Storybook panel under AI Prototypes the moment Copilot saves the file \u2014 no commit needed.",
+            "@designer Here\u2019s my design: https://www.figma.com/design/YOUR_FILE_ID/My-Design \u2014 please create a Storybook prototype of the main screen.",
+        hint: "The agent handles any Figma file \u2014 no environment secrets needed per file. Your story appears in this Storybook panel under AI Prototypes the moment it saves.",
     },
 ];
 
@@ -121,9 +113,9 @@ function DesignerSetupGuide(): JSX.Element {
                     <span className={styles.badge}>AI Prototyping Environment</span>
                     <h1 className={styles.headline}>Welcome — let’s get you set up 🚀</h1>
                     <p className={styles.lead}>
-                        This Codespace connects Figma to a live Storybook via Copilot Chat. Follow the four steps below
-                        and you will be translating designs into interactive component stories in minutes — no engineering
-                        background required.
+                        This Codespace connects Figma to a live Storybook via the Designer agent in Copilot Chat.
+                        Follow the three steps below and you will be translating designs into interactive component
+                        stories in minutes — no engineering background required.
                     </p>
                 </header>
 
@@ -138,7 +130,8 @@ function DesignerSetupGuide(): JSX.Element {
                 <footer className={styles.footer}>
                     <p className={styles.footerText}>
                         Generated stories live in{" "}
-                        <code className={styles.inlineCode}>packages/shared-components/src/prototypes/ai/</code>. See{" "}
+                        <code className={styles.inlineCode}>packages/shared-components/src/prototypes/ai/</code>. The
+                        Designer agent can work with any Figma file — just paste the URL. See{" "}
                         <code className={styles.inlineCode}>docs/ai-prototyping/</code> for the full designer guide.
                     </p>
                 </footer>

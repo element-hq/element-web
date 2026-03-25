@@ -1,13 +1,18 @@
 {
     "name": "element-web designer prototyping",
-    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm",
     "postCreateCommand": "pnpm install --frozen-lockfile",
     "postAttachCommand": "node .devcontainer/storybook-launcher/build-vsix.mjs && code --install-extension $(ls .devcontainer/storybook-launcher/*.vsix | head -1) --force 2>/dev/null; pnpm run storybook:design",
-    "forwardPorts": [6007],
+    "forwardPorts": [6007, 8080],
     "portsAttributes": {
         "6007": {
             "label": "Shared Components Storybook",
             "onAutoForward": "openPreview",
+            "requireLocalPort": false
+        },
+        "8080": {
+            "label": "Element Web",
+            "onAutoForward": "notify",
             "requireLocalPort": false
         }
     },
@@ -35,8 +40,7 @@
                             "scripts/design/figma-mcp-server.mjs"
                         ],
                         "env": {
-                            "FIGMA_TOKEN": "${env:FIGMA_TOKEN}",
-                            "FIGMA_FILE": "${env:FIGMA_FILE}"
+                            "FIGMA_TOKEN": "${env:FIGMA_TOKEN}"
                         }
                     }
                 }
