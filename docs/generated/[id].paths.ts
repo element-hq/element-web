@@ -1,4 +1,4 @@
-import genWorkflowMermaid from "../scripts/gen-workflow-mermaid";
+import genWorkflowMermaid from "../../scripts/gen-workflow-mermaid";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
