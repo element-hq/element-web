@@ -16,13 +16,6 @@ jobs:
         name: GitHub Pages
         runs-on: ubuntu-24.04
         steps:
-            - name: Fetch element-desktop
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-              with:
-                  repository: element-hq/element-desktop
-                  path: element-desktop
-                  persist-credentials: false
-
             - name: Fetch element-web
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
@@ -49,7 +42,7 @@ jobs:
               working-directory: element-web
               run: |
                   pnpm install --frozen-lockfile
-                  pnpm node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
+                  pnpm node ./scripts/gen-workflow-mermaid.ts ../element-web ../matrix-js-sdk > docs/automations.md
                   echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
 
             - name: Setup mdBook
@@ -63,9 +56,6 @@ jobs:
             - name: Prepare docs
               run: |
                   mkdir docs
-
-                  mv element-desktop/README.md element-desktop/docs/
-                  mv element-desktop/docs "docs/Element Desktop"
 
                   mv element-web/README.md element-web/docs/
                   mv element-web/docs/lib docs/

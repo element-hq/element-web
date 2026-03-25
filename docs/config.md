@@ -537,7 +537,7 @@ decentralised.
 
 ## Desktop app configuration
 
-See https://github.com/element-hq/element-desktop#user-specified-configjson
+See https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson
 
 ## UI Features
 

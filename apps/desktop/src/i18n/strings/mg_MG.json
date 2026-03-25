@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "Hanafoana",
+        "close": "Akatona",
+        "close_brand": "Anakatona%(brand)s",
+        "copy": "Dika Mitovy",
+        "cut": "Tapaina",
+        "delete": "Fafaina",
+        "edit": "Anova",
+        "minimise": "Manamaivana",
+        "paste": "Koba",
+        "paste_match_style": "Mametaka sy Mampifanandrify ny fomba",
+        "quit": "Mialà",
+        "redo": "Averina atao",
+        "select_all": "Isafidy ny rehetra",
+        "show_hide": "Aneho/Anafina",
+        "undo": "Ravao",
+        "zoom_in": "Angedao",
+        "zoom_out": "Hahelezo"
+    },
+    "common": {
+        "about": "Mombamomba",
+        "brand_help": "%(marques)Fanampiana",
+        "help": "Fanampiana",
+        "preferences": "Safidy manokana"
+    },
+    "confirm_quit": "Azo Antoka ve fa tena hiala ianao",
+    "edit_menu": {
+        "speech": "Fitenenana",
+        "speech_start_speaking": "Atomboy ny resaka/Manomboha fitenenena",
+        "speech_stop_speaking": "Atsaharo ny fitenenana"
+    },
+    "file_menu": {
+        "label": "Manapetraka/apetrao"
+    },
+    "menu": {
+        "hide": "Afeno",
+        "hide_others": "Afeno ny hafa",
+        "services": "Tolotra",
+        "unhide": "Asehoy"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Ampio ao amin'ny rakibolana",
+        "copy_email": "Adikao ny adiresy imailaka",
+        "copy_image": "Andika ny sary",
+        "copy_image_url": "Adikao ny adiresin'ny sary",
+        "copy_link_url": "Adikao ny adiresy rohy",
+        "save_image_as": "Hitahiry ny sary ho",
+        "save_image_as_error_description": "Tsy voatahiry ilay sary",
+        "save_image_as_error_title": "Tsy nahahomby ny fitahirizana an'ilay sary"
+    },
+    "view_menu": {
+        "actual_size": "Habe Ankehitriny",
+        "toggle_developer_tools": "Amadika fitaovana fampandrosoana",
+        "toggle_full_screen": "Hamadika amin'ny efijery feno",
+        "view": "Hijery"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Ataovy aloha ny zava-drehetra",
+        "label": "Varavarankely",
+        "zoom": "Anakaiky fahitana"
+    }
+}

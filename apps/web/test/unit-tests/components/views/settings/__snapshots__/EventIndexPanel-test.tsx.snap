@@ -62,7 +62,7 @@ exports[`<EventIndexPanel /> when event indexing is supported but not installed 
       Element is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom Element Desktop with 
       <a
         class="mx_ExternalLink"
-        href="https://github.com/vector-im/element-desktop/blob/develop/docs/native-node-modules.md#adding-seshat-for-search-in-e2e-encrypted-rooms"
+        href="https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/native-node-modules.md#adding-seshat-for-search-in-e2e-encrypted-rooms"
         rel="noreferrer noopener"
         target="_blank"
       >
