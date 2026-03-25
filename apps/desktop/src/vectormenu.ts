@@ -96,6 +96,12 @@ export function buildMenuTemplate(): Menu {
                                   global.mainWindow?.webContents.send("preferences");
                               },
                           },
+                          {
+                              label: _t("settings|network_proxy|title") + "…",
+                              click(): void {
+                                  global.mainWindow?.webContents.send("openProxySettings");
+                              },
+                          },
                       ]
                     : []),
                 {
@@ -156,6 +162,12 @@ export function buildMenuTemplate(): Menu {
                     accelerator: "Command+,", // Mac-only accelerator
                     click(): void {
                         global.mainWindow?.webContents.send("preferences");
+                    },
+                },
+                {
+                    label: _t("settings|network_proxy|title") + "…",
+                    click(): void {
+                        global.mainWindow?.webContents.send("openProxySettings");
                     },
                 },
                 { type: "separator" },
