@@ -9,14 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import { type SynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
 import { type Fixtures } from "../../../element-web-test.ts";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const consentHomeserver: Fixtures = {
     _homeserver: [
         async ({ _homeserver: container, mailpit }, use) => {
             (container as SynapseContainer)
-                .withCopyDirectoriesToContainer([
-                    { source: "playwright/plugins/homeserver/synapse/res", target: "/data/res" },
-                ])
+                .withCopyDirectoriesToContainer([{ source: join(__dirname, "res"), target: "/data/res" }])
                 .withSmtpServer(mailpit)
                 .withConfig({
                     user_consent: {
