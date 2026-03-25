@@ -141,7 +141,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             onViewSourceClick: this.onViewSourceClick,
         });
 
-        return <ActionBarView vm={this.editHistoryActionBarViewModel} className="mx_HistoryActionBar" />;
+        return (
+            <ActionBarView vm={this.editHistoryActionBarViewModel} className="mx_ThreadActionBar mx_HistoryActionBar" />
+        );
     }
 
     public render(): React.ReactNode {
