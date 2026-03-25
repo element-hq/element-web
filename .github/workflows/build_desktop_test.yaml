@@ -88,13 +88,7 @@ jobs:
               uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
               timeout-minutes: 20
               with:
-                  run: |
-                      pnpm playwright test \
-                          --config apps/desktop/playwright.config.ts \
-                          --project=${{ inputs.project }} \
-                          ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} \
-                          ${{ inputs.blob_report == false && '--reporter=html' || '' }} \
-                          ${{ inputs.args }}
+                  run: pnpm playwright test --config apps/desktop/playwright.config.ts --project=${{ inputs.project }} ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} ${{ inputs.blob_report == false && '--reporter=html' || '' }} ${{ inputs.args }}
               env:
                   ELEMENT_DESKTOP_EXECUTABLE: ${{ steps.executable.outputs.path }}
 
