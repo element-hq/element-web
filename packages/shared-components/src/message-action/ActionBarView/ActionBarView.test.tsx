@@ -12,7 +12,12 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import * as stories from "./ActionBarView.stories.tsx";
-import { type ActionBarViewActions, ActionBarView, type ActionBarViewSnapshot } from "./ActionBarView.tsx";
+import {
+    ActionBarAction,
+    type ActionBarViewActions,
+    ActionBarView,
+    type ActionBarViewSnapshot,
+} from "./ActionBarView.tsx";
 import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 
 const composedStories = composeStories(stories);
@@ -141,19 +146,9 @@ describe("ActionBarView", () => {
 
     it("applies a custom class name to the toolbar", () => {
         const vm = new MockViewModel<ActionBarViewSnapshot>({
-            showCancel: false,
-            showDownload: false,
-            showEdit: false,
-            showExpandCollapse: false,
-            showHide: false,
-            showPinOrUnpin: false,
-            showReact: false,
-            showReply: false,
-            showReplyInThread: false,
-            showThreadForDeletedMessage: false,
+            actions: [ActionBarAction.Options],
             isDownloadEncrypted: false,
             isDownloadLoading: false,
-            isFailed: false,
             isPinned: false,
             isQuoteExpanded: false,
             isThreadReplyAllowed: true,
@@ -175,19 +170,9 @@ describe("ActionBarView", () => {
         }
 
         const vm = new ActionBarViewModel({
-            showCancel: false,
-            showDownload: false,
-            showEdit: false,
-            showExpandCollapse: false,
-            showHide: false,
-            showPinOrUnpin: false,
-            showReact: false,
-            showReply: true,
-            showReplyInThread: false,
-            showThreadForDeletedMessage: false,
+            actions: [ActionBarAction.Reply, ActionBarAction.Options],
             isDownloadEncrypted: false,
             isDownloadLoading: false,
-            isFailed: false,
             isPinned: false,
             isQuoteExpanded: false,
             isThreadReplyAllowed: true,

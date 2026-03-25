@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ActionBarView, type ActionBarViewActions, type ActionBarViewSnapshot } from "./ActionBarView";
+import { ActionBarAction, ActionBarView, type ActionBarViewActions, type ActionBarViewSnapshot } from "./ActionBarView";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
@@ -54,19 +54,20 @@ const meta = {
     component: ActionBarViewWrapper,
     tags: ["autodocs"],
     args: {
-        showCancel: true,
-        showDownload: true,
-        showEdit: true,
-        showExpandCollapse: true,
-        showHide: true,
-        showPinOrUnpin: true,
-        showReact: true,
-        showReply: true,
-        showReplyInThread: true,
-        showThreadForDeletedMessage: true,
+        actions: [
+            ActionBarAction.Hide,
+            ActionBarAction.Download,
+            ActionBarAction.React,
+            ActionBarAction.Reply,
+            ActionBarAction.ReplyInThread,
+            ActionBarAction.Edit,
+            ActionBarAction.Pin,
+            ActionBarAction.Cancel,
+            ActionBarAction.Expand,
+            ActionBarAction.Options,
+        ],
         isDownloadEncrypted: false,
         isDownloadLoading: false,
-        isFailed: false,
         isPinned: false,
         isQuoteExpanded: false,
         isThreadReplyAllowed: true,
@@ -88,16 +89,12 @@ export const Default: Story = {};
 
 export const TypicalMessage: Story = {
     args: {
-        showHide: false,
-        showDownload: false,
-        showEdit: false,
-        showExpandCollapse: false,
-        showPinOrUnpin: false,
-        showCancel: false,
-        showReact: true,
-        showReply: true,
-        showReplyInThread: true,
-        showThreadForDeletedMessage: false,
+        actions: [
+            ActionBarAction.React,
+            ActionBarAction.Reply,
+            ActionBarAction.ReplyInThread,
+            ActionBarAction.Options,
+        ],
     },
     parameters: {
         docs: {
@@ -110,21 +107,12 @@ export const TypicalMessage: Story = {
 
 export const FailedMessage: Story = {
     args: {
-        showCancel: true,
-        isFailed: true,
-        showDownload: true,
-        showEdit: true,
-        showExpandCollapse: true,
-        showHide: true,
-        showPinOrUnpin: true,
-        showReact: true,
-        showReply: true,
-        showReplyInThread: true,
+        actions: [ActionBarAction.Resend, ActionBarAction.Cancel],
     },
     parameters: {
         docs: {
             description: {
-                story: "Failed event branch. When `showCancel` and `isFailed` are both true, the toolbar collapses to retry and delete only.",
+                story: "Failed event branch. The resolved actions collapse to retry and delete only.",
             },
         },
     },
@@ -132,16 +120,7 @@ export const FailedMessage: Story = {
 
 export const DownloadingAttachment: Story = {
     args: {
-        showHide: false,
-        showDownload: true,
-        showEdit: false,
-        showExpandCollapse: false,
-        showPinOrUnpin: false,
-        showReact: false,
-        showReply: false,
-        showReplyInThread: false,
-        showThreadForDeletedMessage: false,
-        showCancel: false,
+        actions: [ActionBarAction.Download, ActionBarAction.Options],
         isDownloadLoading: true,
         isDownloadEncrypted: false,
     },
@@ -170,16 +149,7 @@ export const DecryptingAttachment: Story = {
 
 export const PinnedMessage: Story = {
     args: {
-        showHide: false,
-        showDownload: false,
-        showEdit: false,
-        showExpandCollapse: false,
-        showPinOrUnpin: true,
-        showReact: true,
-        showReply: true,
-        showReplyInThread: false,
-        showThreadForDeletedMessage: false,
-        showCancel: false,
+        actions: [ActionBarAction.React, ActionBarAction.Reply, ActionBarAction.Pin, ActionBarAction.Options],
         isPinned: true,
     },
     parameters: {
@@ -193,16 +163,7 @@ export const PinnedMessage: Story = {
 
 export const ExpandedReplyChain: Story = {
     args: {
-        showHide: false,
-        showDownload: false,
-        showEdit: false,
-        showExpandCollapse: true,
-        showPinOrUnpin: false,
-        showReact: false,
-        showReply: true,
-        showReplyInThread: false,
-        showThreadForDeletedMessage: false,
-        showCancel: false,
+        actions: [ActionBarAction.Reply, ActionBarAction.Expand, ActionBarAction.Options],
         isQuoteExpanded: true,
     },
     parameters: {
@@ -216,16 +177,12 @@ export const ExpandedReplyChain: Story = {
 
 export const ThreadReplyDisabled: Story = {
     args: {
-        showHide: false,
-        showDownload: false,
-        showEdit: false,
-        showExpandCollapse: false,
-        showPinOrUnpin: false,
-        showReact: true,
-        showReply: true,
-        showReplyInThread: true,
-        showThreadForDeletedMessage: false,
-        showCancel: false,
+        actions: [
+            ActionBarAction.React,
+            ActionBarAction.Reply,
+            ActionBarAction.ReplyInThread,
+            ActionBarAction.Options,
+        ],
         isThreadReplyAllowed: false,
     },
     parameters: {
@@ -239,16 +196,7 @@ export const ThreadReplyDisabled: Story = {
 
 export const DeletedMessageThreadOnly: Story = {
     args: {
-        showHide: false,
-        showDownload: false,
-        showEdit: false,
-        showExpandCollapse: false,
-        showPinOrUnpin: false,
-        showReact: false,
-        showReply: false,
-        showReplyInThread: false,
-        showThreadForDeletedMessage: true,
-        showCancel: false,
+        actions: [ActionBarAction.ReplyInThread, ActionBarAction.Options],
     },
     parameters: {
         docs: {
@@ -261,16 +209,7 @@ export const DeletedMessageThreadOnly: Story = {
 
 export const Minimal: Story = {
     args: {
-        showCancel: false,
-        showDownload: false,
-        showEdit: false,
-        showExpandCollapse: false,
-        showHide: false,
-        showPinOrUnpin: false,
-        showReact: false,
-        showReply: false,
-        showReplyInThread: false,
-        showThreadForDeletedMessage: false,
+        actions: [ActionBarAction.Options],
     },
     parameters: {
         docs: {

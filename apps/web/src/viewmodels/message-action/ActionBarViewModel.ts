@@ -18,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
+    ActionBarAction,
     BaseViewModel,
     type ActionBarViewActions,
     type ActionBarViewSnapshot,
@@ -117,9 +118,56 @@ export class ActionBarViewModel
         const mediaState = ActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
 
         return {
+            actions: ActionBarViewModel.resolveActions(eventState, mediaState),
             ...eventState,
             ...mediaState,
         };
+    }
+
+    private static resolveActions(
+        eventState: DerivedEventState,
+        mediaState: DerivedMediaState,
+    ): ActionBarAction[] {
+        const actions: ActionBarAction[] = [];
+
+        if (eventState.showCancel && eventState.isFailed) {
+            return [ActionBarAction.Resend, ActionBarAction.Cancel];
+        }
+
+        if (mediaState.showHide) {
+            actions.push(ActionBarAction.Hide);
+        }
+        if (mediaState.showDownload) {
+            actions.push(ActionBarAction.Download);
+        }
+        if (eventState.showReact) {
+            actions.push(ActionBarAction.React);
+        }
+        if (!eventState.showReply && eventState.showThreadForDeletedMessage) {
+            actions.push(ActionBarAction.ReplyInThread);
+        }
+        if (eventState.showReply) {
+            actions.push(ActionBarAction.Reply);
+        }
+        if (eventState.showReply && eventState.showReplyInThread) {
+            actions.push(ActionBarAction.ReplyInThread);
+        }
+        if (eventState.showEdit) {
+            actions.push(ActionBarAction.Edit);
+        }
+        if (eventState.showPinOrUnpin) {
+            actions.push(ActionBarAction.Pin);
+        }
+        if (eventState.showCancel) {
+            actions.push(ActionBarAction.Cancel);
+        }
+        if (eventState.showExpandCollapse) {
+            actions.push(ActionBarAction.Expand);
+        }
+
+        actions.push(ActionBarAction.Options);
+
+        return actions;
     }
 
     private static getDerivedEventState(

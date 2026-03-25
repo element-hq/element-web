@@ -10,4 +10,5 @@ export {
     type ActionBarViewActions,
     type ActionBarViewModel,
     type ActionBarViewSnapshot,
+    ActionBarAction,
 } from "./ActionBarView";
