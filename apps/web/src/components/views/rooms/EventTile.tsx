@@ -1376,9 +1376,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
-                                if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
-                                switch (this.context.timelineRenderingType) {
-                                    case TimelineRenderingType.Notification:
+                            if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
+                            switch (this.context.timelineRenderingType) {
+                                case TimelineRenderingType.Notification:
                                     this.onViewInRoomClick(null);
                                     break;
                                 case TimelineRenderingType.ThreadsList:

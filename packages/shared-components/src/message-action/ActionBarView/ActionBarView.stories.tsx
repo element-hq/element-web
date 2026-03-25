@@ -183,12 +183,7 @@ export const ExpandedReplyChain: Story = {
 
 export const DisabledThreadReply: Story = {
     args: {
-        actions: [
-            ActionBarAction.React,
-            ActionBarAction.Reply,
-            ActionBarAction.ReplyInThread,
-            ActionBarAction.Options,
-        ],
+        actions: [ActionBarAction.React, ActionBarAction.Reply, ActionBarAction.ReplyInThread, ActionBarAction.Options],
         isThreadReplyAllowed: false,
     },
     parameters: {

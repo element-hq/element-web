@@ -5,7 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { ActionBarAction, BaseViewModel, type ActionBarViewActions, type ActionBarViewSnapshot } from "@element-hq/web-shared-components";
+import {
+    ActionBarAction,
+    BaseViewModel,
+    type ActionBarViewActions,
+    type ActionBarViewSnapshot,
+} from "@element-hq/web-shared-components";
 
 export interface EditHistoryActionBarViewModelProps {
     canRemove: boolean;
