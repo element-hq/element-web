@@ -1,0 +1,9 @@
+{
+    "appId": "im.riot.nightly",
+    "name": "element-desktop-nightly",
+    "productName": "Element Nightly",
+    "description": "Element: the future of secure communication (nightly unstable build)",
+    "protocols": ["io.element.nightly", "element"],
+    "linux.executableName": "element-desktop-nightly",
+    "linux.deb.name": "element-nightly"
+}
