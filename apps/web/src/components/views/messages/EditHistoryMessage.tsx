@@ -16,12 +16,12 @@ import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import RedactedBody from "./RedactedBody";
 import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { RedactedBodyFactory } from "./MBodyFactory";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -151,7 +151,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
-            contentContainer = <RedactedBody mxEvent={this.props.mxEvent} />;
+            contentContainer = <RedactedBodyFactory mxEvent={this.props.mxEvent} />;
         } else {
             let contentElements;
             if (this.props.previousEdit) {
