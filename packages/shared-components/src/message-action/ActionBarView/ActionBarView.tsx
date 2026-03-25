@@ -171,7 +171,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Edit] = (
         <Tooltip description={_t("action|edit")} placement="top" key="edit">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Edit}
                 ref={editTriggerRef}
                 kind="tertiary"
@@ -192,7 +192,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Pin] = (
         <Tooltip description={pinDescription} placement="top" key="pin">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Pin}
                 ref={pinTriggerRef}
                 kind="tertiary"
@@ -213,7 +213,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Cancel] = (
         <Tooltip description={_t("action|delete")} placement="top" key="cancel">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Cancel}
                 ref={cancelTriggerRef}
                 kind="tertiary"
@@ -233,7 +233,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.CopyLink] = (
         <Tooltip description={_t("timeline|mab|copy_link_thread")} placement="top" key="copy_link">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.CopyLink}
                 ref={copyLinkTriggerRef}
                 kind="tertiary"
@@ -253,7 +253,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Reply] = (
         <Tooltip description={_t("action|reply")} placement="top" key="reply">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Reply}
                 ref={replyTriggerRef}
                 kind="tertiary"
@@ -273,7 +273,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.React] = (
         <Tooltip description={_t("action|react")} placement="top" key="react">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.React}
                 ref={reactTriggerRef}
                 kind="tertiary"
@@ -299,7 +299,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Download] = (
         <Tooltip description={downloadTitle} placement="top" key="download">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Download}
                 ref={downloadTriggerRef}
                 kind="tertiary"
@@ -320,7 +320,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Hide] = (
         <Tooltip description={_t("action|hide")} placement="top" key="hide">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Hide}
                 ref={hideTriggerRef}
                 kind="tertiary"
@@ -343,7 +343,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.ReplyInThread] = (
         <Tooltip description={threadTooltipDescription} placement="top" key="reply_thread">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.ReplyInThread}
                 ref={replyInThreadTriggerRef}
                 kind="tertiary"
@@ -364,7 +364,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Resend] = (
         <Tooltip description={_t("action|retry")} placement="top" key="resend">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Resend}
                 ref={resendTriggerRef}
                 kind="tertiary"
@@ -392,7 +392,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
             key="expand"
         >
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Expand}
                 ref={expandTriggerRef}
                 kind="tertiary"
@@ -413,7 +413,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Options] = (
         <Tooltip description={_t("common|options")} placement="top" key="options">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Options}
                 ref={optionsTriggerRef}
                 kind="tertiary"
@@ -433,7 +433,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.Remove] = (
         <Tooltip description={_t("action|remove")} placement="top" key="remove">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.Remove}
                 ref={removeTriggerRef}
                 kind="tertiary"
@@ -453,7 +453,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.ViewInRoom] = (
         <Tooltip description={_t("timeline|mab|view_in_room")} placement="top" key="view_in_room">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.ViewInRoom}
                 ref={viewInRoomTriggerRef}
                 kind="tertiary"
@@ -473,7 +473,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     actionButtons[ActionBarAction.ViewSource] = (
         <Tooltip description={_t("action|view_source")} placement="top" key="view_source">
             <Button
-                data-type={presentation}
+                data-presentation={presentation}
                 key={ActionBarAction.ViewSource}
                 ref={viewSourceTriggerRef}
                 kind="tertiary"

@@ -38,14 +38,14 @@
         }
     }
 
-    .toolbar_item[data-type="icon"] {
+    .toolbar_item[data-presentation="icon"] {
         block-size: 28px !important;
         inline-size: 28px !important;
 
         color: var(--cpd-color-icon-secondary) !important;
     }
 
-    .toolbar_item[data-type="label"] {
+    .toolbar_item[data-presentation="label"] {
         padding-inline-start: var(--cpd-space-2x) !important;
         padding-inline-end: var(--cpd-space-2x) !important;
         min-inline-size: unset !important;
