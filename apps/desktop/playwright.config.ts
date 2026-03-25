@@ -20,6 +20,7 @@ const projects = [
 ];
 
 export default defineConfig({
+    tag: "desktop",
     // Allows the GitHub action to specify a project name (OS + arch) for the combined report to make sense
     // workaround for https://github.com/microsoft/playwright/issues/33521
     projects: process.env.CI

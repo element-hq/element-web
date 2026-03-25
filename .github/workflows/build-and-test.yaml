@@ -1,7 +1,13 @@
-# Produce a build of element-web with this version of react-sdk
-# and any matching branches of element-web and js-sdk, output it
-# as an artifact and run end-to-end tests.
-name: End to End Tests
+# builds Element Web
+# runs Playwright tests against the built Element Web
+# builds Element Desktop using the built Element Web
+#
+# Tries to use a matching js-sdk branch for the build.
+#
+# Produces a `webapp` artifact
+# Produces multiple Desktop artifacts
+# Produces multiple Playwright report artifacts
+name: Build & Test
 on:
     # CRON to run all Projects at 6am UTC
     schedule:
@@ -10,7 +16,7 @@ on:
     merge_group:
         types: [checks_requested]
     push:
-        branches: [develop, master]
+        branches: [develop, staging, master]
     repository_dispatch:
         types: [element-web-notify]
 
@@ -42,8 +48,8 @@ env:
 permissions: {} # No permissions required
 
 jobs:
-    build:
-        name: "Build Element-Web"
+    build_ew:
+        name: "Build Element Web"
         runs-on: ubuntu-24.04
         if: inputs.skip != true
         outputs:
@@ -94,9 +100,9 @@ jobs:
                       const matrix = Array.from({ length: numRunners }, (_, i) => i + 1);
                       core.setOutput("matrix", JSON.stringify(matrix));
 
-    playwright:
+    playwright_ew:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
-        needs: build
+        needs: build_ew
         if: inputs.skip != true
         runs-on: ubuntu-24.04
         permissions:
@@ -172,9 +178,9 @@ jobs:
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
-              working-directory: apps/web
               run: |
                   pnpm playwright test \
+                      --config apps/web/playwright.config.ts \
                       --shard "$SHARD" \
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
@@ -185,23 +191,72 @@ jobs:
               if: always()
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
-                  name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
-                  path: apps/web/blob-report
+                  name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
+                  path: blob-report
                   retention-days: 1
+                  if-no-files-found: error
 
     downstream-modules:
         name: Downstream Playwright tests [element-modules]
-        needs: build
+        needs: build_ew
         if: inputs.skip != true && github.event_name == 'merge_group'
         uses: element-hq/element-modules/.github/workflows/reusable-playwright-tests.yml@main # zizmor: ignore[unpinned-uses]
         with:
             webapp-artifact: webapp
 
+    prepare_ed:
+        name: "Prepare Element Desktop"
+        uses: ./.github/workflows/build_desktop_prepare.yaml
+        if: inputs.skip != true
+        permissions:
+            contents: read
+        with:
+            config: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'element.io/nightly' || 'element.io/release' }}
+            version: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'develop' || '' }}
+            webapp-artifact: webapp
+
+    build_ed_windows:
+        needs: prepare_ed
+        name: "ED Windows"
+        uses: ./.github/workflows/build_desktop_windows.yaml
+        if: inputs.skip != true
+        strategy:
+            matrix:
+                arch: [x64, ia32, arm64]
+        with:
+            arch: ${{ matrix.arch }}
+            blob_report: true
+
+    build_ed_linux:
+        needs: prepare_ed
+        name: "ED Linux (${{ matrix.arch }}) (sqlcipher: ${{ matrix.sqlcipher }})"
+        uses: ./.github/workflows/build_desktop_linux.yaml
+        if: inputs.skip != true
+        strategy:
+            matrix:
+                sqlcipher: [system, static]
+                arch: [amd64, arm64]
+        with:
+            sqlcipher: ${{ matrix.sqlcipher }}
+            arch: ${{ matrix.arch }}
+            blob_report: true
+
+    build_ed_macos:
+        needs: prepare_ed
+        name: "ED macOS"
+        uses: ./.github/workflows/build_desktop_macos.yaml
+        if: inputs.skip != true
+        with:
+            blob_report: true
+
     complete:
         name: end-to-end-tests
         needs:
-            - playwright
+            - playwright_ew
             - downstream-modules
+            - build_ed_windows
+            - build_ed_linux
+            - build_ed_macos
         if: always()
         runs-on: ubuntu-24.04
         steps:
@@ -227,18 +282,17 @@ jobs:
               if: inputs.skip != true
               uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
-                  pattern: all-blob-reports-*
-                  path: apps/web/all-blob-reports
+                  pattern: blob-report-*
+                  path: all-blob-reports
                   merge-multiple: true
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              working-directory: apps/web
-              run: pnpm playwright merge-reports --reporter=html,./playwright/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js ./all-blob-reports
+              run: pnpm playwright merge-reports --config=merge.config.ts ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
-                  PLAYWRIGHT_HTML_TITLE: ${{ case(github.event_name == 'pull_request', format('EW Playwright Report PR-{0}', env.PR_NUMBER), 'EW Playwright Report') }}
+                  PLAYWRIGHT_HTML_TITLE: ${{ case(github.event_name == 'pull_request', format('Playwright Report PR-{0}', env.PR_NUMBER), 'Playwright Report') }}
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
@@ -246,7 +300,7 @@ jobs:
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: html-report
-                  path: apps/web/playwright-report
+                  path: playwright-report
                   retention-days: 14
                   if-no-files-found: error
 
