@@ -27,9 +27,13 @@ export class Snapshot<T> {
 
     /**
      * Update a part of the current snapshot by merging into the existing snapshot.
+     * Only emits if at least one of the merged fields has a different reference than the current value.
      * @param snapshot A subset of the snapshot to merge into the current snapshot.
      */
     public merge(snapshot: Partial<T>): void {
+        const keys = Object.keys(snapshot) as Array<keyof T>;
+        const hasChanged = keys.some((key) => !Object.is(snapshot[key], this.snapshot[key]));
+        if (!hasChanged) return;
         this.snapshot = { ...this.snapshot, ...snapshot };
         this.emit();
     }
