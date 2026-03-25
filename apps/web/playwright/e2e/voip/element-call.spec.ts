@@ -612,7 +612,10 @@ test.describe("Element Call", () => {
             },
         });
 
-        const fakeCallClientSend = readFile("playwright/sample-files/fake-element-call-with-send.html", "utf-8");
+        const fakeCallClientSend = readFile(
+            join(__dirname, "..", "..", "sample-files", "fake-element-call-with-send.html"),
+            "utf-8",
+        );
 
         let charlie: Bot;
         test.use({
