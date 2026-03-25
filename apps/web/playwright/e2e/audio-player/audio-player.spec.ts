@@ -12,11 +12,7 @@ import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { getSampleFilePath } from "../../sample-files";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Find and click "Reply" button
 const clickButtonReply = async (tile: Locator) => {
