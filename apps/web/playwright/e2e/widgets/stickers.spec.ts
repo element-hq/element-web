@@ -6,20 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as fs from "node:fs";
-
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { type Credentials } from "../../plugins/homeserver";
 import type { UserWidget } from "../../../src/utils/WidgetUtils-types.ts";
+import { readSampleFileSync } from "../../sample-files";
 
 const STICKER_PICKER_WIDGET_ID = "fake-sticker-picker";
 const STICKER_PICKER_WIDGET_NAME = "Fake Stickers";
 const STICKER_NAME = "Test Sticker";
 const ROOM_NAME_1 = "Sticker Test";
 const ROOM_NAME_2 = "Sticker Test Two";
-const STICKER_IMAGE = fs.readFileSync("playwright/sample-files/riot.png");
+const STICKER_IMAGE = readSampleFileSync("riot.png");
 
 function getStickerMessage(contentUri: string, mimetype: string): string {
     return JSON.stringify({

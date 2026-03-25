@@ -11,6 +11,7 @@ import { type Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { getSampleFilePath } from "../../sample-files";
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
@@ -53,9 +54,9 @@ test.describe("FilePanel", () => {
 
         test("should list tiles on the panel", { tag: "@screenshot" }, async ({ page }) => {
             // Upload multiple files
-            await uploadFile(page, "playwright/sample-files/riot.png"); // Image
-            await uploadFile(page, "playwright/sample-files/1sec.ogg"); // Audio
-            await uploadFile(page, "playwright/sample-files/matrix-org-client-versions.json"); // JSON
+            await uploadFile(page, getSampleFilePath("riot.png")); // Image
+            await uploadFile(page, getSampleFilePath("1sec.ogg")); // Audio
+            await uploadFile(page, getSampleFilePath("matrix-org-client-versions.json")); // JSON
 
             const roomViewBody = page.locator(".mx_RoomView_body");
             // Assert that all of the file were uploaded and rendered
@@ -137,7 +138,7 @@ test.describe("FilePanel", () => {
 
         test("should render the audio player and play the audio file on the panel", async ({ page }) => {
             // Upload an image file
-            await uploadFile(page, "playwright/sample-files/1sec.ogg");
+            await uploadFile(page, getSampleFilePath("1sec.ogg"));
 
             const audioBody = page.getByTestId("right-panel").getByRole("region", { name: "Audio player" });
 
@@ -170,7 +171,7 @@ test.describe("FilePanel", () => {
             const size = "1.12 KB"; // actual file size in kibibytes (1024 bytes)
 
             // Upload a file
-            await uploadFile(page, "playwright/sample-files/matrix-org-client-versions.json");
+            await uploadFile(page, getSampleFilePath("matrix-org-client-versions.json"));
 
             const tile = page.locator(".mx_FilePanel .mx_EventTile");
             // Assert that the file size is displayed in kibibytes, not kilobytes (1000 bytes)
@@ -184,7 +185,7 @@ test.describe("FilePanel", () => {
 
         test("should download an image via the link on the panel", async ({ page, context }) => {
             // Upload an image file
-            await uploadFile(page, "playwright/sample-files/riot.png");
+            await uploadFile(page, getSampleFilePath("riot.png"));
 
             // Detect the image file on the panel
             const imageBody = page.locator(

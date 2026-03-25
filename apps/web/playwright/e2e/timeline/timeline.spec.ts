@@ -6,8 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as fs from "node:fs";
-
 import type { Locator, Page } from "@playwright/test";
 import type { ISendEventResponse, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
@@ -16,6 +14,7 @@ import { Layout } from "../../../src/settings/enums/Layout";
 import { type Client } from "../../pages/client";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
+import { getSampleFilePath, readSampleFileSync } from "../../sample-files";
 
 // The avatar size used in the timeline
 const AVATAR_SIZE = 30;
@@ -23,12 +22,12 @@ const AVATAR_SIZE = 30;
 const AVATAR_RESIZE_METHOD = "crop";
 
 const ROOM_NAME = "Test room";
-const OLD_AVATAR = fs.readFileSync("playwright/sample-files/riot.png");
-const NEW_AVATAR = fs.readFileSync("playwright/sample-files/element.png");
+const OLD_AVATAR = readSampleFileSync("riot.png");
+const NEW_AVATAR = readSampleFileSync("element.png");
 const OLD_NAME = "Alan";
 const NEW_NAME = "Alan (away)";
 
-const VIDEO_FILE = fs.readFileSync("playwright/sample-files/5secvid.webm");
+const VIDEO_FILE = readSampleFileSync("5secvid.webm");
 
 const getEventTilesWithBodies = (page: Page): Locator => {
     return page.locator(".mx_EventTile").filter({ has: page.locator(".mx_EventTile_body") });
@@ -765,7 +764,7 @@ test.describe("Timeline", () => {
             // Upload a file from the message composer
             await page
                 .locator(".mx_MessageComposer_actions input[type='file']")
-                .setInputFiles("playwright/sample-files/matrix-org-client-versions.json");
+                .setInputFiles(getSampleFilePath("matrix-org-client-versions.json"));
 
             // Click "Upload" button
             await page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
