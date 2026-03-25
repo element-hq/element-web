@@ -192,7 +192,7 @@ jobs:
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
                   name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
-                  path: blob-report
+                  path: apps/web/blob-report
                   retention-days: 1
                   if-no-files-found: error
 
