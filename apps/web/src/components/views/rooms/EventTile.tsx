@@ -84,7 +84,6 @@ import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import { isContentActionable } from "../../../utils/EventUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { type ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -97,7 +96,6 @@ import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
-import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
@@ -114,6 +112,7 @@ import {
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
 import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
+import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 
@@ -563,9 +562,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
     }
 
-    private readonly viewInRoom = (evt: ButtonEvent): void => {
-        evt.preventDefault();
-        evt.stopPropagation();
+    private readonly onViewInRoomClick = (_anchor: HTMLElement | null): void => {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
@@ -575,9 +572,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private readonly copyLinkToThread = async (evt: ButtonEvent): Promise<void> => {
-        evt.preventDefault();
-        evt.stopPropagation();
+    private readonly onCopyLinkToThreadClick = async (_anchor: HTMLElement | null): Promise<void> => {
         const { permalinkCreator, mxEvent } = this.props;
         if (!permalinkCreator) return;
         const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
@@ -1381,10 +1376,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
-                            if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
-                            switch (this.context.timelineRenderingType) {
-                                case TimelineRenderingType.Notification:
-                                    this.viewInRoom(ev);
+                                if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
+                                switch (this.context.timelineRenderingType) {
+                                    case TimelineRenderingType.Notification:
+                                    this.onViewInRoomClick(null);
                                     break;
                                 case TimelineRenderingType.ThreadsList:
                                     dis.dispatch<ShowThreadPayload>({
@@ -1439,9 +1434,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {this.renderThreadPanelSummary()}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <EventTileThreadToolbar
-                                viewInRoom={this.viewInRoom}
-                                copyLinkToThread={this.copyLinkToThread}
+                            <ThreadListActionBarWrapper
+                                onViewInRoomClick={this.onViewInRoomClick}
+                                onCopyLinkClick={this.onCopyLinkToThreadClick}
                             />
                         )}
 
@@ -1900,6 +1895,33 @@ interface ActionBarWrapperProps {
     isQuoteExpanded?: boolean;
     toggleThreadExpanded: () => void;
     getRelationsForEvent?: GetRelationsForEvent;
+}
+
+interface ThreadListActionBarWrapperProps {
+    onViewInRoomClick: (anchor: HTMLElement | null) => void;
+    onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
+}
+
+function ThreadListActionBarWrapper({
+    onViewInRoomClick,
+    onCopyLinkClick,
+}: Readonly<ThreadListActionBarWrapperProps>): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ThreadListActionBarViewModel({
+                onViewInRoomClick,
+                onCopyLinkClick,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            onViewInRoomClick,
+            onCopyLinkClick,
+        });
+    }, [vm, onViewInRoomClick, onCopyLinkClick]);
+
+    return <ActionBarView vm={vm} className="mx_ThreadActionBar" />;
 }
 
 function ActionBarWrapper({

@@ -6,24 +6,9 @@
  */
 
 .mx_ThreadActionBar {
-    --LegacyActionBar-size-button: 28px;
-    --LegacyActionBar-size-margin: 3px;
-    --LegacyActionBar-item-hover-background: var(--cpd-color-bg-subtle-secondary);
-    --LegacyActionBar-item-hover-borderRadius: 6px;
-    --LegacyActionBar-item-hover-zIndex: 1;
-
     position: absolute;
     visibility: hidden;
-    cursor: pointer;
-    display: flex;
-    gap: var(--cpd-space-0-5x);
-    line-height: $font-24px;
-    border-radius: 8px;
-    background: $background;
-    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
-    top: calc(
-        -1 * (var(--LegacyActionBar-size-button) + 2 * (var(--LegacyActionBar-size-margin) + var(--cpd-border-width-1)))
-    );
+    top: calc(-1 * (28px + 2 * (3px + var(--cpd-border-width-1))));
     right: 8px;
     user-select: none;
     /* Ensure the action bar appears above other things like the read marker */
@@ -68,53 +53,6 @@
             height: 100%;
             top: 0;
             left: 0;
-        }
-    }
-
-    > * {
-        white-space: nowrap;
-        display: inline-block;
-        position: relative;
-        margin: var(--LegacyActionBar-size-margin);
-
-        &:hover {
-            background: var(--LegacyActionBar-item-hover-background);
-            border-radius: var(--LegacyActionBar-item-hover-borderRadius);
-            z-index: var(--LegacyActionBar-item-hover-zIndex);
-        }
-    }
-
-    .mx_ThreadActionBar_iconButton {
-        --LegacyActionBar-icon-size: 20px;
-        width: var(--LegacyActionBar-size-button);
-        height: var(--LegacyActionBar-size-button);
-        color: var(--cpd-color-icon-secondary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            height: var(--LegacyActionBar-icon-size);
-            width: var(--LegacyActionBar-icon-size);
-            flex: 0 0 var(--LegacyActionBar-icon-size);
-        }
-
-        &:disabled,
-        &[disabled] {
-            cursor: not-allowed;
-            opacity: 0.75;
-        }
-
-        &:hover {
-            color: var(--cpd-color-icon-primary);
-        }
-
-        &.mx_ThreadActionBar_downloadButton {
-            &.mx_ThreadActionBar_downloadSpinnerButton {
-                svg {
-                    display: none; /* hide the download icon */
-                }
-            }
         }
     }
 }
