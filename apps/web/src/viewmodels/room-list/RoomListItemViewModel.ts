@@ -19,7 +19,6 @@ import type { RoomNotificationState } from "../../stores/notifications/RoomNotif
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { MessagePreviewStore } from "../../stores/message-preview";
-import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
@@ -69,8 +68,12 @@ export class RoomListItemViewModel
         // Subscribe to notification state changes for this room
         this.disposables.trackListener(this.notifState, NotificationStateEvents.Update, this.onNotificationChanged);
 
-        // Subscribe to message preview changes (will filter to this room)
-        this.disposables.trackListener(MessagePreviewStore.instance, UPDATE_EVENT, this.onMessagePreviewChanged);
+        // Subscribe to message preview changes for this specific room
+        this.disposables.trackListener(
+            MessagePreviewStore.instance,
+            MessagePreviewStore.getPreviewChangedEventName(props.room),
+            this.onMessagePreviewChanged,
+        );
 
         // Subscribe to settings changes for message preview toggle
         const settingsWatchRef = SettingsStore.watchSetting(
