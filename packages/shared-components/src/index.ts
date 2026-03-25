@@ -45,7 +45,6 @@ export * from "./room-list/RoomListItemView";
 export * from "./room-list/RoomListItemAccessibilityWrapper";
 export * from "./room-list/RoomListPrimaryFilters";
 export * from "./room-list/VirtualizedRoomListView";
-export * from "./timeline/DateSeparatorView/";
 export * from "./core/utils/Box";
 export * from "./core/utils/Flex";
 export * from "./core/utils/LinkedText";
