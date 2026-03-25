@@ -2,7 +2,7 @@
     "name": "storybook-launcher",
     "displayName": "Storybook Launcher",
     "description": "Quick access to the Storybook Playground from the Activity Bar",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "publisher": "element-hq",
     "engines": {
         "vscode": "^1.80.0"
@@ -21,13 +21,23 @@
                 "command": "storybookLauncher.openPreview",
                 "title": "Open Storybook Playground Preview",
                 "icon": "$(open-preview)"
+            },
+            {
+                "command": "elementWebLauncher.openInBrowser",
+                "title": "Open Element Web In Browser",
+                "icon": "$(globe)"
+            },
+            {
+                "command": "elementWebLauncher.openPreview",
+                "title": "Open Element Web Preview",
+                "icon": "$(open-preview)"
             }
         ],
         "viewsContainers": {
             "activitybar": [
                 {
                     "id": "storybook-launcher",
-                    "title": "Storybook Playground",
+                    "title": "Element Prototyping",
                     "icon": "media/icon.svg"
                 }
             ]
@@ -37,6 +47,10 @@
                 {
                     "id": "storybookLauncher.welcome",
                     "name": "Storybook Playground"
+                },
+                {
+                    "id": "elementWebLauncher.welcome",
+                    "name": "Element Web"
                 }
             ]
         },
@@ -44,6 +58,10 @@
             {
                 "view": "storybookLauncher.welcome",
                 "contents": "Open the AI Prototype story in Storybook.\n\n[$(globe) Open Storybook Playground In Browser](command:storybookLauncher.openInBrowser)\n\n[$(open-preview) Open In Editor Preview](command:storybookLauncher.openPreview)\n\nYou can reopen this panel any time from the **Element** icon in the Activity Bar on the left."
+            },
+            {
+                "view": "elementWebLauncher.welcome",
+                "contents": "Open the full Element Web app for in-context prototyping.\n\nStart it first with `pnpm run start:element-web` — it will open automatically when ready.\n\n[$(globe) Open Element Web In Browser](command:elementWebLauncher.openInBrowser)\n\n[$(open-preview) Open In Editor Preview](command:elementWebLauncher.openPreview)"
             }
         ],
         "menus": {
@@ -51,6 +69,11 @@
                 {
                     "command": "storybookLauncher.openInBrowser",
                     "when": "view == storybookLauncher.welcome",
+                    "group": "navigation"
+                },
+                {
+                    "command": "elementWebLauncher.openInBrowser",
+                    "when": "view == elementWebLauncher.welcome",
                     "group": "navigation"
                 }
             ]
@@ -64,7 +87,7 @@
                     {
                         "id": "wait",
                         "title": "Hang tight — setting things up",
-                        "description": "Dependencies are installing and Storybook is starting. This usually takes **20–25 seconds**.\n\nWatch the **status bar** at the bottom — when it says **Storybook: Open ▸** everything is ready.\n\nUse the **Element** icon in the Activity Bar on the left to open Storybook at any time.\n\n[Open Storybook Panel](command:storybookLauncher.welcome.focus)",
+                        "description": "Dependencies are installing and Storybook is starting. This usually takes **20–25 seconds**.\n\nWatch the **status bar** at the bottom — when it says **Storybook: Open ▸** everything is ready.\n\nUse the **Element** icon in the Activity Bar on the left to open Storybook or Element Web at any time.\n\n[Open Storybook Panel](command:storybookLauncher.welcome.focus)",
                         "media": { "markdown": "media/walkthrough-welcome.md" }
                     }
                 ]
