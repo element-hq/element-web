@@ -1,6 +1,11 @@
 {
     "name": "element-web designer prototyping",
     "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm",
+    "hostRequirements": {
+        "cpus": 4,
+        "memory": "8gb",
+        "storage": "32gb"
+    },
     "postCreateCommand": "pnpm install --frozen-lockfile && git checkout -b design/${GITHUB_USER}/$(date +%Y%m%d) 2>/dev/null || true",
     "postAttachCommand": "node .devcontainer/storybook-launcher/build-vsix.mjs && code --install-extension $(ls .devcontainer/storybook-launcher/*.vsix | head -1) --force 2>/dev/null; pnpm run storybook:design",
     "forwardPorts": [6007, 8080],
