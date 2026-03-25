@@ -45,6 +45,8 @@ CHANGELOG.md
 /apps/web/playwright/logs/
 /apps/web/playwright/snapshots/
 
+/apps/desktop/.hak/
+/apps/desktop/dist/
 /apps/desktop/build/
 /apps/desktop/dockerbuild/
 /apps/desktop/lib/
