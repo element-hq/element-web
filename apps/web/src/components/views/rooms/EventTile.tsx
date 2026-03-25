@@ -113,7 +113,7 @@ import {
 } from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
-import { ActionBarViewModel } from "../../../viewmodels/message-action/ActionBarViewModel";
+import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 
@@ -1926,7 +1926,7 @@ function ActionBarWrapper({
     }, []);
     const vm = useCreateAutoDisposedViewModel(
         () =>
-            new ActionBarViewModel({
+            new EventTileActionBarViewModel({
                 mxEvent,
                 timelineRenderingType: roomContext.timelineRenderingType,
                 canSendMessages: roomContext.canSendMessages,

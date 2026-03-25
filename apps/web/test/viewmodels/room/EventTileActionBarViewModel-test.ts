@@ -19,11 +19,12 @@ import {
     RelationType,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
+import { ActionBarAction } from "@element-hq/web-shared-components";
 
 import {
-    ActionBarViewModel,
-    type ActionBarViewModelProps,
-} from "../../../src/viewmodels/message-action/ActionBarViewModel";
+    EventTileActionBarViewModel,
+    type EventTileActionBarViewModelProps,
+} from "../../../src/viewmodels/room/EventTileActionBarViewModel";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
@@ -121,7 +122,7 @@ jest.mock("../../../src/utils/FileDownloader", () => ({
     })),
 }));
 
-describe("ActionBarViewModel", () => {
+describe("EventTileActionBarViewModel", () => {
     const userId = "@alice:example.org";
     const roomId = "!room:example.org";
     const rootEvent = new MatrixEvent({
@@ -149,9 +150,9 @@ describe("ActionBarViewModel", () => {
             ...overrides,
         });
 
-    const createVm = (props: Partial<ActionBarViewModelProps> = {}): ActionBarViewModel => {
+    const createVm = (props: Partial<EventTileActionBarViewModelProps> = {}): EventTileActionBarViewModel => {
         const mxEvent = props.mxEvent ?? createMessageEvent();
-        return new ActionBarViewModel({
+        return new EventTileActionBarViewModel({
             mxEvent,
             timelineRenderingType: TimelineRenderingType.Room,
             canSendMessages: true,
@@ -221,19 +222,17 @@ describe("ActionBarViewModel", () => {
 
         await waitFor(() =>
             expect(vm.getSnapshot()).toMatchObject({
-                showCancel: false,
-                showDownload: false,
-                showEdit: true,
-                showExpandCollapse: true,
-                showHide: false,
-                showPinOrUnpin: false,
-                showReact: true,
-                showReply: true,
-                showReplyInThread: true,
-                showThreadForDeletedMessage: false,
+                actions: [
+                    ActionBarAction.React,
+                    ActionBarAction.Reply,
+                    ActionBarAction.ReplyInThread,
+                    ActionBarAction.Edit,
+                    ActionBarAction.Expand,
+                    ActionBarAction.Options,
+                ],
+                presentation: "icon",
                 isDownloadEncrypted: false,
                 isDownloadLoading: false,
-                isFailed: false,
                 isPinned: false,
                 isQuoteExpanded: true,
                 isThreadReplyAllowed: true,
@@ -254,10 +253,10 @@ describe("ActionBarViewModel", () => {
             }),
         });
 
-        expect(vm.getSnapshot().showDownload).toBe(false);
-        expect(vm.getSnapshot().showHide).toBe(true);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
+        expect(vm.getSnapshot().actions).toContain(ActionBarAction.Hide);
 
-        await waitFor(() => expect(vm.getSnapshot().showDownload).toBe(true));
+        await waitFor(() => expect(vm.getSnapshot().actions).toContain(ActionBarAction.Download));
 
         mocked(PinningUtils.isPinned).mockReturnValue(true);
         roomState.emit(
@@ -283,7 +282,7 @@ describe("ActionBarViewModel", () => {
             }),
         );
 
-        expect(vm.getSnapshot().showHide).toBe(false);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Hide);
     });
 
     it("ignores stale download permission results after setProps changes the event", async () => {
@@ -316,18 +315,18 @@ describe("ActionBarViewModel", () => {
         });
 
         const vm = createVm({ mxEvent: eventA });
-        expect(vm.getSnapshot().showDownload).toBe(false);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
 
         vm.setProps({ mxEvent: eventB });
         permissionA.resolve(true);
         await Promise.resolve();
 
-        expect(vm.getSnapshot().showDownload).toBe(false);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
 
         permissionB.resolve(false);
         await Promise.resolve();
 
-        expect(vm.getSnapshot().showDownload).toBe(false);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
     });
 
     it("refreshes on event status changes and removes listeners on dispose", () => {
@@ -336,11 +335,11 @@ describe("ActionBarViewModel", () => {
         const roomStateOffSpy = jest.spyOn(roomState, "off");
         const vm = createVm({ mxEvent });
 
-        expect(vm.getSnapshot().showCancel).toBe(false);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Cancel);
 
         mxEvent.setStatus(EventStatus.QUEUED);
 
-        expect(vm.getSnapshot().showCancel).toBe(true);
+        expect(vm.getSnapshot().actions).toContain(ActionBarAction.Cancel);
         expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(mxEvent);
 
         vm.dispose();
@@ -456,13 +455,13 @@ describe("ActionBarViewModel", () => {
         } as never);
 
         const vm = createVm({ mxEvent: event });
-        expect(vm.getSnapshot().showDownload).toBe(false);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
 
         vm.dispose();
         permission.resolve(true);
         await Promise.resolve();
 
-        expect(vm.getSnapshot().showDownload).toBe(false);
+        expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
     });
 
     it("dispatches reply and thread actions and forwards callbacks", async () => {
@@ -531,32 +530,37 @@ describe("ActionBarViewModel", () => {
                 name: "hides reply and react for non-actionable events",
                 actionable: false,
                 props: {},
-                expected: { showReply: false, showReact: false },
+                expectedActions: [],
+                unexpectedActions: [ActionBarAction.Reply, ActionBarAction.React],
             },
             {
                 name: "hides reply when sending messages is disabled",
                 actionable: true,
                 props: { canSendMessages: false },
-                expected: { showReply: false, showReact: true },
+                expectedActions: [ActionBarAction.React],
+                unexpectedActions: [ActionBarAction.Reply],
             },
             {
                 name: "hides react when reactions are disabled",
                 actionable: true,
                 props: { canReact: false },
-                expected: { showReply: true, showReact: false },
+                expectedActions: [ActionBarAction.Reply],
+                unexpectedActions: [ActionBarAction.React],
             },
             {
                 name: "hides react in search results",
                 actionable: true,
                 props: { isSearch: true },
-                expected: { showReply: true, showReact: false },
+                expectedActions: [ActionBarAction.Reply],
+                unexpectedActions: [ActionBarAction.React],
             },
-        ])("$name", ({ actionable, props, expected }) => {
+        ])("$name", ({ actionable, props, expectedActions, unexpectedActions }) => {
             mocked(isContentActionable).mockReturnValue(actionable);
 
             const vm = createVm(props);
 
-            expect(vm.getSnapshot()).toMatchObject(expected);
+            expectedActions.forEach((action) => expect(vm.getSnapshot().actions).toContain(action));
+            unexpectedActions.forEach((action) => expect(vm.getSnapshot().actions).not.toContain(action));
         });
 
         it.each([
@@ -583,7 +587,7 @@ describe("ActionBarViewModel", () => {
 
             const vm = createVm({ isQuoteExpanded: quoteExpanded });
 
-            expect(vm.getSnapshot().showExpandCollapse).toBe(expected);
+            expect(vm.getSnapshot().actions.includes(ActionBarAction.Expand)).toBe(expected);
         });
 
         it.each([
@@ -593,7 +597,8 @@ describe("ActionBarViewModel", () => {
                 content: { msgtype: MsgType.Text, body: "Hello" },
                 relation: undefined,
                 type: EventType.RoomMessage,
-                expected: { showReplyInThread: true, isThreadReplyAllowed: true },
+                expectedReplyInThread: true,
+                expectedAllowed: true,
             },
             {
                 name: "blocks reply in thread in thread timeline",
@@ -601,7 +606,8 @@ describe("ActionBarViewModel", () => {
                 content: { msgtype: MsgType.Text, body: "Hello" },
                 relation: undefined,
                 type: EventType.RoomMessage,
-                expected: { showReplyInThread: false, isThreadReplyAllowed: true },
+                expectedReplyInThread: false,
+                expectedAllowed: true,
             },
             {
                 name: "blocks reply in thread for verification requests",
@@ -609,7 +615,8 @@ describe("ActionBarViewModel", () => {
                 content: { msgtype: MsgType.KeyVerificationRequest, body: "verify" },
                 relation: undefined,
                 type: EventType.RoomMessage,
-                expected: { showReplyInThread: false, isThreadReplyAllowed: true },
+                expectedReplyInThread: false,
+                expectedAllowed: true,
             },
             {
                 name: "blocks reply in thread for beacon info events",
@@ -617,7 +624,8 @@ describe("ActionBarViewModel", () => {
                 content: {},
                 relation: undefined,
                 type: M_BEACON_INFO.name,
-                expected: { showReplyInThread: false, isThreadReplyAllowed: true },
+                expectedReplyInThread: false,
+                expectedAllowed: true,
             },
             {
                 name: "marks non-thread relations as not thread reply allowed",
@@ -625,9 +633,10 @@ describe("ActionBarViewModel", () => {
                 content: { msgtype: MsgType.Text, body: "Hello" },
                 relation: { rel_type: RelationType.Annotation },
                 type: EventType.RoomMessage,
-                expected: { showReplyInThread: true, isThreadReplyAllowed: false },
+                expectedReplyInThread: true,
+                expectedAllowed: false,
             },
-        ])("$name", ({ timelineRenderingType, content, relation, type, expected }) => {
+        ])("$name", ({ timelineRenderingType, content, relation, type, expectedReplyInThread, expectedAllowed }) => {
             const mxEvent = new MatrixEvent({
                 type,
                 room_id: roomId,
@@ -639,7 +648,8 @@ describe("ActionBarViewModel", () => {
 
             const vm = createVm({ mxEvent, timelineRenderingType });
 
-            expect(vm.getSnapshot()).toMatchObject(expected);
+            expect(vm.getSnapshot().actions.includes(ActionBarAction.ReplyInThread)).toBe(expectedReplyInThread);
+            expect(vm.getSnapshot().isThreadReplyAllowed).toBe(expectedAllowed);
         });
 
         it("shows thread action for deleted messages with a thread in the room timeline", () => {
@@ -649,8 +659,8 @@ describe("ActionBarViewModel", () => {
 
             const vm = createVm({ mxEvent, timelineRenderingType: TimelineRenderingType.Room });
 
-            expect(vm.getSnapshot().showThreadForDeletedMessage).toBe(true);
-            expect(vm.getSnapshot().showReply).toBe(false);
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.ReplyInThread);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Reply);
         });
 
         it("matches media visibility rules for hide and download actions", async () => {
@@ -666,18 +676,12 @@ describe("ActionBarViewModel", () => {
             const vm = createVm({ mxEvent });
 
             expect(vm.getSnapshot()).toMatchObject({
-                showHide: true,
-                showDownload: false,
                 isDownloadEncrypted: true,
             });
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Hide);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
 
-            await waitFor(() =>
-                expect(vm.getSnapshot()).toMatchObject({
-                    showHide: true,
-                    showDownload: false,
-                    isDownloadEncrypted: true,
-                }),
-            );
+            await waitFor(() => expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download));
         });
 
         it("recomputes parity-relevant flags and resets download state when the event changes", () => {
@@ -702,13 +706,11 @@ describe("ActionBarViewModel", () => {
                 }),
             });
 
-            expect(vm.getSnapshot()).toMatchObject({
-                showDownload: false,
-                showHide: false,
-                showReply: false,
-                showReact: false,
-                isDownloadLoading: false,
-            });
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Hide);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Reply);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.React);
+            expect(vm.getSnapshot().isDownloadLoading).toBe(false);
         });
     });
 });

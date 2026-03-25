@@ -45,7 +45,7 @@ import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { ModuleApi } from "../../modules/Api";
 
-export interface ActionBarViewModelProps {
+export interface EventTileActionBarViewModelProps {
     mxEvent: MatrixEvent;
     timelineRenderingType: TimelineRenderingType;
     canSendMessages: boolean;
@@ -86,8 +86,8 @@ interface DerivedMediaState {
     isDownloadLoading: boolean;
 }
 
-export class ActionBarViewModel
-    extends BaseViewModel<ActionBarViewSnapshot, ActionBarViewModelProps>
+export class EventTileActionBarViewModel
+    extends BaseViewModel<ActionBarViewSnapshot, EventTileActionBarViewModelProps>
     implements ActionBarViewActions
 {
     private listenerCleanups: Array<() => void> = [];
@@ -98,10 +98,10 @@ export class ActionBarViewModel
     private readonly downloader = new FileDownloader();
     private downloadedBlob?: Blob;
 
-    public constructor(props: ActionBarViewModelProps) {
+    public constructor(props: EventTileActionBarViewModelProps) {
         super(
             props,
-            ActionBarViewModel.buildSnapshot(props, {
+            EventTileActionBarViewModel.buildSnapshot(props, {
                 canDownload: true,
                 isDownloadLoading: false,
             }),
@@ -110,15 +110,15 @@ export class ActionBarViewModel
     }
 
     private static buildSnapshot(
-        props: ActionBarViewModelProps,
+        props: EventTileActionBarViewModelProps,
         localState: LocalActionBarState,
     ): ActionBarViewSnapshot {
         const client = MatrixClientPeg.safeGet();
-        const eventState = ActionBarViewModel.getDerivedEventState(props, client);
-        const mediaState = ActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
+        const eventState = EventTileActionBarViewModel.getDerivedEventState(props, client);
+        const mediaState = EventTileActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
 
         return {
-            actions: ActionBarViewModel.resolveActions(eventState, mediaState),
+            actions: EventTileActionBarViewModel.resolveActions(eventState, mediaState),
             presentation: "icon",
             isDownloadEncrypted: mediaState.isDownloadEncrypted,
             isDownloadLoading: mediaState.isDownloadLoading,
@@ -135,7 +135,6 @@ export class ActionBarViewModel
             return [ActionBarAction.Resend, ActionBarAction.Cancel];
         }
 
-        // Preserve the legacy toolbar order that previously lived in ActionBarView.
         if (mediaState.showHide) {
             actions.push(ActionBarAction.Hide);
         }
@@ -173,7 +172,7 @@ export class ActionBarViewModel
     }
 
     private static getDerivedEventState(
-        props: ActionBarViewModelProps,
+        props: EventTileActionBarViewModelProps,
         client: ReturnType<typeof MatrixClientPeg.safeGet>,
     ): DerivedEventState {
         const { mxEvent } = props;
@@ -190,7 +189,7 @@ export class ActionBarViewModel
             showReply: contentActionable && props.canSendMessages,
             isThreadReplyAllowed: !(!!relationType && relationType !== RelationType.Thread),
             showExpandCollapse: props.isQuoteExpanded !== undefined && shouldDisplayReply(mxEvent),
-            showReplyInThread: contentActionable && ActionBarViewModel.canShowReplyInThreadAction(props),
+            showReplyInThread: contentActionable && EventTileActionBarViewModel.canShowReplyInThreadAction(props),
             showThreadForDeletedMessage:
                 !contentActionable &&
                 props.timelineRenderingType === TimelineRenderingType.Room &&
@@ -218,13 +217,13 @@ export class ActionBarViewModel
     }
 
     private computeSnapshot(): ActionBarViewSnapshot {
-        return ActionBarViewModel.buildSnapshot(this.props, {
+        return EventTileActionBarViewModel.buildSnapshot(this.props, {
             canDownload: this.canDownload,
             isDownloadLoading: this.isDownloadLoading,
         });
     }
 
-    private static canShowReplyInThreadAction(props: ActionBarViewModelProps): boolean {
+    private static canShowReplyInThreadAction(props: EventTileActionBarViewModelProps): boolean {
         const inNotThreadTimeline = props.timelineRenderingType !== TimelineRenderingType.Thread;
         const content = props.mxEvent.getContent();
         const isAllowedMessageType =
@@ -352,7 +351,7 @@ export class ActionBarViewModel
         }
     }
 
-    public setProps(newProps: Partial<ActionBarViewModelProps>): void {
+    public setProps(newProps: Partial<EventTileActionBarViewModelProps>): void {
         const prevEvent = this.props.mxEvent;
         const prevRoomId = prevEvent.getRoomId();
 
