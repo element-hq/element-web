@@ -17,6 +17,8 @@ test.describe("Appearance user settings tab", () => {
         test.beforeEach(async ({ app, user, util }) => {
             // Disable the default theme for consistency in case ThemeWatcher automatically chooses it
             await util.disableSystemTheme();
+            await app.closeVerifyToast();
+
             await util.openAppearanceTab();
         });
 
@@ -100,6 +102,7 @@ test.describe("Appearance user settings tab", () => {
                     await expect(page).toMatchScreenshot("window-custom-theme.png");
 
                     await page.reload();
+                    await app.closeVerifyToast();
 
                     await util.openAppearanceTab();
                     // Assert that the custom theme is still selected after reloading the page

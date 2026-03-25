@@ -22,6 +22,7 @@ test.describe("Create Room", () => {
         "should create a public room with name, topic & address set",
         { tag: "@screenshot" },
         async ({ page, user, app, axe }) => {
+            await app.closeVerifyToast();
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -50,6 +51,8 @@ test.describe("Create Room", () => {
     );
 
     test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
+        await app.closeVerifyToast();
+
         await page.getByRole("button", { name: "New conversation", exact: true }).click();
         await page.getByRole("menuitem", { name: "Start chat" }).click();
 
@@ -66,6 +69,7 @@ test.describe("Create Room", () => {
 
     test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
         await app.settings.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
+        await app.closeVerifyToast();
 
         const dialog = await app.openCreateRoomDialog("New video room");
         // Fill name & topic
@@ -100,6 +104,7 @@ test.describe("Create Room", () => {
         });
 
         test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app, axe }) => {
+            await app.closeVerifyToast();
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);

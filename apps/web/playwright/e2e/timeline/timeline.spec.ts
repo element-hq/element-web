@@ -790,6 +790,7 @@ test.describe("Timeline", () => {
                     await sendEvent(app.client, room.roomId);
                     await sendEvent(app.client, room.roomId, true);
                     await page.goto(`/#/room/${room.roomId}`);
+                    await app.closeVerifyToast();
 
                     await app.toggleRoomInfoPanel();
 
@@ -815,6 +816,7 @@ test.describe("Timeline", () => {
                 await sendEvent(app.client, room.roomId);
 
                 await page.goto(`/#/room/${room.roomId}`);
+                await app.closeVerifyToast();
 
                 // Open a room setting dialog
                 await app.toggleRoomInfoPanel();

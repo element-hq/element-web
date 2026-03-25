@@ -24,7 +24,6 @@ import {
     showToast as showSetupEncryptionToast,
 } from "../toasts/SetupEncryptionToast";
 import { isSecretStorageBeingAccessed } from "../SecurityManager";
-import { asyncSomeParallel } from "../utils/arrays";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -267,10 +266,10 @@ export class DeviceListenerCurrentDevice {
 
         if (newState === "ok" || this.dismissedThisDeviceToast) {
             hideSetupEncryptionToast();
-        } else if (await this.shouldShowSetupEncryptionToast()) {
+        } else if (!isSecretStorageBeingAccessed()) {
             showSetupEncryptionToast(newState);
         } else {
-            logSpan.info("Not yet ready, but shouldShowSetupEncryptionToast==false");
+            logSpan.info("Device is not yet ready, but secret storage is being accessed, so not showing toast.");
         }
     }
 
@@ -380,23 +379,6 @@ export class DeviceListenerCurrentDevice {
         }
 
         return this.keyBackupInfo;
-    }
-
-    /**
-     * Is the user in at least one encrypted room?
-     */
-    private async shouldShowSetupEncryptionToast(): Promise<boolean> {
-        // If we're in the middle of a secret storage operation, we're likely
-        // modifying the state involved here, so don't add new toasts to setup.
-        if (isSecretStorageBeingAccessed()) return false;
-
-        // Show setup toasts once the user is in at least one encrypted room.
-        const cryptoApi = this.client.getCrypto();
-        if (!cryptoApi) return false;
-
-        return await asyncSomeParallel(this.client.getRooms(), ({ roomId }) =>
-            cryptoApi.isEncryptionEnabledInRoom(roomId),
-        );
     }
 
     /**

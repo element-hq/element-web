@@ -244,15 +244,30 @@ export class ElementAppPage {
         await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
     }
 
+    async closeToast(title: string, button: string): Promise<void> {
+        await this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button }).click();
+    }
+
     /**
-     * Close the notification toast
+     * Dismiss the "Notifications" toast.
      */
-    public closeNotificationToast(): Promise<void> {
-        // Dismiss "Notification" toast
-        return this.page
-            .locator(".mx_Toast_toast", { hasText: "Notifications" })
-            .getByRole("button", { name: "Dismiss" })
-            .click();
+    public async closeNotificationToast(): Promise<void> {
+        await this.closeToast("Notifications", "Dismiss");
+    }
+
+    /**
+     * Dismiss the "Turn on key storage".
+     */
+    public async closeKeyStorageToast() {
+        await this.closeToast("Turn on key storage", "Dismiss");
+        await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+    }
+
+    /**
+     * Dismiss the "Verify this device" toast by clicking "Later".
+     */
+    public async closeVerifyToast() {
+        await this.closeToast("Verify this device", "Later");
     }
 
     /**

@@ -46,7 +46,8 @@ test.describe("Room list filters and sort", () => {
     }
 
     test.beforeEach(async ({ page, app, bot, user }) => {
-        // The notification toast is displayed above the search section
+        // The toasts are displayed above the search section
+        await app.closeVerifyToast();
         await app.closeNotificationToast();
     });
 

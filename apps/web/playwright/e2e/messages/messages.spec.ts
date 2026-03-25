@@ -88,6 +88,7 @@ test.describe("Message rendering", () => {
                 room: async ({ user, app }, use) => {
                     const roomId = await app.client.createRoom({ name: "Test room" });
                     await use({ roomId });
+                    await app.closeVerifyToast();
                 },
             });
 
@@ -218,6 +219,7 @@ test.describe("Message url previews", () => {
         room: async ({ user, app }, use) => {
             const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
+            await app.closeVerifyToast();
         },
     });
     test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {

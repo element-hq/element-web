@@ -144,6 +144,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     };
 
     test.beforeEach(async ({ page, app, user }) => {
+        await app.closeVerifyToast();
         await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
 

@@ -23,7 +23,8 @@ test.describe("Search section of the room list", () => {
     }
 
     test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
+        // The toasts are displayed above the search section
+        await app.closeVerifyToast();
         await app.closeNotificationToast();
     });
 

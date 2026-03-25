@@ -348,11 +348,11 @@ describe("DeviceListener", () => {
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
             });
 
-            it("does not show any toasts when no rooms are encrypted", async () => {
+            it("shows toasts even when no rooms are encrypted", async () => {
                 jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
                 await createAndStart();
 
-                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalled();
             });
 
             it("shows verify session toast when account has cross signing", async () => {

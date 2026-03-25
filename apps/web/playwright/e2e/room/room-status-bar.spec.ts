@@ -19,6 +19,7 @@ test.describe("Room Status Bar", () => {
             const roomId = await app.client.createRoom({
                 name: "A room",
             });
+            await app.closeVerifyToast();
             await app.closeNotificationToast();
             await app.viewRoomById(roomId);
             await use({ roomId });
@@ -139,6 +140,7 @@ test.describe("Room Status Bar", () => {
             "should show an error when creating a local room fails",
             { tag: "@screenshot" },
             async ({ page, app, user, bot }) => {
+                await app.closeVerifyToast();
                 await page
                     .getByRole("navigation", { name: "Room list" })
                     .getByRole("button", { name: "New conversation" })

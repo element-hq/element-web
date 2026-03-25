@@ -169,6 +169,7 @@ test.describe("Cryptography", function () {
         "creating a DM should work, being e2e-encrypted / user verification",
         { tag: "@screenshot" },
         async ({ page, app, bot: bob, user: aliceCredentials }) => {
+            await app.closeVerifyToast();
             await app.client.bootstrapCrossSigning(aliceCredentials);
             await startDMWithBob(page, bob);
             // send first message

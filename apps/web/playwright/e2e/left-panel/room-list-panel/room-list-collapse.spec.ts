@@ -14,6 +14,7 @@ test.describe("Collapsible Room list", () => {
     });
 
     test.beforeEach(async ({ page, app, user }) => {
+        await app.closeVerifyToast();
         await app.closeNotificationToast();
         for (let i = 0; i < 10; i++) {
             await app.client.createRoom({ name: `room${i}` });
