@@ -22,7 +22,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
-import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
+import { FileBodyFactory, renderMBody } from "./MBodyFactory";
 
 interface IState {
     decryptedUrl: string | null;
@@ -246,7 +246,7 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
 
     private getFileBody = (): ReactNode => {
         if (this.props.forExport) return null;
-        return this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyViewFactory);
+        return this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory);
     };
 
     public render(): React.ReactNode {
