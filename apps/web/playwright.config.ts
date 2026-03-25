@@ -34,7 +34,7 @@ const chromeProject: Project<PlaywrightTestOptions, WorkerOptions & PlaywrightWo
 };
 
 export default defineConfig<{}, WorkerOptions>({
-    tag: "web",
+    tag: "@web",
     projects: [
         {
             name: "Chrome",
