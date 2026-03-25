@@ -119,21 +119,23 @@ export class ActionBarViewModel
 
         return {
             actions: ActionBarViewModel.resolveActions(eventState, mediaState),
-            ...eventState,
-            ...mediaState,
+            presentation: "icon",
+            isDownloadEncrypted: mediaState.isDownloadEncrypted,
+            isDownloadLoading: mediaState.isDownloadLoading,
+            isPinned: eventState.isPinned,
+            isQuoteExpanded: eventState.isQuoteExpanded,
+            isThreadReplyAllowed: eventState.isThreadReplyAllowed,
         };
     }
 
-    private static resolveActions(
-        eventState: DerivedEventState,
-        mediaState: DerivedMediaState,
-    ): ActionBarAction[] {
+    private static resolveActions(eventState: DerivedEventState, mediaState: DerivedMediaState): ActionBarAction[] {
         const actions: ActionBarAction[] = [];
 
         if (eventState.showCancel && eventState.isFailed) {
             return [ActionBarAction.Resend, ActionBarAction.Cancel];
         }
 
+        // Preserve the legacy toolbar order that previously lived in ActionBarView.
         if (mediaState.showHide) {
             actions.push(ActionBarAction.Hide);
         }

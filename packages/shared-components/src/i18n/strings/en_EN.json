@@ -28,7 +28,8 @@
         "retry": "Retry",
         "search": "Search",
         "start_chat": "Start chat",
-        "unpin": "Unpin"
+        "unpin": "Unpin",
+        "view_source": "View Source"
     },
     "common": {
         "attachment": "Attachment",
@@ -206,8 +207,10 @@
         },
         "mab": {
             "collapse_reply_chain": "Collapse quotes",
+            "copy_link_thread": "Copy link to thread",
             "expand_reply_chain": "Expand quotes",
-            "label": "Message Actions"
+            "label": "Message Actions",
+            "view_in_room": "View in room"
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s",

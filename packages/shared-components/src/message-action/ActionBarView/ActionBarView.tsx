@@ -12,11 +12,14 @@ import {
     DeleteIcon,
     EditIcon,
     ExpandIcon,
+    InlineCodeIcon,
+    LinkIcon,
     PinIcon,
     ReplyIcon,
     RestartIcon,
     UnpinIcon,
     ThreadsIcon,
+    VisibilityOnIcon,
     VisibilityOffIcon,
     DownloadIcon,
     OverflowHorizontalIcon,
@@ -38,6 +41,8 @@ import styles from "./ActionBarView.module.css";
 export interface ActionBarViewSnapshot {
     /** Explicitly resolved actions to render, in order. */
     actions: ActionBarAction[];
+    /** Whether actions should render as icon buttons or label buttons. */
+    presentation?: "icon" | "label";
     /** Whether the current download is for encrypted media. */
     isDownloadEncrypted: boolean;
     /** Whether a media download or decryption is currently in progress. */
@@ -58,16 +63,20 @@ export interface ActionBarViewSnapshot {
  */
 export interface ActionBarViewActions {
     onCancelClick?: (anchor: HTMLElement | null) => void;
+    onCopyLinkClick?: (anchor: HTMLElement | null) => void;
     onDownloadClick?: (anchor: HTMLElement | null) => void;
     onEditClick?: (anchor: HTMLElement | null) => void;
     onHideClick?: (anchor: HTMLElement | null) => void;
     onOptionsClick?: (anchor: HTMLElement | null) => void;
     onPinClick?: (anchor: HTMLElement | null) => void;
     onReactionsClick?: (anchor: HTMLElement | null) => void;
+    onRemoveClick?: (anchor: HTMLElement | null) => void;
     onReplyClick?: (anchor: HTMLElement | null) => void;
     onReplyInThreadClick?: (anchor: HTMLElement | null) => void;
     onResendClick?: (anchor: HTMLElement | null) => void;
     onToggleThreadExpanded?: (anchor: HTMLElement | null) => void;
+    onViewInRoomClick?: (anchor: HTMLElement | null) => void;
+    onViewSourceClick?: (anchor: HTMLElement | null) => void;
 }
 
 export type ActionBarViewModel = ViewModel<ActionBarViewSnapshot, ActionBarViewActions>;
@@ -80,6 +89,7 @@ export type ActionBarViewModel = ViewModel<ActionBarViewSnapshot, ActionBarViewA
  */
 export enum ActionBarAction {
     Cancel = "cancel",
+    CopyLink = "copyLink",
     Download = "download",
     Edit = "edit",
     Expand = "expand",
@@ -87,9 +97,12 @@ export enum ActionBarAction {
     Options = "options",
     Pin = "pin",
     React = "react",
+    Remove = "remove",
     Reply = "reply",
     ReplyInThread = "replyInThread",
     Resend = "resend",
+    ViewInRoom = "viewInRoom",
+    ViewSource = "viewSource",
 }
 
 interface ToolbarButtonMeta {
@@ -120,18 +133,23 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     const { translate: _t } = useI18n();
     const [activeIndex, setActiveIndex] = useState(0);
     const cancelTriggerRef = useRef<HTMLButtonElement>(null);
+    const copyLinkTriggerRef = useRef<HTMLButtonElement>(null);
     const downloadTriggerRef = useRef<HTMLButtonElement>(null);
     const editTriggerRef = useRef<HTMLButtonElement>(null);
     const expandTriggerRef = useRef<HTMLButtonElement>(null);
     const hideTriggerRef = useRef<HTMLButtonElement>(null);
     const pinTriggerRef = useRef<HTMLButtonElement>(null);
     const reactTriggerRef = useRef<HTMLButtonElement>(null);
+    const removeTriggerRef = useRef<HTMLButtonElement>(null);
     const replyTriggerRef = useRef<HTMLButtonElement>(null);
     const replyInThreadTriggerRef = useRef<HTMLButtonElement>(null);
     const resendTriggerRef = useRef<HTMLButtonElement>(null);
+    const viewInRoomTriggerRef = useRef<HTMLButtonElement>(null);
+    const viewSourceTriggerRef = useRef<HTMLButtonElement>(null);
     const optionsTriggerRef = useRef<HTMLButtonElement>(null);
     const {
         actions,
+        presentation = "icon",
         isThreadReplyAllowed,
         isDownloadEncrypted,
         isDownloadLoading,
@@ -147,6 +165,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
             action?.(ref.current);
         };
 
+    const iconsOnly = presentation === "icon";
     const actionButtons: Partial<Record<ActionBarAction, JSX.Element>> = {};
 
     actionButtons[ActionBarAction.Edit] = (
@@ -156,13 +175,15 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={editTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("action|edit")}
                 onClick={() => vm.onEditClick?.(editTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onEditClick, editTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={EditIcon}
-            />
+                Icon={iconsOnly ? EditIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|edit")}
+            </Button>
         </Tooltip>
     );
 
@@ -174,14 +195,16 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={pinTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={pinDescription}
                 aria-pressed={isPinned}
                 onClick={() => vm.onPinClick?.(pinTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onPinClick, pinTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={isPinned ? UnpinIcon : PinIcon}
-            />
+                Icon={iconsOnly ? (isPinned ? UnpinIcon : PinIcon) : undefined}
+            >
+                {iconsOnly ? undefined : pinDescription}
+            </Button>
         </Tooltip>
     );
 
@@ -192,13 +215,34 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={cancelTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("action|delete")}
                 onClick={() => vm.onCancelClick?.(cancelTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onCancelClick, cancelTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={DeleteIcon}
-            />
+                Icon={iconsOnly ? DeleteIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|delete")}
+            </Button>
+        </Tooltip>
+    );
+
+    actionButtons[ActionBarAction.CopyLink] = (
+        <Tooltip description={_t("timeline|mab|copy_link_thread")} placement="top" key="copy_link">
+            <Button
+                key={ActionBarAction.CopyLink}
+                ref={copyLinkTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={iconsOnly}
+                aria-label={_t("timeline|mab|copy_link_thread")}
+                onClick={() => vm.onCopyLinkClick?.(copyLinkTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onCopyLinkClick, copyLinkTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={iconsOnly ? LinkIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("timeline|mab|copy_link_thread")}
+            </Button>
         </Tooltip>
     );
 
@@ -209,13 +253,15 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={replyTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("action|reply")}
                 onClick={() => vm.onReplyClick?.(replyTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onReplyClick, replyTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={ReplyIcon}
-            />
+                Icon={iconsOnly ? ReplyIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|reply")}
+            </Button>
         </Tooltip>
     );
 
@@ -226,13 +272,15 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={reactTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("action|react")}
                 onClick={() => vm.onReactionsClick?.(reactTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onReactionsClick, reactTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={ReactionAddIcon}
-            />
+                Icon={iconsOnly ? ReactionAddIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|react")}
+            </Button>
         </Tooltip>
     );
 
@@ -249,14 +297,16 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={downloadTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={downloadTitle}
                 disabled={isDownloadLoading}
                 onClick={() => vm.onDownloadClick?.(downloadTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onDownloadClick, downloadTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={isDownloadLoading ? InlineSpinner : DownloadIcon}
-            />
+                Icon={iconsOnly ? (isDownloadLoading ? InlineSpinner : DownloadIcon) : undefined}
+            >
+                {iconsOnly ? undefined : downloadTitle}
+            </Button>
         </Tooltip>
     );
 
@@ -267,13 +317,15 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={hideTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("action|hide")}
                 onClick={() => vm.onHideClick?.(hideTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onHideClick, hideTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={VisibilityOffIcon}
-            />
+                Icon={iconsOnly ? VisibilityOffIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|reply_in_thread")}
+            </Button>
         </Tooltip>
     );
 
@@ -287,14 +339,16 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={replyInThreadTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("action|reply_in_thread")}
                 disabled={!isThreadReplyAllowed}
                 onClick={() => vm.onReplyInThreadClick?.(replyInThreadTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onReplyInThreadClick, replyInThreadTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={ThreadsIcon}
-            />
+                Icon={iconsOnly ? ThreadsIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|reply_in_thread")}
+            </Button>
         </Tooltip>
     );
 
@@ -305,13 +359,15 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={resendTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("action|retry")}
                 onClick={() => vm.onResendClick?.(resendTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onResendClick, resendTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={RestartIcon}
-            />
+                Icon={iconsOnly ? RestartIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|retry")}
+            </Button>
         </Tooltip>
     );
 
@@ -330,14 +386,16 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={expandTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={expandDescription}
                 aria-expanded={isQuoteExpanded}
                 onClick={() => vm.onToggleThreadExpanded?.(expandTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onToggleThreadExpanded, expandTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={isQuoteExpanded ? CollapseIcon : ExpandIcon}
-            />
+                Icon={iconsOnly ? (isQuoteExpanded ? CollapseIcon : ExpandIcon) : undefined}
+            >
+                {iconsOnly ? undefined : expandDescription}
+            </Button>
         </Tooltip>
     );
 
@@ -348,41 +406,112 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
                 ref={optionsTriggerRef}
                 kind="tertiary"
                 size="sm"
-                iconOnly={true}
+                iconOnly={iconsOnly}
                 aria-label={_t("common|options")}
                 onClick={() => vm.onOptionsClick?.(optionsTriggerRef.current)}
                 onContextMenu={handleContextMenu(vm.onOptionsClick, optionsTriggerRef)}
                 className={styles.toolbar_item}
-                Icon={OverflowHorizontalIcon}
-            />
+                Icon={iconsOnly ? OverflowHorizontalIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("common|options")}
+            </Button>
+        </Tooltip>
+    );
+
+    actionButtons[ActionBarAction.Remove] = (
+        <Tooltip description={_t("action|remove")} placement="top" key="remove">
+            <Button
+                key={ActionBarAction.Remove}
+                ref={removeTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={iconsOnly}
+                aria-label={_t("action|remove")}
+                onClick={() => vm.onRemoveClick?.(removeTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onRemoveClick, removeTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={iconsOnly ? DeleteIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|remove")}
+            </Button>
+        </Tooltip>
+    );
+
+    actionButtons[ActionBarAction.ViewInRoom] = (
+        <Tooltip description={_t("timeline|mab|view_in_room")} placement="top" key="view_in_room">
+            <Button
+                key={ActionBarAction.ViewInRoom}
+                ref={viewInRoomTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={iconsOnly}
+                aria-label={_t("timeline|mab|view_in_room")}
+                onClick={() => vm.onViewInRoomClick?.(viewInRoomTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onViewInRoomClick, viewInRoomTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={iconsOnly ? VisibilityOnIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("timeline|mab|view_in_room")}
+            </Button>
+        </Tooltip>
+    );
+
+    actionButtons[ActionBarAction.ViewSource] = (
+        <Tooltip description={_t("action|view_source")} placement="top" key="view_source">
+            <Button
+                key={ActionBarAction.ViewSource}
+                ref={viewSourceTriggerRef}
+                kind="tertiary"
+                size="sm"
+                iconOnly={iconsOnly}
+                aria-label={_t("action|view_source")}
+                onClick={() => vm.onViewSourceClick?.(viewSourceTriggerRef.current)}
+                onContextMenu={handleContextMenu(vm.onViewSourceClick, viewSourceTriggerRef)}
+                className={styles.toolbar_item}
+                Icon={iconsOnly ? InlineCodeIcon : undefined}
+            >
+                {iconsOnly ? undefined : _t("action|view_source")}
+            </Button>
         </Tooltip>
     );
 
     const toolbarButtons = useMemo<ToolbarButtonMeta[]>(() => {
         return actions.map((action) => ({
             action,
-            ref:
-                action === ActionBarAction.Cancel
-                    ? cancelTriggerRef
-                    : action === ActionBarAction.Download
-                      ? downloadTriggerRef
-                      : action === ActionBarAction.Edit
-                        ? editTriggerRef
-                        : action === ActionBarAction.Expand
-                          ? expandTriggerRef
-                          : action === ActionBarAction.Hide
-                            ? hideTriggerRef
-                            : action === ActionBarAction.Options
-                              ? optionsTriggerRef
-                              : action === ActionBarAction.Pin
-                                ? pinTriggerRef
-                                : action === ActionBarAction.React
-                                  ? reactTriggerRef
-                                  : action === ActionBarAction.Reply
-                                    ? replyTriggerRef
-                                    : action === ActionBarAction.ReplyInThread
-                                      ? replyInThreadTriggerRef
-                                      : resendTriggerRef,
+            ref: (() => {
+                switch (action) {
+                    case ActionBarAction.Cancel:
+                        return cancelTriggerRef;
+                    case ActionBarAction.CopyLink:
+                        return copyLinkTriggerRef;
+                    case ActionBarAction.Download:
+                        return downloadTriggerRef;
+                    case ActionBarAction.Edit:
+                        return editTriggerRef;
+                    case ActionBarAction.Expand:
+                        return expandTriggerRef;
+                    case ActionBarAction.Hide:
+                        return hideTriggerRef;
+                    case ActionBarAction.Options:
+                        return optionsTriggerRef;
+                    case ActionBarAction.Pin:
+                        return pinTriggerRef;
+                    case ActionBarAction.React:
+                        return reactTriggerRef;
+                    case ActionBarAction.Remove:
+                        return removeTriggerRef;
+                    case ActionBarAction.Reply:
+                        return replyTriggerRef;
+                    case ActionBarAction.ReplyInThread:
+                        return replyInThreadTriggerRef;
+                    case ActionBarAction.Resend:
+                        return resendTriggerRef;
+                    case ActionBarAction.ViewInRoom:
+                        return viewInRoomTriggerRef;
+                    case ActionBarAction.ViewSource:
+                        return viewSourceTriggerRef;
+                }
+            })(),
             disabled:
                 action === ActionBarAction.Download
                     ? isDownloadLoading

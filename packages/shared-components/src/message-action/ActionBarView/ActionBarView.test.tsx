@@ -22,16 +22,8 @@ import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
 
 const composedStories = composeStories(stories);
 
-const {
-    FailedMessage,
-    DownloadingAttachment,
-    DecryptingAttachment,
-    PinnedMessage,
-    ExpandedReplyChain,
-    ThreadReplyDisabled,
-    DeletedMessageThreadOnly,
-    Minimal,
-} = composedStories;
+const { DownloadingAttachment, DecryptingAttachment, PinnedMessage, ExpandedReplyChain, DisabledThreadReply } =
+    composedStories;
 
 describe("ActionBarView", () => {
     afterEach(() => {
@@ -49,8 +41,18 @@ describe("ActionBarView", () => {
         }
     });
 
-    it("renders the failed-message branch with retry and delete only", () => {
-        render(<FailedMessage />);
+    it("renders retry and delete only when those are the resolved actions", () => {
+        const vm = new MockViewModel<ActionBarViewSnapshot>({
+            actions: [ActionBarAction.Resend, ActionBarAction.Cancel],
+            presentation: "icon",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        render(<ActionBarView vm={vm} />);
 
         expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /delete/i })).toBeInTheDocument();
@@ -87,21 +89,59 @@ describe("ActionBarView", () => {
     });
 
     it("renders a disabled thread reply button when thread reply is not allowed", () => {
-        render(<ThreadReplyDisabled />);
+        render(<DisabledThreadReply />);
 
         const threadButton = screen.getByRole("button", { name: /reply in thread/i });
         expect(threadButton).toHaveAttribute("aria-disabled", "true");
     });
 
-    it("renders a thread action for deleted messages even when reply is hidden", () => {
-        render(<DeletedMessageThreadOnly />);
+    it("renders thread-list actions in icon mode", () => {
+        const vm = new MockViewModel<ActionBarViewSnapshot>({
+            actions: [ActionBarAction.ViewInRoom, ActionBarAction.CopyLink],
+            presentation: "icon",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
 
-        expect(screen.getByRole("button", { name: /reply in thread/i })).toBeInTheDocument();
-        expect(screen.queryByRole("button", { name: /^reply$/i })).not.toBeInTheDocument();
+        render(<ActionBarView vm={vm} />);
+
+        expect(screen.getByRole("button", { name: /view in room/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /copy link/i })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /options/i })).not.toBeInTheDocument();
+    });
+
+    it("renders edit-history actions in label mode", () => {
+        const vm = new MockViewModel<ActionBarViewSnapshot>({
+            actions: [ActionBarAction.Remove, ActionBarAction.ViewSource],
+            presentation: "label",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        render(<ActionBarView vm={vm} />);
+
+        expect(screen.getByRole("button", { name: /remove/i })).toHaveTextContent(/remove/i);
+        expect(screen.getByRole("button", { name: /view source/i })).toHaveTextContent(/view source/i);
     });
 
     it("renders only the options button in the minimal state", () => {
-        render(<Minimal />);
+        const vm = new MockViewModel<ActionBarViewSnapshot>({
+            actions: [ActionBarAction.Options],
+            presentation: "icon",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        render(<ActionBarView vm={vm} />);
 
         expect(screen.getByRole("button", { name: /options/i })).toBeInTheDocument();
         expect(screen.getAllByRole("button")).toHaveLength(1);
@@ -110,12 +150,32 @@ describe("ActionBarView", () => {
     it("uses roving tab index and arrow keys within the toolbar", async () => {
         const user = userEvent.setup();
 
-        const { rerender } = render(<Minimal />);
+        const minimalVm = new MockViewModel<ActionBarViewSnapshot>({
+            actions: [ActionBarAction.Options],
+            presentation: "icon",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        const pinnedVm = new MockViewModel<ActionBarViewSnapshot>({
+            actions: [ActionBarAction.React, ActionBarAction.Reply, ActionBarAction.Pin, ActionBarAction.Options],
+            presentation: "icon",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: true,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        const { rerender } = render(<ActionBarView vm={minimalVm} />);
 
         const optionsButton = screen.getByRole("button", { name: /options/i });
         expect(optionsButton).toHaveAttribute("tabindex", "0");
 
-        rerender(<PinnedMessage />);
+        rerender(<ActionBarView vm={pinnedVm} />);
 
         const reactButton = screen.getByRole("button", { name: /react/i });
         const replyButton = screen.getByRole("button", { name: /^reply$/i });
@@ -144,9 +204,39 @@ describe("ActionBarView", () => {
         expect(unpinButton).toHaveAttribute("tabindex", "0");
     });
 
+    it("uses roving tab index and arrow keys within a label toolbar", async () => {
+        const user = userEvent.setup();
+
+        const vm = new MockViewModel<ActionBarViewSnapshot>({
+            actions: [ActionBarAction.Remove, ActionBarAction.ViewSource],
+            presentation: "label",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        render(<ActionBarView vm={vm} />);
+
+        const removeButton = screen.getByRole("button", { name: /remove/i });
+        const viewSourceButton = screen.getByRole("button", { name: /view source/i });
+
+        expect(removeButton).toHaveAttribute("tabindex", "0");
+        expect(viewSourceButton).toHaveAttribute("tabindex", "-1");
+
+        await user.tab();
+        expect(removeButton).toHaveFocus();
+
+        await user.keyboard("{ArrowRight}");
+        expect(viewSourceButton).toHaveFocus();
+        expect(viewSourceButton).toHaveAttribute("tabindex", "0");
+    });
+
     it("applies a custom class name to the toolbar", () => {
         const vm = new MockViewModel<ActionBarViewSnapshot>({
             actions: [ActionBarAction.Options],
+            presentation: "icon",
             isDownloadEncrypted: false,
             isDownloadLoading: false,
             isPinned: false,
@@ -171,6 +261,7 @@ describe("ActionBarView", () => {
 
         const vm = new ActionBarViewModel({
             actions: [ActionBarAction.Reply, ActionBarAction.Options],
+            presentation: "icon",
             isDownloadEncrypted: false,
             isDownloadLoading: false,
             isPinned: false,
@@ -188,5 +279,37 @@ describe("ActionBarView", () => {
 
         fireEvent.contextMenu(optionsButton);
         expect(onOptionsClick).toHaveBeenCalledWith(optionsButton);
+    });
+
+    it("forwards label-mode actions with the triggering button as anchor", async () => {
+        const user = userEvent.setup();
+        const onRemoveClick = vi.fn();
+        const onViewSourceClick = vi.fn();
+
+        class ActionBarViewModel extends MockViewModel<ActionBarViewSnapshot> implements ActionBarViewActions {
+            public onRemoveClick = onRemoveClick;
+            public onViewSourceClick = onViewSourceClick;
+        }
+
+        const vm = new ActionBarViewModel({
+            actions: [ActionBarAction.Remove, ActionBarAction.ViewSource],
+            presentation: "label",
+            isDownloadEncrypted: false,
+            isDownloadLoading: false,
+            isPinned: false,
+            isQuoteExpanded: false,
+            isThreadReplyAllowed: true,
+        });
+
+        render(<ActionBarView vm={vm} />);
+
+        const removeButton = screen.getByRole("button", { name: /remove/i });
+        const viewSourceButton = screen.getByRole("button", { name: /view source/i });
+
+        await user.click(removeButton);
+        expect(onRemoveClick).toHaveBeenCalledWith(removeButton);
+
+        fireEvent.contextMenu(viewSourceButton);
+        expect(onViewSourceClick).toHaveBeenCalledWith(viewSourceButton);
     });
 });

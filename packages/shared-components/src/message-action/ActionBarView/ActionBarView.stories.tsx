@@ -18,31 +18,39 @@ type ActionBarProps = ActionBarViewSnapshot & ActionBarViewActions;
 const ActionBarViewWrapperImpl = ({ ...snapshotAndActions }: ActionBarProps): JSX.Element => {
     const {
         onCancelClick = fn(),
+        onCopyLinkClick = fn(),
         onDownloadClick = fn(),
         onEditClick = fn(),
         onHideClick = fn(),
         onOptionsClick = fn(),
         onPinClick = fn(),
         onReactionsClick = fn(),
+        onRemoveClick = fn(),
         onReplyClick = fn(),
         onReplyInThreadClick = fn(),
         onResendClick = fn(),
         onToggleThreadExpanded = fn(),
+        onViewInRoomClick = fn(),
+        onViewSourceClick = fn(),
         ...snapshot
     } = snapshotAndActions;
 
     const vm = useMockedViewModel(snapshot, {
         onCancelClick,
+        onCopyLinkClick,
         onDownloadClick,
         onEditClick,
         onHideClick,
         onOptionsClick,
         onPinClick,
         onReactionsClick,
+        onRemoveClick,
         onReplyClick,
         onReplyInThreadClick,
         onResendClick,
         onToggleThreadExpanded,
+        onViewInRoomClick,
+        onViewSourceClick,
     });
 
     return <ActionBarView vm={vm} className="mx_MessageActionBar" />;
@@ -62,10 +70,16 @@ const meta = {
             ActionBarAction.ReplyInThread,
             ActionBarAction.Edit,
             ActionBarAction.Pin,
+            ActionBarAction.Resend,
             ActionBarAction.Cancel,
             ActionBarAction.Expand,
             ActionBarAction.Options,
+            ActionBarAction.ViewInRoom,
+            ActionBarAction.CopyLink,
+            ActionBarAction.Remove,
+            ActionBarAction.ViewSource,
         ],
+        presentation: "icon",
         isDownloadEncrypted: false,
         isDownloadLoading: false,
         isPinned: false,
@@ -76,7 +90,7 @@ const meta = {
         docs: {
             description: {
                 component:
-                    "A compact message action toolbar that renders only the actions available for the current message state. The stories below focus on the main rendering branches: normal messages, failed events, attachment download states, thread restrictions, and reply-chain expansion.",
+                    "A compact message action toolbar that renders the resolved actions for a message. The stories below focus on icon and label presentation plus the remaining view-owned state transitions.",
             },
         },
     },
@@ -85,36 +99,28 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const AllIconActions: Story = {};
 
-export const TypicalMessage: Story = {
+export const AllLabelActions: Story = {
     args: {
         actions: [
+            ActionBarAction.Hide,
+            ActionBarAction.Download,
             ActionBarAction.React,
             ActionBarAction.Reply,
             ActionBarAction.ReplyInThread,
+            ActionBarAction.Edit,
+            ActionBarAction.Pin,
+            ActionBarAction.Resend,
+            ActionBarAction.Cancel,
+            ActionBarAction.Expand,
             ActionBarAction.Options,
+            ActionBarAction.ViewInRoom,
+            ActionBarAction.CopyLink,
+            ActionBarAction.Remove,
+            ActionBarAction.ViewSource,
         ],
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Common non-failed message state with reaction, reply, thread reply, and overflow actions.",
-            },
-        },
-    },
-};
-
-export const FailedMessage: Story = {
-    args: {
-        actions: [ActionBarAction.Resend, ActionBarAction.Cancel],
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Failed event branch. The resolved actions collapse to retry and delete only.",
-            },
-        },
+        presentation: "label",
     },
 };
 
@@ -175,7 +181,7 @@ export const ExpandedReplyChain: Story = {
     },
 };
 
-export const ThreadReplyDisabled: Story = {
+export const DisabledThreadReply: Story = {
     args: {
         actions: [
             ActionBarAction.React,
@@ -188,33 +194,7 @@ export const ThreadReplyDisabled: Story = {
     parameters: {
         docs: {
             description: {
-                story: "Thread reply is present but disabled because the event cannot start a thread.",
-            },
-        },
-    },
-};
-
-export const DeletedMessageThreadOnly: Story = {
-    args: {
-        actions: [ActionBarAction.ReplyInThread, ActionBarAction.Options],
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Deleted-message case where reply is hidden but a thread affordance is still shown.",
-            },
-        },
-    },
-};
-
-export const Minimal: Story = {
-    args: {
-        actions: [ActionBarAction.Options],
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: "Smallest normal toolbar state. All optional actions are disabled, leaving only the overflow menu.",
+                story: "Thread reply action present but disabled.",
             },
         },
     },
