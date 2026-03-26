@@ -41,7 +41,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
 import ScrollPanel, { type IScrollHandle, type IScrollState } from "./ScrollPanel";
-import TimelineScrollPanel from "./TimelineScrollPanel";
+import TimelineScrollPanel, { type TimelineScrollHandle } from "./TimelineScrollPanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Spinner from "../views/elements/Spinner";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -272,7 +272,7 @@ interface EventTimelineRow {
     callEventGrouper?: LegacyCallEventGrouper;
 }
 
-type TimelineRow =
+export type TimelineRow =
     | OpaqueTimelineRow
     | DateSeparatorTimelineRow
     | LateEventSeparatorTimelineRow
@@ -440,6 +440,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return this.eventTiles[eventId];
     }
 
+    public getScrollContainer(): HTMLDivElement | null {
+        return this.scrollPanel.current?.divScroll ?? null;
+    }
+
+    public getVisibleTimelineItemKeys(): string[] | null {
+        return (this.scrollPanel.current as TimelineScrollHandle | null)?.getVisibleItemKeys?.() ?? null;
+    }
+
     /* return true if the content is fully scrolled down right now; else false.
      */
     public isAtBottom(): boolean | undefined {
@@ -462,8 +470,35 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     //   0: read marker is within the window
     //  +1: read marker is below the window
     public getReadMarkerPosition(): number | null {
+        const readMarkerEventId = this.props.readMarkerEventId;
+        const visibleItemKeys = this.getVisibleTimelineItemKeys();
+        if (readMarkerEventId && visibleItemKeys?.length) {
+            const readMarkerKey = `readMarker_${readMarkerEventId}`;
+            if (visibleItemKeys.includes(readMarkerKey)) {
+                return 0;
+            }
+
+            const visibleEventIndices = visibleItemKeys
+                .map((key) => {
+                    return this.props.events.findIndex((event) => (event.getTxnId() || event.getId()) === key);
+                })
+                .filter((index) => index >= 0);
+            const readMarkerEventIndex = this.props.events.findIndex((event) => event.getId() === readMarkerEventId);
+
+            if (readMarkerEventIndex >= 0 && visibleEventIndices.length > 0) {
+                const firstVisibleEventIndex = Math.min(...visibleEventIndices);
+                const lastVisibleEventIndex = Math.max(...visibleEventIndices);
+
+                if (readMarkerEventIndex < firstVisibleEventIndex) {
+                    return -1;
+                } else if (readMarkerEventIndex > lastVisibleEventIndex) {
+                    return 1;
+                }
+            }
+        }
+
         const readMarker = this.readMarkerNode.current;
-        const messageWrapper = this.scrollPanel.current?.divScroll;
+        const messageWrapper = this.getScrollContainer();
 
         if (!readMarker || !messageWrapper) {
             return null;
@@ -525,7 +560,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 block: "nearest",
                 behavior: "instant",
             });
+            return;
         }
+
+        // Virtualized timelines can unmount off-screen rows. Fall back to
+        // token-based scrolling so navigation still works when the target row
+        // is not currently mounted.
+        this.scrollToEvent(eventId);
     }
 
     private isUnmounting = (): boolean => {
@@ -1263,15 +1304,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             style,
             stickyBottom: this.props.stickyBottom,
             fixedChildren: ircResizer,
-            children: timelineRows.map(this.renderTimelineRow),
         };
+        const renderedTimelineRows = timelineRows.map(this.renderTimelineRow);
 
         return (
             <ErrorBoundary>
                 {SettingsStore.getValue("feature_new_timeline") ? (
-                    <TimelineScrollPanel {...panelProps} />
+                    <TimelineScrollPanel {...panelProps} rows={timelineRows} renderRow={this.renderTimelineRow} />
                 ) : (
-                    <ScrollPanel {...panelProps} />
+                    <ScrollPanel {...panelProps}>{renderedTimelineRows}</ScrollPanel>
                 )}
             </ErrorBoundary>
         );

@@ -449,6 +449,63 @@ describe("MessagePanel", function () {
         expect(hr.style.opacity).toEqual("0");
     });
 
+    it("uses visible item keys to report the read-marker as visible in virtualized timelines", function () {
+        const ref = React.createRef<MessagePanel>();
+        render(
+            getComponent({
+                events,
+                readMarkerEventId: events[4].getId(),
+                readMarkerVisible: true,
+                ref,
+            }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        jest.spyOn(ref.current!, "getVisibleTimelineItemKeys").mockReturnValue([`readMarker_${events[4].getId()!}`]);
+
+        expect(ref.current!.getReadMarkerPosition()).toBe(0);
+    });
+
+    it("uses visible item keys to report the read-marker above the viewport in virtualized timelines", function () {
+        const ref = React.createRef<MessagePanel>();
+        render(
+            getComponent({
+                events,
+                readMarkerEventId: events[2].getId(),
+                readMarkerVisible: true,
+                ref,
+            }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        jest.spyOn(ref.current!, "getVisibleTimelineItemKeys").mockReturnValue([
+            events[5].getId()!,
+            events[6].getId()!,
+        ]);
+
+        expect(ref.current!.getReadMarkerPosition()).toBe(-1);
+    });
+
+    it("uses visible item keys to report the read-marker below the viewport in virtualized timelines", function () {
+        const ref = React.createRef<MessagePanel>();
+        render(
+            getComponent({
+                events,
+                readMarkerEventId: events[7].getId(),
+                readMarkerVisible: true,
+                ref,
+            }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        jest.spyOn(ref.current!, "getVisibleTimelineItemKeys").mockReturnValue([
+            events[2].getId()!,
+            events[3].getId()!,
+        ]);
+
+        expect(ref.current!.getReadMarkerPosition()).toBe(1);
+    });
+
     it("should collapse creation events", function () {
         const events = mkCreationEvents();
         const createEvent = events.find((event) => event.getType() === "m.room.create")!;

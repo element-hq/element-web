@@ -9,7 +9,7 @@ export { FlatVirtualizedList } from "./FlatVirtualizedList";
 export type { FlatVirtualizedListProps } from "./FlatVirtualizedList";
 export { GroupedVirtualizedList } from "./GroupedVirtualizedList";
 export type { GroupedVirtualizedListProps, Group } from "./GroupedVirtualizedList";
-export type { VirtualizedListContext, ScrollIntoViewOnChange } from "./virtualized-list";
+export type { VirtualizedListContext, ScrollIntoViewOnChange, VirtualizedListHandle } from "./virtualized-list";
 export * from "./accessbility";
 
 // Re-export VirtuosoMockContext for testing purposes

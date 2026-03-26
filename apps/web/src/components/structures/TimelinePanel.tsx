@@ -386,7 +386,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     private get messagePanelDiv(): HTMLDivElement | null {
-        return this.messagePanel.current?.scrollPanel.current?.divScroll ?? null;
+        return this.messagePanel.current?.getScrollContainer() ?? null;
     }
 
     /**
@@ -787,6 +787,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const tile = this.messagePanel.current?.getTileForEventId(thread.id);
         if (tile) {
             tile.forceUpdate();
+        } else {
+            this.forceUpdate();
         }
     };
 
@@ -805,6 +807,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const tile = this.messagePanel.current?.getTileForEventId(ev.getId());
         if (tile) {
             tile.forceUpdate();
+        } else {
+            this.forceUpdate();
         }
     };
 
@@ -822,7 +826,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         for (const event of this.state.events) {
             const tile = this.messagePanel.current?.getTileForEventId(event.getId());
             if (!tile) {
-                // The event is not visible, nothing to re-render.
+                // Virtualized timelines can unmount off-screen rows, so missing
+                // tiles no longer imply the event does not need re-rendering.
                 continue;
             }
             tile.forceUpdate();
@@ -1639,6 +1644,27 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const messagePanel = this.messagePanel.current;
         if (!messagePanel) return null;
 
+        const visibleItemKeys = messagePanel.getVisibleTimelineItemKeys();
+        if (visibleItemKeys?.length) {
+            const myUserId = MatrixClientPeg.safeGet().credentials.userId;
+            const visibleKeySet = new Set(visibleItemKeys);
+
+            for (let i = this.state.liveEvents.length - 1; i >= 0; --i) {
+                const ev = this.state.liveEvents[i];
+                const shouldIgnore =
+                    !!ev.status || // local echo
+                    (ignoreOwn && ev.getSender() === myUserId); // own message
+
+                if (shouldIgnore) {
+                    continue;
+                }
+
+                if (visibleKeySet.has(ev.getId()!)) {
+                    return i;
+                }
+            }
+        }
+
         const messagePanelNode = this.messagePanelDiv;
         if (!messagePanelNode) return null; // sometimes this happens for fresh rooms/post-sync
         const wrapperRect = messagePanelNode.getBoundingClientRect();
@@ -1701,7 +1727,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
 
             if (!node) {
-                adjacentInvisibleEventCount = 0;
+                // Virtualized timelines can legitimately unmount off-screen rows.
+                // A missing node no longer tells us whether the event is above or
+                // below the viewport, so skip it rather than treating it as a hard
+                // break in the adjacent invisible event run.
                 continue;
             }
 

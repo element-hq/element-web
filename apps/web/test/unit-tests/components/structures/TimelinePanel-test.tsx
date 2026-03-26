@@ -368,6 +368,26 @@ describe("TimelinePanel", () => {
                 expect(client.sendReadReceipt).toHaveBeenCalledWith(threadEv1, ReceiptType.Read);
             });
         });
+
+        it("prefers visible timeline item keys over DOM node scanning when finding the last displayed event", async () => {
+            setUpTimelineSet();
+            await renderTimelinePanel();
+
+            // @ts-ignore - testing private state setup directly
+            timelinePanel!.state = {
+                ...timelinePanel!.state,
+                events: [ev1, ev2],
+                liveEvents: [ev1, ev2],
+            };
+
+            // @ts-ignore - stubbing the child ref contract directly for the focused branch
+            timelinePanel!.messagePanel.current = {
+                getVisibleTimelineItemKeys: () => [ev1.getId()!],
+            };
+
+            // @ts-ignore - exercising the private helper directly
+            expect(timelinePanel!.getLastDisplayedEventIndex()).toBe(0);
+        });
     });
 
     describe("enableReadReceiptsAndMarkersOnActivity", () => {

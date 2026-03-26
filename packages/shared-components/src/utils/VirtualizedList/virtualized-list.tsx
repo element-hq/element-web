@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { type ListRange, type VirtuosoHandle, type VirtuosoProps } from "react-virtuoso";
 
 /**
@@ -41,6 +41,11 @@ export type VirtualizedListContext<Context> = {
     /** Additional context data passed from the parent component */
     context: Context;
 };
+
+export interface VirtualizedListHandle {
+    scrollToIndex(index: number, align?: "center" | "end" | "start"): void;
+    scrollToItem(index: number, isDirectionDown: boolean, align?: "center" | "end" | "start"): void;
+}
 
 export interface VirtualizedListProps<Item, Context> extends Omit<
     VirtuosoProps<Item, VirtualizedListContext<Context>>,
@@ -115,6 +120,11 @@ export interface VirtualizedListProps<Item, Context> extends Omit<
      * @returns The corresponding index in the items array
      */
     mapRangeIndex?: (virtuosoIndex: number) => number;
+
+    /**
+     * Optional imperative handle for programmatic list navigation.
+     */
+    listHandleRef?: React.Ref<VirtualizedListHandle>;
 }
 
 /**
@@ -167,6 +177,7 @@ export function useVirtualizedList<Item, Context>(
         rangeChanged,
         mapScrollIndex,
         mapRangeIndex,
+        listHandleRef,
         ...virtuosoProps
     } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
@@ -240,6 +251,14 @@ export function useVirtualizedList<Item, Context>(
             scrollToIndex(nextIndex, align);
         },
         [scrollToIndex, items, isItemFocusable],
+    );
+    useImperativeHandle(
+        listHandleRef,
+        (): VirtualizedListHandle => ({
+            scrollToIndex,
+            scrollToItem,
+        }),
+        [scrollToIndex, scrollToItem],
     );
 
     /**

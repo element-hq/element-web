@@ -36,7 +36,7 @@ export interface FlatVirtualizedListProps<Item, Context> extends VirtualizedList
  */
 export function FlatVirtualizedList<Item, Context>(props: FlatVirtualizedListProps<Item, Context>): React.ReactElement {
     const { getItemComponent, ...restProps } = props;
-    const { onFocusForGetItemComponent, ...virtuosoProps } = useVirtualizedList<Item, Context>(restProps);
+    const { onFocusForGetItemComponent, ref, ...virtuosoProps } = useVirtualizedList<Item, Context>(restProps);
 
     const getItemComponentInternal = useCallback(
         (index: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element =>
@@ -52,6 +52,7 @@ export function FlatVirtualizedList<Item, Context>(props: FlatVirtualizedListPro
             // on those doesn't seem to work, unfortunately)
             itemContent={getItemComponentInternal}
             data={props.items}
+            ref={ref}
             {...virtuosoProps}
         />
     );
