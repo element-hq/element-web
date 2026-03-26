@@ -41,8 +41,8 @@ concurrency:
 env:
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
-    # Use 6 runners in the default case, but 4 when running on a schedule where we run all 5 projects (20 runners total)
-    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 6 }}
+    # Use 4 runners in the default case, but only 1 when running on a schedule where we run all 5 projects
+    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 1 || 4 }}
     NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
 
 permissions: {} # No permissions required

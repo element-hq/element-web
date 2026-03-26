@@ -95,11 +95,9 @@ jobs:
                   map: |
                       {
                         "amd64": {
-                          "target": "x86_64-unknown-linux-gnu",
                           "arch": "x86-64"
                         },
                         "arm64": {
-                          "target": "aarch64-unknown-linux-gnu",
                           "arch": "aarch64",
                           "build-args": "--arm64"
                         }

@@ -26,7 +26,7 @@ const screenshotOptions = (page: Page) => ({
     `,
 });
 
-const IMAGE_FILE = readSampleFileSync("element.png");
+const IMAGE_FILE = readSampleFileSync("element.png", null);
 
 test.describe("Custom Component API", () => {
     test.use({

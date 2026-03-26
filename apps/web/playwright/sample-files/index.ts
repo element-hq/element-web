@@ -16,10 +16,17 @@ export function getSampleFilePath(file: string): string {
     return join(__dirname, file);
 }
 
-export function readSampleFile(file: string, encoding: BufferEncoding = "utf-8"): Promise<string> {
+export function readSampleFile(file: string, encoding: null): Promise<NonSharedBuffer>;
+export function readSampleFile(file: string, encoding?: BufferEncoding): Promise<string>;
+export function readSampleFile(
+    file: string,
+    encoding: BufferEncoding | null = "utf-8",
+): Promise<NonSharedBuffer | string> {
     return readFile(getSampleFilePath(file), encoding);
 }
 
-export function readSampleFileSync(file: string): NonSharedBuffer {
+export function readSampleFileSync(file: string, encoding: null): NonSharedBuffer;
+export function readSampleFileSync(file: string, encoding?: BufferEncoding): string;
+export function readSampleFileSync(file: string, encoding: BufferEncoding | null = "utf-8"): NonSharedBuffer | string {
     return readFileSync(getSampleFilePath(file));
 }

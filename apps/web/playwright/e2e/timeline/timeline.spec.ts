@@ -22,12 +22,12 @@ const AVATAR_SIZE = 30;
 const AVATAR_RESIZE_METHOD = "crop";
 
 const ROOM_NAME = "Test room";
-const OLD_AVATAR = readSampleFileSync("riot.png");
-const NEW_AVATAR = readSampleFileSync("element.png");
+const OLD_AVATAR = readSampleFileSync("riot.png", null);
+const NEW_AVATAR = readSampleFileSync("element.png", null);
 const OLD_NAME = "Alan";
 const NEW_NAME = "Alan (away)";
 
-const VIDEO_FILE = readSampleFileSync("5secvid.webm");
+const VIDEO_FILE = readSampleFileSync("5secvid.webm", null);
 
 const getEventTilesWithBodies = (page: Page): Locator => {
     return page.locator(".mx_EventTile").filter({ has: page.locator(".mx_EventTile_body") });

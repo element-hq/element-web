@@ -10,7 +10,7 @@ import { type EventType, type MsgType, type RoomJoinRulesEventContent } from "ma
 import { test, expect } from "../../element-web-test";
 import { readSampleFileSync } from "../../sample-files";
 
-const MEDIA_FILE = readSampleFileSync("riot.png");
+const MEDIA_FILE = readSampleFileSync("riot.png", null);
 
 test.describe("Media preview settings", () => {
     test.use({

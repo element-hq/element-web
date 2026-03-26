@@ -13,7 +13,7 @@ import { type Locator, type Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { readSampleFileSync } from "../../sample-files";
 
-const MEDIA_FILE = readSampleFileSync("riot.png");
+const MEDIA_FILE = readSampleFileSync("riot.png", null);
 
 async function waitForMessageSentStatus(msgTile: Locator): Promise<void> {
     await expect(msgTile.getByRole("status")).toHaveAccessibleName("Your message was sent");

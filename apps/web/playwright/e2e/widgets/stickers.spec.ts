@@ -18,7 +18,7 @@ const STICKER_PICKER_WIDGET_NAME = "Fake Stickers";
 const STICKER_NAME = "Test Sticker";
 const ROOM_NAME_1 = "Sticker Test";
 const ROOM_NAME_2 = "Sticker Test Two";
-const STICKER_IMAGE = readSampleFileSync("riot.png");
+const STICKER_IMAGE = readSampleFileSync("riot.png", null);
 
 function getStickerMessage(contentUri: string, mimetype: string): string {
     return JSON.stringify({
