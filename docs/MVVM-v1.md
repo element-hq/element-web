@@ -1,4 +1,4 @@
-# MVVM
+# MVVM v1
 
 _Deprecated_, see [MVVM.md](./MVVM.md) for the current version.
 
