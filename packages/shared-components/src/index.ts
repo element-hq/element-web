@@ -51,6 +51,7 @@ export * from "./core/utils/LinkedText";
 export * from "./right-panel/WidgetContextMenu";
 export * from "./core/VirtualizedList";
 export * from "./resize";
+export * from "./room/StartChatView";
 
 // Utils
 export * from "./core/i18n/i18n";
