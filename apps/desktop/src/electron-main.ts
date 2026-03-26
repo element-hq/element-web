@@ -26,7 +26,7 @@ import {
 import * as Sentry from "@sentry/electron/main";
 import path, { dirname } from "node:path";
 import windowStateKeeper from "electron-window-state";
-import fs, { promises as afs } from "node:fs";
+import fs from "node:fs";
 import { URL, fileURLToPath } from "node:url";
 import minimist from "minimist";
 
@@ -45,7 +45,9 @@ import { setDisplayMediaCallback } from "./displayMediaCallback.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { type Json, loadJsonFile } from "./utils.js";
 import { setupMediaAuth } from "./media-auth.js";
-import { readBuildConfig } from "./build-config.js";
+import { getBuildConfig } from "./build-config.js";
+import { getAsarPath } from "./asar.js";
+import { getIconPath } from "./icon.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -84,7 +86,7 @@ function isRealUserDataDir(d: string): boolean {
     return fs.existsSync(path.join(d, "IndexedDB"));
 }
 
-const buildConfig = readBuildConfig();
+const buildConfig = getBuildConfig();
 const protocolHandler = new ProtocolHandler(buildConfig.protocol);
 
 // check if we are passed a profile in the SSO callback url
@@ -118,44 +120,7 @@ if (userDataPathInProtocol) {
 }
 app.setPath("userData", userDataPath);
 
-async function tryPaths(name: string, root: string, rawPaths: string[]): Promise<string> {
-    // Make everything relative to root
-    const paths = rawPaths.map((p) => path.join(root, p));
-
-    for (const p of paths) {
-        try {
-            await afs.stat(p);
-            return p + "/";
-        } catch {}
-    }
-    console.log(`Couldn't find ${name} files in any of: `);
-    for (const p of paths) {
-        console.log("\t" + path.resolve(p));
-    }
-    throw new Error(`Failed to find ${name} files`);
-}
-
 const homeserverProps = ["default_is_url", "default_hs_url", "default_server_name", "default_server_config"] as const;
-
-let asarPathPromise: Promise<string> | undefined;
-// Get the webapp resource file path, memoizes result
-function getAsarPath(): Promise<string> {
-    if (!asarPathPromise) {
-        asarPathPromise = tryPaths("webapp", __dirname, [
-            // If run from the source checkout, this will be in the directory above
-            "../webapp.asar",
-            // but if run from a packaged application, electron-main.js will be in
-            // a different asar file, so it will be two levels above
-            "../../webapp.asar",
-            // also try without the 'asar' suffix to allow symlinking in a directory
-            "../webapp",
-            // from a packaged application
-            "../../webapp",
-        ]);
-    }
-
-    return asarPathPromise;
-}
 
 function loadLocalConfigFile(): Json {
     if (LocalConfigLocation) {
@@ -254,19 +219,6 @@ async function configureSentry(): Promise<void> {
     }
 }
 
-// Set up globals for Tray
-async function setupGlobals(): Promise<void> {
-    const asarPath = await getAsarPath();
-    await loadConfig();
-
-    // Figure out the tray icon path & brand name
-    const iconFile = `icon.${process.platform === "win32" ? "ico" : "png"}`;
-    global.trayConfig = {
-        icon_path: path.join(path.dirname(asarPath), "build", iconFile),
-        brand: global.vectorConfig.brand || "Element",
-    };
-}
-
 global.appQuitting = false;
 
 const exitShortcuts: Array<(input: Input, platform: string) => boolean> = [
@@ -347,7 +299,7 @@ app.on("ready", async () => {
 
     try {
         asarPath = await getAsarPath();
-        await setupGlobals();
+        await loadConfig();
     } catch (e) {
         console.log("App setup failed: exiting", e);
         process.exit(1);
@@ -451,7 +403,7 @@ app.on("ready", async () => {
         titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
         trafficLightPosition: { x: 9, y: 8 },
 
-        icon: global.trayConfig.icon_path,
+        icon: await getIconPath(),
         show: false,
         autoHideMenuBar: store.get("autoHideMenuBar"),
 
@@ -489,7 +441,7 @@ app.on("ready", async () => {
     global.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
 
     // Create trayIcon icon
-    if (store.get("minimizeToTray")) tray.create(global.trayConfig, buildConfig);
+    if (store.get("minimizeToTray")) await tray.create();
 
     global.mainWindow.once("ready-to-show", () => {
         if (!global.mainWindow) return;

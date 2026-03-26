@@ -14,7 +14,9 @@ import pngToIco from "png-to-ico";
 import path from "node:path";
 
 import { _t } from "./language-helper.js";
-import { type BuildConfig } from "./build-config.js";
+import { getBuildConfig } from "./build-config.js";
+import { getBrand } from "./config.js";
+import { getIconPath } from "./icon.js";
 
 // This hardcoded uuid is an arbitrary v4 uuid generated on https://www.uuidgenerator.net/version4
 const UUID_NAMESPACE = "9fc9c6a0-9ffe-45c9-9cd7-5639ae38b232";
@@ -42,11 +44,13 @@ function toggleWin(): void {
     }
 }
 
-export function create(config: (typeof global)["trayConfig"], buildConfig: BuildConfig): void {
+export async function create(): Promise<void> {
     // no trays on darwin
     if (process.platform === "darwin" || trayIcon) return;
-    const defaultIcon = nativeImage.createFromPath(config.icon_path);
+    const iconPath = await getIconPath();
+    const defaultIcon = nativeImage.createFromPath(iconPath);
 
+    const buildConfig = getBuildConfig();
     if (process.platform === "win32" && app.isPackaged && buildConfig.windowsCertSubjectName) {
         // Providing a GUID lets Windows be smarter about maintaining user's tray preferences
         // https://github.com/electron/electron/pull/21891
@@ -58,7 +62,7 @@ export function create(config: (typeof global)["trayConfig"], buildConfig: Build
         trayIcon = new Tray(defaultIcon);
     }
 
-    trayIcon.setToolTip(config.brand);
+    trayIcon.setToolTip(getBrand());
     initApplicationMenu();
     trayIcon.on("click", toggleWin);
 

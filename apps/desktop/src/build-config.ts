@@ -12,7 +12,9 @@ import { type JsonObject, loadJsonFile } from "./utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export interface BuildConfig {
+let buildConfig: BuildConfig;
+
+interface BuildConfig {
     // Application User Model ID
     appId: string;
     // Protocol string used for OIDC callbacks
@@ -22,11 +24,15 @@ export interface BuildConfig {
     windowsCertSubjectName: string | undefined;
 }
 
-export function readBuildConfig(): BuildConfig {
-    const packageJson = loadJsonFile(path.join(__dirname, "..", "package.json")) as JsonObject;
-    return {
-        appId: (packageJson["electron_appId"] as string) || "im.riot.app",
-        protocol: (packageJson["electron_protocol"] as string) || "io.element.desktop",
-        windowsCertSubjectName: packageJson["electron_windows_cert_sn"] as string,
-    };
+export function getBuildConfig(): BuildConfig {
+    if (!buildConfig) {
+        const packageJson = loadJsonFile(path.join(__dirname, "..", "package.json")) as JsonObject;
+        buildConfig = {
+            appId: (packageJson["electron_appId"] as string) || "im.riot.app",
+            protocol: (packageJson["electron_protocol"] as string) || "io.element.desktop",
+            windowsCertSubjectName: packageJson["electron_windows_cert_sn"] as string,
+        };
+    }
+
+    return buildConfig;
 }
