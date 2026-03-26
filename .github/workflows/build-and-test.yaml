@@ -291,7 +291,7 @@ jobs:
               if: inputs.skip != true
               run: |
                   pnpm playwright merge-reports \
-                      --reporter=html,./packages/playwright-common/flaky-reporter.ts,@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js \
+                      --config=playwright-merge.config.ts \
                       ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
