@@ -86,6 +86,7 @@ jobs:
 
             - name: Run tests
               timeout-minutes: 20
+              shell: bash
               run: |
                   $PREFIX pnpm -C apps/desktop test \
                       ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} \
