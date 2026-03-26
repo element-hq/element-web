@@ -43,7 +43,7 @@ export interface ActionBarViewSnapshot {
     actions: ActionBarAction[];
     /** Whether actions should render as icon buttons or label buttons. */
     presentation?: "icon" | "label";
-    /** Whether the current download is for encrypted media. */
+    /** Whether an in-progress download should be presented as decrypting rather than downloading. */
     isDownloadEncrypted: boolean;
     /** Whether a media download or decryption is currently in progress. */
     isDownloadLoading: boolean;

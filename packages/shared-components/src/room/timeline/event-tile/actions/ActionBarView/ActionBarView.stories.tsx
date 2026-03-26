@@ -61,6 +61,12 @@ const meta = {
     title: "Room/Timeline/EventTile/Actions/ActionBarView",
     component: ActionBarViewWrapper,
     tags: ["autodocs"],
+    argTypes: {
+        presentation: {
+            control: { type: "select" },
+            options: ["icon", "label"],
+        },
+    },
     args: {
         actions: [
             ActionBarAction.Hide,
@@ -85,14 +91,6 @@ const meta = {
         isPinned: false,
         isQuoteExpanded: false,
         isThreadReplyAllowed: true,
-    },
-    parameters: {
-        docs: {
-            description: {
-                component:
-                    "A compact message action toolbar that renders the resolved actions for a message. The stories below focus on icon and label presentation plus the remaining view-owned state transitions.",
-            },
-        },
     },
 } satisfies Meta<typeof ActionBarViewWrapper>;
 
