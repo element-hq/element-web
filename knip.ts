@@ -7,6 +7,10 @@ export default {
     workspaces: {
         "packages/shared-components": {},
         "packages/playwright-common": {
+            ignore: [
+                // Used in build-and-test playwright merge-reports
+                "flaky-reporter.ts",
+            ],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",
