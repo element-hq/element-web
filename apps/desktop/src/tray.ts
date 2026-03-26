@@ -14,7 +14,7 @@ import pngToIco from "png-to-ico";
 import path from "node:path";
 
 import { _t } from "./language-helper.js";
-import { BuildConfig } from "./build-config.js";
+import { type BuildConfig } from "./build-config.js";
 
 // This hardcoded uuid is an arbitrary v4 uuid generated on https://www.uuidgenerator.net/version4
 const UUID_NAMESPACE = "9fc9c6a0-9ffe-45c9-9cd7-5639ae38b232";
