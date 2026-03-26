@@ -57,7 +57,6 @@ jobs:
             - run: pnpm nx run-many -t docker:build
               env:
                   INPUT_PUSH: true
-                  INPUT_LOAD: false
                   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
@@ -66,9 +65,6 @@ jobs:
                   PATTERN: "^ghcr.io/element-hq/element-web*"
               run: |
                   docker image ls --digests --format '{{.Repository}}@{{.Digest}}' | grep "$PATTERN" | while read -r TARGET; do
-                    # Check if digest is valid (not <none>)
-                    if [[ "$TARGET" != *"@<none>"* ]]; then
                       echo "Signing $TARGET..."
                       cosign sign --yes "$TARGET"
-                    fi
                   done
