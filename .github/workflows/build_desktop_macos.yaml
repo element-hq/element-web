@@ -73,7 +73,7 @@ jobs:
         runs-on: macos-15 # M1
         environment: ${{ inputs.sign && 'Desktop Apple' || '' }}
         steps:
-            - uses: maxim-lobanov/setup-xcode@60606e260d2fc5762a71e64e74b2174e8ea3c8bd # v1
+            - uses: maxim-lobanov/setup-xcode@ed7a3b1fda3918c0306d1b724322adc0b8cc0a90 # v1
               with:
                   xcode-version: latest-stable
 
@@ -113,7 +113,7 @@ jobs:
             # https://github.com/electron-userland/electron-builder/issues/9511#issuecomment-3774092888
             - run: sudo pip3 install pyobjc-framework-Quartz
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   node-version-file: apps/desktop/.node-version
