@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX, useCallback, useMemo } from "react";
-import { GroupedVirtuoso } from "react-virtuoso";
+import { Virtuoso } from "react-virtuoso";
 
 import { useVirtualizedList, type VirtualizedListContext, type VirtualizedListProps } from "../virtualized-list";
 
@@ -102,7 +102,7 @@ export interface GroupedVirtualizedListProps<Header, Item, Context> extends Omit
 }
 
 /**
- * A generic grouped virtualized list component built on top of react-virtuoso's GroupedVirtuoso.
+ * A generic grouped virtualized list component built on top of react-virtuoso's Virtuoso.
  * Provides keyboard navigation (including group headers) and virtualized rendering for
  * performance with large lists.
  *
@@ -129,10 +129,8 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         ...restProps
     } = props;
 
-    const groupCounts = useMemo(() => groups.map((group) => group.items.length), [groups]);
-    const items = useMemo(() => groups.flatMap((group) => group.items), [groups]);
-
-    // Build a flat navigation array interleaving group headers with items.
+    // Build a flat array interleaving group headers with items.
+    // Each entry is either { header } or { item }.
     const flatEntries = useMemo(
         () =>
             groups.flatMap<NavigationEntry<Header, Item>>((group) => [
@@ -142,34 +140,12 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         [groups],
     );
 
-    // Build both index-mapping functions in a single pass over the flat entries.
-    // mapScrollIndex: flat index → GroupedVirtuoso item index (headers map to their
-    //   first item so scrollIntoView makes the sticky header visible).
-    // mapRangeIndex: GroupedVirtuoso item index → flat index (translates visible-range
-    //   indices back so the hook's PageUp/PageDown and focus-restore logic works).
-    const { mapScrollIndex, mapRangeIndex } = useMemo(() => {
-        // Map each flat index to the corresponding virtuoso item index.
-        // Headers map to the first item of their group so scrollIntoView shows the sticky header.
-        const flatIndexToVirtuosoIndex: number[] = [];
-
-        // Map the Item index (from virtuoso) to their position in the flat list
-        const virtuosoIndexToFlatIndex: number[] = [];
-        let virtuosoIndex = 0;
-
-        for (let i = 0; i < flatEntries.length; i++) {
-            flatIndexToVirtuosoIndex.push(virtuosoIndex);
-
-            if ("item" in flatEntries[i]) {
-                virtuosoIndexToFlatIndex.push(i);
-                virtuosoIndex++;
-            }
-        }
-
-        return {
-            mapScrollIndex: (flatIndex: number): number => flatIndexToVirtuosoIndex[flatIndex] ?? 0,
-            mapRangeIndex: (virtuosoIndex: number): number => virtuosoIndexToFlatIndex[virtuosoIndex] ?? 0,
-        };
-    }, [flatEntries]);
+    // Pre-compute a lookup from flat index to group index.
+    // Each group contributes 1 header + N items, all mapped to the same group index.
+    const flatIndexToGroupIndex = useMemo(
+        () => groups.flatMap((group, groupIdx) => new Array(1 + group.items.length).fill(groupIdx)),
+        [groups],
+    );
 
     // Wrap getItemKey: dispatch to getHeaderKey or getItemKey based on entry type
     const wrappedGetEntryKey = useCallback(
@@ -178,7 +154,7 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         [getHeaderKey, getItemKey],
     );
 
-    // Wrap isItemFocusable: headers use isHeaderFocusable (default: always true), items use isItemFocusable
+    // Wrap isItemFocusable: headers use isGroupHeaderFocusable, items use isItemFocusable
     const wrappedIsEntryFocusable = useCallback(
         (entry: NavigationEntry<Header, Item>): boolean =>
             "header" in entry ? isGroupHeaderFocusable(entry.header) : isItemFocusable(entry.item),
@@ -194,8 +170,6 @@ export function GroupedVirtualizedList<Header, Item, Context>(
             items: flatEntries,
             isItemFocusable: wrappedIsEntryFocusable,
             getItemKey: wrappedGetEntryKey,
-            mapScrollIndex,
-            mapRangeIndex,
         },
     );
 
@@ -215,27 +189,44 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         [onFocusForGetItemComponent],
     );
 
-    const getItemComponentInternal = useCallback(
-        (index: number, groupIndex: number, _item: unknown, context: VirtualizedListContext<Context>): JSX.Element =>
-            getItemComponent(index, items[index], context, onFocusForItem, groupIndex),
-        [items, getItemComponent, onFocusForItem],
-    );
+    // Unified item renderer that dispatches to group header or item component
+    // based on the entry type at the given flat index.
+    const itemContent = useCallback(
+        (
+            flatIndex: number,
+            _entry: NavigationEntry<Header, Item>,
+            context: VirtualizedListContext<Context>,
+        ): JSX.Element => {
+            const entry = flatEntries[flatIndex];
+            const groupIndex = flatIndexToGroupIndex[flatIndex];
 
-    const getGroupHeaderComponentInternal = useCallback(
-        (groupIndex: number, context: VirtualizedListContext<Context>): JSX.Element =>
-            getGroupHeaderComponent(groupIndex, groups[groupIndex].header, context, onFocusForHeader),
-        [getGroupHeaderComponent, onFocusForHeader, groups],
+            if ("header" in entry) {
+                return getGroupHeaderComponent(groupIndex, entry.header, context, onFocusForHeader);
+            }
+
+            // Item index in the flattened (non-header) items array:
+            // flatIndex minus the number of headers before it (groupIndex + 1).
+            const itemIndex = flatIndex - (groupIndex + 1);
+            return getItemComponent(itemIndex, entry.item, context, onFocusForItem, groupIndex);
+        },
+        [
+            flatEntries,
+            flatIndexToGroupIndex,
+            getGroupHeaderComponent,
+            getItemComponent,
+            onFocusForItem,
+            onFocusForHeader,
+        ],
     );
 
     return (
-        <GroupedVirtuoso
+        <Virtuoso
             // note that either the container of direct children must be focusable to be axe
             // compliant, so we leave tabIndex as the default so the container can be focused
             // (virtuoso wraps the children inside another couple of elements so setting it
             // on those doesn't seem to work, unfortunately)
-            groupCounts={groupCounts}
-            itemContent={getItemComponentInternal}
-            groupContent={getGroupHeaderComponentInternal}
+            itemContent={itemContent}
+            data={flatEntries}
             {...virtuosoProps}
         />
     );

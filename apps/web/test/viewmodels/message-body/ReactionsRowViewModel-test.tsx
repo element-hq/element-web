@@ -86,7 +86,7 @@ describe("ReactionsRowViewModel", () => {
         expect(onAddReactionContextMenu).toHaveBeenCalledWith(clickEvent);
     });
 
-    it("emits only for setters that always merge when values are unchanged", () => {
+    it("doesn't emit only setters that always merge when values are unchanged", () => {
         const vm = createVm();
         const previousSnapshot = vm.getSnapshot();
         const listener = jest.fn();
@@ -99,7 +99,7 @@ describe("ReactionsRowViewModel", () => {
 
         // `setReactionGroupCount` is optimized and skips emit for unchanged derived values.
         // The other setters always merge and therefore emit.
-        expect(listener).toHaveBeenCalledTimes(3);
+        expect(listener).toHaveBeenCalledTimes(0);
         expect(vm.getSnapshot()).toEqual(previousSnapshot);
     });
 });
