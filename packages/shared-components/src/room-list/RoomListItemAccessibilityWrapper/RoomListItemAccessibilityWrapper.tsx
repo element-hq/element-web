@@ -8,7 +8,7 @@
 import React, { memo, type JSX } from "react";
 
 import { RoomListItemView, type RoomListItemViewProps } from "../RoomListItemView";
-import { getItemAccessibleProps } from "../../core/utils/VirtualizedList";
+import { getItemAccessibleProps } from "../../core/VirtualizedList";
 
 export interface RoomListItemAccessibilityWrapperPros extends RoomListItemViewProps {
     /** Index of this room in the list */

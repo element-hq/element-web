@@ -49,7 +49,7 @@ export * from "./core/utils/Box";
 export * from "./core/utils/Flex";
 export * from "./core/utils/LinkedText";
 export * from "./right-panel/WidgetContextMenu";
-export * from "./core/utils/VirtualizedList";
+export * from "./core/VirtualizedList";
 export * from "./resize";
 
 // Utils

@@ -13,7 +13,7 @@ import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
 import { Flex } from "../../core/utils/Flex";
 import { useI18n } from "../../core/i18n/i18nContext";
-import { getGroupHeaderAccessibleProps } from "../../core/utils/VirtualizedList";
+import { getGroupHeaderAccessibleProps } from "../../core/VirtualizedList";
 
 /**
  * The observable state snapshot for a room list section header.

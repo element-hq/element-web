@@ -16,9 +16,9 @@ import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
     type VirtualizedListContext,
-} from "../../core/utils/VirtualizedList";
+} from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
-import { GroupedVirtualizedList } from "../../core/utils/VirtualizedList";
+import { GroupedVirtualizedList } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "../RoomListSectionHeaderView";
 import { RoomListItemAccessibilityWrapper } from "../RoomListItemAccessibilityWrapper";
 
