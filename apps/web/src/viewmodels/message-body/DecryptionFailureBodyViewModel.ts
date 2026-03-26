@@ -86,8 +86,6 @@ export class DecryptionFailureBodyViewModel
     }
 
     public setDecryptionFailureCode(decryptionFailureCode: DecryptionFailureCode | null): void {
-        if (this.props.decryptionFailureCode === decryptionFailureCode) return;
-
         this.props.decryptionFailureCode = decryptionFailureCode;
         this.snapshot.merge({
             decryptionFailureReason: DecryptionFailureBodyViewModel.getDecryptionReasonFromCode(decryptionFailureCode),
