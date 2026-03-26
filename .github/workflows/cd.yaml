@@ -1,7 +1,7 @@
 name: CD # Continuous Delivery
 on:
     push:
-        branches: [master, staging, develop]
+        branches: [master, staging, develop, t3chguy/cd]
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 
 permissions: {}
@@ -55,10 +55,14 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - run: pnpm nx run-many -t docker:build
+              id: build
               env:
-                  INPUT_PUSH: true
+                  INPUT_PUSH: false # TODO
+                  INPUT_PULL: false
                   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUT_BUILDER: ${{ steps.builder.outputs.name }}
+
+            - run: echo ${{ steps.build.outputs.metadata }}
 
             - name: Sign the images with GitHub OIDC token
               env:
