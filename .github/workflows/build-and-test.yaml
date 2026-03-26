@@ -16,7 +16,8 @@ on:
     merge_group:
         types: [checks_requested]
     push:
-        branches: [develop, staging, master]
+        # We do not build on push to develop as the merge_group check handles that
+        branches: [staging, master]
     repository_dispatch:
         types: [element-web-notify]
 
@@ -218,7 +219,7 @@ jobs:
 
     build_ed_windows:
         needs: prepare_ed
-        name: "ED Windows"
+        name: "Desktop Windows"
         uses: ./.github/workflows/build_desktop_windows.yaml
         if: inputs.skip != true
         strategy:
@@ -230,7 +231,7 @@ jobs:
 
     build_ed_linux:
         needs: prepare_ed
-        name: "ED Linux (${{ matrix.arch }}) (sqlcipher: ${{ matrix.sqlcipher }})"
+        name: "Desktop Linux"
         uses: ./.github/workflows/build_desktop_linux.yaml
         if: inputs.skip != true
         strategy:
@@ -244,7 +245,7 @@ jobs:
 
     build_ed_macos:
         needs: prepare_ed
-        name: "ED macOS"
+        name: "Desktop macOS"
         uses: ./.github/workflows/build_desktop_macos.yaml
         if: inputs.skip != true
         with:
