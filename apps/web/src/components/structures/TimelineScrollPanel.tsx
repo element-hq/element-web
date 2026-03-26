@@ -40,6 +40,8 @@ type TimelineScrollPanelProps = IScrollPanelProps & {
     rows?: TimelineRow[];
     renderRow?: (row: TimelineRow) => React.ReactNode;
 };
+type EventTimelineRow = Extract<TimelineRow, { kind: "event" }>;
+type TimelineReadReceipt = NonNullable<EventTimelineRow["readReceipts"]>[number];
 
 const TOP_SPINNER_KEY = "_topSpinner";
 const BOTTOM_SPINNER_KEY = "_bottomSpinner";
@@ -78,6 +80,75 @@ function areTimelineNodesEquivalent(previousNode: React.ReactNode, nextNode: Rea
             nextNode.props as Record<string, unknown>,
         )
     );
+}
+
+function areTimelineReadReceiptsEquivalent(
+    previousReceipts: TimelineReadReceipt[] | undefined,
+    nextReceipts: TimelineReadReceipt[] | undefined,
+): boolean {
+    if (previousReceipts === nextReceipts) {
+        return true;
+    }
+
+    if (!previousReceipts || !nextReceipts) {
+        return false;
+    }
+
+    if (previousReceipts.length !== nextReceipts.length) {
+        return false;
+    }
+
+    return previousReceipts.every((receipt, index) => {
+        const nextReceipt = nextReceipts[index];
+        return (
+            receipt.userId === nextReceipt.userId &&
+            receipt.roomMember === nextReceipt.roomMember &&
+            receipt.ts === nextReceipt.ts
+        );
+    });
+}
+
+function areTimelineRowsEquivalent(previousRow: TimelineRow, nextRow: TimelineRow): boolean {
+    if (previousRow === nextRow) {
+        return true;
+    }
+
+    if (previousRow.kind !== nextRow.kind || previousRow.key !== nextRow.key) {
+        return false;
+    }
+
+    switch (previousRow.kind) {
+        case "opaque": {
+            const nextOpaqueRow = nextRow as Extract<TimelineRow, { kind: "opaque" }>;
+            return areTimelineNodesEquivalent(previousRow.node, nextOpaqueRow.node);
+        }
+        case "date-separator": {
+            const nextDateSeparatorRow = nextRow as Extract<TimelineRow, { kind: "date-separator" }>;
+            return previousRow.roomId === nextDateSeparatorRow.roomId && previousRow.ts === nextDateSeparatorRow.ts;
+        }
+        case "late-event-separator": {
+            const nextLateEventSeparatorRow = nextRow as Extract<TimelineRow, { kind: "late-event-separator" }>;
+            return previousRow.text === nextLateEventSeparatorRow.text;
+        }
+        case "spinner":
+        case "typing-indicator":
+            return true;
+        case "event": {
+            const nextEventRow = nextRow as EventTimelineRow;
+            return (
+                previousRow.event === nextEventRow.event &&
+                previousRow.eventId === nextEventRow.eventId &&
+                previousRow.isEditing === nextEventRow.isEditing &&
+                previousRow.continuation === nextEventRow.continuation &&
+                previousRow.last === nextEventRow.last &&
+                previousRow.lastInSection === nextEventRow.lastInSection &&
+                previousRow.lastSuccessful === nextEventRow.lastSuccessful &&
+                previousRow.highlight === nextEventRow.highlight &&
+                previousRow.callEventGrouper === nextEventRow.callEventGrouper &&
+                areTimelineReadReceiptsEquivalent(previousRow.readReceipts, nextEventRow.readReceipts)
+            );
+        }
+    }
 }
 
 export type TimelineScrollHandle = IScrollHandle & {
@@ -168,7 +239,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
     const rawItemsWithStableIdentity = rawItems.map((item) => {
         const previousItem = itemCacheRef.current.get(item.key);
         if (item.row) {
-            if (previousItem?.row === item.row) {
+            if (previousItem?.row && areTimelineRowsEquivalent(previousItem.row, item.row)) {
                 return previousItem;
             }
 

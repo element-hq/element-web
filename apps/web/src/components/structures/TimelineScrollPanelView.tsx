@@ -18,7 +18,7 @@ import type { VirtualizedListHandle } from "@element-hq/web-shared-components";
 export interface TimelineScrollPanelItem {
     key: string;
     node?: React.ReactNode;
-    row?: { key: string };
+    row?: TimelineRow;
 }
 
 type TimelineScrollPanelViewProps = IScrollPanelProps & {
@@ -49,6 +49,20 @@ export const TimelineScrollPanelItemView = React.memo(
         return <>{item.node}</>;
     },
     (prevProps, nextProps) => prevProps.item === nextProps.item,
+);
+
+const TimelineScrollPanelRowItemView = React.memo(
+    function TimelineScrollPanelRowItemView({
+        item,
+        renderTimelineRow,
+    }: {
+        item: TimelineScrollPanelItem & { row: TimelineRow };
+        renderTimelineRow: (row: TimelineRow) => React.ReactNode;
+    }): React.ReactNode {
+        return <>{renderTimelineRow(item.row)}</>;
+    },
+    (prevProps, nextProps) =>
+        prevProps.item === nextProps.item && prevProps.renderTimelineRow === nextProps.renderTimelineRow,
 );
 
 function assignMergedRef<T>(target: React.Ref<T> | undefined, value: T): void {
@@ -353,7 +367,7 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
             }
 
             if (item.row && renderTimelineRow) {
-                return renderTimelineRow(item.row as TimelineRow);
+                return <TimelineScrollPanelRowItemView item={item as TimelineScrollPanelItem & { row: TimelineRow }} renderTimelineRow={renderTimelineRow} />;
             }
 
             return <TimelineScrollPanelItemView item={item} />;
@@ -390,7 +404,7 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
                     items={items}
                     renderItem={renderItem}
                     scrollContainerRef={scrollContainerRef}
-                    onScroll={(event) => props.onScroll?.(event)}
+                    onScroll={props.onScroll}
                     onVisibleRangeChange={onVisibleRangeChange}
                     stickyBottom={props.stickyBottom}
                     scrollToBottomRequestId={scrollToBottomRequestId}
