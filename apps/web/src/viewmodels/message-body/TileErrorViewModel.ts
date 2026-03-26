@@ -86,13 +86,8 @@ export class TileErrorViewModel
     }
 
     public setLayout(layout: TileErrorViewLayout): void {
-        if (this.props.layout === layout) return;
-
         this.props.layout = layout;
-
-        if (this.snapshot.current.layout !== layout) {
-            this.snapshot.merge({ layout });
-        }
+        this.snapshot.merge({ layout });
     }
 
     public setError(error: Error): void {
@@ -102,14 +97,10 @@ export class TileErrorViewModel
     }
 
     public setDeveloperMode(developerMode: boolean): void {
-        if (this.props.developerMode === developerMode) return;
-
         this.props.developerMode = developerMode;
 
         const nextViewSourceCtaLabel = getViewSourceCtaLabel(developerMode);
-        if (this.snapshot.current.viewSourceCtaLabel !== nextViewSourceCtaLabel) {
-            this.snapshot.merge({ viewSourceCtaLabel: nextViewSourceCtaLabel });
-        }
+        this.snapshot.merge({ viewSourceCtaLabel: nextViewSourceCtaLabel });
     }
 
     public onBugReportClick: MouseEventHandler<HTMLButtonElement> = () => {
