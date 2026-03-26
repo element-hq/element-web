@@ -489,7 +489,7 @@ app.on("ready", async () => {
     global.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
 
     // Create trayIcon icon
-    if (store.get("minimizeToTray")) tray.create(global.trayConfig);
+    if (store.get("minimizeToTray")) tray.create(global.trayConfig, buildConfig);
 
     global.mainWindow.once("ready-to-show", () => {
         if (!global.mainWindow) return;
