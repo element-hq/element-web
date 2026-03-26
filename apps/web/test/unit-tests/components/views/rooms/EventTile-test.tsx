@@ -107,7 +107,7 @@ describe("EventTile", () => {
     });
 
     afterEach(() => {
-        jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
+        jest.restoreAllMocks();
     });
 
     describe("EventTile thread summary", () => {
@@ -203,21 +203,16 @@ describe("EventTile", () => {
         );
 
         it("renders the tile error fallback when tile rendering throws", async () => {
-            const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-            const renderTileSpy = jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
+            jest.spyOn(console, "error").mockImplementation(() => {});
+            jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
                 throw new Error("Boom");
             });
 
-            try {
-                getComponent();
+            getComponent();
 
-                await waitFor(() => {
-                    expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
-                });
-            } finally {
-                renderTileSpy.mockRestore();
-                consoleErrorSpy.mockRestore();
-            }
+            await waitFor(() => {
+                expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
+            });
         });
     });
 
