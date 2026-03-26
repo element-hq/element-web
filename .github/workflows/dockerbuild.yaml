@@ -45,7 +45,7 @@ jobs:
               run: docker run -v $PWD:/project element-desktop-dockerbuild pnpm install
 
             - name: Log in to the Container registry
-              uses: docker/login-action@c144859092e8e353f3e118b0b329679a62351c3e
+              uses: docker/login-action@a0d57b8e43b6ef1cca20559d68cec2227e63fccd
               if: github.event_name != 'pull_request'
               with:
                   registry: ${{ env.REGISTRY }}
