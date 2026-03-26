@@ -79,7 +79,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             <svg
               color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
-              height="1em"
+              height="1rem"
               viewBox="0 0 24 24"
               width="1rem"
               xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             <svg
               color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
-              height="1em"
+              height="1rem"
               viewBox="0 0 24 24"
               width="1rem"
               xmlns="http://www.w3.org/2000/svg"
@@ -818,7 +818,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             <svg
               color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
-              height="1em"
+              height="1rem"
               viewBox="0 0 24 24"
               width="1rem"
               xmlns="http://www.w3.org/2000/svg"
@@ -836,7 +836,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             <svg
               color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
-              height="1em"
+              height="1rem"
               viewBox="0 0 24 24"
               width="1rem"
               xmlns="http://www.w3.org/2000/svg"
@@ -1515,7 +1515,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             <svg
               color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
-              height="1em"
+              height="1rem"
               viewBox="0 0 24 24"
               width="1rem"
               xmlns="http://www.w3.org/2000/svg"
@@ -1533,7 +1533,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             <svg
               color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
-              height="1em"
+              height="1rem"
               viewBox="0 0 24 24"
               width="1rem"
               xmlns="http://www.w3.org/2000/svg"
