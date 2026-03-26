@@ -62,13 +62,10 @@ jobs:
                   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
-            - run: echo ${{ steps.build.outputs.metadata }}
-
             - name: Sign the images with GitHub OIDC token
-              env:
-                  PATTERN: "^ghcr.io/element-hq/element-web*"
               run: |
-                  docker image ls --digests --format '{{.Repository}}@{{.Digest}}' | grep "$PATTERN" | while read -r TARGET; do
+                  for FILE in ./node_modules/.cache/nx-container/*/metadata; do
+                      TARGET=$(jq -r '.["image.name"] + "@" + .["containerimage.digest"]' "$FILE")
                       echo "Signing $TARGET..."
-                      cosign sign --yes "$TARGET"
+                      # cosign sign --yes "$TARGET" # TODO
                   done
