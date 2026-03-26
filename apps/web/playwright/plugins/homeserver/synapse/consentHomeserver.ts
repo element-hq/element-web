@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type SynapseContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
-
-import { type Fixtures } from "../../../element-web-test.ts";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { type Fixtures } from "../../../element-web-test.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
