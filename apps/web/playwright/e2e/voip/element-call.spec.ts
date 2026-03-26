@@ -15,13 +15,14 @@ import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { readSampleFile } from "../../sample-files";
 
 // Load a copy of our fake Element Call app, and the latest widget API.
 // The fake call app does *just* enough to convince Element Web that a call is ongoing
 // and functions like PiP work. It does not actually do anything though, to limit the
 // surface we test.
 const widgetApi = readFile(fileURLToPath(import.meta.resolve("matrix-widget-api/dist/api.min.js")), "utf-8");
-const fakeCallClient = readFile("playwright/sample-files/fake-element-call.html", "utf-8");
+const fakeCallClient = readSampleFile("fake-element-call.html");
 
 function assertCommonCallParameters(
     url: URLSearchParams,
@@ -609,7 +610,7 @@ test.describe("Element Call", () => {
             },
         });
 
-        const fakeCallClientSend = readFile("playwright/sample-files/fake-element-call-with-send.html", "utf-8");
+        const fakeCallClientSend = readSampleFile("fake-element-call-with-send.html");
 
         let charlie: Bot;
         test.use({
