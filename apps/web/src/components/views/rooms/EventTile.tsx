@@ -1545,6 +1545,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 }
 
+/**
+ * Props for the event-tile fallback rendered after the tile error boundary catches a render failure.
+ */
 interface EventTileErrorFallbackProps {
     error: Error;
     layout: Layout;
