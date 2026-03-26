@@ -21,6 +21,7 @@ export * from "./message-body/EventContentBody";
 export * from "./message-body/MediaBody";
 export * from "./message-body/MessageTimestampView";
 export * from "./message-body/DecryptionFailureBodyView";
+export * from "./message-body/RedactedBodyView";
 export * from "./message-body/FileBodyView";
 export * from "./message-body/PinnedMessageBadge";
 export * from "./message-body/ReactionsRowButtonTooltip";

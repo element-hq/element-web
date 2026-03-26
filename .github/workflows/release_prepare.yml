@@ -2,11 +2,6 @@ name: Cut branches
 on:
     workflow_dispatch:
         inputs:
-            element-desktop:
-                description: Prepare element-desktop
-                required: true
-                type: boolean
-                default: true
             element-web:
                 description: Prepare element-web
                 required: true
@@ -26,7 +21,6 @@ jobs:
                 repo:
                     - matrix-org/matrix-js-sdk
                     - element-hq/element-web
-                    - element-hq/element-desktop
         uses: matrix-org/matrix-js-sdk/.github/workflows/release-checks.yml@develop # zizmor: ignore[unpinned-uses]
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -38,19 +32,8 @@ jobs:
         needs: checks
         env:
             # The order is specified bottom-up to avoid any races for allchange
-            REPOS: matrix-js-sdk element-web element-desktop
+            REPOS: matrix-js-sdk element-web
         steps:
-            - name: Checkout Element Desktop
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-              if: inputs.element-desktop
-              with:
-                  repository: element-hq/element-desktop
-                  path: element-desktop
-                  ref: staging
-                  fetch-depth: 0
-                  fetch-tags: true
-                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  persist-credentials: true
             - name: Checkout Element Web
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               if: inputs.element-web
@@ -79,10 +62,6 @@ jobs:
                   git config --global user.email "releases@riot.im"
                   git config --global user.name "RiotRobot"
 
-            - name: Merge Element Desktop
-              if: inputs.element-desktop
-              run: |
-                  git -C "element-desktop" merge origin/develop
             - name: Merge Element Web
               if: inputs.element-web
               run: |
@@ -112,17 +91,6 @@ jobs:
               with:
                   ref: staging
                   repo: element-hq/element-web
-                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-                  wait-interval: 10
-                  check-name: "draft / draft"
-                  allowed-conclusions: success
-
-            - name: Wait for element-desktop draft
-              if: inputs.element-desktop
-              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
-              with:
-                  ref: staging
-                  repo: element-hq/element-desktop
                   repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   wait-interval: 10
                   check-name: "draft / draft"

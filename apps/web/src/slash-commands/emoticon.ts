@@ -11,14 +11,15 @@ import { Command } from "./command";
 import { successSync } from "./utils";
 import { CommandCategories } from "./interface";
 
-export function emoticon(command: string, description: TranslationKey, message: string): Command {
+export function emoticon(command: string, description: TranslationKey, prefix: string): Command {
     return new Command({
         command,
         args: "<message>",
         description,
         runFn: function (_cli, _roomId, _threadId, args) {
+            let message = prefix;
             if (args) {
-                message = message + " " + args;
+                message += " " + args;
             }
             return successSync(ContentHelpers.makeTextMessage(message));
         },

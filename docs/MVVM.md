@@ -1,4 +1,4 @@
-# MVVM
+# MVVM v2
 
 General description of the pattern can be found [here](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel). But the gist of it is that you divide your code into three sections:
 
