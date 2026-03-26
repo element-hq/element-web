@@ -1492,8 +1492,6 @@
     },
     "labs": {
         "ask_to_join": "Увімкнути запити на приєднання",
-        "automatic_debug_logs": "Автоматично надсилати журнал зневадження про всі помилки",
-        "automatic_debug_logs_decryption": "Автоматично надсилати журнали зневадження при збоях розшифрування",
         "beta_description": "Що далі для %(brand)s? Експериментальні — це найкращий спосіб спробувати функції на ранній стадії розробки, протестувати їх і допомогти сформувати їх до фактичного запуску.",
         "beta_feature": "Це бета-можливість",
         "beta_feedback_leave_button": "Щоб вийти з бета-тестування, перейдіть до налаштувань.",
@@ -1549,7 +1547,6 @@
         "notification_settings_beta_caption": "Представляємо простіший спосіб змінювати налаштування сповіщень. Налаштуйте %(brand)s, саме так, як вам подобається.",
         "notification_settings_beta_title": "Налаштування сповіщень",
         "notifications": "Увімкнути панель сповіщень у шапці кімнати",
-        "release_announcement": "Оголошення про випуск",
         "render_reaction_images": "Відтворення кастомних зображень у реакціях",
         "render_reaction_images_description": "Іноді їх називають \"користувацькими емодзі\".",
         "report_to_moderators": "Поскаржитись модераторам",
@@ -2057,9 +2054,6 @@
         "joining_space": "Приєднання до простору…",
         "jump_read_marker": "Перейти до першого непрочитаного повідомлення.",
         "jump_to_bottom_button": "Перейти до найновіших повідомлень",
-        "jump_to_date": "Перейти до дати",
-        "jump_to_date_beginning": "Початок кімнати",
-        "jump_to_date_prompt": "Виберіть до якої дати перейти",
         "kick_reason": "Причина: %(reason)s",
         "kicked_by": "Вас вилучено користувачем %(memberName)s",
         "kicked_from_room_by": "%(memberName)s вилучає вас із %(roomName)s",
@@ -2085,7 +2079,6 @@
         "not_found_title": "Такої кімнати або простору не існує.",
         "not_found_title_name": "%(roomName)s не існує.",
         "peek_join_prompt": "Ви попередньо переглядаєте %(roomName)s. Бажаєте приєднатися?",
-        "pinned_message_badge": "Закріплене повідомлення",
         "pinned_message_banner": {
             "button_close_list": "Закрити список",
             "button_view_all": "Подивитись все",
@@ -3397,8 +3390,7 @@
             "voice_call_unsupported": "%(senderName)s розпочинає голосовий виклик. (не підтримується цим браузером)"
         },
         "m.file": {
-            "error_decrypting": "Помилка розшифрування вкладення",
-            "error_invalid": "Недійсний файл"
+            "error_decrypting": "Помилка розшифрування вкладення"
         },
         "m.image": {
             "error": "Не вдалося показати зображення через помилку",
@@ -3748,14 +3740,7 @@
             "one_user": "%(displayName)s пише…",
             "two_users": "%(names)s та %(lastPerson)s пишуть…"
         },
-        "undecryptable_tooltip": "Не вдалося розшифрувати це повідомлення",
-        "url_preview": {
-            "close": "Закрити попередній перегляд",
-            "show_n_more": {
-                "one": "Показати %(count)s інший попередній перегляд",
-                "other": "Показати %(count)s інших попередніх переглядів"
-            }
-        }
+        "undecryptable_tooltip": "Не вдалося розшифрувати це повідомлення"
     },
     "truncated_list_n_more": {
         "one": "",

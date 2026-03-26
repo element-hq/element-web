@@ -1,0 +1,92 @@
+{
+    "action": {
+        "cancel": "Annuler",
+        "close": "Fermer",
+        "close_brand": "Fermer %(brand)s",
+        "copy": "Copier",
+        "cut": "Couper",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "minimise": "Minimiser",
+        "paste": "Coller",
+        "paste_match_style": "Copier avec le style de destination",
+        "quit": "Quitter",
+        "redo": "Refaire",
+        "select_all": "Tout sélectionner",
+        "show_hide": "Afficher/Masquer",
+        "undo": "Annuler",
+        "zoom_in": "Zoomer",
+        "zoom_out": "Dé-zoomer"
+    },
+    "common": {
+        "about": "À propos",
+        "brand_help": "Aide de %(brand)s",
+        "help": "Aide",
+        "no": "Non",
+        "preferences": "Préférences",
+        "yes": "Oui"
+    },
+    "confirm_quit": "Êtes-vous sûr de vouloir quitter ?",
+    "edit_menu": {
+        "speech": "Dictée",
+        "speech_start_speaking": "Commencer la dictée",
+        "speech_stop_speaking": "Arrêter la dictée"
+    },
+    "eol": {
+        "no_more_updates": "Vous utilisez une version de macOS non prise en charge. Veuillez mettre à jour macOS pour recevoir les mises à jour de %(brand)s.",
+        "title": "Système non pris en charge",
+        "warning": "Vous utilisez une version de macOS non prise en charge. Veuillez mettre à jour macOS afin que %(brand)s continue de fonctionner."
+    },
+    "file_menu": {
+        "label": "Fichier"
+    },
+    "icon_overlay": {
+        "description_error": "Erreur",
+        "description_notifications": {
+            "one": "Vous avez %(count)s notification non lue.",
+            "other": "Vous avez %(count)s notifications non lues."
+        }
+    },
+    "menu": {
+        "hide": "Masquer",
+        "hide_others": "Masquer les autres",
+        "services": "Services",
+        "unhide": "Dé-masquer"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Ajouter au dictionnaire",
+        "copy_email": "Copier l’adresse e-mail",
+        "copy_image": "Copier l’image",
+        "copy_image_url": "Copier l'adresse de l'image",
+        "copy_link_url": "Copier l’adresse du lien",
+        "save_image_as": "Enregistrer l’image sous…",
+        "save_image_as_error_description": "L’image n’a pas pu être enregistrée",
+        "save_image_as_error_title": "Échec de la sauvegarde de l’image"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Effacer les données et recharger ?",
+            "backend_changed_detail": "Impossible d'accéder aux secrets depuis le trousseau de clés du système, il semble avoir changé.",
+            "backend_changed_title": "Impossible de charger la base de données",
+            "backend_no_encryption": "Votre système dispose d'un trousseau de clés compatible mais le chiffrement est indisponible.",
+            "backend_no_encryption_detail": "Electron a détecté que le chiffrement n'est pas disponible pour le trousseau %(backend)s. Veuillez vérifier que votre trousseau est installé. Si c'est le cas, redémarrez et réessayez. Comme alternative, vous pouvez autoriser %(brand)s à utiliser une option de chiffrement moins sécurisée.",
+            "backend_no_encryption_title": "Aucune prise en charge du chiffrement",
+            "unsupported_keyring": "Votre système possède un trousseau de clés non pris en charge, la base de données ne peut pas être ouverte.",
+            "unsupported_keyring_detail": "La détection du porte-clés par Electron n'a pas permis de trouver de backend compatible. Vous pouvez essayer de configurer manuellement le backend en utilisant %(brand)s avec un argument de ligne de commande. Cette opération doit être effectuer une seule fois. Voir%(link)s.",
+            "unsupported_keyring_title": "Système non pris en charge",
+            "unsupported_keyring_use_basic_text": "Utiliser un chiffrement plus faible",
+            "unsupported_keyring_use_plaintext": "N'utilise pas de chiffrement"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Taille réelle",
+        "toggle_developer_tools": "Basculer les outils de développement",
+        "toggle_full_screen": "Basculer le plein écran",
+        "view": "Afficher"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Tout amener au premier plan",
+        "label": "Fenêtre",
+        "zoom": "Zoom"
+    }
+}

@@ -17,7 +17,7 @@ import {
     RoomStateEvent,
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
-import { Widget, type ClientWidgetApi } from "matrix-widget-api";
+import { Widget } from "matrix-widget-api";
 
 import {
     useMockedCalls,
@@ -43,11 +43,10 @@ import { Action } from "../../../../src/dispatcher/actions";
 import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { TestSdkContext } from "../../TestSdkContext";
 import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
-import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 import WidgetStore from "../../../../src/stores/WidgetStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
-import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
 import { type WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";
 
 jest.mock("../../../../src/stores/OwnProfileStore", () => ({
@@ -194,7 +193,7 @@ describe("PipContainer", () => {
         expect(screen.queryByRole("complementary")).toBeNull();
     });
 
-    it("shows an active call with back and leave buttons", async () => {
+    it("shows an active call with back buttons", async () => {
         renderPip();
 
         await withCall(async (call) => {
@@ -211,11 +210,6 @@ describe("PipContainer", () => {
                 metricsTrigger: expect.any(String),
             });
             defaultDispatcher.unregister(dispatcherRef);
-
-            // The leave button should disconnect from the call
-            const disconnectSpy = jest.spyOn(call, "disconnect");
-            await user.click(screen.getByRole("button", { name: "Leave" }));
-            expect(disconnectSpy).toHaveBeenCalled();
         });
     });
 
@@ -240,7 +234,7 @@ describe("PipContainer", () => {
             // The return button should maximize the widget
             const moveSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
             await user.click(await screen.findByRole("button", { name: "Back" }));
-            expect(moveSpy).toHaveBeenCalledWith(room, widget, Container.Center);
+            expect(moveSpy).toHaveBeenCalledWith(room, widget, "center");
 
             expect(screen.queryByRole("button", { name: "Leave" })).toBeNull();
         });
@@ -252,16 +246,7 @@ describe("PipContainer", () => {
         mockPlatformPeg({ supportsJitsiScreensharing: () => true });
         setUpRoomViewStore();
         viewRoom(room2.roomId);
-        const widget = WidgetStore.instance.addVirtualWidget(
-            {
-                id: "1",
-                creatorUserId: "@alice:example.org",
-                type: WidgetType.JITSI.preferred,
-                url: "https://meet.example.org",
-                name: "Jitsi example",
-            },
-            room.roomId,
-        );
+
         renderPip();
 
         await withWidget(async () => {
@@ -277,25 +262,6 @@ describe("PipContainer", () => {
                 metricsTrigger: expect.any(String),
             });
             defaultDispatcher.unregister(dispatcherRef);
-
-            // The leave button should hangup the call
-            const sendSpy = jest
-                .fn<
-                    ReturnType<ClientWidgetApi["transport"]["send"]>,
-                    Parameters<ClientWidgetApi["transport"]["send"]>
-                >()
-                .mockResolvedValue({});
-            const mockMessaging = {
-                on: () => {},
-                off: () => {},
-                stop: () => {},
-                widgetApi: {
-                    transport: { send: sendSpy },
-                },
-            } as unknown as WidgetMessaging;
-            WidgetMessagingStore.instance.storeMessaging(new Widget(widget), room.roomId, mockMessaging);
-            await user.click(screen.getByRole("button", { name: "Leave" }));
-            expect(sendSpy).toHaveBeenCalledWith(ElementWidgetActions.HangupCall, {});
         });
 
         WidgetStore.instance.removeVirtualWidget("1", room.roomId);

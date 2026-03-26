@@ -11,6 +11,7 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
+            ignoreBinaries: ["awk"],
         },
         "apps/web": {
             entry: [
@@ -45,6 +46,15 @@ export default {
                 "@types/content-type",
                 "@types/sdp-transform",
             ],
+        },
+        "apps/desktop": {
+            entry: ["src/preload.cts", "electron-builder.ts", "scripts/**", "hak/**"],
+            project: ["**/*.{js,ts}"],
+            ignoreDependencies: [
+                // Brought in via hak scripts
+                "matrix-seshat",
+            ],
+            ignoreBinaries: ["scripts/in-docker.sh"],
         },
         ".": {
             entry: ["scripts/**", "docs/**"],

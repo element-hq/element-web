@@ -16,7 +16,7 @@ import {
 import { stubClient } from "../../test-utils";
 import WidgetUtils from "../../../src/utils/WidgetUtils";
 import { type IApp } from "../../../src/utils/WidgetUtils-types";
-import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 import * as livestream from "../../../src/Livestream";
 import Modal from "../../../src/Modal";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -138,12 +138,7 @@ describe("WidgetContextMenuViewModel", () => {
         const vm = new WidgetContextMenuViewModel(props);
         vm.onMoveButton(1);
 
-        expect(WidgetLayoutStore.instance.moveWithinContainer).toHaveBeenCalledWith(
-            props.room,
-            Container.Top,
-            props.app,
-            1,
-        );
+        expect(WidgetLayoutStore.instance.moveWithinContainer).toHaveBeenCalledWith(props.room, "top", props.app, 1);
         expect(props.onFinished).toHaveBeenCalled();
     });
 

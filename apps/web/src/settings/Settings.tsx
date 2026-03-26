@@ -89,7 +89,6 @@ export enum LabGroup {
     Threads,
     VoiceAndVideo,
     Moderation,
-    Analytics,
     Themes,
     Encryption,
     Experimental,
@@ -99,7 +98,6 @@ export enum LabGroup {
 
 export enum Features {
     NotificationSettings2 = "feature_notification_settings2",
-    ReleaseAnnouncement = "feature_release_announcement",
 }
 
 export const labGroupNames: Record<LabGroup, TranslationKey> = {
@@ -111,7 +109,6 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Threads]: _td("labs|group_threads"),
     [LabGroup.VoiceAndVideo]: _td("labs|group_voip"),
     [LabGroup.Moderation]: _td("labs|group_moderation"),
-    [LabGroup.Analytics]: _td("common|analytics"),
     [LabGroup.Themes]: _td("labs|group_themes"),
     [LabGroup.Encryption]: _td("labs|group_encryption"),
     [LabGroup.Experimental]: _td("labs|group_experimental"),
@@ -206,7 +203,6 @@ export interface Settings {
     // [settingName: `feature_${string}`]: IFeature;
     "feature_video_rooms": IFeature;
     [Features.NotificationSettings2]: IFeature;
-    [Features.ReleaseAnnouncement]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
     "feature_report_to_moderators": IFeature;
     "feature_latex_maths": IFeature;
@@ -333,6 +329,8 @@ export interface Settings {
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
+    "RoomList.panelSize": IBaseSetting<number | null>;
+    "RoomList.isPanelCollapsed": IBaseSetting<boolean>;
     "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
@@ -350,8 +348,6 @@ export interface Settings {
     "Spaces.enabledMetaSpaces": IBaseSetting<Partial<Record<MetaSpace, boolean>>>;
     "Spaces.showPeopleInSpace": IBaseSetting<boolean>;
     "developerMode": IBaseSetting<boolean>;
-    "automaticErrorReporting": IBaseSetting<boolean>;
-    "automaticDecryptionErrorReporting": IBaseSetting<boolean>;
     "debug_scroll_panel": IBaseSetting<boolean>;
     "debug_timeline_panel": IBaseSetting<boolean>;
     "debug_registration": IBaseSetting<boolean>;
@@ -1223,6 +1219,14 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.DEVICE],
         default: SortingAlgorithm.Recency,
     },
+    "RoomList.panelSize": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: null,
+    },
+    "RoomList.isPanelCollapsed": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: false,
+    },
     "RoomList.showMessagePreview": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: false,
@@ -1310,18 +1314,6 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
-    "automaticErrorReporting": {
-        displayName: _td("labs|automatic_debug_logs"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: false,
-        controller: new ReloadOnChangeController(),
-    },
-    "automaticDecryptionErrorReporting": {
-        displayName: _td("labs|automatic_debug_logs_decryption"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-        controller: new ReloadOnChangeController(),
-    },
     "debug_scroll_panel": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
@@ -1355,16 +1347,6 @@ export const SETTINGS: Settings = {
         default: [],
         // Contains room IDs
         shouldExportToRageshake: false,
-    },
-    /**
-     * Enable or disable the release announcement feature
-     */
-    [Features.ReleaseAnnouncement]: {
-        isFeature: true,
-        labsGroup: LabGroup.Ui,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: true,
-        displayName: _td("labs|release_announcement"),
     },
     /**
      * Managed by the {@link ReleaseAnnouncementStore}

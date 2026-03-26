@@ -1,0 +1,92 @@
+{
+    "action": {
+        "cancel": "Cancelar",
+        "close": "Fechar",
+        "close_brand": "Fechar %(brand)s",
+        "copy": "Copiar",
+        "cut": "Cortar",
+        "delete": "Excluir",
+        "edit": "Editar",
+        "minimise": "Minimizar",
+        "paste": "Colar",
+        "paste_match_style": "Colar e Adequar Estilo",
+        "quit": "Sair",
+        "redo": "Refazer",
+        "select_all": "Selecionar Todas",
+        "show_hide": "Mostrar/Esconder",
+        "undo": "Desfazer",
+        "zoom_in": "Dar Zoom In",
+        "zoom_out": "Dar Zoom Out"
+    },
+    "common": {
+        "about": "Sobre",
+        "brand_help": "%(brand)s Ajuda",
+        "help": "Ajuda",
+        "no": "Não",
+        "preferences": "Preferências",
+        "yes": "Sim"
+    },
+    "confirm_quit": "Você tem certeza que você quer sair?",
+    "edit_menu": {
+        "speech": "Fala",
+        "speech_start_speaking": "Começar a Falar",
+        "speech_stop_speaking": "Parar de Falar"
+    },
+    "eol": {
+        "no_more_updates": "Você está usando uma versão não suportada do macOS. Atualize para receber as atualizações d %(brand)s.",
+        "title": "Sistema não suportado",
+        "warning": "Você está usando uma versão não compatível do macOS. Faça a atualização para garantir que o %(brand)s continue funcionando."
+    },
+    "file_menu": {
+        "label": "Arquivo"
+    },
+    "icon_overlay": {
+        "description_error": "Erro",
+        "description_notifications": {
+            "one": "Você tem %(count)s notificação não lida.",
+            "other": "Você tem %(count)s notificações não lidas."
+        }
+    },
+    "menu": {
+        "hide": "Esconder",
+        "hide_others": "Esconder Outras(os)",
+        "services": "Serviços",
+        "unhide": "Desesconder"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Adicionar a dicionário",
+        "copy_email": "Copiar endereço de email",
+        "copy_image": "Copiar imagem",
+        "copy_image_url": "Copiar endereço de imagem",
+        "copy_link_url": "Copiar endereço de link",
+        "save_image_as": "Salvar imagem como...",
+        "save_image_as_error_description": "A imagem falhou para salvar",
+        "save_image_as_error_title": "Falha para salvar imagem"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Limpar dados e recarregar?",
+            "backend_changed_detail": "Não foi possível acessar o segredo no cofre do sistema, parece que ele foi alterado.",
+            "backend_changed_title": "Falha ao carregar o banco de dados",
+            "backend_no_encryption": "Seu sistema tem um cofre compatível, mas a criptografia não está disponível.",
+            "backend_no_encryption_detail": "O Electron detetou que a encriptação não está disponível no seu cofre %(backend)s. Certifique-se de que tem o cofre instalado. Se tiver o cofre instalado, reinicie e tente novamente. Opcionalmente, você pode permitir que %(brand)s use uma forma mais fraca de criptografia.",
+            "backend_no_encryption_title": "Sem suporte para criptografia",
+            "unsupported_keyring": "Seu sistema possui um cofre não compatível, o que impede a abertura do banco de dados.",
+            "unsupported_keyring_detail": "A detecção de cofre do Electron não encontrou um backend compatível. Você pode tentar configurar manualmente o backend iniciando %(brand)s com um argumento de linha de comando, uma operação única. Consulte %(link)s.",
+            "unsupported_keyring_title": "Sistema não suportado",
+            "unsupported_keyring_use_basic_text": "Use criptografia mais fraca",
+            "unsupported_keyring_use_plaintext": "Não usar criptografia"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Tamanho de Verdade",
+        "toggle_developer_tools": "Ativar/Desativar Ferramentas de Desenvolvimento",
+        "toggle_full_screen": "Pôr em/Tirar de Tela Cheia",
+        "view": "Ver"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Trazer Todas Para Frente",
+        "label": "Janela",
+        "zoom": "Zoom"
+    }
+}

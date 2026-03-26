@@ -101,6 +101,7 @@ export default defineConfig<{}, WorkerOptions>({
     outputDir: "playwright/test-results",
     workers: 1,
     retries: process.env.CI ? 2 : 0,
+    maxFailures: process.env.CI ? 10 : undefined,
     reporter: process.env.CI ? [["blob"], ["github"]] : [["html", { outputFolder: "playwright/html-report" }]],
     snapshotDir: "playwright/snapshots",
     // When running the browser in docker, set the platform to `linux` as that is the platform where the browser is running

@@ -407,11 +407,8 @@ If you run your own rageshake server to collect bug reports, the following optio
    not present in the config, the app will disable all rageshake functionality. Set to `https://rageshakes.element.io/api/submit` to submit
    rageshakes to us, or use your own rageshake server.
    You may also set the value to `"local"` if you wish to only store logs locally, in order to download them for debugging.
-2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
-   alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-auto-uisi`
-   (in contrast to other rageshakes submitted by the app, which use `element-web`).
-3. `existing_issues_url`: URL for where to find existing issues.
-4. `new_issue_url`: URL for where to submit new issues.
+2. `existing_issues_url`: URL for where to find existing issues.
+3. `new_issue_url`: URL for where to submit new issues.
 
 If you would like to use [Sentry](https://sentry.io/) for rageshake data, add a `sentry` object to your config with the following values:
 
@@ -540,7 +537,7 @@ decentralised.
 
 ## Desktop app configuration
 
-See https://github.com/element-hq/element-desktop#user-specified-configjson
+See https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson
 
 ## UI Features
 
@@ -608,3 +605,15 @@ The following are undocumented or intended for developer use only.
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
+
+## Additional config options for Element Desktop
+
+1. `update_base_url`: Specifies the URL of the update server, see [document](https://github.com/element-hq/element-web/blob/develop/apps/desktop/docs/updates.md).
+2. `web_base_url`: Specifies the Element Web URL when performing actions such as popout widget. Defaults to `https://app.element.io/`.
+
+---
+
+The app contains a configuration file specified at build time using [these instructions](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#config).
+This config can be overwritten by the end using by creating a `config.json` file at the paths described [here](https://github.com/element-hq/element-web/blob/develop/apps/desktop/README.md#user-specified-configjson).
+
+After changing the config, the app will need to be exited fully (including via the task tray) and re-started.

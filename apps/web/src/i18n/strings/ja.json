@@ -1181,8 +1181,6 @@
         "upload_file": "ファイルをアップロード"
     },
     "labs": {
-        "automatic_debug_logs": "エラーが生じた際に、自動的にデバッグログを送信",
-        "automatic_debug_logs_decryption": "復号化エラーが生じた際に、自動的にデバッグログを送信",
         "beta_description": "%(brand)sのラボでは、最新の機能をいち早く使用したり、テストしたりできるほか、機能が実際にリリースされる前の改善作業を支援することができます。",
         "beta_feature": "この機能はベータ版です",
         "beta_feedback_leave_button": "ベータ版の使用を終了するには、設定を開いてください。",
@@ -1615,9 +1613,6 @@
         "joining_space": "スペースに参加しています…",
         "jump_read_marker": "最初の未読メッセージに移動。",
         "jump_to_bottom_button": "最新のメッセージを表示",
-        "jump_to_date": "日付に移動",
-        "jump_to_date_beginning": "ルームの先頭",
-        "jump_to_date_prompt": "日付を選択して移動",
         "kick_reason": "理由：%(reason)s",
         "kicked_by": "%(memberName)sにより追放されました",
         "kicked_from_room_by": "%(memberName)sにより%(roomName)sから追放されました",
@@ -2643,8 +2638,7 @@
             "voice_call_unsupported": "%(senderName)sが音声通話を行いました。（このブラウザーではサポートされていません）"
         },
         "m.file": {
-            "error_decrypting": "添付ファイルを復号化する際にエラーが発生しました",
-            "error_invalid": "無効なファイル %(extra)s"
+            "error_decrypting": "添付ファイルを復号化する際にエラーが発生しました"
         },
         "m.image": {
             "error": "エラーにより画像を表示できません",
@@ -2968,14 +2962,7 @@
             "one_user": "%(displayName)sが入力しています…",
             "two_users": "%(names)sと%(lastPerson)sが入力しています…"
         },
-        "undecryptable_tooltip": "このメッセージを復号化できませんでした",
-        "url_preview": {
-            "close": "プレビューを閉じる",
-            "show_n_more": {
-                "one": "他%(count)s個のプレビューを表示",
-                "other": "他%(count)s個のプレビューを表示"
-            }
-        }
+        "undecryptable_tooltip": "このメッセージを復号化できませんでした"
     },
     "truncated_list_n_more": {
         "other": "他%(count)s人以上…"

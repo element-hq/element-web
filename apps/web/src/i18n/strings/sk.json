@@ -1509,8 +1509,6 @@
     },
     "labs": {
         "ask_to_join": "Umožniť požiadať o pripojenie",
-        "automatic_debug_logs": "Automatické odosielanie záznamov ladenia pri akejkoľvek chybe",
-        "automatic_debug_logs_decryption": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
         "beta_description": "Čo vás čaká v aplikácii %(brand)s? Laboratóriá sú najlepším spôsobom, ako získať funkcie v predstihu, otestovať nové funkcie a pomôcť ich vytvoriť ešte pred ich skutočným spustením.",
         "beta_feature": "Toto je funkcia vo verzii beta",
         "beta_feedback_leave_button": "Ak chcete opustiť beta verziu, navštívte svoje nastavenia.",
@@ -1568,7 +1566,6 @@
         "notification_settings_beta_caption": "Predstavujeme jednoduchší spôsob zmeny nastavení oznámení. Prispôsobte si svoju aplikáciu %(brand)s, presne podľa svojich predstáv.",
         "notification_settings_beta_title": "Nastavenia oznámení",
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
-        "release_announcement": "Oznámenie o vydaní",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
@@ -2088,9 +2085,6 @@
         "joining_space": "Pripájanie sa do priestoru …",
         "jump_read_marker": "Preskočiť na prvú neprečítanú správu.",
         "jump_to_bottom_button": "Prejsť na najnovšie správy",
-        "jump_to_date": "Prejsť na dátum",
-        "jump_to_date_beginning": "Začiatok miestnosti",
-        "jump_to_date_prompt": "Vyberte dátum, na ktorý chcete prejsť",
         "kick_reason": "Dôvod: %(reason)s",
         "kicked_by": "Odstránil vás %(memberName)s",
         "kicked_from_room_by": "Boli ste odstránení z %(roomName)s používateľom %(memberName)s",
@@ -2116,7 +2110,6 @@
         "not_found_title": "Táto miestnosť alebo priestor neexistuje.",
         "not_found_title_name": "%(roomName)s neexistuje.",
         "peek_join_prompt": "Zobrazujete náhľad %(roomName)s. Chcete sa k nej pripojiť?",
-        "pinned_message_badge": "Pripnutá správa",
         "pinned_message_banner": {
             "button_close_list": "Zatvoriť zoznam",
             "button_view_all": "Zobraziť všetko",
@@ -3442,8 +3435,7 @@
             "voice_call_unsupported": "%(senderName)s uskutočnil telefonát. (Nepodporované týmto prehliadačom)"
         },
         "m.file": {
-            "error_decrypting": "Chyba pri dešifrovaní prílohy",
-            "error_invalid": "Neplatný súbor"
+            "error_decrypting": "Chyba pri dešifrovaní prílohy"
         },
         "m.image": {
             "error": "Nie je možné zobraziť obrázok kvôli chybe",
@@ -3816,14 +3808,7 @@
             "one_user": "%(displayName)s píše …",
             "two_users": "%(names)s a %(lastPerson)s píšu …"
         },
-        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať",
-        "url_preview": {
-            "close": "Zatvoriť náhľad",
-            "show_n_more": {
-                "one": "Zobraziť %(count)s ďalší náhľad",
-                "other": "Zobraziť %(count)s ďalších náhľadov"
-            }
-        }
+        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať"
     },
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"

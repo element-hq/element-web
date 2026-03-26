@@ -76,7 +76,7 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     return (
         <SettingsToggleInput
             name="element-call-switch"
-            data-test-id="element-call-switch"
+            data-testid="element-call-switch"
             label={_t("room_settings|voip|enable_element_call_label", { brand })}
             helpMessage={_t("room_settings|voip|enable_element_call_caption", {
                 brand,

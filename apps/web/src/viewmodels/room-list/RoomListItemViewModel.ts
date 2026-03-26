@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import {
     BaseViewModel,
     RoomNotifState,
-    type RoomListItemSnapshot,
-    type RoomListItemActions,
+    type RoomListItemViewSnapshot,
+    type RoomListItemViewActions,
 } from "@element-hq/web-shared-components";
 import { RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
@@ -19,7 +19,6 @@ import type { RoomNotificationState } from "../../stores/notifications/RoomNotif
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { MessagePreviewStore } from "../../stores/message-preview";
-import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
@@ -32,6 +31,7 @@ import { UIComponent } from "../../settings/UIFeature";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { clearRoomNotification, setMarkedUnreadState } from "../../utils/notifications";
 import { tagRoom } from "../../utils/room/tagRoom";
+import { keepIfSame } from "../../utils/keepIfSame";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
@@ -46,11 +46,11 @@ interface RoomItemProps {
 /**
  * View model for an individual room list item.
  * Manages per-room subscriptions and updates only when this specific room's data changes.
- * Implements RoomListItemActions to provide interaction callbacks.
+ * Implements RoomListItemViewActions to provide interaction callbacks.
  */
 export class RoomListItemViewModel
-    extends BaseViewModel<RoomListItemSnapshot, RoomItemProps>
-    implements RoomListItemActions
+    extends BaseViewModel<RoomListItemViewSnapshot, RoomItemProps>
+    implements RoomListItemViewActions
 {
     private notifState: RoomNotificationState;
     /**
@@ -69,8 +69,12 @@ export class RoomListItemViewModel
         // Subscribe to notification state changes for this room
         this.disposables.trackListener(this.notifState, NotificationStateEvents.Update, this.onNotificationChanged);
 
-        // Subscribe to message preview changes (will filter to this room)
-        this.disposables.trackListener(MessagePreviewStore.instance, UPDATE_EVENT, this.onMessagePreviewChanged);
+        // Subscribe to message preview changes for this specific room
+        this.disposables.trackListener(
+            MessagePreviewStore.instance,
+            MessagePreviewStore.getPreviewChangedEventName(props.room),
+            this.onMessagePreviewChanged,
+        );
 
         // Subscribe to settings changes for message preview toggle
         const settingsWatchRef = SettingsStore.watchSetting(
@@ -163,8 +167,12 @@ export class RoomListItemViewModel
      */
     private updateItem(): void {
         const newItem = RoomListItemViewModel.generateItemSync(this.props.room, this.props.client, this.notifState);
-        // Preserve message preview - it's managed separately by loadAndSetMessagePreview
-        this.snapshot.set({ ...newItem, messagePreview: this.snapshot.current.messagePreview });
+        this.snapshot.merge({
+            ...newItem,
+            notification: keepIfSame(this.snapshot.current.notification, newItem.notification),
+            // Preserve message preview - it's managed separately by loadAndSetMessagePreview
+            messagePreview: this.snapshot.current.messagePreview,
+        });
     }
 
     private getMessagePreviewTag(): string {
@@ -205,7 +213,7 @@ export class RoomListItemViewModel
         room: Room,
         client: MatrixClient,
         notifState: RoomNotificationState,
-    ): RoomListItemSnapshot {
+    ): RoomListItemViewSnapshot {
         // Get room tags for menu state
         const roomTags = room.tags;
         const isDm = Boolean(DMRoomMap.shared().getUserIdForRoomId(room.roomId));

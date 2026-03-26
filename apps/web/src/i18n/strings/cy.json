@@ -1507,8 +1507,6 @@
     },
     "labs": {
         "ask_to_join": "Galluogi gofyn i ymuno",
-        "automatic_debug_logs": "Anfon logiau dadfygio yn awtomatig ar unrhyw wall",
-        "automatic_debug_logs_decryption": "Anfon logiau dadgryptio yn awtomatig ar wallau dadgryptio",
         "beta_description": "Beth sydd nesaf i %(brand)s? Labs yw'r ffordd orau o gael pethau'n gynnar, profi nodweddion newydd a helpu i'w siapio cyn iddynt gael eu lansio.",
         "beta_feature": "Mae hon yn nodwedd beta",
         "beta_feedback_leave_button": "I adael y beta, ewch i'ch gosodiadau.",
@@ -1566,7 +1564,6 @@
         "notification_settings_beta_caption": "Cyflwyno ffordd symlach o newid eich gosodiadau hysbysu. Addaswch eich %(brand)s, yn union fel y dymunwch.",
         "notification_settings_beta_title": "Gosodiadau Hysbysiadau",
         "notifications": "Galluogi'r panel hysbysiadau ym mhennyn yr ystafell",
-        "release_announcement": "Cyhoeddiad rhyddhau",
         "render_reaction_images": "Rendro delweddau personol mewn adweithiau",
         "render_reaction_images_description": "Weithiau'n cael eu hadnabod fel \"emojis cyfaddas\".",
         "report_to_moderators": "Adrodd i cymedrolwyr",
@@ -2073,9 +2070,6 @@
         "joining_space": "Wrthi'n ymuno â'r gofod…",
         "jump_read_marker": "Symud i'r neges gyntaf heb ei darllen.",
         "jump_to_bottom_button": "Sgrolio i'r negeseuon mwyaf diweddar",
-        "jump_to_date": "Symud i ddyddiad",
-        "jump_to_date_beginning": "Dechreuad yr ystafell",
-        "jump_to_date_prompt": "Dewiswch ddyddiad i fynd iddo",
         "kick_reason": "Rheswm: %(reason)s",
         "kicked_by": "Cawsoch eich tynnu gan %(memberName)s",
         "kicked_from_room_by": "Cawsoch eich tynnu o %(roomName)s gan %(memberName)s",
@@ -2101,7 +2095,6 @@
         "not_found_title": "Nid yw'r ystafell neu'r gofod hwn yn bodoli.",
         "not_found_title_name": "Nid yw %(roomName)s yn bodoli.",
         "peek_join_prompt": "Rydych chi'n cael rhagolwg o %(roomName)s. Eisiau ymuno?",
-        "pinned_message_badge": "Neges wedi'i phinio",
         "pinned_message_banner": {
             "button_close_list": "Cau'r rhestr",
             "button_view_all": "Gweld popeth",
@@ -3405,8 +3398,7 @@
             "voice_call_unsupported": "Gosododd %(senderName)s alwad llais. (heb ei gefnogi gan y porwr hwn)"
         },
         "m.file": {
-            "error_decrypting": "Gwall wrth ddadgryptio atodiad",
-            "error_invalid": "Ffeil annilys"
+            "error_decrypting": "Gwall wrth ddadgryptio atodiad"
         },
         "m.image": {
             "error": "Methu dangos delwedd oherwydd gwall",
@@ -3754,13 +3746,7 @@
             "one_user": "Mae %(displayName)s yn teipio…",
             "two_users": "Mae %(materes)s a %(lastPerson)s yn teipio…"
         },
-        "undecryptable_tooltip": "Nid oedd modd dadgryptio'r neges hon",
-        "url_preview": {
-            "close": "Cau rhagolwg",
-            "show_n_more": {
-                "Dangos %(count)s rhagolwg arall": "other"
-            }
-        }
+        "undecryptable_tooltip": "Nid oedd modd dadgryptio'r neges hon"
     },
     "truncated_list_n_more": {
         "A %(count)s yn rhagor...": "other"

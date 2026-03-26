@@ -78,6 +78,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private roomSkipList?: RoomSkipList;
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
+    /**
+     * Whether a batched LISTS_UPDATE_EVENT emission is pending.
+     * Used by {@link scheduleEmit} to coalesce rapid-fire updates into a single emit per frame.
+     */
+    private pendingEmit = false;
+
     public constructor(dispatcher: MatrixDispatcher) {
         super(dispatcher);
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
@@ -243,7 +249,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     newMembership === EffectiveMembership.Leave
                 ) {
                     this.roomSkipList.removeRoom(payload.room);
-                    this.emit(LISTS_UPDATE_EVENT);
+                    this.scheduleEmit();
                     return;
                 }
 
@@ -269,7 +275,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case Action.AfterForgetRoom: {
                 const room = payload.room;
                 this.roomSkipList.removeRoom(room);
-                this.emit(LISTS_UPDATE_EVENT);
+                this.scheduleEmit();
+
                 break;
             }
         }
@@ -313,7 +320,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 break;
             }
         }
-        if (needsEmit) this.emit(LISTS_UPDATE_EVENT);
+        if (needsEmit) this.scheduleEmit();
     }
 
     /**
@@ -349,6 +356,20 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
+     * Schedule a batched emission of LISTS_UPDATE_EVENT using requestAnimationFrame.
+     * Multiple calls within the same frame are coalesced into a single emit.
+     */
+    private scheduleEmit(): void {
+        if (!this.pendingEmit) {
+            this.pendingEmit = true;
+            requestAnimationFrame(() => {
+                this.pendingEmit = false;
+                this.emit(LISTS_UPDATE_EVENT);
+            });
+        }
+    }
+
+    /**
      * Add a room to the skiplist and emit an update.
      * @param room The room to add to the skiplist
      * @param isNewRoom Set this to true if this a new room that the isn't already in the skiplist
@@ -366,13 +387,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         } else {
             this.roomSkipList.reInsertRoom(room);
         }
-        this.emit(LISTS_UPDATE_EVENT);
+        this.scheduleEmit();
     }
 
     private onActiveSpaceChanged(): void {
         if (!this.roomSkipList) return;
         this.roomSkipList.calculateActiveSpaceForNodes();
-        this.emit(LISTS_UPDATE_EVENT);
+        this.scheduleEmit();
     }
 }
 

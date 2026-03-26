@@ -977,8 +977,6 @@
     },
     "labs": {
         "ask_to_join": "ჩართეთ შეერთების მოთხოვნა",
-        "automatic_debug_logs": "ავტომატურად გაგზავნეთ გამართვის ჟურნალი ნებისმიერი შეცდომის შესახებ",
-        "automatic_debug_logs_decryption": "გაშიფვრის შეცდომებზე გამართვის ჟურნალების ავტომატურად გაგზავნა",
         "beta_description": "რა არის შემდეგი%(brand)s ? ლაბორატორიები საუკეთესო საშუალებაა ნივთების ადრეულ ეტაპზე მისაღებად, ახალი ფუნქციების შესამოწმებლად და მათ ჩამოყალიბებაში, სანამ ისინი რეალურად დაიწყება.",
         "beta_feature": "ეს არის ბეტა ფუნქცია",
         "beta_feedback_leave_button": "ბეტადან გასასვლელად ეწვიეთ თქვენს პარამეტრებს.",
@@ -1280,9 +1278,6 @@
         "joining_space": "სივრცის შეერთება…",
         "jump_read_marker": "გადადით პირველ წაუკითხავ შეტყობინებაზე.",
         "jump_to_bottom_button": "გადადით უახლეს შეტყობინებებზე",
-        "jump_to_date": "თარიღზე გადასვლა",
-        "jump_to_date_beginning": "ოთახის დასაწყისი",
-        "jump_to_date_prompt": "აირჩიეთ თარიღი, რომელზეც გადახვალთ",
         "kick_reason": "მიზეზი:%(reason)s",
         "kicked_by": "თქვენ წაშალეთ%(memberName)s",
         "kicked_from_room_by": "თქვენ წაშალეთ%(roomName)s მიერ%(memberName)s",
@@ -2255,8 +2250,7 @@
             "voice_call_unsupported": "%(senderName)sმოახდინა ხმოვანი ზარი. (ამ ბრაუზერის მიერ არ არის მხარდაჭერილი)"
         },
         "m.file": {
-            "error_decrypting": "შეცდომა დანართის გაშიფვრისას",
-            "error_invalid": "არასწორი ფაილი"
+            "error_decrypting": "შეცდომა დანართის გაშიფვრისას"
         },
         "m.image": {
             "error": "შეცდომის გამო სურათის ჩვენება შეუძლებელია",
@@ -2586,14 +2580,7 @@
             "one_user": "%(displayName)sაკრეფებს...",
             "two_users": "%(names)sდა აკ %(lastPerson)s რეფენ..."
         },
-        "undecryptable_tooltip": "ამ შეტყობინების გაშიფვრა ვერ მოხერხდა",
-        "url_preview": {
-            "close": "გადახედვის დახურვა",
-            "show_n_more": {
-                "one": "ჩვენება%(count)s სხვა გადახედვა",
-                "other": "ჩვენება%(count)s სხვა გადახედვები"
-            }
-        }
+        "undecryptable_tooltip": "ამ შეტყობინების გაშიფვრა ვერ მოხერხდა"
     },
     "unsupported_server_description": "ეს სერვერი იყენებს Matrix-ის ძველ ვერსიას. განაახლეთ Matrix-ზე%(version)s გამოიყენოს%(brand)s შეცდომების გარეშე.",
     "unsupported_server_title": "თქვენი სერვერი მხარდაჭერილი არ არის",

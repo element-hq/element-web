@@ -3,10 +3,14 @@
         "seek_bar_label": "오디오 탐색 바"
     },
     "action": {
+        "back": "돌아가기",
+        "collapse": "접기",
         "delete": "삭제",
         "dismiss": "버리기",
+        "download": "다운로드",
         "edit": "편집",
         "explore_rooms": "방 검색",
+        "go": "이동",
         "invite": "초대",
         "new_conversation": "새로운 대화",
         "new_room": "새로운 방",
@@ -20,6 +24,7 @@
         "start_chat": "채팅 시작"
     },
     "common": {
+        "attachment": "첨부 파일",
         "encryption_enabled": "암호화 활성화됨",
         "preferences": "환경설정",
         "state_encryption_enabled": "실험적 상태 암호화가 활성화되었습니다."
@@ -42,6 +47,10 @@
             "shared": "신규 회원은 기록을 볼 수 있습니다.",
             "world_readable": "누구나 히스토리를 볼 수 있습니다"
         },
+        "jump_to_date": "날짜로 이동",
+        "jump_to_date_beginning": "방의 시작 지점입니다.",
+        "jump_to_date_prompt": "이동할 날짜를 선택하세요.",
+        "pinned_message_badge": "고정된 메시지",
         "status_bar": {
             "delete_all": "전체 삭제",
             "exceeded_resource_limit_description": "서비스를 계속 이용하시려면 서비스 관리자에게 문의하십시오.",
@@ -114,10 +123,13 @@
             "more_options": "옵션 더보기"
         },
         "room_options": "채팅방 옵션",
+        "section_header": {
+            "toggle": "%(section)s 섹션 전환"
+        },
         "show_message_previews": "메시지 미리보기 표시",
         "sort": "정렬",
         "sort_type": {
-            "activity": "활동내역",
+            "activity": "최근 활동",
             "atoz": "A-Z",
             "unread_first": "안읽은 글 우선"
         },
@@ -151,7 +163,7 @@
             "historical_event_no_key_backup": "이 기기에서는 이전 메시지를 볼 수 없습니다.",
             "historical_event_unverified_device": "이전 메시지에 액세스하려면 이 장치를 인증해야 합니다.",
             "historical_event_user_not_joined": "이 메시지에 액세스할 수 없습니다.",
-            "sender_identity_previously_verified": "발신자의 확인된 신원이 재설정되었습니다.",
+            "sender_identity_previously_verified": "보낸 사람의 인증된 디지털 신원이 재설정되었습니다",
             "sender_unsigned_device": "보안되지 않은 기기에서 전송됨.",
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
@@ -159,6 +171,9 @@
             "audio_player": "오디오 플레이어",
             "error_downloading_audio": "오디오 다운로드 중 오류 발생",
             "unnamed_audio": "이름 없는 오디오"
+        },
+        "m.file": {
+            "error_invalid": "잘못된 파일입니다."
         },
         "m.room.encryption": {
             "disable_attempt": "암호화를 비활성화하려는 시도가 무시되었습니다.",
@@ -169,6 +184,15 @@
             "parameters_changed": "일부 암호화 설정이 변경되었습니다.",
             "state_enabled": "이 방의 메시지와 상태 이벤트는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
             "unsupported": "이 방에서 사용 중인 암호화 방식은 지원되지 않습니다."
+        },
+        "message_timestamp_received_at": "수신 시간: %(dateTime)s",
+        "message_timestamp_sent_at": "발송 시간: %(dateTime)s",
+        "url_preview": {
+            "close": "미리보기 닫기",
+            "show_n_more": {
+                "other": "외 %(count)s개의 미리보기 더 보기"
+            },
+            "view_image": "이미지 보기"
         }
     },
     "widget": {

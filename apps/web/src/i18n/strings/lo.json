@@ -1072,8 +1072,6 @@
         "upload_file": "ອັບໂຫຼດໄຟລ໌"
     },
     "labs": {
-        "automatic_debug_logs": "ສົ່ງບັນທຶກ ບັນຫາບັກ ໂດຍອັດຕະໂນມັດກ່ຽວກັບຂໍ້ຜິດພາດໃດໆ",
-        "automatic_debug_logs_decryption": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດໃນຄວາມຜິດພາດການຖອດລະຫັດ",
         "beta_feature": "ນີ້ແມ່ນຄຸນສົມບັດເບຕ້າ",
         "beta_feedback_leave_button": "ເພື່ອອອກຈາກເບຕ້າ, ໃຫ້ເຂົ້າໄປທີ່ການຕັ້ງຄ່າຂອງທ່ານ.",
         "beta_feedback_title": "%(featureName)s ຄຳຕິຊົມເບຕ້າ",
@@ -1454,9 +1452,6 @@
         "joining": "ກຳລັງເຂົ້າ…",
         "jump_read_marker": "ຂ້າມໄປຫາຂໍ້ຄວາມທຳອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
         "jump_to_bottom_button": "ເລື່ອນໄປຫາຂໍ້ຄວາມຫຼ້າສຸດ",
-        "jump_to_date": "ໄປຫາວັນທີ",
-        "jump_to_date_beginning": "ຈຸດເລີ່ມຕົ້ນຂອງຫ້ອງ",
-        "jump_to_date_prompt": "ເລືອກວັນທີເພື່ອໄປຫາ",
         "kick_reason": "ເຫດຜົນ: %(reason)s",
         "kicked_by": "ທ່ານຖືກລຶບຍອອກໂດຍ %(memberName)s",
         "kicked_from_room_by": "ທ່ານຖືກລຶບອອກຈາກ %(roomName)s ໂດຍ %(memberName)s",
@@ -2330,8 +2325,7 @@
             "voice_call_unsupported": "%(senderName)s ການໂທດ້ວຍສຽງ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)"
         },
         "m.file": {
-            "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ",
-            "error_invalid": "ໄຟລ໌ບໍ່ຖືກຕ້ອງ%(extra)s"
+            "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ"
         },
         "m.image": {
             "error_decrypting": "ການຖອດລະຫັດຮູບພາບຜິດພາດ",
@@ -2650,13 +2644,6 @@
             },
             "one_user": "%(displayName)s ກຳລັງພິມ…",
             "two_users": "%(names)s ແລະ %(lastPerson)s ກຳລັງພິມ…"
-        },
-        "url_preview": {
-            "close": "ປິດຕົວຢ່າງ",
-            "show_n_more": {
-                "one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
-                "other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s"
-            }
         }
     },
     "truncated_list_n_more": {

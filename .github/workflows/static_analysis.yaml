@@ -45,13 +45,18 @@ jobs:
                     - name: Rethemendex Check
                       command: "rethemendex"
                       assert-diff: true
+                    - name: Docs
+                      install: layered
+                      command: "docs:build"
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
 
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               if: matrix.install != ''
               with:
                   cache: "pnpm"
@@ -73,6 +78,19 @@ jobs:
               run: git diff --exit-code
               if: matrix.assert-diff
 
+    zizmor:
+        name: Zizmor Github Actions lint
+        runs-on: ubuntu-24.04
+        permissions:
+            security-events: write
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
+
+            - name: Run zizmor
+              uses: zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2
+
     i18n:
         strategy:
             fail-fast: false
@@ -92,10 +110,12 @@ jobs:
                           labs|sliding_sync_description
                           settings|voip|noise_suppression_description
                           settings|voip|echo_cancellation_description
+                    - name: Element Desktop
+                      path: "apps/desktop"
                     - name: Shared Components
                       path: "packages/shared-components"
         name: "i18n Check (${{ matrix.name }})"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         permissions:
             pull-requests: read
         with:

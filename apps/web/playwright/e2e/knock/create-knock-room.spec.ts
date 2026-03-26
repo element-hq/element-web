@@ -48,7 +48,7 @@ test.describe("Create Knock Room", () => {
         await app.settings.openRoomSettings("Security & Privacy");
 
         const settingsGroup = page.getByRole("group", { name: "Access" });
-        await expect(settingsGroup.getByRole("radio", { name: "Private (invite only)" })).toBeChecked();
+        await expect(settingsGroup.getByRole("radio", { name: "Invite only" })).toBeChecked();
         await settingsGroup.getByText("Ask to join").click();
 
         // Room should have a knock join rule

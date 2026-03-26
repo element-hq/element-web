@@ -1250,8 +1250,6 @@
     },
     "labs": {
         "ask_to_join": "Alefaso ny fangatahana hiditra",
-        "automatic_debug_logs": "Alefaso ho azy ny log debug amin'ny lesoka rehetra",
-        "automatic_debug_logs_decryption": "Alefaso ho azy ny diarin'ny debug momba ny lesoka decryption",
         "beta_description": "Inona no manaraka%(brand)s ? Labs no fomba tsara indrindra hahazoana zavatra mialoha, hizaha toetra vaovao ary hanampy amin'ny famolavolana azy ireo alohany hanombohany.",
         "beta_feature": "Ity dia endri-javatra beta",
         "beta_feedback_leave_button": "Raha te hiala amin'ny beta dia tsidiho ny kiranao.",
@@ -1753,9 +1751,6 @@
         "joining_space": "Mikambana amin'ny habaka…",
         "jump_read_marker": "Hanketo amin'ny hafatra tsy novakiana voalohany.",
         "jump_to_bottom_button": "Mandehana mankany amin'ny hafatra farany indrindra",
-        "jump_to_date": "Hitsambikina hatramin'izao",
-        "jump_to_date_beginning": "Ny fiandohan'ny efitrano",
-        "jump_to_date_prompt": "Mifidiana daty hitsambikinana",
         "kick_reason": "Antony:%(reason)s",
         "kicked_by": "Nesorin'ny%(memberName)s",
         "kicked_from_room_by": "Nesorina tamin'ny%(roomName)s ny%(memberName)s",
@@ -2882,8 +2877,7 @@
             "voice_call_unsupported": "%(senderName)snametraka antso an-tariby. (tsy tohanan'ity toeram-pivohizana ity)"
         },
         "m.file": {
-            "error_decrypting": "Nisy olana teo am-pamakiana ny famaha",
-            "error_invalid": "Rakitra tsy mety %(Supplémentaires"
+            "error_decrypting": "Nisy olana teo am-pamakiana ny famaha"
         },
         "m.image": {
             "error": "Tsy afaka mampiseho sary noho ny fahadisoana",
@@ -3217,14 +3211,7 @@
             "one_user": "%(displayName)sdia manoratra",
             "two_users": "%(names)sSY%(lastPerson)s mitendry…"
         },
-        "undecryptable_tooltip": "Ity hafatra ity dia tsy azo decryption",
-        "url_preview": {
-            "close": "Akatona mialoha",
-            "show_n_more": {
-                "one": "FAMPISEHOANA%(count)s preview hafa",
-                "other": "FAMPISEHOANA%(count)s fijery hafa"
-            }
-        }
+        "undecryptable_tooltip": "Ity hafatra ity dia tsy azo decryption"
     },
     "truncated_list_n_more": {
         "one": "",

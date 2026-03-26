@@ -16,84 +16,29 @@ jobs:
         name: GitHub Pages
         runs-on: ubuntu-24.04
         steps:
-            - name: Fetch element-desktop
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
-                  repository: element-hq/element-desktop
-                  path: element-desktop
+                  persist-credentials: false
 
-            - name: Fetch element-web
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
               with:
-                  path: element-web
-
-            - name: Fetch matrix-js-sdk
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-              with:
-                  repository: matrix-org/matrix-js-sdk
-                  path: matrix-js-sdk
-
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-              with:
-                  package_json_file: element-web/package.json
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+                  package_json_file: package.json
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   cache: "pnpm"
-                  cache-dependency-path: element-web/pnpm-lock.yaml
+                  cache-dependency-path: pnpm-lock.yaml
                   node-version: "lts/*"
 
-            - name: Generate automations docs
-              working-directory: element-web
-              run: |
-                  pnpm install --frozen-lockfile
-                  pnpm node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
-                  echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
-
-            - name: Setup mdBook
-              uses: peaceiris/actions-mdbook@ee69d230fe19748b7abf22df32acaa93833fad08 # v2
-              with:
-                  mdbook-version: "0.5.1"
-
-            - name: Install mdbook extensions
-              run: cargo install mdbook-combiner mdbook-mermaid
-
-            - name: Prepare docs
-              run: |
-                  mkdir docs
-
-                  mv element-desktop/README.md element-desktop/docs/
-                  mv element-desktop/docs "docs/Element Desktop"
-
-                  mv element-web/README.md element-web/docs/
-                  mv element-web/docs/lib docs/
-                  mv element-web/docs "docs/Element Web"
-
-                  mv matrix-js-sdk/README.md matrix-js-sdk/docs/
-                  mv matrix-js-sdk/docs "docs/Matrix JS SDK"
-
-                  sed -i -e 's/\.\.\/README.md/README.md/' docs/**/SUMMARY.md
-
-                  mdbook-combiner -m docs
-                  sed -i -E 's/^\t# (.+)$/- [\1]()/gm;t' SUMMARY.md
-                  sed -i -E 's/^- \[(.+)]\(<>\)$/---\n# \1/gm;t' SUMMARY.md
-                  sed -i -E 's/\t- \[Introduction]/- [Introduction]/gm;t' SUMMARY.md
-
-                  cat <<EOF > docs/SUMMARY.md
-                  # Summary
-                  - [Introduction](<Element Web/README.md>)
-
-                  EOF
-                  cat SUMMARY.md >> docs/SUMMARY.md
-
-                  mv element-web/book.toml .
+            - name: Fetch layered build
+              run: ./scripts/layered.sh
 
             - name: Build docs
-              run: mdbook build
+              run: pnpm run docs:build
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
               with:
-                  path: ./book
+                  path: ./docs/.vitepress/dist
 
     deploy:
         environment:

@@ -108,7 +108,6 @@ export interface IConfigOptions {
      * Bug report endpoint URL. "local" means the logs should not be uploaded.
      */
     bug_report_endpoint_url?: typeof BugReportEndpointURLLocal | string; // omission disables bug reporting
-    uisi_autorageshake_app?: string; // defaults to "element-auto-uisi"
     sentry?: {
         dsn: string;
         environment?: string; // "production", etc

@@ -1472,8 +1472,6 @@
     },
     "labs": {
         "ask_to_join": "Włącz prośby o dołączenie",
-        "automatic_debug_logs": "Automatycznie wysyłaj logi debugowania po wystąpieniu jakiegokolwiek błędu",
-        "automatic_debug_logs_decryption": "Automatycznie wysyłaj logi debugowania po wystąpieniu błędów deszyfrowania",
         "beta_description": "Co następne dla %(brand)s? Laboratoria to najlepsze miejsce do przetestowania nowych funkcji i możliwość pomocy w testowaniu, zanim dotrą one do szerszego grona użytkowników.",
         "beta_feature": "To jest funkcja beta",
         "beta_feedback_leave_button": "Aby wyjść z bety, odwiedź swoje ustawienia.",
@@ -1529,7 +1527,6 @@
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
         "notifications": "Włącz panel powiadomień w nagłówku pokoju.",
-        "release_announcement": "Ogłoszenie o wydaniu",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
         "report_to_moderators": "Zgłoś do moderatorów",
@@ -2025,9 +2022,6 @@
         "joining_space": "Dołączanie do przestrzeni…",
         "jump_read_marker": "Skocz do pierwszej nieprzeczytanej wiadomości.",
         "jump_to_bottom_button": "Przewiń do najnowszych wiadomości",
-        "jump_to_date": "Przeskocz do daty",
-        "jump_to_date_beginning": "Początek pokoju",
-        "jump_to_date_prompt": "Wybierz datę do której przeskoczyć",
         "kick_reason": "Powód: %(reason)s",
         "kicked_by": "Zostałeś usunięty przez %(memberName)s",
         "kicked_from_room_by": "Zostałeś usunięty z %(roomName)s przez %(memberName)s",
@@ -2053,7 +2047,6 @@
         "not_found_title": "Ten pokój lub przestrzeń nie istnieje.",
         "not_found_title_name": "%(roomName)s nie istnieje.",
         "peek_join_prompt": "Przeglądasz %(roomName)s. Czy chcesz dołączyć do pokoju?",
-        "pinned_message_badge": "Przypięta wiadomość",
         "pinned_message_banner": {
             "button_close_list": "Zamknij listę",
             "button_view_all": "Pokaż wszystkie",
@@ -3361,8 +3354,7 @@
             "voice_call_unsupported": "%(senderName)s wykonał połączenie głosowe. (nie wspierane przez tę przeglądarkę)"
         },
         "m.file": {
-            "error_decrypting": "Błąd odszyfrowywania załącznika",
-            "error_invalid": "Nieprawidłowy plik"
+            "error_decrypting": "Błąd odszyfrowywania załącznika"
         },
         "m.image": {
             "error": "Nie można pokazać zdjęcia z powodu błędu",
@@ -3709,15 +3701,7 @@
             "one_user": "%(displayName)s pisze…",
             "two_users": "%(names)s i %(lastPerson)s piszą…"
         },
-        "undecryptable_tooltip": "Wiadomość nie mogła zostać rozszyfrowana",
-        "url_preview": {
-            "close": "Zamknij podgląd",
-            "show_n_more": {
-                "one": "Pokaż %(count)s inny podgląd",
-                "few": "Pokaż %(count)s inne podglądy",
-                "many": "Pokaż %(count)s innych podglądów"
-            }
-        }
+        "undecryptable_tooltip": "Wiadomość nie mogła zostać rozszyfrowana"
     },
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"

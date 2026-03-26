@@ -1230,7 +1230,6 @@
         "join_title_account": "הצטרף לשיחה עם חשבון",
         "jump_read_marker": "קפצו להודעה הראשונה שלא נקראה.",
         "jump_to_bottom_button": "גלול להודעות האחרונות",
-        "jump_to_date": "קיפצו לתאריך",
         "kick_reason": "סיבה: %(reason)s",
         "leave_error_title": "שגיאת נסיון לצאת מהחדר",
         "leave_server_notices_description": "החדר הזה משמש להודעות חשובות מהשרת ולכן אינכם יכולים לעזוב אותו.",
@@ -1972,8 +1971,7 @@
             "voice_call_unsupported": "%(senderName)s התחיל שיחה קולית. (אינו נתמך בדפדפן זה)"
         },
         "m.file": {
-            "error_decrypting": "שגיאה בפענוח קבצים מצורפים",
-            "error_invalid": "קובץ לא תקין %(extra)s"
+            "error_decrypting": "שגיאה בפענוח קבצים מצורפים"
         },
         "m.image": {
             "error_decrypting": "שגיאה בפענוח הודעה",
@@ -2240,9 +2238,6 @@
             },
             "one_user": "%(displayName)s כותב…",
             "two_users": "%(names)s ו%(lastPerson)s כותבים…"
-        },
-        "url_preview": {
-            "close": "סגור תצוגה מקדימה"
         }
     },
     "truncated_list_n_more": {

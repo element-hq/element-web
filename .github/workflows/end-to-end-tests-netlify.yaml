@@ -2,7 +2,9 @@
 # taking the artifact and uploading it to Netlify for easier viewing
 name: Upload End to End Test report to Netlify
 on:
-    workflow_run:
+    # Privilege escalation necessary to publish to Netlify
+    # 🚨 We must not execute any checked out code here.
+    workflow_run: # zizmor: ignore[dangerous-triggers]
         workflows: ["End to End Tests"]
         types:
             - completed
@@ -25,7 +27,7 @@ jobs:
             actions: read
         steps:
             - name: Download HTML report
-              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   run-id: ${{ github.event.workflow_run.id }}

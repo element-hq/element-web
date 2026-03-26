@@ -45,6 +45,8 @@ test.describe("Cryptography", function () {
 
                 // Log in again, and see how the message looks.
                 await logIntoElement(page, credentials);
+                // Dismiss the "Back up your chats" toast, otherwise it gets in the way of clicking the room list
+                await page.getByRole("button", { name: "Dismiss" }).click();
                 await app.viewRoomByName("Test room");
                 const lastTile = page.locator(".mx_EventTile").last();
                 await expect(lastTile).toContainText("Historical messages are not available on this device");

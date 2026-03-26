@@ -28,6 +28,7 @@ import CopyableText from "../elements/CopyableText";
 import RoomNotifications from "./devtools/RoomNotifications";
 import { Crypto } from "./devtools/Crypto";
 import SettingsField from "../elements/SettingsField.tsx";
+import { StickyStateExplorer } from "./devtools/StickyEventState.tsx";
 
 enum Category {
     Room,
@@ -49,6 +50,7 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
         [_td("devtools|notifications_debug"), RoomNotifications],
         [_td("devtools|active_widgets"), WidgetExplorer],
         [_td("devtools|users"), UserList],
+        [_td("devtools|explore_sticky_state"), StickyStateExplorer],
     ],
     [Category.Other]: [
         [_td("devtools|explore_account_data"), AccountDataExplorer],

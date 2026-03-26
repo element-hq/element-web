@@ -1438,8 +1438,6 @@
     },
     "labs": {
         "ask_to_join": "Aktivera fråga om att gå med",
-        "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
-        "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
         "beta_description": "Vad händer härnäst med %(brand)s? Experiment är det bästa sättet att få saker tidigt, pröva nya funktioner, och hjälpa till att forma dem innan de egentligen släpps.",
         "beta_feature": "Det här är en betafunktion",
         "beta_feedback_leave_button": "För att lämna betan, besök dina inställningar.",
@@ -1495,7 +1493,6 @@
         "notification_settings_beta_caption": "Vi introducerar ett enklare sätt att ändra dina aviseringsinställningar. Anpassa din %(brand)s precis som du vill ha den.",
         "notification_settings_beta_title": "Aviseringsinställningar",
         "notifications": "Aktivera aviseringspanelen i rumshuvudet",
-        "release_announcement": "Releasemeddelande",
         "render_reaction_images": "Återge anpassade bilder i reaktioner",
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "report_to_moderators": "Rapportera till moderatorer",
@@ -1986,9 +1983,6 @@
         "joining_space": "Går med i utrymme …",
         "jump_read_marker": "Hoppa till första olästa meddelandet.",
         "jump_to_bottom_button": "Skrolla till de senaste meddelandena",
-        "jump_to_date": "Hoppa till datum",
-        "jump_to_date_beginning": "Början av rummet",
-        "jump_to_date_prompt": "Välj ett datum att hoppa till",
         "kick_reason": "Anledning: %(reason)s",
         "kicked_by": "Du togs bort av %(memberName)s",
         "kicked_from_room_by": "Du togs bort från %(roomName)s av %(memberName)s",
@@ -2014,7 +2008,6 @@
         "not_found_title": "Det här rummet eller utrymmet finns inte.",
         "not_found_title_name": "%(roomName)s finns inte.",
         "peek_join_prompt": "Du förhandsgranskar %(roomName)s. Vill du gå med i det?",
-        "pinned_message_badge": "Fäst meddelande",
         "pinned_message_banner": {
             "button_close_list": "Stäng listan",
             "button_view_all": "Visa alla",
@@ -3304,8 +3297,7 @@
             "voice_call_unsupported": "%(senderName)s ringde ett röstsamtal. (stöds inte av denna webbläsare)"
         },
         "m.file": {
-            "error_decrypting": "Fel vid avkryptering av bilagan",
-            "error_invalid": "Ogiltig fil"
+            "error_decrypting": "Fel vid avkryptering av bilagan"
         },
         "m.image": {
             "error": "Kunde inte visa bild på grund av fel",
@@ -3366,7 +3358,7 @@
             "unknown": "%(senderDisplayName)s ändrade gäståtkomst till %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s gjorde framtida rumshistorik synligt för alla rumsmedlemmar från att de bjöds in.",
+            "invited": "%(senderName)s gjorde den framtida rumshistoriken synlig för alla rumsmedlemmar från det att de bjuds in.",
             "joined": "%(senderName)s gjorde framtida rumshistorik synligt för alla rumsmedlemmar fr.o.m. att de gick med som medlem.",
             "shared": "%(senderName)s gjorde framtida rumshistorik synligt för alla rumsmedlemmar.",
             "unknown": "%(senderName)s satte framtida rumshistorik till okänd synlighet (%(visibility)s).",
@@ -3646,14 +3638,7 @@
             "one_user": "%(displayName)s skriver …",
             "two_users": "%(names)s och %(lastPerson)s skriver …"
         },
-        "undecryptable_tooltip": "Det här meddelandet kunde inte avkrypteras",
-        "url_preview": {
-            "close": "Stäng förhandsgranskning",
-            "show_n_more": {
-                "one": "Visa %(count)s annan förhandsgranskning",
-                "other": "Visa %(count)s andra förhandsgranskningar"
-            }
-        }
+        "undecryptable_tooltip": "Det här meddelandet kunde inte avkrypteras"
     },
     "truncated_list_n_more": {
         "other": "Och %(count)s till…"

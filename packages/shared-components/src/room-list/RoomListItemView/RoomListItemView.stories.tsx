@@ -10,19 +10,20 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "./RoomListItemView";
-import { RoomListItemView, type RoomListItemSnapshot, type RoomListItemActions } from "./RoomListItemView";
+import { RoomListItemView, type RoomListItemViewSnapshot, type RoomListItemViewActions } from "./RoomListItemView";
 import { useMockedViewModel } from "../../viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { defaultSnapshot } from "./default-snapshot";
 import { renderAvatar } from "../story-mocks";
+import { mockedActions } from "./mocked-actions";
 
-type RoomListItemProps = RoomListItemSnapshot &
-    RoomListItemActions & {
+type RoomListItemProps = RoomListItemViewSnapshot &
+    RoomListItemViewActions & {
         isSelected: boolean;
         isFocused: boolean;
         onFocus: (room: Room, e: React.FocusEvent) => void;
-        roomIndex: number;
-        roomCount: number;
+        isFirstItem: boolean;
+        isLastItem: boolean;
         renderAvatar: (room: Room) => React.ReactElement;
     };
 
@@ -40,8 +41,8 @@ const RoomListItemWrapperImpl = ({
     isSelected,
     isFocused,
     onFocus,
-    roomIndex,
-    roomCount,
+    isFirstItem,
+    isLastItem,
     renderAvatar: renderAvatarProp,
     ...rest
 }: RoomListItemProps): JSX.Element => {
@@ -62,9 +63,10 @@ const RoomListItemWrapperImpl = ({
             isSelected={isSelected}
             isFocused={isFocused}
             onFocus={onFocus}
-            roomIndex={roomIndex}
-            roomCount={roomCount}
+            isFirstItem={isFirstItem}
+            isLastItem={isLastItem}
             renderAvatar={renderAvatarProp}
+            role="option"
         />
     );
 };
@@ -76,28 +78,18 @@ const meta = {
     tags: ["autodocs"],
     decorators: [
         (Story) => (
-            <div style={{ width: "320px", padding: "8px" }}>
-                <div role="listbox" aria-label="Room list">
-                    <Story />
-                </div>
+            <div role="listbox" aria-label="Room list" style={{ width: "320px", padding: "8px" }}>
+                <Story />
             </div>
         ),
     ],
     args: {
         ...defaultSnapshot,
+        ...mockedActions,
         isSelected: false,
         isFocused: false,
-        roomIndex: 1,
-        roomCount: 10,
-        onOpenRoom: fn(),
-        onMarkAsRead: fn(),
-        onMarkAsUnread: fn(),
-        onToggleFavorite: fn(),
-        onToggleLowPriority: fn(),
-        onInvite: fn(),
-        onCopyRoomLink: fn(),
-        onLeaveRoom: fn(),
-        onSetRoomNotifState: fn(),
+        isFirstItem: false,
+        isLastItem: false,
         onFocus: fn(),
         renderAvatar,
     },
@@ -263,14 +255,14 @@ export const WithZoom: Story = {
 
 export const FirstItem: Story = {
     args: {
-        roomIndex: 0,
+        isFirstItem: true,
         isSelected: true,
     },
 };
 
 export const LastItem: Story = {
     args: {
-        roomIndex: 9,
+        isLastItem: true,
         isSelected: true,
     },
 };

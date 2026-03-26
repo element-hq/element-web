@@ -182,10 +182,10 @@ test.describe("Timeline", () => {
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-irc-layout.png", {
                     css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -218,10 +218,10 @@ test.describe("Timeline", () => {
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-modern-layout.png", {
                     css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -260,7 +260,7 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-bubble-layout.png", {
                     // Exclude timestamp from snapshot
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
                     `,
@@ -280,7 +280,7 @@ test.describe("Timeline", () => {
                 // Save snapshot of collapsed generic event list summary on bubble layout
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("collapsed-gels-bubble-layout.png", {
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
                     `,
@@ -325,10 +325,10 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp and read marker from snapshot
                         css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -447,7 +447,7 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp from snapshot of mx_MainSplit
                         css: `
-                            .mx_MessageTimestamp {
+                            .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                                 visibility: hidden;
                             }
                         `,
@@ -523,10 +523,10 @@ test.describe("Timeline", () => {
                 const screenshotOptions = {
                     // Hide because flaky - See https://github.com/vector-im/element-web/issues/24957
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -651,10 +651,10 @@ test.describe("Timeline", () => {
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -779,7 +779,7 @@ test.describe("Timeline", () => {
             // Assert that the file size is displayed in kibibytes (1024 bytes), not kilobytes (1000 bytes)
             // See: https://github.com/vector-im/element-web/issues/24866
             await expect(
-                page.locator(".mx_EventTile_last .mx_MFileBody_info_filename").getByText(/1.12 KB/),
+                page.locator(".mx_EventTile_last .mx_MFileBody [data-type='info']").getByText(/1.12 KB/),
             ).toBeVisible();
         });
 
@@ -1131,10 +1131,10 @@ test.describe("Timeline", () => {
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
                 css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar,.mx_JumpToBottomButton {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -1259,10 +1259,10 @@ test.describe("Timeline", () => {
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -1325,10 +1325,10 @@ test.describe("Timeline", () => {
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
                 css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
