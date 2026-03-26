@@ -23,7 +23,7 @@
                 "context": "packages/playwright-common",
                 "metadata": {
                     "images": ["ghcr.io/element-hq/element-web/playwright-server"],
-                    "tags": ["type=raw,enable=true,value=$PLAYWRIGHT_VERSION"]
+                    "tags": ["type=raw,enable={{is_default_branch}},value=$PLAYWRIGHT_VERSION"]
                 }
             }
         }
