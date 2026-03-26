@@ -30,7 +30,8 @@
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
     },
     "left_panel": {
-        "open_dial_pad": "Ouvrir le pavé de numérotation"
+        "open_dial_pad": "Ouvrir le pavé de numérotation",
+        "separator_label": "Cliquez ou glissez pour agrandir"
     },
     "notifications": {
         "all_messages": "Tous les messages",

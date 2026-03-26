@@ -135,6 +135,7 @@ describe("EventTile", () => {
 
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
 
         mxEvent = mkMessage({
             room: room.roomId,
@@ -399,6 +400,34 @@ describe("EventTile", () => {
                 getUserIdForRoomId: jest.fn(),
             } as unknown as DMRoomMap;
             DMRoomMap.setShared(dmRoomMap);
+        });
+
+        it("renders the room name for notifications", () => {
+            const { container } = getComponent({}, TimelineRenderingType.Notification);
+            expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
+                "@alice:example.org in !roomId:example.org",
+            );
+        });
+
+        it("renders the sender for the thread list", () => {
+            const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
+            expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent("@alice:example.org");
+        });
+
+        it("renders the shared redacted body for thread previews", () => {
+            jest.spyOn(mxEvent, "isRedacted").mockReturnValue(true);
+            jest.spyOn(mxEvent, "getUnsigned").mockReturnValue({
+                redacted_because: {
+                    sender: "@moderator:example.org",
+                    origin_server_ts: Date.UTC(2022, 10, 17, 15, 58, 32),
+                },
+            } as any);
+
+            const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
+            const redactedBody = container.querySelector(".mx_RedactedBody");
+
+            expect(redactedBody).not.toBeNull();
+            expect(redactedBody).toHaveTextContent("Message deleted by @moderator:example.org");
         });
 
         it.each([

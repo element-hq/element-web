@@ -25,7 +25,12 @@ export default defineConfig({
         rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
-            external: ["@vector-im/compound-design-tokens", "@vector-im/compound-web", "react-virtuoso"],
+            external: [
+                "@vector-im/compound-design-tokens",
+                "@vector-im/compound-web",
+                "react-virtuoso",
+                "react-resizable-panels",
+            ],
             plugins: [
                 esmExternalRequirePlugin({
                     external: ["react", "react-dom"],
@@ -39,6 +44,7 @@ export default defineConfig({
                     "@vector-im/compound-design-tokens": "compoundDesignTokens",
                     "@vector-im/compound-web": "compoundWeb",
                     "react-virtuoso": "reactVirtuoso",
+                    "react-resizable-panels": "reactResizablePanels",
                 },
             },
         },
@@ -47,7 +53,7 @@ export default defineConfig({
         dts({
             rollupTypes: true,
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.test.{ts,tsx}"],
+            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
             copyDtsFiles: true,
         }),
     ],

@@ -30,7 +30,8 @@
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "left_panel": {
-        "open_dial_pad": "Open dial pad"
+        "open_dial_pad": "Open dial pad",
+        "separator_label": "Click or drag to expand"
     },
     "notifications": {
         "all_messages": "All messages",
