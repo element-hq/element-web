@@ -19,13 +19,13 @@ type WrapperProps = TileErrorViewSnapshot &
 
 const TileErrorViewWrapperImpl = ({
     className,
-    onBugReportClick,
-    onViewSourceClick,
+    onBugReportClick = fn(),
+    onViewSourceClick = fn(),
     ...snapshotProps
 }: WrapperProps): JSX.Element => {
     const vm = useMockedViewModel(snapshotProps, {
-        onBugReportClick: onBugReportClick ?? fn(),
-        onViewSourceClick: onViewSourceClick ?? fn(),
+        onBugReportClick,
+        onViewSourceClick,
     });
 
     return <TileErrorView vm={vm} className={className} />;
