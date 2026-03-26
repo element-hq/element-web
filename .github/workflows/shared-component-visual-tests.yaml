@@ -42,7 +42,7 @@ jobs:
               run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
