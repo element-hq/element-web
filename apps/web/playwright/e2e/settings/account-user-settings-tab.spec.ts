@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
-import { getSampleFilePath } from "../../sample-files";
 
 const USER_NAME = "Bob";
 const USER_NAME_NEW = "Alice";
@@ -86,7 +85,7 @@ test.describe("Account user settings tab", () => {
     test("should support adding and removing a profile picture", async ({ uut, page }) => {
         const profileSettings = uut.locator(".mx_UserProfileSettings");
         // Upload a picture
-        await profileSettings.getByAltText("Upload").setInputFiles(getSampleFilePath("riot.png"));
+        await profileSettings.getByAltText("Upload").setInputFiles("playwright/sample-files/riot.png");
 
         // Image should be visible
         await expect(profileSettings.locator(".mx_AvatarSetting_avatar img")).toBeVisible();

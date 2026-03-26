@@ -6,9 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import fs from "node:fs";
 
 import { test, expect } from "../../element-web-test";
-import { getSampleFilePath, readSampleFileSync } from "../../sample-files";
 
 const screenshotOptions = (page: Page) => ({
     // Hide the jump to bottom button in the timeline to avoid flakiness
@@ -26,7 +26,7 @@ const screenshotOptions = (page: Page) => ({
     `,
 });
 
-const IMAGE_FILE = readSampleFileSync("element.png", null);
+const IMAGE_FILE = fs.readFileSync("playwright/sample-files/element.png");
 
 test.describe("Custom Component API", () => {
     test.use({
@@ -36,7 +36,7 @@ test.describe("Custom Component API", () => {
         },
         page: async ({ page }, use) => {
             await page.route("/modules/custom-component-module.js", async (route) => {
-                await route.fulfill({ path: getSampleFilePath("custom-component-module.js") });
+                await route.fulfill({ path: "playwright/sample-files/custom-component-module.js" });
             });
             await use(page);
         },
