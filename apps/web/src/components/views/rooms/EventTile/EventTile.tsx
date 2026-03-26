@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 
-import { Layout } from "../../../settings/enums/Layout";
-import TileErrorBoundary from "../messages/TileErrorBoundary";
-import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } from "./EventTile/EventTilePresenter";
+import { Layout } from "../../../../settings/enums/Layout";
+import TileErrorBoundary from "../../messages/TileErrorBoundary";
+import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } from "./EventTilePresenter";
 
-export type { EventTileHandle } from "./EventTile/EventTilePresenter";
-export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./EventTile/types";
+export type { EventTileHandle } from "./EventTilePresenter";
+export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
 
 /** Props for {@link EventTile}. */
 export interface EventTileProps extends EventTilePresenterProps {
