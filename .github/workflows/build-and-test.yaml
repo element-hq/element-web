@@ -238,6 +238,12 @@ jobs:
             matrix:
                 sqlcipher: [system, static]
                 arch: [amd64, arm64]
+                runAllTests:
+                    - ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests') }}
+                # We ship static sqlcipher builds, so delegate testing the system builds to the merge queue
+                exclude:
+                    - runAllTests: false
+                      sqlcipher: system
         with:
             sqlcipher: ${{ matrix.sqlcipher }}
             arch: ${{ matrix.arch }}
