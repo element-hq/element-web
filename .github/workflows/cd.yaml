@@ -58,7 +58,7 @@ jobs:
               id: build
               env:
                   INPUT_PUSH: false # TODO
-                  INPUT_PULL: false
+                  INPUT_LOAD: false
                   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
