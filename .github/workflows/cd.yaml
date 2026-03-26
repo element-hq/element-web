@@ -54,7 +54,7 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - run: pnpm nx run-many -t docker:build
+            - run: pnpm nx run-many --nxBail -t docker:build
               id: build
               env:
                   INPUT_PUSH: true
