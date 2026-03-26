@@ -200,9 +200,7 @@ export class RoomListItemViewModel
      */
     private async loadAndSetMessagePreview(): Promise<void> {
         const messagePreview = await this.loadMessagePreview();
-        if (messagePreview !== this.snapshot.current.messagePreview) {
-            this.snapshot.merge({ messagePreview });
-        }
+        this.snapshot.merge({ messagePreview });
     }
 
     /**

@@ -73,8 +73,6 @@ export class RedactedBodyViewModel
             "showTwelveHourTimestamps",
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                if (this.showTwelveHour === newVal) return;
-
                 this.showTwelveHour = newVal;
                 this.updateTooltip();
             },
@@ -83,30 +81,15 @@ export class RedactedBodyViewModel
     }
 
     public setEvent(mxEvent: MatrixEvent): void {
-        if (this.props.mxEvent === mxEvent) return;
-
         this.props = { ...this.props, mxEvent };
 
         const text = RedactedBodyViewModel.computeText(this.props);
         const tooltip = RedactedBodyViewModel.computeTooltip(this.props.mxEvent, this.showTwelveHour);
-        const updates: Partial<RedactedBodyViewSnapshot> = {};
-
-        if (this.snapshot.current.text !== text) {
-            updates.text = text;
-        }
-        if (this.snapshot.current.tooltip !== tooltip) {
-            updates.tooltip = tooltip;
-        }
-
-        if (Object.keys(updates).length > 0) {
-            this.snapshot.merge(updates);
-        }
+        this.snapshot.merge({ text, tooltip });
     }
 
     private updateTooltip(): void {
         const tooltip = RedactedBodyViewModel.computeTooltip(this.props.mxEvent, this.showTwelveHour);
-        if (this.snapshot.current.tooltip !== tooltip) {
-            this.snapshot.merge({ tooltip });
-        }
+        this.snapshot.merge({ tooltip });
     }
 }
