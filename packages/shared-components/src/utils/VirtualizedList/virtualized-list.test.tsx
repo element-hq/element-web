@@ -379,12 +379,13 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // Then press PageUp to jump up by viewport size
             fireEvent.keyDown(container, { code: "PageUp" });
 
-            // Verify focus moved up
-            const items = container.querySelectorAll(".mx_item");
-            // PageUp should move back to the first item since we only have 4 items
-            expectTabIndex(items[0], "0");
-            const lastIndex = items.length - 1;
-            expectTabIndex(items[lastIndex], "-1");
+            // Verify focus moved up – use the variant's navigable selector so
+            // group headers (which are also navigable) are included.
+            const allNav = container.querySelectorAll(variant.navigableSelector);
+            // PageUp should move back to the first navigable element since we only have a few items
+            expectTabIndex(allNav[0], "0");
+            const lastIndex = allNav.length - 1;
+            expectTabIndex(allNav[lastIndex], "-1");
         });
 
         it("should not handle keyboard navigation when modifier keys are pressed", () => {

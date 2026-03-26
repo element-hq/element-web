@@ -20,7 +20,6 @@ import { RoomNotificationState } from "../../../src/stores/notifications/RoomNot
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../../src/stores/notifications/NotificationState";
 import { type MessagePreview, MessagePreviewStore } from "../../../src/stores/message-preview";
-import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
@@ -200,7 +199,7 @@ describe("RoomListItemViewModel", () => {
                 text: "Updated message",
             } as MessagePreview);
 
-            MessagePreviewStore.instance.emit(UPDATE_EVENT);
+            MessagePreviewStore.instance.emit(MessagePreviewStore.getPreviewChangedEventName(room));
 
             await flushPromises();
             expect(viewModel.getSnapshot().messagePreview).toBe("Updated message");
