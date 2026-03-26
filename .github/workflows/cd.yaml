@@ -1,7 +1,7 @@
 name: CD # Continuous Delivery
 on:
     push:
-        branches: [master, staging, develop, t3chguy/cd]
+        branches: [master, staging, develop]
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 
 permissions: {}
@@ -21,11 +21,6 @@ jobs:
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
-                  # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-                  fetch-depth: 0
-                  # reduce the size of the checkout with tree filtering,
-                  # see https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/
-                  filter: tree:0
                   persist-credentials: false
 
             - name: Install Cosign
