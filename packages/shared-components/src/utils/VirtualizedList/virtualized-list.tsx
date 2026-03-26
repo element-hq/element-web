@@ -180,19 +180,12 @@ export function useVirtualizedList<Item, Context>(
     /** Range of currently visible items in the viewport */
     const [visibleRange, setVisibleRange] = useState<ListRange | undefined>(undefined);
     /** Map from item keys to their indices in the items array */
-    const [keyToIndexMap, setKeyToIndexMap] = useState<Map<string, number>>(new Map());
-    /** Whether the list is currently focused */
-    const [isFocused, setIsFocused] = useState<boolean>(false);
-
-    // Update the key-to-index mapping whenever items change
-    useEffect(() => {
-        const newKeyToIndexMap = new Map<string, number>();
-        items.forEach((item, index) => {
-            const key = getItemKey(item);
-            newKeyToIndexMap.set(key, index);
-        });
-        setKeyToIndexMap(newKeyToIndexMap);
+    const keyToIndexMap = useMemo(() => {
+        const map = new Map<string, number>();
+        items.forEach((item, index) => map.set(getItemKey(item), index));
+        return map;
     }, [items, getItemKey]);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
     // Ensure the tabIndexKey is set if there is none already or if the existing key is no longer displayed
     useEffect(() => {

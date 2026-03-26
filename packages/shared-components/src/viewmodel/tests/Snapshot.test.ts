@@ -40,4 +40,20 @@ describe("Snapshot", () => {
         snapshot.merge({ key2: 10 });
         expect(snapshot.current).toStrictEqual({ key1: "foo", key2: 10, key3: false });
     });
+
+    it("should not emit when merged values are unchanged", () => {
+        const emit = vi.fn();
+        const snapshot = new Snapshot<TestSnapshot>({ key1: "foo", key2: 5, key3: false }, emit);
+        snapshot.merge({ key1: "foo", key2: 5 });
+        expect(emit).not.toHaveBeenCalled();
+        expect(snapshot.current).toStrictEqual({ key1: "foo", key2: 5, key3: false });
+    });
+
+    it("should emit when at least one merged value differs", () => {
+        const emit = vi.fn();
+        const snapshot = new Snapshot<TestSnapshot>({ key1: "foo", key2: 5, key3: false }, emit);
+        snapshot.merge({ key1: "foo", key2: 10 });
+        expect(emit).toHaveBeenCalledTimes(1);
+        expect(snapshot.current).toStrictEqual({ key1: "foo", key2: 10, key3: false });
+    });
 });
