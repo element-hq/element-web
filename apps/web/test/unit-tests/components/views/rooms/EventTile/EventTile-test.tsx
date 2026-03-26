@@ -30,7 +30,8 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
-import EventTile, {
+import {
+    EventTile,
     type EventTileHandle,
     type EventTileProps,
 } from "../../../../../../src/components/views/rooms/EventTile";
@@ -52,6 +53,7 @@ import { Action } from "../../../../../../src/dispatcher/actions";
 import PinningUtils from "../../../../../../src/utils/PinningUtils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
 import { DecryptionFailureTracker } from "../../../../../../src/DecryptionFailureTracker";
+import SettingsStore from "../../../../../../src/settings/SettingsStore.ts";
 
 jest.mock("../../../../../../src/utils/EventRenderingUtils", () => ({
     ...jest.requireActual("../../../../../../src/utils/EventRenderingUtils"),

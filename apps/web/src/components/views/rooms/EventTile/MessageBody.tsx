@@ -11,10 +11,9 @@ import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { renderTile, type EventTileTypeProps } from "../../../../events/EventTileFactory";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
-import RedactedBody from "../../messages/RedactedBody";
 import { EventPreview } from "../EventPreview";
-import { DecryptionFailureBody } from "./DecryptionFailureBody";
 import type { EventTileOps } from "./types";
+import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../../messages/MBodyFactory";
 
 export type MessageBodyRenderTileProps = Omit<
     EventTileTypeProps,
@@ -50,11 +49,11 @@ export function MessageBody({
         timelineRenderingType === TimelineRenderingType.ThreadsList
     ) {
         if (mxEvent.isRedacted()) {
-            return <RedactedBody mxEvent={mxEvent} />;
+            return <RedactedBodyFactory mxEvent={mxEvent} />;
         }
 
         if (mxEvent.isDecryptionFailure()) {
-            return <DecryptionFailureBody mxEvent={mxEvent} />;
+            return <DecryptionFailureBodyFactory mxEvent={mxEvent} />;
         }
 
         return <EventPreview mxEvent={mxEvent} />;
