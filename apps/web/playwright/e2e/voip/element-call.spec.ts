@@ -189,25 +189,31 @@ test.describe("Element Call", () => {
             expect(hash.get("skipLobby")).toEqual("true");
         });
 
-        test("should be able to join a call in progress", async ({ page, user, bot, room, app }) => {
-            await app.viewRoomById(room.roomId);
-            // Allow bob to create a call
-            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-            await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
-            // Fake a start of a call
-            await sendRTCState(bot, room.roomId);
-            const button = page.getByTestId("join-call-button");
-            await expect(button).toBeInViewport({ timeout: 5000 });
-            // And test joining
-            await button.click();
-            const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
-            const url = new URL(frameUrlStr);
-            const hash = new URLSearchParams(url.hash.slice(1));
-            assertCommonCallParameters(url.searchParams, hash, user, room);
+        ["voice", "video"].forEach((callType) => {
+            test(`should be able to join a ${callType} call in progress`, async ({ page, user, bot, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                // Allow bob to create a call
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+                // Fake a start of a call
+                await sendRTCState(bot, room.roomId, undefined, callType === "voice" ? "audio" : "video");
+                const button = page.getByTestId("join-call-button");
+                await expect(button).toBeInViewport({ timeout: 5000 });
+                // Room list should show that a call is ongoing
+                await expect(
+                    page.getByRole("option", { name: `Open room TestRoom with a ${callType} call.` }),
+                ).toBeVisible();
+                // And test joining
+                await button.click();
+                const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                await expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr);
+                const hash = new URLSearchParams(url.hash.slice(1));
+                assertCommonCallParameters(url.searchParams, hash, user, room);
 
-            expect(hash.get("intent")).toEqual("join_existing");
-            expect(hash.get("skipLobby")).toEqual(null);
+                expect(hash.get("intent")).toEqual("join_existing");
+                expect(hash.get("skipLobby")).toEqual(null);
+            });
         });
 
         [true, false].forEach((skipLobbyToggle) => {
