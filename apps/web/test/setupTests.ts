@@ -73,19 +73,20 @@ require("./setup/setupConfig");
 // In HTML, <form> cannot be a descendant of <form>.
 // In HTML, text nodes cannot be a child of <thead>.
 // This will cause a hydration error.
+// You provided a `checked` prop to a form field without an `onChange` handler.
 let errors: any[] = [];
 beforeEach(() => {
     errors = [];
     const originalError = console.error;
     jest.spyOn(console, "error").mockImplementation((...args) => {
-        if (/validateDOMNesting|Hydration failed|hydration error/i.test(args[0])) {
+        if (/validateDOMNesting|Hydration failed|hydration error|prop to a form field without an/i.test(args[0])) {
             errors.push(args[0]);
         }
         originalError.call(console, ...args);
     });
 });
 afterEach(() => {
-    mocked(console.error).mockRestore();
+    mocked(console.error).mockRestore?.();
     if (errors.length > 0) {
         throw new Error("Test failed due to React hydration errors in the console.");
     }
