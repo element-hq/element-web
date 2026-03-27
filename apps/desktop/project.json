@@ -5,15 +5,14 @@
     "targets": {
         "docker:build": {
             "executor": "@nx-tools/nx-container:build",
-            "dependsOn": ["docker:prebuild"],
             "options": {
                 "load": true,
                 "engine": "docker",
                 "platforms": ["linux/amd64", "linux/arm64"],
                 "provenance": "true",
                 "sbom": true,
-                "context": "apps/desktop",
-                "file": "apps/desktop/dockerbuild/Dockerfile",
+                "context": "{projectRoot}",
+                "file": "{projectRoot}/dockerbuild/Dockerfile",
                 "metadata": {
                     "images": ["ghcr.io/element-hq/element-web/desktop-build-env"],
                     "tags": ["type=ref,event=branch"]
