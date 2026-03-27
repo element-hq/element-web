@@ -184,6 +184,10 @@ const Tile: React.FC<ITileProps> = ({
                     aria-labelledby={checkboxLabelId}
                     checked={!!selected}
                     tabIndex={-1}
+                    onChange={(e) => {
+                        e.stopPropagation();
+                        onToggleClick();
+                    }}
                 />
             );
         } else {
