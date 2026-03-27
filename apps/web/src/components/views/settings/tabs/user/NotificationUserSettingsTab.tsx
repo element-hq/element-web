@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Form } from "@vector-im/compound-web";
 
 import { Features } from "../../../../../settings/Settings";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -26,14 +25,7 @@ export default class NotificationUserSettingsTab extends React.Component {
                     <NotificationSettings2 />
                 ) : (
                     <SettingsSection>
-                        <Form.Root
-                            onSubmit={(evt) => {
-                                evt.preventDefault();
-                                evt.stopPropagation();
-                            }}
-                        >
-                            <Notifications />
-                        </Form.Root>
+                        <Notifications />
                     </SettingsSection>
                 )}
             </SettingsTab>

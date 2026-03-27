@@ -27,7 +27,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                   checked=""
                   class="_input_udcm8_24"
                   disabled=""
-                  id="_r_0_"
+                  id="_r_1f_"
                   role="switch"
                   type="checkbox"
                 />
@@ -41,7 +41,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             >
               <label
                 class="_label_19upo_59"
-                for="_r_0_"
+                for="_r_1f_"
               >
                 Enable notifications for this account
               </label>
@@ -786,7 +786,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_11_"
+                        aria-describedby="_r_2g_"
                         checked=""
                         class="_input_153f2_18"
                         disabled=""
@@ -826,7 +826,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_11_"
+                      id="_r_2g_"
                     >
                       Enter keywords here, or use for spelling variations or nicknames
                     </span>

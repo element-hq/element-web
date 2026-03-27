@@ -651,7 +651,16 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
         // If all the rules are inhibited, don't show anything.
         if (this.isInhibited) {
-            return masterSwitch;
+            return (
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    {masterSwitch}
+                </Form.Root>
+            );
         }
 
         const emailSwitches = (this.state.threepids || [])
@@ -669,19 +678,26 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
         return (
             <SettingsSubsection>
-                {masterSwitch}
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
+                    {masterSwitch}
 
-                <SettingsFlag name="deviceNotificationsEnabled" level={SettingLevel.DEVICE} />
+                    <SettingsFlag name="deviceNotificationsEnabled" level={SettingLevel.DEVICE} />
 
-                {this.state.deviceNotificationsEnabled && (
-                    <>
-                        <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
-                        <SettingsFlag name="notificationBodyEnabled" level={SettingLevel.DEVICE} />
-                        <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
-                    </>
-                )}
+                    {this.state.deviceNotificationsEnabled && (
+                        <>
+                            <SettingsFlag name="notificationsEnabled" level={SettingLevel.DEVICE} />
+                            <SettingsFlag name="notificationBodyEnabled" level={SettingLevel.DEVICE} />
+                            <SettingsFlag name="audioNotificationsEnabled" level={SettingLevel.DEVICE} />
+                        </>
+                    )}
 
-                {emailSwitches}
+                    {emailSwitches}
+                </Form.Root>
             </SettingsSubsection>
         );
     }

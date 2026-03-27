@@ -18,7 +18,6 @@ import {
     RuleId,
 } from "matrix-js-sdk/src/matrix";
 import React from "react";
-import { Form } from "@vector-im/compound-web";
 
 import NotificationSettings2 from "../../../../../../src/components/views/settings/notifications/NotificationSettings2";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
@@ -168,9 +167,7 @@ describe("<Notifications />", () => {
             const user = userEvent.setup();
             const screen = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <Form.Root>
-                        <NotificationSettings2 />
-                    </Form.Root>
+                    <NotificationSettings2 />
                 </MatrixClientContext.Provider>,
             );
             await act(waitForUpdate);
@@ -186,9 +183,7 @@ describe("<Notifications />", () => {
             const user = userEvent.setup();
             const screen = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <Form.Root>
-                        <NotificationSettings2 />
-                    </Form.Root>
+                    <NotificationSettings2 />
                 </MatrixClientContext.Provider>,
             );
             await act(waitForUpdate);
@@ -226,9 +221,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -263,9 +256,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -294,9 +285,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -321,9 +310,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -345,9 +332,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -375,9 +360,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -401,9 +384,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -425,9 +406,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -455,9 +434,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -481,9 +458,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -510,9 +485,7 @@ describe("<Notifications />", () => {
                 const user = userEvent.setup();
                 const screen = render(
                     <MatrixClientContext.Provider value={cli}>
-                        <Form.Root>
-                            <NotificationSettings2 />
-                        </Form.Root>
+                        <NotificationSettings2 />
                     </MatrixClientContext.Provider>,
                 );
                 await act(waitForUpdate);
@@ -531,9 +504,7 @@ describe("<Notifications />", () => {
             const user = userEvent.setup();
             const screen = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <Form.Root>
-                        <NotificationSettings2 />
-                    </Form.Root>
+                    <NotificationSettings2 />
                 </MatrixClientContext.Provider>,
             );
             await act(waitForUpdate);
@@ -644,9 +615,7 @@ describe("<Notifications />", () => {
             const user = userEvent.setup();
             const screen = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <Form.Root>
-                        <NotificationSettings2 />
-                    </Form.Root>
+                    <NotificationSettings2 />
                 </MatrixClientContext.Provider>,
             );
             await act(waitForUpdate);
@@ -705,9 +674,7 @@ describe("<Notifications />", () => {
             const user = userEvent.setup();
             const screen = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <Form.Root>
-                        <NotificationSettings2 />
-                    </Form.Root>
+                    <NotificationSettings2 />
                 </MatrixClientContext.Provider>,
             );
             await act(waitForUpdate);
@@ -727,9 +694,7 @@ describe("<Notifications />", () => {
 
             const { container } = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <Form.Root>
-                        <NotificationSettings2 />
-                    </Form.Root>
+                    <NotificationSettings2 />
                 </MatrixClientContext.Provider>,
             );
             await waitForUpdate();
@@ -756,9 +721,7 @@ describe("<Notifications />", () => {
             const user = userEvent.setup();
             const { container } = render(
                 <MatrixClientContext.Provider value={cli}>
-                    <Form.Root>
-                        <NotificationSettings2 />
-                    </Form.Root>
+                    <NotificationSettings2 />
                 </MatrixClientContext.Provider>,
             );
             await waitForUpdate();
