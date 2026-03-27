@@ -38,3 +38,6 @@ storybook-static
 .nx/workspace-data
 
 .pnpm-store
+
+# Local Netlify folder
+.netlify

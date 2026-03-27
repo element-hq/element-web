@@ -154,6 +154,7 @@ function useDocumentSync(
     // any delta timeline events that arrived after the snapshot so we catch
     // up to the latest state even if the snapshot is stale.
     useEffect(() => {
+        logger.info(`[DocumentView] Load effect running, isCollaborative=${isCollaborative(composerModel)}, model=${composerModel != null}`);
         if (!isCollaborative(composerModel)) {
             setIsLoaded(true);
             return;
@@ -334,16 +335,20 @@ function useDocumentSync(
      * Matrix) are entirely independent so neither path affects the other.
      */
     const scheduleDeltaSend = useCallback(() => {
+        logger.info(`[DocumentView] scheduleDeltaSend called, isCollaborative=${isCollaborative(composerModel)}`);
         if (!isCollaborative(composerModel)) return;
 
         // ── Channel 1: RTC — immediate, every keystroke ───────────────────
         const rtc = rtcRef.current;
+        logger.info(`[DocumentView] RTC check: rtc=${!!rtc}, isConnected=${rtc?.isConnected}`);
         if (rtc?.isConnected) {
             try {
                 const rtcDelta = composerModel.save_after(lastRtcHeadsRef.current);
+                logger.info(`[DocumentView] save_after produced ${rtcDelta.length}b delta`);
                 if (rtcDelta.length > 0) {
                     rtc.publishDelta(rtcDelta);
                     lastRtcHeadsRef.current = composerModel.get_heads();
+                    logger.info(`[DocumentView] Published RTC delta, new heads=${JSON.stringify(lastRtcHeadsRef.current)}`);
                 }
             } catch (e) {
                 logger.warn("[DocumentView] Failed to publish RTC delta", e);
@@ -351,6 +356,7 @@ function useDocumentSync(
         }
 
         // ── Channel 2: Matrix — debounced, persistent ─────────────────────
+        logger.info(`[DocumentView] Setting saveStatus → editing, rtcConnected=${rtc?.isConnected}`);
         setSaveStatus("editing");
         if (savedClearTimer.current !== null) {
             clearTimeout(savedClearTimer.current);
@@ -503,10 +509,13 @@ export const DocumentView = memo(function DocumentView({ room }: DocumentViewPro
     const prevContentRef = useRef(content);
     useEffect(() => {
         if (content !== prevContentRef.current) {
+            logger.info(`[DocumentView] content changed (len ${content?.length ?? 'null'} ← ${prevContentRef.current?.length ?? 'null'}), isLoaded=${isLoaded}`);
             prevContentRef.current = content;
             setHasContent(Boolean(ref.current?.textContent?.trim()));
             if (isLoaded) {
                 scheduleDeltaSend();
+            } else {
+                logger.warn("[DocumentView] Skipping scheduleDeltaSend — not loaded yet");
             }
         }
     }, [content, isLoaded, scheduleDeltaSend, ref]);
