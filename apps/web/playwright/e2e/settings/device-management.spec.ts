@@ -23,7 +23,7 @@ test.describe("Device manager", () => {
         }
     });
 
-    test("should display sessions", async ({ page, app }) => {
+    test("should display sessions", async ({ page, app, axe }) => {
         await app.settings.openUserSettings("Sessions");
         const tab = page.locator(".mx_SettingsTab");
 
@@ -96,5 +96,7 @@ test.describe("Device manager", () => {
         // no other sessions or security recommendations sections when only one session
         await expect(tab.getByText("Other sessions")).not.toBeVisible();
         await expect(tab.getByTestId("security-recommendations-section")).not.toBeVisible();
+
+        await expect(axe).toHaveNoViolations();
     });
 });

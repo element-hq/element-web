@@ -20,7 +20,7 @@ test.describe("General room settings tab", () => {
         await app.viewRoomByName(roomName);
     });
 
-    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, app }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, app, axe }) => {
         const settings = await app.settings.openRoomSettings("General");
 
         // Assert that "Show less" details element is rendered
@@ -34,6 +34,8 @@ test.describe("General room settings tab", () => {
         // Assert that "Show more" details element is rendered instead of "Show more"
         await expect(settings.getByText("Show less")).not.toBeVisible();
         await expect(settings.getByText("Show more")).toBeVisible();
+
+        await expect(axe).toHaveNoViolations();
     });
 
     test("long address should not cause dialog to overflow", { tag: "@no-webkit" }, async ({ page, app, user }) => {
