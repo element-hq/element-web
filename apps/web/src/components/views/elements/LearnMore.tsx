@@ -13,7 +13,7 @@ import Modal from "../../../Modal";
 import InfoDialog from "../dialogs/InfoDialog";
 import AccessibleButton, { type ButtonProps } from "./AccessibleButton";
 
-type Props = Omit<ButtonProps<"div">, "element" | "kind" | "onClick" | "className"> & {
+type Props = Omit<ButtonProps<"button">, "element" | "kind" | "onClick" | "className"> & {
     title: string;
     description: string | React.ReactNode;
 };
