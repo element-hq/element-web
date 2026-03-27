@@ -35,7 +35,7 @@
         "testcontainers": "^11.0.0",
         "matrix-widget-api": "^1.17.0",
         "qs": "6.15.0",
-        "serialize-javascript": "7.0.4",
+        "serialize-javascript": "7.0.5",
         "atomically": "2.1.1",
         "@types/node": "18.19.130",
         "config-file-ts": "0.2.8-rc1",
