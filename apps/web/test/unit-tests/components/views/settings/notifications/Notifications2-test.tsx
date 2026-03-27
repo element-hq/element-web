@@ -94,9 +94,7 @@ describe("<Notifications />", () => {
 
         const screen = render(
             <MatrixClientContext.Provider value={cli}>
-                <Form.Root>
-                    <NotificationSettings2 />
-                </Form.Root>
+                <NotificationSettings2 />
             </MatrixClientContext.Provider>,
         );
         await act(waitForUpdate);
@@ -109,9 +107,7 @@ describe("<Notifications />", () => {
         const user = userEvent.setup();
         const screen = render(
             <MatrixClientContext.Provider value={cli}>
-                <Form.Root>
-                    <NotificationSettings2 />
-                </Form.Root>
+                <NotificationSettings2 />
             </MatrixClientContext.Provider>,
         );
         await act(async () => {

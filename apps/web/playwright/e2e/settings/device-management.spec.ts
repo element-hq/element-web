@@ -85,7 +85,7 @@ test.describe("Device manager", () => {
         // session name updated in details
         await expect(firstSession.locator(".mx_DeviceDetailHeading h4").getByText(sessionName)).toBeVisible();
         // and main list item
-        await expect(firstSession.locator(".mx_DeviceTile h4").getByText(sessionName)).toBeVisible();
+        await expect(firstSession.locator(".mx_DeviceTile h3").getByText(sessionName)).toBeVisible();
 
         // sign out using the device details sign out
         await firstSession.getByRole("button", { name: "Remove this session" }).click();
