@@ -15,11 +15,11 @@ import type ResizeNotifier from "../../utils/ResizeNotifier";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomHeader from "../views/rooms/RoomHeader/RoomHeader.tsx";
 import ScrollPanel from "./ScrollPanel";
-import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { UnwrappedEventTile } from "../views/rooms/EventTile";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext.tsx";
+import { StartChat } from "../views/rooms/StartChat.tsx";
 
 interface Props {
     roomView: RefObject<HTMLElement | null>;
@@ -49,7 +49,7 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                                 title={_t("room|waiting_for_join_title", { brand })}
                                 subtitle={_t("room|waiting_for_join_subtitle", { brand })}
                             />
-                            <NewRoomIntro />
+                            <StartChat />
                             <UnwrappedEventTile mxEvent={inviteEvent} />
                         </ScrollPanel>
                     </div>
