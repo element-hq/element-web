@@ -9,7 +9,6 @@ import React from "react";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { render, screen } from "jest-matrix-react";
 import { waitFor } from "@testing-library/dom";
-import { Form } from "@vector-im/compound-web";
 
 import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../test-utils";
 import { UrlPreviewSettings } from "../../../../../src/components/views/room_settings/UrlPreviewSettings.tsx";
@@ -31,12 +30,7 @@ describe("UrlPreviewSettings", () => {
     });
 
     function renderComponent() {
-        return render(
-            <Form.Root>
-                <UrlPreviewSettings room={room} />
-            </Form.Root>,
-            withClientContextRenderOptions(client),
-        );
+        return render(<UrlPreviewSettings room={room} />, withClientContextRenderOptions(client));
     }
 
     it("should display the correct preview when the setting is in a loading state", () => {

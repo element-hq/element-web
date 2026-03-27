@@ -19,14 +19,14 @@ exports[`<EmailIdentityAuthEntry/> should render 1`] = `
     >
       <span>
         Did not receive it? 
-        <div
+        <a
           aria-label="Resend"
           class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           role="button"
           tabindex="0"
         >
           Resend it
-        </div>
+        </a>
       </span>
     </p>
   </div>

@@ -124,11 +124,11 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Message search
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content"
@@ -186,11 +186,11 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 How to find you
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
@@ -264,11 +264,11 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Ignored users
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content"
