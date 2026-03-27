@@ -15,6 +15,11 @@ interface IProps {
     size?: number;
     message?: string;
     onFinished: any; // XXX: Spinner pretends to be a dialog so it must accept an onFinished, but it never calls it
+    /**
+     * Whether to render the content in a div or span.
+     * @default "div"
+     */
+    as?: "span" | "div";
 }
 
 export default class Spinner extends React.PureComponent<IProps> {
@@ -23,16 +28,16 @@ export default class Spinner extends React.PureComponent<IProps> {
     };
 
     public render(): React.ReactNode {
-        const { size, message } = this.props;
+        const { size, message, as: Component = "div" } = this.props;
         return (
-            <div className="mx_Spinner">
+            <Component className="mx_Spinner">
                 {message && (
                     <React.Fragment>
                         <div className="mx_Spinner_Msg">{message}</div>&nbsp;
                     </React.Fragment>
                 )}
                 <InlineSpinner size={size} aria-label={_t("common|loading")} role="progressbar" data-testid="spinner" />
-            </div>
+            </Component>
         );
     }
 }

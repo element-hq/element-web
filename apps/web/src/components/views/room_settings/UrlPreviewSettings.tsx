@@ -91,7 +91,7 @@ function Description({ isEncrypted }: DescriptionProps): JSX.Element {
     } else {
         const button = {
             a: (sub: string) => (
-                <AccessibleButton kind="link_inline" onClick={onClickUserSettings}>
+                <AccessibleButton element="a" kind="link_inline" onClick={onClickUserSettings}>
                     {sub}
                 </AccessibleButton>
             ),

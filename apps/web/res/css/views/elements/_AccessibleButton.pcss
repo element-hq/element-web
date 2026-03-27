@@ -9,6 +9,11 @@ Please see LICENSE files in the repository root for full details.
 .mx_AccessibleButton {
     cursor: pointer;
 
+    button& {
+        /* Clear default button styling */
+        all: unset;
+    }
+
     &.mx_AccessibleButton_disabled {
         cursor: not-allowed;
 

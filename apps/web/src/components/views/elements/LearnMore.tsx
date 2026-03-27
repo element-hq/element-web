@@ -29,7 +29,13 @@ const LearnMore: React.FC<Props> = ({ title, description, ...rest }) => {
     };
 
     return (
-        <AccessibleButton {...rest} kind="link_inline" onClick={onClick} className="mx_LearnMore_button">
+        <AccessibleButton
+            {...rest}
+            element="button"
+            kind="link_inline"
+            onClick={onClick}
+            className="mx_LearnMore_button"
+        >
             {_t("action|learn_more")}
         </AccessibleButton>
     );
