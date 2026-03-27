@@ -20,6 +20,11 @@ export type Translations = Record<
 
 /**
  * The value a variable or tag can take for a translation interpolation.
+ *
+ * When used as a function, `sub` is the text content wrapped between the tag
+ * in the translation string. For example, given `"Click <a>here</a>"`, the
+ * function receives `"here"` and should return a `ReactNode` wrapping it.
+ *
  * @public
  */
 export type SubstitutionValue = number | string | ReactNode | ((sub: string) => ReactNode);
