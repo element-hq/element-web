@@ -59,10 +59,15 @@ export function useCollapseFilters<T extends HTMLElement>(
         };
 
         hideFilters(ref.current);
-        const observer = new ResizeObserver((entries) => entries.forEach((entry) => hideFilters(entry.target)));
+        let rafId = 0;
+        const observer = new ResizeObserver((entries) => {
+            cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => entries.forEach((entry) => hideFilters(entry.target)));
+        });
 
         observer.observe(ref.current);
         return () => {
+            cancelAnimationFrame(rafId);
             observer.disconnect();
         };
     }, [isExpanded, wrappingClassName]);

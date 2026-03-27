@@ -408,7 +408,7 @@ interface ICounterpartTranslation {
 }
 
 async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
-    console.log("Loading language from", langPath);
+    if (process.env.NODE_ENV !== "test") console.log("Loading language from", langPath);
     const res = await fetch(langPath, { method: "GET" });
 
     if (!res.ok) {
