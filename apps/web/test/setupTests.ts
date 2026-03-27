@@ -66,3 +66,21 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
 require("./setup/setupManualMocks"); // must be first
 require("./setup/setupLanguage");
 require("./setup/setupConfig");
+
+// Utility to check for React errors during the tests
+let errors: any[] = [];
+const originalError = console.error;
+beforeEach(() => {
+    errors = [];
+    jest.spyOn(console, "error").mockImplementation((...args) => {
+        if (/validateDOMNesting|Hydration failed|hydration error/i.test(args[0])) {
+            errors.push(args[0]);
+        }
+        originalError.call(console, ...args);
+    });
+});
+afterEach(() => {
+    if (errors.length > 0) {
+        throw new Error("Test failed due to React hydration errors in the console.");
+    }
+});
