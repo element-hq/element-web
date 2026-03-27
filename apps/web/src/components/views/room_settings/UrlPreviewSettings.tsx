@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
-import { InlineSpinner } from "@vector-im/compound-web";
+import { Form, InlineSpinner } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -49,14 +49,19 @@ export function UrlPreviewSettings({ room }: UrlPreviewSettingsProps): JSX.Eleme
             {isLoading ? (
                 <InlineSpinner />
             ) : (
-                <>
+                <Form.Root
+                    onSubmit={(evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }}
+                >
                     <PreviewsForRoom isEncrypted={isEncrypted} roomId={roomId} />
                     <SettingsFlag
                         name={isEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled"}
                         level={SettingLevel.ROOM_DEVICE}
                         roomId={roomId}
                     />
-                </>
+                </Form.Root>
             )}
         </SettingsFieldset>
     );

@@ -22,20 +22,20 @@ export default class NotificationUserSettingsTab extends React.Component {
 
         return (
             <SettingsTab>
-                <Form.Root
-                    onSubmit={(evt) => {
-                        evt.preventDefault();
-                        evt.stopPropagation();
-                    }}
-                >
-                    {newNotificationSettingsEnabled ? (
-                        <NotificationSettings2 />
-                    ) : (
-                        <SettingsSection>
+                {newNotificationSettingsEnabled ? (
+                    <NotificationSettings2 />
+                ) : (
+                    <SettingsSection>
+                        <Form.Root
+                            onSubmit={(evt) => {
+                                evt.preventDefault();
+                                evt.stopPropagation();
+                            }}
+                        >
                             <Notifications />
-                        </SettingsSection>
-                    )}
-                </Form.Root>
+                        </Form.Root>
+                    </SettingsSection>
+                )}
             </SettingsTab>
         );
     }
