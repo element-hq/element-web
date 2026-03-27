@@ -10,7 +10,7 @@ import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check"
 
 import styles from "./RichItem.module.css";
 import { Flex } from "../../utils/Flex";
-import { useI18n } from "../../utils/i18nContext";
+import { useI18n } from "../../i18n/i18nContext";
 
 export interface RichItemProps extends HTMLAttributes<HTMLLIElement> {
     /**

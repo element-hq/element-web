@@ -17,9 +17,9 @@ import {
     type LeftResizablePanelViewActions,
     type ResizerViewSnapshot,
 } from "..";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../core/utils/Flex";
 
 type LeftResizablePanelViewProps = ResizerViewSnapshot & LeftResizablePanelViewActions;
 

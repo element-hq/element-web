@@ -10,7 +10,7 @@ import { expect, userEvent, within } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "./DateSeparatorView";
-import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type DateSeparatorProps = DateSeparatorViewSnapshot & DateSeparatorViewActions;

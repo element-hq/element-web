@@ -14,8 +14,8 @@ import { describe, it, vi, afterEach, expect } from "vitest";
 
 import * as stories from "./AudioPlayerView.stories.tsx";
 import { AudioPlayerView, type AudioPlayerViewActions, type AudioPlayerViewSnapshot } from "./AudioPlayerView";
-import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
-import { I18nContext } from "../../utils/i18nContext.ts";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel.ts";
+import { I18nContext } from "../../core/i18n/i18nContext.ts";
 import { I18nApi } from "../../index.ts";
 
 const { Default, NoMediaName, NoSize, HasError } = composeStories(stories);

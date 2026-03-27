@@ -10,9 +10,9 @@ import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 
 import styles from "./MessageTimestampView.module.css";
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../viewmodel/useViewModel";
-import { useI18n } from "../../utils/i18nContext";
+import { type ViewModel } from "../../core/viewmodel/ViewModel";
+import { useViewModel } from "../../core/viewmodel/useViewModel";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 export interface MessageTimestampViewSnapshot {
     /**

@@ -9,8 +9,8 @@ import React, { type JSX, type PropsWithChildren, useRef } from "react";
 import { Menu, MenuItem, Separator } from "@vector-im/compound-web";
 import { capitalize } from "lodash";
 
-import { useI18n } from "../../utils/i18nContext";
-import { humanizeRelativeTime } from "../../utils/humanize";
+import { useI18n } from "../../core/i18n/i18nContext";
+import { humanizeRelativeTime } from "../../core/utils/humanize";
 import { type DateSeparatorViewModel } from "./DateSeparatorView";
 import { DateSeparatorDatePickerView } from "./DateSeparatorDatePickerView";
 import styles from "./DateSeparatorContextMenuView.module.css";
