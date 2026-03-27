@@ -311,9 +311,9 @@ const Tile: React.FC<ITileProps> = ({
             };
 
             childSection = (
-                <div className="mx_SpaceHierarchy_subspace_children" onKeyDown={onChildrenKeyDown} role="group">
+                <ul className="mx_SpaceHierarchy_subspace_children" onKeyDown={onChildrenKeyDown} role="group">
                     {children}
-                </div>
+                </ul>
             );
         }
 
