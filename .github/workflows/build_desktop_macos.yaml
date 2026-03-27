@@ -128,22 +128,21 @@ jobs:
               working-directory: apps/desktop
               run: pnpm run build:native:universal
 
-            # We split these because electron-builder gets upset if we set CSC_LINK even to an empty string
-            - name: "[Signed] Build App"
-              if: inputs.sign != ''
+            - name: "Build App"
               working-directory: apps/desktop
-              run: |
-                  pnpm run build:universal --publish never -m ${TARGETS}
+              run: pnpm run build:universal --publish never -m ${TARGETS}
               env:
-                  APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
-                  APPLE_ID: ${{ secrets.APPLE_ID }}
-                  APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-                  CSC_KEY_PASSWORD: ${{ secrets.APPLE_CSC_KEY_PASSWORD }}
-                  CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
+                  # Code signing parameters
+                  CSC_IDENTITY_AUTO_DISCOVERY: ${{ inputs.sign != '' }}
+                  APPLE_TEAM_ID: ${{ case(inputs.sign != '', vars.APPLE_TEAM_ID, '') }}
+                  APPLE_ID: ${{ case(inputs.sign != '', secrets.APPLE_ID, '') }}
+                  APPLE_APP_SPECIFIC_PASSWORD: ${{ case(inputs.sign != '', secrets.APPLE_ID_PASSWORD, '') }}
+                  CSC_KEY_PASSWORD: ${{ case(inputs.sign != '', secrets.APPLE_CSC_KEY_PASSWORD, '') }}
+                  CSC_LINK: ${{ case(inputs.sign != '', secrets.APPLE_CSC_LINK, '') }}
                   VARIANT_PATH: variant.json
+                  TARGETS: ${{ inputs.targets }}
                   # Only set for Nightly builds
                   VERSION: ${{ inputs.version }}
-                  TARGETS: ${{ inputs.targets }}
 
             - name: Check app was signed & notarised successfully
               if: inputs.sign != ''
@@ -153,16 +152,6 @@ jobs:
                   codesign -dv --verbose=4 /Volumes/Element/*.app
                   spctl -a -vvv -t install /Volumes/Element/*.app
                   hdiutil detach /Volumes/Element
-
-            - name: "[Unsigned] Build App"
-              if: inputs.sign == ''
-              working-directory: apps/desktop
-              run: |
-                  pnpm run build:universal --publish never -m ${TARGETS}
-              env:
-                  CSC_IDENTITY_AUTO_DISCOVERY: false
-                  VARIANT_PATH: variant.json
-                  TARGETS: ${{ inputs.targets }}
 
             - name: Generate releases.json
               if: inputs.base-url
