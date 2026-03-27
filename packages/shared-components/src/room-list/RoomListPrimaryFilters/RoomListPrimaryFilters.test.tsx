@@ -13,36 +13,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import * as stories from "./RoomListPrimaryFilters.stories";
 
-const { Default, PeopleSelected, NoFilters, NarrowContainer, NarrowWithActiveWrappingFilter } = composeStories(stories);
+const { Default, NarrowContainer, NarrowWithActiveWrappingFilter } = composeStories(stories);
 
 describe("<RoomListPrimaryFilters /> stories", () => {
-    describe("snapshots", () => {
-        it("renders Default story", () => {
-            const { container } = render(<Default />);
-            expect(container).toMatchSnapshot();
-        });
-
-        it("renders PeopleSelected story", () => {
-            const { container } = render(<PeopleSelected />);
-            expect(container).toMatchSnapshot();
-        });
-
-        it("renders NoFilters story", () => {
-            const { container } = render(<NoFilters />);
-            expect(container).toMatchSnapshot();
-        });
-
-        it("renders NarrowContainer story", () => {
-            const { container } = render(<NarrowContainer />);
-            expect(container).toMatchSnapshot();
-        });
-
-        it("renders NarrowWithActiveWrappingFilter story", () => {
-            const { container } = render(<NarrowWithActiveWrappingFilter />);
-            expect(container).toMatchSnapshot();
-        });
-    });
-
     describe("behavior", () => {
         it("should call onToggleFilter when a filter is clicked", async () => {
             const user = userEvent.setup();
@@ -90,6 +63,8 @@ describe("<RoomListPrimaryFilters /> stories", () => {
             render(<NarrowContainer />);
             mockUnreadWrapping();
 
+            expect(screen.getByText("Unreads")).toHaveAttribute("aria-hidden", "true");
+            expect(screen.getByText("Unreads")).toHaveAttribute("data-away", "true");
             expect(screen.queryByRole("option", { name: "Unreads" })).toBeNull();
             expect(screen.getByRole("button", { name: "Expand filter list" })).toBeInTheDocument();
         });

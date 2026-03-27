@@ -9,9 +9,8 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 
 /**
  * A hook to manage the wrapping of filters in the room list.
- * It observes the filter list and hides filters that are wrapping when the list is not expanded.
+ * It observes the filter list and detects when filters wrap.
  * @param isExpanded
- * @param wrappingClassName - the CSS class to apply to wrapping filters
  * @returns an object containing:
  * - `ref`: a ref to put on the filter list element
  * - `isWrapping`: a boolean indicating if the filters are wrapping
@@ -19,7 +18,6 @@ import { useEffect, useRef, useState, type RefObject } from "react";
  */
 export function useCollapseFilters<T extends HTMLElement>(
     isExpanded: boolean,
-    wrappingClassName: string,
 ): {
     ref: RefObject<T | null>;
     isWrapping: boolean;
@@ -36,10 +34,6 @@ export function useCollapseFilters<T extends HTMLElement>(
             let isWrapping = false;
             Array.from(list.children).forEach((node, i): void => {
                 const child = node as HTMLElement;
-                child.setAttribute("aria-hidden", "false");
-                child.classList.remove(wrappingClassName);
-
-                // If the filter list is expanded, all filters are visible
                 if (isExpanded) return;
 
                 // If the previous element is on the left element of the current one, it means that the filter is wrapping
@@ -48,10 +42,6 @@ export function useCollapseFilters<T extends HTMLElement>(
                     if (!isWrapping) setWrappingIndex(i);
                     isWrapping = true;
                 }
-
-                // If the filter is wrapping, we hide it
-                child.classList.toggle(wrappingClassName, isWrapping);
-                child.setAttribute("aria-hidden", isWrapping.toString());
             });
 
             if (!isWrapping) setWrappingIndex(-1);
@@ -65,7 +55,7 @@ export function useCollapseFilters<T extends HTMLElement>(
         return () => {
             observer.disconnect();
         };
-    }, [isExpanded, wrappingClassName]);
+    }, [isExpanded]);
 
     return { ref, isWrapping, wrappingIndex };
 }
