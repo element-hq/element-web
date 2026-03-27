@@ -21,11 +21,6 @@ jobs:
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
-                  # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-                  fetch-depth: 0
-                  # reduce the size of the checkout with tree filtering,
-                  # see https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/
-                  filter: tree:0
                   persist-credentials: false
 
             - name: Install Cosign
@@ -54,17 +49,20 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - run: pnpm nx run-many -t docker:build
+            - run: pnpm nx run-many --nxBail -t docker:build
+              id: build
               env:
                   INPUT_PUSH: true
+                  INPUT_LOAD: false
                   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
             - name: Sign the images with GitHub OIDC token
-              env:
-                  PATTERN: "^ghcr.io/element-hq/element-web*"
               run: |
-                  docker image ls --digests --format '{{.Repository}}@{{.Digest}}' | grep "$PATTERN" | while read -r TARGET; do
+                  shopt -s globstar
+
+                  for FILE in ./node_modules/.cache/nx-container/**/metadata; do
+                      TARGET=$(jq -r '.["image.name"] + "@" + .["containerimage.digest"]' "$FILE")
                       echo "Signing $TARGET..."
                       cosign sign --yes "$TARGET"
                   done
