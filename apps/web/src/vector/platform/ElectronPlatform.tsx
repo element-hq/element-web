@@ -455,6 +455,10 @@ export default class ElectronPlatform extends BasePlatform {
         return true;
     }
 
+    public supportsProxyConfiguration(): boolean {
+        return !!this.supportedSettings?.desktopProxyConfig;
+    }
+
     public supportsJitsiScreensharing(): boolean {
         // See https://github.com/element-hq/element-web/issues/4880
         return false;

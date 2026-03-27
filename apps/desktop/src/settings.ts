@@ -10,6 +10,7 @@ import { ipcMain } from "electron";
 import * as tray from "./tray.js";
 import Store from "./store.js";
 import { AutoLaunch, type AutoLaunchState } from "./auto-launch.js";
+import { type DesktopProxyConfig, applyProxyConfig } from "./proxy.js";
 
 interface Setting {
     read(): Promise<any>;
@@ -88,7 +89,44 @@ const Settings: Record<string, Setting> = {
             Store.instance?.set("enableContentProtection", value);
         },
     },
+    "desktopProxyConfig": {
+        async read(): Promise<DesktopProxyConfig> {
+            const config = (Store.instance?.get("desktopProxyConfig") as DesktopProxyConfig) || { mode: "system" };
+            if (config.mode === "custom") {
+                const password = await Store.instance?.getSecret("proxy_password");
+                if (password) {
+                    config.password = password;
+                }
+            }
+            return config;
+        },
+        async write(value: any): Promise<void> {
+            if (!value || typeof value !== "object") value = { mode: "system" };
+            if (!value.mode) value.mode = "system";
+
+            const config = value as DesktopProxyConfig;
+            if (config.mode === "custom" && config.password) {
+                await Store.instance?.setSecret("proxy_password", config.password);
+                delete config.password;
+            } else {
+                await Store.instance?.deleteSecret("proxy_password");
+            }
+
+            Store.instance?.set("desktopProxyConfig", config);
+            await applyProxyConfig(config);
+        },
+    },
 };
+
+/**
+ * Initializes the proxy from settings.
+ */
+export async function initProxy(): Promise<void> {
+    console.log("[proxy] Initializing proxy from settings...");
+    const stored = await Settings["desktopProxyConfig"].read();
+    console.log("[proxy] Stored proxy config read:", JSON.stringify(stored));
+    await applyProxyConfig(stored);
+}
 
 ipcMain.handle("getSupportedSettings", async () => {
     const supportedSettings: Record<string, boolean> = {};
