@@ -62,7 +62,7 @@ jobs:
                   shopt -s globstar
 
                   for FILE in ./node_modules/.cache/nx-container/**/metadata; do
-                      TARGET=$(jq -r '.["image.name"] + "@" + .["containerimage.digest"]' "$FILE")
+                      TARGET=$(jq -r '(.["image.name"] | split(",") | last) + "@" + .["containerimage.digest"]' "$FILE")
                       echo "Signing $TARGET..."
                       cosign sign --yes "$TARGET"
                   done
