@@ -1,7 +1,7 @@
 name: CD # Continuous Delivery
 on:
     push:
-        branches: [develop]
+        branches: [master, staging, develop]
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 
 permissions: {}
@@ -28,11 +28,6 @@ jobs:
                   filter: tree:0
                   persist-credentials: false
 
-            - name: Prepare nx
-              uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4
-              with:
-                  main-branch-name: develop
-
             - name: Install Cosign
               uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
 
@@ -43,7 +38,7 @@ jobs:
               id: builder
               uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   node-version-file: package.json
@@ -59,10 +54,9 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - run: pnpm nx affected -t docker:build
+            - run: pnpm nx run-many -t docker:build
               env:
                   INPUT_PUSH: true
-                  INPUT_LOAD: false
                   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUT_BUILDER: ${{ steps.builder.outputs.name }}
 
@@ -71,9 +65,6 @@ jobs:
                   PATTERN: "^ghcr.io/element-hq/element-web*"
               run: |
                   docker image ls --digests --format '{{.Repository}}@{{.Digest}}' | grep "$PATTERN" | while read -r TARGET; do
-                    # Check if digest is valid (not <none>)
-                    if [[ "$TARGET" != *"@<none>"* ]]; then
                       echo "Signing $TARGET..."
                       cosign sign --yes "$TARGET"
-                    fi
                   done

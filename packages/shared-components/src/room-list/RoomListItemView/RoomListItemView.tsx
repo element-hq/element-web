@@ -35,6 +35,10 @@ function getA11yLabel(roomName: string, notification: NotificationDecorationData
         return _t("room_list|a11y|mention", { roomName, count: notification.count });
     } else if (notification.hasUnreadCount && notification.count) {
         return _t("room_list|a11y|unread", { roomName, count: notification.count });
+    } else if (notification.callType === "voice") {
+        return _t("room_list|a11y|voice_call", { roomName });
+    } else if (notification.callType === "video") {
+        return _t("room_list|a11y|video_call", { roomName });
     } else {
         return _t("room_list|a11y|default", { roomName });
     }
