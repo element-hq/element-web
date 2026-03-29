@@ -45,6 +45,6 @@ test.describe("Room list panel", () => {
 
     test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
         await page.setViewportSize({ width: 575, height: 600 });
-        await expect(page).toMatchScreenshot("room-list-panel-smallscreen.png");
+        await expect(page).toMatchScreenshot("room-list-panel-smallscreen.png", { unlockLeftPanelWidth: true });
     });
 });

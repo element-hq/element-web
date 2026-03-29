@@ -15,7 +15,8 @@ jest.useFakeTimers();
 describe("CollapseOnWindowResizeBehaviour", () => {
     it("Should collapse/expand the panel when the window is resized", () => {
         const collapseHandler = new MockCollapseHandler() as unknown as CollapseHandler;
-        const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const _behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler);
         // Making the window smaller should collapse the panel.
         UIStore.instance.emit(UI_EVENTS.WidthDecreased, 750);
         expect(collapseHandler.collapse).toHaveBeenCalledTimes(1);
@@ -52,7 +53,8 @@ describe("CollapseOnWindowResizeBehaviour", () => {
 
     it("should return correct shouldStartCollapsed", () => {
         const collapseHandler = new MockCollapseHandler();
-        const behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler as unknown as CollapseHandler);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const _behaviour = new CollapseOnWindowResizeBehaviour(collapseHandler as unknown as CollapseHandler);
         // When the window is smaller than 768px, start collapsed.
         UIStore.instance.windowWidth = 750;
         expect(CollapseOnWindowResizeBehaviour.shouldStartCollapsed()).toBe(true);

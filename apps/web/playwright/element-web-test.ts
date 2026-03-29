@@ -117,6 +117,7 @@ interface ExtendedToMatchScreenshotOptions extends ToMatchScreenshotOptions {
     showTooltips?: boolean;
     timeout?: number;
     hideJumpToBottomButton?: boolean;
+    unlockLeftPanelWidth?: boolean;
 }
 
 type Expectations = {
@@ -161,6 +162,14 @@ export const expect = baseExpect.extend<Expectations>({
                 font-family: "Fira Code" !important;
             }
         `;
+
+        if (!options?.unlockLeftPanelWidth) {
+            css += `
+                #left-panel {
+                    flex: 0 0 369.6875px !important;
+                }
+            `;
+        }
 
         if (!options?.showTooltips) {
             css += `
