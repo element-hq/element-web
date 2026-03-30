@@ -5,7 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
 import { tryPaths } from "./utils.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 let asarPathPromise: Promise<string> | undefined;
 // Get the webapp resource file path, memoizes result
