@@ -7,7 +7,7 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     aria-live="off"
     class="flex mx_MessageActionBar toolbar"
     role="toolbar"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <button
       aria-label="Hide"
@@ -364,7 +364,7 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     aria-live="off"
     class="flex mx_MessageActionBar toolbar"
     role="toolbar"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <button
       aria-label="Hide"
@@ -375,7 +375,7 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
       role="button"
       tabindex="0"
     >
-      Reply in thread
+      Hide
     </button>
     <button
       aria-disabled="false"
@@ -546,7 +546,7 @@ exports[`ActionBarView > story snapshots > renders DecryptingAttachment 1`] = `
     aria-live="off"
     class="flex mx_MessageActionBar toolbar"
     role="toolbar"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <button
       aria-disabled="true"
@@ -608,7 +608,7 @@ exports[`ActionBarView > story snapshots > renders DisabledThreadReply 1`] = `
     aria-live="off"
     class="flex mx_MessageActionBar toolbar"
     role="toolbar"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <button
       aria-label="React"
@@ -716,7 +716,7 @@ exports[`ActionBarView > story snapshots > renders DownloadingAttachment 1`] = `
     aria-live="off"
     class="flex mx_MessageActionBar toolbar"
     role="toolbar"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <button
       aria-disabled="true"
@@ -778,7 +778,7 @@ exports[`ActionBarView > story snapshots > renders ExpandedReplyChain 1`] = `
     aria-live="off"
     class="flex mx_MessageActionBar toolbar"
     role="toolbar"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <button
       aria-label="Reply"
@@ -858,7 +858,7 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
     aria-live="off"
     class="flex mx_MessageActionBar toolbar"
     role="toolbar"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <button
       aria-label="React"
