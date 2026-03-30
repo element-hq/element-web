@@ -752,7 +752,11 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         }
 
         setScrollToBottomRequestId((current) => current + 1);
-        syncWrapperState();
+        pendingRestoreTargetRef.current = null;
+        pendingScrollRequestRef.current = null;
+        pendingScrollAnchorRef.current = null;
+        logicalScrollStateRef.current = { stuckAtBottom: true };
+        isAtBottomRef.current = true;
         scrollNode.scrollTop = scrollNode.scrollHeight;
         syncWrapperState();
     }, [syncWrapperState]);
