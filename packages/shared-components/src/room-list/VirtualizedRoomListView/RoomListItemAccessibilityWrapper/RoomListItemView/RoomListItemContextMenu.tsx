@@ -8,7 +8,7 @@
 import React, { type JSX, type PropsWithChildren } from "react";
 import { ContextMenu } from "@vector-im/compound-web";
 
-import { _t } from "../../../core/i18n/i18n";
+import { _t } from "../../../../core/i18n/i18n";
 import { MoreOptionContent, type RoomListItemViewModel } from "./RoomListItemMoreOptionsMenu";
 
 /**

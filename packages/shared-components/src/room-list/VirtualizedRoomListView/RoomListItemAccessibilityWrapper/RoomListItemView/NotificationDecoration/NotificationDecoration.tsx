@@ -16,7 +16,7 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
 
-import { Flex } from "../../../../core/utils/Flex";
+import { Flex } from "../../../../../core/utils/Flex";
 
 /**
  * Data representing the notification state for a room or item.

@@ -9,7 +9,7 @@ import React, { useCallback, useMemo, useRef, type JSX, type ReactNode } from "r
 import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
-import { type Room } from "../RoomListView/RoomListItemView";
+import { type Room } from "./RoomListItemAccessibilityWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
 import { _t } from "../../core/i18n/i18n";
 import {

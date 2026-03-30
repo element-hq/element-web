@@ -27,7 +27,7 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 
-interface RoomListViewViewModelProps {
+interface RoomListViewModelProps {
     client: MatrixClient;
 }
 
@@ -41,8 +41,8 @@ const filterKeyToIdMap: Map<FilterKey, FilterId> = new Map([
     [FilterKey.LowPriorityFilter, "low_priority"],
 ]);
 
-export class RoomListViewViewModel
-    extends BaseViewModel<RoomListViewSnapshot, RoomListViewViewModelProps>
+export class RoomListViewModel
+    extends BaseViewModel<RoomListViewSnapshot, RoomListViewModelProps>
     implements RoomListViewActions
 {
     // State tracking
@@ -57,7 +57,7 @@ export class RoomListViewViewModel
     // request a view model for a room that was removed from the latest list. Keeping old entries prevents a crash.
     private roomsMap = new Map<string, Room>();
 
-    public constructor(props: RoomListViewViewModelProps) {
+    public constructor(props: RoomListViewModelProps) {
         const activeSpace = SpaceStore.instance.activeSpaceRoom;
 
         // Get initial rooms

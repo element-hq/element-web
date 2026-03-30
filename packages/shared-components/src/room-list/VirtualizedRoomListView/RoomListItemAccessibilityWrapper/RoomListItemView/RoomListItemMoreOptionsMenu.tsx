@@ -18,8 +18,8 @@ import {
     OverflowHorizontalIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t } from "../../../core/i18n/i18n";
-import { useViewModel, type ViewModel } from "../../../core/viewmodel";
+import { _t } from "../../../../core/i18n/i18n";
+import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
 import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
 
 /**

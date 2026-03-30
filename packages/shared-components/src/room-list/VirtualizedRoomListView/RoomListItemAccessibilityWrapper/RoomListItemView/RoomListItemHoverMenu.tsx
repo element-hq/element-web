@@ -7,7 +7,7 @@
 
 import React, { type JSX } from "react";
 
-import { Flex } from "../../../core/utils/Flex";
+import { Flex } from "../../../../core/utils/Flex";
 import { RoomListItemMoreOptionsMenu, type RoomListItemViewModel } from "./RoomListItemMoreOptionsMenu";
 import { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 import styles from "./RoomListItemView.module.css";
