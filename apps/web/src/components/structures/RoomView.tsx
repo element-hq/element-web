@@ -140,7 +140,7 @@ import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusM
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
-import { EncryptionEventViewModel } from "../../viewmodels/event-tiles/EncryptionEventViewModel.ts";
+import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
 
 const DEBUG = false;
