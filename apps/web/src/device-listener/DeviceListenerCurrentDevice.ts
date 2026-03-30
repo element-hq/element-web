@@ -223,18 +223,10 @@ export class DeviceListenerCurrentDevice {
                 } else {
                     await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "4S is missing secrets", {
                         secretStorageStatus,
-                        allCrossSigningSecretsCached,
-                        isCurrentDeviceTrusted,
-                        keyBackupDownloadIsOk,
                     });
                 }
             } else if (!keyBackupDownloadIsOk) {
-                await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally", {
-                    secretStorageStatus,
-                    allCrossSigningSecretsCached,
-                    isCurrentDeviceTrusted,
-                    keyBackupDownloadIsOk,
-                });
+                await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally");
             } else {
                 // We should not get here
                 throw new Error("DeviceListenerCurrentDevice is in an unexpected state");
