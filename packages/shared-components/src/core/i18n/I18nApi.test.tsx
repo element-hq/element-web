@@ -6,6 +6,7 @@
  */
 
 import { describe, it, expect } from "vitest";
+import React from "react";
 
 import { I18nApi } from "./I18nApi";
 
@@ -19,5 +20,20 @@ describe("I18nApi", () => {
         });
 
         expect(i18n.translate("hello.world" as TranslationKey)).toBe("Hello, World!");
+    });
+
+    it("can register a translation and use it with tags", () => {
+        const i18n = new I18nApi();
+        i18n.register({
+            ["hello.world" as TranslationKey]: {
+                en: "Hello, <world />",
+            },
+        });
+
+        expect(i18n.translate("hello.world" as TranslationKey, {}, { world: <strong>World!</strong> })).toStrictEqual(
+            <span>
+                Hello, <strong>World!</strong>
+            </span>,
+        );
     });
 });
