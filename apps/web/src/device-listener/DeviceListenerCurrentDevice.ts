@@ -219,10 +219,7 @@ export class DeviceListenerCurrentDevice {
                     // The user just hasn't set up 4S yet: if they have key
                     // backup, prompt them to turn on recovery too. (If not, they
                     // have explicitly opted out, so don't hassle them.)
-                    if (recoveryDisabled) {
-                        logSpan.info("Recovery disabled: no toast needed");
-                        await this.setDeviceState("ok", logSpan);
-                    } else if (keyBackupUploadActive) {
+                    if (keyBackupUploadActive) {
                         logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
                         await this.setDeviceState("set_up_recovery", logSpan);
                     } else {
