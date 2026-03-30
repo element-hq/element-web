@@ -792,6 +792,79 @@ describe("TimelineScrollPanelView", () => {
         expect(scroller).toBeInstanceOf(HTMLDivElement);
         expect(scrollContainerRef).toHaveBeenCalledWith(scroller);
     });
+
+    it("seeds the visible range from itemsRendered when rangeChanged has not fired yet", async () => {
+        let TimelineScrollPanelListViewWithMock: typeof TimelineScrollPanelListView | undefined;
+
+        await jest.isolateModulesAsync(async () => {
+            jest.doMock("react", () => React);
+            jest.doMock("@element-hq/web-shared-components", () => {
+                const actual = jest.requireActual("@element-hq/web-shared-components");
+
+                return {
+                    ...actual,
+                    FlatVirtualizedList: ({
+                        items,
+                        itemsRendered,
+                        components,
+                    }: {
+                        items: TimelineScrollPanelItem[];
+                        itemsRendered?: (
+                            items: Array<{ index: number; originalIndex?: number; data?: TimelineScrollPanelItem }>,
+                        ) => void;
+                        components: {
+                            Scroller: React.ComponentType<React.ComponentProps<"div">>;
+                            List: React.ComponentType<React.ComponentProps<"div">>;
+                        };
+                    }): React.ReactNode => {
+                        const Scroller = components.Scroller;
+                        const List = components.List;
+
+                        React.useEffect(() => {
+                            itemsRendered?.([
+                                { index: 4, originalIndex: 4, data: items[4] },
+                                { index: 5, originalIndex: 5, data: items[5] },
+                                { index: 6, originalIndex: 6, data: items[6] },
+                            ]);
+                        }, [items, itemsRendered]);
+
+                        return (
+                            <Scroller>
+                                <List />
+                            </Scroller>
+                        );
+                    },
+                };
+            });
+
+            TimelineScrollPanelListViewWithMock = (
+                await import("../../../../src/components/structures/TimelineScrollPanelView.tsx")
+            ).TimelineScrollPanelListView;
+        });
+
+        expect(TimelineScrollPanelListViewWithMock).toBeDefined();
+        const MockedTimelineScrollPanelListView = TimelineScrollPanelListViewWithMock!;
+        const onVisibleRangeChange = jest.fn();
+        const items: TimelineScrollPanelItem[] = Array.from({ length: 10 }, (_value, index) => ({
+            key: `event-${index}`,
+            node: <li data-scroll-tokens={`event-${index}`}>{index}</li>,
+        }));
+
+        render(
+            <MockedTimelineScrollPanelListView
+                items={items}
+                renderItem={(item) => item.node}
+                scrollContainerRef={jest.fn()}
+                onVisibleRangeChange={onVisibleRangeChange}
+            />,
+        );
+
+        await Promise.resolve();
+
+        expect(onVisibleRangeChange).toHaveBeenCalledWith({ startIndex: 4, endIndex: 6 });
+        jest.dontMock("@element-hq/web-shared-components");
+        jest.dontMock("react");
+    });
 });
 
 describe("TimelineScrollPanel", function () {

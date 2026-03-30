@@ -25,7 +25,7 @@ exports[`TimelineScrollPanel should handle large numbers of hidden events quickl
             aria-live="polite"
             class="mx_RoomView_MessageList"
             data-testid="virtuoso-item-list"
-            style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px; overflow-anchor: none;"
+            style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px; contain-intrinsic-size: auto; content-visibility: visible; display: block; justify-content: normal; overflow-anchor: none; position: static;"
           />
         </div>
       </div>
@@ -59,48 +59,49 @@ exports[`TimelineScrollPanel should handle lots of membership events quickly 1`]
             aria-live="polite"
             class="mx_RoomView_MessageList"
             data-testid="virtuoso-item-list"
-            style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px; overflow-anchor: none;"
+            style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px; contain-intrinsic-size: auto; content-visibility: visible; display: block; justify-content: normal; overflow-anchor: none; position: static;"
           >
-            <div
+            <li
+              class=""
               data-index="0"
               data-item-index="0"
               data-known-size="56"
+              data-scroll-tokens="__scroll_tokens__"
+              data-testid="__testid__"
+              id="mx_TimelinePanel_opaque__room_id-0_"
               style="overflow-anchor: none; min-height: 1px;"
             >
-              <li
-                data-scroll-tokens="__scroll_tokens__"
-                data-testid="__testid__"
-                id="mx_TimelinePanel_opaque__room_id-0_"
+              <div
+                aria-label="Thu, Jan 1, 1970"
+                class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_yq5ye_8"
+                role="separator"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
+                <hr
+                  role="none"
+                />
                 <div
-                  aria-label="Thu, Jan 1, 1970"
-                  class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_yq5ye_8"
-                  role="separator"
-                  style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                  class="_flex_4dswl_9 _content_5dcky_8"
+                  style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  <hr
-                    role="none"
-                  />
-                  <div
-                    class="_flex_4dswl_9 _content_5dcky_8"
-                    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                  <h2
+                    aria-hidden="true"
                   >
-                    <h2
-                      aria-hidden="true"
-                    >
-                      Thu, Jan 1, 1970
-                    </h2>
-                  </div>
-                  <hr
-                    role="none"
-                  />
+                    Thu, Jan 1, 1970
+                  </h2>
                 </div>
-              </li>
-            </div>
-            <div
+                <hr
+                  role="none"
+                />
+              </div>
+            </li>
+            <li
               data-index="1"
               data-item-index="1"
               data-known-size="56"
+              data-scroll-tokens="__scroll_tokens__"
+              data-testid="__testid__"
+              id="mx_TimelinePanel_opaque_historytile"
               style="overflow-anchor: none; min-height: 1px;"
             >
               <div
@@ -123,19 +124,22 @@ exports[`TimelineScrollPanel should handle lots of membership events quickly 1`]
                   You can't see earlier messages
                 </div>
               </div>
-            </div>
-            <div
+            </li>
+            <li
               data-index="2"
               data-item-index="2"
               data-known-size="56"
+              data-scroll-tokens="__scroll_tokens__"
+              data-testid="__testid__"
+              id="mx_TimelinePanel_opaque_eventlistsummary-_0_9742222066102075-0_05541564625196238"
               style="overflow-anchor: none; min-height: 1px;"
             >
-              <li
+              <div
                 class="mx_GenericEventListSummary"
                 data-expanded="false"
                 data-layout="group"
-                data-scroll-tokens="__scroll_tokens__"
-                data-testid="__testid__"
+                data-scroll-tokens="$0.9742222066102075-0.05541564625196238,$0.0664496302119082-0.2917237679994904,$0.5762297847238158-0.3065226782737982,$0.49322028631342407-0.3742766901476293,$0.027107257111588234-0.5832811353936733,$0.1871022862702556-0.7643714515025071,$0.42977243769167184-0.910323174966718,$0.013218822156753296-0.6268298971101993,$0.22554845859207995-0.3446669289664668,$0.7673065242990955-0.19708987239222275,$0.35085626682033166-0.9586398148905102,$0.7009797326115428-0.520717565659965,$0.8738001480516118-0.545753218835132,$0.006472746694718756-0.12400824838742008,$0.1719444031254007-0.4305972296279643,$0.278969528775177-0.04006768905837732,$0.6124015831975631-0.941881943306486,$0.3971979657499649-0.6541254761494242,$0.7770626564596712-0.8307708153516129,$0.9567676664705809-0.7384176986729294,$0.14825086858338166-0.40845023860180474,$0.7437907397011432-0.8603242685921746,$0.05412798353838033-0.3326731346589553,$0.48327423784705537-0.3771863347257245,$0.35202792340369515-0.24186885705202088,$0.3128434679878116-0.3692167044961743,$0.42144839719994986-0.9395414320263564,$0.8325969345253008-0.33812993168140126,$0.3249300497197971-0.9727634175909861,$0.12529594182462045-0.33928913614303324,$0.4577989596776424-0.4041987976824293,$0.2382512310100815-0.5481381229282127,$0.33635889306431666-0.6669718553159618,$0.5853289856992738-0.7352454081985842,$0.9686063370165008-0.7360271176512365,$0.9404370465100467-0.8743454904634107,$0.26384942821247526-0.1707557104097266,$0.44328738435885073-0.662350291040708,$0.18581056194246348-0.19919618446198495,$0.845587822186173-0.026906958035157524,$0.5624016902344218-0.902816823693833,$0.6866081688262378-0.8674163328620794,$0.26300671073683235-0.3228243365852308,$0.8673890284494317-0.0559651212731227,$0.736740162956089-0.24185008515087514,$0.5149519455758838-0.7377191795411742,$0.6041323717813247-0.9211656812746141,$0.21092787595727347-0.7096636795944764,$0.7095358623041519-0.7539068167255398,$0.7993681095676164-0.8318229733580838,$0.6303374436920255-0.24055615450696632,$0.5947351476789002-0.6715573138771609,$0.543193903121211-0.380378038399696,$0.9426357872986622-0.12335593236805331,$0.9834673502485201-0.7469997831719266,$0.31053019105671953-0.50162797429812,$0.5670862636628717-0.8199712935302965,$0.9181991423430007-0.22021687148393876,$0.1900656091883175-0.9374332312501847,$0.20947538826293255-0.9337072620922933,$0.8466526279681461-0.08290208992596426,$0.845043430955305-0.5117203362418254,$0.7330036018737258-0.03488280637257368,$0.7663527091060793-0.561243803903255,$0.26140797576519215-0.9361095590912241,$0.37206136548864177-0.08557077007599423,$0.9581899342944433-0.9216985755339826,$0.9608775280712638-0.5981528196296462,$0.6085928636895337-0.3262095830547129,$0.1328153509212957-0.4421427253149355,$0.5147053976324538-0.1455668023270058,$0.4585455450633793-0.8777044641646325,$0.46863685649236553-0.5686013730123638,$0.9079830711829031-0.16954628499131585,$0.23989951540098353-0.7471617056446078,$0.36275819006918963-0.07021407636067267,$0.3857307655768163-0.174413129630266,$0.7148048844615151-0.7192375819515464,$0.4430748818264907-0.6992931936223024,$0.2521392716551536-0.02111291463198328,$0.28451347967772733-0.6313177254858777,$0.3268080627934482-0.03804564268394239,$0.2981219395396666-0.48774125854900263,$0.41029052134752453-0.10365880251123483,$0.8181596561107523-0.2849360122536351,$0.08647365105587945-0.415043616934448,$0.9615483927979673-0.6018694669402682,$0.6070580442101827-0.29401305793778865,$0.20698748753260565-0.011524139573001246,$0.19664573871958324-0.8164323427007745,$0.6310167623977692-0.366857192190817,$0.9488402672710015-0.0277542658583958,$0.23273477629332828-0.5110473327177372,$0.9883983453047371-0.029031332922306863,$0.37401886556286-0.3270958715248313,$0.6397101505557434-0.6963512013843445,$0.6586914924556613-0.3412596349241155,$0.22122440085261652-0.781862337067577,$0.4087019675257686-0.515463487939388,$0.3182387026858573-0.4247225216668731"
+                data-testid="eventlistsummary-$0.9742222066102075-0.05541564625196238"
               >
                 <div
                   aria-expanded="false"
@@ -175,8 +179,8 @@ exports[`TimelineScrollPanel should handle lots of membership events quickly 1`]
                     </span>
                   </div>
                 </div>
-              </li>
-            </div>
+              </div>
+            </li>
           </ol>
         </div>
       </div>
@@ -210,7 +214,7 @@ exports[`TimelineScrollPanel should handle lots of room creation events quickly 
             aria-live="polite"
             class="mx_RoomView_MessageList"
             data-testid="virtuoso-item-list"
-            style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px; overflow-anchor: none;"
+            style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px; contain-intrinsic-size: auto; content-visibility: visible; display: block; justify-content: normal; overflow-anchor: none; position: static;"
           />
         </div>
       </div>

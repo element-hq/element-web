@@ -9,10 +9,14 @@ import React, { useEffect } from "react";
 import { FlatVirtualizedList } from "@element-hq/web-shared-components";
 import classNames from "classnames";
 
+import type { ListItem } from "react-virtuoso";
 import { type IScrollPanelProps } from "./ScrollPanel";
 import type { TimelineRow } from "./MessagePanel";
 import Spinner from "../views/elements/Spinner";
-import { type TimelineScrollPanelViewSnapshot, type TimelineVisibleRange } from "../../viewmodels/timeline/TimelineScrollPanelViewModel";
+import {
+    type TimelineScrollPanelViewSnapshot,
+    type TimelineVisibleRange,
+} from "../../viewmodels/timeline/TimelineScrollPanelViewModel";
 import type { VirtualizedListHandle } from "@element-hq/web-shared-components";
 
 export interface TimelineScrollPanelItem {
@@ -128,6 +132,7 @@ export function TimelineScrollPanelListView({
     virtualListHandleRef,
 }: TimelineScrollPanelListViewProps): React.ReactNode {
     const scrollElementRef = React.useRef<HTMLDivElement | null>(null);
+    const lastVisibleRangeRef = React.useRef<TimelineVisibleRange | null>(null);
     const hasUserScrolledRef = React.useRef(false);
     const isProgrammaticScrollRef = React.useRef(false);
     const hasInitializedPassiveBottomRef = React.useRef(false);
@@ -193,12 +198,33 @@ export function TimelineScrollPanelListView({
     );
     const handleVisibleRangeChange = React.useCallback(
         (range: TimelineVisibleRange): void => {
+            const previousRange = lastVisibleRangeRef.current;
+            if (previousRange?.startIndex === range.startIndex && previousRange.endIndex === range.endIndex) {
+                return;
+            }
+
+            lastVisibleRangeRef.current = range;
             if (stickyBottom && !hasUserScrolledRef.current && !hasInitializedPassiveBottomRef.current) {
                 hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
             }
             onVisibleRangeChange?.(range);
         },
         [onVisibleRangeChange, scrollToBottomWhilePassive, stickyBottom],
+    );
+    const handleItemsRendered = React.useCallback(
+        (renderedItems: ListItem<TimelineScrollPanelItem>[]): void => {
+            if (lastVisibleRangeRef.current || renderedItems.length === 0) {
+                return;
+            }
+
+            const firstRenderedItem = renderedItems[0];
+            const lastRenderedItem = renderedItems[renderedItems.length - 1];
+            const startIndex = firstRenderedItem.originalIndex ?? firstRenderedItem.index;
+            const endIndex = lastRenderedItem.originalIndex ?? lastRenderedItem.index;
+
+            handleVisibleRangeChange({ startIndex, endIndex });
+        },
+        [handleVisibleRangeChange],
     );
     const handleTotalListHeightChanged = React.useCallback((): void => {
         const scrollNode = scrollElementRef.current;
@@ -394,6 +420,7 @@ export function TimelineScrollPanelListView({
             alignToBottom={stickyBottom}
             followOutput={() => (stickyBottom && !hasUserScrolledRef.current ? "auto" : false)}
             initialItemCount={items.length}
+            itemsRendered={handleItemsRendered}
             rangeChanged={handleVisibleRangeChange}
             totalListHeightChanged={handleTotalListHeightChanged}
             style={{ flex: 1, minHeight: 0, height: "100%" }}
