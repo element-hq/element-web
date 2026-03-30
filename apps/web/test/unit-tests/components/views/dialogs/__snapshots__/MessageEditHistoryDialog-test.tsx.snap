@@ -88,13 +88,13 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1uh5c_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
                     role="toolbar"
-                    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1uh5c_17"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
                       data-kind="tertiary"
                       data-presentation="label"
                       data-size="sm"
@@ -234,13 +234,13 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1uh5c_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
                     role="toolbar"
-                    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1uh5c_17"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
                       data-kind="tertiary"
                       data-presentation="label"
                       data-size="sm"
@@ -296,13 +296,13 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1uh5c_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
                     role="toolbar"
-                    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1uh5c_17"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
                       data-kind="tertiary"
                       data-presentation="label"
                       data-size="sm"
@@ -340,13 +340,13 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1uh5c_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
                     role="toolbar"
-                    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1uh5c_17"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
                       data-kind="tertiary"
                       data-presentation="label"
                       data-size="sm"

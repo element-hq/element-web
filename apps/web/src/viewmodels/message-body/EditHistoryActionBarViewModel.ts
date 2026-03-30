@@ -12,13 +12,19 @@ import {
     type ActionBarViewSnapshot,
 } from "@element-hq/web-shared-components";
 
+/** Props for the edit-history action bar view model. */
 export interface EditHistoryActionBarViewModelProps {
+    /** Whether to include the remove action. */
     canRemove: boolean;
+    /** Whether to include the view source action. */
     showViewSource: boolean;
+    /** Called when the remove action is activated. */
     onRemoveClick?: (anchor: HTMLElement | null) => void;
+    /** Called when the view source action is activated. */
     onViewSourceClick?: (anchor: HTMLElement | null) => void;
 }
 
+/** View model for the label-style action bar shown in the edit-history panel. */
 export class EditHistoryActionBarViewModel
     extends BaseViewModel<ActionBarViewSnapshot, EditHistoryActionBarViewModelProps>
     implements ActionBarViewActions
@@ -48,18 +54,21 @@ export class EditHistoryActionBarViewModel
         };
     }
 
+    /** Updates props and rebuilds the derived action-bar snapshot. */
     public setProps(newProps: Partial<EditHistoryActionBarViewModelProps>): void {
         this.props = {
             ...this.props,
             ...newProps,
         };
-        this.snapshot.set(EditHistoryActionBarViewModel.buildSnapshot(this.props));
+        this.snapshot.merge(EditHistoryActionBarViewModel.buildSnapshot(this.props));
     }
 
+    /** Forwards the remove action using the triggering button as the anchor. */
     public onRemoveClick = (anchor: HTMLElement | null): void => {
         this.props.onRemoveClick?.(anchor);
     };
 
+    /** Forwards the view source action using the triggering button as the anchor. */
     public onViewSourceClick = (anchor: HTMLElement | null): void => {
         this.props.onViewSourceClick?.(anchor);
     };

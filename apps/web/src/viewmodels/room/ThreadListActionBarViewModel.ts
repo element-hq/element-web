@@ -12,11 +12,15 @@ import {
     type ActionBarViewSnapshot,
 } from "@element-hq/web-shared-components";
 
+/** Props for the thread-list action bar view model. */
 export interface ThreadListActionBarViewModelProps {
+    /** Called when the view in room action is activated. */
     onViewInRoomClick?: (anchor: HTMLElement | null) => void;
+    /** Called when the copy link action is activated. */
     onCopyLinkClick?: (anchor: HTMLElement | null) => void;
 }
 
+/** View model for the icon-only action bar shown in the thread list. */
 export class ThreadListActionBarViewModel
     extends BaseViewModel<ActionBarViewSnapshot, ThreadListActionBarViewModelProps>
     implements ActionBarViewActions
@@ -33,6 +37,7 @@ export class ThreadListActionBarViewModel
         });
     }
 
+    /** Updates the action handlers exposed by the view model. */
     public setProps(newProps: Partial<ThreadListActionBarViewModelProps>): void {
         this.props = {
             ...this.props,
@@ -40,10 +45,12 @@ export class ThreadListActionBarViewModel
         };
     }
 
+    /** Forwards the view in room action using the triggering button as the anchor. */
     public onViewInRoomClick = (anchor: HTMLElement | null): void => {
         this.props.onViewInRoomClick?.(anchor);
     };
 
+    /** Forwards the copy link action using the triggering button as the anchor. */
     public onCopyLinkClick = (anchor: HTMLElement | null): void => {
         this.props.onCopyLinkClick?.(anchor);
     };

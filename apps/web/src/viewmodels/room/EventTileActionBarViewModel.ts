@@ -45,17 +45,29 @@ import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { ModuleApi } from "../../modules/Api";
 
+/** Props for the event-tile action bar view model. */
 export interface EventTileActionBarViewModelProps {
+    /** The event whose available actions are being resolved. */
     mxEvent: MatrixEvent;
+    /** The timeline context the event is rendered within. */
     timelineRenderingType: TimelineRenderingType;
+    /** Whether the current user can send message-based actions such as reply. */
     canSendMessages: boolean;
+    /** Whether the current user can react to the event. */
     canReact: boolean;
+    /** Whether the tile is being rendered in search results. */
     isSearch?: boolean;
+    /** Whether the tile is being rendered inside a card-style surface. */
     isCard?: boolean;
+    /** Whether the quoted reply chain is currently expanded. */
     isQuoteExpanded?: boolean;
+    /** Called when the overflow options action is activated. */
     onOptionsClick?: (anchor: HTMLElement | null) => void;
+    /** Called when the reactions action is activated. */
     onReactionsClick?: (anchor: HTMLElement | null) => void;
+    /** Provides relations needed for editing when available. */
     getRelationsForEvent?: GetRelationsForEvent;
+    /** Called when the expand or collapse thread action is activated. */
     onToggleThreadExpanded?: (anchor: HTMLElement | null) => void;
 }
 
@@ -86,6 +98,7 @@ interface DerivedMediaState {
     isDownloadLoading: boolean;
 }
 
+/** View model for the timeline event action bar shown on event tiles. */
 export class EventTileActionBarViewModel
     extends BaseViewModel<ActionBarViewSnapshot, EventTileActionBarViewModelProps>
     implements ActionBarViewActions
@@ -278,7 +291,7 @@ export class EventTileActionBarViewModel
     }
 
     private readonly refreshSnapshot = (): void => {
-        this.snapshot.set(this.computeSnapshot());
+        this.snapshot.merge(this.computeSnapshot());
     };
 
     private resetEventState(): void {
@@ -351,6 +364,7 @@ export class EventTileActionBarViewModel
         }
     }
 
+    /** Updates props, refreshes listeners when the event changes, and rebuilds the snapshot. */
     public setProps(newProps: Partial<EventTileActionBarViewModelProps>): void {
         const prevEvent = this.props.mxEvent;
         const prevRoomId = prevEvent.getRoomId();
@@ -368,11 +382,13 @@ export class EventTileActionBarViewModel
         this.refreshSnapshot();
     }
 
+    /** Removes listeners and releases resources owned by the view model. */
     public override dispose(): void {
         this.teardownListeners();
         super.dispose();
     }
 
+    /** Starts a reply to the current event. */
     public onReplyClick = (_anchor: HTMLElement | null): void => {
         defaultDispatcher.dispatch({
             action: "reply_to_event",
@@ -381,6 +397,7 @@ export class EventTileActionBarViewModel
         });
     };
 
+    /** Opens the edit composer for the current event. */
     public onEditClick = (_anchor: HTMLElement | null): void => {
         editEvent(
             MatrixClientPeg.safeGet(),
@@ -390,10 +407,12 @@ export class EventTileActionBarViewModel
         );
     };
 
+    /** Retries sending the failed event variant that is still actionable. */
     public onResendClick = (_anchor: HTMLElement | null): void => {
         this.runActionOnFailedEv((event) => Resend.resend(MatrixClientPeg.safeGet(), event));
     };
 
+    /** Cancels the failed event variant that is still cancellable. */
     public onCancelClick = (_anchor: HTMLElement | null): void => {
         this.runActionOnFailedEv(
             (event) => Resend.removeFromQueue(MatrixClientPeg.safeGet(), event),
@@ -401,12 +420,14 @@ export class EventTileActionBarViewModel
         );
     };
 
+    /** Pins or unpins the current event. */
     public onPinClick = async (_anchor: HTMLElement | null): Promise<void> => {
         const isPinned = PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent);
         await PinningUtils.pinOrUnpinEvent(MatrixClientPeg.safeGet(), this.props.mxEvent);
         PosthogTrackers.trackPinUnpinMessage(isPinned ? "Pin" : "Unpin", "Timeline");
     };
 
+    /** Downloads the media content for the current event when available. */
     public onDownloadClick = async (_anchor: HTMLElement | null): Promise<void> => {
         if (this.isDownloadLoading || !this.canDownload) return;
         const requestId = ++this.downloadRequestId;
@@ -437,22 +458,27 @@ export class EventTileActionBarViewModel
         }
     };
 
+    /** Hides the media preview for the current event. */
     public onHideClick = (_anchor: HTMLElement | null): void => {
         void setMediaVisibility(this.props.mxEvent, false);
     };
 
+    /** Forwards the expand or collapse thread action using the triggering button as the anchor. */
     public onToggleThreadExpanded = (anchor: HTMLElement | null): void => {
         this.props.onToggleThreadExpanded?.(anchor);
     };
 
+    /** Forwards the overflow options action using the triggering button as the anchor. */
     public onOptionsClick = (anchor: HTMLElement | null): void => {
         this.props.onOptionsClick?.(anchor);
     };
 
+    /** Forwards the reactions action using the triggering button as the anchor. */
     public onReactionsClick = (anchor: HTMLElement | null): void => {
         this.props.onReactionsClick?.(anchor);
     };
 
+    /** Opens or starts the thread associated with the current event. */
     public onReplyInThreadClick = (_anchor: HTMLElement | null): void => {
         const { mxEvent, isCard } = this.props;
         const thread = mxEvent.getThread();
