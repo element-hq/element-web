@@ -54,7 +54,8 @@ export class EventIndexPeg {
             return false;
         }
 
-        if (!SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing")) {
+        const enableEventIndexing = SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing");
+        if (!enableEventIndexing) {
             logger.log("EventIndex: Event indexing is disabled, not initializing");
             return false;
         }
@@ -78,20 +79,31 @@ export class EventIndexPeg {
 
         const userId = client.getUserId()!;
         const deviceId = client.getDeviceId()!;
+        const tokenizerMode = SettingsStore.getValueAt(SettingLevel.DEVICE, "tokenizerMode");
 
         try {
-            await indexManager.initEventIndex(userId, deviceId);
+            const initResult = await indexManager.initEventIndex(userId, deviceId, tokenizerMode);
+
+            // If the database was recreated (e.g., due to schema change), force re-adding checkpoints
+            if (initResult && typeof initResult === "object" && initResult.wasRecreated) {
+                logger.log("EventIndex: Database was recreated, will force add initial checkpoints");
+                index.setForceAddInitialCheckpoints(true);
+            }
 
             const userVersion = await indexManager.getUserVersion();
             const eventIndexIsEmpty = await indexManager.isEventIndexEmpty();
 
             if (eventIndexIsEmpty) {
                 await indexManager.setUserVersion(INDEX_VERSION);
+                // Force adding initial checkpoints because limited timeline events
+                // may add checkpoints before onSync is called
+                logger.log("EventIndex: Index is empty, will force add initial checkpoints");
+                index.setForceAddInitialCheckpoints(true);
             } else if (userVersion === 0 && !eventIndexIsEmpty) {
                 await indexManager.closeEventIndex();
                 await this.deleteEventIndex();
 
-                await indexManager.initEventIndex(userId, deviceId);
+                await indexManager.initEventIndex(userId, deviceId, tokenizerMode);
                 await indexManager.setUserVersion(INDEX_VERSION);
             }
 
