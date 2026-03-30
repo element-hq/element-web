@@ -58,7 +58,10 @@ export interface RoomListViewActions {
     createChatRoom: () => void;
     /** Called to create a new room */
     createRoom: () => void;
-    /** Get view model for a specific room (virtualization API) */
+    /**
+     * Get view model for a specific room (virtualization API)
+     * Allow undefined to be returned if we don't have a view model for the room. In this case the room will not be rendered.
+     */
     getRoomItemViewModel: (roomId: string) => RoomListItemViewModel | undefined;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
