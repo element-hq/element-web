@@ -101,11 +101,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private roomSkipList?: RoomSkipList;
 
     /**
-     * Maps section tags to their corresponding skip lists.
-     */
-    private roomSkipListByTag: Map<string, RoomSkipList> = new Map();
-
-    /**
      * Maps section tags to their corresponding tag filters, used to determine which rooms belong in which sections.
      */
     private filterByTag: Map<string, Filter> = new Map();
@@ -145,7 +140,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Check whether the initial list of rooms has loaded.
      */
     public get isLoadingRooms(): boolean {
-        return !this.areSkipListsInitialized();
+        return !this.roomSkipList?.initialized;
     }
 
     /**
@@ -183,11 +178,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * @param algorithm The sorting algorithm to use.
      */
     public resort(algorithm: SortingAlgorithm): void {
-        if (!this.areSkipListsInitialized()) throw new Error("Cannot resort room list before skip list is created.");
+        if (!this.roomSkipList) throw new Error("Cannot resort room list before skip list is created.");
         if (!this.matrixClient) throw new Error("Cannot resort room list without matrix client.");
-        if (this.roomSkipList!.activeSortAlgorithm === algorithm) return;
+        if (this.roomSkipList.activeSortAlgorithm === algorithm) return;
         const sorter = this.getSorterFromSortingAlgorithm(algorithm, this.matrixClient.getSafeUserId());
-        this.runOnAllList((list) => list.useNewSorter(sorter, this.getRooms()));
+        this.roomSkipList.useNewSorter(sorter, this.getRooms());
         this.emit(LISTS_UPDATE_EVENT);
         SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
     }
@@ -200,25 +195,24 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     protected async onReady(): Promise<any> {
-        if (this.areSkipListsInitialized() || !this.matrixClient) return;
+        if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
 
-        this.createSkipLists(sorter, FILTERS);
+        this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
 
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
-        this.runOnAllList((list) => list.seed(rooms));
+        this.roomSkipList.seed(rooms);
         this.emit(LISTS_LOADED_EVENT);
         this.emit(LISTS_UPDATE_EVENT);
     }
 
     protected async onNotReady(): Promise<void> {
-        this.roomSkipListByTag.clear();
         this.roomSkipList = undefined;
     }
 
     protected async onAction(payload: ActionPayload): Promise<void> {
-        if (!this.matrixClient || !this.areSkipListsInitialized()) return;
+        if (!this.matrixClient || !this.roomSkipList?.initialized) return;
 
         /**
          * For the kind of updates that we care about (represented by the cases below),
@@ -294,7 +288,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     (oldMembership === EffectiveMembership.Invite || oldMembership === EffectiveMembership.Join) &&
                     newMembership === EffectiveMembership.Leave
                 ) {
-                    this.runOnAllList((list) => list.removeRoom(payload.room));
+                    this.roomSkipList.removeRoom(payload.room);
                     this.scheduleEmit();
                     return;
                 }
@@ -310,7 +304,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     );
                     const predecessors = roomUpgradeHistory.slice(0, roomUpgradeHistory.indexOf(room));
                     for (const predecessor of predecessors) {
-                        this.runOnAllList((list) => list.removeRoom(predecessor));
+                        this.roomSkipList.removeRoom(predecessor);
                     }
                 }
 
@@ -320,7 +314,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
             case Action.AfterForgetRoom: {
                 const room = payload.room;
-                this.runOnAllList((list) => list.removeRoom(room));
+                this.roomSkipList.removeRoom(room);
                 this.scheduleEmit();
                 break;
             }
@@ -331,8 +325,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * This method deals with the two types of account data payloads that we care about.
      */
     private handleAccountDataPayload(payload: ActionPayload): void {
-        if (!this.areSkipListsInitialized()) throw new Error("sectionStore hasn't been created yet!");
-
         const eventType = payload.event_type;
         let needsEmit = false;
         switch (eventType) {
@@ -347,7 +339,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                             logger.warn(`${roomId} was found in DMs but the room is not in the store`);
                             continue;
                         }
-                        this.runOnAllList((list) => list.reInsertRoom(room));
+                        this.roomSkipList?.reInsertRoom(room);
                         needsEmit = true;
                     }
                 }
@@ -361,7 +353,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     .map((id) => this.matrixClient?.getRoom(id))
                     .filter((room) => !!room);
                 for (const room of rooms) {
-                    this.runOnAllList((list) => list.reInsertRoom(room));
+                    this.roomSkipList?.reInsertRoom(room);
                     needsEmit = true;
                 }
                 break;
@@ -422,7 +414,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * @param isNewRoom Set this to true if this a new room that the isn't already in the skiplist
      */
     private addRoomAndEmit(room: Room, isNewRoom = false): void {
-        if (!this.areSkipListsInitialized()) throw new Error("roomSkipList hasn't been created yet!");
+        if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
         if (isNewRoom) {
             if (!isRoomVisible(room)) {
                 logger.info(
@@ -430,52 +422,30 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 );
                 return;
             }
-            this.runOnAllList((list) => list.addNewRoom(room));
+            this.roomSkipList.addNewRoom(room);
         } else {
-            this.runOnAllList((list) => list.reInsertRoom(room));
+            this.roomSkipList.reInsertRoom(room);
         }
         this.scheduleEmit();
     }
 
     private onActiveSpaceChanged(): void {
-        if (!this.areSkipListsInitialized()) return;
-        this.runOnAllList((list) => list.calculateActiveSpaceForNodes());
+        if (!this.roomSkipList) return;
+        this.roomSkipList.calculateActiveSpaceForNodes();
         this.scheduleEmit();
     }
 
     /**
-     * Initializes the skip lists for each section and the "all rooms" list with the provided sorter and filters.
-     * @param sorter The sorting algorithm to use for all skip lists
-     * @param filters The filters to use for all skip lists, in addition to the tag filters for each section
+     * Get the list of filters to be used in the skip list, including the tag filters for sectioning.
      */
-    private createSkipLists(sorter: Sorter, filters: Filter[]): void {
+    private getSkipListFilters(): Filter[] {
         const tagsToExclude = this.sortedTags.filter((tag) => tag !== CHATS_TAG);
-        this.sortedTags.forEach((tag) => {
-            const filter = tag === CHATS_TAG ? new ExcludeTagsFilter(tagsToExclude) : new TagFilter(tag);
-            this.filterByTag.set(tag, filter);
-            this.roomSkipListByTag.set(tag, new RoomSkipList(sorter, [filter, ...filters]));
-        });
-
-        this.roomSkipList = new RoomSkipList(sorter, filters);
-    }
-
-    /**
-     * Runs the provided callback on all the skip lists
-     * @param cb The callback to run on all the skip lists
-     */
-    private runOnAllList(cb: (list: RoomSkipList) => void): void {
-        this.roomSkipListByTag.forEach((skipList) => cb(skipList));
-        if (this.roomSkipList) cb(this.roomSkipList);
-    }
-
-    /**
-     * Checks whether all skip lists have been initialized.
-     */
-    private areSkipListsInitialized(): boolean {
-        return (
-            this.sortedTags.every((tag) => this.roomSkipListByTag.get(tag)?.initialized) &&
-            Boolean(this.roomSkipList?.initialized)
+        const tagFilters = this.sortedTags.map((tag) =>
+            tag === CHATS_TAG ? new ExcludeTagsFilter(tagsToExclude) : new TagFilter(tag),
         );
+        this.sortedTags.forEach((tag, index) => this.filterByTag.set(tag, tagFilters[index]));
+
+        return [...FILTERS, ...tagFilters];
     }
 
     /**
@@ -489,7 +459,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
             return {
                 tag,
-                rooms: Array.from(this.roomSkipListByTag.get(tag)?.getRoomsInActiveSpace(filters) || []),
+                rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filters) || []),
             };
         });
     }
