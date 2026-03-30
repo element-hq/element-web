@@ -61,39 +61,42 @@ exports[`TimelineScrollPanel should handle lots of membership events quickly 1`]
             data-testid="virtuoso-item-list"
             style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px; overflow-anchor: none;"
           >
-            <li
-              class=""
+            <div
               data-index="0"
               data-item-index="0"
               data-known-size="56"
-              data-scroll-tokens="__scroll_tokens__"
-              data-testid="__testid__"
               style="overflow-anchor: none; min-height: 1px;"
             >
-              <div
-                aria-label="Thu, Jan 1, 1970"
-                class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_yq5ye_8"
-                role="separator"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+              <li
+                data-scroll-tokens="__scroll_tokens__"
+                data-testid="__testid__"
+                id="mx_TimelinePanel_opaque__room_id-0_"
               >
-                <hr
-                  role="none"
-                />
                 <div
-                  class="_flex_4dswl_9 _content_5dcky_8"
-                  style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                  aria-label="Thu, Jan 1, 1970"
+                  class="_flex_4dswl_9 mx_TimelineSeparator _timelineSeparator_yq5ye_8"
+                  role="separator"
+                  style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
-                  <h2
-                    aria-hidden="true"
+                  <hr
+                    role="none"
+                  />
+                  <div
+                    class="_flex_4dswl_9 _content_5dcky_8"
+                    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
-                    Thu, Jan 1, 1970
-                  </h2>
+                    <h2
+                      aria-hidden="true"
+                    >
+                      Thu, Jan 1, 1970
+                    </h2>
+                  </div>
+                  <hr
+                    role="none"
+                  />
                 </div>
-                <hr
-                  role="none"
-                />
-              </div>
-            </li>
+              </li>
+            </div>
             <div
               data-index="1"
               data-item-index="1"

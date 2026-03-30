@@ -2021,7 +2021,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // (particularly in the case that the user reads some stuff on another
         // device).
         //
-        if (this.state.atEndOfLiveTimeline) {
+        if (messagePanel.isAtEndOfLiveTimeline()) {
             return null;
         }
 
@@ -2581,6 +2581,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!isRoomEncryptionLoading) {
             messagePanel = (
                 <TimelinePanel
+                    key={this.state.room.roomId}
                     ref={this.gatherTimelinePanelRef}
                     timelineSet={this.state.room.getUnfilteredTimelineSet()}
                     showReadReceipts={this.state.showReadReceipts}

@@ -12,7 +12,10 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { act, render as baseRender, within, type RenderOptions } from "jest-matrix-react";
 import { VirtuosoMockContext } from "react-virtuoso";
 
-import MessagePanel, { shouldFormContinuation } from "../../../../src/components/structures/MessagePanel.tsx";
+import MessagePanel, {
+    shouldFormContinuation,
+    type TimelineRow,
+} from "../../../../src/components/structures/MessagePanel.tsx";
 import TimelineScrollPanel from "../../../../src/components/structures/TimelineScrollPanel.tsx";
 import { type IScrollHandle } from "../../../../src/components/structures/ScrollPanel.tsx";
 import {
@@ -274,6 +277,98 @@ describe("TimelineScrollPanel wrapper", () => {
         expect(afterTopScrollNode).toBe(firstScrollNode);
         expect(afterBottomState).toEqual(expect.any(Object));
         expect(afterBottomScrollNode).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it("assigns unique ids to rendered li timeline rows", () => {
+        const firstEvent = TestUtilsMatrix.mkMessage({
+            room: roomId,
+            user: "@alice:server_name",
+            msg: "First",
+            event: true,
+        });
+        const secondEvent = TestUtilsMatrix.mkMessage({
+            room: roomId,
+            user: "@alice:server_name",
+            msg: "Second",
+            event: true,
+        });
+        const rows: TimelineRow[] = [firstEvent, secondEvent].map((event) => ({
+            kind: "event",
+            key: event.getId()!,
+            eventId: event.getId()!,
+            event,
+            isEditing: false,
+            continuation: false,
+            last: false,
+            lastInSection: false,
+            highlight: false,
+        }));
+        rows.unshift({
+            kind: "date-separator",
+            key: "date-separator-0",
+            roomId,
+            ts: 0,
+        });
+
+        const { container } = render(
+            <TimelineScrollPanel
+                rows={rows}
+                renderRow={(row) => {
+                    switch (row.kind) {
+                        case "date-separator":
+                            return <li data-scroll-tokens="date-separator">Date separator</li>;
+                        case "event":
+                            return <li data-scroll-tokens={row.eventId}>{row.eventId}</li>;
+                        default:
+                            return null;
+                    }
+                }}
+            />,
+        );
+
+        const renderedListItems = [...container.querySelectorAll<HTMLElement>("ol > li[id], ol > div > li[id]")];
+        expect(renderedListItems).toHaveLength(3);
+        expect(renderedListItems.map((node) => node.id)).toEqual([
+            "mx_TimelinePanel_date-separator_date-separator-0",
+            `mx_TimelinePanel_event_${firstEvent.getId()!.replace(/[^A-Za-z0-9_-]/g, "_")}`,
+            `mx_TimelinePanel_event_${secondEvent.getId()!.replace(/[^A-Za-z0-9_-]/g, "_")}`,
+        ]);
+        expect(new Set(renderedListItems.map((node) => node.id)).size).toBe(3);
+    });
+
+    it("synthesizes unique virtual ids when source row keys collide", () => {
+        const rows: TimelineRow[] = [
+            {
+                kind: "late-event-separator",
+                key: "duplicate-key",
+                text: "One",
+            },
+            {
+                kind: "late-event-separator",
+                key: "duplicate-key",
+                text: "Two",
+            },
+        ];
+
+        const { container } = render(
+            <TimelineScrollPanel
+                rows={rows}
+                renderRow={(row) => {
+                    if (row.kind !== "late-event-separator") {
+                        return null;
+                    }
+
+                    return <li data-scroll-tokens={row.key}>{row.text}</li>;
+                }}
+            />,
+        );
+
+        const renderedListItems = [...container.querySelectorAll<HTMLElement>("ol > li[id], ol > div > li[id]")];
+        expect(renderedListItems).toHaveLength(2);
+        expect(renderedListItems.map((node) => node.id)).toEqual([
+            "mx_TimelinePanel_late-event-separator_duplicate-key",
+            "mx_TimelinePanel_late-event-separator_duplicate-key_2",
+        ]);
     });
 
     it("keeps wrapper-owned state coherent when using shrinking prevention", () => {

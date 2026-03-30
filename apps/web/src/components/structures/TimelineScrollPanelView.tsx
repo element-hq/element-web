@@ -17,8 +17,49 @@ import type { VirtualizedListHandle } from "@element-hq/web-shared-components";
 
 export interface TimelineScrollPanelItem {
     key: string;
+    virtualKey?: string;
+    domId?: string;
     node?: React.ReactNode;
     row?: TimelineRow;
+}
+
+function sanitizeTimelineDomIdPart(value: string | null | undefined): string {
+    if (!value) {
+        return "unknown";
+    }
+
+    return value.replace(/[^A-Za-z0-9_-]/g, "_");
+}
+
+function getTimelineItemDomId(item: TimelineScrollPanelItem | undefined): string | undefined {
+    if (!item) {
+        return undefined;
+    }
+
+    if (item.domId) {
+        return item.domId;
+    }
+
+    if (item.row) {
+        return ["mx_TimelinePanel", sanitizeTimelineDomIdPart(item.row.kind), sanitizeTimelineDomIdPart(item.key)].join(
+            "_",
+        );
+    }
+
+    return ["mx_TimelinePanel", "item", sanitizeTimelineDomIdPart(item.key)].join("_");
+}
+
+function withTimelineItemDomId(node: React.ReactNode, item: TimelineScrollPanelItem): React.ReactNode {
+    const itemDomId = getTimelineItemDomId(item);
+    if (!itemDomId || !React.isValidElement(node) || node.type !== "li") {
+        return node;
+    }
+
+    const childProps = node.props as React.HTMLAttributes<HTMLLIElement>;
+    return React.cloneElement(node, {
+        ...childProps,
+        id: itemDomId,
+    });
 }
 
 type TimelineScrollPanelViewProps = IScrollPanelProps & {
@@ -46,7 +87,7 @@ interface TimelineScrollPanelListViewProps {
 
 export const TimelineScrollPanelItemView = React.memo(
     function TimelineScrollPanelItemView({ item }: { item: TimelineScrollPanelItem }): React.ReactNode {
-        return <>{item.node}</>;
+        return <>{withTimelineItemDomId(item.node, item)}</>;
     },
     (prevProps, nextProps) => prevProps.item === nextProps.item,
 );
@@ -59,7 +100,7 @@ const TimelineScrollPanelRowItemView = React.memo(
         item: TimelineScrollPanelItem & { row: TimelineRow };
         renderTimelineRow: (row: TimelineRow) => React.ReactNode;
     }): React.ReactNode {
-        return <>{renderTimelineRow(item.row)}</>;
+        return <>{withTimelineItemDomId(renderTimelineRow(item.row), item)}</>;
     },
     (prevProps, nextProps) =>
         prevProps.item === nextProps.item && prevProps.renderTimelineRow === nextProps.renderTimelineRow,
@@ -326,7 +367,7 @@ export function TimelineScrollPanelListView({
         <FlatVirtualizedList
             listHandleRef={virtualListHandleRef}
             items={items}
-            getItemKey={(item) => item.key}
+            getItemKey={(item) => item.virtualKey ?? item.key}
             getItemComponent={getVirtualizedItemComponent}
             isItemFocusable={() => false}
             alignToBottom={stickyBottom}

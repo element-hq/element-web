@@ -49,6 +49,36 @@ function normalizeTimelineItemKey(key: string): string {
     return key.startsWith(".$") ? key.slice(2) : key;
 }
 
+function sanitizeTimelineIdentityPart(value: string): string {
+    return value.replace(/[^A-Za-z0-9_-]/g, "_");
+}
+
+function getTimelineItemIdentityNamespace(item: Pick<TimelineScrollPanelItem, "key" | "row">): string {
+    return item.row ? item.row.kind : "item";
+}
+
+function dedupeTimelineIdentity(baseIdentity: string, seenIdentities: Map<string, number>): string {
+    const seenCount = seenIdentities.get(baseIdentity) ?? 0;
+    seenIdentities.set(baseIdentity, seenCount + 1);
+
+    return seenCount === 0 ? baseIdentity : `${baseIdentity}#${seenCount + 1}`;
+}
+
+function withSynthesizedTimelineIdentity(items: TimelineScrollPanelItem[]): TimelineScrollPanelItem[] {
+    const seenIdentities = new Map<string, number>();
+
+    return items.map((item) => {
+        const baseIdentity = `${getTimelineItemIdentityNamespace(item)}:${item.key}`;
+        const panelIdentity = dedupeTimelineIdentity(baseIdentity, seenIdentities);
+
+        return {
+            ...item,
+            virtualKey: panelIdentity,
+            domId: `mx_TimelinePanel_${sanitizeTimelineIdentityPart(panelIdentity)}`,
+        };
+    });
+}
+
 function areTimelineNodePropsEquivalent(
     previousProps: Record<string, unknown>,
     nextProps: Record<string, unknown>,
@@ -223,7 +253,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             scrollListenerRef.current = null;
         }
     }, []);
-    const rawItems: TimelineScrollPanelItem[] =
+    const rawItems: TimelineScrollPanelItem[] = withSynthesizedTimelineIdentity(
         rows && renderRow
             ? rows.map((row) => ({
                   key: normalizeTimelineItemKey(row.key),
@@ -235,9 +265,10 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
                       key: normalizeTimelineItemKey(key),
                       node,
                   };
-              });
+              }),
+    );
     const rawItemsWithStableIdentity = rawItems.map((item) => {
-        const previousItem = itemCacheRef.current.get(item.key);
+        const previousItem = itemCacheRef.current.get(item.virtualKey ?? item.key);
         if (item.row) {
             if (previousItem?.row && areTimelineRowsEquivalent(previousItem.row, item.row)) {
                 return previousItem;
@@ -258,20 +289,24 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
 
         return item;
     });
-    itemCacheRef.current = new Map(rawItemsWithStableIdentity.map((item) => [item.key, item]));
+    itemCacheRef.current = new Map(rawItemsWithStableIdentity.map((item) => [item.virtualKey ?? item.key, item]));
     const hasTopSpinner = rawItemsWithStableIdentity.some((item) => item.key === TOP_SPINNER_KEY);
     const hasBottomSpinner = rawItemsWithStableIdentity.some((item) => item.key === BOTTOM_SPINNER_KEY);
     const items = rawItemsWithStableIdentity.filter(
         (item) => item.key !== TOP_SPINNER_KEY && item.key !== BOTTOM_SPINNER_KEY,
     );
-    itemIndexByKeyRef.current = new Map(items.map((item, index) => [item.key, index]));
+    itemIndexByKeyRef.current = new Map(
+        items.flatMap((item, index) =>
+            item.row?.kind === "event" ? [[(item.row as EventTimelineRow).eventId, index] as const] : [],
+        ),
+    );
     const getVisibleItemKeys = useCallback(
         (visibleRange: TimelineVisibleRange | null): string[] | null => {
             if (!visibleRange) {
                 return null;
             }
 
-            return items.slice(visibleRange.startIndex, visibleRange.endIndex + 1).map((item) => item.key);
+            return items.slice(visibleRange.startIndex, visibleRange.endIndex + 1).map((item) => item.virtualKey ?? item.key);
         },
         [items],
     );
