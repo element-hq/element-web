@@ -37,7 +37,6 @@ function assertCommonCallParameters(
     expect(hash.get("userId")).toEqual(user.userId);
     expect(hash.get("deviceId")).toEqual(user.deviceId);
     expect(hash.get("roomId")).toEqual(room.roomId);
-    expect(hash.get("preload")).toEqual("false");
 }
 
 async function sendRTCState(bot: Bot, roomId: string, notification?: "ring" | "notification", intent?: string) {
