@@ -1263,6 +1263,33 @@ describe("TimelineScrollPanel", function () {
         expect(isReadMarkerVisible(rm)).toBeFalsy();
     });
 
+    it("hides the read-marker hr when the same marker row rerenders from visible to hidden", function () {
+        const melsEvents = mkMelsEvents();
+        const readMarkerEventId = melsEvents[5].getId();
+        const { container, rerender } = render(
+            getComponent({
+                events: melsEvents,
+                readMarkerEventId,
+                readMarkerVisible: true,
+            }),
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+
+        let [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
+        expect(isReadMarkerVisible(rm)).toBeTruthy();
+
+        rerender(
+            getComponent({
+                events: melsEvents.slice(1, 6),
+                readMarkerEventId,
+                readMarkerVisible: true,
+            }),
+        );
+
+        [rm] = container.getElementsByClassName("mx_MessagePanel_myReadMarker");
+        expect(isReadMarkerVisible(rm)).toBeFalsy();
+    });
+
     it("shows a ghost read-marker when the read-marker moves", function () {
         // fake the clock so that we can test the velocity animation.
         jest.useFakeTimers();

@@ -83,7 +83,7 @@ function areTimelineNodePropsEquivalent(
     previousProps: Record<string, unknown>,
     nextProps: Record<string, unknown>,
 ): boolean {
-    const ignoredProps = new Set(["ref", "children"]);
+    const ignoredProps = new Set(["ref"]);
     const previousKeys = Object.keys(previousProps).filter((key) => !ignoredProps.has(key));
     const nextKeys = Object.keys(nextProps).filter((key) => !ignoredProps.has(key));
 
