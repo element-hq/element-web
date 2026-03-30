@@ -314,9 +314,6 @@ importers:
       tar:
         specifier: ^7.5.8
         version: 7.5.13
-      tsx:
-        specifier: ^4.19.2
-        version: 4.21.0
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -26560,6 +26557,7 @@ snapshots:
       get-tsconfig: 4.13.6
     optionalDependencies:
       fsevents: 2.3.3
+    optional: true
 
   tsyringe@4.10.0:
     dependencies:

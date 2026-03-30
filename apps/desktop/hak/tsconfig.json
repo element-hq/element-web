@@ -6,7 +6,8 @@
         "sourceMap": false,
         "strict": true,
         "lib": ["es2022"],
-        "types": ["node"]
+        "types": ["node"],
+        "allowImportingTsExtensions": true
     },
     "include": ["../scripts/@types/*.d.ts", "./**/*.ts"]
 }
