@@ -181,56 +181,45 @@ export class DeviceListenerCurrentDevice {
         const keyBackupDownloadIsOk =
             !keyBackupUploadActive || backupDisabled || (await crypto.getSessionBackupPrivateKey()) !== null;
 
-        const allSystemsReady =
-            isCurrentDeviceTrusted &&
-            allCrossSigningSecretsCached &&
-            keyBackupUploadIsOk &&
-            recoveryIsOk &&
-            keyBackupDownloadIsOk;
+        if (!isCurrentDeviceTrusted) {
+            // The current device is not trusted: prompt the user to verify
+            await this.failedCheck("verify_this_session", logSpan, "info", "Current device not verified");
+        } else if (!allCrossSigningSecretsCached) {
+            // cross signing ready & device trusted, but we are missing secrets from our local cache.
+            // prompt the user to enter their recovery key.
+            const newState = crossSigningStatus.privateKeysInSecretStorage
+                ? "key_storage_out_of_sync"
+                : "identity_needs_reset";
 
-        if (allSystemsReady) {
+            await this.failedCheck(
+                newState,
+                logSpan,
+                "info",
+                "Some secrets not cached",
+                crossSigningStatus.privateKeysCachedLocally,
+                crossSigningStatus.privateKeysInSecretStorage,
+            );
+        } else if (!keyBackupUploadIsOk) {
+            await this.failedCheck(
+                "turn_on_key_storage",
+                logSpan,
+                "info",
+                "Key backup upload is unexpectedly turned off",
+            );
+        } else if (!recoveryIsOk) {
+            if (secretStorageStatus.defaultKeyId === null) {
+                await this.failedCheck("set_up_recovery", logSpan, "info", "No default 4S key");
+            } else {
+                await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "4S is missing secrets", {
+                    secretStorageStatus,
+                });
+            }
+        } else if (!keyBackupDownloadIsOk) {
+            await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally");
+        } else {
+            // Everything is OK - no need to show a toast
             logSpan.info("No toast needed");
             await this.setDeviceState("ok", logSpan);
-        } else {
-            if (!isCurrentDeviceTrusted) {
-                // The current device is not trusted: prompt the user to verify
-                await this.failedCheck("verify_this_session", logSpan, "info", "Current device not verified");
-            } else if (!allCrossSigningSecretsCached) {
-                // cross signing ready & device trusted, but we are missing secrets from our local cache.
-                // prompt the user to enter their recovery key.
-                const newState = crossSigningStatus.privateKeysInSecretStorage
-                    ? "key_storage_out_of_sync"
-                    : "identity_needs_reset";
-
-                await this.failedCheck(
-                    newState,
-                    logSpan,
-                    "info",
-                    "Some secrets not cached",
-                    crossSigningStatus.privateKeysCachedLocally,
-                    crossSigningStatus.privateKeysInSecretStorage,
-                );
-            } else if (!keyBackupUploadIsOk) {
-                await this.failedCheck(
-                    "turn_on_key_storage",
-                    logSpan,
-                    "info",
-                    "Key backup upload is unexpectedly turned off",
-                );
-            } else if (!recoveryIsOk) {
-                if (secretStorageStatus.defaultKeyId === null) {
-                    await this.failedCheck("set_up_recovery", logSpan, "info", "No default 4S key");
-                } else {
-                    await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "4S is missing secrets", {
-                        secretStorageStatus,
-                    });
-                }
-            } else if (!keyBackupDownloadIsOk) {
-                await this.failedCheck("key_storage_out_of_sync", logSpan, "warn", "Backup key is not cached locally");
-            } else {
-                // We should not get here
-                throw new Error("DeviceListenerCurrentDevice is in an unexpected state");
-            }
         }
     }
 
