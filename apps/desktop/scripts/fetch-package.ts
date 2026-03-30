@@ -8,7 +8,7 @@ import * as asar from "@electron/asar";
 import { promises as stream } from "node:stream";
 
 import riotDesktopPackageJson from "../package.json" with { type: "json" };
-import { setPackageVersion } from "./set-version.ts.js";
+import { setPackageVersion } from "./set-version.ts";
 
 const PUB_KEY_URL = "https://packages.riot.im/element-release-key.asc";
 const PACKAGE_URL_PREFIX = "https://github.com/element-hq/element-web/releases/download/";

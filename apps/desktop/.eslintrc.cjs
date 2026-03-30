@@ -62,6 +62,7 @@ module.exports = {
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",
                 "quotes": "off",
+                "n/file-extension-in-import": "off",
 
                 "@typescript-eslint/no-explicit-any": "off",
                 // We're okay with assertion errors when we ask for them

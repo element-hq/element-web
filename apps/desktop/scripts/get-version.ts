@@ -6,7 +6,7 @@
 
 import url from "node:url";
 
-import { versionFromAsar } from "./set-version.ts.js";
+import { versionFromAsar } from "./set-version.ts";
 
 async function main(): Promise<number> {
     const version = await versionFromAsar();
