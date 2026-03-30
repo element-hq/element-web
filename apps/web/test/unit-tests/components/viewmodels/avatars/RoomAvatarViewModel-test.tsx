@@ -6,7 +6,16 @@
  */
 
 import { renderHook, waitFor } from "jest-matrix-react";
-import { JoinRule, type MatrixClient, type Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
+import {
+    JoinRule,
+    type MatrixClient,
+    MatrixEvent,
+    type Room,
+    RoomEvent,
+    RoomMember,
+    User,
+} from "matrix-js-sdk/src/matrix";
+import { act } from "react";
 
 import {
     AvatarBadgeDecoration,
@@ -78,6 +87,7 @@ describe("RoomAvatarViewModel", () => {
 
         // 4. With presence, public room, video room and low priority, low priority takes precedence
         room.tags[DefaultTagID.LowPriority] = {};
+        act(() => room.emit(RoomEvent.Tags, new MatrixEvent(), room));
         rerender(room);
         expect(vm.current.badgeDecoration).toBe(AvatarBadgeDecoration.LowPriority);
     });

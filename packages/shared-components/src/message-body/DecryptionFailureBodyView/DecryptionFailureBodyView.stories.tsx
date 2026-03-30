@@ -13,7 +13,7 @@ import {
     DecryptionFailureReason,
     type DecryptionFailureBodyViewSnapshot,
 } from "./DecryptionFailureBodyView";
-import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type DecryptionFailureBodyProps = DecryptionFailureBodyViewSnapshot;

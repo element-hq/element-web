@@ -28,5 +28,5 @@ export function readSampleFile(
 export function readSampleFileSync(file: string, encoding: null): NonSharedBuffer;
 export function readSampleFileSync(file: string, encoding?: BufferEncoding): string;
 export function readSampleFileSync(file: string, encoding: BufferEncoding | null = "utf-8"): NonSharedBuffer | string {
-    return readFileSync(getSampleFilePath(file));
+    return readFileSync(getSampleFilePath(file), encoding);
 }

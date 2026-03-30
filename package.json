@@ -19,7 +19,10 @@
         "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
         "lint:knip": "knip",
         "install:git-hooks": "husky",
-        "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall"
+        "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:preview": "vitepress preview docs"
     },
     "resolutions": {
         "pretty-format@30>react-is": "19.2.4",
@@ -32,7 +35,7 @@
         "testcontainers": "^11.0.0",
         "matrix-widget-api": "^1.17.0",
         "qs": "6.15.0",
-        "serialize-javascript": "7.0.4",
+        "serialize-javascript": "7.0.5",
         "atomically": "2.1.1",
         "@types/node": "18.19.130",
         "config-file-ts": "0.2.8-rc1",
@@ -53,10 +56,13 @@
         "knip": "5.87.0",
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
+        "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
         "nx": "22.5.4",
         "prettier": "3.8.1",
         "typescript": "catalog:",
+        "vitepress": "^1.6.4",
+        "vitepress-plugin-mermaid": "^2.0.17",
         "yaml": "^2.3.3"
     },
     "pnpm": {

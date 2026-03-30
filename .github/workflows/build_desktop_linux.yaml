@@ -73,7 +73,7 @@ jobs:
         # https://github.com/matrix-org/seshat/issues/135
         runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') }}
         env:
-            HAK_DOCKER_IMAGE: ghcr.io/element-hq/element-desktop-dockerbuild
+            HAK_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env
         steps:
             - name: Resolve docker image tag for push
               if: github.event_name == 'push'
@@ -116,13 +116,13 @@ jobs:
 
             - name: Cache .hak
               id: cache
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               with:
                   key: ${{ runner.os }}-${{ github.ref_name }}-${{ inputs.sqlcipher }}-${{ inputs.arch }}-${{ hashFiles('hakHash', 'electronVersion', 'dockerbuild/*') }}
                   path: |
                       apps/desktop/.hak
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   node-version-file: apps/desktop/.node-version
