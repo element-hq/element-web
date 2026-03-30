@@ -32,9 +32,10 @@
         "lint": "pnpm lint:types && pnpm lint:js",
         "lint:js": "eslint --max-warnings 0 src hak playwright scripts",
         "lint:js-fix": "eslint --fix --max-warnings 0 src hak playwright scripts && prettier --log-level=warn --write .",
-        "lint:types": "pnpm lint:types:src && pnpm lint:types:test && pnpm lint:types:scripts && pnpm lint:types:hak",
+        "lint:types": "pnpm lint:types:src && pnpm lint:types:test && pnpm lint:types:unit && pnpm lint:types:scripts && pnpm lint:types:hak",
         "lint:types:src": "tsc --noEmit",
         "lint:types:test": "tsc --noEmit -p playwright/tsconfig.json",
+        "lint:types:unit": "tsc --noEmit -p test/tsconfig.json",
         "lint:types:scripts": "tsc --noEmit -p scripts/tsconfig.json",
         "lint:types:hak": "tsc --noEmit -p hak/tsconfig.json",
         "build:native": "pnpm run hak",
@@ -52,6 +53,7 @@
         "clean": "rimraf webapp.asar dist packages deploys lib",
         "hak": "tsx scripts/hak/index.ts",
         "test": "playwright test",
+        "test:unit": "vitest run --environment node test/unit-tests",
         "test:open": "pnpm test --ui",
         "test:screenshots:build": "docker build playwright -t element-desktop-playwright --platform linux/amd64",
         "test:screenshots:run": "docker run --rm --network host -v $(pwd):/work/element-desktop -v element-desktop-playwright:/work/element-desktop/node_modules -v /var/run/docker.sock:/var/run/docker.sock --platform linux/amd64 -it element-desktop-playwright",
@@ -103,7 +105,8 @@
         "rimraf": "^6.0.0",
         "tar": "^7.5.8",
         "tsx": "^4.19.2",
-        "typescript": "5.9.3"
+        "typescript": "5.9.3",
+        "vitest": "^4.0.18"
     },
     "hakDependencies": {
         "matrix-seshat": "^4.0.1"
