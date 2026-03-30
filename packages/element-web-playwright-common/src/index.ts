@@ -66,6 +66,16 @@ export interface TestFixtures {
 
     labsFlags: string[];
     disablePresence: boolean;
+    /**
+     * Whether the left panel should have its width fixed.
+     * This is done because the library that we use for rendering collapsible
+     * panels uses math to calculate the width which can sometimes leads to +/-1px
+     * difference. While this does not matter to the user, it can lead to screenshot
+     * tests failing.
+     * Defaults to true, should be set to false via {@link base.use} when you want to test the collapse
+     * behaviour.
+     */
+    lockLeftPanelWidth: boolean;
 }
 
 export const test = base.extend<TestFixtures>({
@@ -73,8 +83,18 @@ export const test = base.extend<TestFixtures>({
     config: async ({}, use) => use({}),
     labsFlags: async ({}, use) => use([]),
     disablePresence: async ({}, use) => use(false),
-    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
+    lockLeftPanelWidth: true,
+    page: async ({ homeserver, context, page, config, labsFlags, disablePresence, lockLeftPanelWidth }, use) => {
         await routeConfigJson(context, homeserver.baseUrl, config, labsFlags, disablePresence);
+        if (lockLeftPanelWidth) {
+            await page.addStyleTag({
+                content: `
+                        #left-panel {
+                            flex: 0 0 369.6875px !important;
+                        }
+                `,
+            });
+        }
         await use(page);
     },
 });
