@@ -214,28 +214,30 @@ export class DeviceListenerCurrentDevice {
             } else if (!keyBackupUploadIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: setting state to TURN_ON_KEY_STORAGE");
                 await this.setDeviceState("turn_on_key_storage", logSpan);
-            } else if (secretStorageStatus.defaultKeyId === null) {
-                // The user just hasn't set up 4S yet: if they have key
-                // backup, prompt them to turn on recovery too. (If not, they
-                // have explicitly opted out, so don't hassle them.)
-                if (recoveryDisabled) {
-                    logSpan.info("Recovery disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
-                } else if (keyBackupUploadActive) {
-                    logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
-                    await this.setDeviceState("set_up_recovery", logSpan);
-                } else {
-                    logSpan.info("No default 4S key but backup disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
-                }
             } else if (!recoveryIsOk) {
-                logSpan.warn("4S is missing secrets: setting state to KEY_STORAGE_OUT_OF_SYNC", {
-                    secretStorageStatus,
-                    allCrossSigningSecretsCached,
-                    isCurrentDeviceTrusted,
-                    keyBackupDownloadIsOk,
-                });
-                await this.setDeviceState("key_storage_out_of_sync", logSpan);
+                if (secretStorageStatus.defaultKeyId === null) {
+                    // The user just hasn't set up 4S yet: if they have key
+                    // backup, prompt them to turn on recovery too. (If not, they
+                    // have explicitly opted out, so don't hassle them.)
+                    if (recoveryDisabled) {
+                        logSpan.info("Recovery disabled: no toast needed");
+                        await this.setDeviceState("ok", logSpan);
+                    } else if (keyBackupUploadActive) {
+                        logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
+                        await this.setDeviceState("set_up_recovery", logSpan);
+                    } else {
+                        logSpan.info("No default 4S key but backup disabled: no toast needed");
+                        await this.setDeviceState("ok", logSpan);
+                    }
+                } else {
+                    logSpan.warn("4S is missing secrets: setting state to KEY_STORAGE_OUT_OF_SYNC", {
+                        secretStorageStatus,
+                        allCrossSigningSecretsCached,
+                        isCurrentDeviceTrusted,
+                        keyBackupDownloadIsOk,
+                    });
+                    await this.setDeviceState("key_storage_out_of_sync", logSpan);
+                }
             } else if (!keyBackupDownloadIsOk) {
                 logSpan.warn("Backup key is not cached locally: setting state to KEY_STORAGE_OUT_OF_SYNC", {
                     secretStorageStatus,
