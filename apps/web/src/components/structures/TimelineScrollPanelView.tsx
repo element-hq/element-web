@@ -195,10 +195,6 @@ export function TimelineScrollPanelListView({
         (range: TimelineVisibleRange): void => {
             if (stickyBottom && !hasUserScrolledRef.current && !hasInitializedPassiveBottomRef.current) {
                 hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
-                return;
-            }
-            if (stickyBottom && !hasUserScrolledRef.current) {
-                return;
             }
             onVisibleRangeChange?.(range);
         },
@@ -296,7 +292,12 @@ export function TimelineScrollPanelListView({
                         className={classNames("mx_RoomView_MessageList", className)}
                         style={{
                             ...listProps.style,
+                            containIntrinsicSize: "auto",
+                            contentVisibility: "visible",
+                            display: "block",
+                            justifyContent: "normal",
                             overflowAnchor: "none",
+                            position: "static",
                         }}
                         aria-live="polite"
                     >

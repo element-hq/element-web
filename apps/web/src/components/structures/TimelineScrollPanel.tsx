@@ -306,7 +306,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
                 return null;
             }
 
-            return items.slice(visibleRange.startIndex, visibleRange.endIndex + 1).map((item) => item.virtualKey ?? item.key);
+            return items.slice(visibleRange.startIndex, visibleRange.endIndex + 1).map((item) => item.key);
         },
         [items],
     );
@@ -342,9 +342,20 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             return undefined;
         }
 
-        return Array.from(scrollNode.querySelectorAll<HTMLElement>("[data-scroll-tokens]")).find((node) =>
-            node.dataset.scrollTokens?.split(",").includes(scrollToken),
+        const matchingNodes = Array.from(scrollNode.querySelectorAll<HTMLElement>("[data-scroll-tokens]")).filter(
+            (node) => node.dataset.scrollTokens?.split(",").includes(scrollToken),
         );
+
+        if (matchingNodes.length === 0) {
+            return undefined;
+        }
+
+        return matchingNodes.reduce((bestNode, node) => {
+            const bestTokenCount = bestNode.dataset.scrollTokens?.split(",").length ?? Number.MAX_SAFE_INTEGER;
+            const tokenCount = node.dataset.scrollTokens?.split(",").length ?? Number.MAX_SAFE_INTEGER;
+
+            return tokenCount < bestTokenCount ? node : bestNode;
+        });
     }, []);
     const requestFill = useCallback(
         (backwards: boolean): void => {
