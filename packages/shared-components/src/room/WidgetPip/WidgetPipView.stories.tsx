@@ -9,7 +9,7 @@ import { type Meta, type StoryFn } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { WidgetPipView, type WidgetPipViewActions, type WidgetPipViewSnapshot } from "./WidgetPipView";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 

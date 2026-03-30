@@ -12,7 +12,7 @@ import React from "react";
 
 import { EncryptionEventState, EncryptionEventView } from "./EncryptionEventView";
 import * as stories from "./EncryptionEventView.stories";
-import { MockViewModel } from "../../viewmodel";
+import { MockViewModel } from "../../core/viewmodel";
 
 const {
     Default,

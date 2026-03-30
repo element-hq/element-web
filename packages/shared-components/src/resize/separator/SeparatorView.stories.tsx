@@ -10,9 +10,9 @@ import { expect, fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ResizableGroup, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../core/utils/Flex";
 
 type SeparatorViewProps = ResizerViewSnapshot & SeparatorViewActions;
 

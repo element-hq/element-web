@@ -17,8 +17,8 @@ import {
     type MessageTimestampViewActions,
     type MessageTimestampViewSnapshot,
 } from "./MessageTimestampView";
-import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
-import { I18nContext } from "../../utils/i18nContext.ts";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel.ts";
+import { I18nContext } from "../../core/i18n/i18nContext.ts";
 import { I18nApi } from "../../index.ts";
 
 const { Default, HasHref } = composeStories(stories);

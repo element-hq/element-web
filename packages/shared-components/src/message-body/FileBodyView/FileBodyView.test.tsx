@@ -11,9 +11,9 @@ import { fireEvent, render, screen } from "@test-utils";
 import { describe, it, expect, vi } from "vitest";
 
 import { FileBodyView, FileBodyViewState, type FileBodyViewActions, type FileBodyViewSnapshot } from "./FileBodyView";
-import { MockViewModel } from "../../viewmodel/MockViewModel";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel";
 import { I18nApi } from "../../index";
-import { I18nContext } from "../../utils/i18nContext";
+import { I18nContext } from "../../core/i18n/i18nContext";
 import * as stories from "./FileBodyView.stories";
 
 const renderWithI18n = (ui: React.ReactElement): ReturnType<typeof render> =>

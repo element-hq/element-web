@@ -87,7 +87,7 @@ export class RoomListItemViewModel
         });
 
         // Subscribe to call state changes
-        this.disposables.trackListener(CallStore.instance, CallStoreEvent.ConnectedCalls, this.onCallStateChanged);
+        this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallStateChanged);
         // If there is an active call for this room, listen to participant changes
         this.listenToCallParticipants();
 
@@ -102,6 +102,7 @@ export class RoomListItemViewModel
     public dispose(): void {
         super.dispose();
         this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
+        this.currentCall?.off(CallEvent.CallTypeChanged, this.onCallTypeChanged);
     }
 
     private onNotificationChanged = (): void => {
@@ -129,15 +130,24 @@ export class RoomListItemViewModel
     };
 
     /**
+     * Handler for call type changes. Only updates the item if the call type is actually present in the snapshot.
+     */
+    private onCallTypeChanged = (): void => {
+        if (this.snapshot.current.notification.callType !== undefined) this.updateItem();
+    };
+
+    /**
      * Listen to participant changes for the current call in this room (if any) to trigger updates when participants join/leave the call.
      */
     private listenToCallParticipants(): void {
         const call = CallStore.instance.getCall(this.props.room.roomId);
 
-        // Remove listener from previous call (if any) and add to new call to track participant changes
+        // Remove listeners from previous call (if any) and add to new call to track changes
         if (call !== this.currentCall) {
             this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
+            this.currentCall?.off(CallEvent.CallTypeChanged, this.onCallTypeChanged);
             call?.on(CallEvent.Participants, this.onCallParticipantsChanged);
+            call?.on(CallEvent.CallTypeChanged, this.onCallTypeChanged);
         }
         this.currentCall = call;
     }
@@ -200,9 +210,7 @@ export class RoomListItemViewModel
      */
     private async loadAndSetMessagePreview(): Promise<void> {
         const messagePreview = await this.loadMessagePreview();
-        if (messagePreview !== this.snapshot.current.messagePreview) {
-            this.snapshot.merge({ messagePreview });
-        }
+        this.snapshot.merge({ messagePreview });
     }
 
     /**

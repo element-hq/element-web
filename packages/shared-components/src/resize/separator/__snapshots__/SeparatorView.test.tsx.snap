@@ -188,12 +188,8 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
         </div>
       </div>
       <div
-        aria-controls="_r_9_"
         aria-label="Click or drag to expand"
         aria-orientation="vertical"
-        aria-valuemax="96.618"
-        aria-valuemin="0"
-        aria-valuenow="48.309"
         class="separator Separator"
         data-separator="inactive"
         data-testid="_r_a_"
