@@ -10,7 +10,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import { type Filter, FilterEnum } from ".";
 
 export class ExcludeTagsFilter implements Filter {
-    public constructor(private tags: string[]) {}
+    public constructor(private readonly tags: string[]) {}
 
     public matches(room: Room): boolean {
         return !this.tags.some((tag) => room.tags[tag]);

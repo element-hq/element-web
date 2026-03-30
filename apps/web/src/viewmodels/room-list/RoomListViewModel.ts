@@ -83,13 +83,13 @@ export class RoomListViewModel
     private lastActiveRoomPosition: StickyRoomPosition | undefined = undefined;
 
     // Child view model management
-    private roomItemViewModels = new Map<string, RoomListItemViewModel>();
+    private readonly roomItemViewModels = new Map<string, RoomListItemViewModel>();
     // This map is intentionally additive (never cleared except on space changes) to avoid a race condition:
     // a list update can refresh roomsResult and roomsMap before the view re-renders, so the view may still
     // request a view model for a room that was removed from the latest list. Keeping old entries prevents a crash.
     private roomsMap = new Map<string, Room>();
     // Don't clear section vm because we want to keep the expand/collapse state even during space changes.
-    private roomSectionHeaderViewModels = new Map<string, RoomListSectionHeaderViewModel>();
+    private readonly roomSectionHeaderViewModels = new Map<string, RoomListSectionHeaderViewModel>();
 
     public constructor(props: RoomListViewModelProps) {
         const activeSpace = SpaceStore.instance.activeSpaceRoom;

@@ -10,7 +10,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import { type Filter } from ".";
 
 export class TagFilter implements Filter {
-    public constructor(private tag: string) {}
+    public constructor(private readonly tag: string) {}
 
     public matches(room: Room): boolean {
         return !!room.tags[this.tag];

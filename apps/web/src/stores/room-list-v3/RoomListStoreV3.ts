@@ -103,12 +103,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Maps section tags to their corresponding tag filters, used to determine which rooms belong in which sections.
      */
-    private filterByTag: Map<string, Filter> = new Map();
+    private readonly filterByTag: Map<string, Filter> = new Map();
 
     /**
      * Defines the display order of sections.
      */
-    private sortedTags: string[] = [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority];
+    private readonly sortedTags: string[] = [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority];
 
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
