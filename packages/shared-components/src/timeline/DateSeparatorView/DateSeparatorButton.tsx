@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { Tooltip } from "@vector-im/compound-web";
+import { Heading, Tooltip } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
 import { Flex } from "../../core/utils/Flex";
@@ -53,7 +53,9 @@ export function DateSeparatorButton({
                 tabIndex={0}
                 {...props}
             >
-                <h2 aria-hidden="true">{label}</h2>
+                <Heading as="h2" size="lg" aria-hidden="true">
+                    {label}
+                </Heading>
                 <ChevronDownIcon />
             </Flex>
         </Tooltip>
