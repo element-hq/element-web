@@ -14,6 +14,7 @@ import {
     useCreateAutoDisposedViewModel,
     EventContentBodyView,
     LINKIFIED_DATA_ATTRIBUTE,
+    useViewModel,
 } from "@element-hq/web-shared-components";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
@@ -39,6 +40,7 @@ import { UrlPreviewGroupViewModel } from "../../../viewmodels/message-body/UrlPr
 import { useMediaVisible } from "../../../hooks/useMediaVisible.ts";
 import ImageView from "../elements/ImageView.tsx";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
 
 const logger = rootLogger.getChild("TextualBody");
 
@@ -426,6 +428,15 @@ export default function TextualBody(props: IBodyProps): React.ReactElement {
             }
         })();
     }, [vm, props.showUrlPreview, mediaVisible]);
+
+    const { previews } = useViewModel(vm);
+
+    useEffect(() => {
+        if (previews.length === 0) {
+            return;
+        }
+        PosthogTrackers.instance.trackUrlPreview(props.mxEvent.getId()!, props.mxEvent.isEncrypted(), previews);
+    }, [props.mxEvent, previews]);
 
     return <InnerTextualBody urlPreviewViewModel={vm} {...props} />;
 }
