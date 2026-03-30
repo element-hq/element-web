@@ -5,6 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import EventEmitter from "events";
 import {
     type MatrixClient,
     type MatrixEvent,
@@ -26,7 +27,7 @@ import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import { CallStore } from "../../../src/stores/CallStore";
-import type { Call } from "../../../src/models/Call";
+import { CallEvent, type Call } from "../../../src/models/Call";
 import { RoomListItemViewModel } from "../../../src/viewmodels/room-list/RoomListItemViewModel";
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
@@ -435,6 +436,28 @@ describe("RoomListItemViewModel", () => {
             expect(firstCall.off).toHaveBeenCalledWith("participants", participantsCallback);
             // The new call must have a listener registered
             expect(secondCall.on).toHaveBeenCalledWith("participants", expect.any(Function));
+        });
+
+        it("should listen to call type changes", async () => {
+            // Start with a voice call
+            let callType = CallType.Voice;
+            const mockCall = new (class extends EventEmitter {
+                get callType() {
+                    return callType;
+                }
+                participants = new Map([[matrixClient.getUserId()!, {}]]);
+            })() as unknown as Call;
+            jest.spyOn(CallStore.instance, "getCall").mockReturnValue(mockCall);
+
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            await flushPromises();
+
+            expect(viewModel.getSnapshot().notification.callType).toBe("voice");
+
+            // Now turn it into a video call
+            callType = CallType.Video;
+            mockCall.emit(CallEvent.CallTypeChanged, callType);
+            expect(viewModel.getSnapshot().notification.callType).toBe("video");
         });
     });
 

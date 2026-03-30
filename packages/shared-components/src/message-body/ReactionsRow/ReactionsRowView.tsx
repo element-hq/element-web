@@ -10,7 +10,7 @@ import classNames from "classnames";
 import { ReactionAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import styles from "./ReactionsRow.module.css";
 
 export interface ReactionsRowViewSnapshot {

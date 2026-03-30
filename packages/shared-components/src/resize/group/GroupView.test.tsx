@@ -12,7 +12,7 @@ import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import * as stories from "./GroupView.stories";
-import { BaseViewModel } from "../../viewmodel";
+import { BaseViewModel } from "../../core/viewmodel";
 import { GroupView, type GroupViewActions, Panel, Separator } from "..";
 
 const { Default } = composeStories(stories);

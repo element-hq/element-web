@@ -10,7 +10,7 @@ import React from "react";
 import { describe, it, expect } from "vitest";
 
 import { DecryptionFailureBodyView, DecryptionFailureReason } from "./DecryptionFailureBodyView";
-import { MockViewModel } from "../../viewmodel";
+import { MockViewModel } from "../../core/viewmodel";
 
 describe("DecryptionFailureBodyView", () => {
     function customRender(

@@ -6,11 +6,8 @@
  */
 
 .separator {
-    display: flex;
-    align-items: center;
     /* Hide the separator by default */
-    width: 0px;
-    opacity: 0;
+    display: none;
     /* Necessary to avoid weird focus outlines (doubled on one side, absent on one side etc...) */
     outline-offset: -2px;
 }
@@ -22,7 +19,8 @@
 
 .visible {
     /* Show the separator when the left panel is collapsed */
-    opacity: 100%;
+    display: flex;
+    align-items: center;
     width: 12px;
     border-right: 1px solid var(--cpd-color-bg-subtle-primary);
 }

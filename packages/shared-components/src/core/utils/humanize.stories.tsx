@@ -9,7 +9,7 @@ import React from "react";
 import { Markdown } from "@storybook/addon-docs/blocks";
 
 import type { Meta } from "@storybook/react-vite";
-import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
+import humanizeTimeDoc from "../../../typedoc/functions/humanizeTime.md?raw";
 
 const meta = {
     title: "utils/humanize",

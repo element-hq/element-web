@@ -12,7 +12,7 @@ import { describe, it, expect, vi } from "vitest";
 import { userEvent } from "vitest/browser";
 
 import * as stories from "./SeparatorView.stories";
-import { BaseViewModel } from "../../viewmodel";
+import { BaseViewModel } from "../../core/viewmodel";
 import { ResizableGroup, Panel, type ResizerViewSnapshot, SeparatorView, type SeparatorViewActions } from "..";
 
 const { Default, LeftPanelExpanded, KeyboardFocused } = composeStories(stories);

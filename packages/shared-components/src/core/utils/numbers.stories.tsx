@@ -9,11 +9,11 @@ import React from "react";
 import { Markdown } from "@storybook/addon-docs/blocks";
 
 import type { Meta } from "@storybook/react-vite";
-import clampDoc from "../../typedoc/functions/clamp.md?raw";
-import defaultNumberDoc from "../../typedoc/functions/defaultNumber.md?raw";
-import percentageOfDoc from "../../typedoc/functions/percentageOf.md?raw";
-import percentageWithinDoc from "../../typedoc/functions/percentageWithin.md?raw";
-import sumDoc from "../../typedoc/functions/sum.md?raw";
+import clampDoc from "../../../typedoc/functions/clamp.md?raw";
+import defaultNumberDoc from "../../../typedoc/functions/defaultNumber.md?raw";
+import percentageOfDoc from "../../../typedoc/functions/percentageOf.md?raw";
+import percentageWithinDoc from "../../../typedoc/functions/percentageWithin.md?raw";
+import sumDoc from "../../../typedoc/functions/sum.md?raw";
 
 const meta = {
     title: "utils/numbers",
