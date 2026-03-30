@@ -18,7 +18,7 @@ import {
     ActionBarView,
     type ActionBarViewSnapshot,
 } from "./ActionBarView.tsx";
-import { MockViewModel } from "../../../../../viewmodel/MockViewModel.ts";
+import { MockViewModel } from "../../../../../core/viewmodel/MockViewModel.ts";
 
 const composedStories = composeStories(stories);
 

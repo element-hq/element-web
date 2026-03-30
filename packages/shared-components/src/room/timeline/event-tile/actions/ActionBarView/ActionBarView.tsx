@@ -27,9 +27,9 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Button, InlineSpinner, Tooltip } from "@vector-im/compound-web";
 
-import { useI18n } from "../../../../../utils/i18nContext";
-import { Flex } from "../../../../../utils/Flex";
-import { type ViewModel, useViewModel } from "../../../../../viewmodel";
+import { useI18n } from "../../../../../core/i18n/i18nContext";
+import { Flex } from "../../../../../core/utils/Flex";
+import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import styles from "./ActionBarView.module.css";
 
 /**

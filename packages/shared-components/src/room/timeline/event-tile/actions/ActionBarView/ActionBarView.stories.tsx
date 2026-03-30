@@ -10,7 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ActionBarAction, ActionBarView, type ActionBarViewActions, type ActionBarViewSnapshot } from "./ActionBarView";
-import { useMockedViewModel } from "../../../../../viewmodel";
+import { useMockedViewModel } from "../../../../../core/viewmodel";
 import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
 
 type ActionBarProps = ActionBarViewSnapshot & ActionBarViewActions;
