@@ -86,42 +86,30 @@ describe("initEventIndex", () => {
         expect(result).toEqual({ eventIndex: reopenedIndex });
     });
 
-    it("recreates the index and reports wasRecreated for non-reindex failures", async () => {
+    it("propagates non-reindex errors without deleting the database", async () => {
         const mkdir = vi.fn().mockResolvedValue(undefined);
         const deleteContents = vi.fn().mockResolvedValue(undefined);
-        const recreatedIndex = { kind: "recreated-index" };
         const fixtureValue = "fixture-value";
-        const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+        const openError = new Error("filesystem lock");
 
         class FakeReindexError extends Error {}
 
-        const Seshat = vi
-            .fn()
-            .mockImplementationOnce(() => {
-                throw new Error("schema mismatch");
-            })
-            .mockImplementationOnce(() => recreatedIndex);
+        const Seshat = vi.fn().mockImplementationOnce(() => {
+            throw openError;
+        });
         const SeshatRecovery = vi.fn();
 
-        const result = await initEventIndex(eventStorePath, fixtureValue, TokenizerMode.Ngram, {
-            mkdir,
-            deleteContents,
-            createSeshat: Seshat,
-            createSeshatRecovery: SeshatRecovery,
-            isReindexError: (error) => error instanceof FakeReindexError,
-        });
+        await expect(
+            initEventIndex(eventStorePath, fixtureValue, TokenizerMode.Ngram, {
+                mkdir,
+                deleteContents,
+                createSeshat: Seshat,
+                createSeshatRecovery: SeshatRecovery,
+                isReindexError: (error) => error instanceof FakeReindexError,
+            }),
+        ).rejects.toThrow("filesystem lock");
 
-        expect(deleteContents).toHaveBeenCalledWith(eventStorePath);
-        expect(Seshat).toHaveBeenNthCalledWith(2, eventStorePath, {
-            passphrase: fixtureValue,
-            tokenizerMode: TokenizerMode.Ngram,
-            ngramMinSize: 2,
-            ngramMaxSize: 4,
-        });
+        expect(deleteContents).not.toHaveBeenCalled();
         expect(SeshatRecovery).not.toHaveBeenCalled();
-        expect(warnSpy).toHaveBeenCalledOnce();
-        expect(result).toEqual({ eventIndex: recreatedIndex, wasRecreated: true });
-
-        warnSpy.mockRestore();
     });
 });

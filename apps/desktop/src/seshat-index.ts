@@ -54,11 +54,9 @@ export async function initEventIndex(
             return { eventIndex: createSeshat(eventStorePath, seshatConfig) };
         }
 
-        console.warn("Failed to open Seshat database, deleting and recreating:", e);
-        await deleteContents(eventStorePath);
-        return {
-            eventIndex: createSeshat(eventStorePath, seshatConfig),
-            wasRecreated: true,
-        };
+        // For non-reindex errors (e.g. bad passphrase, filesystem lock),
+        // propagate to the caller so the user sees an error instead of
+        // silently losing their search index.
+        throw e;
     }
 }
