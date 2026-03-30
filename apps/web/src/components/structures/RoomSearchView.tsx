@@ -40,7 +40,6 @@ interface Props {
     scope: SearchScope;
     inProgress: boolean;
     promise: Promise<ISearchResults>;
-    abortController?: AbortController;
     className: string;
     onUpdate(this: void, inProgress: boolean, results: ISearchResults | null, error: Error | null): void;
     ref?: Ref<ScrollPanel>;
@@ -48,16 +47,7 @@ interface Props {
 
 // XXX: todo: merge overlapping results somehow?
 // XXX: why doesn't searching on name work?
-export const RoomSearchView = ({
-    term,
-    scope,
-    promise,
-    abortController,
-    className,
-    onUpdate,
-    inProgress,
-    ref,
-}: Props): JSX.Element => {
+export const RoomSearchView = ({ term, scope, promise, className, onUpdate, inProgress, ref }: Props): JSX.Element => {
     const client = useContext(MatrixClientContext);
     const roomContext = useScopedRoomContext("showHiddenEvents");
     const [highlights, setHighlights] = useState<string[] | null>(null);
@@ -144,7 +134,6 @@ export const RoomSearchView = ({
         handleSearchResult(promise);
         return () => {
             aborted.current = true;
-            abortController?.abort();
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
