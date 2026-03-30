@@ -222,6 +222,7 @@ export interface I18nApi {
     get language(): string;
     register(this: void, translations: Partial<Translations>): void;
     translate(this: void, key: keyof Translations, variables?: Variables): string;
+    translate(this: void, key: keyof Translations, variables: Variables | undefined, tags: Tags): ReactNode;
 }
 
 // @alpha
@@ -440,6 +441,12 @@ export interface StoresApi {
 }
 
 // @public
+export type SubstitutionValue = number | string | ReactNode | ((sub: string) => ReactNode);
+
+// @public
+export type Tags = Record<string, SubstitutionValue>;
+
+// @public
 export type Translations = Record<string, {
     [ietfLanguageTag: string]: string;
 }>;
@@ -469,7 +476,7 @@ export function useWatchable<T>(watchable: Watchable<T>): T;
 // @public
 export type Variables = {
     count?: number;
-    [key: string]: number | string | undefined;
+    [key: string]: SubstitutionValue;
 };
 
 // @public
