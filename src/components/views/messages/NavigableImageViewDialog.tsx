@@ -35,7 +35,7 @@ function isImageEvent(ev: MatrixEvent): boolean {
     if (ev.getType() !== EventType.RoomMessage) return false;
 
     const c = ev.getContent<ImageContent>();
-    return c?.msgtype === MsgType.Image;
+    if (c?.msgtype !== MsgType.Image) return false;
 
     // We use the security fallback from MImageBody: some events claim to be images but must be rendered as files.
     // Encrypted events use file, if the mimetype is not allowed and no safe thumbnail, MImageBody
@@ -45,6 +45,7 @@ function isImageEvent(ev: MatrixEvent): boolean {
     const hasThumbnail = Boolean(c.info?.thumbnail_info);
 
     if (isEncrypted && !isMimeTypeAllowed(mimetype) && !hasThumbnail) return false;
+    return true;
 }
 
 function eventToName(ev: MatrixEvent): string {
@@ -158,8 +159,8 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
 
     const [isPaginating, setIsPaginating] = useState(false);
 
-    const paginateBackwards = useCallback(async (): Promise<boolean> => {
-        if (!timeline || isPaginating || !canPaginateBackwards) return false;
+    const paginateBackwards = useCallback(async (): Promise<{ progressed: boolean; reachedStart: boolean }> => {
+        if (!timeline || isPaginating || !canPaginateBackwards) return { progressed: false, reachedStart: true };
         setIsPaginating(true);
         try {
             const before = (timeline.getEvents?.() as MatrixEvent[] | undefined) ?? [];
@@ -177,10 +178,9 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
                 afterLen > beforeLen ||
                 (beforeOldestId !== null && afterOldestId !== null && afterOldestId !== beforeOldestId);
 
-            const canContinue = ok === true && progressed;
-
-            setCanPaginateBackwards(canContinue);
-            return canContinue;
+            const reachedStart = ok !== true;
+            setCanPaginateBackwards(!reachedStart);
+            return { progressed, reachedStart };
         } finally {
             setIsPaginating(false);
         }
@@ -219,8 +219,8 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
         // Try paginating backwards until we either find an earlier image
         // or determine that we're at the start of the room history.
         for (let page = 0; page < MAX_PAGES; page++) {
-            const ok = await paginateBackwards();
-            if (!ok) {
+            const { progressed, reachedStart } = await paginateBackwards();
+            if (reachedStart) {
                 setAtStartOfRoomImages(true);
                 return;
             }
@@ -241,8 +241,7 @@ export default function NavigableImageViewDialog(props: Props): React.ReactNode 
                 setAtStartOfRoomImages(false);
                 return;
             }
-            if (newIndex === -1) return;
-            // else newIndex === 0: still no earlier image, paginate again
+            if (!progressed) continue;
         }
 
         if (!canPaginateBackwards) {

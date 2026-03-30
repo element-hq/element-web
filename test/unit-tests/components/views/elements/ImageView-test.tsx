@@ -32,6 +32,7 @@ jest.mock("../../../../../src/KeyBindingsManager", () => ({
         getAccessibilityAction: (ev: any) => {
             // Preserve existing Ctrl+S behavior
             if (ev?.ctrlKey && (ev?.key === "s" || ev?.code === "KeyS")) return "save";
+            if (ev?.key === "Escape") return "escape";
             // For other keys, don't map to an accessibility action
             return undefined;
         },
@@ -194,6 +195,35 @@ describe("<ImageView />", () => {
 
         fireEvent.keyDown(dialog, { key: "ArrowRight" });
         expect(onNext).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not trigger arrow-key navigation when focus is in an input", () => {
+        const onPrev = jest.fn();
+        const onNext = jest.fn();
+
+        const { container } = render(
+            <ImageView src="https://example.com/image.png" onFinished={jest.fn()} onPrev={onPrev} onNext={onNext} />,
+        );
+
+        const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
+        const input = document.createElement("input");
+        dialog.appendChild(input);
+
+        fireEvent.keyDown(input, { key: "ArrowLeft" });
+        fireEvent.keyDown(input, { key: "ArrowRight" });
+
+        expect(onPrev).not.toHaveBeenCalled();
+        expect(onNext).not.toHaveBeenCalled();
+    });
+
+    it("closes on Escape key", () => {
+        const onFinished = jest.fn();
+        const { container } = render(<ImageView src="https://example.com/image.png" onFinished={onFinished} />);
+
+        const dialog = container.querySelector('[role="dialog"]') as HTMLElement;
+        fireEvent.keyDown(dialog, { key: "Escape" });
+
+        expect(onFinished).toHaveBeenCalledTimes(1);
     });
 
     it("resets interaction state when navigating to a different mxEvent", () => {
