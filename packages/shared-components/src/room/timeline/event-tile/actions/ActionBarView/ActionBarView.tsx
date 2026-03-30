@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { createRef, type JSX, useCallback, useLayoutEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 import {
     CollapseIcon,
@@ -106,9 +106,11 @@ export enum ActionBarAction {
     ViewSource = "viewSource",
 }
 
+type ActionButtonRef = React.RefObject<HTMLButtonElement | null>;
+
 interface ToolbarButtonMeta {
     action: ActionBarAction;
-    ref: React.RefObject<HTMLButtonElement | null>;
+    ref: ActionButtonRef;
     disabled?: boolean;
 }
 
@@ -133,21 +135,6 @@ interface ActionBarViewProps {
 export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): JSX.Element | null {
     const { translate: _t } = useI18n();
     const [activeIndex, setActiveIndex] = useState(0);
-    const cancelTriggerRef = useRef<HTMLButtonElement>(null);
-    const copyLinkTriggerRef = useRef<HTMLButtonElement>(null);
-    const downloadTriggerRef = useRef<HTMLButtonElement>(null);
-    const editTriggerRef = useRef<HTMLButtonElement>(null);
-    const expandTriggerRef = useRef<HTMLButtonElement>(null);
-    const hideTriggerRef = useRef<HTMLButtonElement>(null);
-    const pinTriggerRef = useRef<HTMLButtonElement>(null);
-    const reactTriggerRef = useRef<HTMLButtonElement>(null);
-    const removeTriggerRef = useRef<HTMLButtonElement>(null);
-    const replyTriggerRef = useRef<HTMLButtonElement>(null);
-    const replyInThreadTriggerRef = useRef<HTMLButtonElement>(null);
-    const resendTriggerRef = useRef<HTMLButtonElement>(null);
-    const viewInRoomTriggerRef = useRef<HTMLButtonElement>(null);
-    const viewSourceTriggerRef = useRef<HTMLButtonElement>(null);
-    const optionsTriggerRef = useRef<HTMLButtonElement>(null);
     const {
         actions,
         presentation = "icon",
@@ -158,13 +145,19 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         isQuoteExpanded,
     } = useViewModel(vm);
 
+    const actionButtonRefs = useMemo(() => {
+        return Object.fromEntries(
+            Object.values(ActionBarAction).map((action) => [action, createRef<HTMLButtonElement>()]),
+        ) as Record<ActionBarAction, ActionButtonRef>;
+    }, []);
+
     const actionButtons: Partial<Record<ActionBarAction, JSX.Element>> = {};
 
     actionButtons[ActionBarAction.Edit] = (
         <ActionBarButton
             key={ActionBarAction.Edit}
             presentation={presentation}
-            buttonRef={editTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Edit]}
             label={_t("action|edit")}
             onActivate={vm.onEditClick}
             icon={EditIcon}
@@ -176,7 +169,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Pin}
             presentation={presentation}
-            buttonRef={pinTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Pin]}
             label={pinDescription}
             onActivate={vm.onPinClick}
             icon={isPinned ? UnpinIcon : PinIcon}
@@ -188,7 +181,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Cancel}
             presentation={presentation}
-            buttonRef={cancelTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Cancel]}
             label={_t("action|delete")}
             onActivate={vm.onCancelClick}
             icon={DeleteIcon}
@@ -199,7 +192,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.CopyLink}
             presentation={presentation}
-            buttonRef={copyLinkTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.CopyLink]}
             label={_t("timeline|mab|copy_link_thread")}
             onActivate={vm.onCopyLinkClick}
             icon={LinkIcon}
@@ -210,7 +203,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Reply}
             presentation={presentation}
-            buttonRef={replyTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Reply]}
             label={_t("action|reply")}
             onActivate={vm.onReplyClick}
             icon={ReplyIcon}
@@ -221,7 +214,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.React}
             presentation={presentation}
-            buttonRef={reactTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.React]}
             label={_t("action|react")}
             onActivate={vm.onReactionsClick}
             icon={ReactionAddIcon}
@@ -238,7 +231,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Download}
             presentation={presentation}
-            buttonRef={downloadTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Download]}
             label={downloadTitle}
             onActivate={vm.onDownloadClick}
             icon={isDownloadLoading ? InlineSpinner : DownloadIcon}
@@ -250,7 +243,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Hide}
             presentation={presentation}
-            buttonRef={hideTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Hide]}
             label={_t("action|hide")}
             onActivate={vm.onHideClick}
             icon={VisibilityOffIcon}
@@ -264,7 +257,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.ReplyInThread}
             presentation={presentation}
-            buttonRef={replyInThreadTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.ReplyInThread]}
             label={_t("action|reply_in_thread")}
             tooltipDescription={threadTooltipDescription}
             onActivate={vm.onReplyInThreadClick}
@@ -277,7 +270,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Resend}
             presentation={presentation}
-            buttonRef={resendTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Resend]}
             label={_t("action|retry")}
             onActivate={vm.onResendClick}
             icon={RestartIcon}
@@ -291,7 +284,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Expand}
             presentation={presentation}
-            buttonRef={expandTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Expand]}
             label={expandDescription}
             tooltipCaption={`${_t("keyboard|shift")} + ${_t("action|click")}`}
             onActivate={vm.onToggleThreadExpanded}
@@ -304,7 +297,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Options}
             presentation={presentation}
-            buttonRef={optionsTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Options]}
             label={_t("common|options")}
             onActivate={vm.onOptionsClick}
             icon={OverflowHorizontalIcon}
@@ -315,7 +308,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.Remove}
             presentation={presentation}
-            buttonRef={removeTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.Remove]}
             label={_t("action|remove")}
             onActivate={vm.onRemoveClick}
             icon={DeleteIcon}
@@ -326,7 +319,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.ViewInRoom}
             presentation={presentation}
-            buttonRef={viewInRoomTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.ViewInRoom]}
             label={_t("timeline|mab|view_in_room")}
             onActivate={vm.onViewInRoomClick}
             icon={VisibilityOnIcon}
@@ -337,7 +330,7 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
         <ActionBarButton
             key={ActionBarAction.ViewSource}
             presentation={presentation}
-            buttonRef={viewSourceTriggerRef}
+            buttonRef={actionButtonRefs[ActionBarAction.ViewSource]}
             label={_t("action|view_source")}
             onActivate={vm.onViewSourceClick}
             icon={InlineCodeIcon}
@@ -361,43 +354,10 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
     const toolbarButtons = useMemo<ToolbarButtonMeta[]>(() => {
         return actions.map((action) => ({
             action,
-            ref: (() => {
-                switch (action) {
-                    case ActionBarAction.Cancel:
-                        return cancelTriggerRef;
-                    case ActionBarAction.CopyLink:
-                        return copyLinkTriggerRef;
-                    case ActionBarAction.Download:
-                        return downloadTriggerRef;
-                    case ActionBarAction.Edit:
-                        return editTriggerRef;
-                    case ActionBarAction.Expand:
-                        return expandTriggerRef;
-                    case ActionBarAction.Hide:
-                        return hideTriggerRef;
-                    case ActionBarAction.Options:
-                        return optionsTriggerRef;
-                    case ActionBarAction.Pin:
-                        return pinTriggerRef;
-                    case ActionBarAction.React:
-                        return reactTriggerRef;
-                    case ActionBarAction.Remove:
-                        return removeTriggerRef;
-                    case ActionBarAction.Reply:
-                        return replyTriggerRef;
-                    case ActionBarAction.ReplyInThread:
-                        return replyInThreadTriggerRef;
-                    case ActionBarAction.Resend:
-                        return resendTriggerRef;
-                    case ActionBarAction.ViewInRoom:
-                        return viewInRoomTriggerRef;
-                    case ActionBarAction.ViewSource:
-                        return viewSourceTriggerRef;
-                }
-            })(),
+            ref: actionButtonRefs[action],
             disabled: isActionDisabled(action),
         }));
-    }, [actions, isActionDisabled]);
+    }, [actionButtonRefs, actions, isActionDisabled]);
 
     // Handle RovingIndex for toolbar
     const enabledIndices = toolbarButtons
