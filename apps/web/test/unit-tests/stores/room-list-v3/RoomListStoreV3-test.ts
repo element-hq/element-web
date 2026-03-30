@@ -48,6 +48,10 @@ describe("RoomListStoreV3", () => {
     }
 
     beforeEach(() => {
+        jest.spyOn(global, "requestAnimationFrame").mockImplementation((cb: FrameRequestCallback) => {
+            cb(0);
+            return 0;
+        });
         jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());

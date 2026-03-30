@@ -10,7 +10,7 @@ import classNames from "classnames";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 
 import styles from "./PinnedMessageBadge.module.css";
-import { _t } from "../../utils/i18n";
+import { _t } from "../../core/i18n/i18n";
 
 export type PinnedMessageBadgeProps = HTMLAttributes<HTMLDivElement>;
 

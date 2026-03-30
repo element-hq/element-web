@@ -9,14 +9,14 @@ import React, { type JSX, memo, useEffect, useRef, type ReactNode } from "react"
 import classNames from "classnames";
 import { Text } from "@vector-im/compound-web";
 
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../core/utils/Flex";
 import { NotificationDecoration, type NotificationDecorationData } from "./NotificationDecoration";
 import { RoomListItemHoverMenu } from "./RoomListItemHoverMenu";
 import { RoomListItemContextMenu } from "./RoomListItemContextMenu";
 import { type RoomNotifState } from "./RoomNotifs";
 import styles from "./RoomListItemView.module.css";
-import { useViewModel, type ViewModel } from "../../viewmodel";
-import { _t } from "../../utils/i18n";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
+import { _t } from "../../core/i18n/i18n";
 
 /**
  * Opaque type representing a Room object from the parent application
@@ -35,6 +35,10 @@ function getA11yLabel(roomName: string, notification: NotificationDecorationData
         return _t("room_list|a11y|mention", { roomName, count: notification.count });
     } else if (notification.hasUnreadCount && notification.count) {
         return _t("room_list|a11y|unread", { roomName, count: notification.count });
+    } else if (notification.callType === "voice") {
+        return _t("room_list|a11y|voice_call", { roomName });
+    } else if (notification.callType === "video") {
+        return _t("room_list|a11y|video_call", { roomName });
     } else {
         return _t("room_list|a11y|default", { roomName });
     }

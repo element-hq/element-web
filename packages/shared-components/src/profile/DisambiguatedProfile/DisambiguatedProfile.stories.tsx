@@ -14,7 +14,7 @@ import {
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewActions,
 } from "./DisambiguatedProfileView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type DisambiguatedProfileProps = DisambiguatedProfileViewSnapshot & DisambiguatedProfileViewActions;

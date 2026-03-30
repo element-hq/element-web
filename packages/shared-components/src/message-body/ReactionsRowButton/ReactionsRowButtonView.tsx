@@ -8,7 +8,7 @@
 import React, { type HTMLAttributes, type JSX } from "react";
 import classNames from "classnames";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { ReactionsRowButtonTooltipView, type ReactionsRowButtonTooltipViewModel } from "../ReactionsRowButtonTooltip";
 import styles from "./ReactionsRowButton.module.css";
 

@@ -16,9 +16,9 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import styles from "./FileBodyView.module.css";
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../viewmodel/useViewModel";
-import { useI18n } from "../../utils/i18nContext";
+import { type ViewModel } from "../../core/viewmodel/ViewModel";
+import { useViewModel } from "../../core/viewmodel/useViewModel";
+import { useI18n } from "../../core/i18n/i18nContext";
 import { MediaBody } from "../MediaBody";
 
 /**

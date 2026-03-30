@@ -14,7 +14,7 @@ import {
     type MessageTimestampViewActions,
     type MessageTimestampViewSnapshot,
 } from "./MessageTimestampView";
-import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type MessageTimestampProps = MessageTimestampViewSnapshot & MessageTimestampViewActions;

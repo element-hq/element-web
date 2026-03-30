@@ -19,9 +19,9 @@ import {
     WidgetContextMenuView,
 } from "./WidgetContextMenuView";
 import * as stories from "./WidgetContextMenuView.stories.tsx";
-import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
-import { I18nApi } from "../../utils/I18nApi.ts";
-import { I18nContext } from "../../utils/i18nContext.ts";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel.ts";
+import { I18nApi } from "../../core/i18n/I18nApi.ts";
+import { I18nContext } from "../../core/i18n/i18nContext.ts";
 
 const { Default, OnlyBasicModification } = composeStories(stories);
 

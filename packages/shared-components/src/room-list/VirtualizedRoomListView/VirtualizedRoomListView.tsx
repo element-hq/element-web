@@ -10,15 +10,15 @@ import { type ScrollIntoViewLocation } from "react-virtuoso";
 import { isEqual } from "lodash";
 
 import { type Room } from "../RoomListItemView";
-import { useViewModel } from "../../viewmodel";
-import { _t } from "../../utils/i18n";
+import { useViewModel } from "../../core/viewmodel";
+import { _t } from "../../core/i18n/i18n";
 import {
     FlatVirtualizedList,
     getContainerAccessibleProps,
     type VirtualizedListContext,
-} from "../../utils/VirtualizedList";
+} from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
-import { GroupedVirtualizedList } from "../../utils/VirtualizedList";
+import { GroupedVirtualizedList } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "../RoomListSectionHeaderView";
 import { RoomListItemAccessibilityWrapper } from "../RoomListItemAccessibilityWrapper";
 

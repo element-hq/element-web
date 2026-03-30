@@ -15,7 +15,7 @@ import {
     type RoomListSectionHeaderActions,
     type RoomListSectionHeaderViewProps,
 } from "./RoomListSectionHeaderView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type RoomListSectionHeaderProps = RoomListSectionHeaderViewSnapshot &
