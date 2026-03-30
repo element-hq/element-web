@@ -10,7 +10,7 @@ import React from "react";
 import { describe, it, expect } from "vitest";
 
 import { DecryptionFailureBodyView, DecryptionFailureReason } from "./DecryptionFailureBodyView";
-import { MockViewModel } from "../../viewmodel";
+import { MockViewModel } from "../../core/viewmodel";
 
 describe("DecryptionFailureBodyView", () => {
     function customRender(
@@ -118,7 +118,7 @@ describe("DecryptionFailureBodyView", () => {
             const { container } = customRender(DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED, verified);
 
             // Then
-            expect(container).toHaveTextContent("Sender's verified identity was reset");
+            expect(container).toHaveTextContent("Sender's verified digital identity was reset");
             expect(container).toMatchSnapshot();
         },
     );

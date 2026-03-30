@@ -18,7 +18,7 @@ import {
     type DisambiguatedProfileViewActions,
     type DisambiguatedProfileViewSnapshot,
 } from "./DisambiguatedProfileView";
-import { MockViewModel } from "../../viewmodel/MockViewModel";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel";
 
 const { Default, WithMxid, WithColorClass, Emphasized, WithTooltip, FullExample } = composeStories(stories);
 

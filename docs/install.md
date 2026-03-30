@@ -1,6 +1,6 @@
 # Installing Element Web
 
-**Familiarise yourself with the [Important Security Notes](../README.md#important-security-notes) before starting, they apply to all installation methods.**
+**Familiarise yourself with the [Important Security Notes](../apps/web/README.md#important-security-notes) before starting, they apply to all installation methods.**
 
 _Note: that for the security of your chats will need to serve Element over HTTPS.
 Major browsers also do not allow you to use VoIP/video chats over HTTP, as WebRTC is only usable over HTTPS.
@@ -11,7 +11,7 @@ There are some exceptions like when using localhost, which is considered a [secu
 1. Download the latest version from <https://github.com/element-hq/element-web/releases>
 1. Untar the tarball on your web server
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
-1. Configure the correct caching headers in your webserver (see [README.md](../README.md#caching-requirements))
+1. Configure the correct caching headers in your webserver (see [README.md](../apps/web/README.md#caching-requirements))
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it. See the [configuration docs](config.md) for details.
 1. Enter the URL into your browser and log into Element!

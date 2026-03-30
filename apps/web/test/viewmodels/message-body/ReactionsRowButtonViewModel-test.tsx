@@ -80,7 +80,7 @@ describe("ReactionsRowButtonViewModel", () => {
         expect(listener).toHaveBeenCalledTimes(1);
         expect(tooltipSetPropsSpy).not.toHaveBeenCalled();
 
-        vm.setCount(5);
+        vm.setCount(6);
 
         expect(listener).toHaveBeenCalledTimes(2);
     });

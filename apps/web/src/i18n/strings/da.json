@@ -1302,8 +1302,6 @@
     },
     "labs": {
         "ask_to_join": "Aktivér spørg om at deltage",
-        "automatic_debug_logs": "Send automatisk fejlfindingslogfiler ved enhver fejl",
-        "automatic_debug_logs_decryption": "Send automatisk fejlfindingslogfiler ved dekrypteringsfejl",
         "beta_description": "Hvad er det næste skridt for %(brand)s? Labs er den bedste måde at få adgang til tingene tidligt, afprøve nye funktioner og være med til at forme dem, inden de faktisk lanceres.",
         "beta_feature": "Dette er en betafunktion",
         "beta_feedback_leave_button": "For at forlade betaversionen skal du gå til dine indstillinger.",
@@ -2957,8 +2955,7 @@
             "voice_call_unsupported": "%(senderName)s foretog et stemmeopkald. (ikke understøttet af denne browser)"
         },
         "m.file": {
-            "error_decrypting": "Fejl ved dekryptering af vedhæftet fil",
-            "error_invalid": "Ugyldig fil"
+            "error_decrypting": "Fejl ved dekryptering af vedhæftet fil"
         },
         "m.image": {
             "error": "Billedet kunne ikke vises på grund af en fejl",
@@ -3292,14 +3289,7 @@
             "one_user": "%(displayName)s skriver …",
             "two_users": "%(names)s og %(lastPerson)s skriver …"
         },
-        "undecryptable_tooltip": "Denne besked kunne ikke dekrypteres",
-        "url_preview": {
-            "close": "Luk forhåndsvisning",
-            "show_n_more": {
-                "one": "Vis %(count)s anden forhåndsvisning",
-                "other": "Vis %(count)s andre forhåndsvisninger"
-            }
-        }
+        "undecryptable_tooltip": "Denne besked kunne ikke dekrypteres"
     },
     "truncated_list_n_more": {
         "other": "Og %(count)s mere..."

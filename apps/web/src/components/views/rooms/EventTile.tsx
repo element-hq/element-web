@@ -50,7 +50,6 @@ import { uniqueId, uniqBy } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import {
     useCreateAutoDisposedViewModel,
-    DecryptionFailureBodyView,
     MessageTimestampView,
     PinnedMessageBadge,
     ReactionsRowButtonView,
@@ -58,7 +57,6 @@ import {
     useViewModel,
 } from "@element-hq/web-shared-components";
 
-import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -88,7 +86,6 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
-import RedactedBody from "../messages/RedactedBody";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from "../../../utils/Reply";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -105,7 +102,6 @@ import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
-import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -116,6 +112,7 @@ import {
 import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
 import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -1401,9 +1398,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         <div className={lineClasses} key="mx_EventTile_line">
                             <div className="mx_EventTile_body">
                                 {this.props.mxEvent.isRedacted() ? (
-                                    <RedactedBody mxEvent={this.props.mxEvent} />
+                                    <RedactedBodyFactory mxEvent={this.props.mxEvent} />
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
+                                    <DecryptionFailureBodyFactory mxEvent={this.props.mxEvent} />
                                 ) : (
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
@@ -1598,26 +1595,6 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             </div>
         </div>
     );
-}
-
-/**
- * Bridge decryption-failure events into the view model using current local verification state.
- * This wrapper can be removed after EventTile has been changed to a function component.
- */
-function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
-    const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new DecryptionFailureBodyViewModel({
-                decryptionFailureCode: mxEvent.decryptionFailureReason,
-                verificationState,
-            }),
-    );
-    useEffect(() => {
-        vm.setVerificationState(verificationState);
-    }, [verificationState, vm]);
-
-    return <DecryptionFailureBodyView vm={vm} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }
 
 /**

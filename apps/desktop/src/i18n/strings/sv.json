@@ -1,0 +1,87 @@
+{
+    "action": {
+        "cancel": "Avbryt",
+        "close": "Stäng",
+        "close_brand": "Stäng %(brand)s",
+        "copy": "Kopiera",
+        "cut": "Klipp ut",
+        "delete": "Radera",
+        "edit": "Ändra",
+        "minimise": "Minimera",
+        "paste": "Klistra in",
+        "paste_match_style": "Klistra in och matcha stilen",
+        "quit": "Avsluta",
+        "redo": "Gör om",
+        "select_all": "Markera allt",
+        "show_hide": "Visa/dölj",
+        "undo": "Ångra",
+        "zoom_in": "Zooma in",
+        "zoom_out": "Zooma ut"
+    },
+    "common": {
+        "about": "Om",
+        "brand_help": "%(brand)s-hjälp",
+        "help": "Hjälp",
+        "no": "Nej",
+        "preferences": "Inställningar",
+        "yes": "Ja"
+    },
+    "confirm_quit": "Är du säker att du vill avsluta?",
+    "edit_menu": {
+        "speech": "Tal",
+        "speech_start_speaking": "Börja tala",
+        "speech_stop_speaking": "Sluta tala"
+    },
+    "file_menu": {
+        "label": "Arkiv"
+    },
+    "icon_overlay": {
+        "description_error": "Fel",
+        "description_notifications": {
+            "one": "Du har %(count)s oläst avisering.",
+            "other": "Du har %(count)s olästa aviseringar."
+        }
+    },
+    "menu": {
+        "hide": "Göm",
+        "hide_others": "Göm övriga",
+        "services": "Tjänster",
+        "unhide": "Sluta gömma"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Lägg till i ordlistan",
+        "copy_email": "Kopiera e-postadress",
+        "copy_image": "Kopiera bild",
+        "copy_image_url": "Kopiera bildadress",
+        "copy_link_url": "Kopiera länkadress",
+        "save_image_as": "Spara bild som…",
+        "save_image_as_error_description": "Bilden sparades inte",
+        "save_image_as_error_title": "Misslyckades med att spara bilden"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Rensa data och ladda om?",
+            "backend_changed_detail": "Kunde inte komma åt hemligheten från systemnyckelringen, det verkar ha ändrats.",
+            "backend_changed_title": "Misslyckades att ladda databasen",
+            "backend_no_encryption": "Ditt system har en nyckelring som stöds men kryptering är inte tillgänglig.",
+            "backend_no_encryption_detail": "Electron har upptäckt att kryptering inte är tillgänglig på din nyckelring %(backend)s. Se till att du har nyckelringen installerad. Om du har nyckelringen installerad, starta om och försök igen. Alternativt kan du tillåta %(brand)s att använda en svagare form av kryptering.",
+            "backend_no_encryption_title": "Inget krypteringsstöd",
+            "unsupported_keyring": "Ditt system har en nyckelring som inte stöds, vilket innebär att databasen inte kan öppnas.",
+            "unsupported_keyring_detail": "Electrons nyckelringsdetektering hittade inte en backend som stöds. Du kan försöka konfigurera backend manuellt genom att starta %(brand)s med ett kommandoradsargument, en engångsåtgärd. Se %(link)s.",
+            "unsupported_keyring_title": "Systemet stöds inte",
+            "unsupported_keyring_use_basic_text": "Använd svagare kryptering",
+            "unsupported_keyring_use_plaintext": "Använd ingen kryptering"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Verklig storlek",
+        "toggle_developer_tools": "Växla utvecklarverktyg",
+        "toggle_full_screen": "Växla helskärm",
+        "view": "Visa"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Lägg alla överst",
+        "label": "Fönster",
+        "zoom": "Zooma"
+    }
+}

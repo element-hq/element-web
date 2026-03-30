@@ -10,7 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ReactionsRowButtonView } from "../ReactionsRowButton";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { ReactionsRowView, type ReactionsRowViewActions, type ReactionsRowViewSnapshot } from "./ReactionsRowView";
 
 interface MockReactionButtonProps {

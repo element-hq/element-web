@@ -108,16 +108,15 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     protected readonly widgetUid: string;
     protected readonly room: Room;
 
-    private _callType: CallType = CallType.Video;
+    private _callType: CallType;
     public get callType(): CallType {
         return this._callType;
     }
 
     protected set callType(callType: CallType) {
-        if (this._callType !== callType) {
-            this.emit(CallEvent.CallTypeChanged, callType);
-        }
+        const prevCallType = this._callType;
         this._callType = callType;
+        if (callType !== prevCallType) this.emit(CallEvent.CallTypeChanged, callType);
     }
 
     /**
@@ -184,11 +183,13 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
          */
         public readonly widget: IApp,
         protected readonly client: MatrixClient,
+        initialCallType: CallType,
     ) {
         super();
         this.widgetUid = WidgetUtils.getWidgetUid(this.widget);
         this.room = this.client.getRoom(this.roomId)!;
         WidgetMessagingStore.instance.on(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
+        this._callType = initialCallType;
     }
 
     /**
@@ -347,7 +348,7 @@ export class JitsiCall extends Call {
     private participantsExpirationTimer: number | null = null;
 
     private constructor(widget: IApp, client: MatrixClient) {
-        super(widget, client);
+        super(widget, client, CallType.Video);
 
         this.room.on(RoomStateEvent.Update, this.onRoomState);
         this.on(CallEvent.ConnectionState, this.onConnectionState);
@@ -899,7 +900,7 @@ export class ElementCall extends Call {
         widget: IApp,
         client: MatrixClient,
     ) {
-        super(widget, client);
+        super(widget, client, session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video);
 
         this.session.on(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionEnded, this.checkDestroy);

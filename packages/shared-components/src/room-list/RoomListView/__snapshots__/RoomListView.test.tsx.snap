@@ -8283,16 +8283,18 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
       tabindex="0"
     >
       <div
-        style="position: sticky; top: 0px; width: 100%; z-index: 1; margin-top: 0px;"
+        data-viewport-type="element"
+        style="height: 100%; position: absolute; top: 0px; width: 100%;"
       >
         <div
-          data-testid="virtuoso-top-item-list"
+          data-testid="virtuoso-item-list"
+          style="box-sizing: border-box; margin-top: 0px; padding-bottom: 3432px; padding-top: 0px;"
         >
           <div
             data-index="0"
             data-item-index="0"
             data-known-size="52"
-            style="overflow-anchor: none; position: sticky; z-index: 1;"
+            style="overflow-anchor: none;"
           >
             <div
               aria-expanded="true"
@@ -8334,20 +8336,9 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
               </button>
             </div>
           </div>
-        </div>
-      </div>
-      <div
-        data-viewport-type="element"
-        style="height: 100%; position: absolute; top: 0px; width: 100%;"
-      >
-        <div
-          data-testid="virtuoso-item-list"
-          style="box-sizing: border-box; margin-top: 0px; padding-bottom: 3432px; padding-top: 52px;"
-        >
           <div
             data-index="1"
-            data-item-group-index="0"
-            data-item-index="0"
+            data-item-index="1"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -8501,8 +8492,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="2"
-            data-item-group-index="0"
-            data-item-index="1"
+            data-item-index="2"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -8629,8 +8619,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="3"
-            data-item-group-index="0"
-            data-item-index="2"
+            data-item-index="3"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -8763,8 +8752,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="4"
-            data-item-group-index="0"
-            data-item-index="3"
+            data-item-index="4"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -8891,8 +8879,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="5"
-            data-item-group-index="0"
-            data-item-index="4"
+            data-item-index="5"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9025,8 +9012,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="6"
-            data-item-group-index="0"
-            data-item-index="5"
+            data-item-index="6"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9176,8 +9162,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="7"
-            data-item-group-index="0"
-            data-item-index="6"
+            data-item-index="7"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9310,8 +9295,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="8"
-            data-item-group-index="0"
-            data-item-index="7"
+            data-item-index="8"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9438,8 +9422,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="9"
-            data-item-group-index="0"
-            data-item-index="8"
+            data-item-index="9"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9572,8 +9555,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="10"
-            data-item-group-index="0"
-            data-item-index="9"
+            data-item-index="10"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9700,8 +9682,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="11"
-            data-item-group-index="0"
-            data-item-index="10"
+            data-item-index="11"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9857,8 +9838,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="12"
-            data-item-group-index="0"
-            data-item-index="11"
+            data-item-index="12"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -9985,8 +9965,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="13"
-            data-item-group-index="0"
-            data-item-index="12"
+            data-item-index="13"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -10119,8 +10098,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="14"
-            data-item-group-index="0"
-            data-item-index="13"
+            data-item-index="14"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -10247,8 +10225,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="15"
-            data-item-group-index="0"
-            data-item-index="14"
+            data-item-index="15"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -10381,8 +10358,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="16"
-            data-item-group-index="0"
-            data-item-index="15"
+            data-item-index="16"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -10532,8 +10508,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="17"
-            data-item-group-index="0"
-            data-item-index="16"
+            data-item-index="17"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -10666,8 +10641,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="18"
-            data-item-group-index="0"
-            data-item-index="17"
+            data-item-index="18"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -10794,8 +10768,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="19"
-            data-item-group-index="0"
-            data-item-index="18"
+            data-item-index="19"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -10928,8 +10901,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="20"
-            data-item-group-index="0"
-            data-item-index="19"
+            data-item-index="20"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -11056,8 +11028,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="21"
-            data-item-group-index="0"
-            data-item-index="20"
+            data-item-index="21"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -11213,8 +11184,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="22"
-            data-item-group-index="0"
-            data-item-index="21"
+            data-item-index="22"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -11341,8 +11311,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="23"
-            data-item-group-index="0"
-            data-item-index="22"
+            data-item-index="23"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -11475,9 +11444,9 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="24"
-            data-item-index="1"
+            data-item-index="24"
             data-known-size="52"
-            style="overflow-anchor: none; position: sticky; z-index: 1;"
+            style="overflow-anchor: none;"
           >
             <div
               aria-expanded="true"
@@ -11521,8 +11490,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="25"
-            data-item-group-index="1"
-            data-item-index="23"
+            data-item-index="25"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -11649,8 +11617,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="26"
-            data-item-group-index="1"
-            data-item-index="24"
+            data-item-index="26"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -11783,8 +11750,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="27"
-            data-item-group-index="1"
-            data-item-index="25"
+            data-item-index="27"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -11934,8 +11900,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="28"
-            data-item-group-index="1"
-            data-item-index="26"
+            data-item-index="28"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -12068,8 +12033,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="29"
-            data-item-group-index="1"
-            data-item-index="27"
+            data-item-index="29"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -12196,8 +12160,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="30"
-            data-item-group-index="1"
-            data-item-index="28"
+            data-item-index="30"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -12330,8 +12293,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="31"
-            data-item-group-index="1"
-            data-item-index="29"
+            data-item-index="31"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -12458,8 +12420,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="32"
-            data-item-group-index="1"
-            data-item-index="30"
+            data-item-index="32"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -12615,8 +12576,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="33"
-            data-item-group-index="1"
-            data-item-index="31"
+            data-item-index="33"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -12743,8 +12703,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="34"
-            data-item-group-index="1"
-            data-item-index="32"
+            data-item-index="34"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -12877,8 +12836,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="35"
-            data-item-group-index="1"
-            data-item-index="33"
+            data-item-index="35"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -13005,8 +12963,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
           </div>
           <div
             data-index="36"
-            data-item-group-index="1"
-            data-item-index="34"
+            data-item-index="36"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -13626,16 +13583,18 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
       tabindex="0"
     >
       <div
-        style="position: sticky; top: 0px; width: 100%; z-index: 1; margin-top: 0px;"
+        data-viewport-type="element"
+        style="height: 100%; position: absolute; top: 0px; width: 100%;"
       >
         <div
-          data-testid="virtuoso-top-item-list"
+          data-testid="virtuoso-item-list"
+          style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 0px;"
         >
           <div
             data-index="0"
             data-item-index="0"
             data-known-size="52"
-            style="overflow-anchor: none; position: sticky; z-index: 1;"
+            style="overflow-anchor: none;"
           >
             <div
               aria-expanded="true"
@@ -13677,20 +13636,9 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
               </button>
             </div>
           </div>
-        </div>
-      </div>
-      <div
-        data-viewport-type="element"
-        style="height: 100%; position: absolute; top: 0px; width: 100%;"
-      >
-        <div
-          data-testid="virtuoso-item-list"
-          style="box-sizing: border-box; margin-top: 0px; padding-bottom: 0px; padding-top: 52px;"
-        >
           <div
             data-index="1"
-            data-item-group-index="0"
-            data-item-index="0"
+            data-item-index="1"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -13844,8 +13792,7 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
           </div>
           <div
             data-index="2"
-            data-item-group-index="0"
-            data-item-index="1"
+            data-item-index="2"
             data-known-size="52"
             style="overflow-anchor: none;"
           >
@@ -13972,9 +13919,9 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
           </div>
           <div
             data-index="3"
-            data-item-index="1"
+            data-item-index="3"
             data-known-size="52"
-            style="overflow-anchor: none; position: sticky; z-index: 1;"
+            style="overflow-anchor: none;"
           >
             <div
               aria-expanded="true"

@@ -4,7 +4,20 @@ exports[`EventListSummary correctly identifies transitions 1`] = `
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 was invited, was banned, joined, rejected their invitation, left, had their invitation withdrawn, was unbanned, was removed, left and was removed
+  <span>
+    <button
+      class="mx_EventTile_spoiler"
+    >
+       
+      <span
+        class="mx_EventTile_spoiler_content"
+      >
+        user_1
+      </span>
+    </button>
+     
+    was invited, was banned, joined, rejected their invitation, left, had their invitation withdrawn, was unbanned, was removed, left and was removed
+  </span>
 </span>
 `;
 
@@ -12,9 +25,26 @@ exports[`EventListSummary correctly orders sequences of transitions by the order
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_2 was unbanned and joined and left 2 times
+  <span>
+    user_2
+     
+    was unbanned and joined and left 2 times
+  </span>
   , 
-  user_1 was unbanned, joined and left 2 times and was banned
+  <span>
+    <button
+      class="mx_EventTile_spoiler"
+    >
+       
+      <span
+        class="mx_EventTile_spoiler_content"
+      >
+        user_1
+      </span>
+    </button>
+     
+    was unbanned, joined and left 2 times and was banned
+  </span>
 </span>
 `;
 
@@ -22,7 +52,16 @@ exports[`EventListSummary handles a summary length = 2, with 1 "other" 1`] = `
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1, user_2 and one other joined
+  <span>
+    <span>
+      user_1
+      , 
+      user_2
+       and one other
+    </span>
+     
+    joined
+  </span>
 </span>
 `;
 
@@ -30,7 +69,16 @@ exports[`EventListSummary handles a summary length = 2, with many "others" 1`] =
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_0, user_1 and 18 others joined
+  <span>
+    <span>
+      user_0
+      , 
+      user_1
+       and 18 others
+    </span>
+     
+    joined
+  </span>
 </span>
 `;
 
@@ -38,7 +86,13 @@ exports[`EventListSummary handles a summary length = 2, with no "others" 1`] = `
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 and user_2 joined 2 times
+  <span>
+    user_1
+     and 
+    user_2
+     
+    joined 2 times
+  </span>
 </span>
 `;
 
@@ -46,7 +100,11 @@ exports[`EventListSummary handles invitation plurals correctly when there are mu
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 rejected their invitation 2 times
+  <span>
+    user_1
+     
+    rejected their invitation 2 times
+  </span>
 </span>
 `;
 
@@ -54,7 +112,14 @@ exports[`EventListSummary handles invitation plurals correctly when there are mu
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 and one other rejected their invitations and had their invitations withdrawn
+  <span>
+    <span>
+      user_1
+       and one other
+    </span>
+     
+    rejected their invitations and had their invitations withdrawn
+  </span>
 </span>
 `;
 
@@ -62,7 +127,23 @@ exports[`EventListSummary handles many users following the same sequence of memb
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_0 and 19 others were unbanned, joined and left 2 times and were banned
+  <span>
+    <span>
+      <button
+        class="mx_EventTile_spoiler"
+      >
+         
+        <span
+          class="mx_EventTile_spoiler_content"
+        >
+          user_0
+        </span>
+      </button>
+       and 19 others
+    </span>
+     
+    were unbanned, joined and left 2 times and were banned
+  </span>
 </span>
 `;
 
@@ -70,7 +151,23 @@ exports[`EventListSummary handles multiple users following the same sequence of 
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 and one other were unbanned, joined and left 2 times and were banned
+  <span>
+    <span>
+      <button
+        class="mx_EventTile_spoiler"
+      >
+         
+        <span
+          class="mx_EventTile_spoiler_content"
+        >
+          user_1
+        </span>
+      </button>
+       and one other
+    </span>
+     
+    were unbanned, joined and left 2 times and were banned
+  </span>
 </span>
 `;
 
@@ -78,7 +175,11 @@ exports[`EventListSummary renders collapsed events if events.length = props.thre
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 joined and left and joined
+  <span>
+    user_1
+     
+    joined and left and joined
+  </span>
 </span>
 `;
 
@@ -111,9 +212,17 @@ exports[`EventListSummary should not blindly group 3pid invites and treat them a
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  n...@d... was invited 2 times
+  <span>
+    n...@d...
+     
+    was invited 2 times
+  </span>
   , 
-  d...@w... was invited
+  <span>
+    d...@w...
+     
+    was invited
+  </span>
 </span>
 `;
 
@@ -121,7 +230,11 @@ exports[`EventListSummary truncates long join,leave repetitions 1`] = `
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 joined and left 7 times
+  <span>
+    user_1
+     
+    joined and left 7 times
+  </span>
 </span>
 `;
 
@@ -129,7 +242,11 @@ exports[`EventListSummary truncates long join,leave repetitions between other ev
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 was unbanned, joined and left 7 times and was invited
+  <span>
+    user_1
+     
+    was unbanned, joined and left 7 times and was invited
+  </span>
 </span>
 `;
 
@@ -137,6 +254,19 @@ exports[`EventListSummary truncates multiple sequences of repetitions with other
 <span
   class="mx_TextualEvent mx_GenericEventListSummary_summary"
 >
-  user_1 was unbanned, joined and left 2 times, was banned, joined and left 3 times and was invited
+  <span>
+    <button
+      class="mx_EventTile_spoiler"
+    >
+       
+      <span
+        class="mx_EventTile_spoiler_content"
+      >
+        user_1
+      </span>
+    </button>
+     
+    was unbanned, joined and left 2 times, was banned, joined and left 3 times and was invited
+  </span>
 </span>
 `;

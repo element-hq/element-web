@@ -8,7 +8,7 @@
 import React, { type JSX, type PropsWithChildren } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import {
     ReactionsRowButtonTooltipView,

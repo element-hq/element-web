@@ -56,8 +56,8 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
@@ -76,7 +76,7 @@ jobs:
               env:
                   CI_PACKAGE: true
               working-directory: apps/web
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm build
+              run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
@@ -133,13 +133,13 @@ jobs:
                   repository: element-hq/element-web
 
             - name: 📥 Download artifact
-              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   cache: "pnpm"
                   cache-dependency-path: pnpm-lock.yaml
@@ -150,10 +150,10 @@ jobs:
 
             - name: Get installed Playwright version
               id: playwright
-              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
+              run: echo "version=$(pnpm --silent -- playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -211,9 +211,9 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
               if: inputs.skip != true
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               if: inputs.skip != true
               with:
                   cache: "pnpm"
@@ -225,7 +225,7 @@ jobs:
 
             - name: Download blob reports from GitHub Actions Artifacts
               if: inputs.skip != true
-              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   pattern: all-blob-reports-*
                   path: apps/web/all-blob-reports
@@ -238,6 +238,7 @@ jobs:
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}
+                  PLAYWRIGHT_HTML_TITLE: ${{ case(github.event_name == 'pull_request', format('EW Playwright Report PR-{0}', env.PR_NUMBER), 'EW Playwright Report') }}
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report

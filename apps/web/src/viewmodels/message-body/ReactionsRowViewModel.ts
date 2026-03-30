@@ -99,17 +99,10 @@ export class ReactionsRowViewModel
         const nextIsVisible = this.props.isActionable && this.props.reactionGroupCount > 0;
         const nextShowAllButtonVisible =
             this.props.reactionGroupCount > MAX_ITEMS_WHEN_LIMITED + 1 && !this.props.showAll;
-        const updates: Partial<ReactionsRowViewSnapshot> = {};
-
-        if (this.snapshot.current.isVisible !== nextIsVisible) {
-            updates.isVisible = nextIsVisible;
-        }
-        if (this.snapshot.current.showAllButtonVisible !== nextShowAllButtonVisible) {
-            updates.showAllButtonVisible = nextShowAllButtonVisible;
-        }
-        if (Object.keys(updates).length > 0) {
-            this.snapshot.merge(updates);
-        }
+        this.snapshot.merge({
+            isVisible: nextIsVisible,
+            showAllButtonVisible: nextShowAllButtonVisible,
+        });
     }
 
     public setCanReact(canReact: boolean): void {

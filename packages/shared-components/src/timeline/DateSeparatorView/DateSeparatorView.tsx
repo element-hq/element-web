@@ -8,10 +8,10 @@
 import classNames from "classnames";
 import React, { type JSX, useState } from "react";
 
-import { type ViewModel } from "../../viewmodel/ViewModel";
-import { useViewModel } from "../../viewmodel/useViewModel";
+import { type ViewModel } from "../../core/viewmodel/ViewModel";
+import { useViewModel } from "../../core/viewmodel/useViewModel";
 import styles from "./DateSeparatorView.module.css";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../../core/utils/Flex";
 import { TimelineSeparator } from "../../message-body/TimelineSeparator";
 import { DateSeparatorContextMenuView } from "./DateSeparatorContextMenuView";
 import { DateSeparatorButton } from "./DateSeparatorButton";

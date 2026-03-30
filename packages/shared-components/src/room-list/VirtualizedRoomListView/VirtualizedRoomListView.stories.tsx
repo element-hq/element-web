@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Room } from "../RoomListItemView";
 import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
 import type { RoomListViewSnapshot, RoomListViewActions } from "../RoomListView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import type { FilterId } from "../RoomListPrimaryFilters";
 import {
