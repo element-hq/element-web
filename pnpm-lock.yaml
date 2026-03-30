@@ -51,7 +51,7 @@ overrides:
   testcontainers: ^11.0.0
   matrix-widget-api: ^1.17.0
   qs: 6.15.0
-  serialize-javascript: 7.0.4
+  serialize-javascript: 7.0.5
   atomically: 2.1.1
   '@types/node': 18.19.130
   config-file-ts: 0.2.8-rc1
@@ -435,7 +435,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/bc8f67089ce8702694e03187d349ad86b1857be0
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -9753,8 +9753,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/bc8f67089ce8702694e03187d349ad86b1857be0:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/bc8f67089ce8702694e03187d349ad86b1857be0}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b}
     version: 41.2.0
     engines: {node: '>=22.0.0'}
 
@@ -11678,8 +11678,8 @@ packages:
     resolution: {integrity: sha512-8I8TjW5KMOKsZQTvoxjuSIa7foAwPWGOts+6o7sgjz41/qMD9VQHEDxi6PBvK2l0MXUmqZyNpUK+T2tQaaElvw==}
     engines: {node: '>=10'}
 
-  serialize-javascript@7.0.4:
-    resolution: {integrity: sha512-DuGdB+Po43Q5Jxwpzt1lhyFSYKryqoNjQSA9M92tyw0lyHIOur+XCalOUe0KTJpyqzT8+fQ5A0Jf7vCx/NKmIg==}
+  serialize-javascript@7.0.5:
+    resolution: {integrity: sha512-F4LcB0UqUl1zErq+1nYEEzSHJnIwb3AF2XWB94b+afhrekOUijwooAYqFyRbjYkm2PAKBabx6oYv/xDxNi8IBw==}
     engines: {node: '>=20.0.0'}
 
   serve-index@1.9.2:
@@ -19953,7 +19953,7 @@ snapshots:
       glob-parent: 6.0.2
       normalize-path: 3.0.0
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.4
+      serialize-javascript: 7.0.5
       tinyglobby: 0.2.15
       webpack: 5.105.3(webpack-cli@7.0.2)
 
@@ -20122,7 +20122,7 @@ snapshots:
       jest-worker: 30.3.0
       postcss: 8.5.8
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.4
+      serialize-javascript: 7.0.5
       webpack: 5.105.3(webpack-cli@7.0.2)
     optionalDependencies:
       lightningcss: 1.32.0
@@ -23348,7 +23348,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/bc8f67089ce8702694e03187d349ad86b1857be0:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
@@ -25630,7 +25630,7 @@ snapshots:
       type-fest: 0.13.1
     optional: true
 
-  serialize-javascript@7.0.4: {}
+  serialize-javascript@7.0.5: {}
 
   serve-index@1.9.2:
     dependencies:
@@ -26382,7 +26382,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.4
+      serialize-javascript: 7.0.5
       terser: 5.46.0
       webpack: 5.105.3(esbuild@0.27.4)
     optionalDependencies:
@@ -26394,7 +26394,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.4
+      serialize-javascript: 7.0.5
       terser: 5.46.0
       webpack: 5.105.3(webpack-cli@7.0.2)
 

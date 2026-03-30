@@ -12,7 +12,7 @@ import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 
 import * as stories from "./LeftResizablePanelView.stories";
-import { BaseViewModel } from "../../viewmodel";
+import { BaseViewModel } from "../../core/viewmodel";
 import {
     ResizableGroup,
     LEFT_PANEL_ID,

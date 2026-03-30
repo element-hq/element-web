@@ -11,7 +11,7 @@ import React, { type MouseEventHandler } from "react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { MockViewModel } from "../../viewmodel";
+import { MockViewModel } from "../../core/viewmodel";
 import {
     ReactionsRowView,
     type ReactionsRowViewActions,

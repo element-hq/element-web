@@ -9,8 +9,8 @@ import React from "react";
 import { Markdown } from "@storybook/addon-docs/blocks";
 
 import type { Meta } from "@storybook/react-vite";
-import formatBytesDoc from "../../typedoc/functions/formatBytes.md?raw";
-import formatSecondsDoc from "../../typedoc/functions/formatSeconds.md?raw";
+import formatBytesDoc from "../../../typedoc/functions/formatBytes.md?raw";
+import formatSecondsDoc from "../../../typedoc/functions/formatSeconds.md?raw";
 
 const meta = {
     title: "utils/FormattingUtils",

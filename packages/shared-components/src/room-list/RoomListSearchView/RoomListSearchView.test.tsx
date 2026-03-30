@@ -17,7 +17,7 @@ import {
     type RoomListSearchViewActions,
     type RoomListSearchViewSnapshot,
 } from "./RoomListSearchView";
-import { MockViewModel } from "../../viewmodel/MockViewModel";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel";
 
 const { Default, WithDialPad, WithoutExplore, AllButtons } = composeStories(stories);
 

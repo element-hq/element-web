@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { expect, userEvent, within } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 import { RedactedBodyView, type RedactedBodyViewSnapshot } from "./RedactedBodyView";
 

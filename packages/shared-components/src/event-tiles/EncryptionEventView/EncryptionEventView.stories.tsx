@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EncryptionEventView, EncryptionEventState, type EncryptionEventViewSnapshot } from "./EncryptionEventView";
-import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type EncryptionEventProps = EncryptionEventViewSnapshot;

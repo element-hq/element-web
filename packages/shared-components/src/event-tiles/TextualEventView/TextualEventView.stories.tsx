@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Meta, type StoryObj } from "@storybook/react-vite";
 
 import { TextualEventView as TextualEventComponent } from "./TextualEventView";
-import { MockViewModel } from "../../viewmodel/MockViewModel";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel";
 
 const meta = {
     title: "Event/TextualEvent",

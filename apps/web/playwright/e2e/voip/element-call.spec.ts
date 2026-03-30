@@ -15,13 +15,14 @@ import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { readSampleFile } from "../../sample-files";
 
 // Load a copy of our fake Element Call app, and the latest widget API.
 // The fake call app does *just* enough to convince Element Web that a call is ongoing
 // and functions like PiP work. It does not actually do anything though, to limit the
 // surface we test.
 const widgetApi = readFile(fileURLToPath(import.meta.resolve("matrix-widget-api/dist/api.min.js")), "utf-8");
-const fakeCallClient = readFile("playwright/sample-files/fake-element-call.html", "utf-8");
+const fakeCallClient = readSampleFile("fake-element-call.html");
 
 function assertCommonCallParameters(
     url: URLSearchParams,
@@ -189,25 +190,31 @@ test.describe("Element Call", () => {
             expect(hash.get("skipLobby")).toEqual("true");
         });
 
-        test("should be able to join a call in progress", async ({ page, user, bot, room, app }) => {
-            await app.viewRoomById(room.roomId);
-            // Allow bob to create a call
-            await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
-            await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
-            // Fake a start of a call
-            await sendRTCState(bot, room.roomId);
-            const button = page.getByTestId("join-call-button");
-            await expect(button).toBeInViewport({ timeout: 5000 });
-            // And test joining
-            await button.click();
-            const frameUrlStr = await page.locator("iframe").getAttribute("src");
-            await expect(frameUrlStr).toBeDefined();
-            const url = new URL(frameUrlStr);
-            const hash = new URLSearchParams(url.hash.slice(1));
-            assertCommonCallParameters(url.searchParams, hash, user, room);
+        ["voice", "video"].forEach((callType) => {
+            test(`should be able to join a ${callType} call in progress`, async ({ page, user, bot, room, app }) => {
+                await app.viewRoomById(room.roomId);
+                // Allow bob to create a call
+                await expect(page.getByText("Bob and one other were invited and joined")).toBeVisible();
+                await app.client.setPowerLevel(room.roomId, bot.credentials.userId, 50);
+                // Fake a start of a call
+                await sendRTCState(bot, room.roomId, undefined, callType === "voice" ? "audio" : "video");
+                const button = page.getByTestId("join-call-button");
+                await expect(button).toBeInViewport({ timeout: 5000 });
+                // Room list should show that a call is ongoing
+                await expect(
+                    page.getByRole("option", { name: `Open room TestRoom with a ${callType} call.` }),
+                ).toBeVisible();
+                // And test joining
+                await button.click();
+                const frameUrlStr = await page.locator("iframe").getAttribute("src");
+                await expect(frameUrlStr).toBeDefined();
+                const url = new URL(frameUrlStr);
+                const hash = new URLSearchParams(url.hash.slice(1));
+                assertCommonCallParameters(url.searchParams, hash, user, room);
 
-            expect(hash.get("intent")).toEqual("join_existing");
-            expect(hash.get("skipLobby")).toEqual(null);
+                expect(hash.get("intent")).toEqual("join_existing");
+                expect(hash.get("skipLobby")).toEqual(null);
+            });
         });
 
         [true, false].forEach((skipLobbyToggle) => {
@@ -609,7 +616,7 @@ test.describe("Element Call", () => {
             },
         });
 
-        const fakeCallClientSend = readFile("playwright/sample-files/fake-element-call-with-send.html", "utf-8");
+        const fakeCallClientSend = readSampleFile("fake-element-call-with-send.html");
 
         let charlie: Bot;
         test.use({

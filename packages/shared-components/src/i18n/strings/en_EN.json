@@ -79,7 +79,9 @@
                 "one": "Open room %(roomName)s with 1 unread message.",
                 "other": "Open room %(roomName)s with %(count)s unread messages."
             },
-            "unsent_message": "Open room %(roomName)s with an unsent message."
+            "unsent_message": "Open room %(roomName)s with an unsent message.",
+            "video_call": "Open room %(roomName)s with a video call.",
+            "voice_call": "Open room %(roomName)s with a voice call."
         },
         "appearance": "Appearance",
         "collapse_filters": "Collapse filter list",

@@ -56,7 +56,7 @@ jobs:
                   repository: element-hq/element-web
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   cache: "pnpm"
@@ -138,7 +138,7 @@ jobs:
                   name: webapp
                   path: apps/web/webapp
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   cache: "pnpm"
@@ -153,7 +153,7 @@ jobs:
               run: echo "version=$(pnpm --silent -- playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
+              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
@@ -211,7 +211,7 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
               if: inputs.skip != true
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               if: inputs.skip != true

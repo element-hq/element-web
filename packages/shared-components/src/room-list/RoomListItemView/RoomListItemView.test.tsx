@@ -19,6 +19,8 @@ const {
     Bold,
     WithNotification,
     WithMention,
+    WithVoiceCall,
+    WithVideoCall,
     Invitation,
     UnsentMessage,
     NoMessagePreview,
@@ -49,6 +51,16 @@ describe("<RoomListItemView />", () => {
 
     it("renders WithMention story", () => {
         const { container } = render(<WithMention />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders WithVoiceCall story", () => {
+        const { container } = render(<WithVoiceCall />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders WithVideoCall story", () => {
+        const { container } = render(<WithVideoCall />);
         expect(container).toMatchSnapshot();
     });
 
