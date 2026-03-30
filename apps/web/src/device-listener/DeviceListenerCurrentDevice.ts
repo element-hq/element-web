@@ -153,7 +153,6 @@ export class DeviceListenerCurrentDevice {
             return;
         }
 
-        const crossSigningReady = await crypto.isCrossSigningReady();
         const secretStorageStatus = await crypto.getSecretStorageStatus();
         const crossSigningStatus = await crypto.getCrossSigningStatus();
         const allCrossSigningSecretsCached =
@@ -163,8 +162,6 @@ export class DeviceListenerCurrentDevice {
 
         const recoveryDisabled = await this.recheckRecoveryDisabled(this.client);
 
-        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled;
-
         const isCurrentDeviceTrusted = Boolean(
             (await crypto.getDeviceVerificationStatus(this.client.getSafeUserId(), this.client.deviceId!))
                 ?.crossSigningVerified,
@@ -172,6 +169,8 @@ export class DeviceListenerCurrentDevice {
 
         const keyBackupUploadActive = await this.isKeyBackupUploadActive(logSpan);
         const backupDisabled = await this.recheckBackupDisabled();
+
+        const recoveryIsOk = secretStorageStatus.ready || recoveryDisabled || backupDisabled;
 
         // We warn if key backup upload is turned off and we have not explicitly
         // said we are OK with that.
@@ -215,36 +214,30 @@ export class DeviceListenerCurrentDevice {
             } else if (!keyBackupUploadIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: setting state to TURN_ON_KEY_STORAGE");
                 await this.setDeviceState("turn_on_key_storage", logSpan);
-            } else if (secretStorageStatus.defaultKeyId === null) {
-                // The user just hasn't set up 4S yet: if they have key
-                // backup, prompt them to turn on recovery too. (If not, they
-                // have explicitly opted out, so don't hassle them.)
-                if (recoveryDisabled) {
-                    logSpan.info("Recovery disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
-                } else if (keyBackupUploadActive) {
+            } else if (!recoveryIsOk) {
+                if (secretStorageStatus.defaultKeyId === null) {
                     logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
                     await this.setDeviceState("set_up_recovery", logSpan);
                 } else {
-                    logSpan.info("No default 4S key but backup disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
+                    logSpan.warn("4S is missing secrets: setting state to KEY_STORAGE_OUT_OF_SYNC", {
+                        secretStorageStatus,
+                        allCrossSigningSecretsCached,
+                        isCurrentDeviceTrusted,
+                        keyBackupDownloadIsOk,
+                    });
+                    await this.setDeviceState("key_storage_out_of_sync", logSpan);
                 }
-            } else {
-                // If we get here, then we are verified, have key backup, and
-                // 4S, but allSystemsReady is false, which means that either
-                // secretStorageStatus.ready is false (which means that 4S
-                // doesn't have all the secrets), or we don't have the backup
-                // key cached locally. If any of the cross-signing keys are
-                // missing locally, that is handled by the
-                // `!allCrossSigningSecretsCached` branch above.
-                logSpan.warn("4S is missing secrets or backup key not cached", {
-                    crossSigningReady,
+            } else if (!keyBackupDownloadIsOk) {
+                logSpan.warn("Backup key is not cached locally: setting state to KEY_STORAGE_OUT_OF_SYNC", {
                     secretStorageStatus,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
                     keyBackupDownloadIsOk,
                 });
                 await this.setDeviceState("key_storage_out_of_sync", logSpan);
+            } else {
+                // We should not get here
+                throw new Error("DeviceListenerCurrentDevice is in an unexpected state");
             }
         }
     }
