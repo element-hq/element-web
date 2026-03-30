@@ -622,6 +622,11 @@ Please see LICENSE files in the repository root for full details.
         margin-top: 20px;
     }
 
+    /* Virtualized timeline shape: ol > li > div.mx_EventTile */
+    &[data-expanded="false"] + li > .mx_EventTile[data-layout="bubble"][data-self="true"] {
+        margin-top: 20px;
+    }
+
     &[data-expanded="true"] .mx_EventTile_info {
         padding: 2px 0;
         margin-right: 0;

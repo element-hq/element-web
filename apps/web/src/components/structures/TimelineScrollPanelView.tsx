@@ -55,8 +55,9 @@ function withTimelineItemDomId(node: React.ReactNode, item: TimelineScrollPanelI
         return node;
     }
 
-    const childProps = node.props as React.HTMLAttributes<HTMLLIElement>;
-    return React.cloneElement(node, {
+    const liNode = node as React.ReactElement<React.HTMLAttributes<HTMLLIElement>>;
+    const childProps = liNode.props;
+    return React.cloneElement(liNode, {
         ...childProps,
         id: itemDomId,
     });
@@ -85,33 +86,35 @@ interface TimelineScrollPanelListViewProps {
     virtualListHandleRef?: React.Ref<VirtualizedListHandle>;
 }
 
-export const TimelineScrollPanelItemView = React.memo(
-    function TimelineScrollPanelItemView({ item }: { item: TimelineScrollPanelItem }): React.ReactNode {
-        return <>{withTimelineItemDomId(item.node, item)}</>;
-    },
-    (prevProps, nextProps) => prevProps.item === nextProps.item,
-);
-
-const TimelineScrollPanelRowItemView = React.memo(
-    function TimelineScrollPanelRowItemView({
-        item,
-        renderTimelineRow,
-    }: {
-        item: TimelineScrollPanelItem & { row: TimelineRow };
-        renderTimelineRow: (row: TimelineRow) => React.ReactNode;
-    }): React.ReactNode {
-        return <>{withTimelineItemDomId(renderTimelineRow(item.row), item)}</>;
-    },
-    (prevProps, nextProps) =>
-        prevProps.item === nextProps.item && prevProps.renderTimelineRow === nextProps.renderTimelineRow,
-);
-
 function assignMergedRef<T>(target: React.Ref<T> | undefined, value: T): void {
     if (typeof target === "function") {
         target(value);
     } else if (target) {
         target.current = value;
     }
+}
+
+type TimelineWrapperItemProps = React.HTMLAttributes<HTMLLIElement> & {
+    "data-scroll-tokens"?: string;
+};
+
+function getWrapperItemProps(item: TimelineScrollPanelItem | undefined): TimelineWrapperItemProps {
+    if (!item?.row || item.row.kind !== "event") {
+        return item?.domId ? { id: item.domId } : {};
+    }
+
+    const { event, eventId } = item.row;
+    const wrapperProps: TimelineWrapperItemProps = {};
+
+    if (!event.status) {
+        wrapperProps["data-scroll-tokens"] = eventId;
+    }
+
+    if (item.domId) {
+        wrapperProps.id = item.domId;
+    }
+
+    return wrapperProps;
 }
 
 export function TimelineScrollPanelListView({
@@ -312,7 +315,7 @@ export function TimelineScrollPanelListView({
                     item?: unknown;
                 },
             ): React.ReactNode {
-                const { children, context: _context, item: _item, ref, ...rest } = props;
+                const { children, context: _context, item, ref, ...rest } = props;
                 const mergedStyle: React.CSSProperties = {
                     ...rest.style,
                     minHeight: rest.style?.minHeight ?? 1,
@@ -330,27 +333,44 @@ export function TimelineScrollPanelListView({
                         ref?: React.Ref<HTMLLIElement>;
                     };
 
-                    return React.cloneElement(liChild, {
-                        ...itemProps,
-                        ...childProps,
-                        ref: (element: HTMLLIElement | null) => {
-                            if (element) {
-                                assignMergedRef(ref as React.Ref<HTMLLIElement> | undefined, element);
-                            }
-                            assignMergedRef(childProps.ref, element);
-                        },
-                        className: classNames(itemProps.className, childProps.className),
-                        style: {
-                            ...mergedStyle,
-                            ...childProps.style,
-                        } satisfies React.CSSProperties,
-                    });
+                    return (
+                        <li
+                            {...itemProps}
+                            {...childProps}
+                            ref={(element: HTMLLIElement | null) => {
+                                if (element) {
+                                    assignMergedRef(ref as React.Ref<HTMLLIElement> | undefined, element);
+                                }
+                                assignMergedRef(childProps.ref, element);
+                            }}
+                            className={classNames(itemProps.className, childProps.className)}
+                            style={{
+                                ...mergedStyle,
+                                ...childProps.style,
+                            }}
+                        >
+                            {childProps.children}
+                        </li>
+                    );
                 }
 
+                const wrapperItemProps = getWrapperItemProps(item as TimelineScrollPanelItem | undefined);
+                const normalizedChildren =
+                    React.isValidElement(children) && typeof children.type !== "string"
+                        ? React.cloneElement(children as React.ReactElement<{ as?: string }>, {
+                              as: "div",
+                          })
+                        : children;
+
                 return (
-                    <div {...rest} ref={ref} style={mergedStyle}>
-                        {children}
-                    </div>
+                    <li
+                        {...(rest as unknown as React.HTMLAttributes<HTMLLIElement>)}
+                        {...wrapperItemProps}
+                        ref={ref as React.Ref<HTMLLIElement>}
+                        style={mergedStyle}
+                    >
+                        {normalizedChildren}
+                    </li>
                 );
             },
         [],
@@ -408,10 +428,23 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
             }
 
             if (item.row && renderTimelineRow) {
-                return <TimelineScrollPanelRowItemView item={item as TimelineScrollPanelItem & { row: TimelineRow }} renderTimelineRow={renderTimelineRow} />;
+                const renderedRow = withTimelineItemDomId(renderTimelineRow(item.row), item);
+
+                if (
+                    React.isValidElement(renderedRow) &&
+                    typeof renderedRow.props === "object" &&
+                    renderedRow.props !== null &&
+                    typeof renderedRow.type !== "string"
+                ) {
+                    return React.cloneElement(renderedRow as React.ReactElement<{ as?: React.ElementType }>, {
+                        as: "div",
+                    });
+                }
+
+                return renderedRow;
             }
 
-            return <TimelineScrollPanelItemView item={item} />;
+            return withTimelineItemDomId(item.node, item);
         },
         [renderTimelineRow],
     );

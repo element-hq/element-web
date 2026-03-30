@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { type ElementType, type JSX } from "react";
 import { type Room, RoomEvent, type RoomMember, RoomMemberEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import * as WhoIsTyping from "../../../WhoIsTyping";
@@ -22,6 +22,7 @@ interface IProps {
     // Number of names to display in typing indication. E.g. set to 3, will
     // result in "X, Y, Z and 100 others are typing."
     whoIsTypingLimit: number;
+    as?: ElementType;
 }
 
 interface IState {
@@ -206,13 +207,15 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
             return null;
         }
 
+        const Root = this.props.as ?? "li";
+
         return (
-            <li className="mx_WhoIsTypingTile" aria-atomic="true">
+            <Root className="mx_WhoIsTypingTile" aria-atomic="true">
                 <div className="mx_WhoIsTypingTile_avatars">
                     {this.renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit)}
                 </div>
                 <div className="mx_WhoIsTypingTile_label">{typingString}</div>
-            </li>
+            </Root>
         );
     }
 }

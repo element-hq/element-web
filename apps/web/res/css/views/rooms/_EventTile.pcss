@@ -1374,6 +1374,18 @@ $left-gutter: 64px;
     }
 }
 
+.mx_RoomView_MessageList > li:first-child > .mx_EventTile {
+    margin-top: 0;
+}
+
+.mx_RoomView_MessageList > li:last-child > .mx_EventTile {
+    margin-bottom: 0;
+
+    &::after {
+        content: unset;
+    }
+}
+
 .mx_EventTile_annotated {
     display: flex;
 }

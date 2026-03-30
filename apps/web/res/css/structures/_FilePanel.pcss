@@ -37,6 +37,12 @@ Please see LICENSE files in the repository root for full details.
             padding-top: var(--cpd-space-6x);
         }
 
+        /* Virtualized timeline shape: ol > li > div.mx_EventTile */
+        li + li > & {
+            border-top: 1px solid var(--cpd-color-gray-400);
+            padding-top: var(--cpd-space-6x);
+        }
+
         .mx_EventTile_line {
             padding-inline-start: 0;
         }

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, useEffect } from "react";
+import React, { type ElementType, type ReactNode, useEffect } from "react";
 import { uniqBy } from "lodash";
 import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -35,6 +35,7 @@ interface IProps {
     // The layout currently used
     "layout"?: Layout;
     "data-testid"?: string;
+    as?: ElementType;
 }
 
 const GenericEventListSummary: React.FC<IProps> = ({
@@ -47,6 +48,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
     summaryText,
     layout = Layout.Group,
     "data-testid": testId,
+    as: Root = "li",
 }) => {
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
 
@@ -62,14 +64,14 @@ const GenericEventListSummary: React.FC<IProps> = ({
     // If we are only given few events then just pass them through
     if (events.length < threshold) {
         return (
-            <li
+            <Root
                 className="mx_GenericEventListSummary"
                 data-scroll-tokens={eventIds}
                 data-expanded={true}
                 data-layout={layout}
             >
                 <ol className="mx_GenericEventListSummary_unstyledList">{children}</ol>
-            </li>
+            </Root>
         );
     }
 
@@ -109,7 +111,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
     }
 
     return (
-        <li
+        <Root
             className="mx_GenericEventListSummary"
             data-scroll-tokens={eventIds}
             data-expanded={expanded + ""}
@@ -125,7 +127,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
                 {expanded ? _t("action|collapse") : _t("action|expand")}
             </AccessibleButton>
             {body}
-        </li>
+        </Root>
     );
 };
 

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext, useMemo } from "react";
+import React, { type ElementType, type JSX, useContext, useMemo } from "react";
 import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { ErrorSolidIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -52,7 +52,7 @@ const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolea
     return _td("room|intro|start_of_dm_history");
 };
 
-const NewRoomIntro: React.FC = () => {
+const NewRoomIntro: React.FC<{ as?: ElementType }> = ({ as: Root = "li" }) => {
     const cli = useContext(MatrixClientContext);
     const { room, roomId } = useScopedRoomContext("room", "roomId");
     const topic = useTopic(room);
@@ -297,7 +297,7 @@ const NewRoomIntro: React.FC = () => {
     );
 
     return (
-        <li className="mx_NewRoomIntro">
+        <Root className="mx_NewRoomIntro">
             {!hasExpectedEncryptionSettings(cli, room) && (
                 <EventTileBubble
                     icon={<ErrorSolidIcon color="var(--cpd-color-icon-critical-primary)" />}
@@ -308,7 +308,7 @@ const NewRoomIntro: React.FC = () => {
             )}
 
             {body}
-        </li>
+        </Root>
     );
 };
 
