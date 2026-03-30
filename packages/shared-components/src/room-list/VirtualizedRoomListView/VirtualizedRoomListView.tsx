@@ -181,6 +181,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                     isFocused={isFocused}
                     onFocus={onFocus}
                     roomIndex={index}
+                    // For a flat list, we don't have sections, so roomIndexInSection is unused and can be set to 0
                     roomIndexInSection={roomIndexInSection || 0}
                     roomCount={roomCount}
                     isFirstItem={isFirstItem}
