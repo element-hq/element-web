@@ -114,7 +114,10 @@ jobs:
             - name: "[Nightly] Calculate version"
               id: versions
               if: inputs.nightly
+              working-directory: apps/desktop
               run: |
+                  set -e
+
                   # Find all latest Nightly versions
                   aws s3 cp s3://$R2_BUCKET/nightly/update/macos/releases.json - --endpoint-url $R2_URL --region auto | jq -r .currentRelease >> VERSIONS
                   aws s3 cp s3://$R2_BUCKET/debian/dists/default/main/binary-amd64/Packages - --endpoint-url $R2_URL --region auto | grep "Package: element-nightly" -A 50 | grep Version -m1 | sed -n 's/Version: //p' >> VERSIONS
@@ -167,6 +170,8 @@ jobs:
               if: inputs.nightly
               working-directory: apps/desktop
               run: |
+                  set -e
+
                   BUNDLE_HASH=$(npx asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
                   WEBAPP_VERSION=$(./scripts/get-version.ts)
                   WEB_VERSION=${WEBAPP_VERSION:0:12}
