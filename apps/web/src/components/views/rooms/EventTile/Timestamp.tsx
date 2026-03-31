@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, type JSX } from "react";
 import { MessageTimestampView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import type { MessageTimestampViewModelProps } from "../../../../viewmodels/message-body/MessageTimestampViewModel";
-import { MessageTimestampViewModel } from "../../../../viewmodels/message-body/MessageTimestampViewModel";
+import type { MessageTimestampViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
+import { MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
 export function Timestamp(props: Readonly<MessageTimestampViewModelProps>): JSX.Element {
