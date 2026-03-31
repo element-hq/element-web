@@ -140,7 +140,7 @@ import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusM
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
-import { EncryptionEventViewModel } from "../../viewmodels/event-tiles/EncryptionEventViewModel.ts";
+import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
 
 const DEBUG = false;
@@ -2563,7 +2563,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     term={this.state.search.term}
                     scope={this.state.search.scope}
                     promise={this.state.search.promise}
-                    abortController={this.state.search.abortController}
                     inProgress={!!this.state.search.inProgress}
                     className={this.messagePanelClassNames}
                     onUpdate={this.onSearchUpdate}
