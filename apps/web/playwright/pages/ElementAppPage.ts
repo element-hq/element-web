@@ -256,7 +256,7 @@ export class ElementAppPage {
     }
 
     /**
-     * Dismiss the "Turn on key storage".
+     * Dismiss the "Turn on key storage" toast.
      */
     public async closeKeyStorageToast() {
         await this.closeToast("Turn on key storage", "Dismiss");
