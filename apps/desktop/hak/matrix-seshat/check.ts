@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import childProcess from "node:child_process";
 import fsProm from "node:fs/promises";
 
-import type HakEnv from "../../scripts/hak/hakEnv.js";
-import type { Tool } from "../../scripts/hak/hakEnv.js";
-import type { DependencyInfo } from "../../scripts/hak/dep.js";
+import type HakEnv from "../../scripts/hak/hakEnv.ts";
+import type { Tool } from "../../scripts/hak/hakEnv.ts";
+import type { DependencyInfo } from "../../scripts/hak/dep.ts";
 
 export default async function (hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
     const tools: Tool[] = [
