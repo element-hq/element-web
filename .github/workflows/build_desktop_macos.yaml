@@ -92,7 +92,7 @@ jobs:
               id: cache
               uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               with:
-                  key: ${{ runner.os }}-${{ hashFiles('hakHash', 'electronVersion') }}
+                  key: ${{ runner.os }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion') }}
                   path: |
                       apps/desktop/.hak
 

@@ -123,7 +123,7 @@ jobs:
               id: cache
               uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               with:
-                  key: ${{ runner.os }}-${{ inputs.arch }}-${{ hashFiles('hakHash', 'electronVersion') }}
+                  key: ${{ runner.os }}-${{ inputs.arch }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion') }}
                   path: |
                       apps/desktop/.hak
 
