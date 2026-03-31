@@ -18,8 +18,6 @@ on:
     push:
         # We do not build on push to develop as the merge_group check handles that
         branches: [staging, master]
-    repository_dispatch:
-        types: [element-web-notify]
 
     # support triggering from other workflows
     workflow_call:
