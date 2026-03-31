@@ -80,7 +80,7 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Forgot your recovery key? You’ll need to reset your identity.
+        Forgot your recovery key? You’ll need to reset your digital identity.
       </h2>
     </div>
     <div
@@ -263,7 +263,7 @@ exports[`<ResetIdentityPanel /> should display the 'sync failed' variant correct
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Failed to sync key storage. You need to reset your identity.
+        Failed to sync key storage. You need to reset your digital identity.
       </h2>
     </div>
     <div
@@ -446,7 +446,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Are you sure you want to reset your identity?
+        Are you sure you want to reset your digital identity?
       </h2>
     </div>
     <div
@@ -632,7 +632,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
       <h2
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Are you sure you want to reset your identity?
+        Are you sure you want to reset your digital identity?
       </h2>
     </div>
     <div

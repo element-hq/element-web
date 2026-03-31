@@ -99,4 +99,51 @@ describe("WithPresenceIndicator", () => {
 
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it.each([
+        ["online", "Online"],
+        ["offline", "Offline"],
+        ["unavailable", "Away"],
+    ])(
+        "renders presence indicator when member.user is not linked but client has user data",
+        async (presenceStr, renderedStr) => {
+            mocked(isPresenceEnabled).mockReturnValue(true);
+
+            const DM_USER_ID = "@bob:foo.bar";
+            const dmRoomMap = {
+                getUserIdForRoomId: () => {
+                    return DM_USER_ID;
+                },
+            } as unknown as DMRoomMap;
+
+            jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+
+            // member.user is not set: simulates the race condition on fresh login with no cache
+            // where the room list renders before member.user is linked
+            room.getMember = jest.fn((userId) => {
+                return new RoomMember(room.roomId, userId);
+            });
+
+            // But client.getUser() has the presence data
+            const user = new User(DM_USER_ID);
+            user.presence = presenceStr;
+            mockClient.getUser = jest.fn((userId) => (userId === DM_USER_ID ? user : null));
+
+            const { container } = renderComponent();
+
+            const presence = container.querySelector(".mx_WithPresenceIndicator_icon")!;
+            expect(presence).toBeVisible();
+            await userEvent.hover(presence!);
+
+            const tooltip = await waitFor(() => {
+                const tooltip = document.getElementById(presence.getAttribute("aria-labelledby")!);
+                expect(tooltip).toBeVisible();
+                return tooltip;
+            });
+
+            // component should fall back to reading client.getUser() which does have the presence data
+            // so it should render correctly
+            expect(tooltip).toHaveTextContent(renderedStr);
+        },
+    );
 });

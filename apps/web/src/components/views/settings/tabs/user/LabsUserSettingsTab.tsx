@@ -16,7 +16,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import { type FeatureSettingKey, LabGroup, labGroupNames } from "../../../../../settings/Settings";
+import { type FeatureSettingKey, type LabGroup, labGroupNames } from "../../../../../settings/Settings";
 import { EnhancedMap } from "../../../../../utils/maps";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -70,16 +70,6 @@ export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
                     .getOrCreate(SettingsStore.getLabGroup(f)!, [])
                     .push(<SettingsFlag level={SettingLevel.DEVICE} name={f} key={f} />);
             });
-
-            groups
-                .getOrCreate(LabGroup.Analytics, [])
-                .push(
-                    <SettingsFlag
-                        key="automaticDecryptionErrorReporting"
-                        name="automaticDecryptionErrorReporting"
-                        level={SettingLevel.DEVICE}
-                    />,
-                );
 
             labsSections = (
                 <>

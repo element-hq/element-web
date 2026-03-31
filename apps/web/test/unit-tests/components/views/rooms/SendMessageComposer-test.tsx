@@ -67,6 +67,7 @@ describe("<SendMessageComposer/>", () => {
         showJoinLeaves: true,
         showAvatarChanges: true,
         showDisplaynameChanges: true,
+        showUrlPreview: false,
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
         mainSplitContentType: MainSplitContentType.Timeline,

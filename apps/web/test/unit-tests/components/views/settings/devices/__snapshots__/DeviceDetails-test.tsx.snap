@@ -110,7 +110,7 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
         <span
           class="mx_DeviceDetails_signOutButtonContent"
         >
-          Sign out of this session
+          Remove this session
         </span>
       </div>
     </section>
@@ -174,7 +174,7 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify or remove this session for best security and reliability.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -326,7 +326,7 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
         <span
           class="mx_DeviceDetails_signOutButtonContent"
         >
-          Sign out of this session
+          Remove this session
         </span>
       </div>
     </section>
@@ -390,7 +390,7 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify or remove this session for best security and reliability.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -442,7 +442,7 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
         <span
           class="mx_DeviceDetails_signOutButtonContent"
         >
-          Sign out of this session
+          Remove this session
         </span>
       </div>
     </section>

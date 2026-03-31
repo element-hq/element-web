@@ -7,8 +7,8 @@
 
 import React, { type JSX } from "react";
 
-import { Flex } from "../../utils/Flex";
-import { RoomListItemMoreOptionsMenu, type RoomItemViewModel } from "./RoomListItemMoreOptionsMenu";
+import { Flex } from "../../core/utils/Flex";
+import { RoomListItemMoreOptionsMenu, type RoomListItemViewModel } from "./RoomListItemMoreOptionsMenu";
 import { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 import styles from "./RoomListItemView.module.css";
 
@@ -21,7 +21,7 @@ export interface RoomListItemHoverMenuProps {
     /** Whether the notification menu should be shown */
     showNotificationMenu: boolean;
     /** The room item view model */
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
 }
 
 /**

@@ -14,14 +14,14 @@ import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/over
 import { describe, vi, expect, it, afterEach } from "vitest";
 
 import {
-    type WidgetContextMenuAction,
-    type WidgetContextMenuSnapshot,
+    type WidgetContextMenuViewActions,
+    type WidgetContextMenuViewSnapshot,
     WidgetContextMenuView,
 } from "./WidgetContextMenuView";
 import * as stories from "./WidgetContextMenuView.stories.tsx";
-import { MockViewModel } from "../../viewmodel/MockViewModel.ts";
-import { I18nApi } from "../../utils/I18nApi.ts";
-import { I18nContext } from "../../utils/i18nContext.ts";
+import { MockViewModel } from "../../core/viewmodel/MockViewModel.ts";
+import { I18nApi } from "../../core/i18n/I18nApi.ts";
+import { I18nContext } from "../../core/i18n/i18nContext.ts";
 
 const { Default, OnlyBasicModification } = composeStories(stories);
 
@@ -52,8 +52,8 @@ describe("<WidgetContextMenuView />", () => {
     const onFinished = vi.fn();
     const onMoveButton = vi.fn();
     class WidgetContextMenuViewModel
-        extends MockViewModel<WidgetContextMenuSnapshot>
-        implements WidgetContextMenuAction
+        extends MockViewModel<WidgetContextMenuViewSnapshot>
+        implements WidgetContextMenuViewActions
     {
         public onKeyDown = onKeyDown;
         public togglePlay = togglePlay;
@@ -68,7 +68,7 @@ describe("<WidgetContextMenuView />", () => {
         public onMoveButton = onMoveButton;
     }
 
-    const defaultValue: WidgetContextMenuSnapshot = {
+    const defaultValue: WidgetContextMenuViewSnapshot = {
         showStreamAudioStreamButton: true,
         showEditButton: true,
         showRevokeButton: true,

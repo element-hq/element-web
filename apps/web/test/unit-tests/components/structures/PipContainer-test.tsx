@@ -43,7 +43,7 @@ import { Action } from "../../../../src/dispatcher/actions";
 import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { TestSdkContext } from "../../TestSdkContext";
 import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
-import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 import WidgetStore from "../../../../src/stores/WidgetStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
@@ -234,7 +234,7 @@ describe("PipContainer", () => {
             // The return button should maximize the widget
             const moveSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
             await user.click(await screen.findByRole("button", { name: "Back" }));
-            expect(moveSpy).toHaveBeenCalledWith(room, widget, Container.Center);
+            expect(moveSpy).toHaveBeenCalledWith(room, widget, "center");
 
             expect(screen.queryByRole("button", { name: "Leave" })).toBeNull();
         });

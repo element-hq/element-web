@@ -1,0 +1,203 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:description': 'A description',\\n  'og:title': ''\\n} 1`] = `
+{
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": undefined,
+  "siteName": undefined,
+  "title": "A description",
+}
+`;
+
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:site_name': 'Site name',\\n  'og:title': ''\\n} 1`] = `
+{
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": undefined,
+  "siteName": undefined,
+  "title": "Site name",
+}
+`;
+
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Basic title'\\n} 1`] = `
+{
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": undefined,
+  "siteName": undefined,
+  "title": "Basic title",
+}
+`;
+
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Cool blog',\\n  'og:site_name': 'Cool site'\\n} 1`] = `
+{
+  "description": undefined,
+  "image": undefined,
+  "link": "https://example.org",
+  "showTooltipOnLink": undefined,
+  "siteName": "Cool site",
+  "title": "Cool blog",
+}
+`;
+
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Media test',\\n  'og:image:height': '500',\\n  'og:image:width': 500,\\n  'matrix:image:size': 1024,\\n  'og:image': 'mxc://example.org/abc'\\n} 1`] = `
+{
+  "description": undefined,
+  "image": {
+    "fileSize": 1024,
+    "height": 100,
+    "imageFull": "https://example.org/image/src",
+    "imageThumb": "https://example.org/image/thumb",
+    "width": 100,
+  },
+  "link": "https://example.org",
+  "showTooltipOnLink": undefined,
+  "siteName": undefined,
+  "title": "Media test",
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should deduplicate multiple versions of the same URL 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [
+    {
+      "description": "This is a description",
+      "image": undefined,
+      "link": "https://example.org",
+      "showTooltipOnLink": undefined,
+      "siteName": "Example.org",
+      "title": "This is an example!",
+    },
+  ],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the user 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the user 2`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [
+    {
+      "description": "This is a description",
+      "image": undefined,
+      "link": "https://example.org",
+      "showTooltipOnLink": undefined,
+      "siteName": "Example.org",
+      "title": "This is an example!",
+    },
+  ],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should hide preview when invisible 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should ignore failed previews 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should ignore media when mediaVisible is false 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [
+    {
+      "description": undefined,
+      "image": undefined,
+      "link": "https://example.org",
+      "showTooltipOnLink": undefined,
+      "siteName": undefined,
+      "title": "This is an example!",
+    },
+  ],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should preview a URL with media 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [
+    {
+      "description": undefined,
+      "image": {
+        "fileSize": 10000,
+        "height": 100,
+        "imageFull": "https://example.org/image/src",
+        "imageThumb": "https://example.org/image/thumb",
+        "width": 100,
+      },
+      "link": "https://example.org",
+      "showTooltipOnLink": undefined,
+      "siteName": undefined,
+      "title": "This is an example!",
+    },
+  ],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should preview a single valid URL 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [
+    {
+      "description": "This is a description",
+      "image": undefined,
+      "link": "https://example.org",
+      "showTooltipOnLink": undefined,
+      "siteName": "Example.org",
+      "title": "This is an example!",
+    },
+  ],
+  "previewsLimited": true,
+  "totalPreviewCount": 1,
+}
+`;
+
+exports[`UrlPreviewGroupViewModel should return no previews by default 1`] = `
+{
+  "compactLayout": false,
+  "overPreviewLimit": false,
+  "previews": [],
+  "previewsLimited": true,
+  "totalPreviewCount": 0,
+}
+`;

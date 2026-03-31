@@ -89,7 +89,6 @@ export enum LabGroup {
     Threads,
     VoiceAndVideo,
     Moderation,
-    Analytics,
     Themes,
     Encryption,
     Experimental,
@@ -110,7 +109,6 @@ export const labGroupNames: Record<LabGroup, TranslationKey> = {
     [LabGroup.Threads]: _td("labs|group_threads"),
     [LabGroup.VoiceAndVideo]: _td("labs|group_voip"),
     [LabGroup.Moderation]: _td("labs|group_moderation"),
-    [LabGroup.Analytics]: _td("common|analytics"),
     [LabGroup.Themes]: _td("labs|group_themes"),
     [LabGroup.Encryption]: _td("labs|group_encryption"),
     [LabGroup.Experimental]: _td("labs|group_experimental"),
@@ -335,6 +333,8 @@ export interface Settings {
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
+    "RoomList.panelSize": IBaseSetting<number | null>;
+    "RoomList.isPanelCollapsed": IBaseSetting<boolean>;
     "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
@@ -1222,6 +1222,14 @@ export const SETTINGS: Settings = {
     "RoomList.preferredSorting": {
         supportedLevels: [SettingLevel.DEVICE],
         default: SortingAlgorithm.Recency,
+    },
+    "RoomList.panelSize": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: null,
+    },
+    "RoomList.isPanelCollapsed": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: false,
     },
     "RoomList.showMessagePreview": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
