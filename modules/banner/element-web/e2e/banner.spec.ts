@@ -166,8 +166,8 @@ test.describe("Banner", () => {
                     // Verify that the #matrixchat root got shrunk to fit rather than exploding the viewport
                     const bodyBoundingBox = await page.locator("body").boundingBox();
                     const rootBoundingBox = await page.locator("#matrixchat").boundingBox();
-                    const headerElement = await page.locator("#matrixchat").evaluate((e) => e.previousElementSibling);
-                    const headerBoundingBox = headerElement?.getBoundingClientRect();
+                    const headerBoundingBox = await page.getByTestId("banner").boundingBox();
+                    expect(rootBoundingBox!.height).toBeLessThan(bodyBoundingBox!.height);
                     expect(rootBoundingBox!.height + headerBoundingBox!.height).toEqual(bodyBoundingBox!.height);
                 });
 

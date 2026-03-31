@@ -36,6 +36,7 @@ class BannerModule implements Module {
         }
 
         const div = document.createElement("div");
+        div.dataset.testid = "banner";
         this.api.rootNode.before(div);
 
         const root = this.api.createRoot(div);
