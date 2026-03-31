@@ -153,7 +153,22 @@ test.describe("Banner", () => {
                     // Assert the sidebar looks as we expect
                     await expect(axe).toHaveNoViolations();
                     await expect(sidebar).toMatchAriaSnapshot();
-                    await expect(page).toMatchScreenshot(`${type}_menu.png`);
+                    await expect(page).toMatchScreenshot(`${type}_menu.png`, {
+                        // We exclude this as we don't want to assert Element's styling, only our own
+                        css: `
+                            #matrixchat {
+                                opacity: 0;
+                                background: orchid;
+                            }
+                        `,
+                    });
+
+                    // Verify that the #matrixchat root got shrunk to fit rather than exploding the viewport
+                    const bodyBoundingBox = await page.locator("body").boundingBox();
+                    const rootBoundingBox = await page.locator("#matrixchat").boundingBox();
+                    const headerElement = await page.locator("#matrixchat").evaluate((e) => e.previousElementSibling);
+                    const headerBoundingBox = headerElement?.getBoundingClientRect();
+                    expect(rootBoundingBox!.height + headerBoundingBox!.height).toEqual(bodyBoundingBox!.height);
                 });
 
                 await test.step("close menu", async () => {
