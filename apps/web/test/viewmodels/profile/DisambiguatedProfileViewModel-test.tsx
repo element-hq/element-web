@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { DisambiguatedProfileViewModel } from "../../../src/viewmodels/profile/DisambiguatedProfileViewModel";
+import { DisambiguatedProfileViewModel } from "../../../src/viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 
 describe("DisambiguatedProfileViewModel", () => {
     const member = {

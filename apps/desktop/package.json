@@ -18,7 +18,7 @@
     "type": "module",
     "files": [],
     "engines": {
-        "node": ">=18.0.0"
+        "node": ">=22.18"
     },
     "scripts": {
         "i18n": "matrix-gen-i18n && pnpm i18n:sort && pnpm i18n:lint",
@@ -26,7 +26,7 @@
         "i18n:lint": "prettier --log-level=silent  --write src/i18n/strings/ --ignore-path /dev/null",
         "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && pnpm i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
         "mkdirs": "mkdirp packages deploys",
-        "fetch": "pnpm run mkdirs && tsx scripts/fetch-package.ts",
+        "fetch": "pnpm run mkdirs && node scripts/fetch-package.ts",
         "asar-webapp": "asar p webapp webapp.asar",
         "start": "pnpm run build:ts && pnpm run build:res && electron .",
         "lint": "pnpm lint:types && pnpm lint:js",
@@ -44,13 +44,13 @@
         "build:universal": "pnpm run build:ts && pnpm run build:res && electron-builder --universal",
         "build": "pnpm run build:ts && pnpm run build:res && electron-builder",
         "build:ts": "tsc",
-        "build:res": "tsx scripts/copy-res.ts",
+        "build:res": "node scripts/copy-res.ts",
         "docker:setup": "docker build --platform linux/amd64 -t element-desktop-dockerbuild -f dockerbuild/Dockerfile .",
         "docker:build:native": "scripts/in-docker.sh pnpm run hak",
         "docker:build": "scripts/in-docker.sh pnpm run build",
         "docker:install": "scripts/in-docker.sh pnpm install",
         "clean": "rimraf webapp.asar dist packages deploys lib",
-        "hak": "tsx scripts/hak/index.ts",
+        "hak": "node scripts/hak/index.ts",
         "test": "playwright test",
         "test:open": "pnpm test --ui",
         "test:screenshots:build": "docker build playwright -t element-desktop-playwright --platform linux/amd64",
@@ -102,7 +102,6 @@
         "prettier": "^3.0.0",
         "rimraf": "^6.0.0",
         "tar": "^7.5.8",
-        "tsx": "^4.19.2",
         "typescript": "5.9.3"
     },
     "hakDependencies": {
