@@ -12,7 +12,7 @@ import styles from "./ActionBarView.module.css";
 
 interface ActionBarButtonProps {
     presentation: "icon" | "label";
-    buttonRef: React.RefObject<HTMLButtonElement | null>;
+    buttonRef: React.Ref<HTMLButtonElement>;
     label: string;
     onActivate?: (anchor: HTMLElement | null) => void;
     icon?: React.ComponentProps<typeof Button>["Icon"];
@@ -40,7 +40,7 @@ export function ActionBarButton({
     const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement>): void => {
         event.preventDefault();
         event.stopPropagation();
-        onActivate?.(buttonRef.current);
+        onActivate?.(event.currentTarget);
     };
 
     return (
@@ -55,7 +55,7 @@ export function ActionBarButton({
                 aria-pressed={ariaPressed}
                 aria-expanded={ariaExpanded}
                 disabled={disabled}
-                onClick={() => onActivate?.(buttonRef.current)}
+                onClick={(event) => onActivate?.(event.currentTarget)}
                 onContextMenu={handleContextMenu}
                 className={styles.toolbar_item}
                 Icon={iconOnly ? icon : undefined}
