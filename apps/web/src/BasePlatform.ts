@@ -466,10 +466,9 @@ export default abstract class BasePlatform {
      * The URL to return to after a successful OIDC authentication
      */
     public getOidcCallbackUrl(): URL {
-        const url = new URL(window.location.href);
         // The redirect URL has to exactly match that registered at the OIDC server, so
-        // ensure that the fragment part of the URL is empty.
-        url.hash = "";
+        // build it from scratch to avoid leaking ephemeral query params (e.g. `updated`).
+        const url = new URL(window.location.origin + window.location.pathname);
         // Set no_universal_links=true to prevent the callback being handled by Element X installed on macOS Apple Silicon
         url.searchParams.set("no_universal_links", "true");
         return url;

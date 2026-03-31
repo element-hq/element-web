@@ -12,6 +12,7 @@ import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { getSampleFilePath } from "../../sample-files";
 
 // Find and click "Reply" button
 const clickButtonReply = async (tile: Locator) => {
@@ -28,9 +29,11 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         displayName: "Hanako",
     });
 
-    const uploadFile = async (page: Page, file: string) => {
+    const uploadFile = async (page: Page, sampleFile: string) => {
         // Upload a file from the message composer
-        await page.locator(".mx_MessageComposer_actions input[type='file']").setInputFiles(file);
+        await page
+            .locator(".mx_MessageComposer_actions input[type='file']")
+            .setInputFiles(getSampleFilePath(sampleFile));
 
         // Find and click primary "Upload" button
         await page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
@@ -41,12 +44,12 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             "Your message was sent",
         );
         // wait for the tile to finish loading
-        await expect(
-            page
-                .getByTestId("audio-player-name")
-                .last()
-                .filter({ hasText: file.split("/").at(-1) }),
-        ).toBeVisible();
+        await expect(page.getByTestId("audio-player-name").last().filter({ hasText: sampleFile })).toBeVisible();
+    };
+
+    const scrollToBottomOfTimeline = async (page: Page) => {
+        await page.locator(".mx_RoomView_MessageList").click();
+        await page.mouse.wheel(0, 100);
     };
 
     /**
@@ -113,10 +116,12 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             `,
             mask: [page.getByTestId("audio-player-seek")],
             clip: undefined,
+            hideJumpToBottomButton: true,
         };
 
         // Take a snapshot of mx_EventTile_last on IRC layout
         screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-irc-layout.png`, screenshotOptions);
 
         // Take a snapshot on modern/group layout
@@ -125,6 +130,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await groupTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(groupTile);
         screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-group-layout.png`, screenshotOptions);
 
         // Take a snapshot on bubble layout
@@ -133,6 +139,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await bubbleTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(bubbleTile);
         screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-bubble-layout.png`, screenshotOptions);
     };
 
@@ -149,7 +156,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     });
 
     test("should be correctly rendered - light theme", { tag: "@screenshot" }, async ({ page, app }) => {
-        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "1sec-long-name-audio-file.ogg");
         await takeSnapshots(page, app, "Selected EventTile of audio player (light theme)");
     });
 
@@ -157,7 +164,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         "should be correctly rendered - light theme with monospace font",
         { tag: "@screenshot" },
         async ({ page, app }) => {
-            await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
+            await uploadFile(page, "1sec-long-name-audio-file.ogg");
 
             await takeSnapshots(page, app, "Selected EventTile of audio player (light theme, monospace font)", true); // Enable monospace
         },
@@ -174,7 +181,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         await app.closeDialog();
 
-        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "1sec-long-name-audio-file.ogg");
 
         await takeSnapshots(page, app, "Selected EventTile of audio player (high contrast)");
     });
@@ -183,13 +190,13 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Enable dark theme
         await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
 
-        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "1sec-long-name-audio-file.ogg");
 
         await takeSnapshots(page, app, "Selected EventTile of audio player (dark theme)");
     });
 
     test("should play an audio file", async ({ page, app }) => {
-        await uploadFile(page, "playwright/sample-files/1sec.ogg");
+        await uploadFile(page, "1sec.ogg");
 
         // Assert that the audio player is rendered
         const container = page.locator(".mx_EventTile_last").getByRole("region", { name: "Audio player" });
@@ -211,7 +218,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     });
 
     test("should support downloading an audio file", async ({ page, app }) => {
-        await uploadFile(page, "playwright/sample-files/1sec.ogg");
+        await uploadFile(page, "1sec.ogg");
 
         const downloadPromise = page.waitForEvent("download");
 
@@ -229,7 +236,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         "should support replying to audio file with another audio file",
         { tag: "@screenshot" },
         async ({ page, app }) => {
-            await uploadFile(page, "playwright/sample-files/1sec.ogg");
+            await uploadFile(page, "1sec.ogg");
 
             // Assert the audio player is rendered
             await expect(page.getByRole("region", { name: "Audio player" })).toBeVisible();
@@ -239,7 +246,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await clickButtonReply(tile);
 
             // Reply to the player with another audio file
-            await uploadFile(page, "playwright/sample-files/1sec.ogg");
+            await uploadFile(page, "1sec.ogg");
 
             // Assert that the audio player is rendered
             await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
@@ -264,7 +271,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             const tile = page.locator(".mx_EventTile_last");
 
-            await uploadFile(page, "playwright/sample-files/upload-first.ogg");
+            await uploadFile(page, "upload-first.ogg");
 
             // Assert that the audio player is rendered
             await expect(
@@ -274,7 +281,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await clickButtonReply(tile);
 
             // Reply to the player with another audio file
-            await uploadFile(page, "playwright/sample-files/upload-second.ogg");
+            await uploadFile(page, "upload-second.ogg");
 
             // Assert that the audio player is rendered
             await expect(
@@ -284,7 +291,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             await clickButtonReply(tile);
 
             // Reply to the player with yet another audio file to create a reply chain
-            await uploadFile(page, "playwright/sample-files/upload-third.ogg");
+            await uploadFile(page, "upload-third.ogg");
 
             // Assert that the audio player is rendered
             await expect(tile.getByRole("region", { name: "Audio player" })).toBeVisible();
@@ -316,7 +323,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     );
 
     test("should be rendered, play, and support replying on a thread", async ({ page, app }) => {
-        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
+        await uploadFile(page, "1sec-long-name-audio-file.ogg");
 
         // On the main timeline
         const messageList = page.locator(".mx_RoomView_MessageList");

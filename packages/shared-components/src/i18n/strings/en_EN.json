@@ -30,7 +30,8 @@
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "left_panel": {
-        "open_dial_pad": "Open dial pad"
+        "open_dial_pad": "Open dial pad",
+        "separator_label": "Click or drag to expand"
     },
     "menus": {
         "user_menu": {
@@ -87,7 +88,9 @@
                 "one": "Open room %(roomName)s with 1 unread message.",
                 "other": "Open room %(roomName)s with %(count)s unread messages."
             },
-            "unsent_message": "Open room %(roomName)s with an unsent message."
+            "unsent_message": "Open room %(roomName)s with an unsent message.",
+            "video_call": "Open room %(roomName)s with a video call.",
+            "voice_call": "Open room %(roomName)s with a voice call."
         },
         "appearance": "Appearance",
         "collapse_filters": "Collapse filter list",

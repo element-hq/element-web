@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "Huỷ bỏ",
+        "close": "Đóng",
+        "close_brand": "Đóng %(brand)s",
+        "copy": "Sao chép",
+        "cut": "Cắt",
+        "delete": "Xoá",
+        "edit": "Sửa",
+        "minimise": "Thu nhỏ",
+        "paste": "Dán",
+        "paste_match_style": "Dán và khớp kiểu",
+        "quit": "Thoát",
+        "redo": "Làm lại",
+        "select_all": "Chọn tất cả",
+        "show_hide": "Hiện/Ẩn",
+        "undo": "Hoàn tác",
+        "zoom_in": "Phóng to",
+        "zoom_out": "Thu nhỏ"
+    },
+    "common": {
+        "about": "Giới thiệu",
+        "brand_help": "Hỗ trợ %(brand)s",
+        "help": "Hỗ trợ",
+        "preferences": "Tùy chọn"
+    },
+    "confirm_quit": "Bạn có chắc chắn muốn thoát?",
+    "edit_menu": {
+        "speech": "Đọc màn hình",
+        "speech_start_speaking": "Bắt đầu nói",
+        "speech_stop_speaking": "Dừng nói"
+    },
+    "file_menu": {
+        "label": "Tệp"
+    },
+    "menu": {
+        "hide": "Ẩn",
+        "hide_others": "Ẩn cái khác",
+        "services": "Dịch vụ",
+        "unhide": "Bỏ ẩn"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Thêm vào từ điển",
+        "copy_email": "Sao chép địa chỉ email",
+        "copy_image": "Sao chép ảnh",
+        "copy_image_url": "Sao chép địa chỉ ảnh",
+        "copy_link_url": "Sao chép địa chỉ liên kết",
+        "save_image_as": "Lưu ảnh…",
+        "save_image_as_error_description": "Ảnh không lưu được",
+        "save_image_as_error_title": "Không lưu được ảnh"
+    },
+    "view_menu": {
+        "actual_size": "Kích thước thực",
+        "toggle_developer_tools": "Công cụ phát triển",
+        "toggle_full_screen": "Toàn màn hình",
+        "view": "Xem"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Đưa tất cả lên trước",
+        "label": "Cửa sổ",
+        "zoom": "Thu phóng"
+    }
+}

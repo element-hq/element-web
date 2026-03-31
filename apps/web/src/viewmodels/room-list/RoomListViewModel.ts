@@ -52,6 +52,9 @@ export class RoomListViewModel
 
     // Child view model management
     private roomItemViewModels = new Map<string, RoomListItemViewModel>();
+    // This map is intentionally additive (never cleared except on space changes) to avoid a race condition:
+    // a list update can refresh roomsResult and roomsMap before the view re-renders, so the view may still
+    // request a view model for a room that was removed from the latest list. Keeping old entries prevents a crash.
     private roomsMap = new Map<string, Room>();
 
     public constructor(props: RoomListViewModelProps) {
@@ -142,11 +145,11 @@ export class RoomListViewModel
     };
 
     /**
-     * Rebuild roomsMap when roomsResult changes.
+     * Add rooms from the RoomsResult to the roomsMap for quick lookup.
+     * This does not clear the roomsMap.
      * This maintains a quick lookup for room objects.
      */
     private updateRoomsMap(roomsResult: RoomsResult): void {
-        this.roomsMap.clear();
         for (const room of roomsResult.rooms) {
             this.roomsMap.set(room.roomId, room);
         }
@@ -181,10 +184,14 @@ export class RoomListViewModel
         let viewModel = this.roomItemViewModels.get(roomId);
 
         if (!viewModel) {
-            const room = this.roomsMap.get(roomId);
+            let room = this.roomsMap.get(roomId);
             if (!room) {
-                throw new Error(`Room ${roomId} not found in roomsMap`);
+                // Maybe the roomsMap is out of date due to a recent roomsResult change that hasn't been applied yet (race condition)
+                this.updateRoomsMap(this.roomsResult);
+                room = this.roomsMap.get(roomId);
             }
+
+            if (!room) throw new Error(`Room ${roomId} not found in roomsMap`);
 
             // Create new view model
             viewModel = new RoomListItemViewModel({
@@ -298,8 +305,6 @@ export class RoomListViewModel
 
         // Refresh room data from store
         this.roomsResult = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filterKeys);
-        this.updateRoomsMap(this.roomsResult);
-
         const newSpaceId = this.roomsResult.spaceId;
 
         // Detect space change
@@ -308,6 +313,10 @@ export class RoomListViewModel
             // We only want to do this on space changes, not on regular list updates, to preserve view models when possible
             // The view models are disposed when scrolling out of view (handled by updateVisibleRooms)
             this.clearViewModels();
+            // Clear roomsMap to prevent stale room data - it will be repopulated with the new roomsResult
+            this.roomsMap.clear();
+
+            this.updateRoomsMap(this.roomsResult);
 
             // Space changed - get the last selected room for the new space to prevent flicker
             const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
@@ -315,6 +324,8 @@ export class RoomListViewModel
             this.updateRoomListData(true, lastSelectedRoom);
             return;
         }
+
+        this.updateRoomsMap(this.roomsResult);
 
         // Normal room list update (not a space change)
         this.updateRoomListData();
@@ -441,8 +452,8 @@ export class RoomListViewModel
             isLoadingRooms,
             isRoomListEmpty,
             activeFilterId,
-            roomListState,
-            sections,
+            roomListState: keepIfSame(this.snapshot.current.roomListState, roomListState),
+            sections: keepIfSame(this.snapshot.current.sections, sections),
         });
     }
 

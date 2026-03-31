@@ -1,0 +1,93 @@
+{
+    "action": {
+        "cancel": "Storno",
+        "close": "Zavřít",
+        "close_brand": "Zavřít %(brand)s",
+        "copy": "Zkopírovat",
+        "cut": "Vyjmout",
+        "delete": "Smazat",
+        "edit": "Upravit",
+        "minimise": "Minimalizovat",
+        "paste": "Vložit",
+        "paste_match_style": "Vložit a přizpůsobit styl",
+        "quit": "Ukončit",
+        "redo": "Znovu",
+        "select_all": "Vybrat vše",
+        "show_hide": "Zobrazit/Skrýt",
+        "undo": "Zpět",
+        "zoom_in": "Přiblížit",
+        "zoom_out": "Oddálit"
+    },
+    "common": {
+        "about": "O",
+        "brand_help": "%(brand)s nápověda",
+        "help": "Nápověda",
+        "no": "Ne",
+        "preferences": "Předvolby",
+        "yes": "Ano"
+    },
+    "confirm_quit": "Opravdu chcete ukončit aplikaci?",
+    "edit_menu": {
+        "speech": "Řeč",
+        "speech_start_speaking": "Spustit nahrávání hlasu",
+        "speech_stop_speaking": "Zastavit nahrávání hlasu"
+    },
+    "eol": {
+        "no_more_updates": "Používáte nepodporovanou verzi systému macOS. Prosím upgradujte %(brand)s pro získání aktualizací.",
+        "title": "Systém není podporován",
+        "warning": "Používáte nepodporovanou verzi systému macOS. Proveďte prosím upgrade %(brand)s, aby byl stále funkční."
+    },
+    "file_menu": {
+        "label": "Soubor"
+    },
+    "icon_overlay": {
+        "description_error": "Chyba",
+        "description_notifications": {
+            "one": "Máte %(count)s nepřečtené oznámení.",
+            "few": "Máte %(count)s nepřečtená oznámení.",
+            "other": "Máte %(count)s nepřečtených oznámení."
+        }
+    },
+    "menu": {
+        "hide": "Skrýt",
+        "hide_others": "Skrýt ostatní",
+        "services": "Služby",
+        "unhide": "Zrušit skrytí"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Přidat do slovníku",
+        "copy_email": "Kopírovat e-mailovou adresu",
+        "copy_image": "Kopírovat obrázek",
+        "copy_image_url": "Kopírovat adresu obrázku",
+        "copy_link_url": "Kopírovat adresu odkazu",
+        "save_image_as": "Uložit obrázek jako...",
+        "save_image_as_error_description": "Obrázek se nepodařilo uložit",
+        "save_image_as_error_title": "Chyba při ukládání obrázku"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Vymazat data a znovu načíst?",
+            "backend_changed_detail": "Nelze získat přístup k tajnému klíči ze systémové klíčenky, zdá se, že se změnil.",
+            "backend_changed_title": "Nepodařilo se načíst databázi",
+            "backend_no_encryption": "Váš systém má podporovanou klíčenku, ale šifrování není k dispozici.",
+            "backend_no_encryption_detail": "Electron zjistil, že pro vaši klíčenku %(backend)s není k dispozici šifrování. Ujistěte se, že máte nainstalovanou klíčenku. Pokud ji máte, restartujte počítač a zkuste to znovu. Volitelně můžete povolit %(brand)s použít slabší formu šifrování.",
+            "backend_no_encryption_title": "Bez podpory šifrování",
+            "unsupported_keyring": "Váš systém má nepodporovanou klíčenku, což znamená, že databázi nelze otevřít.",
+            "unsupported_keyring_detail": "Detekce klíčenky Electronu nenalezla podporovaný backend. Můžete se pokusit ručně nakonfigurovat backend spuštěním %(brand)s s argumentem příkazového řádku, jednorázovou operací. Viz %(link)s.",
+            "unsupported_keyring_title": "Systém není podporován",
+            "unsupported_keyring_use_basic_text": "Používat slabší šifrování",
+            "unsupported_keyring_use_plaintext": "Nepoužívat žádné šifrování"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Aktuální velikost",
+        "toggle_developer_tools": "Přepnout zobrazení nástrojů pro vývojáře",
+        "toggle_full_screen": "Přepnout zobrazení celé obrazovky",
+        "view": "Zobrazit"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Přenést vše do popředí",
+        "label": "Okno",
+        "zoom": "Lupa"
+    }
+}

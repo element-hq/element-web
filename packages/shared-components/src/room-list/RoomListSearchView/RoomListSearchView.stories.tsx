@@ -14,7 +14,7 @@ import {
     type RoomListSearchViewActions,
     type RoomListSearchViewSnapshot,
 } from "./RoomListSearchView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type RoomListSearchProps = RoomListSearchViewSnapshot & RoomListSearchViewActions;
