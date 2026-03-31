@@ -15,7 +15,7 @@ import {
     RoomNotifState,
 } from "./RoomListItemView";
 import { type RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderView";
-import { MockViewModel } from "../viewmodel";
+import { MockViewModel } from "../core/viewmodel";
 
 /**
  * Mock avatar component for stories

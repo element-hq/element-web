@@ -108,16 +108,15 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     protected readonly widgetUid: string;
     protected readonly room: Room;
 
-    private _callType: CallType = CallType.Video;
+    private _callType: CallType;
     public get callType(): CallType {
         return this._callType;
     }
 
     protected set callType(callType: CallType) {
-        if (this._callType !== callType) {
-            this.emit(CallEvent.CallTypeChanged, callType);
-        }
+        const prevCallType = this._callType;
         this._callType = callType;
+        if (callType !== prevCallType) this.emit(CallEvent.CallTypeChanged, callType);
     }
 
     /**
@@ -184,11 +183,13 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
          */
         public readonly widget: IApp,
         protected readonly client: MatrixClient,
+        initialCallType: CallType,
     ) {
         super();
         this.widgetUid = WidgetUtils.getWidgetUid(this.widget);
         this.room = this.client.getRoom(this.roomId)!;
         WidgetMessagingStore.instance.on(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
+        this._callType = initialCallType;
     }
 
     /**
@@ -347,7 +348,7 @@ export class JitsiCall extends Call {
     private participantsExpirationTimer: number | null = null;
 
     private constructor(widget: IApp, client: MatrixClient) {
-        super(widget, client);
+        super(widget, client, CallType.Video);
 
         this.room.on(RoomStateEvent.Update, this.onRoomState);
         this.on(CallEvent.ConnectionState, this.onConnectionState);
@@ -659,7 +660,7 @@ export class ElementCall extends Call {
     ): void {
         const room = client.getRoom(roomId);
         if (!room) {
-            // If the room isn't known, or the room is a video room then skip setting an intent.
+            // If the room isn't known then skip setting an intent.
             return;
         } else if (isVideoRoom(room)) {
             // Video rooms already exist, so just treat as if we're joining a group call.
@@ -668,35 +669,27 @@ export class ElementCall extends Call {
             params.append("returnToLobby", "true");
             // Never skip the lobby, we always want to give the caller a chance to explicitly join.
             params.append("skipLobby", "false");
-            // Never preload, as per below warning.
-            params.append("preload", "false");
             return;
         }
+
         const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
         const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
         const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
-        // XXX: @element-hq/element-call-embedded <= 0.15.0 sets the wrong parameter for
-        // preload by default so we override here. This can be removed when that package
-        // is released and upgraded.
         if (isDM) {
             if (hasCallStarted) {
                 params.append(
                     "intent",
                     voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM,
                 );
-                params.append("preload", "false");
             } else {
                 params.append("intent", voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM);
-                params.append("preload", "false");
             }
         } else {
             // Group chats do not have a voice option.
             if (hasCallStarted) {
                 params.append("intent", ElementCallIntent.JoinExisting);
-                params.append("preload", "false");
             } else {
                 params.append("intent", ElementCallIntent.StartCall);
-                params.append("preload", "false");
             }
         }
     }
@@ -835,58 +828,18 @@ export class ElementCall extends Call {
         );
     }
 
-    /**
-     * Get the correct intent for a widget, so that Element Call presents the correct
-     * default config.
-     * @param client The matrix client.
-     * @param roomId
-     * @param voiceOnly Should the call be voice-only, or video (default).
-     */
-    public static getWidgetIntent(client: MatrixClient, roomId: string, voiceOnly?: boolean): ElementCallIntent {
-        const room = client.getRoom(roomId);
-        if (room !== null && !isVideoRoom(room)) {
-            const isDM = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-            const oldestCallMember = client.matrixRTC.getRoomSession(room).getOldestMembership();
-            const hasCallStarted = !!oldestCallMember && oldestCallMember.sender !== client.getSafeUserId();
-            if (isDM) {
-                if (hasCallStarted) {
-                    return voiceOnly ? ElementCallIntent.JoinExistingDMVoice : ElementCallIntent.JoinExistingDM;
-                } else {
-                    return voiceOnly ? ElementCallIntent.StartCallDMVoice : ElementCallIntent.StartCallDM;
-                }
-            } else {
-                if (hasCallStarted) {
-                    return ElementCallIntent.JoinExisting;
-                } else {
-                    return ElementCallIntent.StartCall;
-                }
-            }
-        }
-        // If unknown, default to joining an existing call.
-        return ElementCallIntent.JoinExisting;
-    }
-
     private static getWidgetData(
         client: MatrixClient,
         roomId: string,
         currentData: IWidgetData,
         overwriteData: IWidgetData,
-        voiceOnly?: boolean,
     ): IWidgetData {
-        let perParticipantE2EE = false;
-        if (
-            client.getRoom(roomId)?.hasEncryptionStateEvent() &&
-            !SettingsStore.getValue("feature_disable_call_per_sender_encryption")
-        )
-            perParticipantE2EE = true;
-
-        const intent = ElementCall.getWidgetIntent(client, roomId, voiceOnly);
-
         return {
             ...currentData,
             ...overwriteData,
-            intent,
-            perParticipantE2EE,
+            perParticipantE2EE:
+                client.getRoom(roomId)?.hasEncryptionStateEvent() &&
+                !SettingsStore.getValue("feature_disable_call_per_sender_encryption"),
         };
     }
 
@@ -899,7 +852,7 @@ export class ElementCall extends Call {
         widget: IApp,
         client: MatrixClient,
     ) {
-        super(widget, client);
+        super(widget, client, session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video);
 
         this.session.on(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionEnded, this.checkDestroy);

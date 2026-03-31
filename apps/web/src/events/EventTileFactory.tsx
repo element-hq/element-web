@@ -46,8 +46,8 @@ import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
-import { EncryptionEventViewModel } from "../viewmodels/event-tiles/EncryptionEventViewModel";
-import { TextualEventViewModel } from "../viewmodels/event-tiles/TextualEventViewModel";
+import { EncryptionEventViewModel } from "../viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
+import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
