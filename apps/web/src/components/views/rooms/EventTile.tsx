@@ -108,9 +108,12 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
-} from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
-import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
-import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
+} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
+import {
+    MAX_ITEMS_WHEN_LIMITED,
+    ReactionsRowViewModel,
+} from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 

@@ -70,6 +70,7 @@ describe("LeftPanelResizerViewModel", () => {
 
     it("should expand panel on onSeparatorClick()", () => {
         const vm = new ResizerViewModel();
+        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
         const mockHandle = {
             resize: jest.fn(),
             isCollapsed: jest.fn().mockReturnValue(true),
@@ -78,7 +79,7 @@ describe("LeftPanelResizerViewModel", () => {
 
         vm.onSeparatorClick();
 
-        expect(mockHandle.resize).toHaveBeenCalledWith("100%");
+        expect(mockHandle.resize).toHaveBeenCalledWith("34%");
     });
 
     it("should set isFocusedViaKeyboard state correctly", () => {
