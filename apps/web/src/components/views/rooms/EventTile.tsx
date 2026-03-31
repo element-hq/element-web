@@ -108,9 +108,12 @@ import { CardContext } from "../right_panel/context";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
-} from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
-import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
-import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
+} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
+import {
+    MAX_ITEMS_WHEN_LIMITED,
+    ReactionsRowViewModel,
+} from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
 import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
