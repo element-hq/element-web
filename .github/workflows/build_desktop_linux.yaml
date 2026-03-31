@@ -126,7 +126,7 @@ jobs:
             - name: "Get modified files"
               id: changed_files
               if: steps.cache.outputs.cache-hit != 'true' && github.event_name == 'pull_request' && github.repository == 'element-hq/element-web'
-              uses: tj-actions/changed-files@823fcebdb31bb35fdf2229d9f769b400309430d0 # v46
+              uses: tj-actions/changed-files@823fcebdb31bb35fdf2229d9f769b400309430d0 # v47.0.5
               with:
                   files: |
                       apps/desktop/dockerbuild/**
