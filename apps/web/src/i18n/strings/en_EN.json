@@ -2696,9 +2696,8 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
-        "inline_url_previews_default": "Enable inline URL previews by default",
-        "inline_url_previews_room": "Enable URL previews by default for participants in this room",
-        "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
+        "inline_url_previews_default": "Enable previews",
+        "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms"
@@ -2836,6 +2835,8 @@
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
             "keyboard_heading": "Keyboard shortcuts",
             "keyboard_view_shortcuts_button": "To view all keyboard shortcuts, <a>click here</a>.",
+            "link_previews_heading": "Link previews",
+            "link_previews_description": "Shows information about links underneath messages",
             "media_heading": "Images, GIFs and videos",
             "presence_description": "Share your activity and status with others.",
             "publish_timezone": "Publish timezone on public profile",
