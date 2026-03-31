@@ -48,8 +48,7 @@ jobs:
                   cache: "pnpm"
 
             - name: Install Deps
-              working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
@@ -87,8 +86,9 @@ jobs:
             - name: Run tests
               timeout-minutes: 20
               shell: bash
+              working-directory: apps/desktop
               run: |
-                  $PREFIX pnpm -C apps/desktop test \
+                  $PREFIX pnpm playwright test \
                       ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} \
                       ${{ inputs.blob_report == false && '--reporter=html' || '' }} \
                       $ARGS

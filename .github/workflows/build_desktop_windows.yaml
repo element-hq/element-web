@@ -160,7 +160,7 @@ jobs:
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: Insert config snippet
               if: steps.config.outputs.extra_config != ''

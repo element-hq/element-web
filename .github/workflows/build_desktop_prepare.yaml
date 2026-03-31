@@ -65,7 +65,7 @@ jobs:
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: Fetch Element Web (from artifact)
               if: inputs.webapp-artifact != ''

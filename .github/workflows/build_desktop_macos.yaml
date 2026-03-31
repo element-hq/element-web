@@ -121,7 +121,7 @@ jobs:
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: Build Natives
               if: steps.cache.outputs.cache-hit != 'true'
