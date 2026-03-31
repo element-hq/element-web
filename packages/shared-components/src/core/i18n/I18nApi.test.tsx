@@ -26,11 +26,13 @@ describe("I18nApi", () => {
         const i18n = new I18nApi();
         i18n.register({
             ["hello.world" as TranslationKey]: {
-                en: "Hello, <world />",
+                en: "Hello, <Bold>World!</Bold>",
             },
         });
 
-        expect(i18n.translate("hello.world" as TranslationKey, {}, { world: <strong>World!</strong> })).toStrictEqual(
+        expect(
+            i18n.translate("hello.world" as TranslationKey, {}, { Bold: (sub) => <strong>{sub}</strong> }),
+        ).toStrictEqual(
             <span>
                 Hello, <strong>World!</strong>
             </span>,
