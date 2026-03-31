@@ -262,6 +262,7 @@ jobs:
         needs:
             - playwright_ew
             - downstream-modules
+            - prepare_ed
             - build_ed_windows
             - build_ed_linux
             - build_ed_macos
