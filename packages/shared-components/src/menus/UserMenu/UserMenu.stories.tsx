@@ -15,7 +15,7 @@ import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
-import { BaseViewModel, useCreateAutoDisposedViewModel } from "../../viewmodel";
+import { BaseViewModel, useCreateAutoDisposedViewModel } from "../../core/viewmodel";
 
 class MockUserMenuViewModel extends BaseViewModel<UserMenuViewSnapshot, undefined> implements UserMenuViewActions {
     public constructor(snapshot: UserMenuViewSnapshot) {
