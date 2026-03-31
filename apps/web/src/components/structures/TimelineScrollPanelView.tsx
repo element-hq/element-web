@@ -149,6 +149,7 @@ export function TimelineScrollPanelListView({
     virtualListHandleRef,
 }: TimelineScrollPanelListViewProps): React.ReactNode {
     const scrollElementRef = React.useRef<HTMLDivElement | null>(null);
+    const wasHiddenRef = React.useRef(false);
     const lastVisibleRangeRef = React.useRef<TimelineVisibleRange | null>(null);
     const hasUserScrolledRef = React.useRef(false);
     const isProgrammaticScrollRef = React.useRef(false);
@@ -347,6 +348,37 @@ export function TimelineScrollPanelListView({
         scrollLastItemIntoView();
         hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
     }, [scrollLastItemIntoView, scrollToBottomRequestId, scrollToBottomWhilePassive]);
+    useEffect(() => {
+        const isHidden = scrollElementRef.current?.offsetParent === null;
+        if (isHidden) {
+            wasHiddenRef.current = true;
+            return;
+        }
+
+        if (!wasHiddenRef.current) {
+            return;
+        }
+
+        wasHiddenRef.current = false;
+        lastVisibleRangeRef.current = null;
+        hasInitializedPassiveBottomRef.current = false;
+        lastKnownScrollHeightRef.current = scrollElementRef.current?.scrollHeight ?? 0;
+
+        requestAnimationFrame(() => {
+            const virtualListHandle = readRefCurrent(virtualListHandleRef);
+            if (!virtualListHandle || items.length === 0) {
+                return;
+            }
+
+            if (stickyBottom && !hasUserScrolledRef.current) {
+                virtualListHandle.scrollToIndex(items.length - 1, "end");
+                hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
+                return;
+            }
+
+            virtualListHandle.scrollToIndex(0, "start");
+        });
+    }, [items, scrollToBottomWhilePassive, stickyBottom, virtualListHandleRef]);
     const Scroller = React.useMemo(
         () =>
             function TimelineScroller(
