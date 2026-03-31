@@ -10,8 +10,8 @@ catalogs:
       specifier: 1.12.0
       version: 1.12.0
     '@element-hq/element-web-playwright-common':
-      specifier: 2.2.7
-      version: 2.2.7
+      specifier: 2.3.0
+      version: 2.3.0
     '@fontsource/inter':
       specifier: 5.2.8
       version: 5.2.8
@@ -454,7 +454,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -587,7 +587,7 @@ importers:
         version: 0.18.0
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
-        version: 2.2.7(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)
+        version: 2.3.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)
       '@element-hq/element-web-playwright-common-local':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -964,8 +964,8 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(react@19.2.4)
       react-resizable-panels:
-        specifier: ^4.6.5
-        version: 4.7.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^4.8.0
+        version: 4.8.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react-virtuoso:
         specifier: ^4.14.0
         version: 4.18.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -2394,8 +2394,8 @@ packages:
       matrix-web-i18n:
         optional: true
 
-  '@element-hq/element-web-playwright-common@2.2.7':
-    resolution: {integrity: sha512-YMvhIHKqjwlaHe6bo7wCIer7nIc2cRqXAYjKVrGmHiKSeBP+E+qw5LuOSM20u7+0SHyRnC/IR3/Up63O81Qhyw==}
+  '@element-hq/element-web-playwright-common@2.3.0':
+    resolution: {integrity: sha512-NyAhoRish+km2CLK2226H8oQHB2HdUw6M2eNcmAyJS46hfXDbPdr/nCKfyALAZiL+FSvOQcz3N33+zRlP63mQQ==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -9763,8 +9763,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf}
     version: 41.2.0
     engines: {node: '>=22.0.0'}
 
@@ -11292,8 +11292,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-resizable-panels@4.7.2:
-    resolution: {integrity: sha512-1L2vyeBG96hp7N6x6rzYXJ8EjYiDiffMsqj3cd+T9aOKwscvuyCn2CuZ5q3PoUSTIJUM6Q5DgXH1bdDe6uvh2w==}
+  react-resizable-panels@4.8.0:
+    resolution: {integrity: sha512-2uEABkewb3ky/ZgIlAUxWa1W/LjsK494fdV1QsXxst7CDRHCzo7h22tWWu3NNaBjmiuriOCt3CvhipnaYcpoIw==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -14840,7 +14840,7 @@ snapshots:
       '@matrix-org/react-sdk-module-api': 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4)
       matrix-web-i18n: 3.6.0
 
-  '@element-hq/element-web-playwright-common@2.2.7(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)':
+  '@element-hq/element-web-playwright-common@2.3.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.58.2)(playwright-core@1.58.2)':
     dependencies:
       '@axe-core/playwright': 4.11.1(playwright-core@1.58.2)
       '@element-hq/element-web-module-api': 1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
@@ -23334,7 +23334,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/aed74c5a7259497de590600e2f25af4b39b7734b:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
@@ -25120,7 +25120,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.10
 
-  react-resizable-panels@4.7.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  react-resizable-panels@4.8.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
