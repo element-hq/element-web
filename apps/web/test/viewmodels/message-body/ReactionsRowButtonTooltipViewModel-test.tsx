@@ -10,7 +10,7 @@ import { type MatrixClient, type MatrixEvent, type Room, type RoomMember } from 
 import {
     ReactionsRowButtonTooltipViewModel,
     type ReactionsRowButtonTooltipViewModelProps,
-} from "../../../src/viewmodels/message-body/ReactionsRowButtonTooltipViewModel";
+} from "../../../src/viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonTooltipViewModel";
 import { stubClient, mkStubRoom, mkEvent } from "../../test-utils";
 import { unicodeToShortcode } from "../../../src/HtmlUtils";
 
