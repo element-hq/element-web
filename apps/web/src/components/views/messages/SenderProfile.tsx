@@ -11,8 +11,9 @@ import React, { type JSX, useEffect } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
-import { DisambiguatedProfileViewModel } from "../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
+import { DisambiguatedProfileViewModel } from "../../../viewmodels/profile/DisambiguatedProfileViewModel";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
+import { useUserStatus } from "../../../hooks/useUserStatus";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -27,6 +28,7 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         userId: sender,
         member: mxEvent.sender,
     });
+    const userStatus = useUserStatus(sender);
 
     const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
         () =>
@@ -37,9 +39,13 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
                 colored: true,
                 emphasizeDisplayName: true,
                 withTooltip,
+                userStatus,
             }),
     );
 
+    useEffect(() => {
+        disambiguatedProfileVM.setUserStatus(userStatus);
+    }, [disambiguatedProfileVM, userStatus]);
     useEffect(() => {
         disambiguatedProfileVM.setMember(sender ?? "", member);
     }, [disambiguatedProfileVM, member, sender]);

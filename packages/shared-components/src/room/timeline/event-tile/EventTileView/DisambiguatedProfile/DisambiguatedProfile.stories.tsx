@@ -40,6 +40,10 @@ const meta = {
         displayIdentifier: { control: "text" },
         title: { control: "text" },
         emphasizeDisplayName: { control: "boolean" },
+        userStatus: {
+            status: { control: "string" },
+            emoji: { control: "string" },
+        },
     },
     args: {
         displayName: "Alice",
@@ -82,6 +86,17 @@ export const WithTooltip: Story = {
     },
 };
 
+export const WithUserStatus: Story = {
+    args: {
+        displayName: "Eve",
+        title: "Eve (@eve:matrix.org)",
+        userStatus: {
+            emoji: "🏝️",
+            text: "On holiday",
+        },
+    },
+};
+
 export const FullExample: Story = {
     args: {
         displayName: "Eve",
@@ -89,5 +104,9 @@ export const FullExample: Story = {
         colorClass: "mx_Username_color5",
         title: "Eve (@eve:matrix.org)",
         emphasizeDisplayName: true,
+        userStatus: {
+            emoji: "🏝️",
+            text: "On holiday",
+        },
     },
 };
