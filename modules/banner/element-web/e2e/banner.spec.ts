@@ -153,15 +153,7 @@ test.describe("Banner", () => {
                     // Assert the sidebar looks as we expect
                     await expect(axe).toHaveNoViolations();
                     await expect(sidebar).toMatchAriaSnapshot();
-                    await expect(page).toMatchScreenshot(`${type}_menu.png`, {
-                        // We exclude this as we don't want to assert Element's styling, only our own
-                        css: `
-                            #matrixchat {
-                                opacity: 0;
-                                background: orchid;
-                            }
-                        `,
-                    });
+                    await expect(page).toMatchScreenshot(`${type}_menu.png`);
                 });
 
                 await test.step("close menu", async () => {
