@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx tsx
+#!/usr/bin/env node
 
 /*
  * Checks for the presence of a webapp, inspects its version and prints it
@@ -6,7 +6,7 @@
 
 import url from "node:url";
 
-import { versionFromAsar } from "./set-version.js";
+import { versionFromAsar } from "./set-version.ts";
 
 async function main(): Promise<number> {
     const version = await versionFromAsar();

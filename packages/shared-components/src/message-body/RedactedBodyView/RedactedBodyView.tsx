@@ -10,8 +10,8 @@ import classNames from "classnames";
 import { DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { type ViewModel } from "../../viewmodel";
-import { useViewModel } from "../../viewmodel/useViewModel";
+import { type ViewModel } from "../../core/viewmodel";
+import { useViewModel } from "../../core/viewmodel/useViewModel";
 import styles from "./RedactedBodyView.module.css";
 
 export interface RedactedBodyViewSnapshot {

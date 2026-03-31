@@ -12,11 +12,11 @@ function customPathResolver(href: string, currentPath: string) {
 
     switch (link) {
         case "../packages/shared-components/README.md":
-            return `../../docs/readme-shared-components.md#${fragment}`;
+            return `../docs/readme-shared-components.md#${fragment}`;
         case "../apps/web/README.md":
-            return `../../docs/readme-element-web.md#${fragment}`;
+            return `../docs/readme-element-web.md#${fragment}`;
         case "../README.md":
-            return `../../docs/index.md#${fragment}`;
+            return `../docs/index.md#${fragment}`;
 
         default:
             return `https://github.com/element-hq/element-web/blob/develop/${href.split("/").pop()}`;
@@ -27,11 +27,7 @@ function customPathResolver(href: string, currentPath: string) {
 export default withMermaid({
     title: "Element Web & Desktop docs",
     description: "Documentation",
-    srcExclude: ["changelogs", "SUMMARY.md"],
-    rewrites: {
-        ":file": "docs/:file",
-        "README": "index",
-    },
+    srcExclude: ["changelogs"],
     markdown: {
         config: (md) => {
             // Custom rule to fix links
