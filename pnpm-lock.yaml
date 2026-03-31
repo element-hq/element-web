@@ -230,8 +230,8 @@ importers:
         specifier: ^7.18.6
         version: 7.28.5(@babel/core@7.29.0)
       '@electron/asar':
-        specifier: 4.1.0
-        version: 4.1.0
+        specifier: 4.1.2
+        version: 4.1.2
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.58.2
@@ -269,8 +269,8 @@ importers:
         specifier: ^2.0.0
         version: 2.1.2
       electron:
-        specifier: 41.0.3
-        version: 41.0.3
+        specifier: 41.1.0
+        version: 41.1.0
       electron-builder:
         specifier: 26.8.2
         version: 26.8.2(electron-builder-squirrel-windows@26.8.2)
@@ -462,7 +462,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9bcb83a20af068c31f7284ef5c4a1ef984e40ab2
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -2344,8 +2344,8 @@ packages:
     engines: {node: '>=10.12.0'}
     hasBin: true
 
-  '@electron/asar@4.1.0':
-    resolution: {integrity: sha512-DflfXtTFuTYHcyupbhnCWi+hBFdhsWl878NuA1UmW7YVFlqPlY0SHdREVnigEO3zjS2vh4hp1A4dEl3I6mgd9w==}
+  '@electron/asar@4.1.2':
+    resolution: {integrity: sha512-J3gAHIvBwz8cLT74MfAt0+Rel4Nk+YElWMMbAetvGKW3HmKPeMzF3xTbtRIDIA1jcAG6ArdNZdag0BjpUYiikw==}
     engines: {node: '>=22.12.0'}
     hasBin: true
 
@@ -7550,8 +7550,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@41.0.3:
-    resolution: {integrity: sha512-IDjx8liW1q+r7+MOip5W1Eo1eMwJzVObmYrd9yz2dPCkS7XlgLq3qPVMR80TpiROFp73iY30kTzMdpA6fEVs3A==}
+  electron@41.1.0:
+    resolution: {integrity: sha512-0XRFyxRqetmqtkkBvV++wGbHYJ7bD++f6EgJW8y9kX4pPRagwlmKDtzqXZhKiu0DIQppm3sXxzHWK9GYP91OKQ==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -9619,8 +9619,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9bcb83a20af068c31f7284ef5c4a1ef984e40ab2:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9bcb83a20af068c31f7284ef5c4a1ef984e40ab2}
     version: 41.2.0
     engines: {node: '>=22.0.0'}
 
@@ -14581,7 +14581,7 @@ snapshots:
       glob: 7.2.3
       minimatch: 3.1.5
 
-  '@electron/asar@4.1.0':
+  '@electron/asar@4.1.2':
     dependencies:
       commander: 13.1.0
       glob: 13.0.6
@@ -20550,7 +20550,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@41.0.3:
+  electron@41.1.0:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 18.19.130
@@ -23086,7 +23086,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3ceadd512d18a1573acde6d0ecec59a7f885febf:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9bcb83a20af068c31f7284ef5c4a1ef984e40ab2:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
