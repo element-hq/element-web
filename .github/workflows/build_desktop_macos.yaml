@@ -37,7 +37,7 @@ on:
                 type: string
                 required: false
                 description: |
-                    The name of the prepare artifact to use, defaults to 'webapp'.
+                    The name of the prepare artifact to use, defaults to 'desktop-prepare'.
                     The artifact must contain the following:
                     + webapp.asar - the asar archive of the webapp to embed in the desktop app
                     + electronVersion - the version of electron to use for cache keying
@@ -46,7 +46,7 @@ on:
 
                     The artifact can also contain any additional files which will be applied as overrides to the checkout root before building,
                     for example icons in the `build/` directory to override the app icons.
-                default: "webapp"
+                default: "desktop-prepare"
             test:
                 type: boolean
                 required: false
@@ -92,7 +92,7 @@ jobs:
               id: cache
               uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               with:
-                  key: ${{ runner.os }}-${{ hashFiles('hakHash', 'electronVersion') }}
+                  key: ${{ runner.os }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion') }}
                   path: |
                       apps/desktop/.hak
 
@@ -121,7 +121,7 @@ jobs:
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: Build Natives
               if: steps.cache.outputs.cache-hit != 'true'

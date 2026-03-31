@@ -27,9 +27,11 @@
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
         "@action-validator/core": "^0.6.0",
+        "@element-hq/element-web-playwright-common": "catalog:",
         "@nx-tools/nx-container": "^7.2.1",
         "@nx/jest": "^22.5.0",
         "@types/node": "22",
+        "@playwright/test": "catalog:",
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
