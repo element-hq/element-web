@@ -10,7 +10,7 @@ import { composeStories } from "@storybook/react-vite";
 import { fireEvent, render, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-import { MockViewModel } from "../../viewmodel/MockViewModel";
+import { MockViewModel } from "../../../../../core/viewmodel/MockViewModel";
 import * as stories from "./VideoBodyView.stories";
 import {
     VideoBodyView,

@@ -17,7 +17,7 @@ import classNames from "classnames";
 import { FileErrorIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { InlineSpinner } from "@vector-im/compound-web";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import styles from "./VideoBodyView.module.css";
 
 /**

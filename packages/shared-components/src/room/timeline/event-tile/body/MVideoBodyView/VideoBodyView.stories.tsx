@@ -8,17 +8,17 @@
 import React, { type ReactNode } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import posterImage from "../../../static/element.png";
+import posterImage from "../../../../../../static/element.png";
 import {
     VideoBodyView,
     VideoBodyViewState,
     type VideoBodyViewActions,
     type VideoBodyViewSnapshot,
 } from "./VideoBodyView";
-import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
-import { withViewDocs } from "../../../.storybook/withViewDocs";
+import { useMockedViewModel } from "../../../../../core/viewmodel/useMockedViewModel";
+import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
 
-const demoVideo = new URL("../../../static/videoBodyDemo.webm", import.meta.url).href;
+const demoVideo = new URL("../../../../../../static/videoBodyDemo.webm", import.meta.url).href;
 
 type VideoBodyViewProps = VideoBodyViewSnapshot &
     VideoBodyViewActions & {
