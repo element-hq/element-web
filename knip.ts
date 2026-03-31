@@ -75,5 +75,8 @@ export default {
     nx: {
         config: ["{nx,package,project}.json", "{apps,packages,modules}/**/{package,project}.json"],
     },
+    playwright: {
+        config: ["playwright.config.ts", "playwright-merge.config.ts"],
+    },
     tags: ["-knipignore"],
 } satisfies KnipConfig;

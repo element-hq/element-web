@@ -17,7 +17,7 @@ import {
 import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
-import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { DecryptionFailureBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
 import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 
