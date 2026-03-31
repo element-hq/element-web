@@ -59,7 +59,7 @@ const Settings: Record<string, Setting> = {
         async write(value: any): Promise<void> {
             if (value) {
                 // Create trayIcon icon
-                tray.create(global.trayConfig);
+                await tray.create();
             } else {
                 tray.destroy();
             }
