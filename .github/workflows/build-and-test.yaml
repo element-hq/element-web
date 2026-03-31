@@ -212,7 +212,7 @@ jobs:
             contents: read
         with:
             config: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'element.io/nightly' || 'element.io/release' }}
-            version: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'develop' || '' }}
+            version: ${{ case((github.event.pull_request.base.ref || github.ref_name) == 'develop' || github.event_name == 'merge_group', 'develop', '') }}
             webapp-artifact: webapp
 
     build_ed_windows:
