@@ -822,8 +822,8 @@ importers:
         specifier: 'catalog:'
         version: 3.6.0
       mini-css-extract-plugin:
-        specifier: 2.10.1
-        version: 2.10.1(webpack@5.105.3)
+        specifier: 2.10.2
+        version: 2.10.2(webpack@5.105.3)
       modernizr:
         specifier: ^3.12.0
         version: 3.13.1
@@ -9814,8 +9814,8 @@ packages:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
 
-  mini-css-extract-plugin@2.10.1:
-    resolution: {integrity: sha512-k7G3Y5QOegl380tXmZ68foBRRjE9Ljavx835ObdvmZjQ639izvZD8CS7BkWw1qKPPzHsGL/JDhl0uyU1zc2rJw==}
+  mini-css-extract-plugin@2.10.2:
+    resolution: {integrity: sha512-AOSS0IdEB95ayVkxn5oGzNQwqAi2J0Jb/kKm43t7H73s8+f5873g0yuj0PNvK4dO75mu5DHg4nlgp4k6Kga8eg==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
       webpack: ^5.0.0
@@ -23357,7 +23357,7 @@ snapshots:
 
   min-indent@1.0.1: {}
 
-  mini-css-extract-plugin@2.10.1(webpack@5.105.3):
+  mini-css-extract-plugin@2.10.2(webpack@5.105.3):
     dependencies:
       schema-utils: 4.3.3
       tapable: 2.3.0

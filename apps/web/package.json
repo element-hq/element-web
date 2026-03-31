@@ -203,7 +203,7 @@
         "jest-raw-loader": "^1.0.1",
         "jsqr": "^1.4.0",
         "matrix-web-i18n": "catalog:",
-        "mini-css-extract-plugin": "2.10.1",
+        "mini-css-extract-plugin": "2.10.2",
         "modernizr": "^3.12.0",
         "playwright-core": "catalog:",
         "postcss": "8.5.8",
