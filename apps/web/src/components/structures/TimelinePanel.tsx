@@ -1189,8 +1189,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     // advance the read marker past any events we sent ourselves.
-    private advanceReadMarkerPastMyEvents(): void {
-        if (!this.props.manageReadMarkers || !this.timelineWindow) return;
+    private advanceReadMarkerPastMyEvents(inhibitSetState = false): string | null {
+        if (!this.props.manageReadMarkers || !this.timelineWindow) return null;
 
         // we call `timelineWindow.getEvents()` rather than using
         // `this.state.liveEvents`, because React batches the update to the
@@ -1205,7 +1205,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
         }
         if (i >= events.length) {
-            return;
+            return null;
         }
 
         // now think about advancing it
@@ -1220,7 +1220,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         i--;
 
         const ev = events[i];
-        this.setReadMarker(ev.getId()!, ev.getTs());
+        void this.setReadMarker(ev.getId()!, ev.getTs(), inhibitSetState);
+        return ev.getId()!;
     }
 
     /* jump down to the bottom of this room, where new events are arriving
@@ -1456,17 +1457,26 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
             // clear the timeline min-height when (re)loading the timeline
             this.messagePanel.current?.onTimelineReset();
-            this.reloadEvents();
+            const eventState = this.getEvents();
+            this.buildLegacyCallEventGroupers(eventState.events);
 
             // If we switched away from the room while there were pending
             // outgoing events, the read-marker will be before those events.
             // We need to skip over any which have subsequently been sent.
-            this.advanceReadMarkerPastMyEvents();
+            const advancedReadMarkerEventId = this.advanceReadMarkerPastMyEvents(true);
+            const lastLiveEventId = eventState.liveEvents[eventState.liveEvents.length - 1]?.getId() ?? null;
+            const readMarkerVisible =
+                advancedReadMarkerEventId && advancedReadMarkerEventId === lastLiveEventId
+                    ? false
+                    : this.state.readMarkerVisible;
 
             this.setState(
                 {
+                    ...eventState,
                     canBackPaginate: this.timelineWindow?.canPaginate(EventTimeline.BACKWARDS) ?? false,
                     canForwardPaginate: this.timelineWindow?.canPaginate(EventTimeline.FORWARDS) ?? false,
+                    readMarkerEventId: advancedReadMarkerEventId ?? this.state.readMarkerEventId,
+                    readMarkerVisible,
                     timelineLoading: false,
                 },
                 () => {
@@ -1866,8 +1876,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         // If the state is PREPARED or CATCHUP, we're still waiting for the js-sdk to sync with
         // the HS and fetch the latest events, so we are effectively forward paginating.
+        const syncCatchupForwardPaginating = ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState!);
         const forwardPaginating =
-            this.state.forwardPaginating || ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState!);
+            this.state.forwardPaginating ||
+            (!SettingsStore.getValue("feature_new_timeline") && syncCatchupForwardPaginating);
         const events = this.state.events;
         return (
             <MessagePanel

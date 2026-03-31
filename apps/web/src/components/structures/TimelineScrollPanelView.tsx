@@ -520,7 +520,6 @@ export function TimelineScrollPanelListView({
             increaseViewportBy={{ top: 2000, bottom: 3000 }}
             alignToBottom={isPassiveBottomEnabled}
             followOutput={() => (isPassiveBottomEnabled ? "auto" : false)}
-            initialItemCount={items.length}
             itemsRendered={handleItemsRendered}
             rangeChanged={handleVisibleRangeChange}
             totalListHeightChanged={handleTotalListHeightChanged}
