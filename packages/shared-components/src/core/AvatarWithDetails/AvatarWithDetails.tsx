@@ -10,7 +10,7 @@ import React from "react";
 import classNames from "classnames";
 
 import styles from "./AvatarWithDetails.module.css";
-import { Flex } from "../../utils/Flex";
+import { Flex } from "../utils/Flex";
 
 export type AvatarWithDetailsProps<C extends ElementType> = {
     /**
