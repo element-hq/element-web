@@ -67,7 +67,7 @@ export function VideoBodyFactory({
     mediaEventHelper,
     forExport,
     inhibitInteraction,
-}: Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "inhibitInteraction">): JSX.Element {
+}: Readonly<Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "inhibitInteraction">>): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
     const videoRef = useRef<HTMLVideoElement>(null);

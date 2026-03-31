@@ -156,7 +156,7 @@ export function VideoBodyView({
 
     // Reserve the media box on the container itself so the timeline doesn't jump
     // while the video element or loading state is still settling.
-    const resolvedWidth = maxWidth !== undefined ? `min(100%, ${maxWidth}px)` : undefined;
+    const resolvedWidth = maxWidth === undefined ? undefined : `min(100%, ${maxWidth}px)`;
     const containerStyle: CSSProperties = {
         width: resolvedWidth,
         maxWidth,
