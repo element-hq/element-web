@@ -905,8 +905,17 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 <h3
                   class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
                 >
-                  Images, GIFs and videos
+                  Link previews
                 </h3>
+              </div>
+              <div
+                class="mx_SettingsSubsection_description"
+              >
+                <div
+                  class="mx_SettingsSubsection_text"
+                >
+                  Shows information about links underneath messages
+                </div>
               </div>
               <div
                 class="mx_SettingsSubsection_content"
@@ -923,7 +932,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       <input
                         checked=""
                         class="_input_udcm8_24"
-                        disabled=""
                         id="mx_SettingsFlag_vfGFMldL2r2v"
                         role="switch"
                         type="checkbox"
@@ -940,7 +948,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_vfGFMldL2r2v"
                     >
-                      Enable inline URL previews by default
+                      Enable previews
                     </label>
                   </div>
                 </div>
@@ -955,7 +963,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <input
                         class="_input_udcm8_24"
-                        disabled=""
                         id="mx_SettingsFlag_bsSwicmKUiOB"
                         role="switch"
                         type="checkbox"
@@ -972,10 +979,31 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_bsSwicmKUiOB"
                     >
-                      Autoplay GIFs
+                      Enable previews in encrypted rooms
                     </label>
                   </div>
                 </div>
+              </div>
+            </div>
+          </form>
+          <form
+            class="_root_19upo_16"
+          >
+            <div
+              class="mx_SettingsSubsection"
+            >
+              <div
+                class="mx_SettingsSubsectionHeading"
+              >
+                <h3
+                  class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+                >
+                  Images, GIFs and videos
+                </h3>
+              </div>
+              <div
+                class="mx_SettingsSubsection_content"
+              >
                 <div
                   class="_inline-field_19upo_32"
                 >
@@ -1003,6 +1031,38 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     <label
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_dvqsxEaZtl3A"
+                    >
+                      Autoplay GIFs
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_19upo_32"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_udcm8_10"
+                    >
+                      <input
+                        class="_input_udcm8_24"
+                        disabled=""
+                        id="mx_SettingsFlag_NIiWzqsApP1c"
+                        role="switch"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_udcm8_34"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="mx_SettingsFlag_NIiWzqsApP1c"
                     >
                       Autoplay videos
                     </label>
@@ -1042,39 +1102,6 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         checked=""
                         class="_input_udcm8_24"
                         disabled=""
-                        id="mx_SettingsFlag_NIiWzqsApP1c"
-                        role="switch"
-                        type="checkbox"
-                      />
-                      <div
-                        class="_ui_udcm8_34"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="_inline-field-body_19upo_38"
-                  >
-                    <label
-                      class="_label_19upo_59"
-                      for="mx_SettingsFlag_NIiWzqsApP1c"
-                    >
-                      Show typing notifications
-                    </label>
-                  </div>
-                </div>
-                <div
-                  class="_inline-field_19upo_32"
-                >
-                  <div
-                    class="_inline-field-control_19upo_44"
-                  >
-                    <div
-                      class="_container_udcm8_10"
-                    >
-                      <input
-                        checked=""
-                        class="_input_udcm8_24"
-                        disabled=""
                         id="mx_SettingsFlag_q1SIAPqLMVXh"
                         role="switch"
                         type="checkbox"
@@ -1091,7 +1118,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_q1SIAPqLMVXh"
                     >
-                      Show a placeholder for removed messages
+                      Show typing notifications
                     </label>
                   </div>
                 </div>
@@ -1124,7 +1151,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_dXFDGgBsKXay"
                     >
-                      Show read receipts sent by other users
+                      Show a placeholder for removed messages
                     </label>
                   </div>
                 </div>
@@ -1157,7 +1184,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_7Az0xw4Bs4Tt"
                     >
-                      Show join/leave messages (invites/removes/bans unaffected)
+                      Show read receipts sent by other users
                     </label>
                   </div>
                 </div>
@@ -1190,7 +1217,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_8jmzPIlPoBCv"
                     >
-                      Show display name changes
+                      Show join/leave messages (invites/removes/bans unaffected)
                     </label>
                   </div>
                 </div>
@@ -1223,7 +1250,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_enFRaTjdsFou"
                     >
-                      Show chat effects (animations when receiving e.g. confetti)
+                      Show display name changes
                     </label>
                   </div>
                 </div>
@@ -1256,7 +1283,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_bfwnd5rz4XNX"
                     >
-                      Show profile picture changes
+                      Show chat effects (animations when receiving e.g. confetti)
                     </label>
                   </div>
                 </div>
@@ -1289,7 +1316,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_gs5uWEzYzZrS"
                     >
-                      Show avatars in user, room and event mentions
+                      Show profile picture changes
                     </label>
                   </div>
                 </div>
@@ -1322,7 +1349,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_qWg7OgID1yRR"
                     >
-                      Enable big emoji in chat
+                      Show avatars in user, room and event mentions
                     </label>
                   </div>
                 </div>
@@ -1355,7 +1382,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_pOPewl7rtMbV"
                     >
-                      Jump to the bottom of the timeline when you send a message
+                      Enable big emoji in chat
                     </label>
                   </div>
                 </div>
@@ -1387,6 +1414,39 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     <label
                       class="_label_19upo_59"
                       for="mx_SettingsFlag_cmt3PZSyNp3v"
+                    >
+                      Jump to the bottom of the timeline when you send a message
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_19upo_32"
+                >
+                  <div
+                    class="_inline-field-control_19upo_44"
+                  >
+                    <div
+                      class="_container_udcm8_10"
+                    >
+                      <input
+                        checked=""
+                        class="_input_udcm8_24"
+                        disabled=""
+                        id="mx_SettingsFlag_dJJz3lHUv9XX"
+                        role="switch"
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_udcm8_34"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_19upo_38"
+                  >
+                    <label
+                      class="_label_19upo_59"
+                      for="mx_SettingsFlag_dJJz3lHUv9XX"
                     >
                       Show current profile picture and name for users in message history
                     </label>
@@ -1424,7 +1484,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <input
                         class="_input_udcm8_24"
-                        id="_r_24_"
+                        id="_r_26_"
                         role="switch"
                         type="checkbox"
                       />
@@ -1438,7 +1498,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r_24_"
+                      for="_r_26_"
                     >
                       Hide avatars of room and inviter
                     </label>
@@ -1452,13 +1512,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 >
                   <label
                     class="_label_19upo_59"
-                    for="radix-_r_26_"
+                    for="radix-_r_28_"
                   >
                     Show media in timeline
                   </label>
                   <span
                     class="_message_19upo_85 _help-message_19upo_91 mx_MediaPreviewAccountSetting_RadioHelp"
-                    id="radix-_r_27_"
+                    id="radix-_r_29_"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
@@ -1571,7 +1631,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         checked=""
                         class="_input_udcm8_24"
                         disabled=""
-                        id="_r_2b_"
+                        id="_r_2d_"
                         role="switch"
                         type="checkbox"
                       />
@@ -1585,13 +1645,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r_2b_"
+                      for="_r_2d_"
                     >
                       Allow users to invite you to rooms
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_2d_"
+                      id="radix-_r_2f_"
                     >
                       Your server does not implement this feature.
                     </span>
@@ -1636,7 +1696,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                       <input
                         class="_input_udcm8_24"
                         disabled=""
-                        id="mx_SettingsFlag_dJJz3lHUv9XX"
+                        id="mx_SettingsFlag_SBSSOZDRlzlA"
                         role="switch"
                         type="checkbox"
                       />
@@ -1650,7 +1710,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="mx_SettingsFlag_dJJz3lHUv9XX"
+                      for="mx_SettingsFlag_SBSSOZDRlzlA"
                     >
                       Show NSFW content
                     </label>
@@ -1690,7 +1750,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         checked=""
                         class="_input_udcm8_24"
                         disabled=""
-                        id="mx_SettingsFlag_SBSSOZDRlzlA"
+                        id="mx_SettingsFlag_FLEpLCb0jpp6"
                         role="switch"
                         type="checkbox"
                       />
@@ -1704,7 +1764,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="mx_SettingsFlag_SBSSOZDRlzlA"
+                      for="mx_SettingsFlag_FLEpLCb0jpp6"
                     >
                       Prompt before sending invites to potentially invalid matrix IDs
                     </label>
