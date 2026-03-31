@@ -1272,7 +1272,7 @@ test.describe("Timeline", () => {
                 // Scroll to the bottom to take a snapshot of the whole viewport
                 await app.timeline.scrollToBottom();
                 // Assert that both avatar in the introduction and the last message are visible at the same time
-                await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
+                await expect(page.getByTestId("start-chat-view").locator(".mx_BaseAvatar")).toBeVisible();
                 const lastEventTileIrc = page.locator(".mx_EventTile_last[data-layout='irc']");
                 await expect(lastEventTileIrc.locator(".mx_MTextBody").first()).toBeVisible();
                 await expect(lastEventTileIrc.getByRole("status")).toHaveAccessibleName("Your message was sent"); // rendered at the bottom of EventTile
@@ -1285,7 +1285,7 @@ test.describe("Timeline", () => {
                 // Make sure the strings do not overflow on modern layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
                 await app.timeline.scrollToBottom(); // Scroll again in case
-                await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
+                await expect(page.getByTestId("start-chat-view").locator(".mx_BaseAvatar")).toBeVisible();
                 const lastEventTileGroup = page.locator(".mx_EventTile_last[data-layout='group']");
                 await expect(lastEventTileGroup.locator(".mx_MTextBody").first()).toBeVisible();
                 await expect(lastEventTileGroup.getByRole("status")).toHaveAccessibleName("Your message was sent");
@@ -1297,7 +1297,7 @@ test.describe("Timeline", () => {
                 // Make sure the strings do not overflow on bubble layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
                 await app.timeline.scrollToBottom(); // Scroll again in case
-                await expect(page.locator(".mx_NewRoomIntro .mx_BaseAvatar")).toBeVisible();
+                await expect(page.getByTestId("start-chat-view").locator(".mx_BaseAvatar")).toBeVisible();
                 const lastEventTileBubble = page.locator(".mx_EventTile_last[data-layout='bubble']");
                 await expect(lastEventTileBubble.locator(".mx_MTextBody").first()).toBeVisible();
                 await expect(lastEventTileBubble.getByRole("status")).toHaveAccessibleName("Your message was sent");
