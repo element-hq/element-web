@@ -1380,12 +1380,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         if (ev.getType() === "org.matrix.room.preview_urls") {
-            this.updatePreviewUrlVisibility(room);
+            this.updatePreviewUrlVisibility();
         }
 
         if (ev.getType() === "m.room.encryption") {
             this.updateE2EStatus(room);
-            this.updatePreviewUrlVisibility(room);
+            this.updatePreviewUrlVisibility();
         }
 
         // ignore anything but real-time updates at the end of the room:
@@ -1635,7 +1635,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         this.setState({
             isRoomEncrypted,
-            showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
+            showUrlPreview: this.getPreviewUrlVisibility(isRoomEncrypted),
             ...(newE2EStatus && { e2eStatus: newE2EStatus }),
         });
     }
