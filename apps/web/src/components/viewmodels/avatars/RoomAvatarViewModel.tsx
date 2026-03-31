@@ -8,7 +8,7 @@
 import { EventType, JoinRule, type MatrixEvent, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { useEffect, useState } from "react";
 
-import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useDmMember, usePresence, type Presence } from "../../views/avatars/WithPresenceIndicator";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 
@@ -41,7 +41,7 @@ export function useRoomAvatarViewModel(room: Room): RoomAvatarViewState {
     const roomMember = useDmMember(room);
     const presence = usePresence(room, roomMember);
     const isPublic = useIsPublic(room);
-    const isLowPriority = !!room.tags[DefaultTagID.LowPriority];
+    const isLowPriority = useTypedEventEmitterState(room, RoomEvent.Tags, () => !!room.tags[DefaultTagID.LowPriority]);
 
     let badgeDecoration: AvatarBadgeDecoration | undefined;
     if (isLowPriority) {

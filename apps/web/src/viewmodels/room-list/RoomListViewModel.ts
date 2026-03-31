@@ -452,8 +452,8 @@ export class RoomListViewModel
             isLoadingRooms,
             isRoomListEmpty,
             activeFilterId,
-            roomListState,
-            sections,
+            roomListState: keepIfSame(this.snapshot.current.roomListState, roomListState),
+            sections: keepIfSame(this.snapshot.current.sections, sections),
         });
     }
 

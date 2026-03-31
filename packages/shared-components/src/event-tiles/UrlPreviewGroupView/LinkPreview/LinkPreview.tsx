@@ -9,10 +9,10 @@ import React, { type MouseEventHandler, type JSX, useCallback, useMemo } from "r
 import { Tooltip, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 
-import { useI18n } from "../../../utils/i18nContext";
+import { useI18n } from "../../../core/i18n/i18nContext";
 import styles from "./LinkPreview.module.css";
 import type { UrlPreview } from "../types";
-import { LinkedText } from "../../../utils/LinkedText";
+import { LinkedText } from "../../../core/utils/LinkedText";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;

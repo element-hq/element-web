@@ -7,7 +7,7 @@
 
 import { vi } from "vitest";
 
-import { MockViewModel } from "../../viewmodel";
+import { MockViewModel } from "../../core/viewmodel";
 import { type RoomListHeaderViewActions, type RoomListHeaderViewSnapshot } from "./RoomListHeaderView";
 
 /**
