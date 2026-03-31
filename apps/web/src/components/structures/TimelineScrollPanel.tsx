@@ -43,8 +43,6 @@ type TimelineScrollPanelProps = IScrollPanelProps & {
 type EventTimelineRow = Extract<TimelineRow, { kind: "event" }>;
 type TimelineReadReceipt = NonNullable<EventTimelineRow["readReceipts"]>[number];
 
-const TOP_SPINNER_KEY = "_topSpinner";
-const BOTTOM_SPINNER_KEY = "_bottomSpinner";
 function normalizeTimelineItemKey(key: string): string {
     return key.startsWith(".$") ? key.slice(2) : key;
 }
@@ -186,7 +184,9 @@ export type TimelineScrollHandle = IScrollHandle & {
     getVisibleItemKeys(): string[] | null;
 };
 
-type ScrollRestoreTarget = { kind: "bottom" } | { kind: "anchor"; key: string; bottomOffset: number };
+type ScrollRestoreTarget =
+    | { kind: "bottom" }
+    | { kind: "anchor"; key: string; bottomOffset?: number; topOffset?: number };
 interface PendingScrollRequest {
     key: string;
     pixelOffset?: number;
@@ -213,11 +213,13 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         forwards: null,
     });
     const pendingScrollAnchorRef = useRef<{ key: string; topOffset: number } | null>(null);
+    const skipNextPropsRestoreRef = useRef(false);
     const pendingRestoreTargetRef = useRef<{ target: ScrollRestoreTarget; evaluatePagination: boolean } | null>(null);
     const restoreAnimationFrameRef = useRef<number | null>(null);
     const preventShrinkingTargetRef = useRef<ScrollRestoreTarget | null>(null);
     const unfillDebouncerRef = useRef<number | null>(null);
     const itemCacheRef = useRef<Map<string, TimelineScrollPanelItem>>(new Map());
+    const previousItemsRef = useRef<TimelineScrollPanelItem[]>([]);
     const itemIndexByKeyRef = useRef<Map<string, number>>(new Map());
     const virtualListHandleRef = useRef<VirtualizedListHandle | null>(null);
     const pendingScrollRequestRef = useRef<PendingScrollRequest | null>(null);
@@ -225,7 +227,6 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
     const evaluatePaginationForRangeRef = useRef<(range: TimelineVisibleRange) => void>(() => {});
     const checkScrollRef = useRef<(isFromPropsUpdate?: boolean) => void>(() => {});
     const syncWrapperStateRef = useRef<() => void>(() => {});
-    const onScrollPropRef = useRef<TimelineScrollPanelProps["onScroll"]>(undefined);
     const setScrollContainerRef = useCallback((element: HTMLElement | Window | null): void => {
         const scrollNode = element instanceof HTMLDivElement ? element : null;
         if (divScrollRef.current === scrollNode) {
@@ -244,7 +245,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
                 if (visibleRangeRef.current) {
                     evaluatePaginationForRangeRef.current(visibleRangeRef.current);
                 }
-                onScrollPropRef.current?.(event);
+                void event;
             };
 
             scrollListenerRef.current = handleScrollEvent;
@@ -290,11 +291,12 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         return item;
     });
     itemCacheRef.current = new Map(rawItemsWithStableIdentity.map((item) => [item.virtualKey ?? item.key, item]));
-    const hasTopSpinner = rawItemsWithStableIdentity.some((item) => item.key === TOP_SPINNER_KEY);
-    const hasBottomSpinner = rawItemsWithStableIdentity.some((item) => item.key === BOTTOM_SPINNER_KEY);
-    const items = rawItemsWithStableIdentity.filter(
-        (item) => item.key !== TOP_SPINNER_KEY && item.key !== BOTTOM_SPINNER_KEY,
-    );
+    const items =
+        rawItemsWithStableIdentity.length === previousItemsRef.current.length &&
+        rawItemsWithStableIdentity.every((item, index) => item === previousItemsRef.current[index])
+            ? previousItemsRef.current
+            : rawItemsWithStableIdentity;
+    previousItemsRef.current = items;
     itemIndexByKeyRef.current = new Map(
         items.flatMap((item, index) =>
             item.row?.kind === "event" ? [[(item.row as EventTimelineRow).eventId, index] as const] : [],
@@ -421,6 +423,17 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
     const topFromBottom = useCallback((node: HTMLElement, scrollNode: HTMLDivElement): number => {
         return scrollNode.scrollHeight - node.offsetTop;
     }, []);
+    const topFromTop = useCallback((node: HTMLElement, scrollNode: HTMLDivElement): number => {
+        return node.offsetTop - scrollNode.scrollTop;
+    }, []);
+    const isNodeVisibleInViewport = useCallback((node: HTMLElement, scrollNode: HTMLDivElement): boolean => {
+        const viewportTop = scrollNode.scrollTop;
+        const viewportBottom = viewportTop + scrollNode.clientHeight;
+        const nodeTop = node.offsetTop;
+        const nodeBottom = nodeTop + node.clientHeight;
+
+        return nodeBottom > viewportTop && nodeTop < viewportBottom;
+    }, []);
     const findTrackedNode = useCallback(
         (scrollNode: HTMLDivElement): HTMLElement | undefined => {
             if (logicalScrollStateRef.current.stuckAtBottom === false) {
@@ -514,6 +527,10 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             return null;
         }
 
+        if (stickyBottom && logicalScrollStateRef.current.stuckAtBottom) {
+            return { kind: "bottom" };
+        }
+
         syncWrapperState();
 
         if (stickyBottom && isAtBottomRef.current) {
@@ -530,6 +547,37 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             bottomOffset: logicalScrollStateRef.current.bottomOffset,
         };
     }, [stickyBottom, syncWrapperState]);
+    const captureResizeRestoreTarget = useCallback((): ScrollRestoreTarget | null => {
+        const scrollNode = divScrollRef.current;
+        if (!scrollNode) {
+            return null;
+        }
+
+        if (stickyBottom && logicalScrollStateRef.current.stuckAtBottom) {
+            return { kind: "bottom" };
+        }
+
+        syncWrapperState();
+
+        if (stickyBottom && isAtBottomRef.current) {
+            return { kind: "bottom" };
+        }
+
+        if (logicalScrollStateRef.current.stuckAtBottom) {
+            return null;
+        }
+
+        const trackedNode = findNodeForToken(logicalScrollStateRef.current.trackedScrollToken);
+        if (!trackedNode) {
+            return null;
+        }
+
+        return {
+            kind: "anchor",
+            key: logicalScrollStateRef.current.trackedScrollToken,
+            topOffset: topFromTop(trackedNode, scrollNode),
+        };
+    }, [findNodeForToken, stickyBottom, syncWrapperState, topFromTop]);
     const restoreScrollTarget = useCallback(
         (target: ScrollRestoreTarget): boolean => {
             const scrollNode = divScrollRef.current;
@@ -548,8 +596,14 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
                 return false;
             }
 
+            if (target.topOffset !== undefined) {
+                scrollNode.scrollTop = trackedNode.offsetTop - target.topOffset;
+                syncWrapperState();
+                return true;
+            }
+
             const newBottomOffset = topFromBottom(trackedNode, scrollNode);
-            scrollNode.scrollBy(0, newBottomOffset - target.bottomOffset);
+            scrollNode.scrollBy(0, newBottomOffset - (target.bottomOffset ?? newBottomOffset));
             syncWrapperState();
             return true;
         },
@@ -645,7 +699,17 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
     const evaluatePaginationForRange = useCallback(
         (range: TimelineVisibleRange): void => {
             const scrollNode = divScrollRef.current;
-            const firstVisibleNode = findNodeForToken(items[range.startIndex]?.key ?? "");
+            const renderableNodes = getRenderableNodes();
+            const viewportTop = scrollNode?.scrollTop ?? 0;
+            const viewportBottom = viewportTop + (scrollNode?.clientHeight ?? 0);
+            const viewportVisibleNodes = renderableNodes.filter((node) => {
+                const nodeTop = node.offsetTop;
+                const nodeBottom = nodeTop + node.clientHeight;
+
+                return nodeBottom > viewportTop && nodeTop < viewportBottom;
+            });
+            const firstVisibleNode = viewportVisibleNodes[0];
+            const lastVisibleNode = viewportVisibleNodes[viewportVisibleNodes.length - 1];
             const shouldBackPaginate =
                 !!scrollNode &&
                 (!firstVisibleNode || scrollNode.scrollTop - firstVisibleNode.offsetTop < scrollNode.clientHeight);
@@ -654,8 +718,8 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
                 !(stickyBottom && isAtBottomRef.current) &&
                 scrollNode.scrollHeight - scrollNode.scrollTop < scrollNode.clientHeight * 2;
 
-            const startAnchor = items[range.startIndex]?.key ?? null;
-            const endAnchor = items[range.endIndex]?.key ?? null;
+            const startAnchor = firstVisibleNode?.dataset.scrollTokens?.split(",")[0] ?? items[range.startIndex]?.key ?? null;
+            const endAnchor = lastVisibleNode?.dataset.scrollTokens?.split(",")[0] ?? items[range.endIndex]?.key ?? null;
 
             if (!shouldBackPaginate) {
                 edgeFillAnchorRef.current.backwards = null;
@@ -674,10 +738,9 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             scheduleUnfill(true, getUnfillPaginationToken(true));
             scheduleUnfill(false, getUnfillPaginationToken(false));
         },
-        [findNodeForToken, getUnfillPaginationToken, items, requestFill, scheduleUnfill, stickyBottom],
+        [getRenderableNodes, getUnfillPaginationToken, items, requestFill, scheduleUnfill, stickyBottom],
     );
     evaluatePaginationForRangeRef.current = evaluatePaginationForRange;
-    onScrollPropRef.current = props.onScroll ? (event) => props.onScroll?.(event) : undefined;
 
     const setVisibleRange = useCallback(
         (range: TimelineVisibleRange): void => {
@@ -692,9 +755,20 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
 
     const checkScroll = useCallback(
         (isFromPropsUpdate?: boolean): void => {
-            const restoreTarget = captureScrollRestoreTarget();
+            const restoreTarget = isFromPropsUpdate ? captureScrollRestoreTarget() : captureResizeRestoreTarget();
             syncWrapperState();
-            void isFromPropsUpdate;
+
+            if (!isFromPropsUpdate && restoreTarget?.kind === "anchor") {
+                const scrollNode = divScrollRef.current;
+                const trackedNode = scrollNode ? findNodeForToken(restoreTarget.key) : undefined;
+
+                if (scrollNode && trackedNode && isNodeVisibleInViewport(trackedNode, scrollNode)) {
+                    if (visibleRangeRef.current) {
+                        evaluatePaginationForRange(visibleRangeRef.current);
+                    }
+                    return;
+                }
+            }
 
             if (restoreTarget) {
                 scheduleRestore(restoreTarget, true);
@@ -702,7 +776,15 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
                 evaluatePaginationForRange(visibleRangeRef.current);
             }
         },
-        [captureScrollRestoreTarget, evaluatePaginationForRange, scheduleRestore, syncWrapperState],
+        [
+            captureResizeRestoreTarget,
+            captureScrollRestoreTarget,
+            evaluatePaginationForRange,
+            findNodeForToken,
+            isNodeVisibleInViewport,
+            scheduleRestore,
+            syncWrapperState,
+        ],
     );
     checkScrollRef.current = checkScroll;
 
@@ -866,15 +948,24 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
 
         scrollNode.scrollTop = anchoredNode.offsetTop - anchor.topOffset;
         pendingScrollAnchorRef.current = null;
+        skipNextPropsRestoreRef.current = true;
         syncWrapperState();
     }, [items, syncWrapperState]);
 
     useLayoutEffect(() => {
         void tryResolvePendingScrollRequest();
         void tryResolvePendingRestoreTarget();
-        checkScroll(true);
-        updatePreventShrinking();
-    }, [checkScroll, items, tryResolvePendingRestoreTarget, tryResolvePendingScrollRequest, updatePreventShrinking]);
+        if (skipNextPropsRestoreRef.current) {
+            skipNextPropsRestoreRef.current = false;
+            syncWrapperState();
+            if (visibleRangeRef.current) {
+                evaluatePaginationForRangeRef.current(visibleRangeRef.current);
+            }
+        } else {
+            checkScroll(true);
+            updatePreventShrinking();
+        }
+    }, [checkScroll, items, syncWrapperState, tryResolvePendingRestoreTarget, tryResolvePendingScrollRequest, updatePreventShrinking]);
 
     useEffect(() => {
         return () => {
@@ -925,11 +1016,10 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         <TimelineScrollPanelView
             {...viewProps}
             scrollContainerRef={setScrollContainerRef}
+            onBeforeScrollNotify={syncWrapperState}
             onVisibleRangeChange={setVisibleRange}
             viewState={viewState}
             items={items}
-            hasTopSpinner={hasTopSpinner}
-            hasBottomSpinner={hasBottomSpinner}
             virtualListHandleRef={virtualListHandleRef}
             scrollToBottomRequestId={scrollToBottomRequestId}
             renderTimelineRow={renderRow}

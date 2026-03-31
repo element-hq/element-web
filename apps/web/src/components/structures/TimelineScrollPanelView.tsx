@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect } from "react";
 import { FlatVirtualizedList } from "@element-hq/web-shared-components";
 import classNames from "classnames";
+import { flushSync } from "react-dom";
 
 import type { ListItem } from "react-virtuoso";
 import { type IScrollPanelProps } from "./ScrollPanel";
 import type { TimelineRow } from "./MessagePanel";
-import Spinner from "../views/elements/Spinner";
 import {
     type TimelineScrollPanelViewSnapshot,
     type TimelineVisibleRange,
@@ -69,10 +69,9 @@ function withTimelineItemDomId(node: React.ReactNode, item: TimelineScrollPanelI
 
 type TimelineScrollPanelViewProps = IScrollPanelProps & {
     scrollContainerRef: (element: HTMLElement | Window | null) => void;
+    onBeforeScrollNotify?: () => void;
     viewState: TimelineScrollPanelViewSnapshot;
     items: TimelineScrollPanelItem[];
-    hasTopSpinner?: boolean;
-    hasBottomSpinner?: boolean;
     virtualListHandleRef?: React.Ref<VirtualizedListHandle>;
     scrollToBottomRequestId?: number;
     renderTimelineRow?: (row: TimelineRow) => React.ReactNode;
@@ -83,11 +82,20 @@ interface TimelineScrollPanelListViewProps {
     items: TimelineScrollPanelItem[];
     renderItem: (item: TimelineScrollPanelItem) => React.ReactNode;
     scrollContainerRef: (element: HTMLElement | Window | null) => void;
+    onBeforeScrollNotify?: () => void;
     onScroll?: IScrollPanelProps["onScroll"];
     onVisibleRangeChange?: (range: TimelineVisibleRange) => void;
     stickyBottom?: boolean;
     scrollToBottomRequestId?: number;
     virtualListHandleRef?: React.Ref<VirtualizedListHandle>;
+}
+
+function isScrollNodeAtBottom(scrollNode: HTMLDivElement | null): boolean {
+    if (!scrollNode) {
+        return false;
+    }
+
+    return scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight) <= 1;
 }
 
 function assignMergedRef<T>(target: React.Ref<T> | undefined, value: T): void {
@@ -96,6 +104,14 @@ function assignMergedRef<T>(target: React.Ref<T> | undefined, value: T): void {
     } else if (target) {
         target.current = value;
     }
+}
+
+function readRefCurrent<T>(target: React.Ref<T> | undefined): T | null {
+    if (!target || typeof target === "function") {
+        return null;
+    }
+
+    return target.current;
 }
 
 type TimelineWrapperItemProps = React.HTMLAttributes<HTMLLIElement> & {
@@ -125,6 +141,7 @@ export function TimelineScrollPanelListView({
     items,
     renderItem,
     scrollContainerRef,
+    onBeforeScrollNotify,
     onScroll,
     onVisibleRangeChange,
     stickyBottom,
@@ -138,9 +155,59 @@ export function TimelineScrollPanelListView({
     const hasInitializedPassiveBottomRef = React.useRef(false);
     const lastKnownScrollHeightRef = React.useRef(0);
     const lastPassiveAdjustmentAtRef = React.useRef(0);
+    const lastScrollTopRef = React.useRef(0);
+    const lastTouchYRef = React.useRef<number | null>(null);
+    const lastReportedAtBottomRef = React.useRef(false);
+    const programmaticScrollGenerationRef = React.useRef(0);
+    const [isPassiveBottomEnabled, setIsPassiveBottomEnabled] = React.useState(Boolean(stickyBottom));
+    const disablePassiveBottom = React.useCallback((): void => {
+        flushSync(() => {
+            setIsPassiveBottomEnabled(false);
+        });
+    }, []);
     const markUserScrolled = React.useCallback((): void => {
         hasUserScrolledRef.current = true;
+        programmaticScrollGenerationRef.current += 1;
+        disablePassiveBottom();
+    }, [disablePassiveBottom]);
+    const handleWheelCapture = React.useCallback((event: React.WheelEvent<HTMLDivElement>): void => {
+        if (event.deltaY < 0) {
+            markUserScrolled();
+        }
+    }, [markUserScrolled]);
+    const handleTouchStartCapture = React.useCallback((event: React.TouchEvent<HTMLDivElement>): void => {
+        lastTouchYRef.current = event.touches[0]?.clientY ?? null;
     }, []);
+    const handleTouchMoveCapture = React.useCallback(
+        (event: React.TouchEvent<HTMLDivElement>): void => {
+            const currentTouchY = event.touches[0]?.clientY ?? null;
+            if (currentTouchY !== null && lastTouchYRef.current !== null && currentTouchY > lastTouchYRef.current) {
+                markUserScrolled();
+            }
+            lastTouchYRef.current = currentTouchY;
+        },
+        [markUserScrolled],
+    );
+    const scrollLastItemIntoView = React.useCallback((): boolean => {
+        if (items.length === 0) {
+            return false;
+        }
+
+        const virtualListHandle = readRefCurrent(virtualListHandleRef);
+        if (!virtualListHandle) {
+            return false;
+        }
+
+        isProgrammaticScrollRef.current = true;
+        lastPassiveAdjustmentAtRef.current = performance.now();
+        virtualListHandle.scrollToIndex(items.length - 1, "end");
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                isProgrammaticScrollRef.current = false;
+            });
+        });
+        return true;
+    }, [items, virtualListHandleRef]);
     const runProgrammaticScroll = React.useCallback((callback: (scrollNode: HTMLDivElement) => void): void => {
         const scrollNode = scrollElementRef.current;
         if (!scrollNode) {
@@ -149,7 +216,12 @@ export function TimelineScrollPanelListView({
 
         isProgrammaticScrollRef.current = true;
         lastPassiveAdjustmentAtRef.current = performance.now();
+        const generationAtSchedule = programmaticScrollGenerationRef.current;
         requestAnimationFrame(() => {
+            if (generationAtSchedule !== programmaticScrollGenerationRef.current || hasUserScrolledRef.current) {
+                isProgrammaticScrollRef.current = false;
+                return;
+            }
             callback(scrollNode);
             requestAnimationFrame(() => {
                 isProgrammaticScrollRef.current = false;
@@ -171,30 +243,38 @@ export function TimelineScrollPanelListView({
     const handleScroll = React.useCallback(
         (event: Event): void => {
             const scrollNode = scrollElementRef.current;
+            const previousScrollTop = lastScrollTopRef.current;
+            const currentScrollTop = scrollNode?.scrollTop ?? previousScrollTop;
+            const isAtBottom = isScrollNodeAtBottom(scrollNode);
+            const movedUpward = currentScrollTop < previousScrollTop;
+            const movedAwayFromBottom = scrollNode
+                ? scrollNode.scrollHeight - (currentScrollTop + scrollNode.clientHeight) > 1
+                : false;
+            const detachedFromBottomByUser =
+                stickyBottom && !hasUserScrolledRef.current && (movedUpward || movedAwayFromBottom);
 
-            if (
-                stickyBottom &&
-                hasInitializedPassiveBottomRef.current &&
-                !hasUserScrolledRef.current &&
-                !isProgrammaticScrollRef.current &&
-                scrollNode &&
-                scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight) > 1
-            ) {
+            if (detachedFromBottomByUser) {
                 hasUserScrolledRef.current = true;
+                isProgrammaticScrollRef.current = false;
+                programmaticScrollGenerationRef.current += 1;
+                disablePassiveBottom();
+            } else if (stickyBottom && isAtBottom && hasUserScrolledRef.current && !isProgrammaticScrollRef.current) {
+                hasUserScrolledRef.current = false;
+                setIsPassiveBottomEnabled(true);
             }
 
-            if (
-                stickyBottom &&
-                !hasUserScrolledRef.current &&
-                !isProgrammaticScrollRef.current &&
-                scrollNode &&
-                scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight) > 1
-            ) {
-                scrollToBottomWhilePassive();
+            if (!isProgrammaticScrollRef.current || detachedFromBottomByUser) {
+                onBeforeScrollNotify?.();
+                onScroll?.(event);
+            } else if (!lastReportedAtBottomRef.current && isAtBottom) {
+                onBeforeScrollNotify?.();
+                onScroll?.(event);
             }
-            onScroll?.(event);
+
+            lastReportedAtBottomRef.current = isAtBottom;
+            lastScrollTopRef.current = currentScrollTop;
         },
-        [onScroll, scrollToBottomWhilePassive, stickyBottom],
+        [disablePassiveBottom, onBeforeScrollNotify, onScroll, stickyBottom],
     );
     const handleVisibleRangeChange = React.useCallback(
         (range: TimelineVisibleRange): void => {
@@ -253,13 +333,20 @@ export function TimelineScrollPanelListView({
         }
     }, [runProgrammaticScroll, scrollToBottomWhilePassive, stickyBottom]);
     useEffect(() => {
+        if (!stickyBottom) {
+            setIsPassiveBottomEnabled(false);
+        }
+    }, [stickyBottom]);
+    useEffect(() => {
         if (!scrollToBottomRequestId) {
             return;
         }
 
         hasUserScrolledRef.current = false;
+        setIsPassiveBottomEnabled(true);
+        scrollLastItemIntoView();
         hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
-    }, [scrollToBottomRequestId, scrollToBottomWhilePassive]);
+    }, [scrollLastItemIntoView, scrollToBottomRequestId, scrollToBottomWhilePassive]);
     const Scroller = React.useMemo(
         () =>
             function TimelineScroller(
@@ -282,12 +369,17 @@ export function TimelineScrollPanelListView({
 
                             scrollElementRef.current = element;
                             lastKnownScrollHeightRef.current = element?.scrollHeight ?? 0;
+                            lastScrollTopRef.current = element?.scrollTop ?? 0;
+                            lastReportedAtBottomRef.current = isScrollNodeAtBottom(element);
                             scrollContainerRef(element);
                         }}
                         style={{
                             ...rest.style,
                             overflowAnchor: "none",
                         }}
+                        onWheelCapture={handleWheelCapture}
+                        onTouchStartCapture={handleTouchStartCapture}
+                        onTouchMoveCapture={handleTouchMoveCapture}
                         onWheel={() => markUserScrolled()}
                         onMouseDown={() => markUserScrolled()}
                         onTouchMove={() => markUserScrolled()}
@@ -298,7 +390,14 @@ export function TimelineScrollPanelListView({
                     </div>
                 );
             },
-        [handleScroll, markUserScrolled, scrollContainerRef],
+        [
+            handleScroll,
+            handleTouchMoveCapture,
+            handleTouchStartCapture,
+            handleWheelCapture,
+            markUserScrolled,
+            scrollContainerRef,
+        ],
     );
     const List = React.useMemo(
         () =>
@@ -417,8 +516,10 @@ export function TimelineScrollPanelListView({
             getItemKey={(item) => item.virtualKey ?? item.key}
             getItemComponent={getVirtualizedItemComponent}
             isItemFocusable={() => false}
-            alignToBottom={stickyBottom}
-            followOutput={() => (stickyBottom && !hasUserScrolledRef.current ? "auto" : false)}
+            // Keep roughly 1-2 extra screens mounted so media/tile interactions churn less than the default window.
+            increaseViewportBy={{ top: 2000, bottom: 3000 }}
+            alignToBottom={isPassiveBottomEnabled}
+            followOutput={() => (isPassiveBottomEnabled ? "auto" : false)}
             initialItemCount={items.length}
             itemsRendered={handleItemsRendered}
             rangeChanged={handleVisibleRangeChange}
@@ -441,8 +542,6 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
         className,
         style,
         items,
-        hasTopSpinner,
-        hasBottomSpinner,
         virtualListHandleRef,
         scrollToBottomRequestId,
         renderTimelineRow,
@@ -481,10 +580,7 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
         display: "flex",
         flexDirection: "column" as const,
         minHeight: 0,
-        position: "relative" as const,
     };
-    const showTopSpinner = !!hasTopSpinner;
-    const showBottomSpinner = !!hasBottomSpinner;
 
     return (
         <div
@@ -493,19 +589,12 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
             tabIndex={-1}
         >
             {fixedChildren}
-            {showTopSpinner && (
-                <div
-                    className="mx_RoomView_messagePanelSpinner"
-                    style={{ position: "absolute", top: 0, left: 0, right: 0, pointerEvents: "none", zIndex: 1 }}
-                >
-                    <Spinner />
-                </div>
-            )}
             <div className="mx_RoomView_messageListWrapper" style={{ flex: 1, minHeight: 0 }}>
                 <TimelineScrollPanelListView
                     items={items}
                     renderItem={renderItem}
                     scrollContainerRef={scrollContainerRef}
+                    onBeforeScrollNotify={props.onBeforeScrollNotify}
                     onScroll={props.onScroll}
                     onVisibleRangeChange={onVisibleRangeChange}
                     stickyBottom={props.stickyBottom}
@@ -513,14 +602,6 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
                     virtualListHandleRef={virtualListHandleRef}
                 />
             </div>
-            {showBottomSpinner && (
-                <div
-                    className="mx_RoomView_messagePanelSpinner"
-                    style={{ position: "absolute", bottom: 0, left: 0, right: 0, pointerEvents: "none", zIndex: 1 }}
-                >
-                    <Spinner />
-                </div>
-            )}
         </div>
     );
 }
