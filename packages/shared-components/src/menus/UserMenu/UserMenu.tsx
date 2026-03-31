@@ -11,8 +11,8 @@ import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-o
 import classNames from "classnames";
 
 import styles from "./UserMenu.module.css";
-import { useViewModel, type ViewModel } from "../../viewmodel";
-import { useI18n } from "../../utils/i18nContext";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 type Icon = React.ForwardRefExoticComponent<
     Omit<React.SVGProps<SVGSVGElement>, "ref" | "children"> & React.RefAttributes<SVGSVGElement>
