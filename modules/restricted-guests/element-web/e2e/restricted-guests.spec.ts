@@ -291,7 +291,7 @@ for (const auth of ["mas", "legacy"] as const) {
 
                         await button.click();
                         const dialog = page.getByRole("dialog");
-                        await expect(dialog).toMatchScreenshot(`dialog.png`);
+                        await expect(dialog).toMatchScreenshot(`dialog-login.png`);
 
                         await dialog.getByPlaceholder("Name").fill("Jim");
                         await dialog.getByRole("button", { name: "Continue as guest" }).click();
