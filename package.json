@@ -35,7 +35,7 @@
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "5.87.0",
+        "knip": "6.1.0",
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
