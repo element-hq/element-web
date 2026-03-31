@@ -4007,7 +4007,7 @@
             "change_name_this_room": "Change the name of this room",
             "change_topic_active_room": "Change the topic of your active room",
             "change_topic_this_room": "Change the topic of this room",
-            "download_file": "Download files from the media repository (experimental)",
+            "download_file": "Download files from the media repository",
             "receive_membership_active_room": "See when people join, leave, or are invited to your active room",
             "receive_membership_this_room": "See when people join, leave, or are invited to this room",
             "remove_ban_invite_leave_active_room": "Remove, ban, or invite people to your active room, and make you leave",
