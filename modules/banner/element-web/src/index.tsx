@@ -13,6 +13,7 @@ import Translations from "./translations.json";
 import { ModuleConfig, CONFIG_KEY } from "./config";
 import Banner from "./Banner";
 import { name as ModuleName } from "../package.json";
+import style from "./style.css" with { type: "css" };
 
 class BannerModule implements Module {
     public static readonly moduleApiVersion = "^1.0.0";
@@ -23,6 +24,7 @@ class BannerModule implements Module {
 
     public async load(): Promise<void> {
         document.adoptedStyleSheets.push(compound);
+        document.adoptedStyleSheets.push(style);
 
         this.api.i18n.register(Translations);
 
