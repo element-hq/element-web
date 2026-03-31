@@ -15,6 +15,7 @@ import { type MouseEvent } from "react";
 import { _t } from "../../../../languageHandler";
 import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
 import UserIdentifier from "../../../../customisations/UserIdentifier";
+import type { UserStatus } from "../../../../hooks/useUserStatus";
 
 /**
  * Information about a member for disambiguation purposes.
@@ -47,6 +48,10 @@ export interface DisambiguatedProfileViewModelProps {
      */
     member?: MemberInfo | null;
     /**
+     * The user's present status.
+     */
+    userStatus?: UserStatus;
+    /**
      * The fallback name to use if the member's display name is not available.
      */
     fallbackName: string;
@@ -62,6 +67,7 @@ export interface DisambiguatedProfileViewModelProps {
      * Whether to show a tooltip with additional information.
      */
     withTooltip?: boolean;
+
     /**
      * Optional click handler for the profile.
      */
@@ -79,7 +85,7 @@ export class DisambiguatedProfileViewModel
     private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
-        const { member, fallbackName, colored, emphasizeDisplayName, withTooltip } = props;
+        const { member, fallbackName, colored, emphasizeDisplayName, withTooltip, userStatus } = props;
 
         // Compute display name
         const displayName = member?.rawDisplayName || fallbackName;
@@ -122,11 +128,15 @@ export class DisambiguatedProfileViewModel
             displayIdentifier,
             title,
             emphasizeDisplayName,
+            userStatus,
         };
     };
 
     public constructor(props: DisambiguatedProfileViewModelProps) {
         super(props, DisambiguatedProfileViewModel.computeSnapshot(props));
+        this.snapshot.merge({
+            userStatus: props.userStatus,
+        });
     }
 
     public setMember(fallbackName: string, member?: MemberInfo | null): void {
@@ -134,6 +144,13 @@ export class DisambiguatedProfileViewModel
         this.props.fallbackName = fallbackName;
 
         this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
+    }
+
+    public setUserStatus(userStatus?: UserStatus): void {
+        this.props.userStatus = userStatus;
+        this.snapshot.merge({
+            userStatus,
+        });
     }
 
     public onClick = (evt: MouseEvent<HTMLDivElement>): void => {

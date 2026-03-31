@@ -11,7 +11,7 @@ import React, { type JSX, useEffect } from "react";
 import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
-import { DisambiguatedProfileViewModel } from "../../../viewmodels/profile/DisambiguatedProfileViewModel";
+import { DisambiguatedProfileViewModel } from "../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 import { useUserStatus } from "../../../hooks/useUserStatus";
 
