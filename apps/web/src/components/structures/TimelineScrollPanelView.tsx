@@ -24,7 +24,6 @@ export interface TimelineScrollPanelItem {
     virtualKey?: string;
     domId?: string;
     node?: React.ReactNode;
-    renderedNode?: React.ReactNode;
     row?: TimelineRow;
 }
 
@@ -82,6 +81,11 @@ function normalizeTimelineItemNode(node: React.ReactNode, item: TimelineScrollPa
 
 type TimelineScrollPanelViewProps = IScrollPanelProps & {
     scrollContainerRef: (element: HTMLElement | Window | null) => void;
+    onItemElementChange?: (
+        item: TimelineScrollPanelItem | undefined,
+        previousElement: HTMLLIElement | null,
+        nextElement: HTMLLIElement | null,
+    ) => void;
     onBeforeScrollNotify?: () => void;
     viewState: TimelineScrollPanelViewSnapshot;
     items: TimelineScrollPanelItem[];
@@ -95,6 +99,11 @@ interface TimelineScrollPanelListViewProps {
     items: TimelineScrollPanelItem[];
     renderItem: (item: TimelineScrollPanelItem) => React.ReactNode;
     scrollContainerRef: (element: HTMLElement | Window | null) => void;
+    onItemElementChange?: (
+        item: TimelineScrollPanelItem | undefined,
+        previousElement: HTMLLIElement | null,
+        nextElement: HTMLLIElement | null,
+    ) => void;
     onBeforeScrollNotify?: () => void;
     onScroll?: IScrollPanelProps["onScroll"];
     onVisibleRangeChange?: (range: TimelineVisibleRange) => void;
@@ -154,6 +163,7 @@ export function TimelineScrollPanelListView({
     items,
     renderItem,
     scrollContainerRef,
+    onItemElementChange,
     onBeforeScrollNotify,
     onScroll,
     onVisibleRangeChange,
@@ -162,11 +172,13 @@ export function TimelineScrollPanelListView({
     virtualListHandleRef,
 }: TimelineScrollPanelListViewProps): React.ReactNode {
     const scrollElementRef = React.useRef<HTMLDivElement | null>(null);
+    const animationFrameIdsRef = React.useRef<Set<number>>(new Set());
+    const itemElementByItemRef = React.useRef<WeakMap<TimelineScrollPanelItem, HTMLLIElement>>(new WeakMap());
     const onScrollRef = React.useRef(onScroll);
     const onBeforeScrollNotifyRef = React.useRef(onBeforeScrollNotify);
     const wasHiddenRef = React.useRef(false);
     const lastVisibleRangeRef = React.useRef<TimelineVisibleRange | null>(null);
-    const lastRenderedItemsSignatureRef = React.useRef<string | null>(null);
+    const lastRenderedItemsSignatureRef = React.useRef<string[] | null>(null);
     const hasUserScrolledRef = React.useRef(false);
     const isProgrammaticScrollRef = React.useRef(false);
     const hasInitializedPassiveBottomRef = React.useRef(false);
@@ -178,6 +190,14 @@ export function TimelineScrollPanelListView({
     const programmaticScrollGenerationRef = React.useRef(0);
     const hasSeenRealUserInputRef = React.useRef(false);
     const [isPassiveBottomEnabled, setIsPassiveBottomEnabled] = React.useState(Boolean(stickyBottom));
+    const scheduleAnimationFrame = React.useCallback((callback: () => void): number => {
+        const frameId = requestAnimationFrame(() => {
+            animationFrameIdsRef.current.delete(frameId);
+            callback();
+        });
+        animationFrameIdsRef.current.add(frameId);
+        return frameId;
+    }, []);
     React.useEffect(() => {
         onScrollRef.current = onScroll;
     }, [onScroll]);
@@ -229,13 +249,13 @@ export function TimelineScrollPanelListView({
         isProgrammaticScrollRef.current = true;
         lastPassiveAdjustmentAtRef.current = performance.now();
         virtualListHandle.scrollToIndex(items.length - 1, "end");
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
+        scheduleAnimationFrame(() => {
+            scheduleAnimationFrame(() => {
                 isProgrammaticScrollRef.current = false;
             });
         });
         return true;
-    }, [items, virtualListHandleRef]);
+    }, [items, scheduleAnimationFrame, virtualListHandleRef]);
     const runProgrammaticScroll = React.useCallback((callback: (scrollNode: HTMLDivElement) => void): void => {
         const scrollNode = scrollElementRef.current;
         if (!scrollNode) {
@@ -245,17 +265,17 @@ export function TimelineScrollPanelListView({
         isProgrammaticScrollRef.current = true;
         lastPassiveAdjustmentAtRef.current = performance.now();
         const generationAtSchedule = programmaticScrollGenerationRef.current;
-        requestAnimationFrame(() => {
+        scheduleAnimationFrame(() => {
             if (generationAtSchedule !== programmaticScrollGenerationRef.current || hasUserScrolledRef.current) {
                 isProgrammaticScrollRef.current = false;
                 return;
             }
             callback(scrollNode);
-            requestAnimationFrame(() => {
+            scheduleAnimationFrame(() => {
                 isProgrammaticScrollRef.current = false;
             });
         });
-    }, []);
+    }, [scheduleAnimationFrame]);
     const scrollToBottomWhilePassive = React.useCallback((): boolean => {
         const scrollNode = scrollElementRef.current;
         if (!scrollNode || scrollNode.scrollHeight === 0 || scrollNode.clientHeight === 0) {
@@ -342,13 +362,13 @@ export function TimelineScrollPanelListView({
     );
     const handleItemsRendered = React.useCallback(
         (renderedItems: ListItem<TimelineScrollPanelItem>[]): void => {
-            const renderedItemsSignature = renderedItems
-                .map(
-                    (item) =>
-                        `${item.originalIndex ?? item.index}:${item.data?.virtualKey ?? item.data?.key ?? "unknown"}`,
-                )
-                .join("|");
-            if (lastRenderedItemsSignatureRef.current === renderedItemsSignature) {
+            const renderedItemsSignature = renderedItems.map(
+                (item) => `${item.originalIndex ?? item.index}:${item.data?.virtualKey ?? item.data?.key ?? "unknown"}`,
+            );
+            if (
+                lastRenderedItemsSignatureRef.current?.length === renderedItemsSignature.length &&
+                lastRenderedItemsSignatureRef.current.every((item, index) => item === renderedItemsSignature[index])
+            ) {
                 return;
             }
             lastRenderedItemsSignatureRef.current = renderedItemsSignature;
@@ -425,7 +445,7 @@ export function TimelineScrollPanelListView({
         hasInitializedPassiveBottomRef.current = false;
         lastKnownScrollHeightRef.current = scrollElementRef.current?.scrollHeight ?? 0;
 
-        requestAnimationFrame(() => {
+        scheduleAnimationFrame(() => {
             const virtualListHandle = readRefCurrent(virtualListHandleRef);
             if (!virtualListHandle || items.length === 0) {
                 return;
@@ -439,7 +459,14 @@ export function TimelineScrollPanelListView({
 
             virtualListHandle.scrollToIndex(0, "start");
         });
-    }, [items, scrollToBottomWhilePassive, stickyBottom, virtualListHandleRef]);
+    }, [items, scheduleAnimationFrame, scrollToBottomWhilePassive, stickyBottom, virtualListHandleRef]);
+    useEffect(() => {
+        const animationFrameIds = animationFrameIdsRef.current;
+        return () => {
+            animationFrameIds.forEach((frameId) => cancelAnimationFrame(frameId));
+            animationFrameIds.clear();
+        };
+    }, []);
 
     const viewportIncrease = React.useMemo(() => ({ top: 400, bottom: 800 }), []);
 
@@ -565,10 +592,20 @@ export function TimelineScrollPanelListView({
                             {...itemProps}
                             {...childProps}
                             ref={(element: HTMLLIElement | null) => {
-                                if (element) {
-                                    assignMergedRef(ref as React.Ref<HTMLLIElement> | undefined, element);
-                                }
+                                const timelineItem = item as TimelineScrollPanelItem | undefined;
+                                const previousElement = timelineItem
+                                    ? itemElementByItemRef.current.get(timelineItem) ?? null
+                                    : null;
+                                assignMergedRef(ref as React.Ref<HTMLLIElement> | undefined, element);
                                 assignMergedRef(childProps.ref, element);
+                                onItemElementChange?.(timelineItem, previousElement, element);
+                                if (timelineItem) {
+                                    if (element) {
+                                        itemElementByItemRef.current.set(timelineItem, element);
+                                    } else {
+                                        itemElementByItemRef.current.delete(timelineItem);
+                                    }
+                                }
                             }}
                             className={classNames(itemProps.className, childProps.className)}
                             style={{
@@ -586,14 +623,28 @@ export function TimelineScrollPanelListView({
                     <li
                         {...(rest as unknown as React.HTMLAttributes<HTMLLIElement>)}
                         {...wrapperItemProps}
-                        ref={ref as React.Ref<HTMLLIElement>}
+                        ref={(element: HTMLLIElement | null) => {
+                            const timelineItem = item as TimelineScrollPanelItem | undefined;
+                            const previousElement = timelineItem
+                                ? itemElementByItemRef.current.get(timelineItem) ?? null
+                                : null;
+                            assignMergedRef(ref as React.Ref<HTMLLIElement> | undefined, element);
+                            onItemElementChange?.(timelineItem, previousElement, element);
+                            if (timelineItem) {
+                                if (element) {
+                                    itemElementByItemRef.current.set(timelineItem, element);
+                                } else {
+                                    itemElementByItemRef.current.delete(timelineItem);
+                                }
+                            }
+                        }}
                         style={mergedStyle}
                     >
                         {children}
                     </li>
                 );
             },
-        [],
+        [onItemElementChange],
     );
     const getVirtualizedItemComponent = React.useCallback(
         (_index: number, item: TimelineScrollPanelItem): React.JSX.Element => {
@@ -652,6 +703,7 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
         scrollToBottomRequestId,
         renderTimelineRow,
         onVisibleRangeChange,
+        onItemElementChange,
     } = props;
     void viewState;
     const renderItem = React.useCallback(
@@ -660,13 +712,8 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
                 return null;
             }
 
-            if (item.renderedNode !== undefined) {
-                return item.renderedNode;
-            }
-
             const renderedNode = item.row ? renderTimelineRow?.(item.row) : item.node;
-            item.renderedNode = normalizeTimelineItemNode(renderedNode, item);
-            return item.renderedNode;
+            return normalizeTimelineItemNode(renderedNode, item);
         },
         [renderTimelineRow],
     );
@@ -690,6 +737,7 @@ export default function TimelineScrollPanelView(props: TimelineScrollPanelViewPr
                     items={items}
                     renderItem={renderItem}
                     scrollContainerRef={scrollContainerRef}
+                    onItemElementChange={onItemElementChange}
                     onBeforeScrollNotify={onBeforeScrollNotify}
                     onScroll={onScroll}
                     onVisibleRangeChange={onVisibleRangeChange}

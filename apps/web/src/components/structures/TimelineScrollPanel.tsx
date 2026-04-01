@@ -78,6 +78,14 @@ function countSharedSuffix(previous: string[], next: string[]): number {
     return count;
 }
 
+function areStringArraysEqual(previous: string[] | null | undefined, next: string[]): boolean {
+    if (!previous || previous.length !== next.length) {
+        return false;
+    }
+
+    return previous.every((value, index) => value === next[index]);
+}
+
 function withSynthesizedTimelineIdentity(items: TimelineScrollPanelItem[]): TimelineScrollPanelItem[] {
     const seenIdentities = new Map<string, number>();
 
@@ -307,9 +315,10 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
     const preventShrinkingTargetRef = useRef<ScrollRestoreTarget | null>(null);
     const itemCacheRef = useRef<Map<string, TimelineScrollPanelItem>>(new Map());
     const previousItemsRef = useRef<TimelineScrollPanelItem[]>([]);
-    const previousItemOrderSignatureRef = useRef<string | null>(null);
-    const lastLoggedItemOrderSignatureRef = useRef<string | null>(null);
+    const previousItemOrderRef = useRef<string[] | null>(null);
     const itemIndexByKeyRef = useRef<Map<string, number>>(new Map());
+    const mountedElementsByTokenRef = useRef<Map<string, Set<HTMLElement>>>(new Map());
+    const tokensByElementRef = useRef<WeakMap<HTMLElement, string[]>>(new WeakMap());
     const virtualListHandleRef = useRef<VirtualizedListHandle | null>(null);
     const pendingScrollRequestRef = useRef<PendingScrollRequest | null>(null);
     const suppressNextPropsRestoreRef = useRef(false);
@@ -369,7 +378,6 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
 
             if (previousItem?.row && previousItem.row.key === item.row.key) {
                 previousItem.row = item.row;
-                previousItem.renderedNode = undefined;
                 return previousItem;
             }
         }
@@ -384,29 +392,14 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
 
         return item;
     });
-    const rawItemsWithRenderedNode = rawItemsWithStableIdentity.map((item) => {
-        if (!item.row || !renderRow) {
-            return item;
-        }
-
-        if (item.renderedNode !== undefined) {
-            return item;
-        }
-
-        item.renderedNode = renderRow(item.row);
-        return item;
-    });
-    itemCacheRef.current = new Map(rawItemsWithRenderedNode.map((item) => [item.virtualKey ?? item.key, item]));
+    itemCacheRef.current = new Map(rawItemsWithStableIdentity.map((item) => [item.virtualKey ?? item.key, item]));
     const items =
-        rawItemsWithRenderedNode.length === previousItemsRef.current.length &&
-        rawItemsWithRenderedNode.every((item, index) => item === previousItemsRef.current[index])
+        rawItemsWithStableIdentity.length === previousItemsRef.current.length &&
+        rawItemsWithStableIdentity.every((item, index) => item === previousItemsRef.current[index])
             ? previousItemsRef.current
-            : rawItemsWithRenderedNode;
+            : rawItemsWithStableIdentity;
     previousItemsRef.current = items;
-    const itemOrderSignature = items.map((item) => item.virtualKey ?? item.key).join("|");
-    if (lastLoggedItemOrderSignatureRef.current !== itemOrderSignature) {
-        lastLoggedItemOrderSignatureRef.current = itemOrderSignature;
-    }
+    const currentItemKeys = items.map((item) => item.virtualKey ?? item.key);
     itemIndexByKeyRef.current = new Map(
         items.flatMap((item, index) =>
             item.row?.kind === "event" ? [[(item.row as EventTimelineRow).eventId, index] as const] : [],
@@ -418,9 +411,79 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
                 return null;
             }
 
-            return items.slice(visibleRange.startIndex, visibleRange.endIndex + 1).map((item) => item.key);
+            const visibleKeys: string[] = [];
+            for (let index = visibleRange.startIndex; index <= visibleRange.endIndex; index++) {
+                const item = items[index];
+                if (item) {
+                    visibleKeys.push(item.key);
+                }
+            }
+            return visibleKeys;
         },
         [items],
+    );
+    const updateElementRegistration = useCallback((element: HTMLElement, nextTokens: string[]): void => {
+        const previousTokens = tokensByElementRef.current.get(element) ?? [];
+
+        for (const token of previousTokens) {
+            if (nextTokens.includes(token)) {
+                continue;
+            }
+
+            const elements = mountedElementsByTokenRef.current.get(token);
+            if (!elements) {
+                continue;
+            }
+
+            elements.delete(element);
+            if (elements.size === 0) {
+                mountedElementsByTokenRef.current.delete(token);
+            }
+        }
+
+        for (const token of nextTokens) {
+            let elements = mountedElementsByTokenRef.current.get(token);
+            if (!elements) {
+                elements = new Set();
+                mountedElementsByTokenRef.current.set(token, elements);
+            }
+            elements.add(element);
+        }
+
+        tokensByElementRef.current.set(element, nextTokens);
+    }, []);
+    const unregisterElement = useCallback((element: HTMLElement): void => {
+        const tokens = tokensByElementRef.current.get(element) ?? [];
+        for (const token of tokens) {
+            const elements = mountedElementsByTokenRef.current.get(token);
+            if (!elements) {
+                continue;
+            }
+
+            elements.delete(element);
+            if (elements.size === 0) {
+                mountedElementsByTokenRef.current.delete(token);
+            }
+        }
+    }, []);
+    const handleItemElementChange = useCallback(
+        (
+            _item: TimelineScrollPanelItem | undefined,
+            previousElement: HTMLLIElement | null,
+            nextElement: HTMLLIElement | null,
+        ): void => {
+            if (previousElement && previousElement !== nextElement) {
+                unregisterElement(previousElement);
+            }
+
+            if (!nextElement) {
+                return;
+            }
+
+            const tokens = nextElement.dataset.scrollTokens?.split(",").filter(Boolean) ?? [];
+            updateElementRegistration(nextElement, tokens);
+        },
+        [unregisterElement, updateElementRegistration],
     );
     const getItemIndex = useCallback((scrollToken: string): number | undefined => {
         return itemIndexByKeyRef.current.get(scrollToken);
@@ -452,25 +515,26 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         [],
     );
     const findNodeForToken = useCallback((scrollToken: string): HTMLElement | undefined => {
-        const scrollNode = divScrollRef.current;
-        if (!scrollNode) {
+        const matchingNodes = mountedElementsByTokenRef.current.get(scrollToken);
+        if (!matchingNodes?.size) {
             return undefined;
         }
 
-        const matchingNodes = Array.from(scrollNode.querySelectorAll<HTMLElement>("[data-scroll-tokens]")).filter(
-            (node) => node.dataset.scrollTokens?.split(",").includes(scrollToken),
-        );
-
-        if (matchingNodes.length === 0) {
-            return undefined;
-        }
-
-        return matchingNodes.reduce((bestNode, node) => {
+        return Array.from(matchingNodes).reduce((bestNode, node) => {
             const bestTokenCount = bestNode.dataset.scrollTokens?.split(",").length ?? Number.MAX_SAFE_INTEGER;
             const tokenCount = node.dataset.scrollTokens?.split(",").length ?? Number.MAX_SAFE_INTEGER;
 
             return tokenCount < bestTokenCount ? node : bestNode;
         });
+    }, []);
+    const getRenderableNodes = useCallback((): HTMLElement[] => {
+        const renderableNodes = new Set<HTMLElement>();
+        mountedElementsByTokenRef.current.forEach((elements) => {
+            elements.forEach((element) => {
+                renderableNodes.add(element);
+            });
+        });
+        return Array.from(renderableNodes).sort((first, second) => first.offsetTop - second.offsetTop);
     }, []);
     const requestFill = useCallback(
         (backwards: boolean): void => {
@@ -527,14 +591,6 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         }
         return "center";
     }, []);
-    const getRenderableNodes = useCallback((): HTMLElement[] => {
-        const scrollNode = divScrollRef.current;
-        if (!scrollNode) {
-            return [];
-        }
-
-        return Array.from(scrollNode.querySelectorAll<HTMLElement>("[data-scroll-tokens]"));
-    }, []);
     const topFromBottom = useCallback((node: HTMLElement, scrollNode: HTMLDivElement): number => {
         return scrollNode.scrollHeight - node.offsetTop;
     }, []);
@@ -568,7 +624,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             }
 
             const viewportBottom = scrollNode.scrollHeight - (scrollNode.scrollTop + scrollNode.clientHeight);
-            const nodes = Array.from(scrollNode.querySelectorAll<HTMLElement>("[data-scroll-tokens]"));
+            const nodes = getRenderableNodes();
 
             let trackedNode: HTMLElement | undefined;
             for (let i = nodes.length - 1; i >= 0; i--) {
@@ -581,7 +637,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
 
             return trackedNode;
         },
-        [findNodeForToken, topFromBottom],
+        [findNodeForToken, getRenderableNodes, topFromBottom],
     );
     const saveScrollState = useCallback((): void => {
         const scrollNode = divScrollRef.current;
@@ -1102,9 +1158,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             return;
         }
 
-        const anchoredNode = Array.from(scrollNode.querySelectorAll<HTMLElement>("[data-scroll-tokens]")).find((node) =>
-            node.dataset.scrollTokens?.split(",").includes(anchor.key),
-        );
+        const anchoredNode = findNodeForToken(anchor.key);
         if (!anchoredNode) {
             return;
         }
@@ -1119,9 +1173,14 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         void tryResolvePendingScrollRequest();
         void tryResolvePendingRestoreTarget();
         const previousItemKeys = lastCommittedItemKeysRef.current;
-        const currentItemKeys = items.map((item) => item.virtualKey ?? item.key);
         const sharedSuffix = countSharedSuffix(previousItemKeys, currentItemKeys);
-        const overlappingKeyCount = currentItemKeys.filter((key) => previousItemKeys.includes(key)).length;
+        const previousItemKeySet = new Set(previousItemKeys);
+        let overlappingKeyCount = 0;
+        for (const key of currentItemKeys) {
+            if (previousItemKeySet.has(key)) {
+                overlappingKeyCount += 1;
+            }
+        }
         const prependedItemCount = currentItemKeys.length - previousItemKeys.length;
         const isPurePrependGrowth =
             previousItemKeys.length > 0 &&
@@ -1134,10 +1193,9 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             !!visibleRange &&
             visibleRange.startIndex + prependedItemCount >= 0 &&
             visibleRange.endIndex + prependedItemCount < currentItemKeys.length;
-        const previousItemOrderSignature = previousItemOrderSignatureRef.current;
-        previousItemOrderSignatureRef.current = itemOrderSignature;
-        const shouldRestoreForPropsUpdate =
-            previousItemOrderSignature === null || previousItemOrderSignature !== itemOrderSignature;
+        const previousItemOrder = previousItemOrderRef.current;
+        previousItemOrderRef.current = currentItemKeys;
+        const shouldRestoreForPropsUpdate = !areStringArraysEqual(previousItemOrder, currentItemKeys);
         if (skipNextPropsRestoreRef.current) {
             skipNextPropsRestoreRef.current = false;
             syncWrapperState();
@@ -1167,7 +1225,6 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         lastCommittedItemKeysRef.current = currentItemKeys;
     }, [
         checkScroll,
-        itemOrderSignature,
         items,
         syncWrapperState,
         tryResolvePendingRestoreTarget,
@@ -1187,6 +1244,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             if (resizeRestoreTimeoutRef.current !== null) {
                 window.clearTimeout(resizeRestoreTimeoutRef.current);
             }
+            mountedElementsByTokenRef.current.clear();
             lastScheduledResizeRestoreTargetRef.current = null;
         };
     }, []);
@@ -1227,6 +1285,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             scrollContainerRef={setScrollContainerRef}
             onBeforeScrollNotify={syncWrapperState}
             onVisibleRangeChange={setVisibleRange}
+            onItemElementChange={handleItemElementChange}
             viewState={viewState}
             items={items}
             virtualListHandleRef={virtualListHandleRef}

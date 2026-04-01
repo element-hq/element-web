@@ -1353,14 +1353,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             stickyBottom: this.props.stickyBottom,
             fixedChildren: ircResizer,
         };
-        const renderedTimelineRows = timelineRows.map(this.renderTimelineRow);
 
         return (
             <ErrorBoundary>
                 {SettingsStore.getValue("feature_new_timeline") ? (
                     <TimelineScrollPanel {...panelProps} rows={timelineRows} renderRow={this.renderTimelineRow} />
                 ) : (
-                    <ScrollPanel {...panelProps}>{renderedTimelineRows}</ScrollPanel>
+                    <ScrollPanel {...panelProps}>{timelineRows.map(this.renderTimelineRow)}</ScrollPanel>
                 )}
             </ErrorBoundary>
         );
