@@ -9,7 +9,7 @@ import { defineConfig, ViteUserConfig } from "vitest/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
-import { storybookVis, trimCommonFolder } from "storybook-addon-vis/vitest-plugin";
+import { storybookVis } from "storybook-addon-vis/vitest-plugin";
 import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { Reporter } from "vitest/reporters";
@@ -70,29 +70,6 @@ const commonLaunchOptions = {
     args: ["--font-render-hinting=none", "--disable-font-subpixel-positioning", "--disable-lcd-text"],
 };
 
-function resolveVisualSnapshotRootDir({ ci, platform }: { ci: boolean; platform: string }): string {
-    return `__vis__/${ci ? "linux" : platform}`;
-}
-
-function slugifySnapshotSegment(segment: string): string {
-    return segment
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-}
-
-function resolveVisualSnapshotSubpath({ subpath }: { subpath: string }): string {
-    const normalizedSubpath = trimCommonFolder(subpath.startsWith("./") ? subpath.slice(2) : subpath).replaceAll(
-        "\\",
-        "/",
-    );
-    const topLevelDirectory = normalizedSubpath.split("/", 1)[0] ?? "shared-components";
-    const storyName = path.basename(normalizedSubpath, path.extname(normalizedSubpath)).replace(/\.stories$/, "");
-
-    return `${slugifySnapshotSegment(topLevelDirectory)}/${storyName}`;
-}
-
 export default defineConfig({
     test: {
         coverage: {
@@ -120,8 +97,8 @@ export default defineConfig({
                     storybookVis({
                         // 3px of difference allowed before marking as failed
                         failureThreshold: 3,
-                        snapshotRootDir: resolveVisualSnapshotRootDir,
-                        snapshotSubpath: resolveVisualSnapshotSubpath,
+                        // When running in CI=1 mode, set the platform to `linux` as that is the platform where the browser-in-docker is running
+                        snapshotRootDir: ({ ci, platform }) => `__vis__/${ci ? "linux" : platform}`,
                     }),
                 ],
                 test: {

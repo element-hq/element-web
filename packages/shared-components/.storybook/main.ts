@@ -9,10 +9,8 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import fs from "node:fs";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { mergeConfig } from "vite";
-import { basename, dirname, extname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineStorybookVis } from "storybook-addon-vis/node";
-import { trimCommonFolder } from "storybook-addon-vis/vitest-plugin";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -30,27 +28,12 @@ for (const lang of languageFiles) {
     }
 }
 
-function resolveVisualSnapshotRootDir({ ci, platform }: { ci: boolean; platform: string }): string {
-    return `__vis__/${ci ? "linux" : platform}`;
-}
-
-function slugifySnapshotSegment(segment: string): string {
-    return segment
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-}
-
-function resolveVisualSnapshotSubpath({ subpath }: { subpath: string }): string {
-    const normalizedSubpath = trimCommonFolder(subpath.startsWith("./") ? subpath.slice(2) : subpath).replaceAll(
-        "\\",
-        "/",
-    );
-    const topLevelDirectory = normalizedSubpath.split("/", 1)[0] ?? "shared-components";
-    const storyName = basename(normalizedSubpath, extname(normalizedSubpath)).replace(/\.stories$/, "");
-
-    return `${slugifySnapshotSegment(topLevelDirectory)}/${storyName}`;
+/**
+ * This function is used to resolve the absolute path of a package.
+ * It is needed in projects that use Yarn PnP or are set up within a monorepo.
+ */
+function getAbsolutePath(value: string): any {
+    return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
 }
 
 const config: StorybookConfig = {
@@ -60,14 +43,7 @@ const config: StorybookConfig = {
         "@storybook/addon-designs",
         "@storybook/addon-a11y",
         "@storybook/addon-vitest",
-        defineStorybookVis({
-            visProjects: [
-                {
-                    snapshotRootDir: resolveVisualSnapshotRootDir,
-                    snapshotSubpath: resolveVisualSnapshotSubpath,
-                },
-            ],
-        }),
+        getAbsolutePath("storybook-addon-vis"),
     ],
     framework: "@storybook/react-vite",
     core: {
