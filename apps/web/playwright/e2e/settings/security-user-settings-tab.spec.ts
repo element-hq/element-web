@@ -25,10 +25,10 @@ test.describe("Security user settings tab", () => {
             },
         });
 
-        test.beforeEach(async ({ page, app, user }) => {
+        test.beforeEach(async ({ page, app, user, toasts }) => {
             // Dismiss toasts
-            await app.closeVerifyToast();
-            await app.closeNotificationToast();
+            await toasts.rejectToast("Verify this device");
+            await toasts.rejectToast("Notifications");
             await page.locator(".mx_Toast_buttons").getByRole("button", { name: "Yes" }).click(); // Allow analytics
         });
 

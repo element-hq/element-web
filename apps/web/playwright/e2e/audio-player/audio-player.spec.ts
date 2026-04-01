@@ -143,8 +143,8 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-bubble-layout.png`, screenshotOptions);
     };
 
-    test.beforeEach(async ({ page, app, user }) => {
-        await app.closeVerifyToast();
+    test.beforeEach(async ({ page, app, user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
         await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
 

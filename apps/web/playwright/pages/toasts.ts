@@ -50,4 +50,12 @@ export class Toasts {
         const toast = await this.getToast(expectedTitle);
         await toast.locator('.mx_Toast_buttons button[data-kind="secondary"]').click();
     }
+
+    /**
+     * Reject the "Turn on key storage" toast.
+     */
+    public async rejectKeyStorageToast() {
+        await this.rejectToast("Turn on key storage");
+        await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
+    }
 }

@@ -15,12 +15,12 @@ test.describe("Room Status Bar", () => {
             await page.setViewportSize({ width: 1400, height: 768 });
             await use(page);
         },
-        room: async ({ app, user }, use) => {
+        room: async ({ app, user, toasts }, use) => {
             const roomId = await app.client.createRoom({
                 name: "A room",
             });
-            await app.closeVerifyToast();
-            await app.closeNotificationToast();
+            await toasts.rejectToast("Verify this device");
+            await toasts.rejectToast("Notifications");
             await app.viewRoomById(roomId);
             await use({ roomId });
         },
@@ -139,8 +139,8 @@ test.describe("Room Status Bar", () => {
         test(
             "should show an error when creating a local room fails",
             { tag: "@screenshot" },
-            async ({ page, app, user, bot }) => {
-                await app.closeVerifyToast();
+            async ({ page, app, user, bot, toasts }) => {
+                await toasts.rejectToast("Verify this device");
                 await page
                     .getByRole("navigation", { name: "Room list" })
                     .getByRole("button", { name: "New conversation" })

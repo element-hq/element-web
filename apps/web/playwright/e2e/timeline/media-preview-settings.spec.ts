@@ -35,48 +35,52 @@ test.describe("Media preview settings", () => {
         },
     });
 
-    test("should be able to hide avatars of inviters", { tag: "@screenshot" }, async ({ page, app, room, user }) => {
-        await app.closeVerifyToast();
+    test(
+        "should be able to hide avatars of inviters",
+        { tag: "@screenshot" },
+        async ({ page, app, room, user, toasts }) => {
+            await toasts.rejectToast("Verify this device");
 
-        let settings = await app.settings.openUserSettings("Preferences");
-        await settings.getByLabel("Hide avatars of room and inviter").click();
-        await app.closeDialog();
-        await app.viewRoomById(room.roomId);
-        await expect(
-            page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
-        ).toMatchScreenshot("invite-no-avatar.png", {
-            // Hide the mxid, which is not stable.
-            css: `
+            let settings = await app.settings.openUserSettings("Preferences");
+            await settings.getByLabel("Hide avatars of room and inviter").click();
+            await app.closeDialog();
+            await app.viewRoomById(room.roomId);
+            await expect(
+                page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
+            ).toMatchScreenshot("invite-no-avatar.png", {
+                // Hide the mxid, which is not stable.
+                css: `
                 .mx_RoomPreviewBar_inviter_mxid {
                     display: none !important;
                 }
             `,
-        });
+            });
 
-        const testRoomTile = page
-            .getByRole("listbox", { name: "Room list" })
-            .getByRole("option", { name: "Test room" });
-        await expect(testRoomTile).toBeVisible();
-        await expect(testRoomTile).toMatchScreenshot("invite-room-tree-no-avatar.png");
+            const testRoomTile = page
+                .getByRole("listbox", { name: "Room list" })
+                .getByRole("option", { name: "Test room" });
+            await expect(testRoomTile).toBeVisible();
+            await expect(testRoomTile).toMatchScreenshot("invite-room-tree-no-avatar.png");
 
-        // And then go back to being visible
-        settings = await app.settings.openUserSettings("Preferences");
-        await settings.getByLabel("Hide avatars of room and inviter").click();
-        await app.closeDialog();
-        await page.goto("#/home");
-        await app.viewRoomById(room.roomId);
-        await expect(
-            page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
-        ).toMatchScreenshot("invite-with-avatar.png", {
-            // Hide the mxid, which is not stable.
-            css: `
+            // And then go back to being visible
+            settings = await app.settings.openUserSettings("Preferences");
+            await settings.getByLabel("Hide avatars of room and inviter").click();
+            await app.closeDialog();
+            await page.goto("#/home");
+            await app.viewRoomById(room.roomId);
+            await expect(
+                page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
+            ).toMatchScreenshot("invite-with-avatar.png", {
+                // Hide the mxid, which is not stable.
+                css: `
                 .mx_RoomPreviewBar_inviter_mxid {
                     display: none !important;
                 }
             `,
-        });
-        await expect(testRoomTile).toMatchScreenshot("invite-room-tree-with-avatar.png");
-    });
+            });
+            await expect(testRoomTile).toMatchScreenshot("invite-room-tree-with-avatar.png");
+        },
+    );
 
     test("should be able to hide media in rooms globally", async ({ page, app, room, user }) => {
         const settings = await app.settings.openUserSettings("Preferences");

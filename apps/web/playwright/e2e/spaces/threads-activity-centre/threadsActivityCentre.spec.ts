@@ -24,8 +24,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test(
         "should have the button correctly aligned and displayed in the space panel when expanded",
         { tag: "@screenshot" },
-        async ({ util, app }) => {
-            await app.closeVerifyToast();
+        async ({ util, app, toasts }) => {
+            await toasts.rejectToast("Verify this device");
 
             // Open the space panel
             await util.expandSpacePanel();
@@ -146,8 +146,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await expect(page.locator(".mx_SpotlightDialog")).not.toBeVisible();
     });
 
-    test("should have the correct hover state", { tag: "@screenshot" }, async ({ util, page, app }) => {
-        await app.closeVerifyToast();
+    test("should have the correct hover state", { tag: "@screenshot" }, async ({ util, page, app, toasts }) => {
+        await toasts.rejectToast("Verify this device");
 
         await util.hoverTacButton();
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered.png");

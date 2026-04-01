@@ -21,10 +21,10 @@ test.describe("Header section of the room list", () => {
         return page.getByTestId("room-list-header");
     }
 
-    test.beforeEach(async ({ page, app, user }) => {
+    test.beforeEach(async ({ page, app, user, toasts }) => {
         // The toasts are displayed above the search section
-        await app.closeVerifyToast();
-        await app.closeNotificationToast();
+        await toasts.rejectToast("Verify this device");
+        await toasts.rejectToast("Notifications");
     });
 
     test("should render the header section", { tag: "@screenshot" }, async ({ page, app, user }) => {

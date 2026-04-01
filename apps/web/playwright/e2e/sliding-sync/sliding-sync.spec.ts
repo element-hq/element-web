@@ -71,9 +71,9 @@ test.describe("Sliding Sync", () => {
     });
 
     // Load the user fixture for all tests
-    test.beforeEach(async ({ app, user }) => {
-        await app.closeVerifyToast();
-        await app.closeNotificationToast();
+    test.beforeEach(async ({ app, user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
+        await toasts.rejectToast("Notifications");
     });
 
     test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({

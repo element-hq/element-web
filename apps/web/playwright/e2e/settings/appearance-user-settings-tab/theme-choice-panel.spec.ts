@@ -14,10 +14,10 @@ test.describe("Appearance user settings tab", () => {
     });
 
     test.describe("Theme Choice Panel", () => {
-        test.beforeEach(async ({ app, user, util }) => {
+        test.beforeEach(async ({ app, user, util, toasts }) => {
             // Disable the default theme for consistency in case ThemeWatcher automatically chooses it
             await util.disableSystemTheme();
-            await app.closeVerifyToast();
+            await toasts.rejectToast("Verify this device");
 
             await util.openAppearanceTab();
         });
@@ -94,7 +94,7 @@ test.describe("Appearance user settings tab", () => {
             test(
                 "should keep custom theme when reloading the page",
                 { tag: "@screenshot" },
-                async ({ page, app, user, util }) => {
+                async ({ page, app, user, util, toasts }) => {
                     await util.addCustomTheme();
                     await util.getCustomTheme().click();
                     await util.closeAppearanceTab();
@@ -102,7 +102,7 @@ test.describe("Appearance user settings tab", () => {
                     await expect(page).toMatchScreenshot("window-custom-theme.png");
 
                     await page.reload();
-                    await app.closeVerifyToast();
+                    await toasts.rejectToast("Verify this device");
 
                     await util.openAppearanceTab();
                     // Assert that the custom theme is still selected after reloading the page

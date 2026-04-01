@@ -12,6 +12,7 @@ import { Settings } from "./settings";
 import { Client } from "./client";
 import { Timeline } from "./timeline";
 import { Spotlight } from "./Spotlight";
+import { Toasts } from "./toasts";
 
 /**
  * A set of utility methods for interacting with the Element-Web UI.
@@ -35,6 +36,11 @@ export class ElementAppPage {
     public get timeline(): Timeline {
         if (!this._timeline) this._timeline = new Timeline(this.page);
         return this._timeline;
+    }
+    private _toasts?: Toasts;
+    public get toasts(): Toasts {
+        if (!this._toasts) this._toasts = new Toasts(this.page);
+        return this._toasts;
     }
 
     public async cleanup() {
@@ -246,28 +252,6 @@ export class ElementAppPage {
 
     async closeToast(title: string, button: string): Promise<void> {
         await this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button }).click();
-    }
-
-    /**
-     * Dismiss the "Notifications" toast.
-     */
-    public async closeNotificationToast(): Promise<void> {
-        await this.closeToast("Notifications", "Dismiss");
-    }
-
-    /**
-     * Dismiss the "Turn on key storage" toast.
-     */
-    public async closeKeyStorageToast() {
-        await this.closeToast("Turn on key storage", "Dismiss");
-        await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
-    }
-
-    /**
-     * Dismiss the "Verify this device" toast by clicking "Later".
-     */
-    public async closeVerifyToast() {
-        await this.closeToast("Verify this device", "Later");
     }
 
     /**

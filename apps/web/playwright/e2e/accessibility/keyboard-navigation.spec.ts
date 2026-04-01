@@ -14,8 +14,8 @@ test.describe("Landmark navigation tests", () => {
         displayName: "Alice",
     });
 
-    test("without any rooms", async ({ page, homeserver, app, user }) => {
-        await app.closeVerifyToast();
+    test("without any rooms", async ({ page, homeserver, app, user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
 
         // sometimes the space button doesn't appear right away
         await expect(page.locator(".mx_SpaceButton_active")).toBeVisible();
