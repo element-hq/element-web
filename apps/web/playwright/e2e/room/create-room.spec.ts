@@ -130,7 +130,9 @@ test.describe("Create Room", () => {
     test.describe("when the encrypted state labs flag is turned off", () => {
         test.use({ labsFlags: [] });
 
-        test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user }) => {
+        test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user, app }) => {
+            await app.closeVerifyToast();
+
             // When we start to create a room
             await page.getByRole("button", { name: "New conversation", exact: true }).click();
             await page.getByRole("menuitem", { name: "New room" }).click();
@@ -159,7 +161,9 @@ test.describe("Create Room", () => {
         test(
             "creates a room with encrypted state if we check the box",
             { tag: "@screenshot" },
-            async ({ page, user: _user }) => {
+            async ({ page, user: _user, app }) => {
+                await app.closeVerifyToast();
+
                 // Given we check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();
@@ -186,7 +190,9 @@ test.describe("Create Room", () => {
         test(
             "creates a room without encrypted state if we don't check the box",
             { tag: "@screenshot" },
-            async ({ page, user: _user }) => {
+            async ({ page, user: _user, app }) => {
+                await app.closeVerifyToast();
+
                 // Given we did not check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();
