@@ -241,10 +241,59 @@ interface IReadReceiptForUser {
     receipt: IReadReceiptProps;
 }
 
-interface TimelineEventsMetadata {
+interface TimelineBuildContext {
     events: WrappedEvent[];
     lastShownEvent?: MatrixEvent;
     lastShownNonLocalEchoIndex: number;
+    nextVisibleTiles: Array<MatrixEvent | null>;
+    readReceiptsByEvent: Map<string, IReadReceiptProps[]>;
+}
+
+interface EventRowDeps {
+    roomId?: string;
+    timelineRenderingType?: TimelineRenderingType;
+    showHiddenEvents: boolean;
+    prevEvent: MatrixEvent | null;
+    event: MatrixEvent;
+    nextEventWithTile: MatrixEvent | null;
+    readReceipts?: IReadReceiptProps[];
+    isEditing: boolean;
+    last: boolean;
+    lastSuccessful?: boolean;
+    highlight: boolean;
+    callEventGrouper?: LegacyCallEventGrouper;
+}
+
+interface EventRowCacheEntry {
+    deps: EventRowDeps;
+    rows: TimelineRow[];
+}
+
+interface GroupRowDeps {
+    grouperType: string;
+    groupKey: string;
+    prevEvent: MatrixEvent | null;
+    lastShownEvent?: MatrixEvent;
+    nextEventTile?: MatrixEvent | null;
+    highlightedEventId?: string;
+    layout?: Layout;
+    showHiddenEvents: boolean;
+    canBackPaginate?: boolean;
+    events: WrappedEvent[];
+    ejectedEvents: WrappedEvent[];
+}
+
+interface GroupRowCacheEntry {
+    deps: GroupRowDeps;
+    rows: TimelineRow[];
+}
+
+interface ReceiptCacheEntry {
+    receiptDestination: object | null;
+    shownEventIds: string[];
+    rawReceiptRefs: unknown[][];
+    readReceiptsByEvent: Map<string, IReadReceiptProps[]>;
+    readReceiptsByUserId: Map<string, IReadReceiptForUser>;
 }
 
 interface OpaqueTimelineRow {
@@ -298,6 +347,122 @@ export type TimelineRow =
     | SpinnerTimelineRow
     | TypingIndicatorTimelineRow
     | EventTimelineRow;
+
+function areReadReceiptsEqual(
+    previousReceipts: IReadReceiptProps[] | undefined,
+    nextReceipts: IReadReceiptProps[] | undefined,
+): boolean {
+    if (previousReceipts === nextReceipts) {
+        return true;
+    }
+
+    if (!previousReceipts || !nextReceipts || previousReceipts.length !== nextReceipts.length) {
+        return false;
+    }
+
+    return previousReceipts.every((receipt, index) => {
+        const nextReceipt = nextReceipts[index];
+        return (
+            receipt.userId === nextReceipt.userId &&
+            receipt.roomMember === nextReceipt.roomMember &&
+            receipt.ts === nextReceipt.ts
+        );
+    });
+}
+
+function areTimelineRowsRenderEquivalent(previousRow: TimelineRow | undefined, nextRow: TimelineRow): boolean {
+    if (!previousRow || previousRow.kind !== nextRow.kind || previousRow.key !== nextRow.key) {
+        return false;
+    }
+
+    switch (nextRow.kind) {
+        case "opaque": {
+            const previousOpaqueRow = previousRow as OpaqueTimelineRow;
+            return previousOpaqueRow.node === nextRow.node;
+        }
+        case "date-separator": {
+            const previousDateSeparatorRow = previousRow as DateSeparatorTimelineRow;
+            return previousDateSeparatorRow.roomId === nextRow.roomId && previousDateSeparatorRow.ts === nextRow.ts;
+        }
+        case "late-event-separator": {
+            const previousLateEventSeparatorRow = previousRow as LateEventSeparatorTimelineRow;
+            return previousLateEventSeparatorRow.text === nextRow.text;
+        }
+        case "spinner":
+        case "typing-indicator":
+            return true;
+        case "event": {
+            const previousEventRow = previousRow as EventTimelineRow;
+            return (
+                previousEventRow.event === nextRow.event &&
+                previousEventRow.eventId === nextRow.eventId &&
+                previousEventRow.isEditing === nextRow.isEditing &&
+                previousEventRow.continuation === nextRow.continuation &&
+                previousEventRow.last === nextRow.last &&
+                previousEventRow.lastInSection === nextRow.lastInSection &&
+                previousEventRow.lastSuccessful === nextRow.lastSuccessful &&
+                previousEventRow.highlight === nextRow.highlight &&
+                previousEventRow.callEventGrouper === nextRow.callEventGrouper &&
+                areReadReceiptsEqual(previousEventRow.readReceipts, nextRow.readReceipts)
+            );
+        }
+    }
+}
+
+function areEventRowDepsEqual(previousDeps: EventRowDeps | undefined, nextDeps: EventRowDeps): boolean {
+    return (
+        !!previousDeps &&
+        previousDeps.roomId === nextDeps.roomId &&
+        previousDeps.timelineRenderingType === nextDeps.timelineRenderingType &&
+        previousDeps.showHiddenEvents === nextDeps.showHiddenEvents &&
+        previousDeps.prevEvent === nextDeps.prevEvent &&
+        previousDeps.event === nextDeps.event &&
+        previousDeps.nextEventWithTile === nextDeps.nextEventWithTile &&
+        previousDeps.isEditing === nextDeps.isEditing &&
+        previousDeps.last === nextDeps.last &&
+        previousDeps.lastSuccessful === nextDeps.lastSuccessful &&
+        previousDeps.highlight === nextDeps.highlight &&
+        previousDeps.callEventGrouper === nextDeps.callEventGrouper &&
+        areReadReceiptsEqual(previousDeps.readReceipts, nextDeps.readReceipts)
+    );
+}
+
+function areWrappedEventArraysEqual(previousEvents: WrappedEvent[], nextEvents: WrappedEvent[]): boolean {
+    return (
+        previousEvents.length === nextEvents.length &&
+        previousEvents.every(
+            (event, index) =>
+                event === nextEvents[index] &&
+                event.lastSuccessfulWeSent === nextEvents[index]?.lastSuccessfulWeSent &&
+                event.shouldShow === nextEvents[index]?.shouldShow,
+        )
+    );
+}
+
+function areGroupRowDepsEqual(previousDeps: GroupRowDeps | undefined, nextDeps: GroupRowDeps): boolean {
+    return (
+        !!previousDeps &&
+        previousDeps.grouperType === nextDeps.grouperType &&
+        previousDeps.groupKey === nextDeps.groupKey &&
+        previousDeps.prevEvent === nextDeps.prevEvent &&
+        previousDeps.lastShownEvent === nextDeps.lastShownEvent &&
+        previousDeps.nextEventTile === nextDeps.nextEventTile &&
+        previousDeps.highlightedEventId === nextDeps.highlightedEventId &&
+        previousDeps.layout === nextDeps.layout &&
+        previousDeps.showHiddenEvents === nextDeps.showHiddenEvents &&
+        previousDeps.canBackPaginate === nextDeps.canBackPaginate &&
+        areWrappedEventArraysEqual(previousDeps.events, nextDeps.events) &&
+        areWrappedEventArraysEqual(previousDeps.ejectedEvents, nextDeps.ejectedEvents)
+    );
+}
+
+function areStringListsEqual(previousItems: string[], nextItems: string[]): boolean {
+    return previousItems.length === nextItems.length && previousItems.every((item, index) => item === nextItems[index]);
+}
+
+function areReceiptRefListsEqual(previousRefs: unknown[][], nextRefs: unknown[][]): boolean {
+    return previousRefs.length === nextRefs.length && previousRefs.every((refs, index) => refs === nextRefs[index]);
+}
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
@@ -355,6 +520,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     private showTypingNotificationsWatcherRef?: string;
     private eventTiles: Record<string, UnwrappedEventTile> = {};
+    private timelineRowCache = new Map<string, TimelineRow>();
+    private eventRowCache = new Map<string, EventRowCacheEntry>();
+    private groupRowCache = new Map<string, GroupRowCacheEntry>();
+    private receiptCache: ReceiptCacheEntry | null = null;
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
@@ -706,33 +875,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         });
     };
 
-    /**
-     * Find the next event in the list, and the next visible event in the list.
-     *
-     * @param events     - the list of events to look in and whether they are shown
-     * @param i          - where in the list we are now
-     *
-     * @returns { nextEvent, nextTile }
-     *
-     * nextEvent is the event after i in the supplied array.
-     *
-     * nextTile is the first event in the array after i that we will show a tile
-     * for. It is used to to determine the 'last successful' flag when rendering
-     * the tile.
-     */
-    private getNextEventInfo(
-        events: WrappedEvent[],
-        i: number,
-    ): { nextEventAndShouldShow: WrappedEvent | null; nextTile: MatrixEvent | null } {
-        // WARNING: this method is on a hot path.
-
-        const nextEventAndShouldShow = i < events.length - 1 ? events[i + 1] : null;
-
-        const nextTile = findFirstShownAfter(i, events);
-
-        return { nextEventAndShouldShow, nextTile };
-    }
-
     private get pendingEditItem(): string | null {
         if (!this.props.room) {
             return null;
@@ -752,37 +894,50 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !status || status === EventStatus.SENT;
     }
 
-    private getWrappedEvents(): WrappedEvent[] {
-        return this.props.events.map((event) => {
-            return { event, shouldShow: this.shouldShowEvent(event) };
-        });
-    }
-
-    private getTimelineEventsMetadata(events: WrappedEvent[]): TimelineEventsMetadata {
-        let lastShownEvent: MatrixEvent | undefined;
+    private buildTimelineContext(): TimelineBuildContext {
+        const events: WrappedEvent[] = [];
+        const nextVisibleTiles = new Array<MatrixEvent | null>(this.props.events.length).fill(null);
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
-        let foundLastSuccessfulEvent = false;
+        let lastShownEvent: MatrixEvent | undefined;
         let lastShownNonLocalEchoIndex = -1;
+        let lastSuccessfulShownIndex = -1;
+        const shownEvents: MatrixEvent[] = [];
 
-        // Find the indices of the last successful event we sent and the last non-local-echo event shown.
-        for (let i = events.length - 1; i >= 0; i--) {
-            const { event, shouldShow } = events[i];
-            if (!shouldShow) {
+        for (let i = 0; i < this.props.events.length; i++) {
+            const event = this.props.events[i];
+            const wrappedEvent: WrappedEvent = { event, shouldShow: this.shouldShowEvent(event) };
+            events.push(wrappedEvent);
+
+            if (!wrappedEvent.shouldShow) {
                 continue;
             }
 
-            lastShownEvent ??= event;
-            ({ foundLastSuccessfulEvent, lastShownNonLocalEchoIndex } = this.updateTimelineMetadata(
-                event,
-                events[i],
-                i,
-                userId,
-                foundLastSuccessfulEvent,
-                lastShownNonLocalEchoIndex,
-            ));
+            lastShownEvent = event;
+            shownEvents.push(event);
 
-            if (lastShownNonLocalEchoIndex >= 0 && foundLastSuccessfulEvent) {
-                break;
+            if (!event.status) {
+                lastShownNonLocalEchoIndex = i;
+            }
+
+            if (this.isSentState(event) && isEligibleForSpecialReceipt(event)) {
+                lastSuccessfulShownIndex = i;
+            }
+        }
+
+        if (lastSuccessfulShownIndex >= 0) {
+            const lastSuccessfulWrappedEvent = events[lastSuccessfulShownIndex];
+            if (lastSuccessfulWrappedEvent?.event.getSender() === userId) {
+                lastSuccessfulWrappedEvent.lastSuccessfulWeSent = true;
+            }
+        }
+
+        const readReceiptsByEvent = this.buildReadReceiptsContext(shownEvents);
+
+        let nextVisibleTile: MatrixEvent | null = null;
+        for (let i = events.length - 1; i >= 0; i--) {
+            nextVisibleTiles[i] = nextVisibleTile;
+            if (events[i].shouldShow) {
+                nextVisibleTile = events[i].event;
             }
         }
 
@@ -790,42 +945,89 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             events,
             lastShownEvent,
             lastShownNonLocalEchoIndex,
+            nextVisibleTiles,
+            readReceiptsByEvent,
         };
     }
 
-    private updateTimelineMetadata(
-        event: MatrixEvent,
-        wrappedEvent: WrappedEvent,
-        index: number,
-        userId: string,
-        foundLastSuccessfulEvent: boolean,
-        lastShownNonLocalEchoIndex: number,
-    ): { foundLastSuccessfulEvent: boolean; lastShownNonLocalEchoIndex: number } {
-        if (!foundLastSuccessfulEvent && this.isSentState(event) && isEligibleForSpecialReceipt(event)) {
-            foundLastSuccessfulEvent = true;
-            // If we are not sender of this last successful event eligible for special receipt then we stop here
-            // As we do not want to render our sent receipt if there are more receipts below it and events sent
-            // by other users get a synthetic read receipt for their sent events.
-            if (event.getSender() === userId) {
-                wrappedEvent.lastSuccessfulWeSent = true;
+    private buildReadReceiptsContext(shownEvents: MatrixEvent[]): Map<string, IReadReceiptProps[]> {
+        if (!this.props.showReadReceipts) {
+            this.readReceiptsByUserId = new Map();
+            this.receiptCache = null;
+            return new Map();
+        }
+
+        const { room } = this.props;
+        if (!room) {
+            this.readReceiptsByUserId = new Map();
+            this.receiptCache = null;
+            return new Map();
+        }
+
+        const receiptDestination = this.context.threadId ? room.getThread(this.context.threadId) : room;
+        if (!receiptDestination) {
+            this.readReceiptsByUserId = new Map();
+            this.receiptCache = null;
+            return new Map();
+        }
+
+        const shownEventIds = shownEvents.map((event) => event.getId()!);
+        const rawReceiptRefs = shownEvents.map((event) => receiptDestination.getReceiptsForEvent(event));
+        const previousReceiptCache = this.receiptCache;
+        if (
+            previousReceiptCache &&
+            previousReceiptCache.receiptDestination === receiptDestination &&
+            areStringListsEqual(previousReceiptCache.shownEventIds, shownEventIds) &&
+            areReceiptRefListsEqual(previousReceiptCache.rawReceiptRefs, rawReceiptRefs)
+        ) {
+            this.readReceiptsByUserId = previousReceiptCache.readReceiptsByUserId;
+            return previousReceiptCache.readReceiptsByEvent;
+        }
+
+        const readReceiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
+        const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
+
+        for (const event of shownEvents) {
+            const lastShownEventId = event.getId()!;
+            const existingReceipts = readReceiptsByEvent.get(lastShownEventId) || [];
+            const newReceipts = this.getReadReceiptsForEvent(event);
+            if (!newReceipts) {
+                continue;
+            }
+            readReceiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
+
+            for (const receipt of newReceipts) {
+                receiptsByUserId.set(receipt.userId, {
+                    lastShownEventId,
+                    receipt,
+                });
             }
         }
 
-        if (lastShownNonLocalEchoIndex < 0 && !event.status) {
-            lastShownNonLocalEchoIndex = index;
+        for (const userId of this.readReceiptsByUserId.keys()) {
+            if (receiptsByUserId.get(userId)) {
+                continue;
+            }
+            const { lastShownEventId, receipt } = this.readReceiptsByUserId.get(userId)!;
+            const existingReceipts = readReceiptsByEvent.get(lastShownEventId) || [];
+            readReceiptsByEvent.set(lastShownEventId, existingReceipts.concat(receipt));
+            receiptsByUserId.set(userId, { lastShownEventId, receipt });
         }
 
-        return { foundLastSuccessfulEvent, lastShownNonLocalEchoIndex };
-    }
-
-    private initialiseReadReceiptsByEvent(events: WrappedEvent[]): void {
-        // Note: the EventTile might still render a "sent/sending receipt" independent of
-        // this information. When not providing read receipt information, the tile is likely
-        // to assume that sent receipts are to be shown more often.
-        this.readReceiptsByEvent = new Map();
-        if (this.props.showReadReceipts) {
-            this.readReceiptsByEvent = this.getReadReceiptsByShownEvent(events);
+        for (const receipts of readReceiptsByEvent.values()) {
+            receipts.sort((r1, r2) => r2.ts - r1.ts);
         }
+
+        this.readReceiptsByUserId = receiptsByUserId;
+        this.receiptCache = {
+            receiptDestination,
+            shownEventIds,
+            rawReceiptRefs,
+            readReceiptsByEvent,
+            readReceiptsByUserId: receiptsByUserId,
+        };
+
+        return readReceiptsByEvent;
     }
 
     private getTimelinePrefixRows(): TimelineRow[] {
@@ -864,9 +1066,108 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return rows;
     }
 
-    private buildEventTimelineRows(metadata: TimelineEventsMetadata): TimelineRow[] {
-        const { events, lastShownEvent, lastShownNonLocalEchoIndex } = metadata;
+    private getEventCacheKey(event: MatrixEvent): string {
+        return event.getTxnId() || event.getId()!;
+    }
+
+    private getEventRowDeps(
+        prevEvent: MatrixEvent | null,
+        wrappedEvent: WrappedEvent,
+        last: boolean,
+        nextEventWithTile: MatrixEvent | null,
+    ): EventRowDeps | null {
+        const mxEv = wrappedEvent.event;
+        const callId = mxEv.getContent().call_id;
+        const callEventGrouper = callId ? this.props.callEventGroupers.get(callId) : undefined;
+        if (callEventGrouper) {
+            return null;
+        }
+
+        const eventId = mxEv.getId()!;
+        return {
+            roomId: this.props.room?.roomId,
+            timelineRenderingType: this.context.timelineRenderingType,
+            showHiddenEvents: this.showHiddenEvents,
+            prevEvent,
+            event: mxEv,
+            nextEventWithTile,
+            readReceipts: this.readReceiptsByEvent.get(eventId),
+            isEditing: this.props.editState?.getEvent().getId() === eventId,
+            last,
+            lastSuccessful: wrappedEvent.lastSuccessfulWeSent,
+            highlight: this.props.highlightedEventId === eventId,
+        };
+    }
+
+    private getCachedRowsForEvent(
+        prevEvent: MatrixEvent | null,
+        wrappedEvent: WrappedEvent,
+        last: boolean,
+        nextEventWithTile: MatrixEvent | null,
+        nextEventRowCache: Map<string, EventRowCacheEntry>,
+    ): TimelineRow[] {
+        const cacheKey = this.getEventCacheKey(wrappedEvent.event);
+        const deps = this.getEventRowDeps(prevEvent, wrappedEvent, last, nextEventWithTile);
+
+        if (deps !== null) {
+            const previousEntry = this.eventRowCache.get(cacheKey);
+            if (previousEntry && areEventRowDepsEqual(previousEntry.deps, deps)) {
+                nextEventRowCache.set(cacheKey, previousEntry);
+                return previousEntry.rows;
+            }
+        }
+
+        const rows = this.getRowsForEvent(prevEvent, wrappedEvent, last, false, null, nextEventWithTile);
+        if (deps !== null) {
+            nextEventRowCache.set(cacheKey, { deps, rows });
+        }
+
+        return rows;
+    }
+
+    private getGroupCacheKey(grouper: BaseGrouper): string {
+        const firstEvent = grouper.firstEventAndShouldShow.event;
+        return `${grouper.constructor.name}:${firstEvent.getTxnId() || firstEvent.getId()!}`;
+    }
+
+    private getGroupRowDeps(grouper: BaseGrouper): GroupRowDeps {
+        return {
+            grouperType: grouper.constructor.name,
+            groupKey: this.getGroupCacheKey(grouper),
+            prevEvent: grouper.prevEvent,
+            lastShownEvent: grouper.lastShownEvent,
+            nextEventTile: grouper.nextEventTile,
+            highlightedEventId: this.props.highlightedEventId,
+            layout: this.props.layout,
+            showHiddenEvents: this.showHiddenEvents,
+            canBackPaginate: this.props.canBackPaginate,
+            events: grouper.events,
+            ejectedEvents: grouper.ejectedEvents,
+        };
+    }
+
+    private getCachedRowsForGroup(
+        grouper: BaseGrouper,
+        nextGroupRowCache: Map<string, GroupRowCacheEntry>,
+    ): TimelineRow[] {
+        const cacheKey = this.getGroupCacheKey(grouper);
+        const deps = this.getGroupRowDeps(grouper);
+        const previousEntry = this.groupRowCache.get(cacheKey);
+        if (previousEntry && areGroupRowDepsEqual(previousEntry.deps, deps)) {
+            nextGroupRowCache.set(cacheKey, previousEntry);
+            return previousEntry.rows;
+        }
+
+        const rows = this.wrapOpaqueTimelineRows(grouper.getTiles(), "group");
+        nextGroupRowCache.set(cacheKey, { deps, rows });
+        return rows;
+    }
+
+    private buildEventTimelineRows(context: TimelineBuildContext): TimelineRow[] {
+        const { events, lastShownEvent, lastShownNonLocalEchoIndex, nextVisibleTiles } = context;
         const rows: TimelineRow[] = [];
+        const nextEventRowCache = new Map<string, EventRowCacheEntry>();
+        const nextGroupRowCache = new Map<string, GroupRowCacheEntry>();
         let prevEvent: MatrixEvent | null = null;
         let grouper: BaseGrouper | null = null;
 
@@ -875,7 +1176,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             const { event, shouldShow } = wrappedEvent;
             const eventId = event.getId()!;
             const last = event === lastShownEvent;
-            const { nextEventAndShouldShow, nextTile } = this.getNextEventInfo(events, i);
+            const nextTile = nextVisibleTiles[i];
 
             if (grouper) {
                 if (grouper.shouldGroup(wrappedEvent)) {
@@ -883,19 +1184,19 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     continue;
                 }
 
-                rows.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
+                rows.push(...this.getCachedRowsForGroup(grouper, nextGroupRowCache));
                 prevEvent = grouper.getNewPrevEvent();
                 grouper = null;
             }
 
-            grouper = this.tryStartGrouper(wrappedEvent, prevEvent, lastShownEvent, nextEventAndShouldShow, nextTile);
+            grouper = this.tryStartGrouper(wrappedEvent, prevEvent, lastShownEvent, null, nextTile);
 
             if (!grouper) {
                 if (shouldShow) {
                     // Make sure we unpack the returned rows, otherwise React will auto-generate keys
                     // and replace DOM elements whenever we paginate.
                     rows.push(
-                        ...this.getRowsForEvent(prevEvent, wrappedEvent, last, false, nextEventAndShouldShow, nextTile),
+                        ...this.getCachedRowsForEvent(prevEvent, wrappedEvent, last, nextTile, nextEventRowCache),
                     );
                     prevEvent = event;
                 }
@@ -908,9 +1209,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
 
         if (grouper) {
-            rows.push(...this.wrapOpaqueTimelineRows(grouper.getTiles(), "group"));
+            rows.push(...this.getCachedRowsForGroup(grouper, nextGroupRowCache));
         }
 
+        this.eventRowCache = nextEventRowCache;
+        this.groupRowCache = nextGroupRowCache;
         return rows;
     }
 
@@ -930,16 +1233,29 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return null;
     }
 
-    private getTimelineRows(): TimelineRow[] {
-        const events = this.getWrappedEvents();
-        const metadata = this.getTimelineEventsMetadata(events);
-        this.initialiseReadReceiptsByEvent(metadata.events);
+    private stabilizeTimelineRows(rows: TimelineRow[]): TimelineRow[] {
+        const nextTimelineRowCache = new Map<string, TimelineRow>();
+        const stabilizedRows = rows.map((row) => {
+            const cacheKey = `${row.kind}:${row.key}`;
+            const previousRow = this.timelineRowCache.get(cacheKey);
+            const stabilizedRow = areTimelineRowsRenderEquivalent(previousRow, row) ? previousRow! : row;
+            nextTimelineRowCache.set(cacheKey, stabilizedRow);
+            return stabilizedRow;
+        });
 
-        return [
+        this.timelineRowCache = nextTimelineRowCache;
+        return stabilizedRows;
+    }
+
+    private getTimelineRows(): TimelineRow[] {
+        const context = this.buildTimelineContext();
+        this.readReceiptsByEvent = context.readReceiptsByEvent;
+
+        return this.stabilizeTimelineRows([
             ...this.getTimelinePrefixRows(),
-            ...this.buildEventTimelineRows(metadata),
+            ...this.buildEventTimelineRows(context),
             ...this.getTimelineSuffixRows(),
-        ];
+        ]);
     }
 
     public getRowsForEvent(
@@ -1197,65 +1513,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return receipts;
     }
 
-    // Get an object that maps from event ID to a list of read receipts that
-    // should be shown next to that event. If a hidden event has read receipts,
-    // they are folded into the receipts of the last shown event.
-    private getReadReceiptsByShownEvent(events: WrappedEvent[]): Map<string, IReadReceiptProps[]> {
-        const receiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
-        const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
-
-        let lastShownEventId: string | undefined;
-        for (const event of this.props.events) {
-            if (this.shouldShowEvent(event)) {
-                lastShownEventId = event.getId();
-            }
-            if (!lastShownEventId) {
-                continue;
-            }
-
-            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
-            const newReceipts = this.getReadReceiptsForEvent(event);
-            if (!newReceipts) continue;
-            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
-
-            // Record these receipts along with their last shown event ID for
-            // each associated user ID.
-            for (const receipt of newReceipts) {
-                receiptsByUserId.set(receipt.userId, {
-                    lastShownEventId,
-                    receipt,
-                });
-            }
-        }
-
-        // It's possible in some cases (for example, when a read receipt
-        // advances before we have paginated in the new event that it's marking
-        // received) that we can temporarily not have a matching event for
-        // someone which had one in the last. By looking through our previous
-        // mapping of receipts by user ID, we can cover recover any receipts
-        // that would have been lost by using the same event ID from last time.
-        for (const userId of this.readReceiptsByUserId.keys()) {
-            if (receiptsByUserId.get(userId)) {
-                continue;
-            }
-            const { lastShownEventId, receipt } = this.readReceiptsByUserId.get(userId)!;
-            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
-            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(receipt));
-            receiptsByUserId.set(userId, { lastShownEventId, receipt });
-        }
-        this.readReceiptsByUserId = receiptsByUserId;
-
-        // After grouping receipts by shown events, do another pass to sort each
-        // receipt list.
-        for (const receipts of receiptsByEvent.values()) {
-            receipts.sort((r1, r2) => {
-                return r2.ts - r1.ts;
-            });
-        }
-
-        return receiptsByEvent;
-    }
-
     private readonly collectEventTile = (eventId: string, node: UnwrappedEventTile | null): void => {
         if (node) {
             this.eventTiles[eventId] = node;
@@ -1380,21 +1637,3 @@ export interface WrappedEvent {
 
 // all the grouper classes that we use, ordered by priority
 const groupers = [CreationGrouper, MainGrouper];
-
-/**
- * Look through the supplied list of WrappedEvent, and return the first
- * event that is >start items through the list, and is shown.
- */
-function findFirstShownAfter(start: number, events: WrappedEvent[]): MatrixEvent | null {
-    // Note: this could be done with something like:
-    // events.slice(i + 1).find((e) => e.shouldShow)?.event ?? null;
-    // but it is ~10% slower, and this is on the critical path.
-
-    for (let n = start + 1; n < events.length; n++) {
-        const { event, shouldShow } = events[n];
-        if (shouldShow) {
-            return event;
-        }
-    }
-    return null;
-}

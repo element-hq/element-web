@@ -44,7 +44,6 @@ type TimelineScrollPanelProps = IScrollPanelProps & {
     renderRow?: (row: TimelineRow) => React.ReactNode;
 };
 type EventTimelineRow = Extract<TimelineRow, { kind: "event" }>;
-type TimelineReadReceipt = NonNullable<EventTimelineRow["readReceipts"]>[number];
 
 function normalizeTimelineItemKey(key: string): string {
     return key.startsWith(".$") ? key.slice(2) : key;
@@ -99,144 +98,6 @@ function withSynthesizedTimelineIdentity(items: TimelineScrollPanelItem[]): Time
             domId: `mx_TimelinePanel_${sanitizeTimelineIdentityPart(panelIdentity)}`,
         };
     });
-}
-
-function areTimelineNodePropsEquivalent(
-    previousProps: Record<string, unknown>,
-    nextProps: Record<string, unknown>,
-): boolean {
-    const ignoredProps = new Set(["ref"]);
-    const previousKeys = Object.keys(previousProps).filter((key) => !ignoredProps.has(key));
-    const nextKeys = Object.keys(nextProps).filter((key) => !ignoredProps.has(key));
-
-    if (previousKeys.length !== nextKeys.length) {
-        return false;
-    }
-
-    return previousKeys.every((key) => areTimelinePropValuesEquivalent(previousProps[key], nextProps[key]));
-}
-
-function areTimelinePropValuesEquivalent(previousValue: unknown, nextValue: unknown): boolean {
-    if (Object.is(previousValue, nextValue)) {
-        return true;
-    }
-
-    if (Array.isArray(previousValue) && Array.isArray(nextValue)) {
-        if (previousValue.length !== nextValue.length) {
-            return false;
-        }
-
-        return previousValue.every((value, index) => areTimelinePropValuesEquivalent(value, nextValue[index]));
-    }
-
-    if (React.isValidElement(previousValue) || React.isValidElement(nextValue)) {
-        return areTimelineNodesEquivalent(previousValue as React.ReactNode, nextValue as React.ReactNode);
-    }
-
-    if (
-        typeof previousValue === "object" &&
-        previousValue !== null &&
-        typeof nextValue === "object" &&
-        nextValue !== null &&
-        "getId" in previousValue &&
-        typeof (previousValue as { getId?: unknown }).getId === "function" &&
-        "getId" in nextValue &&
-        typeof (nextValue as { getId?: unknown }).getId === "function"
-    ) {
-        return (
-            (previousValue as { getId: () => string | undefined }).getId() ===
-            (nextValue as { getId: () => string | undefined }).getId()
-        );
-    }
-
-    return false;
-}
-
-function areTimelineNodesEquivalent(previousNode: React.ReactNode, nextNode: React.ReactNode): boolean {
-    if (previousNode === nextNode) {
-        return true;
-    }
-
-    if (!React.isValidElement(previousNode) || !React.isValidElement(nextNode)) {
-        return false;
-    }
-
-    return (
-        previousNode.type === nextNode.type &&
-        areTimelineNodePropsEquivalent(
-            previousNode.props as Record<string, unknown>,
-            nextNode.props as Record<string, unknown>,
-        )
-    );
-}
-
-function areTimelineReadReceiptsEquivalent(
-    previousReceipts: TimelineReadReceipt[] | undefined,
-    nextReceipts: TimelineReadReceipt[] | undefined,
-): boolean {
-    if (previousReceipts === nextReceipts) {
-        return true;
-    }
-
-    if (!previousReceipts || !nextReceipts) {
-        return false;
-    }
-
-    if (previousReceipts.length !== nextReceipts.length) {
-        return false;
-    }
-
-    return previousReceipts.every((receipt, index) => {
-        const nextReceipt = nextReceipts[index];
-        return (
-            receipt.userId === nextReceipt.userId &&
-            receipt.roomMember === nextReceipt.roomMember &&
-            receipt.ts === nextReceipt.ts
-        );
-    });
-}
-
-function areTimelineRowsEquivalent(previousRow: TimelineRow, nextRow: TimelineRow): boolean {
-    if (previousRow === nextRow) {
-        return true;
-    }
-
-    if (previousRow.kind !== nextRow.kind || previousRow.key !== nextRow.key) {
-        return false;
-    }
-
-    switch (previousRow.kind) {
-        case "opaque": {
-            const nextOpaqueRow = nextRow as Extract<TimelineRow, { kind: "opaque" }>;
-            return areTimelineNodesEquivalent(previousRow.node, nextOpaqueRow.node);
-        }
-        case "date-separator": {
-            const nextDateSeparatorRow = nextRow as Extract<TimelineRow, { kind: "date-separator" }>;
-            return previousRow.roomId === nextDateSeparatorRow.roomId && previousRow.ts === nextDateSeparatorRow.ts;
-        }
-        case "late-event-separator": {
-            const nextLateEventSeparatorRow = nextRow as Extract<TimelineRow, { kind: "late-event-separator" }>;
-            return previousRow.text === nextLateEventSeparatorRow.text;
-        }
-        case "spinner":
-        case "typing-indicator":
-            return true;
-        case "event": {
-            const nextEventRow = nextRow as EventTimelineRow;
-            return (
-                previousRow.event === nextEventRow.event &&
-                previousRow.eventId === nextEventRow.eventId &&
-                previousRow.isEditing === nextEventRow.isEditing &&
-                previousRow.continuation === nextEventRow.continuation &&
-                previousRow.last === nextEventRow.last &&
-                previousRow.lastInSection === nextEventRow.lastInSection &&
-                previousRow.lastSuccessful === nextEventRow.lastSuccessful &&
-                previousRow.highlight === nextEventRow.highlight &&
-                previousRow.callEventGrouper === nextEventRow.callEventGrouper &&
-                areTimelineReadReceiptsEquivalent(previousRow.readReceipts, nextEventRow.readReceipts)
-            );
-        }
-    }
 }
 
 export type TimelineScrollHandle = IScrollHandle & {
@@ -371,28 +232,15 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
     );
     const rawItemsWithStableIdentity = rawItems.map((item) => {
         const previousItem = itemCacheRef.current.get(item.virtualKey ?? item.key);
-        if (item.row) {
-            if (previousItem?.row && areTimelineRowsEquivalent(previousItem.row, item.row)) {
-                return previousItem;
-            }
-
-            if (previousItem?.row && previousItem.row.key === item.row.key) {
-                previousItem.row = item.row;
-                return previousItem;
-            }
-        }
-
-        if (
-            item.node !== undefined &&
-            previousItem?.node !== undefined &&
-            areTimelineNodesEquivalent(previousItem.node, item.node)
-        ) {
+        if (previousItem && (previousItem.row === item.row || previousItem.node === item.node)) {
             return previousItem;
         }
 
         return item;
     });
-    itemCacheRef.current = new Map(rawItemsWithStableIdentity.map((item) => [item.virtualKey ?? item.key, item]));
+    itemCacheRef.current = new Map<string, TimelineScrollPanelItem>(
+        rawItemsWithStableIdentity.map((item) => [item.virtualKey ?? item.key, item] as const),
+    );
     const items =
         rawItemsWithStableIdentity.length === previousItemsRef.current.length &&
         rawItemsWithStableIdentity.every((item, index) => item === previousItemsRef.current[index])
@@ -1167,7 +1015,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         pendingScrollAnchorRef.current = null;
         skipNextPropsRestoreRef.current = true;
         syncWrapperState();
-    }, [items, syncWrapperState]);
+    }, [findNodeForToken, items, syncWrapperState]);
 
     useLayoutEffect(() => {
         void tryResolvePendingScrollRequest();
@@ -1225,6 +1073,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
         lastCommittedItemKeysRef.current = currentItemKeys;
     }, [
         checkScroll,
+        currentItemKeys,
         items,
         syncWrapperState,
         tryResolvePendingRestoreTarget,
@@ -1233,6 +1082,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
     ]);
 
     useEffect(() => {
+        const mountedElementsByToken = mountedElementsByTokenRef.current;
         return () => {
             if (divScrollRef.current && scrollListenerRef.current) {
                 divScrollRef.current.removeEventListener("scroll", scrollListenerRef.current);
@@ -1244,7 +1094,7 @@ export default function TimelineScrollPanel({ ref, ...props }: TimelineScrollPan
             if (resizeRestoreTimeoutRef.current !== null) {
                 window.clearTimeout(resizeRestoreTimeoutRef.current);
             }
-            mountedElementsByTokenRef.current.clear();
+            mountedElementsByToken.clear();
             lastScheduledResizeRestoreTargetRef.current = null;
         };
     }, []);

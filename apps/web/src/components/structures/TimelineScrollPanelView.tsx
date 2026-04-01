@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect } from "react";
 import { FlatVirtualizedList } from "@element-hq/web-shared-components";
 import classNames from "classnames";
-import { flushSync } from "react-dom";
 
 import type { ListItem } from "react-virtuoso";
 import { type IScrollPanelProps } from "./ScrollPanel";
@@ -189,7 +188,9 @@ export function TimelineScrollPanelListView({
     const lastReportedAtBottomRef = React.useRef(false);
     const programmaticScrollGenerationRef = React.useRef(0);
     const hasSeenRealUserInputRef = React.useRef(false);
+    const pendingPassiveBottomEnableRef = React.useRef(false);
     const [isPassiveBottomEnabled, setIsPassiveBottomEnabled] = React.useState(Boolean(stickyBottom));
+    const isPassiveBottomEnabledRef = React.useRef(isPassiveBottomEnabled);
     const scheduleAnimationFrame = React.useCallback((callback: () => void): number => {
         const frameId = requestAnimationFrame(() => {
             animationFrameIdsRef.current.delete(frameId);
@@ -204,14 +205,50 @@ export function TimelineScrollPanelListView({
     React.useEffect(() => {
         onBeforeScrollNotifyRef.current = onBeforeScrollNotify;
     }, [onBeforeScrollNotify]);
-    const disablePassiveBottom = React.useCallback((): void => {
-        flushSync(() => {
-            setIsPassiveBottomEnabled(false);
-        });
+    React.useEffect(() => {
+        isPassiveBottomEnabledRef.current = isPassiveBottomEnabled;
+    }, [isPassiveBottomEnabled]);
+    const syncPassiveBottomBaseline = React.useCallback((): void => {
+        const scrollNode = scrollElementRef.current;
+        if (!scrollNode) {
+            return;
+        }
+
+        lastKnownScrollHeightRef.current = scrollNode.scrollHeight;
+        lastScrollTopRef.current = scrollNode.scrollTop;
+        lastReportedAtBottomRef.current = isScrollNodeAtBottom(scrollNode);
     }, []);
+    const disablePassiveBottom = React.useCallback((): void => {
+        pendingPassiveBottomEnableRef.current = false;
+        setIsPassiveBottomEnabled((previousValue) => (previousValue ? false : previousValue));
+    }, []);
+    const enablePassiveBottomIfStillAtBottom = React.useCallback((): void => {
+        if (pendingPassiveBottomEnableRef.current) {
+            return;
+        }
+
+        pendingPassiveBottomEnableRef.current = true;
+        scheduleAnimationFrame(() => {
+            pendingPassiveBottomEnableRef.current = false;
+            const scrollNode = scrollElementRef.current;
+            if (!scrollNode || hasUserScrolledRef.current || !isScrollNodeAtBottom(scrollNode)) {
+                return;
+            }
+
+            syncPassiveBottomBaseline();
+            setIsPassiveBottomEnabled(true);
+        });
+    }, [scheduleAnimationFrame, syncPassiveBottomBaseline]);
     const markUserScrolled = React.useCallback((): void => {
+        const shouldTransitionAwayFromPassiveBottom =
+            !hasSeenRealUserInputRef.current ||
+            !hasUserScrolledRef.current ||
+            isPassiveBottomEnabledRef.current;
         hasSeenRealUserInputRef.current = true;
         hasUserScrolledRef.current = true;
+        if (!shouldTransitionAwayFromPassiveBottom) {
+            return;
+        }
         programmaticScrollGenerationRef.current += 1;
         disablePassiveBottom();
     }, [disablePassiveBottom]);
@@ -323,7 +360,7 @@ export function TimelineScrollPanelListView({
                 disablePassiveBottom();
             } else if (stickyBottom && isAtBottom && hasUserScrolledRef.current && !isProgrammaticScrollRef.current) {
                 hasUserScrolledRef.current = false;
-                setIsPassiveBottomEnabled(true);
+                enablePassiveBottomIfStillAtBottom();
             } else if (shouldRestorePassiveBottomAfterNonUserDrift) {
                 setIsPassiveBottomEnabled(true);
                 scrollToBottomWhilePassive();
@@ -342,7 +379,7 @@ export function TimelineScrollPanelListView({
             lastReportedAtBottomRef.current = isAtBottom;
             lastScrollTopRef.current = currentScrollTop;
         },
-        [disablePassiveBottom, scrollToBottomWhilePassive, stickyBottom],
+        [disablePassiveBottom, enablePassiveBottomIfStillAtBottom, scrollToBottomWhilePassive, stickyBottom],
     );
     const handleVisibleRangeChange = React.useCallback(
         (range: TimelineVisibleRange): void => {
@@ -404,6 +441,13 @@ export function TimelineScrollPanelListView({
 
         if (!hasInitializedPassiveBottomRef.current) {
             hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
+            syncPassiveBottomBaseline();
+            return;
+        }
+
+        if (isPassiveBottomEnabled) {
+            scrollToBottomWhilePassive();
+            syncPassiveBottomBaseline();
             return;
         }
 
@@ -413,7 +457,7 @@ export function TimelineScrollPanelListView({
                 node.scrollTop = Math.max(0, node.scrollTop + delta);
             });
         }
-    }, [runProgrammaticScroll, scrollToBottomWhilePassive, stickyBottom]);
+    }, [isPassiveBottomEnabled, runProgrammaticScroll, scrollToBottomWhilePassive, stickyBottom, syncPassiveBottomBaseline]);
     useEffect(() => {
         if (!stickyBottom) {
             setIsPassiveBottomEnabled(false);
@@ -428,7 +472,8 @@ export function TimelineScrollPanelListView({
         setIsPassiveBottomEnabled(true);
         scrollLastItemIntoView();
         hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
-    }, [scrollLastItemIntoView, scrollToBottomRequestId, scrollToBottomWhilePassive]);
+        syncPassiveBottomBaseline();
+    }, [scrollLastItemIntoView, scrollToBottomRequestId, scrollToBottomWhilePassive, syncPassiveBottomBaseline]);
     useEffect(() => {
         const isHidden = scrollElementRef.current?.offsetParent === null;
         if (isHidden) {
