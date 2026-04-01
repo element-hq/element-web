@@ -269,6 +269,8 @@ export class DeviceListenerCurrentDevice {
         } else if (!isSecretStorageBeingAccessed()) {
             showSetupEncryptionToast(newState);
         } else {
+            // If we're in the middle of a secret storage operation, we're likely
+            // modifying the state involved here, so don't add new toasts to setup.
             logSpan.info("Device is not yet ready, but secret storage is being accessed, so not showing toast.");
         }
     }
