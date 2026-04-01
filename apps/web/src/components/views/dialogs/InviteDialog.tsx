@@ -65,9 +65,6 @@ import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
 
-// we have a number of types defined from the Matrix spec which can't reasonably be altered here.
-/* eslint-disable camelcase */
-
 interface Result {
     userId: string;
     user: Member;
