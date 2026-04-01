@@ -270,16 +270,26 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     }
 
-    test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {
+    test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts, app }) => {
+        /* Log in but don't verify the device */
         await logIntoElement(page, credentials);
-
-        /* Dismiss "Verify this device" */
         const authPage = page.locator(".mx_AuthPage");
         await authPage.getByRole("button", { name: "Skip verification for now" }).click();
         await authPage.getByRole("button", { name: "I'll verify later" }).click();
 
         await page.waitForSelector(".mx_MatrixChat");
         const elementDeviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId());
+
+        /* Create an encrypted room so the "Verify this device" toast appears */
+        await app.client.createRoom({
+            initial_state: [
+                {
+                    type: "m.room.encryption",
+                    state_key: "",
+                    content: { algorithm: "m.megolm.v1.aes-sha2" },
+                },
+            ],
+        });
 
         /* Now initiate a verification request from the *bot* device. */
         const botVerificationRequest = await aliceBotClient.evaluateHandle(

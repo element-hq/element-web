@@ -11,8 +11,8 @@ import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 
 import { RoomListItemMoreOptionsMenu } from "./RoomListItemMoreOptionsMenu";
-import { useMockedViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot } from "./RoomListItemView";
+import { useMockedViewModel } from "../../core/viewmodel";
+import type { RoomListItemViewSnapshot } from "./RoomListItemView";
 import { defaultSnapshot } from "./default-snapshot";
 
 describe("<RoomListItemMoreOptionsMenu />", () => {
@@ -28,7 +28,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         onSetRoomNotifState: vi.fn(),
     };
 
-    const renderMenu = (overrides: Partial<RoomListItemSnapshot> = {}): ReturnType<typeof render> => {
+    const renderMenu = (overrides: Partial<RoomListItemViewSnapshot> = {}): ReturnType<typeof render> => {
         const TestComponent = (): JSX.Element => {
             const vm = useMockedViewModel(
                 {
@@ -36,7 +36,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
                     showMoreOptionsMenu: true,
                     showNotificationMenu: false,
                     ...overrides,
-                } as RoomListItemSnapshot,
+                } as RoomListItemViewSnapshot,
                 mockCallbacks,
             );
             return <RoomListItemMoreOptionsMenu vm={vm} />;

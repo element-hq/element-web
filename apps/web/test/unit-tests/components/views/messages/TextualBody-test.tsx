@@ -193,7 +193,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Chat with <a href="https://matrix.to/#/@user:example.com" class="linkified" rel="noreferrer noopener">@user:example.com</a>"`,
+                `"Chat with <a href="https://matrix.to/#/@user:example.com" rel="noreferrer noopener" data-linkified="true">@user:example.com</a>"`,
             );
         });
 
@@ -211,7 +211,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Visit <a href="https://matrix.to/#/#room:example.com" class="linkified" rel="noreferrer noopener">#room:example.com</a>"`,
+                `"Visit <a href="https://matrix.to/#/#room:example.com" rel="noreferrer noopener" data-linkified="true">#room:example.com</a>"`,
             );
         });
 
@@ -469,7 +469,10 @@ describe("<TextualBody />", () => {
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
 
             getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
-            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
+            waitFor(() => {
+                // Asynchronous check since the VM needs to recalcuate.
+                expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
+            });
         });
     });
 });

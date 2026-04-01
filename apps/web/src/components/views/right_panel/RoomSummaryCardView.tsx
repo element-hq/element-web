@@ -39,14 +39,14 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
-import { Box, Flex, HistoryVisibilityBadge } from "@element-hq/web-shared-components";
+import { Box, Flex, HistoryVisibilityBadge, LinkedText } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard.tsx";
 import { _t } from "../../../languageHandler.tsx";
 import RoomAvatar from "../avatars/RoomAvatar.tsx";
 import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
-import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
+import { topicToHtml } from "../../../HtmlUtils.tsx";
 import { useRoomSummaryCardViewModel } from "../../viewmodels/right_panel/RoomSummaryCardViewModel.tsx";
 import { useRoomTopicViewModel } from "../../viewmodels/right_panel/RoomSummaryCardTopicViewModel.tsx";
 import { useRoomName } from "../../../hooks/useRoomName.ts";
@@ -89,7 +89,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = vm.expanded ? <Linkify>{body}</Linkify> : body;
+    const content = vm.expanded ? <LinkedText as="span">{body}</LinkedText> : body;
 
     return (
         <Flex
@@ -172,28 +172,28 @@ const RoomSummaryCardView: React.FC<IProps> = ({
             >
                 {!vm.isDirectMessage && vm.roomJoinRule === JoinRule.Public && (
                     <Badge kind="blue">
-                        <PublicIcon width="1rem" color="var(--cpd-color-icon-info-primary)" />
+                        <PublicIcon width="1rem" height="1rem" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|public_room")}
                     </Badge>
                 )}
 
                 {vm.isRoomEncrypted && vm.e2eStatus !== E2EStatus.Warning && (
                     <Badge kind="green">
-                        <LockIcon width="1rem" />
+                        <LockIcon width="1rem" height="1rem" />
                         {_t("common|encrypted")}
                     </Badge>
                 )}
 
                 {!vm.isRoomEncrypted && (
                     <Badge kind="blue">
-                        <LockOffIcon width="1rem" color="var(--cpd-color-icon-info-primary)" />
+                        <LockOffIcon width="1rem" height="1rem" color="var(--cpd-color-icon-info-primary)" />
                         {_t("common|unencrypted")}
                     </Badge>
                 )}
 
                 {vm.e2eStatus === E2EStatus.Warning && (
                     <Badge kind="red">
-                        <ErrorSolidIcon width="1rem" />
+                        <ErrorSolidIcon width="1rem" height="1rem" />
                         {_t("common|not_trusted")}
                     </Badge>
                 )}

@@ -1494,8 +1494,6 @@
     },
     "labs": {
         "ask_to_join": "Aktifkan bertanya untuk bergabung",
-        "automatic_debug_logs": "Kirim catatan pengawakutu secara otomatis saat ada kesalahan",
-        "automatic_debug_logs_decryption": "Kirim catatan pengawakutu secara otomatis ketika terjadi kesalahan pendekripsian",
         "beta_description": "Apa berikutnya untuk %(brand)s? Fitur Uji Coba merupakan cara yang terbaik untuk mendapatkan hal-hal baru lebih awal, mencoba fitur baru dan membantu memperbaikinya sebelum diluncurkan.",
         "beta_feature": "Ini adalah fitur beta",
         "beta_feedback_leave_button": "Untuk keluar dari beta, pergi ke pengaturan Anda.",
@@ -1553,7 +1551,6 @@
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
-        "release_announcement": "Pengumuman rilis",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
@@ -2077,7 +2074,6 @@
         "not_found_title": "Ruangan atau space ini tidak ada.",
         "not_found_title_name": "%(roomName)s tidak ada.",
         "peek_join_prompt": "Anda melihat tampilan %(roomName)s. Ingin bergabung?",
-        "pinned_message_badge": "Pesan yang disematkan",
         "pinned_message_banner": {
             "button_close_list": "Tutup daftar",
             "button_view_all": "Lihat semua",
@@ -3387,8 +3383,7 @@
             "voice_call_unsupported": "%(senderName)s melakukan panggilan suara. (tidak didukung oleh browser ini)"
         },
         "m.file": {
-            "error_decrypting": "Terjadi kesalahan mendekripsi lampiran",
-            "error_invalid": "Berkas tidak valid"
+            "error_decrypting": "Terjadi kesalahan mendekripsi lampiran"
         },
         "m.image": {
             "error": "Tidak dapat menampilkan gambar karena kesalahan",
@@ -3729,14 +3724,7 @@
             "one_user": "%(displayName)s sedang mengetik …",
             "two_users": "%(names)s dan %(lastPerson)s sedang mengetik …"
         },
-        "undecryptable_tooltip": "Pesan ini tidak dapat didekripsi",
-        "url_preview": {
-            "close": "Tutup tampilan",
-            "show_n_more": {
-                "one": "Tampilkan %(count)s tampilan lainnya",
-                "other": "Tampilkan %(count)s tampilan lainnya"
-            }
-        }
+        "undecryptable_tooltip": "Pesan ini tidak dapat didekripsi"
     },
     "truncated_list_n_more": {
         "other": "Dan %(count)s lagi..."

@@ -1,0 +1,22 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.content {
+    white-space: pre-wrap;
+    color: var(--cpd-color-text-secondary);
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.icon {
+    width: 14px;
+    height: 14px;
+    color: var(--cpd-color-icon-secondary);
+    flex: 0 0 14px;
+}

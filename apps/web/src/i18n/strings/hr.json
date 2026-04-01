@@ -1508,8 +1508,6 @@
     },
     "labs": {
         "ask_to_join": "Omogući traženje pridruživanja",
-        "automatic_debug_logs": "Automatsko slanje zapisnika o svakoj pogrešci",
-        "automatic_debug_logs_decryption": "Automatsko slanje zapisnika o otklanjanju pogrešaka dešifriranja",
         "beta_description": "Što je sljedeće za %(brand)s? Labs su najbolji način da među prvima isprobate novosti, testirate nove značajke i pomognete ih oblikovati prije nego što službeno postanu dostupne.",
         "beta_feature": "Ovo je beta značajka",
         "beta_feedback_leave_button": "Da biste napustili beta inačicu, idite na postavke.",
@@ -1567,7 +1565,6 @@
         "notification_settings_beta_caption": "Predstavljamo jednostavniji način promjene postavki obavijesti. Prilagodite svoj %(brand)s tako da bude po vašoj mjeri.",
         "notification_settings_beta_title": "Postavke obavijesti",
         "notifications": "Omogući ploču s obavijestima u zaglavlju sobe",
-        "release_announcement": "Najava nove inačice",
         "render_reaction_images": "Prikaži prilagođene slike u reakcijama",
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
         "report_to_moderators": "Prijavi moderatorima",
@@ -2112,7 +2109,6 @@
         "not_found_title": "Ova soba ili prostor ne postoji.",
         "not_found_title_name": "%(roomName)s ne postoji.",
         "peek_join_prompt": "Pregledavate sobu %(roomName)s. Želite li joj se pridružiti?",
-        "pinned_message_badge": "Prikvačena poruka",
         "pinned_message_banner": {
             "button_close_list": "Zatvori popis",
             "button_view_all": "Prikaži sve",
@@ -3444,8 +3440,7 @@
             "voice_call_unsupported": "%(senderName)s uputio/la je glasovni poziv. (Ne podržava ovaj preglednik.)"
         },
         "m.file": {
-            "error_decrypting": "Pogreška pri dešifriranju privitka",
-            "error_invalid": "Nevažeća datoteka"
+            "error_decrypting": "Pogreška pri dešifriranju privitka"
         },
         "m.image": {
             "error": "Nije moguće prikazati sliku zbog pogreške",
@@ -3823,15 +3818,7 @@
             "one_user": "%(displayName)s tipka…",
             "two_users": "%(names)s i %(lastPerson)s tipkaju…"
         },
-        "undecryptable_tooltip": "Ova se poruka nije mogla dešifrirati",
-        "url_preview": {
-            "close": "Zatvori pretpregled",
-            "show_n_more": {
-                "one": "Prikaži %(count)s drugi pregled",
-                "few": "Prikaži %(count)s druga pregleda",
-                "other": "Prikaži %(count)s drugih pregleda"
-            }
-        }
+        "undecryptable_tooltip": "Ova se poruka nije mogla dešifrirati"
     },
     "truncated_list_n_more": {
         "one": "I još %(count)s...",

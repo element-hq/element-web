@@ -17,12 +17,12 @@ import InlineSpinner from "../elements/InlineSpinner";
 import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../utils/image-media";
 import { type IBodyProps } from "./IBodyProps";
-import MFileBody from "./MFileBody";
 import { type ImageSize, suggestedSize as suggestedVideoSize } from "../../../settings/enums/ImageSize";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
+import { FileBodyFactory, renderMBody } from "./MBodyFactory";
 
 interface IState {
     decryptedUrl: string | null;
@@ -246,7 +246,7 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
 
     private getFileBody = (): ReactNode => {
         if (this.props.forExport) return null;
-        return this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />;
+        return this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory);
     };
 
     public render(): React.ReactNode {

@@ -7,13 +7,14 @@
 
 import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { type MockedObject } from "jest-mock";
+import { createRef } from "react";
 
 import { mkRoom, stubClient } from "../../test-utils";
 import { WidgetPipViewModel } from "../../../src/viewmodels/room/WidgetPipViewModel";
 import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
-import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 import { CallStore, CallStoreEvent } from "../../../src/stores/CallStore";
 import { type Call } from "../../../src/models/Call";
 
@@ -50,6 +51,8 @@ describe("WidgetPipViewModel", () => {
         vm = new WidgetPipViewModel({
             room,
             widgetId,
+            onStartMoving: () => {},
+            movePersistedElement: createRef(),
         });
     });
 
@@ -93,7 +96,7 @@ describe("WidgetPipViewModel", () => {
 
         vm.setViewingRoom(true);
         vm.onBackClick(createBackClickEvent());
-        expect(moveSpy).toHaveBeenCalledWith(room, widget, Container.Center);
+        expect(moveSpy).toHaveBeenCalledWith(room, widget, "center");
 
         moveSpy.mockClear();
         vm.setViewingRoom(false);

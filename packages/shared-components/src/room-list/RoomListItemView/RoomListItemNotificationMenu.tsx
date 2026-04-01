@@ -13,22 +13,22 @@ import {
     CheckIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t } from "../../utils/i18n";
+import { _t } from "../../core/i18n/i18n";
 import { RoomNotifState } from "./RoomNotifs";
-import { useViewModel, type ViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItemView";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
+import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
 
 /**
  * View model type for room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
+export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomListItemViewActions>;
 
 /**
  * Props for RoomListItemNotificationMenu component
  */
 export interface RoomListItemNotificationMenuProps {
     /** The room item view model */
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
 }
 
 /**

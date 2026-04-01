@@ -4,8 +4,10 @@
     },
     "action": {
         "back": "Back",
+        "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
+        "download": "Download",
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "go": "Go",
@@ -22,12 +24,14 @@
         "start_chat": "Start chat"
     },
     "common": {
+        "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "left_panel": {
-        "open_dial_pad": "Open dial pad"
+        "open_dial_pad": "Open dial pad",
+        "separator_label": "Click or drag to expand"
     },
     "notifications": {
         "all_messages": "All messages",
@@ -47,6 +51,7 @@
         "jump_to_date": "Jump to date",
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",
+        "pinned_message_badge": "Pinned message",
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",
@@ -74,7 +79,9 @@
                 "one": "Open room %(roomName)s with 1 unread message.",
                 "other": "Open room %(roomName)s with %(count)s unread messages."
             },
-            "unsent_message": "Open room %(roomName)s with an unsent message."
+            "unsent_message": "Open room %(roomName)s with an unsent message.",
+            "video_call": "Open room %(roomName)s with a video call.",
+            "voice_call": "Open room %(roomName)s with a voice call."
         },
         "appearance": "Appearance",
         "collapse_filters": "Collapse filter list",
@@ -121,6 +128,9 @@
             "more_options": "More Options"
         },
         "room_options": "Room Options",
+        "section_header": {
+            "toggle": "Toggle %(section)s section"
+        },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
         "sort_type": {
@@ -158,7 +168,7 @@
             "historical_event_no_key_backup": "Historical messages are not available on this device",
             "historical_event_unverified_device": "You need to verify this device for access to historical messages",
             "historical_event_user_not_joined": "You don't have access to this message",
-            "sender_identity_previously_verified": "Sender's verified identity was reset",
+            "sender_identity_previously_verified": "Sender's verified digital identity was reset",
             "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
@@ -166,6 +176,9 @@
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
             "unnamed_audio": "Unnamed audio"
+        },
+        "m.file": {
+            "error_invalid": "Invalid file"
         },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",
@@ -178,7 +191,15 @@
             "unsupported": "The encryption used by this room isn't supported."
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
-        "message_timestamp_sent_at": "Sent at: %(dateTime)s"
+        "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "url_preview": {
+            "close": "Close preview",
+            "show_n_more": {
+                "one": "Show %(count)s other preview",
+                "other": "Show %(count)s other previews"
+            },
+            "view_image": "View image"
+        }
     },
     "widget": {
         "context_menu": {

@@ -1,0 +1,194 @@
+# This action helps perform common actions before the build_* actions are started in parallel.
+on:
+    workflow_call:
+        inputs:
+            config:
+                type: string
+                required: true
+                description: "The config directory to use"
+            version:
+                type: string
+                required: false
+                description: "The version tag to fetch, or 'develop', will pick automatically if not passed"
+            nightly:
+                type: boolean
+                required: false
+                default: false
+                description: "Whether the build is a Nightly and to calculate the version strings new builds should use"
+            deploy:
+                type: boolean
+                required: false
+                default: false
+                description: "Whether the build should be deployed to production"
+            branch-matching:
+                type: boolean
+                required: false
+                default: false
+                description: "Whether the branch name should be matched to find the element-web commit"
+        secrets:
+            # Required if `nightly` is set
+            CF_R2_ACCESS_KEY_ID:
+                required: false
+            # Required if `nightly` is set
+            CF_R2_TOKEN:
+                required: false
+        outputs:
+            nightly-version:
+                description: "The version string the next Nightly should use, only output for nightly"
+                value: ${{ jobs.prepare.outputs.nightly-version }}
+            packages-dir:
+                description: "The directory non-deb packages for this run should live in within packages.element.io"
+                value: ${{ inputs.nightly && 'nightly' || 'desktop' }}
+            # This is just a simple pass-through of the input to simplify reuse of complex inline conditions
+            deploy:
+                description: "Whether the build should be deployed to production"
+                value: ${{ inputs.deploy }}
+permissions: {}
+jobs:
+    prepare:
+        name: Prepare
+        environment: ${{ inputs.nightly && 'packages.element.io' || '' }}
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: read
+        outputs:
+            nightly-version: ${{ steps.versions.outputs.nightly }}
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+              with:
+                  node-version-file: apps/desktop/.node-version
+                  cache: "pnpm"
+
+            - name: Install Deps
+              working-directory: apps/desktop
+              run: "pnpm install --frozen-lockfile"
+
+            - name: Fetch Element Web (matching branch)
+              id: branch-matching
+              if: inputs.branch-matching
+              working-directory: apps/desktop
+              continue-on-error: true
+              run: |
+                  scripts/branch-match.sh
+                  cp "$CONFIG_DIR/config.json" element-web/
+                  pnpm --cwd element-web install --frozen-lockfile
+                  pnpm --cwd element-web run build
+                  mv element-web/webapp .
+                  pnpm run asar-webapp
+              env:
+                  # These must be set for branch-match.sh to get the right branch
+                  REPOSITORY: ${{ github.repository }}
+                  PR_NUMBER: ${{ github.event.pull_request.number }}
+                  CONFIG_DIR: ${{ inputs.config }}
+
+            - name: Fetch Element Web (${{ inputs.version }})
+              if: steps.branch-matching.outcome == 'failure' || steps.branch-matching.outcome == 'skipped'
+              working-directory: apps/desktop
+              run: pnpm run fetch --noverify -d ${CONFIG} ${VERSION}
+              env:
+                  CONFIG: ${{ inputs.config }}
+                  VERSION: ${{ inputs.version }}
+
+            - name: Copy variant config
+              working-directory: apps/desktop
+              run: cp "$CONFIG_DIR/build.json" variant.json
+              env:
+                  CONFIG_DIR: ${{ inputs.config }}
+
+            # We split this out to save the build_* scripts having to do it to make use of `hashFiles` in the cache action
+            - name: Generate cache hash files
+              working-directory: apps/desktop
+              run: |
+                  set -ex
+                  # Add --no-sandbox as otherwise it fails because the helper isn't setuid root. It's only getting the version.
+                  pnpm --silent electron --no-sandbox --version > electronVersion
+                  cat package.json | jq -c .hakDependencies | sha1sum > hakHash
+                  find hak -type f -print0 | xargs -0 sha1sum >> hakHash
+                  find scripts/hak -type f -print0 | xargs -0 sha1sum >> hakHash
+
+            - name: "[Nightly] Calculate version"
+              id: versions
+              if: inputs.nightly
+              run: |
+                  # Find all latest Nightly versions
+                  aws s3 cp s3://$R2_BUCKET/nightly/update/macos/releases.json - --endpoint-url $R2_URL --region auto | jq -r .currentRelease >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/debian/dists/default/main/binary-amd64/Packages - --endpoint-url $R2_URL --region auto | grep "Package: element-nightly" -A 50 | grep Version -m1 | sed -n 's/Version: //p' >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/debian/dists/default/main/binary-arm64/Packages - --endpoint-url $R2_URL --region auto | grep "Package: element-nightly" -A 50 | grep Version -m1 | sed -n 's/Version: //p' >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/nightly/update/win32/x64/RELEASES - --endpoint-url $R2_URL --region auto | awk '{print $2}' | cut -d "-" -f 5 | cut -c 8- >> VERSIONS
+                  aws s3 cp s3://$R2_BUCKET/nightly/update/win32/arm64/RELEASES - --endpoint-url $R2_URL --region auto | awk '{print $2}' | cut -d "-" -f 5 | cut -c 8- >> VERSIONS
+
+                  # Pick the greatest one
+                  VERSION=$(cat VERSIONS | sort -uf | tail -n1)
+                  echo "Found latest nightly version $VERSION"
+                  # Increment it
+                  echo "nightly=$(scripts/generate-nightly-version.ts --latest $VERSION)" >> $GITHUB_OUTPUT
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+                  R2_BUCKET: ${{ vars.R2_BUCKET }}
+                  R2_URL: ${{ vars.CF_R2_S3_API }}
+
+            - name: Check version
+              id: package
+              working-directory: apps/desktop
+              run: |
+                  echo "version=$(cat package.json | jq -r .version)" >> $GITHUB_OUTPUT
+
+            - name: "[Release] Fetch release"
+              id: release
+              if: ${{ !inputs.nightly && inputs.version != 'develop' }}
+              uses: cardinalby/git-get-release-action@5172c3a026600b1d459b117738c605fabc9e4e44 # 1.2.5
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  tag: v${{ steps.package.outputs.version }}
+
+            - name: "[Release] Write changelog"
+              if: ${{ !inputs.nightly && inputs.version != 'develop' }}
+              working-directory: apps/desktop
+              run: |
+                  TIME=$(date -d "$PUBLISHED_AT" -R)
+                  echo "element-desktop ($VERSION) default; urgency=medium" >> changelog.Debian
+                  echo "$BODY" | sed 's/^##/\n  */g;s/^\*/  */g' | perl -pe 's/\[.+?]\((.+?)\)/\1/g' >> changelog.Debian
+                  echo "" >> changelog.Debian
+                  echo " -- $ACTOR <support@element.io>  $TIME" >> changelog.Debian
+              env:
+                  ACTOR: ${{ github.actor }}
+                  VERSION: v${{ steps.package.outputs.version }}
+                  BODY: ${{ steps.release.outputs.body }}
+                  PUBLISHED_AT: ${{ steps.release.outputs.published_at }}
+
+            - name: "[Nightly] Write summary"
+              if: inputs.nightly
+              working-directory: apps/desktop
+              run: |
+                  BUNDLE_HASH=$(npx asar l webapp.asar | grep /bundles/ | head -n 1 | sed 's|.*/||')
+                  WEBAPP_VERSION=$(./scripts/get-version.ts)
+                  WEB_VERSION=${WEBAPP_VERSION:0:12}
+                  JS_VERSION=${WEBAPP_VERSION:16:12}
+
+                  echo "### Nightly build ${NIGHTLY_VERSION}" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "| Component   | Version |" >> $GITHUB_STEP_SUMMARY
+                  echo "| ----------- | ------- |" >> $GITHUB_STEP_SUMMARY
+                  echo "| Bundle Hash | $BUNDLE_HASH |" >> $GITHUB_STEP_SUMMARY
+                  echo "| Element Web | [$WEB_VERSION](https://github.com/element-hq/element-web/commit/$WEB_VERSION) |" >> $GITHUB_STEP_SUMMARY
+                  echo "| JS SDK      | [$JS_VERSION](https://github.com/matrix-org/matrix-js-sdk/commit/$JS_VERSION) |" >> $GITHUB_STEP_SUMMARY
+              env:
+                  NIGHTLY_VERSION: ${{ steps.versions.outputs.nightly }}
+
+            - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              with:
+                  name: webapp
+                  retention-days: 1
+                  path: |
+                      apps/desktop/webapp.asar
+                      apps/desktop/electronVersion
+                      apps/desktop/hakHash
+                      apps/desktop/changelog.Debian
+                      apps/desktop/variant.json

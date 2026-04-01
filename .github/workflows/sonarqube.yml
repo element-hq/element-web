@@ -22,3 +22,4 @@ jobs:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
         with:
             sharded: true
+            version-pkg-json-dir: ./apps/web

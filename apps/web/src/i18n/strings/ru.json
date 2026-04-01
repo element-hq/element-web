@@ -1493,8 +1493,6 @@
     },
     "labs": {
         "ask_to_join": "Включить запрос на присоединение",
-        "automatic_debug_logs": "Автоматическая отправка журналов отладки при любой ошибке",
-        "automatic_debug_logs_decryption": "Автоматическая отправка журналов отладки при ошибках расшифровки",
         "beta_description": "Что нового в %(brand)s? Labs — это лучший способ получить и испытать новые функции, помогая сформировать их перед выходом в свет.",
         "beta_feature": "Это бета-функция",
         "beta_feedback_leave_button": "Чтобы выйти из бета-версии, зайдите в настройки.",
@@ -1550,7 +1548,6 @@
         "notification_settings_beta_caption": "Представляем вам более простой способ изменения настроек уведомлений. Настройте свои настройки так %(brand)s, как вам удобно.",
         "notification_settings_beta_title": "Настройки уведомлений",
         "notifications": "Включить панель уведомлений в заголовке комнаты",
-        "release_announcement": "Объявление о новой версии",
         "render_reaction_images": "Обработка пользовательских изображений в реакциях",
         "render_reaction_images_description": "Иногда их называют \"пользовательскими эмодзи\".",
         "report_to_moderators": "Пожаловаться модераторам",
@@ -2079,7 +2076,6 @@
         "not_found_title": "Такой комнаты или пространства не существует.",
         "not_found_title_name": "%(roomName)s не существует.",
         "peek_join_prompt": "Вы просматриваете %(roomName)s. Хотите присоединиться?",
-        "pinned_message_badge": "Закреплённое сообщение",
         "pinned_message_banner": {
             "button_close_list": "Закрыть список",
             "button_view_all": "Посмотреть все",
@@ -3403,8 +3399,7 @@
             "voice_call_unsupported": "%(senderName)s сделал голосовой вызов. (не поддерживается этим браузером)"
         },
         "m.file": {
-            "error_decrypting": "Ошибка расшифровки вложения",
-            "error_invalid": "Недопустимый формат файла"
+            "error_decrypting": "Ошибка расшифровки вложения"
         },
         "m.image": {
             "error": "Невозможно показать изображение из-за ошибки",
@@ -3747,14 +3742,7 @@
             "one_user": "%(displayName)s печатает…",
             "two_users": "%(names)s и %(lastPerson)s печатают…"
         },
-        "undecryptable_tooltip": "Это сообщение не удалось расшифровать",
-        "url_preview": {
-            "close": "Закрыть предпросмотр",
-            "show_n_more": {
-                "one": "Показать %(count)s другой предварительный просмотр",
-                "other": "Показать %(count)s других предварительных просмотров"
-            }
-        }
+        "undecryptable_tooltip": "Это сообщение не удалось расшифровать"
     },
     "truncated_list_n_more": {
         "one": "%(count)s...",

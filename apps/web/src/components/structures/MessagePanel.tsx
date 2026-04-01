@@ -57,7 +57,7 @@ import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
-import { DateSeparatorViewModel } from "../../viewmodels/timeline/DateSeparatorViewModel";
+import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];

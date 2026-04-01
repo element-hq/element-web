@@ -3,10 +3,14 @@
         "seek_bar_label": "Barre de recherche audio"
     },
     "action": {
+        "back": "Retour",
+        "collapse": "Réduire",
         "delete": "Supprimer",
         "dismiss": "Ignorer",
+        "download": "Télécharger",
         "edit": "Modifier",
         "explore_rooms": "Parcourir les salons",
+        "go": "C’est parti",
         "invite": "Inviter",
         "new_conversation": "Nouvelle conversation",
         "new_room": "Nouveau salon",
@@ -20,12 +24,14 @@
         "start_chat": "Démarrer une discussion"
     },
     "common": {
+        "attachment": "Pièce jointe",
         "encryption_enabled": "Chiffrement activé",
         "preferences": "Préférences",
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
     },
     "left_panel": {
-        "open_dial_pad": "Ouvrir le pavé de numérotation"
+        "open_dial_pad": "Ouvrir le pavé de numérotation",
+        "separator_label": "Cliquez ou glissez pour agrandir"
     },
     "notifications": {
         "all_messages": "Tous les messages",
@@ -42,6 +48,10 @@
             "shared": "Les nouveaux membres voient l'historique",
             "world_readable": "Tout le monde voit l'historique"
         },
+        "jump_to_date": "Aller à la date",
+        "jump_to_date_beginning": "Le début du salon",
+        "jump_to_date_prompt": "Choisissez vers quelle date aller",
+        "pinned_message_badge": "Message épinglé",
         "status_bar": {
             "delete_all": "Tout supprimer",
             "exceeded_resource_limit_description": "Veuillez contacter votre administrateur pour continuer à utiliser le service.",
@@ -116,6 +126,9 @@
             "more_options": "Plus d’options"
         },
         "room_options": "Options du salon",
+        "section_header": {
+            "toggle": "Afficher/masquer la section %(section)s"
+        },
         "show_message_previews": "Afficher les aperçus des messages",
         "sort": "Trier",
         "sort_type": {
@@ -162,6 +175,9 @@
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
             "unnamed_audio": "Audio sans nom"
         },
+        "m.file": {
+            "error_invalid": "Fichier invalide"
+        },
         "m.room.encryption": {
             "disable_attempt": "Essai de désactiver le chiffrement ignoré",
             "disabled": "Chiffrement désactivé",
@@ -173,7 +189,15 @@
             "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
         },
         "message_timestamp_received_at": "Reçu à : %(dateTime)s",
-        "message_timestamp_sent_at": "Envoyé à : %(dateTime)s"
+        "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
+        "url_preview": {
+            "close": "Fermer l’aperçu",
+            "show_n_more": {
+                "one": "Montrer %(count)s autre preview",
+                "other": "Montrer %(count)s autres previews"
+            },
+            "view_image": "Afficher l'image"
+        }
     },
     "widget": {
         "context_menu": {

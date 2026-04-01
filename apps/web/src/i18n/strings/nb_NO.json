@@ -1495,8 +1495,6 @@
     },
     "labs": {
         "ask_to_join": "Aktiver be om å bli med",
-        "automatic_debug_logs": "Send automatisk feilsøkingslogger ved eventuelle feil",
-        "automatic_debug_logs_decryption": "Send automatisk feilsøkingslogger ved dekrypteringsfeil",
         "beta_description": "Hva er det neste for %(brand)s? Labs er den beste måten å få ting tidlig på, teste ut nye funksjoner og hjelpe til med å forme dem før de lanseres.",
         "beta_feature": "Dette er en betafunksjon",
         "beta_feedback_leave_button": "For å forlate betaen, gå til innstillingene dine.",
@@ -1554,7 +1552,6 @@
         "notification_settings_beta_caption": "Vi introduserer en enklere måte å endre varslingsinnstillingene dine på. Tilpass %(brand)s, akkurat slik du vil.",
         "notification_settings_beta_title": "Innstillinger for varsler",
         "notifications": "Aktiver varslingspanelet i romoverskriften",
-        "release_announcement": "Kunngjøring om ny versjon",
         "render_reaction_images": "Gjengi egendefinerte bilder i reaksjoner",
         "render_reaction_images_description": "Noen ganger omtalt som \"egendefinerte emojier\".",
         "report_to_moderators": "Rapporter til moderatorene",
@@ -2087,7 +2084,6 @@
         "not_found_title": "Dette rommet eller området eksisterer ikke.",
         "not_found_title_name": "%(roomName)s eksisterer ikke.",
         "peek_join_prompt": "Du forhåndsviser %(roomName)s. Vil du bli med?",
-        "pinned_message_badge": "Festet melding",
         "pinned_message_banner": {
             "button_close_list": "Lukk liste",
             "button_view_all": "Vis alle",
@@ -3397,8 +3393,7 @@
             "voice_call_unsupported": "%(senderName)s gjorde et taleanrop. (støttes ikke av denne nettleseren)"
         },
         "m.file": {
-            "error_decrypting": "Feil ved dekryptering av vedlegg",
-            "error_invalid": "Ugyldig fil"
+            "error_decrypting": "Feil ved dekryptering av vedlegg"
         },
         "m.image": {
             "error": "Kan ikke vise bilde på grunn av feil",
@@ -3736,14 +3731,7 @@
             "one_user": "%(displayName)s skriver …",
             "two_users": "%(names)s og %(lastPerson)s skriver …"
         },
-        "undecryptable_tooltip": "Denne meldingen kunne ikke dekrypteres",
-        "url_preview": {
-            "close": "Lukk forhåndsvisning",
-            "show_n_more": {
-                "one": "Vis %(count)s annen forhåndsvisning",
-                "other": "Vis %(count)s andre forhåndsvisninger"
-            }
-        }
+        "undecryptable_tooltip": "Denne meldingen kunne ikke dekrypteres"
     },
     "truncated_list_n_more": {
         "Og %(count)s til...": "other"

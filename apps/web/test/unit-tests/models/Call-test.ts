@@ -26,6 +26,7 @@ import {
     MatrixRTCSession,
     MatrixRTCSessionEvent,
 } from "matrix-js-sdk/src/matrixrtc";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import type { Mocked } from "jest-mock";
 import type { ClientWidgetApi } from "matrix-widget-api";
@@ -985,6 +986,35 @@ describe("ElementCall", () => {
             expect(onParticipants.mock.calls).toEqual([[new Map([[alice, new Set(["alices_device"])]]), new Map()]]);
 
             call.off(CallEvent.Participants, onParticipants);
+        });
+
+        it("emits events when call type changes", async () => {
+            const onCallTypeChanged = jest.fn();
+            call.on(CallEvent.CallTypeChanged, onCallTypeChanged);
+            // Should default to video when unknown
+            expect(call.callType).toBe(CallType.Video);
+
+            // Change call type to voice
+            roomSession.memberships = [
+                { sender: alice.userId, deviceId: "alices_device", callIntent: "audio" } as Mocked<CallMembership>,
+            ];
+            roomSession.getConsensusCallIntent.mockReturnValue("audio");
+            roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
+
+            expect(call.callType).toBe(CallType.Voice);
+            expect(onCallTypeChanged.mock.calls).toEqual([[CallType.Voice]]);
+
+            // Change call type back to video
+            roomSession.memberships = [
+                { sender: alice.userId, deviceId: "alices_device", callIntent: "video" } as Mocked<CallMembership>,
+            ];
+            roomSession.getConsensusCallIntent.mockReturnValue("video");
+            roomSession.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
+
+            expect(call.callType).toBe(CallType.Video);
+            expect(onCallTypeChanged.mock.calls).toEqual([[CallType.Voice], [CallType.Video]]);
+
+            call.off(CallEvent.CallTypeChanged, onCallTypeChanged);
         });
 
         it("ends the call immediately if the session ended", async () => {

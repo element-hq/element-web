@@ -36,11 +36,11 @@ describe("SetupEncryptionToast", () => {
         render(<ToastContainer />);
     });
 
-    describe("Set up recovery", () => {
+    describe("Back up your chats", () => {
         it("should render the toast", async () => {
             act(() => showToast("set_up_recovery"));
 
-            expect(await screen.findByRole("heading", { name: "Set up recovery" })).toBeInTheDocument();
+            expect(await screen.findByRole("heading", { name: "Back up your chats" })).toBeInTheDocument();
         });
 
         it("should dismiss the toast when 'Dismiss' button clicked, and remember it", async () => {
@@ -334,13 +334,13 @@ describe("SetupEncryptionToast", () => {
         });
     });
 
-    describe("Verify this session", () => {
+    describe("Verify this device", () => {
         it("should render the toast", async () => {
             act(() => showToast("verify_this_session"));
 
-            await expect(screen.findByText("Verify this session")).resolves.toBeInTheDocument();
+            await expect(screen.findByText("Verify this device")).resolves.toBeInTheDocument();
             await expect(screen.findByRole("button", { name: "Later" })).resolves.toBeInTheDocument();
-            await expect(screen.findByRole("button", { name: "Verify" })).resolves.toBeInTheDocument();
+            await expect(screen.findByRole("button", { name: "Continue" })).resolves.toBeInTheDocument();
         });
 
         it("should dismiss the toast when 'Later' button clicked, and remember it", async () => {
@@ -354,14 +354,14 @@ describe("SetupEncryptionToast", () => {
             expect(DeviceListener.sharedInstance().dismissEncryptionSetup).toHaveBeenCalled();
         });
 
-        it("should open the verification dialog when 'Verify' clicked", async () => {
+        it("should open the verification dialog when 'Continue' clicked", async () => {
             jest.spyOn(Modal, "createDialog");
 
             // When we show the toast, and click Verify
             act(() => showToast("verify_this_session"));
 
             const user = userEvent.setup();
-            await user.click(await screen.findByRole("button", { name: "Verify" }));
+            await user.click(await screen.findByRole("button", { name: "Continue" }));
 
             // Then the dialog was opened
             expect(Modal.createDialog).toHaveBeenCalledWith(SetupEncryptionDialog, {}, undefined, false, true);
@@ -375,7 +375,7 @@ describe("SetupEncryptionToast", () => {
             await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
             await expect(
                 screen.findByText(
-                    "You have to reset your cryptographic identity in order to ensure access to your message history",
+                    "You have to reset your digital identity in order to ensure access to your chat history",
                 ),
             ).resolves.toBeInTheDocument();
             await expect(screen.findByRole("button", { name: "Continue with reset" })).resolves.toBeInTheDocument();

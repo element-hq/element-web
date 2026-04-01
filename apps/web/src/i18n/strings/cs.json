@@ -1495,8 +1495,6 @@
     },
     "labs": {
         "ask_to_join": "Umožnit požádat o vstup",
-        "automatic_debug_logs": "Automaticky odesílat ladící protokoly při jakékoli chybě",
-        "automatic_debug_logs_decryption": "Automaticky odesílat ladící protokoly při chybách dešifrování",
         "beta_description": "Co se chystá pro %(brand)s? Experimentální funkce jsou nejlepším způsobem, jak se dostat k novým věcem v raném stádiu, vyzkoušet nové funkce a pomoci je formovat ještě před jejich spuštěním.",
         "beta_feature": "Jedná se o funkci ve vývoji",
         "beta_feedback_leave_button": "Chcete-li opustit beta verzi, jděte do nastavení.",
@@ -1554,7 +1552,6 @@
         "notification_settings_beta_caption": "Představujeme jednodušší způsob, jak změnit nastavení oznámení. Přizpůsobte svůj %(brand)s přesně tak, jak se vám líbí.",
         "notification_settings_beta_title": "Nastavení oznámení",
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
-        "release_announcement": "Oznámení o vydání",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",
@@ -2093,7 +2090,6 @@
         "not_found_title": "Tato místnost nebo prostor neexistuje.",
         "not_found_title_name": "%(roomName)s neexistuje.",
         "peek_join_prompt": "Nahlížíte do místnosti %(roomName)s. Chcete do ní vstoupit?",
-        "pinned_message_badge": "Připnutá zpráva",
         "pinned_message_banner": {
             "button_close_list": "Zavřít seznam",
             "button_view_all": "Zobrazit vše",
@@ -3410,8 +3406,7 @@
             "voice_call_unsupported": "%(senderName)s zahájil(a) hovor. (není podporováno tímto prohlížečem)"
         },
         "m.file": {
-            "error_decrypting": "Chyba při dešifrování přílohy",
-            "error_invalid": "Neplatný soubor"
+            "error_decrypting": "Chyba při dešifrování přílohy"
         },
         "m.image": {
             "error": "Obrázek nelze zobrazit kvůli chybě",
@@ -3752,14 +3747,7 @@
             "one_user": "%(displayName)s píše …",
             "two_users": "%(names)s a %(lastPerson)s píšou …"
         },
-        "undecryptable_tooltip": "Tuto zprávu se nepodařilo dešifrovat",
-        "url_preview": {
-            "close": "Zavřít náhled",
-            "show_n_more": {
-                "one": "Zobrazit %(count)s další náhled",
-                "other": "Zobrazit %(count)s dalších náhledů"
-            }
-        }
+        "undecryptable_tooltip": "Tuto zprávu se nepodařilo dešifrovat"
     },
     "truncated_list_n_more": {
         "other": "A %(count)s dalších..."
