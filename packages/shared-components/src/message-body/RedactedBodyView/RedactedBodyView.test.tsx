@@ -11,7 +11,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
-import { MockViewModel } from "../../../../../core/viewmodel";
+import { MockViewModel } from "../../core/viewmodel";
 import { RedactedBodyView, type RedactedBodyViewModel, type RedactedBodyViewSnapshot } from "./RedactedBodyView";
 import * as stories from "./RedactedBodyView.stories";
 

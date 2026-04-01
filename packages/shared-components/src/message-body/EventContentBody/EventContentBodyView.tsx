@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, memo, type Ref } from "react";
 import parse, { type HTMLReactParserOptions } from "html-react-parser";
 
-import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
-import { applyReplacerOnString } from "../../../../../core/utils/applyReplacerOnString";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
+import { applyReplacerOnString } from "../../core/utils/applyReplacerOnString";
 
 type Replacer = HTMLReactParserOptions["replace"];
 type ParseFormattedBody = (formattedBody: string, replacer?: Replacer) => ReturnType<typeof parse>;
