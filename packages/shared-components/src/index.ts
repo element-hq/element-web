@@ -16,6 +16,7 @@ export * from "./event-tiles/UrlPreviewGroupView";
 export * from "./message-body/EventContentBody";
 export * from "./message-body/RedactedBodyView";
 export * from "./message-body/FileBodyView";
+export * from "./room/timeline/event-tile/body/MVideoBodyView";
 export * from "./core/pill-input/Pill";
 export * from "./core/pill-input/PillInput";
 export * from "./room/RoomStatusBar";
