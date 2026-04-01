@@ -1186,8 +1186,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     /**
-     * Render content of the common "users" tab that is shown whether we have a regular invite dialog or a
-     * "CallTransfer" one.
+     * Render content of the "users" that is used for both invites and "start chat".
      */
     private renderMainTab(): JSX.Element {
         let helpText;
@@ -1342,7 +1341,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
      * See also: {@link renderRegularDialog}.
      */
     private renderCallTransferDialog(): React.ReactNode {
-        const usersSection = this.renderMainTab();
+        const usersSection = (
+            <React.Fragment>
+                <div className="mx_InviteDialog_addressBar">{this.renderEditor()}</div>
+                {this.state.busy ? <InviteProgressBody /> : this.renderSuggestions()}
+            </React.Fragment>
+        );
 
         const tabs: NonEmptyArray<Tab<TabId>> = [
             new Tab(
