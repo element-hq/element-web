@@ -79,6 +79,18 @@ interface State {
     summaryMembers: RoomMember[];
 }
 
+const areEventsShallowEqual = (left: MatrixEvent[], right: MatrixEvent[]): boolean => {
+    if (left === right) {
+        return true;
+    }
+
+    if (left.length !== right.length) {
+        return false;
+    }
+
+    return left.every((event, index) => event === right[index]);
+};
+
 export default class EventListSummary extends React.Component<Props, State> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
@@ -155,7 +167,7 @@ export default class EventListSummary extends React.Component<Props, State> {
     }
 
     public componentDidUpdate(prevProps: Readonly<Props>): void {
-        if (prevProps.events !== this.props.events) {
+        if (!areEventsShallowEqual(prevProps.events, this.props.events)) {
             this.unbindSentinelListeners(prevProps.events);
             this.bindSentinelListeners(this.props.events);
             this.setState(this.generateState());
@@ -174,7 +186,7 @@ export default class EventListSummary extends React.Component<Props, State> {
 
     private unbindSentinelListeners(events: MatrixEvent[]): void {
         for (const event of events) {
-            event.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
+            event.off(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
         }
     }
 

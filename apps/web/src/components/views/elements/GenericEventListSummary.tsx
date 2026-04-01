@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ElementType, type ReactNode, useEffect } from "react";
+import React, { type ElementType, type ReactNode, useEffect, useRef } from "react";
 import { uniqBy } from "lodash";
 import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -35,7 +35,7 @@ interface IProps {
     // The layout currently used
     "layout"?: Layout;
     "data-testid"?: string;
-    as?: ElementType;
+    "as"?: ElementType;
 }
 
 const GenericEventListSummary: React.FC<IProps> = ({
@@ -48,12 +48,19 @@ const GenericEventListSummary: React.FC<IProps> = ({
     summaryText,
     layout = Layout.Group,
     "data-testid": testId,
-    as: Root = "li",
+    "as": Root = "li",
 }) => {
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
+    const hasMountedRef = useRef(false);
 
-    // Whenever expanded changes call onToggle
+    // Skip the initial effect run so onToggle only reflects expansion changes
+    // after mount, not the initial startExpanded state.
     useEffect(() => {
+        if (!hasMountedRef.current) {
+            hasMountedRef.current = true;
+            return;
+        }
+
         if (onToggle) {
             onToggle();
         }

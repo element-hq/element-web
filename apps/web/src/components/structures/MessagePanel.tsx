@@ -6,7 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, isValidElement, type ReactNode, type TransitionEvent } from "react";
+import React, {
+    type ComponentProps,
+    type JSX,
+    createRef,
+    isValidElement,
+    type ReactNode,
+    type TransitionEvent,
+} from "react";
 import classNames from "classnames";
 import {
     type Room,
@@ -44,6 +51,7 @@ import ScrollPanel, { type IScrollHandle, type IScrollState } from "./ScrollPane
 import TimelineScrollPanel, { type TimelineScrollHandle } from "./TimelineScrollPanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Spinner from "../views/elements/Spinner";
+import EventListSummary from "../views/elements/EventListSummary";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
@@ -58,6 +66,17 @@ import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
 import { getLateEventInfo } from "./grouper/LateEventGrouper";
 import { DateSeparatorViewModel } from "../../viewmodels/room/timeline/DateSeparatorViewModel";
+
+function isSingleEventSummaryNode(
+    node: ReactNode,
+): node is React.ReactElement<ComponentProps<typeof EventListSummary>> {
+    return (
+        isValidElement<ComponentProps<typeof EventListSummary>>(node) &&
+        node.type === EventListSummary &&
+        Array.isArray(node.props.events) &&
+        node.props.events.length === 1
+    );
+}
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -339,6 +358,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
+    // Tracks a queued requestAnimationFrame used to batch height-change reactions into the next paint.
+    private heightChangeRaf: number | null = null;
 
     public constructor(props: IProps) {
         super(props);
@@ -373,6 +394,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
         this.readReceiptMap = {};
+        if (this.heightChangeRaf !== null) {
+            cancelAnimationFrame(this.heightChangeRaf);
+            this.heightChangeRaf = null;
+        }
         this.resizeObserver.disconnect();
     }
 
@@ -1011,13 +1036,29 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     private wrapOpaqueTimelineRows(nodes: ReactNode[], fallbackPrefix: string): TimelineRow[] {
-        return nodes.map((node, index) => {
+        return nodes.flatMap((node, index) => {
+            if (SettingsStore.getValue("feature_new_timeline") && isSingleEventSummaryNode(node)) {
+                return React.Children.toArray(node.props.children).map((child, childIndex) => {
+                    const key =
+                        isValidElement(child) && child.key !== null
+                            ? String(child.key)
+                            : `${fallbackPrefix}-${index}-${childIndex}`;
+                    return {
+                        kind: "opaque" as const,
+                        key,
+                        node: child,
+                    };
+                });
+            }
+
             const key = isValidElement(node) && node.key !== null ? String(node.key) : `${fallbackPrefix}-${index}`;
-            return {
-                kind: "opaque",
-                key,
-                node,
-            };
+            return [
+                {
+                    kind: "opaque" as const,
+                    key,
+                    node,
+                },
+            ];
         });
     }
 
@@ -1229,7 +1270,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
     public onHeightChanged = (): void => {
-        this.scrollPanel.current?.checkScroll();
+        if (this.heightChangeRaf !== null) {
+            return;
+        }
+
+        this.heightChangeRaf = requestAnimationFrame(() => {
+            this.heightChangeRaf = null;
+            this.scrollPanel.current?.checkScroll();
+        });
     };
 
     private resizeObserver = new ResizeObserver(this.onHeightChanged);
