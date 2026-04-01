@@ -16,9 +16,9 @@ import { SeparatorKind, type WrappedEvent } from "../MessagePanel";
 import type MessagePanel from "../MessagePanel";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";
-import NewRoomIntro from "../../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../../views/elements/GenericEventListSummary";
 import { DateSeparatorViewModel } from "../../../viewmodels/room/timeline/DateSeparatorViewModel";
+import { StartChat } from "../../views/rooms/StartChat";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
@@ -137,7 +137,7 @@ export class CreationGrouper extends BaseGrouper {
             summaryText = _t("timeline|creation_summary_room", { creator });
         }
 
-        ret.push(<NewRoomIntro key="newroomintro" />);
+        ret.push(<StartChat key="startchat" />);
 
         ret.push(
             <GenericEventListSummary

@@ -1,0 +1,145 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<StartChatView /> > renders DirectMessage 1`] = `
+<div>
+  <ul
+    aria-label="timeline"
+    style="all: unset;"
+  >
+    <li
+      class="flex container"
+      data-testid="start-chat-view"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+    >
+      <div
+        style="width: 88px; height: 88px; background-color: grey; border-radius: 100%;"
+      />
+      <div
+        class="flex content"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+      >
+        <h2
+          class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112"
+        >
+          Alice
+        </h2>
+        <div
+          class="flex"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+        >
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+          >
+            <span
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+            >
+              <span>
+                This is the beginning of your direct message history with 
+                <span
+                  class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+                >
+                  Alice
+                </span>
+                .
+              </span>
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+            >
+              All messages are end-to-end encrypted.
+            </span>
+          </div>
+          <div
+            class="flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
+          >
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+              data-kind="green"
+            >
+              <svg
+                fill="currentColor"
+                height="1rem"
+                viewBox="0 0 24 24"
+                width="1rem"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+                />
+              </svg>
+              Encrypted
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex actions"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
+      >
+        <form
+          class="_root_19upo_16"
+        >
+          <div
+            class="_inline-field_19upo_32"
+          >
+            <div
+              class="_inline-field-control_19upo_44"
+            >
+              <div
+                class="_container_udcm8_10"
+              >
+                <input
+                  checked=""
+                  class="_input_udcm8_24"
+                  id="_r_0_"
+                  role="switch"
+                  type="checkbox"
+                />
+                <div
+                  class="_ui_udcm8_34"
+                />
+              </div>
+            </div>
+            <div
+              class="_inline-field-body_19upo_38"
+            >
+              <label
+                class="_label_19upo_59"
+                for="_r_0_"
+              >
+                Add to favourites
+              </label>
+            </div>
+          </div>
+        </form>
+        <a
+          class="_link_1v5rz_8 action"
+          data-kind="primary"
+          data-size="medium"
+          rel="noreferrer noopener"
+          role="button"
+        >
+          <svg
+            fill="currentColor"
+            height="20px"
+            viewBox="0 0 24 24"
+            width="20px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.293 17.293c.63.63.184 1.707-.707 1.707H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-7 7-7 7 7 7 7v6zM12 22a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2"
+            />
+          </svg>
+          <span
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60"
+          >
+            Notifications
+          </span>
+        </a>
+      </div>
+    </li>
+  </ul>
+</div>
+`;

@@ -40,7 +40,6 @@ test.describe("Topic links", () => {
                 "",
             );
             await page.goto(`#/room/${room.roomId}`);
-            await expect(page.getByTestId("topic").getByRole("link", { name: link })).toBeVisible();
             const locator = await app.toggleRoomInfoPanel();
             await expect(locator.getByRole("link", { name: link })).toBeVisible();
         });

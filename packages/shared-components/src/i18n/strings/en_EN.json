@@ -25,8 +25,12 @@
     },
     "common": {
         "attachment": "Attachment",
+        "encrypted": "Encrypted",
         "encryption_enabled": "Encryption enabled",
+        "not_encrypted": "Not encrypted",
+        "notifications": "Notifications",
         "preferences": "Preferences",
+        "public_room": "Public room",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
     "left_panel": {
@@ -52,6 +56,16 @@
         "jump_to_date_beginning": "The beginning of the room",
         "jump_to_date_prompt": "Pick a date to jump to",
         "pinned_message_badge": "Pinned message",
+        "start_chat": {
+            "add_favourite": "Add to favourites",
+            "dm": "This is the beginning of your direct message history with <dmName />.",
+            "dm_encrypted": "All messages are end-to-end encrypted.",
+            "invite": "Invite people",
+            "private_room": "This is the beginning of your encrypted message history.",
+            "private_room_description": "Nobody can join without an invitation.",
+            "public_room": "This is the beginning of your message history.",
+            "public_room_description": "Anybody can join without an invitation."
+        },
         "status_bar": {
             "delete_all": "Delete all",
             "exceeded_resource_limit_description": "Please contact your service administrator to continue using the service.",

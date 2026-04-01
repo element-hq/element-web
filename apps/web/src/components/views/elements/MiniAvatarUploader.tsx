@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/matrix";
 import React, { useContext, useRef, useState, type MouseEvent, type ReactNode } from "react";
-import { TakePhotoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { EditIcon, TakePhotoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
@@ -19,6 +19,7 @@ import { getFileChanged } from "../settings/AvatarSetting.tsx";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 export const AVATAR_SIZE = "52px";
+export const AVATAR_LARGE_SIZE = "88px";
 
 interface IProps {
     hasAvatar: boolean;
@@ -28,6 +29,11 @@ interface IProps {
     isUserAvatar?: boolean;
     onClick?(this: void, ev: MouseEvent<HTMLInputElement>): void;
     children?: ReactNode;
+    /**
+     * The size of the avatar, either {@link AVATAR_SIZE} or {@link AVATAR_LARGE_SIZE}.
+     * @default AVATAR_SIZE
+     */
+    size?: typeof AVATAR_SIZE | typeof AVATAR_LARGE_SIZE;
 }
 
 const MiniAvatarUploader: React.FC<IProps> = ({
@@ -38,6 +44,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({
     isUserAvatar,
     children,
     onClick,
+    size = AVATAR_SIZE,
 }) => {
     const cli = useContext(MatrixClientContext);
     const [busy, setBusy] = useState(false);
@@ -50,6 +57,14 @@ const MiniAvatarUploader: React.FC<IProps> = ({
     const canSetAvatar =
         isUserAvatar || room?.currentState?.maySendStateEvent(EventType.RoomAvatar, cli.getSafeUserId());
     if (!canSetAvatar) return <React.Fragment>{children}</React.Fragment>;
+
+    const spinnerSize = size === AVATAR_LARGE_SIZE ? 24 : 20;
+    const icon =
+        size === AVATAR_LARGE_SIZE ? (
+            <EditIcon className="mx_MiniAvatarUploader_icon" />
+        ) : (
+            <TakePhotoSolidIcon className="mx_MiniAvatarUploader_icon" />
+        );
 
     return (
         <React.Fragment>
@@ -86,8 +101,15 @@ const MiniAvatarUploader: React.FC<IProps> = ({
             >
                 {children}
 
-                <div className="mx_MiniAvatarUploader_indicator">
-                    {busy ? <Spinner size={20} /> : <TakePhotoSolidIcon className="mx_MiniAvatarUploader_cameraIcon" />}
+                <div
+                    className={classNames(
+                        {
+                            mx_MiniAvatarUploader_indicatorLarge: size === AVATAR_LARGE_SIZE,
+                        },
+                        "mx_MiniAvatarUploader_indicator",
+                    )}
+                >
+                    {busy ? <Spinner size={spinnerSize} /> : icon}
                 </div>
             </AccessibleButton>
         </React.Fragment>

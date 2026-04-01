@@ -115,7 +115,6 @@ import Measured from "../views/elements/Measured";
 import { type FocusComposerPayload } from "../../dispatcher/payloads/FocusComposerPayload";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { createRoomFromLocalRoom } from "../../utils/direct-messages";
-import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { LargeLoader } from "./LargeLoader";
@@ -142,6 +141,7 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
+import { StartChat } from "../views/rooms/StartChat";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -347,7 +347,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
                     <div className="mx_RoomView_timeline">
                         <ScrollPanel className="mx_RoomView_messagePanel">
                             {encryptionTile}
-                            <NewRoomIntro />
+                            <StartChat />
                         </ScrollPanel>
                     </div>
                     {statusBar}

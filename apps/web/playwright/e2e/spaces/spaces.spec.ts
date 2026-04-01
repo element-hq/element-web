@@ -344,7 +344,7 @@ test.describe("Spaces", () => {
         await page.getByRole("button", { name: "View", exact: true }).click();
 
         // Assert we get shown the new room intro, and thus not the soft crash screen
-        await expect(page.locator(".mx_NewRoomIntro")).toBeVisible();
+        await expect(page.getByTestId("start-chat-view")).toBeVisible();
     });
 
     test("should render spaces view", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {

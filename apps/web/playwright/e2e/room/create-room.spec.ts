@@ -58,7 +58,7 @@ test.describe("Create Room", () => {
         await page.getByRole("button", { name: "Go" }).click();
 
         await expect(page.getByText("Encryption enabled")).toBeVisible();
-        await expect(page.getByText("Send your first message to")).toBeVisible();
+        await expect(page.getByText("This is the beginning of your direct message history with")).toBeVisible();
 
         const composer = page.getByRole("region", { name: "Message composer" });
         await expect(composer.getByRole("textbox", { name: "Send a message…" })).toBeVisible();
