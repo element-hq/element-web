@@ -1,6 +1,7 @@
 {
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "projectType": "app",
+    "projectType": "application",
+    "implicitDependencies": ["element-web"],
     "root": "apps/desktop",
     "targets": {
         "docker:build": {
