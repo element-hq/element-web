@@ -176,7 +176,10 @@ export function TimelineScrollPanelListView({
     const lastTouchYRef = React.useRef<number | null>(null);
     const lastReportedAtBottomRef = React.useRef(false);
     const programmaticScrollGenerationRef = React.useRef(0);
+    const hasCompletedInitialStabilizationRef = React.useRef(false);
+    const initialStabilizationFrameRef = React.useRef<number | null>(null);
     const [isPassiveBottomEnabled, setIsPassiveBottomEnabled] = React.useState(Boolean(stickyBottom));
+    const [isUsingInitialOverscan, setIsUsingInitialOverscan] = React.useState(true);
     React.useEffect(() => {
         onScrollRef.current = onScroll;
     }, [onScroll]);
@@ -313,6 +316,15 @@ export function TimelineScrollPanelListView({
             if (stickyBottom && !hasUserScrolledRef.current && !hasInitializedPassiveBottomRef.current) {
                 hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
             }
+
+            if (!hasCompletedInitialStabilizationRef.current && initialStabilizationFrameRef.current === null) {
+                initialStabilizationFrameRef.current = requestAnimationFrame(() => {
+                    initialStabilizationFrameRef.current = null;
+                    hasCompletedInitialStabilizationRef.current = true;
+                    setIsUsingInitialOverscan(false);
+                });
+            }
+
             onVisibleRangeChange?.(range);
         },
         [onVisibleRangeChange, scrollToBottomWhilePassive, stickyBottom],
@@ -364,6 +376,10 @@ export function TimelineScrollPanelListView({
             return;
         }
 
+        if (!hasCompletedInitialStabilizationRef.current) {
+            return;
+        }
+
         const delta = currentScrollHeight - previousScrollHeight;
         if (delta !== 0) {
             runProgrammaticScroll((node) => {
@@ -371,6 +387,13 @@ export function TimelineScrollPanelListView({
             });
         }
     }, [runProgrammaticScroll, scrollToBottomWhilePassive, stickyBottom]);
+    useEffect(() => {
+        return () => {
+            if (initialStabilizationFrameRef.current !== null) {
+                cancelAnimationFrame(initialStabilizationFrameRef.current);
+            }
+        };
+    }, []);
     useEffect(() => {
         if (!stickyBottom) {
             setIsPassiveBottomEnabled(false);
@@ -400,7 +423,9 @@ export function TimelineScrollPanelListView({
         wasHiddenRef.current = false;
         lastVisibleRangeRef.current = null;
         hasInitializedPassiveBottomRef.current = false;
+        hasCompletedInitialStabilizationRef.current = false;
         lastKnownScrollHeightRef.current = scrollElementRef.current?.scrollHeight ?? 0;
+        setIsUsingInitialOverscan(true);
 
         requestAnimationFrame(() => {
             const virtualListHandle = readRefCurrent(virtualListHandleRef);
@@ -417,6 +442,14 @@ export function TimelineScrollPanelListView({
             virtualListHandle.scrollToIndex(0, "start");
         });
     }, [items, scrollToBottomWhilePassive, stickyBottom, virtualListHandleRef]);
+
+    // Keep startup overscan conservative so off-screen media rows don't mount and resize during initial load.
+    // Once the first visible range settles, expand to the normal overscan to reduce interaction churn.
+    const viewportIncrease = React.useMemo(
+        () => (isUsingInitialOverscan ? { top: 400, bottom: 800 } : { top: 2000, bottom: 3000 }),
+        [isUsingInitialOverscan],
+    );
+
     const Scroller = React.useMemo(
         () =>
             function TimelineScroller(
@@ -584,8 +617,7 @@ export function TimelineScrollPanelListView({
             getItemKey={(item) => item.virtualKey ?? item.key}
             getItemComponent={getVirtualizedItemComponent}
             isItemFocusable={() => false}
-            // Keep roughly 1-2 extra screens mounted so media/tile interactions churn less than the default window.
-            increaseViewportBy={{ top: 2000, bottom: 3000 }}
+            increaseViewportBy={viewportIncrease}
             alignToBottom={isPassiveBottomEnabled}
             followOutput={() => (isPassiveBottomEnabled ? "auto" : false)}
             itemsRendered={handleItemsRendered}

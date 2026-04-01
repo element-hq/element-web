@@ -190,6 +190,7 @@ export function useVirtualizedList<Item, Context>(
     );
     /** Range of currently visible items in the viewport */
     const [visibleRange, setVisibleRange] = useState<ListRange | undefined>(undefined);
+    const visibleRangeRef = useRef<ListRange | undefined>(undefined);
     /** Map from item keys to their indices in the items array */
     const keyToIndexMap = useMemo(() => {
         const map = new Map<string, number>();
@@ -393,7 +394,16 @@ export function useVirtualizedList<Item, Context>(
             const internalRange = mapRangeIndex
                 ? { startIndex: mapRangeIndex(range.startIndex), endIndex: mapRangeIndex(range.endIndex) }
                 : range;
-            setVisibleRange(internalRange);
+            const previousRange = visibleRangeRef.current;
+
+            if (
+                previousRange?.startIndex !== internalRange.startIndex ||
+                previousRange.endIndex !== internalRange.endIndex
+            ) {
+                visibleRangeRef.current = internalRange;
+                setVisibleRange(internalRange);
+            }
+
             rangeChanged?.(range);
         },
         [rangeChanged, mapRangeIndex],
