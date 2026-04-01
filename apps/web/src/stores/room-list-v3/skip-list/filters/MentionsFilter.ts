@@ -5,8 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Filter } from ".";
-import { FilterKey } from ".";
+import { type Filter, FilterEnum } from ".";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
 export class MentionsFilter implements Filter {
@@ -14,7 +13,7 @@ export class MentionsFilter implements Filter {
         return RoomNotificationStateStore.instance.getRoomState(room).isMention;
     }
 
-    public get key(): FilterKey.MentionsFilter {
-        return FilterKey.MentionsFilter;
+    public get key(): FilterEnum.MentionsFilter {
+        return FilterEnum.MentionsFilter;
     }
 }
