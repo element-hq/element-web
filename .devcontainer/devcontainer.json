@@ -39,21 +39,9 @@
             },
             "extensions": [
                 "GitHub.copilot",
-                "GitHub.copilot-chat"
-            ],
-            "mcp": {
-                "servers": {
-                    "element-web-figma": {
-                        "command": "node",
-                        "args": [
-                            "scripts/design/figma-mcp-server.mjs"
-                        ],
-                        "env": {
-                            "FIGMA_TOKEN": "${env:FIGMA_TOKEN}"
-                        }
-                    }
-                }
-            }
+                "GitHub.copilot-chat",
+                "figma.figma-vscode-extension"
+            ]
         }
     }
 }
