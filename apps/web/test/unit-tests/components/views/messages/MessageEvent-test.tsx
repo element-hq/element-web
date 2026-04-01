@@ -29,22 +29,23 @@ jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     default: () => <div data-testid="image-body" />,
 }));
 
-jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="video-body" />,
-}));
-
 jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
     DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
     FileBodyFactory: () => <div data-testid="file-body" />,
     RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
+    VideoBodyFactory: () => <video data-testid="video-body" />,
     renderMBody: () => <div data-testid="file-body" />,
 }));
 
 jest.mock("../../../../../src/components/views/messages/MImageReplyBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-reply-body" />,
+}));
+
+jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
+    __esModule: true,
+    useMediaVisible: () => [true, jest.fn()],
 }));
 
 jest.mock("../../../../../src/components/views/messages/MStickerBody", () => ({
@@ -164,11 +165,11 @@ describe("MessageEvent", () => {
             result.getByTestId("textual-body");
         });
 
-        it("should render a TextualBody and an VideoBody", () => {
+        it("should render a TextualBody and a video element", () => {
             event = createEvent("video/mp4", "video.mp4", MsgType.Video);
             result = renderMessageEvent();
             mockMedia();
-            result.getByTestId("video-body");
+            expect(result.container.querySelector("video")).not.toBeNull();
             result.getByTestId("textual-body");
         });
 
