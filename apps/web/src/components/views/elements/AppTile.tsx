@@ -108,6 +108,8 @@ interface IProps {
     handleMinimisePointerEvents?: boolean;
     // Optionally hide the popout widget icon
     showPopout?: boolean;
+    // Whether sending a sticker should close the sticker picker widget
+    closeOnStickerSend?: boolean;
     // Is this an instance of a user widget
     userWidget: boolean;
     // sets the pointer-events property on the iframe
@@ -148,6 +150,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         showMenubar: true,
         showTitle: true,
         showPopout: true,
+        closeOnStickerSend: true,
         handleMinimisePointerEvents: false,
         userWidget: false,
         miniMode: false,
@@ -586,7 +589,9 @@ export default class AppTile extends React.Component<IProps, IState> {
                             threadId: this.props.threadId,
                         },
                     });
-                    dis.dispatch({ action: "stickerpicker_close" });
+                    if (this.props.closeOnStickerSend) {
+                        dis.dispatch({ action: "stickerpicker_close" });
+                    }
                 } else {
                     logger.warn("Ignoring sticker message. Invalid capability");
                 }
