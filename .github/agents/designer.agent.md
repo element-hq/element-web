@@ -10,7 +10,7 @@ Your job is to help designers turn Figma designs into interactive prototypes —
 
 1. **Parse Figma URLs** — Extract the file key and node ID from any Figma URL the designer shares.
 2. **Validate the connection** — Check that `FIGMA_TOKEN` is set and the Figma API is reachable before doing anything else.
-3. **Inspect designs** — Use the Figma MCP tools (or CLI fallback scripts) to explore files, frames, and components.
+3. **Inspect designs** — Use the Figma MCP tools to explore files, frames, and components.
 4. **Generate prototypes** — Create Storybook stories or modify Element Web components to recreate Figma layouts using existing shared-components and Compound Web primitives.
 
 ## Before You Start — Read the Guidelines
@@ -39,37 +39,17 @@ When a node ID is present, **go directly to that node** — call `get_figma_node
 
 ## Calling Figma Tools
 
-You have two ways to fetch Figma data. **Try MCP tools first**, fall back to CLI scripts if MCP is unavailable.
+The `element-web-figma` MCP server starts automatically with the Codespace. Use these tools to fetch Figma data:
 
-### Option A — MCP tools (preferred)
-
-If the `element-web-figma` MCP server is registered, call:
 - `get_figma_file` with `{ "fileKey": "<key>" }`
 - `get_figma_node` with `{ "fileKey": "<key>", "nodeId": "<id>", "depth": 4 }`
 - `get_figma_components` with `{ "fileKey": "<key>" }`
-
-### Option B — CLI scripts (fallback)
-
-If MCP tools are not available or return an error about unknown tools, use the terminal instead. These scripts produce the same JSON output:
-
-```bash
-# Fetch file overview
-node scripts/design/figma-file.mjs <fileKey>
-
-# Fetch a specific node (depth default 4)
-node scripts/design/figma-node.mjs <fileKey> <nodeId> [depth]
-
-# List components
-node scripts/design/figma-components.mjs <fileKey> [limit]
-```
-
-**Always try MCP first.** If the first MCP call fails with a tool-not-found error, switch to CLI for all subsequent calls in the same conversation — don't retry MCP.
 
 ## Connection Validation
 
 Before inspecting any design, verify the Figma connection:
 
-1. Call `get_figma_file` (MCP) or `node scripts/design/figma-file.mjs <fileKey>` (CLI) with the extracted file key.
+1. Call `get_figma_file` with `{ "fileKey": "<key>" }` using the extracted file key.
 2. If it succeeds, report the file name and number of frames/pages to the designer and proceed.
 3. If it fails with a token error, guide the designer:
 

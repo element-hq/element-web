@@ -35,9 +35,9 @@ const SETUP_STEPS: StepData[] = [
     },
     {
         number: 2,
-        title: "Store your token in this Codespace",
+        title: "Store your token before creating the Codespace",
         description:
-            "Add one Codespace secret called FIGMA_TOKEN so the Figma MCP tools work automatically every time this environment starts. Navigate to GitHub \u2192 Settings \u2192 Codespaces \u2192 Secrets, add the secret, and allow this repository.",
+            "Add a Codespace secret called FIGMA_TOKEN before you create (or rebuild) the Codespace. The Figma MCP server reads the token at startup — if it is missing the Figma tools will not work. Go to GitHub \u2192 Settings \u2192 Codespaces \u2192 Secrets, add the secret, and allow this repository. If you already created a Codespace without it, add the secret then rebuild: Command Palette \u2192 Codespaces: Rebuild Container.",
         code: "FIGMA_TOKEN  \u2014 your personal access token",
         action: {
             label: "Open Codespaces secrets",

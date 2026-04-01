@@ -31,8 +31,8 @@
         },
         "vscode": {
             "settings": {
-                "chat.mcp.autoStart": false,
-                "workbench.startupEditor": "welcomePageInEmptyWorkbench",
+                "chat.mcp.autoStart": true,
+                "workbench.startupEditor": "none",
                 "workbench.tips.enabled": false,
                 "workbench.welcome.enabled": false,
                 "github.copilot.chat.openAtStartup": true

@@ -64,20 +64,7 @@ async function waitForServer(port, maxWait) {
     return false;
 }
 
-const WALKTHROUGH_SEEN_KEY = "storybookLauncher.walkthroughSeen";
-
 function activate(context) {
-    const walkthroughSeen = context.globalState.get(WALKTHROUGH_SEEN_KEY, false);
-
-    if (!walkthroughSeen) {
-        context.globalState.update(WALKTHROUGH_SEEN_KEY, true);
-        vscode.commands.executeCommand(
-            "workbench.action.openWalkthrough",
-            { category: "element-hq.storybook-launcher#storybookLauncher.gettingStarted", step: "wait" },
-            false,
-        );
-    }
-
     // --- Storybook status bar ---
     const sbItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
     sbItem.text = "$(loading~spin) Storybook: Starting\u2026";
@@ -106,7 +93,7 @@ function activate(context) {
             sbItem.text = "$(beaker) Storybook: Open \u25b8";
             sbItem.tooltip = "Storybook Playground is ready — click to open";
             sbItem.command = "storybookLauncher.openPreview";
-            if (walkthroughSeen) await openStorybookPreview();
+            await openStorybookPreview();
         } else {
             sbItem.text = "$(warning) Storybook: Not Started";
             sbItem.tooltip = "Storybook did not start. Try: pnpm run storybook:design";
