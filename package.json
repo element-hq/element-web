@@ -15,8 +15,6 @@
         "i18n:lint": "pnpm -r i18n:lint",
         "storybook:design": "node scripts/design/run-storybook.mjs",
         "start:element-web": "node scripts/design/run-element-web.mjs",
-        "figma:connect": "node scripts/design/figma-connect.mjs",
-        "figma:mcp": "node scripts/design/figma-mcp-server.mjs",
         "lint": "pnpm -r lint:types && pnpm lint:prettier && pnpm -r lint:js && pnpm -r lint:style && pnpm lint:workflows && pnpm lint:knip",
         "lint:prettier": "prettier --check .",
         "lint:prettier-fix": "prettier --log-level=warn --write .",
