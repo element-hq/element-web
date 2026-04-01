@@ -176,10 +176,8 @@ export function TimelineScrollPanelListView({
     const lastTouchYRef = React.useRef<number | null>(null);
     const lastReportedAtBottomRef = React.useRef(false);
     const programmaticScrollGenerationRef = React.useRef(0);
-    const hasCompletedInitialStabilizationRef = React.useRef(false);
-    const initialStabilizationFrameRef = React.useRef<number | null>(null);
+    const hasSeenRealUserInputRef = React.useRef(false);
     const [isPassiveBottomEnabled, setIsPassiveBottomEnabled] = React.useState(Boolean(stickyBottom));
-    const [isUsingInitialOverscan, setIsUsingInitialOverscan] = React.useState(true);
     React.useEffect(() => {
         onScrollRef.current = onScroll;
     }, [onScroll]);
@@ -192,6 +190,7 @@ export function TimelineScrollPanelListView({
         });
     }, []);
     const markUserScrolled = React.useCallback((): void => {
+        hasSeenRealUserInputRef.current = true;
         hasUserScrolledRef.current = true;
         programmaticScrollGenerationRef.current += 1;
         disablePassiveBottom();
@@ -280,7 +279,22 @@ export function TimelineScrollPanelListView({
                 ? scrollNode.scrollHeight - (currentScrollTop + scrollNode.clientHeight) > 1
                 : false;
             const detachedFromBottomByUser =
-                stickyBottom && !hasUserScrolledRef.current && (movedUpward || movedAwayFromBottom);
+                stickyBottom &&
+                hasSeenRealUserInputRef.current &&
+                !hasUserScrolledRef.current &&
+                (movedUpward || movedAwayFromBottom);
+            const shouldRestorePassiveBottomAfterNonUserDrift =
+                stickyBottom &&
+                !hasSeenRealUserInputRef.current &&
+                !hasUserScrolledRef.current &&
+                !isProgrammaticScrollRef.current &&
+                !isAtBottom;
+            const shouldSuppressParentScrollNotification =
+                stickyBottom &&
+                !hasSeenRealUserInputRef.current &&
+                !hasUserScrolledRef.current &&
+                !detachedFromBottomByUser &&
+                !isAtBottom;
 
             if (detachedFromBottomByUser) {
                 hasUserScrolledRef.current = true;
@@ -290,11 +304,16 @@ export function TimelineScrollPanelListView({
             } else if (stickyBottom && isAtBottom && hasUserScrolledRef.current && !isProgrammaticScrollRef.current) {
                 hasUserScrolledRef.current = false;
                 setIsPassiveBottomEnabled(true);
+            } else if (shouldRestorePassiveBottomAfterNonUserDrift) {
+                setIsPassiveBottomEnabled(true);
+                scrollToBottomWhilePassive();
             }
 
             if (!isProgrammaticScrollRef.current || detachedFromBottomByUser) {
                 onBeforeScrollNotifyRef.current?.();
-                onScrollRef.current?.(event);
+                if (!shouldSuppressParentScrollNotification) {
+                    onScrollRef.current?.(event);
+                }
             } else if (!lastReportedAtBottomRef.current && isAtBottom) {
                 onBeforeScrollNotifyRef.current?.();
                 onScrollRef.current?.(event);
@@ -303,7 +322,7 @@ export function TimelineScrollPanelListView({
             lastReportedAtBottomRef.current = isAtBottom;
             lastScrollTopRef.current = currentScrollTop;
         },
-        [disablePassiveBottom, stickyBottom],
+        [disablePassiveBottom, scrollToBottomWhilePassive, stickyBottom],
     );
     const handleVisibleRangeChange = React.useCallback(
         (range: TimelineVisibleRange): void => {
@@ -315,14 +334,6 @@ export function TimelineScrollPanelListView({
             lastVisibleRangeRef.current = range;
             if (stickyBottom && !hasUserScrolledRef.current && !hasInitializedPassiveBottomRef.current) {
                 hasInitializedPassiveBottomRef.current = scrollToBottomWhilePassive();
-            }
-
-            if (!hasCompletedInitialStabilizationRef.current && initialStabilizationFrameRef.current === null) {
-                initialStabilizationFrameRef.current = requestAnimationFrame(() => {
-                    initialStabilizationFrameRef.current = null;
-                    hasCompletedInitialStabilizationRef.current = true;
-                    setIsUsingInitialOverscan(false);
-                });
             }
 
             onVisibleRangeChange?.(range);
@@ -376,10 +387,6 @@ export function TimelineScrollPanelListView({
             return;
         }
 
-        if (!hasCompletedInitialStabilizationRef.current) {
-            return;
-        }
-
         const delta = currentScrollHeight - previousScrollHeight;
         if (delta !== 0) {
             runProgrammaticScroll((node) => {
@@ -387,13 +394,6 @@ export function TimelineScrollPanelListView({
             });
         }
     }, [runProgrammaticScroll, scrollToBottomWhilePassive, stickyBottom]);
-    useEffect(() => {
-        return () => {
-            if (initialStabilizationFrameRef.current !== null) {
-                cancelAnimationFrame(initialStabilizationFrameRef.current);
-            }
-        };
-    }, []);
     useEffect(() => {
         if (!stickyBottom) {
             setIsPassiveBottomEnabled(false);
@@ -423,9 +423,7 @@ export function TimelineScrollPanelListView({
         wasHiddenRef.current = false;
         lastVisibleRangeRef.current = null;
         hasInitializedPassiveBottomRef.current = false;
-        hasCompletedInitialStabilizationRef.current = false;
         lastKnownScrollHeightRef.current = scrollElementRef.current?.scrollHeight ?? 0;
-        setIsUsingInitialOverscan(true);
 
         requestAnimationFrame(() => {
             const virtualListHandle = readRefCurrent(virtualListHandleRef);
@@ -443,12 +441,7 @@ export function TimelineScrollPanelListView({
         });
     }, [items, scrollToBottomWhilePassive, stickyBottom, virtualListHandleRef]);
 
-    // Keep startup overscan conservative so off-screen media rows don't mount and resize during initial load.
-    // Once the first visible range settles, expand to the normal overscan to reduce interaction churn.
-    const viewportIncrease = React.useMemo(
-        () => (isUsingInitialOverscan ? { top: 400, bottom: 800 } : { top: 2000, bottom: 3000 }),
-        [isUsingInitialOverscan],
-    );
+    const viewportIncrease = React.useMemo(() => ({ top: 400, bottom: 800 }), []);
 
     const Scroller = React.useMemo(
         () =>
