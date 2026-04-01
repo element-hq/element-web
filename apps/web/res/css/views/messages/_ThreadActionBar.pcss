@@ -1,23 +1,14 @@
 /*
-Copyright 2019-2024 New Vector Ltd.
-Copyright 2019 The Matrix.org Foundation C.I.C.
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
-
-.mx_MessageActionBar {
-    --MessageActionBar-size-button: 28px;
-    --MessageActionBar-size-margin: 3px;
-
+.mx_ThreadActionBar {
     position: absolute;
-    top: calc(
-        -1 *
-            (
-                var(--MessageActionBar-size-button) + 2 *
-                    (var(--MessageActionBar-size-margin) + var(--cpd-border-width-1))
-            )
-    );
+    visibility: hidden;
+    top: calc(-1 * (28px + 2 * (3px + var(--cpd-border-width-1))));
     right: 8px;
     user-select: none;
     /* Ensure the action bar appears above other things like the read marker */
