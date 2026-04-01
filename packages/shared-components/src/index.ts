@@ -14,7 +14,7 @@ export * from "./composer/Banner";
 export * from "./crypto/SasEmoji";
 export * from "./event-tiles/UrlPreviewGroupView";
 export * from "./message-body/EventContentBody";
-export * from "./message-body/ReadMarker";
+export * from "./room/timeline/ReadMarker";
 export * from "./message-body/RedactedBodyView";
 export * from "./message-body/FileBodyView";
 export * from "./room/timeline/event-tile/body/MVideoBodyView";
