@@ -1565,6 +1565,7 @@
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "report_to_moderators": "Report to moderators",
         "report_to_moderators_description": "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
+        "room_list_sections": "Room list sections",
         "share_history_on_invite": "Share encrypted history with new members",
         "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
@@ -2161,6 +2162,11 @@
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "section": {
+            "chats": "Chats",
+            "favourites": "Favourites",
+            "low_priority": "Low Priority"
         },
         "show_less": "Show less",
         "show_n_more": {
