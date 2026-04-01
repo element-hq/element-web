@@ -35,14 +35,15 @@ export interface FlatVirtualizedListProps<Item, Context> extends VirtualizedList
  * @template Context - The type of additional context data passed to items
  */
 export function FlatVirtualizedList<Item, Context>(props: FlatVirtualizedListProps<Item, Context>): React.ReactElement {
-    const { getItemComponent, ...restProps } = props;
-    const { onFocusForGetItemComponent, ref, ...virtuosoProps } = useVirtualizedList<Item, Context>(restProps);
+    const { getItemComponent, getItemKey } = props;
+    const { onFocusForGetItemComponent, ref, ...virtuosoProps } = useVirtualizedList<Item, Context>(props);
 
     const getItemComponentInternal = useCallback(
         (index: number, item: Item, context: VirtualizedListContext<Context>): JSX.Element =>
             getItemComponent(index, item, context, onFocusForGetItemComponent),
         [getItemComponent, onFocusForGetItemComponent],
     );
+    const computeItemKey = useCallback((index: number, item: Item): React.Key => getItemKey(item), [getItemKey]);
 
     return (
         <Virtuoso
@@ -50,6 +51,7 @@ export function FlatVirtualizedList<Item, Context>(props: FlatVirtualizedListPro
             // compliant, so we leave tabIndex as the default so the container can be focused
             // (virtuoso wraps the children inside another couple of elements so setting it
             // on those doesn't seem to work, unfortunately)
+            computeItemKey={computeItemKey}
             itemContent={getItemComponentInternal}
             data={props.items}
             ref={ref}

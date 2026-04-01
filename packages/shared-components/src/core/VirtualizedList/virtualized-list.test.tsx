@@ -839,3 +839,77 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
         });
     });
 });
+
+describe("GroupedVirtualizedList key collisions", () => {
+    it("keeps header and item focus distinct when their raw keys collide", async () => {
+        const sharedKey = "shared";
+
+        render(
+            <GroupedVirtualizedList<TestGroupHeader, TestItemWithSeparator, undefined>
+                groups={[
+                    {
+                        header: { id: sharedKey, name: "Header" },
+                        items: [{ id: sharedKey, name: "Item" }],
+                    },
+                ]}
+                getGroupHeaderComponent={(
+                    _groupIndex: number,
+                    header: TestGroupHeader,
+                    context: VirtualizedListContext<any>,
+                    onFocus: (header: TestGroupHeader, e: React.FocusEvent) => void,
+                ) => (
+                    <div
+                        className="mx_group_header"
+                        data-testid="colliding-header"
+                        tabIndex={context.tabIndexKey === header.id ? 0 : -1}
+                        onFocus={(e) => onFocus(header, e)}
+                    >
+                        {header.name}
+                    </div>
+                )}
+                getHeaderKey={(header) => header.id}
+                getItemComponent={(
+                    _index: number,
+                    item: TestItemWithSeparator,
+                    context: VirtualizedListContext<any>,
+                    onFocus: (item: TestItemWithSeparator, e: React.FocusEvent) => void,
+                ) => (
+                    <div
+                        className="mx_item"
+                        data-testid="colliding-item"
+                        tabIndex={context.tabIndexKey === getItemKey(item) ? 0 : -1}
+                        onFocus={(e) => onFocus(item, e)}
+                    >
+                        {typeof item === "string" ? item : item.name}
+                    </div>
+                )}
+                getItemKey={getItemKey}
+                isGroupHeaderFocusable={() => true}
+                isItemFocusable={() => true}
+                role="grid"
+                aria-rowcount={2}
+                aria-colcount={1}
+            />,
+            { wrapper: virtuosoWrapper },
+        );
+
+        const list = screen.getByRole("grid");
+        const header = screen.getByTestId("colliding-header");
+        const item = screen.getByTestId("colliding-item");
+
+        fireEvent.focus(list);
+        await waitFor(() => {
+            expect(header).toHaveAttribute("tabindex", "0");
+            expect(item).toHaveAttribute("tabindex", "-1");
+        });
+
+        await act(async () => {
+            fireEvent.keyDown(list, { code: "ArrowDown" });
+        });
+
+        await waitFor(() => {
+            expect(header).toHaveAttribute("tabindex", "-1");
+            expect(item).toHaveAttribute("tabindex", "0");
+        });
+    });
+});

@@ -29,6 +29,35 @@ export interface Group<Header, Item> {
  */
 type NavigationEntry<Header, Item> = { header: Header } | { item: Item };
 
+const HEADER_ENTRY_PROPERTY = "header";
+const HEADER_KEY_PREFIX = "header:";
+const ITEM_KEY_PREFIX = "item:";
+
+const getInternalHeaderKey = (key: string): string => `${HEADER_KEY_PREFIX}${key}`;
+const getInternalItemKey = (key: string): string => `${ITEM_KEY_PREFIX}${key}`;
+
+const isHeaderInternalKey = (key: string | undefined): boolean => key?.startsWith(HEADER_KEY_PREFIX) ?? false;
+const isItemInternalKey = (key: string | undefined): boolean => key?.startsWith(ITEM_KEY_PREFIX) ?? false;
+
+const stripInternalKeyPrefix = (key: string | undefined): string | undefined => {
+    if (!key) {
+        return undefined;
+    }
+
+    if (isHeaderInternalKey(key)) {
+        return key.slice(HEADER_KEY_PREFIX.length);
+    }
+
+    if (isItemInternalKey(key)) {
+        return key.slice(ITEM_KEY_PREFIX.length);
+    }
+
+    return key;
+};
+
+const isHeaderEntry = <Header, Item>(entry: NavigationEntry<Header, Item>): entry is { header: Header } =>
+    HEADER_ENTRY_PROPERTY in entry;
+
 export interface GroupedVirtualizedListProps<Header, Item, Context> extends Omit<
     VirtualizedListProps<Item, Context>,
     "items" | "isItemFocusable" | "getItemKey"
@@ -150,14 +179,16 @@ export function GroupedVirtualizedList<Header, Item, Context>(
     // Wrap getItemKey: dispatch to getHeaderKey or getItemKey based on entry type
     const wrappedGetEntryKey = useCallback(
         (entry: NavigationEntry<Header, Item>): string =>
-            "header" in entry ? getHeaderKey(entry.header) : getItemKey(entry.item),
+            isHeaderEntry(entry)
+                ? getInternalHeaderKey(getHeaderKey(entry.header))
+                : getInternalItemKey(getItemKey(entry.item)),
         [getHeaderKey, getItemKey],
     );
 
     // Wrap isItemFocusable: headers use isGroupHeaderFocusable, items use isItemFocusable
     const wrappedIsEntryFocusable = useCallback(
         (entry: NavigationEntry<Header, Item>): boolean =>
-            "header" in entry ? isGroupHeaderFocusable(entry.header) : isItemFocusable(entry.item),
+            isHeaderEntry(entry) ? isGroupHeaderFocusable(entry.header) : isItemFocusable(entry.item),
         [isGroupHeaderFocusable, isItemFocusable],
     );
 
@@ -194,29 +225,38 @@ export function GroupedVirtualizedList<Header, Item, Context>(
     const itemContent = useCallback(
         (
             flatIndex: number,
-            _entry: NavigationEntry<Header, Item>,
+            entry: NavigationEntry<Header, Item>,
             context: VirtualizedListContext<Context>,
         ): JSX.Element => {
-            const entry = flatEntries[flatIndex];
             const groupIndex = flatIndexToGroupIndex[flatIndex];
+            const scopedContext: VirtualizedListContext<Context> = {
+                ...context,
+                tabIndexKey: isHeaderEntry(entry)
+                    ? isHeaderInternalKey(context.tabIndexKey)
+                        ? stripInternalKeyPrefix(context.tabIndexKey)
+                        : undefined
+                    : isItemInternalKey(context.tabIndexKey)
+                      ? stripInternalKeyPrefix(context.tabIndexKey)
+                      : undefined,
+            };
 
-            if ("header" in entry) {
-                return getGroupHeaderComponent(groupIndex, entry.header, context, onFocusForHeader);
+            if (isHeaderEntry(entry)) {
+                return getGroupHeaderComponent(groupIndex, entry.header, scopedContext, onFocusForHeader);
             }
 
             // Item index in the flattened (non-header) items array:
             // flatIndex minus the number of headers before it (groupIndex + 1).
             const itemIndex = flatIndex - (groupIndex + 1);
-            return getItemComponent(itemIndex, entry.item, context, onFocusForItem, groupIndex);
+            return getItemComponent(itemIndex, entry.item, scopedContext, onFocusForItem, groupIndex);
         },
-        [
-            flatEntries,
-            flatIndexToGroupIndex,
-            getGroupHeaderComponent,
-            getItemComponent,
-            onFocusForItem,
-            onFocusForHeader,
-        ],
+        [flatIndexToGroupIndex, getGroupHeaderComponent, getItemComponent, onFocusForItem, onFocusForHeader],
+    );
+    const computeItemKey = useCallback(
+        (index: number, entry: NavigationEntry<Header, Item>): React.Key =>
+            isHeaderEntry(entry)
+                ? getInternalHeaderKey(getHeaderKey(entry.header))
+                : getInternalItemKey(getItemKey(entry.item)),
+        [getHeaderKey, getItemKey],
     );
 
     return (
@@ -225,6 +265,7 @@ export function GroupedVirtualizedList<Header, Item, Context>(
             // compliant, so we leave tabIndex as the default so the container can be focused
             // (virtuoso wraps the children inside another couple of elements so setting it
             // on those doesn't seem to work, unfortunately)
+            computeItemKey={computeItemKey}
             itemContent={itemContent}
             data={flatEntries}
             {...virtuosoProps}
