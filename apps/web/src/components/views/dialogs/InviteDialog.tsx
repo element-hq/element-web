@@ -1274,26 +1274,23 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
             buttonText = _t("action|invite");
             goButtonFn = this.inviteUsers;
+        } else {
+            throw new Error("Unknown InviteDialog kind: " + this.props.kind);
         }
-
-        const goButton =
-            this.props.kind == InviteKind.CallTransfer ? null : (
-                <AccessibleButton
-                    kind="primary"
-                    onClick={goButtonFn}
-                    className="mx_InviteDialog_goButton"
-                    disabled={this.state.busy || !this.hasSelection()}
-                >
-                    {buttonText}
-                </AccessibleButton>
-            );
 
         return (
             <React.Fragment>
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
                 <div className="mx_InviteDialog_addressBar">
                     {this.renderEditor()}
-                    {goButton}
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={goButtonFn}
+                        className="mx_InviteDialog_goButton"
+                        disabled={this.state.busy || !this.hasSelection()}
+                    >
+                        {buttonText}
+                    </AccessibleButton>
                 </div>
                 {this.state.busy ? <InviteProgressBody /> : this.renderSuggestions()}
             </React.Fragment>
