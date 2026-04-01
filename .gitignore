@@ -13,6 +13,7 @@ package-lock.json
 /.tmp
 .vscode/*
 !.vscode/settings.json
+!.vscode/mcp.json
 .env
 .env.*
 coverage
