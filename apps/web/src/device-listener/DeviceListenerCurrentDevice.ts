@@ -246,7 +246,7 @@ export class DeviceListenerCurrentDevice {
                 await this.setDeviceState("key_storage_out_of_sync", logSpan);
             } else {
                 // We should not get here
-                throw new Error("DeviceListenerCurrentDevice is in an unexpected state");
+                logSpan.error("DeviceListenerCurrentDevice: allSystemsReady was false, but no case matched.");
             }
         }
     }
