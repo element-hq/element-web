@@ -40,7 +40,7 @@ import Spinner from "./Spinner";
 import dis from "../../../dispatcher/dispatcher";
 import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import { ContextMenuButton } from "../../structures/ContextMenu";
+import { ContextMenuButton, toLeftOrRightOf } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, WidgetMessaging, WidgetMessagingEvent } from "../../../stores/widgets/WidgetMessaging";
@@ -63,7 +63,7 @@ import { toWidgetDescriptor } from "../../../modules/WidgetLifecycleApi";
 import { parseUrl } from "../../../utils/UrlUtils";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore.ts";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases.ts";
-import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
+import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 
 // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
 // because that would allow the iframe to programmatically remove the sandbox attribute, but
@@ -100,6 +100,8 @@ interface IProps {
     onEditClick?: () => void;
     // Optional onDeleteClickHandler (overrides default behaviour)
     onDeleteClick?: () => void;
+    // Optional onAttachToSidebarClickHandler
+    onAttachToSidebarClick?: () => void;
     // Optionally hide the tile title
     showTitle?: boolean;
     // Optionally handle minimise button pointer events (default false)
@@ -870,26 +872,27 @@ export default class AppTile extends React.Component<IProps, IState> {
                                     </AccessibleButton>
                                 )}
                                 <I18nContext.Provider value={window.mxModuleApi.i18n}>
-                                    <WidgetContextMenu
-                                        trigger={
-                                            <ContextMenuButton
-                                                className="mx_AppTileMenuBar_widgets_button"
-                                                label={_t("common|options")}
-                                                isExpanded={this.state.menuDisplayed}
-                                                ref={this.contextMenuButton}
-                                                onClick={this.onContextMenuClick}
-                                            >
-                                                <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
-                                            </ContextMenuButton>
-                                        }
-                                        app={this.props.app}
-                                        onFinished={this.closeContextMenu}
-                                        showUnpin={!this.props.userWidget}
-                                        userWidget={this.props.userWidget}
-                                        onEditClick={this.props.onEditClick}
-                                        onDeleteClick={this.props.onDeleteClick}
-                                        menuDisplayed={this.state.menuDisplayed}
-                                    />
+                                    <ContextMenuButton
+                                        className="mx_AppTileMenuBar_widgets_button"
+                                        label={_t("common|options")}
+                                        isExpanded={this.state.menuDisplayed}
+                                        ref={this.contextMenuButton}
+                                        onClick={this.onContextMenuClick}
+                                    >
+                                        <OverflowHorizontalIcon className="mx_Icon mx_Icon_12" />
+                                    </ContextMenuButton>
+                                    {this.state.menuDisplayed && this.contextMenuButton.current && (
+                                        <WidgetContextMenu
+                                            app={this.props.app}
+                                            onFinished={this.closeContextMenu}
+                                            showUnpin={!this.props.userWidget}
+                                            userWidget={this.props.userWidget}
+                                            onEditClick={this.props.onEditClick}
+                                            onDeleteClick={this.props.onDeleteClick}
+                                            onAttachToSidebarClick={this.props.onAttachToSidebarClick}
+                                            {...toLeftOrRightOf(this.contextMenuButton.current.getBoundingClientRect())}
+                                        />
+                                    )}
                                 </I18nContext.Provider>
                             </span>
                         </div>

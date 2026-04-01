@@ -54,6 +54,12 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import {
+    isStickerpickerAttachedToSidebar,
+    setStickerpickerAttachedToSidebar,
+} from "./StickerpickerSidebarStore";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -300,7 +306,21 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         break;
                     }
                 }
+                break;
             }
+            case "stickerpicker_attach_to_sidebar":
+                if (payload.roomId === this.props.room.roomId) {
+                    setStickerpickerAttachedToSidebar(true);
+                    this.setStickerPickerOpen(false);
+                    RightPanelStore.instance.setCard({ phase: RightPanelPhases.StickerPicker });
+                }
+                break;
+            case "stickerpicker_detach_from_sidebar":
+                if (payload.roomId === this.props.room.roomId) {
+                    setStickerpickerAttachedToSidebar(false);
+                    this.setStickerPickerOpen(false);
+                }
+                break;
         }
     };
 
@@ -486,6 +506,11 @@ export class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private toggleStickerPickerOpen = (): void => {
+        if (isStickerpickerAttachedToSidebar()) {
+            this.setStickerPickerOpen(false);
+            RightPanelStore.instance.showOrHidePhase(RightPanelPhases.StickerPicker);
+            return;
+        }
         this.setStickerPickerOpen(!this.state.isStickerPickerOpen);
     };
 
@@ -695,6 +720,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     relation={this.props.relation}
                                     onRecordStartEndClick={this.onRecordStartEndClick}
                                     setStickerPickerOpen={this.setStickerPickerOpen}
+                                    toggleStickerPickerOpen={this.toggleStickerPickerOpen}
                                     showLocationButton={
                                         !window.electron && SettingsStore.getValue(UIFeature.LocationSharing)
                                     }

@@ -20,7 +20,7 @@ import {
 import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import { _t } from "../../../languageHandler";
-import { useContextMenu } from "../../structures/ContextMenu";
+import { toLeftOrRightOf, useContextMenu } from "../../structures/ContextMenu";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { type IApp } from "../../../stores/WidgetStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
@@ -31,7 +31,7 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import EmptyState from "./EmptyState";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
-import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
+import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 
 interface Props {
     room: Room;
@@ -107,21 +107,23 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             </AccessibleButton>
 
             {canModifyWidget && (
-                <WidgetContextMenu
-                    app={app}
-                    onFinished={closeMenu}
-                    menuDisplayed={menuDisplayed}
-                    trigger={
-                        <AccessibleButton
-                            ref={handle}
-                            className="mx_ExtensionsCard_app_options"
-                            onClick={openMenu}
-                            title={_t("common|options")}
-                        >
-                            <OverflowHorizontalIcon />
-                        </AccessibleButton>
-                    }
-                />
+                <>
+                    <AccessibleButton
+                        ref={handle}
+                        className="mx_ExtensionsCard_app_options"
+                        onClick={openMenu}
+                        title={_t("common|options")}
+                    >
+                        <OverflowHorizontalIcon />
+                    </AccessibleButton>
+                    {menuDisplayed && handle.current && (
+                        <WidgetContextMenu
+                            app={app}
+                            onFinished={closeMenu}
+                            {...toLeftOrRightOf(handle.current.getBoundingClientRect())}
+                        />
+                    )}
+                </>
             )}
 
             <AccessibleButton

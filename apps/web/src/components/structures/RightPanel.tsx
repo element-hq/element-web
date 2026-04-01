@@ -34,6 +34,7 @@ import { Action } from "../../dispatcher/actions";
 import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
 import MemberListView from "../views/rooms/MemberList/MemberListView";
+import StickerpickerCard from "../views/right_panel/StickerpickerCard";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -275,6 +276,11 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.Widget:
                 if (!!this.props.room && !!cardState?.widgetId) {
                     card = <WidgetCard room={this.props.room} widgetId={cardState.widgetId} onClose={this.onClose} />;
+                }
+                break;
+            case RightPanelPhases.StickerPicker:
+                if (!!this.props.room) {
+                    card = <StickerpickerCard onClose={this.onClose} />;
                 }
                 break;
         }

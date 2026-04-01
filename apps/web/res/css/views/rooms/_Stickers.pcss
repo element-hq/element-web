@@ -4,7 +4,7 @@
 
 .mx_Stickers_content_container {
     overflow: hidden;
-    height: 300px;
+    height: 450px;
 }
 
 #mx_persistedElement_stickerPicker {
@@ -21,8 +21,8 @@
     }
 
     iframe {
-        /* Sticker picker depends on the fixed height previously used for all tiles */
-        height: 283px; /* height of the popout minus the AppTile menu bar */
+        /* Sticker picker depends on a fixed popover height */
+        height: 433px; /* 450px popover minus the AppTile menu bar */
     }
 }
 
@@ -43,4 +43,32 @@
     display: inline;
     cursor: pointer;
     color: $accent;
+}
+
+.mx_Stickers_sidebar {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+
+    .mx_AppTileFullWidth {
+        width: 100% !important;
+        max-width: unset;
+    }
+}
+
+.mx_Stickers_sidebarPlaceholder {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+}
+
+.mx_Stickers_loading {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
 }

@@ -37,6 +37,8 @@ interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "child
     showUnpin?: boolean;
     // override delete handler
     onDeleteClick?(this: void): void;
+    // override attach to sidebar handler
+    onAttachToSidebarClick?(this: void): void;
     // override edit handler
     onEditClick?(this: void): void;
 }
@@ -89,6 +91,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     app,
     userWidget,
     onDeleteClick,
+    onAttachToSidebarClick,
     onEditClick,
     showUnpin,
     ...props
@@ -190,6 +193,18 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         );
     }
 
+    let attachToSidebarButton: JSX.Element | undefined;
+    if (onAttachToSidebarClick) {
+        const onClick = (): void => {
+            onAttachToSidebarClick();
+            onFinished();
+        };
+
+        attachToSidebarButton = (
+            <IconizedContextMenuOption onClick={onClick} label={_t("widget|context_menu|attach_to_sidebar")} />
+        );
+    }
+
     let revokeButton: JSX.Element | undefined;
     if (showRevokeButton(cli, roomId, app, userWidget)) {
         const opts: ApprovalOpts = { approved: undefined };
@@ -245,6 +260,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
                 {streamAudioStreamButton}
                 {editButton}
                 {revokeButton}
+                {attachToSidebarButton}
                 {deleteButton}
                 {snapshotButton}
                 {moveLeftButton}

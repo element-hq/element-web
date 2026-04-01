@@ -115,6 +115,8 @@ export class ElementWidgetDriver extends WidgetDriver {
             const stickerSendingCap = WidgetEventCapability.forRoomEvent(EventDirection.Send, EventType.Sticker).raw;
             this.allowedCapabilities.add(MatrixCapabilities.StickerSending); // legacy as far as MSC2762 is concerned
             this.allowedCapabilities.add(stickerSendingCap);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4039UploadFile);
+            this.allowedCapabilities.add(MatrixCapabilities.MSC4039DownloadFile);
 
             // Auto-approve the legacy visibility capability. We send it regardless of capability.
             // Widgets don't technically need to request this capability, but Scalar still does.

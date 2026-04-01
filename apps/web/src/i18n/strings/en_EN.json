@@ -3282,6 +3282,7 @@
         "start_group_chat_button": "Start a group chat"
     },
     "stickers": {
+        "detach_from_sidebar": "Detach from sidebar",
         "empty": "You don't currently have any stickerpacks enabled",
         "empty_add_prompt": "Add some now"
     },
@@ -4067,6 +4068,7 @@
         },
         "close_to_view_right_panel": "Close this widget to view it in this panel",
         "context_menu": {
+            "attach_to_sidebar": "Attach to sidebar",
             "delete": "Delete widget",
             "delete_warning": "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?",
             "move_left": "Move left",
