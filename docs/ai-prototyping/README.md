@@ -4,18 +4,24 @@ This workflow gives designers a no-local-setup path for turning Figma designs in
 
 ## 1. Create a Figma API token
 
-1. Open Figma and go to Settings → Security → Personal access tokens.
+1. Open Figma and go to **Settings → Security → Personal access tokens**.
 2. Generate a new token and copy it immediately (Figma only shows it once).
 
-## 2. Add the Codespace secret
+## 2. Add the Codespace secret (before creating the Codespace)
 
-Create **one** user secret in GitHub Codespaces before launching the workspace:
+> **Important:** You must add this secret **before** creating the Codespace.
+> The Figma MCP server reads `FIGMA_TOKEN` at startup. If the secret is
+> missing when the Codespace is created, the server will start without a
+> valid token and Figma tools will not work.
 
-- `FIGMA_TOKEN`: your Figma personal access token.
+1. Go to [GitHub → Settings → Codespaces → Secrets](https://github.com/settings/codespaces).
+2. Add a secret named `FIGMA_TOKEN` with the token you copied.
+3. Under **Repository access**, allow the `element-hq/element-web` repository.
 
-Go to [GitHub → Settings → Codespaces → Secrets](https://github.com/settings/codespaces), add `FIGMA_TOKEN`, and allow the `element-hq/element-web` repository.
-
-> **No per-file secret needed.** The Designer agent extracts the file key from whatever Figma URL you paste in chat. You can work with any Figma file using the same token.
+> **Already created a Codespace without the token?** You can add the secret
+> and then rebuild the Codespace: open the Command Palette (⌘⇧P / Ctrl+Shift+P)
+> and run **Codespaces: Rebuild Container**. This will restart the environment
+> with the secret available.
 
 ## 3. Open the Codespace
 
@@ -23,7 +29,7 @@ Go to [GitHub → Settings → Codespaces → Secrets](https://github.com/settin
 2. Wait for the dev container to finish installing dependencies with `pnpm`.
 3. Storybook starts automatically in the existing shared-components package and forwards port `6007` for preview.
 4. Element Web can also be started for in-app prototyping (see below).
-5. The Figma MCP server registers automatically from the dev container configuration.
+5. The Figma MCP server starts automatically — no manual action required (as long as `FIGMA_TOKEN` was set before creating the Codespace).
 
 ## 4. Use the Designer agent
 
