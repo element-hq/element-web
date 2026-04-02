@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
@@ -12,6 +13,7 @@ import { type WatchManager } from "../WatchManager";
 import SettingsStore from "../SettingsStore";
 import { type SettingKey } from "../Settings.tsx";
 import { _t } from "../../languageHandler.tsx";
+import PlatformPeg from "../../PlatformPeg.ts";
 
 /**
  * Disables a given setting if the server unstable feature it requires is not supported
@@ -28,6 +30,9 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
      * @param unstableFeatureGroups - If any one of the feature groups is satisfied,
      * then the setting is considered enabled. A feature group is satisfied if all of
      * the features in the group are supported (all features in a group are required).
+     * @param defaultEnabled - If we haven't been able to check for support yet, should
+     *  this feature be enabled or disabled (default).
+     * @param forceReload - Should the client force reload.
      */
     public constructor(
         private readonly settingName: SettingKey,
@@ -36,12 +41,23 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         private readonly stableVersion?: string,
         private readonly disabledMessage?: TranslationKey,
         private readonly forcedValue: any = false,
+        private readonly defaultEnabled = false,
+        private readonly forceReload = false,
     ) {
         super();
     }
 
+    public async onChange(): Promise<void> {
+        if (this.forceReload) {
+            PlatformPeg.get()?.reload();
+        }
+    }
+
     public get disabled(): boolean {
-        return !this.enabled;
+        if (this.enabled !== undefined) {
+            return !this.enabled;
+        }
+        return !this.defaultEnabled;
     }
 
     public set disabled(newDisabledValue: boolean) {

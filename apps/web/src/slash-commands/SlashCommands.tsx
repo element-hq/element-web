@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
@@ -62,6 +63,7 @@ import { goto, join } from "./join";
 import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import upgraderoom from "./upgraderoom/upgraderoom";
 import { emoticon } from "./emoticon";
+import { userStatusTextWithinMaxLength } from "../hooks/useUserStatus";
 
 export { CommandCategories, Command };
 
@@ -817,6 +819,39 @@ export const Commands = [
             if (!room) return reject(new UserFriendlyError("slash_command|could_not_find_room"));
             return success(guessAndSetDMRoom(room, false));
         },
+        renderingTypes: [TimelineRenderingType.Room],
+    }),
+    new Command({
+        command: "status",
+        args: "<emoji> <text>",
+        description: _td("slash_command|status|description"),
+        isEnabled: () => SettingsStore.getValue("feature_user_status"),
+        runFn: function (cli, _roomId, _threadId, args) {
+            if (!args) {
+                return reject(new UserFriendlyError("slash_command|status|no_args"));
+            }
+            const [emojiText, text] = splitAtFirstSpace(args);
+            if (!emojiText) {
+                return reject(new UserFriendlyError("slash_command|status|no_emoji"));
+            }
+            if (!text) {
+                return reject(new UserFriendlyError("slash_command|status|no_text"));
+            }
+            const [emoji, additionalSegment] = [...new Intl.Segmenter().segment(emojiText)];
+            if (additionalSegment) {
+                return reject(new UserFriendlyError("slash_command|status|too_long_emoji"));
+            }
+            if (text && !userStatusTextWithinMaxLength(text)) {
+                return reject(new UserFriendlyError("slash_command|status|too_long_text"));
+            }
+            return success(
+                cli.setExtendedProfileProperty("org.matrix.msc4426.status", {
+                    emoji: emoji.segment,
+                    text,
+                }),
+            );
+        },
+        category: CommandCategories.actions,
         renderingTypes: [TimelineRenderingType.Room],
     }),
 

@@ -1530,6 +1530,11 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_user_status": {
+            "description": "Enables being able to see and set a current status.",
+            "display_name": "User status",
+            "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
+        },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
         "group_calls": "New group call experience",
         "group_developer": "Developer",
@@ -3135,6 +3140,14 @@
         "server_error_detail": "Server unavailable, overloaded, or something else went wrong.",
         "shrug": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
         "spoiler": "Sends the given message as a spoiler",
+        "status": {
+            "description": "Set your current status",
+            "no_args": "No arguments provided. You should supply an emoij and an optional text component.",
+            "no_emoji": "You did not provide an emoji",
+            "no_text": "You did not provide any status text",
+            "too_long_emoji": "The first argument must be an emoji",
+            "too_long_text": "The text you provided was too long."
+        },
         "tableflip": "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message",
         "topic": "Gets or sets the room topic",
         "topic_none": "This room has no topic.",

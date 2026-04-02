@@ -139,5 +139,10 @@ joining a room.
 
 Replaces the legacy notification settings with a new one to manage push rules.
 
+## User status (`feature_user_status`)
+
+Enables setting a status message in your profile and to be able to view other's statuses.
+Requires [MSC4429](https://github.com/matrix-org/matrix-spec-proposals/pull/4429) and [MSC4426](https://github.com/matrix-org/matrix-spec-proposals/pull/4426).
+
 **Warning** This feature has options which are not backwards compatible, disabling
 it may have unintended consequences.

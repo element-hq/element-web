@@ -297,7 +297,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.lazyLoadMembers = true;
         opts.clientWellKnownPollPeriod = 2 * 60 * 60; // 2 hours
         opts.threadSupport = true;
-        opts.unstableMSC4429SyncUserProfileFields = ["org.matrix.msc4426.status"];
+        if (SettingsStore.getValue("feature_user_status")) {
+            opts.unstableMSC4429SyncUserProfileFields = ["org.matrix.msc4426.status"];
+        }
 
         if (SettingsStore.getValue("feature_sliding_sync")) {
             throw new UserFriendlyError("sliding_sync_legacy_no_longer_supported");

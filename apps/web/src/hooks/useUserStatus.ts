@@ -11,6 +11,7 @@ import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "./useEventEmitter";
+import { useFeatureEnabled } from "./useSettings";
 
 const logger = rootLogger.getChild("useUserStatus");
 
@@ -19,7 +20,15 @@ export interface UserStatus {
     text: string;
 }
 
+const MAX_STATUS_TEXT_BYTES = 256;
+
+export function userStatusTextWithinMaxLength(text: string): boolean {
+    const textEncoder = new TextEncoder();
+    return textEncoder.encode(text).length <= MAX_STATUS_TEXT_BYTES;
+}
+
 export function useUserStatus(userId: string | undefined): UserStatus | undefined {
+    const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
     const [rawUserStatus, setRawUserStatus] = useState<unknown | undefined>();
 
@@ -33,6 +42,9 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
     });
     useEffect(() => {
         (async () => {
+            if (!isEnabled) {
+                return;
+            }
             if (!userId) {
                 setRawUserStatus(undefined);
                 return;
@@ -52,23 +64,26 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
                 }
             }
         })();
-    }, [userId, matrixClient]);
+    }, [isEnabled, userId, matrixClient]);
+    if (!isEnabled) {
+        return;
+    }
 
     if (typeof rawUserStatus !== "object" || rawUserStatus === null) {
         logger.warn(`value of "org.matrix.msc4426.status" was not an object for ${userId}`);
-        return undefined;
+        return;
     }
     if ("emoji" in rawUserStatus === false || typeof rawUserStatus.emoji !== "string" || !rawUserStatus.emoji) {
         logger.warn(`"emoji" property was not a valid string for ${userId}`);
-        return undefined;
+        return;
     }
     if ("text" in rawUserStatus === false || typeof rawUserStatus.text !== "string" || !rawUserStatus.text) {
-        logger.warn(`"status" property was not a valid string for ${userId}`);
-        return undefined;
+        logger.warn(`"text" property was not a valid string for ${userId}`);
+        return;
     }
 
     return {
         emoji: rawUserStatus.emoji,
-        text: rawUserStatus.text,
+        text: userStatusTextWithinMaxLength(rawUserStatus.text) ? rawUserStatus.text : `${rawUserStatus.text}…`,
     };
 }
