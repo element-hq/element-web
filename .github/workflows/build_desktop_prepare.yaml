@@ -20,11 +20,10 @@ on:
                 required: false
                 default: false
                 description: "Whether the build should be deployed to production"
-            branch-matching:
-                type: boolean
+            webapp-artifact:
+                type: string
                 required: false
-                default: false
-                description: "Whether the branch name should be matched to find the element-web commit"
+                description: "Name of the webapp artifact that should be used, will fetch a relevant build if omitted"
         secrets:
             # Required if `nightly` is set
             CF_R2_ACCESS_KEY_ID:
@@ -57,6 +56,7 @@ jobs:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
               with:
                   persist-credentials: false
+                  repository: element-hq/element-web
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
@@ -66,28 +66,26 @@ jobs:
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
-            - name: Fetch Element Web (matching branch)
-              id: branch-matching
-              if: inputs.branch-matching
+            - name: Fetch Element Web (from artifact)
+              if: inputs.webapp-artifact != ''
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+              with:
+                  name: ${{ inputs.webapp-artifact }}
+                  path: apps/desktop/webapp
+
+            - name: Build webapp.asar (from artifact)
+              if: inputs.webapp-artifact != ''
               working-directory: apps/desktop
-              continue-on-error: true
               run: |
-                  scripts/branch-match.sh
-                  cp "$CONFIG_DIR/config.json" element-web/
-                  pnpm --cwd element-web install --frozen-lockfile
-                  pnpm --cwd element-web run build
-                  mv element-web/webapp .
+                  cp -f "$CONFIG_DIR/config.json" webapp/config.json
                   pnpm run asar-webapp
               env:
-                  # These must be set for branch-match.sh to get the right branch
-                  REPOSITORY: ${{ github.repository }}
-                  PR_NUMBER: ${{ github.event.pull_request.number }}
                   CONFIG_DIR: ${{ inputs.config }}
 
             - name: Fetch Element Web (${{ inputs.version }})
-              if: steps.branch-matching.outcome == 'failure' || steps.branch-matching.outcome == 'skipped'
+              if: inputs.webapp-artifact == ''
               working-directory: apps/desktop
               run: pnpm run fetch --noverify -d ${CONFIG} ${VERSION}
               env:
@@ -189,7 +187,7 @@ jobs:
 
             - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
-                  name: webapp
+                  name: desktop-prepare
                   retention-days: 1
                   path: |
                       apps/desktop/webapp.asar
