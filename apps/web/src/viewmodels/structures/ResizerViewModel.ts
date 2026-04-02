@@ -19,9 +19,12 @@ import whatInput from "what-input";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { AutoCollapse } from "./auto-collapse/AutoCollapse";
 
 function getInitialState(): ResizerViewSnapshot {
-    if (SettingsStore.getValue("RoomList.isPanelCollapsed")) {
+    const shouldStartCollapsed =
+        SettingsStore.getValue("RoomList.isPanelCollapsed") || AutoCollapse.shouldStartCollapsed();
+    if (shouldStartCollapsed) {
         return {
             isCollapsed: true,
             initialSize: 0,
@@ -47,16 +50,29 @@ export class ResizerViewModel
      */
     private panelHandle?: PanelImperativeHandle;
 
+    private readonly autoCollapse: AutoCollapse;
+
     public constructor() {
         super(undefined, getInitialState());
+        this.autoCollapse = this.disposables.track(
+            new AutoCollapse((isCollapsed) => {
+                this.snapshot.merge({ isCollapsed });
+            }),
+        );
     }
 
     public onLeftPanelResize = debounce((panelSize: PanelSize): void => {
+        if (this.autoCollapse.isAutoCollapsed) return;
         const newSize = panelSize.inPixels;
         this.snapshot.merge({ isCollapsed: newSize === 0 });
     }, 50);
 
     public onLeftPanelResized = (newSize: number): void => {
+        // Early return if we should be ignoring this event due to some auto-collapse behaviour.
+        if (this.autoCollapse.shouldIgnoreResize) return;
+
+        this.autoCollapse.onLeftPanelResized();
+
         const isCollapsed = newSize === 0;
         // Store the size if the panel isn't collapsed.
         if (!isCollapsed) {
@@ -71,12 +87,14 @@ export class ResizerViewModel
 
     public setPanelHandle = (handle: PanelImperativeHandle): void => {
         this.panelHandle = handle;
+        this.autoCollapse.setHandle(handle);
     };
 
     public onSeparatorClick = (): void => {
         if (this.panelHandle?.isCollapsed()) {
             const lastSize = SettingsStore.getValue("RoomList.panelSize");
-            this.panelHandle.resize(`${lastSize}%`);
+            this.panelHandle.resize(`${lastSize ?? 100}%`);
+            this.autoCollapse.onLeftPanelResized();
         }
     };
 

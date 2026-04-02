@@ -82,7 +82,7 @@ test.describe("Location sharing", { tag: "@no-firefox" }, () => {
                 "region", // XXX: ContextMenu managed=false does not provide a role.
             ]);
             await expect(axe).toHaveNoViolations();
-            await expect(menu).toMatchScreenshot("location-live-share-dialog.png");
+            await expect(menu).toMatchScreenshot("location-live-share-dialog.png", { unlockLeftPanelWidth: true });
         },
     );
 });

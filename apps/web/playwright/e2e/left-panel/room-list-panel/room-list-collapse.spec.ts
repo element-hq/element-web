@@ -40,7 +40,7 @@ test.describe("Collapsible Room list", () => {
     }
 
     test("should be possible to expand/contract the room list", { tag: "@screenshot" }, async ({ page, app, user }) => {
-        await expect(page).toMatchScreenshot("room-list-collapse-default.png");
+        await expect(page).toMatchScreenshot("room-list-collapse-default.png", { unlockLeftPanelWidth: true });
         const leftPanelLocator = page.getByTestId("left-panel");
 
         // Contract the panel
@@ -68,7 +68,9 @@ test.describe("Collapsible Room list", () => {
             // Expect te separator to be shown
             const separator = page.getByRole("separator", { name: "Click or drag to expand" });
             await expect(separator).toBeInViewport();
-            await expect(page).toMatchScreenshot("room-list-collapse-fully-collapsed.png");
+            await expect(page).toMatchScreenshot("room-list-collapse-fully-collapsed.png", {
+                unlockLeftPanelWidth: true,
+            });
 
             // Should be possible to expand by clicking on the separator
             await separator.click();
