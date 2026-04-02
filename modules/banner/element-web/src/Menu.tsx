@@ -89,6 +89,8 @@ const CloseButton = styled.button`
 `;
 
 const CategoryHeading = styled.h2`
+    line-height: var(--cpd-font-line-height-tight);
+    letter-spacing: var(--cpd-font-letter-spacing-heading-lg);
     font-weight: 700;
     font-size: 12px;
     color: ${({ theme }): string => theme.subheadingColor};
