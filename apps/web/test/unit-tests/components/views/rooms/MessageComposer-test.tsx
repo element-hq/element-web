@@ -295,7 +295,7 @@ describe("MessageComposer", () => {
                     act(() => resizeCallback(UI_EVENTS.Resize, {}));
                 });
 
-                it("should close the menu", () => {
+                it("should not show the sticker button in narrow mode", () => {
                     expect(screen.queryByLabelText("Sticker")).not.toBeInTheDocument();
                 });
 
@@ -317,8 +317,8 @@ describe("MessageComposer", () => {
                     act(() => resizeCallback(UI_EVENTS.Resize, {}));
                 });
 
-                it("should close the menu", () => {
-                    expect(screen.queryByLabelText("Sticker")).not.toBeInTheDocument();
+                it("should show the sticker button in wide mode", () => {
+                    expect(screen.getByLabelText("Sticker")).toBeInTheDocument();
                 });
 
                 it("should show the attachment button", () => {

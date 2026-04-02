@@ -10,7 +10,6 @@ import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../languageHandler";
-import type { TranslationKey } from "../../../languageHandler";
 import Spinner from "../elements/Spinner";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";

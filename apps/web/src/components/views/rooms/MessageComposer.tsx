@@ -56,10 +56,7 @@ import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import {
-    isStickerpickerAttachedToSidebar,
-    setStickerpickerAttachedToSidebar,
-} from "./StickerpickerSidebarStore";
+import { isStickerpickerAttachedToSidebar, setStickerpickerAttachedToSidebar } from "./StickerpickerSidebarStore";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
