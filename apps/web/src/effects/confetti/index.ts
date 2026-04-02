@@ -6,10 +6,11 @@ Copyright 2020 Nordeck IT + Consulting GmbH.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
- */
+*/
+
 import type ICanvasEffect from "../ICanvasEffect";
 
-export type ConfettiOptions = {
+type ConfettiOptions = {
     /**
      * max confetti count
      */
@@ -54,7 +55,7 @@ export const DefaultOptions: ConfettiOptions = {
 export default class Confetti implements ICanvasEffect {
     private readonly options: ConfettiOptions;
 
-    public constructor(options: { [key: string]: any }) {
+    public constructor(options: Partial<ConfettiOptions>) {
         this.options = { ...DefaultOptions, ...options };
     }
 
