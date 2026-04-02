@@ -28,7 +28,7 @@ on:
                 type: string
                 required: false
                 description: |
-                    The name of the prepare artifact to use, defaults to 'webapp'.
+                    The name of the prepare artifact to use, defaults to 'desktop-prepare'.
                     The artifact must contain the following:
                     + webapp.asar - the asar archive of the webapp to embed in the desktop app
                     + electronVersion - the version of electron to use for cache keying
@@ -38,7 +38,7 @@ on:
 
                     The artifact can also contain any additional files which will be applied as overrides to the checkout root before building,
                     for example icons in the `build/` directory to override the app icons.
-                default: "webapp"
+                default: "desktop-prepare"
             test:
                 type: boolean
                 required: false
@@ -73,20 +73,8 @@ jobs:
         # https://github.com/matrix-org/seshat/issues/135
         runs-on: ${{ inputs.runs-on || (inputs.arch == 'arm64' && 'ubuntu-22.04-arm' || 'ubuntu-22.04') }}
         env:
-            HAK_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env
+            HAK_DOCKER_IMAGE: ghcr.io/element-hq/element-web/desktop-build-env:${{ case(github.event_name == 'push', inputs.ref || github.ref_name, github.event_name == 'release', 'staging', 'develop') }}
         steps:
-            - name: Resolve docker image tag for push
-              if: github.event_name == 'push'
-              run: echo "HAK_DOCKER_IMAGE=$HAK_DOCKER_IMAGE:$REF" >> $GITHUB_ENV
-              env:
-                  REF: ${{ inputs.ref || github.ref_name }}
-            - name: Resolve docker image tag for release
-              if: github.event_name == 'release'
-              run: echo "HAK_DOCKER_IMAGE=$HAK_DOCKER_IMAGE:staging" >> $GITHUB_ENV
-            - name: Resolve docker image tag for other triggers
-              if: github.event_name != 'push' && github.event_name != 'release'
-              run: echo "HAK_DOCKER_IMAGE=$HAK_DOCKER_IMAGE:develop" >> $GITHUB_ENV
-
             - uses: nbucic/variable-mapper@0673f6891a0619ba7c002ecfed0f9f4f39017b6f
               id: config
               with:
@@ -95,11 +83,9 @@ jobs:
                   map: |
                       {
                         "amd64": {
-                          "target": "x86_64-unknown-linux-gnu",
                           "arch": "x86-64"
                         },
                         "arm64": {
-                          "target": "aarch64-unknown-linux-gnu",
                           "arch": "aarch64",
                           "build-args": "--arm64"
                         }
@@ -120,7 +106,7 @@ jobs:
               id: cache
               uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
               with:
-                  key: ${{ runner.os }}-${{ github.ref_name }}-${{ inputs.sqlcipher }}-${{ inputs.arch }}-${{ hashFiles('hakHash', 'electronVersion', 'dockerbuild/*') }}
+                  key: ${{ runner.os }}-${{ github.ref_name }}-${{ inputs.sqlcipher }}-${{ inputs.arch }}-${{ hashFiles('apps/desktop/hakHash', 'apps/desktop/electronVersion', 'apps/desktop/dockerbuild/*') }}
                   path: |
                       apps/desktop/.hak
 
@@ -135,7 +121,7 @@ jobs:
 
             - name: Install Deps
               working-directory: apps/desktop
-              run: pnpm install --frozen-lockfile
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - name: "Get modified files"
               id: changed_files
