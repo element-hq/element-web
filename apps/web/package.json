@@ -63,7 +63,7 @@
         "css-tree": "^3.0.0",
         "diff-dom": "^5.0.0",
         "diff-match-patch": "^1.0.5",
-        "domutils": "^3.2.2",
+        "domutils": "^4.0.0",
         "emojibase-regex": "^17.0.0",
         "escape-html": "^1.0.3",
         "file-saver": "^2.0.5",
