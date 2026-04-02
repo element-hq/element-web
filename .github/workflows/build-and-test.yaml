@@ -151,7 +151,7 @@ jobs:
                   node-version: "lts/*"
 
             - name: Install dependencies
-              run: pnpm install --frozen-lockfile --filter element-web --dev
+              run: pnpm install --frozen-lockfile --dev
 
             - name: Get installed Playwright version
               id: playwright
