@@ -725,21 +725,32 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         ],
     );
 
+    const showActionBar =
+        !vmSnapshot.isEditing &&
+        !props.forExport &&
+        (vmSnapshot.hover ||
+            vmSnapshot.focusWithin ||
+            vmSnapshot.actionBarFocused);
+
     const actionBar = useMemo(
-        (): ActionBarProps => ({
-            mxEvent: props.mxEvent,
-            forExport: props.forExport,
-            permalinkCreator: props.permalinkCreator,
-            getRelationsForEvent: props.getRelationsForEvent,
-            reactions: vmSnapshot.reactions,
-            isEditing: vmSnapshot.isEditing,
-            isQuoteExpanded: vmSnapshot.isQuoteExpanded,
-            tileRef,
-            replyChainRef,
-            onFocusChange: onActionBarFocusChange,
-            toggleThreadExpanded,
-        }),
+        (): ActionBarProps | undefined =>
+            showActionBar
+                ? {
+                      mxEvent: props.mxEvent,
+                      forExport: props.forExport,
+                      permalinkCreator: props.permalinkCreator,
+                      getRelationsForEvent: props.getRelationsForEvent,
+                      reactions: vmSnapshot.reactions,
+                      isEditing: vmSnapshot.isEditing,
+                      isQuoteExpanded: vmSnapshot.isQuoteExpanded,
+                      tileRef,
+                      replyChainRef,
+                      onFocusChange: onActionBarFocusChange,
+                      toggleThreadExpanded,
+                  }
+                : undefined,
         [
+            showActionBar,
             props.mxEvent,
             props.forExport,
             props.permalinkCreator,
