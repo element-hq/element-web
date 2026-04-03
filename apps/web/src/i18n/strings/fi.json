@@ -32,7 +32,6 @@
         "cancel": "Peruuta",
         "change": "Muuta",
         "clear": "Tyhjennä",
-        "click": "Napsauta",
         "click_to_copy": "Kopioi napsauttamalla",
         "close": "Sulje",
         "collapse": "Supista",
@@ -64,7 +63,6 @@
         "go": "Mene",
         "go_back": "Takaisin",
         "got_it": "Asia selvä",
-        "hide": "Piilota",
         "hide_advanced": "Piilota lisäasetukset",
         "hold": "Pidä",
         "ignore": "Sivuuta",
@@ -2802,7 +2800,6 @@
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Puretaan salausta",
         "download_action_downloading": "Ladataan",
         "download_failed": "Lataus epäonnistui",
         "download_failed_description": "Tiedostoa ladattaessa tapahtui virhe",
@@ -2992,10 +2989,7 @@
             "removed": "%(senderName)s poisti sovelman %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Supista lainaukset",
             "copy_link_thread": "Kopioi linkki ketjuun",
-            "expand_reply_chain": "Laajenna lainaukset",
-            "label": "Viestitoiminnot",
             "view_in_room": "Näytä huoneessa"
         },
         "mjolnir": {

@@ -32,7 +32,6 @@
         "cancel": "Abbrechen",
         "change": "Ändern",
         "clear": "Zurücksetzen",
-        "click": "Klick",
         "click_to_copy": "Klicken um zu kopieren",
         "close": "Schließen",
         "collapse": "Verbergen",
@@ -66,7 +65,6 @@
         "go": "Los",
         "go_back": "Zurück",
         "got_it": "Verstanden",
-        "hide": "Verstecken",
         "hide_advanced": "Erweiterte Einstellungen ausblenden",
         "hold": "Halten",
         "ignore": "Ignorieren",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Integrationen sind nicht erlaubt"
     },
     "invite": {
-        "ask_anyway_description": "Konnte keine Profile für die folgenden Matrix-IDs finden – möchtest du dennoch eine Direktnachricht beginnen?",
-        "ask_anyway_label": "Dennoch DM beginnen",
-        "ask_anyway_never_warn_label": "Dennoch DM beginnen und mich nicht mehr warnen",
         "email_caption": "Via Email einladen",
         "email_limit_one": "E-Mail-Einladungen können nur nacheinander gesendet werden",
         "email_use_default_is": "Verwende einen Identitäts-Server, um per E-Mail einzuladen. <default>Nutze den Standardidentitäts-Server (%(defaultIdentityServerName)s)</default> oder konfiguriere einen in den <settings>Einstellungen</settings>.",
@@ -3296,7 +3291,6 @@
         },
         "empty_description": "Verwende \"%(replyInThread)s\" beim Hovern über eine Nachricht.",
         "empty_title": "Threads helfen, Unterhaltungen beim Thema zu halten und sie leichter zu verfolgen.",
-        "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten",
         "mark_all_read": "Alle als gelesen markieren",
         "my_threads": "Meine Threads",
         "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
@@ -3340,7 +3334,6 @@
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Entschlüsseln",
         "download_action_downloading": "Herunterladen",
         "download_failed": "Herunterladen fehlgeschlagen",
         "download_failed_description": "Beim Herunterladen dieser Datei ist ein Fehler aufgetreten",
@@ -3538,10 +3531,7 @@
             "removed": "%(senderName)s hat das Widget %(widgetName)s entfernt"
         },
         "mab": {
-            "collapse_reply_chain": "Zitate einklappen",
             "copy_link_thread": "Link zu Thread kopieren",
-            "expand_reply_chain": "Zitate ausklappen",
-            "label": "Nachrichtenaktionen",
             "view_in_room": "Im Chat anzeigen"
         },
         "mjolnir": {
