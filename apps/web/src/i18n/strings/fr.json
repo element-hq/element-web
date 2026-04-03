@@ -32,7 +32,6 @@
         "cancel": "Annuler",
         "change": "Changer",
         "clear": "Effacer",
-        "click": "Clic",
         "click_to_copy": "Cliquez pour copier",
         "close": "Fermer",
         "collapse": "Réduire",
@@ -66,7 +65,6 @@
         "go": "C’est parti",
         "go_back": "Revenir en arrière",
         "got_it": "Compris",
-        "hide": "Masquer",
         "hide_advanced": "Masquer les paramètres avancés",
         "hold": "Mettre en pause",
         "ignore": "Ignorer",
@@ -1364,9 +1362,6 @@
         "impossible_dialog_title": "Les intégrations ne sont pas autorisées"
     },
     "invite": {
-        "ask_anyway_description": "Impossible de trouver les profils pour les identifiants Matrix listés ci-dessous. Voulez-vous quand même commencer une conversation privée ?",
-        "ask_anyway_label": "Commencer la conversation privée quand même",
-        "ask_anyway_never_warn_label": "Commencer quand même la conversation privée et ne plus me prévenir",
         "email_caption": "Inviter par e-mail",
         "email_limit_one": "Les invitations par e-mail ne peuvent être envoyées qu’une par une",
         "email_use_default_is": "Utilisez un serveur d’identité pour inviter avec un e-mail. <default>Utilisez le serveur par défaut (%(defaultIdentityServerName)s)</default> ou gérez-le dans les <settings>Paramètres</settings>.",
@@ -1567,6 +1562,7 @@
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
+        "room_list_sections": "Sections de la liste de salons",
         "share_history_on_invite": "Partagez l'historique chiffré avec les nouveaux membres",
         "share_history_on_invite_description": "Lorsque vous invitez un utilisateur dans un salon chiffré dont la visibilité de l'historique est définie sur « partagée », partagez l'historique chiffré avec cet utilisateur et acceptez l'historique chiffré lorsque vous êtes invité dans une telle salon.",
         "share_history_on_invite_warning": "Cette fonctionnalité est EXPÉRIMENTALE et toutes les précautions de sécurité ne sont pas mises en œuvre. Ne l'activez pas sur les comptes en production.",
@@ -2162,6 +2158,11 @@
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
+        },
+        "section": {
+            "chats": "Discussions",
+            "favourites": "Favoris",
+            "low_priority": "Priorité basse"
         },
         "show_less": "En voir moins",
         "show_n_more": {
@@ -3309,7 +3310,6 @@
         },
         "empty_description": "Utiliser \"%(replyInThread)s\" lorsque vous survolez un message.",
         "empty_title": "Les fils de discussion aident à garder vos conversations sur le sujet et à les suivre facilement.",
-        "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante",
         "mark_all_read": "Tout marquer comme lu",
         "my_threads": "Mes fils de discussion",
         "my_threads_description": "Affiche tous les fils de discussion auxquels vous avez participé",
@@ -3353,7 +3353,6 @@
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Déchiffrement",
         "download_action_downloading": "Téléchargement en cours",
         "download_failed": "Échec du téléchargement",
         "download_failed_description": "Une erreur s'est produite lors du téléchargement de ce fichier",
@@ -3553,10 +3552,7 @@
             "removed": "Widget %(widgetName)s supprimé par %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Réduire les citations",
             "copy_link_thread": "Copier le lien du fil de discussion",
-            "expand_reply_chain": "Étendre les citations",
-            "label": "Actions de message",
             "view_in_room": "Voir dans le salon"
         },
         "mjolnir": {

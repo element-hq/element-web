@@ -32,7 +32,6 @@
         "cancel": "Storno",
         "change": "Změnit",
         "clear": "Smazat",
-        "click": "Kliknutí",
         "click_to_copy": "Kliknutím zkopírujte",
         "close": "Zavřít",
         "collapse": "Sbalit",
@@ -66,7 +65,6 @@
         "go": "Ok",
         "go_back": "Zpět",
         "got_it": "Rozumím",
-        "hide": "Skrýt",
         "hide_advanced": "Skrýt pokročilé možnosti",
         "hold": "Podržet",
         "ignore": "Ignorovat",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Integrace nejsou povolené"
     },
     "invite": {
-        "ask_anyway_description": "Není možné najít uživatelské profily pro níže uvedené Matrix ID - chcete přesto založit DM?",
-        "ask_anyway_label": "Zahájit přímou zprávu i přesto",
-        "ask_anyway_never_warn_label": "Zahájit přímou zprávu i přesto a nikdy už mě nevarovat",
         "email_caption": "Pozvat emailem",
         "email_limit_one": "Pozvánky e-mailem lze zasílat pouze po jedné",
         "email_use_default_is": "Odeslat pozvánku pomocí serveru identit. <default>Použít výchozí (%(defaultIdentityServerName)s)</default> nebo přenastavit <settings>Nastavení</settings>.",
@@ -3311,7 +3306,6 @@
         },
         "empty_description": "Při najetí na zprávu použijte \"%(replyInThread)s\".",
         "empty_title": "Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.",
-        "error_start_thread_existing_relation": "Nelze založit vlákno ve vlákně",
         "mark_all_read": "Označit vše jako přečtené",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazit všechna vlákna, kterých jste se zúčastnili",
@@ -3355,7 +3349,6 @@
             "unable_to_decrypt": "Zprávu nelze dešifrovat"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrování",
         "download_action_downloading": "Stahování",
         "download_failed": "Stažení se nezdařilo",
         "download_failed_description": "Při stahování tohoto souboru došlo k chybě",
@@ -3553,10 +3546,7 @@
             "removed": "%(senderName)s odstranil(a) widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Sbalit citace",
             "copy_link_thread": "Kopírovat odkaz na vlákno",
-            "expand_reply_chain": "Rozbalit citace",
-            "label": "Akce zprávy",
             "view_in_room": "Zobrazit v místnosti"
         },
         "mjolnir": {
