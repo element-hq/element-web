@@ -8,17 +8,17 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
-import { mocked } from "jest-mock";
 import {
     EventStatus,
     EventType,
     type IEventDecryptionResult,
     type MatrixClient,
-    MatrixEvent,
+    type MatrixEvent,
     NotificationCountType,
     PendingEventOrdering,
     Room,
-    TweakName,
+    type Thread,
+    ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
 import {
     type CryptoApi,
@@ -30,26 +30,67 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
-import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
-import * as EventTileFactory from "../../../../../src/events/EventTileFactory";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../../test-utils";
-import { mkThread } from "../../../../test-utils/threads";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import dis from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
-import PinningUtils from "../../../../../src/utils/PinningUtils";
-import { Layout } from "../../../../../src/settings/enums/Layout";
-import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
+import {
+    EventTile,
+    type EventTileHandle,
+    type EventTileProps,
+} from "../../../../../../src/components/views/rooms/EventTile";
+import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+import { type RoomContextType, TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import {
+    filterConsole,
+    flushPromises,
+    getRoomContext,
+    mkEvent,
+    mkMessage,
+    stubClient,
+} from "../../../../../test-utils";
+import { makeThreadEvent, mkThread } from "../../../../../test-utils/threads";
+import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
+import dis from "../../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../../src/dispatcher/actions";
+import PinningUtils from "../../../../../../src/utils/PinningUtils";
+import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
+import { DecryptionFailureTracker } from "../../../../../../src/DecryptionFailureTracker";
+import SettingsStore from "../../../../../../src/settings/SettingsStore.ts";
+
+jest.mock("../../../../../../src/utils/EventRenderingUtils", () => ({
+    ...jest.requireActual("../../../../../../src/utils/EventRenderingUtils"),
+    getEventDisplayInfo: jest.fn(),
+}));
+
+jest.mock("../../../../../../src/components/views/rooms/EventTile/ReplyPreview", () => ({
+    ReplyPreview: ({ mxEvent }: { mxEvent: MatrixEvent }) => <div data-testid="reply-preview">{mxEvent.getId()}</div>,
+}));
+
+jest.mock("../../../../../../src/components/views/rooms/EventTile/Avatar", () => ({
+    Avatar: ({ member }: { member?: { userId?: string } | null }) =>
+        member ? <div data-testid="avatar-subject">{member.userId}</div> : null,
+}));
+
+const mockGetEventDisplayInfo = jest.requireMock("../../../../../../src/utils/EventRenderingUtils")
+    .getEventDisplayInfo as jest.Mock;
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
     let mxEvent: MatrixEvent;
     let room: Room;
     let client: MatrixClient;
+
+    function defer<T>(): {
+        promise: Promise<T>;
+        resolve: (value: T) => void;
+        reject: (reason?: unknown) => void;
+    } {
+        let resolve!: (value: T) => void;
+        let reject!: (reason?: unknown) => void;
+        const promise = new Promise<T>((res, rej) => {
+            resolve = res;
+            reject = rej;
+        });
+        return { promise, resolve, reject };
+    }
 
     // let changeEvent: (event: MatrixEvent) => void;
 
@@ -104,10 +145,19 @@ describe("EventTile", () => {
             msg: "Hello world!",
             event: true,
         });
+
+        mockGetEventDisplayInfo.mockReturnValue({
+            hasRenderer: true,
+            isBubbleMessage: false,
+            isInfoMessage: false,
+            isLeftAlignedBubbleMessage: false,
+            noBubbleEvent: false,
+            isSeeingThroughMessageHiddenForModeration: false,
+        });
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
     });
 
     describe("EventTile thread summary", () => {
@@ -148,9 +198,55 @@ describe("EventTile", () => {
 
             await waitFor(() => expect(screen.queryByTestId("thread-summary")).toBeNull());
         });
+
+        it("updates the thread preview when a new reply is added", async () => {
+            const {
+                thread,
+                rootEvent,
+                events: [, reply1],
+            } = mkThread({
+                room,
+                client,
+                authorId: "@alice:example.org",
+                participantUserIds: ["@alice:example.org"],
+                length: 2,
+            });
+            thread.initialEventsFetched = true;
+
+            reply1.getContent().body = "ReplyEvent1";
+
+            getComponent({ mxEvent: rootEvent }, TimelineRenderingType.Room);
+
+            await screen.findByText("ReplyEvent1");
+
+            const reply2 = makeThreadEvent({
+                user: "@alice:example.org",
+                room: room.roomId,
+                event: true,
+                msg: "ReplyEvent2",
+                rootEventId: rootEvent.getId()!,
+                replyToEventId: reply1.getId()!,
+            });
+
+            await act(async () => {
+                await thread.addEvent(reply2, false, true);
+            });
+
+            await screen.findByText("ReplyEvent2");
+        });
     });
 
     describe("EventTile renderingType: ThreadsList", () => {
+        it("renders the sender in the thread list details", async () => {
+            const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
+
+            await waitFor(() => {
+                const sender = container.querySelector(".mx_EventTile_details .mx_DisambiguatedProfile");
+                expect(sender).not.toBeNull();
+                expect(sender).toHaveTextContent("@alice:example.org");
+            });
+        });
+
         it("shows an unread notification badge", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
 
@@ -173,46 +269,130 @@ describe("EventTile", () => {
         });
     });
 
-    describe("EventTile renderingType: Threads", () => {
-        it("should display the pinned message badge", async () => {
-            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
-            getComponent({}, TimelineRenderingType.Thread);
+    describe("EventTile renderingType: Notification", () => {
+        it("renders the room name in the notification details", async () => {
+            const dmRoomMap: DMRoomMap = {
+                getUserIdForRoomId: jest.fn(),
+            } as unknown as DMRoomMap;
+            DMRoomMap.setShared(dmRoomMap);
+            room.name = "Test room";
 
-            expect(screen.getByText("Pinned message")).toBeInTheDocument();
+            const { container } = getComponent({}, TimelineRenderingType.Notification);
+
+            await waitFor(() => {
+                const details = container.getElementsByClassName("mx_EventTile_details")[0];
+                expect(details).toHaveTextContent("@alice:example.org");
+                expect(details).toHaveTextContent("in Test room");
+            });
+        });
+
+        it("does not render the missing renderer fallback for notifications", () => {
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const { container } = getComponent({}, TimelineRenderingType.Notification);
+
+            expect(container).not.toHaveTextContent("This event could not be displayed");
         });
     });
 
     describe("EventTile renderingType: File", () => {
-        it("should not display the pinned message badge", async () => {
-            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
-            getComponent({}, TimelineRenderingType.File);
+        it("renders the timestamp in the sender details when enabled", async () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Hello world!",
+                event: true,
+                ts: 123,
+            });
 
-            expect(screen.queryByText("Pinned message")).not.toBeInTheDocument();
+            const { container } = getComponent({ mxEvent, alwaysShowTimestamps: true }, TimelineRenderingType.File);
+
+            await waitFor(() => {
+                expect(container.getElementsByClassName("mx_MessageTimestamp")).toHaveLength(1);
+            });
         });
     });
 
-    describe("EventTile renderingType: default", () => {
-        it.each([[Layout.Group], [Layout.Bubble], [Layout.IRC]])(
-            "should display the pinned message badge",
-            async (layout) => {
-                jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
-                getComponent({ layout });
-
-                expect(screen.getByText("Pinned message")).toBeInTheDocument();
-            },
-        );
-
-        it("renders the tile error fallback when tile rendering throws", async () => {
-            jest.spyOn(console, "error").mockImplementation(() => {});
-            jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
-                throw new Error("Boom");
+    describe("EventTile presenter wiring", () => {
+        it("renders the missing renderer fallback when the VM selects it", () => {
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
             });
 
-            getComponent();
+            const { container } = getComponent();
 
-            await waitFor(() => {
-                expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
+            expect(container).toHaveTextContent("This event could not be displayed");
+        });
+
+        it("renders a reply preview when the VM says the event is a reply", async () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Reply",
+                event: true,
+                relatesTo: {
+                    "m.in_reply_to": {
+                        event_id: "$parent",
+                    },
+                },
             });
+
+            const { container } = getComponent({ mxEvent });
+
+            await waitFor(() => expect(getByTestId(container, "reply-preview")).toHaveTextContent(mxEvent.getId()!));
+        });
+
+        it("resolves the avatar subject from the VM for third-party invites", async () => {
+            mxEvent = mkEvent({
+                event: true,
+                type: "m.room.member",
+                user: "@alice:example.org",
+                room: room.roomId,
+                content: {
+                    membership: "invite",
+                    third_party_invite: {
+                        display_name: "Bob",
+                    },
+                },
+            });
+            mxEvent.sender = {
+                userId: "@alice:example.org",
+                membership: "join",
+                name: "@alice:example.org",
+                rawDisplayName: "@alice:example.org",
+                roomId: room.roomId,
+            } as never;
+            mxEvent.target = {
+                userId: "@bob:example.org",
+                membership: "invite",
+                name: "@bob:example.org",
+                rawDisplayName: "@bob:example.org",
+                roomId: room.roomId,
+            } as never;
+
+            const { container } = getComponent({ mxEvent });
+
+            await waitFor(() => expect(getByTestId(container, "avatar-subject")).toHaveTextContent("@bob:example.org"));
+        });
+    });
+
+    describe("EventTile renderingType: Pinned", () => {
+        it("does not render a DisambiguatedProfile for continuation messages", () => {
+            const { container } = getComponent({ continuation: true }, TimelineRenderingType.Pinned);
+
+            expect(container.getElementsByClassName("mx_DisambiguatedProfile")).toHaveLength(0);
         });
     });
 
@@ -281,89 +461,6 @@ describe("EventTile", () => {
                 getEncryptionInfoForEvent: async (event: MatrixEvent) => eventToEncryptionInfoMap.get(event.getId()!)!,
             } as unknown as CryptoApi;
             client.getCrypto = () => mockCrypto;
-        });
-
-        it("shows a warning for an event from an unverified device", async () => {
-            mxEvent = await mkEncryptedMatrixEvent({
-                plainContent: { msgtype: "m.text", body: "msg1" },
-                plainType: "m.room.message",
-                sender: "@alice:example.org",
-                roomId: room.roomId,
-            });
-            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                shieldColour: EventShieldColour.RED,
-                shieldReason: EventShieldReason.UNSIGNED_DEVICE,
-            } as EventEncryptionInfo);
-
-            const { container } = getComponent();
-            await flushPromises();
-
-            const eventTiles = container.getElementsByClassName("mx_EventTile");
-            expect(eventTiles).toHaveLength(1);
-
-            // there should be a warning shield
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
-                "Encrypted by a device not verified by its owner.",
-            );
-        });
-
-        it("shows no shield for a verified event", async () => {
-            mxEvent = await mkEncryptedMatrixEvent({
-                plainContent: { msgtype: "m.text", body: "msg1" },
-                plainType: "m.room.message",
-                sender: "@alice:example.org",
-                roomId: room.roomId,
-            });
-            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                shieldColour: EventShieldColour.NONE,
-                shieldReason: null,
-            } as EventEncryptionInfo);
-
-            const { container } = getComponent();
-            await flushPromises();
-
-            const eventTiles = container.getElementsByClassName("mx_EventTile");
-            expect(eventTiles).toHaveLength(1);
-
-            // there should be no warning
-            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
-        });
-
-        it.each([
-            [EventShieldReason.UNKNOWN, "Unknown error"],
-            [EventShieldReason.UNVERIFIED_IDENTITY, "Encrypted by an unverified user."],
-            [EventShieldReason.UNSIGNED_DEVICE, "Encrypted by a device not verified by its owner."],
-            [EventShieldReason.UNKNOWN_DEVICE, "Encrypted by an unknown or deleted device."],
-            [
-                EventShieldReason.AUTHENTICITY_NOT_GUARANTEED,
-                "The authenticity of this encrypted message can't be guaranteed on this device.",
-            ],
-            [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
-            [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
-            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified digital identity was reset"],
-            [
-                EventShieldReason.MISMATCHED_SENDER,
-                "The sender of the event does not match the owner of the device that sent it.",
-            ],
-        ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
-            mxEvent = await mkEncryptedMatrixEvent({
-                plainContent: { msgtype: "m.text", body: "msg1" },
-                plainType: "m.room.message",
-                sender: "@alice:example.org",
-                roomId: room.roomId,
-            });
-            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
-                shieldColour: EventShieldColour.GREY,
-                shieldReason: reasonCode,
-            } as EventEncryptionInfo);
-
-            const { container } = getComponent();
-            await flushPromises();
-
-            const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
-            expect(e2eIcons).toHaveLength(1);
-            expect(e2eIcons[0]).toHaveAccessibleName(expectedText);
         });
 
         it("shows the correct reason code for a forwarded message", async () => {
@@ -537,114 +634,191 @@ describe("EventTile", () => {
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
             expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName("Not encrypted");
         });
+
+        it("ignores stale verification results after the event changes", async () => {
+            const firstEvent = await mkEncryptedMatrixEvent({
+                plainContent: { msgtype: "m.text", body: "msg1" },
+                plainType: "m.room.message",
+                sender: "@alice:example.org",
+                roomId: room.roomId,
+            });
+            const secondEvent = await mkEncryptedMatrixEvent({
+                plainContent: { msgtype: "m.text", body: "msg2" },
+                plainType: "m.room.message",
+                sender: "@alice:example.org",
+                roomId: room.roomId,
+            });
+
+            const firstResult = defer<EventEncryptionInfo | null>();
+            const secondResult = defer<EventEncryptionInfo | null>();
+            const getEncryptionInfoForEvent = jest.fn((event: MatrixEvent) => {
+                if (event.getId() === firstEvent.getId()) {
+                    return firstResult.promise;
+                }
+                if (event.getId() === secondEvent.getId()) {
+                    return secondResult.promise;
+                }
+                return Promise.resolve(null);
+            });
+            client.getCrypto = () =>
+                ({
+                    getEncryptionInfoForEvent,
+                }) as unknown as CryptoApi;
+
+            const roomContext = getRoomContext(room, {});
+            const { container, rerender } = render(
+                <WrappedEventTile
+                    roomContext={roomContext}
+                    eventTilePropertyOverrides={{
+                        mxEvent: firstEvent,
+                        replacingEventId: firstEvent.replacingEventId(),
+                    }}
+                />,
+            );
+
+            rerender(
+                <WrappedEventTile
+                    roomContext={roomContext}
+                    eventTilePropertyOverrides={{
+                        mxEvent: secondEvent,
+                        replacingEventId: secondEvent.replacingEventId(),
+                    }}
+                />,
+            );
+
+            await act(async () => {
+                secondResult.resolve({
+                    shieldColour: EventShieldColour.RED,
+                    shieldReason: EventShieldReason.UNSIGNED_DEVICE,
+                } as EventEncryptionInfo);
+                await flushPromises();
+            });
+
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                "Encrypted by a device not verified by its owner.",
+            );
+
+            await act(async () => {
+                firstResult.resolve({
+                    shieldColour: EventShieldColour.NONE,
+                    shieldReason: null,
+                } as EventEncryptionInfo);
+                await flushPromises();
+            });
+
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(1);
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")[0]).toHaveAccessibleName(
+                "Encrypted by a device not verified by its owner.",
+            );
+        });
     });
 
-    describe("event highlighting", () => {
-        const isHighlighted = (container: HTMLElement): boolean =>
-            !!container.getElementsByClassName("mx_EventTile_highlight").length;
-
-        beforeEach(() => {
-            mocked(client.getPushActionsForEvent).mockReturnValue(null);
+    it("decrypts the event on mount and when the event prop changes", async () => {
+        const firstEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "First",
+            event: true,
+        });
+        const secondEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "Second",
+            event: true,
         });
 
-        it("does not highlight message where message matches no push actions", () => {
-            const { container } = getComponent();
+        const roomContext = getRoomContext(room, {});
+        const { rerender } = render(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: firstEvent, replacingEventId: firstEvent.replacingEventId() }}
+            />,
+        );
 
-            expect(client.getPushActionsForEvent).toHaveBeenCalledWith(mxEvent);
-            expect(isHighlighted(container)).toBeFalsy();
+        await waitFor(() => expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(firstEvent));
+
+        jest.mocked(client.decryptEventIfNeeded).mockClear();
+
+        rerender(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: secondEvent, replacingEventId: secondEvent.replacingEventId() }}
+            />,
+        );
+
+        await waitFor(() => expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(secondEvent));
+    });
+
+    it("marks the event as visible to the decryption failure tracker on mount", () => {
+        const addVisibleEventSpy = jest.spyOn(DecryptionFailureTracker.instance, "addVisibleEvent");
+
+        getComponent();
+
+        expect(addVisibleEventSpy).toHaveBeenCalledWith(mxEvent);
+    });
+
+    it("marks a new event as visible to the decryption failure tracker when the event prop changes", () => {
+        const addVisibleEventSpy = jest.spyOn(DecryptionFailureTracker.instance, "addVisibleEvent");
+        const firstEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "First",
+            event: true,
+        });
+        const secondEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "Second",
+            event: true,
         });
 
-        it("does not highlight when message's push actions does not have a highlight tweak", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({ notify: true, tweaks: {} });
-            const { container } = getComponent();
+        const roomContext = getRoomContext(room, {});
+        const { rerender } = render(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: firstEvent, replacingEventId: firstEvent.replacingEventId() }}
+            />,
+        );
 
-            expect(isHighlighted(container)).toBeFalsy();
+        expect(addVisibleEventSpy).toHaveBeenCalledWith(firstEvent);
+
+        addVisibleEventSpy.mockClear();
+
+        rerender(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{ mxEvent: secondEvent, replacingEventId: secondEvent.replacingEventId() }}
+            />,
+        );
+
+        expect(addVisibleEventSpy).toHaveBeenCalledWith(secondEvent);
+    });
+
+    it("does not mark exported events as visible to the decryption failure tracker", () => {
+        const addVisibleEventSpy = jest.spyOn(DecryptionFailureTracker.instance, "addVisibleEvent");
+
+        getComponent({ forExport: true });
+
+        expect(addVisibleEventSpy).not.toHaveBeenCalled();
+    });
+
+    it("removes the ThreadEvent.New listener once the matching thread is found", () => {
+        const offSpy = jest.spyOn(room, "off");
+        getComponent();
+
+        const thread = {
+            id: mxEvent.getId(),
+            length: 0,
+            on: jest.fn(),
+            off: jest.fn(),
+        } as unknown as Thread;
+
+        act(() => {
+            room.emit(ThreadEvent.New, thread, false);
         });
 
-        it("does not highlight when message's push actions have a highlight tweak but message has been redacted", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({
-                notify: true,
-                tweaks: { [TweakName.Highlight]: true },
-            });
-            const { container } = getComponent({ isRedacted: true });
-
-            expect(isHighlighted(container)).toBeFalsy();
-        });
-
-        it("highlights when message's push actions have a highlight tweak", () => {
-            mocked(client.getPushActionsForEvent).mockReturnValue({
-                notify: true,
-                tweaks: { [TweakName.Highlight]: true },
-            });
-            const { container } = getComponent();
-
-            expect(isHighlighted(container)).toBeTruthy();
-        });
-
-        describe("when a message has been edited", () => {
-            let editingEvent: MatrixEvent;
-
-            beforeEach(() => {
-                editingEvent = new MatrixEvent({
-                    type: "m.room.message",
-                    room_id: ROOM_ID,
-                    sender: "@alice:example.org",
-                    content: {
-                        "msgtype": "m.text",
-                        "body": "* edited body",
-                        "m.new_content": {
-                            msgtype: "m.text",
-                            body: "edited body",
-                        },
-                        "m.relates_to": {
-                            rel_type: "m.replace",
-                            event_id: mxEvent.getId(),
-                        },
-                    },
-                });
-                mxEvent.makeReplaced(editingEvent);
-            });
-
-            it("does not highlight message where no version of message matches any push actions", () => {
-                const { container } = getComponent();
-
-                // get push actions for both events
-                expect(client.getPushActionsForEvent).toHaveBeenCalledWith(mxEvent);
-                expect(client.getPushActionsForEvent).toHaveBeenCalledWith(editingEvent);
-                expect(isHighlighted(container)).toBeFalsy();
-            });
-
-            it(`does not highlight when no version of message's push actions have a highlight tweak`, () => {
-                mocked(client.getPushActionsForEvent).mockReturnValue({ notify: true, tweaks: {} });
-                const { container } = getComponent();
-
-                expect(isHighlighted(container)).toBeFalsy();
-            });
-
-            it(`highlights when previous version of message's push actions have a highlight tweak`, () => {
-                mocked(client.getPushActionsForEvent).mockImplementation((event: MatrixEvent) => {
-                    if (event === mxEvent) {
-                        return { notify: true, tweaks: { [TweakName.Highlight]: true } };
-                    }
-                    return { notify: false, tweaks: {} };
-                });
-                const { container } = getComponent();
-
-                expect(isHighlighted(container)).toBeTruthy();
-            });
-
-            it(`highlights when new version of message's push actions have a highlight tweak`, () => {
-                mocked(client.getPushActionsForEvent).mockImplementation((event: MatrixEvent) => {
-                    if (event === editingEvent) {
-                        return { notify: true, tweaks: { [TweakName.Highlight]: true } };
-                    }
-                    return { notify: false, tweaks: {} };
-                });
-                const { container } = getComponent();
-
-                expect(isHighlighted(container)).toBeTruthy();
-            });
-        });
+        expect(offSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
     });
 
     it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {
@@ -669,6 +843,37 @@ describe("EventTile", () => {
 
         // The event tile should now show the not encrypted status
         await waitFor(() => expect(screen.getByText("Not encrypted")).toBeInTheDocument());
+    });
+
+    it("refreshes derived state when forceUpdate is called through the imperative ref", () => {
+        const ref = React.createRef<EventTileHandle>();
+        const isPinnedSpy = jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
+
+        getComponent({ ref });
+
+        expect(screen.queryByText("Pinned message")).toBeNull();
+
+        isPinnedSpy.mockReturnValue(true);
+        act(() => ref.current?.forceUpdate());
+
+        expect(screen.getByText("Pinned message")).toBeInTheDocument();
+    });
+
+    it("exposes the expected forwarded tile ref shape", () => {
+        const ref = React.createRef<EventTileHandle>();
+
+        getComponent({ ref });
+
+        expect(ref.current).toMatchObject({
+            ref: expect.any(Object),
+            forceUpdate: expect.any(Function),
+            isWidgetHidden: expect.any(Function),
+            unhideWidget: expect.any(Function),
+            getMediaHelper: expect.any(Function),
+        });
+        expect(ref.current?.ref.current).toBeInstanceOf(HTMLElement);
+        expect(ref.current?.isWidgetHidden?.()).toBe(false);
+        expect(ref.current?.getMediaHelper?.()).toBeUndefined();
     });
 
     it.each([

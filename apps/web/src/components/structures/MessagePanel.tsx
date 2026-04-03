@@ -32,10 +32,9 @@ import SettingsStore from "../../settings/SettingsStore";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import EventTile, {
+    type EventTileHandle,
     type GetRelationsForEvent,
-    type IReadReceiptProps,
-    isEligibleForSpecialReceipt,
-    type UnwrappedEventTile,
+    type ReadReceiptProps,
 } from "../views/rooms/EventTile";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -49,7 +48,7 @@ import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { type IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
-import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { haveRendererForEvent, isMessageEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
 import { type BaseGrouper } from "./grouper/BaseGrouper";
@@ -219,7 +218,7 @@ interface IState {
 
 interface IReadReceiptForUser {
     lastShownEventId: string;
-    receipt: IReadReceiptProps;
+    receipt: ReadReceiptProps;
 }
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
@@ -248,7 +247,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // This is recomputed on each render. It's only stored on the component
     // for ease of passing the data around since it's computed in one pass
     // over all events.
-    private readReceiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
+    private readReceiptsByEvent: Map<string, ReadReceiptProps[]> = new Map();
 
     // Track read receipts by user ID. For each user ID we've ever shown a
     // a read receipt for, we store an object:
@@ -277,7 +276,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     public scrollPanel = createRef<ScrollPanel>();
 
     private showTypingNotificationsWatcherRef?: string;
-    private eventTiles: Record<string, UnwrappedEventTile> = {};
+    private eventTiles: Record<string, EventTileHandle> = {};
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
@@ -375,7 +374,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return this.eventTiles[eventId]?.ref?.current ?? undefined;
     }
 
-    public getTileForEventId(eventId?: string): UnwrappedEventTile | undefined {
+    public getTileForEventId(eventId?: string): EventTileHandle | undefined {
         if (!this.eventTiles || !eventId) {
             return undefined;
         }
@@ -619,6 +618,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return !status || status === EventStatus.SENT;
     }
 
+    private isEligibleForSpecialReceipt(event: MatrixEvent): boolean {
+        return isMessageEvent(event) || event.getType() === EventType.RoomMessageEncrypted;
+    }
+
     private getEventTiles(): ReactNode[] {
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
@@ -646,7 +649,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 lastShownEvent = event;
             }
 
-            if (!foundLastSuccessfulEvent && this.isSentState(event) && isEligibleForSpecialReceipt(event)) {
+            if (!foundLastSuccessfulEvent && this.isSentState(event) && this.isEligibleForSpecialReceipt(event)) {
                 foundLastSuccessfulEvent = true;
                 // If we are not sender of this last successful event eligible for special receipt then we stop here
                 // As we do not want to render our sent receipt if there are more receipts below it and events sent
@@ -869,7 +872,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // Get a list of read receipts that should be shown next to this event
     // Receipts are objects which have a 'userId', 'roomMember' and 'ts'.
-    private getReadReceiptsForEvent(event: MatrixEvent): IReadReceiptProps[] | null {
+    private getReadReceiptsForEvent(event: MatrixEvent): ReadReceiptProps[] | null {
         const myUserId = MatrixClientPeg.safeGet().credentials.userId;
 
         // get list of read receipts, sorted most recent first
@@ -880,7 +883,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         const receiptDestination = this.context.threadId ? room.getThread(this.context.threadId) : room;
 
-        const receipts: IReadReceiptProps[] = [];
+        const receipts: ReadReceiptProps[] = [];
 
         if (!receiptDestination) {
             logger.debug(
@@ -909,8 +912,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // Get an object that maps from event ID to a list of read receipts that
     // should be shown next to that event. If a hidden event has read receipts,
     // they are folded into the receipts of the last shown event.
-    private getReadReceiptsByShownEvent(events: WrappedEvent[]): Map<string, IReadReceiptProps[]> {
-        const receiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
+    private getReadReceiptsByShownEvent(events: WrappedEvent[]): Map<string, ReadReceiptProps[]> {
+        const receiptsByEvent: Map<string, ReadReceiptProps[]> = new Map();
         const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
 
         let lastShownEventId: string | undefined;
@@ -965,7 +968,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return receiptsByEvent;
     }
 
-    private collectEventTile = (eventId: string, node: UnwrappedEventTile): void => {
+    private collectEventTile = (eventId: string, node: EventTileHandle): void => {
         this.eventTiles[eventId] = node;
     };
 
