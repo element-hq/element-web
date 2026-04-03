@@ -72,7 +72,8 @@ test.describe("Invite dialog", function () {
     test(
         "should support inviting a user to Direct Messages",
         { tag: "@screenshot" },
-        async ({ page, app, user, bot }) => {
+        async ({ page, app, user, bot, toasts }) => {
+            await toasts.rejectToast("Verify this device");
             await page
                 .getByRole("navigation", { name: "Room list" })
                 .getByRole("button", { name: "New conversation" })

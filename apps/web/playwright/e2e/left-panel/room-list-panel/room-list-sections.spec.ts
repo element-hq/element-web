@@ -44,9 +44,10 @@ test.describe("Room list sections", () => {
         return getRoomList(page).getByRole("gridcell", { name: `Toggle ${sectionName} section` });
     }
 
-    test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
+    test.beforeEach(async ({ page, app, user, toasts }) => {
+        // The toasts are displayed above the search section
+        await toasts.rejectToast("Verify this device");
+        await toasts.rejectToast("Notifications");
 
         // focus the user menu to avoid to have hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();

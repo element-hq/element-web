@@ -122,6 +122,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // There should be no toast (other than the notifications one)
         const toasts = new Toasts(page);
+        await toasts.rejectToast("Verify this device");
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
 

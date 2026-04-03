@@ -13,7 +13,8 @@ test.describe("Appearance user settings tab", () => {
         displayName: "Hanako",
     });
 
-    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, user, app }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, user, app, toasts }) => {
+        await toasts.rejectToast("Verify this device");
         const tab = await app.settings.openUserSettings("Appearance");
 
         // Click "Show advanced" link button
@@ -28,7 +29,8 @@ test.describe("Appearance user settings tab", () => {
     test(
         "should support changing font size by using the font size dropdown",
         { tag: "@screenshot" },
-        async ({ page, app, user }) => {
+        async ({ page, app, user, toasts }) => {
+            await toasts.rejectToast("Verify this device");
             await app.settings.openUserSettings("Appearance");
 
             const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
@@ -43,7 +45,8 @@ test.describe("Appearance user settings tab", () => {
         },
     );
 
-    test("should support enabling system font", async ({ page, app, user }) => {
+    test("should support enabling system font", async ({ page, app, user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
         await app.settings.openUserSettings("Appearance");
         const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
 
@@ -60,8 +63,11 @@ test.describe("Appearance user settings tab", () => {
     test(
         "should keep same font and emoji when switching theme",
         { tag: "@screenshot" },
-        async ({ page, app, user, util }) => {
+        async ({ page, app, user, util, toasts }) => {
+            await toasts.rejectToast("Verify this device");
+
             const roomId = await util.createAndDisplayRoom();
+
             await app.client.sendMessage(roomId, { body: "Message with 🦡", msgtype: "m.text" });
 
             await app.settings.openUserSettings("Appearance");

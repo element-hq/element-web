@@ -22,9 +22,10 @@ test.describe("Room list panel", () => {
         return page.getByRole("navigation", { name: "Room list" });
     }
 
-    test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
+    test.beforeEach(async ({ page, app, user, toasts }) => {
+        // The toasts are displayed above the search section
+        await toasts.rejectToast("Verify this device");
+        await toasts.rejectToast("Notifications");
 
         // Populate the room list
         for (let i = 0; i < 20; i++) {

@@ -45,9 +45,10 @@ test.describe("Room list filters and sort", () => {
         return page.getByTestId("room-list");
     }
 
-    test.beforeEach(async ({ page, app, bot, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
+    test.beforeEach(async ({ page, app, bot, user, toasts }) => {
+        // The toasts are displayed above the search section
+        await toasts.rejectToast("Verify this device");
+        await toasts.rejectToast("Notifications");
     });
 
     test("Tombstoned rooms are not shown even when they receive updates", async ({ page, app, bot }) => {

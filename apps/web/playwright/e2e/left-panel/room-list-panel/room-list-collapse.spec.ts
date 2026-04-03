@@ -13,8 +13,9 @@ test.describe("Collapsible Room list", () => {
         displayName: "Alice",
     });
 
-    test.beforeEach(async ({ page, app, user }) => {
-        await app.closeNotificationToast();
+    test.beforeEach(async ({ page, app, user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
+        await toasts.rejectToast("Notifications");
         for (let i = 0; i < 10; i++) {
             await app.client.createRoom({ name: `room${i}` });
         }

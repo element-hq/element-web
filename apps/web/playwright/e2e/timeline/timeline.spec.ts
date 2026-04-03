@@ -786,10 +786,11 @@ test.describe("Timeline", () => {
             test(
                 "should highlight search result words regardless of formatting",
                 { tag: "@screenshot" },
-                async ({ page, app, room }) => {
+                async ({ page, app, room, toasts }) => {
                     await sendEvent(app.client, room.roomId);
                     await sendEvent(app.client, room.roomId, true);
                     await page.goto(`/#/room/${room.roomId}`);
+                    await toasts.rejectToast("Verify this device");
 
                     await app.toggleRoomInfoPanel();
 
@@ -809,47 +810,54 @@ test.describe("Timeline", () => {
                 },
             );
 
-            test("should render a fully opaque textual event", { tag: "@screenshot" }, async ({ page, app, room }) => {
-                const stringToSearch = "Message"; // Same with string sent with sendEvent()
+            test(
+                "should render a fully opaque textual event",
+                { tag: "@screenshot" },
+                async ({ page, app, room, toasts }) => {
+                    const stringToSearch = "Message"; // Same with string sent with sendEvent()
 
-                await sendEvent(app.client, room.roomId);
+                    await sendEvent(app.client, room.roomId);
 
-                await page.goto(`/#/room/${room.roomId}`);
+                    await page.goto(`/#/room/${room.roomId}`);
+                    await toasts.rejectToast("Verify this device");
 
-                // Open a room setting dialog
-                await app.toggleRoomInfoPanel();
-                await page.getByRole("menuitem", { name: "Settings" }).click();
+                    // Open a room setting dialog
+                    await app.toggleRoomInfoPanel();
+                    await page.getByRole("menuitem", { name: "Settings" }).click();
 
-                // Set a room topic to render a TextualEvent
-                await page.getByRole("textbox", { name: "Room Topic" }).type(`This is a room for ${stringToSearch}.`);
-                await page.getByRole("button", { name: "Save" }).click();
+                    // Set a room topic to render a TextualEvent
+                    await page
+                        .getByRole("textbox", { name: "Room Topic" })
+                        .type(`This is a room for ${stringToSearch}.`);
+                    await page.getByRole("button", { name: "Save" }).click();
 
-                await app.closeDialog();
+                    await app.closeDialog();
 
-                // Assert that the TextualEvent is rendered
-                await expect(
-                    page.getByText(`${OLD_NAME} changed the topic to "This is a room for ${stringToSearch}.".`),
-                ).toHaveClass(/mx_TextualEvent/);
+                    // Assert that the TextualEvent is rendered
+                    await expect(
+                        page.getByText(`${OLD_NAME} changed the topic to "This is a room for ${stringToSearch}.".`),
+                    ).toHaveClass(/mx_TextualEvent/);
 
-                // Search the string to display both the message and TextualEvent on search results panel
-                await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill(stringToSearch);
-                await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").press("Enter");
+                    // Search the string to display both the message and TextualEvent on search results panel
+                    await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").fill(stringToSearch);
+                    await page.locator(".mx_RoomSummaryCard_search").getByRole("searchbox").press("Enter");
 
-                // On search results panel
-                const resultsPanel = page.locator(".mx_RoomView_searchResultsPanel");
-                // Assert that contextual event tiles are translucent
-                for (const locator of await resultsPanel.locator(".mx_EventTile.mx_EventTile_contextual").all()) {
-                    await expect(locator).toHaveCSS("opacity", "0.4");
-                }
-                // Assert that the TextualEvent is fully opaque (visually solid).
-                for (const locator of await resultsPanel.locator(".mx_EventTile .mx_TextualEvent").all()) {
-                    await expect(locator).toHaveCSS("opacity", "1");
-                }
+                    // On search results panel
+                    const resultsPanel = page.locator(".mx_RoomView_searchResultsPanel");
+                    // Assert that contextual event tiles are translucent
+                    for (const locator of await resultsPanel.locator(".mx_EventTile.mx_EventTile_contextual").all()) {
+                        await expect(locator).toHaveCSS("opacity", "0.4");
+                    }
+                    // Assert that the TextualEvent is fully opaque (visually solid).
+                    for (const locator of await resultsPanel.locator(".mx_EventTile .mx_TextualEvent").all()) {
+                        await expect(locator).toHaveCSS("opacity", "1");
+                    }
 
-                await expect(page.locator(".mx_RoomView_searchResultsPanel")).toMatchScreenshot(
-                    "search-results-with-TextualEvent.png",
-                );
-            });
+                    await expect(page.locator(".mx_RoomView_searchResultsPanel")).toMatchScreenshot(
+                        "search-results-with-TextualEvent.png",
+                    );
+                },
+            );
         });
 
         test("should render a code block", { tag: "@screenshot" }, async ({ page, app, room }) => {

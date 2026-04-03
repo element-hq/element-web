@@ -21,7 +21,8 @@ test.describe("Create Room", () => {
     test(
         "should create a public room with name, topic & address set",
         { tag: "@screenshot" },
-        async ({ page, user, app, axe }) => {
+        async ({ page, user, app, axe, toasts }) => {
+            await toasts.rejectToast("Verify this device");
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -49,7 +50,9 @@ test.describe("Create Room", () => {
         },
     );
 
-    test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
+    test("should allow us to start a chat and show encryption state", async ({ page, user, app, toasts }) => {
+        await toasts.rejectToast("Verify this device");
+
         await page.getByRole("button", { name: "New conversation", exact: true }).click();
         await page.getByRole("menuitem", { name: "Start chat" }).click();
 
@@ -64,8 +67,9 @@ test.describe("Create Room", () => {
         await expect(composer.getByRole("textbox", { name: "Send a message…" })).toBeVisible();
     });
 
-    test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
+    test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app, toasts }) => {
         await app.settings.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
+        await toasts.rejectToast("Verify this device");
 
         const dialog = await app.openCreateRoomDialog("New video room");
         // Fill name & topic
@@ -99,53 +103,64 @@ test.describe("Create Room", () => {
             },
         });
 
-        test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app, axe }) => {
-            const dialog = await app.openCreateRoomDialog();
-            // Fill name & topic
-            await dialog.getByRole("textbox", { name: "Name" }).fill(name);
-            await dialog.getByRole("textbox", { name: "Topic" }).fill(topic);
+        test(
+            "should disallow creating public rooms",
+            { tag: "@screenshot" },
+            async ({ page, user, app, axe, toasts }) => {
+                await toasts.rejectToast("Verify this device");
+                const dialog = await app.openCreateRoomDialog();
+                // Fill name & topic
+                await dialog.getByRole("textbox", { name: "Name" }).fill(name);
+                await dialog.getByRole("textbox", { name: "Topic" }).fill(topic);
 
-            axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
-            await expect(axe).toHaveNoViolations();
-            // Snapshot it
-            // Mask topic to avoid flakiness with top border
-            await expect(dialog).toMatchScreenshot("create-room-no-public.png", {
-                mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
-            });
+                axe.disableRules("color-contrast"); // XXX: Inheriting colour contrast issues from room view.
+                await expect(axe).toHaveNoViolations();
+                // Snapshot it
+                // Mask topic to avoid flakiness with top border
+                await expect(dialog).toMatchScreenshot("create-room-no-public.png", {
+                    mask: [dialog.locator(".mx_CreateRoomDialog_topic")],
+                });
 
-            // Submit
-            await dialog.getByRole("button", { name: "Create room" }).click();
+                // Submit
+                await dialog.getByRole("button", { name: "Create room" }).click();
 
-            await expect(page).toHaveURL(new RegExp(`/#/room/!.+`));
-            const header = page.locator(".mx_RoomHeader");
-            await expect(header).toContainText(name);
-        });
+                await expect(page).toHaveURL(new RegExp(`/#/room/!.+`));
+                const header = page.locator(".mx_RoomHeader");
+                await expect(header).toContainText(name);
+            },
+        );
     });
 
     test.describe("when the encrypted state labs flag is turned off", () => {
         test.use({ labsFlags: [] });
 
-        test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user }) => {
-            // When we start to create a room
-            await page.getByRole("button", { name: "New conversation", exact: true }).click();
-            await page.getByRole("menuitem", { name: "New room" }).click();
-            await page.getByRole("textbox", { name: "Name" }).fill(name);
+        test(
+            "creates a room without encrypted state",
+            { tag: "@screenshot" },
+            async ({ page, user: _user, app, toasts }) => {
+                await toasts.rejectToast("Verify this device");
 
-            // Then there is no Encrypt state events button
-            await expect(page.getByRole("checkbox", { name: "Encrypt state events" })).not.toBeVisible();
+                // When we start to create a room
+                await page.getByRole("button", { name: "New conversation", exact: true }).click();
+                await page.getByRole("menuitem", { name: "New room" }).click();
+                await page.getByRole("textbox", { name: "Name" }).fill(name);
 
-            // And when we create the room
-            await page.getByRole("button", { name: "Create room" }).click();
+                // Then there is no Encrypt state events button
+                await expect(page.getByRole("checkbox", { name: "Encrypt state events" })).not.toBeVisible();
 
-            // Then we created a normal encrypted room, without encrypted state
-            await expect(page.getByText("Encryption enabled")).toBeVisible();
-            await expect(page.getByText("State encryption enabled")).not.toBeVisible();
+                // And when we create the room
+                await page.getByRole("button", { name: "Create room" }).click();
 
-            // And the room name state event is not encrypted
-            await viewSourceOnRoomNameEvent(page);
-            await expect(page.getByText("Original event source")).toBeVisible();
-            await expect(page.getByText("Decrypted event source")).not.toBeVisible();
-        });
+                // Then we created a normal encrypted room, without encrypted state
+                await expect(page.getByText("Encryption enabled")).toBeVisible();
+                await expect(page.getByText("State encryption enabled")).not.toBeVisible();
+
+                // And the room name state event is not encrypted
+                await viewSourceOnRoomNameEvent(page);
+                await expect(page.getByText("Original event source")).toBeVisible();
+                await expect(page.getByText("Decrypted event source")).not.toBeVisible();
+            },
+        );
     });
 
     test.describe("when the encrypted state labs flag is turned on", () => {
@@ -154,7 +169,9 @@ test.describe("Create Room", () => {
         test(
             "creates a room with encrypted state if we check the box",
             { tag: "@screenshot" },
-            async ({ page, user: _user }) => {
+            async ({ page, user: _user, app, toasts }) => {
+                await toasts.rejectToast("Verify this device");
+
                 // Given we check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();
@@ -181,7 +198,9 @@ test.describe("Create Room", () => {
         test(
             "creates a room without encrypted state if we don't check the box",
             { tag: "@screenshot" },
-            async ({ page, user: _user }) => {
+            async ({ page, user: _user, app, toasts }) => {
+                await toasts.rejectToast("Verify this device");
+
                 // Given we did not check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();

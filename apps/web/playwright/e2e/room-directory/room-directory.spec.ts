@@ -57,7 +57,7 @@ test.describe("Room Directory", () => {
     test(
         "should allow finding published rooms in directory",
         { tag: "@screenshot" },
-        async ({ page, app, user, bot }) => {
+        async ({ page, app, user, bot, toasts }) => {
             const name = "This is a public room";
             await bot.createRoom({
                 visibility: "public" as Visibility,
@@ -65,6 +65,7 @@ test.describe("Room Directory", () => {
                 room_alias_name: "test1234",
             });
 
+            await toasts.rejectToast("Verify this device");
             await page.getByRole("button", { name: "Explore rooms" }).click();
 
             const dialog = page.locator(".mx_SpotlightDialog");

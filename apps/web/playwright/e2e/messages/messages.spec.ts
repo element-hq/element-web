@@ -85,9 +85,10 @@ test.describe("Message rendering", () => {
         test.describe(`with ${direction} display name`, { tag: "@screenshot" }, () => {
             test.use({
                 displayName,
-                room: async ({ user, app }, use) => {
+                room: async ({ user, app, toasts }, use) => {
                     const roomId = await app.client.createRoom({ name: "Test room" });
                     await use({ roomId });
+                    await toasts.rejectToast("Verify this device");
                 },
             });
 
@@ -215,9 +216,10 @@ test.describe("Message rendering", () => {
 test.describe("Message url previews", () => {
     test.use({
         displayName: "Alice",
-        room: async ({ user, app }, use) => {
+        room: async ({ user, app, toasts }, use) => {
             const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
+            await toasts.rejectToast("Verify this device");
         },
     });
     test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {

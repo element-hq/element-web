@@ -22,9 +22,10 @@ test.describe("Search section of the room list", () => {
         return page.getByRole("search");
     }
 
-    test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
-        await app.closeNotificationToast();
+    test.beforeEach(async ({ page, app, user, toasts }) => {
+        // The toasts are displayed above the search section
+        await toasts.rejectToast("Verify this device");
+        await toasts.rejectToast("Notifications");
     });
 
     test("should render the search section", { tag: "@screenshot" }, async ({ page, app, user }) => {

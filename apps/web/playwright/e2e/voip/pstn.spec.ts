@@ -21,6 +21,7 @@ test.describe("PSTN", () => {
     });
 
     test("should render dialpad as expected", { tag: "@screenshot" }, async ({ page, user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
 

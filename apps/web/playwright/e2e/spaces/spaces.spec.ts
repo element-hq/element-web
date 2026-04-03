@@ -67,7 +67,8 @@ test.describe("Spaces", () => {
     test(
         "should allow user to create public space",
         { tag: ["@screenshot", "@no-webkit"] },
-        async ({ page, app, user }) => {
+        async ({ page, app, user, toasts }) => {
+            await toasts.rejectToast("Verify this device");
             const contextMenu = await openSpaceCreateMenu(page);
             await expect(contextMenu).toMatchScreenshot("space-create-menu.png");
 
@@ -103,7 +104,8 @@ test.describe("Spaces", () => {
         },
     );
 
-    test("should allow user to create private space", { tag: "@screenshot" }, async ({ page, app, user }) => {
+    test("should allow user to create private space", { tag: "@screenshot" }, async ({ page, app, user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
@@ -145,11 +147,12 @@ test.describe("Spaces", () => {
         ).toBeVisible();
     });
 
-    test("should allow user to create just-me space", async ({ page, app, user }) => {
+    test("should allow user to create just-me space", async ({ page, app, user, toasts }) => {
         await app.client.createRoom({
             name: "Sample Room",
         });
 
+        await toasts.rejectToast("Verify this device");
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
@@ -176,7 +179,7 @@ test.describe("Spaces", () => {
     test(
         "should allow user to add an existing room to a space after creation",
         { tag: "@screenshot" },
-        async ({ page, app, user }) => {
+        async ({ page, app, user, toasts }) => {
             await app.client.createRoom({
                 name: "Sample Room",
             });
@@ -184,6 +187,7 @@ test.describe("Spaces", () => {
                 name: "A Room that will not be selected",
             });
 
+            await toasts.rejectToast("Verify this device");
             const menu = await openSpaceCreateMenu(page);
             await menu.getByRole("button", { name: "Private" }).click();
 
@@ -282,7 +286,9 @@ test.describe("Spaces", () => {
     test(
         "should render subspaces in the space panel only when expanded",
         { tag: "@screenshot" },
-        async ({ page, app, user, axe }) => {
+        async ({ page, app, user, axe, toasts }) => {
+            await toasts.rejectToast("Verify this device");
+
             axe.disableRules([
                 // Disable this check as it triggers on nested roving tab index elements which are in practice fine
                 "nested-interactive",
@@ -403,7 +409,8 @@ test.describe("Spaces", () => {
             },
         });
 
-        test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app }) => {
+        test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app, toasts }) => {
+            await toasts.rejectToast("Verify this device");
             const menu = await openSpaceCreateMenu(page);
             await menu
                 .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
