@@ -95,6 +95,12 @@ export interface TimelineViewActions {
 
     /** Report that the user has scrolled to or away from the bottom. */
     onStuckAtBottomChanged(stuckAtBottom: boolean): void;
+
+    /**
+     * Return the Virtuoso firstItemIndex for proper prepend handling.
+     * Starts high and decreases as backward pagination adds items.
+     */
+    getFirstItemIndex(): number;
 }
 
 export type TimelineViewModel = ViewModel<TimelineViewSnapshot, TimelineViewActions>;
