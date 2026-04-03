@@ -47,6 +47,7 @@ import Timer from "../../utils/Timer";
 import shouldHideEvent from "../../shouldHideEvent";
 import MessagePanel from "./MessagePanel";
 import { type IScrollState } from "./ScrollPanel";
+import { NewTimelinePanel } from "./NewTimelinePanel";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
@@ -1843,6 +1844,20 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // the HS and fetch the latest events, so we are effectively forward paginating.
         const forwardPaginating = this.state.forwardPaginating || this.syncImpliesForwardPaginating;
         const events = this.state.events;
+
+        // New MVVM timeline behind Labs flag
+        if (SettingsStore.getValue("feature_new_timeline")) {
+            const room = this.props.timelineSet.room;
+            if (room) {
+                return (
+                    <NewTimelinePanel
+                        room={room}
+                        highlightedEventId={this.props.highlightedEventId}
+                    />
+                );
+            }
+        }
+
         return (
             <MessagePanel
                 ref={this.messagePanel}
