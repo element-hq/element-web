@@ -32,7 +32,6 @@
         "cancel": "Avbryt",
         "change": "Endre",
         "clear": "Tøm",
-        "click": "Klikk",
         "click_to_copy": "Klikk for å kopiere",
         "close": "Lukk",
         "collapse": "Trekk sammen",
@@ -66,7 +65,6 @@
         "go": "Gå",
         "go_back": "Gå tilbake",
         "got_it": "Jeg forstår",
-        "hide": "Skjul",
         "hide_advanced": "Skjul avansert",
         "hold": "Hold",
         "ignore": "Ignorer",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Integreringer er ikke tillatt"
     },
     "invite": {
-        "ask_anyway_description": "Kan ikke finne profiler for Matrix ID-ene som er oppført nedenfor - vil du starte en DM likevel?",
-        "ask_anyway_label": "Start DM uansett",
-        "ask_anyway_never_warn_label": "Start DM uansett og advar meg aldri igjen",
         "email_caption": "Inviter gjennom E-post",
         "email_limit_one": "Invitasjoner via e-post kan bare sendes én om gangen",
         "email_use_default_is": "Bruk en identitetsserver til å invitere via e-post. <default>Bruk standard (%(defaultIdentityServerName)s) </default> eller administrer i <settings> Innstillinger</settings>.",
@@ -3293,7 +3288,6 @@
         },
         "empty_description": "Bruk «%(replyInThread)s» når du holder musepekeren over en melding.",
         "empty_title": "Tråder bidrar til å holde samtalene innenfor temaet og gjør det enkelt å spore dem.",
-        "error_start_thread_existing_relation": "Kan ikke opprette en tråd fra en hendelse med en eksisterende relasjon",
         "mark_all_read": "Marker alle som lest",
         "my_threads": "Mine tråder",
         "my_threads_description": "Viser alle tråder du har deltatt i",
@@ -3337,7 +3331,6 @@
             "unable_to_decrypt": "Kan ikke dekryptere meldingen"
         },
         "disambiguated_profile": "%(displayName)s(%(matrixId)s)",
-        "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Laster ned",
         "download_failed": "Nedlasting mislyktes",
         "download_failed_description": "Det oppstod en feil under nedlasting av denne filen",
@@ -3535,10 +3528,7 @@
             "removed": "%(widgetName)s-modulen ble fjernet av %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Skjul sitater",
             "copy_link_thread": "Kopier lenke til tråd",
-            "expand_reply_chain": "Utvid sitater",
-            "label": "Meldingshandlinger",
             "view_in_room": "Vis i rom"
         },
         "mjolnir": {

@@ -1815,7 +1815,6 @@
         },
         "creation_summary_dm": "%(creator)s sukūrė šį tiesioginio susirašymo kambarį.",
         "creation_summary_room": "%(creator)s sukūrė ir sukonfigūravo kambarį.",
-        "download_action_decrypting": "Iššifruojama",
         "download_action_downloading": "Atsiunčiama",
         "edits": {
             "tooltip_label": "Keista %(date)s. Spustelėkite kad peržiūrėti pakeitimus.",
@@ -1978,7 +1977,6 @@
         },
         "mab": {
             "copy_link_thread": "Kopijuoti nuorodą į temą",
-            "label": "Žinutės veiksmai",
             "view_in_room": "Peržiūrėti kambaryje"
         },
         "mjolnir": {
