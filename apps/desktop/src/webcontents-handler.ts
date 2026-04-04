@@ -23,9 +23,11 @@ import {
 } from "electron";
 import url from "node:url";
 import fs from "node:fs";
-import { pipeline } from "node:stream/promises";
 import path from "node:path";
+import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 
+import type { ReadableStream as WebReadableStream } from "node:stream/web";
 import { _t } from "./language-helper.js";
 
 const MAILTO_PREFIX = "mailto:";
@@ -155,7 +157,10 @@ function onLinkContextMenu(ev: Event, params: ContextMenuParams, webContents: We
                             const resp = await fetch(url);
                             if (!resp.ok) throw new Error(`unexpected response ${resp.statusText}`);
                             if (!resp.body) throw new Error(`unexpected response has no body ${resp.statusText}`);
-                            await pipeline(resp.body, fs.createWriteStream(filePath));
+                            await pipeline(
+                                Readable.fromWeb(resp.body as WebReadableStream),
+                                fs.createWriteStream(filePath),
+                            );
                         }
                     } catch (err) {
                         console.error(err);
