@@ -122,12 +122,18 @@
             "undici@7.22.2": "7.24.0",
             "@xmldom/xmldom@0.8.11": "0.8.12",
             "esbuild@<=0.24.2": ">=0.25.0",
-            "minimatch@>=10.0.0 <10.2.3": ">=10.2.3"
+            "minimatch@>=10.0.0 <10.2.3": ">=10.2.3",
+            "matrix-seshat": "link:apps/desktop/.hak/hakModules/matrix-seshat",
+            "@vencord/venmic": "link:apps/desktop/.hak/hakModules/@vencord/venmic"
         }
     },
     "engines": {
         "node": ">=22.18"
     },
     "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
-    "private": true
+    "private": true,
+    "dependencies": {
+        "@vencord/venmic": "link:apps/desktop/.hak/hakModules/@vencord/venmic",
+        "matrix-seshat": "link:apps/desktop/.hak/hakModules/matrix-seshat"
+    }
 }

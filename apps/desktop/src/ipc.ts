@@ -9,7 +9,12 @@ import { app, autoUpdater, desktopCapturer, ipcMain, powerSaveBlocker, TouchBar,
 
 import IpcMainEvent = Electron.IpcMainEvent;
 import { randomArray } from "./utils.js";
-import { getDisplayMediaCallback, setDisplayMediaCallback } from "./displayMediaCallback.js";
+import {
+    getDisplayMediaCallback,
+    setDisplayMediaCallback,
+    getAudioRequested,
+    setAudioRequested,
+} from "./displayMediaCallback.js";
 import Store, { clearDataAndRelaunch } from "./store.js";
 
 let focusHandlerAttached = false;
@@ -142,11 +147,22 @@ ipcMain.on("ipcCall", async function (_ev: IpcMainEvent, payload) {
                 thumbnailURL: source.thumbnail.toDataURL(),
             }));
             break;
-        case "callDisplayMediaCallback":
-            await getDisplayMediaCallback()?.({ video: args[0] });
+        case "callDisplayMediaCallback": {
+            const audioRequested = getAudioRequested();
+            const callback = getDisplayMediaCallback();
             setDisplayMediaCallback(null);
+            setAudioRequested(false);
+
+            // Show audio picker for Linux (X11 path - Wayland is handled in electron-main.ts)
+            if (audioRequested && process.platform === "linux" && global.mainWindow) {
+                const { showAudioPickerAndStart } = await import("./audio-picker.js");
+                await showAudioPickerAndStart(global.mainWindow);
+            }
+
+            callback?.({ video: args[0] });
             ret = null;
             break;
+        }
 
         case "clearStorage":
             await clearDataAndRelaunch(global.mainWindow.webContents.session);

@@ -84,6 +84,22 @@
         "toggle_full_screen": "Toggle Full Screen",
         "view": "View"
     },
+    "audio_picker": {
+        "title": "Share Audio",
+        "subtitle": "Choose what audio to share with the call",
+        "loading": "Loading audio sources…",
+        "share": "Share",
+        "no_audio_label": "No audio",
+        "no_audio_description": "Share screen only",
+        "system_label": "Entire system",
+        "system_description": "Share all audio from your computer",
+        "applications_header": "Applications",
+        "no_apps": "No applications are currently playing audio",
+        "error_load_prefix": "Unable to load audio sources.",
+        "error_glibc": "Your system's GLIBC version may be too old.",
+        "error_pipewire": "PipeWire may not be available.",
+        "error_load_fail": "Failed to load audio sources: %(error)s"
+    },
     "window_menu": {
         "bring_all_to_front": "Bring All to Front",
         "label": "Window",

@@ -2,6 +2,8 @@
 /lib
 /webapp
 /webapp.asar
+# Generated from @vector-im/compound-design-tokens at build time
+/build/compound
 /packages
 /deploys
 node_modules/

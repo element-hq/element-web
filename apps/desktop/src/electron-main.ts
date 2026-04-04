@@ -41,13 +41,24 @@ import webContentsHandler from "./webcontents-handler.js";
 import * as updater from "./updater.js";
 import ProtocolHandler from "./protocol.js";
 import { _t, AppLocalization } from "./language-helper.js";
-import { setDisplayMediaCallback } from "./displayMediaCallback.js";
+import { setDisplayMediaCallback, setAudioRequested } from "./displayMediaCallback.js";
 import { setupMacosTitleBar } from "./macos-titlebar.js";
 import { type Json, loadJsonFile } from "./utils.js";
 import { setupMediaAuth } from "./media-auth.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
+import type { showAudioPickerAndStart as ShowAudioPickerAndStartType } from "./audio-picker.js";
+import type { setupVenmicInjection as SetupVenmicInjectionType } from "./venmic-inject.js";
+
+let showAudioPickerAndStart: typeof ShowAudioPickerAndStartType | undefined;
+let setupVenmicInjection: typeof SetupVenmicInjectionType | undefined;
+
+if (process.platform === "linux") {
+    await import("./venmic.js");
+    showAudioPickerAndStart = (await import("./audio-picker.js")).showAudioPickerAndStart;
+    setupVenmicInjection = (await import("./venmic-inject.js")).setupVenmicInjection;
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -524,25 +535,39 @@ app.on("ready", async () => {
 
     webContentsHandler(global.mainWindow.webContents);
 
+    // Set up venmic injection for Linux audio sharing in iframes (Element Call)
+    setupVenmicInjection?.(global.mainWindow.webContents);
+
     session.defaultSession.setDisplayMediaRequestHandler(
-        (_, callback) => {
+        async (request, callback) => {
             if (process.env.XDG_SESSION_TYPE === "wayland") {
                 // On Wayland, calling getSources() opens the xdg-desktop-portal picker.
                 // The user can only select a single source there, so Electron will return an array with exactly one entry.
-                desktopCapturer
-                    .getSources({ types: ["screen", "window"] })
-                    .then((sources) => {
-                        callback({ video: sources[0] });
-                    })
-                    .catch((err) => {
-                        // If the user cancels the dialog an error occurs "Failed to get sources"
-                        console.error("Wayland: failed to get user-selected source:", err);
-                        callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
-                    });
+                try {
+                    const sources = await desktopCapturer.getSources({ types: ["screen", "window"] });
+                    const source = sources[0];
+
+                    if (!source) {
+                        callback({ video: { id: "", name: "" } });
+                        return;
+                    }
+
+                    // Show audio picker if audio was requested and we're on Linux with venmic available
+                    if (request.audioRequested && showAudioPickerAndStart && global.mainWindow) {
+                        await showAudioPickerAndStart(global.mainWindow);
+                    }
+
+                    callback({ video: source });
+                } catch (err) {
+                    // If the user cancels the dialog an error occurs "Failed to get sources"
+                    console.error("Wayland: failed to get user-selected source:", err);
+                    callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
+                }
             } else {
                 global.mainWindow?.webContents.send("openDesktopCapturerSourcePicker");
+                setDisplayMediaCallback(callback);
+                setAudioRequested(request.audioRequested);
             }
-            setDisplayMediaCallback(callback);
         },
         { useSystemPicker: true },
     ); // Use Mac OS 15+ native picker

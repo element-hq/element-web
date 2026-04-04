@@ -1,0 +1,569 @@
+<!doctype html>
+<!--
+Copyright 2026 Joao Costa <me@joaocosta.dev>
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+-->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+        />
+        <link rel="stylesheet" href="compound/compound-design-tokens.css" />
+        <title id="page-title">Share Audio</title>
+        <style>
+            :root {
+                /* Local tokens — no Compound equivalents */
+                --radius-md: 8px;
+                --transition-fast: 0.15s ease;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                :root {
+                    --transition-fast: 0s;
+                }
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: var(--cpd-font-family-sans);
+                background: var(--cpd-color-bg-canvas-default);
+                color: var(--cpd-color-text-primary);
+                padding: var(--cpd-space-5x);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            main {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                min-height: 0;
+            }
+
+            h1 {
+                font: var(--cpd-font-heading-sm-semibold);
+                margin-bottom: var(--cpd-space-2x);
+            }
+
+            .subtitle {
+                font: var(--cpd-font-body-sm-regular);
+                color: var(--cpd-color-text-secondary);
+                margin-bottom: var(--cpd-space-5x);
+            }
+
+            .options-container {
+                flex: 1;
+                overflow-y: auto;
+                margin-bottom: var(--cpd-space-4x);
+            }
+
+            /* Scrollbar styling */
+            .options-container::-webkit-scrollbar,
+            .app-list::-webkit-scrollbar {
+                width: var(--cpd-space-1-5x);
+            }
+
+            .options-container::-webkit-scrollbar-track,
+            .app-list::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .options-container::-webkit-scrollbar-thumb,
+            .app-list::-webkit-scrollbar-thumb {
+                background: var(--cpd-color-border-interactive-secondary);
+                border-radius: 3px;
+            }
+
+            .options-container::-webkit-scrollbar-thumb:hover,
+            .app-list::-webkit-scrollbar-thumb:hover {
+                background: var(--cpd-color-border-interactive-primary);
+            }
+
+            .option {
+                display: flex;
+                align-items: center;
+                padding: var(--cpd-space-3x) var(--cpd-space-4x);
+                border-radius: var(--radius-md);
+                margin-bottom: var(--cpd-space-2x);
+                cursor: pointer;
+                background: var(--cpd-color-bg-subtle-primary);
+                border: 2px solid transparent;
+                transition:
+                    background var(--transition-fast),
+                    border-color var(--transition-fast);
+                outline: none;
+            }
+
+            .option:hover {
+                background: var(--cpd-color-bg-action-secondary-hovered);
+            }
+
+            .option:focus-visible {
+                box-shadow: 0 0 0 2px var(--cpd-color-border-focused);
+            }
+
+            .option[aria-checked="true"] {
+                background: var(--cpd-color-bg-accent-selected);
+                border-color: var(--cpd-color-border-accent-subtle);
+            }
+
+            .option-radio {
+                width: 18px;
+                height: 18px;
+                border: 2px solid var(--cpd-color-border-interactive-primary);
+                border-radius: 50%;
+                margin-right: var(--cpd-space-3x);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                transition: border-color var(--transition-fast);
+            }
+
+            .option[aria-checked="true"] .option-radio {
+                border-color: var(--cpd-color-border-accent-subtle);
+            }
+
+            .option[aria-checked="true"] .option-radio::after {
+                content: "";
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--cpd-color-bg-accent-rest);
+            }
+
+            .option-content {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .option-label {
+                font: var(--cpd-font-body-md-medium);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .option-description {
+                font: var(--cpd-font-body-xs-regular);
+                color: var(--cpd-color-text-secondary);
+                margin-top: var(--cpd-space-0-5x);
+            }
+
+            .section-header {
+                font: var(--cpd-font-body-xs-semibold);
+                color: var(--cpd-color-text-secondary);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin: var(--cpd-space-5x) 0 var(--cpd-space-3x);
+            }
+
+            .app-list {
+                max-height: 240px;
+                overflow-y: auto;
+                border-radius: var(--radius-md);
+            }
+
+            .buttons {
+                display: flex;
+                gap: var(--cpd-space-3x);
+                padding-top: var(--cpd-space-2x);
+                border-top: 1px solid var(--cpd-color-border-interactive-secondary);
+            }
+
+            button {
+                flex: 1;
+                padding: var(--cpd-space-3x) var(--cpd-space-4x);
+                border: none;
+                border-radius: var(--radius-md);
+                font: var(--cpd-font-body-md-medium);
+                cursor: pointer;
+                transition:
+                    background var(--transition-fast),
+                    opacity var(--transition-fast);
+                outline: none;
+            }
+
+            button:focus-visible {
+                box-shadow: 0 0 0 2px var(--cpd-color-border-focused);
+            }
+
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            .btn-primary {
+                background: var(--cpd-color-bg-accent-rest);
+                color: var(--cpd-color-text-on-solid-primary);
+            }
+
+            .btn-primary:hover:not(:disabled) {
+                background: var(--cpd-color-bg-accent-hovered);
+            }
+
+            .btn-secondary {
+                background: var(--cpd-color-bg-action-secondary-rest);
+                color: var(--cpd-color-text-primary);
+            }
+
+            .btn-secondary:hover:not(:disabled) {
+                background: var(--cpd-color-bg-action-secondary-hovered);
+            }
+
+            .loading {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: var(--cpd-space-10x);
+                color: var(--cpd-color-text-disabled);
+                gap: var(--cpd-space-3x);
+            }
+
+            .spinner {
+                width: var(--cpd-space-6x);
+                height: var(--cpd-space-6x);
+                border: 2px solid var(--cpd-color-border-interactive-secondary);
+                border-top-color: var(--cpd-color-bg-accent-rest);
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .spinner {
+                    animation: none;
+                    border-top-color: var(--cpd-color-border-interactive-secondary);
+                    border-right-color: var(--cpd-color-bg-accent-rest);
+                }
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .error {
+                background: var(--cpd-color-bg-critical-subtle);
+                border: 1px solid var(--cpd-color-border-critical-subtle);
+                color: var(--cpd-color-text-critical-primary);
+                padding: var(--cpd-space-4x);
+                border-radius: var(--radius-md);
+                margin-bottom: var(--cpd-space-4x);
+            }
+
+            .no-apps {
+                text-align: center;
+                padding: var(--cpd-space-5x);
+                color: var(--cpd-color-text-disabled);
+                font: var(--cpd-font-body-sm-regular);
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <h1 id="heading"></h1>
+            <p class="subtitle" id="subtitle"></p>
+
+            <div id="content" class="loading" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
+                <span id="loading-text"></span>
+            </div>
+        </main>
+
+        <div class="buttons">
+            <button type="button" class="btn-secondary" id="cancel"></button>
+            <button type="button" class="btn-primary" id="share" disabled></button>
+        </div>
+
+        <script>
+            (function () {
+                "use strict";
+
+                const content = document.getElementById("content");
+                const shareBtn = document.getElementById("share");
+                const cancelBtn = document.getElementById("cancel");
+
+                /** @type {Record<string, string>} */
+                var strings = {};
+
+                let selectedType = "none";
+                let selectedNode = null;
+                let isSubmitting = false;
+
+                function getAppName(node) {
+                    return (
+                        node["application.name"] ||
+                        node["application.process.binary"] ||
+                        node["node.name"] ||
+                        "Unknown Application"
+                    );
+                }
+
+                function escapeHtml(text) {
+                    const div = document.createElement("div");
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+
+                function selectOption(option) {
+                    // Update visual state
+                    content.querySelectorAll(".option").forEach(function (o) {
+                        o.setAttribute("aria-checked", "false");
+                        o.setAttribute("tabindex", "-1");
+                    });
+                    option.setAttribute("aria-checked", "true");
+                    option.setAttribute("tabindex", "0");
+                    option.focus();
+
+                    // Update selection state
+                    selectedType = option.dataset.type;
+                    if (option.dataset.node) {
+                        try {
+                            selectedNode = JSON.parse(option.dataset.node);
+                        } catch (e) {
+                            selectedNode = null;
+                        }
+                    } else {
+                        selectedNode = null;
+                    }
+                }
+
+                function handleKeyDown(e) {
+                    const options = Array.from(content.querySelectorAll(".option"));
+                    const currentIndex = options.findIndex(function (o) {
+                        return o.getAttribute("aria-checked") === "true";
+                    });
+
+                    let nextIndex = currentIndex;
+
+                    switch (e.key) {
+                        case "ArrowDown":
+                        case "ArrowRight":
+                            e.preventDefault();
+                            nextIndex = (currentIndex + 1) % options.length;
+                            break;
+                        case "ArrowUp":
+                        case "ArrowLeft":
+                            e.preventDefault();
+                            nextIndex = (currentIndex - 1 + options.length) % options.length;
+                            break;
+                        case "Home":
+                            e.preventDefault();
+                            nextIndex = 0;
+                            break;
+                        case "End":
+                            e.preventDefault();
+                            nextIndex = options.length - 1;
+                            break;
+                        case " ":
+                            e.preventDefault();
+                            // Space confirms current selection (already selected via focus)
+                            return;
+                        default:
+                            return;
+                    }
+
+                    if (nextIndex !== currentIndex && options[nextIndex]) {
+                        selectOption(options[nextIndex]);
+                    }
+                }
+
+                function renderOptions(sources) {
+                    const targets = sources.targets || [];
+
+                    // Group by application name to avoid duplicates
+                    // Only store stable properties that won't change when the app recreates its audio node
+                    const appMap = new Map();
+                    for (const node of targets) {
+                        const name = getAppName(node);
+                        if (!appMap.has(name)) {
+                            // Create a minimal filter using only stable properties
+                            // This ensures venmic can re-link if the app recreates its audio node
+                            const stableNode = {};
+                            if (node["application.name"]) {
+                                stableNode["application.name"] = node["application.name"];
+                            } else if (node["node.name"]) {
+                                stableNode["node.name"] = node["node.name"];
+                            }
+                            appMap.set(name, stableNode);
+                        }
+                    }
+
+                    const apps = Array.from(appMap.entries()).sort(function (a, b) {
+                        return a[0].localeCompare(b[0]);
+                    });
+
+                    let html = '<div role="radiogroup" aria-label="' + escapeHtml(strings.title) + '">';
+
+                    html +=
+                        '\
+                    <div class="option" role="radio" aria-checked="true" tabindex="0" data-type="none">\
+                        <div class="option-radio" aria-hidden="true"></div>\
+                        <div class="option-content">\
+                            <div class="option-label">' +
+                        escapeHtml(strings.noAudioLabel) +
+                        '</div>\
+                            <div class="option-description">' +
+                        escapeHtml(strings.noAudioDescription) +
+                        '</div>\
+                        </div>\
+                    </div>\
+                    <div class="option" role="radio" aria-checked="false" tabindex="-1" data-type="system">\
+                        <div class="option-radio" aria-hidden="true"></div>\
+                        <div class="option-content">\
+                            <div class="option-label">' +
+                        escapeHtml(strings.systemLabel) +
+                        '</div>\
+                            <div class="option-description">' +
+                        escapeHtml(strings.systemDescription) +
+                        "</div>\
+                        </div>\
+                    </div>";
+
+                    if (apps.length > 0) {
+                        html +=
+                            '<div class="section-header">' +
+                            escapeHtml(strings.applicationsHeader) +
+                            '</div><div class="app-list">';
+                        for (const [name, node] of apps) {
+                            const nodeJson = JSON.stringify(node).replace(/"/g, "&quot;");
+                            html +=
+                                '\
+                            <div class="option" role="radio" aria-checked="false" tabindex="-1" data-type="app" data-node="' +
+                                nodeJson +
+                                '">\
+                                <div class="option-radio" aria-hidden="true"></div>\
+                                <div class="option-content">\
+                                    <div class="option-label">' +
+                                escapeHtml(name) +
+                                "</div>\
+                                </div>\
+                            </div>";
+                        }
+                        html += "</div>";
+                    } else {
+                        html += '<div class="no-apps">' + escapeHtml(strings.noApps) + "</div>";
+                    }
+
+                    html += "</div>";
+
+                    content.className = "options-container";
+                    content.innerHTML = html;
+
+                    // Add click handlers
+                    content.querySelectorAll(".option").forEach(function (option) {
+                        option.addEventListener("click", function () {
+                            selectOption(option);
+                        });
+                    });
+
+                    // Add keyboard navigation to radiogroup
+                    const radiogroup = content.querySelector('[role="radiogroup"]');
+                    if (radiogroup) {
+                        radiogroup.addEventListener("keydown", handleKeyDown);
+                    }
+
+                    // Enable share button and focus first option
+                    shareBtn.disabled = false;
+                    const firstOption = content.querySelector(".option");
+                    if (firstOption) {
+                        firstOption.focus();
+                    }
+                }
+
+                function submit() {
+                    if (isSubmitting || shareBtn.disabled) return;
+                    isSubmitting = true;
+                    shareBtn.disabled = true;
+
+                    const selection = { type: selectedType };
+                    if (selectedNode) {
+                        selection.node = selectedNode;
+                    }
+                    window.audioPickerAPI.submitSelection(selection);
+                }
+
+                function cancel() {
+                    if (isSubmitting) return;
+                    isSubmitting = true;
+                    window.audioPickerAPI.cancel();
+                }
+
+                shareBtn.addEventListener("click", submit);
+                cancelBtn.addEventListener("click", cancel);
+
+                // Handle global keyboard shortcuts
+                document.addEventListener("keydown", function (e) {
+                    if (e.key === "Enter" && !shareBtn.disabled) {
+                        e.preventDefault();
+                        submit();
+                    } else if (e.key === "Escape") {
+                        e.preventDefault();
+                        cancel();
+                    }
+                });
+
+                // Load config (theme) first, then strings, then sources
+                window.audioPickerAPI
+                    .getConfig()
+                    .then(function (config) {
+                        // Apply Compound theme class immediately for correct token values
+                        document.documentElement.classList.add("cpd-theme-" + (config.theme || "dark"));
+                        return window.audioPickerAPI.getStrings();
+                    })
+                    .then(function (s) {
+                        strings = s;
+
+                        // Populate static UI elements with translated strings
+                        document.getElementById("page-title").textContent = strings.title;
+                        document.getElementById("heading").textContent = strings.title;
+                        document.getElementById("subtitle").textContent = strings.subtitle;
+                        document.getElementById("loading-text").textContent = strings.loading;
+                        cancelBtn.textContent = strings.cancel;
+                        shareBtn.textContent = strings.share;
+
+                        return window.audioPickerAPI.getSources();
+                    })
+                    .then(function (sources) {
+                        if (sources.ok) {
+                            renderOptions(sources);
+                        } else {
+                            content.className = "";
+                            content.innerHTML =
+                                '<div class="error">' +
+                                escapeHtml(strings.errorLoadPrefix) +
+                                " " +
+                                (sources.isGlibcOutdated
+                                    ? escapeHtml(strings.errorGlibc)
+                                    : escapeHtml(strings.errorPipewire)) +
+                                "</div>";
+                            shareBtn.disabled = false;
+                        }
+                    })
+                    .catch(function (err) {
+                        content.className = "";
+                        content.innerHTML =
+                            '<div class="error">' +
+                            escapeHtml(
+                                (strings.errorLoadPrefix || "Failed to load audio sources:") + " " + err.message,
+                            ) +
+                            "</div>";
+                        shareBtn.disabled = false;
+                    });
+            })();
+        </script>
+    </body>
+</html>

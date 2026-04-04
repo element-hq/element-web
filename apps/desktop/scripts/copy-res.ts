@@ -79,3 +79,20 @@ INCLUDE_LANGS.forEach((file): void => {
 if (watch) {
     INCLUDE_LANGS.forEach((file) => watchLanguage(I18N_BASE_PATH + file, I18N_DEST));
 }
+
+// Compound Design Tokens CSS — copy to build/compound/ for use by audio-picker.html
+const CPD_CSS_SRC = "node_modules/@vector-im/compound-design-tokens/assets/web/css/";
+const CPD_CSS_DEST = "build/compound/";
+if (fs.existsSync(CPD_CSS_SRC)) {
+    fs.mkdirSync(CPD_CSS_DEST, { recursive: true });
+    for (const file of fs.readdirSync(CPD_CSS_SRC)) {
+        if (file.endsWith(".css")) {
+            fs.copyFileSync(path.join(CPD_CSS_SRC, file), path.join(CPD_CSS_DEST, file));
+            if (verbose) {
+                console.log("Copied Compound CSS: " + file);
+            }
+        }
+    }
+} else {
+    console.warn("Compound Design Tokens CSS not found at " + CPD_CSS_SRC + ", skipping copy");
+}

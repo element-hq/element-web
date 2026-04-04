@@ -81,6 +81,8 @@ overrides:
   '@xmldom/xmldom@0.8.11': 0.8.12
   esbuild@<=0.24.2: '>=0.25.0'
   minimatch@>=10.0.0 <10.2.3: '>=10.2.3'
+  matrix-seshat: link:apps/desktop/.hak/hakModules/matrix-seshat
+  '@vencord/venmic': link:apps/desktop/.hak/hakModules/@vencord/venmic
 
 packageExtensionsChecksum: sha256-OFePh8Fn8A1ZEWgJF51vTMPT/HEVyXQyj6YGIztPb0w=
 
@@ -128,6 +130,13 @@ patchedDependencies:
 importers:
 
   .:
+    dependencies:
+      '@vencord/venmic':
+        specifier: link:apps/desktop/.hak/hakModules/@vencord/venmic
+        version: link:apps/desktop/.hak/hakModules/@vencord/venmic
+      matrix-seshat:
+        specifier: link:apps/desktop/.hak/hakModules/matrix-seshat
+        version: link:apps/desktop/.hak/hakModules/matrix-seshat
     devDependencies:
       '@action-validator/cli':
         specifier: ^0.6.0
@@ -325,6 +334,13 @@ importers:
       typescript:
         specifier: 5.9.3
         version: 5.9.3
+    optionalDependencies:
+      '@vector-im/compound-design-tokens':
+        specifier: latest
+        version: 10.1.0(@types/react@19.2.10)(react@19.2.4)
+      '@vencord/venmic':
+        specifier: link:.hak/hakModules/@vencord/venmic
+        version: link:.hak/hakModules/@vencord/venmic
 
   apps/web:
     dependencies:
@@ -5734,6 +5750,17 @@ packages:
 
   '@upsetjs/venn.js@2.0.0':
     resolution: {integrity: sha512-WbBhLrooyePuQ1VZxrJjtLvTc4NVfpOyKx0sKqioq9bX1C1m7Jgykkn8gLrtwumBioXIqam8DLxp88Adbue6Hw==}
+
+  '@vector-im/compound-design-tokens@10.1.0':
+    resolution: {integrity: sha512-o+7DGx+NygpT2NPE1Jo//7NZDuyjzRH06eRchS0ZlkJicKx/impEmShmHU/XiE4P84BIFOo9eZ1Ws+rAym6Tuw==}
+    peerDependencies:
+      '@types/react': ^19.2.10
+      react: ^17 || ^18 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
 
   '@vector-im/compound-design-tokens@8.0.0':
     resolution: {integrity: sha512-9CffdYzNZp9A2uQ/pcVZBNZuv7fyR9Ye8e6KuimBv1TOcgegFb7F55WUCcEEqj8kRRcWcaPbbM6kkTzSpsMSmg==}
@@ -18441,6 +18468,12 @@ snapshots:
     optionalDependencies:
       d3-selection: 3.0.0
       d3-transition: 3.0.1(d3-selection@3.0.0)
+
+  '@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.10)(react@19.2.4)':
+    optionalDependencies:
+      '@types/react': 19.2.10
+      react: 19.2.4
+    optional: true
 
   '@vector-im/compound-design-tokens@8.0.0(@types/react@19.2.10)(react@19.2.4)':
     optionalDependencies:
