@@ -141,7 +141,8 @@
         },
         "room_options": "Room Options",
         "section_header": {
-            "toggle": "Toggle %(section)s section"
+            "toggle": "Toggle %(section)s section",
+            "toggle_unread": "Toggle %(section)s section with unread room(s)"
         },
         "show_message_previews": "Show message previews",
         "sort": "Sort",

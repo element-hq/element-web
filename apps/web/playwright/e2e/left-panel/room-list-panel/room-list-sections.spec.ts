@@ -39,9 +39,12 @@ test.describe("Room list sections", () => {
      * Get a section header toggle button by section name
      * @param page
      * @param sectionName The display name of the section (e.g. "Favourites", "Chats", "Low Priority")
+     * @param isUnread Whether to look for the unread version of the section header
      */
-    function getSectionHeader(page: Page, sectionName: string): Locator {
-        return getRoomList(page).getByRole("gridcell", { name: `Toggle ${sectionName} section` });
+    function getSectionHeader(page: Page, sectionName: string, isUnread = false): Locator {
+        return getRoomList(page).getByRole("gridcell", {
+            name: isUnread ? `Toggle ${sectionName} section with unread room(s)` : `Toggle ${sectionName} section`,
+        });
     }
 
     test.beforeEach(async ({ page, app, user }) => {
@@ -207,6 +210,31 @@ test.describe("Room list sections", () => {
             roomItem = roomList.getByRole("row", { name: "Open room my room" });
             await expect(roomItem).toBeVisible();
         });
+    });
+
+    test("should show unread indicator on section header", async ({ page, app, bot }) => {
+        // Create a favourite room
+        const favouriteId = await app.client.createRoom({ name: "favourite room" });
+        await app.client.evaluate(async (client, roomId) => {
+            await client.setRoomTag(roomId, "m.favourite");
+        }, favouriteId);
+
+        const roomList = getRoomList(page);
+
+        // Invite the bot and have it send a message to generate an unread
+        await app.client.inviteUser(favouriteId, bot.credentials.userId);
+        await bot.joinRoom(favouriteId);
+        await bot.sendMessage(favouriteId, "Hello from bot!");
+
+        let sectionHeader = getSectionHeader(page, "Favourites", true);
+        await expect(sectionHeader).toBeVisible();
+
+        // Open the room to mark it as read
+        await roomList.getByRole("row", { name: "Open room favourite room" }).click();
+
+        // The section should no longer be unread
+        sectionHeader = getSectionHeader(page, "Favourites", false);
+        await expect(sectionHeader).toBeVisible();
     });
 
     test.describe("Sections and filters interaction", () => {
