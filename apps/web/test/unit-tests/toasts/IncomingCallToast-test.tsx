@@ -20,6 +20,7 @@ import {
     RoomEvent,
     type IRoomTimelineData,
     type ISendEventResponse,
+    type IContent,
 } from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
@@ -50,12 +51,32 @@ import LegacyCallHandler, { AudioID } from "../../../src/LegacyCallHandler";
 import { CallEvent } from "../../../src/models/Call";
 import { type WidgetMessaging } from "../../../src/stores/widgets/WidgetMessaging";
 
+function makeNotificationEvent(room: Room, content: IContent = {}): MatrixEvent {
+    const ts = Date.now();
+    const notificationContent = {
+        "notification_type": "notification",
+        "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
+        "m.mentions": { user_ids: [], room: true },
+        "lifetime": 3000,
+        "sender_ts": ts,
+        ...content,
+    } as unknown as IRTCNotificationContent;
+    return mkEvent({
+        type: EventType.RTCNotification,
+        user: "@userId:matrix.org",
+        content: notificationContent,
+        room: room.roomId,
+        ts,
+        id: "$notificationEventId",
+        event: true,
+    });
+}
+
 describe("IncomingCallToast", () => {
     useMockedCalls();
 
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let notificationEvent: MatrixEvent;
 
     let alice: RoomMember;
     let bob: RoomMember;
@@ -77,23 +98,6 @@ describe("IncomingCallToast", () => {
         document.body.appendChild(audio);
 
         room = new Room("!1:example.org", client, "@alice:example.org");
-        const ts = Date.now();
-        const notificationContent = {
-            "notification_type": "notification",
-            "m.relation": { rel_type: "m.reference", event_id: "$memberEventId" },
-            "m.mentions": { user_ids: [], room: true },
-            "lifetime": 3000,
-            "sender_ts": ts,
-        } as unknown as IRTCNotificationContent;
-        notificationEvent = mkEvent({
-            type: EventType.RTCNotification,
-            user: "@userId:matrix.org",
-            content: notificationContent,
-            room: room.roomId,
-            ts,
-            id: "$notificationEventId",
-            event: true,
-        });
         alice = mkRoomMember(room.roomId, "@alice:example.org");
         bob = mkRoomMember(room.roomId, "@bob:example.org");
 
@@ -130,7 +134,7 @@ describe("IncomingCallToast", () => {
         jest.restoreAllMocks();
     });
 
-    const renderToast = (): string => {
+    const renderToast = (notificationEvent: MatrixEvent = makeNotificationEvent(room)): string => {
         const callId = randomUUID();
         call.event.getContent = () =>
             ({
@@ -146,29 +150,52 @@ describe("IncomingCallToast", () => {
         return callId;
     };
 
-    it("correctly shows all the information", () => {
+    it.each(["video", "voice"])("shows information for a group %s call", (callType: string) => {
         call.participants = new Map([
             [alice, new Set("a")],
             [bob, new Set(["b1", "b2"])],
         ]);
-        renderToast();
+        const notificationEvent = makeNotificationEvent(room, {
+            "m.call.intent": callType === "voice" ? "audio" : "video",
+        });
+        renderToast(notificationEvent);
 
         screen.getByText("Group call started");
-        screen.getByLabelText("Video call");
+        screen.getByLabelText(callType === "voice" ? "Voice call" : "Video call");
         screen.getByLabelText("@alice:example.org");
         screen.getByLabelText("@bob:example.org");
+        screen.getByText("on the call");
 
         screen.getByRole("button", { name: "Join" });
         screen.getByRole("button", { name: "Ignore" });
         screen.getByRole("button", { name: "Expand" });
     });
 
-    it("start ringing on ring notify event", () => {
-        const oldContent = notificationEvent.getContent() as IRTCNotificationContent;
-        (notificationEvent as unknown as { getContent: () => IRTCNotificationContent }).getContent = () => {
-            return { ...oldContent, notification_type: "ring" } as IRTCNotificationContent;
-        };
+    it.each(["video", "voice"])("shows information for a DM %s call", (callType: string) => {
+        mocked(dmRoomMap.getUserIdForRoomId).mockImplementation((roomId) =>
+            roomId === room.roomId ? alice.userId : undefined,
+        );
+        try {
+            call.participants = new Map([[alice, new Set("a")]]);
+            const notificationEvent = makeNotificationEvent(room, {
+                "m.call.intent": callType === "voice" ? "audio" : "video",
+            });
+            renderToast(notificationEvent);
 
+            screen.getByText(callType === "voice" ? "Incoming voice call" : "Incoming video call");
+            screen.getByLabelText(callType === "voice" ? "Voice call" : "Video call");
+            screen.getByLabelText("@alice:example.org");
+
+            screen.getByRole("button", { name: "Join" });
+            screen.getByRole("button", { name: "Ignore" });
+            screen.getByRole("button", { name: "Expand" });
+        } finally {
+            mocked(dmRoomMap.getUserIdForRoomId).mockReset();
+        }
+    });
+
+    it("start ringing on ring notify event", () => {
+        const notificationEvent = makeNotificationEvent(room, { notification_type: "ring" });
         const playMock = jest.spyOn(LegacyCallHandler.instance, "play");
         render(<IncomingCallToast notificationEvent={notificationEvent} toastKey="" />);
         expect(playMock).toHaveBeenCalled();
@@ -180,6 +207,7 @@ describe("IncomingCallToast", () => {
 
         screen.getByText("Group call started");
         screen.getByLabelText("Video call");
+        expect(screen.queryByText("on the call")).toBe(null);
 
         screen.getByRole("button", { name: "Join" });
         screen.getByRole("button", { name: "Ignore" });
@@ -328,7 +356,8 @@ describe("IncomingCallToast", () => {
     });
 
     it("closes toast when the notification event is redacted", async () => {
-        const callId = renderToast();
+        const notificationEvent = makeNotificationEvent(room);
+        const callId = renderToast(notificationEvent);
 
         room.emit(MatrixEventEvent.BeforeRedaction, notificationEvent, {} as unknown as MatrixEvent);
 
@@ -347,7 +376,8 @@ describe("IncomingCallToast", () => {
     });
 
     it("closes toast when a decline event was received", async () => {
-        const callId = renderToast();
+        const notificationEvent = makeNotificationEvent(room);
+        const callId = renderToast(notificationEvent);
 
         room.emit(
             RoomEvent.Timeline,
@@ -369,7 +399,8 @@ describe("IncomingCallToast", () => {
     });
 
     it("does not close toast when a decline event for another user was received", async () => {
-        const callId = renderToast();
+        const notificationEvent = makeNotificationEvent(room);
+        const callId = renderToast(notificationEvent);
 
         room.emit(
             RoomEvent.Timeline,
@@ -434,6 +465,7 @@ describe("IncomingCallToast", () => {
     });
 
     it("getNotificationEventSendTs returns the correct ts", () => {
+        const notificationEvent = makeNotificationEvent(room);
         const eventOriginServerTs = mkEvent({
             user: "@userId:matrix.org",
             type: EventType.RTCNotification,
