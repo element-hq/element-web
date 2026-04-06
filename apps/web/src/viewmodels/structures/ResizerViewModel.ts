@@ -60,6 +60,7 @@ export class ResizerViewModel
         // We don't want the panels to have fractional widths as that can cause blurry UI elements.
         if (!Number.isInteger(newSize)) {
             this.panelHandle?.resize(`${Math.round(newSize)}%`);
+            return;
         }
 
         const isCollapsed = newSize === 0;
