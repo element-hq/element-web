@@ -57,6 +57,11 @@ export class ResizerViewModel
     }, 50);
 
     public onLeftPanelResized = (newSize: number): void => {
+        // We don't want the panels to have fractional widths as that can cause blurry UI elements.
+        if (!Number.isInteger(newSize)) {
+            this.panelHandle?.resize(`${Math.round(newSize)}%`);
+        }
+
         const isCollapsed = newSize === 0;
         // Store the size if the panel isn't collapsed.
         if (!isCollapsed) {
