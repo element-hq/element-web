@@ -5,11 +5,12 @@ Copyright 2022 Arseny Uskov
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
- */
+*/
+
 import type ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
-export type HeartOptions = {
+type HeartOptions = {
     /**
      * The maximum number of hearts to render at a given time
      */
@@ -51,7 +52,7 @@ const KEY_FRAME_INTERVAL = 15; // 15ms, roughly
 export default class Hearts implements ICanvasEffect {
     private readonly options: HeartOptions;
 
-    public constructor(options: { [key: string]: any }) {
+    public constructor(options: Partial<HeartOptions>) {
         this.options = { ...DefaultOptions, ...options };
     }
 
