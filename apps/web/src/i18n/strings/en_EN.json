@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Video room",
         "view_message": "View message",
-        "voice": "Voice",
         "warning": "Warning"
     },
     "composer": {
@@ -3891,6 +3890,16 @@
         "call_held": "%(peerName)s held the call",
         "call_held_resume": "You held the call <a>Resume</a>",
         "call_held_switch": "You held the call <a>Switch</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> on the call",
+                "other": "<avatars/> on the call"
+            },
+            "overflow": {
+                "one": "<avatars/> +%(overflowCount)s on the call",
+                "other": "<avatars/> +%(overflowCount)s on the call"
+            }
+        },
         "call_toast_unknown_room": "Unknown room",
         "camera_disabled": "Your camera is turned off",
         "camera_enabled": "Your camera is still enabled",

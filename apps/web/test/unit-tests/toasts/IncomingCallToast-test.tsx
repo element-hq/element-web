@@ -154,8 +154,9 @@ describe("IncomingCallToast", () => {
         renderToast();
 
         screen.getByText("Group call started");
-        screen.getByText("Video");
-        screen.getByLabelText("3 people joined");
+        screen.getByLabelText("Video call");
+        screen.getByLabelText("@alice:example.org");
+        screen.getByLabelText("@bob:example.org");
 
         screen.getByRole("button", { name: "Join" });
         screen.getByRole("button", { name: "Ignore" });
@@ -178,7 +179,7 @@ describe("IncomingCallToast", () => {
         renderToast();
 
         screen.getByText("Group call started");
-        screen.getByText("Video");
+        screen.getByLabelText("Video call");
 
         screen.getByRole("button", { name: "Join" });
         screen.getByRole("button", { name: "Ignore" });

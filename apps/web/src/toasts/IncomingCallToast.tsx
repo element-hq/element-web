@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useCallback, useEffect, useRef, useState, useId } from "react";
+import React, { type JSX, type ReactNode, useCallback, useEffect, useRef, useState, useId } from "react";
 import {
     type Room,
     type MatrixEvent,
@@ -15,7 +15,7 @@ import {
     EventType,
     MatrixEventEvent,
 } from "matrix-js-sdk/src/matrix";
-import { Button, Form, Heading, InlineField, Label, ToggleInput, Tooltip } from "@vector-im/compound-web";
+import { AvatarStack, Button, Form, Heading, InlineField, Label, ToggleInput, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
 import {
@@ -34,8 +34,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import ToastStore from "../stores/ToastStore";
-import { LiveContentSummary, LiveContentType } from "../components/views/rooms/LiveContentSummary";
-import { useCall, useParticipantCount } from "../hooks/useCall";
+import { useCall, useParticipatingMembers } from "../hooks/useCall";
 import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";
@@ -44,6 +43,7 @@ import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter, useTypedEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import DMRoomMap from "../utils/DMRoomMap";
+import MemberAvatar from "../components/views/avatars/MemberAvatar";
 
 /**
  * Get the key for the incoming call toast. A combination of the call ID and room ID.
@@ -279,19 +279,30 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, onCall);
     useEventEmitter(call ?? undefined, CallEvent.Participants, onParticipantChange);
     useEventEmitter(room, RoomEvent.Timeline, onTimelineChange);
+
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(roomId);
-    const participantCount = useParticipantCount(call);
-    const detailsInformation =
-        notificationContent.notification_type === "ring" ? (
-            <span>{otherUserId}</span>
-        ) : (
-            <LiveContentSummary
-                type={isVoice ? LiveContentType.Voice : LiveContentType.Video}
-                text={isVoice ? _t("common|voice") : _t("common|video")}
-                active={false}
-                participantCount={participantCount}
-            />
-        );
+    const members = useParticipatingMembers(call);
+    const avatars = (): ReactNode => (
+        <AvatarStack className="mx_IncomingCallToast_avatars">
+            {members.slice(0, 3).map((m) => (
+                <MemberAvatar key={m.userId} size="20px" member={m} aria-label={m.name} />
+            ))}
+        </AvatarStack>
+    );
+
+    let detailsInformation: ReactNode;
+    if (notificationContent.notification_type === "ring") {
+        detailsInformation = <span>{otherUserId}</span>;
+    } else if (members.length > 0) {
+        detailsInformation =
+            members.length > 3
+                ? _t(
+                      "voip|call_members|overflow",
+                      { count: members.length, overflowCount: members.length - 3 },
+                      { avatars },
+                  )
+                : _t("voip|call_members|exhaustive", { count: members.length }, { avatars });
+    }
 
     const Icon = isVoice ? VoiceCallSolidIcon : VideoCallSolidIcon;
     const iconLabel = isVoice ? _t("voip|voice_call") : _t("voip|video_call");
