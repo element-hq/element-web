@@ -35,6 +35,7 @@ const calcIsInfoMessage = (
         eventType !== EventType.RoomMessageEncrypted &&
         eventType !== EventType.Sticker &&
         eventType !== EventType.RoomCreate &&
+        eventType !== EventType.RTCNotification &&
         !M_POLL_START.matches(eventType) &&
         !M_POLL_END.matches(eventType) &&
         !M_BEACON_INFO.matches(eventType)
