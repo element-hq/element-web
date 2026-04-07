@@ -79,7 +79,7 @@ export default class SetIntegrationManager extends React.Component<EmptyObject, 
                         <Heading as="h2" size="3">
                             {_t("integration_manager|manage_title")}
                         </Heading>
-                        <Heading id="mx_SetIntegrationManager_ManagerName" size="4">
+                        <Heading id="mx_SetIntegrationManager_ManagerName" as="h3" size="4">
                             {managerName}
                         </Heading>
                     </div>

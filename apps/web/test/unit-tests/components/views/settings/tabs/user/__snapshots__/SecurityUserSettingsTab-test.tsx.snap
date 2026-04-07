@@ -49,12 +49,12 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
             >
               Manage integrations
             </h2>
-            <h4
+            <h3
               class="mx_Heading_h4"
               id="mx_SetIntegrationManager_ManagerName"
             >
               (scalar.vector.im)
-            </h4>
+            </h3>
           </div>
         </div>
         <div
