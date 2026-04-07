@@ -1,5 +1,5 @@
 {
-    "name": "@element-hq/element-web-module-restricted-guests",
+    "name": "@element-hq/element-web-module-widget-lifecycle",
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -9,24 +9,18 @@
         "prepare": "vite build",
         "lint:types": "tsc --noEmit",
         "lint:codestyle": "echo 'handled by lint:eslint'",
-        "test": "echo no tests yet"
+        "test": "vitest run --coverage"
     },
     "devDependencies": {
-        "@arcmantle/vite-plugin-import-css-sheet": "^1.0.12",
         "@element-hq/element-web-module-api": "^1.0.0",
         "@types/node": "^22.10.7",
-        "@types/react": "^19",
-        "@vitejs/plugin-react": "^5.0.0",
-        "react": "19.2.4",
-        "rollup-plugin-external-globals": "^0.13.0",
+        "@vitest/coverage-v8": "^4.0.0",
         "typescript": "^5.7.3",
         "vite": "^7.3.2",
-        "vite-plugin-node-polyfills": "^0.25.0"
+        "vitest": "^4.0.0",
+        "vitest-sonar-reporter": "^2.0.0"
     },
     "dependencies": {
-        "@vector-im/compound-design-tokens": "^8.0.0",
-        "@vector-im/compound-web": "^8.0.0",
-        "styled-components": "^6.1.18",
         "zod": "^4.0.0"
     }
 }
