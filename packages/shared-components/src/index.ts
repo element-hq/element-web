@@ -25,6 +25,7 @@ export * from "./room/WidgetPip";
 export * from "./room/HistoryVisibilityBadge";
 export * from "./room/timeline/DateSeparatorView";
 export * from "./room/timeline/TimelineSeparator";
+export * from "./room/timeline/event-tile/actions/ActionBarView";
 export * from "./room/timeline/event-tile/EventTileView/DisambiguatedProfile";
 export * from "./room/timeline/event-tile/EventTileView/EncryptionEventView";
 export * from "./room/timeline/event-tile/EventTileView/EventTileBubble";

@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "돌아가기",
+        "click": "클릭",
         "collapse": "접기",
         "delete": "삭제",
         "dismiss": "버리기",
@@ -11,26 +12,38 @@
         "edit": "편집",
         "explore_rooms": "방 검색",
         "go": "이동",
+        "hide": "숨기기",
         "invite": "초대",
         "new_conversation": "새로운 대화",
         "new_room": "새로운 방",
         "new_video_room": "새로운 비디오룸",
         "open_menu": "메뉴 열기",
         "pause": "일시중지",
+        "pin": "고정",
         "play": "재생",
+        "react": "리액션",
         "remove": "제거",
+        "reply": "답장",
+        "reply_in_thread": "스레드로 답장",
         "retry": "재시도",
         "search": "찾기",
-        "start_chat": "채팅 시작"
+        "start_chat": "채팅 시작",
+        "unpin": "고정 해제",
+        "view_source": "소스 보기"
     },
     "common": {
         "attachment": "첨부 파일",
         "encryption_enabled": "암호화 활성화됨",
+        "options": "옵션",
         "preferences": "환경설정",
         "state_encryption_enabled": "실험적 상태 암호화가 활성화되었습니다."
     },
+    "keyboard": {
+        "shift": "전환"
+    },
     "left_panel": {
-        "open_dial_pad": "다이얼 패드 열기"
+        "open_dial_pad": "다이얼 패드 열기",
+        "separator_label": "클릭하거나 드래그하여 확대"
     },
     "notifications": {
         "all_messages": "모든 메시지",
@@ -76,7 +89,9 @@
             "unread": {
                 "other": "읽지 않은 메세지 %(count)s개가 있는 %(roomName)s 방 열기"
             },
-            "unsent_message": "전송되지 않은 메시지가 있는 %(roomName)s 방 열기"
+            "unsent_message": "전송되지 않은 메시지가 있는 %(roomName)s 방 열기",
+            "video_call": "%(roomName)s 대화방에서 영상 통화 시작",
+            "voice_call": "%(roomName)s 대화방에서 음성 통화 시작"
         },
         "appearance": "모양",
         "collapse_filters": "필터 목록 접기",
@@ -141,6 +156,9 @@
     "terms": {
         "tac_button": "이용 약관을 검토하세요."
     },
+    "threads": {
+        "error_start_thread_existing_relation": "이미 관계가 설정된 항목에서는 스레드를 생성할 수 없습니다."
+    },
     "time": {
         "about_day_ago": "약 1일 전",
         "about_hour_ago": "약 1 시간 전",
@@ -167,6 +185,8 @@
             "sender_unsigned_device": "보안되지 않은 기기에서 전송됨.",
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
+        "download_action_decrypting": "복호화 중",
+        "download_action_downloading": "다운로드 중",
         "m.audio": {
             "audio_player": "오디오 플레이어",
             "error_downloading_audio": "오디오 다운로드 중 오류 발생",
@@ -184,6 +204,13 @@
             "parameters_changed": "일부 암호화 설정이 변경되었습니다.",
             "state_enabled": "이 방의 메시지와 상태 이벤트는 종단간 암호화로 보호됩니다. 새로운 사용자가 참여하면 프로필 사진을 탭하여 신원을 인증할 수 있습니다.",
             "unsupported": "이 방에서 사용 중인 암호화 방식은 지원되지 않습니다."
+        },
+        "mab": {
+            "collapse_reply_chain": "인용문 접기",
+            "copy_link_thread": "스레드 링크 복사",
+            "expand_reply_chain": "인용문 펼치기",
+            "label": "메시지 작업",
+            "view_in_room": "대화방에서 보기"
         },
         "message_timestamp_received_at": "수신 시간: %(dateTime)s",
         "message_timestamp_sent_at": "발송 시간: %(dateTime)s",

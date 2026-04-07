@@ -32,7 +32,6 @@
         "cancel": "Cancel",
         "change": "Change",
         "clear": "Clear",
-        "click": "Click",
         "click_to_copy": "Click to copy",
         "close": "Close",
         "collapse": "Collapse",
@@ -66,7 +65,6 @@
         "go": "Go",
         "go_back": "Go back",
         "got_it": "Got it",
-        "hide": "Hide",
         "hide_advanced": "Hide advanced",
         "hold": "Hold",
         "ignore": "Ignore",
@@ -1364,9 +1362,6 @@
         "impossible_dialog_title": "Integrations not allowed"
     },
     "invite": {
-        "ask_anyway_description": "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?",
-        "ask_anyway_label": "Start DM anyway",
-        "ask_anyway_never_warn_label": "Start DM anyway and never warn me again",
         "email_caption": "Invite by email",
         "email_limit_one": "Invites by email can only be sent one at a time",
         "email_use_default_is": "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
@@ -3316,7 +3311,6 @@
         },
         "empty_description": "Use “%(replyInThread)s” when hovering over a message.",
         "empty_title": "Threads help keep your conversations on-topic and easy to track.",
-        "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation",
         "mark_all_read": "Mark all as read",
         "my_threads": "My threads",
         "my_threads_description": "Shows all threads you've participated in",
@@ -3360,7 +3354,6 @@
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
@@ -3560,10 +3553,7 @@
             "removed": "%(widgetName)s widget removed by %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Collapse quotes",
             "copy_link_thread": "Copy link to thread",
-            "expand_reply_chain": "Expand quotes",
-            "label": "Message Actions",
             "view_in_room": "View in room"
         },
         "mjolnir": {

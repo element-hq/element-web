@@ -26,7 +26,6 @@
         "cancel": "Anuloje",
         "change": "Ndërroje",
         "clear": "Spastroje",
-        "click": "Klikim",
         "click_to_copy": "Klikoni që të kopjohet",
         "close": "Mbylle",
         "collapse": "Tkurre",
@@ -1069,9 +1068,6 @@
         "impossible_dialog_title": "Integrimet s’lejohen"
     },
     "invite": {
-        "ask_anyway_description": "S’arrihet të gjenden profile për ID-të Matrix radhitur më poshtë - doni të niset një MD sido që të jetë?",
-        "ask_anyway_label": "Nis MD sido qoftë",
-        "ask_anyway_never_warn_label": "Nis MD sido qoftë dhe mos më sinjalizo kurrë më",
         "email_caption": "Ftojeni me email",
         "email_limit_one": "Ftesat me email mund të dërgohen vetëm një në herë",
         "email_use_default_is": "Përdorni një shërbyes identitetesh për të ftuar me email. <default>Përdorni parazgjedhjen (%(defaultIdentityServerName)s)</default> ose administrojeni që nga <settings>Rregullimet</settings>.",
@@ -2622,7 +2618,6 @@
             "one": "%(count)s përgjigje",
             "other": "%(count)s përgjigje"
         },
-        "error_start_thread_existing_relation": "S’mund të krijohet një rrjedhë prej një akti me një marrëdhënie ekzistuese",
         "my_threads": "Rrjedhat e mia",
         "my_threads_description": "Shfaq krejt rrjedhat ku keni marrë pjesë",
         "open_thread": "Hape rrjedhën",
@@ -2648,7 +2643,6 @@
         },
         "creation_summary_dm": "%(creator)s krijoi këtë DM.",
         "creation_summary_room": "%(creator)s krijoi dhe formësoi dhomën.",
-        "download_action_decrypting": "Po shfshehtëzohet",
         "download_action_downloading": "Shkarkim",
         "edits": {
             "tooltip_label": "Përpunuar më %(date)s. Klikoni që të shihni përpunimet.",
@@ -2838,10 +2832,7 @@
             "removed": "Widget-i %(widgetName)s u hoq nga %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Tkurri thonjëzat",
             "copy_link_thread": "Kopjoje lidhjen te rrjedha",
-            "expand_reply_chain": "Zgjeroji thonjëzat",
-            "label": "Veprime Mesazhesh",
             "view_in_room": "Shiheni në dhomë"
         },
         "mjolnir": {
