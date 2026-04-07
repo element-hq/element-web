@@ -30,12 +30,12 @@
         "@element-hq/element-web-playwright-common": "catalog:",
         "@nx-tools/nx-container": "^7.2.1",
         "@nx/jest": "^22.5.0",
-        "@types/node": "22",
         "@playwright/test": "catalog:",
+        "@types/node": "22",
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "5.87.0",
+        "knip": "6.1.0",
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
@@ -67,9 +67,9 @@
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
             "jsdom": "patches/jsdom.patch",
             "rollup": "patches/rollup.patch",
-            "knip": "patches/knip.patch",
             "postcss-mixins": "patches/postcss-mixins.patch",
-            "app-builder-lib": "patches/app-builder-lib.patch"
+            "app-builder-lib": "patches/app-builder-lib.patch",
+            "knip": "patches/knip.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {

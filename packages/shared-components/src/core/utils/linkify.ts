@@ -228,10 +228,10 @@ export function generateLinkedTextOptions({
             : undefined),
         // By default, ignore Matrix ID types.
         // Other applications may implement their own version of LinkifyComponent.
-        validate: (_value, type: string) =>
+        validate: (value, type: string) =>
             !!(type === LinkifyMatrixOpaqueIdType.UserId && userIdListener) ||
             !!(type === LinkifyMatrixOpaqueIdType.RoomAlias && roomAliasListener) ||
-            type === LinkifyMatrixOpaqueIdType.URL,
+            !!(type === LinkifyMatrixOpaqueIdType.URL && URL.canParse(value)),
     } satisfies linkifyjs.Opts;
 }
 

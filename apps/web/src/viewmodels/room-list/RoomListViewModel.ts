@@ -491,6 +491,11 @@ export class RoomListViewModel
         // Track the current active room position for future sticky calculations
         this.lastActiveRoomPosition = roomId ? this.findRoomPosition(this.roomsResult.sections, roomId) : undefined;
 
+        // Update section header view models with current rooms for unread state tracking
+        for (const section of this.roomsResult.sections) {
+            this.getSectionHeaderViewModel(section.tag).setRooms(section.rooms);
+        }
+
         // Build the complete state atomically to ensure consistency
         const { sections, isFlatList } = computeSections(
             this.roomsResult,

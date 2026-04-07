@@ -26,7 +26,6 @@
         "cancel": "キャンセル",
         "change": "変更",
         "clear": "消去",
-        "click": "クリック",
         "click_to_copy": "クリックでコピー",
         "close": "閉じる",
         "collapse": "折りたたむ",
@@ -2553,7 +2552,6 @@
             "other": "%(count)s件の返信",
             "one": "%(count)s件の返信"
         },
-        "error_start_thread_existing_relation": "既存の関係のあるイベントからスレッドを作成することはできません",
         "my_threads": "自分のスレッド",
         "my_threads_description": "参加している全スレッドを表示",
         "open_thread": "スレッドを開く",
@@ -2587,7 +2585,6 @@
         "creation_summary_dm": "%(creator)sがこのダイレクトメッセージを作成しました。",
         "creation_summary_room": "%(creator)sがルームを作成し設定しました。",
         "disambiguated_profile": "%(displayName)s（%(matrixId)s）",
-        "download_action_decrypting": "復号化しています",
         "download_action_downloading": "ダウンロードしています",
         "edits": {
             "tooltip_label": "%(date)sに編集済。クリックすると変更履歴を表示。",
@@ -2773,10 +2770,7 @@
             "removed": "%(widgetName)sウィジェットが%(senderName)sによって削除されました"
         },
         "mab": {
-            "collapse_reply_chain": "引用を折りたたむ",
             "copy_link_thread": "スレッドへのリンクをコピー",
-            "expand_reply_chain": "引用を展開",
-            "label": "メッセージのアクション",
             "view_in_room": "ルーム内で表示"
         },
         "mjolnir": {

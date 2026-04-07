@@ -27,6 +27,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
+import Heading from "../typography/Heading.tsx";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -194,7 +195,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
 
     return (
         <div className="mx_UserProfileSettings">
-            <h2>{_t("common|profile")}</h2>
+            <Heading size="2">{_t("common|profile")}</Heading>
             <div>
                 {someFieldsDisabled
                     ? _t("settings|general|profile_subtitle_oidc")

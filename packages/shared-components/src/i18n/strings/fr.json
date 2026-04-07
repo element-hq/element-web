@@ -79,7 +79,9 @@
                 "one": "Ouvrir le salon %(roomName)s avec 1 message non lu.",
                 "other": "Ouvrir le salon %(roomName)s avec %(count)s message non lus."
             },
-            "unsent_message": "Ouvrir le salon %(roomName)s avec un message non envoyé."
+            "unsent_message": "Ouvrir le salon %(roomName)s avec un message non envoyé.",
+            "video_call": "Ouvrir le salon %(roomName)s contenant un appel vidéo",
+            "voice_call": "Ouvrir le salon %(roomName)s contenant un appel vocal."
         },
         "appearance": "Apparence",
         "collapse_filters": "Réduire la liste des filtres",
