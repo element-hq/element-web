@@ -14,15 +14,11 @@ import React, {
     type ReactNode,
     type Ref,
 } from "react";
-import { type EventStatus, type MatrixEvent, type Relations, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
-import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import {
     PadlockMode,
-    type AvatarSize,
     type EncryptionIndicatorMode,
-    type SenderMode,
     TimestampDisplayMode,
     TimestampFormatMode,
 } from "../../../../models/rooms/EventTileModel";
@@ -30,16 +26,6 @@ import { Layout } from "../../../../settings/enums/Layout";
 import { EncryptionIndicator } from "./EncryptionIndicator";
 import { Timestamp } from "./Timestamp";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
-import { Sender } from "./Sender";
-import { Avatar } from "./Avatar";
-import { Footer } from "./Footer";
-import { MessageStatus } from "./MessageStatus";
-import { MessageBody, type MessageBodyProps } from "./MessageBody";
-import { ReplyPreview, type ReplyPreviewProps } from "./ReplyPreview";
-import { ContextMenu, type ContextMenuProps } from "./ContextMenu";
-import { ActionBar, type ActionBarProps } from "./ActionBar";
-import type { ReadReceiptProps } from "./types";
-import { ThreadToolbar } from "./ThreadToolbar";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -54,74 +40,23 @@ import { ThreadToolbar } from "./ThreadToolbar";
 
 /** Structured content regions rendered inside the tile body. */
 type EventTileContentProps = {
-    sender?: {
-        /** Sender presentation mode. */
-        mode: SenderMode;
-        /** Event whose sender should be rendered. */
-        mxEvent: MatrixEvent;
-        /** Optional sender click handler. */
-        onClick?: () => void;
-    };
-    avatar?: {
-        /** Room member to render for the avatar. */
-        member?: RoomMember | null;
-        /** Avatar size to render. */
-        size: AvatarSize;
-        /** Whether avatar clicks should open the user view. */
-        viewUserOnClick: boolean;
-        /** Whether historical member data should be preferred. */
-        forceHistorical: boolean;
-    };
-    /** Reply preview props, when shown. */
-    replyChain?: ReplyPreviewProps;
-    /** Message body props for the event content. */
-    messageBody: MessageBodyProps;
-    /** Action bar props for the tile controls. */
-    actionBar?: ActionBarProps;
-    messageStatus?: {
-        /** Local message send state. */
-        messageState: EventStatus | undefined;
-        /** Whether initial read receipt animations should be suppressed. */
-        suppressReadReceiptAnimation: boolean;
-        /** Whether the sent receipt state should be shown. */
-        shouldShowSentReceipt: boolean;
-        /** Whether the sending receipt state should be shown. */
-        shouldShowSendingReceipt: boolean;
-        /** Whether read receipts should be shown. */
-        showReadReceipts: boolean;
-        /** Read receipt entries for the tile. */
-        readReceipts?: ReadReceiptProps[];
-        /** Read receipt positions keyed by user ID. */
-        readReceiptMap?: { [userId: string]: IReadReceiptPosition };
-        /** Whether timestamps should use a twelve-hour clock. */
-        isTwelveHour?: boolean;
-        /** Optional callback used to detect unmounting during async work. */
-        checkUnmounting?: () => boolean;
-    };
-    footer?: {
-        /** Whether footer rendering is enabled. */
-        enabled: boolean;
-        /** Event associated with the footer. */
-        mxEvent: MatrixEvent;
-        /** Reactions to render in the footer. */
-        reactions: Relations | null;
-        /** Whether the event is redacted. */
-        isRedacted?: boolean;
-        /** Whether the event is pinned. */
-        isPinned: boolean;
-        /** Whether the event belongs to the current user. */
-        isOwnEvent: boolean;
-        /** Layout variant for the footer. */
-        layout?: Layout;
-        /** DOM ID of the tile content region. */
-        tileContentId: string;
-    };
-    /** Context menu props when the menu is open. */
-    contextMenu?: ContextMenuProps;
+    /** Sender node, when shown. */
+    sender?: ReactNode;
+    /** Avatar node, when shown. */
+    avatar?: ReactNode;
+    /** Reply preview node, when shown. */
+    replyChain?: ReactNode;
+    /** Message body node for the event content. */
+    messageBody: ReactNode;
+    /** Action bar node for the tile controls. */
+    actionBar?: ReactNode;
+    /** Message status node when shown. */
+    messageStatus?: ReactNode;
+    /** Footer node when shown. */
+    footer?: ReactNode;
+    /** Context menu node when the menu is open. */
+    contextMenu?: ReactNode;
 };
-
-/** Non-null footer props extracted from {@link EventTileContentProps}. */
-type EventTileFooterProps = NonNullable<EventTileContentProps["footer"]>;
 
 /** Thread summary and toolbar props for the tile. */
 type EventTileThreadsProps = {
@@ -131,12 +66,8 @@ type EventTileThreadsProps = {
     replyCount?: number;
     /** Thread preview node. */
     preview?: ReactNode;
-    /** Whether the thread toolbar should be shown. */
-    showToolbar?: boolean;
-    /** Opens the thread in its room context. */
-    openInRoom: (_anchor: HTMLElement | null) => void;
-    /** Copies a permalink to the thread. */
-    copyLinkToThread: (_anchor: HTMLElement | null) => Promise<void>;
+    /** Thread toolbar node, when shown. */
+    toolbar?: ReactNode;
 };
 
 /** Timestamp display props for the tile. */
@@ -304,32 +235,18 @@ const EventContentRegion = memo(function EventContentRegion({
     );
 });
 
-/** Props for the combined footer and thread metadata region. */
-type FooterThreadMetaProps = {
-    /** Footer props when footer rendering is enabled. */
-    footer?: EventTileFooterProps;
-    /** Additional thread metadata node. */
+const FooterThreadMeta = memo(function FooterThreadMeta({
+    footer,
+    info,
+}: {
+    footer?: ReactNode;
     info?: ReactNode;
-};
-
-const FooterThreadMeta = memo(function FooterThreadMeta({ footer, info }: FooterThreadMetaProps): JSX.Element | null {
-    if (!footer?.enabled && !info) return null;
+}): JSX.Element | null {
+    if (!footer && !info) return null;
 
     return (
         <>
-            {footer?.enabled && (
-                <div className="mx_EventTile_footer">
-                    <Footer
-                        layout={footer.layout}
-                        mxEvent={footer.mxEvent}
-                        isRedacted={footer.isRedacted}
-                        isPinned={footer.isPinned}
-                        isOwnEvent={footer.isOwnEvent}
-                        reactions={footer.reactions}
-                        tileContentId={footer.tileContentId}
-                    />
-                </div>
-            )}
+            {footer}
             {info}
         </>
     );
@@ -338,11 +255,9 @@ const FooterThreadMeta = memo(function FooterThreadMeta({ footer, info }: Footer
 const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
     replyCount,
     preview,
-    showToolbar,
-    openInRoom,
-    copyLinkToThread,
+    toolbar,
 }: EventTileViewProps["threads"]): JSX.Element | null {
-    if (replyCount === undefined && preview === undefined && !showToolbar) {
+    if (replyCount === undefined && preview === undefined && !toolbar) {
         return null;
     }
 
@@ -351,7 +266,7 @@ const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
             {replyCount !== undefined && preview !== undefined && (
                 <ThreadPanelSummary replyCount={replyCount} preview={preview} />
             )}
-            {showToolbar && <ThreadToolbar onViewInRoomClick={openInRoom} onCopyLinkClick={copyLinkToThread} />}
+            {toolbar}
         </>
     );
 });
@@ -378,22 +293,13 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
     } = props;
 
     const Root = (as ?? "li") as ElementType;
-    const sender = content.sender ? (
-        <Sender mode={content.sender.mode} mxEvent={content.sender.mxEvent} onClick={content.sender.onClick} />
-    ) : undefined;
-    const avatar = content.avatar ? (
-        <Avatar
-            member={content.avatar.member}
-            size={content.avatar.size}
-            viewUserOnClick={content.avatar.viewUserOnClick}
-            forceHistorical={content.avatar.forceHistorical}
-        />
-    ) : undefined;
-    const replyChain = content.replyChain ? <ReplyPreview {...content.replyChain} /> : undefined;
-    const actionBar = content.actionBar ? <ActionBar {...content.actionBar} /> : undefined;
-    const messageStatus = content.messageStatus ? <MessageStatus {...content.messageStatus} /> : undefined;
-    const messageBody = <MessageBody {...content.messageBody} />;
-    const contextMenu = content.contextMenu ? <ContextMenu {...content.contextMenu} /> : undefined;
+    const sender = content.sender;
+    const avatar = content.avatar;
+    const replyChain = content.replyChain;
+    const actionBar = content.actionBar;
+    const messageStatus = content.messageStatus;
+    const messageBody = content.messageBody;
+    const contextMenu = content.contextMenu;
 
     switch (timelineRenderingType) {
         case TimelineRenderingType.Thread:

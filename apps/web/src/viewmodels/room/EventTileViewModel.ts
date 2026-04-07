@@ -55,7 +55,7 @@ import { shouldDisplayReply } from "../../utils/Reply";
 import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import PinningUtils from "../../utils/PinningUtils";
-import type { GetRelationsForEvent, ReadReceiptProps } from "../../components/views/rooms/EventTile/types";
+import type { GetRelationsForEvent, ReadReceiptProps } from "./EventTileContracts";
 
 /** Interaction-only state that changes in response to pointer and focus events. */
 interface EventTileInteractionSnapshot {
@@ -97,6 +97,10 @@ interface EventTileRenderingSnapshot {
     isEditing: boolean;
     /** Whether the tile should show a reply preview above the event content. */
     showReplyPreview: boolean;
+    /** Whether the tile should currently render the reply preview component. */
+    shouldRenderReplyPreview: boolean;
+    /** Whether the tile should currently render the action bar. */
+    shouldRenderActionBar: boolean;
     /** The event renderer mode chosen for the tile body. */
     renderMode: EventTileRenderMode;
     /** Whether a dedicated renderer exists for the event content. */
@@ -304,22 +308,22 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     /** Updates whether focus is currently inside the tile. */
-    public setFocusWithin(focusWithin: boolean): void {
+    private setFocusWithin(focusWithin: boolean): void {
         this.updateInteractionSnapshot({ focusWithin });
     }
 
     /** Updates whether keyboard-visible focus should force the action bar to show. */
-    public setShowActionBarFromFocus(showActionBarFromFocus: boolean): void {
+    private setShowActionBarFromFocus(showActionBarFromFocus: boolean): void {
         this.updateInteractionSnapshot({ showActionBarFromFocus });
     }
 
     /** Updates whether the action bar is considered focused. */
-    public setActionBarFocused(actionBarFocused: boolean): void {
+    private setActionBarFocused(actionBarFocused: boolean): void {
         this.updateInteractionSnapshot({ actionBarFocused });
     }
 
     /** Updates whether the tile's context menu is open. */
-    public setContextMenuOpen(isContextMenuOpen: boolean): void {
+    private setContextMenuOpen(isContextMenuOpen: boolean): void {
         this.updateInteractionSnapshot({
             isContextMenuOpen,
             actionBarFocused: isContextMenuOpen,
@@ -329,6 +333,48 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     /** Updates whether the quoted reply preview is expanded. */
     public setQuoteExpanded(isQuoteExpanded: boolean): void {
         this.updateInteractionSnapshot({ isQuoteExpanded });
+    }
+
+    /** Applies root focus entry state and whether keyboard focus should reveal the action bar. */
+    public onFocusEnter(showActionBarFromFocus: boolean): void {
+        this.updateInteractionSnapshot({
+            focusWithin: true,
+            showActionBarFromFocus,
+        });
+    }
+
+    /** Applies root focus exit state. */
+    public onFocusLeave(): void {
+        this.updateInteractionSnapshot({
+            focusWithin: false,
+            showActionBarFromFocus: false,
+        });
+    }
+
+    /** Applies action-bar focus state and syncs hover state with the current tile hover status. */
+    public onActionBarFocusChange(focused: boolean, isTileHovered: boolean): void {
+        this.updateInteractionSnapshot({
+            actionBarFocused: focused,
+            hover: focused ? this.snapshot.current.hover : isTileHovered,
+        });
+    }
+
+    /** Applies the interaction state changes required when opening the context menu. */
+    public onContextMenuOpen(): void {
+        this.updateInteractionSnapshot({
+            isContextMenuOpen: true,
+            actionBarFocused: true,
+            hover: false,
+        });
+    }
+
+    /** Applies the interaction state changes required when closing the context menu. */
+    public onContextMenuClose(): void {
+        this.updateInteractionSnapshot({
+            isContextMenuOpen: false,
+            actionBarFocused: false,
+            hover: false,
+        });
     }
 
     /** Replaces the model props and refreshes affected listeners and derived state. */
@@ -500,6 +546,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
         nextSnapshot.showTimestamp = EventTileViewModel.getShowTimestamp(this.props, nextSnapshot);
         nextSnapshot.timestampDisplayMode = EventTileViewModel.getTimestampDisplayMode(this.props, nextSnapshot);
+        nextSnapshot.shouldRenderActionBar = EventTileViewModel.getShouldRenderActionBar(this.props, nextSnapshot);
 
         if (objectHasDiff(currentSnapshot, nextSnapshot)) {
             this.snapshot.set(nextSnapshot);
@@ -646,6 +693,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             isSending: false,
             isEditing: false,
             showReplyPreview: false,
+            shouldRenderReplyPreview: false,
+            shouldRenderActionBar: false,
             renderMode: EventTileRenderMode.Rendered,
             isEncryptionFailure: false,
             isOwnEvent: false,
@@ -693,6 +742,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.isSending = EventTileViewModel.getIsSending(props);
         snapshot.isEditing = EventTileViewModel.getIsEditing(props);
         snapshot.showReplyPreview = EventTileViewModel.getShowReplyPreview(props);
+        snapshot.shouldRenderReplyPreview = EventTileViewModel.getShouldRenderReplyPreview(snapshot);
         snapshot.isEncryptionFailure = EventTileViewModel.getIsEncryptionFailure(props);
         snapshot.isOwnEvent = EventTileViewModel.getIsOwnEvent(props);
         snapshot.permalink = EventTileViewModel.getPermalink(props);
@@ -730,6 +780,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot.threadInfoMode = EventTileViewModel.getThreadInfoMode(props, snapshot);
         snapshot.tileClickMode = EventTileViewModel.getTileClickMode(props);
         snapshot.openedFromSearch = EventTileViewModel.getOpenedFromSearch(props);
+        snapshot.shouldRenderActionBar = EventTileViewModel.getShouldRenderActionBar(props, snapshot);
         return snapshot;
     }
 
@@ -825,6 +876,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getShowReplyPreview(props: EventTileViewModelProps): boolean {
         return !this.shouldHideEvent(props) && shouldDisplayReply(props.mxEvent);
+    }
+
+    private static getShouldRenderReplyPreview(snapshot: EventTileViewSnapshot): boolean {
+        return snapshot.showReplyPreview && snapshot.hasRenderer;
     }
 
     private static getAvatarSubject(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): AvatarSubject {
@@ -1138,6 +1193,16 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getOpenedFromSearch(props: EventTileViewModelProps): boolean {
         return props.timelineRenderingType === TimelineRenderingType.Search;
+    }
+
+    private static getShouldRenderActionBar(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
+        return (
+            !snapshot.isEditing &&
+            !props.forExport &&
+            (snapshot.hover ||
+                snapshot.showActionBarFromFocus ||
+                (snapshot.actionBarFocused && !snapshot.isContextMenuOpen))
+        );
     }
 
     private static getShouldShowSentReceipt(props: EventTileViewModelProps): boolean {

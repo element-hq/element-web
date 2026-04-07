@@ -168,6 +168,35 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel({ mxEvent });
 
             expect(vm.getSnapshot().showReplyPreview).toBe(true);
+            expect(vm.getSnapshot().shouldRenderReplyPreview).toBe(true);
+        });
+
+        it("does not render the reply preview when no renderer exists", () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Reply",
+                event: true,
+                relatesTo: {
+                    "m.in_reply_to": {
+                        event_id: "$parent",
+                    },
+                },
+            });
+
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const vm = createViewModel({ mxEvent });
+
+            expect(vm.getSnapshot().showReplyPreview).toBe(true);
+            expect(vm.getSnapshot().shouldRenderReplyPreview).toBe(false);
         });
 
         it("does not recompute display info for hover-only updates", () => {
@@ -422,70 +451,126 @@ describe("EventTileViewModel", () => {
             const vm = createTimestampedViewModel();
 
             expect(vm.getSnapshot().showTimestamp).toBe(false);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
 
             vm.setHover(true);
             expect(vm.getSnapshot().hover).toBe(true);
             expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
 
             vm.setHover(false);
             expect(vm.getSnapshot().hover).toBe(false);
             expect(vm.getSnapshot().showTimestamp).toBe(false);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
         });
 
         it("shows timestamps when focus enters the tile", () => {
             const vm = createTimestampedViewModel();
 
-            vm.setFocusWithin(true);
+            vm.onFocusEnter(false);
 
             expect(vm.getSnapshot().focusWithin).toBe(true);
             expect(vm.getSnapshot().showTimestamp).toBe(true);
         });
 
-        it("tracks keyboard-triggered action bar visibility separately from focusWithin", () => {
+        it("shows the action bar when focus enters via keyboard", () => {
             const vm = createTimestampedViewModel();
 
-            vm.setShowActionBarFromFocus(true);
+            vm.onFocusEnter(true);
 
             expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
-            expect(vm.getSnapshot().focusWithin).toBe(false);
-            expect(vm.getSnapshot().showTimestamp).toBe(false);
+            expect(vm.getSnapshot().focusWithin).toBe(true);
+            expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
         });
 
         it("shows timestamps when the action bar is focused", () => {
             const vm = createTimestampedViewModel();
 
-            vm.setActionBarFocused(true);
+            vm.onActionBarFocusChange(true, false);
 
             expect(vm.getSnapshot().actionBarFocused).toBe(true);
             expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
         });
 
         it("keeps action bar focus in sync with the context menu state", () => {
             const vm = createTimestampedViewModel();
 
-            vm.setContextMenuOpen(true);
+            vm.onContextMenuOpen();
 
             expect(vm.getSnapshot().isContextMenuOpen).toBe(true);
             expect(vm.getSnapshot().actionBarFocused).toBe(true);
             expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
 
-            vm.setContextMenuOpen(false);
+            vm.onContextMenuClose();
 
             expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
             expect(vm.getSnapshot().actionBarFocused).toBe(false);
             expect(vm.getSnapshot().showTimestamp).toBe(false);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
         });
 
         it("preserves keyboard-triggered action bar visibility when the context menu closes", () => {
             const vm = createTimestampedViewModel();
 
-            vm.setShowActionBarFromFocus(true);
-            vm.setContextMenuOpen(true);
-            vm.setContextMenuOpen(false);
+            vm.onFocusEnter(true);
+            vm.onContextMenuOpen();
+            vm.onContextMenuClose();
 
             expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
             expect(vm.getSnapshot().actionBarFocused).toBe(false);
             expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
+        });
+
+        it("applies focus enter and leave as a single VM transition", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.onFocusEnter(true);
+
+            expect(vm.getSnapshot().focusWithin).toBe(true);
+            expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
+
+            vm.onFocusLeave();
+
+            expect(vm.getSnapshot().focusWithin).toBe(false);
+            expect(vm.getSnapshot().showActionBarFromFocus).toBe(false);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+        });
+
+        it("resets hover when action bar focus is lost through the VM helper", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.setHover(true);
+            vm.onActionBarFocusChange(true, true);
+
+            expect(vm.getSnapshot().actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().hover).toBe(true);
+
+            vm.onActionBarFocusChange(false, false);
+
+            expect(vm.getSnapshot().actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().hover).toBe(false);
+            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+        });
+
+        it("opens and closes the context menu through VM helpers", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.onContextMenuOpen();
+
+            expect(vm.getSnapshot().isContextMenuOpen).toBe(true);
+            expect(vm.getSnapshot().actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().hover).toBe(false);
+
+            vm.onContextMenuClose();
+
+            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
+            expect(vm.getSnapshot().actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().hover).toBe(false);
         });
 
         it("tracks quote expansion state", () => {

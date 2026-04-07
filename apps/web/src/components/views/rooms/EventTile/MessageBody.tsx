@@ -12,7 +12,7 @@ import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { renderTile, type EventTileTypeProps } from "../../../../events/EventTileFactory";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { EventPreview } from "../EventPreview";
-import type { EventTileOps } from "./types";
+import type { EventTileOps } from "../../../../viewmodels/room/EventTileContracts";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../../messages/MBodyFactory";
 
 export type MessageBodyRenderTileProps = Omit<

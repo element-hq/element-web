@@ -15,7 +15,7 @@ import { StaticNotificationState } from "../../../../stores/notifications/Static
 import NotificationBadge from "../NotificationBadge";
 import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import type { IReadReceiptPosition } from "../ReadReceiptMarker";
-import type { ReadReceiptProps } from "./types";
+import type { ReadReceiptProps } from "../../../../viewmodels/room/EventTileContracts";
 
 type MessageStatusProps = Readonly<{
     messageState: EventStatus | undefined;
