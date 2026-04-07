@@ -714,6 +714,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         if (this.props.isRedacted) return false;
 
+        // This event is a room mention but we don't want the call tile to have a highlight.
+        if (this.props.mxEvent.getType() === EventType.RTCNotification) return false;
+
         const cli = MatrixClientPeg.safeGet();
         const actions = cli.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         // get the actions for the previous version of the event too if it is an edit
@@ -1115,7 +1118,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         } else if (
             (this.props.continuation && this.context.timelineRenderingType !== TimelineRenderingType.File) ||
             eventType === EventType.CallInvite ||
-            ElementCallEventType.matches(eventType)
+            ElementCallEventType.matches(eventType) ||
+            eventType === EventType.RTCNotification
         ) {
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = null;
