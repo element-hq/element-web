@@ -44,11 +44,11 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
           <div
             class="mx_SetIntegrationManager_heading_manager"
           >
-            <h3
+            <h2
               class="mx_Heading_h3"
             >
               Manage integrations
-            </h3>
+            </h2>
             <h4
               class="mx_Heading_h4"
               id="mx_SetIntegrationManager_ManagerName"
