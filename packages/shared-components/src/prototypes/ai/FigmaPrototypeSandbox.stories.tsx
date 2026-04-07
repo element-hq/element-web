@@ -24,35 +24,19 @@ type StepData = {
 const SETUP_STEPS: StepData[] = [
     {
         number: 1,
-        title: "Get your Figma access token",
+        title: "Open Copilot Chat and select the Designer agent",
         description:
-            "Create a personal access token so Copilot can read your Figma files. In Figma: open the main menu \u2192 Account settings \u2192 Security \u2192 Personal access tokens \u2192 Generate new token.",
-        action: {
-            label: "Open Figma account settings",
-            url: "https://www.figma.com/settings",
-        },
-        hint: "Copy the token immediately \u2014 Figma only shows it once.",
+            "Open Copilot Chat (\u2318\u21e7I on Mac \u00b7 Ctrl+Shift+I on Windows/Linux), select the Designer agent from the agent picker, then paste any Figma URL. The Figma MCP server is already configured in this Codespace \u2014 no tokens or secrets needed.",
+        prompt:
+            "@designer Here\u2019s my design: https://www.figma.com/design/YOUR_FILE_ID/My-Design \u2014 please create a Storybook prototype of the main screen.",
+        hint: "Your story appears in this Storybook panel under AI Prototypes the moment it saves.",
     },
     {
         number: 2,
-        title: "Store your token before creating the Codespace",
+        title: 'If prompted, click "Start server now"',
         description:
-            "Add a Codespace secret called FIGMA_TOKEN before you create (or rebuild) the Codespace. The Figma MCP server reads the token at startup — if it is missing the Figma tools will not work. Go to GitHub \u2192 Settings \u2192 Codespaces \u2192 Secrets, add the secret, and allow this repository. If you already created a Codespace without it, add the secret then rebuild: Command Palette \u2192 Codespaces: Rebuild Container.",
-        code: "FIGMA_TOKEN  \u2014 your personal access token",
-        action: {
-            label: "Open Codespaces secrets",
-            url: "https://github.com/settings/codespaces",
-        },
-        hint: "You only need the token \u2014 the Designer agent extracts the file ID from whatever Figma URL you share.",
-    },
-    {
-        number: 3,
-        title: "Paste a Figma URL and go",
-        description:
-            "Open Copilot Chat (\u2318\u21e7I on Mac \u00b7 Ctrl+Shift+I on Windows/Linux), select the Designer agent from the agent picker, then paste any Figma URL. The agent validates the connection, inspects the file, and builds the story for you.",
-        prompt:
-            "@designer Here\u2019s my design: https://www.figma.com/design/YOUR_FILE_ID/My-Design \u2014 please create a Storybook prototype of the main screen.",
-        hint: "The agent handles any Figma file \u2014 no environment secrets needed per file. Your story appears in this Storybook panel under AI Prototypes the moment it saves.",
+            'The first time you ask about a Figma file, Copilot Chat may show a notification that the Figma MCP server needs to start. Click the "Start server now" link that appears directly in the chat — the agent will then connect automatically and continue with your request.',
+        hint: "You will only need to do this once per Codespace session. After that, Figma requests work immediately.",
     },
 ];
 
@@ -111,11 +95,11 @@ function DesignerSetupGuide(): JSX.Element {
             <div className={styles.surface}>
                 <header className={styles.header}>
                     <span className={styles.badge}>AI Prototyping Environment</span>
-                    <h1 className={styles.headline}>Welcome — let’s get you set up 🚀</h1>
+                    <h1 className={styles.headline}>Welcome — you're ready to go 🚀</h1>
                     <p className={styles.lead}>
                         This Codespace connects Figma to a live Storybook via the Designer agent in Copilot Chat.
-                        Follow the three steps below and you will be translating designs into interactive component
-                        stories in minutes — no engineering background required.
+                        The Figma MCP server is already configured — just open Copilot Chat, paste a Figma URL, and
+                        the agent will build an interactive component story for you. No tokens or setup required.
                     </p>
                 </header>
 
