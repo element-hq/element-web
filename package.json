@@ -88,7 +88,7 @@
             "@types/react-dom": "catalog:",
             "oidc-client-ts": "3.5.0",
             "jwt-decode": "4.0.0",
-            "caniuse-lite": "1.0.30001780",
+            "caniuse-lite": "1.0.30001781",
             "markdown-it": "14.1.1",
             "testcontainers": "^11.0.0",
             "matrix-widget-api": "^1.17.0",
