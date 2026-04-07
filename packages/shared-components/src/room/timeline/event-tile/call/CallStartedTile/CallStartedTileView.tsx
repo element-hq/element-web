@@ -63,7 +63,7 @@ export function CallStartedTileView({ vm, className }: CallStartedTileViewProps)
     const { type, timestamp } = useViewModel(vm);
     const classNames = classnames(className, styles.container);
     return (
-        <Flex className={classNames} align="center" gap="8px">
+        <Flex className={classNames} align="center" gap="var(--cpd-space-2x)">
             {getIconForCallType(type)}
             <div className={styles.title}>
                 {type === CallType.Voice
