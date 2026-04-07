@@ -39,8 +39,7 @@
             },
             "extensions": [
                 "GitHub.copilot",
-                "GitHub.copilot-chat",
-                "figma.figma-vscode-extension"
+                "GitHub.copilot-chat"
             ]
         }
     }

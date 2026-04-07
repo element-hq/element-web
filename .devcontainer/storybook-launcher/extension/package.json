@@ -2,7 +2,7 @@
     "name": "storybook-launcher",
     "displayName": "Storybook Launcher",
     "description": "Quick access to the Storybook Playground from the Activity Bar",
-    "version": "0.0.3",
+    "version": "0.0.6",
     "publisher": "element-hq",
     "engines": {
         "vscode": "^1.80.0"
@@ -18,19 +18,9 @@
                 "icon": "$(globe)"
             },
             {
-                "command": "storybookLauncher.openPreview",
-                "title": "Open Storybook Playground Preview",
-                "icon": "$(open-preview)"
-            },
-            {
                 "command": "elementWebLauncher.openInBrowser",
                 "title": "Open Element Web In Browser",
                 "icon": "$(globe)"
-            },
-            {
-                "command": "elementWebLauncher.openPreview",
-                "title": "Open Element Web Preview",
-                "icon": "$(open-preview)"
             }
         ],
         "viewsContainers": {
@@ -57,11 +47,11 @@
         "viewsWelcome": [
             {
                 "view": "storybookLauncher.welcome",
-                "contents": "Open the AI Prototype story in Storybook.\n\n[$(globe) Open Storybook Playground In Browser](command:storybookLauncher.openInBrowser)\n\n[$(open-preview) Open In Editor Preview](command:storybookLauncher.openPreview)\n\nYou can reopen this panel any time from the **Element** icon in the Activity Bar on the left."
+                "contents": "Open the AI Prototype story in Storybook.\n\n[$(globe) Open Storybook Playground In Browser](command:storybookLauncher.openInBrowser)"
             },
             {
                 "view": "elementWebLauncher.welcome",
-                "contents": "Open the full Element Web app for in-context prototyping.\n\nStart it first with `pnpm run start:element-web` — it will open automatically when ready.\n\n[$(globe) Open Element Web In Browser](command:elementWebLauncher.openInBrowser)\n\n[$(open-preview) Open In Editor Preview](command:elementWebLauncher.openPreview)"
+                "contents": "Open the full Element Web app for in-context prototyping.\n\n[$(globe) Open Element Web In Browser](command:elementWebLauncher.openInBrowser)"
             }
         ],
         "menus": {
