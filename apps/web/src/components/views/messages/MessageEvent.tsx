@@ -28,14 +28,19 @@ import { type IBodyProps } from "./IBodyProps";
 import TextualBody from "./TextualBody";
 import MImageBody from "./MImageBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
-import MVideoBody from "./MVideoBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type EventTileOps, type GetRelationsForEvent } from "../rooms/EventTile";
-import { DecryptionFailureBodyFactory, FileBodyFactory, RedactedBodyFactory, renderMBody } from "./MBodyFactory";
+import {
+    DecryptionFailureBodyFactory,
+    FileBodyFactory,
+    RedactedBodyFactory,
+    VideoBodyFactory,
+    renderMBody,
+} from "./MBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -65,7 +70,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Image, MImageBody],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
-    [MsgType.Video, MVideoBody],
+    [MsgType.Video, VideoBodyFactory],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
@@ -260,7 +265,8 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
 
             if (
-                ((BodyType === MImageBody || BodyType == MVideoBody) && !this.validateImageOrVideoMimetype(content)) ||
+                ((BodyType === MImageBody || BodyType === VideoBodyFactory) &&
+                    !this.validateImageOrVideoMimetype(content)) ||
                 (BodyType === MStickerBody && !this.validateStickerMimetype(content))
             ) {
                 BodyType = this.bodyTypes.get(MsgType.File)!;

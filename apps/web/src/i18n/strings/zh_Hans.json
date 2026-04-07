@@ -27,7 +27,6 @@
         "cancel": "取消",
         "change": "更改",
         "clear": "清除",
-        "click": "点击",
         "click_to_copy": "点击复制",
         "close": "关闭",
         "collapse": "折叠",
@@ -2493,7 +2492,6 @@
             "one": "%(count)s 条回复",
             "other": "%(count)s 条回复"
         },
-        "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列",
         "my_threads": "我的消息列",
         "my_threads_description": "显示您参与的所有消息列",
         "open_thread": "打开消息列",
@@ -2526,7 +2524,6 @@
         },
         "creation_summary_dm": "%(creator)s 创建了此私聊。",
         "creation_summary_room": "%(creator)s 创建并配置了此房间。",
-        "download_action_decrypting": "解密中",
         "download_action_downloading": "下载中",
         "edits": {
             "tooltip_label": "编辑于 %(date)s。点击以查看编辑历史。",
@@ -2709,10 +2706,7 @@
             "removed": "%(senderName)s 移除了 %(widgetName)s 挂件"
         },
         "mab": {
-            "collapse_reply_chain": "折叠引号",
             "copy_link_thread": "复制到消息列的链接",
-            "expand_reply_chain": "展开引号",
-            "label": "消息操作",
             "view_in_room": "在房间内查看"
         },
         "mjolnir": {

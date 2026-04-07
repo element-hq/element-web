@@ -34,7 +34,6 @@
         "cancel": "Zrušiť",
         "change": "Zmeniť",
         "clear": "Vyčistiť",
-        "click": "Kliknúť",
         "click_to_copy": "Kliknutím skopírujete",
         "close": "Zavrieť",
         "collapse": "Zbaliť",
@@ -68,7 +67,6 @@
         "go": "Spustiť",
         "go_back": "Naspäť",
         "got_it": "Rozumiem",
-        "hide": "Skryť",
         "hide_advanced": "Skryť pokročilé možnosti",
         "hold": "Podržať",
         "ignore": "Ignorovať",
@@ -1365,9 +1363,6 @@
         "impossible_dialog_title": "Integrácie nie sú povolené"
     },
     "invite": {
-        "ask_anyway_description": "Nie je možné nájsť používateľské profily pre Matrix ID zobrazené nižšie - chcete aj tak začať priamu správu?",
-        "ask_anyway_label": "Spustiť priamu správu aj tak",
-        "ask_anyway_never_warn_label": "Spustiť priamu správu aj tak a nikdy ma už nevarovať",
         "email_caption": "Pozvať e-mailom",
         "email_limit_one": "Pozvánky e-mailom sa môžu posielať len po jednej",
         "email_use_default_is": "Na pozvanie e-mailom použite server identity. <default>Použite predvolený (%(defaultIdentityServerName)s)</default> alebo spravujte v <settings>nastaveniach</settings>.",
@@ -3335,7 +3330,6 @@
         },
         "empty_description": "Použite „%(replyInThread)s“, keď umiestnite kurzor myši nad správu.",
         "empty_title": "Vlákna pomáhajú udržiavať vaše konverzácie k téme a ľahko sledovateľné.",
-        "error_start_thread_existing_relation": "Nie je možné vytvoriť vlákno z udalosti s existujúcim vzťahom",
         "mark_all_read": "Označiť všetko ako prečítané",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazí všetky vlákna, v ktorých ste sa zúčastnili",
@@ -3379,7 +3373,6 @@
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrovanie",
         "download_action_downloading": "Preberanie",
         "download_failed": "Sťahovanie zlyhalo",
         "download_failed_description": "Pri sťahovaní tohto súboru sa vyskytla chyba",
@@ -3578,10 +3571,7 @@
             "removed": "%(senderName)s odstránil widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Zbaliť citácie",
             "copy_link_thread": "Kopírovať odkaz na vlákno",
-            "expand_reply_chain": "Rozbaliť citácie",
-            "label": "Akcie správy",
             "view_in_room": "Zobraziť v miestnosti"
         },
         "mjolnir": {

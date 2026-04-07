@@ -14,10 +14,7 @@ import type { Tool } from "../../scripts/hak/hakEnv.ts";
 import type { DependencyInfo } from "../../scripts/hak/dep.ts";
 
 export default async function (hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
-    const tools: Tool[] = [
-        ["rustc", "--version"],
-        ["python", "--version"], // node-gyp uses python for reasons beyond comprehension
-    ];
+    const tools: Tool[] = [["rustc", "--version"]];
     if (hakEnv.isWin()) {
         tools.push(["perl", "--version"]); // for openssl configure
         tools.push(["nasm", "-v"]); // for openssl building
@@ -27,6 +24,14 @@ export default async function (hakEnv: HakEnv, moduleInfo: DependencyInfo): Prom
         tools.push(["make", "--version"]);
     }
     await hakEnv.checkTools(tools);
+
+    try {
+        // node-gyp uses python for reasons beyond comprehension
+        // Try python3 first, to get a more sensible error if python is not found in the fallback
+        await hakEnv.checkTools([["python3", "--version"]]);
+    } catch {
+        await hakEnv.checkTools([["python", "--version"]]);
+    }
 
     // Ensure Rust target exists (nb. we avoid depending on rustup)
     await new Promise((resolve, reject) => {

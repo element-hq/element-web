@@ -223,6 +223,7 @@ export interface Settings {
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_new_room_list": IFeature;
+    "feature_room_list_sections": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
@@ -693,6 +694,15 @@ export const SETTINGS: Settings = {
         description: _td("labs|under_active_development"),
         isFeature: true,
         default: true,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_room_list_sections": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|room_list_sections"),
+        description: _td("labs|under_active_development"),
+        isFeature: true,
+        default: false,
         controller: new ReloadOnChangeController(),
     },
     /**

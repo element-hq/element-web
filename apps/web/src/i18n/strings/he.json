@@ -1921,7 +1921,6 @@
     "threads": {
         "all_threads": "כל הקישורים",
         "all_threads_description": "הצג את כל הקישורים מחדר זה",
-        "error_start_thread_existing_relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים",
         "my_threads": "הקישורים שלי",
         "my_threads_description": "הצג את כל השרשורים שאתם משתתפים בהם",
         "open_thread": "פתיחת שרשור",
@@ -1945,7 +1944,6 @@
         },
         "creation_summary_dm": "%(creator)s יצר את DM הזה.",
         "creation_summary_room": "%(creator)s יצר/ה והגדיר/ה את החדר.",
-        "download_action_decrypting": "מפענח",
         "download_action_downloading": "מוריד",
         "edits": {
             "tooltip_label": "נערך ב-%(date)s. לחץ לצפייה בעריכות.",
@@ -2086,8 +2084,7 @@
             "removed": "היישומון %(widgetName)s הוסר על ידי %(senderName)s"
         },
         "mab": {
-            "copy_link_thread": "העתק קישור לשרשור",
-            "label": "פעולות הודעה"
+            "copy_link_thread": "העתק קישור לשרשור"
         },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
