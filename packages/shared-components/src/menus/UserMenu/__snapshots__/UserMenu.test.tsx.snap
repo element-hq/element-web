@@ -165,6 +165,7 @@ exports[`UserMenu > renders a guest menu 1`] = `
         </span>
         <span
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          data-testid="userId"
         >
           @guest:attendees.example.org
         </span>
@@ -448,6 +449,7 @@ exports[`UserMenu > renders a menu 1`] = `
         </span>
         <span
           class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+          data-testid="userId"
         >
           @person-name:homeserver.com
         </span>

@@ -132,7 +132,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                     <Text className={styles.displayname} type="heading" size="md" weight="semibold" as="span">
                         {displayName}
                     </Text>
-                    <Text size="md" as="span" type="body">
+                    <Text data-testid="userId" size="md" as="span" type="body">
                         {userId}
                     </Text>
                     {manageAccountHref && (

@@ -6,7 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { Page } from "playwright-core";
 import { test, expect } from "../../element-web-test";
+
+const screenshotOptions = (page?: Page) => ({
+    // Hide the UserID
+    css: `
+        span[data-testid="userId"] {
+            display: none !important;
+        }
+    `,
+});
 
 test.describe("User Menu", () => {
     test.use({ displayName: "Jeff" });
@@ -17,6 +27,6 @@ test.describe("User Menu", () => {
 
         await expect(menu.getByText(user.displayName)).toBeVisible();
         await expect(menu.getByText(user.userId)).toBeVisible();
-        await expect(menu).toMatchScreenshot("user-menu.png");
+        await expect(menu).toMatchScreenshot("user-menu.png", screenshotOptions(page));
     });
 });
