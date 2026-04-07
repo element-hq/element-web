@@ -152,9 +152,8 @@ jobs:
                   key: ${{ hashFiles('pnpm-lock.yaml') }}
 
             - name: Get installed Playwright version
-              working-directory: packages/shared-components
               id: playwright
-              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
+              run: echo "version=$(pnpm --silent -- playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
 
             - name: Cache playwright binaries
               uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
