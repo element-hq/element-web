@@ -17,14 +17,26 @@ export function Timestamp(props: Readonly<MessageTimestampViewModelProps>): JSX.
 
     useEffect(() => {
         viewModel.setTimestamp(props.ts);
+    }, [viewModel, props.ts]);
+
+    useEffect(() => {
         viewModel.setReceivedTimestamp(props.receivedTs);
+    }, [viewModel, props.receivedTs]);
+
+    useEffect(() => {
         viewModel.setDisplayOptions({
             showTwelveHour: props.showTwelveHour,
             showRelative: props.showRelative,
         });
+    }, [viewModel, props.showTwelveHour, props.showRelative]);
+
+    useEffect(() => {
         viewModel.setHref(props.href);
+    }, [viewModel, props.href]);
+
+    useEffect(() => {
         viewModel.setHandlers({ onClick: props.onClick, onContextMenu: props.onContextMenu });
-    }, [viewModel, props]);
+    }, [viewModel, props.onClick, props.onContextMenu]);
 
     return (
         <>

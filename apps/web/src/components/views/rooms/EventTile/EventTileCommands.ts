@@ -89,7 +89,7 @@ export function onPermalinkClicked(
     deps.dispatch(payload);
 }
 
-/** Copies a permalink to the current event thread when available. */
+/** Copies a permalink for the current event from the thread-list affordance when available. */
 export async function copyLinkToThread(deps: EventTileCommandDeps, context: EventTileCommandContext): Promise<void> {
     if (!context.permalinkCreator) return;
     const eventId = context.mxEvent.getId();

@@ -152,7 +152,7 @@ export interface EventTileViewProps {
     contentClassName: string;
     /** Optional `aria-live` override. */
     ariaLive?: "off";
-    /** Search scroll tokens used to restore timeline context. */
+    /** DOM scroll tokens used by scroll-state restoration. */
     scrollTokens?: string;
     /** Whether the event belongs to the current user. */
     isOwnEvent: boolean;

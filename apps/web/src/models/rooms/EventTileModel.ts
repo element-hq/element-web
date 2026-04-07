@@ -23,9 +23,9 @@ export enum ThreadInfoMode {
     None = "none",
     /** Shows the standard thread summary UI. */
     Summary = "summary",
-    /** Shows a link back to search results for a thread match. */
+    /** Shows the compact search-result thread label as a link. */
     SearchLink = "searchLink",
-    /** Shows search-specific thread text without the standard summary UI. */
+    /** Shows the compact search-result thread label without a link. */
     SearchText = "searchText",
 }
 
@@ -79,7 +79,7 @@ export enum TimestampDisplayMode {
     Plain = "plain",
     /** Shows the timestamp as a permalink. */
     Linked = "linked",
-    /** Reserves timestamp space without rendering the actual time. */
+    /** Reserves timestamp space without rendering the actual time, used for IRC alignment. */
     Placeholder = "placeholder",
 }
 

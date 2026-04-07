@@ -14,28 +14,23 @@ type ThreadInfoProps = Readonly<{
     label?: string;
 }>;
 
+/** Renders either a full thread summary node or a compact icon-plus-label thread indicator. */
 export function ThreadInfo({ summary, href, label }: ThreadInfoProps): JSX.Element | undefined {
-    if (summary) {
-        return <>{summary}</>;
-    }
+    if (summary) return <>{summary}</>;
+    if (!label) return undefined;
 
-    if (href && label) {
-        return (
-            <a className="mx_ThreadSummary_icon" href={href}>
-                <ThreadsIcon />
-                {label}
-            </a>
-        );
-    }
+    const content = (
+        <>
+            <ThreadsIcon />
+            {label}
+        </>
+    );
 
-    if (label) {
-        return (
-            <p className="mx_ThreadSummary_icon">
-                <ThreadsIcon />
-                {label}
-            </p>
-        );
-    }
-
-    return undefined;
+    return href ? (
+        <a className="mx_ThreadSummary_icon" href={href}>
+            {content}
+        </a>
+    ) : (
+        <p className="mx_ThreadSummary_icon">{content}</p>
+    );
 }
