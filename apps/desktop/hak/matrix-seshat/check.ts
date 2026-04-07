@@ -27,10 +27,10 @@ export default async function (hakEnv: HakEnv, moduleInfo: DependencyInfo): Prom
 
     try {
         // node-gyp uses python for reasons beyond comprehension
-        await hakEnv.checkTools([["python", "--version"]]);
-    } catch {
-        // try python3 too
+        // Try python3 first, to get a more sensible error if python is not found in the fallback
         await hakEnv.checkTools([["python3", "--version"]]);
+    } catch {
+        await hakEnv.checkTools([["python", "--version"]]);
     }
 
     // Ensure Rust target exists (nb. we avoid depending on rustup)

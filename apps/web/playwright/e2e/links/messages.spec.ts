@@ -14,7 +14,7 @@ test.describe("Message links", () => {
             await use({ roomId });
         },
     });
-    for (const link of ["https://example.org", "example.org", "ftp://example.org"]) {
+    for (const link of ["https://example.org", "ftp://example.org"]) {
         test(`should linkify a regular link '${link}'`, async ({ page, user, app, room }) => {
             await page.goto(`#/room/${room.roomId}`);
             // Needs to be unformatted so we test linkifing
@@ -24,6 +24,13 @@ test.describe("Message links", () => {
             await expect(linkElement).toBeVisible();
         });
     }
+    test("should NOT linkify a bare domain", async ({ page, user, app, room }) => {
+        await page.goto(`#/room/${room.roomId}`);
+        // Needs to be unformatted so we test linkifing
+        await app.client.sendMessage(room.roomId, `Check out example.org`);
+        const linkElement = page.locator(".mx_EventTile_last").getByRole("link", { name: "example.org" });
+        await expect(linkElement).not.toBeVisible();
+    });
     test("should linkify a User ID", async ({ page, user, app, room }) => {
         await page.goto(`#/room/${room.roomId}`);
         // Needs to be unformatted so we test linkifing

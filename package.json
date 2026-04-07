@@ -30,12 +30,12 @@
         "@element-hq/element-web-playwright-common": "catalog:",
         "@nx-tools/nx-container": "^7.2.1",
         "@nx/jest": "^22.5.0",
-        "@types/node": "22",
         "@playwright/test": "catalog:",
+        "@types/node": "22",
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "5.87.0",
+        "knip": "6.1.0",
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
@@ -67,9 +67,9 @@
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
             "jsdom": "patches/jsdom.patch",
             "rollup": "patches/rollup.patch",
-            "knip": "patches/knip.patch",
             "postcss-mixins": "patches/postcss-mixins.patch",
-            "app-builder-lib": "patches/app-builder-lib.patch"
+            "app-builder-lib": "patches/app-builder-lib.patch",
+            "knip": "patches/knip.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
@@ -128,6 +128,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+    "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
     "private": true
 }

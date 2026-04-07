@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Back",
+        "click": "Click",
         "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
@@ -11,23 +12,34 @@
         "edit": "Edit",
         "explore_rooms": "Explore rooms",
         "go": "Go",
+        "hide": "Hide",
         "invite": "Invite",
         "new_conversation": "New conversation",
         "new_room": "New room",
         "new_video_room": "New video room",
         "open_menu": "Open menu",
         "pause": "Pause",
+        "pin": "Pin",
         "play": "Play",
+        "react": "React",
         "remove": "Remove",
+        "reply": "Reply",
+        "reply_in_thread": "Reply in thread",
         "retry": "Retry",
         "search": "Search",
-        "start_chat": "Start chat"
+        "start_chat": "Start chat",
+        "unpin": "Unpin",
+        "view_source": "View Source"
     },
     "common": {
         "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
+        "options": "Options",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
+    },
+    "keyboard": {
+        "shift": "Shift"
     },
     "left_panel": {
         "open_dial_pad": "Open dial pad",
@@ -138,7 +150,8 @@
         },
         "room_options": "Room Options",
         "section_header": {
-            "toggle": "Toggle %(section)s section"
+            "toggle": "Toggle %(section)s section",
+            "toggle_unread": "Toggle %(section)s section with unread room(s)"
         },
         "show_message_previews": "Show message previews",
         "sort": "Sort",
@@ -154,6 +167,9 @@
     },
     "terms": {
         "tac_button": "Review terms and conditions"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation"
     },
     "time": {
         "about_day_ago": "about a day ago",
@@ -181,6 +197,8 @@
             "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
+        "download_action_decrypting": "Decrypting",
+        "download_action_downloading": "Downloading",
         "m.audio": {
             "audio_player": "Audio player",
             "error_downloading_audio": "Error downloading audio",
@@ -198,6 +216,13 @@
             "parameters_changed": "Some encryption parameters have been changed.",
             "state_enabled": "Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.",
             "unsupported": "The encryption used by this room isn't supported."
+        },
+        "mab": {
+            "collapse_reply_chain": "Collapse quotes",
+            "copy_link_thread": "Copy link to thread",
+            "expand_reply_chain": "Expand quotes",
+            "label": "Message Actions",
+            "view_in_room": "View in room"
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s",

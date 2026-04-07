@@ -66,13 +66,28 @@ module.exports = {
             },
         ],
         "storybook/meta-satisfies-type": "error",
+
+        "react/forbid-elements": [
+            "error",
+            {
+                forbid: [
+                    { element: "h1", message: "Use Compound <Heading> instead" },
+                    { element: "h2", message: "Use Compound <Heading> instead" },
+                    { element: "h3", message: "Use Compound <Heading> instead" },
+                    { element: "h4", message: "Use Compound <Heading> instead" },
+                    { element: "h5", message: "Use Compound <Heading> instead" },
+                    { element: "h6", message: "Use Compound <Heading> instead" },
+                ],
+            },
+        ],
     },
     overrides: [
         {
-            files: ["src/**/*.test.{ts,tsx}"],
+            files: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.tsx"],
             rules: {
                 "@typescript-eslint/unbound-method": "off",
                 "@typescript-eslint/no-explicit-any": "off",
+                "react/forbid-elements": "off",
             },
         },
     ],
