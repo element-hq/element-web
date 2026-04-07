@@ -14,12 +14,14 @@ import {
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { decode } from "html-entities";
+import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";
 
 import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
 import PlatformPeg from "../../PlatformPeg";
 import { thumbHeight } from "../../ImageUtils";
 import SettingsStore from "../../settings/SettingsStore";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
 
 const logger = rootLogger.getChild("UrlPreviewGroupViewModel");
 
@@ -355,7 +357,7 @@ export class UrlPreviewGroupViewModel
      * Trigger a recalculation of the links in an event.
      * @param eventElement
      */
-    public async updateEventElement(eventElement: HTMLElement): Promise<void> {
+    public async updateEventElement(eventElement: HTMLDivElement): Promise<void> {
         const newLinks = UrlPreviewGroupViewModel.findLinks([eventElement]);
         // Only recalculate if the set of links has changed.
         if (newLinks.some((x) => !this.links.includes(x)) || this.links.some((x) => !newLinks.includes(x))) {
@@ -404,6 +406,13 @@ export class UrlPreviewGroupViewModel
         // FIXME: persist this somewhere smarter than local storage
         globalThis.localStorage?.setItem(this.storageKey, "1");
         this.urlPreviewEnabledByUser = false;
+        PosthogAnalytics.instance.trackEvent<UrlPreviewVisibilityChanged>({
+            eventName: "UrlPreviewVisibilityChanged",
+            previewKind: "LegacyCard",
+            hasThumbnail: this.snapshot.current.previews.some((p) => !!p.image),
+            previewCount: this.snapshot.current.previews.length,
+            visible: this.urlPreviewEnabledByUser,
+        });
         return this.computeSnapshot();
     };
 

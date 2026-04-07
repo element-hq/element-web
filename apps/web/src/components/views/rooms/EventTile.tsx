@@ -16,6 +16,7 @@ import React, {
     useState,
     type JSX,
     type Ref,
+    type FocusEvent,
     type MouseEvent,
     type ReactNode,
 } from "react";
@@ -50,7 +51,7 @@ import { uniqueId, uniqBy } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import {
     useCreateAutoDisposedViewModel,
-    DecryptionFailureBodyView,
+    ActionBarView,
     MessageTimestampView,
     PinnedMessageBadge,
     ReactionsRowButtonView,
@@ -58,7 +59,6 @@ import {
     useViewModel,
 } from "@element-hq/web-shared-components";
 
-import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -79,16 +79,13 @@ import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import SenderProfile from "../messages/SenderProfile";
 import { type IReadReceiptPosition } from "./ReadReceiptMarker";
-import MessageActionBar from "../messages/MessageActionBar";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import { isContentActionable } from "../../../utils/EventUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { type ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
-import RedactedBody from "../messages/RedactedBody";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from "../../../utils/Reply";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -99,23 +96,28 @@ import { ReadReceiptGroup } from "./ReadReceiptGroup";
 import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";
-import { EventTileThreadToolbar } from "./EventTile/EventTileThreadToolbar";
 import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
-import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import SettingsStore from "../../../settings/SettingsStore";
+import { CardContext } from "../right_panel/context";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
-} from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
-import { ReactionsRowButtonViewModel } from "../../../viewmodels/message-body/ReactionsRowButtonViewModel";
-import { MAX_ITEMS_WHEN_LIMITED, ReactionsRowViewModel } from "../../../viewmodels/message-body/ReactionsRowViewModel";
+} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
+import { ReactionsRowButtonViewModel } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
+import {
+    MAX_ITEMS_WHEN_LIMITED,
+    ReactionsRowViewModel,
+} from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
+import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 
 export type GetRelationsForEvent = (
     eventId: string,
@@ -268,6 +270,7 @@ export interface EventTileProps {
 interface IState {
     // Whether the action bar is focused.
     actionBarFocused: boolean;
+    showActionBarFromFocus: boolean;
 
     /**
      * E2EE shield we should show for decryption problems.
@@ -342,6 +345,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.state = {
             // Whether the action bar is focused.
             actionBarFocused: false,
+            showActionBarFromFocus: false,
 
             shieldColour: EventShieldColour.NONE,
             shieldReason: null,
@@ -453,7 +457,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.verifyEvent();
     }
 
-    private updateThread = (thread: Thread): void => {
+    private readonly updateThread = (thread: Thread): void => {
         this.setState({ thread });
     };
 
@@ -498,7 +502,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
     }
 
-    private onNewThread = (thread: Thread): void => {
+    private readonly onNewThread = (thread: Thread): void => {
         if (thread.id === this.props.mxEvent.getId()) {
             this.updateThread(thread);
             const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
@@ -561,9 +565,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
     }
 
-    private viewInRoom = (evt: ButtonEvent): void => {
-        evt.preventDefault();
-        evt.stopPropagation();
+    private readonly onViewInRoomClick = (_anchor: HTMLElement | null): void => {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
@@ -573,16 +575,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private copyLinkToThread = async (evt: ButtonEvent): Promise<void> => {
-        evt.preventDefault();
-        evt.stopPropagation();
+    private readonly onCopyLinkToThreadClick = async (_anchor: HTMLElement | null): Promise<void> => {
         const { permalinkCreator, mxEvent } = this.props;
         if (!permalinkCreator) return;
         const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
         await copyPlaintext(matrixToUrl);
     };
 
-    private onRoomReceipt = (ev: MatrixEvent, room: Room): void => {
+    private readonly onRoomReceipt = (ev: MatrixEvent, room: Room): void => {
         // ignore events for other rooms
         const tileRoom = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
         if (room !== tileRoom) return;
@@ -604,20 +604,20 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     /** called when the event is decrypted after we show it.
      */
-    private onDecrypted = (): void => {
+    private readonly onDecrypted = (): void => {
         // we need to re-verify the sending device.
         this.verifyEvent();
         this.forceUpdate();
     };
 
-    private onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
+    private readonly onUserVerificationChanged = (userId: string, _trustStatus: UserVerificationStatus): void => {
         if (userId === this.props.mxEvent.getSender()) {
             this.verifyEvent();
         }
     };
 
     /** called when the event is edited after we show it. */
-    private onReplaced = (): void => {
+    private readonly onReplaced = (): void => {
         // re-verify the event if it is replaced (the edit may not be verified)
         this.verifyEvent();
     };
@@ -732,7 +732,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return !!(actions?.tweaks.highlight || previousActions?.tweaks.highlight);
     }
 
-    private onSenderProfileClick = (): void => {
+    private readonly onSenderProfileClick = (): void => {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             userId: this.props.mxEvent.getSender()!,
@@ -740,7 +740,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private onPermalinkClicked = (e: MouseEvent): void => {
+    private readonly onPermalinkClicked = (e: MouseEvent): void => {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Element when clicked.
         e.preventDefault();
@@ -855,15 +855,34 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return null;
     }
 
-    private onActionBarFocusChange = (actionBarFocused: boolean): void => {
-        this.setState({ actionBarFocused });
+    private readonly onActionBarFocusChange = (actionBarFocused: boolean): void => {
+        this.setState((prevState) => ({
+            actionBarFocused,
+            hover: actionBarFocused ? prevState.hover : (this.ref.current?.matches(":hover") ?? false),
+        }));
     };
 
-    private getTile: () => IEventTileType | null = () => this.tile.current;
+    private readonly onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
+        // Show the action toolbar for keyboard-visible focus, with what-input as a fallback signal.
+        const target = event.target as HTMLElement;
+        const showActionBarFromFocus =
+            target.matches(":focus-visible") || document.body.dataset["data-whatinput"] === "keyboard";
+        this.setState({ focusWithin: true, showActionBarFromFocus });
+    };
 
-    private getReplyChain = (): ReplyChain | null => this.replyChain.current;
+    private readonly onBlurWithin = (event: FocusEvent<HTMLElement>): void => {
+        if (event.currentTarget.contains(event.relatedTarget)) {
+            return;
+        }
 
-    private getReactions = (): Relations | null => {
+        this.setState({ focusWithin: false, showActionBarFromFocus: false });
+    };
+
+    private readonly getTile: () => IEventTileType | null = () => this.tile.current;
+
+    private readonly getReplyChain = (): ReplyChain | null => this.replyChain.current;
+
+    private readonly getReactions = (): Relations | null => {
         if (!this.props.showReactions || !this.props.getRelationsForEvent) {
             return null;
         }
@@ -871,7 +890,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction") ?? null;
     };
 
-    private onReactionsCreated = (relationType: string, eventType: string): void => {
+    private readonly onReactionsCreated = (relationType: string, eventType: string): void => {
         if (relationType !== "m.annotation" || eventType !== "m.reaction") {
             return;
         }
@@ -880,11 +899,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private onContextMenu = (ev: React.MouseEvent): void => {
+    private readonly onContextMenu = (ev: React.MouseEvent): void => {
         this.showContextMenu(ev);
     };
 
-    private onTimestampContextMenu = (ev: React.MouseEvent): void => {
+    private readonly onTimestampContextMenu = (ev: React.MouseEvent): void => {
         this.showContextMenu(ev, this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!));
     };
 
@@ -917,17 +936,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 link: anchorElement?.href || permalink,
             },
             actionBarFocused: true,
+            hover: false,
         });
     }
 
-    private onCloseMenu = (): void => {
+    private readonly onCloseMenu = (): void => {
         this.setState({
             contextMenu: undefined,
             actionBarFocused: false,
+            hover: false,
         });
     };
 
-    private setQuoteExpanded = (expanded: boolean): void => {
+    private readonly setQuoteExpanded = (expanded: boolean): void => {
         this.setState({
             isQuoteExpanded: expanded,
         });
@@ -1150,9 +1171,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
 
-        const showMessageActionBar = !isEditing && !this.props.forExport;
+        const showMessageActionBar =
+            !isEditing &&
+            !this.props.forExport &&
+            (this.state.hover ||
+                this.state.showActionBarFromFocus ||
+                (this.state.actionBarFocused && !this.state.contextMenu));
         const actionBar = showMessageActionBar ? (
-            <MessageActionBar
+            <ActionBarWrapper
                 mxEvent={this.props.mxEvent}
                 reactions={this.state.reactions}
                 permalinkCreator={this.props.permalinkCreator}
@@ -1286,8 +1312,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-event-id": this.props.mxEvent.getId(),
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
-                        "onFocus": () => this.setState({ focusWithin: true }),
-                        "onBlur": () => this.setState({ focusWithin: false }),
+                        "onFocus": this.onFocusWithin,
+                        "onBlur": this.onBlurWithin,
                     },
                     [
                         <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
@@ -1348,15 +1374,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-has-reply": !!replyChain,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
-                        "onFocus": () => this.setState({ focusWithin: true }),
-                        "onBlur": () => this.setState({ focusWithin: false }),
+                        "onFocus": this.onFocusWithin,
+                        "onBlur": this.onBlurWithin,
                         "onClick": (ev: MouseEvent) => {
                             const target = ev.currentTarget as HTMLElement;
                             let index = -1;
                             if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
                             switch (this.context.timelineRenderingType) {
                                 case TimelineRenderingType.Notification:
-                                    this.viewInRoom(ev);
+                                    this.onViewInRoomClick(null);
                                     break;
                                 case TimelineRenderingType.ThreadsList:
                                     dis.dispatch<ShowThreadPayload>({
@@ -1401,9 +1427,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         <div className={lineClasses} key="mx_EventTile_line">
                             <div className="mx_EventTile_body">
                                 {this.props.mxEvent.isRedacted() ? (
-                                    <RedactedBody mxEvent={this.props.mxEvent} />
+                                    <RedactedBodyFactory mxEvent={this.props.mxEvent} />
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBodyWrapper mxEvent={this.props.mxEvent} />
+                                    <DecryptionFailureBodyFactory mxEvent={this.props.mxEvent} />
                                 ) : (
                                     <EventPreview mxEvent={this.props.mxEvent} />
                                 )}
@@ -1411,9 +1437,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             {this.renderThreadPanelSummary()}
                         </div>
                         {this.context.timelineRenderingType === TimelineRenderingType.ThreadsList && (
-                            <EventTileThreadToolbar
-                                viewInRoom={this.viewInRoom}
-                                copyLinkToThread={this.copyLinkToThread}
+                            <ThreadListActionBarWrapper
+                                onViewInRoomClick={this.onViewInRoomClick}
+                                onCopyLinkClick={this.onCopyLinkToThreadClick}
                             />
                         )}
 
@@ -1481,8 +1507,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-has-reply": !!replyChain,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
-                        "onFocus": () => this.setState({ focusWithin: true }),
-                        "onBlur": () => this.setState({ focusWithin: false }),
+                        "onFocus": this.onFocusWithin,
+                        "onBlur": this.onBlurWithin,
                     },
                     <>
                         {ircTimestamp}
@@ -1598,26 +1624,6 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
             </div>
         </div>
     );
-}
-
-/**
- * Bridge decryption-failure events into the view model using current local verification state.
- * This wrapper can be removed after EventTile has been changed to a function component.
- */
-function DecryptionFailureBodyWrapper({ mxEvent }: { mxEvent: MatrixEvent }): JSX.Element {
-    const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new DecryptionFailureBodyViewModel({
-                decryptionFailureCode: mxEvent.decryptionFailureReason,
-                verificationState,
-            }),
-    );
-    useEffect(() => {
-        vm.setVerificationState(verificationState);
-    }, [verificationState, vm]);
-
-    return <DecryptionFailureBodyView vm={vm} className="mx_DecryptionFailureBody mx_EventTile_content" />;
 }
 
 /**
@@ -1878,6 +1884,163 @@ function ReactionsRowWrapper({ mxEvent, reactions }: Readonly<ReactionsRowWrappe
                 {items}
             </ReactionsRowView>
             {contextMenu}
+        </>
+    );
+}
+
+interface ActionBarWrapperProps {
+    mxEvent: MatrixEvent;
+    reactions?: Relations | null;
+    permalinkCreator?: RoomPermalinkCreator;
+    getTile: () => IEventTileType | null;
+    getReplyChain: () => ReplyChain | null;
+    onFocusChange?: (focused: boolean) => void;
+    isQuoteExpanded?: boolean;
+    toggleThreadExpanded: () => void;
+    getRelationsForEvent?: GetRelationsForEvent;
+}
+
+interface ThreadListActionBarWrapperProps {
+    onViewInRoomClick: (anchor: HTMLElement | null) => void;
+    onCopyLinkClick: (anchor: HTMLElement | null) => void | Promise<void>;
+}
+
+function ThreadListActionBarWrapper({
+    onViewInRoomClick,
+    onCopyLinkClick,
+}: Readonly<ThreadListActionBarWrapperProps>): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ThreadListActionBarViewModel({
+                onViewInRoomClick,
+                onCopyLinkClick,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            onViewInRoomClick,
+            onCopyLinkClick,
+        });
+    }, [vm, onViewInRoomClick, onCopyLinkClick]);
+
+    return <ActionBarView vm={vm} className="mx_ThreadActionBar" />;
+}
+
+function ActionBarWrapper({
+    mxEvent,
+    reactions,
+    permalinkCreator,
+    getTile,
+    getReplyChain,
+    onFocusChange,
+    isQuoteExpanded,
+    toggleThreadExpanded,
+    getRelationsForEvent,
+}: Readonly<ActionBarWrapperProps>): JSX.Element {
+    const roomContext = useContext(RoomContext);
+    const { isCard } = useContext(CardContext);
+    const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
+    const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
+    const isSearch = Boolean(roomContext.search);
+    const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
+        setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
+    }, []);
+    const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
+        setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
+    }, []);
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new EventTileActionBarViewModel({
+                mxEvent,
+                timelineRenderingType: roomContext.timelineRenderingType,
+                canSendMessages: roomContext.canSendMessages,
+                canReact: roomContext.canReact,
+                isSearch,
+                isCard,
+                isQuoteExpanded,
+                onToggleThreadExpanded: toggleThreadExpanded,
+                onOptionsClick: handleOptionsClick,
+                onReactionsClick: handleReactionsClick,
+                getRelationsForEvent,
+            }),
+    );
+
+    useEffect(() => {
+        vm.setProps({
+            mxEvent,
+            timelineRenderingType: roomContext.timelineRenderingType,
+            canSendMessages: roomContext.canSendMessages,
+            canReact: roomContext.canReact,
+            isSearch,
+            isCard,
+            isQuoteExpanded,
+            getRelationsForEvent,
+            onToggleThreadExpanded: toggleThreadExpanded,
+            onOptionsClick: handleOptionsClick,
+            onReactionsClick: handleReactionsClick,
+        });
+    }, [
+        vm,
+        mxEvent,
+        roomContext.timelineRenderingType,
+        roomContext.canSendMessages,
+        roomContext.canReact,
+        isSearch,
+        isCard,
+        isQuoteExpanded,
+        getRelationsForEvent,
+        handleOptionsClick,
+        handleReactionsClick,
+        toggleThreadExpanded,
+    ]);
+
+    useEffect(() => {
+        onFocusChange?.(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));
+    }, [onFocusChange, optionsMenuAnchorRect, reactionsMenuAnchorRect]);
+
+    useEffect(() => {
+        setOptionsMenuAnchorRect(null);
+        setReactionsMenuAnchorRect(null);
+    }, [mxEvent]);
+
+    const closeOptionsMenu = useCallback((): void => {
+        setOptionsMenuAnchorRect(null);
+    }, []);
+
+    const closeReactionsMenu = useCallback((): void => {
+        setReactionsMenuAnchorRect(null);
+    }, []);
+
+    const tile = getTile();
+    const replyChain = getReplyChain();
+    const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
+    const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
+
+    return (
+        <>
+            <ActionBarView vm={vm} className="mx_MessageActionBar" />
+            {optionsMenuAnchorRect ? (
+                <MessageContextMenu
+                    {...aboveLeftOf(optionsMenuAnchorRect)}
+                    mxEvent={mxEvent}
+                    permalinkCreator={permalinkCreator}
+                    eventTileOps={eventTileOps}
+                    collapseReplyChain={collapseReplyChain}
+                    onFinished={closeOptionsMenu}
+                    getRelationsForEvent={getRelationsForEvent}
+                />
+            ) : null}
+            {reactionsMenuAnchorRect ? (
+                <ContextMenu
+                    {...aboveLeftOf(reactionsMenuAnchorRect)}
+                    onFinished={closeReactionsMenu}
+                    managed={false}
+                    focusLock
+                >
+                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionsMenu} />
+                </ContextMenu>
+            ) : null}
         </>
     );
 }

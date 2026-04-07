@@ -64,6 +64,7 @@
         "lodash": "npm:lodash-es@^4.17.21",
         "matrix-web-i18n": "catalog:",
         "react-merge-refs": "^3.0.2",
+        "react-resizable-panels": "^4.6.5",
         "react-virtuoso": "^4.14.0",
         "temporal-polyfill": "^0.3.0"
     },
@@ -111,16 +112,16 @@
         "typedoc-plugin-markdown": "^4.9.0",
         "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "catalog:",
-        "vite": "^7.3.1",
+        "vite": "^8.0.0",
         "vite-plugin-dts": "^4.5.4",
-        "vite-plugin-node-polyfills": "^0.25.0",
+        "vite-plugin-node-polyfills": "^0.26.0",
         "vitest": "^4.0.18",
         "vitest-sonar-reporter": "^3.0.0"
     },
     "engines": {
         "node": ">=20.0.0"
     },
-    "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
+    "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
     "peerDependencies": {
         "@vector-im/compound-web": "^8.3.5"
     }

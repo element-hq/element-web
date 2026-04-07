@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { type Locator, type Page } from "@playwright/test";
-import { readFileSync } from "node:fs";
 
 import { test, expect } from "../../element-web-test";
+import { readSampleFileSync } from "../../sample-files";
 
-const MEDIA_FILE = readFileSync("playwright/sample-files/riot.png");
+const MEDIA_FILE = readSampleFileSync("riot.png", null);
 
 async function waitForMessageSentStatus(msgTile: Locator): Promise<void> {
     await expect(msgTile.getByRole("status")).toHaveAccessibleName("Your message was sent");

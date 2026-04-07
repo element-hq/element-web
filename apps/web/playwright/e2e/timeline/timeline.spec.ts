@@ -6,8 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as fs from "node:fs";
-
 import type { Locator, Page } from "@playwright/test";
 import type { ISendEventResponse, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
@@ -16,6 +14,7 @@ import { Layout } from "../../../src/settings/enums/Layout";
 import { type Client } from "../../pages/client";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
+import { getSampleFilePath, readSampleFileSync } from "../../sample-files";
 
 // The avatar size used in the timeline
 const AVATAR_SIZE = 30;
@@ -23,12 +22,12 @@ const AVATAR_SIZE = 30;
 const AVATAR_RESIZE_METHOD = "crop";
 
 const ROOM_NAME = "Test room";
-const OLD_AVATAR = fs.readFileSync("playwright/sample-files/riot.png");
-const NEW_AVATAR = fs.readFileSync("playwright/sample-files/element.png");
+const OLD_AVATAR = readSampleFileSync("riot.png", null);
+const NEW_AVATAR = readSampleFileSync("element.png", null);
 const OLD_NAME = "Alan";
 const NEW_NAME = "Alan (away)";
 
-const VIDEO_FILE = fs.readFileSync("playwright/sample-files/5secvid.webm");
+const VIDEO_FILE = readSampleFileSync("5secvid.webm", null);
 
 const getEventTilesWithBodies = (page: Page): Locator => {
     return page.locator(".mx_EventTile").filter({ has: page.locator(".mx_EventTile_body") });
@@ -182,10 +181,10 @@ test.describe("Timeline", () => {
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-irc-layout.png", {
                     css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -218,10 +217,10 @@ test.describe("Timeline", () => {
 
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-modern-layout.png", {
                     css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -260,7 +259,7 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("expanded-gels-bubble-layout.png", {
                     // Exclude timestamp from snapshot
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
                     `,
@@ -280,7 +279,7 @@ test.describe("Timeline", () => {
                 // Save snapshot of collapsed generic event list summary on bubble layout
                 await expect(page.locator(".mx_MainSplit")).toMatchScreenshot("collapsed-gels-bubble-layout.png", {
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
                     `,
@@ -325,10 +324,10 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp and read marker from snapshot
                         css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -447,7 +446,7 @@ test.describe("Timeline", () => {
                     {
                         // Exclude timestamp from snapshot of mx_MainSplit
                         css: `
-                            .mx_MessageTimestamp {
+                            .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                                 visibility: hidden;
                             }
                         `,
@@ -523,10 +522,10 @@ test.describe("Timeline", () => {
                 const screenshotOptions = {
                     // Hide because flaky - See https://github.com/vector-im/element-web/issues/24957
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -651,10 +650,10 @@ test.describe("Timeline", () => {
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -765,7 +764,7 @@ test.describe("Timeline", () => {
             // Upload a file from the message composer
             await page
                 .locator(".mx_MessageComposer_actions input[type='file']")
-                .setInputFiles("playwright/sample-files/matrix-org-client-versions.json");
+                .setInputFiles(getSampleFilePath("matrix-org-client-versions.json"));
 
             // Click "Upload" button
             await page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
@@ -1131,10 +1130,10 @@ test.describe("Timeline", () => {
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
                 css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar,.mx_JumpToBottomButton {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
@@ -1259,10 +1258,10 @@ test.describe("Timeline", () => {
                 // Exclude timestamp and read marker from snapshot
                 const screenshotOptions = {
                     css: `
-                        .mx_MessageTimestamp {
+                        .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                             visibility: hidden;
                         }
-                        .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                        .mx_MessagePanel_myReadMarker {
                             display: none !important;
                         }
                     `,
@@ -1325,10 +1324,10 @@ test.describe("Timeline", () => {
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {
                 css: `
-                    .mx_MessageTimestamp {
+                    .mx_MessageTimestamp,.mx_TopUnreadMessagesBar {
                         visibility: hidden;
                     }
-                    .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
+                    .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,

@@ -42,10 +42,10 @@ describe("<RecoveryPanel />", () => {
         const onChangeRecoveryKeyClick = jest.fn();
         const { asFragment } = renderRecoverPanel(onChangeRecoveryKeyClick);
 
-        await waitFor(() => screen.getByRole("button", { name: "Set up recovery" }));
+        await waitFor(() => screen.getByRole("button", { name: "Get recovery key" }));
         expect(asFragment()).toMatchSnapshot();
 
-        await user.click(screen.getByRole("button", { name: "Set up recovery" }));
+        await user.click(screen.getByRole("button", { name: "Get recovery key" }));
         expect(onChangeRecoveryKeyClick).toHaveBeenCalledWith(true);
     });
 

@@ -32,7 +32,6 @@
         "cancel": "Hanafoana",
         "change": "Fiovana",
         "clear": "Mazava",
-        "click": "Tsindrio eto",
         "click_to_copy": "Tsindrio raha handika",
         "close": "Akatona",
         "collapse": "Firodanana",
@@ -1115,9 +1114,6 @@
         "impossible_dialog_title": "Tsy azo atao ny fampidirana"
     },
     "invite": {
-        "ask_anyway_description": "Tsy afaka mahita ny mombamomba ireo ID voatanisa etsy ambany - te hanomboka DM ve ianao?",
-        "ask_anyway_label": "Manomboka DM na izany aza",
-        "ask_anyway_never_warn_label": "Manomboha DM na izany aza ary aza mampitandrina ahy intsony",
         "email_caption": "Asao amin'ny imailaka",
         "email_limit_one": "Ny fanasana amin'ny alàlan'ny imailaka ihany no azo alefa tsirairay",
         "email_use_default_is": "Mampiasà mpizara famantarana hanasana amin'ny imailaka.<default> Ampiasao ny ara-pototra (%(defaultIdentityServerName)s )</default> na mitantana in<settings> Fikirana</settings> .",
@@ -1250,8 +1246,6 @@
     },
     "labs": {
         "ask_to_join": "Alefaso ny fangatahana hiditra",
-        "automatic_debug_logs": "Alefaso ho azy ny log debug amin'ny lesoka rehetra",
-        "automatic_debug_logs_decryption": "Alefaso ho azy ny diarin'ny debug momba ny lesoka decryption",
         "beta_description": "Inona no manaraka%(brand)s ? Labs no fomba tsara indrindra hahazoana zavatra mialoha, hizaha toetra vaovao ary hanampy amin'ny famolavolana azy ireo alohany hanombohany.",
         "beta_feature": "Ity dia endri-javatra beta",
         "beta_feedback_leave_button": "Raha te hiala amin'ny beta dia tsidiho ny kiranao.",
@@ -2789,7 +2783,6 @@
             "one": "%(count)smamaly",
             "other": "%(count)svaliny"
         },
-        "error_start_thread_existing_relation": "Tsy afaka mamorona kofehy avy amin'ny hetsika misy fifandraisana efa misy",
         "my_threads": "Zanako",
         "my_threads_description": "Asehoy ny zanako rehetra ianao nandray anjara Zao amin'ny ",
         "open_thread": "Sokafy kofehy",
@@ -2826,7 +2819,6 @@
         "creation_summary_dm": "%(creator)snamorona ity DM ity.",
         "creation_summary_room": "%(creator)snamorona sy nanamboatra ny efitrano.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
-        "download_action_decrypting": "Decryptering",
         "download_action_downloading": "Misintona",
         "edits": {
             "tooltip_label": "Namboarina tamin'ny%(Rendez-vous . Kitiho raha hijery ny fanovana.",
@@ -2879,8 +2871,7 @@
             "voice_call_unsupported": "%(senderName)snametraka antso an-tariby. (tsy tohanan'ity toeram-pivohizana ity)"
         },
         "m.file": {
-            "error_decrypting": "Nisy olana teo am-pamakiana ny famaha",
-            "error_invalid": "Rakitra tsy mety %(Supplémentaires"
+            "error_decrypting": "Nisy olana teo am-pamakiana ny famaha"
         },
         "m.image": {
             "error": "Tsy afaka mampiseho sary noho ny fahadisoana",
@@ -3016,10 +3007,7 @@
             "removed": "%(widgetName)swidget nesorina avy%(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Atsaharo ny teny nindramina",
             "copy_link_thread": "Adikao ny rohy mankany amin'ny kofehy",
-            "expand_reply_chain": "Hanitatra ny teny nindramina",
-            "label": "Asa atao amin'ny hafatra",
             "view_in_room": "Jereo ao amin'ny"
         },
         "mjolnir": {
@@ -3214,14 +3202,7 @@
             "one_user": "%(displayName)sdia manoratra",
             "two_users": "%(names)sSY%(lastPerson)s mitendry…"
         },
-        "undecryptable_tooltip": "Ity hafatra ity dia tsy azo decryption",
-        "url_preview": {
-            "close": "Akatona mialoha",
-            "show_n_more": {
-                "one": "FAMPISEHOANA%(count)s preview hafa",
-                "other": "FAMPISEHOANA%(count)s fijery hafa"
-            }
-        }
+        "undecryptable_tooltip": "Ity hafatra ity dia tsy azo decryption"
     },
     "truncated_list_n_more": {
         "one": "",

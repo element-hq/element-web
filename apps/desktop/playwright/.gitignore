@@ -1,0 +1,5 @@
+/test-results/
+/html-report/
+# Only commit snapshots from Linux
+/snapshots/**/*.png
+!/snapshots/**/*-linux.png

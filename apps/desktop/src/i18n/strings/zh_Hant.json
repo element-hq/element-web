@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "取消",
+        "close": "關閉",
+        "close_brand": "關閉 %(brand)s",
+        "copy": "複製",
+        "cut": "剪下",
+        "delete": "刪除",
+        "edit": "編輯",
+        "minimise": "最小化",
+        "paste": "貼上",
+        "paste_match_style": "貼上並保留格式",
+        "quit": "離開",
+        "redo": "取消復原",
+        "select_all": "全選",
+        "show_hide": "顯示/隱藏",
+        "undo": "復原",
+        "zoom_in": "放大",
+        "zoom_out": "縮小"
+    },
+    "common": {
+        "about": "關於",
+        "brand_help": "%(brand)s 說明",
+        "help": "說明",
+        "preferences": "偏好設定"
+    },
+    "confirm_quit": "您確定要離開嗎？",
+    "edit_menu": {
+        "speech": "語音",
+        "speech_start_speaking": "開始說話",
+        "speech_stop_speaking": "停止說話"
+    },
+    "file_menu": {
+        "label": "檔案"
+    },
+    "menu": {
+        "hide": "隱藏",
+        "hide_others": "隱藏其他",
+        "services": "服務",
+        "unhide": "取消隱藏"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "新增到字典",
+        "copy_email": "複製電子郵件地址",
+        "copy_image": "複製圖片",
+        "copy_image_url": "複製圖片地址",
+        "copy_link_url": "複製連結",
+        "save_image_as": "另存圖片為...",
+        "save_image_as_error_description": "儲存圖片失敗",
+        "save_image_as_error_title": "儲存圖片失敗"
+    },
+    "view_menu": {
+        "actual_size": "實際大小",
+        "toggle_developer_tools": "切換開發工具",
+        "toggle_full_screen": "切換全螢幕",
+        "view": "檢視"
+    },
+    "window_menu": {
+        "bring_all_to_front": "全部移至最前",
+        "label": "視窗",
+        "zoom": "縮放"
+    }
+}

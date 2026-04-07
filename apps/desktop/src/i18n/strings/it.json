@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "Annulla",
+        "close": "Chiudi",
+        "close_brand": "Chiudi %(brand)s",
+        "copy": "Copia",
+        "cut": "Taglia",
+        "delete": "Elimina",
+        "edit": "Modifica",
+        "minimise": "Riduci",
+        "paste": "Incolla",
+        "paste_match_style": "Incolla e adegua lo stile",
+        "quit": "Esci",
+        "redo": "Ripeti",
+        "select_all": "Seleziona tutto",
+        "show_hide": "Mostra/Nascondi",
+        "undo": "Annulla",
+        "zoom_in": "Ingrandisci",
+        "zoom_out": "Rimpicciolisci"
+    },
+    "common": {
+        "about": "Informazioni su",
+        "brand_help": "Aiuto per %(brand)s",
+        "help": "Aiuto",
+        "preferences": "Preferenze"
+    },
+    "confirm_quit": "Vuoi veramente uscire?",
+    "edit_menu": {
+        "speech": "Dettatura",
+        "speech_start_speaking": "Inizia a parlare",
+        "speech_stop_speaking": "Smetti di parlare"
+    },
+    "file_menu": {
+        "label": "File"
+    },
+    "menu": {
+        "hide": "Nascondi",
+        "hide_others": "Nascondi gli altri",
+        "services": "Servizi",
+        "unhide": "Mostra"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Aggiungi al dizionario",
+        "copy_email": "Copia indirizzo email",
+        "copy_image": "Copia immagine",
+        "copy_image_url": "Copia indirizzo immagine",
+        "copy_link_url": "Copia indirizzo collegamento",
+        "save_image_as": "Salva immagine come...",
+        "save_image_as_error_description": "Non è stato possibile salvare l'immagine",
+        "save_image_as_error_title": "Salvataggio immagine fallito"
+    },
+    "view_menu": {
+        "actual_size": "Dimensione effettiva",
+        "toggle_developer_tools": "Attiva strumenti per sviluppatori",
+        "toggle_full_screen": "Passa a schermo intero",
+        "view": "Vedi"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Porta tutto in primo piano",
+        "label": "Finestra",
+        "zoom": "Ingrandisci"
+    }
+}

@@ -11,6 +11,7 @@ export default {
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
+            ignoreBinaries: ["awk"],
         },
         "apps/web": {
             entry: [
@@ -46,6 +47,15 @@ export default {
                 "@types/sdp-transform",
             ],
         },
+        "apps/desktop": {
+            entry: ["src/preload.cts", "electron-builder.ts", "scripts/**", "hak/**"],
+            project: ["**/*.{js,ts}"],
+            ignoreDependencies: [
+                // Brought in via hak scripts
+                "matrix-seshat",
+            ],
+            ignoreBinaries: ["scripts/in-docker.sh"],
+        },
         ".": {
             entry: ["scripts/**", "docs/**"],
         },
@@ -64,6 +74,9 @@ export default {
     },
     nx: {
         config: ["{nx,package,project}.json", "{apps,packages,modules}/**/{package,project}.json"],
+    },
+    playwright: {
+        config: ["playwright.config.ts", "playwright-merge.config.ts"],
     },
     tags: ["-knipignore"],
 } satisfies KnipConfig;

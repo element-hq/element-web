@@ -32,7 +32,6 @@
         "cancel": "Annuleer",
         "change": "Wijzig",
         "clear": "Wis",
-        "click": "Klik",
         "click_to_copy": "Klik om te kopiëren",
         "close": "Sluiten",
         "collapse": "Invouwen",
@@ -1101,8 +1100,6 @@
         "upload_file": "Bestand uploaden"
     },
     "labs": {
-        "automatic_debug_logs": "Automatisch foutenlogboek versturen bij een fout",
-        "automatic_debug_logs_decryption": "Automatisch foutopsporingslogboeken versturen bij decoderingsfouten",
         "beta_feature": "Dit is een bètafunctie",
         "beta_feedback_leave_button": "Om de beta te verlaten, ga naar je instellingen.",
         "beta_feedback_title": "%(featureName)s Bèta-feedback",
@@ -2393,7 +2390,6 @@
             "one": "%(count)s reactie",
             "other": "%(count)s reacties"
         },
-        "error_start_thread_existing_relation": "Kan geen discussie maken van een gebeurtenis met een bestaande relatie",
         "my_threads": "Mijn discussies",
         "my_threads_description": "Toon alle threads waarin je hebt bijgedragen",
         "open_thread": "Open discussie",
@@ -2424,7 +2420,6 @@
         },
         "creation_summary_dm": "%(creator)s maakte deze directe chat.",
         "creation_summary_room": "Kamer gestart en ingesteld door %(creator)s.",
-        "download_action_decrypting": "Ontsleutelen",
         "download_action_downloading": "Downloaden",
         "edits": {
             "tooltip_label": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
@@ -2474,8 +2469,7 @@
             "voice_call_unsupported": "%(senderName)s poogt je te bellen, maar jouw browser ondersteunt dat niet"
         },
         "m.file": {
-            "error_decrypting": "Fout bij het ontsleutelen van de bijlage",
-            "error_invalid": "Ongeldig bestand %(extra)s"
+            "error_decrypting": "Fout bij het ontsleutelen van de bijlage"
         },
         "m.image": {
             "error_decrypting": "Fout bij het ontsleutelen van de afbeelding",
@@ -2608,10 +2602,7 @@
             "removed": "%(widgetName)s-widget verwijderd door %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Citaten invouwen",
             "copy_link_thread": "Kopieer link naar draad",
-            "expand_reply_chain": "Citaten uitvouwen",
-            "label": "Berichtacties",
             "view_in_room": "In kamer bekijken"
         },
         "mjolnir": {
@@ -2793,13 +2784,6 @@
             },
             "one_user": "%(displayName)s is aan het typen…",
             "two_users": "%(names)s en %(lastPerson)s zijn aan het typen…"
-        },
-        "url_preview": {
-            "close": "Voorbeeld sluiten",
-            "show_n_more": {
-                "one": "%(count)s andere preview weergeven",
-                "other": "%(count)s andere previews weergeven"
-            }
         }
     },
     "truncated_list_n_more": {

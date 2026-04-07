@@ -32,7 +32,6 @@ import { type IConfigOptions } from "../../../../../src/IConfigOptions";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { type IProfileInfo } from "../../../../../src/hooks/useProfileInfo";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
 jest.mock("../../../../../src/IdentityAuthClient", () =>
@@ -120,7 +119,7 @@ describe("InviteDialog", () => {
                 if (userId === bobId) return bobProfileInfo;
 
                 throw new MatrixError({
-                    errcode: "M_NOT_FOUND",
+                    errcode: "M_UNKNOWN",
                     error: "Profile not found",
                 });
             }),
@@ -419,63 +418,12 @@ describe("InviteDialog", () => {
 
     describe("when inviting a user with an unknown profile", () => {
         beforeEach(async () => {
-            render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
-            await enterIntoSearchField(carolId);
-            await userEvent.click(screen.getByRole("button", { name: "Go" }));
-            // Wait for the »invite anyway« modal to show up
-            await screen.findByText("The following users may not exist");
-        });
-
-        it("should not start the DM", () => {
-            expect(startDmOnFirstMessage).not.toHaveBeenCalled();
-        });
-
-        it("should show the »invite anyway« dialog if the profile is not available", () => {
-            expect(screen.getByText("The following users may not exist")).toBeInTheDocument();
-            expect(screen.getByText(`${carolId}: Profile not found`)).toBeInTheDocument();
-        });
-
-        describe("when clicking »Start DM anyway«", () => {
-            beforeEach(async () => {
-                await userEvent.click(screen.getByRole("button", { name: "Start DM anyway" }));
-            });
-
-            it("should start the DM", () => {
-                expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockClient, [
-                    new DirectoryMember({
-                        user_id: carolId,
-                    }),
-                ]);
-            });
-        });
-
-        describe("when clicking »Close«", () => {
-            beforeEach(async () => {
-                mocked(startDmOnFirstMessage).mockClear();
-                await userEvent.click(screen.getByRole("button", { name: "Close" }));
-            });
-
-            it("should not start the DM", () => {
-                expect(startDmOnFirstMessage).not.toHaveBeenCalled();
-            });
-        });
-    });
-
-    describe("when inviting a user with an unknown profile and »promptBeforeInviteUnknownUsers« setting = false", () => {
-        beforeEach(async () => {
             mocked(startDmOnFirstMessage).mockClear();
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName !== "promptBeforeInviteUnknownUsers",
-            );
             render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
             await enterIntoSearchField(carolId);
             await userEvent.click(screen.getByRole("button", { name: "Go" }));
             // modal rendering has some weird sleeps - fake timers will mess up the entire test
             await sleep(100);
-        });
-
-        it("should not show the »invite anyway« dialog", () => {
-            expect(screen.queryByText("The following users may not exist")).not.toBeInTheDocument();
         });
 
         it("should start the DM directly", () => {

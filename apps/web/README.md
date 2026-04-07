@@ -101,8 +101,7 @@ Element requires the following URLs not to be cached, when/if you are serving El
 ```
 /config.*.json
 /i18n
-/home
-/sites
+/version
 /index.html
 ```
 

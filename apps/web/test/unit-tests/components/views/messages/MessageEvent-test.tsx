@@ -15,11 +15,9 @@ import path from "path";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
-import { getRoomContext } from "../../../../test-utils/room";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 
 jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
@@ -31,14 +29,12 @@ jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     default: () => <div data-testid="image-body" />,
 }));
 
-jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="video-body" />,
-}));
-
 jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     __esModule: true,
-    FileBodyViewFactory: () => <div data-testid="file-body" />,
+    DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
+    FileBodyFactory: () => <div data-testid="file-body" />,
+    RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
+    VideoBodyFactory: () => <video data-testid="video-body" />,
     renderMBody: () => <div data-testid="file-body" />,
 }));
 
@@ -47,13 +43,19 @@ jest.mock("../../../../../src/components/views/messages/MImageReplyBody", () => 
     default: () => <div data-testid="image-reply-body" />,
 }));
 
+jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
+    __esModule: true,
+    useMediaVisible: () => [true, jest.fn()],
+}));
+
 jest.mock("../../../../../src/components/views/messages/MStickerBody", () => ({
     __esModule: true,
     default: () => <div data-testid="sticker-body" />,
 }));
 
-jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
-    useMediaVisible: () => [true, jest.fn()],
+jest.mock("../../../../../src/components/views/messages/TextualBody.tsx", () => ({
+    __esModule: true,
+    default: () => <div data-testid="textual-body" />,
 }));
 
 describe("MessageEvent", () => {
@@ -61,12 +63,21 @@ describe("MessageEvent", () => {
     let client: MatrixClient;
     let event: MatrixEvent;
 
+    const makeRedactedBecauseEvent = ({ sender, originServerTs }: { sender: string; originServerTs: number }) => ({
+        content: {},
+        event_id: "$redaction:example.com",
+        origin_server_ts: originServerTs,
+        redacts: "$message:example.com",
+        room_id: room.roomId,
+        sender,
+        type: EventType.RoomRedaction,
+        unsigned: {},
+    });
+
     const renderMessageEvent = (): RenderResult => {
         return render(
             <MatrixClientContext.Provider value={client}>
-                <RoomContext.Provider value={getRoomContext(room, { room })}>
-                    <MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />
-                </RoomContext.Provider>
+                <MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />
             </MatrixClientContext.Provider>,
         );
     };
@@ -74,9 +85,37 @@ describe("MessageEvent", () => {
     beforeEach(() => {
         client = stubClient();
         room = mkRoom(client, "!room:example.com");
+        jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(SettingsStore, "getValue");
         jest.spyOn(SettingsStore, "watchSetting");
         jest.spyOn(SettingsStore, "unwatchSetting").mockImplementation(jest.fn());
+    });
+
+    it("renders the shared redacted body for redacted events", () => {
+        jest.spyOn(room, "getMember").mockReturnValue({ name: "Moderator" } as any);
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@alice:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: MsgType.Text,
+                body: "Secret",
+            },
+            unsigned: {
+                redacted_because: makeRedactedBecauseEvent({
+                    sender: "@moderator:example.com",
+                    originServerTs: Date.UTC(2022, 10, 17, 15, 58, 32),
+                }),
+            },
+        });
+        jest.spyOn(event, "isRedacted").mockReturnValue(true);
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText("Message deleted by Moderator")).toBeInTheDocument();
+        expect(result.container.querySelector(".mx_RedactedBody")).not.toBeNull();
+        expect(result.queryByTestId("textual-body")).toBeNull();
     });
 
     describe("when an image with a caption is sent", () => {
@@ -115,7 +154,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("image-body");
-            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
+            result.getByTestId("textual-body");
         });
 
         it("should render a TextualBody and a FileBody for mismatched extension", () => {
@@ -123,15 +162,15 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("file-body");
-            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
+            result.getByTestId("textual-body");
         });
 
-        it("should render a TextualBody and an VideoBody", () => {
+        it("should render a TextualBody and a video element", () => {
             event = createEvent("video/mp4", "video.mp4", MsgType.Video);
             result = renderMessageEvent();
             mockMedia();
-            result.getByTestId("video-body");
-            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
+            expect(result.container.querySelector("video")).not.toBeNull();
+            result.getByTestId("textual-body");
         });
 
         it("should render a TextualBody and a FileBody for non-video mimetype", () => {
@@ -139,7 +178,7 @@ describe("MessageEvent", () => {
             result = renderMessageEvent();
             mockMedia();
             result.getByTestId("file-body");
-            expect(result.container.querySelector(".mx_MTextBody")).toHaveTextContent("caption for a test image");
+            result.getByTestId("textual-body");
         });
     });
 });

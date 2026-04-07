@@ -16,8 +16,8 @@ import {
     type UrlPreviewGroupViewActions,
     type UrlPreviewGroupViewSnapshot,
 } from "./UrlPreviewGroupView";
-import { useMockedViewModel } from "../../viewmodel";
-import { LinkedTextContext } from "../../utils/LinkedText";
+import { useMockedViewModel } from "../../core/viewmodel";
+import { LinkedTextContext } from "../../core/utils/LinkedText";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 

@@ -18,6 +18,7 @@ import {
     RoomStateEvent,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { mocked, type Mocked } from "jest-mock";
 import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
@@ -52,6 +53,7 @@ export class MockedCall extends Call {
                 waitForIframeLoad: false,
             },
             room.client,
+            CallType.Video,
         );
         this.groupCall = { creationTs: this.event.getTs() } as unknown as GroupCall;
     }

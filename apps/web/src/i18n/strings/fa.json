@@ -1803,8 +1803,7 @@
             "voice_call_unsupported": "%(senderName)s تماس صوتی برقرار کرد. (توسط این مرورگر پشتیبانی نمی شود)"
         },
         "m.file": {
-            "error_decrypting": "خطا در رمزگشایی پیوست",
-            "error_invalid": "پرونده نامعتبر%(extra)s"
+            "error_decrypting": "خطا در رمزگشایی پیوست"
         },
         "m.image": {
             "error_decrypting": "خطا در رمزگشایی تصویر",
@@ -1925,9 +1924,6 @@
             "jitsi_updated": "کنفرانس ویدیویی توسط %(senderName)s به روز شد",
             "modified": "ویجت %(widgetName)s توسط %(senderName)s تغییر کرد",
             "removed": "ویجت %(widgetName)s توسط %(senderName)s حذف گردید"
-        },
-        "mab": {
-            "label": "اقدامات پیام"
         },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s یک قاعده تحریم را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای به‌روزرسانی کرد که با %(newGlob)s تطابق داشته باشد",
@@ -2065,9 +2061,6 @@
             },
             "one_user": "%(displayName)s در حال نوشتن…",
             "two_users": "%(names)s و %(lastPerson)s در حال نوشتن…"
-        },
-        "url_preview": {
-            "close": "بستن پیش نمایش"
         }
     },
     "truncated_list_n_more": {
