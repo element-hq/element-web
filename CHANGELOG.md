@@ -1,3 +1,26 @@
+Changes in [1.12.14](https://github.com/element-hq/element-web/releases/tag/v1.12.14) (2026-04-07)
+==================================================================================================
+## ✨ Features
+
+* Add analytics tracking for URL previews ([#32659](https://github.com/element-hq/element-web/pull/32659)). Contributed by @Half-Shot.
+* Collapsible Room List - Clicking on separator should expand to last set width ([#32909](https://github.com/element-hq/element-web/pull/32909)). Contributed by @MidhunSureshR.
+* RoomList: improve performance ([#32919](https://github.com/element-hq/element-web/pull/32919)). Contributed by @florianduros.
+* Implement collapsible panels for the new room list ([#32742](https://github.com/element-hq/element-web/pull/32742)). Contributed by @MidhunSureshR.
+* Hide the names of banned users behind a spoiler tag (attempt 2) ([#32636](https://github.com/element-hq/element-web/pull/32636)). Contributed by @andybalaam.
+
+## 🐛 Bug Fixes
+
+* Use the code signing Subject Name as basis for Tray GUID on Windows ([#32939](https://github.com/element-hq/element-web/pull/32939)). Contributed by @t3chguy.
+* Ensure the incoming verification request appears above the please verify prompt ([#32931](https://github.com/element-hq/element-web/pull/32931)). Contributed by @andybalaam.
+* Collapsible Room List - Prevent any interaction with the separator when the panel is expanded ([#32910](https://github.com/element-hq/element-web/pull/32910)). Contributed by @MidhunSureshR.
+* Fix icon size of badges in right panel ([#32952](https://github.com/element-hq/element-web/pull/32952)). Contributed by @florianduros.
+* Fix room list often showing the wrong icons for calls ([#32881](https://github.com/element-hq/element-web/pull/32881)). Contributed by @robintown.
+* Fix emoticon slash commands including stale buffers ([#32928](https://github.com/element-hq/element-web/pull/32928)). Contributed by @t3chguy.
+* Fix presence indicators not showing without cache   ([#32880](https://github.com/element-hq/element-web/pull/32880)). Contributed by @DLCSharp.
+* Show space name instead of 'Empty room' after creation ([#32886](https://github.com/element-hq/element-web/pull/32886)). Contributed by @gugaribeiro05.
+* Strip ephemeral query params from OIDC redirect URI ([#32875](https://github.com/element-hq/element-web/pull/32875)). Contributed by @azmeuk.
+
+
 Changes in [1.12.13](https://github.com/element-hq/element-web/releases/tag/v1.12.13) (2026-03-24)
 ==================================================================================================
 ## 🦖 Deprecations
