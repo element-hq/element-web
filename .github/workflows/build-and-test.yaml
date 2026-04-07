@@ -164,12 +164,12 @@ jobs:
               id: playwright-cache
               with:
                   path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}
+                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}-onlyshell
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               working-directory: apps/web
-              run: pnpm playwright install --with-deps --no-shell
+              run: pnpm playwright install --with-deps --only-shell
 
             - name: Install system dependencies for WebKit
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
