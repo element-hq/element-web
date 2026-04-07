@@ -53,17 +53,20 @@ export function ReadMarker({
     onGhostTransitionEnd,
     className,
 }: Readonly<ReadMarkerProps>): JSX.Element {
-    const line =
-        kind === "ghost" ? (
+    let line: JSX.Element | null = null;
+
+    if (kind === "ghost") {
+        line = (
             <hr
                 className={styles.line}
                 ref={onGhostLineRef}
                 onTransitionEnd={onGhostTransitionEnd}
                 data-eventid={eventId}
             />
-        ) : showLine ? (
-            <hr className={styles.line} />
-        ) : null;
+        );
+    } else if (showLine) {
+        line = <hr className={styles.line} />;
+    }
 
     return (
         <li
