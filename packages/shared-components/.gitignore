@@ -2,8 +2,9 @@
 /src/**/__screenshots__/
 
 # Ignore vis diffs & local baseline
-/__vis__/**
-!/__vis__/linux/__baselines__
+/__vis__/**/__diffs__
+/__vis__/**/__results__
+/__vis__/local
 
 # Ignore coverage report
 /coverage/
