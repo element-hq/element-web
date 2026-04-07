@@ -68,18 +68,33 @@ describe("LeftPanelResizerViewModel", () => {
         expect(() => vm.onSeparatorClick()).not.toThrow();
     });
 
-    it("should expand panel on onSeparatorClick()", () => {
-        const vm = new ResizerViewModel();
-        SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
-        const mockHandle = {
-            resize: jest.fn(),
-            isCollapsed: jest.fn().mockReturnValue(true),
-        } as unknown as PanelImperativeHandle;
-        vm.setPanelHandle(mockHandle);
+    describe("should expand panel on onSeparatorClick()", () => {
+        it("to last non-zero width that the user set", () => {
+            const vm = new ResizerViewModel();
+            SettingsStore.setValue("RoomList.panelSize", null, SettingLevel.DEVICE, 34);
+            const mockHandle = {
+                resize: jest.fn(),
+                isCollapsed: jest.fn().mockReturnValue(true),
+            } as unknown as PanelImperativeHandle;
+            vm.setPanelHandle(mockHandle);
 
-        vm.onSeparatorClick();
+            vm.onSeparatorClick();
 
-        expect(mockHandle.resize).toHaveBeenCalledWith("34%");
+            expect(mockHandle.resize).toHaveBeenCalledWith("34%");
+        });
+
+        it("to maximum size of the panel", () => {
+            const vm = new ResizerViewModel();
+            const mockHandle = {
+                resize: jest.fn(),
+                isCollapsed: jest.fn().mockReturnValue(true),
+            } as unknown as PanelImperativeHandle;
+            vm.setPanelHandle(mockHandle);
+
+            vm.onSeparatorClick();
+
+            expect(mockHandle.resize).toHaveBeenCalledWith("100%");
+        });
     });
 
     it("should set isFocusedViaKeyboard state correctly", () => {

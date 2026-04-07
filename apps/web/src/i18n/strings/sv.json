@@ -115,7 +115,7 @@
         "show_advanced": "Visa avancerat",
         "show_all": "Visa alla",
         "sign_in": "Logga in",
-        "sign_out": "Logga ut",
+        "sign_out": "Ta bort den här enheten",
         "skip": "Hoppa över",
         "start": "Starta",
         "start_chat": "Starta chatt",
@@ -2856,8 +2856,8 @@
             "sign_out": "Logga ut den här sessionen",
             "sign_out_all_other_sessions": "Logga ut ur alla andra sessioner (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Är du säker på att du vill logga ut %(count)s session?",
-                "other": "Är du säker på att du vill logga ut %(count)s sessioner?"
+                "one": "Är du säker på att du vill ta bort %(count)s session?",
+                "other": "Är du säker på att du vill ta bort %(count)s sessioner?"
             },
             "sign_out_n_sessions": {
                 "one": "Logga ut ur %(count)s session",
@@ -3368,8 +3368,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepterade inbjudan för %(displayName)s",
             "accepted_invite": "%(targetName)s accepterade inbjudan",
-            "ban": "%(senderName)s bannade %(targetName)s",
-            "ban_reason": "%(senderName)s bannade %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s bannade en användare",
+            "ban_reason": "%(senderName)s bannade en användare: %(reason)s",
             "change_avatar": "%(senderName)s bytte sin profilbild",
             "change_name": "%(oldDisplayName)s bytte sitt visningsnamn till %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s bytte sitt visningsnamn och sin profilbild",
