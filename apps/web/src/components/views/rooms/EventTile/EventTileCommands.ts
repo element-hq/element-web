@@ -16,6 +16,18 @@ import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import type { EventTileContextMenuState } from "../../../../models/rooms/EventTileTypes";
 
+/**
+ * Command-side behaviors for {@link EventTilePresenter}.
+ *
+ * These functions form a small side-effect boundary between the presenter's
+ * React wiring and the application services it needs to call, such as the
+ * dispatcher, clipboard helpers, analytics, and platform policy checks.
+ *
+ * Keeping them separate from presenter hooks preserves a clean split:
+ * the presenter composes UI and adapts DOM events, while this module executes
+ * command intent in a directly unit-testable form.
+ */
+
 /** Side-effect dependencies used by event tile commands. */
 export interface EventTileCommandDeps {
     dispatch: (payload: ActionPayload) => void;

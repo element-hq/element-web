@@ -649,7 +649,27 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         previousSnapshot?: EventTileViewSnapshot,
         partial: Partial<EventTileViewSnapshot> = {},
     ): EventTileViewSnapshot {
-        const snapshot: EventTileViewSnapshot = {
+        const snapshot = EventTileViewModel.createBaseSnapshot(previousSnapshot, partial, props);
+        const displayInfo = EventTileViewModel.getDisplayInfo(props);
+
+        Object.assign(snapshot, EventTileViewModel.deriveReceiptSnapshot(props, snapshot));
+        Object.assign(snapshot, EventTileViewModel.deriveRenderingSnapshot(props, snapshot, displayInfo));
+        Object.assign(snapshot, EventTileViewModel.deriveTimestampSnapshot(props, snapshot));
+        Object.assign(snapshot, EventTileViewModel.deriveThreadSnapshot(props, snapshot));
+        Object.assign(snapshot, EventTileViewModel.deriveSenderSnapshot(props, snapshot));
+        Object.assign(snapshot, EventTileViewModel.deriveEncryptionSnapshot(props, snapshot));
+        Object.assign(snapshot, EventTileViewModel.deriveFooterSnapshot(props, snapshot));
+
+        snapshot.shouldRenderActionBar = EventTileViewModel.getShouldRenderActionBar(props, snapshot);
+        return snapshot;
+    }
+
+    private static createBaseSnapshot(
+        previousSnapshot: EventTileViewSnapshot | undefined,
+        partial: Partial<EventTileViewSnapshot>,
+        props: EventTileViewModelProps,
+    ): EventTileViewSnapshot {
+        return {
             actionBarFocused: false,
             shieldColour: EventShieldColour.NONE,
             shieldReason: null,
@@ -709,56 +729,147 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ...previousSnapshot,
             ...partial,
         };
+    }
 
-        const displayInfo = EventTileViewModel.getDisplayInfo(props);
-        snapshot.reactions = partial.reactions ?? previousSnapshot?.reactions ?? EventTileViewModel.getReactions(props);
-        snapshot.thread = partial.thread ?? previousSnapshot?.thread ?? EventTileViewModel.getThread(props);
-        snapshot.shouldShowSentReceipt = EventTileViewModel.getShouldShowSentReceipt(props);
-        snapshot.shouldShowSendingReceipt = EventTileViewModel.getShouldShowSendingReceipt(props);
-        snapshot.isHighlighted = EventTileViewModel.getShouldHighlight(props);
-        snapshot.isSending = EventTileViewModel.getIsSending(props);
-        snapshot.isEditing = EventTileViewModel.getIsEditing(props);
-        snapshot.showReplyPreview = EventTileViewModel.getShowReplyPreview(props);
-        snapshot.shouldRenderReplyPreview = EventTileViewModel.getShouldRenderReplyPreview(snapshot);
-        snapshot.isEncryptionFailure = EventTileViewModel.getIsEncryptionFailure(props);
-        snapshot.isOwnEvent = EventTileViewModel.getIsOwnEvent(props);
-        snapshot.permalink = EventTileViewModel.getPermalink(props);
-        snapshot.scrollToken = EventTileViewModel.getScrollToken(props);
-        snapshot.isContinuation = EventTileViewModel.getIsContinuation(props);
-        snapshot.showTimestamp = EventTileViewModel.getShowTimestamp(props, snapshot);
-        snapshot.hasThread = Boolean(snapshot.thread);
-        snapshot.isThreadRoot = snapshot.thread?.id === props.mxEvent.getId();
-        snapshot.threadUpdateKey = EventTileViewModel.getThreadUpdateKey(snapshot.thread);
-        snapshot.hasRenderer = displayInfo.hasRenderer;
-        snapshot.renderMode = EventTileViewModel.getRenderMode(props, displayInfo.hasRenderer);
-        snapshot.isBubbleMessage = displayInfo.isBubbleMessage;
-        snapshot.isInfoMessage = displayInfo.isInfoMessage;
-        snapshot.isLeftAlignedBubbleMessage = displayInfo.isLeftAlignedBubbleMessage;
-        snapshot.noBubbleEvent = displayInfo.noBubbleEvent;
-        snapshot.isSeeingThroughMessageHiddenForModeration = displayInfo.isSeeingThroughMessageHiddenForModeration;
-        snapshot.showSender = EventTileViewModel.getShowSender(props);
-        snapshot.threadPanelMode = EventTileViewModel.getThreadPanelMode(props, snapshot);
-        snapshot.showReadReceipts = EventTileViewModel.getShowReadReceipts(props, snapshot);
-        snapshot.padlockMode = EventTileViewModel.getPadlockMode(props, snapshot);
-        snapshot.timestampDisplayMode = EventTileViewModel.getTimestampDisplayMode(props, snapshot);
-        snapshot.timestampFormatMode = EventTileViewModel.getTimestampFormatMode(props);
-        snapshot.timestampTs = EventTileViewModel.getTimestampTs(props, snapshot);
-        snapshot.tileRenderType = EventTileViewModel.getTileRenderType(props);
-        snapshot.avatarSize = EventTileViewModel.getAvatarSize(props, snapshot);
-        snapshot.avatarSubject = EventTileViewModel.getAvatarSubject(props, snapshot);
-        snapshot.avatarMemberUserOnClick = EventTileViewModel.getAvatarMemberUserOnClick(props, snapshot);
-        snapshot.avatarForceHistorical = EventTileViewModel.getAvatarForceHistorical(props);
-        snapshot.senderMode = EventTileViewModel.getSenderMode(props, snapshot);
-        snapshot.isPinned = EventTileViewModel.getIsPinned(props);
-        snapshot.hasFooter = EventTileViewModel.getHasFooter(props, snapshot);
-        snapshot.encryptionIndicatorMode = EventTileViewModel.getEncryptionIndicatorMode(props, snapshot);
-        snapshot.sharedKeysUserId = EventTileViewModel.getSharedKeysUserId(props, snapshot);
-        snapshot.sharedKeysRoomId = EventTileViewModel.getSharedKeysRoomId(props);
-        snapshot.threadInfoMode = EventTileViewModel.getThreadInfoMode(props, snapshot);
-        snapshot.tileClickMode = EventTileViewModel.getTileClickMode(props);
-        snapshot.openedFromSearch = EventTileViewModel.getOpenedFromSearch(props);
-        snapshot.shouldRenderActionBar = EventTileViewModel.getShouldRenderActionBar(props, snapshot);
-        return snapshot;
+    private static deriveReceiptSnapshot(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): EventTileReceiptSnapshot {
+        return {
+            reactions: snapshot.reactions ?? EventTileViewModel.getReactions(props),
+            shouldShowSentReceipt: EventTileViewModel.getShouldShowSentReceipt(props),
+            shouldShowSendingReceipt: EventTileViewModel.getShouldShowSendingReceipt(props),
+            showReadReceipts: EventTileViewModel.getShowReadReceipts(props, snapshot),
+        };
+    }
+
+    private static deriveRenderingSnapshot(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+        displayInfo: ReturnType<typeof getEventDisplayInfo>,
+    ): EventTileRenderingSnapshot {
+        return {
+            isHighlighted: EventTileViewModel.getShouldHighlight(props),
+            isContinuation: EventTileViewModel.getIsContinuation(props),
+            isSending: EventTileViewModel.getIsSending(props),
+            isEditing: EventTileViewModel.getIsEditing(props),
+            showReplyPreview: EventTileViewModel.getShowReplyPreview(props),
+            shouldRenderReplyPreview: EventTileViewModel.getShouldRenderReplyPreview({
+                ...snapshot,
+                hasRenderer: displayInfo.hasRenderer,
+                showReplyPreview: EventTileViewModel.getShowReplyPreview(props),
+            }),
+            shouldRenderActionBar: false,
+            renderMode: EventTileViewModel.getRenderMode(props, displayInfo.hasRenderer),
+            hasRenderer: displayInfo.hasRenderer,
+            tileRenderType: EventTileViewModel.getTileRenderType(props),
+            isBubbleMessage: displayInfo.isBubbleMessage,
+            isInfoMessage: displayInfo.isInfoMessage,
+            isLeftAlignedBubbleMessage: displayInfo.isLeftAlignedBubbleMessage,
+            noBubbleEvent: displayInfo.noBubbleEvent,
+            isSeeingThroughMessageHiddenForModeration: displayInfo.isSeeingThroughMessageHiddenForModeration,
+            isPinned: EventTileViewModel.getIsPinned(props),
+            hasFooter: false,
+        };
+    }
+
+    private static deriveTimestampSnapshot(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): EventTileTimestampSnapshot {
+        const showTimestamp = EventTileViewModel.getShowTimestamp(props, snapshot);
+        const timestampSnapshot: EventTileTimestampSnapshot = {
+            showTimestamp,
+            permalink: EventTileViewModel.getPermalink(props),
+            scrollToken: EventTileViewModel.getScrollToken(props),
+            timestampDisplayMode: EventTileViewModel.getTimestampDisplayMode(props, {
+                ...snapshot,
+                showTimestamp,
+            }),
+            timestampFormatMode: EventTileViewModel.getTimestampFormatMode(props),
+            timestampTs: props.mxEvent.getTs(),
+        };
+
+        timestampSnapshot.timestampTs = EventTileViewModel.getTimestampTs(props, {
+            ...snapshot,
+            ...timestampSnapshot,
+        });
+
+        return timestampSnapshot;
+    }
+
+    private static deriveThreadSnapshot(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): EventTileThreadSnapshot {
+        const thread = snapshot.thread ?? EventTileViewModel.getThread(props);
+        const threadedSnapshot = { ...snapshot, thread, hasThread: Boolean(thread) } as EventTileViewSnapshot;
+
+        return {
+            thread,
+            threadUpdateKey: EventTileViewModel.getThreadUpdateKey(thread),
+            threadNotification: snapshot.threadNotification,
+            hasThread: Boolean(thread),
+            isThreadRoot: thread?.id === props.mxEvent.getId(),
+            threadPanelMode: EventTileViewModel.getThreadPanelMode(props, threadedSnapshot),
+            threadInfoMode: EventTileViewModel.getThreadInfoMode(props, {
+                ...threadedSnapshot,
+                isThreadRoot: thread?.id === props.mxEvent.getId(),
+            } as EventTileViewSnapshot),
+            tileClickMode: EventTileViewModel.getTileClickMode(props),
+            openedFromSearch: EventTileViewModel.getOpenedFromSearch(props),
+        };
+    }
+
+    private static deriveSenderSnapshot(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): EventTileSenderSnapshot {
+        const baseSnapshot = {
+            ...snapshot,
+            showSender: EventTileViewModel.getShowSender(props),
+        } as EventTileViewSnapshot;
+        const avatarSize = EventTileViewModel.getAvatarSize(props, baseSnapshot);
+        const avatarSnapshot = { ...baseSnapshot, avatarSize } as EventTileViewSnapshot;
+
+        return {
+            isOwnEvent: EventTileViewModel.getIsOwnEvent(props),
+            showSender: baseSnapshot.showSender,
+            avatarSubject: EventTileViewModel.getAvatarSubject(props, avatarSnapshot),
+            avatarSize,
+            avatarMemberUserOnClick: EventTileViewModel.getAvatarMemberUserOnClick(props, avatarSnapshot),
+            avatarForceHistorical: EventTileViewModel.getAvatarForceHistorical(props),
+            senderMode: EventTileViewModel.getSenderMode(props, avatarSnapshot),
+        };
+    }
+
+    private static deriveEncryptionSnapshot(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): EventTileEncryptionSnapshot {
+        const encryptionSnapshot = {
+            ...snapshot,
+            isEncryptionFailure: EventTileViewModel.getIsEncryptionFailure(props),
+        } as EventTileViewSnapshot;
+
+        return {
+            shieldColour: snapshot.shieldColour,
+            shieldReason: snapshot.shieldReason,
+            isEncryptionFailure: encryptionSnapshot.isEncryptionFailure,
+            padlockMode: EventTileViewModel.getPadlockMode(props, encryptionSnapshot),
+            encryptionIndicatorMode: EventTileViewModel.getEncryptionIndicatorMode(props, encryptionSnapshot),
+            sharedKeysUserId: EventTileViewModel.getSharedKeysUserId(props, encryptionSnapshot),
+            sharedKeysRoomId: EventTileViewModel.getSharedKeysRoomId(props),
+        };
+    }
+
+    private static deriveFooterSnapshot(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+    ): Pick<EventTileRenderingSnapshot, "hasFooter"> {
+        return {
+            hasFooter: EventTileViewModel.getHasFooter(props, snapshot),
+        };
     }
 
     private static getDisplayInfo(props: EventTileViewModelProps): ReturnType<typeof getEventDisplayInfo> {
