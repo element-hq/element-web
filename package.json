@@ -69,7 +69,8 @@
             "rollup": "patches/rollup.patch",
             "postcss-mixins": "patches/postcss-mixins.patch",
             "app-builder-lib": "patches/app-builder-lib.patch",
-            "knip": "patches/knip.patch"
+            "knip": "patches/knip.patch",
+            "plist": "patches/plist.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
