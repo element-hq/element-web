@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
+import { useMockedViewModel } from "../../../../../core/viewmodel/useMockedViewModel";
 import { EventContentBodyView, type EventContentBodyViewSnapshot } from "./EventContentBodyView";
 import styles from "./EventContentBody.module.css";
-import { withViewDocs } from "../../../.storybook/withViewDocs";
+import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
 
 type EventContentBodyStoryProps = EventContentBodyViewSnapshot & {
     as: "div" | "span";

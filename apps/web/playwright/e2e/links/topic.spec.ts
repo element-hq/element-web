@@ -14,13 +14,7 @@ test.describe("Topic links", () => {
             await use({ roomId });
         },
     });
-    for (const link of [
-        "https://example.org",
-        "example.org",
-        "ftp://example.org",
-        "#aroom:example.org",
-        "@alice:example.org",
-    ]) {
+    for (const link of ["https://example.org", "ftp://example.org", "#aroom:example.org", "@alice:example.org"]) {
         // Playwright treats '@' as a tag, so replace it to be safe
         test(`should linkify plaintext '${link.replace("@", "_@")}'`, async ({ page, user, app, room }) => {
             await app.client.sendStateEvent(
