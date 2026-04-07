@@ -32,7 +32,6 @@
         "cancel": "Afbryd",
         "change": "Skift",
         "clear": "Ryd",
-        "click": "Klik",
         "click_to_copy": "Klik for at kopiere",
         "close": "Luk",
         "collapse": "Fold sammen",
@@ -66,7 +65,6 @@
         "go": "Start",
         "go_back": "Gå tilbage",
         "got_it": "Forstået",
-        "hide": "Skjul",
         "hide_advanced": "Skjul avanceret",
         "hold": "Pausér",
         "ignore": "Ignorere",
@@ -1168,9 +1166,6 @@
         "impossible_dialog_title": "Integrationer er ikke tilladt"
     },
     "invite": {
-        "ask_anyway_description": "Kan ikke finde profiler for nedenstående Matrix-id'er – vil du alligevel starte en samtale?",
-        "ask_anyway_label": "Start samtale alligevel",
-        "ask_anyway_never_warn_label": "Start samtale alligevel og advar mig aldrig igen",
         "email_caption": "Invitér via e-mail",
         "email_limit_one": "Invitationer via e-mail kan kun sendes én ad gangen",
         "email_use_default_is": "Brug en identitetsserver til at invitere via e-mail. <default>Brug standardindstillingen (%(defaultIdentityServerName)s)</default> eller administrer den i <settings>Indstillinger</settings>.",
@@ -2862,7 +2857,6 @@
             "one": "%(count)s svar",
             "other": "%(count)s svar"
         },
-        "error_start_thread_existing_relation": "Kan ikke oprette en tråd fra en begivenhed med en eksisterende relation",
         "mark_all_read": "Markér alle som læst",
         "my_threads": "Mine tråde",
         "my_threads_description": "Viser alle de tråde, du har deltaget i",
@@ -2902,7 +2896,6 @@
         "creation_summary_dm": "%(creator)s oprettede denne samtale.",
         "creation_summary_room": "%(creator)s oprettede og konfigurerede rummet.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Downloader",
         "e2e_state": "Tilstand på end-to-end krypteringen",
         "edits": {
@@ -3091,10 +3084,7 @@
             "removed": "%(widgetName)s fjernet af %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Skjul citater",
             "copy_link_thread": "Kopiér link til tråd",
-            "expand_reply_chain": "Udvid citater",
-            "label": "Beskedhandlinger",
             "view_in_room": "Vis i rum"
         },
         "mjolnir": {

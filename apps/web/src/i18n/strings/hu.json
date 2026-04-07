@@ -32,7 +32,6 @@
         "cancel": "Mégse",
         "change": "Módosítás",
         "clear": "Törlés",
-        "click": "Kattintson",
         "click_to_copy": "Másolás kattintással",
         "close": "Bezárás",
         "collapse": "Összecsukás",
@@ -66,7 +65,6 @@
         "go": "Meghívás",
         "go_back": "Vissza",
         "got_it": "Értem",
-        "hide": "Elrejtés",
         "hide_advanced": "Speciális beállítások elrejtése",
         "hold": "Várakoztatás",
         "ignore": "Mellőzés",
@@ -1345,9 +1343,6 @@
         "impossible_dialog_title": "Az integrációk nem engedélyezettek"
     },
     "invite": {
-        "ask_anyway_description": "Nem található profil az alábbi Matrix-azonosítókhoz – mégis a közvetlen csevegés elindítása mellett dönt?",
-        "ask_anyway_label": "Közvetlen beszélgetés indítása mindenképpen",
-        "ask_anyway_never_warn_label": "Közvetlen beszélgetés indítása mindenképpen és később se figyelmeztessen",
         "email_caption": "Meghívás e-maillel",
         "email_limit_one": "E-mail meghívóból egyszerre csak egy küldhető el",
         "email_use_default_is": "Használjon azonosítási kiszolgálót az e-mailben történő meghíváshoz. <default> Használja az alapértelmezett kiszolgálót (%(defaultIdentityServerName)s)</default> vagy adjon meg egy másikat a <settings>Beállításokban</settings>.",
@@ -3273,7 +3268,6 @@
         },
         "empty_description": "Amikor az egérmutatót egy üzenet fölé viszi használja ezt: „%(replyInThread)s ”.",
         "empty_title": "Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.",
-        "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről ami már rendelkezik kapcsolattal",
         "mark_all_read": "Az összes megjelölése olvasottként",
         "my_threads": "Saját üzenetszálak",
         "my_threads_description": "Összes olyan üzenetszál megjelenítése, amelyben részt vesz",
@@ -3317,7 +3311,6 @@
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Visszafejtés",
         "download_action_downloading": "Letöltés",
         "download_failed": "Letöltés sikertelen",
         "download_failed_description": "Hiba történt a fájl letöltése közben",
@@ -3514,10 +3507,7 @@
             "removed": "%(senderName)s eltávolította a %(widgetName)s kisalkalmazást"
         },
         "mab": {
-            "collapse_reply_chain": "Idézetek összecsukása",
             "copy_link_thread": "Hivatkozás másolása az üzenetszálba",
-            "expand_reply_chain": "Idézetek megjelenítése",
-            "label": "Üzenetműveletek",
             "view_in_room": "Megjelenítés szobában"
         },
         "mjolnir": {

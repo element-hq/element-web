@@ -32,7 +32,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click": "Clicar",
         "click_to_copy": "Clique para copiar",
         "close": "Fechar",
         "collapse": "Recolher",
@@ -66,7 +65,6 @@
         "go": "Próximo",
         "go_back": "Voltar",
         "got_it": "Ok, entendi",
-        "hide": "Ocultar",
         "hide_advanced": "Esconder configurações avançadas",
         "hold": "Pausar",
         "ignore": "Bloquear",
@@ -1346,9 +1344,6 @@
         "impossible_dialog_title": "As integrações não estão permitidas"
     },
     "invite": {
-        "ask_anyway_description": "Não foi possível encontrar perfis para os Matrix IDs listados abaixo - você gostaria de iniciar um DM mesmo assim?",
-        "ask_anyway_label": "Inicie o DM de qualquer maneira",
-        "ask_anyway_never_warn_label": "Inicie o DM mesmo assim e nunca mais me avise",
         "email_caption": "Convidar por e-mail",
         "email_limit_one": "Os convites por e-mail só podem ser enviados um de cada vez",
         "email_use_default_is": "Use um servidor de identidade para convidar por e-mail. <default>Use o padrão (%(defaultIdentityServerName)s)</default> ou um servidor personalizado em <settings>Configurações</settings>.",
@@ -3265,7 +3260,6 @@
         },
         "empty_description": "Use “%(replyInThread)s” ao passar o mouse sobre uma mensagem.",
         "empty_title": "Os tópicos ajudam a manter suas conversas dentro do tópico e fáceis de acompanhar.",
-        "error_start_thread_existing_relation": "Não é possível criar um tópico a partir de um evento com uma relação existente",
         "mark_all_read": "Marcar tudo como lido",
         "my_threads": "Meus tópicos",
         "my_threads_description": "Mostra todos os tópicos em que você participou",
@@ -3309,7 +3303,6 @@
             "unable_to_decrypt": "Não foi possível descriptografar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decriptando",
         "download_action_downloading": "Baixando",
         "download_failed": "Falha no download",
         "download_failed_description": "Ocorreu um erro ao baixar esse arquivo",
@@ -3507,10 +3500,7 @@
             "removed": "O widget %(widgetName)s foi removido por %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Recolher citações",
             "copy_link_thread": "Copiar ligação para o tópico",
-            "expand_reply_chain": "Expandir citações",
-            "label": "Ações da mensagem",
             "view_in_room": "Ver na sala"
         },
         "mjolnir": {
