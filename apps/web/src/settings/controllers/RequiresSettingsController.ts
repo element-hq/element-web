@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import SettingController from "./SettingController";
-import { type SettingLevel } from "../SettingLevel";
 import SettingsStore from "../SettingsStore";
 import type { BooleanSettingKey } from "../Settings.tsx";
 
@@ -21,12 +20,7 @@ export default class RequiresSettingsController extends SettingController {
         super();
     }
 
-    public getValueOverride(
-        _level: SettingLevel,
-        _roomId: string,
-        _calculatedValue: any,
-        _calculatedAtLevel: SettingLevel | null,
-    ): any {
+    public getValueOverride(): any {
         if (this.settingDisabled) {
             // per the docs: we force a disabled state when the feature isn't active
             return this.forcedValue;
