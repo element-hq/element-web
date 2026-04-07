@@ -69,6 +69,19 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/Avatar", () =>
         member ? <div data-testid="avatar-subject">{member.userId}</div> : null,
 }));
 
+jest.mock("../../../../../../src/components/views/context_menus/MessageContextMenu", () => ({
+    __esModule: true,
+    default: ({ onFinished }: { onFinished?: () => void }) => (
+        <div data-testid="message-context-menu">
+            <button data-testid="close-message-context-menu" onClick={onFinished}>
+                close
+            </button>
+        </div>
+    ),
+    aboveRightOf: jest.fn(),
+    aboveLeftOf: jest.fn(),
+}));
+
 const mockGetEventDisplayInfo = jest.requireMock("../../../../../../src/utils/EventRenderingUtils")
     .getEventDisplayInfo as jest.Mock;
 
@@ -158,6 +171,7 @@ describe("EventTile", () => {
 
     afterEach(() => {
         jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
+        document.body.removeAttribute("data-whatinput");
     });
 
     describe("EventTile thread summary", () => {
@@ -385,6 +399,66 @@ describe("EventTile", () => {
             const { container } = getComponent({ mxEvent });
 
             await waitFor(() => expect(getByTestId(container, "avatar-subject")).toHaveTextContent("@bob:example.org"));
+        });
+
+        it("shows the action bar for keyboard focus but not generic focus, and keeps it while focus moves within the tile", async () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Keyboard focus",
+                event: true,
+                ts: 123,
+            });
+
+            const { container } = getComponent({ mxEvent });
+            const tile = container.querySelector(".mx_EventTile") as HTMLElement;
+
+            fireEvent.focus(tile, { target: tile });
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+
+            document.body.setAttribute("data-whatinput", "keyboard");
+            fireEvent.focus(tile, { target: tile });
+
+            await waitFor(() => expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull());
+
+            const child = document.createElement("button");
+            tile.append(child);
+
+            fireEvent.blur(tile, { relatedTarget: child });
+
+            expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
+        });
+
+        it("clears hover-driven action bar state when the context menu opens and hides the timestamp again when it closes", async () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Context menu",
+                event: true,
+                ts: 123,
+            });
+
+            const { container } = getComponent({ mxEvent });
+            const tile = container.querySelector(".mx_EventTile") as HTMLElement;
+            const line = container.querySelector(".mx_EventTile_line") as HTMLElement;
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+
+            fireEvent.mouseEnter(tile);
+            await waitFor(() => expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull());
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+
+            fireEvent.contextMenu(line);
+            await waitFor(() => expect(screen.getByTestId("message-context-menu")).toBeInTheDocument());
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+
+            fireEvent.click(screen.getByTestId("close-message-context-menu"));
+            await waitFor(() => expect(screen.queryByTestId("message-context-menu")).toBeNull());
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
         });
     });
 

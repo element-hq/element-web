@@ -65,6 +65,8 @@ interface EventTileInteractionSnapshot {
     hover: boolean;
     /** Whether focus is currently inside the tile subtree. */
     focusWithin: boolean;
+    /** Whether keyboard-visible focus should force the action bar to show. */
+    showActionBarFromFocus: boolean;
     /** Whether the tile context menu is currently open. */
     isContextMenuOpen: boolean;
     /** Whether the reply quote preview is expanded. */
@@ -304,6 +306,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     /** Updates whether focus is currently inside the tile. */
     public setFocusWithin(focusWithin: boolean): void {
         this.updateInteractionSnapshot({ focusWithin });
+    }
+
+    /** Updates whether keyboard-visible focus should force the action bar to show. */
+    public setShowActionBarFromFocus(showActionBarFromFocus: boolean): void {
+        this.updateInteractionSnapshot({ showActionBarFromFocus });
     }
 
     /** Updates whether the action bar is considered focused. */
@@ -625,6 +632,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             reactions: null,
             hover: false,
             focusWithin: false,
+            showActionBarFromFocus: false,
             isContextMenuOpen: false,
             isQuoteExpanded: undefined,
             thread: null,

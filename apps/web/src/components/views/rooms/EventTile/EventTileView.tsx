@@ -27,9 +27,7 @@ import {
     TimestampFormatMode,
 } from "../../../../models/rooms/EventTileModel";
 import { Layout } from "../../../../settings/enums/Layout";
-import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { EncryptionIndicator } from "./EncryptionIndicator";
-import { ThreadToolbar } from "./ThreadToolbar";
 import { Timestamp } from "./Timestamp";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
 import { Sender } from "./Sender";
@@ -41,6 +39,7 @@ import { ReplyPreview, type ReplyPreviewProps } from "./ReplyPreview";
 import { ContextMenu, type ContextMenuProps } from "./ContextMenu";
 import { ActionBar, type ActionBarProps } from "./ActionBar";
 import type { ReadReceiptProps } from "./types";
+import { ThreadToolbar } from "./ThreadToolbar";
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -135,9 +134,9 @@ type EventTileThreadsProps = {
     /** Whether the thread toolbar should be shown. */
     showToolbar?: boolean;
     /** Opens the thread in its room context. */
-    openInRoom: (evt: ButtonEvent) => void;
+    openInRoom: (_anchor: HTMLElement | null) => void;
     /** Copies a permalink to the thread. */
-    copyLinkToThread: (evt: ButtonEvent) => void;
+    copyLinkToThread: (_anchor: HTMLElement | null) => Promise<void>;
 };
 
 /** Timestamp display props for the tile. */
@@ -352,7 +351,7 @@ const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
             {replyCount !== undefined && preview !== undefined && (
                 <ThreadPanelSummary replyCount={replyCount} preview={preview} />
             )}
-            {showToolbar && <ThreadToolbar viewInRoom={openInRoom} copyLinkToThread={copyLinkToThread} />}
+            {showToolbar && <ThreadToolbar onViewInRoomClick={openInRoom} onCopyLinkClick={copyLinkToThread} />}
         </>
     );
 });

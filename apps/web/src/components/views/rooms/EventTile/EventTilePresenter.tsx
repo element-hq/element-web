@@ -14,6 +14,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    type FocusEvent,
     type JSX,
     type MouseEvent,
     type Ref,
@@ -41,7 +42,6 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import { Action } from "../../../../dispatcher/actions";
 import dis from "../../../../dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
-import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { type ShowThreadPayload } from "../../../../dispatcher/payloads/ShowThreadPayload";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { copyPlaintext } from "../../../../utils/strings";
@@ -226,9 +226,9 @@ type UseEventTileActionsResult = {
     /** The room that owns the event, if it can be resolved from the client. */
     room: Room | null;
     /** Opens the event in the full room timeline. */
-    openInRoom: (evt: ButtonEvent) => void;
+    openInRoom: (_anchor: HTMLElement | null) => void;
     /** Copies a permalink to the event thread when available. */
-    copyLinkToThread: (evt: ButtonEvent) => Promise<void>;
+    copyLinkToThread: (_anchor: HTMLElement | null) => Promise<void>;
     /** Handles timestamp permalink clicks. */
     onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
     /** Handles clicks on list-style tiles. */
@@ -251,10 +251,10 @@ type EventTileViewRenderContent = {
 
 /** Event handlers passed through to {@link EventTileView}. */
 type EventTileViewActions = {
-    /** Opens the event in the owning room. */
-    openInRoom: (evt: ButtonEvent) => void;
-    /** Copies a permalink to the thread for this event. */
-    copyLinkToThread: (evt: ButtonEvent) => Promise<void>;
+    /** Opens the event in the owning room from the thread toolbar. */
+    openInRoom: (_anchor: HTMLElement | null) => void;
+    /** Copies a permalink to the thread for this event from the thread toolbar. */
+    copyLinkToThread: (_anchor: HTMLElement | null) => Promise<void>;
     /** Handles clicks on the timestamp permalink. */
     onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
     /** Handles list tile click behavior. */
@@ -544,9 +544,7 @@ function useEventTileActions(
     );
 
     const openInRoom = useCallback(
-        (evt: ButtonEvent): void => {
-            evt.preventDefault();
-            evt.stopPropagation();
+        (_anchor: HTMLElement | null): void => {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 event_id: props.mxEvent.getId(),
@@ -559,9 +557,7 @@ function useEventTileActions(
     );
 
     const copyLinkToThread = useCallback(
-        async (evt: ButtonEvent): Promise<void> => {
-            evt.preventDefault();
-            evt.stopPropagation();
+        async (_anchor: HTMLElement | null): Promise<void> => {
             if (!props.permalinkCreator) return;
             const eventId = props.mxEvent.getId();
             if (!eventId) return;
@@ -590,6 +586,7 @@ function useEventTileActions(
                 link: anchorElement?.href || permalink,
             });
             vm.setContextMenuOpen(true);
+            vm.setHover(false);
         },
         [props.editState, setContextMenuState, vm],
     );
@@ -617,7 +614,7 @@ function useEventTileActions(
 
             switch (snapshot.tileClickMode) {
                 case ClickMode.ViewRoom:
-                    openInRoom(ev);
+                    openInRoom(null);
                     break;
                 case ClickMode.ShowThread:
                     dis.dispatch<ShowThreadPayload>({
@@ -679,14 +676,38 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         onListTileClick,
     } = useEventTileActions(props, cli, roomContext, setContextMenuState, vm, vmSnapshot);
     const setQuoteExpanded = useCallback((expanded: boolean): void => vm.setQuoteExpanded(expanded), [vm]);
-    const onActionBarFocusChange = useCallback((focused: boolean): void => vm.setActionBarFocused(focused), [vm]);
+    const onActionBarFocusChange = useCallback(
+        (focused: boolean): void => {
+            vm.setActionBarFocused(focused);
+            vm.setHover(focused ? vmSnapshot.hover : (rootRef.current?.matches(":hover") ?? false));
+        },
+        [vm, vmSnapshot.hover, rootRef],
+    );
     const toggleThreadExpanded = useCallback((): void => {
         vm.setQuoteExpanded(!vmSnapshot.isQuoteExpanded);
     }, [vm, vmSnapshot.isQuoteExpanded]);
     const closeContextMenu = useCallback((): void => {
         setContextMenuState(undefined);
         vm.setContextMenuOpen(false);
+        vm.setHover(false);
     }, [setContextMenuState, vm]);
+
+    const shouldRenderActionBar = useMemo(
+        () =>
+            !vmSnapshot.isEditing &&
+            !props.forExport &&
+            (vmSnapshot.hover ||
+                vmSnapshot.showActionBarFromFocus ||
+                (vmSnapshot.actionBarFocused && !vmSnapshot.isContextMenuOpen)),
+        [
+            vmSnapshot.isEditing,
+            props.forExport,
+            vmSnapshot.hover,
+            vmSnapshot.showActionBarFromFocus,
+            vmSnapshot.actionBarFocused,
+            vmSnapshot.isContextMenuOpen,
+        ],
+    );
     const shouldRenderReplyPreview = useMemo(
         () => vmSnapshot.showReplyPreview && haveRendererForEvent(props.mxEvent, cli, roomContext.showHiddenEvents),
         [vmSnapshot.showReplyPreview, props.mxEvent, cli, roomContext.showHiddenEvents],
@@ -726,25 +747,25 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
     );
 
     const actionBar = useMemo(
-        (): ActionBarProps => ({
-            mxEvent: props.mxEvent,
-            forExport: props.forExport,
-            permalinkCreator: props.permalinkCreator,
-            getRelationsForEvent: props.getRelationsForEvent,
-            reactions: vmSnapshot.reactions,
-            isEditing: vmSnapshot.isEditing,
-            isQuoteExpanded: vmSnapshot.isQuoteExpanded,
-            tileRef,
-            replyChainRef,
-            onFocusChange: onActionBarFocusChange,
-            toggleThreadExpanded,
-        }),
+        (): ActionBarProps | undefined =>
+            shouldRenderActionBar
+                ? {
+                      mxEvent: props.mxEvent,
+                      permalinkCreator: props.permalinkCreator,
+                      getRelationsForEvent: props.getRelationsForEvent,
+                      reactions: vmSnapshot.reactions,
+                      isQuoteExpanded: vmSnapshot.isQuoteExpanded,
+                      tileRef,
+                      replyChainRef,
+                      onFocusChange: onActionBarFocusChange,
+                      toggleThreadExpanded,
+                  }
+                : undefined,
         [
+            shouldRenderActionBar,
             props.mxEvent,
-            props.forExport,
             props.permalinkCreator,
             props.getRelationsForEvent,
-            vmSnapshot.isEditing,
             vmSnapshot.reactions,
             vmSnapshot.isQuoteExpanded,
             tileRef,
@@ -800,8 +821,8 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
             onContextMenu,
             onPermalinkClicked,
             onTimestampContextMenu,
-            openInRoom,
-            copyLinkToThread,
+            openInRoom: openInRoom,
+            copyLinkToThread: copyLinkToThread,
             onListTileClick,
         },
     });
@@ -971,8 +992,27 @@ function useEventTileViewProps({
     );
     const onMouseEnter = useCallback((): void => vm.setHover(true), [vm]);
     const onMouseLeave = useCallback((): void => vm.setHover(false), [vm]);
-    const onFocus = useCallback((): void => vm.setFocusWithin(true), [vm]);
-    const onBlur = useCallback((): void => vm.setFocusWithin(false), [vm]);
+    const onFocus = useCallback(
+        (event: FocusEvent<HTMLElement>): void => {
+            const target = event.target as HTMLElement;
+            const showActionBarFromFocus =
+                target.matches(":focus-visible") || document.body.dataset.whatinput === "keyboard";
+            vm.setFocusWithin(true);
+            vm.setShowActionBarFromFocus(showActionBarFromFocus);
+        },
+        [vm],
+    );
+    const onBlur = useCallback(
+        (event: FocusEvent<HTMLElement>): void => {
+            if (event.currentTarget.contains(event.relatedTarget)) {
+                return;
+            }
+
+            vm.setFocusWithin(false);
+            vm.setShowActionBarFromFocus(false);
+        },
+        [vm],
+    );
     const handlers = useMemo(
         () => ({
             onClick: undefined,

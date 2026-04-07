@@ -441,6 +441,16 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().showTimestamp).toBe(true);
         });
 
+        it("tracks keyboard-triggered action bar visibility separately from focusWithin", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.setShowActionBarFromFocus(true);
+
+            expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
+            expect(vm.getSnapshot().focusWithin).toBe(false);
+            expect(vm.getSnapshot().showTimestamp).toBe(false);
+        });
+
         it("shows timestamps when the action bar is focused", () => {
             const vm = createTimestampedViewModel();
 
@@ -464,6 +474,18 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
             expect(vm.getSnapshot().actionBarFocused).toBe(false);
             expect(vm.getSnapshot().showTimestamp).toBe(false);
+        });
+
+        it("preserves keyboard-triggered action bar visibility when the context menu closes", () => {
+            const vm = createTimestampedViewModel();
+
+            vm.setShowActionBarFromFocus(true);
+            vm.setContextMenuOpen(true);
+            vm.setContextMenuOpen(false);
+
+            expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
+            expect(vm.getSnapshot().actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
         });
 
         it("tracks quote expansion state", () => {
