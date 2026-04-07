@@ -34,8 +34,9 @@ export interface UrlPreviewGroupViewModelProps {
 }
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
-export const PREVIEW_WIDTH = 100;
-export const PREVIEW_HEIGHT = 100;
+export const PREVIEW_WIDTH = 478;
+export const PREVIEW_HEIGHT = 200;
+export const MIN_IMAGE_SIZE_BYTES = 8192;
 
 export enum PreviewVisibility {
     /**
@@ -120,6 +121,27 @@ export class UrlPreviewGroupViewModel
             description: description && decode(description),
             siteName,
         };
+    }
+
+    /**
+     * Calculate the best possible title from an opengraph response.
+     * @param response The opengraph response
+     * @param link The link being used to preview.
+     * @returns The title value.
+     */
+    private static getAuthorFromResponse(response: IPreviewUrlResponse): UrlPreview["author"] {
+        if (response["og:type"] === "article") {
+            if (typeof response["article:author"] === "string" && response["article:author"]) {
+                return {
+                    name: response["article:author"],
+                };
+            }
+        }
+        if (typeof response["profile:username"] === "string" && response["profile:username"]) {
+            return {
+                name: response["profile:username"],
+            };
+        }
     }
 
     /**
@@ -278,6 +300,8 @@ export class UrlPreviewGroupViewModel
         }
 
         const { title, description, siteName } = UrlPreviewGroupViewModel.getBaseMetadataFromResponse(preview, link);
+        const author = UrlPreviewGroupViewModel.getAuthorFromResponse(preview);
+        const playable = !!preview["og:video"] || !!preview["og:video:type"] || !!preview["og:audio"];
         const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
         // Ensure we have something relevant to render.
         // The title must not just be the link, or we must have an image.
@@ -285,32 +309,46 @@ export class UrlPreviewGroupViewModel
             return null;
         }
         let image: UrlPreview["image"];
+        let siteIcon: string | undefined;
         if (typeof preview["og:image"] === "string" && this.visibility > PreviewVisibility.MediaHidden) {
             const media = mediaFromMxc(preview["og:image"], this.client);
             const declaredHeight = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:height"]);
             const declaredWidth = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
-            const width = Math.min(declaredWidth ?? PREVIEW_WIDTH, PREVIEW_WIDTH);
-            const height = thumbHeight(width, declaredHeight, PREVIEW_WIDTH, PREVIEW_WIDTH) ?? PREVIEW_WIDTH;
-            const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale");
-            // No thumb, no preview.
-            if (thumb) {
-                image = {
-                    imageThumb: thumb,
-                    imageFull: media.srcHttp ?? thumb,
-                    width,
-                    height,
-                    fileSize: UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
-                };
+            const imageSize = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]);
+
+            // We can't currently distinguish from a preview image and a favicon. Neither OpenGraph nor Matrix
+            // have a clear distinction, so we're using a heuristic here to check the size of the file and
+            // deciding whether to render it as a full preview or icon.
+            const isIcon = imageSize && imageSize < MIN_IMAGE_SIZE_BYTES;
+            if (!isIcon) {
+                const width = Math.min(declaredWidth ?? PREVIEW_WIDTH, PREVIEW_WIDTH);
+                const height = thumbHeight(width, declaredHeight, PREVIEW_WIDTH, PREVIEW_WIDTH) ?? PREVIEW_WIDTH;
+                const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale");
+                // No thumb, no preview.
+                if (thumb) {
+                    image = {
+                        imageThumb: thumb,
+                        imageFull: media.srcHttp ?? thumb,
+                        width,
+                        height,
+                        fileSize: UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
+                    };
+                }
+            } else if (media.srcHttp) {
+                siteIcon = media.srcHttp;
             }
         }
 
         const result = {
             link,
             title,
+            author,
             description,
             siteName,
+            siteIcon,
             showTooltipOnLink: link !== title && PlatformPeg.get()?.needsUrlTooltips(),
             image,
+            playable,
         } satisfies UrlPreview;
         this.previewCache.set(link, result);
         return result;

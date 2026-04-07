@@ -6,51 +6,75 @@
  */
 
 .thumbnail {
-    /* Thumbnails are always limited to a maximum of 100px */
-    max-width: 100px;
-    max-height: 100px;
+    /* Thumbnails are always limited to a maxiumum of 100px */
+    max-height: 200px;
     /* Ensure we don't stretch the image */
     object-fit: cover;
+}
+
+.preview {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border: none;
+    .playButton[data-kind="primary"] {
+        padding: 0;
+        width: 50px;
+        height: 50px;
+        margin: auto;
+        color: var(--cpd-color-gray-800);
+        > svg {
+            margin: auto;
+            border-radius: 50px;
+            color: var(--cpd-color-gray-400);
+        }
+    }
 }
 
 .link {
     color: var(--cpd-color-text-link-external);
     text-decoration-line: none;
+    width: 100%;
+    height: 50px;
+    aspect-ratio: 1; /* will make width equal to height (500px container) */
+    object-fit: cover; /* use the one you need */
+    border-radius: 6px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .container {
-    display: inline flex;
-    column-gap: var(--cpd-space-1x);
-    border-inline-start: 2px solid var(--cpd-color-bg-subtle-primary);
-    border-radius: 2px;
+    max-width: 478px;
+    display: flex;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: 12px; /* Get radius from cpd */
+    flex-direction: column;
     color: var(--cpd-color-gray-900);
+    overflow: clip;
 
-    .wrapImageCaption {
-        display: inline-flex;
+    &.inline {
         flex-direction: row;
-        flex-wrap: wrap;
-        row-gap: var(--cpd-space-2x);
-        flex: 1;
+
+        .siteAvatar {
+            margin: auto var(--cpd-space-2x);
+        }
     }
 
-    .image,
+    .textContent {
+        padding: var(--cpd-space-3x) var(--cpd-space-4x);
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-2x);
+    }
+
     .caption {
         display: inline-flex;
         flex-direction: column;
-        margin-inline-start: var(--cpd-space-4x);
         min-width: 0; /* Prevent blowout */
     }
-
-    .image {
-        /* Clear default <button> styles */
-        padding: 0;
-        border: none;
-        background: none;
-
-        /* Consistent image size */
-        flex: 0 0 100px;
-    }
-
     .caption {
         flex: 1;
         overflow: hidden; /* cause it to wrap rather than clip */
@@ -69,17 +93,30 @@
         line-clamp: 2;
         -webkit-line-clamp: 2;
         margin: var(--cpd-space-1x) 0;
-
-        > a {
-            font-weight: var(--cpd-font-weight-semibold);
-            text-decoration: none;
-        }
+        font-weight: var(--cpd-font-weight-semibold);
+        color: var(--cpd-color-text-primary);
+        text-decoration-line: none;
     }
 
     .description {
-        margin: var(--cpd-space-1x) 0;
-        word-wrap: break-word;
-        line-clamp: 3;
-        -webkit-line-clamp: 3;
+        font-size: var(--cpd-font-size-body-lg);
+        margin: 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .siteName {
+        margin-top: var(--cpd-space-2x);
+        vertical-align: middle;
+        display: flex;
+        gap: var(--cpd-space-1-5x);
+    }
+
+    .author {
+        display: flex;
+        flex-direction: column;
     }
 }

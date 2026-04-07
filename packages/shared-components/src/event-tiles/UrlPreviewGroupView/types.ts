@@ -5,7 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-/** Represents a URL preview. */
 export interface UrlPreview {
     /**
      * The URL for the preview.
@@ -23,6 +22,10 @@ export interface UrlPreview {
      * The site name to be displayed alongside the title.
      */
     siteName?: string;
+    /**
+     * The HTTP URI of the the sites icon.
+     */
+    siteIcon?: string;
     /**
      * Description of the site. May contain links.
      */
@@ -52,4 +55,14 @@ export interface UrlPreview {
          */
         height?: number;
     };
+
+    author?: {
+        name: string;
+        username?: string;
+    };
+
+    /**
+     * Is the media playable.
+     */
+    playable?: boolean;
 }

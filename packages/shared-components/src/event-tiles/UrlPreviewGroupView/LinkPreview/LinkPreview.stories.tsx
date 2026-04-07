@@ -9,9 +9,10 @@ import React from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryFn } from "@storybook/react-vite";
-import imageFile from "../../../../static/element.png";
 import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../../core/utils/LinkedText";
+import imageFile from "../../../../static/element.png";
+import imageFileWide from "../../../../static/wideImage.png";
 
 export default {
     title: "Event/UrlPreviewGroupView/LinkPreview",
@@ -44,6 +45,7 @@ export const Title = Template.bind({});
 Title.args = {
     title: "A simple title",
     link: "https://matrix.org",
+    siteName: "matrix.org",
 };
 
 export const TitleAndDescription = Template.bind({});
@@ -51,6 +53,7 @@ TitleAndDescription.args = {
     title: "A simple title",
     description: "A simple description with a link to https://matrix.org",
     link: "https://matrix.org",
+    siteName: "matrix.org",
 };
 
 export const WithTooltip = Template.bind({});
@@ -59,6 +62,62 @@ WithTooltip.args = {
     description: "A simple description",
     showTooltipOnLink: true,
     link: "https://matrix.org",
+    siteName: "matrix.org",
+};
+
+export const Article = Template.bind({});
+Article.args = {
+    title: "A linked article",
+    description:
+        "This is a basic description returned from the linked source, usually with a word or two about what the link contains.",
+    link: "https://matrix.org",
+    siteName: "blog.example.org",
+    image: {
+        imageThumb: imageFileWide,
+        imageFull: imageFileWide,
+    },
+};
+
+export const Video = Template.bind({});
+Video.args = {
+    title: "A linked video",
+    description:
+        "This is a link to a video. You cannot play the video inline yet, but you can click the play button to open the link",
+    link: "https://matrix.org",
+    siteName: "blog.example.org",
+    playable: true,
+    image: {
+        imageThumb: imageFileWide,
+        imageFull: imageFileWide,
+    },
+};
+
+export const Social = Template.bind({});
+Social.args = {
+    description: "Sending a small message",
+    link: "https://matrix.org",
+    siteName: "socialsite.example.org",
+    title: "Test user (@test)",
+    author: {
+        username: "@test",
+        name: "Test user",
+    },
+};
+
+export const SocialWithImage = Template.bind({});
+SocialWithImage.args = {
+    description: "Sending a message with an attached image.",
+    title: "Test user (@test)",
+    link: "https://matrix.org",
+    siteName: "socialsite.example.org",
+    author: {
+        username: "@test",
+        name: "Test user",
+    },
+    image: {
+        imageThumb: imageFileWide,
+        imageFull: imageFileWide,
+    },
 };
 
 export const WithVeryLongText = Template.bind({});
