@@ -179,6 +179,10 @@
         "n_minutes_ago": "%(num)s minutes ago"
     },
     "timeline": {
+        "call_tile": {
+            "video_call_title": "Video call",
+            "voice_call_title": "Voice call"
+        },
         "decryption_failure": {
             "blocked": "The sender has blocked you from receiving this message because your device is unverified",
             "historical_event_no_key_backup": "Historical messages are not available on this device",
