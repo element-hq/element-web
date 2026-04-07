@@ -10,8 +10,8 @@ catalogs:
       specifier: 1.12.0
       version: 1.12.0
     '@element-hq/element-web-playwright-common':
-      specifier: 2.3.0
-      version: 2.3.0
+      specifier: 2.4.0
+      version: 2.4.0
     '@fontsource/inter':
       specifier: 5.2.8
       version: 5.2.8
@@ -137,7 +137,7 @@ importers:
         version: 0.6.0
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
-        version: 2.3.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.59.1)(playwright-core@1.59.1)
+        version: 2.4.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.59.1)(playwright-core@1.59.1)
       '@nx-tools/nx-container':
         specifier: ^7.2.1
         version: 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.5.4))(dotenv@17.3.1)(nx@22.5.4)(tslib@2.8.1)
@@ -595,7 +595,7 @@ importers:
         version: 0.18.0
       '@element-hq/element-web-playwright-common':
         specifier: 'catalog:'
-        version: 2.3.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.59.1)(playwright-core@1.59.1)
+        version: 2.4.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.59.1)(playwright-core@1.59.1)
       '@element-hq/element-web-playwright-common-local':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -2402,8 +2402,8 @@ packages:
       matrix-web-i18n:
         optional: true
 
-  '@element-hq/element-web-playwright-common@2.3.0':
-    resolution: {integrity: sha512-NyAhoRish+km2CLK2226H8oQHB2HdUw6M2eNcmAyJS46hfXDbPdr/nCKfyALAZiL+FSvOQcz3N33+zRlP63mQQ==}
+  '@element-hq/element-web-playwright-common@2.4.0':
+    resolution: {integrity: sha512-6zXRkeTlCEEBfUKgE42+5+RYGQloQB4p/HBdTBxjnMArAnZY/+8GE8pY1CeoJrmRISxGdDbdWkMEyT7bwIBx/g==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -14848,7 +14848,7 @@ snapshots:
       '@matrix-org/react-sdk-module-api': 2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4)
       matrix-web-i18n: 3.6.0
 
-  '@element-hq/element-web-playwright-common@2.3.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.59.1)(playwright-core@1.59.1)':
+  '@element-hq/element-web-playwright-common@2.4.0(@element-hq/element-web-module-api@1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4))(@playwright/test@1.59.1)(playwright-core@1.59.1)':
     dependencies:
       '@axe-core/playwright': 4.11.1(playwright-core@1.59.1)
       '@element-hq/element-web-module-api': 1.12.0(@matrix-org/react-sdk-module-api@2.5.0(patch_hash=016146c9cc96e6363609d2b2ac0896ccef567882eb1d73b75a77b8a30929de96)(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(matrix-web-i18n@3.6.0)(react@19.2.4)
