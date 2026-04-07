@@ -48,7 +48,7 @@ jobs:
                   cache: "pnpm"
 
             - name: Install Deps
-              run: "pnpm install --frozen-lockfile --filter element-desktop --dev"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
