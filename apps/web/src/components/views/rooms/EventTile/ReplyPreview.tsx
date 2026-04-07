@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { memo, type JSX } from "react";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type Layout } from "../../../../settings/enums/Layout";
@@ -23,22 +23,18 @@ export type ReplyPreviewProps = Readonly<{
     layout?: Layout;
     getRelationsForEvent?: GetRelationsForEvent;
     alwaysShowTimestamps?: boolean;
-    hover: boolean;
-    focusWithin: boolean;
     isQuoteExpanded?: boolean;
     replyChainRef: React.RefObject<ReplyChain | null>;
     setQuoteExpanded: (expanded: boolean) => void;
 }>;
 
-export function ReplyPreview({
+function ReplyPreviewComponent({
     mxEvent,
     forExport,
     permalinkCreator,
     layout,
     getRelationsForEvent,
     alwaysShowTimestamps,
-    hover,
-    focusWithin,
     isQuoteExpanded,
     replyChainRef,
     setQuoteExpanded,
@@ -50,10 +46,12 @@ export function ReplyPreview({
             forExport={forExport}
             permalinkCreator={permalinkCreator}
             layout={layout}
-            alwaysShowTimestamps={alwaysShowTimestamps || hover || focusWithin}
+            alwaysShowTimestamps={alwaysShowTimestamps}
             isQuoteExpanded={isQuoteExpanded}
             setQuoteExpanded={setQuoteExpanded}
             getRelationsForEvent={getRelationsForEvent}
         />
     );
 }
+
+export const ReplyPreview = memo(ReplyPreviewComponent);

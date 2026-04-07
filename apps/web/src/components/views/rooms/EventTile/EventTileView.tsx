@@ -271,6 +271,159 @@ const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
     );
 });
 
+type ThreadTimelineContentProps = Pick<
+    EventTileViewProps,
+    "contentId" | "content" | "contentClassName" | "timestamp"
+> & {
+    onContextMenu: MouseEventHandler<HTMLElement>;
+};
+
+const ThreadTimelineContent = memo(function ThreadTimelineContent({
+    contentId,
+    content,
+    contentClassName,
+    timestamp,
+    onContextMenu,
+}: ThreadTimelineContentProps): JSX.Element {
+    return (
+        <>
+            <div className="mx_EventTile_senderDetails">
+                {content.avatar}
+                {content.sender}
+            </div>
+            <EventContentRegion contentId={contentId} contentClassName={contentClassName} onContextMenu={onContextMenu}>
+                {content.contextMenu}
+                {content.replyChain}
+                {content.messageBody}
+                {content.actionBar}
+                <LinkedTimestamp timestamp={timestamp} />
+                {content.messageStatus}
+            </EventContentRegion>
+            <FooterThreadMeta footer={content.footer} />
+        </>
+    );
+});
+
+type ListTimelineContentProps = Pick<
+    EventTileViewProps,
+    "content" | "contentClassName" | "notification" | "threads" | "timestamp"
+> & {
+    onContextMenu: MouseEventHandler<HTMLElement>;
+};
+
+const ListTimelineContent = memo(function ListTimelineContent({
+    content,
+    contentClassName,
+    notification,
+    threads,
+    timestamp,
+    onContextMenu,
+}: ListTimelineContentProps): JSX.Element {
+    return (
+        <>
+            <div className="mx_EventTile_details">
+                {content.sender}
+                {notification.enabled && notification.roomLabel ? (
+                    <span className="mx_EventTile_truncated">{notification.roomLabel}</span>
+                ) : (
+                    ""
+                )}
+                <PlainTimestamp timestamp={timestamp} />
+                {notification.unreadBadge}
+            </div>
+            {notification.enabled && notification.roomAvatar ? notification.roomAvatar : content.avatar}
+            <EventContentRegion contentClassName={contentClassName} onContextMenu={onContextMenu}>
+                <div className="mx_EventTile_body">{content.messageBody}</div>
+                <ThreadsPanelRegion {...threads} />
+            </EventContentRegion>
+            {content.messageStatus}
+        </>
+    );
+});
+
+type FileTimelineContentProps = Pick<EventTileViewProps, "content" | "contentClassName" | "timestamp"> & {
+    onContextMenu: MouseEventHandler<HTMLElement>;
+};
+
+const FileTimelineContent = memo(function FileTimelineContent({
+    content,
+    contentClassName,
+    timestamp,
+    onContextMenu,
+}: FileTimelineContentProps): JSX.Element {
+    return (
+        <>
+            <a
+                className="mx_EventTile_senderDetailsLink"
+                href={timestamp.permalink}
+                onClick={timestamp.onPermalinkClicked}
+            >
+                <div className="mx_EventTile_senderDetails" onContextMenu={timestamp.onContextMenu}>
+                    {content.avatar}
+                    {content.sender}
+                    <PlainTimestamp timestamp={timestamp} />
+                </div>
+            </a>
+            <EventContentRegion contentClassName={contentClassName} onContextMenu={onContextMenu}>
+                {content.contextMenu}
+                {content.messageBody}
+            </EventContentRegion>
+        </>
+    );
+});
+
+type DefaultTimelineContentProps = Pick<
+    EventTileViewProps,
+    "contentId" | "content" | "contentClassName" | "encryption" | "layout" | "threads" | "timestamp"
+> & {
+    onContextMenu: MouseEventHandler<HTMLElement>;
+};
+
+const DefaultTimelineContent = memo(function DefaultTimelineContent({
+    contentId,
+    content,
+    contentClassName,
+    encryption,
+    layout,
+    threads,
+    timestamp,
+    onContextMenu,
+}: DefaultTimelineContentProps): JSX.Element {
+    return (
+        <>
+            {layout === Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
+            {content.sender}
+            {encryption.padlockMode === PadlockMode.Irc && (
+                <EncryptionIndicator
+                    icon={encryption.mode}
+                    title={encryption.indicatorTitle}
+                    sharedUserId={encryption.sharedKeysUserId}
+                    roomId={encryption.sharedKeysRoomId}
+                />
+            )}
+            {content.avatar}
+            <EventContentRegion contentId={contentId} contentClassName={contentClassName} onContextMenu={onContextMenu}>
+                {content.contextMenu}
+                {layout !== Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
+                {encryption.padlockMode === PadlockMode.Group && (
+                    <EncryptionIndicator
+                        icon={encryption.mode}
+                        title={encryption.indicatorTitle}
+                        sharedUserId={encryption.sharedKeysUserId}
+                        roomId={encryption.sharedKeysRoomId}
+                    />
+                )}
+                {content.replyChain}
+                {content.messageBody}
+                {content.actionBar}
+                {layout === Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
+            </EventContentRegion>
+            {layout !== Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
+            {content.messageStatus}
+        </>
+    );
+});
+
 function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Element {
     const {
         as,
@@ -293,13 +446,7 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
     } = props;
 
     const Root = (as ?? "li") as ElementType;
-    const sender = content.sender;
-    const avatar = content.avatar;
     const replyChain = content.replyChain;
-    const actionBar = content.actionBar;
-    const messageStatus = content.messageStatus;
-    const messageBody = content.messageBody;
-    const contextMenu = content.contextMenu;
 
     switch (timelineRenderingType) {
         case TimelineRenderingType.Thread:
@@ -319,23 +466,13 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
                     onFocus={handlers.onFocus}
                     onBlur={handlers.onBlur}
                 >
-                    <div className="mx_EventTile_senderDetails">
-                        {avatar}
-                        {sender}
-                    </div>
-                    <EventContentRegion
+                    <ThreadTimelineContent
                         contentId={contentId}
+                        content={content}
                         contentClassName={contentClassName}
+                        timestamp={timestamp}
                         onContextMenu={handlers.onContextMenu}
-                    >
-                        {contextMenu}
-                        {replyChain}
-                        {messageBody}
-                        {actionBar}
-                        <LinkedTimestamp timestamp={timestamp} />
-                        {messageStatus}
-                    </EventContentRegion>
-                    <FooterThreadMeta footer={content.footer} />
+                    />
                 </Root>
             );
         case TimelineRenderingType.Notification:
@@ -359,22 +496,14 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
                     onBlur={handlers.onBlur}
                     onClick={handlers.onClick}
                 >
-                    <div className="mx_EventTile_details">
-                        {sender}
-                        {notification.enabled && notification.roomLabel ? (
-                            <span className="mx_EventTile_truncated">{notification.roomLabel}</span>
-                        ) : (
-                            ""
-                        )}
-                        <PlainTimestamp timestamp={timestamp} />
-                        {notification.unreadBadge}
-                    </div>
-                    {notification.enabled && notification.roomAvatar ? notification.roomAvatar : avatar}
-                    <EventContentRegion contentClassName={contentClassName} onContextMenu={handlers.onContextMenu}>
-                        <div className="mx_EventTile_body">{messageBody}</div>
-                        <ThreadsPanelRegion {...threads} />
-                    </EventContentRegion>
-                    {messageStatus}
+                    <ListTimelineContent
+                        content={content}
+                        contentClassName={contentClassName}
+                        notification={notification}
+                        threads={threads}
+                        timestamp={timestamp}
+                        onContextMenu={handlers.onContextMenu}
+                    />
                 </Root>
             );
         case TimelineRenderingType.File:
@@ -386,21 +515,12 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
                     data-scroll-tokens={scrollTokens}
                     data-event-id={eventId}
                 >
-                    <a
-                        className="mx_EventTile_senderDetailsLink"
-                        href={timestamp.permalink}
-                        onClick={timestamp.onPermalinkClicked}
-                    >
-                        <div className="mx_EventTile_senderDetails" onContextMenu={timestamp.onContextMenu}>
-                            {avatar}
-                            {sender}
-                            <PlainTimestamp timestamp={timestamp} />
-                        </div>
-                    </a>
-                    <EventContentRegion contentClassName={contentClassName} onContextMenu={handlers.onContextMenu}>
-                        {contextMenu}
-                        {messageBody}
-                    </EventContentRegion>
+                    <FileTimelineContent
+                        content={content}
+                        contentClassName={contentClassName}
+                        timestamp={timestamp}
+                        onContextMenu={handlers.onContextMenu}
+                    />
                 </Root>
             );
         default:
@@ -421,39 +541,16 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
                     onFocus={handlers.onFocus}
                     onBlur={handlers.onBlur}
                 >
-                    {layout === Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
-                    {sender}
-                    {encryption.padlockMode === PadlockMode.Irc && (
-                        <EncryptionIndicator
-                            icon={encryption.mode}
-                            title={encryption.indicatorTitle}
-                            sharedUserId={encryption.sharedKeysUserId}
-                            roomId={encryption.sharedKeysRoomId}
-                        />
-                    )}
-                    {avatar}
-                    <EventContentRegion
+                    <DefaultTimelineContent
                         contentId={contentId}
+                        content={content}
                         contentClassName={contentClassName}
+                        encryption={encryption}
+                        layout={layout}
+                        threads={threads}
+                        timestamp={timestamp}
                         onContextMenu={handlers.onContextMenu}
-                    >
-                        {contextMenu}
-                        {layout !== Layout.IRC && <LinkedTimestamp timestamp={timestamp} />}
-                        {encryption.padlockMode === PadlockMode.Group && (
-                            <EncryptionIndicator
-                                icon={encryption.mode}
-                                title={encryption.indicatorTitle}
-                                sharedUserId={encryption.sharedKeysUserId}
-                                roomId={encryption.sharedKeysRoomId}
-                            />
-                        )}
-                        {replyChain}
-                        {messageBody}
-                        {actionBar}
-                        {layout === Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
-                    </EventContentRegion>
-                    {layout !== Layout.IRC && <FooterThreadMeta footer={content.footer} info={threads.info} />}
-                    {messageStatus}
+                    />
                 </Root>
             );
     }

@@ -50,7 +50,6 @@ import { isMessageEvent } from "../../../../events/EventTileFactory";
 import { Layout } from "../../../../settings/enums/Layout";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
-import { objectHasDiff } from "../../../../utils/objects";
 import { shouldDisplayReply } from "../../../../utils/Reply";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
@@ -543,11 +542,58 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private updateSnapshot(partial?: Partial<EventTileViewSnapshot>): void {
         const nextSnapshot = EventTileViewModel.deriveSnapshot(this.props, this.snapshot.current, partial);
 
-        if (objectHasDiff(this.snapshot.current, nextSnapshot)) {
-            this.snapshot.set(nextSnapshot);
-        }
+        this.snapshot.merge(nextSnapshot);
 
         this.updateReceiptListener(nextSnapshot);
+    }
+
+    private mergeSnapshot(partial: Partial<EventTileViewSnapshot>): void {
+        const nextSnapshot: EventTileViewSnapshot = {
+            ...this.snapshot.current,
+            ...partial,
+        };
+
+        this.snapshot.merge(partial);
+        this.updateReceiptListener(nextSnapshot);
+    }
+
+    private updateReceiptSnapshot(partial: Partial<EventTileViewSnapshot> = {}): void {
+        const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
+        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
+        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(this.props, context);
+
+        this.mergeSnapshot({
+            ...partial,
+            ...receiptSnapshot,
+            hasFooter: EventTileViewModel.getHasFooter(
+                this.props.isRedacted,
+                this.snapshot.current.isPinned,
+                receiptSnapshot.reactions,
+            ),
+        });
+    }
+
+    private updateThreadSnapshot(thread: Thread | null): void {
+        const partial: Partial<EventTileViewSnapshot> = { thread };
+        const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
+        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
+
+        this.mergeSnapshot({
+            ...partial,
+            ...EventTileViewModel.deriveThreadSnapshot(this.props, context),
+            ...EventTileViewModel.deriveTimestampSnapshot(this.props, baseSnapshot, context),
+        });
+    }
+
+    private updateVerificationSnapshot(shieldColour: EventShieldColour, shieldReason: EventShieldReason | null): void {
+        const partial: Partial<EventTileViewSnapshot> = { shieldColour, shieldReason };
+        const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
+        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
+
+        this.mergeSnapshot({
+            ...partial,
+            ...EventTileViewModel.deriveEncryptionSnapshot(this.props, context),
+        });
     }
 
     private updateInteractionSnapshot(partial: Partial<EventTileInteractionSnapshot>): void {
@@ -559,9 +605,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
         Object.assign(nextSnapshot, EventTileViewModel.deriveInteractionDependentSnapshot(this.props, nextSnapshot));
 
-        if (objectHasDiff(currentSnapshot, nextSnapshot)) {
-            this.snapshot.set(nextSnapshot);
-        }
+        this.snapshot.merge(nextSnapshot);
     }
 
     private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
@@ -586,7 +630,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const tileRoom = roomId ? this.props.cli.getRoom(roomId) : null;
         if (room !== tileRoom) return;
 
-        this.updateSnapshot();
+        this.updateReceiptSnapshot();
     };
 
     private readonly onDecrypted = (): void => {
@@ -610,13 +654,13 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             return;
         }
 
-        this.updateSnapshot({
+        this.updateReceiptSnapshot({
             reactions: this.getReactions(),
         });
     };
 
     private readonly updateThread = (thread: Thread): void => {
-        this.updateSnapshot({ thread });
+        this.updateThreadSnapshot(thread);
     };
 
     private readonly onThreadUpdate = (thread: Thread): void => {
@@ -642,10 +686,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             const event = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
             if (!event.isEncrypted() || event.isRedacted()) {
-                this.updateSnapshot({
-                    shieldColour: EventShieldColour.NONE,
-                    shieldReason: null,
-                });
+                this.updateVerificationSnapshot(EventShieldColour.NONE, null);
                 return;
             }
 
@@ -654,17 +695,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 return;
             }
             if (encryptionInfo === null) {
-                this.updateSnapshot({
-                    shieldColour: EventShieldColour.NONE,
-                    shieldReason: null,
-                });
+                this.updateVerificationSnapshot(EventShieldColour.NONE, null);
                 return;
             }
 
-            this.updateSnapshot({
-                shieldColour: encryptionInfo.shieldColour,
-                shieldReason: encryptionInfo.shieldReason,
-            });
+            this.updateVerificationSnapshot(encryptionInfo.shieldColour, encryptionInfo.shieldReason);
         } catch (error) {
             logger.error(
                 `Error getting encryption info on event ${this.props.mxEvent.getId()} in room ${this.props.mxEvent.getRoomId()}`,

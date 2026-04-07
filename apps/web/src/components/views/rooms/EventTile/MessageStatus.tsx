@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode } from "react";
+import React, { memo, useMemo, type JSX, type ReactNode } from "react";
 import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Tooltip } from "@vector-im/compound-web";
 import { type EventStatus } from "matrix-js-sdk/src/matrix";
@@ -29,7 +29,7 @@ type MessageStatusProps = Readonly<{
     checkUnmounting?: () => boolean;
 }>;
 
-export function MessageStatus({
+function MessageStatusComponent({
     messageState,
     suppressReadReceiptAnimation,
     shouldShowSentReceipt,
@@ -40,18 +40,25 @@ export function MessageStatus({
     isTwelveHour,
     checkUnmounting,
 }: MessageStatusProps): JSX.Element | undefined {
-    const sentReceipt = getSentReceiptDetails(messageState, shouldShowSentReceipt, shouldShowSendingReceipt);
+    const sentReceipt = useMemo(
+        () => getSentReceiptDetails(messageState, shouldShowSentReceipt, shouldShowSendingReceipt),
+        [messageState, shouldShowSentReceipt, shouldShowSendingReceipt],
+    );
     const sentReceiptIcon = sentReceipt?.icon;
     const sentReceiptLabel = sentReceipt?.label;
-    const receiptGroup = showReadReceipts ? (
-        <ReadReceiptGroup
-            readReceipts={[...(readReceipts ?? [])]}
-            readReceiptMap={readReceiptMap ?? {}}
-            checkUnmounting={checkUnmounting}
-            suppressAnimation={suppressReadReceiptAnimation}
-            isTwelveHour={isTwelveHour}
-        />
-    ) : undefined;
+    const receiptGroup = useMemo(
+        () =>
+            showReadReceipts ? (
+                <ReadReceiptGroup
+                    readReceipts={[...(readReceipts ?? [])]}
+                    readReceiptMap={readReceiptMap ?? {}}
+                    checkUnmounting={checkUnmounting}
+                    suppressAnimation={suppressReadReceiptAnimation}
+                    isTwelveHour={isTwelveHour}
+                />
+            ) : undefined,
+        [showReadReceipts, readReceipts, readReceiptMap, checkUnmounting, suppressReadReceiptAnimation, isTwelveHour],
+    );
 
     if (sentReceiptIcon && sentReceiptLabel) {
         return (
@@ -73,6 +80,8 @@ export function MessageStatus({
 
     return undefined;
 }
+
+export const MessageStatus = memo(MessageStatusComponent);
 
 function getSentReceiptDetails(
     messageState: EventStatus | undefined,
