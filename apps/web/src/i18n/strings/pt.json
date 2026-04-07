@@ -32,7 +32,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click": "Clica",
         "click_to_copy": "Clica para copiar",
         "close": "Fechar",
         "collapse": "Colapsar",
@@ -64,7 +63,6 @@
         "go": "Ir",
         "go_back": "Voltar",
         "got_it": "Entendi",
-        "hide": "Ocultar",
         "hide_advanced": "Ocultar avançadas",
         "hold": "Espera",
         "ignore": "Ignorar",
@@ -1254,9 +1252,6 @@
         "impossible_dialog_title": "Integrações não permitidas"
     },
     "invite": {
-        "ask_anyway_description": "Não foi possível encontrar perfis para os IDs de Matrix listados abaixo - gostarias de iniciar uma MD na mesma?",
-        "ask_anyway_label": "Começa a MD na mesma",
-        "ask_anyway_never_warn_label": "Começa a MD na mesma e não me avises mais",
         "email_caption": "Convida por e-mail",
         "email_limit_one": "Os convites por e-mail só podem ser enviados um de cada vez",
         "email_use_default_is": "Utiliza um servidor de identidade para convidar por e-mail. <default>Utiliza a predefinição (%(defaultIdentityServerName)s)</default> ou gere em <settings>Definições</settings>.",
@@ -3109,7 +3104,6 @@
         },
         "empty_description": "Utiliza \"%(replyInThread)s\" quando passares o cursor sobre uma mensagem.",
         "empty_title": "Os tópicos ajudam a manter as tuas conversas dentro do tópico e são fáceis de seguir.",
-        "error_start_thread_existing_relation": "Não é possível criar um tópico a partir de um evento com uma relação existente",
         "mark_all_read": "Marcar tudo como lido",
         "my_threads": "Os meus tópicos",
         "my_threads_description": "Mostra todos os tópicos em que participaste",
@@ -3153,7 +3147,6 @@
             "unable_to_decrypt": "Não é possível desencriptar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Descriptografando",
         "download_action_downloading": "A transferir…",
         "download_failed": "A transferência falhou",
         "download_failed_description": "Ocorreu um erro ao transferir este ficheiro",
@@ -3350,10 +3343,7 @@
             "removed": "Widget %(widgetName)s removido por %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Recolher citações",
             "copy_link_thread": "Copia o link para o tópico",
-            "expand_reply_chain": "Expandir cotações",
-            "label": "Acções de mensagens",
             "view_in_room": "Vista na sala"
         },
         "mjolnir": {

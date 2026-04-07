@@ -46,6 +46,11 @@
             transform: rotate(90deg);
         }
     }
+
+    &.unread {
+        font: var(--cpd-font-body-md-semibold);
+        color: var(--cpd-color-text-primary);
+    }
 }
 
 .container {
