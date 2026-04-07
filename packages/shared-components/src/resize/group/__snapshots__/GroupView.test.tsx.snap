@@ -15,7 +15,7 @@ exports[`<GroupView /> > renders Default story 1`] = `
         data-panel="true"
         data-testid="_r_1_"
         id="_r_1_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 50 1 0px; overflow: visible;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 50 1 0px; overflow: visible;"
       >
         <div
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
@@ -45,7 +45,7 @@ exports[`<GroupView /> > renders Default story 1`] = `
         data-panel="true"
         data-testid="_r_3_"
         id="_r_3_"
-        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px none; padding: 0px; margin: 0px; display: flex; flex: 50 1 0px; overflow: visible;"
+        style="min-height: 0px; max-height: 100%; height: auto; min-width: 0px; max-width: 100%; width: auto; border: 0px; padding: 0px; margin: 0px; display: flex; flex: 50 1 0px; overflow: visible;"
       >
         <div
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
