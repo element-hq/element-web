@@ -104,9 +104,14 @@ jobs:
                   rustup target add aarch64-apple-darwin
                   rustup target add x86_64-apple-darwin
 
+            # M1 macos-14 comes without Python preinstalled
+            - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+              with:
+                  python-version: "3.13"
+
             # Install Quartz for DMG badges
             # https://github.com/electron-userland/electron-builder/issues/9511#issuecomment-3774092888
-            - run: sudo -H pip3 install --break-system-packages pyobjc-framework-Quartz
+            - run: sudo pip3 install pyobjc-framework-Quartz
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
