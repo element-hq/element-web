@@ -32,7 +32,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click": "Tıklayın",
         "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
@@ -1252,9 +1251,6 @@
         "impossible_dialog_title": "Entegrasyonlara izin verilmiyor"
     },
     "invite": {
-        "ask_anyway_description": "Aşağıda listelenen Matrix Kimlikleri için profil bulunamadı - yine de bir DM başlatmak ister misiniz?",
-        "ask_anyway_label": "Yine de DM'ye başla",
-        "ask_anyway_never_warn_label": "Yine de DM'yi başlat ve beni bir daha uyarma",
         "email_caption": "E-posta ile davet et",
         "email_limit_one": "E-posta yoluyla davetler yalnızca birer birer gönderilebilir",
         "email_use_default_is": "E-posta ile davet etmek için bir kimlik sunucusu kullan. <default> Varsayılanı kullan (%(defaultIdentityServerName)s</default> ya da <settings>Ayarlar</settings> kullanarak yönetin.",
@@ -3099,7 +3095,6 @@
         },
         "empty_description": "Bir mesajın üzerine geldiğinizde \"%(replyInThread)s\" kullan.",
         "empty_title": "Mesaj dizileri, konuşmalarınızın konuyla ilgili ve takip edilmesi kolay kalmasına yardımcı olur.",
-        "error_start_thread_existing_relation": "Varolan bir ilişkiye sahip mesaj dizisinden dolayı, mesaj dizisi oluşturulamıyor",
         "mark_all_read": "Tümünü okundu olarak işaretle",
         "my_threads": "Mesaj dizilerim",
         "my_threads_description": "Katıldığınız tüm mesaj dizilerini gösterir",
@@ -3143,7 +3138,6 @@
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Şifre çözülüyor",
         "download_action_downloading": "İndiriliyor",
         "download_failed": "İndirme başarısız oldu",
         "download_failed_description": "Bu dosya indirilirken bir hata oluştu",
@@ -3340,10 +3334,7 @@
             "removed": "%(widgetName)s görsel bileşeni %(senderName)s tarafından silindi"
         },
         "mab": {
-            "collapse_reply_chain": "Alıntıları daralt",
             "copy_link_thread": "Bağlantıyı konuya kopyala",
-            "expand_reply_chain": "Alıntıları genişlet",
-            "label": "Mesaj Eylemleri",
             "view_in_room": "Odada görüntüle"
         },
         "mjolnir": {

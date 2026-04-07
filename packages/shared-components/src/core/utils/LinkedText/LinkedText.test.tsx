@@ -49,6 +49,15 @@ describe("LinkedText", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("does not linkify domains without a protocol.", () => {
+        const { queryAllByRole } = render(
+            <LinkedTextContext value={{}}>
+                <LinkedText>Check out this link github.com</LinkedText>
+            </LinkedTextContext>,
+        );
+        expect(queryAllByRole("link")).toHaveLength(0);
+    });
+
     it("renders a user ID", () => {
         const { container } = render(<WithUserId />);
         expect(container).toMatchSnapshot();
@@ -73,7 +82,7 @@ describe("LinkedText", () => {
         const fn = vitest.fn();
         const { getAllByRole } = render(
             <LinkedTextContext value={{}}>
-                <LinkedText onLinkClick={fn}>Check out this link https://google.com and example.org</LinkedText>
+                <LinkedText onLinkClick={fn}>Check out this link https://google.com and https://example.org</LinkedText>
             </LinkedTextContext>,
         );
         const links = getAllByRole("link");
