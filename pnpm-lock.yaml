@@ -115,6 +115,9 @@ patchedDependencies:
   linkify-html:
     hash: 1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2
     path: patches/linkify-html.patch
+  plist:
+    hash: 7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7
+    path: patches/plist.patch
   postcss-mixins:
     hash: 30fc882486b610a1c252340c87a99f1030c50e698a3c57c837eff7232e29d6d0
     path: patches/postcss-mixins.patch
@@ -14798,7 +14801,7 @@ snapshots:
       commander: 13.1.0
       glob: 13.0.6
       minimatch: 10.2.5
-      plist: 3.1.0
+      plist: 3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7)
 
   '@electron/fuses@1.8.0':
     dependencies:
@@ -14849,7 +14852,7 @@ snapshots:
       fs-extra: 10.1.0
       isbinaryfile: 4.0.10
       minimist: 1.2.8
-      plist: 3.1.0
+      plist: 3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7)
     transitivePeerDependencies:
       - supports-color
 
@@ -14879,7 +14882,7 @@ snapshots:
       dir-compare: 4.2.0
       fs-extra: 11.3.3
       minimatch: 9.0.9
-      plist: 3.1.0
+      plist: 3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7)
     transitivePeerDependencies:
       - supports-color
 
@@ -19108,7 +19111,7 @@ snapshots:
       json5: 2.2.3
       lazy-val: 1.0.5
       minimatch: 10.2.5
-      plist: 3.1.0
+      plist: 3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7)
       proper-lockfile: 4.1.2
       resedit: 1.7.2
       semver: 7.7.4
@@ -20700,7 +20703,7 @@ snapshots:
       ajv: 6.14.0
       crc: 3.8.0
       iconv-corefoundation: 1.1.7
-      plist: 3.1.0
+      plist: 3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7)
       smart-buffer: 4.2.0
       verror: 1.10.1
     optional: true
@@ -24443,7 +24446,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  plist@3.1.0:
+  plist@3.1.0(patch_hash=7a3c35087f0ab2a8efbac9e2899990f07d61e2b3e41d8d962ef0bdb0786e1af7):
     dependencies:
       '@xmldom/xmldom': 0.9.9
       base64-js: 1.5.1
