@@ -21,6 +21,12 @@ export default {
     args: {
         onImageClick: fn(),
     },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/sI9A2kV2K4xeiyqJsL7Ey3/Link-Previews?node-id=87-7920",
+        },
+    },
 } satisfies Meta<typeof LinkPreview>;
 
 const Template: StoryFn<typeof LinkPreview> = (args) => (
