@@ -6,8 +6,8 @@
         {
             "groupName": "testcontainers docker digests",
             "groupSlug": "{{manager}}-docker-digests",
-            "matchManagers": ["regex"],
-            "matchPackagePatterns": ["*"]
+            "matchManagers": ["custom.regex"],
+            "matchPackageNames": ["*"]
         }
     ],
     "customManagers": [
@@ -17,7 +17,9 @@
             "versioningTemplate": "loose",
             "description": "Update testcontainers docker digests",
             "managerFilePatterns": ["**/testcontainers/*.ts"],
-            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""]
+            "matchStrings": [
+                "\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""
+            ]
         }
     ]
 }
