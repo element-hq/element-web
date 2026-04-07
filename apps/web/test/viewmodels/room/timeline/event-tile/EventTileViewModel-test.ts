@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import {
     AvatarSubject,
     ClickMode,
@@ -34,19 +34,22 @@ import {
     ThreadPanelMode,
     TimestampDisplayMode,
     ThreadInfoMode,
-} from "../../../src/models/rooms/EventTileModel";
-import { EventTileViewModel, type EventTileViewModelProps } from "../../../src/viewmodels/room/EventTileViewModel";
-import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
-import { Layout } from "../../../src/settings/enums/Layout";
-import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../test-utils";
-import { mkThread } from "../../test-utils/threads";
+} from "../../../../../src/models/rooms/EventTileModel";
+import {
+    EventTileViewModel,
+    type EventTileViewModelProps,
+} from "../../../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { Layout } from "../../../../../src/settings/enums/Layout";
+import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../../../test-utils";
+import { mkThread } from "../../../../test-utils/threads";
 
-jest.mock("../../../src/utils/EventRenderingUtils", () => ({
-    ...jest.requireActual("../../../src/utils/EventRenderingUtils"),
+jest.mock("../../../../../src/utils/EventRenderingUtils", () => ({
+    ...jest.requireActual("../../../../../src/utils/EventRenderingUtils"),
     getEventDisplayInfo: jest.fn(),
 }));
 
-const mockGetEventDisplayInfo = jest.requireMock("../../../src/utils/EventRenderingUtils")
+const mockGetEventDisplayInfo = jest.requireMock("../../../../../src/utils/EventRenderingUtils")
     .getEventDisplayInfo as jest.Mock;
 
 describe("EventTileViewModel", () => {

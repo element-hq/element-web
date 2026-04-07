@@ -11,7 +11,7 @@ import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { type Layout } from "../../../../settings/enums/Layout";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import ReplyChain from "../../elements/ReplyChain";
-import type { GetRelationsForEvent } from "../../../../viewmodels/room/EventTileContracts";
+import type { GetRelationsForEvent } from "../../../../models/rooms/EventTileTypes";
 
 /**
  * Props used to render the reply preview shown ahead of the main event body.

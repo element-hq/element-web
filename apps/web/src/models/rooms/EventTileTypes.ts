@@ -25,6 +25,12 @@ export interface ReadReceiptProps {
     roomMember: RoomMember | null;
 }
 
+/** Captured pointer position and link metadata for opening an event tile context menu. */
+export interface EventTileContextMenuState {
+    position: Pick<DOMRect, "top" | "left" | "bottom">;
+    link?: string;
+}
+
 /** Shared imperative operations exposed by event tile implementations. */
 export type EventTileOps = {
     /** Returns whether an embedded widget preview is currently hidden. */

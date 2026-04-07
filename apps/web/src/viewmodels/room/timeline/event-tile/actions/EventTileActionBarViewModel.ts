@@ -24,26 +24,26 @@ import {
     type ActionBarViewSnapshot,
 } from "@element-hq/web-shared-components";
 
-import { MatrixClientPeg } from "../../MatrixClientPeg";
-import defaultDispatcher from "../../dispatcher/dispatcher";
-import { Action } from "../../dispatcher/actions";
-import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
-import { type GetRelationsForEvent } from "../../components/views/rooms/EventTile";
-import { canCancel, canEditContent, editEvent, isContentActionable } from "../../utils/EventUtils";
-import { TimelineRenderingType } from "../../contexts/RoomContext";
-import Resend from "../../Resend";
-import PinningUtils from "../../utils/PinningUtils";
-import PosthogTrackers from "../../PosthogTrackers";
-import { shouldDisplayReply } from "../../utils/Reply";
-import { MediaEventHelper } from "../../utils/MediaEventHelper";
-import SettingsStore from "../../settings/SettingsStore";
-import { type SettingKey } from "../../settings/Settings";
-import { getMediaVisibility, setMediaVisibility } from "../../utils/media/mediaVisibility";
-import { FileDownloader } from "../../utils/FileDownloader";
-import { _t } from "../../languageHandler";
-import Modal from "../../Modal";
-import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { ModuleApi } from "../../modules/Api";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
+import defaultDispatcher from "../../../../../dispatcher/dispatcher";
+import { Action } from "../../../../../dispatcher/actions";
+import { type ShowThreadPayload } from "../../../../../dispatcher/payloads/ShowThreadPayload";
+import { type GetRelationsForEvent } from "../../../../../components/views/rooms/EventTile";
+import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../../../utils/EventUtils";
+import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
+import Resend from "../../../../../Resend";
+import PinningUtils from "../../../../../utils/PinningUtils";
+import PosthogTrackers from "../../../../../PosthogTrackers";
+import { shouldDisplayReply } from "../../../../../utils/Reply";
+import { MediaEventHelper } from "../../../../../utils/MediaEventHelper";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import { type SettingKey } from "../../../../../settings/Settings";
+import { getMediaVisibility, setMediaVisibility } from "../../../../../utils/media/mediaVisibility";
+import { FileDownloader } from "../../../../../utils/FileDownloader";
+import { _t } from "../../../../../languageHandler";
+import Modal from "../../../../../Modal";
+import ErrorDialog from "../../../../../components/views/dialogs/ErrorDialog";
+import { ModuleApi } from "../../../../../modules/Api";
 
 /** Props for the event-tile action bar view model. */
 export interface EventTileActionBarViewModelProps {

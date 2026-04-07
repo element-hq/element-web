@@ -24,25 +24,25 @@ import { ActionBarAction } from "@element-hq/web-shared-components";
 import {
     EventTileActionBarViewModel,
     type EventTileActionBarViewModelProps,
-} from "../../../src/viewmodels/room/EventTileActionBarViewModel";
-import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import defaultDispatcher from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
-import Resend from "../../../src/Resend";
-import PinningUtils from "../../../src/utils/PinningUtils";
-import PosthogTrackers from "../../../src/PosthogTrackers";
-import Modal from "../../../src/Modal";
-import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { ModuleApi } from "../../../src/modules/Api";
-import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../src/utils/EventUtils";
-import { shouldDisplayReply } from "../../../src/utils/Reply";
-import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
-import { getMediaVisibility, setMediaVisibility } from "../../../src/utils/media/mediaVisibility";
-import { createTestClient } from "../../test-utils";
+} from "../../../../../../src/viewmodels/room/timeline/event-tile/actions/EventTileActionBarViewModel";
+import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../../src/dispatcher/actions";
+import Resend from "../../../../../../src/Resend";
+import PinningUtils from "../../../../../../src/utils/PinningUtils";
+import PosthogTrackers from "../../../../../../src/PosthogTrackers";
+import Modal from "../../../../../../src/Modal";
+import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import { ModuleApi } from "../../../../../../src/modules/Api";
+import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../../../../src/utils/EventUtils";
+import { shouldDisplayReply } from "../../../../../../src/utils/Reply";
+import { MediaEventHelper } from "../../../../../../src/utils/MediaEventHelper";
+import { getMediaVisibility, setMediaVisibility } from "../../../../../../src/utils/media/mediaVisibility";
+import { createTestClient } from "../../../../../test-utils";
 
-jest.mock("../../../src/dispatcher/dispatcher", () => ({
+jest.mock("../../../../../../src/dispatcher/dispatcher", () => ({
     __esModule: true,
     default: {
         dispatch: jest.fn(),
@@ -51,7 +51,7 @@ jest.mock("../../../src/dispatcher/dispatcher", () => ({
     },
 }));
 
-jest.mock("../../../src/Resend", () => ({
+jest.mock("../../../../../../src/Resend", () => ({
     __esModule: true,
     default: {
         resend: jest.fn(),
@@ -59,21 +59,21 @@ jest.mock("../../../src/Resend", () => ({
     },
 }));
 
-jest.mock("../../../src/PosthogTrackers", () => ({
+jest.mock("../../../../../../src/PosthogTrackers", () => ({
     __esModule: true,
     default: {
         trackPinUnpinMessage: jest.fn(),
     },
 }));
 
-jest.mock("../../../src/Modal", () => ({
+jest.mock("../../../../../../src/Modal", () => ({
     __esModule: true,
     default: {
         createDialog: jest.fn(),
     },
 }));
 
-jest.mock("../../../src/languageHandler", () => ({
+jest.mock("../../../../../../src/languageHandler", () => ({
     _t: (key: string) => {
         switch (key) {
             case "timeline|download_failed":
@@ -89,14 +89,14 @@ jest.mock("../../../src/languageHandler", () => ({
     _td: (key: string) => key,
 }));
 
-jest.mock("../../../src/utils/EventUtils", () => ({
+jest.mock("../../../../../../src/utils/EventUtils", () => ({
     canCancel: jest.fn(),
     canEditContent: jest.fn(),
     editEvent: jest.fn(),
     isContentActionable: jest.fn(),
 }));
 
-jest.mock("../../../src/utils/PinningUtils", () => ({
+jest.mock("../../../../../../src/utils/PinningUtils", () => ({
     __esModule: true,
     default: {
         canPin: jest.fn(),
@@ -106,17 +106,17 @@ jest.mock("../../../src/utils/PinningUtils", () => ({
     },
 }));
 
-jest.mock("../../../src/utils/Reply", () => ({
+jest.mock("../../../../../../src/utils/Reply", () => ({
     shouldDisplayReply: jest.fn(),
 }));
 
-jest.mock("../../../src/utils/media/mediaVisibility", () => ({
+jest.mock("../../../../../../src/utils/media/mediaVisibility", () => ({
     getMediaVisibility: jest.fn(),
     setMediaVisibility: jest.fn(),
 }));
 
 const mockDownload = jest.fn();
-jest.mock("../../../src/utils/FileDownloader", () => ({
+jest.mock("../../../../../../src/utils/FileDownloader", () => ({
     FileDownloader: jest.fn().mockImplementation(() => ({
         download: mockDownload,
     })),

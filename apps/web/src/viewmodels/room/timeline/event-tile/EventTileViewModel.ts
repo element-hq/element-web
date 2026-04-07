@@ -29,7 +29,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
-import type LegacyCallEventGrouper from "../../components/structures/LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "../../../../components/structures/LegacyCallEventGrouper";
 import {
     AvatarSubject,
     AvatarSize,
@@ -42,20 +42,20 @@ import {
     TimestampFormatMode,
     ThreadPanelMode,
     ThreadInfoMode,
-} from "../../models/rooms/EventTileModel";
-import { TimelineRenderingType } from "../../contexts/RoomContext";
-import { ElementCallEventType } from "../../call-types";
-import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { isMessageEvent } from "../../events/EventTileFactory";
-import { Layout } from "../../settings/enums/Layout";
-import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
-import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { objectHasDiff } from "../../utils/objects";
-import { shouldDisplayReply } from "../../utils/Reply";
-import type EditorStateTransfer from "../../utils/EditorStateTransfer";
-import type { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import PinningUtils from "../../utils/PinningUtils";
-import type { GetRelationsForEvent, ReadReceiptProps } from "./EventTileContracts";
+} from "../../../../models/rooms/EventTileModel";
+import { TimelineRenderingType } from "../../../../contexts/RoomContext";
+import { ElementCallEventType } from "../../../../call-types";
+import { DecryptionFailureTracker } from "../../../../DecryptionFailureTracker";
+import { isMessageEvent } from "../../../../events/EventTileFactory";
+import { Layout } from "../../../../settings/enums/Layout";
+import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
+import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
+import { objectHasDiff } from "../../../../utils/objects";
+import { shouldDisplayReply } from "../../../../utils/Reply";
+import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
+import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
+import PinningUtils from "../../../../utils/PinningUtils";
+import type { GetRelationsForEvent, ReadReceiptProps } from "../../../../models/rooms/EventTileTypes";
 
 /** Interaction-only state that changes in response to pointer and focus events. */
 interface EventTileInteractionSnapshot {
@@ -305,29 +305,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     /** Updates whether the tile is currently hovered. */
     public setHover(hover: boolean): void {
         this.updateInteractionSnapshot({ hover });
-    }
-
-    /** Updates whether focus is currently inside the tile. */
-    private setFocusWithin(focusWithin: boolean): void {
-        this.updateInteractionSnapshot({ focusWithin });
-    }
-
-    /** Updates whether keyboard-visible focus should force the action bar to show. */
-    private setShowActionBarFromFocus(showActionBarFromFocus: boolean): void {
-        this.updateInteractionSnapshot({ showActionBarFromFocus });
-    }
-
-    /** Updates whether the action bar is considered focused. */
-    private setActionBarFocused(actionBarFocused: boolean): void {
-        this.updateInteractionSnapshot({ actionBarFocused });
-    }
-
-    /** Updates whether the tile's context menu is open. */
-    private setContextMenuOpen(isContextMenuOpen: boolean): void {
-        this.updateInteractionSnapshot({
-            isContextMenuOpen,
-            actionBarFocused: isContextMenuOpen,
-        });
     }
 
     /** Updates whether the quoted reply preview is expanded. */

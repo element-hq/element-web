@@ -12,7 +12,7 @@ import TileErrorBoundary from "../../messages/TileErrorBoundary";
 import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } from "./EventTilePresenter";
 
 export type { EventTileHandle } from "./EventTilePresenter";
-export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
+export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "../../../../models/rooms/EventTileTypes";
 
 /** Props for {@link EventTile}. */
 export interface EventTileProps extends EventTilePresenterProps {

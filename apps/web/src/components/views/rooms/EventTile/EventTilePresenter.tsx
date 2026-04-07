@@ -37,13 +37,11 @@ import {
     EventTileViewModel,
     type EventTileViewModelProps,
     type EventTileViewSnapshot,
-} from "../../../../viewmodels/room/EventTileViewModel";
+} from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import RoomContext, { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { Action } from "../../../../dispatcher/actions";
 import dis from "../../../../dispatcher/dispatcher";
-import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
-import { type ShowThreadPayload } from "../../../../dispatcher/payloads/ShowThreadPayload";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { copyPlaintext } from "../../../../utils/strings";
 import { EventTileView, type EventTileViewProps } from "./EventTileView";
@@ -59,7 +57,6 @@ import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotification
 import {
     AvatarSize,
     AvatarSubject,
-    ClickMode,
     EventTileRenderMode,
     ThreadInfoMode,
     ThreadPanelMode,
@@ -71,17 +68,18 @@ import { type RoomPermalinkCreator } from "../../../../utils/permalinks/Permalin
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import type { MessageBodyProps, MessageBodyRenderTileProps } from "./MessageBody";
 import type {
+    EventTileContextMenuState,
     EventTileOps,
     GetRelationsForEvent,
     ReadReceiptProps,
-} from "../../../../viewmodels/room/EventTileContracts";
+} from "../../../../models/rooms/EventTileTypes";
 import { type ReplyPreviewProps } from "./ReplyPreview";
 import { ThreadInfo } from "./ThreadInfo";
 import { MediaEventHelper as TileMediaEventHelper } from "../../../../utils/MediaEventHelper";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import ContextMenu, { aboveLeftOf, aboveRightOf } from "../../../structures/ContextMenu";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
-import { EventTileActionBarViewModel } from "../../../../viewmodels/room/EventTileActionBarViewModel";
+import { EventTileActionBarViewModel } from "../../../../viewmodels/room/timeline/event-tile/actions/EventTileActionBarViewModel";
 import { ThreadListActionBarViewModel } from "../../../../viewmodels/room/ThreadListActionBarViewModel";
 import { CardContext } from "../../right_panel/context";
 import { Sender } from "./Sender";
@@ -90,6 +88,15 @@ import { ReplyPreview } from "./ReplyPreview";
 import { MessageStatus } from "./MessageStatus";
 import { Footer } from "./Footer";
 import { MessageBody } from "./MessageBody";
+import {
+    buildContextMenuState,
+    copyLinkToThread as copyLinkToThreadCommand,
+    onListTileClick as onListTileClickCommand,
+    onPermalinkClicked as onPermalinkClickedCommand,
+    openEventInRoom,
+    type EventTileCommandContext,
+    type EventTileCommandDeps,
+} from "./EventTileCommands";
 
 /** Ref handle for direct access to tile actions and the root element. */
 export interface EventTileHandle extends EventTileOps {
@@ -226,9 +233,9 @@ type UseEventTileViewModelResult = {
     /** Whether initial read receipt animations should be suppressed. */
     suppressReadReceiptAnimation: boolean;
     /** Current context menu state, if the menu is open. */
-    contextMenuState?: ContextMenuState;
+    contextMenuState?: EventTileContextMenuState;
     /** Setter for the current context menu state. */
-    setContextMenuState: React.Dispatch<React.SetStateAction<ContextMenuState | undefined>>;
+    setContextMenuState: React.Dispatch<React.SetStateAction<EventTileContextMenuState | undefined>>;
     /** The event tile view model instance. */
     vm: EventTileViewModel;
     /** The current derived tile snapshot. */
@@ -264,11 +271,6 @@ type EventTileViewRenderContent = {
     /** Thread toolbar node for thread list and notification views. */
     threadToolbar?: JSX.Element;
 };
-
-interface ContextMenuState {
-    position: Pick<DOMRect, "top" | "left" | "bottom">;
-    link?: string;
-}
 
 /** Event handlers passed through to {@link EventTileView}. */
 type EventTileViewActions = {
@@ -412,7 +414,7 @@ function useEventTileViewModel(
     const tileRef = useRef<EventTileOps>(null);
     const replyChainRef = useRef<ReplyChain>(null);
     const [suppressReadReceiptAnimation, setSuppressReadReceiptAnimation] = useState(true);
-    const [contextMenuState, setContextMenuState] = useState<ContextMenuState>();
+    const [contextMenuState, setContextMenuState] = useState<EventTileContextMenuState>();
     const vmReadReceipts = useMemo(
         () => readReceipts?.map(({ userId, ts, roomMember }) => ({ userId, ts, roomMember })),
         [readReceipts],
@@ -542,73 +544,62 @@ function useEventTileViewModel(
 function useEventTileActions(
     props: EventTileProps,
     cli: ReturnType<typeof useMatrixClientContext>,
-    roomContext: React.ContextType<typeof RoomContext>,
-    setContextMenuState: React.Dispatch<React.SetStateAction<ContextMenuState | undefined>>,
+    setContextMenuState: React.Dispatch<React.SetStateAction<EventTileContextMenuState | undefined>>,
     vm: EventTileViewModel,
     snapshot: EventTileViewSnapshot,
 ): UseEventTileActionsResult {
     const roomId = props.mxEvent.getRoomId();
     const room = roomId ? cli.getRoom(roomId) : null;
+    const commandDeps = useMemo<EventTileCommandDeps>(
+        () => ({
+            dispatch: (payload) => dis.dispatch(payload),
+            copyPlaintext,
+            trackInteraction: (name, ev, index) => PosthogTrackers.trackInteraction(name, ev, index),
+            allowOverridingNativeContextMenus: () => Boolean(PlatformPeg.get()?.allowOverridingNativeContextMenus()),
+        }),
+        [],
+    );
+    const commandContext = useMemo<EventTileCommandContext>(
+        () => ({
+            mxEvent: props.mxEvent,
+            permalinkCreator: props.permalinkCreator,
+            openedFromSearch: snapshot.openedFromSearch,
+            tileClickMode: snapshot.tileClickMode,
+            editState: props.editState,
+        }),
+        [props.mxEvent, props.permalinkCreator, snapshot.openedFromSearch, snapshot.tileClickMode, props.editState],
+    );
 
     const onPermalinkClicked = useCallback(
         (ev: MouseEvent<HTMLElement>): void => {
-            ev.preventDefault();
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                event_id: props.mxEvent.getId(),
-                highlighted: true,
-                room_id: props.mxEvent.getRoomId(),
-                metricsTrigger: snapshot.openedFromSearch ? "MessageSearch" : undefined,
-            });
+            onPermalinkClickedCommand(commandDeps, commandContext, ev);
         },
-        [props.mxEvent, snapshot.openedFromSearch],
+        [commandDeps, commandContext],
     );
 
     const openInRoom = useCallback(
         (_anchor: HTMLElement | null): void => {
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                event_id: props.mxEvent.getId(),
-                highlighted: true,
-                room_id: props.mxEvent.getRoomId(),
-                metricsTrigger: undefined,
-            });
+            openEventInRoom(commandDeps, commandContext);
         },
-        [props.mxEvent],
+        [commandDeps, commandContext],
     );
 
     const copyLinkToThread = useCallback(
         async (_anchor: HTMLElement | null): Promise<void> => {
-            if (!props.permalinkCreator) return;
-            const eventId = props.mxEvent.getId();
-            if (!eventId) return;
-            await copyPlaintext(props.permalinkCreator.forEvent(eventId));
+            await copyLinkToThreadCommand(commandDeps, commandContext);
         },
-        [props.permalinkCreator, props.mxEvent],
+        [commandDeps, commandContext],
     );
 
     const showContextMenu = useCallback(
         (ev: MouseEvent<HTMLElement>, permalink?: string): void => {
-            const clickTarget = ev.target;
-            if (!(clickTarget instanceof HTMLElement) || clickTarget instanceof HTMLImageElement) return;
-            const anchorElement = clickTarget instanceof HTMLAnchorElement ? clickTarget : clickTarget.closest("a");
+            const nextContextMenuState = buildContextMenuState(commandDeps, commandContext, ev, permalink);
+            if (!nextContextMenuState) return;
 
-            if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && anchorElement) return;
-            if (props.editState) return;
-
-            ev.preventDefault();
-            ev.stopPropagation();
-            setContextMenuState({
-                position: {
-                    left: ev.clientX,
-                    top: ev.clientY,
-                    bottom: ev.clientY,
-                },
-                link: anchorElement?.href || permalink,
-            });
+            setContextMenuState(nextContextMenuState);
             vm.onContextMenuOpen();
         },
-        [props.editState, setContextMenuState, vm],
+        [commandDeps, commandContext, setContextMenuState, vm],
     );
 
     const onContextMenu = useCallback(
@@ -632,21 +623,9 @@ function useEventTileActions(
             let index = -1;
             if (target.parentElement) index = Array.from(target.parentElement.children).indexOf(target);
 
-            switch (snapshot.tileClickMode) {
-                case ClickMode.ViewRoom:
-                    openInRoom(null);
-                    break;
-                case ClickMode.ShowThread:
-                    dis.dispatch<ShowThreadPayload>({
-                        action: Action.ShowThread,
-                        rootEvent: props.mxEvent,
-                        push: true,
-                    });
-                    PosthogTrackers.trackInteraction("WebThreadsPanelThreadItem", ev, index);
-                    break;
-            }
+            onListTileClickCommand(commandDeps, commandContext, ev.nativeEvent, index);
         },
-        [snapshot.tileClickMode, openInRoom, props.mxEvent],
+        [commandDeps, commandContext],
     );
 
     return useMemo(
@@ -821,7 +800,7 @@ function ThreadToolbarHost({ onViewInRoomClick, onCopyLinkClick }: ThreadToolbar
 }
 
 type EventTileContextMenuHostProps = {
-    contextMenu: ContextMenuState;
+    contextMenu: EventTileContextMenuState;
     mxEvent: MatrixEvent;
     reactions: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
@@ -880,7 +859,7 @@ export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTilePro
         onContextMenu,
         onTimestampContextMenu,
         onListTileClick,
-    } = useEventTileActions(props, cli, roomContext, setContextMenuState, vm, vmSnapshot);
+    } = useEventTileActions(props, cli, setContextMenuState, vm, vmSnapshot);
     const setQuoteExpanded = useCallback((expanded: boolean): void => vm.setQuoteExpanded(expanded), [vm]);
     const onActionBarFocusChange = useCallback(
         (focused: boolean): void => {
