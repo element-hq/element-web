@@ -17,7 +17,7 @@ import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../src/settings/UIFeature";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
-import { DateSeparatorViewModel } from "../../../src/viewmodels/timeline/DateSeparatorViewModel";
+import { DateSeparatorViewModel } from "../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
 import { flushPromisesWithFakeTimers } from "../../test-utils";
 
 jest.mock("../../../src/settings/SettingsStore");

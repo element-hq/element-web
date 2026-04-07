@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import HakEnv from "./hakEnv.js";
-import type { TargetId } from "./target.js";
-import type { DependencyInfo } from "./dep.js";
-import { loadJsonFile } from "../../src/utils.js";
-import packageJson from "../../package.json";
+import HakEnv from "./hakEnv.ts";
+import type { TargetId } from "./target.ts";
+import type { DependencyInfo } from "./dep.ts";
+import { loadJsonFile } from "../../src/utils.ts";
+import packageJson from "../../package.json" with { type: "json" };
 
 // These can only be run on specific modules
 const MODULECOMMANDS = ["check", "fetch", "link", "build", "copy", "clean"];
@@ -127,7 +127,7 @@ async function main(): Promise<void> {
             process.exit(1);
         }
 
-        const cmdFunc = (await import("./" + cmd)).default;
+        const cmdFunc = (await import(`./${cmd}.ts`)).default;
 
         for (const mod of modules) {
             const depInfo = deps[mod];

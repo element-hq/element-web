@@ -108,14 +108,11 @@ export default defineConfig({
                         headless: true,
                         provider: playwright({
                             contextOptions: commonContextOptions,
-                            launchOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT ? undefined : commonLaunchOptions,
+                            launchOptions: commonLaunchOptions,
                             connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT
                                 ? {
                                       wsEndpoint: process.env.PW_TEST_CONNECT_WS_ENDPOINT,
                                       exposeNetwork: "<loopback>",
-                                      headers: {
-                                          "x-playwright-launch-options": JSON.stringify(commonLaunchOptions),
-                                      },
                                   }
                                 : undefined,
                         }),

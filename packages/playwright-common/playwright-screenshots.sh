@@ -23,7 +23,7 @@ IMAGE_NAME="ghcr.io/element-hq/element-web/playwright-server:$PW_VERSION"
 docker pull "$IMAGE_NAME" 2>/dev/null || build_image "$IMAGE_NAME"
 
 # Start the playwright-server in docker
-CONTAINER=$(docker run --network=host --rm -d -e PORT="$WS_PORT" "$IMAGE_NAME")
+CONTAINER=$(docker run --network=host -v /tmp:/tmp --rm -d -e PORT="$WS_PORT" "$IMAGE_NAME")
 # Set up an exit trap to clean up the docker container
 clean_up() {
     ARG=$?
