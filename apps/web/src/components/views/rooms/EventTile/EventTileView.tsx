@@ -255,9 +255,8 @@ const FooterThreadMeta = memo(function FooterThreadMeta({
 const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
     replyCount,
     preview,
-    toolbar,
 }: EventTileViewProps["threads"]): JSX.Element | null {
-    if (replyCount === undefined && preview === undefined && !toolbar) {
+    if (replyCount === undefined && preview === undefined) {
         return null;
     }
 
@@ -266,7 +265,6 @@ const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
             {replyCount !== undefined && preview !== undefined && (
                 <ThreadPanelSummary replyCount={replyCount} preview={preview} />
             )}
-            {toolbar}
         </>
     );
 });
@@ -336,6 +334,7 @@ const ListTimelineContent = memo(function ListTimelineContent({
                 <div className="mx_EventTile_body">{content.messageBody}</div>
                 <ThreadsPanelRegion {...threads} />
             </EventContentRegion>
+            {threads.toolbar}
             {content.messageStatus}
         </>
     );

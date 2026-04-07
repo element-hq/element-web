@@ -413,8 +413,14 @@ describe("EventTileView", () => {
             />,
         );
 
-        expect(getByLabelText(container, "View in room")).toBeInTheDocument();
-        expect(getByLabelText(container, "Copy link to thread")).toBeInTheDocument();
+        const line = container.querySelector(".mx_EventTile_line");
+        const viewInRoomButton = getByLabelText(container, "View in room");
+        const copyLinkButton = getByLabelText(container, "Copy link to thread");
+
+        expect(viewInRoomButton).toBeInTheDocument();
+        expect(copyLinkButton).toBeInTheDocument();
+        expect(line?.contains(viewInRoomButton)).toBe(false);
+        expect(line?.contains(copyLinkButton)).toBe(false);
     });
 
     it("wires thread toolbar callbacks", async () => {
