@@ -64,7 +64,10 @@ describe("TextualBodyView", () => {
         const onBodyActionClick = vi.fn();
         const onEmoteSenderClick = vi.fn();
 
-        class TestTextualBodyViewModel extends MockViewModel<TextualBodyViewSnapshot> implements TextualBodyViewActions {
+        class TestTextualBodyViewModel
+            extends MockViewModel<TextualBodyViewSnapshot>
+            implements TextualBodyViewActions
+        {
             public onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
             public onBodyActionClick?: MouseEventHandler<HTMLDivElement>;
             public onEmoteSenderClick?: MouseEventHandler<HTMLButtonElement>;
