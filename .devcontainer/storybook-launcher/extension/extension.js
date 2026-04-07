@@ -92,8 +92,8 @@ function activate(context) {
         if (ready) {
             sbItem.text = "$(beaker) Storybook: Open \u25b8";
             sbItem.tooltip = "Storybook Playground is ready — click to open";
-            sbItem.command = "storybookLauncher.openPreview";
-            await openStorybookPreview();
+            sbItem.command = "storybookLauncher.openInBrowser";
+            await openStorybookInBrowser();
         } else {
             sbItem.text = "$(warning) Storybook: Not Started";
             sbItem.tooltip = "Storybook did not start. Try: pnpm run storybook:design";
@@ -106,8 +106,8 @@ function activate(context) {
         if (ready) {
             ewItem.text = "$(globe) Element Web: Open \u25b8";
             ewItem.tooltip = "Element Web is ready — click to open";
-            ewItem.command = "elementWebLauncher.openPreview";
-            await openElementWebPreview();
+            ewItem.command = "elementWebLauncher.openInBrowser";
+            await openElementWebInBrowser();
         } else {
             ewItem.text = "$(circle-outline) Element Web: Not Started";
             ewItem.tooltip = "Run \u2018pnpm run start:element-web\u2019 to start the app";
