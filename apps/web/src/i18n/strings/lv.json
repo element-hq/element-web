@@ -33,7 +33,6 @@
         "cancel": "Atcelt",
         "change": "Mainīt",
         "clear": "Notīrīt",
-        "click": "Noklikšķiniet",
         "click_to_copy": "Noklikšķiniet, lai kopētu",
         "close": "Aizvērt",
         "collapse": "Sakļaut",
@@ -1126,9 +1125,6 @@
         "disabled_dialog_title": "Integrācijas ir atspējotas"
     },
     "invite": {
-        "ask_anyway_description": "Nevar atrast profilus zemāk uzskaitītajiem Matrix ID. Vai jūs tomēr vēlētos sākt DM jebkurā gadījumā?",
-        "ask_anyway_label": "Sākt DM jebkurā gadījumā",
-        "ask_anyway_never_warn_label": "Sākt DM jebkurā gadījumā un nekad vairs nebrīdināt mani",
         "email_caption": "Uzaicināt pa e-pastu",
         "email_limit_one": "Uzaicinājumus pa e-pastu var nosūtīt tikai pa vienam",
         "email_use_default_is": "Izmantot identitātes serveri, lai uzaicinātu pa e-pastu. <default>Izmantojiet noklusējumu (%(defaultIdentityServerName)s)</default> vai pārvaldiet <settings>Iestatījumos</settings>.",
@@ -2768,7 +2764,6 @@
         "creation_summary_dm": "%(creator)s uzsāka šo tiešo saraksti.",
         "creation_summary_room": "%(creator)s izveidoja un nokonfigurēja istabu.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Atšifrē",
         "download_action_downloading": "Lejupielādē",
         "edits": {
             "tooltip_label": "Labots %(date)s. Klikšķināt, lai skatītu labojumus.",
@@ -2957,10 +2952,7 @@
             "removed": "Ekrānvadīklu %(widgetName)s noņēma %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Sakļaut citātus",
             "copy_link_thread": "Kopēt saiti uz pavedienu",
-            "expand_reply_chain": "Izvērst citātus",
-            "label": "Darbības ar ziņu",
             "view_in_room": "Skats istabā"
         },
         "mjolnir": {

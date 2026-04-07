@@ -25,7 +25,6 @@
         "cancel": "Cancelar",
         "change": "Cambiar",
         "clear": "Limpar",
-        "click": "Premer",
         "click_to_copy": "Click para copiar",
         "close": "Pechar",
         "collapse": "Pechar",
@@ -2347,7 +2346,6 @@
             "one": "%(count)s resposta",
             "other": "%(count)s respostas"
         },
-        "error_start_thread_existing_relation": "Non se pode crear un tema con unha relación existente desde un evento",
         "my_threads": "As miñas conversas",
         "my_threads_description": "Mostra tódalas conversas nas que participaches",
         "open_thread": "Abrir fío",
@@ -2373,7 +2371,6 @@
         },
         "creation_summary_dm": "%(creator)s creou esta MD.",
         "creation_summary_room": "%(creator)s creou e configurou a sala.",
-        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Editada o %(date)s. Preme para ver edicións.",
@@ -2554,10 +2551,7 @@
             "removed": "%(widgetName)s eliminado por %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Pregar as citas",
             "copy_link_thread": "Copiar ligazón da conversa",
-            "expand_reply_chain": "Despregar as citas",
-            "label": "Accións da mensaxe",
             "view_in_room": "Ver na sala"
         },
         "mjolnir": {

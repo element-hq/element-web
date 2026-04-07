@@ -79,44 +79,6 @@ exports[`MBodyFactory renderMBody fallback shows m.file generic placeholder when
 </div>
 `;
 
-exports[`MBodyFactory renderMBody fallback shows m.video generic placeholder when showFileInfo is true 1`] = `
-<div>
-  <span
-    class="_content_f1s5h_8 mx_MFileBody"
-  >
-    <div
-      class="mx_MediaBody _mediaBody_rgndh_8"
-      data-type="info"
-    >
-      <button
-        aria-label="alt"
-        class="_button_13vu4_8 _has-icon_13vu4_60"
-        data-kind="secondary"
-        data-size="sm"
-        role="button"
-        tabindex="0"
-      >
-        <svg
-          aria-hidden="true"
-          fill="currentColor"
-          height="20"
-          viewBox="0 0 24 24"
-          width="20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4"
-          />
-        </svg>
-        <span>
-          alt
-        </span>
-      </button>
-    </div>
-  </span>
-</div>
-`;
-
 exports[`MBodyFactory renderMBody renders download button for m.file in file rendering type 1`] = `
 <div>
   <span
