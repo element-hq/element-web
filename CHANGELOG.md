@@ -1,3 +1,57 @@
+Changes in [1.12.14](https://github.com/element-hq/element-web/releases/tag/v1.12.14) (2026-04-07)
+==================================================================================================
+## ✨ Features
+
+* Add analytics tracking for URL previews ([#32659](https://github.com/element-hq/element-web/pull/32659)). Contributed by @Half-Shot.
+* Collapsible Room List - Clicking on separator should expand to last set width ([#32909](https://github.com/element-hq/element-web/pull/32909)). Contributed by @MidhunSureshR.
+* RoomList: improve performance ([#32919](https://github.com/element-hq/element-web/pull/32919)). Contributed by @florianduros.
+* Implement collapsible panels for the new room list ([#32742](https://github.com/element-hq/element-web/pull/32742)). Contributed by @MidhunSureshR.
+* Hide the names of banned users behind a spoiler tag (attempt 2) ([#32636](https://github.com/element-hq/element-web/pull/32636)). Contributed by @andybalaam.
+
+## 🐛 Bug Fixes
+
+* Use the code signing Subject Name as basis for Tray GUID on Windows ([#32939](https://github.com/element-hq/element-web/pull/32939)). Contributed by @t3chguy.
+* Ensure the incoming verification request appears above the please verify prompt ([#32931](https://github.com/element-hq/element-web/pull/32931)). Contributed by @andybalaam.
+* Collapsible Room List - Prevent any interaction with the separator when the panel is expanded ([#32910](https://github.com/element-hq/element-web/pull/32910)). Contributed by @MidhunSureshR.
+* Fix icon size of badges in right panel ([#32952](https://github.com/element-hq/element-web/pull/32952)). Contributed by @florianduros.
+* Fix room list often showing the wrong icons for calls ([#32881](https://github.com/element-hq/element-web/pull/32881)). Contributed by @robintown.
+* Fix emoticon slash commands including stale buffers ([#32928](https://github.com/element-hq/element-web/pull/32928)). Contributed by @t3chguy.
+* Fix presence indicators not showing without cache   ([#32880](https://github.com/element-hq/element-web/pull/32880)). Contributed by @DLCSharp.
+* Show space name instead of 'Empty room' after creation ([#32886](https://github.com/element-hq/element-web/pull/32886)). Contributed by @gugaribeiro05.
+* Strip ephemeral query params from OIDC redirect URI ([#32875](https://github.com/element-hq/element-web/pull/32875)). Contributed by @azmeuk.
+
+
+Changes in [1.12.13](https://github.com/element-hq/element-web/releases/tag/v1.12.13) (2026-03-24)
+==================================================================================================
+## 🦖 Deprecations
+
+* Remove automatic rageshakes on UTD labs feature ([#32778](https://github.com/element-hq/element-web/pull/32778)). Contributed by @Half-Shot.
+* Remove automaticErrorReporting labs feature ([#32781](https://github.com/element-hq/element-web/pull/32781)). Contributed by @Half-Shot.
+
+## ✨ Features
+
+* Upgrade Element Call for new picture-in-picture designs ([#32816](https://github.com/element-hq/element-web/pull/32816)). Contributed by @robintown.
+* Room list: add sections to shared components ([#32735](https://github.com/element-hq/element-web/pull/32735)). Contributed by @florianduros.
+* feat: Devtool for sticky events MSC4354 ([#32741](https://github.com/element-hq/element-web/pull/32741)). Contributed by @BillCarsonFr.
+* Port URL Preview components to MVVM ([#32525](https://github.com/element-hq/element-web/pull/32525)). Contributed by @Half-Shot.
+* Add support for Widget \& Room Header Buttons module APIs ([#32734](https://github.com/element-hq/element-web/pull/32734)). Contributed by @dbkr.
+* Port over linkifyJS to shared-components. ([#32731](https://github.com/element-hq/element-web/pull/32731)). Contributed by @Half-Shot.
+* Redesign widget pip and move into shared component ([#32654](https://github.com/element-hq/element-web/pull/32654)). Contributed by @toger5.
+* Implement customisations \& login component Module API 1.11.0 ([#32687](https://github.com/element-hq/element-web/pull/32687)). Contributed by @t3chguy.
+* Realign MessageActionBar to Figma designs ([#32722](https://github.com/element-hq/element-web/pull/32722)). Contributed by @t3chguy.
+* Implement new widget permissions module api ([#32565](https://github.com/element-hq/element-web/pull/32565)). Contributed by @langleyd.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix soft crash of room list when trying to open a room ([#32872](https://github.com/element-hq/element-web/pull/32872)). Contributed by @RiotRobot.
+* Fix "key storage out of sync" appearing when key storage is actually fine ([#32811](https://github.com/element-hq/element-web/pull/32811)). Contributed by @andybalaam.
+* Fix remove button styling in local address list of room settings ([#32798](https://github.com/element-hq/element-web/pull/32798)). Contributed by @florianduros.
+* Always check \& update the users timezone on their profile on startup ([#32764](https://github.com/element-hq/element-web/pull/32764)). Contributed by @Half-Shot.
+* Fix nx configuration to actually run type linter ([#32776](https://github.com/element-hq/element-web/pull/32776)). Contributed by @richvdh.
+* Fix expand space panel button not being shown on keyboard focus ([#32746](https://github.com/element-hq/element-web/pull/32746)). Contributed by @t3chguy.
+* Reset key storage if restoring from Recovery encounters the wrong decryption key ([#32668](https://github.com/element-hq/element-web/pull/32668)). Contributed by @andybalaam.
+
+
 Changes in [1.12.12](https://github.com/element-hq/element-web/releases/tag/v1.12.12) (2026-03-10)
 ==================================================================================================
 ## ✨ Features

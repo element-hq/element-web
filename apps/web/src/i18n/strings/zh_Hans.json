@@ -27,7 +27,6 @@
         "cancel": "取消",
         "change": "更改",
         "clear": "清除",
-        "click": "点击",
         "click_to_copy": "点击复制",
         "close": "关闭",
         "collapse": "折叠",
@@ -1158,8 +1157,6 @@
     },
     "labs": {
         "ask_to_join": "启用 “需要验证加入请求”",
-        "automatic_debug_logs": "遇到任何错误自动发送调试日志",
-        "automatic_debug_logs_decryption": "自动发送有关解密错误的debug日志",
         "beta_description": "%(brand)s的下一步是什么？实验室是早期获得东西、测试新功能和在它们发布前帮助塑造的最好方式。",
         "beta_feature": "这是beta功能",
         "beta_feedback_leave_button": "要离开beta，请访问你的设置。",
@@ -2495,7 +2492,6 @@
             "one": "%(count)s 条回复",
             "other": "%(count)s 条回复"
         },
-        "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列",
         "my_threads": "我的消息列",
         "my_threads_description": "显示您参与的所有消息列",
         "open_thread": "打开消息列",
@@ -2528,7 +2524,6 @@
         },
         "creation_summary_dm": "%(creator)s 创建了此私聊。",
         "creation_summary_room": "%(creator)s 创建并配置了此房间。",
-        "download_action_decrypting": "解密中",
         "download_action_downloading": "下载中",
         "edits": {
             "tooltip_label": "编辑于 %(date)s。点击以查看编辑历史。",
@@ -2576,8 +2571,7 @@
             "voice_call_unsupported": "%(senderName)s 发起了语音通话。（此浏览器不支持）"
         },
         "m.file": {
-            "error_decrypting": "解密附件时出错",
-            "error_invalid": "无效文件 %(extra)s"
+            "error_decrypting": "解密附件时出错"
         },
         "m.image": {
             "error_decrypting": "解密图像时出错",
@@ -2712,10 +2706,7 @@
             "removed": "%(senderName)s 移除了 %(widgetName)s 挂件"
         },
         "mab": {
-            "collapse_reply_chain": "折叠引号",
             "copy_link_thread": "复制到消息列的链接",
-            "expand_reply_chain": "展开引号",
-            "label": "消息操作",
             "view_in_room": "在房间内查看"
         },
         "mjolnir": {
@@ -2897,13 +2888,6 @@
             },
             "one_user": "%(displayName)s 正在输入…",
             "two_users": "%(names)s和%(lastPerson)s正在输入……"
-        },
-        "url_preview": {
-            "close": "关闭预览",
-            "show_n_more": {
-                "one": "显示 %(count)s 个其他预览",
-                "other": "显示 %(count)s 个其他预览"
-            }
         }
     },
     "truncated_list_n_more": {

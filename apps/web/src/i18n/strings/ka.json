@@ -15,7 +15,6 @@
         "cancel": "გაუქმება",
         "change": "ცვლილება",
         "clear": "გასუფთავება",
-        "click": "დააწკაპუნეთ",
         "click_to_copy": "დააწკაპუნეთ კოპირებისთვის",
         "close": "დახურვა",
         "collapse": "აკეცვა",
@@ -899,9 +898,6 @@
         "other": "In%(spaceName)s და%(count)s სხვა სივრცეები."
     },
     "invite": {
-        "ask_anyway_description": "ქვემოთ ჩამოთვლილი Matrix ID-ების პროფილების პოვნა ვერ ხერხდება - მაინც გსურთ DM-ის დაწყება?",
-        "ask_anyway_label": "მაინც დაიწყე DM",
-        "ask_anyway_never_warn_label": "მაინც დაიწყე DM და აღარასოდეს გამაფრთხილო",
         "email_caption": "მოიწვიე ელექტრონული ფოსტით",
         "email_limit_one": "მოწვევები ელექტრონული ფოსტით შეიძლება გაიგზავნოს მხოლოდ ერთ ჯერზე",
         "email_use_default_is": "გამოიყენეთ საიდენტიფიკაციო სერვერი ელექტრონული ფოსტით მოსაწვევად.<default> გამოიყენეთ ნაგულისხმევი (%(defaultIdentityServerName)s )</default> ან მართეთ<settings> პარამეტრები</settings> .",
@@ -977,8 +973,6 @@
     },
     "labs": {
         "ask_to_join": "ჩართეთ შეერთების მოთხოვნა",
-        "automatic_debug_logs": "ავტომატურად გაგზავნეთ გამართვის ჟურნალი ნებისმიერი შეცდომის შესახებ",
-        "automatic_debug_logs_decryption": "გაშიფვრის შეცდომებზე გამართვის ჟურნალების ავტომატურად გაგზავნა",
         "beta_description": "რა არის შემდეგი%(brand)s ? ლაბორატორიები საუკეთესო საშუალებაა ნივთების ადრეულ ეტაპზე მისაღებად, ახალი ფუნქციების შესამოწმებლად და მათ ჩამოყალიბებაში, სანამ ისინი რეალურად დაიწყება.",
         "beta_feature": "ეს არის ბეტა ფუნქცია",
         "beta_feedback_leave_button": "ბეტადან გასასვლელად ეწვიეთ თქვენს პარამეტრებს.",
@@ -2200,7 +2194,6 @@
         "creation_summary_dm": "%(creator)sშექმნა ეს DM.",
         "creation_summary_room": "%(creator)sოთახის შექმნა და კონფიგურაცია.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
-        "download_action_decrypting": "გაშიფვრა",
         "download_action_downloading": "ჩამოტვირთვა",
         "edits": {
             "tooltip_label": "რედაქტირებულია%(date)s . დააწკაპუნეთ რედაქტირების სანახავად.",
@@ -2252,8 +2245,7 @@
             "voice_call_unsupported": "%(senderName)sმოახდინა ხმოვანი ზარი. (ამ ბრაუზერის მიერ არ არის მხარდაჭერილი)"
         },
         "m.file": {
-            "error_decrypting": "შეცდომა დანართის გაშიფვრისას",
-            "error_invalid": "არასწორი ფაილი"
+            "error_decrypting": "შეცდომა დანართის გაშიფვრისას"
         },
         "m.image": {
             "error": "შეცდომის გამო სურათის ჩვენება შეუძლებელია",
@@ -2389,10 +2381,7 @@
             "removed": "%(widgetName)sვიჯეტი ამოღებულია %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "ციტატების ჩაკეცვა",
             "copy_link_thread": "დააკოპირეთ ბმული თემაში",
-            "expand_reply_chain": "ციტატების გაფართოება",
-            "label": "შეტყობინების მოქმედებები",
             "view_in_room": "ხედი ოთახში"
         },
         "mjolnir": {
@@ -2583,14 +2572,7 @@
             "one_user": "%(displayName)sაკრეფებს...",
             "two_users": "%(names)sდა აკ %(lastPerson)s რეფენ..."
         },
-        "undecryptable_tooltip": "ამ შეტყობინების გაშიფვრა ვერ მოხერხდა",
-        "url_preview": {
-            "close": "გადახედვის დახურვა",
-            "show_n_more": {
-                "one": "ჩვენება%(count)s სხვა გადახედვა",
-                "other": "ჩვენება%(count)s სხვა გადახედვები"
-            }
-        }
+        "undecryptable_tooltip": "ამ შეტყობინების გაშიფვრა ვერ მოხერხდა"
     },
     "unsupported_server_description": "ეს სერვერი იყენებს Matrix-ის ძველ ვერსიას. განაახლეთ Matrix-ზე%(version)s გამოიყენოს%(brand)s შეცდომების გარეშე.",
     "unsupported_server_title": "თქვენი სერვერი მხარდაჭერილი არ არის",

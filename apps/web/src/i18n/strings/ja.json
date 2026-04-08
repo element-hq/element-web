@@ -26,7 +26,6 @@
         "cancel": "キャンセル",
         "change": "変更",
         "clear": "消去",
-        "click": "クリック",
         "click_to_copy": "クリックでコピー",
         "close": "閉じる",
         "collapse": "折りたたむ",
@@ -1181,8 +1180,6 @@
         "upload_file": "ファイルをアップロード"
     },
     "labs": {
-        "automatic_debug_logs": "エラーが生じた際に、自動的にデバッグログを送信",
-        "automatic_debug_logs_decryption": "復号化エラーが生じた際に、自動的にデバッグログを送信",
         "beta_description": "%(brand)sのラボでは、最新の機能をいち早く使用したり、テストしたりできるほか、機能が実際にリリースされる前の改善作業を支援することができます。",
         "beta_feature": "この機能はベータ版です",
         "beta_feedback_leave_button": "ベータ版の使用を終了するには、設定を開いてください。",
@@ -2555,7 +2552,6 @@
             "other": "%(count)s件の返信",
             "one": "%(count)s件の返信"
         },
-        "error_start_thread_existing_relation": "既存の関係のあるイベントからスレッドを作成することはできません",
         "my_threads": "自分のスレッド",
         "my_threads_description": "参加している全スレッドを表示",
         "open_thread": "スレッドを開く",
@@ -2589,7 +2585,6 @@
         "creation_summary_dm": "%(creator)sがこのダイレクトメッセージを作成しました。",
         "creation_summary_room": "%(creator)sがルームを作成し設定しました。",
         "disambiguated_profile": "%(displayName)s（%(matrixId)s）",
-        "download_action_decrypting": "復号化しています",
         "download_action_downloading": "ダウンロードしています",
         "edits": {
             "tooltip_label": "%(date)sに編集済。クリックすると変更履歴を表示。",
@@ -2640,8 +2635,7 @@
             "voice_call_unsupported": "%(senderName)sが音声通話を行いました。（このブラウザーではサポートされていません）"
         },
         "m.file": {
-            "error_decrypting": "添付ファイルを復号化する際にエラーが発生しました",
-            "error_invalid": "無効なファイル %(extra)s"
+            "error_decrypting": "添付ファイルを復号化する際にエラーが発生しました"
         },
         "m.image": {
             "error": "エラーにより画像を表示できません",
@@ -2776,10 +2770,7 @@
             "removed": "%(widgetName)sウィジェットが%(senderName)sによって削除されました"
         },
         "mab": {
-            "collapse_reply_chain": "引用を折りたたむ",
             "copy_link_thread": "スレッドへのリンクをコピー",
-            "expand_reply_chain": "引用を展開",
-            "label": "メッセージのアクション",
             "view_in_room": "ルーム内で表示"
         },
         "mjolnir": {
@@ -2965,14 +2956,7 @@
             "one_user": "%(displayName)sが入力しています…",
             "two_users": "%(names)sと%(lastPerson)sが入力しています…"
         },
-        "undecryptable_tooltip": "このメッセージを復号化できませんでした",
-        "url_preview": {
-            "close": "プレビューを閉じる",
-            "show_n_more": {
-                "one": "他%(count)s個のプレビューを表示",
-                "other": "他%(count)s個のプレビューを表示"
-            }
-        }
+        "undecryptable_tooltip": "このメッセージを復号化できませんでした"
     },
     "truncated_list_n_more": {
         "other": "他%(count)s人以上…"

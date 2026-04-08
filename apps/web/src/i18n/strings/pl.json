@@ -32,7 +32,6 @@
         "cancel": "Anuluj",
         "change": "Zmień",
         "clear": "Wyczyść",
-        "click": "Kliknij",
         "click_to_copy": "Kliknij, aby skopiować",
         "close": "Zamknij",
         "collapse": "Zwiń",
@@ -66,7 +65,6 @@
         "go": "Przejdź",
         "go_back": "Wróć",
         "got_it": "Rozumiem",
-        "hide": "Ukryj",
         "hide_advanced": "Ukryj zaawansowane",
         "hold": "Wstrzymaj",
         "ignore": "Ignoruj",
@@ -1328,9 +1326,6 @@
         "impossible_dialog_title": "Integracje nie są dozwolone"
     },
     "invite": {
-        "ask_anyway_description": "Nie znaleziono profilów dla identyfikatorów Matrix wymienionych poniżej - czy chcesz rozpocząć wiadomość prywatną mimo to?",
-        "ask_anyway_label": "Rozpocznij wiadomość prywatną mimo to",
-        "ask_anyway_never_warn_label": "Rozpocznij wiadomość prywatną mimo to i nie ostrzegaj ponownie",
         "email_caption": "Zaproś przez e-mail",
         "email_limit_one": "Zaproszenie e-mail może zostać wysłane tylko jedno na raz",
         "email_use_default_is": "Użyj serwera identyfikacji, aby zaprosić przez e-mail. <default>Użyj domyślnego (%(defaultIdentityServerName)s)</default> lub zarządzaj w <settings>Ustawieniach</settings>.",
@@ -1472,8 +1467,6 @@
     },
     "labs": {
         "ask_to_join": "Włącz prośby o dołączenie",
-        "automatic_debug_logs": "Automatycznie wysyłaj logi debugowania po wystąpieniu jakiegokolwiek błędu",
-        "automatic_debug_logs_decryption": "Automatycznie wysyłaj logi debugowania po wystąpieniu błędów deszyfrowania",
         "beta_description": "Co następne dla %(brand)s? Laboratoria to najlepsze miejsce do przetestowania nowych funkcji i możliwość pomocy w testowaniu, zanim dotrą one do szerszego grona użytkowników.",
         "beta_feature": "To jest funkcja beta",
         "beta_feedback_leave_button": "Aby wyjść z bety, odwiedź swoje ustawienia.",
@@ -1529,7 +1522,6 @@
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
         "notifications": "Włącz panel powiadomień w nagłówku pokoju.",
-        "release_announcement": "Ogłoszenie o wydaniu",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
         "report_to_moderators": "Zgłoś do moderatorów",
@@ -2050,7 +2042,6 @@
         "not_found_title": "Ten pokój lub przestrzeń nie istnieje.",
         "not_found_title_name": "%(roomName)s nie istnieje.",
         "peek_join_prompt": "Przeglądasz %(roomName)s. Czy chcesz dołączyć do pokoju?",
-        "pinned_message_badge": "Przypięta wiadomość",
         "pinned_message_banner": {
             "button_close_list": "Zamknij listę",
             "button_view_all": "Pokaż wszystkie",
@@ -3258,7 +3249,6 @@
         },
         "empty_description": "Użyj „%(replyInThread)s” podczas najechania kursorem na wiadomość.",
         "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo je śledzić.",
-        "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
         "my_threads_description": "Pokazuje wszystkie wątki, w których brałeś udział",
@@ -3302,7 +3292,6 @@
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
         "download_failed": "Błąd pobierania",
         "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
@@ -3358,8 +3347,7 @@
             "voice_call_unsupported": "%(senderName)s wykonał połączenie głosowe. (nie wspierane przez tę przeglądarkę)"
         },
         "m.file": {
-            "error_decrypting": "Błąd odszyfrowywania załącznika",
-            "error_invalid": "Nieprawidłowy plik"
+            "error_decrypting": "Błąd odszyfrowywania załącznika"
         },
         "m.image": {
             "error": "Nie można pokazać zdjęcia z powodu błędu",
@@ -3501,10 +3489,7 @@
             "removed": "Widżet %(widgetName)s został usunięty przez %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Zwiń cytaty",
             "copy_link_thread": "Kopiuj link do wątku",
-            "expand_reply_chain": "Rozwiń cytaty",
-            "label": "Działania na wiadomościach",
             "view_in_room": "Wyświetl w pokoju"
         },
         "mjolnir": {
@@ -3706,15 +3691,7 @@
             "one_user": "%(displayName)s pisze…",
             "two_users": "%(names)s i %(lastPerson)s piszą…"
         },
-        "undecryptable_tooltip": "Wiadomość nie mogła zostać rozszyfrowana",
-        "url_preview": {
-            "close": "Zamknij podgląd",
-            "show_n_more": {
-                "one": "Pokaż %(count)s inny podgląd",
-                "few": "Pokaż %(count)s inne podglądy",
-                "many": "Pokaż %(count)s innych podglądów"
-            }
-        }
+        "undecryptable_tooltip": "Wiadomość nie mogła zostać rozszyfrowana"
     },
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"

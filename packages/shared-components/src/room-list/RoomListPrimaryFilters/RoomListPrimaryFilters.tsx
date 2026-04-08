@@ -9,8 +9,8 @@ import React, { type JSX, memo, useId, useState } from "react";
 import { ChatFilter, IconButton } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
-import { Flex } from "../../utils/Flex";
-import { _t } from "../../utils/i18n";
+import { Flex } from "../../core/utils/Flex";
+import { _t } from "../../core/i18n/i18n";
 import { useCollapseFilters } from "./useCollapseFilters";
 import { useVisibleFilters, type FilterId } from "./useVisibleFilters";
 import styles from "./RoomListPrimaryFilters.module.css";

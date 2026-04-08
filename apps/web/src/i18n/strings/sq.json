@@ -26,7 +26,6 @@
         "cancel": "Anuloje",
         "change": "Ndërroje",
         "clear": "Spastroje",
-        "click": "Klikim",
         "click_to_copy": "Klikoni që të kopjohet",
         "close": "Mbylle",
         "collapse": "Tkurre",
@@ -1069,9 +1068,6 @@
         "impossible_dialog_title": "Integrimet s’lejohen"
     },
     "invite": {
-        "ask_anyway_description": "S’arrihet të gjenden profile për ID-të Matrix radhitur më poshtë - doni të niset një MD sido që të jetë?",
-        "ask_anyway_label": "Nis MD sido qoftë",
-        "ask_anyway_never_warn_label": "Nis MD sido qoftë dhe mos më sinjalizo kurrë më",
         "email_caption": "Ftojeni me email",
         "email_limit_one": "Ftesat me email mund të dërgohen vetëm një në herë",
         "email_use_default_is": "Përdorni një shërbyes identitetesh për të ftuar me email. <default>Përdorni parazgjedhjen (%(defaultIdentityServerName)s)</default> ose administrojeni që nga <settings>Rregullimet</settings>.",
@@ -1191,8 +1187,6 @@
         "upload_file": "Ngarkoni një kartelë"
     },
     "labs": {
-        "automatic_debug_logs": "Me çdo gabim, dërgo automatikisht regjistra diagnostikimi",
-        "automatic_debug_logs_decryption": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi",
         "beta_description": "Ç’vjen më pas për %(brand)s? Labs janë mënyra më e mirë për t’i pasur gjërat që herët, për të testuar veçori të reja dhe për të ndihmuar t’u jepet formë para se të hidhen faktikisht në qarkullim.",
         "beta_feature": "Kjo është një veçori beta",
         "beta_feedback_leave_button": "Që të braktisni beta-n, vizitoni rregullimet tuaja.",
@@ -2624,7 +2618,6 @@
             "one": "%(count)s përgjigje",
             "other": "%(count)s përgjigje"
         },
-        "error_start_thread_existing_relation": "S’mund të krijohet një rrjedhë prej një akti me një marrëdhënie ekzistuese",
         "my_threads": "Rrjedhat e mia",
         "my_threads_description": "Shfaq krejt rrjedhat ku keni marrë pjesë",
         "open_thread": "Hape rrjedhën",
@@ -2650,7 +2643,6 @@
         },
         "creation_summary_dm": "%(creator)s krijoi këtë DM.",
         "creation_summary_room": "%(creator)s krijoi dhe formësoi dhomën.",
-        "download_action_decrypting": "Po shfshehtëzohet",
         "download_action_downloading": "Shkarkim",
         "edits": {
             "tooltip_label": "Përpunuar më %(date)s. Klikoni që të shihni përpunimet.",
@@ -2702,8 +2694,7 @@
             "voice_call_unsupported": "%(senderName)s bëri një thirrje zanore. (e pambuluar nga ky shfletues)"
         },
         "m.file": {
-            "error_decrypting": "Gabim në shfshehtëzim bashkëngjitjeje",
-            "error_invalid": "Kartelë e pavlefshme%(extra)s"
+            "error_decrypting": "Gabim në shfshehtëzim bashkëngjitjeje"
         },
         "m.image": {
             "error": "S’arrihet të shihet figurë, për shkak gabimi",
@@ -2841,10 +2832,7 @@
             "removed": "Widget-i %(widgetName)s u hoq nga %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Tkurri thonjëzat",
             "copy_link_thread": "Kopjoje lidhjen te rrjedha",
-            "expand_reply_chain": "Zgjeroji thonjëzat",
-            "label": "Veprime Mesazhesh",
             "view_in_room": "Shiheni në dhomë"
         },
         "mjolnir": {
@@ -3029,14 +3017,7 @@
             "one_user": "%(displayName)s po shtyp …",
             "two_users": "%(names)s dhe %(lastPerson)s të tjerë po shtypin …"
         },
-        "undecryptable_tooltip": "Ky mesazh s’u shfshehtëzua dot",
-        "url_preview": {
-            "close": "Mbylle paraparjen",
-            "show_n_more": {
-                "one": "Shfaq %(count)s paraparje tjetër",
-                "other": "Shfaq %(count)s paraparje të tjera"
-            }
-        }
+        "undecryptable_tooltip": "Ky mesazh s’u shfshehtëzua dot"
     },
     "truncated_list_n_more": {
         "other": "Dhe %(count)s të tjerë…"

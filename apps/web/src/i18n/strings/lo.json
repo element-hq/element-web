@@ -25,7 +25,6 @@
         "cancel": "ຍົກເລີກ",
         "change": "ປ່ຽນແປງ",
         "clear": "ຈະແຈ້ງ",
-        "click": "ກົດ",
         "click_to_copy": "ກົດເພື່ອສຳເນົາ",
         "close": "ປິດ",
         "collapse": "ຫຍໍ້ລົງ",
@@ -1072,8 +1071,6 @@
         "upload_file": "ອັບໂຫຼດໄຟລ໌"
     },
     "labs": {
-        "automatic_debug_logs": "ສົ່ງບັນທຶກ ບັນຫາບັກ ໂດຍອັດຕະໂນມັດກ່ຽວກັບຂໍ້ຜິດພາດໃດໆ",
-        "automatic_debug_logs_decryption": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດໃນຄວາມຜິດພາດການຖອດລະຫັດ",
         "beta_feature": "ນີ້ແມ່ນຄຸນສົມບັດເບຕ້າ",
         "beta_feedback_leave_button": "ເພື່ອອອກຈາກເບຕ້າ, ໃຫ້ເຂົ້າໄປທີ່ການຕັ້ງຄ່າຂອງທ່ານ.",
         "beta_feedback_title": "%(featureName)s ຄຳຕິຊົມເບຕ້າ",
@@ -2260,7 +2257,6 @@
             "one": "%(count)s ຕອບກັບ",
             "other": "%(count)s ຕອບກັບ"
         },
-        "error_start_thread_existing_relation": "ບໍ່ສາມາດສ້າງກະທູ້ຈາກເຫດການທີ່ມີຄວາມສໍາພັນທີ່ມີຢູ່ແລ້ວ",
         "my_threads": "ກະທູ້ຂອງຂ້ອຍ",
         "my_threads_description": "ສະແດງຫົວຂໍ້ທັງໝົດທີ່ທ່ານໄດ້ເຂົ້າຮ່ວມ",
         "open_thread": "ເປີດກະທູ້",
@@ -2283,7 +2279,6 @@
         },
         "creation_summary_dm": "%(creator)s ສ້າງ DM ນີ້.",
         "creation_summary_room": "%(creator)s ສ້າງ ແລະ ກຳນົດຄ່າຫ້ອງ.",
-        "download_action_decrypting": "ການຖອດລະຫັດ",
         "download_action_downloading": "ກຳລັງດາວໂຫຼດ",
         "edits": {
             "tooltip_label": "ແກ້ໄຂເມື່ອ %(date)s. ກົດເພື່ອເບິ່ງການແກ້ໄຂ.",
@@ -2327,8 +2322,7 @@
             "voice_call_unsupported": "%(senderName)s ການໂທດ້ວຍສຽງ. (ບຣາວເຊີນີ້ບໍ່ຮອງຮັບ)"
         },
         "m.file": {
-            "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ",
-            "error_invalid": "ໄຟລ໌ບໍ່ຖືກຕ້ອງ%(extra)s"
+            "error_decrypting": "ເກີດຄວາມຜິດພາດໃນການຖອດລະຫັດໄຟລ໌ຄັດຕິດ"
         },
         "m.image": {
             "error_decrypting": "ການຖອດລະຫັດຮູບພາບຜິດພາດ",
@@ -2461,10 +2455,7 @@
             "removed": "%(widgetName)s ຖືກລຶບອອກໂດຍ %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "ຫຍໍ້ວົງຢືມ",
             "copy_link_thread": "ສຳເນົາລິ້ງໃສ່ກະທູ້",
-            "expand_reply_chain": "ຂະຫຍາຍວົງຢືມ",
-            "label": "ການດຳເນີນການທາງຂໍ້ຄວາມ",
             "view_in_room": "ເບິ່ງຢູ່ໃນຫ້ອງ"
         },
         "mjolnir": {
@@ -2647,13 +2638,6 @@
             },
             "one_user": "%(displayName)s ກຳລັງພິມ…",
             "two_users": "%(names)s ແລະ %(lastPerson)s ກຳລັງພິມ…"
-        },
-        "url_preview": {
-            "close": "ປິດຕົວຢ່າງ",
-            "show_n_more": {
-                "one": "ສະແດງຕົວຢ່າງ %(count)s ອື່ນໆ",
-                "other": "ສະແດງຕົວຢ່າງອື່ນໆ %(count)s"
-            }
         }
     },
     "truncated_list_n_more": {

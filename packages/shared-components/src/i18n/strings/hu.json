@@ -3,29 +3,47 @@
         "seek_bar_label": "Hang keresősávja"
     },
     "action": {
+        "back": "Vissza",
+        "click": "Kattintson",
+        "collapse": "Összecsukás",
         "delete": "Törlés",
         "dismiss": "Eltüntetés",
+        "download": "Letöltés",
         "edit": "Szerkesztés",
         "explore_rooms": "Szobák felderítése",
+        "go": "Kezdés",
+        "hide": "Elrejtés",
         "invite": "Meghívás",
         "new_conversation": "Új beszélgetés",
         "new_room": "Új szoba",
         "new_video_room": "Új videószoba",
         "open_menu": "Menü megnyitása",
         "pause": "Szünet",
+        "pin": "Kitűzés",
         "play": "Lejátszás",
+        "react": "Reakció",
         "remove": "Eltávolítás",
+        "reply": "Válasz",
+        "reply_in_thread": "Válasz üzenetszálban",
         "retry": "Újra",
         "search": "Keresés",
-        "start_chat": "Csevegés indítása"
+        "start_chat": "Csevegés indítása",
+        "unpin": "Kitűzés megszüntetése",
+        "view_source": "Forrás megjelenítése"
     },
     "common": {
+        "attachment": "Melléklet",
         "encryption_enabled": "Titkosítás engedélyezve",
+        "options": "Beállítások",
         "preferences": "Beállítások",
         "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
     },
+    "keyboard": {
+        "shift": "Shift"
+    },
     "left_panel": {
-        "open_dial_pad": "Számlap megnyitása"
+        "open_dial_pad": "Számlap megnyitása",
+        "separator_label": "Kattintson vagy húzza az egérrel a kibontáshoz"
     },
     "notifications": {
         "all_messages": "Összes üzenet",
@@ -42,6 +60,10 @@
             "shared": "Az új tagok látják az előzményeket",
             "world_readable": "Bárki láthatja az előzményeket"
         },
+        "jump_to_date": "Ugrás időpontra",
+        "jump_to_date_beginning": "A szoba kezdete",
+        "jump_to_date_prompt": "Idő kiválasztása az ugráshoz",
+        "pinned_message_badge": "Kitűzött üzenet",
         "status_bar": {
             "delete_all": "Összes törlése",
             "exceeded_resource_limit_description": "A szolgáltatás további használatához vegye fel a kapcsolatot a szolgáltatóval.",
@@ -69,7 +91,9 @@
                 "one": "%(roomName)s szoba megnyitása 1 olvasatlan üzenettel.",
                 "other": "%(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel."
             },
-            "unsent_message": "%(roomName)s szoba megnyitása elküldetlen üzenettel."
+            "unsent_message": "%(roomName)s szoba megnyitása elküldetlen üzenettel.",
+            "video_call": "Szoba megnyitása videóhívással itt: %(roomName)s",
+            "voice_call": "Szoba megnyitása hanghívással itt: %(roomName)s"
         },
         "appearance": "Megjelenítés",
         "collapse_filters": "Szűrőlista összecsukása",
@@ -116,6 +140,9 @@
             "more_options": "További lehetőségek"
         },
         "room_options": "Szobabeállítások",
+        "section_header": {
+            "toggle": "%(section)s szakasz be/ki"
+        },
         "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "sort": "Rendezés",
         "sort_type": {
@@ -130,6 +157,9 @@
     },
     "terms": {
         "tac_button": "Általános Szerződési Feltételek elolvasása"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről, amely már rendelkezik kapcsolattal"
     },
     "time": {
         "about_day_ago": "egy napja",
@@ -153,14 +183,19 @@
             "historical_event_no_key_backup": "A korábbi üzenetek nem érhetők el ezen az eszközön",
             "historical_event_unverified_device": "Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez",
             "historical_event_user_not_joined": "Nincs hozzáférése ehhez az üzenethez",
-            "sender_identity_previously_verified": "A feladó ellenőrzött személyazonossága megváltozott",
+            "sender_identity_previously_verified": "A feladó ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva",
             "sender_unsigned_device": "Nem biztonságos eszközről küldve.",
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },
+        "download_action_decrypting": "Visszafejtés",
+        "download_action_downloading": "Letöltés",
         "m.audio": {
             "audio_player": "Hanglejátszó",
             "error_downloading_audio": "Hiba a hang letöltésekor",
             "unnamed_audio": "Névtelen hang"
+        },
+        "m.file": {
+            "error_invalid": "Érvénytelen fájl"
         },
         "m.room.encryption": {
             "disable_attempt": "A titkosítás kikapcsolására tett kísérlet figyelmen kívül lett hagyva",
@@ -172,8 +207,23 @@
             "state_enabled": "Az ebben a szobában lévő üzenetek és állapotesemények végpontok közötti titkosítással vannak ellátva. Amikor valaki csatlakozik, ellenőrizheti a profiljában, csak kattintson a profilképére.",
             "unsupported": "A szobában használt titkosítás nem támogatott."
         },
+        "mab": {
+            "collapse_reply_chain": "Idézetek összecsukása",
+            "copy_link_thread": "Hivatkozás másolása az üzenetszálba",
+            "expand_reply_chain": "Idézetek megjelenítése",
+            "label": "Üzenetműveletek",
+            "view_in_room": "Megjelenítés a szobában"
+        },
         "message_timestamp_received_at": "Érkezett: %(dateTime)s",
-        "message_timestamp_sent_at": "Elküldve: %(dateTime)s"
+        "message_timestamp_sent_at": "Elküldve: %(dateTime)s",
+        "url_preview": {
+            "close": "Előnézet bezárása",
+            "show_n_more": {
+                "one": "%(count)s további előnézet megjelenítése",
+                "other": "%(count)s további előnézet megjelenítése"
+            },
+            "view_image": "Kép megtekintése"
+        }
     },
     "widget": {
         "context_menu": {

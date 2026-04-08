@@ -13,8 +13,8 @@ import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
-import { useI18n } from "../../../utils/i18nContext";
-import { useViewModel } from "../../../viewmodel";
+import { useI18n } from "../../../core/i18n/i18nContext";
+import { useViewModel } from "../../../core/viewmodel";
 
 interface ComposeMenuViewProps {
     /**

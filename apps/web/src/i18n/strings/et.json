@@ -32,7 +32,6 @@
         "cancel": "Loobu",
         "change": "Muuda",
         "clear": "Eemalda",
-        "click": "Klõpsi",
         "click_to_copy": "Kopeerimiseks klõpsa",
         "close": "Sulge",
         "collapse": "Ahenda",
@@ -66,7 +65,6 @@
         "go": "Mine",
         "go_back": "Mine tagasi",
         "got_it": "Selge lugu",
-        "hide": "Peida",
         "hide_advanced": "Peida lisaseadistused",
         "hold": "Pane ootele",
         "ignore": "Eira",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Lõimingute kasutamine ei ole lubatud"
     },
     "invite": {
-        "ask_anyway_description": "Allpool loetletud Matrix'i kasutajatunnustele ei leidunud profiile. Kas sa ikkagi tahaksid nendega vestlust alustada?",
-        "ask_anyway_label": "Ikkagi alusta vestlust",
-        "ask_anyway_never_warn_label": "Alusta siiski ja ära hoiata mind enam",
         "email_caption": "Saada kutse e-kirjaga",
         "email_limit_one": "Kutseid saad e-posti teel saata vaid ükshaaval",
         "email_use_default_is": "E-posti teel kutse saatmiseks kasuta isikutuvastusserverit. Võid kasutada <default>vaikimisi serverit (%(defaultIdentityServerName)s)</default> või määrata muud serverid <settings>seadistustes</settings>.",
@@ -1495,8 +1490,6 @@
     },
     "labs": {
         "ask_to_join": "Võta kasutusele liitumine kasutaja sooviavalduse alusel",
-        "automatic_debug_logs": "Iga vea puhul saada silumislogid automaatselt arendajatele",
-        "automatic_debug_logs_decryption": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele",
         "beta_description": "Mida %(brand)s tulevikus teha oskab? Arendusjärgus funktsionaalsuste loendist leiad võimalusi, mis varsti on kõigile saadaval, kuid sa saad neid juba katsetada ning ka mõjutada missuguseks nad lõplikukt kujunevad.",
         "beta_feature": "See on veel katsetamisjärgus funktsionaalsus",
         "beta_feedback_leave_button": "Beetaversiooni saad välja lülitada rakenduse seadistustest.",
@@ -1554,7 +1547,6 @@
         "notification_settings_beta_caption": "Võtame kasutusele senisest lihtsama viisi teavituste seadistamiseks. Kohanda rakendust %(brand)s nii nagu soovid.",
         "notification_settings_beta_title": "Teavituste seadistused",
         "notifications": "Kasuta jututoa päises teavituste riba",
-        "release_announcement": "Teave uue versiooni kohta",
         "render_reaction_images": "Kujuta reaktsioonides ka kohandatud pilte",
         "render_reaction_images_description": "Mõnikord nimetatakse neid ka „kohandatud emotikonideks“.",
         "report_to_moderators": "Teata moderaatoritele",
@@ -2087,7 +2079,6 @@
         "not_found_title": "Seda jututuba või kogukonda pole olemas.",
         "not_found_title_name": "Jututuba %(roomName)s ei ole olemas.",
         "peek_join_prompt": "Sa vaatad jututoa %(roomName)s eelvaadet. Kas soovid sellega liituda?",
-        "pinned_message_badge": "Esiletõstetud sõnum",
         "pinned_message_banner": {
             "button_close_list": "Sulge loend",
             "button_view_all": "Vaata kõiki",
@@ -3300,7 +3291,6 @@
         },
         "empty_description": "Sõnumi kohtmenüüst vali „%(replyInThread)s“",
         "empty_title": "Jutulõngad aitavad hoida vestlusi teemakohastena ja hallatavatena.",
-        "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa",
         "mark_all_read": "Märgi kõik loetuks",
         "my_threads": "Minu jutulõngad",
         "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
@@ -3344,7 +3334,6 @@
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestu"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dekrüptin sisu",
         "download_action_downloading": "Laadin alla",
         "download_failed": "Allalaadimine ei õnnestunud",
         "download_failed_description": "Selle faili allalaadimisel tekkis viga",
@@ -3400,8 +3389,7 @@
             "voice_call_unsupported": "%(senderName)s alustas häälkõnet. (sellel brauseril puudub niisuguste kõnede tugi)"
         },
         "m.file": {
-            "error_decrypting": "Viga manuse dekrüptimisel",
-            "error_invalid": "Vigane fail"
+            "error_decrypting": "Viga manuse dekrüptimisel"
         },
         "m.image": {
             "error": "Vea tõttu ei ole võimalik pilti kuvada",
@@ -3543,10 +3531,7 @@
             "removed": "%(senderName)s eemaldas vidina %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Peida viidatud sisu",
             "copy_link_thread": "Kopeeri jutulõnga link",
-            "expand_reply_chain": "Näita viidatud sisu",
-            "label": "Tegevused sõnumitega",
             "view_in_room": "Vaata jututoas"
         },
         "mjolnir": {
@@ -3742,14 +3727,7 @@
             "one_user": "%(displayName)s kirjutab midagi…",
             "two_users": "%(names)s ja %(lastPerson)s kirjutavad midagi…"
         },
-        "undecryptable_tooltip": "Seda sõnumit ei õnnestunud dekrüptida",
-        "url_preview": {
-            "close": "Sulge eelvaade",
-            "show_n_more": {
-                "other": "Näita %(count)s muud eelvaadet",
-                "one": "Näita veel %(count)s eelvaadet"
-            }
-        }
+        "undecryptable_tooltip": "Seda sõnumit ei õnnestunud dekrüptida"
     },
     "truncated_list_n_more": {
         "other": "Ja %(count)s muud..."

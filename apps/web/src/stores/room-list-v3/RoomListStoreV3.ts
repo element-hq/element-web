@@ -11,11 +11,10 @@ import { EventType } from "matrix-js-sdk/src/matrix";
 import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
-import type { FilterKey } from "./skip-list/filters";
+import type { Filter, FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
@@ -36,6 +35,11 @@ import { Action } from "../../dispatcher/actions";
 import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";
 import { getChangedOverrideRoomMutePushRules } from "./utils";
 import { isRoomVisible } from "./isRoomVisible";
+import { RoomSkipList } from "./skip-list/RoomSkipList";
+import { DefaultTagID } from "./skip-list/tag";
+import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
+import { TagFilter } from "./skip-list/filters/TagFilter";
+import { filterBoolean } from "../../utils/arrays";
 
 /**
  * These are the filters passed to the room skip list.
@@ -64,8 +68,24 @@ export type RoomsResult = {
     // The filter queried
     filterKeys?: FilterKey[];
     // The resulting list of rooms
-    rooms: Room[];
+    sections: Section[];
 };
+
+/**
+ * Represents a named section of rooms in the room list, identified by a tag.
+ */
+export interface Section {
+    /** The tag that identifies this section. */
+    tag: string;
+    /** The ordered list of rooms belonging to this section. */
+    rooms: Room[];
+}
+
+/**
+ * A synthetic tag used to represent the "Chats" section, which contains
+ * every room that does not belong to any other explicit tag section.
+ */
+export const CHATS_TAG = "chats";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
@@ -75,8 +95,28 @@ export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
  * This store is being actively developed so expect the methods to change in future.
  */
 export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
+    /**
+     * Contains all the rooms in the active space
+     */
     private roomSkipList?: RoomSkipList;
+
+    /**
+     * Maps section tags to their corresponding tag filters, used to determine which rooms belong in which sections.
+     */
+    private readonly filterByTag: Map<string, Filter> = new Map();
+
+    /**
+     * Defines the display order of sections.
+     */
+    private readonly sortedTags: string[] = [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority];
+
     private readonly msc3946ProcessDynamicPredecessor: boolean;
+
+    /**
+     * Whether a batched LISTS_UPDATE_EVENT emission is pending.
+     * Used by {@link scheduleEmit} to coalesce rapid-fire updates into a single emit per frame.
+     */
+    private pendingEmit = false;
 
     public constructor(dispatcher: MatrixDispatcher) {
         super(dispatcher);
@@ -120,13 +160,17 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): RoomsResult {
         const spaceId = SpaceStore.instance.activeSpace;
-        if (this.roomSkipList?.initialized)
-            return {
-                spaceId: spaceId,
-                filterKeys,
-                rooms: Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys)),
-            };
-        else return { spaceId: spaceId, filterKeys, rooms: [] };
+
+        const areSectionsEnabled = SettingsStore.getValue("feature_room_list_sections");
+        const sections = areSectionsEnabled
+            ? this.getSections(filterKeys)
+            : [{ tag: CHATS_TAG, rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filterKeys) ?? []) }];
+
+        return {
+            spaceId: spaceId,
+            filterKeys,
+            sections,
+        };
     }
 
     /**
@@ -153,7 +197,9 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
-        this.roomSkipList = new RoomSkipList(sorter, FILTERS);
+
+        this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
+
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
@@ -243,7 +289,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     newMembership === EffectiveMembership.Leave
                 ) {
                     this.roomSkipList.removeRoom(payload.room);
-                    this.emit(LISTS_UPDATE_EVENT);
+                    this.scheduleEmit();
                     return;
                 }
 
@@ -269,7 +315,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case Action.AfterForgetRoom: {
                 const room = payload.room;
                 this.roomSkipList.removeRoom(room);
-                this.emit(LISTS_UPDATE_EVENT);
+                this.scheduleEmit();
                 break;
             }
         }
@@ -293,7 +339,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                             logger.warn(`${roomId} was found in DMs but the room is not in the store`);
                             continue;
                         }
-                        this.roomSkipList!.reInsertRoom(room);
+                        this.roomSkipList?.reInsertRoom(room);
                         needsEmit = true;
                     }
                 }
@@ -307,13 +353,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                     .map((id) => this.matrixClient?.getRoom(id))
                     .filter((room) => !!room);
                 for (const room of rooms) {
-                    this.roomSkipList!.reInsertRoom(room);
+                    this.roomSkipList?.reInsertRoom(room);
                     needsEmit = true;
                 }
                 break;
             }
         }
-        if (needsEmit) this.emit(LISTS_UPDATE_EVENT);
+        if (needsEmit) this.scheduleEmit();
     }
 
     /**
@@ -349,6 +395,20 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
+     * Schedule a batched emission of LISTS_UPDATE_EVENT using requestAnimationFrame.
+     * Multiple calls within the same frame are coalesced into a single emit.
+     */
+    private scheduleEmit(): void {
+        if (!this.pendingEmit) {
+            this.pendingEmit = true;
+            requestAnimationFrame(() => {
+                this.pendingEmit = false;
+                this.emit(LISTS_UPDATE_EVENT);
+            });
+        }
+    }
+
+    /**
      * Add a room to the skiplist and emit an update.
      * @param room The room to add to the skiplist
      * @param isNewRoom Set this to true if this a new room that the isn't already in the skiplist
@@ -366,13 +426,42 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         } else {
             this.roomSkipList.reInsertRoom(room);
         }
-        this.emit(LISTS_UPDATE_EVENT);
+        this.scheduleEmit();
     }
 
     private onActiveSpaceChanged(): void {
         if (!this.roomSkipList) return;
         this.roomSkipList.calculateActiveSpaceForNodes();
-        this.emit(LISTS_UPDATE_EVENT);
+        this.scheduleEmit();
+    }
+
+    /**
+     * Get the list of filters to be used in the skip list, including the tag filters for sectioning.
+     */
+    private getSkipListFilters(): Filter[] {
+        const tagsToExclude = this.sortedTags.filter((tag) => tag !== CHATS_TAG);
+        const tagFilters = this.sortedTags.map((tag) =>
+            tag === CHATS_TAG ? new ExcludeTagsFilter(tagsToExclude) : new TagFilter(tag),
+        );
+        this.sortedTags.forEach((tag, index) => this.filterByTag.set(tag, tagFilters[index]));
+
+        return [...FILTERS, ...tagFilters];
+    }
+
+    /**
+     * Get the sections to display in the room list, based on the current active space and the provided filters.
+     * @param filterKeys - Optional array of filters that the rooms must match against to be included in the sections.
+     * @returns An array of sections
+     */
+    private getSections(filterKeys?: FilterKey[]): Section[] {
+        return this.sortedTags.map((tag) => {
+            const filters = filterBoolean([this.filterByTag.get(tag)?.key, ...(filterKeys || [])]);
+
+            return {
+                tag,
+                rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filters) || []),
+            };
+        });
     }
 }
 

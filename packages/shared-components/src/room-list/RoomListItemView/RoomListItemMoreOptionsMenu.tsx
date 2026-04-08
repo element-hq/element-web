@@ -18,21 +18,21 @@ import {
     OverflowHorizontalIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t } from "../../utils/i18n";
-import { useViewModel, type ViewModel } from "../../viewmodel";
-import type { RoomListItemSnapshot, RoomListItemActions } from "./RoomListItemView";
+import { _t } from "../../core/i18n/i18n";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
+import type { RoomListItemViewSnapshot, RoomListItemViewActions } from "./RoomListItemView";
 
 /**
  * View model type for room list item
  */
-export type RoomItemViewModel = ViewModel<RoomListItemSnapshot, RoomListItemActions>;
+export type RoomListItemViewModel = ViewModel<RoomListItemViewSnapshot, RoomListItemViewActions>;
 
 /**
  * Props for RoomListItemMoreOptionsMenu component
  */
 export interface RoomListItemMoreOptionsMenuProps {
     /** The room item view model */
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
 }
 
 /**
@@ -66,7 +66,7 @@ export function RoomListItemMoreOptionsMenu({ vm }: RoomListItemMoreOptionsMenuP
 }
 
 interface MoreOptionContentProps {
-    vm: RoomItemViewModel;
+    vm: RoomListItemViewModel;
 }
 
 export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {

@@ -32,7 +32,6 @@
         "cancel": "Annulla",
         "change": "Cambia",
         "clear": "Svuota",
-        "click": "Clicca",
         "click_to_copy": "Clicca per copiare",
         "close": "Chiudi",
         "collapse": "Riduci",
@@ -1130,9 +1129,6 @@
         "impossible_dialog_title": "Integrazioni non permesse"
     },
     "invite": {
-        "ask_anyway_description": "Impossibile trovare profili per gli ID Matrix elencati sotto - vuoi comunque iniziare un messaggio diretto?",
-        "ask_anyway_label": "Inizia il messaggio lo stesso",
-        "ask_anyway_never_warn_label": "Inizia il messaggio lo stesso e non avvisarmi più",
         "email_caption": "Invita per email",
         "email_limit_one": "Gli inviti per email possono essere inviati uno per volta",
         "email_use_default_is": "Usa un server d'identità per invitare via email. <default>Usa quello predefinito (%(defaultIdentityServerName)s)</default> o gestiscilo nelle <settings>impostazioni</settings>.",
@@ -1265,8 +1261,6 @@
     },
     "labs": {
         "ask_to_join": "Attiva \"Chiedi di entrare\"",
-        "automatic_debug_logs": "Invia automaticamente log di debug per qualsiasi errore",
-        "automatic_debug_logs_decryption": "Invia automaticamente log di debug per errori di decifrazione",
         "beta_description": "Cosa riserva il futuro di %(brand)s? I laboratori sono il miglior modo di provare cose in anticipo, testare nuove funzioni ed aiutare a plasmarle prima che vengano distribuite.",
         "beta_feature": "Questa è una funzionalità beta",
         "beta_feedback_leave_button": "Per abbandonare la beta, vai nelle impostazioni.",
@@ -2806,7 +2800,6 @@
             "one": "%(count)s risposta",
             "other": "%(count)s risposte"
         },
-        "error_start_thread_existing_relation": "Impossibile creare una conversazione da un evento con una relazione esistente",
         "my_threads": "Le mie conversazioni",
         "my_threads_description": "Mostra tutte le conversazioni a cui hai partecipato",
         "open_thread": "Apri conversazione",
@@ -2843,7 +2836,6 @@
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",
         "edits": {
             "tooltip_label": "Modificato alle %(date)s. Clicca per vedere le modifiche.",
@@ -2896,8 +2888,7 @@
             "voice_call_unsupported": "%(senderName)s ha iniziato una telefonata. (non supportata da questo browser)"
         },
         "m.file": {
-            "error_decrypting": "Errore decifratura allegato",
-            "error_invalid": "File non valido %(extra)s"
+            "error_decrypting": "Errore decifratura allegato"
         },
         "m.image": {
             "error": "Impossibile mostrare l'immagine per un errore",
@@ -3036,10 +3027,7 @@
             "removed": "Widget %(widgetName)s rimosso da %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Riduci le citazioni",
             "copy_link_thread": "Copia link nella conversazione",
-            "expand_reply_chain": "Espandi le citazioni",
-            "label": "Azioni messaggio",
             "view_in_room": "Vedi nella stanza"
         },
         "mjolnir": {
@@ -3234,14 +3222,7 @@
             "one_user": "%(displayName)s sta scrivendo …",
             "two_users": "%(names)s e %(lastPerson)s stanno scrivendo …"
         },
-        "undecryptable_tooltip": "Non è stato possibile decifrare questo messaggio",
-        "url_preview": {
-            "close": "Chiudi anteprima",
-            "show_n_more": {
-                "one": "Mostra %(count)s altra anteprima",
-                "other": "Mostra altre %(count)s anteprime"
-            }
-        }
+        "undecryptable_tooltip": "Non è stato possibile decifrare questo messaggio"
     },
     "truncated_list_n_more": {
         "other": "E altri %(count)s ..."

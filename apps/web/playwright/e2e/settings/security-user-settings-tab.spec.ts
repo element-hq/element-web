@@ -32,12 +32,14 @@ test.describe("Security user settings tab", () => {
         });
 
         test.describe("AnalyticsLearnMoreDialog", () => {
-            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
+            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user, axe }) => {
                 const tab = await app.settings.openUserSettings("Security");
                 await tab.getByRole("button", { name: "Learn more" }).click();
                 await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot(
                     "Security-user-settings-tab-with-posthog-enable-b5d89-csLearnMoreDialog-should-be-rendered-properly-1.png",
                 );
+
+                await expect(axe).toHaveNoViolations();
             });
         });
 

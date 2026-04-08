@@ -381,6 +381,7 @@ export function createStubMatrixRTC(): MatrixRTCSessionManager {
         const session = new EventEmitter() as MatrixRTCSession;
         session.memberships = [];
         session.getOldestMembership = () => undefined;
+        session.getConsensusCallIntent = () => "video";
         return session;
     });
     return {
@@ -680,11 +681,13 @@ export function mkStubRoom(
             maySendStateEvent: jest.fn().mockReturnValue(true),
             maySendRedactionForEvent: jest.fn().mockReturnValue(true),
             maySendEvent: jest.fn().mockReturnValue(true),
+            maySendMessage: jest.fn().mockReturnValue(true),
             members: {},
             getHistoryVisibility: jest.fn().mockReturnValue(HistoryVisibility.Shared),
             getJoinRule: jest.fn().mockReturnValue(JoinRule.Invite),
             on: jest.fn(),
             off: jest.fn(),
+            removeListener: jest.fn(),
         } as unknown as RoomState,
         eventShouldLiveIn: jest.fn().mockReturnValue({ shouldLiveInRoom: true, shouldLiveInThread: false }),
         fetchRoomThreads: jest.fn().mockReturnValue(Promise.resolve()),
@@ -713,6 +716,7 @@ export function mkStubRoom(
             isKicked: () => false,
         }),
         getMembers: jest.fn().mockReturnValue([]),
+        getEncryptionTargetMembers: jest.fn().mockReturnValue([]),
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getMxcAvatarUrl: () => "mxc://avatar.url/room.png",
         getMyMembership: jest.fn().mockReturnValue(KnownMembership.Join),

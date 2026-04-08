@@ -32,7 +32,6 @@
         "cancel": "Afbryd",
         "change": "Skift",
         "clear": "Ryd",
-        "click": "Klik",
         "click_to_copy": "Klik for at kopiere",
         "close": "Luk",
         "collapse": "Fold sammen",
@@ -66,7 +65,6 @@
         "go": "Start",
         "go_back": "Gå tilbage",
         "got_it": "Forstået",
-        "hide": "Skjul",
         "hide_advanced": "Skjul avanceret",
         "hold": "Pausér",
         "ignore": "Ignorere",
@@ -410,6 +408,7 @@
     "cannot_invite_without_identity_server": "Du kan ikke invitere brugere via e-mail uden at være forbundet til en identitetsserver. Du kan oprette forbindelse til en under \"Indstillinger\".",
     "cannot_reach_homeserver": "Homeserveren kan ikke kontaktes",
     "cannot_reach_homeserver_detail": "Vær sikker at du har en stabil internetforbindelse, eller kontakt serveradministratoren",
+    "cant_load_page": "Siden kunne ikke indlæses",
     "chat_card_back_action_label": "Tilbage til chat",
     "chat_effects": {
         "confetti_description": "Sender den givne besked med konfetti",
@@ -617,6 +616,8 @@
         "stop_voice_message": "Stop optagelsen",
         "voice_message_button": "Talebesked"
     },
+    "console_dev_note": "Element er open source, så hvis du ved, hvad du laver, så sørg for at tjekke vores GitHub (https://github.com/vector-im/element-web/) og bidrag!",
+    "console_scam_warning": "Hvis nogen bad dig om at kopiere/indsætte noget her, er der stor sandsynlighed for, at du bliver snydt!",
     "console_wait": "Vent!",
     "create_room": {
         "action_create_room": "Opret rum",
@@ -668,7 +669,7 @@
         "name_required": "Indtast et navn til klyngen",
         "personal_space": "Bare mig",
         "personal_space_description": "En privat klynge til at organisere dine rum i",
-        "private_description": "Kun for inviterede, bedst til dig selv eller lukkede fællesskaber",
+        "private_description": "Kun med invitation, personligt eller til dit team",
         "private_heading": "Din private klynge",
         "private_only_heading": "Din klynge",
         "private_personal_description": "Sørg for at de rette mennesker har adgang til %(name)s",
@@ -678,10 +679,10 @@
         "public_description": "Alle kan deltage, bedst til åbne fællesskaber",
         "public_heading": "Din offentlige klynge",
         "search_public_button": "Søg efter offentlige klynger",
-        "setup_rooms_community_description": "Lad os oprette et rum til hver af dem.",
+        "setup_rooms_community_description": "Lad os oprette nogle rum for at komme i gang.",
         "setup_rooms_community_heading": "Hvad er nogle af de ting, du ønsker at diskutere i %(spaceName)s?",
-        "setup_rooms_description": "Du kan også tilføje flere senere, herunder allerede eksisterende.",
-        "setup_rooms_private_description": "Vi opretter rum for hver af dem.",
+        "setup_rooms_description": "Du kan tilføje flere rum til klyngen senere, inklusiv eksisterende rum.",
+        "setup_rooms_private_description": "Lad os oprette nogle rum for at komme i gang.",
         "setup_rooms_private_heading": "Hvilke projekter arbejder dit hold på?",
         "share_description": "Der er kun dig herinde i øjeblikket. Det bliver endnu bedre med andre.",
         "share_heading": "Del %(name)s",
@@ -694,7 +695,7 @@
         "subspace_join_rule_invite_only": "Privat klynge (kun for inviterede)",
         "subspace_join_rule_label": "Klyngens synlighed",
         "subspace_join_rule_public_description": "Alle vil kunne finde og deltage i denne klynge, ikke kun medlemmer af <SpaceName/> .",
-        "subspace_join_rule_restricted_description": "Enhver i <SpaceName/> vil kunne finde og deltage."
+        "subspace_join_rule_restricted_description": "Enhver i <SpaceName/> kan deltage."
     },
     "credits": {
         "default_cover_photo": "Standardforsidebilledet <photo></photo> er © <author>Jesús Roncero</author> brugt under betingelserne i <terms>CC-BY-SA 4.0</terms>.",
@@ -984,6 +985,9 @@
     },
     "error_database_closed_title": "%(brand)s holdt op med at fungere",
     "error_dialog": {
+        "copy_room_link_failed": {
+            "title": "Kunne ikke kopiere linket til rummet"
+        },
         "forget_room_failed": "Kunne ikke glemme rummet %(errCode)s"
     },
     "error_user_not_logged_in": "Brugeren er ikke logget ind",
@@ -1088,6 +1092,12 @@
         "send_feedback_action": "Send feedback",
         "sent": "Feedback sendt! Tak, vi sætter pris på det!"
     },
+    "file_panel": {
+        "empty_description": "Vedhæft filer fra chatten, eller træk og slip dem hvor som helst i et rum.",
+        "empty_heading": "Ingen filer synlige i dette rum",
+        "guest_note": "<a>Registrer dig</a> for at kunne bruge denne funktion.",
+        "peek_note": "Du skal deltage i rummet for at se dets filer"
+    },
     "forward": {
         "filter_placeholder": "Søg efter rum eller personer",
         "message_preview_heading": "Forhåndsvisning af besked",
@@ -1156,9 +1166,6 @@
         "impossible_dialog_title": "Integrationer er ikke tilladt"
     },
     "invite": {
-        "ask_anyway_description": "Kan ikke finde profiler for nedenstående Matrix-id'er – vil du alligevel starte en samtale?",
-        "ask_anyway_label": "Start samtale alligevel",
-        "ask_anyway_never_warn_label": "Start samtale alligevel og advar mig aldrig igen",
         "email_caption": "Invitér via e-mail",
         "email_limit_one": "Invitationer via e-mail kan kun sendes én ad gangen",
         "email_use_default_is": "Brug en identitetsserver til at invitere via e-mail. <default>Brug standardindstillingen (%(defaultIdentityServerName)s)</default> eller administrer den i <settings>Indstillinger</settings>.",
@@ -1290,8 +1297,6 @@
     },
     "labs": {
         "ask_to_join": "Aktivér spørg om at deltage",
-        "automatic_debug_logs": "Send automatisk fejlfindingslogfiler ved enhver fejl",
-        "automatic_debug_logs_decryption": "Send automatisk fejlfindingslogfiler ved dekrypteringsfejl",
         "beta_description": "Hvad er det næste skridt for %(brand)s? Labs er den bedste måde at få adgang til tingene tidligt, afprøve nye funktioner og være med til at forme dem, inden de faktisk lanceres.",
         "beta_feature": "Dette er en betafunktion",
         "beta_feedback_leave_button": "For at forlade betaversionen skal du gå til dine indstillinger.",
@@ -1398,9 +1403,16 @@
     },
     "language_dropdown_label": "Rullemenu for sprog",
     "leave_room_dialog": {
+        "last_person_warning": "Du er den eneste person her. Hvis du forlader rummet, vil ingen kunne deltage i fremtiden, heller ikke dig.",
+        "leave_room_question": "Er du sikker på, at du vil forlade rummet '%(roomName)s'?",
+        "leave_space_question": "Er du sikker på, at du vil forlade klyngen '%(spaceName)s'?",
         "room_leave_admin_warning": "Du er den eneste administrator i dette rum. Hvis du forlader det, vil ingen være i stand til at ændre dets indstillinger eller foretage andre vigtige handlinger.",
         "room_leave_mod_warning": "Du er den eneste moderator i dette rum. Hvis du forlader det, vil ingen kunne ændre rummets indstillinger eller foretage andre vigtige handlinger.",
+        "room_rejoin_warning": "Dette rum er ikke offentligt. Du kan ikke deltage igen uden en invitation.",
         "space_rejoin_warning": "Denne klynge er ikke offentlig. Du har ikke mulighed for at tilslutte dig uden en invitation."
+    },
+    "left_panel": {
+        "open_dial_pad": "Åbn opkaldstastaturet"
     },
     "lightbox": {
         "rotate_left": "Roter mod venstre",
@@ -1614,6 +1626,7 @@
         "incorrect_security_phrase_title": "Forkert adgangsfrase",
         "key_backup_warning": "<b>Advarsel</b>: Du bør kun konfigurere nøglebackup fra en computer du stoler på.",
         "key_fetch_in_progress": "Henter nøgler fra serveren...",
+        "key_forgotten_text": "Hvis du har glemt din gendannelsesnøgle, kan du opsætte <button>nye gendannelsesmuligheder</button>",
         "key_is_invalid": "Ikke en gyldig gendannelsesnøgle",
         "key_is_valid": "Dette ser ud til at være en gyldig gendannelsesnøgle!",
         "keys_restored_title": "Nøgler gendannet",
@@ -2044,11 +2057,11 @@
             "history_visibility_warning": "Ændringer vil ikke påvirke tidligere beskeder, kun nye. <a>Læs mere</a>",
             "history_visibility_world_readable": "Alle (historikken er offentlig)",
             "join_rule_description": "Bestem hvem der kan deltage i %(roomName)s .",
-            "join_rule_invite": "Privat (kun tilgængeligt med invitation)",
+            "join_rule_invite": "Kun inviterede",
             "join_rule_invite_description": "Kun inviterede personer kan deltage i dette rum.",
             "join_rule_knock": "Bed om at deltage",
             "join_rule_knock_description": "Andre kan ikke tilslutte sig, medmindre der gives adgang.",
-            "join_rule_public_description": "Enhver kan finde og tilslutte sig.",
+            "join_rule_public_description": "Alle kan deltage.",
             "join_rule_restricted": "Medlemmer af klyngen",
             "join_rule_restricted_description": "Alle, der er i en klynge med tilladelse, kan finde og deltage. <a>Håndter klynger.</a>",
             "join_rule_restricted_description_active_space": "Enhver i <spaceName/> kan finde og deltage",
@@ -2068,8 +2081,8 @@
                 "other": "& %(count)s mere"
             },
             "join_rule_restricted_summary": {
-                "one": "I øjeblikket har et rum adgang",
-                "other": "I øjeblikket har %(count)s rum adgang"
+                "one": "I øjeblikket har en klynge adgang",
+                "other": "I øjeblikket har %(count)s klynger adgang"
             },
             "join_rule_restricted_upgrade_description": "Denne opgradering vil tillade medlemmer af udvalgte klynger at tilgå dette rum uden invitation.",
             "join_rule_restricted_upgrade_warning": "Dette rum er i nogle klynger, som du ikke er admin for. I de klynger, vil det gamle rum stadig blive vist, men brugere vil blive foreslået at tilslutte sig det nye.",
@@ -2102,7 +2115,7 @@
             "history_visibility_anyone_space": "Forhåndsvis klynge",
             "history_visibility_anyone_space_description": "Tillad andre at få forhåndsvist din klynge før de tilslutter sig.",
             "history_visibility_anyone_space_recommendation": "Anbefalet for offentlige klynger.",
-            "title": "Synlighed"
+            "title": "Sikkerhed & Privatliv"
         },
         "voip": {
             "call_type_section": "Opkaldstype",
@@ -2844,11 +2857,16 @@
             "one": "%(count)s svar",
             "other": "%(count)s svar"
         },
-        "error_start_thread_existing_relation": "Kan ikke oprette en tråd fra en begivenhed med en eksisterende relation",
+        "mark_all_read": "Markér alle som læst",
         "my_threads": "Mine tråde",
         "my_threads_description": "Viser alle de tråde, du har deltaget i",
         "open_thread": "Åbn tråd",
         "show_thread_filter": "Vis:"
+    },
+    "threads_activity_centre": {
+        "header": "Aktivitet i tråde",
+        "no_rooms_with_threads_notifs": "Du har ingen rum med notifikationer fra tråde endnu.",
+        "no_rooms_with_unread_threads": "Du har ingen rum med ulæste tråde."
     },
     "time": {
         "date_at_time": "%(date)s om %(time)s",
@@ -2878,7 +2896,6 @@
         "creation_summary_dm": "%(creator)s oprettede denne samtale.",
         "creation_summary_room": "%(creator)s oprettede og konfigurerede rummet.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dekrypterer",
         "download_action_downloading": "Downloader",
         "e2e_state": "Tilstand på end-to-end krypteringen",
         "edits": {
@@ -2931,8 +2948,7 @@
             "voice_call_unsupported": "%(senderName)s foretog et stemmeopkald. (ikke understøttet af denne browser)"
         },
         "m.file": {
-            "error_decrypting": "Fejl ved dekryptering af vedhæftet fil",
-            "error_invalid": "Ugyldig fil"
+            "error_decrypting": "Fejl ved dekryptering af vedhæftet fil"
         },
         "m.image": {
             "error": "Billedet kunne ikke vises på grund af en fejl",
@@ -3068,10 +3084,7 @@
             "removed": "%(widgetName)s fjernet af %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Skjul citater",
             "copy_link_thread": "Kopiér link til tråd",
-            "expand_reply_chain": "Udvid citater",
-            "label": "Beskedhandlinger",
             "view_in_room": "Vis i rum"
         },
         "mjolnir": {
@@ -3266,14 +3279,7 @@
             "one_user": "%(displayName)s skriver …",
             "two_users": "%(names)s og %(lastPerson)s skriver …"
         },
-        "undecryptable_tooltip": "Denne besked kunne ikke dekrypteres",
-        "url_preview": {
-            "close": "Luk forhåndsvisning",
-            "show_n_more": {
-                "one": "Vis %(count)s anden forhåndsvisning",
-                "other": "Vis %(count)s andre forhåndsvisninger"
-            }
-        }
+        "undecryptable_tooltip": "Denne besked kunne ikke dekrypteres"
     },
     "truncated_list_n_more": {
         "other": "Og %(count)s mere..."

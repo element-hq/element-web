@@ -1,0 +1,18 @@
+diff --git a/index.d.ts b/index.d.ts
+index a30a77c..e512ce1 100644
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -25,6 +25,13 @@ interface AutoLaunchOptions {
+ declare class AutoLaunch {
+     constructor(options: AutoLaunchOptions);
+ 
++    /**
++     * This type describes the internal options of the `auto-launch` package which allows us to update options after initialization.
++     */
++    readonly opts: {
++        isHiddenOnLaunch: boolean;
++    };
++
+     /**
+      * Enables auto-launch at start up.
+      */

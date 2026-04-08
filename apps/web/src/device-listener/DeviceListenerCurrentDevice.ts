@@ -94,6 +94,7 @@ export class DeviceListenerCurrentDevice {
         this.client.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.on(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
         this.client.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChanged);
+        this.client.on(CryptoEvent.KeyBackupDecryptionKeyCached, this.onKeyBackupDecryptionKeyCached);
         this.client.on(ClientEvent.AccountData, this.onAccountData);
         this.client.on(ClientEvent.Sync, this.onSync);
         this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
@@ -112,6 +113,7 @@ export class DeviceListenerCurrentDevice {
         this.client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         this.client.removeListener(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
         this.client.removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChanged);
+        this.client.removeListener(CryptoEvent.KeyBackupDecryptionKeyCached, this.onKeyBackupDecryptionKeyCached);
         this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
         this.client.removeListener(ClientEvent.Sync, this.onSync);
         this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
@@ -151,7 +153,6 @@ export class DeviceListenerCurrentDevice {
             return;
         }
 
-        const crossSigningReady = await crypto.isCrossSigningReady();
         const secretStorageStatus = await crypto.getSecretStorageStatus();
         const crossSigningStatus = await crypto.getCrossSigningStatus();
         const allCrossSigningSecretsCached =
@@ -236,7 +237,6 @@ export class DeviceListenerCurrentDevice {
                 // missing locally, that is handled by the
                 // `!allCrossSigningSecretsCached` branch above.
                 logSpan.warn("4S is missing secrets or backup key not cached", {
-                    crossSigningReady,
                     secretStorageStatus,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,
@@ -305,6 +305,12 @@ export class DeviceListenerCurrentDevice {
 
     private onKeyBackupStatusChanged = (): void => {
         this.logger.info("Backup status changed");
+        this.cachedKeyBackupUploadActive = undefined;
+        this.deviceListener.recheck();
+    };
+
+    private onKeyBackupDecryptionKeyCached = (): void => {
+        this.logger.info("Backup decryption key cached");
         this.cachedKeyBackupUploadActive = undefined;
         this.deviceListener.recheck();
     };

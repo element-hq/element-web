@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { type JSX, createRef, useContext, useEffect } from "react";
+import React, { createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -18,28 +18,29 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { useCreateAutoDisposedViewModel, DecryptionFailureBodyView } from "@element-hq/web-shared-components";
 
-import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
-import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
 import TextualBody from "./TextualBody";
 import MImageBody from "./MImageBody";
-import MFileBody from "./MFileBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
-import MVideoBody from "./MVideoBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
-import { DecryptionFailureBodyViewModel } from "../../../viewmodels/message-body/DecryptionFailureBodyViewModel";
+import {
+    DecryptionFailureBodyFactory,
+    FileBodyFactory,
+    RedactedBodyFactory,
+    VideoBodyFactory,
+    renderMBody,
+} from "./MBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -67,9 +68,9 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Notice, TextualBody],
     [MsgType.Emote, TextualBody],
     [MsgType.Image, MImageBody],
-    [MsgType.File, MFileBody],
+    [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
-    [MsgType.Video, MVideoBody],
+    [MsgType.Video, VideoBodyFactory],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
@@ -246,17 +247,17 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType: React.ComponentType<IBodyProps> = RedactedBody;
+        let BodyType: React.ComponentType<IBodyProps> = RedactedBodyFactory;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (this.props.mxEvent.isDecryptionFailure()) {
-                BodyType = DecryptionFailureBodyWrapper;
+                BodyType = DecryptionFailureBodyFactory;
             } else if (type && this.evTypes.has(type)) {
                 BodyType = this.evTypes.get(type)!;
             } else if (msgtype && this.bodyTypes.has(msgtype)) {
                 BodyType = this.bodyTypes.get(msgtype)!;
             } else if (content.url) {
-                // Fallback to MFileBody if there's a content URL
+                // Fallback to file body if there's a content URL
                 BodyType = this.bodyTypes.get(MsgType.File)!;
             } else {
                 // Fallback to UnknownBody otherwise if not redacted
@@ -264,7 +265,8 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
 
             if (
-                ((BodyType === MImageBody || BodyType == MVideoBody) && !this.validateImageOrVideoMimetype(content)) ||
+                ((BodyType === MImageBody || BodyType === VideoBodyFactory) &&
+                    !this.validateImageOrVideoMimetype(content)) ||
                 (BodyType === MStickerBody && !this.validateStickerMimetype(content))
             ) {
                 BodyType = this.bodyTypes.get(MsgType.File)!;
@@ -330,22 +332,3 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
         <TextualBody {...{ ...props, ref: undefined }} />
     </div>
 );
-
-/**
- * Bridge decryption-failure events into the view model using current local verification state.
- * This wrapper can be removed after MessageEvent has been changed to a function component.
- */
-function DecryptionFailureBodyWrapper({ mxEvent, ref }: IBodyProps): JSX.Element {
-    const verificationState = useContext(LocalDeviceVerificationStateContext);
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new DecryptionFailureBodyViewModel({
-                decryptionFailureCode: mxEvent.decryptionFailureReason,
-                verificationState,
-            }),
-    );
-    useEffect(() => {
-        vm.setVerificationState(verificationState);
-    }, [verificationState, vm]);
-    return <DecryptionFailureBodyView vm={vm} ref={ref} className="mx_DecryptionFailureBody mx_EventTile_content" />;
-}

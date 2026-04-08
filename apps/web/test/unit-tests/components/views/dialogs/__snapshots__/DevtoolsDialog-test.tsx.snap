@@ -103,6 +103,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           Users
         </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          Explore sticky state
+        </button>
       </div>
       <div>
         <h2
@@ -232,6 +237,50 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             </label>
           </div>
         </div>
+        <div
+          class="_inline-field_19upo_32"
+        >
+          <div
+            class="_inline-field-control_19upo_44"
+          >
+            <div
+              class="_container_udcm8_10"
+            >
+              <input
+                class="_input_udcm8_24"
+                id="mx_SettingsFlag_4yVCeEefiPqp"
+                role="switch"
+                type="checkbox"
+              />
+              <div
+                class="_ui_udcm8_34"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_19upo_38"
+          >
+            <label
+              class="_label_19upo_59"
+              for="mx_SettingsFlag_4yVCeEefiPqp"
+            >
+              Disable bandwidth-heavy features
+            </label>
+            <span
+              class="_message_19upo_85 _help-message_19upo_91"
+              id="radix-_r_c_"
+            >
+              <span>
+                <span
+                  class="mx_SettingsTab_microcopy_warning"
+                >
+                  WARNING:
+                </span>
+                 Disables encryption, presence, avatars, read receipts, and typing notifications
+              </span>
+            </span>
+          </div>
+        </div>
       </form>
       <form
         class="_root_19upo_16"
@@ -241,7 +290,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="radix-_r_a_"
+            for="radix-_r_d_"
           >
             Element Call URL
           </label>
@@ -250,7 +299,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <input
               class="_control_sqdq4_10"
-              id="radix-_r_a_"
+              id="radix-_r_d_"
               name="input"
               title=""
               value=""

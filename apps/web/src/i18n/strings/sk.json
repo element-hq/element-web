@@ -34,7 +34,6 @@
         "cancel": "Zrušiť",
         "change": "Zmeniť",
         "clear": "Vyčistiť",
-        "click": "Kliknúť",
         "click_to_copy": "Kliknutím skopírujete",
         "close": "Zavrieť",
         "collapse": "Zbaliť",
@@ -68,7 +67,6 @@
         "go": "Spustiť",
         "go_back": "Naspäť",
         "got_it": "Rozumiem",
-        "hide": "Skryť",
         "hide_advanced": "Skryť pokročilé možnosti",
         "hold": "Podržať",
         "ignore": "Ignorovať",
@@ -1365,9 +1363,6 @@
         "impossible_dialog_title": "Integrácie nie sú povolené"
     },
     "invite": {
-        "ask_anyway_description": "Nie je možné nájsť používateľské profily pre Matrix ID zobrazené nižšie - chcete aj tak začať priamu správu?",
-        "ask_anyway_label": "Spustiť priamu správu aj tak",
-        "ask_anyway_never_warn_label": "Spustiť priamu správu aj tak a nikdy ma už nevarovať",
         "email_caption": "Pozvať e-mailom",
         "email_limit_one": "Pozvánky e-mailom sa môžu posielať len po jednej",
         "email_use_default_is": "Na pozvanie e-mailom použite server identity. <default>Použite predvolený (%(defaultIdentityServerName)s)</default> alebo spravujte v <settings>nastaveniach</settings>.",
@@ -1509,8 +1504,6 @@
     },
     "labs": {
         "ask_to_join": "Umožniť požiadať o pripojenie",
-        "automatic_debug_logs": "Automatické odosielanie záznamov ladenia pri akejkoľvek chybe",
-        "automatic_debug_logs_decryption": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
         "beta_description": "Čo vás čaká v aplikácii %(brand)s? Laboratóriá sú najlepším spôsobom, ako získať funkcie v predstihu, otestovať nové funkcie a pomôcť ich vytvoriť ešte pred ich skutočným spustením.",
         "beta_feature": "Toto je funkcia vo verzii beta",
         "beta_feedback_leave_button": "Ak chcete opustiť beta verziu, navštívte svoje nastavenia.",
@@ -1568,7 +1561,6 @@
         "notification_settings_beta_caption": "Predstavujeme jednoduchší spôsob zmeny nastavení oznámení. Prispôsobte si svoju aplikáciu %(brand)s, presne podľa svojich predstáv.",
         "notification_settings_beta_title": "Nastavenia oznámení",
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
-        "release_announcement": "Oznámenie o vydaní",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
@@ -2113,7 +2105,6 @@
         "not_found_title": "Táto miestnosť alebo priestor neexistuje.",
         "not_found_title_name": "%(roomName)s neexistuje.",
         "peek_join_prompt": "Zobrazujete náhľad %(roomName)s. Chcete sa k nej pripojiť?",
-        "pinned_message_badge": "Pripnutá správa",
         "pinned_message_banner": {
             "button_close_list": "Zatvoriť zoznam",
             "button_view_all": "Zobraziť všetko",
@@ -3339,7 +3330,6 @@
         },
         "empty_description": "Použite „%(replyInThread)s“, keď umiestnite kurzor myši nad správu.",
         "empty_title": "Vlákna pomáhajú udržiavať vaše konverzácie k téme a ľahko sledovateľné.",
-        "error_start_thread_existing_relation": "Nie je možné vytvoriť vlákno z udalosti s existujúcim vzťahom",
         "mark_all_read": "Označiť všetko ako prečítané",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazí všetky vlákna, v ktorých ste sa zúčastnili",
@@ -3383,7 +3373,6 @@
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrovanie",
         "download_action_downloading": "Preberanie",
         "download_failed": "Sťahovanie zlyhalo",
         "download_failed_description": "Pri sťahovaní tohto súboru sa vyskytla chyba",
@@ -3439,8 +3428,7 @@
             "voice_call_unsupported": "%(senderName)s uskutočnil telefonát. (Nepodporované týmto prehliadačom)"
         },
         "m.file": {
-            "error_decrypting": "Chyba pri dešifrovaní prílohy",
-            "error_invalid": "Neplatný súbor"
+            "error_decrypting": "Chyba pri dešifrovaní prílohy"
         },
         "m.image": {
             "error": "Nie je možné zobraziť obrázok kvôli chybe",
@@ -3583,10 +3571,7 @@
             "removed": "%(senderName)s odstránil widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Zbaliť citácie",
             "copy_link_thread": "Kopírovať odkaz na vlákno",
-            "expand_reply_chain": "Rozbaliť citácie",
-            "label": "Akcie správy",
             "view_in_room": "Zobraziť v miestnosti"
         },
         "mjolnir": {
@@ -3813,14 +3798,7 @@
             "one_user": "%(displayName)s píše …",
             "two_users": "%(names)s a %(lastPerson)s píšu …"
         },
-        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať",
-        "url_preview": {
-            "close": "Zatvoriť náhľad",
-            "show_n_more": {
-                "one": "Zobraziť %(count)s ďalší náhľad",
-                "other": "Zobraziť %(count)s ďalších náhľadov"
-            }
-        }
+        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať"
     },
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"

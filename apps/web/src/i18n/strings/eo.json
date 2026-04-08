@@ -2043,7 +2043,6 @@
         },
         "creation_summary_dm": "%(creator)s kreis ĉi tiun individuan ĉambron.",
         "creation_summary_room": "%(creator)s kreis kaj agordis la ĉambron.",
-        "download_action_decrypting": "Malĉifrante",
         "edits": {
             "tooltip_label": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
             "tooltip_sub": "Klaku por vidi redaktojn",
@@ -2086,8 +2085,7 @@
             "voice_call_unsupported": "%(senderName)s ekigis voĉvokon. (mankas subteno en ĉi tiu foliumilo)"
         },
         "m.file": {
-            "error_decrypting": "Malĉifro de aldonaĵo eraris",
-            "error_invalid": "Malvalida dosiero%(extra)s"
+            "error_decrypting": "Malĉifro de aldonaĵo eraris"
         },
         "m.image": {
             "error_decrypting": "Malĉifro de bildo eraris",
@@ -2212,9 +2210,6 @@
             "jitsi_updated": "Grupan vidvokon ĝisdatigis %(senderName)s",
             "modified": "Fenestraĵon %(widgetName)s ŝanĝis %(senderName)s",
             "removed": "Fenestraĵon %(widgetName)s forigis %(senderName)s"
-        },
-        "mab": {
-            "label": "Mesaĝaj agoj"
         },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ĝisdatigis forbaran regulon, kiu akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",
@@ -2352,13 +2347,6 @@
             },
             "one_user": "%(displayName)s tajpas…",
             "two_users": "%(names)s kaj %(lastPerson)s tajpas…"
-        },
-        "url_preview": {
-            "close": "Fermi antaŭrigardon",
-            "show_n_more": {
-                "one": "Montri %(count)s alian antaŭrigardon",
-                "other": "Montri %(count)s aliajn antaŭrigardojn"
-            }
         }
     },
     "truncated_list_n_more": {

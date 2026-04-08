@@ -12,14 +12,14 @@ import TriggerIcon from "@vector-im/compound-design-tokens/assets/web/icons/over
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-    type WidgetContextMenuAction,
-    type WidgetContextMenuSnapshot,
+    type WidgetContextMenuViewActions,
+    type WidgetContextMenuViewSnapshot,
     WidgetContextMenuView,
 } from "./WidgetContextMenuView";
-import { useMockedViewModel } from "../../viewmodel/useMockedViewModel";
+import { useMockedViewModel } from "../../core/viewmodel/useMockedViewModel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
-type WidgetContextMenuViewModelProps = WidgetContextMenuSnapshot & WidgetContextMenuAction;
+type WidgetContextMenuViewModelProps = WidgetContextMenuViewSnapshot & WidgetContextMenuViewActions;
 
 const WidgetContextMenuViewWrapperImpl = ({
     onStreamAudioClick,

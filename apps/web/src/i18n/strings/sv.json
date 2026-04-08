@@ -32,7 +32,6 @@
         "cancel": "Avbryt",
         "change": "Ändra",
         "clear": "Rensa",
-        "click": "Klicka",
         "click_to_copy": "Klicka för att kopiera",
         "close": "Stäng",
         "collapse": "Kollapsa",
@@ -66,7 +65,6 @@
         "go": "Gå",
         "go_back": "Gå tillbaka",
         "got_it": "Uppfattat",
-        "hide": "Dölj",
         "hide_advanced": "Dölj avancerat",
         "hold": "Parkera",
         "ignore": "Ignorera",
@@ -117,7 +115,7 @@
         "show_advanced": "Visa avancerat",
         "show_all": "Visa alla",
         "sign_in": "Logga in",
-        "sign_out": "Logga ut",
+        "sign_out": "Ta bort den här enheten",
         "skip": "Hoppa över",
         "start": "Starta",
         "start_chat": "Starta chatt",
@@ -1296,9 +1294,6 @@
         "impossible_dialog_title": "Integrationer är inte tillåtna"
     },
     "invite": {
-        "ask_anyway_description": "Kunde inte hitta profiler för Matrix-ID:n nedan — skulle du vilja starta ett DM ändå?",
-        "ask_anyway_label": "Starta DM ändå",
-        "ask_anyway_never_warn_label": "Starta DM ändå och varna mig aldrig igen",
         "email_caption": "Bjud in via e-post",
         "email_limit_one": "Inbjudningar via e-post kan endast skickas en i taget",
         "email_use_default_is": "Använd en identitetsserver för att bjuda in via e-post. <default>Använd förval (%(defaultIdentityServerName)s)</default> eller hantera i <settings>inställningarna</settings>.",
@@ -1438,8 +1433,6 @@
     },
     "labs": {
         "ask_to_join": "Aktivera fråga om att gå med",
-        "automatic_debug_logs": "Skicka automatiskt felsökningsloggar vid fel",
-        "automatic_debug_logs_decryption": "Skicka automatiskt avbuggningsloggar vid avkrypteringsfel",
         "beta_description": "Vad händer härnäst med %(brand)s? Experiment är det bästa sättet att få saker tidigt, pröva nya funktioner, och hjälpa till att forma dem innan de egentligen släpps.",
         "beta_feature": "Det här är en betafunktion",
         "beta_feedback_leave_button": "För att lämna betan, besök dina inställningar.",
@@ -1495,7 +1488,6 @@
         "notification_settings_beta_caption": "Vi introducerar ett enklare sätt att ändra dina aviseringsinställningar. Anpassa din %(brand)s precis som du vill ha den.",
         "notification_settings_beta_title": "Aviseringsinställningar",
         "notifications": "Aktivera aviseringspanelen i rumshuvudet",
-        "release_announcement": "Releasemeddelande",
         "render_reaction_images": "Återge anpassade bilder i reaktioner",
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "report_to_moderators": "Rapportera till moderatorer",
@@ -2011,7 +2003,6 @@
         "not_found_title": "Det här rummet eller utrymmet finns inte.",
         "not_found_title_name": "%(roomName)s finns inte.",
         "peek_join_prompt": "Du förhandsgranskar %(roomName)s. Vill du gå med i det?",
-        "pinned_message_badge": "Fäst meddelande",
         "pinned_message_banner": {
             "button_close_list": "Stäng listan",
             "button_view_all": "Visa alla",
@@ -2865,8 +2856,8 @@
             "sign_out": "Logga ut den här sessionen",
             "sign_out_all_other_sessions": "Logga ut ur alla andra sessioner (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Är du säker på att du vill logga ut %(count)s session?",
-                "other": "Är du säker på att du vill logga ut %(count)s sessioner?"
+                "one": "Är du säker på att du vill ta bort %(count)s session?",
+                "other": "Är du säker på att du vill ta bort %(count)s sessioner?"
             },
             "sign_out_n_sessions": {
                 "one": "Logga ut ur %(count)s session",
@@ -3201,7 +3192,6 @@
         },
         "empty_description": "Använd ”%(replyInThread)s” när du håller muspekaren över ett meddelande.",
         "empty_title": "Trådar underlättar för att hålla konversationer till ämnet och gör dem lättare att följa.",
-        "error_start_thread_existing_relation": "Kan inte skapa tråd från en händelse med en existerande relation",
         "mark_all_read": "Markera allt som läst",
         "my_threads": "Mina trådar",
         "my_threads_description": "Visar alla trådar du har medverkat i",
@@ -3245,7 +3235,6 @@
             "unable_to_decrypt": "Det gick inte att dekryptera meddelandet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Avkrypterar",
         "download_action_downloading": "Laddar ner",
         "download_failed": "Nedladdning misslyckades",
         "download_failed_description": "Ett fel uppstod när den här filen laddades ned",
@@ -3301,8 +3290,7 @@
             "voice_call_unsupported": "%(senderName)s ringde ett röstsamtal. (stöds inte av denna webbläsare)"
         },
         "m.file": {
-            "error_decrypting": "Fel vid avkryptering av bilagan",
-            "error_invalid": "Ogiltig fil"
+            "error_decrypting": "Fel vid avkryptering av bilagan"
         },
         "m.image": {
             "error": "Kunde inte visa bild på grund av fel",
@@ -3380,8 +3368,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepterade inbjudan för %(displayName)s",
             "accepted_invite": "%(targetName)s accepterade inbjudan",
-            "ban": "%(senderName)s bannade %(targetName)s",
-            "ban_reason": "%(senderName)s bannade %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s bannade en användare",
+            "ban_reason": "%(senderName)s bannade en användare: %(reason)s",
             "change_avatar": "%(senderName)s bytte sin profilbild",
             "change_name": "%(oldDisplayName)s bytte sitt visningsnamn till %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s bytte sitt visningsnamn och sin profilbild",
@@ -3444,10 +3432,7 @@
             "removed": "%(widgetName)s-widget har tagits bort av %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Kollapsa citat",
             "copy_link_thread": "Kopiera länk till tråd",
-            "expand_reply_chain": "Expandera citat",
-            "label": "Meddelandeåtgärder",
             "view_in_room": "Visa i rum"
         },
         "mjolnir": {
@@ -3643,14 +3628,7 @@
             "one_user": "%(displayName)s skriver …",
             "two_users": "%(names)s och %(lastPerson)s skriver …"
         },
-        "undecryptable_tooltip": "Det här meddelandet kunde inte avkrypteras",
-        "url_preview": {
-            "close": "Stäng förhandsgranskning",
-            "show_n_more": {
-                "one": "Visa %(count)s annan förhandsgranskning",
-                "other": "Visa %(count)s andra förhandsgranskningar"
-            }
-        }
+        "undecryptable_tooltip": "Det här meddelandet kunde inte avkrypteras"
     },
     "truncated_list_n_more": {
         "other": "Och %(count)s till…"

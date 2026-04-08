@@ -1,0 +1,91 @@
+{
+    "action": {
+        "cancel": "Batalkan",
+        "close": "Tutup",
+        "close_brand": "Tutuo %(brand)s",
+        "copy": "Salin",
+        "cut": "Potong",
+        "delete": "Hapus",
+        "edit": "Edit",
+        "minimise": "Minimalkan",
+        "paste": "Tempel",
+        "paste_match_style": "Tempel dan Cocokkan Gaya",
+        "quit": "Keluar",
+        "redo": "Ulangi",
+        "select_all": "Pilih Semua",
+        "show_hide": "Tampilkan/Sembunyikan",
+        "undo": "Urungkan",
+        "zoom_in": "Perbesar",
+        "zoom_out": "Perkecil"
+    },
+    "common": {
+        "about": "Tentang",
+        "brand_help": "Bantuan %(brand)s",
+        "help": "Bantuan",
+        "no": "Tidak",
+        "preferences": "Preferensi",
+        "yes": "Ya"
+    },
+    "confirm_quit": "Apakah Anda yakin ingin keluar?",
+    "edit_menu": {
+        "speech": "Dikte",
+        "speech_start_speaking": "Mulai Berbicara",
+        "speech_stop_speaking": "Berhenti Berbicara"
+    },
+    "eol": {
+        "no_more_updates": "Anda menggunakan versi macOS yang tidak didukung. Harap tingkatkan untuk menerima pembaruan %(brand)s.",
+        "title": "Sistem tidak didukung",
+        "warning": "Anda menggunakan versi macOS yang tidak didukung. Harap perbarui untuk memastikan%(brand)s terus bekerja."
+    },
+    "file_menu": {
+        "label": "Berkas"
+    },
+    "icon_overlay": {
+        "description_error": "Kesalahan",
+        "description_notifications": {
+            "other": "Anda memiliki %(count)s notifikasi yang belum dibaca."
+        }
+    },
+    "menu": {
+        "hide": "Sembunyikan",
+        "hide_others": "Sembunyikan yang Lain",
+        "services": "Layanan",
+        "unhide": "Tampilkan"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Tambah ke kamus",
+        "copy_email": "Salin surel",
+        "copy_image": "Salin gambar",
+        "copy_image_url": "Salin alamat gambar",
+        "copy_link_url": "Salin alamat tautan",
+        "save_image_as": "Simpan gambar sebagai...",
+        "save_image_as_error_description": "Gambar gagal disimpan",
+        "save_image_as_error_title": "Gagal menyimpan gambar"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Hapus data dan muat ulang?",
+            "backend_changed_detail": "Tidak dapat mengakses rahasia dari keyring sistem, tampaknya telah berubah.",
+            "backend_changed_title": "Gagal memuat basis data",
+            "backend_no_encryption": "Sistem Anda memiliki keyring yang didukung tetapi enkripsi tidak tersedia.",
+            "backend_no_encryption_detail": "Electron telah mendeteksi bahwa enkripsi tidak tersedia pada keyring %(backend)s Anda. Harap pastikan bahwa Anda telah memasang keyring. Jika Anda telah memasang keyring, silakan mulai ulang dan coba lagi. Secara opsional, Anda dapat mengizinkan %(brand)s untuk menggunakan bentuk enkripsi yang lebih lemah.",
+            "backend_no_encryption_title": "Tidak ada dukungan enkripsi",
+            "unsupported_keyring": "Sistem Anda memiliki keyring yang tidak didukung yang berarti basis data tidak dapat dibuka.",
+            "unsupported_keyring_detail": "Deteksi keyring Electron tidak menemukan backend yang didukung. Anda dapat mencoba mengonfigurasi backend secara manual dengan memulai %(brand)s dengan argumen baris perintah, operasi satu kali. Lihat %(link)s.",
+            "unsupported_keyring_title": "Sistem tidak didukung",
+            "unsupported_keyring_use_basic_text": "Gunakan enkripsi yang lebih lemah",
+            "unsupported_keyring_use_plaintext": "Jangan gunakan enkripsi"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Ukuran Sebenarnya",
+        "toggle_developer_tools": "Beralih Alat Pengembang",
+        "toggle_full_screen": "Beralih Layar Penuh",
+        "view": "Tampilan"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Bawa Semua ke Depan",
+        "label": "Jendela",
+        "zoom": "Perbesar"
+    }
+}

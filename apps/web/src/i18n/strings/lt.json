@@ -652,18 +652,48 @@
         }
     },
     "export_chat": {
+        "creating_html": "Kuriama HTML…",
+        "creating_output": "Kuriama išvestis…",
+        "creator_summary": "%(creatorName)s sukūrė šį kambarį.",
+        "current_timeline": "Dabartinė laiko skalė",
+        "error_fetching_file": "Klaida gaunant failą.",
+        "export_info": "Tai – „<roomName/>“ eksporto pradžia. Eksportavo <exporterDetails/> %(exportDate)s.",
         "export_successful": "Eksportas sėkmingas!",
         "exported_n_events_in_time": {
             "one": "Eksportavome %(count)s įvyki per %(seconds)s sekundes",
             "other": "Eksportavome %(count)s įvykius per %(seconds)s sekundes"
         },
+        "fetched_n_events": {
+            "one": "Gautas %(count)s įvykis iki šiol",
+            "few": "Gauti %(count)s įvykiai iki šiol",
+            "other": "Gauta %(count)s įvykių iki šiol"
+        },
         "fetched_n_events_in_time": {
             "one": "Surinkome %(count)s įvykius per %(seconds)ss"
         },
+        "fetched_n_events_with_total": {
+            "one": "Gautas %(count)s įvykis iš %(total)s",
+            "few": "Gauti %(count)s įvykiai iš %(total)s",
+            "other": "Gauta %(count)s įvykių iš %(total)s"
+        },
+        "fetching_events": "Gaunami įvykiai…",
         "file_attached": "Failas pridėtas",
         "from_the_beginning": "Nuo pradžios",
+        "generating_zip": "Generuojamas ZIP",
+        "html": "HTML",
+        "html_title": "Eksportuoti duomenys",
+        "json": "JSON",
+        "media_omitted": "Medija praleista",
+        "media_omitted_file_size": "Medija praleista – viršyta failo dydžio riba.",
         "messages": "Žinutės",
-        "text": "Paprastas Tekstas"
+        "next_page": "Tolesnė žinučių grupė",
+        "number_of_messages": "Nurodykite žinučių skaičių.",
+        "previous_page": "Ankstesnė žinučių grupė",
+        "processing_event_n": "Apdorojamas įvykis %(number)s iš %(total)s",
+        "starting_export": "Pradedamas eksportas…",
+        "text": "Paprastas Tekstas",
+        "topic": "Tema: %(topic)s",
+        "unload_confirm": "Ar tikrai norite išeiti šio eksportavimo metu?"
     },
     "failed_load_async_component": "Nepavyko įkelti! Patikrinkite savo tinklo ryšį ir bandykite dar kartą.",
     "feedback": {
@@ -794,8 +824,6 @@
         "upload_file": "Įkelti failą"
     },
     "labs": {
-        "automatic_debug_logs": "Automatiškai siųsti derinimo žurnalus esant bet kokiai klaidai",
-        "automatic_debug_logs_decryption": "Automatiškai siųsti derinimo žurnalus apie iššifravimo klaidas",
         "beta_feedback_leave_button": "Norėdami išeiti iš beta versijos, apsilankykite savo nustatymuose.",
         "bridge_state": "Rodyti informaciją apie tiltus kambario nustatymuose",
         "bridge_state_channel": "Kanalas: <channelLink/>",
@@ -820,6 +848,8 @@
         "latex_maths": "Atvaizduoti LaTeX matematikas žinutėse",
         "leave_beta": "Palikti beta versiją",
         "msc3531_hide_messages_pending_moderation": "Leisti moderatoriams slėpti žinutes, laukiančias moderavimo.",
+        "notification_settings": "Nauji pranešimų nustatymai",
+        "report_to_moderators": "Pranešti prižiūrėtojams",
         "video_rooms": "Vaizdo kambariai",
         "video_rooms_a_new_way_to_chat": "Naujas būdas kalbėtis balsu ir vaizdu per %(brand)s.",
         "video_rooms_always_on_voip_channels": "Vaizdo kambariai - tai visada veikiantys VoIP kanalai, įterpti į %(brand)s kambarį.",
@@ -827,7 +857,8 @@
         "video_rooms_faq1_answer": "Kairiajame skydelyje esančioje kambarių skiltyje naudokite mygtuką “+”.",
         "video_rooms_faq1_question": "Kaip galiu sukurti vaizdo kambarį?",
         "video_rooms_faq2_answer": "Taip, pokalbių laiko juosta rodoma kartu su vaizdu.",
-        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?"
+        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?",
+        "wysiwyg_composer": "Raiškiojos teksto rengyklė"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ Šie nustatymai yra skirti pažengusiems vartotojams.",
@@ -1784,7 +1815,6 @@
         },
         "creation_summary_dm": "%(creator)s sukūrė šį tiesioginio susirašymo kambarį.",
         "creation_summary_room": "%(creator)s sukūrė ir sukonfigūravo kambarį.",
-        "download_action_decrypting": "Iššifruojama",
         "download_action_downloading": "Atsiunčiama",
         "edits": {
             "tooltip_label": "Keista %(date)s. Spustelėkite kad peržiūrėti pakeitimus.",
@@ -1819,8 +1849,7 @@
             "voice_call_unsupported": "%(senderName)s pradėjo vaizdo skambutį. (nepalaikoma šios naršyklės)"
         },
         "m.file": {
-            "error_decrypting": "Klaida iššifruojant priedą",
-            "error_invalid": "Neteisingas failas %(extra)s"
+            "error_decrypting": "Klaida iššifruojant priedą"
         },
         "m.image": {
             "error_decrypting": "Klaida iššifruojant vaizdą",
@@ -1869,7 +1898,7 @@
             "unknown": "%(senderDisplayName)s pakeitė svečių prieigą prie %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s padarė būsimą kambario istoriją matomą visiems kambario dalyviams, nuo jų pakvietimo momento.",
+            "invited": "%(senderName)s padarė būsimą kambario istoriją matomą visiems kambario nariams nuo to momento, kai jie buvo pakviesti.",
             "joined": "%(senderName)s padarė būsimą kambario istoriją matomą visiems kambario dalyviams, nuo jų prisijungimo momento.",
             "shared": "%(senderName)s padarė būsimą kambario istoriją matomą visiems kambario dalyviams.",
             "unknown": "%(senderName)s padarė būsimą kambario istoriją matomą nežinomam (%(visibility)s).",
@@ -1877,6 +1906,7 @@
         },
         "m.room.join_rules": {
             "invite": "%(senderDisplayName)s padarė kambarį tik pakviestiems.",
+            "knock": "%(senderDisplayName)s pakeitė jungimosi taisyklę, kad būtų prašoma prisijungti.",
             "public": "%(senderDisplayName)s padarė kambarį viešą visiems žinantiems nuorodą.",
             "restricted": "%(senderDisplayName)s pakeitė kas gali prisijungti prie šio kambario.",
             "restricted_settings": "%(senderDisplayName)s pakeitė kas gali prisijungti prie šio kambario. <a>Peržiūrėti nustatymus</a>.",
@@ -1885,9 +1915,11 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s priėmė kvietimą, skirtą %(displayName)s",
             "accepted_invite": "%(targetName)s priėmė kvietimą",
-            "ban": "%(senderName)s užblokavo %(targetName)s",
+            "ban": "%(senderName)s uždraudė %(targetName)s",
+            "ban_reason": "%(senderName)s uždraudė %(targetName)s%(targetName)s: %(reason)s",
             "change_avatar": "%(senderName)s pakeitė savo profilio nuotrauką",
             "change_name": "%(oldDisplayName)s pasikeitė savo rodomą vardą į %(displayName)s",
+            "change_name_avatar": "%(oldDisplayName)s pakeitė savo rodomą vardą ir profilio nuotrauką",
             "invite": "%(senderName)s pakvietė %(targetName)s",
             "join": "%(targetName)s prisijungė prie kambario",
             "kick": "%(senderName)s pašalino %(targetName)s",
@@ -1945,7 +1977,6 @@
         },
         "mab": {
             "copy_link_thread": "Kopijuoti nuorodą į temą",
-            "label": "Žinutės veiksmai",
             "view_in_room": "Peržiūrėti kambaryje"
         },
         "mjolnir": {
@@ -2089,13 +2120,6 @@
             },
             "one_user": "%(displayName)s rašo …",
             "two_users": "%(names)s ir %(lastPerson)s rašo …"
-        },
-        "url_preview": {
-            "close": "Uždaryti peržiūrą",
-            "show_n_more": {
-                "one": "Rodyti %(count)s kitą peržiūrą",
-                "other": "Rodyti %(count)s kitas peržiūras"
-            }
         }
     },
     "truncated_list_n_more": {

@@ -16,7 +16,7 @@ test.describe("Advanced section in Encryption tab", () => {
         await bootstrapCrossSigningForClient(clientHandle, credentials, true);
     });
 
-    test("should show the encryption details", { tag: "@screenshot" }, async ({ page, app, util }) => {
+    test("should show the encryption details", { tag: "@screenshot" }, async ({ page, app, util, axe }) => {
         await util.openEncryptionTab();
         const section = util.getEncryptionDetailsSection();
 
@@ -26,6 +26,8 @@ test.describe("Advanced section in Encryption tab", () => {
         await expect(section).toMatchScreenshot("encryption-details.png", {
             mask: [section.getByTestId("deviceId"), section.getByTestId("sessionKey")],
         });
+
+        await expect(axe).toHaveNoViolations();
     });
 
     test("should show the import room keys dialog", async ({ page, app, util }) => {
@@ -64,7 +66,7 @@ test.describe("Advanced section in Encryption tab", () => {
 
             // After resetting the identity, the user should set up a new recovery key
             await expect(
-                util.getEncryptionRecoverySection().getByRole("button", { name: "Set up recovery" }),
+                util.getEncryptionRecoverySection().getByRole("button", { name: "Get recovery key" }),
             ).toBeVisible();
 
             await checkDeviceIsCrossSigned(app);

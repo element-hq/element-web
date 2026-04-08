@@ -14,6 +14,10 @@ import { Heading } from "@vector-im/compound-web";
  */
 interface SettingsHeaderProps {
     /**
+     * The component to render the heading as, defaults to h2
+     */
+    as?: React.ComponentProps<typeof Heading>["as"];
+    /**
      * Whether the user has a recommended tag.
      */
     hasRecommendedTag?: boolean;
@@ -23,12 +27,12 @@ interface SettingsHeaderProps {
     label: string;
 }
 
-export function SettingsHeader({ hasRecommendedTag = false, label }: SettingsHeaderProps): JSX.Element {
+export function SettingsHeader({ hasRecommendedTag = false, label, as = "h2" }: SettingsHeaderProps): JSX.Element {
     const classes = classNames("mx_SettingsHeader", {
         mx_SettingsHeader_recommended: hasRecommendedTag,
     });
     return (
-        <Heading className={classes} as="h2" size="sm" weight="semibold">
+        <Heading className={classes} as={as} size="sm" weight="semibold">
             {label}
         </Heading>
     );

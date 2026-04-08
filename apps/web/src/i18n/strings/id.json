@@ -32,7 +32,6 @@
         "cancel": "Batalkan",
         "change": "Ubah",
         "clear": "Hapus",
-        "click": "Klik",
         "click_to_copy": "Klik untuk menyalin",
         "close": "Tutup",
         "collapse": "Tutup",
@@ -66,7 +65,6 @@
         "go": "Mulai",
         "go_back": "Kembali ke sebelumnya",
         "got_it": "Mengerti",
-        "hide": "Sembunyikan",
         "hide_advanced": "Sembunyikan lanjutan",
         "hold": "Jeda",
         "ignore": "Abaikan",
@@ -1352,9 +1350,6 @@
         "impossible_dialog_title": "Integrasi tidak diperbolehkan"
     },
     "invite": {
-        "ask_anyway_description": "Tidak dapat menemukan profil untuk ID Matrix yang disertakan di bawah — apakah Anda ingin memulai percakapan langsung saja?",
-        "ask_anyway_label": "Mulai percakapan langsung saja",
-        "ask_anyway_never_warn_label": "Mulai percakapan langsung saja dan jangan peringatkan saya lagi",
         "email_caption": "Undang melalui email",
         "email_limit_one": "Undangan lewat surel hanya dapat dikirim satu-satu",
         "email_use_default_is": "Gunakan sebuah server identitas untuk mengundang melalui email. <default>Gunakan bawaan (%(defaultIdentityServerName)s)</default> atau kelola di <settings>Pengaturan</settings>.",
@@ -1494,8 +1489,6 @@
     },
     "labs": {
         "ask_to_join": "Aktifkan bertanya untuk bergabung",
-        "automatic_debug_logs": "Kirim catatan pengawakutu secara otomatis saat ada kesalahan",
-        "automatic_debug_logs_decryption": "Kirim catatan pengawakutu secara otomatis ketika terjadi kesalahan pendekripsian",
         "beta_description": "Apa berikutnya untuk %(brand)s? Fitur Uji Coba merupakan cara yang terbaik untuk mendapatkan hal-hal baru lebih awal, mencoba fitur baru dan membantu memperbaikinya sebelum diluncurkan.",
         "beta_feature": "Ini adalah fitur beta",
         "beta_feedback_leave_button": "Untuk keluar dari beta, pergi ke pengaturan Anda.",
@@ -1553,7 +1546,6 @@
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
-        "release_announcement": "Pengumuman rilis",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
@@ -2077,7 +2069,6 @@
         "not_found_title": "Ruangan atau space ini tidak ada.",
         "not_found_title_name": "%(roomName)s tidak ada.",
         "peek_join_prompt": "Anda melihat tampilan %(roomName)s. Ingin bergabung?",
-        "pinned_message_badge": "Pesan yang disematkan",
         "pinned_message_banner": {
             "button_close_list": "Tutup daftar",
             "button_view_all": "Lihat semua",
@@ -3287,7 +3278,6 @@
         },
         "empty_description": "Gunakan “%(replyInThread)s” ketika berada di atas pesan.",
         "empty_title": "Utas membantu percakapan Anda sesuai dengan topik dan mudah untuk dilacak.",
-        "error_start_thread_existing_relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada",
         "mark_all_read": "Tandai semua sebagai dibaca",
         "my_threads": "Utasan saya",
         "my_threads_description": "Menampilkan semua utasan yang Anda berpartisipasi",
@@ -3331,7 +3321,6 @@
             "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Mendekripsi",
         "download_action_downloading": "Mengunduh",
         "download_failed": "Pengunduhan gagal",
         "download_failed_description": "Terjadi kesalahan saat mengunduh berkas ini",
@@ -3387,8 +3376,7 @@
             "voice_call_unsupported": "%(senderName)s melakukan panggilan suara. (tidak didukung oleh browser ini)"
         },
         "m.file": {
-            "error_decrypting": "Terjadi kesalahan mendekripsi lampiran",
-            "error_invalid": "Berkas tidak valid"
+            "error_decrypting": "Terjadi kesalahan mendekripsi lampiran"
         },
         "m.image": {
             "error": "Tidak dapat menampilkan gambar karena kesalahan",
@@ -3530,10 +3518,7 @@
             "removed": "Widget %(widgetName)s dihapus oleh %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Tutup kutip",
             "copy_link_thread": "Salin tautan ke utasan",
-            "expand_reply_chain": "Buka kutip",
-            "label": "Aksi Pesan",
             "view_in_room": "Tampilkan di ruangan"
         },
         "mjolnir": {
@@ -3729,14 +3714,7 @@
             "one_user": "%(displayName)s sedang mengetik …",
             "two_users": "%(names)s dan %(lastPerson)s sedang mengetik …"
         },
-        "undecryptable_tooltip": "Pesan ini tidak dapat didekripsi",
-        "url_preview": {
-            "close": "Tutup tampilan",
-            "show_n_more": {
-                "one": "Tampilkan %(count)s tampilan lainnya",
-                "other": "Tampilkan %(count)s tampilan lainnya"
-            }
-        }
+        "undecryptable_tooltip": "Pesan ini tidak dapat didekripsi"
     },
     "truncated_list_n_more": {
         "other": "Dan %(count)s lagi..."

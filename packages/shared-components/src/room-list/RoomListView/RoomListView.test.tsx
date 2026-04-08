@@ -20,8 +20,10 @@ const {
     Empty,
     EmptyWithoutCreatePermission,
     WithActiveFilter,
-    SmallList,
-    LargeList,
+    SmallFlatList,
+    LargeFlatList,
+    SmallSectionList,
+    LargeSectionList,
     EmptyFavouriteFilter,
     EmptyPeopleFilter,
     EmptyRoomsFilter,
@@ -67,13 +69,23 @@ describe("<RoomListView />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders SmallList story", () => {
-        const { container } = renderWithMockContext(<SmallList />);
+    it("renders SmallFlatList story", () => {
+        const { container } = renderWithMockContext(<SmallFlatList />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders LargeList story", () => {
-        const { container } = renderWithMockContext(<LargeList />);
+    it("renders LargeFlatList story", () => {
+        const { container } = renderWithMockContext(<LargeFlatList />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders SmallSectionList story", () => {
+        const { container } = renderWithMockContext(<SmallSectionList />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders LargeSectionList story", () => {
+        const { container } = renderWithMockContext(<LargeSectionList />);
         expect(container).toMatchSnapshot();
     });
 
