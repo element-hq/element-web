@@ -1,3 +1,9 @@
+Changes in [1.12.15](https://github.com/element-hq/element-web/releases/tag/v1.12.15) (2026-04-08)
+==================================================================================================
+Fixes Desktop release workflow.
+
+This release is identical to v1.12.14 otherwise.
+
 Changes in [1.12.14](https://github.com/element-hq/element-web/releases/tag/v1.12.14) (2026-04-07)
 ==================================================================================================
 ## ✨ Features
