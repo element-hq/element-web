@@ -36,6 +36,7 @@ import {
     type EventTileHandle,
     type EventTileProps,
 } from "../../../../../../src/components/views/rooms/EventTile";
+import * as EventTileFactory from "../../../../../../src/events/EventTileFactory";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
@@ -136,7 +137,12 @@ describe("EventTile", () => {
             timelineRenderingType: renderingType,
             ...roomContext,
         });
-        return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
+        return render(
+            <WrappedEventTile
+                roomContext={context}
+                eventTilePropertyOverrides={{ withErrorBoundary: false, ...overrides }}
+            />,
+        );
     }
 
     beforeEach(() => {
@@ -471,6 +477,23 @@ describe("EventTile", () => {
 
             expect(container.getElementsByClassName("mx_DisambiguatedProfile")).toHaveLength(0);
         });
+    });
+
+    it("renders the tile error fallback when tile rendering throws", async () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        const renderTileSpy = jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
+            throw new Error("Boom");
+        });
+
+        try {
+            getComponent({ withErrorBoundary: true });
+
+            await waitFor(() => {
+                expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
+            });
+        } finally {
+            renderTileSpy.mockRestore();
+        }
     });
 
     describe("EventTile in the right panel", () => {

@@ -65,7 +65,7 @@ function MessageStatusComponent({
             <div className="mx_EventTile_msgOption">
                 <div className="mx_ReadReceiptGroup">
                     <Tooltip label={sentReceiptLabel} placement="top-end">
-                        <div className="mx_ReadReceiptGroup_button" role="status">
+                        <div className="mx_ReadReceiptGroup_button" role="status" aria-label={sentReceiptLabel}>
                             <span className="mx_ReadReceiptGroup_container">{sentReceiptIcon}</span>
                         </div>
                     </Tooltip>

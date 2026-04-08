@@ -8,15 +8,15 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 import { Layout } from "../../../../settings/enums/Layout";
-import TileErrorBoundary from "../../messages/TileErrorBoundary";
 import { EventTilePresenter, type EventTileProps as EventTilePresenterProps } from "./EventTilePresenter";
+import { EventTileErrorBoundary } from "./EventTileErrorBoundary";
 
 export type { EventTileHandle } from "./EventTilePresenter";
 export type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "../../../../models/rooms/EventTileTypes";
 
 /** Props for {@link EventTile}. */
 export interface EventTileProps extends EventTilePresenterProps {
-    /** Wraps the tile in {@link TileErrorBoundary}. Defaults to `true`. */
+    /** Wraps the tile in {@link EventTileErrorBoundary}. Defaults to `true`. */
     withErrorBoundary?: boolean;
 }
 
@@ -31,8 +31,8 @@ export function EventTile(props: Readonly<EventTileProps>): JSX.Element {
     }
 
     return (
-        <TileErrorBoundary mxEvent={tileProps.mxEvent} layout={tileProps.layout}>
+        <EventTileErrorBoundary mxEvent={tileProps.mxEvent} layout={tileProps.layout}>
             {tile}
-        </TileErrorBoundary>
+        </EventTileErrorBoundary>
     );
 }
