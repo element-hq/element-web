@@ -52,7 +52,7 @@ If you only want to run the app locally and don't need to build packages, you ca
 provide the `webapp` directory directly:
 
 ```
-ln -s ../web/webapp ./
+ln -s ../web ./webapp
 ```
 
 [TODO: add support for fetching develop builds, arbitrary URLs and arbitrary paths]
