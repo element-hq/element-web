@@ -8,7 +8,7 @@
 import React, { createRef, type MouseEventHandler } from "react";
 import { composeStories } from "@storybook/react-vite";
 import userEvent from "@testing-library/user-event";
-import { fireEvent, render, screen } from "@test-utils";
+import { render, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
 import { MockViewModel } from "../../../../../core/viewmodel";
@@ -76,7 +76,7 @@ describe("TextualBodyView", () => {
             implements TextualBodyViewActions
         {
             public onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
-            public onBodyActionClick?: MouseEventHandler<HTMLDivElement>;
+            public onBodyActionClick?: MouseEventHandler<HTMLElement>;
             public onEmoteSenderClick?: MouseEventHandler<HTMLButtonElement>;
 
             public constructor(snapshot: TextualBodyViewSnapshot, actions: TextualBodyViewActions) {
@@ -154,14 +154,15 @@ describe("TextualBodyView", () => {
         expect(onEditedMarkerClick).toHaveBeenCalledTimes(1);
     });
 
-    it("only activates action wrappers for Enter and Space key presses", () => {
+    it("renders action wrappers as native buttons and activates them for Enter and Space key presses", async () => {
+        const user = userEvent.setup();
         const onBodyActionClick = vi.fn();
 
         class TestTextualBodyViewModel
             extends MockViewModel<TextualBodyViewSnapshot>
             implements TextualBodyViewActions
         {
-            public onBodyActionClick?: MouseEventHandler<HTMLDivElement>;
+            public onBodyActionClick?: MouseEventHandler<HTMLElement>;
 
             public constructor(snapshot: TextualBodyViewSnapshot, actions: TextualBodyViewActions) {
                 super(snapshot);
@@ -181,9 +182,12 @@ describe("TextualBodyView", () => {
         render(<TextualBodyView vm={vm} body={<span>Launch the integration flow.</span>} />);
 
         const action = screen.getByRole("button", { name: "Open starter link" });
-        fireEvent.keyDown(action, { key: "Escape" });
-        fireEvent.keyDown(action, { key: "Enter" });
-        fireEvent.keyDown(action, { key: " " });
+        expect(action).toHaveAttribute("type", "button");
+
+        action.focus();
+        await user.keyboard("{Escape}");
+        await user.keyboard("{Enter}");
+        await user.keyboard(" ");
 
         expect(onBodyActionClick).toHaveBeenCalledTimes(2);
     });

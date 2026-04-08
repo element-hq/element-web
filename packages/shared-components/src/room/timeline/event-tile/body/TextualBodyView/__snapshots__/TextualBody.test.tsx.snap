@@ -3,7 +3,7 @@
 exports[`TextualBodyView > renders caption messages with url previews 1`] = `
 <div>
   <div
-    class="root caption mx_MTextBody mx_EventTile_caption"
+    class="root caption"
   >
     <div>
       Caption for the uploaded image.
@@ -20,19 +20,19 @@ exports[`TextualBodyView > renders caption messages with url previews 1`] = `
 exports[`TextualBodyView > renders emote messages with annotations 1`] = `
 <div>
   <div
-    class="root emote mx_MEmoteBody mx_EventTile_content"
+    class="root emote"
     dir="auto"
   >
     * 
     <button
-      class="mx_MEmoteBody_sender emoteSender"
+      class="emoteSender"
       type="button"
     >
       Alice
     </button>
      
     <div
-      class="mx_EventTile_annotated annotated"
+      class="annotated"
       dir="auto"
     >
       <span>
@@ -54,7 +54,7 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
 exports[`TextualBodyView > renders the default message body 1`] = `
 <div>
   <div
-    class="root text mx_MTextBody mx_EventTile_content"
+    class="root text"
   >
     <div>
       Hello, this is a textual message.
@@ -66,7 +66,7 @@ exports[`TextualBodyView > renders the default message body 1`] = `
 exports[`TextualBodyView > renders the notice branch 1`] = `
 <div>
   <div
-    class="root notice mx_MNoticeBody mx_EventTile_content"
+    class="root notice"
   >
     <div>
       This is a notice message.

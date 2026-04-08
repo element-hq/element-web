@@ -9,8 +9,6 @@ import React, {
     cloneElement,
     isValidElement,
     type JSX,
-    type KeyboardEvent,
-    type MouseEvent,
     type MouseEventHandler,
     type ReactElement,
     type ReactNode,
@@ -94,7 +92,7 @@ export interface TextualBodyViewActions {
     /**
      * Activation handler used when `bodyWrapper` is `ACTION`.
      */
-    onBodyActionClick?: MouseEventHandler<HTMLDivElement>;
+    onBodyActionClick?: MouseEventHandler<HTMLElement>;
     /**
      * Click handler for the edited marker.
      */
@@ -145,18 +143,6 @@ function attachBodyRef(body: ReactElement, bodyRef?: TextualBodyContentRef): Rea
     return cloneElement(body as ReactElement<{ ref?: TextualBodyContentRef }>, { ref: bodyRef });
 }
 
-function onActionKeyDown(
-    event: KeyboardEvent<HTMLDivElement>,
-    onBodyActionClick?: MouseEventHandler<HTMLDivElement>,
-): void {
-    if (event.key !== "Enter" && event.key !== " ") {
-        return;
-    }
-
-    event.preventDefault();
-    onBodyActionClick?.(event as unknown as MouseEvent<HTMLDivElement>);
-}
-
 export function TextualBodyView({
     vm,
     body,
@@ -184,14 +170,6 @@ export function TextualBodyView({
         [styles.notice]: kind === TextualBodyViewKind.NOTICE,
         [styles.emote]: kind === TextualBodyViewKind.EMOTE,
         [styles.caption]: kind === TextualBodyViewKind.CAPTION,
-    });
-
-    const legacyRootClasses = classNames(rootClasses, {
-        mx_MTextBody: kind === TextualBodyViewKind.TEXT || kind === TextualBodyViewKind.CAPTION,
-        mx_MNoticeBody: kind === TextualBodyViewKind.NOTICE,
-        mx_MEmoteBody: kind === TextualBodyViewKind.EMOTE,
-        mx_EventTile_content: kind !== TextualBodyViewKind.CAPTION,
-        mx_EventTile_caption: kind === TextualBodyViewKind.CAPTION,
     });
 
     let renderedBody: ReactNode = attachBodyRef(body, bodyRef);
@@ -239,15 +217,6 @@ export function TextualBodyView({
         );
     }
 
-    if (markers.length > 0) {
-        renderedBody = (
-            <div dir="auto" className={classNames("mx_EventTile_annotated", styles.annotated)}>
-                {renderedBody}
-                {markers}
-            </div>
-        );
-    }
-
     if (bodyWrapper === TextualBodyViewBodyWrapperKind.LINK && bodyLinkHref) {
         renderedBody = (
             <a href={bodyLinkHref} className={styles.bodyLink}>
@@ -256,28 +225,31 @@ export function TextualBodyView({
         );
     } else if (bodyWrapper === TextualBodyViewBodyWrapperKind.ACTION) {
         renderedBody = (
-            <div
-                role="button"
-                tabIndex={0}
+            <button
+                type="button"
                 aria-label={bodyActionAriaLabel}
                 className={styles.bodyAction}
                 onClick={vm.onBodyActionClick}
-                onKeyDown={(event) => onActionKeyDown(event, vm.onBodyActionClick)}
             >
                 {renderedBody}
+            </button>
+        );
+    }
+
+    if (markers.length > 0) {
+        renderedBody = (
+            <div dir="auto" className={styles.annotated}>
+                {renderedBody}
+                {markers}
             </div>
         );
     }
 
     if (kind === TextualBodyViewKind.EMOTE) {
         return (
-            <div id={id} className={legacyRootClasses} onClickCapture={vm.onRootClick} dir="auto">
+            <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} dir="auto">
                 *&nbsp;
-                <button
-                    type="button"
-                    className={classNames("mx_MEmoteBody_sender", styles.emoteSender)}
-                    onClick={vm.onEmoteSenderClick}
-                >
+                <button type="button" className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
                     {emoteSenderName}
                 </button>
                 &nbsp;
@@ -288,7 +260,7 @@ export function TextualBodyView({
     }
 
     return (
-        <div id={id} className={legacyRootClasses} onClickCapture={vm.onRootClick}>
+        <div id={id} className={rootClasses} onClickCapture={vm.onRootClick}>
             {renderedBody}
             {urlPreviews}
         </div>
