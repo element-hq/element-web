@@ -3,21 +3,39 @@
         "seek_bar_label": "Панель поиска аудио"
     },
     "action": {
+        "back": "Назад",
+        "click": "Нажмите",
+        "collapse": "Свернуть",
         "delete": "Удалить",
         "dismiss": "Закрыть",
+        "download": "Скачать",
         "edit": "Редактировать",
         "explore_rooms": "Обзор комнат",
+        "go": "Перейти",
+        "hide": "Скрыть",
         "invite": "Пригласить",
         "new_conversation": "Новый диалог",
         "new_room": "Новая комната",
         "new_video_room": "Новая видеокомната",
         "open_menu": "Открыть меню",
         "pause": "Пауза",
+        "pin": "Закрепить",
         "play": "Воспроизведение",
+        "react": "Реакции",
         "remove": "Удалить",
+        "reply": "Ответить",
+        "reply_in_thread": "Ответить в ветке обсуждения",
         "retry": "Повторить",
         "search": "Поиск",
-        "start_chat": "Начать чат"
+        "start_chat": "Начать чат",
+        "unpin": "Открепить",
+        "view_source": "Показать источник"
+    },
+    "common": {
+        "attachment": "Вложение",
+        "encryption_enabled": "Шифрование включено",
+        "preferences": "Настройки",
+        "state_encryption_enabled": "Экспериментальное шифрование включено"
     },
     "left_panel": {
         "open_dial_pad": "Открыть панель набора номера"
