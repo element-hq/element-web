@@ -456,7 +456,7 @@ importers:
         version: 0.16.45
       lodash:
         specifier: npm:lodash-es@^4.17.21
-        version: lodash-es@4.18.1
+        version: 4.18.1
       maplibre-gl:
         specifier: ^5.0.0
         version: 5.22.0
@@ -465,7 +465,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9dc12baaa9256be6594945d9b55ef3a985cea7d8
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6371e4b25206dcd459d19375f5d046993ce11b1b
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -967,7 +967,7 @@ importers:
         version: 4.3.2
       lodash:
         specifier: npm:lodash-es@^4.17.21
-        version: lodash-es@4.18.1
+        version: 4.18.1
       matrix-web-i18n:
         specifier: 'catalog:'
         version: 3.6.0
@@ -9842,8 +9842,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9dc12baaa9256be6594945d9b55ef3a985cea7d8:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9dc12baaa9256be6594945d9b55ef3a985cea7d8}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6371e4b25206dcd459d19375f5d046993ce11b1b:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6371e4b25206dcd459d19375f5d046993ce11b1b}
     version: 41.3.0
     engines: {node: '>=22.0.0'}
 
@@ -23459,7 +23459,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9dc12baaa9256be6594945d9b55ef3a985cea7d8:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6371e4b25206dcd459d19375f5d046993ce11b1b:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
