@@ -266,11 +266,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 
         if (pipContent.length) {
             return (
-                <PictureInPictureDragger
-                    className="mx_LegacyCallPreview"
-                    onDoubleClick={this.onDoubleClick}
-                    onMove={this.onMove}
-                >
+                <PictureInPictureDragger onDoubleClick={this.onDoubleClick} onMove={this.onMove}>
                     {pipContent}
                 </PictureInPictureDragger>
             );
