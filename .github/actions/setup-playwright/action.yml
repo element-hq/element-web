@@ -16,6 +16,7 @@ runs:
           run: |
               PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
               echo "key=${PREFIX}-playwright-${PW_VERSION}" >> $GITHUB_OUTPUT
+          shell: bash
           env:
               PREFIX: ${{ runner.os }}-${{ runner.arch }}
 
@@ -38,9 +39,11 @@ runs:
 
         - name: Install Playwright browsers
           if: (steps.cache.outputs.cache-hit || steps.cache-restore.outputs.cache-hit) != 'true'
+          shell: bash
           run: pnpm playwright install --with-deps
 
         # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
         - name: Install system dependencies for WebKit
           if: inputs.needs-webkit == 'true' && (steps.cache.outputs.cache-hit || steps.cache-restore.outputs.cache-hit) == 'true'
+          shell: bash
           run: pnpm playwright install-deps webkit
