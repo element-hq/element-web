@@ -501,6 +501,12 @@ export class RoomListViewModel
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
+        // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
+        if (isFlatList) {
+            const chatSections = this.roomSectionHeaderViewModels.get(CHATS_TAG);
+            if (chatSections) chatSections.isExpanded = true;
+            chatSections?.setRooms(this.roomsResult.sections.flatMap((section) => section.rooms));
+        }
         this.sections = sections;
 
         // Calculate the active room index from the computed sections (which exclude collapsed sections' rooms)

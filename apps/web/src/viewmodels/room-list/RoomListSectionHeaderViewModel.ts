@@ -49,6 +49,14 @@ export class RoomListSectionHeaderViewModel
     }
 
     /**
+     * Set whether the section is expanded.
+     * This will not trigger the onToggleExpanded callback.
+     */
+    public set isExpanded(value: boolean) {
+        this.snapshot.merge({ isExpanded: value });
+    }
+
+    /**
      * Update the rooms tracked by this section header for unread state computation.
      * Only subscribes to new rooms and unsubscribes from rooms no longer in the section.
      * @param rooms - The rooms currently in this section
