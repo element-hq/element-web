@@ -33,6 +33,7 @@ import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { NotificationPusherSettings } from "./NotificationPusherSettings";
 import SettingsFlag from "../../elements/SettingsFlag";
 import { SettingsSubsectionHeading } from "../shared/SettingsSubsectionHeading";
+import { onSubmitPreventDefault } from "../../../../utils/form.ts";
 
 enum NotificationDefaultLevels {
     AllMessages = "all_messages",
@@ -111,7 +112,7 @@ export default function NotificationSettings2(): JSX.Element {
                 </SettingsBanner>
             )}
             <SettingsSection>
-                <Form.Root className="mx_SettingsSubsection_content" onSubmit={(e) => e.preventDefault()}>
+                <Form.Root className="mx_SettingsSubsection_content" onSubmit={onSubmitPreventDefault}>
                     <SettingsToggleInput
                         name="enable_notifications_account"
                         label={_t("settings|notifications|enable_notifications_account")}
@@ -346,7 +347,7 @@ export default function NotificationSettings2(): JSX.Element {
                         placeholder={_t("notifications|keyword_new")}
                     />
 
-                    <Form.Root onSubmit={(e) => e.preventDefault()}>
+                    <Form.Root onSubmit={onSubmitPreventDefault}>
                         <SettingsFlag name="Notifications.showbold" level={SettingLevel.DEVICE} />
                         <SettingsFlag name="Notifications.tac_only_notifications" level={SettingLevel.DEVICE} />
                     </Form.Root>

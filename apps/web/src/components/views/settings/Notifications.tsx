@@ -52,6 +52,7 @@ import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
+import { onSubmitPreventDefault } from "../../../utils/form.ts";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -651,16 +652,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
         // If all the rules are inhibited, don't show anything.
         if (this.isInhibited) {
-            return (
-                <Form.Root
-                    onSubmit={(evt) => {
-                        evt.preventDefault();
-                        evt.stopPropagation();
-                    }}
-                >
-                    {masterSwitch}
-                </Form.Root>
-            );
+            return <Form.Root onSubmit={onSubmitPreventDefault}>{masterSwitch}</Form.Root>;
         }
 
         const emailSwitches = (this.state.threepids || [])
@@ -678,12 +670,7 @@ export default class Notifications extends React.PureComponent<EmptyObject, ISta
 
         return (
             <SettingsSubsection>
-                <Form.Root
-                    onSubmit={(evt) => {
-                        evt.preventDefault();
-                        evt.stopPropagation();
-                    }}
-                >
+                <Form.Root onSubmit={onSubmitPreventDefault}>
                     {masterSwitch}
 
                     <SettingsFlag name="deviceNotificationsEnabled" level={SettingLevel.DEVICE} />

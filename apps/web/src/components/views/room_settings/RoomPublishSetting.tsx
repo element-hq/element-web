@@ -16,6 +16,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DirectoryCustomisations from "../../../customisations/Directory";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import { onSubmitPreventDefault } from "../../../utils/form.ts";
 
 interface IProps {
     roomId: string;
@@ -90,12 +91,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         const enabled = canSetCanonicalAlias && (isRoomPublishable || this.state.isRoomPublished);
 
         return (
-            <Form.Root
-                onSubmit={(evt) => {
-                    evt.preventDefault();
-                    evt.stopPropagation();
-                }}
-            >
+            <Form.Root onSubmit={onSubmitPreventDefault}>
                 <SettingsToggleInput
                     name="room-publish"
                     checked={this.state.isRoomPublished}

@@ -24,6 +24,7 @@ import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 import { useSettingValueAt } from "../../../hooks/useSettings.ts";
+import { onSubmitPreventDefault } from "../../../utils/form.ts";
 
 /**
  * The URL preview settings for a room
@@ -49,12 +50,7 @@ export function UrlPreviewSettings({ room }: UrlPreviewSettingsProps): JSX.Eleme
             {isLoading ? (
                 <InlineSpinner />
             ) : (
-                <Form.Root
-                    onSubmit={(evt) => {
-                        evt.preventDefault();
-                        evt.stopPropagation();
-                    }}
-                >
+                <Form.Root onSubmit={onSubmitPreventDefault}>
                     <PreviewsForRoom isEncrypted={isEncrypted} roomId={roomId} />
                     <SettingsFlag
                         name={isEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled"}
