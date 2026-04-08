@@ -25,6 +25,7 @@ export type MessageBodyRenderTileProps = Omit<
  */
 export type MessageBodyProps = Readonly<{
     mxEvent: MatrixEvent;
+    isDecryptionFailure: boolean;
     renderTileProps: MessageBodyRenderTileProps;
     timelineRenderingType: TimelineRenderingType;
     tileRenderType: TimelineRenderingType;
@@ -36,6 +37,7 @@ export type MessageBodyProps = Readonly<{
 
 function MessageBodyComponent({
     mxEvent,
+    isDecryptionFailure,
     renderTileProps,
     timelineRenderingType,
     tileRenderType,
@@ -52,7 +54,7 @@ function MessageBodyComponent({
             return <RedactedBodyFactory mxEvent={mxEvent} />;
         }
 
-        if (mxEvent.isDecryptionFailure()) {
+        if (isDecryptionFailure) {
             return <DecryptionFailureBodyFactory mxEvent={mxEvent} />;
         }
 

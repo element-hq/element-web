@@ -14,6 +14,7 @@ import {
     type IEventDecryptionResult,
     type MatrixClient,
     type MatrixEvent,
+    MatrixEventEvent,
     NotificationCountType,
     PendingEventOrdering,
     Room,
@@ -849,6 +850,32 @@ describe("EventTile", () => {
         );
 
         await waitFor(() => expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(secondEvent));
+    });
+
+    it("rerenders the message body when the event decrypts in place", async () => {
+        mxEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "Hello world!",
+            event: true,
+        });
+
+        let isDecryptionFailure = true;
+        jest.spyOn(mxEvent, "isDecryptionFailure").mockImplementation(() => isDecryptionFailure);
+
+        const { container } = getComponent();
+
+        await waitFor(() => expect(container.querySelector(".mx_DecryptionFailureBody")).not.toBeNull());
+        expect(screen.queryByText("Hello world!")).toBeNull();
+
+        await act(async () => {
+            isDecryptionFailure = false;
+            mxEvent.emit(MatrixEventEvent.Decrypted, mxEvent, undefined);
+            await flushPromises();
+        });
+
+        await waitFor(() => expect(container.querySelector(".mx_DecryptionFailureBody")).toBeNull());
+        expect(screen.getByText("Hello world!")).toBeInTheDocument();
     });
 
     it("marks the event as visible to the decryption failure tracker on mount", () => {

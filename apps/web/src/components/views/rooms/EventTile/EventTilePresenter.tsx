@@ -894,6 +894,7 @@ function useEventTileNodes({
     const messageBodyProps = useMemo<MessageBodyProps>(
         () => ({
             mxEvent: props.mxEvent,
+            isDecryptionFailure: snapshot.isEncryptionFailure,
             timelineRenderingType: roomContext.timelineRenderingType,
             tileRenderType: snapshot.tileRenderType,
             isSeeingThroughMessageHiddenForModeration: snapshot.isSeeingThroughMessageHiddenForModeration,
@@ -904,6 +905,7 @@ function useEventTileNodes({
         }),
         [
             props.mxEvent,
+            snapshot.isEncryptionFailure,
             roomContext.timelineRenderingType,
             snapshot.tileRenderType,
             snapshot.isSeeingThroughMessageHiddenForModeration,
