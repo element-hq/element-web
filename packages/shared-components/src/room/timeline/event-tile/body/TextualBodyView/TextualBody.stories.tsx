@@ -62,21 +62,30 @@ const Preview = (
     </div>
 );
 
+const TEXTUAL_BODY_VIEW_KIND_OPTIONS = [
+    TextualBodyViewKind.TEXT,
+    TextualBodyViewKind.NOTICE,
+    TextualBodyViewKind.EMOTE,
+    TextualBodyViewKind.CAPTION,
+];
+
+const TEXTUAL_BODY_VIEW_BODY_WRAPPER_KIND_OPTIONS = [
+    TextualBodyViewBodyWrapperKind.NONE,
+    TextualBodyViewBodyWrapperKind.LINK,
+    TextualBodyViewBodyWrapperKind.ACTION,
+];
+
 const meta = {
     title: "MessageBody/TextualBody",
     component: TextualBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {
         kind: {
-            options: Object.entries(TextualBodyViewKind)
-                .filter(([key, value]) => key === value)
-                .map(([key]) => key),
+            options: TEXTUAL_BODY_VIEW_KIND_OPTIONS,
             control: { type: "select" },
         },
         bodyWrapper: {
-            options: Object.entries(TextualBodyViewBodyWrapperKind)
-                .filter(([key, value]) => key === value)
-                .map(([key]) => key),
+            options: TEXTUAL_BODY_VIEW_BODY_WRAPPER_KIND_OPTIONS,
             control: { type: "select" },
         },
     },

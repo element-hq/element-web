@@ -49,8 +49,6 @@ describe("TextualBodyView", () => {
 
     it("re-exports the public TextualBodyView API", () => {
         expect(publicApi.TextualBodyView).toBe(TextualBodyView);
-        expect(publicApi.TextualBodyViewKind).toBe(TextualBodyViewKind);
-        expect(publicApi.TextualBodyViewBodyWrapperKind).toBe(TextualBodyViewBodyWrapperKind);
     });
 
     it("forwards body refs to the rendered body element", () => {

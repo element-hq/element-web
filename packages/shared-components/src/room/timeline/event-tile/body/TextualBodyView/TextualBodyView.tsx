@@ -20,14 +20,14 @@ import { Tooltip } from "@vector-im/compound-web";
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import styles from "./TextualBody.module.css";
 
-export enum TextualBodyViewKind {
+export const enum TextualBodyViewKind {
     TEXT = "TEXT",
     NOTICE = "NOTICE",
     EMOTE = "EMOTE",
     CAPTION = "CAPTION",
 }
 
-export enum TextualBodyViewBodyWrapperKind {
+export const enum TextualBodyViewBodyWrapperKind {
     NONE = "NONE",
     LINK = "LINK",
     ACTION = "ACTION",
