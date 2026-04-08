@@ -12,7 +12,7 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
         class="mx_SettingsSection_subSections"
       >
         <form
-          class="_root_19upo_16 mx_SettingsSubsection_content mx_NotificationSettings2_flags"
+          class="_root_19upo_16 mx_SettingsSubsection_content"
         >
           <div
             class="_inline-field_19upo_32"
@@ -1037,7 +1037,7 @@ exports[`<Notifications /> matches the snapshot 1`] = `
         class="mx_SettingsSection_subSections"
       >
         <form
-          class="_root_19upo_16 mx_SettingsSubsection_content mx_NotificationSettings2_flags"
+          class="_root_19upo_16 mx_SettingsSubsection_content"
         >
           <div
             class="_inline-field_19upo_32"
