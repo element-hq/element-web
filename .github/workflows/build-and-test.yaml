@@ -155,10 +155,6 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Get installed Playwright version
-              id: playwright
-              run: echo "version=$(pnpm --silent -- playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
-
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
               with:
