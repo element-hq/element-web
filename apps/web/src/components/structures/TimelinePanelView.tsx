@@ -6,23 +6,35 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo, type JSX, type ReactNode } from "react";
-import { TimelineView, type TimelineItem } from "@element-hq/web-shared-components";
+import { DateSeparatorView, TimelineView } from "@element-hq/web-shared-components";
 
 import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { TimelinePanelViewModel } from "../../viewmodels/room/timeline/TimelinePanelViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
+import type { TimelineModelItem } from "../../models/rooms/TimelineModel";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
 
-interface NewTimelinePanelProps {
+interface TimelinePanelViewProps {
     room: Room;
     highlightedEventId?: string;
 }
+
+/** Look up a MatrixEvent by ID from the room's timelines. */
+function findEventById(room: Room, eventId: string): MatrixEvent | undefined {
+    return room.findEventById(eventId) ?? undefined;
+}
+
+/** Typed TimelineView alias for the web timeline row model. */
+const TypedTimelineView = TimelineView as (props: {
+    vm: TimelinePanelViewModel;
+    renderItem: (item: TimelineModelItem) => ReactNode;
+}) => JSX.Element;
 
 /**
  * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
  * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
  */
-export function TimelinePanelView({ room, highlightedEventId }: NewTimelinePanelProps): JSX.Element {
+export function TimelinePanelView({ room, highlightedEventId }: TimelinePanelViewProps): JSX.Element {
     const client: MatrixClient = useMatrixClientContext();
 
     const vm = useMemo(
@@ -37,14 +49,10 @@ export function TimelinePanelView({ room, highlightedEventId }: NewTimelinePanel
 
     const renderItem = useMemo(
         () =>
-            (item: TimelineItem): ReactNode => {
+            (item: TimelineModelItem): ReactNode => {
                 switch (item.kind) {
                     case "date-separator":
-                        return (
-                            <div key={item.key} className="mx_DateSeparator">
-                                {item.key}
-                            </div>
-                        );
+                        return <DateSeparatorView key={item.key} vm={item.vm} className="mx_TimelineSeparator" />;
                     case "read-marker":
                         return <hr key={item.key} className="mx_RoomView_myReadMarker" />;
                     case "loading":
@@ -65,14 +73,7 @@ export function TimelinePanelView({ room, highlightedEventId }: NewTimelinePanel
 
     return (
         <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper" style={{ height: "100%" }}>
-            <TimelineView vm={vm} renderItem={renderItem} />
+            <TypedTimelineView vm={vm} renderItem={renderItem} />
         </div>
     );
-}
-
-/**
- * Look up a MatrixEvent by ID from the room's timelines.
- */
-function findEventById(room: Room, eventId: string): MatrixEvent | undefined {
-    return room.findEventById(eventId) ?? undefined;
 }

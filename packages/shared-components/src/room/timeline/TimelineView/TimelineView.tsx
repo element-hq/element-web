@@ -25,13 +25,13 @@ const OVERSCAN_PX = 600;
 
 const log = (...args: unknown[]): void => console.log("[TimelineView]", ...args);
 
-export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
+export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: TimelineViewProps<TItem>): JSX.Element {
     const snapshot = useViewModel(vm);
 
     const increaseViewportBy = useMemo(() => ({ top: OVERSCAN_PX, bottom: OVERSCAN_PX }), []);
 
     const itemContent = useCallback(
-        (index: number, item: TimelineItem): JSX.Element => {
+        (index: number, item: TItem): JSX.Element => {
             return <React.Fragment key={item.key}>{renderItem(item)}</React.Fragment>;
         },
         [renderItem],

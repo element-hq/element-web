@@ -15,10 +15,12 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
+import { wantsDateSeparator } from "../../../DateUtils";
+import type { TimelineModelItem } from "../../../models/rooms/TimelineModel";
+import { DateSeparatorViewModel } from "./DateSeparatorViewModel";
 import type {
     TimelineViewSnapshot,
     TimelineViewActions,
-    TimelineItem,
     VisibleRange,
     PaginationState,
 } from "@element-hq/web-shared-components";
@@ -42,10 +44,11 @@ export interface TimelinePanelViewModelOpts {
  * into the SDK-agnostic types that the shared TimelineView consumes.
  */
 export class TimelinePanelViewModel
-    extends BaseViewModel<TimelineViewSnapshot, TimelinePanelViewModelOpts>
+    extends BaseViewModel<TimelineViewSnapshot<TimelineModelItem>, TimelinePanelViewModelOpts>
     implements TimelineViewActions
 {
     private timelineWindow: TimelineWindow;
+    private dateSeparatorVms = new Map<string, DateSeparatorViewModel>();
     // TODO: Use visibleRange for read receipts
     public visibleRange: VisibleRange = { startIndex: 0, endIndex: 0 };
 
@@ -69,6 +72,10 @@ export class TimelinePanelViewModel
 
     public override dispose(): void {
         this.props.room.off(RoomEvent.Timeline, this.onRoomTimeline);
+        for (const vm of this.dateSeparatorVms.values()) {
+            vm.dispose();
+        }
+        this.dateSeparatorVms.clear();
         super.dispose();
     }
 
@@ -192,30 +199,58 @@ export class TimelinePanelViewModel
 
     // ── Snapshot construction ────────────────────────────────────────
 
-    private buildItems(): TimelineItem[] {
+    private shouldInsertDateSeparator(prevEvent: MatrixEvent | null, event: MatrixEvent): boolean {
+        if (prevEvent === null) {
+            return !this.timelineWindow.canPaginate(Direction.Backward);
+        }
+
+        return wantsDateSeparator(prevEvent.getDate() || undefined, event.getDate() || undefined);
+    }
+
+    private getDateSeparatorVm(ts: number): DateSeparatorViewModel {
+        const key = `${this.props.room.roomId}-${ts}`;
+        let vm = this.dateSeparatorVms.get(key);
+        if (!vm) {
+            vm = new DateSeparatorViewModel({
+                roomId: this.props.room.roomId,
+                ts,
+            });
+            this.dateSeparatorVms.set(key, vm);
+        }
+
+        return vm;
+    }
+
+    private buildDateSeparatorItem(event: MatrixEvent): TimelineModelItem {
+        const ts = event.getTs();
+        const dateKey = new Date(ts).toDateString();
+
+        return {
+            key: `date-${dateKey}`,
+            kind: "date-separator",
+            vm: this.getDateSeparatorVm(ts),
+        };
+    }
+
+    private buildItems(): TimelineModelItem[] {
         const events: MatrixEvent[] = this.timelineWindow.getEvents();
-        const items: TimelineItem[] = [];
-        let lastDate: string | null = null;
+        const items: TimelineModelItem[] = [];
+        let prevEvent: MatrixEvent | null = null;
 
         for (const event of events) {
             const eventId = event.getId();
             if (!eventId) continue;
 
-            // Insert date separator when the day changes
-            const eventDate = new Date(event.getTs());
-            const dateKey = eventDate.toDateString();
-            if (dateKey !== lastDate) {
-                items.push({
-                    key: `date-${dateKey}`,
-                    kind: "date-separator",
-                });
-                lastDate = dateKey;
+            if (this.shouldInsertDateSeparator(prevEvent, event)) {
+                items.push(this.buildDateSeparatorItem(event));
             }
 
             items.push({
                 key: eventId,
                 kind: "event",
             });
+
+            prevEvent = event;
         }
 
         return items;

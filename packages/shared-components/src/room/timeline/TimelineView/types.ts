@@ -54,9 +54,9 @@ export interface FocusState {
 
 // ─── Timeline view model contract ──────────────────────────────────
 
-export interface TimelineViewSnapshot {
+export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem> {
     /** The ordered list of items to render. */
-    items: TimelineItem[];
+    items: TItem[];
 
     /** Whether the viewport is pinned to the live (bottom) end. */
     stuckAtBottom: boolean;
@@ -98,16 +98,19 @@ export interface TimelineViewActions {
     getFirstItemIndex(): number;
 }
 
-export type TimelineViewModel = ViewModel<TimelineViewSnapshot, TimelineViewActions>;
+export type TimelineViewModel<TItem extends TimelineItem = TimelineItem> = ViewModel<
+    TimelineViewSnapshot<TItem>,
+    TimelineViewActions
+>;
 
 // ─── Shared timeline view props ────────────────────────────────────
 
-export interface TimelineViewProps {
-    vm: TimelineViewModel;
+export interface TimelineViewProps<TItem extends TimelineItem = TimelineItem> {
+    vm: TimelineViewModel<TItem>;
 
     /**
      * Render callback for each timeline item.
      * The shared container calls this for every visible item.
      */
-    renderItem: (item: TimelineItem) => ReactNode;
+    renderItem: (item: TItem) => ReactNode;
 }
