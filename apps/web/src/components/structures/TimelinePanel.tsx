@@ -58,6 +58,7 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { TimelinePanelView } from "./TimelinePanelView";
 
 // These pagination sizes are higher than they may possibly need be
 // once https://github.com/matrix-org/matrix-spec-proposals/pull/3874 lands
@@ -1835,6 +1836,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const forwardPaginating =
             this.state.forwardPaginating || ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState!);
         const events = this.state.events;
+
+        // New MVVM timeline behind Labs flag
+        if (SettingsStore.getValue("feature_new_timeline")) {
+            const room = this.props.timelineSet.room;
+            if (room) {
+                return <TimelinePanelView room={room} highlightedEventId={this.props.highlightedEventId} />;
+            }
+        }
+
         return (
             <MessagePanel
                 ref={this.messagePanel}
