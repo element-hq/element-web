@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { memo, useMemo, type JSX, type ReactNode } from "react";
 import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Tooltip } from "@vector-im/compound-web";
-import { type EventStatus } from "matrix-js-sdk/src/matrix";
+import { EventStatus } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
@@ -65,9 +65,9 @@ function MessageStatusComponent({
             <div className="mx_EventTile_msgOption">
                 <div className="mx_ReadReceiptGroup">
                     <Tooltip label={sentReceiptLabel} placement="top-end">
-                        <output className="mx_ReadReceiptGroup_button" aria-label={sentReceiptLabel}>
+                        <div className="mx_ReadReceiptGroup_button" role="status">
                             <span className="mx_ReadReceiptGroup_container">{sentReceiptIcon}</span>
-                        </output>
+                        </div>
                     </Tooltip>
                 </div>
             </div>
@@ -92,12 +92,12 @@ function getSentReceiptDetails(
         return undefined;
     }
 
-    const isSent = !messageState || messageState === "sent";
-    const isFailed = messageState === "not_sent";
+    const isSent = !messageState || messageState === EventStatus.SENT;
+    const isFailed = messageState === EventStatus.NOT_SENT;
 
     let icon: JSX.Element | undefined;
     let label: string | undefined;
-    if (messageState === "encrypting") {
+    if (messageState === EventStatus.ENCRYPTING) {
         icon = <CircleIcon />;
         label = _t("timeline|send_state_encrypting");
     } else if (isSent) {

@@ -38,6 +38,7 @@ import {
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import { LOCAL_ROOM_ID_PREFIX, LocalRoom } from "../../../../../../src/models/LocalRoom";
 import {
     filterConsole,
     flushPromises,
@@ -558,6 +559,31 @@ describe("EventTile", () => {
             expect(e2eIcon).toHaveAccessibleName(
                 "@bob:example.org (@bob:example.org) shared this message since you were not in the room when it was sent.",
             );
+        });
+
+        it("does not show a forwarded-message icon for local rooms", async () => {
+            room = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "event-tile-test", client, client.getSafeUserId());
+            jest.spyOn(client, "getRoom").mockImplementation((roomId) => (roomId === room.roomId ? room : null));
+
+            mxEvent = await mkEncryptedMatrixEvent({
+                plainContent: { msgtype: "m.text", body: "msg1" },
+                plainType: "m.room.message",
+                sender: "@alice:example.org",
+                roomId: room.roomId,
+            });
+            // @ts-ignore assignment to private member
+            mxEvent.keyForwardedBy = "@bob:example.org";
+            eventToEncryptionInfoMap.set(mxEvent.getId()!, {
+                shieldColour: EventShieldColour.GREY,
+                shieldReason: EventShieldReason.AUTHENTICITY_NOT_GUARANTEED,
+            } as EventEncryptionInfo);
+
+            const { container } = getComponent();
+
+            await flushPromises();
+
+            expect(container.querySelector('[data-testid="e2e-padlock"]')).toBeNull();
+            expect(container.getElementsByClassName("mx_EventTile_e2eIcon")).toHaveLength(0);
         });
 
         describe("undecryptable event", () => {

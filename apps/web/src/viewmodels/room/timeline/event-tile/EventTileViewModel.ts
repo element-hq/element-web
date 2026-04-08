@@ -919,19 +919,31 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         props: EventTileViewModelProps,
         context: EventTileDerivationContext,
     ): EventTileEncryptionSnapshot {
+        const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
+        const encryptionIndicatorMode = EventTileViewModel.getEncryptionIndicatorMode(
+            props,
+            context.isEncryptionFailure,
+            context.shieldColour,
+            context.shieldReason,
+        );
+
         return {
             shieldColour: context.shieldColour,
             shieldReason: context.shieldReason,
             isEncryptionFailure: context.isEncryptionFailure,
             padlockMode: EventTileViewModel.getPadlockMode(props, context.displayInfo.isBubbleMessage),
-            encryptionIndicatorMode: EventTileViewModel.getEncryptionIndicatorMode(
+            encryptionIndicatorMode,
+            sharedKeysUserId: EventTileViewModel.getSharedKeysUserId(
                 props,
+                event,
                 context.isEncryptionFailure,
-                context.shieldColour,
                 context.shieldReason,
             ),
-            sharedKeysUserId: EventTileViewModel.getSharedKeysUserId(props, context.shieldReason),
-            sharedKeysRoomId: EventTileViewModel.getSharedKeysRoomId(props),
+            sharedKeysRoomId: EventTileViewModel.getSharedKeysRoomId(
+                event,
+                context.isEncryptionFailure,
+                context.shieldReason,
+            ),
         };
     }
 
@@ -1455,17 +1467,34 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getSharedKeysUserId(
         props: EventTileViewModelProps,
+        event: MatrixEvent,
+        isEncryptionFailure: boolean,
         shieldReason: EventShieldReason | null,
     ): string | undefined {
-        if (shieldReason !== EventShieldReason.AUTHENTICITY_NOT_GUARANTEED) {
+        if (
+            isLocalRoom(event.getRoomId()) ||
+            isEncryptionFailure ||
+            shieldReason !== EventShieldReason.AUTHENTICITY_NOT_GUARANTEED
+        ) {
             return undefined;
         }
 
         return props.mxEvent.getKeyForwardingUser() ?? undefined;
     }
 
-    private static getSharedKeysRoomId(props: EventTileViewModelProps): string | undefined {
-        const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
+    private static getSharedKeysRoomId(
+        event: MatrixEvent,
+        isEncryptionFailure: boolean,
+        shieldReason: EventShieldReason | null,
+    ): string | undefined {
+        if (
+            isLocalRoom(event.getRoomId()) ||
+            isEncryptionFailure ||
+            shieldReason !== EventShieldReason.AUTHENTICITY_NOT_GUARANTEED
+        ) {
+            return undefined;
+        }
+
         return event.getRoomId() ?? undefined;
     }
 }
