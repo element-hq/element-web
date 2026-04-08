@@ -133,6 +133,10 @@ interface TextualBodyViewProps {
     className?: string;
 }
 
+/**
+ * Re-clones the supplied body element so consumers can observe the rendered
+ * body node via `bodyRef` without constraining the `body` prop shape.
+ */
 function attachBodyRef(body: ReactElement, bodyRef?: TextualBodyContentRef): ReactElement {
     if (!bodyRef || !isValidElement(body)) {
         return body;
