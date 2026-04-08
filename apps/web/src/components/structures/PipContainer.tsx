@@ -268,7 +268,6 @@ class PipContainerInner extends React.Component<IProps, IState> {
             return (
                 <PictureInPictureDragger
                     className="mx_LegacyCallPreview"
-                    draggable={pipMode}
                     onDoubleClick={this.onDoubleClick}
                     onMove={this.onMove}
                 >

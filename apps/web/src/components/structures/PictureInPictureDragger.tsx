@@ -39,7 +39,6 @@ interface IChildrenOptions {
 interface IProps {
     className?: string;
     children: Array<CreatePipChildren>;
-    draggable: boolean;
     onDoubleClick?: () => void;
     onMove?: () => void;
 }
