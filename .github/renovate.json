@@ -6,8 +6,8 @@
         {
             "groupName": "testcontainers docker digests",
             "groupSlug": "{{manager}}-docker-digests",
-            "matchManagers": ["regex"],
-            "matchPackagePatterns": ["*"]
+            "matchManagers": ["custom.regex"],
+            "matchPackageNames": ["*"]
         }
     ],
     "customManagers": [
