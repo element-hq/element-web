@@ -109,7 +109,7 @@
             "brace-expansion@2.0.2": "2.0.3",
             "brace-expansion@5.0.4": "5.0.5",
             "handlebars@4.7.8": "4.7.9",
-            "path-to-regexp@0.1.12": "0.2.5",
+            "path-to-regexp@0.1.12": "1.9.0",
             "path-to-regexp@8.3.0": "8.4.2",
             "picomatch@2.3.1": "2.3.2",
             "picomatch@4.0": "4.0.4",
