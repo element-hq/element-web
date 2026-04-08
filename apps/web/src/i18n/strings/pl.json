@@ -32,7 +32,6 @@
         "cancel": "Anuluj",
         "change": "Zmień",
         "clear": "Wyczyść",
-        "click": "Kliknij",
         "click_to_copy": "Kliknij, aby skopiować",
         "close": "Zamknij",
         "collapse": "Zwiń",
@@ -66,7 +65,6 @@
         "go": "Przejdź",
         "go_back": "Wróć",
         "got_it": "Rozumiem",
-        "hide": "Ukryj",
         "hide_advanced": "Ukryj zaawansowane",
         "hold": "Wstrzymaj",
         "ignore": "Ignoruj",
@@ -1328,9 +1326,6 @@
         "impossible_dialog_title": "Integracje nie są dozwolone"
     },
     "invite": {
-        "ask_anyway_description": "Nie znaleziono profilów dla identyfikatorów Matrix wymienionych poniżej - czy chcesz rozpocząć wiadomość prywatną mimo to?",
-        "ask_anyway_label": "Rozpocznij wiadomość prywatną mimo to",
-        "ask_anyway_never_warn_label": "Rozpocznij wiadomość prywatną mimo to i nie ostrzegaj ponownie",
         "email_caption": "Zaproś przez e-mail",
         "email_limit_one": "Zaproszenie e-mail może zostać wysłane tylko jedno na raz",
         "email_use_default_is": "Użyj serwera identyfikacji, aby zaprosić przez e-mail. <default>Użyj domyślnego (%(defaultIdentityServerName)s)</default> lub zarządzaj w <settings>Ustawieniach</settings>.",
@@ -3254,7 +3249,6 @@
         },
         "empty_description": "Użyj „%(replyInThread)s” podczas najechania kursorem na wiadomość.",
         "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo je śledzić.",
-        "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
         "my_threads_description": "Pokazuje wszystkie wątki, w których brałeś udział",
@@ -3298,7 +3292,6 @@
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
         "download_failed": "Błąd pobierania",
         "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
@@ -3496,10 +3489,7 @@
             "removed": "Widżet %(widgetName)s został usunięty przez %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Zwiń cytaty",
             "copy_link_thread": "Kopiuj link do wątku",
-            "expand_reply_chain": "Rozwiń cytaty",
-            "label": "Działania na wiadomościach",
             "view_in_room": "Wyświetl w pokoju"
         },
         "mjolnir": {

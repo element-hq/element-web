@@ -32,7 +32,6 @@
         "cancel": "Cancelar",
         "change": "Cambiar",
         "clear": "Borrar",
-        "click": "Clic",
         "click_to_copy": "Haz clic para copiar",
         "close": "Cerrar",
         "collapse": "Encoger",
@@ -66,7 +65,6 @@
         "go": "Ir",
         "go_back": "Atrás",
         "got_it": "Aceptar",
-        "hide": "Ocultar",
         "hide_advanced": "Ocultar ajustes avanzados",
         "hold": "Poner en espera",
         "ignore": "Ignorar",
@@ -1142,7 +1140,6 @@
         "impossible_dialog_title": "Integraciones no están permitidas"
     },
     "invite": {
-        "ask_anyway_never_warn_label": "Enviar mensaje directo de todos modos y no avisar más",
         "email_caption": "Invitar a través de correo electrónico",
         "email_use_default_is": "Usar un servidor de identidad para invitar a través de correo electrónico. <default>. Usar (%(defaultIdentityServerName)s)</default>o seleccione en <settings>Ajustes</settings>.",
         "email_use_is": "Utilice un servidor de identidad para invitar por correo electrónico. Gestionar en <settings>Ajustes</settings>.",
@@ -2668,7 +2665,6 @@
             "one": "%(count)s respuesta",
             "other": "%(count)s respuestas"
         },
-        "error_start_thread_existing_relation": "No ha sido posible crear un hilo a partir de un evento con una relación existente",
         "my_threads": "Mis hilos",
         "my_threads_description": "Ver todos los hilos en los que has participado",
         "open_thread": "Abrir hilo",
@@ -2701,7 +2697,6 @@
         },
         "creation_summary_dm": "%(creator)s creó este mensaje directo.",
         "creation_summary_room": "Sala creada y configurada por %(creator)s.",
-        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Última vez editado: %(date)s. Haz clic para ver los cambios.",
@@ -2889,10 +2884,7 @@
             "removed": "componente %(widgetName)s eliminado por %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Plegar citas",
             "copy_link_thread": "Copiar enlace al hilo",
-            "expand_reply_chain": "Expandir citas",
-            "label": "Acciones de mensaje",
             "view_in_room": "Ver en la sala"
         },
         "mjolnir": {

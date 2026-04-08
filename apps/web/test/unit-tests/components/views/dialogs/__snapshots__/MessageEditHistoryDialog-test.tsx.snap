@@ -49,11 +49,12 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                   role="none"
                 />
                 <div
-                  class="_flex_4dswl_9 _content_5dcky_8"
+                  class="_flex_4dswl_9 _content_u6fft_8"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
                   <h2
                     aria-hidden="true"
+                    class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
                   >
                     Thu, Jan 1, 1970
                   </h2>
@@ -86,15 +87,23 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_MessageActionBar"
+                    aria-label="Message Actions"
+                    aria-live="off"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    role="toolbar"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
-                    <div
-                      class="mx_AccessibleButton"
+                    <button
+                      aria-label="Remove"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      data-kind="tertiary"
+                      data-presentation="label"
+                      data-size="sm"
                       role="button"
                       tabindex="0"
                     >
                       Remove
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -180,11 +189,12 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   role="none"
                 />
                 <div
-                  class="_flex_4dswl_9 _content_5dcky_8"
+                  class="_flex_4dswl_9 _content_u6fft_8"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                 >
                   <h2
                     aria-hidden="true"
+                    class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
                   >
                     Thu, Jan 1, 1970
                   </h2>
@@ -224,15 +234,23 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_MessageActionBar"
+                    aria-label="Message Actions"
+                    aria-live="off"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    role="toolbar"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
-                    <div
-                      class="mx_AccessibleButton"
+                    <button
+                      aria-label="Remove"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      data-kind="tertiary"
+                      data-presentation="label"
+                      data-size="sm"
                       role="button"
                       tabindex="0"
                     >
                       Remove
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -278,15 +296,23 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_MessageActionBar"
+                    aria-label="Message Actions"
+                    aria-live="off"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    role="toolbar"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
-                    <div
-                      class="mx_AccessibleButton"
+                    <button
+                      aria-label="Remove"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      data-kind="tertiary"
+                      data-presentation="label"
+                      data-size="sm"
                       role="button"
                       tabindex="0"
                     >
                       Remove
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -314,15 +340,23 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                     </span>
                   </div>
                   <div
-                    class="mx_MessageActionBar"
+                    aria-label="Message Actions"
+                    aria-live="off"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    role="toolbar"
+                    style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
-                    <div
-                      class="mx_AccessibleButton"
+                    <button
+                      aria-label="Remove"
+                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      data-kind="tertiary"
+                      data-presentation="label"
+                      data-size="sm"
                       role="button"
                       tabindex="0"
                     >
                       Remove
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -332,7 +366,7 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
       </div>
     </div>
     <div
-      aria-describedby="_r_8_"
+      aria-describedby="_r_c_"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

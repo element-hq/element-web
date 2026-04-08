@@ -27,7 +27,6 @@ test.describe("Advanced section in Encryption tab", () => {
             mask: [section.getByTestId("deviceId"), section.getByTestId("sessionKey")],
         });
 
-        axe.disableRules("link-in-text-block");
         await expect(axe).toHaveNoViolations();
     });
 

@@ -28,7 +28,6 @@
         "cancel": "取消",
         "change": "變更",
         "clear": "清除",
-        "click": "點擊",
         "click_to_copy": "點擊複製",
         "close": "關閉",
         "collapse": "收折",
@@ -62,7 +61,6 @@
         "go": "前往",
         "go_back": "返回",
         "got_it": "了解",
-        "hide": "隱藏",
         "hide_advanced": "隱藏進階設定",
         "hold": "保留",
         "ignore": "忽略",
@@ -1126,9 +1124,6 @@
         "impossible_dialog_title": "不允許整合"
     },
     "invite": {
-        "ask_anyway_description": "找不到下方列出的 Matrix ID 個人檔案，您是否仍要開始直接訊息？",
-        "ask_anyway_label": "開始直接訊息",
-        "ask_anyway_never_warn_label": "開始直接訊息且不要再次警告",
         "email_caption": "透過電子郵件邀請",
         "email_limit_one": "透過電子郵件傳送的邀請一次只能傳送一個",
         "email_use_default_is": "使用身分伺服器以透過電子郵件邀請。<default>使用預設值 (%(defaultIdentityServerName)s)</default>或在<settings>設定</settings>中管理。",
@@ -2805,7 +2800,6 @@
             "one": "%(count)s 回覆",
             "other": "%(count)s 回覆"
         },
-        "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動",
         "my_threads": "我的討論串",
         "my_threads_description": "顯示您參與的所有討論串",
         "open_thread": "開啟討論串",
@@ -2838,7 +2832,6 @@
         },
         "creation_summary_dm": "%(creator)s 建立了此私人訊息。",
         "creation_summary_room": "%(creator)s 建立並設定了聊天室。",
-        "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下載",
         "edits": {
             "tooltip_label": "編輯於 %(date)s。點擊以檢視編輯。",
@@ -3029,10 +3022,7 @@
             "removed": "%(widgetName)s 小工具是由 %(senderName)s 所移除"
         },
         "mab": {
-            "collapse_reply_chain": "收折引號",
             "copy_link_thread": "複製討論串連結",
-            "expand_reply_chain": "展開引號",
-            "label": "訊息動作",
             "view_in_room": "在聊天室中檢視"
         },
         "mjolnir": {

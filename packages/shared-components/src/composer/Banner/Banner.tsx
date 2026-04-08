@@ -20,7 +20,7 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 
 import styles from "./Banner.module.css";
-import { _t } from "../../utils/i18n";
+import { _t } from "../../core/i18n/i18n";
 
 interface BannerProps {
     /**

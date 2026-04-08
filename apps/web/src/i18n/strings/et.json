@@ -32,7 +32,6 @@
         "cancel": "Loobu",
         "change": "Muuda",
         "clear": "Eemalda",
-        "click": "Klõpsi",
         "click_to_copy": "Kopeerimiseks klõpsa",
         "close": "Sulge",
         "collapse": "Ahenda",
@@ -66,7 +65,6 @@
         "go": "Mine",
         "go_back": "Mine tagasi",
         "got_it": "Selge lugu",
-        "hide": "Peida",
         "hide_advanced": "Peida lisaseadistused",
         "hold": "Pane ootele",
         "ignore": "Eira",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Lõimingute kasutamine ei ole lubatud"
     },
     "invite": {
-        "ask_anyway_description": "Allpool loetletud Matrix'i kasutajatunnustele ei leidunud profiile. Kas sa ikkagi tahaksid nendega vestlust alustada?",
-        "ask_anyway_label": "Ikkagi alusta vestlust",
-        "ask_anyway_never_warn_label": "Alusta siiski ja ära hoiata mind enam",
         "email_caption": "Saada kutse e-kirjaga",
         "email_limit_one": "Kutseid saad e-posti teel saata vaid ükshaaval",
         "email_use_default_is": "E-posti teel kutse saatmiseks kasuta isikutuvastusserverit. Võid kasutada <default>vaikimisi serverit (%(defaultIdentityServerName)s)</default> või määrata muud serverid <settings>seadistustes</settings>.",
@@ -3296,7 +3291,6 @@
         },
         "empty_description": "Sõnumi kohtmenüüst vali „%(replyInThread)s“",
         "empty_title": "Jutulõngad aitavad hoida vestlusi teemakohastena ja hallatavatena.",
-        "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa",
         "mark_all_read": "Märgi kõik loetuks",
         "my_threads": "Minu jutulõngad",
         "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
@@ -3340,7 +3334,6 @@
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestu"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dekrüptin sisu",
         "download_action_downloading": "Laadin alla",
         "download_failed": "Allalaadimine ei õnnestunud",
         "download_failed_description": "Selle faili allalaadimisel tekkis viga",
@@ -3538,10 +3531,7 @@
             "removed": "%(senderName)s eemaldas vidina %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Peida viidatud sisu",
             "copy_link_thread": "Kopeeri jutulõnga link",
-            "expand_reply_chain": "Näita viidatud sisu",
-            "label": "Tegevused sõnumitega",
             "view_in_room": "Vaata jututoas"
         },
         "mjolnir": {
