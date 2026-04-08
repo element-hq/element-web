@@ -32,7 +32,7 @@
 .annotation {
     user-select: none;
     display: inline-block;
-    margin-inline-start: 9px; /* Preserve legacy EventTile spacing for inline annotations like*/
+    margin-inline-start: 9px; /* Preserve legacy EventTile spacing for inline annotations like (edited) */
     font: var(--cpd-font-body-xs-regular);
     color: var(--cpd-color-text-secondary);
 }
