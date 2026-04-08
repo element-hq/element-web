@@ -8,7 +8,7 @@
 import React, { createRef, type MouseEventHandler } from "react";
 import { composeStories } from "@storybook/react-vite";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "@test-utils";
+import { fireEvent, render, screen } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
 import { MockViewModel } from "../../../../../core/viewmodel";
@@ -21,6 +21,7 @@ import {
     type TextualBodyViewModel,
     type TextualBodyViewSnapshot,
 } from "./TextualBodyView";
+import * as publicApi from "./index";
 import * as stories from "./TextualBody.stories";
 
 const { Default, Notice, CaptionWithPreview, Emote } = composeStories(stories);
@@ -44,6 +45,12 @@ describe("TextualBodyView", () => {
     it("renders emote messages with annotations", () => {
         const { container } = render(<Emote />);
         expect(container).toMatchSnapshot();
+    });
+
+    it("re-exports the public TextualBodyView API", () => {
+        expect(publicApi.TextualBodyView).toBe(TextualBodyView);
+        expect(publicApi.TextualBodyViewKind).toBe(TextualBodyViewKind);
+        expect(publicApi.TextualBodyViewBodyWrapperKind).toBe(TextualBodyViewBodyWrapperKind);
     });
 
     it("forwards body refs to the rendered body element", () => {
@@ -105,5 +112,79 @@ describe("TextualBodyView", () => {
         expect(onEmoteSenderClick).toHaveBeenCalledTimes(1);
         expect(onBodyActionClick).toHaveBeenCalledTimes(1);
         expect(onEditedMarkerClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("renders link-wrapped annotated bodies without an edited tooltip", async () => {
+        const user = userEvent.setup();
+        const onEditedMarkerClick = vi.fn();
+
+        class TestTextualBodyViewModel
+            extends MockViewModel<TextualBodyViewSnapshot>
+            implements TextualBodyViewActions
+        {
+            public onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
+
+            public constructor(snapshot: TextualBodyViewSnapshot, actions: TextualBodyViewActions) {
+                super(snapshot);
+                Object.assign(this, actions);
+            }
+        }
+
+        const vm = new TestTextualBodyViewModel(
+            {
+                kind: TextualBodyViewKind.TEXT,
+                bodyWrapper: TextualBodyViewBodyWrapperKind.LINK,
+                bodyLinkHref: "https://example.org/#/room/!room:example.org/$event",
+                showEditedMarker: true,
+                editedMarkerText: "(edited)",
+                showPendingModerationMarker: true,
+                pendingModerationText: "(Visible to you while moderation is pending)",
+            },
+            { onEditedMarkerClick },
+        ) as TextualBodyViewModel;
+
+        render(<TextualBodyView vm={vm} body={<div>Body content</div>} />);
+
+        expect(screen.getByRole("link")).toHaveAttribute("href", "https://example.org/#/room/!room:example.org/$event");
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+        expect(screen.getByText("(Visible to you while moderation is pending)")).toBeInTheDocument();
+
+        await user.click(screen.getByRole("button", { name: "(edited)" }));
+
+        expect(onEditedMarkerClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("only activates action wrappers for Enter and Space key presses", () => {
+        const onBodyActionClick = vi.fn();
+
+        class TestTextualBodyViewModel
+            extends MockViewModel<TextualBodyViewSnapshot>
+            implements TextualBodyViewActions
+        {
+            public onBodyActionClick?: MouseEventHandler<HTMLDivElement>;
+
+            public constructor(snapshot: TextualBodyViewSnapshot, actions: TextualBodyViewActions) {
+                super(snapshot);
+                Object.assign(this, actions);
+            }
+        }
+
+        const vm = new TestTextualBodyViewModel(
+            {
+                kind: TextualBodyViewKind.TEXT,
+                bodyWrapper: TextualBodyViewBodyWrapperKind.ACTION,
+                bodyActionAriaLabel: "Open starter link",
+            },
+            { onBodyActionClick },
+        ) as TextualBodyViewModel;
+
+        render(<TextualBodyView vm={vm} body={<span>Launch the integration flow.</span>} />);
+
+        const action = screen.getByRole("button", { name: "Open starter link" });
+        fireEvent.keyDown(action, { key: "Escape" });
+        fireEvent.keyDown(action, { key: "Enter" });
+        fireEvent.keyDown(action, { key: " " });
+
+        expect(onBodyActionClick).toHaveBeenCalledTimes(2);
     });
 });
