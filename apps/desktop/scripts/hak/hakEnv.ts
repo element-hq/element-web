@@ -103,6 +103,9 @@ export default class HakEnv {
                 shell: this.isWin(),
                 ...options,
             });
+            proc.on("error", (err) => {
+                reject(err);
+            });
             proc.on("exit", (code) => {
                 if (code) {
                     reject(code);

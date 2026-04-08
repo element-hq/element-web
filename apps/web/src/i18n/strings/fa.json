@@ -1925,9 +1925,6 @@
             "modified": "ویجت %(widgetName)s توسط %(senderName)s تغییر کرد",
             "removed": "ویجت %(widgetName)s توسط %(senderName)s حذف گردید"
         },
-        "mab": {
-            "label": "اقدامات پیام"
-        },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s یک قاعده تحریم را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای به‌روزرسانی کرد که با %(newGlob)s تطابق داشته باشد",
             "changed_rule_rooms": "%(senderName)s یک قاعده تحریم اتاق‌ها را که با %(oldGlob)s تطابق داشت، به دلیل (دلایل) %(reason)s به گونه‌ای تغییر داد که با %(newGlob)s تطابق داشته باشد",

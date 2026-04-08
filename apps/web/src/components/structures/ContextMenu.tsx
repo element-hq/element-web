@@ -8,7 +8,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type CSSProperties, type RefObject, type SyntheticEvent, useRef, useState } from "react";
+import React, {
+    type JSX,
+    type CSSProperties,
+    type RefObject,
+    type SyntheticEvent,
+    useRef,
+    useState,
+    type AriaRole,
+} from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
@@ -74,27 +82,31 @@ export interface MenuProps extends IPosition {
 
 export interface IProps extends MenuProps {
     // If true, insert an invisible screen-sized element behind the menu that when clicked will close it.
-    hasBackground?: boolean;
+    "hasBackground"?: boolean;
     // whether this context menu should be focus managed. If false it must handle itself
-    managed?: boolean;
-    wrapperClassName?: string;
-    menuClassName?: string;
+    "managed"?: boolean;
+    "wrapperClassName"?: string;
+    "menuClassName"?: string;
 
     // If true, this context menu will be mounted as a child to the parent container. Otherwise
     // it will be mounted to a container at the root of the DOM.
-    mountAsChild?: boolean;
+    "mountAsChild"?: boolean;
 
     // If specified, contents will be wrapped in a FocusLock, this is only needed if the context menu is being rendered
     // within an existing FocusLock e.g inside a modal.
-    focusLock?: boolean;
+    "focusLock"?: boolean;
 
     // call onFinished on any interaction with the menu
-    closeOnInteraction?: boolean;
+    "closeOnInteraction"?: boolean;
 
     // Function to be called on menu close
     onFinished(this: void): void;
     // on resize callback
     windowResize?(this: void): void;
+
+    // Role & label for accessibility
+    "role"?: AriaRole;
+    "aria-label"?: string;
 }
 
 interface IState {
@@ -257,9 +269,11 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
             focusLock,
             managed,
             wrapperClassName,
-            chevronFace: propsChevronFace,
-            chevronOffset: propsChevronOffset,
+            "chevronFace": propsChevronFace,
+            "chevronOffset": propsChevronOffset,
             mountAsChild,
+            role,
+            "aria-label": ariaLabel,
             ...props
         } = this.props;
 
@@ -424,6 +438,8 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
                         onClick={this.onClick}
                         onKeyDown={onKeyDownHandler}
                         onContextMenu={this.onContextMenuPreventBubbling}
+                        role={role}
+                        aria-label={ariaLabel}
                     >
                         {background}
                         <TooltipProvider>

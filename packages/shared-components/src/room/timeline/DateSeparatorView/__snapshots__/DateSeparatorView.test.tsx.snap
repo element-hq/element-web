@@ -17,6 +17,7 @@ exports[`DateSeparatorView > renders default story 1`] = `
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Today
       </h2>
@@ -45,6 +46,7 @@ exports[`DateSeparatorView > renders long localized label story 1`] = `
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time
       </h2>
@@ -73,6 +75,7 @@ exports[`DateSeparatorView > renders with extra class names 1`] = `
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Today
       </h2>
@@ -113,6 +116,7 @@ exports[`DateSeparatorView > renders with jump to date picker story 1`] = `
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Today
       </h2>

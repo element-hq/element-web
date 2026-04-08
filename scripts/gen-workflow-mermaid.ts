@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import path from "node:path";
 import YAML from "yaml";
 import parseArgs from "minimist";
@@ -288,16 +288,16 @@ function getTriggerNodes<K extends keyof WorkflowYaml["on"]>(key: K, workflow: W
     });
 }
 
-function readFile(...pathSegments: string[]): string {
-    return fs.readFileSync(path.join(...pathSegments), { encoding: "utf-8" });
+function readFile(...pathSegments: string[]): Promise<string> {
+    return fs.readFile(path.join(...pathSegments), { encoding: "utf-8" });
 }
 
-function readJson<T extends object>(...pathSegments: string[]): T {
-    return JSON.parse(readFile(...pathSegments));
+async function readJson<T extends object>(...pathSegments: string[]): Promise<T> {
+    return JSON.parse(await readFile(...pathSegments));
 }
 
-function readYaml<T extends object>(...pathSegments: string[]): T {
-    return YAML.parse(readFile(...pathSegments));
+async function readYaml<T extends object>(...pathSegments: string[]): Promise<T> {
+    return YAML.parse(await readFile(...pathSegments));
 }
 
 function toArray<T>(v: T | T[]): T[] {
@@ -442,8 +442,16 @@ export default async function main(dirs: string[], on?: string[], print = false,
         const {
             name,
             repository: { url },
-        } = readJson<{ name: string; repository: { url: string } }>(projectPath, "package.json");
+        } = await readJson<{ name: string; repository: { url: string } }>(projectPath, "package.json");
         const workflowsPath = path.join(projectPath, ".github", "workflows");
+
+        let files: string[];
+        try {
+            files = await fs.readdir(workflowsPath);
+        } catch (e) {
+            console.error(`Could not read ${workflowsPath}`, e);
+            continue;
+        }
 
         const project: Project = {
             name,
@@ -452,8 +460,8 @@ export default async function main(dirs: string[], on?: string[], print = false,
             workflows: new Map(),
         };
 
-        for (const file of fs.readdirSync(workflowsPath).filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))) {
-            const data = readYaml<WorkflowYaml>(workflowsPath, file);
+        for (const file of files.filter((f) => f.endsWith(".yml") || f.endsWith(".yaml"))) {
+            const data = await readYaml<WorkflowYaml>(workflowsPath, file);
             const name = data.name ?? file;
             const workflow: Workflow = {
                 id: `${project.name}/${name}`,

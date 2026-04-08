@@ -32,7 +32,6 @@
         "cancel": "Storno",
         "change": "Změnit",
         "clear": "Smazat",
-        "click": "Kliknutí",
         "click_to_copy": "Kliknutím zkopírujte",
         "close": "Zavřít",
         "collapse": "Sbalit",
@@ -66,7 +65,6 @@
         "go": "Ok",
         "go_back": "Zpět",
         "got_it": "Rozumím",
-        "hide": "Skrýt",
         "hide_advanced": "Skrýt pokročilé možnosti",
         "hold": "Podržet",
         "ignore": "Ignorovat",
@@ -117,7 +115,7 @@
         "show_advanced": "Zobrazit pokročilé možnosti",
         "show_all": "Zobrazit vše",
         "sign_in": "Přihlásit",
-        "sign_out": "Odhlásit",
+        "sign_out": "Odebrat toto zařízení",
         "skip": "Přeskočit",
         "start": "Začít",
         "start_chat": "Zahájit konverzaci",
@@ -221,11 +219,11 @@
         "incorrect_password": "Nesprávné heslo",
         "log_in_new_account": "<a>Přihlaste se</a> svým novým účtem.",
         "logout_dialog": {
-            "description": "Opravdu se chcete odhlásit?",
+            "description": "Opravdu chcete toto zařízení odstranit?",
             "megolm_export": "Export klíčů",
             "setup_key_backup_title": "Přijdete o přístup k šifrovaným zprávám",
             "setup_secure_backup_description_1": "Šifrované zprávy jsou zabezpečené koncovým šifrováním. Klíče pro jejich dešifrování máte jen vy a příjemci zpráv.",
-            "setup_secure_backup_description_2": "Po odhlášení budou tyto klíče z tohoto zařízení odstraněny, což znamená, že nebudete moci číst zašifrované zprávy, pokud k nim nemáte klíče v jiných zařízeních nebo je nemáte zálohované na serveru.",
+            "setup_secure_backup_description_2": "Po odstranění tohoto zařízení nebudete moci číst šifrované zprávy, pokud k nim nemáte klíče na ostatních zařízeních nebo je nezálohujete na server.",
             "skip_key_backup": "Už své zašifrované zprávy nechci"
         },
         "misconfigured_body": "Požádejte správce vašeho %(brand)su, aby zkontroloval <a>vaši konfiguraci</a>. Pravděpodobně obsahuje chyby nebo duplicity.",
@@ -298,16 +296,16 @@
         "registration_username_validation": "Používejte pouze malá písmena, čísla, pomlčky a podtržítka",
         "reset_password": {
             "confirm_new_password": "Potvrďte nové heslo",
-            "devices_logout_success": "Byli jste odhlášeni ze všech zařízení a již nebudete dostávat push oznámení. Chcete-li oznámení znovu povolit, znovu se přihlaste na každém zařízení.",
-            "other_devices_logout_warning_1": "Odhlášením zařízení odstraníte šifrovací klíče zpráv, které jsou v nich uloženy, a historie zašifrovaných chatů tak nebude čitelná.",
-            "other_devices_logout_warning_2": "Pokud si chcete zachovat přístup k historii chatu v zašifrovaných místnostech, nastavte si zálohování klíčů nebo exportujte klíče zpráv z některého z dalších zařízení, než budete pokračovat.",
+            "devices_logout_success": "Všechna vaše zařízení byla odebrána a již nebudou dostávat push oznámení. Chcete-li oznámení znovu povolit, znovu se přihlaste na každém zařízení.",
+            "other_devices_logout_warning_1": "Odstranění zařízení vymaže klíče pro šifrování zpráv, které jsou na nich uloženy, čímž se zašifrovaná historie chatu stane nečitelnou.",
+            "other_devices_logout_warning_2": "Pokud si chcete zachovat přístup k historii chatu v šifrovaných místnostech, získejte před pokračováním obnovovací klíč nebo exportujte klíče zpráv z jednoho z vašich ostatních zařízení.",
             "password_not_entered": "Musíte zadat nové heslo.",
             "passwords_mismatch": "Nová hesla se musí shodovat.",
             "rate_limit_error": "Příliš mnoho pokusů v krátkém čase. Před dalším pokusem nějakou dobu počkejte.",
             "rate_limit_error_with_time": "Příliš mnoho pokusů v krátkém čase. Zkuste to znovu po %(timeout)s.",
             "reset_successful": "Heslo bylo resetováno.",
             "return_to_login": "Vrátit k přihlašovací obrazovce",
-            "sign_out_other_devices": "Odhlásit se ze všech zařízení"
+            "sign_out_other_devices": "Odstranit další zařízení"
         },
         "reset_password_action": "Obnovit heslo",
         "reset_password_button": "Zapomněli jste heslo?",
@@ -330,8 +328,8 @@
         "server_picker_title": "Přihlaste se do svého domovského serveru",
         "server_picker_title_default": "Možnosti serveru",
         "server_picker_title_registration": "Hostovat účet na",
-        "session_logged_out_description": "Z bezpečnostních důvodů bylo toto přihlášení ukončeno. Přihlašte se prosím znovu.",
-        "session_logged_out_title": "Jste odhlášeni",
+        "session_logged_out_description": "Z bezpečnostních důvodů byla tato relace odstraněna. Přihlaste se prosím znovu.",
+        "session_logged_out_title": "Relace byla odstraněna",
         "set_email": {
             "description": "Toto vám umožní obnovit si heslo a přijímat oznámení e-mailem.",
             "verification_pending_description": "Zkontrolujte svou e-mailovou schránku a klepněte na odkaz ve zprávě, kterou jsme vám poslali. V případě, že jste to už udělali, klepněte na tlačítko Pokračovat.",
@@ -371,7 +369,7 @@
             "email_resent": "Přeposláno!",
             "fallback_button": "Zahájit autentizaci",
             "mas_cross_signing_reset_cta": "Přejděte na svůj účet",
-            "mas_cross_signing_reset_description": "Resetujte svou identitu prostřednictvím svého poskytovatele účtu a poté se vraťte a klikněte na \"Opakovat\".",
+            "mas_cross_signing_reset_description": "Chystáte se přejít na svůj účet %(serverName)s, abyste obnovili svou digitální identitu. Jakmile dokončíte obnovení svého účtu, vraťte se sem a klikněte na Zkusit znovu.",
             "mas_cross_signing_reset_title": "Přejděte na svůj účet a obnovte svou identitu",
             "msisdn": "Na číslo %(msisdn)s byla odeslána textová zpráva",
             "msisdn_token_incorrect": "Neplatný token",
@@ -980,19 +978,19 @@
             "title": "Nový způsob obnovy",
             "warning": "Pokud jste nenastavili nový způsob obnovy vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
-        "pinned_identity_changed": "Identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
-        "pinned_identity_changed_no_displayname": "Identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
+        "pinned_identity_changed": "Digitální identita uživatele %(displayName)s (<b>%(userId)s</b>) byla resetována. <a>Další informace</a>",
+        "pinned_identity_changed_no_displayname": "Digitální identita uživatele <b>%(userId)s</b> byla resetována. <a>Další informace</a>",
         "recovery_method_removed": {
             "description_1": "Tato relace zjistila, že byla odstraněna vaše bezpečnostní fráze a klíč pro zabezpečené zprávy.",
             "description_2": "Pokud se vám to stalo neúmyslně, můžete znovu nastavit zálohu zpráv pro tuto relaci. To znovu zašifruje historii zpráv novým způsobem.",
             "title": "Záloha klíčů byla odstraněna",
             "warning": "Pokud jste způsob obnovy neodstranili vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
-        "set_up_recovery": "Nastavení obnovení",
+        "set_up_recovery": "Zálohujte své chaty",
         "set_up_recovery_toast_description": "Vygenerujte klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup k zařízením.",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "setup_secure_backup": {
-            "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli."
+            "explainer": "Před odebráním tohoto zařízení si zálohujte klíče, abyste o ně nepřišli."
         },
         "turn_on_key_storage": "Zapnout úložiště klíčů",
         "turn_on_key_storage_description": "Bezpečně uložte svou kryptografickou identitu a klíče zpráv na serveru. To vám umožní zobrazit historii zpráv na všech nových zařízeních.",
@@ -1105,8 +1103,8 @@
         "verification_requested_toast_title": "Žádost ověření",
         "verified_identity_changed": "Ověřená identita uživatele %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
         "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
-        "verify_toast_description": "Ostatní uživatelé této relaci nemusí věřit",
-        "verify_toast_title": "Ověřit tuto relaci",
+        "verify_toast_description": "Od konce dubna 2026 nebudou neověřená zařízení moci odesílat ani přijímat zprávy. <a>Další informace</a>",
+        "verify_toast_title": "Ověřit toto zařízení",
         "withdraw_verification_action": "Zrušit ověření"
     },
     "error": {
@@ -1131,15 +1129,15 @@
         "non_urgent_echo_failure_toast": "Váš server neodpovídá na některé <a>požadavky</a>.",
         "resource_limits": "Tento domovský server překročil některý z limitů.",
         "session_restore": {
-            "clear_storage_button": "Vymazat uložiště a odhlásit se",
-            "clear_storage_description": "Odhlásit a odstranit šifrovací klíče?",
-            "description_1": "V průběhu obnovování Vaší minulé relace nastala chyba.",
+            "clear_storage_button": "Odstranit toto zařízení",
+            "clear_storage_description": "Odstranit toto zařízení spolu s jeho šifrovacími klíči?",
+            "description_1": "Při pokusu o obnovení vaší relace došlo k chybě.",
             "description_2": "Pokud jste se v minulosti již přihlásili s novější verzi programu %(brand)s, vaše relace nemusí být kompatibilní s touto verzí. Zavřete prosím toto okno a přihlaste se znovu pomocí nové verze.",
-            "description_3": "Vymazání úložiště prohlížeče možná váš problém opraví, zároveň se tím ale odhlásíte a můžete přijít o historii svých šifrovaných konverzací.",
+            "description_3": "Vymazání úložiště prohlížeče může problém vyřešit, ale odstraní toto zařízení a způsobí, že veškerá encryptovaná historie chatu bude nečitelná.",
             "title": "Nelze obnovit relaci"
         },
         "something_went_wrong": "Něco se nepovedlo!",
-        "storage_evicted_description_1": "Některá data sezení, například klíče od šifrovaných zpráv, nám chybí. Přihlaste se prosím znovu a obnovte si klíče ze zálohy.",
+        "storage_evicted_description_1": "Chybí některá data relace, včetně šifrovacích klíčů zpráv. Chcete-li tento problém vyřešit, odpojte toto zařízení a přihlaste se znovu, čímž se klíče obnoví ze zálohy.",
         "storage_evicted_description_2": "Prohlížeč data možná smazal aby ušetřil místo na disku.",
         "storage_evicted_title": "Chybějící data relace",
         "sync": "Nelze se připojit k domovskému serveru. Opakovaný pokus…",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Integrace nejsou povolené"
     },
     "invite": {
-        "ask_anyway_description": "Není možné najít uživatelské profily pro níže uvedené Matrix ID - chcete přesto založit DM?",
-        "ask_anyway_label": "Zahájit přímou zprávu i přesto",
-        "ask_anyway_never_warn_label": "Zahájit přímou zprávu i přesto a nikdy už mě nevarovat",
         "email_caption": "Pozvat emailem",
         "email_limit_one": "Pozvánky e-mailem lze zasílat pouze po jedné",
         "email_use_default_is": "Odeslat pozvánku pomocí serveru identit. <default>Použít výchozí (%(defaultIdentityServerName)s)</default> nebo přenastavit <settings>Nastavení</settings>.",
@@ -1561,7 +1556,7 @@
         "share_history_on_invite_warning": "Tato funkce je EXPERIMENTÁLNÍ a nejsou v ní implementována všechna bezpečnostní opatření. Neaktivujte ji na produkčních účtech.",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
-        "sliding_sync_disabled_notice": "Pro vypnutí se odhlaste a znovu přihlaste",
+        "sliding_sync_disabled_notice": "Pro deaktivaci se znovu přihlaste",
         "sliding_sync_server_no_support": "Váš server nemá podporu",
         "under_active_development": "V aktivním vývoji.",
         "unrealiable_e2e": "Nespolehlivé v šifrovaných místnostech",
@@ -2888,29 +2883,32 @@
         "send_read_receipts_unsupported": "Váš server nepodporuje vypnutí odesílání potvrzení o přečtení.",
         "send_typing_notifications": "Posílat oznámení, když píšete",
         "sessions": {
-            "best_security_note": "V zájmu co nejlepšího zabezpečení ověřujte své relace a odhlašujte se ze všech relací, které již nepoznáváte nebo nepoužíváte.",
+            "best_security_note": "V zájmu co nejlepšího zabezpečení ověřujte své relace a odstraňte relace, které již nepoznáváte nebo nepoužíváte.",
             "browser": "Prohlížeč",
             "confirm_sign_out": {
-                "one": "Potvrďte odhlášení z tohoto zařízení",
-                "other": "Potvrďte odhlášení z těchto zařízení"
+                "one": "Potvrďte odstranění tohoto zařízení",
+                "few": "",
+                "other": "Potvrďte odstranění těchto zařízení"
             },
             "confirm_sign_out_body": {
-                "other": "Kliknutím na tlačítko níže potvrdíte odhlášení těchto zařízení.",
-                "one": "Kliknutím na tlačítko níže potvrdíte odhlášení tohoto zařízení."
+                "one": "Kliknutím na tlačítko níže potvrdíte odstranění tohoto zařízení.",
+                "few": "",
+                "other": "Kliknutím na tlačítko níže potvrdíte odstranění těchto zařízení."
             },
             "confirm_sign_out_continue": {
-                "one": "Odhlášení zařízení",
-                "other": "Odhlášení zařízení"
+                "one": "Odstranění zařízení",
+                "few": "",
+                "other": "Odstranění zařízení"
             },
             "confirm_sign_out_sso": {
-                "one": "Potvrďte odhlášení tohoto zařízení pomocí Jednotného přihlášení, abyste prokázali svou identitu.",
+                "one": "Potvrďte odstranění tohoto zařízení pomocí Jednotného přihlášení, abyste prokázali svou identitu.",
                 "few": "",
-                "other": "Potvrďte odhlášení těchto zařízení pomocí Jednotného přihlášení, abyste prokázali svou identitu."
+                "other": "Potvrďte odstranění těchto zařízení pomocí Jednotného přihlášení, abyste prokázali svou identitu."
             },
             "current_session": "Aktuální relace",
             "desktop_session": "Relace stolního počítače",
             "details_heading": "Podrobnosti o relaci",
-            "device_unverified_description": "V zájmu nejvyšší bezpečnosti a spolehlivosti tuto relaci ověřte nebo se z ní odhlaste.",
+            "device_unverified_description": "V zájmu nejvyšší bezpečnosti a spolehlivosti tuto relaci ověřte nebo jí odstraňte.",
             "device_unverified_description_current": "Ověřte svou aktuální relaci pro vylepšené zabezpečené zasílání zpráv.",
             "device_verified_description": "Tato relace je připravena na bezpečné zasílání zpráv.",
             "device_verified_description_current": "Vaše aktuální relace je připravena pro bezpečné zasílání zpráv.",
@@ -2928,7 +2926,7 @@
             "inactive_sessions": "Neaktivní relace",
             "inactive_sessions_explainer_1": "Neaktivní relace jsou relace, které jste po určitou dobu nepoužili, ale nadále dostávají šifrovací klíče.",
             "inactive_sessions_explainer_2": "Odstranění neaktivních relací zvyšuje zabezpečení a výkon a usnadňuje identifikaci nové podezřelé relace.",
-            "inactive_sessions_list_description": "Zvažte odhlášení ze starých relací (%(inactiveAgeDays)s dní nebo starších), které již nepoužíváte.",
+            "inactive_sessions_list_description": "Zvažte odstranění starých relací (%(inactiveAgeDays)s dní nebo starších), které již nepoužíváte.",
             "ip": "IP adresa",
             "last_activity": "Poslední aktivita",
             "manage": "Spravovat tuto relaci",
@@ -2959,15 +2957,17 @@
             "sign_in_with_qr_button": "Zobrazit QR kód",
             "sign_in_with_qr_description": "Pomocí QR kódu se přihlaste do jiného zařízení a nastavte zabezpečené zasílání zpráv.",
             "sign_in_with_qr_unsupported": "Není podporováno vaším poskytovatelem účtu",
-            "sign_out": "Odhlásit se z této relace",
-            "sign_out_all_other_sessions": "Odhlásit se ze všech ostatních relací (%(otherSessionsCount)s)",
+            "sign_out": "Odebrat tuto relaci",
+            "sign_out_all_other_sessions": "Odebrat všechny ostatní relace (%(otherSessionsCount)s )",
             "sign_out_confirm_description": {
-                "other": "Opravdu se chcete odhlásit z %(count)s relací?",
-                "one": "Opravdu se chcete odhlásit z %(count)s relace?"
+                "one": "Opravdu se chcete odhlásit z %(count)s relace?",
+                "few": "",
+                "other": "Opravdu se chcete odhlásit z %(count)s relací?"
             },
             "sign_out_n_sessions": {
-                "one": "Odhlásit se z %(count)s relace",
-                "other": "Odhlásit se z %(count)s relací"
+                "one": "Odstranit %(count)s relaci",
+                "few": "Odstranit %(count)s relace",
+                "other": "Odstranit %(count)s relací"
             },
             "title": "Relace",
             "unknown_session": "Neznámý typ relace",
@@ -2976,15 +2976,15 @@
             "unverified_session_explainer_2": "Při použití této relace se nebudete moci účastnit místností, kde je povoleno šifrování.",
             "unverified_session_explainer_3": "Pro co nejlepší zabezpečení a ochranu soukromí je doporučeno používat Matrix klienty, které podporují šifrování.",
             "unverified_sessions": "Neověřené relace",
-            "unverified_sessions_explainer_1": "Neověřené relace jsou relace, které se přihlásily pomocí vašich přihlašovacích údajů, ale nebyly křížově ověřeny.",
+            "unverified_sessions_explainer_1": "Neověřené relace jsou relace, ke kterým jste se přihlásili pomocí svých přihlašovacích údajů, ale nebyly potvrzeny vaší digitální identitou.",
             "unverified_sessions_explainer_2": "Měli byste si být jisti, že tyto relace rozpoznáte, protože by mohly představovat neoprávněné použití vašeho účtu.",
-            "unverified_sessions_list_description": "Ověřte své relace pro bezpečné zasílání zpráv nebo se odhlaste z těch, které již nepoznáváte nebo nepoužíváte.",
+            "unverified_sessions_list_description": "Ověřte své relace pro bezpečné zasílání zpráv nebo odstraňte ty, které již nepoznáváte nebo nepoužíváte.",
             "url": "URL",
             "verified_session": "Ověřená relace",
             "verified_sessions": "Ověřené relace",
-            "verified_sessions_explainer_1": "Ověřené relace jsou všude tam, kde tento účet používáte po zadání své přístupové fráze nebo po potvrzení své identity jinou ověřenou relací.",
+            "verified_sessions_explainer_1": "Ověřené relace potvrdily vaši digitální identitu.",
             "verified_sessions_explainer_2": "To znamená, že máte všechny klíče potřebné k odemknutí zašifrovaných zpráv a potvrzení ostatním uživatelům, že této relaci důvěřujete.",
-            "verified_sessions_list_description": "Pro nejlepší zabezpečení se odhlaste z každé relace, kterou již nepoznáváte nebo nepoužíváte.",
+            "verified_sessions_list_description": "V zájmu nejvyšší bezpečnosti odstraňte každou relaci, kterou již nepoznáváte nebo nepoužíváte.",
             "verify_session": "Ověřit relaci",
             "web_session": "Relace na webu"
         },
@@ -3306,7 +3306,6 @@
         },
         "empty_description": "Při najetí na zprávu použijte \"%(replyInThread)s\".",
         "empty_title": "Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.",
-        "error_start_thread_existing_relation": "Nelze založit vlákno ve vlákně",
         "mark_all_read": "Označit vše jako přečtené",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazit všechna vlákna, kterých jste se zúčastnili",
@@ -3346,11 +3345,10 @@
         "creation_summary_dm": "%(creator)s vytvořil(a) tuto přímou zprávu.",
         "creation_summary_room": "%(creator)s vytvořil(a) a nakonfiguroval(a) místnost.",
         "decryption_failure": {
-            "sender_identity_previously_verified": "Ověřená identita odesílatele se změnila",
+            "sender_identity_previously_verified": "Ověřená digitální identita odesílatele byla resetována",
             "unable_to_decrypt": "Zprávu nelze dešifrovat"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrování",
         "download_action_downloading": "Stahování",
         "download_failed": "Stažení se nezdařilo",
         "download_failed_description": "Při stahování tohoto souboru došlo k chybě",
@@ -3484,8 +3482,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s přijal(a) pozvání do %(displayName)s",
             "accepted_invite": "%(targetName)s přijal(a) pozvání",
-            "ban": "%(senderName)s vykázal(a) %(targetName)s",
-            "ban_reason": "%(senderName)s vykázal(a) %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s vykázal(a) uživatele",
+            "ban_reason": "%(senderName)s vykázal(a) uživatele: %(reason)s",
             "change_avatar": "%(senderName)s změnil(a) svůj profilový obrázek",
             "change_name": "%(oldDisplayName)s si změnil(a) zobrazované jméno na %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s změnil(a) své zobrazované jméno a profilový obrázek",
@@ -3548,10 +3546,7 @@
             "removed": "%(senderName)s odstranil(a) widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Sbalit citace",
             "copy_link_thread": "Kopírovat odkaz na vlákno",
-            "expand_reply_chain": "Rozbalit citace",
-            "label": "Akce zprávy",
             "view_in_room": "Zobrazit v místnosti"
         },
         "mjolnir": {
@@ -3806,7 +3801,7 @@
         "ban_space_everything": "Vykázat je všude, kde mohu",
         "ban_space_specific": "Vykázat je z konkrétních míst, ze kterých jsem schopen",
         "deactivate_confirm_action": "Deaktivovat uživatele",
-        "deactivate_confirm_description": "Deaktivování uživatele ho odhlásí a zabrání mu v opětovném přihlášení. Navíc bude odstraněn ze všech místností. Akci nelze vzít zpět. Opravdu chcete uživatele deaktivovat?",
+        "deactivate_confirm_description": "Deaktivace tohoto uživatele odstraní jeho zařízení a znemožní mu opětovné přihlášení. Navíc opustí všechny místnosti, ve kterých se nachází. Tuto akci nelze vrátit zpět. Opravdu chcete tohoto uživatele deaktivovat?",
         "deactivate_confirm_title": "Deaktivovat uživatele?",
         "demote_button": "Degradovat",
         "demote_self_confirm_description_space": "Tuto změnu nebudete moci vrátit zpět, protože budete degradováni, pokud jste posledním privilegovaným uživatelem v daném prostoru, nebude možné znovu získat oprávnění.",

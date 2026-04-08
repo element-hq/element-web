@@ -28,7 +28,6 @@
         "cancel": "Ακύρωση",
         "change": "Αλλαγή",
         "clear": "Καθαρισμός",
-        "click": "Κλικ",
         "click_to_copy": "Κλικ για αντιγραφή",
         "close": "Κλείσιμο",
         "collapse": "Σύμπτυξη",
@@ -1084,9 +1083,6 @@
         "impossible_dialog_title": "Δεν επιτρέπονται πρόσθετα"
     },
     "invite": {
-        "ask_anyway_description": "Δεν είναι δυνατή η εύρεση προφίλ για τα αναγνωριστικά Matrix που αναφέρονται παρακάτω - θα θέλατε να ξεκινήσετε μία συνομιλία ούτως ή άλλως;",
-        "ask_anyway_label": "Έναρξη συνομιλίας ούτως ή άλλως",
-        "ask_anyway_never_warn_label": "Έναρξη συνομιλίας ούτως ή άλλως και μην με προειδοποιήσετε ξανά",
         "email_caption": "Πρόσκληση μέσω email",
         "email_limit_one": "Οι προσκλήσεις μέσω email μπορούν να αποστέλλονται μόνο μία κάθε φορά",
         "email_use_default_is": "Χρησιμοποιήστε έναν διακομιστή ταυτότητας για πρόσκληση μέσω email. <default> Χρησιμοποιήστε τον προεπιλεγμένο (%(defaultIdentityServerName)s)</default> ή διαμορφώστε στις <settings>Ρυθμίσεις</settings>.",
@@ -2590,7 +2586,6 @@
             "one": "%(count)s απάντηση",
             "other": "%(count)s απαντήσεις"
         },
-        "error_start_thread_existing_relation": "Δεν είναι δυνατή η δημιουργία νήματος από ένα συμβάν με μια υπάρχουσα σχέση",
         "my_threads": "Τα νήματα μου",
         "my_threads_description": "Εμφανίζει όλα τα νήματα στα οποία έχετε συμμετάσχει",
         "open_thread": "Άνοιγμα νήματος",
@@ -2622,7 +2617,6 @@
         },
         "creation_summary_dm": "Ο/η %(creator)s δημιούργησε αυτό το απευθείας μήνυμα.",
         "creation_summary_room": "Ο/η %(creator)s δημιούργησε και διαμόρφωσε το δωμάτιο.",
-        "download_action_decrypting": "Αποκρυπτογράφηση",
         "download_action_downloading": "Γίνεται λήψη",
         "edits": {
             "tooltip_label": "Επεξεργάστηκε στις %(date)s. Κάντε κλικ για να δείτε τις τροποποιήσεις.",
@@ -2802,10 +2796,7 @@
             "removed": "Η μικροεφαρμογή %(widgetName)s αφαιρέθηκε από τον/την %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Σύμπτυξη εισαγωγικών",
             "copy_link_thread": "Αντιγραφή συνδέσμου στο νήμα εκτέλεσης",
-            "expand_reply_chain": "Ανάπτυξη εισαγωγικών",
-            "label": "Ενέργειες μηνυμάτων",
             "view_in_room": "Δείτε στο δωμάτιο"
         },
         "mjolnir": {

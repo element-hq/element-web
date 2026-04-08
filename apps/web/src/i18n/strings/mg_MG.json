@@ -32,7 +32,6 @@
         "cancel": "Hanafoana",
         "change": "Fiovana",
         "clear": "Mazava",
-        "click": "Tsindrio eto",
         "click_to_copy": "Tsindrio raha handika",
         "close": "Akatona",
         "collapse": "Firodanana",
@@ -1115,9 +1114,6 @@
         "impossible_dialog_title": "Tsy azo atao ny fampidirana"
     },
     "invite": {
-        "ask_anyway_description": "Tsy afaka mahita ny mombamomba ireo ID voatanisa etsy ambany - te hanomboka DM ve ianao?",
-        "ask_anyway_label": "Manomboka DM na izany aza",
-        "ask_anyway_never_warn_label": "Manomboha DM na izany aza ary aza mampitandrina ahy intsony",
         "email_caption": "Asao amin'ny imailaka",
         "email_limit_one": "Ny fanasana amin'ny alàlan'ny imailaka ihany no azo alefa tsirairay",
         "email_use_default_is": "Mampiasà mpizara famantarana hanasana amin'ny imailaka.<default> Ampiasao ny ara-pototra (%(defaultIdentityServerName)s )</default> na mitantana in<settings> Fikirana</settings> .",
@@ -2787,7 +2783,6 @@
             "one": "%(count)smamaly",
             "other": "%(count)svaliny"
         },
-        "error_start_thread_existing_relation": "Tsy afaka mamorona kofehy avy amin'ny hetsika misy fifandraisana efa misy",
         "my_threads": "Zanako",
         "my_threads_description": "Asehoy ny zanako rehetra ianao nandray anjara Zao amin'ny ",
         "open_thread": "Sokafy kofehy",
@@ -2824,7 +2819,6 @@
         "creation_summary_dm": "%(creator)snamorona ity DM ity.",
         "creation_summary_room": "%(creator)snamorona sy nanamboatra ny efitrano.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
-        "download_action_decrypting": "Decryptering",
         "download_action_downloading": "Misintona",
         "edits": {
             "tooltip_label": "Namboarina tamin'ny%(Rendez-vous . Kitiho raha hijery ny fanovana.",
@@ -3013,10 +3007,7 @@
             "removed": "%(widgetName)swidget nesorina avy%(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Atsaharo ny teny nindramina",
             "copy_link_thread": "Adikao ny rohy mankany amin'ny kofehy",
-            "expand_reply_chain": "Hanitatra ny teny nindramina",
-            "label": "Asa atao amin'ny hafatra",
             "view_in_room": "Jereo ao amin'ny"
         },
         "mjolnir": {
