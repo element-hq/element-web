@@ -948,11 +948,11 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Email summary
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -998,11 +998,11 @@ exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Quick Actions
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content"
@@ -2174,11 +2174,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Email summary
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -2280,11 +2280,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Notification targets
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -2308,11 +2308,11 @@ exports[`<Notifications /> matches the snapshot 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Quick Actions
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content"

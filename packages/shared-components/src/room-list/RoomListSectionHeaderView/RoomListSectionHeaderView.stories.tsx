@@ -15,7 +15,7 @@ import {
     type RoomListSectionHeaderActions,
     type RoomListSectionHeaderViewProps,
 } from "./RoomListSectionHeaderView";
-import { useMockedViewModel } from "../../viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
 import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type RoomListSectionHeaderProps = RoomListSectionHeaderViewSnapshot &
@@ -56,6 +56,7 @@ const meta = {
         title: "Favourites",
         isExpanded: true,
         isFocused: false,
+        isUnread: false,
         onClick: fn(),
         onFocus: fn(),
         sectionIndex: 1,
@@ -105,5 +106,11 @@ export const LastHeaderCollapsed: Story = {
     args: {
         isExpanded: false,
         sectionIndex: 2,
+    },
+};
+
+export const Unread: Story = {
+    args: {
+        isUnread: true,
     },
 };

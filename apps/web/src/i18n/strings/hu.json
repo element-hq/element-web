@@ -32,7 +32,6 @@
         "cancel": "Mégse",
         "change": "Módosítás",
         "clear": "Törlés",
-        "click": "Kattintson",
         "click_to_copy": "Másolás kattintással",
         "close": "Bezárás",
         "collapse": "Összecsukás",
@@ -66,7 +65,6 @@
         "go": "Meghívás",
         "go_back": "Vissza",
         "got_it": "Értem",
-        "hide": "Elrejtés",
         "hide_advanced": "Speciális beállítások elrejtése",
         "hold": "Várakoztatás",
         "ignore": "Mellőzés",
@@ -117,7 +115,7 @@
         "show_advanced": "Speciális beállítások megjelenítése",
         "show_all": "Összes megjelenítése",
         "sign_in": "Bejelentkezés",
-        "sign_out": "Kijelentkezés",
+        "sign_out": "Eszköz eltávolítása",
         "skip": "Kihagyás",
         "start": "Indítás",
         "start_chat": "Csevegés indítása",
@@ -221,11 +219,11 @@
         "incorrect_password": "Helytelen jelszó",
         "log_in_new_account": "<a>Belépés</a> az új fiókjába.",
         "logout_dialog": {
-            "description": "Biztos, hogy kijelentkezik?",
+            "description": "Biztosan eltávolítja ezt az eszközt?",
             "megolm_export": "Kulcsok kézi mentése",
             "setup_key_backup_title": "Elveszíti a hozzáférést a titkosított üzeneteihez",
             "setup_secure_backup_description_1": "A titkosított üzenetek végpontok közti titkosítással védettek. Csak Önnek és a címzetteknek lehet meg a kulcsuk az üzenet visszafejtéséhez.",
-            "setup_secure_backup_description_2": "A kijelentkezéssel a kulcsok az eszközről törlődnek, ami azt jelenti, hogy ha nincsenek meg máshol a kulcsok, vagy nincsenek mentve a kiszolgálón, akkor a titkosított üzenetek olvashatatlanná válnak.",
+            "setup_secure_backup_description_2": "Ha eltávolítja ezt az eszközt, nem fogja tudni elolvasni a titkosított üzeneteket, hacsak nincs meg a kulcsuk a többi eszközén, vagy ha nem készített róluk biztonsági másolatot a kiszolgálóra.",
             "skip_key_backup": "Nincs szükségem a titkosított üzeneteimre"
         },
         "misconfigured_body": "Kérje meg a(z) %(brand)s adminisztrátorát, hogy ellenőrizze a <a>beállításait</a>, hibás vagy duplikált bejegyzéseket keresve.",
@@ -298,8 +296,8 @@
         "registration_username_validation": "Csak kisbetűt, számokat, kötőjeleket és aláhúzásokat használj",
         "reset_password": {
             "confirm_new_password": "Új jelszó megerősítése",
-            "devices_logout_success": "Az összes eszközéről kijelentkezett és leküldéses értesítéseket sem fog kapni. Az értesítések újbóli engedélyezéséhez újra be kell jelentkezni az egyes eszközökön.",
-            "other_devices_logout_warning_1": "A kijelentkezéssel az üzeneteket titkosító kulcsokat az eszközök törlik magukról ami elérhetetlenné teheti a régi titkosított csevegéseket.",
+            "devices_logout_success": "Minden eszköze eltávolításra került, és többé nem fog leküldéses értesítéseket kapni. Az értesítések újraengedélyezéséhez jelentkezzen be újra minden eszközön.",
+            "other_devices_logout_warning_1": "Az eszközök eltávolításával törlődnek az azokon tárolt üzenettitkosítási kulcsok, így a titkosított csevegési előzmények olvashatatlanok lesznek.",
             "other_devices_logout_warning_2": "Ha szeretné megtartani a hozzáférést a titkosított szobákban lévő csevegésekhez, állítson be kulcsmentést vagy exportálja a kulcsokat valamelyik eszközéről mielőtt továbblép.",
             "password_not_entered": "Új jelszót kell megadni.",
             "passwords_mismatch": "Az új jelszavaknak meg kell egyezniük egymással.",
@@ -307,7 +305,7 @@
             "rate_limit_error_with_time": "Rövid idő alatt túl sok próbálkozás. Próbálkozzon ennyi idő múlva: %(timeout)s.",
             "reset_successful": "A jelszava vissza lett állítva.",
             "return_to_login": "Vissza a bejelentkezési képernyőre",
-            "sign_out_other_devices": "Kijelentkezés az összes eszközről"
+            "sign_out_other_devices": "Többi eszköz eltávolítása"
         },
         "reset_password_action": "Jelszó visszaállítása",
         "reset_password_button": "Elfelejtette a jelszavát?",
@@ -330,8 +328,8 @@
         "server_picker_title": "Bejelentkezés a Matrix-kiszolgálójába",
         "server_picker_title_default": "Kiszolgálóbeállítások",
         "server_picker_title_registration": "Fiók létrehozása itt:",
-        "session_logged_out_description": "A biztonság érdekében ez a munkamenet ki lesz jelentkeztetve. Jelentkezzen be újra.",
-        "session_logged_out_title": "Kijelentkezett",
+        "session_logged_out_description": "Biztonsági okokból ez a munkamenet el lett távolítva. Jelentkezzen be újra.",
+        "session_logged_out_title": "Munkamenet eltávolítva",
         "set_email": {
             "description": "Ez lehetővé teszi, hogy vissza tudja állítani a jelszavát, és értesítéseket fogadjon.",
             "verification_pending_description": "Nézze meg a levelét és kattintson a benne lévő hivatkozásra. Ha ez megvan, kattintson a folytatásra.",
@@ -749,6 +747,7 @@
         "category_other": "Egyéb",
         "category_room": "Szoba",
         "caution_colon": "Figyelmeztetés:",
+        "checking_sticky_events_support": "Kiemelt események támogatásának ellenőrzése…",
         "client_versions": "Kliensverziók",
         "crypto": {
             "4s_public_key_in_account_data": "a fiókadatokban",
@@ -807,13 +806,18 @@
         "edit_setting": "Beállítások szerkesztése",
         "edit_values": "Értékek szerkesztése",
         "empty_string": "<üres karakterek>",
+        "error_sticky_duration_must_be_a_number": "A stickyDuration értékének számnak kell lennie",
+        "error_sticky_duration_out_of_range": "A stickyDuration értékének 0 és 36000 ezredmásodperc (1 óra) között kell lennie.",
         "event_content": "Esemény tartalma",
         "event_id": "Eseményazonosító: %(eventId)s",
         "event_sent": "Az esemény elküldve!",
         "event_type": "Esemény típusa",
+        "expired": "Lejárt",
+        "expires_in": "Lejár:",
         "explore_account_data": "Fiókadatok felderítése",
         "explore_room_account_data": "Szoba fiókadatainak felderítése",
         "explore_room_state": "Szobaállapot felderítése",
+        "explore_sticky_state": "Kiemelt események felderítése",
         "failed_to_find_widget": "Hiba történt a kisalkalmazás keresése során.",
         "failed_to_load": "A betöltés sikertelen.",
         "failed_to_save": "A beállítások elmentése sikertelen.",
@@ -827,6 +831,7 @@
         "main_timeline": "Fő idővonal",
         "manual_device_verification": "Kézi eszközellenőrzés",
         "no_receipt_found": "Nincs visszajelzés",
+        "no_sticky_events": "Ebben a szobában nincs kiemelt esemény.",
         "notification_state": "Értesítés állapota: <strong>%(notificationState)s</strong>",
         "notifications_debug": "Értesítések hibakeresése",
         "number_of_users": "Felhasználószám",
@@ -852,6 +857,7 @@
         "send_custom_account_data_event": "Egyéni fiókadat-esemény küldése",
         "send_custom_room_account_data_event": "Egyéni szobafiókadat-esemény küldése",
         "send_custom_state_event": "Egyéni állapotesemény küldése",
+        "send_custom_sticky_event": "Egyéni kiemelt esemény küldése",
         "send_custom_timeline_event": "Egyéni idővonal-esemény küldése",
         "server_info": "Kiszolgálóinformációk",
         "server_versions": "Kiszolgálóverziók",
@@ -871,6 +877,9 @@
             "<szóköz>": "one"
         },
         "state_key": "Állapotkulcs",
+        "sticky_duration": "Kiemelés időtartama",
+        "sticky_events_not_supported": "A Matrix-kiszolgáló egyelőre nem támogatja a kiemelt eseményeket.",
+        "sticky_key": "Kiemelés gomb",
         "thread_root_id": "Üzenetszál gyökérazonosítója: %(threadRootId)s",
         "threads_timeline": "Üzenetszálak idővonala",
         "title": "Fejlesztői eszközök",
@@ -989,7 +998,7 @@
         "set_up_recovery_toast_description": "A csevegései automatikusan mentve vannak, végpontok közti titkosítással Ahhoz, hogy az eszközei elvesztése esetén helyre tudja állítani a biztonsági mentést és megtartsa a digitális személyazonosságát, egy helyreállítási kulcsra van szüksége.",
         "set_up_toast_title": "Biztonsági mentés beállítása",
         "setup_secure_backup": {
-            "explainer": "Mentse a kulcsait a kiszolgálóra kijelentkezés előtt, hogy ne veszítse el azokat."
+            "explainer": "Az eszköz eltávolítása előtt készítsen biztonsági másolatot a kulcsairól, hogy elkerülje azok elvesztését."
         },
         "turn_on_key_storage": "A kulcstárolás bekapcsolása",
         "turn_on_key_storage_description": "Ez lehetővé teszi az üzenetelőzmények megtekintését bármely új eszközön, és szükséges a csevegések és a digitális személyazonossága biztonsági mentéséhez.",
@@ -1102,8 +1111,8 @@
         "verification_requested_toast_title": "Hitelesítés kérés elküldve",
         "verified_identity_changed": "%(displayName)s (<b>%(userId)s</b> ) digitális személyazonossága alaphelyzetbe lett állítva. <a>További információ</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b> digitális személyazonossága alaphelyzetbe lett állítva. <a>További információ</a>",
-        "verify_toast_description": "Más felhasználók lehet, hogy nem bíznak benne",
-        "verify_toast_title": "Munkamenet ellenőrzése",
+        "verify_toast_description": "2026 áprilisának végétől a nem ellenőrzött eszközök nem tudnak üzeneteket küldeni és fogadni. <a>További információk</a>",
+        "verify_toast_title": "Az eszköz ellenőrzése",
         "withdraw_verification_action": "Ellenőrzés visszavonása"
     },
     "error": {
@@ -1128,15 +1137,15 @@
         "non_urgent_echo_failure_toast": "A kiszolgálója nem válaszol néhány <a>kérésre</a>.",
         "resource_limits": "A Matrix-kiszolgáló túllépte valamelyik erőforráskorlátját.",
         "session_restore": {
-            "clear_storage_button": "Tárhely törlése és kijelentkezés",
-            "clear_storage_description": "Kilépés és a titkosítási kulcsok törlése?",
-            "description_1": "Hiba történt az előző munkamenet helyreállítási kísérlete során.",
+            "clear_storage_button": "Eszköz eltávolítása",
+            "clear_storage_description": "Eszköz eltávolítása a titkosítási kulcsokkal együtt?",
+            "description_1": "Hiba történt a munkamenet helyreállítása során.",
             "description_2": "Ha egy újabb %(brand)s verziót használt, akkor valószínűleg ez a munkamenet nem lesz kompatibilis vele. Zárja be az ablakot és térjen vissza az újabb verzióhoz.",
-            "description_3": "A böngésző tárolójának törlése megoldhatja a problémát, de ezzel kijelentkezik és a titkosított beszélgetéseinek előzményei olvashatatlanná válnak.",
+            "description_3": "A böngésző tárolójának törlése megoldhatja a problémát, viszont ez eltávolítja az eszközt, és a titkosított csevegéselőzményei olvashatatlanná válnak.",
             "title": "A munkamenetet nem lehet helyreállítani"
         },
         "something_went_wrong": "Valami rosszul sikerült.",
-        "storage_evicted_description_1": "Néhány kapcsolati adat hiányzik, beleértve a titkosított üzenetek kulcsait. A hiba javításához lépjen ki és jelentkezzen be újra, így a mentésből helyreállítva a kulcsokat.",
+        "storage_evicted_description_1": "Néhány munkamenetadat, beleértve a titkosított üzenetkulcsokat is, hiányzik. Távolítsa el ezt az eszközt, majd jelentkezzen be újra, hogy a biztonsági másolatból helyreállítsa a kulcsokat.",
         "storage_evicted_description_2": "A böngésző valószínűleg törölte ezeket az adatokat, amikor lecsökkent a szabad lemezterület.",
         "storage_evicted_title": "A munkamenetadatok hiányzik",
         "sync": "A Matrix-kiszolgálóval nem lehet felvenni a kapcsolatot. Újrapróbálkozás…",
@@ -1345,9 +1354,6 @@
         "impossible_dialog_title": "Az integrációk nem engedélyezettek"
     },
     "invite": {
-        "ask_anyway_description": "Nem található profil az alábbi Matrix-azonosítókhoz – mégis a közvetlen csevegés elindítása mellett dönt?",
-        "ask_anyway_label": "Közvetlen beszélgetés indítása mindenképpen",
-        "ask_anyway_never_warn_label": "Közvetlen beszélgetés indítása mindenképpen és később se figyelmeztessen",
         "email_caption": "Meghívás e-maillel",
         "email_limit_one": "E-mail meghívóból egyszerre csak egy küldhető el",
         "email_use_default_is": "Használjon azonosítási kiszolgálót az e-mailben történő meghíváshoz. <default> Használja az alapértelmezett kiszolgálót (%(defaultIdentityServerName)s)</default> vagy adjon meg egy másikat a <settings>Beállításokban</settings>.",
@@ -1540,6 +1546,7 @@
         "mjolnir": "Új lehetőség emberek figyelmen kívül hagyására",
         "msc3531_hide_messages_pending_moderation": "A moderátorok kitakarhatják a még nem moderált üzeneteket.",
         "new_room_list": "Új szobalista engedélyezése",
+        "new_timeline": "Új idővonal (MVVM)",
         "notification_settings": "Új értesítési beállítások",
         "notification_settings_beta_caption": "Bemutatjuk az értesítési beállítások módosításának egyszerűbb módját. Testreszabhatja a sajátját, ahogy tetszik itt: %(brand)s.",
         "notification_settings_beta_title": "Értesítési beállítások",
@@ -1548,12 +1555,13 @@
         "render_reaction_images_description": "Néha „egyéni emodzsiknak” nevezik.",
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
+        "room_list_sections": "Szobalista szakaszok",
         "share_history_on_invite": "Titkosított előzmények megosztása az új tagokkal",
         "share_history_on_invite_description": "Ha egy felhasználót olyan titkosított szobába hív meg, amelynél az előzmények láthatósága „megosztott” beállításra van állítva, akkor a titkosított előzményeket megosztja azzal a felhasználóval, valamint elfogadja a titkosított előzményeket, ha ilyen szobába hívják meg.",
         "share_history_on_invite_warning": "Ez a funkció KÍSÉRLETI JELLEGŰ, és nem minden biztonsági óvintézkedés van megvalósítva. Ne engedélyezze éles fiókokban.",
         "sliding_sync": "Csúszóablakos szinkronizálási mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
-        "sliding_sync_disabled_notice": "A kikapcsoláshoz ki-, és bejelentkezés szükséges",
+        "sliding_sync_disabled_notice": "Jelentkezzen be újra a letiltáshoz",
         "sliding_sync_server_no_support": "A kiszolgálója nem támogatja",
         "under_active_development": "Aktív fejlesztés alatt.",
         "unrealiable_e2e": "Megbízhatatlan titkosított szobákban",
@@ -2135,6 +2143,11 @@
         "redacting_messages_status": {
             "Üzenet törlése %(count)s szobából": "other"
         },
+        "section": {
+            "chats": "Csevegések",
+            "favourites": "Kedvencek",
+            "low_priority": "Alacsony prioritás"
+        },
         "show_less": "Kevesebb megjelenítése",
         "show_n_more": {
             "Még %(count)s megjelenítése": "one"
@@ -2532,13 +2545,13 @@
                 "title": "Speciális"
             },
             "confirm_key_storage_off": "Biztosan kikapcsolva szeretné tartani a kulcstárolást?",
-            "confirm_key_storage_off_description": "Ha kijelentkezik az összes eszközéről, elveszíti üzenetelőzményeit, és újra ellenőriznie kell az összes meglévő kapcsolatát. <a>Tudjon meg többet</a>",
+            "confirm_key_storage_off_description": "Ha eltávolítja az összes eszközét, elveszíti üzenetelőzményeit, és újra ellenőriznie kell az összes meglévő kapcsolatát. <a>Tudjon meg többet</a>",
             "delete_key_storage": {
                 "breadcrumb_page": "Kulcstároló törlése",
                 "confirm": "Kulcstároló törlése",
                 "description": "A kulcstároló törlése eltávolítja a kriptográfiai személyazonosságát és üzenetkulcsát a kiszolgálóról, és kikapcsolja a következő biztonsági funkciókat:",
                 "list_first": "Nem lesznek meg a titkosított üzenetek előzményei az új eszközein",
-                "list_second": "Elveszíti hozzáférését titkosított üzeneteihez, ha mindenhol kijelentkezett az %(brand)sből.",
+                "list_second": "Elveszíti hozzáférését titkosított üzeneteihez, ha egy eszközön sincs bejelentkezve.",
                 "title": "Biztos, hogy kikapcsolja a kulcstárolót és törli azt?"
             },
             "device_not_verified_button": "Az eszköz ellenőrzése",
@@ -2861,28 +2874,28 @@
         "send_read_receipts_unsupported": "A kiszolgálója nem támogatja az olvasási visszajelzések elküldésének kikapcsolását.",
         "send_typing_notifications": "Gépelési visszajelzés küldése",
         "sessions": {
-            "best_security_note": "A legjobb biztonság érdekében ellenőrizze munkameneteit, és jelentkezzen ki minden olyan munkamenetből, amelyet már nem ismer fel vagy használ.",
+            "best_security_note": "A nagyobb biztonság érdekében ellenőrizze a munkameneteit, és távolítson el minden olyan munkamenetet, amelyet nem ismer fel vagy már nem használ.",
             "browser": "Böngésző",
             "confirm_sign_out": {
-                "Megerősítés ebből az eszközből való kijelentkezéshez": "one",
-                "Megerősítés ezekből az eszközökből való kijelentkezéshez": "other"
+                "one": "Erősítse meg az eszköz eltávolítását",
+                "other": "Erősítse meg az eszközök eltávolítását"
             },
             "confirm_sign_out_body": {
-                "Ezeknek a eszközöknek törlésének a megerősítéséhez kattintson a gombra lent.": "other",
-                "Az eszközből való kilépés megerősítéséhez kattintson a lenti gombra.": "one"
+                "one": "Kattintson az alábbi gombra az eszköz eltávolításának megerősítéséhez.",
+                "other": "Kattintson az alábbi gombra az eszközök eltávolításának megerősítéséhez."
             },
             "confirm_sign_out_continue": {
-                "Eszközből való kijelentkezés": "one",
-                "Eszközökből való kijelentkezés": "other"
+                "one": "Eszköz eltávolítása",
+                "other": "Eszközök eltávolítása"
             },
             "confirm_sign_out_sso": {
-                "Az eszközből való kijelentkezéshez erősítse meg a személyazonosságát az egyszeri bejelentkezés használatával.": "one",
-                "Az eszközökből való kijelentkezéshez erősítse meg a személyazonosságát az egyszeri bejelentkezés használatával.": "other"
+                "one": "Erősítse meg az eszköz eltávolítását a bejelentkezési adatok újbóli megadásával.",
+                "other": "Erősítse meg az eszközök eltávolítását a bejelentkezési adatok újbóli megadásával."
             },
             "current_session": "Jelenlegi munkamenet",
             "desktop_session": "Asztali munkamenet",
             "details_heading": "Munkamenet-információk",
-            "device_unverified_description": "A jobb biztonság vagy megbízhatóság érdekében ellenőrizze, vagy jelentkezzen ki ebből a munkamenetből.",
+            "device_unverified_description": "A legjobb biztonság és megbízhatóság érdekében ellenőrizze vagy távolítsa el ezt a munkamenetet.",
             "device_unverified_description_current": "Ellenőrizze az aktuális munkamenetet a biztonságos üzenetküldéshez.",
             "device_verified_description": "Ez a munkamenet beállítva a biztonságos üzenetküldéshez.",
             "device_verified_description_current": "Az aktuális munkamenet készen áll a biztonságos üzenetküldésre.",
@@ -2900,7 +2913,7 @@
             "inactive_sessions": "Inaktív munkamenetek",
             "inactive_sessions_explainer_1": "Az inaktív munkamenetek olyan régóta nem használt munkamenetek, melyek még mindig megkapják a titkosítási kulcsokat.",
             "inactive_sessions_explainer_2": "Az inaktív munkamenetek törlése növeli a biztonságot és a sebességet, valamint egyszerűbbé teszi a gyanús munkamenetek felismerését.",
-            "inactive_sessions_list_description": "Fontolja meg a kijelentkezést a régi munkamenetekből (%(inactiveAgeDays)s napnál régebbi) ha már nem használja azokat.",
+            "inactive_sessions_list_description": "Fontolja meg a régi munkamenetek eltávolítását (%(inactiveAgeDays)s nap vagy régebbi), amelyeket már nem használ.",
             "ip": "IP-cím",
             "last_activity": "Utolsó tevékenység",
             "manage": "Munkamenet kezelése",
@@ -2930,13 +2943,15 @@
             "sign_in_with_qr_button": "QR kód beolvasása",
             "sign_in_with_qr_description": "Használjon QR-kódot egy másik eszközre való bejelentkezéshez és biztonságos üzenetküldés beállításához.",
             "sign_in_with_qr_unsupported": "A fiókszolgáltató nem támogatja",
-            "sign_out": "Kijelentkezés ebből a munkamenetből",
-            "sign_out_all_other_sessions": "Kijelentkezés minden munkamenetből (%(otherSessionsCount)s)",
+            "sign_out": "Munkamenet eltávolítása",
+            "sign_out_all_other_sessions": "Az összes többi munkamenet eltávolítása (%(otherSessionsCount)s )",
             "sign_out_confirm_description": {
-                "Biztos, hogy ki szeretne lépni %(count)s munkamenetből?": "other"
+                "one": "Biztosan el akar távolítani %(count)s munkamenetet?",
+                "other": "Biztosan el akar távolítani %(count)s munkamenetet?"
             },
             "sign_out_n_sessions": {
-                "Kijelentkezés %(count)s munkamenetből": "other"
+                "one": "%(count)s munkamenet eltávolítása",
+                "other": "%(count)s munkamenet eltávolítása"
             },
             "title": "Munkamenetek",
             "unknown_session": "Ismeretlen munkamenettípus",
@@ -2945,15 +2960,15 @@
             "unverified_session_explainer_2": "Ezzel a munkamenettel azokban szobákban nem tud részt venni, ahol a titkosítás be van kapcsolva.",
             "unverified_session_explainer_3": "A biztonság és adatvédelem érdekében javasolt olyan Matrix klienst használni, amely támogatja a titkosítást.",
             "unverified_sessions": "Nem ellenőrzött munkamenetek",
-            "unverified_sessions_explainer_1": "A nem ellenőrzött munkamenetek olyanok, amelyek a hitelesítő adataival bejelentkeztek, de a digitális személyazonosságát nem ellenőrizték.",
+            "unverified_sessions_explainer_1": "A nem ellenőrzött munkamenetek olyan munkamenetek, amelyekbe a hitelesítő adataival jelentkezett be, viszont a digitális személyazonosságával nem lettek megerősítve.",
             "unverified_sessions_explainer_2": "Egészen bizonyosodjon meg arról, hogy ismeri ezeket a munkameneteket, mivel elképzelhető, hogy jogosulatlan fiókhasználatot jeleznek.",
-            "unverified_sessions_list_description": "Erősítse meg a munkameneteit a még biztonságosabb csevegéshez vagy jelentkezzen ki ezekből, ha nem ismeri fel vagy már nem használja őket.",
+            "unverified_sessions_list_description": "Ellenőrizze a munkameneteit a fokozottan biztonságos üzenetküldés érdekében, vagy távolítsa el azokat, amelyeket nem ismer fel vagy már nem használ.",
             "url": "Webcím",
             "verified_session": "Ellenőrzött munkamenet",
             "verified_sessions": "Ellenőrzött munkamenetek",
             "verified_sessions_explainer_1": "Az ellenőrzött munkamenetek megerősítették a digitális személyazonosságát.",
             "verified_sessions_explainer_2": "Ez azt jelenti, hogy a titkosított üzenetek visszafejtéséhez minden kulccsal rendelkezik valamint a többi felhasználó megbízhat ebben a munkamenetben.",
-            "verified_sessions_list_description": "A legbiztonságosabb, ha minden olyan munkamenetből kijelentkezel, melyet már nem ismersz fel vagy nem használsz.",
+            "verified_sessions_list_description": "A legjobb biztonság érdekében távolítson el minden olyan munkamenetet, melyet nem ismer fel, vagy már nem használ.",
             "verify_session": "Munkamenet ellenőrzése",
             "web_session": "Webes munkamenet"
         },
@@ -3122,7 +3137,7 @@
         "view": "Megadott címmel rendelkező szobák megjelenítése",
         "whois": "Információt jelenít meg a felhasználóról"
     },
-    "sliding_sync_legacy_no_longer_supported": "A régi csúszóablakos szinkronizálás már nem támogatott: jelentkezzen ki, és lépjen be újra az új csúszóablakos szinkronizálás engedélyezéséhez.",
+    "sliding_sync_legacy_no_longer_supported": "Az örökölt csúszóablakos szinkronizálás már nem támogatott: jelentkezzen be újra, hogy engedélyezze az új csúszóablakos szinkronizálás jelzőjét",
     "space": {
         "add_existing_room_space": {
             "create": "Inkább új szobát adna hozzá?",
@@ -3273,7 +3288,6 @@
         },
         "empty_description": "Amikor az egérmutatót egy üzenet fölé viszi használja ezt: „%(replyInThread)s ”.",
         "empty_title": "Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.",
-        "error_start_thread_existing_relation": "Nem lehet üzenetszálat indítani olyan eseményről ami már rendelkezik kapcsolattal",
         "mark_all_read": "Az összes megjelölése olvasottként",
         "my_threads": "Saját üzenetszálak",
         "my_threads_description": "Összes olyan üzenetszál megjelenítése, amelyben részt vesz",
@@ -3317,7 +3331,6 @@
             "unable_to_decrypt": "Nem sikerült visszafejteni az üzenetet"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Visszafejtés",
         "download_action_downloading": "Letöltés",
         "download_failed": "Letöltés sikertelen",
         "download_failed_description": "Hiba történt a fájl letöltése közben",
@@ -3450,8 +3463,10 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s elfogadta a meghívást ide: %(displayName)s",
             "accepted_invite": "%(targetName)s elfogadta a meghívást",
-            "ban": "%(senderName)s kitiltotta a következőt: %(targetName)s",
-            "ban_reason": "%(senderName)s kitiltotta a következőt: %(targetName)s, ok: %(reason)s",
+            "ban": "%(senderName)s kitiltott egy felhasználót",
+            "ban_reason": "%(senderName)s kitiltott egy felhasználót: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s kitiltotta <user/> felhasználót: %(reason)s",
+            "ban_spoiler": "%(senderName)s kitiltotta <user/> felhasználót",
             "change_avatar": "%(senderName)s megváltoztatta a profilképét",
             "change_name": "s%(oldDisplayName)s a következőre változtatta a nevét: %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s megváltoztatta a megjelenítendő nevét és profilképét",
@@ -3514,10 +3529,7 @@
             "removed": "%(senderName)s eltávolította a %(widgetName)s kisalkalmazást"
         },
         "mab": {
-            "collapse_reply_chain": "Idézetek összecsukása",
             "copy_link_thread": "Hivatkozás másolása az üzenetszálba",
-            "expand_reply_chain": "Idézetek megjelenítése",
-            "label": "Üzenetműveletek",
             "view_in_room": "Megjelenítés szobában"
         },
         "mjolnir": {
@@ -3771,7 +3783,7 @@
         "ban_space_everything": "Kitiltani őket mindenhonnan ahonnan joga van hozzá",
         "ban_space_specific": "Kitiltani őket bizonyos helyekről ahonnan joga van hozzá",
         "deactivate_confirm_action": "Felhasználó felfüggesztése",
-        "deactivate_confirm_description": "A felhasználó deaktiválása a felhasználót kijelentkezteti és megakadályozza, hogy vissza tudjon lépni. Továbbá kilépteti minden szobából, amelynek tagja volt. Ezt nem lehet visszavonni. Biztos, hogy deaktiválja ezt a felhasználót?",
+        "deactivate_confirm_description": "A felhasználó deaktiválásával az eszközei eltávolításra kerülnek, és nem tud majd újra bejelentkezni. Ezen felül kilép minden szobából, amelyben jelenleg tartózkodik. Ez a művelet visszafordíthatatlan. Biztosan szeretné deaktiválni ezt a felhasználót?",
         "deactivate_confirm_title": "Felhasználó felfüggesztése?",
         "demote_button": "Lefokozás",
         "demote_self_confirm_description_space": "Nem fogja tudni visszavonni ezt a változtatást, mert lefokozza magát, ha Ön az utolsó privilegizált felhasználó a térben, akkor lehetetlen lesz a jogosultságok visszanyerése.",

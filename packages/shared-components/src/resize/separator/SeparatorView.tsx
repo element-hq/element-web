@@ -11,10 +11,10 @@ import DragIcon from "@vector-im/compound-design-tokens/assets/web/icons/drag-li
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { type ViewModel, useViewModel } from "../../viewmodel";
+import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import styles from "./SeparatorView.module.css";
 import { type ResizerViewSnapshot } from "..";
-import { useI18n } from "../../utils/i18nContext";
+import { useI18n } from "../../core/i18n/i18nContext";
 
 export interface SeparatorViewActions {
     /**

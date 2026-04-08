@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import afs from "node:fs/promises";
 
 export async function randomArray(size: number): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -43,4 +44,27 @@ export function loadJsonFile<T extends Json>(...paths: string[]): T {
 
     const file = fs.readFileSync(joinedPaths, { encoding: "utf-8" });
     return JSON.parse(file);
+}
+
+/**
+ * Looks for a given path relative to root
+ * @param name - dir name to use in logging
+ * @param root - the root to search from
+ * @param rawPaths - the paths to search, in order
+ */
+export async function tryPaths(name: string, root: string, rawPaths: string[]): Promise<string> {
+    // Make everything relative to root
+    const paths = rawPaths.map((p) => path.join(root, p));
+
+    for (const p of paths) {
+        try {
+            await afs.stat(p);
+            return p + "/";
+        } catch {}
+    }
+    console.log(`Couldn't find ${name} files in any of: `);
+    for (const p of paths) {
+        console.log("\t" + path.resolve(p));
+    }
+    throw new Error(`Failed to find ${name} files`);
 }

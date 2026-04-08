@@ -41,15 +41,14 @@ jobs:
                   repository: ${{ github.repository == 'element-hq/element-web-pro' && 'element-hq/element-web' || github.repository }}
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   node-version-file: apps/desktop/.node-version
                   cache: "pnpm"
 
             - name: Install Deps
-              working-directory: apps/desktop
-              run: "pnpm install --frozen-lockfile"
+              run: "pnpm install --frozen-lockfile --filter element-desktop"
 
             - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
@@ -85,12 +84,19 @@ jobs:
                   EXECUTABLE: ${{ steps.executable.outputs.path }}
 
             - name: Run tests
-              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
               timeout-minutes: 20
-              with:
-                  run: pnpm -C apps/desktop test --project=${{ inputs.project }} ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} ${{ inputs.blob_report == false && '--reporter=html' || '' }} ${{ inputs.args }}
+              shell: bash
+              working-directory: apps/desktop
+              run: |
+                  $PREFIX pnpm playwright test \
+                      ${{ runner.os != 'Linux' && '--ignore-snapshots' || '' }} \
+                      ${{ inputs.blob_report == false && '--reporter=html' || '' }} \
+                      $ARGS
               env:
+                  PREFIX: ${{ runner.os == 'Linux' && 'xvfb-run' || '' }}
+                  PW_TAG: ${{ inputs.project }}
                   ELEMENT_DESKTOP_EXECUTABLE: ${{ steps.executable.outputs.path }}
+                  ARGS: ${{ inputs.args }}
 
             - name: Upload blob report
               if: always() && inputs.blob_report
@@ -99,6 +105,7 @@ jobs:
                   name: blob-report-${{ inputs.artifact }}
                   path: apps/desktop/blob-report
                   retention-days: 1
+                  if-no-files-found: error
 
             - name: Upload HTML report
               if: always() && inputs.blob_report == false
@@ -107,3 +114,4 @@ jobs:
                   name: ${{ inputs.artifact }}-test
                   path: apps/desktop/playwright-report
                   retention-days: 14
+                  if-no-files-found: error

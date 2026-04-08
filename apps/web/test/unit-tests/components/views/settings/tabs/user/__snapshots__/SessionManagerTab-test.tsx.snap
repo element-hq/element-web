@@ -83,11 +83,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
   <div
     class="mx_SettingsSubsectionHeading"
   >
-    <h3
+    <h2
       class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
     >
       Current session
-    </h3>
+    </h2>
     <div
       aria-expanded="false"
       aria-haspopup="true"
@@ -159,11 +159,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
       <div
         class="mx_DeviceTile_info"
       >
-        <h4
+        <h3
           class="mx_Heading_h4"
         >
           Alices device
-        </h4>
+        </h3>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -260,11 +260,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
   <div
     class="mx_SettingsSubsectionHeading"
   >
-    <h3
+    <h2
       class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
     >
       Current session
-    </h3>
+    </h2>
     <div
       aria-expanded="false"
       aria-haspopup="true"
@@ -334,11 +334,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
       <div
         class="mx_DeviceTile_info"
       >
-        <h4
+        <h3
           class="mx_Heading_h4"
         >
           Alices device
-        </h4>
+        </h3>
         <div
           class="mx_DeviceTile_metadata"
         >
