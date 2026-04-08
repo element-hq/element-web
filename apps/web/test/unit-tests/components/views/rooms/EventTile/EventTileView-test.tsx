@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, getByLabelText, render, screen, waitFor } from "jest-matrix-react";
+import { getByLabelText, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
@@ -170,28 +170,6 @@ describe("EventTileView", () => {
         expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
             "default:@alice:example.org in !roomId:example.org",
         );
-    });
-
-    it("opens the content region context menu from keyboard shortcuts", async () => {
-        const onContextMenu = jest.fn();
-        const { container } = render(
-            <EventTileView
-                {...makeProps({
-                    handlers: {
-                        onContextMenu,
-                    },
-                })}
-            />,
-        );
-
-        const contentRegion = container.querySelector(".mx_EventTile_line");
-        expect(contentRegion).not.toBeNull();
-
-        fireEvent.keyDown(contentRegion!, { key: "ContextMenu" });
-        await waitFor(() => expect(onContextMenu).toHaveBeenCalledTimes(1));
-
-        fireEvent.keyDown(contentRegion!, { key: "F10", shiftKey: true });
-        await waitFor(() => expect(onContextMenu).toHaveBeenCalledTimes(2));
     });
 
     it("renders the sender slot for the thread list", () => {

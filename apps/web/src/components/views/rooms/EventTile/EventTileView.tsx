@@ -9,7 +9,6 @@ import React, {
     memo,
     type ElementType,
     type FocusEventHandler,
-    type KeyboardEvent,
     type JSX,
     type MouseEventHandler,
     type ReactNode,
@@ -229,36 +228,8 @@ const EventContentRegion = memo(function EventContentRegion({
     onContextMenu,
     children,
 }: Readonly<EventContentRegionProps>): JSX.Element {
-    const onKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
-        if (event.key !== "ContextMenu" && !(event.shiftKey && event.key === "F10")) {
-            return;
-        }
-
-        event.preventDefault();
-
-        // Make sure a keyboard call to context menu opens centered in the event tile
-        const target = event.currentTarget;
-        const { left, top, width, height } = target.getBoundingClientRect();
-        target.dispatchEvent(
-            new MouseEvent("contextmenu", {
-                bubbles: true,
-                cancelable: true,
-                clientX: left + width / 2,
-                clientY: top + height / 2,
-            }),
-        );
-    };
-
     return (
-        <div
-            id={contentId}
-            className={contentClassName}
-            role="button"
-            tabIndex={0}
-            aria-haspopup="menu"
-            onContextMenu={onContextMenu}
-            onKeyDown={onKeyDown}
-        >
+        <div id={contentId} className={contentClassName} onContextMenu={onContextMenu}>
             {children}
         </div>
     );
