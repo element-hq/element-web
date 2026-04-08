@@ -5,6 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { DateSeparatorViewModel } from "@element-hq/web-shared-components";
 
 export type TimelineModelItem =
@@ -14,18 +15,35 @@ export type TimelineModelItem =
       }
     | {
           key: string;
-          kind: "read-marker";
+          kind: "virtual";
+          type: "read-marker";
       }
     | {
           key: string;
-          kind: "loading";
+          kind: "virtual";
+          type: "loading";
       }
     | {
           key: string;
-          kind: "gap";
+          kind: "virtual";
+          type: "new-room";
       }
     | {
           key: string;
-          kind: "date-separator";
+          kind: "virtual";
+          type: "gap";
+      }
+    | {
+          key: string;
+          kind: "virtual";
+          type: "date-separator";
           vm: DateSeparatorViewModel;
+      }
+    | {
+          key: string;
+          kind: "group";
+          type: "room-creation";
+          events: MatrixEvent[];
+          summaryText: string;
+          summaryMembers?: RoomMember[];
       };

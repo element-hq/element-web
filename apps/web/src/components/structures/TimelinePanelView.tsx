@@ -13,6 +13,8 @@ import { TimelinePanelViewModel } from "../../viewmodels/room/timeline/TimelineP
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import type { TimelineModelItem } from "../../models/rooms/TimelineModel";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
+import NewRoomIntro from "../views/rooms/NewRoomIntro";
+import GenericEventListSummary from "../views/elements/GenericEventListSummary";
 
 interface TimelinePanelViewProps {
     room: Room;
@@ -51,19 +53,48 @@ export function TimelinePanelView({ room, highlightedEventId }: TimelinePanelVie
         () =>
             (item: TimelineModelItem): ReactNode => {
                 switch (item.kind) {
-                    case "date-separator":
-                        return <DateSeparatorView key={item.key} vm={item.vm} className="mx_TimelineSeparator" />;
-                    case "read-marker":
-                        return <hr key={item.key} className="mx_RoomView_myReadMarker" />;
-                    case "loading":
-                        return <div key={item.key}>Loading...</div>;
-                    case "gap":
-                        return <div key={item.key}>Gap</div>;
                     case "event":
                         // For now, all events go through the legacy adapter.
                         // As tiles are migrated to MVVM, this switch will
                         // send migrated types to their shared views instead.
                         return <LegacyEventTileAdapter key={item.key} mxEvent={findEventById(room, item.key)!} />;
+                    case "virtual":
+                        switch (item.type) {
+                            case "date-separator":
+                                return (
+                                    <DateSeparatorView key={item.key} vm={item.vm} className="mx_TimelineSeparator" />
+                                );
+                            case "new-room":
+                                return <NewRoomIntro key={item.key} />;
+                            case "read-marker":
+                                return <hr key={item.key} className="mx_RoomView_myReadMarker" />;
+                            case "loading":
+                                return <div key={item.key}>Loading...</div>;
+                            case "gap":
+                                return <div key={item.key}>Gap</div>;
+                            default:
+                                return null;
+                        }
+                    case "group":
+                        switch (item.type) {
+                            case "room-creation":
+                                return (
+                                    <GenericEventListSummary
+                                        key={item.key}
+                                        events={item.events}
+                                        summaryMembers={item.summaryMembers}
+                                        summaryText={item.summaryText}
+                                    >
+                                        {item.events.map((event) => (
+                                            <li key={event.getId()!}>
+                                                <LegacyEventTileAdapter mxEvent={event} />
+                                            </li>
+                                        ))}
+                                    </GenericEventListSummary>
+                                );
+                            default:
+                                return null;
+                        }
                     default:
                         return null;
                 }

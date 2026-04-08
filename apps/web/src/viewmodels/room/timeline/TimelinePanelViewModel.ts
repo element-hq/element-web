@@ -9,14 +9,19 @@ import {
     TimelineWindow,
     Direction,
     RoomEvent,
+    EventType,
+    M_BEACON_INFO,
     type MatrixClient,
     type Room,
     type MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { BaseViewModel } from "@element-hq/web-shared-components";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { wantsDateSeparator } from "../../../DateUtils";
 import type { TimelineModelItem } from "../../../models/rooms/TimelineModel";
+import DMRoomMap from "../../../utils/DMRoomMap";
+import { _t } from "../../../languageHandler";
 import { DateSeparatorViewModel } from "./DateSeparatorViewModel";
 import type {
     TimelineViewSnapshot,
@@ -227,17 +232,106 @@ export class TimelinePanelViewModel
 
         return {
             key: `date-${dateKey}`,
-            kind: "date-separator",
+            kind: "virtual",
+            type: "date-separator",
             vm: this.getDateSeparatorVm(ts),
         };
+    }
+
+    private buildRoomCreationItem(): TimelineModelItem {
+        return {
+            key: "new-room",
+            kind: "virtual",
+            type: "new-room",
+        };
+    }
+
+    private shouldIncludeInCreationGroup(createEvent: MatrixEvent, event: MatrixEvent): boolean {
+        if (this.shouldInsertDateSeparator(createEvent, event)) {
+            return false;
+        }
+
+        const eventType = event.getType();
+        if (
+            eventType === EventType.RoomMember &&
+            (event.getStateKey() !== createEvent.getSender() ||
+                event.getContent()["membership"] !== KnownMembership.Join)
+        ) {
+            return false;
+        }
+
+        if (M_BEACON_INFO.matches(eventType)) {
+            return false;
+        }
+
+        return event.isState() && event.getSender() === createEvent.getSender();
+    }
+
+    private buildRoomCreationGroupItem(events: MatrixEvent[]): TimelineModelItem {
+        const latestEvent = events[events.length - 1];
+        const roomId = latestEvent.getRoomId();
+        const creator = latestEvent.sender?.name ?? latestEvent.getSender();
+        const summaryText =
+            roomId && DMRoomMap.shared().getUserIdForRoomId(roomId)
+                ? _t("timeline|creation_summary_dm", { creator })
+                : _t("timeline|creation_summary_room", { creator });
+
+        return {
+            key: `room-creation-${events[0].getId()}`,
+            kind: "group",
+            type: "room-creation",
+            events,
+            summaryMembers: latestEvent.sender ? [latestEvent.sender] : undefined,
+            summaryText,
+        };
+    }
+
+    private buildInitialCreationItems(
+        events: MatrixEvent[],
+    ): { items: TimelineModelItem[]; consumedCount: number } | null {
+        const createEvent = events[0];
+        if (!createEvent || createEvent.getType() !== EventType.RoomCreate) {
+            return null;
+        }
+
+        const groupedEvents: MatrixEvent[] = [createEvent];
+        const ejectedEvents: MatrixEvent[] = [];
+        let index = 1;
+
+        while (index < events.length && this.shouldIncludeInCreationGroup(createEvent, events[index])) {
+            const event = events[index];
+            if (event.getType() === EventType.RoomEncryption) {
+                ejectedEvents.push(event);
+            } else {
+                groupedEvents.push(event);
+            }
+            index += 1;
+        }
+
+        const items: TimelineModelItem[] = [this.buildDateSeparatorItem(createEvent)];
+        items.push(...ejectedEvents.map((event) => ({ key: event.getId()!, kind: "event" as const })));
+        items.push(this.buildRoomCreationItem());
+        items.push(this.buildRoomCreationGroupItem(groupedEvents));
+
+        return { items, consumedCount: index };
     }
 
     private buildItems(): TimelineModelItem[] {
         const events: MatrixEvent[] = this.timelineWindow.getEvents();
         const items: TimelineModelItem[] = [];
         let prevEvent: MatrixEvent | null = null;
+        let startIndex = 0;
 
-        for (const event of events) {
+        if (!this.timelineWindow.canPaginate(Direction.Backward)) {
+            const creationItems = this.buildInitialCreationItems(events);
+            if (creationItems) {
+                items.push(...creationItems.items);
+                startIndex = creationItems.consumedCount;
+                prevEvent = events[creationItems.consumedCount - 1] ?? null;
+            }
+        }
+
+        for (const event of events.slice(startIndex)) {
             const eventId = event.getId();
             if (!eventId) continue;
 

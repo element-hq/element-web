@@ -11,7 +11,7 @@ import type { ViewModel } from "../../../core/viewmodel/ViewModel";
 // ─── Timeline item: one renderable row ─────────────────────────────
 
 /** Discriminated union of every row kind the timeline can render. */
-export type TimelineItemKind = "event" | "date-separator" | "read-marker" | "loading" | "gap";
+export type TimelineItemKind = "event" | "virtual" | "group";
 
 export interface TimelineItem {
     /** Stable, unique key for React reconciliation and scroll-token anchoring. */
