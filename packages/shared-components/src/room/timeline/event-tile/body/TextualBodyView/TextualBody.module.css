@@ -32,7 +32,7 @@
 .annotation {
     user-select: none;
     display: inline-block;
-    margin-inline-start: 9px;
+    margin-inline-start: 9px; /* 9px does not exist in cpd https://compound.element.io/?path=/docs/tokens-spacing--docs */
     font: var(--cpd-font-body-xs-regular);
     color: var(--cpd-color-text-secondary);
 }
