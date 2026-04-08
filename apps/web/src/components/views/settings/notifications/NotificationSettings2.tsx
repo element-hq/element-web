@@ -111,10 +111,7 @@ export default function NotificationSettings2(): JSX.Element {
                 </SettingsBanner>
             )}
             <SettingsSection>
-                <Form.Root
-                    className="mx_SettingsSubsection_content mx_NotificationSettings2_flags"
-                    onSubmit={(e) => e.preventDefault()}
-                >
+                <Form.Root className="mx_SettingsSubsection_content" onSubmit={(e) => e.preventDefault()}>
                     <SettingsToggleInput
                         name="enable_notifications_account"
                         label={_t("settings|notifications|enable_notifications_account")}
