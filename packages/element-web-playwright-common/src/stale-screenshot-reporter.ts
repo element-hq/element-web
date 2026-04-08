@@ -56,11 +56,7 @@ class StaleScreenshotReporter implements Reporter {
         this.success = false;
     }
 
-    public async onExit(): Promise<void> {
-        if (this.failing.size) {
-            console.error(`${this.failing.size} tests failed, skipping stale screenshot reporter.`);
-        }
-
+    private async checkStaleScreenshots(): Promise<void> {
         if (!this.snapshotRoots.size) {
             this.error("No snapshot directories found, did you set the snapshotDir in your Playwright config?", "");
             return;
@@ -89,6 +85,14 @@ class StaleScreenshotReporter implements Reporter {
             for (const screenshot of screenshotFiles) {
                 this.error("Stale screenshot file", screenshot);
             }
+        }
+    }
+
+    public async onExit(): Promise<void> {
+        if (this.failing.size) {
+            this.error(`${this.failing.size} tests failed, skipping stale screenshot reporter.`, "");
+        } else {
+            await this.checkStaleScreenshots();
         }
 
         if (!this.success) {
