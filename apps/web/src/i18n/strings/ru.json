@@ -115,7 +115,7 @@
         "show_advanced": "Показать дополнительные настройки",
         "show_all": "Показать все",
         "sign_in": "Войти",
-        "sign_out": "Выйти",
+        "sign_out": "Удалить это устройство",
         "skip": "Пропустить",
         "start": "Начать",
         "start_chat": "Отправить личное сообщение",
@@ -405,7 +405,7 @@
         "download_logs": "Скачать журналы",
         "downloading_logs": "Скачивание журналов",
         "error_empty": "Пожалуйста, расскажите нам что пошло не так, либо, ещё лучше, создайте отчёт в GitHub с описанием проблемы.",
-        "failed_download_logs": "Не удалось загрузить журналы отладки: ",
+        "failed_download_logs": "Не удалось скачать журналы отладки: ",
         "failed_send_logs_causes": {
             "disallowed_app": "Ваш отчет об ошибке отклонен. Сервер rageshake не поддерживает это приложение.",
             "rejected_generic": "Ваш отчет об ошибке отклонен. Сервер rageshake отклонил содержимое отчета из-за политики.",
@@ -419,7 +419,7 @@
         "log_request": "Чтобы помочь нам предотвратить это в будущем, пожалуйста, <a>отправьте нам логи</a>.",
         "logs_sent": "Журналы отправлены",
         "matrix_security_issue": "Чтобы сообщить о проблеме безопасности Matrix, пожалуйста, прочитайте <a>Политику раскрытия информации</a> Matrix.org.",
-        "preparing_download": "Подготовка к загрузке журналов",
+        "preparing_download": "Подготовка к скачиванию журналов",
         "preparing_logs": "Подготовка к отправке журналов",
         "send_logs": "Отправить журналы",
         "submit_debug_logs": "Отправить отладочные журналы",
@@ -563,6 +563,7 @@
         "someone": "Кто-то",
         "space": "Пространство",
         "spaces": "Пространства",
+        "state_encryption_enabled": "Экспериментальное шифрование включено",
         "sticker": "Стикер",
         "stickerpack": "Набор стикеров",
         "success": "Успех",
@@ -666,10 +667,11 @@
         "join_rule_knock_label": "Любой желающий может подать заявку на участие, но администраторы или модераторы должны предоставить доступ. Это можно изменить позже.",
         "join_rule_public_label": "Любой желающий сможет найти эту комнату и присоединиться к ней.",
         "join_rule_public_parent_space_label": "Любой сможет найти и присоединиться к этой комнате, а не только участники <SpaceName/>.",
-        "join_rule_restricted": "Видимая для участников пространства",
-        "join_rule_restricted_label": "Все в <SpaceName/> смогут найти и присоединиться к этой комнате.",
+        "join_rule_restricted": "Стандартная",
+        "join_rule_restricted_label": "Любой может присоединиться в <SpaceName/>.",
         "name_validation_required": "Пожалуйста, введите название комнаты",
         "room_visibility_label": "Видимость комнаты",
+        "state_encryption_label": "Шифровать события состояния",
         "title_private_room": "Создать приватную комнату",
         "title_public_room": "Создать публичную комнату",
         "title_video_room": "Создайте видеокомнату",
@@ -807,6 +809,7 @@
         "event_id": "ID события: %(eventId)s",
         "event_sent": "Событие отправлено!",
         "event_type": "Тип события",
+        "expired": "Срок действия истек",
         "explore_account_data": "Посмотреть данные учётной записи",
         "explore_room_account_data": "Посмотреть данные учётной записи комнаты",
         "explore_room_state": "Посмотреть состояние комнаты",
@@ -907,7 +910,7 @@
         "widget_screenshots": "Включить скриншоты виджетов для поддерживаемых виджетов"
     },
     "dialog_close_label": "Закрыть диалог",
-    "download_completed": "Загрузка завершена",
+    "download_completed": "Скачивание завершено",
     "emoji": {
         "categories": "Категории",
         "category_activities": "Действия",
@@ -1665,9 +1668,9 @@
     },
     "member_list": {
         "count": {
-            "one": "%(count)s Участник",
-            "few": "%(count)s Участника",
-            "many": "%(count)s Участников"
+            "one": "%(count)s участник",
+            "few": "%(count)s участника",
+            "many": "%(count)s участников"
         },
         "filter_placeholder": "Поиск по участникам",
         "invite_button_no_perms_tooltip": "У вас нет разрешения приглашать пользователей",
@@ -3235,7 +3238,8 @@
         "copy_link_text": "Копировать ссылку приглашения",
         "count_of_members": {
             "one": "%(count)s участник",
-            "other": "%(count)s участников"
+            "few": "%(count)s участника",
+            "many": "%(count)s участников"
         },
         "create_new_room_button": "Создать комнату",
         "failed_querying_public_rooms": "Не удалось запросить публичную комнату",

@@ -105,4 +105,15 @@ describe("LeftPanelResizerViewModel", () => {
         vm.onBlur();
         expect(vm.getSnapshot().isFocusedViaKeyboard).toStrictEqual(false);
     });
+
+    it("should resize to nearest whole number", () => {
+        const vm = new ResizerViewModel();
+        const mockHandle = {
+            resize: jest.fn(),
+        } as unknown as PanelImperativeHandle;
+        vm.setPanelHandle(mockHandle);
+
+        vm.onLeftPanelResized(25.515);
+        expect(mockHandle.resize).toHaveBeenCalledWith("26%");
+    });
 });
