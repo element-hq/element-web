@@ -19,6 +19,10 @@ import { type RoomNotificationState } from "../../stores/notifications/RoomNotif
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
     title: string;
+    /**
+     * The ID of the current space.
+     */
+    spaceId: string;
     onToggleExpanded: (isExpanded: boolean) => void;
 }
 
@@ -31,12 +35,19 @@ export class RoomListSectionHeaderViewModel
      */
     private roomNotificationStates = new Set<RoomNotificationState>();
 
+    /**
+     * Tracks the expanded/collapsed state per space.
+     * Key is spaceId. Defaults to expanded if not set.
+     */
+    private readonly expandedBySpace = new Map<string, boolean>();
+
     public constructor(props: RoomListSectionHeaderViewModelProps) {
         super(props, { id: props.tag, title: props.title, isExpanded: true, isUnread: false });
     }
 
     public onClick = (): void => {
         const isExpanded = !this.snapshot.current.isExpanded;
+        this.expandedBySpace.set(this.props.spaceId, isExpanded);
         this.snapshot.merge({ isExpanded });
         this.props.onToggleExpanded(isExpanded);
     };
@@ -49,11 +60,22 @@ export class RoomListSectionHeaderViewModel
     }
 
     /**
-     * Set whether the section is expanded.
+     * Set whether the section is expanded for the current space.
      * This will not trigger the onToggleExpanded callback.
      */
     public set isExpanded(value: boolean) {
+        this.expandedBySpace.set(this.props.spaceId, value);
         this.snapshot.merge({ isExpanded: value });
+    }
+
+    /**
+     * Switch to a different space, restoring the expanded state for that space.
+     * Defaults to expanded if no state has been saved for the space.
+     */
+    public setSpace(spaceId: string): void {
+        this.props.spaceId = spaceId;
+        const isExpanded = this.expandedBySpace.get(this.props.spaceId) ?? true;
+        this.snapshot.merge({ isExpanded });
     }
 
     /**

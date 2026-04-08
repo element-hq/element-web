@@ -806,10 +806,10 @@ describe("RoomListViewModel", () => {
                 expect(favSection!.roomIds).toEqual([]);
             });
 
-            it("should preserve section collapse state across space changes", () => {
+            it("should track section collapse state per space", () => {
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
-                // Collapse favourites
+                // Collapse favourites in the home space
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
                 favHeader.onClick();
 
@@ -828,15 +828,37 @@ describe("RoomListViewModel", () => {
 
                 RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
-                const snapshot = viewModel.getSnapshot();
-                // Favourites should still be collapsed even after the space change
-                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                let snapshot = viewModel.getSnapshot();
+                // Favourites should be expanded in the new space (per-space state)
+                let favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection).toBeDefined();
+                expect(favSection!.roomIds).toEqual(["!spacefav:server"]);
+
+                // Other sections should also be expanded
+                let chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
+
+                // Switch back to home space
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                snapshot = viewModel.getSnapshot();
+                // Favourites should still be collapsed in the home space
+                favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
                 expect(favSection).toBeDefined();
                 expect(favSection!.roomIds).toEqual([]);
 
-                // Other sections should remain expanded
-                const chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
-                expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
+                // Chats should be expanded
+                chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!reg1:server"]);
             });
 
             it("should apply filters across all sections", () => {

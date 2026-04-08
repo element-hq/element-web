@@ -258,6 +258,7 @@ export class RoomListViewModel
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
             title,
+            spaceId: this.roomsResult.spaceId,
             onToggleExpanded: () => this.updateRoomListData(),
         });
         this.roomSectionHeaderViewModels.set(tag, viewModel);
@@ -366,6 +367,11 @@ export class RoomListViewModel
             this.roomsMap.clear();
 
             this.updateRoomsMap(this.roomsResult);
+
+            // Restore the expanded/collapsed state for the new space
+            for (const viewModel of this.roomSectionHeaderViewModels.values()) {
+                viewModel.setSpace(newSpaceId);
+            }
 
             // Space changed - get the last selected room for the new space to prevent flicker
             const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);

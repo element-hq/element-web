@@ -30,6 +30,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
             title: "Favourites",
+            spaceId: "!space:server",
             onToggleExpanded,
         });
 
@@ -43,6 +44,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         const vm = new RoomListSectionHeaderViewModel({
             tag: "m.favourite",
             title: "Favourites",
+            spaceId: "!space:server",
             onToggleExpanded,
         });
         expect(vm.isExpanded).toBe(true);
@@ -56,6 +58,33 @@ describe("RoomListSectionHeaderViewModel", () => {
         expect(vm.isExpanded).toBe(true);
         expect(vm.getSnapshot().isExpanded).toBe(true);
         expect(onToggleExpanded).toHaveBeenCalledWith(true);
+    });
+
+    it("should track expanded state per space", () => {
+        const vm = new RoomListSectionHeaderViewModel({
+            tag: "m.favourite",
+            title: "Favourites",
+            spaceId: "!space:server",
+            onToggleExpanded,
+        });
+
+        // Default space: collapse
+        vm.onClick();
+        expect(vm.isExpanded).toBe(false);
+
+        // Switch to a different space: should default to expanded
+        vm.setSpace("!space2:server");
+        expect(vm.isExpanded).toBe(true);
+
+        // Collapse in the new space
+        vm.onClick();
+        expect(vm.isExpanded).toBe(false);
+        vm.onClick();
+        expect(vm.isExpanded).toBe(true);
+
+        // Switch to the other space: should still be collapsed
+        vm.setSpace("!space:server");
+        expect(vm.isExpanded).toBe(false);
     });
 
     describe("unread status", () => {
@@ -72,6 +101,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag: "m.favourite",
                 title: "Favourites",
+                spaceId: "!space:server",
                 onToggleExpanded,
             });
             vm.setRooms([room]);
@@ -85,6 +115,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag: "m.favourite",
                 title: "Favourites",
+                spaceId: "!space:server",
                 onToggleExpanded,
             });
             vm.setRooms([room]);
@@ -107,6 +138,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag: "m.favourite",
                 title: "Favourites",
+                spaceId: "!space:server",
                 onToggleExpanded,
             });
             vm.setRooms([room]);
@@ -127,6 +159,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag: "m.favourite",
                 title: "Favourites",
+                spaceId: "!space:server",
                 onToggleExpanded,
             });
             vm.setRooms([room]);
@@ -145,6 +178,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             const vm = new RoomListSectionHeaderViewModel({
                 tag: "m.favourite",
                 title: "Favourites",
+                spaceId: "!space:server",
                 onToggleExpanded,
             });
             vm.setRooms([room]);
