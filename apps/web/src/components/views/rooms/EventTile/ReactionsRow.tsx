@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useMemo, useState, type JSX } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useReducer, useState, type JSX } from "react";
 import {
     ReactionsRowButtonView,
     ReactionsRowView,
@@ -110,7 +110,7 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [menuDisplayed, setMenuDisplayed] = useState(false);
     const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [, setRelationsVersion] = useState(0);
+    const [, bumpRelationsVersion] = useReducer((version: number) => version + 1, 0);
     const reactionGroups = getReactionGroups(reactions);
     const myReactions = getMyReactions(reactions, userId);
 
@@ -163,7 +163,7 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
         if (!reactions) return;
 
         const onRelationsChanged = (): void => {
-            setRelationsVersion((version) => version + 1);
+            bumpRelationsVersion();
         };
 
         reactions.on(RelationsEvent.Add, onRelationsChanged);

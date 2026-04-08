@@ -85,25 +85,25 @@ jest.mock("../../../../../../src/components/views/context_menus/MessageContextMe
 const mockGetEventDisplayInfo = jest.requireMock("../../../../../../src/utils/EventRenderingUtils")
     .getEventDisplayInfo as jest.Mock;
 
+function defer<T>(): {
+    promise: Promise<T>;
+    resolve: (value: T) => void;
+    reject: (reason?: unknown) => void;
+} {
+    let resolve!: (value: T) => void;
+    let reject!: (reason?: unknown) => void;
+    const promise = new Promise<T>((res, rej) => {
+        resolve = res;
+        reject = rej;
+    });
+    return { promise, resolve, reject };
+}
+
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
     let mxEvent: MatrixEvent;
     let room: Room;
     let client: MatrixClient;
-
-    function defer<T>(): {
-        promise: Promise<T>;
-        resolve: (value: T) => void;
-        reject: (reason?: unknown) => void;
-    } {
-        let resolve!: (value: T) => void;
-        let reject!: (reason?: unknown) => void;
-        const promise = new Promise<T>((res, rej) => {
-            resolve = res;
-            reject = rej;
-        });
-        return { promise, resolve, reject };
-    }
 
     // let changeEvent: (event: MatrixEvent) => void;
 
@@ -364,8 +364,9 @@ describe("EventTile", () => {
             });
 
             const { container } = getComponent({ mxEvent });
-
-            await waitFor(() => expect(getByTestId(container, "reply-preview")).toHaveTextContent(mxEvent.getId()!));
+            const eventId = mxEvent.getId();
+            expect(eventId).toBeDefined();
+            await waitFor(() => expect(getByTestId(container, "reply-preview")).toHaveTextContent(eventId ?? ""));
         });
 
         it("resolves the avatar subject from the VM for third-party invites", async () => {
@@ -416,7 +417,7 @@ describe("EventTile", () => {
             fireEvent.focus(tile, { target: tile });
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
 
-            document.body.setAttribute("data-whatinput", "keyboard");
+            document.body.dataset.whatinput = "keyboard";
             fireEvent.focus(tile, { target: tile });
 
             await waitFor(() => expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull());

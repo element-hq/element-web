@@ -1258,7 +1258,7 @@ function EventTileActionBarHost({
     replyChainRef,
     onFocusChange,
     toggleThreadExpanded,
-}: ActionBarHostProps): JSX.Element {
+}: Readonly<ActionBarHostProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
     const { isCard } = useContext(CardContext);
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
@@ -1358,7 +1358,7 @@ function buildThreadToolbarViewModelProps({
     };
 }
 
-function ThreadToolbarHost({ onViewInRoomClick, onCopyLinkClick }: ThreadToolbarHostProps): JSX.Element {
+function ThreadToolbarHost({ onViewInRoomClick, onCopyLinkClick }: Readonly<ThreadToolbarHostProps>): JSX.Element {
     const threadToolbarViewModelProps = useMemo(
         () => buildThreadToolbarViewModelProps({ onViewInRoomClick, onCopyLinkClick }),
         [onViewInRoomClick, onCopyLinkClick],
@@ -1392,7 +1392,7 @@ function EventTileContextMenuHost({
     tileRef,
     replyChainRef,
     onFinished,
-}: EventTileContextMenuHostProps): JSX.Element {
+}: Readonly<EventTileContextMenuHostProps>): JSX.Element {
     return (
         <MessageContextMenu
             {...aboveRightOf(contextMenu.position)}
@@ -1410,7 +1410,7 @@ function EventTileContextMenuHost({
 }
 
 /** Headless presenter that wires {@link EventTileViewModel} to {@link EventTileView}. */
-export function EventTilePresenter({ ref: forwardedRef, ...props }: EventTileProps): JSX.Element {
+export function EventTilePresenter({ ref: forwardedRef, ...props }: Readonly<EventTileProps>): JSX.Element {
     const {
         cli,
         roomContext,
