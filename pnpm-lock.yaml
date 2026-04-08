@@ -455,8 +455,8 @@ importers:
         specifier: ^0.16.0
         version: 0.16.45
       lodash:
-        specifier: npm:lodash-es@^4.17.21
-        version: 4.18.1
+        specifier: npm:lodash-es@4.18.1
+        version: lodash-es@4.18.1
       maplibre-gl:
         specifier: ^5.0.0
         version: 5.22.0
