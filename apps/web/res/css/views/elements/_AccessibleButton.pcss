@@ -9,9 +9,17 @@ Please see LICENSE files in the repository root for full details.
 .mx_AccessibleButton {
     cursor: pointer;
 
-    button& {
+    &:where(button) {
         /* Clear default button styling */
-        all: unset;
+        appearance: none;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+        cursor: pointer;
     }
 
     &.mx_AccessibleButton_disabled {
