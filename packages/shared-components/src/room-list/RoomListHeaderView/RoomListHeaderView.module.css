@@ -25,5 +25,6 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        user-select: none; /* currently supported by Chrome, Edge, Opera and Firefox */
     }
 }
