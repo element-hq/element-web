@@ -45,6 +45,7 @@ const RoomPreviewBar: FC<RoomPreviewBarProps> = ({ api, config, roomId, roomAlia
             {
                 api,
                 config,
+                showLoginLink: true,
             },
         );
 

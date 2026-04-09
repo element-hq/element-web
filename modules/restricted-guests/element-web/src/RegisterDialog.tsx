@@ -15,6 +15,7 @@ import { type ModuleConfig } from "./config.ts";
 interface RegisterDialogProps extends DialogProps<AccountAuthInfo> {
     api: Api;
     config: ModuleConfig;
+    showLoginLink?: boolean;
 }
 
 const enum State {
@@ -29,7 +30,7 @@ const StyledFormRoot = styled(Form.Root)`
     font-feature-settings: normal;
 `;
 
-const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubmit }) => {
+const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubmit, showLoginLink }) => {
     const [username, setUsername] = useState("");
     const [state, setState] = useState<State>(State.Idle);
 
@@ -69,7 +70,7 @@ const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubm
 
     return (
         <StyledFormRoot onSubmit={trySubmit}>
-            <Form.Field name="mxid">
+            <Form.Field name="name">
                 <Form.Label>{api.i18n.translate("register_dialog_register_username_label")}</Form.Label>
                 <Form.TextControl
                     disabled={disabled}
@@ -82,9 +83,11 @@ const RegisterDialog: FC<RegisterDialogProps> = ({ api, config, onCancel, onSubm
                 {message}
             </Form.Field>
 
-            <a href={config.skip_single_sign_on ? "/#/login" : "/#/start_sso"} onClick={onCancel}>
-                {api.i18n.translate("register_dialog_existing_account")}
-            </a>
+            {showLoginLink && (
+                <a href={config.skip_single_sign_on ? "/#/login" : "/#/start_sso"} onClick={onCancel}>
+                    {api.i18n.translate("register_dialog_existing_account")}
+                </a>
+            )}
 
             <Form.Submit disabled={disabled || !username}>
                 {api.i18n.translate("register_dialog_continue_label")}

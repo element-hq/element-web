@@ -4,8 +4,8 @@
         "de": "Benutzername"
     },
     "register_dialog_title": {
-        "en": "Request room access",
-        "de": "Raumbeitritt anfragen"
+        "en": "Request access",
+        "de": "Zugriff anfordern"
     },
     "register_dialog_busy": {
         "en": "Creating your account...",
@@ -32,7 +32,7 @@
         "de": "Treten Sie dem Raum bei, um teilzunehmen"
     },
     "join_cta": {
-        "en": "Join",
-        "de": "Verbinden"
+        "en": "Join as guest",
+        "de": "Als Gast beitreten"
     }
 }
