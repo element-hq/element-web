@@ -10,9 +10,9 @@ import { Tooltip, Text, Avatar, Button } from "@vector-im/compound-web";
 import PlaySolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
 import classNames from "classnames";
 
-import { useI18n } from "../../../core/i18n/i18nContext";
+import { useI18n } from "../../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "../types";
-import { LinkedText } from "../../../core/utils/LinkedText";
+import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
 
 export interface LinkPreviewActions {

@@ -16,8 +16,8 @@ import {
     type UrlPreviewGroupViewActions,
     type UrlPreviewGroupViewSnapshot,
 } from "./UrlPreviewGroupView";
-import { useMockedViewModel } from "../../core/viewmodel";
-import { LinkedTextContext } from "../../core/utils/LinkedText";
+import { useMockedViewModel } from "../../../../core/viewmodel";
+import { LinkedTextContext } from "../../../../core/utils/LinkedText";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
@@ -40,7 +40,7 @@ const UrlPreviewGroupViewWrapper = ({
 };
 
 export default {
-    title: "Event/UrlPreviewGroupView",
+    title: "UrlPreviewGroupView",
     component: UrlPreviewGroupViewWrapper,
     tags: ["autodocs"],
     args: {

@@ -10,8 +10,8 @@ import { Button, IconButton } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import classNames from "classnames";
 
-import { useViewModel, type ViewModel } from "../../core/viewmodel";
-import { useI18n } from "../../core/i18n/i18nContext";
+import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
+import { useI18n } from "../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
 import styles from "./UrlPreviewGroupView.module.css";
