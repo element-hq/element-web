@@ -806,10 +806,10 @@ describe("RoomListViewModel", () => {
                 expect(favSection!.roomIds).toEqual([]);
             });
 
-            it("should preserve section collapse state across space changes", () => {
+            it("should track section collapse state per space", () => {
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
-                // Collapse favourites
+                // Collapse favourites in the home space
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
                 favHeader.onClick();
 
@@ -828,15 +828,37 @@ describe("RoomListViewModel", () => {
 
                 RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
-                const snapshot = viewModel.getSnapshot();
-                // Favourites should still be collapsed even after the space change
-                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                let snapshot = viewModel.getSnapshot();
+                // Favourites should be expanded in the new space (per-space state)
+                let favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection).toBeDefined();
+                expect(favSection!.roomIds).toEqual(["!spacefav:server"]);
+
+                // Other sections should also be expanded
+                let chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
+
+                // Switch back to home space
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                snapshot = viewModel.getSnapshot();
+                // Favourites should still be collapsed in the home space
+                favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
                 expect(favSection).toBeDefined();
                 expect(favSection!.roomIds).toEqual([]);
 
-                // Other sections should remain expanded
-                const chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
-                expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
+                // Chats should be expanded
+                chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!reg1:server"]);
             });
 
             it("should apply filters across all sections", () => {
@@ -861,6 +883,33 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.sections).toHaveLength(1);
                 expect(snapshot.sections[0].id).toBe(DefaultTagID.Favourite);
                 expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server"]);
+            });
+
+            it("should expand collapsed sections that have results when a filter is toggled on", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Collapse the favourite section
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                favHeader.onClick();
+                expect(favHeader.isExpanded).toBe(false);
+
+                // Toggle a filter that returns rooms in the favourite section
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1] },
+                        { tag: CHATS_TAG, rooms: [] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                    filterKeys: [FilterEnum.UnreadFilter],
+                });
+                viewModel.onToggleFilter("unread");
+
+                // The favourite section should be expanded and its rooms visible
+                expect(favHeader.isExpanded).toBe(true);
+                const snapshot = viewModel.getSnapshot();
+                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection!.roomIds).toEqual(["!fav1:server"]);
             });
 
             it("should apply sticky room within the correct section", async () => {

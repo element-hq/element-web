@@ -182,6 +182,16 @@ export class RoomListViewModel
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
 
+        // When a filter is toggled on, expand sections that have results so they're visible
+        if (newFilter) {
+            for (const section of this.roomsResult.sections) {
+                if (section.rooms.length > 0) {
+                    const sectionHeaderVM = this.roomSectionHeaderViewModels.get(section.tag);
+                    if (sectionHeaderVM) sectionHeaderVM.isExpanded = true;
+                }
+            }
+        }
+
         this.updateRoomListData();
     };
 
@@ -258,6 +268,7 @@ export class RoomListViewModel
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
             title,
+            spaceId: this.roomsResult.spaceId,
             onToggleExpanded: () => this.updateRoomListData(),
         });
         this.roomSectionHeaderViewModels.set(tag, viewModel);
@@ -366,6 +377,11 @@ export class RoomListViewModel
             this.roomsMap.clear();
 
             this.updateRoomsMap(this.roomsResult);
+
+            // Restore the expanded/collapsed state for the new space
+            for (const viewModel of this.roomSectionHeaderViewModels.values()) {
+                viewModel.setSpace(newSpaceId);
+            }
 
             // Space changed - get the last selected room for the new space to prevent flicker
             const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
@@ -491,11 +507,22 @@ export class RoomListViewModel
         // Track the current active room position for future sticky calculations
         this.lastActiveRoomPosition = roomId ? this.findRoomPosition(this.roomsResult.sections, roomId) : undefined;
 
+        // Update section header view models with current rooms for unread state tracking
+        for (const section of this.roomsResult.sections) {
+            this.getSectionHeaderViewModel(section.tag).setRooms(section.rooms);
+        }
+
         // Build the complete state atomically to ensure consistency
         const { sections, isFlatList } = computeSections(
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
+        // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
+        if (isFlatList) {
+            const chatSections = this.roomSectionHeaderViewModels.get(CHATS_TAG);
+            if (chatSections) chatSections.isExpanded = true;
+            chatSections?.setRooms(this.roomsResult.sections.flatMap((section) => section.rooms));
+        }
         this.sections = sections;
 
         // Calculate the active room index from the computed sections (which exclude collapsed sections' rooms)
