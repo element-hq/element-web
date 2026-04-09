@@ -46,8 +46,10 @@ function countPrependedItems<TItem extends TimelineItem>(prevItems: TItem[], nex
 
 export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: TimelineViewProps<TItem>): JSX.Element {
     const snapshot = useViewModel(vm);
+    const previousVmRef = useRef(vm);
     const lastAnchoredKeyRef = useRef<string | null>(null);
     const previousItemsRef = useRef<TItem[]>([]);
+    const lastVisibleRangeRef = useRef<VisibleRange | null>(null);
     const [initialFillState, setInitialFillState] = useState<"filling" | "done">("filling");
     const [firstItemIndex, setFirstItemIndex] = useState(INITIAL_FIRST_ITEM_INDEX);
     const initialFillRoundsRef = useRef(0);
@@ -56,12 +58,32 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
     const increaseViewportBy = useMemo(() => ({ top: OVERSCAN_PX, bottom: OVERSCAN_PX }), []);
 
     useEffect(() => {
+        if (previousVmRef.current === vm) {
+            return;
+        }
+
+        previousVmRef.current = vm;
         setInitialFillState("filling");
         setFirstItemIndex(INITIAL_FIRST_ITEM_INDEX);
+        lastAnchoredKeyRef.current = null;
+        lastVisibleRangeRef.current = null;
         initialFillRoundsRef.current = 0;
         sawInitialRangeRef.current = false;
         previousItemsRef.current = [];
     }, [vm]);
+
+    useEffect(() => {
+        if (initialFillState === "done") {
+            vm.onInitialFillCompleted();
+
+            const lastVisibleRange = lastVisibleRangeRef.current;
+            const isAtEnd =
+                lastVisibleRange !== null && lastVisibleRange.endIndex >= Math.max(0, snapshot.items.length - 1);
+            if (isAtEnd && snapshot.forwardPagination === "idle" && snapshot.canPaginateForward) {
+                vm.paginate("forward");
+            }
+        }
+    }, [initialFillState, snapshot.items.length, snapshot.forwardPagination, snapshot.canPaginateForward, vm]);
 
     useLayoutEffect(() => {
         const prependedItems = countPrependedItems(previousItemsRef.current, snapshot.items);
@@ -85,6 +107,7 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
                 startIndex: range.startIndex,
                 endIndex: range.endIndex,
             };
+            lastVisibleRangeRef.current = visibleRange;
             vm.onVisibleRangeChanged(visibleRange);
 
             if (initialFillState !== "filling") {
@@ -146,12 +169,22 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
             "initialFill:",
             initialFillState,
         );
-        // Startup fill is allowed to keep pulling older history from the top
-        // edge until the viewport is sufficiently filled.
-        if (snapshot.backwardPagination === "idle" && snapshot.canPaginateBackward) {
-            vm.paginate("backward");
+        if (snapshot.backwardPagination !== "idle" || !snapshot.canPaginateBackward) {
+            return;
         }
-    }, [vm, initialFillState, snapshot.backwardPagination, snapshot.canPaginateBackward]);
+
+        // The initial top-edge probe should come from startReached, but once
+        // startup fill is underway the range-change loop owns subsequent pulls.
+        if (initialFillState === "filling") {
+            if (initialFillRoundsRef.current === 0 && !snapshot.pendingAnchor) {
+                initialFillRoundsRef.current = 1;
+                vm.paginate("backward");
+            }
+            return;
+        }
+
+        vm.paginate("backward");
+    }, [vm, initialFillState, snapshot.backwardPagination, snapshot.canPaginateBackward, snapshot.pendingAnchor]);
 
     const handleEndReached = useCallback(() => {
         log(

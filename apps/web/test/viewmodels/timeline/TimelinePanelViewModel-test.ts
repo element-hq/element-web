@@ -134,6 +134,33 @@ describe("TimelinePanelViewModel", () => {
         expect(vm.getSnapshot().canPaginateForward).toBe(false);
     });
 
+    it("ignores a second pagination request while the same direction is already loading", async () => {
+        timelineWindowInstance.canPaginate.mockImplementation(
+            (direction: Direction) => direction === Direction.Backward,
+        );
+
+        let resolvePagination: (value: boolean) => void;
+        const paginationPromise = new Promise<boolean>((resolve) => {
+            resolvePagination = resolve;
+        });
+        timelineWindowInstance.paginate.mockReturnValue(paginationPromise);
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        vm.paginate("backward");
+        vm.paginate("backward");
+
+        expect(timelineWindowInstance.paginate).toHaveBeenCalledTimes(1);
+        expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Backward, 20);
+        expect(vm.getSnapshot().backwardPagination).toBe("loading");
+
+        resolvePagination!(false);
+        await flushPromises();
+
+        expect(vm.getSnapshot().backwardPagination).toBe("idle");
+    });
+
     it("marks pagination as exhausted when the timeline can no longer paginate backward", async () => {
         timelineWindowInstance.canPaginate.mockImplementationOnce(() => true).mockImplementation(() => false);
 
@@ -161,13 +188,49 @@ describe("TimelinePanelViewModel", () => {
     });
 
     it("extends the live window without a network request when stuck at bottom", async () => {
-        new TimelinePanelViewModel({ client, room });
+        const vm = new TimelinePanelViewModel({ client, room });
         await flushPromises();
 
         room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
         await flushPromises();
 
         expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Forward, 1, false);
+        expect(vm.getSnapshot().forwardPagination).toBe("idle");
+    });
+
+    it("ignores a second live-end extension while forward pagination is already loading", async () => {
+        let resolvePagination: (value: boolean) => void;
+        const paginationPromise = new Promise<boolean>((resolve) => {
+            resolvePagination = resolve;
+        });
+        timelineWindowInstance.paginate.mockReturnValue(paginationPromise);
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
+        room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
+
+        expect(timelineWindowInstance.paginate).toHaveBeenCalledTimes(1);
+        expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Forward, 1, false);
+        expect(vm.getSnapshot().forwardPagination).toBe("loading");
+
+        resolvePagination!(false);
+        await flushPromises();
+
+        expect(vm.getSnapshot().forwardPagination).toBe("idle");
+    });
+
+    it("marks forward pagination as error when live-end extension fails", async () => {
+        timelineWindowInstance.paginate.mockRejectedValueOnce(new Error("boom"));
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
+        await flushPromises();
+
+        expect(vm.getSnapshot().forwardPagination).toBe("error");
     });
 
     it("ignores pagination-driven timeline updates", async () => {
@@ -179,6 +242,24 @@ describe("TimelinePanelViewModel", () => {
 
         expect(timelineWindowInstance.paginate).not.toHaveBeenCalledWith(Direction.Forward, 1, false);
         expect(vm.getSnapshot().canPaginateForward).toBe(false);
+    });
+
+    it("refuses public forward pagination until initial fill is marked complete", async () => {
+        timelineWindowInstance.canPaginate.mockImplementation(
+            (direction: Direction) => direction === Direction.Forward,
+        );
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        vm.paginate("forward");
+        expect(timelineWindowInstance.paginate).not.toHaveBeenCalledWith(Direction.Forward, 20);
+
+        vm.onInitialFillCompleted();
+        vm.paginate("forward");
+        await flushPromises();
+
+        expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Forward, 20);
     });
 
     it("tracks the latest visible range without triggering pagination", async () => {
@@ -200,5 +281,51 @@ describe("TimelinePanelViewModel", () => {
 
         expect(presenterInstance.dispose).toHaveBeenCalled();
         expect(room.off).toHaveBeenCalledWith(RoomEvent.Timeline, expect.any(Function));
+    });
+
+    it("ignores load completion after disposal", async () => {
+        let resolveLoad: () => void;
+        timelineWindowInstance.load.mockReturnValue(
+            new Promise<void>((resolve) => {
+                resolveLoad = resolve;
+            }),
+        );
+
+        const vm = new TimelinePanelViewModel({ client, room });
+
+        expect(vm.getSnapshot().backwardPagination).toBe("loading");
+        vm.dispose();
+        resolveLoad!();
+        await flushPromises();
+
+        expect(vm.getSnapshot().items).toEqual([]);
+        expect(vm.getSnapshot().backwardPagination).toBe("loading");
+        expect(vm.getSnapshot().forwardPagination).toBe("loading");
+        expect(presenterInstance.buildItems).not.toHaveBeenCalled();
+    });
+
+    it("ignores pagination completion after disposal", async () => {
+        timelineWindowInstance.canPaginate.mockImplementation(
+            (direction: Direction) => direction === Direction.Backward,
+        );
+
+        let resolvePagination: (value: boolean) => void;
+        timelineWindowInstance.paginate.mockReturnValue(
+            new Promise<boolean>((resolve) => {
+                resolvePagination = resolve;
+            }),
+        );
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        vm.paginate("backward");
+        expect(vm.getSnapshot().backwardPagination).toBe("loading");
+
+        vm.dispose();
+        resolvePagination!(true);
+        await flushPromises();
+
+        expect(vm.getSnapshot().backwardPagination).toBe("loading");
     });
 });

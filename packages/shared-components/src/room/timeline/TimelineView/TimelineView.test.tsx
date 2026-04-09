@@ -24,6 +24,7 @@ class TestTimelineViewModel
     }
 
     public paginate = vi.fn();
+    public onInitialFillCompleted = vi.fn();
     public onVisibleRangeChanged = vi.fn();
     public onAnchorReached = vi.fn();
     public onStuckAtBottomChanged = vi.fn();
@@ -82,11 +83,14 @@ describe("TimelineView", () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
                 canPaginateForward: true,
+                canPaginateBackward: false,
             }),
         );
 
         renderTimeline(vm);
 
+        await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
+        await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
         await waitFor(() => expect(vm.paginate).toHaveBeenCalledWith("forward"));
         expect(vm.paginate).not.toHaveBeenCalledWith("backward");
     });
@@ -103,6 +107,7 @@ describe("TimelineView", () => {
 
         await waitFor(() => expect(vm.paginate).toHaveBeenCalledWith("backward"));
         expect(vm.paginate).not.toHaveBeenCalledWith("forward");
+        expect(vm.onInitialFillCompleted).not.toHaveBeenCalled();
     });
 
     it("acknowledges a pending anchor when the anchored item is present", async () => {
@@ -115,5 +120,58 @@ describe("TimelineView", () => {
         renderTimeline(vm);
 
         await waitFor(() => expect(vm.onAnchorReached).toHaveBeenCalledOnce());
+    });
+
+    it("marks initial fill complete without probing backward when no backfill is available", async () => {
+        const vm = new TestTimelineViewModel(
+            makeSnapshot({
+                canPaginateBackward: false,
+                canPaginateForward: false,
+            }),
+        );
+
+        renderTimeline(vm);
+
+        await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+        expect(vm.paginate).not.toHaveBeenCalledWith("backward");
+    });
+
+    it("suppresses the initial backward probe while a pending anchor is being resolved", async () => {
+        const vm = new TestTimelineViewModel(
+            makeSnapshot({
+                canPaginateBackward: true,
+                pendingAnchor: { targetKey: "beta", position: 0.5, highlight: true },
+            }),
+        );
+
+        renderTimeline(vm);
+
+        await waitFor(() => expect(vm.onAnchorReached).toHaveBeenCalledOnce());
+        expect(vm.paginate).not.toHaveBeenCalledWith("backward");
+    });
+
+    it("resets anchor tracking when the view model instance changes", async () => {
+        const firstVm = new TestTimelineViewModel(
+            makeSnapshot({
+                pendingAnchor: { targetKey: "beta", position: 0.5, highlight: true },
+            }),
+        );
+
+        const secondVm = new TestTimelineViewModel(
+            makeSnapshot({
+                pendingAnchor: { targetKey: "beta", position: 0.5, highlight: true },
+            }),
+        );
+
+        const view = renderTimeline(firstVm);
+        await waitFor(() => expect(firstVm.onAnchorReached).toHaveBeenCalledOnce());
+
+        view.rerender(
+            <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
+                <TimelineView vm={secondVm} renderItem={(item) => <div>{item.key}</div>} />
+            </VirtuosoMockContext.Provider>,
+        );
+
+        await waitFor(() => expect(secondVm.onAnchorReached).toHaveBeenCalledOnce());
     });
 });

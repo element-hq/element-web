@@ -57,6 +57,7 @@ export class TimelinePanelViewModel
 {
     private timelineWindow: TimelineWindow;
     private presenter: TimelinePanelPresenter;
+    private initialFillCompleted = false;
     // TODO: Use visibleRange for read receipts
     public visibleRange: VisibleRange = { startIndex: 0, endIndex: 0 };
 
@@ -115,32 +116,27 @@ export class TimelinePanelViewModel
         const { stuckAtBottom } = this.snapshot.current;
         log("onRoomTimeline fired, stuckAtBottom:", stuckAtBottom);
         if (!stuckAtBottom) {
-            this.snapshot.merge({
+            this.mergeSnapshot({
                 canPaginateForward: true,
             });
             return;
         }
 
-        this.timelineWindow.paginate(Direction.Forward, 1, false).then(() => {
-            const items = this.buildItems();
-            log("live event added, total items:", items.length);
-            this.snapshot.merge({
-                items,
-                canPaginateBackward: this.timelineWindow.canPaginate(Direction.Backward),
-                canPaginateForward: this.timelineWindow.canPaginate(Direction.Forward),
-            });
-        });
+        this.paginateDirection(Direction.Forward, 1, false, false);
     };
 
     private async load(eventId?: string): Promise<void> {
         log("load() start, eventId:", eventId);
-        this.snapshot.merge({
+        this.mergeSnapshot({
             backwardPagination: "loading",
             forwardPagination: "loading",
         });
 
         try {
             await this.timelineWindow.load(eventId, INITIAL_SIZE);
+            if (this.isDisposed) {
+                return;
+            }
 
             const items = this.buildItems();
             const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
@@ -148,7 +144,7 @@ export class TimelinePanelViewModel
 
             log("load() done, items:", items.length, "canBack:", canPaginateBackward, "canFwd:", canPaginateForward);
 
-            this.snapshot.merge({
+            this.mergeSnapshot({
                 items,
                 canPaginateBackward,
                 canPaginateForward,
@@ -158,7 +154,7 @@ export class TimelinePanelViewModel
             });
         } catch (e) {
             log("load() error:", e);
-            this.snapshot.merge({
+            this.mergeSnapshot({
                 canPaginateBackward: false,
                 canPaginateForward: false,
                 backwardPagination: "error",
@@ -170,30 +166,80 @@ export class TimelinePanelViewModel
     // ── TimelineViewActions ──────────────────────────────────────────
 
     public paginate = (direction: "backward" | "forward"): void => {
+        if (direction === "forward" && !this.initialFillCompleted) {
+            return;
+        }
+
         const dir = direction === "backward" ? Direction.Backward : Direction.Forward;
+        this.paginateDirection(dir, PAGINATE_SIZE, true, true);
+    };
+
+    public onInitialFillCompleted = (): void => {
+        this.initialFillCompleted = true;
+    };
+
+    public onVisibleRangeChanged = (range: VisibleRange): void => {
+        this.visibleRange = range;
+    };
+
+    public onAnchorReached = (): void => {
+        this.mergeSnapshot({ pendingAnchor: null });
+    };
+
+    public onStuckAtBottomChanged = (stuckAtBottom: boolean): void => {
+        this.mergeSnapshot({ stuckAtBottom });
+    };
+
+    private buildItems(): TimelineModelItem[] {
+        return this.presenter.buildItems(this.timelineWindow.getEvents());
+    }
+
+    private mergeSnapshot(update: Partial<TimelineViewSnapshot<TimelineModelItem>>): void {
+        if (this.isDisposed) {
+            return;
+        }
+
+        this.snapshot.merge(update);
+    }
+
+    private paginateDirection(dir: Direction, size: number, allowRequest: boolean, requireCanPaginate: boolean): void {
+        const direction = dir === Direction.Backward ? "backward" : "forward";
         const stateKey = direction === "backward" ? "backwardPagination" : "forwardPagination";
-
+        const capabilityKey = direction === "backward" ? "canPaginateBackward" : "canPaginateForward";
+        const currentState = this.snapshot.current[stateKey];
         const canPaginate = this.timelineWindow.canPaginate(dir);
-        log("paginate()", direction, "canPaginate:", canPaginate, "currentState:", this.snapshot.current[stateKey]);
 
-        if (!canPaginate) {
-            this.snapshot.merge({
-                [direction === "backward" ? "canPaginateBackward" : "canPaginateForward"]: false,
+        log("paginate()", direction, "canPaginate:", canPaginate, "currentState:", currentState, "size:", size);
+
+        if (currentState === "loading") {
+            return;
+        }
+
+        if (requireCanPaginate && !canPaginate) {
+            this.mergeSnapshot({
+                [capabilityKey]: false,
             });
             return;
         }
 
-        this.snapshot.merge({ [stateKey]: "loading" as PaginationState });
+        this.mergeSnapshot({ [stateKey]: "loading" as PaginationState });
 
         const prevItemCount = this.snapshot.current.items.length;
-        this.timelineWindow
-            .paginate(dir, PAGINATE_SIZE)
+        const paginationRequest = allowRequest
+            ? this.timelineWindow.paginate(dir, size)
+            : this.timelineWindow.paginate(dir, size, false);
+
+        paginationRequest
             .then((success) => {
+                if (this.isDisposed) {
+                    return;
+                }
+
                 const items = this.buildItems();
                 const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
                 const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
                 log("paginate()", direction, "success:", success, "items:", prevItemCount, "->", items.length);
-                this.snapshot.merge({
+                this.mergeSnapshot({
                     items,
                     canPaginateBackward,
                     canPaginateForward,
@@ -202,27 +248,11 @@ export class TimelinePanelViewModel
             })
             .catch((e) => {
                 log("paginate()", direction, "error:", e);
-                this.snapshot.merge({
+                this.mergeSnapshot({
                     canPaginateBackward: this.timelineWindow.canPaginate(Direction.Backward),
                     canPaginateForward: this.timelineWindow.canPaginate(Direction.Forward),
                     [stateKey]: "error" as PaginationState,
                 });
             });
-    };
-
-    public onVisibleRangeChanged = (range: VisibleRange): void => {
-        this.visibleRange = range;
-    };
-
-    public onAnchorReached = (): void => {
-        this.snapshot.merge({ pendingAnchor: null });
-    };
-
-    public onStuckAtBottomChanged = (stuckAtBottom: boolean): void => {
-        this.snapshot.merge({ stuckAtBottom });
-    };
-
-    private buildItems(): TimelineModelItem[] {
-        return this.presenter.buildItems(this.timelineWindow.getEvents());
     }
 }

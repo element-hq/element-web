@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo, type JSX, type ReactNode } from "react";
-import { DateSeparatorView, TimelineView } from "@element-hq/web-shared-components";
+import { DateSeparatorView, TimelineView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { TimelinePanelViewModel } from "../../viewmodels/room/timeline/TimelinePanelViewModel";
@@ -19,8 +19,8 @@ import GenericEventListSummary from "../views/elements/GenericEventListSummary";
 interface TimelinePanelViewProps {
     /** Room whose unfiltered timeline should be rendered. */
     room: Room;
-    /** Event to open the timeline around on first load, such as scroll-state restore or permalink navigation. */
-    initialAnchorEventId?: string;
+    /** Event to open the timeline around, such as scroll-state restore or permalink navigation. */
+    anchoredEventId?: string;
     /** Event to visually highlight after navigation, such as a search result target. */
     highlightedEventId?: string;
 }
@@ -40,21 +40,27 @@ const TypedTimelineView = TimelineView as (props: {
  * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
  * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
  */
-export function TimelinePanelView({
+export function TimelinePanelView({ room, anchoredEventId, highlightedEventId }: TimelinePanelViewProps): JSX.Element {
+    const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
+    const viewKey = `${room.roomId}|${effectiveAnchorEventId ?? ""}`;
+
+    return <TimelinePanelViewContent key={viewKey} room={room} anchoredEventId={anchoredEventId} highlightedEventId={highlightedEventId} />;
+}
+
+function TimelinePanelViewContent({
     room,
-    initialAnchorEventId,
+    anchoredEventId,
     highlightedEventId,
 }: TimelinePanelViewProps): JSX.Element {
+    const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const client: MatrixClient = useMatrixClientContext();
-
-    const vm = useMemo(
+    const vm = useCreateAutoDisposedViewModel(
         () =>
             new TimelinePanelViewModel({
                 client,
                 room,
-                initialEventId: initialAnchorEventId ?? highlightedEventId,
+                initialEventId: effectiveAnchorEventId,
             }),
-        [client, room, initialAnchorEventId, highlightedEventId],
     );
 
     const renderItem = useMemo(

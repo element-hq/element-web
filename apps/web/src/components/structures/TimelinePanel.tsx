@@ -1844,7 +1844,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 return (
                     <TimelinePanelView
                         room={room}
-                        initialAnchorEventId={this.props.eventId}
+                        anchoredEventId={this.props.eventId}
                         highlightedEventId={this.props.highlightedEventId}
                     />
                 );

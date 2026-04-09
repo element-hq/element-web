@@ -72,6 +72,9 @@ export interface TimelineViewActions {
     /** Request more items at the given end. */
     paginate(direction: "backward" | "forward"): void;
 
+    /** Report that the shared mount-time initial fill has completed. */
+    onInitialFillCompleted(): void;
+
     /** Report the currently visible range after every scroll. */
     onVisibleRangeChanged(range: VisibleRange): void;
 
