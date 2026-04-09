@@ -11,8 +11,8 @@ import { fn } from "storybook/test";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../../../../core/utils/LinkedText";
-import imageFile from "../../../../static/element.png";
-import imageFileWide from "../../../../static/wideImage.png";
+import imageFile from "../../../../../../static/element.png";
+import imageFileWide from "../../../../../../static/wideImage.png";
 
 export default {
     title: "UrlPreviewGroupView/LinkPreview",

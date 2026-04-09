@@ -8,8 +8,8 @@
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
-import imageFile from "../../../static/element.png";
-import tallImageFile from "../../../static/tallImage.png";
+import imageFile from "../../../../../static/element.png";
+import tallImageFile from "../../../../../static/tallImage.png";
 import type { Meta, StoryFn } from "@storybook/react-vite";
 import {
     UrlPreviewGroupView,
@@ -40,7 +40,7 @@ const UrlPreviewGroupViewWrapper = ({
 };
 
 export default {
-    title: "UrlPreviewGroupView",
+    title: "Event/UrlPreviewGroupView",
     component: UrlPreviewGroupViewWrapper,
     tags: ["autodocs"],
     args: {
