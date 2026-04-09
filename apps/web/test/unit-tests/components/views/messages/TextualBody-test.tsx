@@ -146,6 +146,28 @@ describe("<TextualBody />", () => {
         expect(content).toMatchSnapshot();
     });
 
+    it("keeps edited emote bodies inline with the sender", () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "winks",
+                msgtype: "m.emote",
+            },
+            event: true,
+        });
+        jest.spyOn(ev, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
+
+        const { container } = getComponent({ mxEvent: ev, replacingEventId: ev.getId() });
+
+        const annotated = container.querySelector(".mx_MEmoteBody > .mx_EventTile_annotatedInline");
+        expect(annotated).not.toBeNull();
+        expect(annotated?.tagName).toBe("DIV");
+    });
+
     it("renders m.notice correctly", () => {
         DMRoomMap.makeShared(defaultMatrixClient);
 
