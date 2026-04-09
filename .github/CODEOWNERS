@@ -6,7 +6,7 @@
 /apps/web/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
 /apps/web/test/unit-tests/SecurityManager-test.ts                                @element-hq/element-crypto-web-reviewers
 /apps/web/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
-/apps/web/test/unit-tests/async-components/views/dialogs/security/               @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/async-components/dialogs/security/                     @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
 /apps/web/test/unit-tests/components/views/dialogs/security/                     @element-hq/element-crypto-web-reviewers
 /apps/web/src/stores/SetupEncryptionStore.ts                                     @element-hq/element-crypto-web-reviewers
