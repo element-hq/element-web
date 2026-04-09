@@ -26,12 +26,7 @@ class TestTimelineViewModel
     public paginate = vi.fn();
     public onVisibleRangeChanged = vi.fn();
     public onAnchorReached = vi.fn();
-    public setFocus = vi.fn();
     public onStuckAtBottomChanged = vi.fn();
-
-    public getFirstItemIndex(): number {
-        return 100_000;
-    }
 }
 
 function makeSnapshot(partial?: Partial<TimelineViewSnapshot<TimelineItem>>): TimelineViewSnapshot<TimelineItem> {
@@ -41,13 +36,11 @@ function makeSnapshot(partial?: Partial<TimelineViewSnapshot<TimelineItem>>): Ti
             { key: "beta", kind: "event" },
             { key: "gamma", kind: "event" },
         ],
-        initialFill: "done",
         stuckAtBottom: true,
         canPaginateBackward: false,
         canPaginateForward: false,
         backwardPagination: "idle",
         forwardPagination: "idle",
-        focus: { focusedKey: null, containerFocused: false },
         pendingAnchor: null,
         ...partial,
     };
@@ -101,7 +94,6 @@ describe("TimelineView", () => {
     it("allows the initial backward probe while suppressing forward pagination during initial fill", async () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
-                initialFill: "filling",
                 canPaginateBackward: true,
                 canPaginateForward: true,
             }),

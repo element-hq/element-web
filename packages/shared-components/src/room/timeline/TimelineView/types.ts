@@ -42,26 +42,12 @@ export interface VisibleRange {
 // ─── Loading & error ───────────────────────────────────────────────
 
 export type PaginationState = "idle" | "loading" | "error";
-/** Mount-time viewport fill state for the initial timeline window. */
-export type InitialFillState = "filling" | "done";
-
-// ─── Focus state ───────────────────────────────────────────────────
-
-export interface FocusState {
-    /** The key of the item that currently holds keyboard focus, if any. */
-    focusedKey: string | null;
-    /** Whether the timeline container itself is focused. */
-    containerFocused: boolean;
-}
 
 // ─── Timeline view model contract ──────────────────────────────────
 
 export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem> {
     /** The ordered list of items to render. */
     items: TItem[];
-
-    /** Whether the initial window is still being backfilled to fill the viewport. */
-    initialFill: InitialFillState;
 
     /** Whether the viewport is pinned to the live (bottom) end. */
     stuckAtBottom: boolean;
@@ -74,9 +60,6 @@ export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem>
     /** Pagination state at each end of the loaded window. */
     backwardPagination: PaginationState;
     forwardPagination: PaginationState;
-
-    /** Current focus state for keyboard navigation and a11y. */
-    focus: FocusState;
 
     /**
      * If set, the container should scroll to this anchor on the
@@ -95,17 +78,8 @@ export interface TimelineViewActions {
     /** Report that the container has scrolled to the pending anchor. */
     onAnchorReached(): void;
 
-    /** Move keyboard focus to a specific item. */
-    setFocus(key: string | null): void;
-
     /** Report that the user has scrolled to or away from the bottom. */
     onStuckAtBottomChanged(stuckAtBottom: boolean): void;
-
-    /**
-     * Return the Virtuoso firstItemIndex for proper prepend handling.
-     * Starts high and decreases as backward pagination adds items.
-     */
-    getFirstItemIndex(): number;
 }
 
 export type TimelineViewModel<TItem extends TimelineItem = TimelineItem> = ViewModel<

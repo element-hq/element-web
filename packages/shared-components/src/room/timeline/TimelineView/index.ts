@@ -16,6 +16,4 @@ export type {
     NavigationAnchor,
     VisibleRange,
     PaginationState,
-    InitialFillState,
-    FocusState,
 } from "./types";

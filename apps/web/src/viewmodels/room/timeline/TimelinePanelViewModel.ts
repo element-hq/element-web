@@ -28,7 +28,6 @@ import type {
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 30;
 const WINDOW_LIMIT = 200;
-const MAX_INITIAL_FILL_ROUNDS = 3;
 
 const log = (...args: unknown[]): void => console.log("[TimelineVM]", ...args);
 type RoomTimelineListenerArgs = [
@@ -60,21 +59,15 @@ export class TimelinePanelViewModel
     private presenter: TimelinePanelPresenter;
     // TODO: Use visibleRange for read receipts
     public visibleRange: VisibleRange = { startIndex: 0, endIndex: 0 };
-    /** Number of backward paginations consumed by the mount-time fill loop. */
-    private initialFillRounds = 0;
-    /** Whether Virtuoso has emitted at least one visible range for this load. */
-    private sawInitialRange = false;
 
     public constructor(opts: TimelinePanelViewModelOpts) {
         super(opts, {
             items: [],
-            initialFill: "filling",
             stuckAtBottom: !opts.initialEventId,
             canPaginateBackward: false,
             canPaginateForward: false,
             backwardPagination: "idle",
             forwardPagination: "idle",
-            focus: { focusedKey: null, containerFocused: false },
             pendingAnchor: null,
         });
 
@@ -139,16 +132,6 @@ export class TimelinePanelViewModel
         });
     };
 
-    /**
-     * Track the Virtuoso firstItemIndex — starts at a high number so
-     * prepending items shifts it down without going negative.
-     */
-    private firstItemIndex = 100_000;
-
-    public getFirstItemIndex(): number {
-        return this.firstItemIndex;
-    }
-
     private async load(eventId?: string): Promise<void> {
         log("load() start, eventId:", eventId);
         this.snapshot.merge({
@@ -167,7 +150,6 @@ export class TimelinePanelViewModel
 
             this.snapshot.merge({
                 items,
-                initialFill: "filling",
                 canPaginateBackward,
                 canPaginateForward,
                 backwardPagination: "idle",
@@ -177,7 +159,6 @@ export class TimelinePanelViewModel
         } catch (e) {
             log("load() error:", e);
             this.snapshot.merge({
-                initialFill: "done",
                 canPaginateBackward: false,
                 canPaginateForward: false,
                 backwardPagination: "error",
@@ -202,14 +183,6 @@ export class TimelinePanelViewModel
             return;
         }
 
-        if (
-            direction === "backward" &&
-            this.snapshot.current.initialFill === "filling" &&
-            this.initialFillRounds === 0
-        ) {
-            this.initialFillRounds = 1;
-        }
-
         this.snapshot.merge({ [stateKey]: "loading" as PaginationState });
 
         const prevItemCount = this.snapshot.current.items.length;
@@ -217,24 +190,9 @@ export class TimelinePanelViewModel
             .paginate(dir, PAGINATE_SIZE)
             .then((success) => {
                 const items = this.buildItems();
-                const newCount = items.length - prevItemCount;
                 const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
                 const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
-                if (direction === "backward" && newCount > 0) {
-                    this.firstItemIndex -= newCount;
-                }
-                log(
-                    "paginate()",
-                    direction,
-                    "success:",
-                    success,
-                    "items:",
-                    prevItemCount,
-                    "->",
-                    items.length,
-                    "firstItemIndex:",
-                    this.firstItemIndex,
-                );
+                log("paginate()", direction, "success:", success, "items:", prevItemCount, "->", items.length);
                 this.snapshot.merge({
                     items,
                     canPaginateBackward,
@@ -254,17 +212,10 @@ export class TimelinePanelViewModel
 
     public onVisibleRangeChanged = (range: VisibleRange): void => {
         this.visibleRange = range;
-        this.maybeRunInitialFill(range);
     };
 
     public onAnchorReached = (): void => {
         this.snapshot.merge({ pendingAnchor: null });
-    };
-
-    public setFocus = (key: string | null): void => {
-        this.snapshot.merge({
-            focus: { ...this.snapshot.current.focus, focusedKey: key },
-        });
     };
 
     public onStuckAtBottomChanged = (stuckAtBottom: boolean): void => {
@@ -273,80 +224,5 @@ export class TimelinePanelViewModel
 
     private buildItems(): TimelineModelItem[] {
         return this.presenter.buildItems(this.timelineWindow.getEvents());
-    }
-
-    /**
-     * Startup fill state machine:
-     * 1. Wait for the first top-edge backward probe opportunity.
-     * 2. Keep paginating backward while the viewport remains top-bound.
-     * 3. Hand over to normal edge pagination once the viewport settles.
-     */
-    private maybeRunInitialFill(range: VisibleRange): void {
-        const snapshot = this.snapshot.current;
-        if (snapshot.initialFill !== "filling") {
-            return;
-        }
-
-        if (snapshot.backwardPagination === "loading") {
-            return;
-        }
-
-        if (this.shouldWaitForFirstBackwardProbe(snapshot)) {
-            return;
-        }
-
-        if (!this.sawInitialRange) {
-            this.sawInitialRange = true;
-            this.runBackwardStartupFillIfPossible(range, snapshot);
-            return;
-        }
-
-        if (!this.shouldContinueInitialFill(range, snapshot)) {
-            this.finishInitialFill();
-            return;
-        }
-
-        this.initialFillRounds += 1;
-        this.paginate("backward");
-    }
-
-    private shouldWaitForFirstBackwardProbe(snapshot: TimelineViewSnapshot<TimelineModelItem>): boolean {
-        return this.initialFillRounds === 0 && snapshot.canPaginateBackward && !snapshot.pendingAnchor;
-    }
-
-    private canRunBackwardStartupFill(range: VisibleRange, snapshot: TimelineViewSnapshot<TimelineModelItem>): boolean {
-        return (
-            snapshot.items.length > 0 &&
-            range.startIndex === 0 &&
-            snapshot.canPaginateBackward &&
-            this.initialFillRounds < MAX_INITIAL_FILL_ROUNDS &&
-            !snapshot.pendingAnchor
-        );
-    }
-
-    private runBackwardStartupFillIfPossible(
-        range: VisibleRange,
-        snapshot: TimelineViewSnapshot<TimelineModelItem>,
-    ): void {
-        if (this.canRunBackwardStartupFill(range, snapshot)) {
-            this.initialFillRounds += 1;
-            this.paginate("backward");
-            return;
-        }
-
-        this.finishInitialFill();
-    }
-
-    private shouldContinueInitialFill(range: VisibleRange, snapshot: TimelineViewSnapshot<TimelineModelItem>): boolean {
-        return (
-            range.startIndex === 0 &&
-            snapshot.canPaginateBackward &&
-            this.initialFillRounds < MAX_INITIAL_FILL_ROUNDS &&
-            !snapshot.pendingAnchor
-        );
-    }
-
-    private finishInitialFill(): void {
-        this.snapshot.merge({ initialFill: "done" });
     }
 }
