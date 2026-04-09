@@ -301,7 +301,9 @@ class InnerTextualBody extends React.Component<Props> {
         const isCaption = [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(
             content.msgtype as MsgType,
         );
-        const annotatedClassName = isEmote ? "mx_EventTile_annotated mx_EventTile_annotatedInline" : "mx_EventTile_annotated";
+        const annotatedClassName = isEmote
+            ? "mx_EventTile_annotated mx_EventTile_annotatedInline"
+            : "mx_EventTile_annotated";
 
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
