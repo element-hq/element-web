@@ -30,7 +30,8 @@
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
     },
     "left_panel": {
-        "open_dial_pad": "Ouvrir le pavé de numérotation"
+        "open_dial_pad": "Ouvrir le pavé de numérotation",
+        "separator_label": "Cliquez ou glissez pour agrandir"
     },
     "notifications": {
         "all_messages": "Tous les messages",
@@ -78,7 +79,9 @@
                 "one": "Ouvrir le salon %(roomName)s avec 1 message non lu.",
                 "other": "Ouvrir le salon %(roomName)s avec %(count)s message non lus."
             },
-            "unsent_message": "Ouvrir le salon %(roomName)s avec un message non envoyé."
+            "unsent_message": "Ouvrir le salon %(roomName)s avec un message non envoyé.",
+            "video_call": "Ouvrir le salon %(roomName)s contenant un appel vidéo",
+            "voice_call": "Ouvrir le salon %(roomName)s contenant un appel vocal."
         },
         "appearance": "Apparence",
         "collapse_filters": "Réduire la liste des filtres",

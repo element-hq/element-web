@@ -7,7 +7,7 @@
 
 import React, { type JSX, type ReactNode } from "react";
 
-import { useViewModel, type ViewModel } from "../../viewmodel";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
@@ -58,8 +58,11 @@ export interface RoomListViewActions {
     createChatRoom: () => void;
     /** Called to create a new room */
     createRoom: () => void;
-    /** Get view model for a specific room (virtualization API) */
-    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel;
+    /**
+     * Get view model for a specific room (virtualization API)
+     * Allow undefined to be returned if we don't have a view model for the room. In this case the room will not be rendered.
+     */
+    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel | undefined;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
     /** Get view model for a specific section header (virtualization API) */

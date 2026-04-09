@@ -44,6 +44,7 @@ export default defineConfig({
                     "@vector-im/compound-design-tokens": "compoundDesignTokens",
                     "@vector-im/compound-web": "compoundWeb",
                     "react-virtuoso": "reactVirtuoso",
+                    "react-resizable-panels": "reactResizablePanels",
                 },
             },
         },
@@ -52,7 +53,7 @@ export default defineConfig({
         dts({
             rollupTypes: true,
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.test.{ts,tsx}"],
+            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
             copyDtsFiles: true,
         }),
     ],

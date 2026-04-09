@@ -57,6 +57,12 @@ export class ResizerViewModel
     }, 50);
 
     public onLeftPanelResized = (newSize: number): void => {
+        // We don't want the panels to have fractional widths as that can cause blurry UI elements.
+        if (!Number.isInteger(newSize)) {
+            this.panelHandle?.resize(`${Math.round(newSize)}%`);
+            return;
+        }
+
         const isCollapsed = newSize === 0;
         // Store the size if the panel isn't collapsed.
         if (!isCollapsed) {
@@ -75,7 +81,8 @@ export class ResizerViewModel
 
     public onSeparatorClick = (): void => {
         if (this.panelHandle?.isCollapsed()) {
-            this.panelHandle.resize(`100%`);
+            const lastSize = SettingsStore.getValue("RoomList.panelSize");
+            this.panelHandle.resize(`${lastSize ?? 100}%`);
         }
     };
 
@@ -98,6 +105,6 @@ export class ResizerViewModel
     };
 
     public onBlur = (): void => {
-        if (this.getSnapshot().isFocusedViaKeyboard) this.snapshot.merge({ isFocusedViaKeyboard: false });
+        this.snapshot.merge({ isFocusedViaKeyboard: false });
     };
 }

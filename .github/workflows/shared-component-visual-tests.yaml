@@ -26,7 +26,7 @@ jobs:
                   persist-credentials: false
                   repository: element-hq/element-web
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
               with:
                   cache: "pnpm"
@@ -36,22 +36,10 @@ jobs:
               working-directory: packages/shared-components
               run: pnpm install --frozen-lockfile
 
-            - name: Get installed Playwright version
-              working-directory: packages/shared-components
-              id: playwright
-              run: echo "version=$(pnpm list @playwright/test --depth=0 --json | jq -r '.[].devDependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
-
-            - name: Cache playwright binaries
-              uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5
-              id: playwright-cache
+            - name: Setup playwright
+              uses: ./.github/actions/setup-playwright
               with:
-                  path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}-onlyshell
-
-            - name: Install Playwright browsers
-              working-directory: packages/shared-components
-              if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: "pnpm playwright install --with-deps --only-shell"
+                  write-cache: ${{ github.event_name != 'merge_group' }}
 
             - name: Run Visual tests
               working-directory: packages/shared-components

@@ -30,7 +30,6 @@
         "cancel": "취소",
         "change": "변경",
         "clear": "지우기",
-        "click": "클릭",
         "click_to_copy": "복사하려면 클릭하세요.",
         "close": "닫기",
         "collapse": "접기",
@@ -64,7 +63,6 @@
         "go": "이동",
         "go_back": "돌아가기",
         "got_it": "확인",
-        "hide": "숨기기",
         "hide_advanced": "고급 숨기기",
         "hold": "대기",
         "ignore": "무시",
@@ -746,6 +744,7 @@
         "category_other": "기타",
         "category_room": "방",
         "caution_colon": "주의:",
+        "checking_sticky_events_support": "고정 이벤트(Sticky events) 지원 여부 확인 중...",
         "client_versions": "클라이언트 버전",
         "crypto": {
             "4s_public_key_in_account_data": "계정 데이터",
@@ -804,13 +803,18 @@
         "edit_setting": "설정 편집",
         "edit_values": "값 편집",
         "empty_string": "<empty string>",
+        "error_sticky_duration_must_be_a_number": "stickyDuration 값은 숫자여야 합니다",
+        "error_sticky_duration_out_of_range": "stickyDuration 값은 0에서 36,000밀리초(1시간) 사이여야 합니다",
         "event_content": "이벤트 내용",
         "event_id": "이벤트 ID:%(eventId)s",
         "event_sent": "이벤트를 보냈습니다!",
         "event_type": "이벤트 종류",
+        "expired": "만료됨",
+        "expires_in": "만료까지",
         "explore_account_data": "계정 데이터 탐색",
         "explore_room_account_data": "방 계정 데이터 탐색",
         "explore_room_state": "방 상태 탐색",
+        "explore_sticky_state": "고정 상태(Sticky state) 탐색",
         "failed_to_find_widget": "이 위젯을 찾는 과정에서 오류가 발생했습니다.",
         "failed_to_load": "불러 오지 못했습니다",
         "failed_to_save": "설정 저장에 실패했습니다.",
@@ -824,6 +828,7 @@
         "main_timeline": "주 타임라인",
         "manual_device_verification": "수동 기기 검증",
         "no_receipt_found": "영수증을 찾을 수 없습니다",
+        "no_sticky_events": "이 방에 고정된 이벤트가 없습니다.",
         "notification_state": "알림 상태는 <strong>%(notificationState)s</strong>",
         "notifications_debug": "알림 디버그",
         "number_of_users": "사용자 수",
@@ -849,6 +854,7 @@
         "send_custom_account_data_event": "사용자 지정 계정 데이터 이벤트 전송",
         "send_custom_room_account_data_event": "사용자 지정 방 계정 데이터 이벤트 전송",
         "send_custom_state_event": "사용자 정의 상태 이벤트 전송",
+        "send_custom_sticky_event": "사용자 정의 고정 이벤트 보내기",
         "send_custom_timeline_event": "사용자 지정 타임라인 이벤트 보내기",
         "server_info": "서버 정보",
         "server_versions": "서버 버전",
@@ -867,6 +873,9 @@
             "other": "<%(count)s 스페이스>"
         },
         "state_key": "상태 키",
+        "sticky_duration": "고정 유지 시간 (ms)",
+        "sticky_events_not_supported": "현재 사용 중인 홈서버가 아직 고정 이벤트를 지원하지 않습니다.",
+        "sticky_key": "고정 키",
         "thread_root_id": "스레드 Root ID: %(threadRootId)s",
         "threads_timeline": "스레드 타임라인",
         "title": "개발자 도구",
@@ -953,7 +962,7 @@
         "event_shield_reason_unverified_identity": "검증되지 않은 사용자에 의해 암호화되었습니다.",
         "export_unsupported": "필요한 암호화 확장 기능을 브라우저가 지원하지 않습니다",
         "forgot_recovery_key": "복구 키를 잊으셨나요?",
-        "identity_needs_reset_description": "메시지 기록에 접근하려면 암호화 신원을 재설정해야 합니다.",
+        "identity_needs_reset_description": "대화 기록에 대한 접근 권한을 유지하려면 디지털 신원을 재설정해야 합니다.",
         "import_invalid_keyfile": "올바른 %(brand)s 열쇠 파일이 아닙니다",
         "import_invalid_passphrase": "인증 확인 실패: 비밀번호를 틀리셨나요?",
         "key_storage_out_of_sync": "키 저장소가 동기화되지 않았습니다.",
@@ -1341,9 +1350,6 @@
         "impossible_dialog_title": "통합이 허용되지 않습니다"
     },
     "invite": {
-        "ask_anyway_description": "아래에 나열된 매트릭스 ID에 대한 프로필을 찾을 수 없습니다 - 그래도 DM을 시작하시겠습니까?",
-        "ask_anyway_label": "그래도 DM 시작하기",
-        "ask_anyway_never_warn_label": "어쨌든 DM을 시작하고 다시는 경고하지 마세요",
         "email_caption": "이메일로 초대",
         "email_limit_one": "이메일 초대는 한 번에 하나씩만 보낼 수 있습니다",
         "email_use_default_is": "이메일로 초대하기 위해 ID 서버를 사용합니다. <default>기본 (%(defaultIdentityServerName)s)을(를) 사용하거나</default> <settings>설정</settings>에서 관리하세요.",
@@ -1542,6 +1548,7 @@
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
         "report_to_moderators": "관리자에게 신고하기",
         "report_to_moderators_description": "운영자가 관리하는 방에서는 '신고' 버튼으로 관리자에게 문제를 신고할 수 있습니다.",
+        "room_list_sections": "대화방 목록 섹션",
         "share_history_on_invite": "새 멤버에게 암호화 된 기록을 공유합니다.",
         "share_history_on_invite_description": "기록 공개 설정이 '공유'로 설정된 암호화된 방으로 사용자를 초대할 때, 해당 사용자와 암호화된 기록을 공유하고, 그러한 방에 초대받았을 때는 암호화된 기록을 수락하세요.",
         "share_history_on_invite_warning": "이 기능은 실험용 기능으로, 모든 보안 조치가 구현되어 있지는 않습니다. 실제 운영 계정에서는 활성화하지 마십시오.",
@@ -2112,6 +2119,11 @@
         "redacting_messages_status": {
             "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
         },
+        "section": {
+            "chats": "채팅",
+            "favourites": "즐겨찾기",
+            "low_priority": "낮은 우선순위"
+        },
         "show_less": "간단히 표시",
         "show_n_more": {
             "other": "%(count)s개 더 보기"
@@ -2313,6 +2325,7 @@
             "join_rule_invite_description": "초대한 경우에만 참여할 수 있습니다.",
             "join_rule_knock": "참가 요청",
             "join_rule_knock_description": "접근 권한이 부여되지 않으면 사람들은 참여할 수 없습니다.",
+            "join_rule_public": "누구나",
             "join_rule_public_description": "누구나 참여 가능",
             "join_rule_restricted": "스페이스 멤버 목록",
             "join_rule_restricted_description": "승인된 스페이스의 멤버라면 초대 없이도 참여할 수 있습니다. <a>스페이스 관리</a>",
@@ -3236,7 +3249,6 @@
         },
         "empty_description": "메시지 위에 마우스를 올렸을 때 \"%(replyInThread)s\"를 사용하세요.",
         "empty_title": "스레드는 대화를 주제 중심으로 유지하고 쉽게 추적할 수 있도록 도와줍니다.",
-        "error_start_thread_existing_relation": "기존 관계가 있는 이벤트로부터 스레드를 생성할 수 없습니다",
         "mark_all_read": "모두 읽음으로 표시",
         "my_threads": "내 스레드",
         "my_threads_description": "참여한 모든 스레드를 표시합니다",
@@ -3280,7 +3292,6 @@
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "복호화 중",
         "download_action_downloading": "다운로드 중",
         "download_failed": "다운로드 실패",
         "download_failed_description": "이 파일을 다운로드하는 동안 오류가 발생했습니다.",
@@ -3413,6 +3424,8 @@
             "accepted_invite": "%(targetName)s님이 초대를 수락했습니다.",
             "ban": "%(senderName)s님이 사용자를 차단했습니다",
             "ban_reason": "%(senderName)s님이 사용자를 차단했습니다: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s님이 <user/>님을 차단했습니다: %(reason)s",
+            "ban_spoiler": "%(senderName)s님이 <user/>님을 차단했습니다",
             "change_avatar": "%(senderName)s님이 프로필 사진을 변경했습니다",
             "change_name": "%(oldDisplayName)s님이 표시이름을 %(displayName)s(으)로 변경했습니다",
             "change_name_avatar": "%(oldDisplayName)s님이 디스플레이 이름과 프로필 사진을 변경했습니다",
@@ -3475,10 +3488,7 @@
             "removed": "%(senderName)s님이 제거한 %(widgetName)s 위젯"
         },
         "mab": {
-            "collapse_reply_chain": "인용문 접기",
             "copy_link_thread": "스레드 링크 복사",
-            "expand_reply_chain": "인용문 확장",
-            "label": "메시지 동작",
             "view_in_room": "방에서 보기"
         },
         "mjolnir": {

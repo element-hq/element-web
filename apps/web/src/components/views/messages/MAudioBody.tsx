@@ -19,8 +19,8 @@ import { type IBodyProps } from "./IBodyProps";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
-import { AudioPlayerViewModel } from "../../../viewmodels/audio/AudioPlayerViewModel";
-import { FileBodyViewFactory, renderMBody } from "./MBodyFactory";
+import { AudioPlayerViewModel } from "../../../viewmodels/room/timeline/event-tile/body/AudioPlayerViewModel";
+import { FileBodyFactory, renderMBody } from "./MBodyFactory";
 
 interface IState {
     error?: boolean;
@@ -111,7 +111,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         return (
             <span className="mx_MAudioBody">
                 <AudioPlayer playback={this.state.playback} mediaName={this.props.mxEvent.getContent().body} />
-                {this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyViewFactory)}
+                {this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory)}
             </span>
         );
     }

@@ -9,7 +9,7 @@ import fetchMock from "@fetch-mock/vitest";
 import { cleanup } from "@test-utils";
 import { afterEach } from "vitest";
 
-import { setLanguage } from "../../src/utils/i18n";
+import { setLanguage } from "../../src/core/i18n/i18n";
 import en from "../i18n/strings/en_EN.json";
 
 function setupLanguageMock(): void {

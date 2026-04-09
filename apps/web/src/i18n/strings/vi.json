@@ -29,7 +29,6 @@
         "cancel": "Huỷ bỏ",
         "change": "Thay đổi",
         "clear": "Xoá",
-        "click": "Nhấn",
         "click_to_copy": "Bấm để sao chép",
         "close": "Đóng",
         "collapse": "Tắt đi",
@@ -1069,9 +1068,6 @@
         "impossible_dialog_title": "Tích hợp không được phép"
     },
     "invite": {
-        "ask_anyway_description": "Không thể tìm hồ sơ cho định danh Matrix được liệt kê - bạn có muốn tiếp tục tạo phòng nhắn tin riêng?",
-        "ask_anyway_label": "Cứ tạo phòng nhắn tin riêng",
-        "ask_anyway_never_warn_label": "Cứ tạo phòng nhắn tin riêng và đừng cảnh báo tôi nữa",
         "email_caption": "Mời qua thư điện tử",
         "email_limit_one": "Chỉ có thể gửi một thư điện tử mời mỗi lần",
         "email_use_default_is": "Sử dụng máy chủ nhận dạng để mời qua thư điện tử. <default>Sử dụng mặc định (%(defaultIdentityServerName)s)</default> hoặc quản lý trong mục Cài đặt <settings>Settings</settings>.",
@@ -2602,7 +2598,6 @@
         },
         "creation_summary_dm": "%(creator)s đã tạo DM này.",
         "creation_summary_room": "%(creator)s đã tạo và định cấu hình phòng.",
-        "download_action_decrypting": "Đang giải mã",
         "download_action_downloading": "Đang tải xuống",
         "edits": {
             "tooltip_label": "Đã chỉnh sửa vào %(date)s. Bấm để xem các chỉnh sửa.",
@@ -2787,7 +2782,6 @@
         },
         "mab": {
             "copy_link_thread": "Sao chép liên kết vào chủ đề",
-            "label": "Hành động tin nhắn",
             "view_in_room": "Xem phòng này"
         },
         "mjolnir": {

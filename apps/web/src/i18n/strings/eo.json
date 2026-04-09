@@ -2043,7 +2043,6 @@
         },
         "creation_summary_dm": "%(creator)s kreis ĉi tiun individuan ĉambron.",
         "creation_summary_room": "%(creator)s kreis kaj agordis la ĉambron.",
-        "download_action_decrypting": "Malĉifrante",
         "edits": {
             "tooltip_label": "Redaktita je %(date)s. Klaku por vidi redaktojn.",
             "tooltip_sub": "Klaku por vidi redaktojn",
@@ -2211,9 +2210,6 @@
             "jitsi_updated": "Grupan vidvokon ĝisdatigis %(senderName)s",
             "modified": "Fenestraĵon %(widgetName)s ŝanĝis %(senderName)s",
             "removed": "Fenestraĵon %(widgetName)s forigis %(senderName)s"
-        },
-        "mab": {
-            "label": "Mesaĝaj agoj"
         },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s ĝisdatigis forbaran regulon, kiu akordis kun %(oldGlob)s, al akordo kun %(newGlob)s, pro %(reason)s",

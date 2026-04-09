@@ -5,7 +5,12 @@ process.env.GITHUB_ACTIONS = "1";
 
 export default {
     workspaces: {
-        "packages/shared-components": {},
+        "packages/shared-components": {
+            ignoreDependencies: [
+                // Used for vitest browser tests
+                "@playwright/test",
+            ],
+        },
         "packages/playwright-common": {
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
@@ -47,6 +52,15 @@ export default {
                 "@types/sdp-transform",
             ],
         },
+        "apps/desktop": {
+            entry: ["src/preload.cts", "electron-builder.ts", "scripts/**", "hak/**"],
+            project: ["**/*.{js,ts}"],
+            ignoreDependencies: [
+                // Brought in via hak scripts
+                "matrix-seshat",
+            ],
+            ignoreBinaries: ["scripts/in-docker.sh"],
+        },
         ".": {
             entry: ["scripts/**", "docs/**"],
         },
@@ -65,6 +79,9 @@ export default {
     },
     nx: {
         config: ["{nx,package,project}.json", "{apps,packages,modules}/**/{package,project}.json"],
+    },
+    playwright: {
+        config: ["playwright.config.ts", "playwright-merge.config.ts"],
     },
     tags: ["-knipignore"],
 } satisfies KnipConfig;

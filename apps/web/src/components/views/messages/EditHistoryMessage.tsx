@@ -6,22 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef } from "react";
+import React, { createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { EventContentBodyView } from "@element-hq/web-shared-components";
+import { ActionBarView, EventContentBodyView } from "@element-hq/web-shared-components";
 
+import { EditHistoryActionBarViewModel } from "../../../viewmodels/message-body/EditHistoryActionBarViewModel";
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
-import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import RedactedBody from "./RedactedBody";
-import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { RedactedBodyFactory } from "./MBodyFactory";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -47,6 +46,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
 
     private content = createRef<HTMLDivElement>();
     private EventContentBodyViewModel: EventContentBodyViewModel;
+    private editHistoryActionBarViewModel: EditHistoryActionBarViewModel;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -72,6 +72,13 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             linkify: true,
             client: cli,
         });
+
+        this.editHistoryActionBarViewModel = new EditHistoryActionBarViewModel({
+            canRemove: !props.mxEvent.isRedacted() && !props.isBaseEvent && canRedact,
+            showViewSource: SettingsStore.getValue("developerMode"),
+            onRemoveClick: this.onRedactClick,
+            onViewSourceClick: this.onViewSourceClick,
+        });
     }
 
     public componentDidUpdate(prevProps: IProps): void {
@@ -79,6 +86,13 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             const mxEventContent = getReplacedContent(this.props.mxEvent);
             this.EventContentBodyViewModel.setEventContent(this.props.mxEvent, mxEventContent);
         }
+
+        this.editHistoryActionBarViewModel.setProps({
+            canRemove: !this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact,
+            showViewSource: SettingsStore.getValue("developerMode"),
+            onRemoveClick: this.onRedactClick,
+            onViewSourceClick: this.onViewSourceClick,
+        });
     }
 
     private onAssociatedStatusChanged = (): void => {
@@ -116,34 +130,20 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const event = this.props.mxEvent;
         event.localRedactionEvent()?.off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
         this.EventContentBodyViewModel.dispose();
+        this.editHistoryActionBarViewModel.dispose();
     }
 
     private renderActionBar(): React.ReactNode {
-        // hide the button when already redacted
-        let redactButton: JSX.Element | undefined;
-        if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
-            redactButton = <AccessibleButton onClick={this.onRedactClick}>{_t("action|remove")}</AccessibleButton>;
-        }
+        this.editHistoryActionBarViewModel.setProps({
+            canRemove: !this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact,
+            showViewSource: SettingsStore.getValue("developerMode"),
+            onRemoveClick: this.onRedactClick,
+            onViewSourceClick: this.onViewSourceClick,
+        });
 
-        let viewSourceButton: JSX.Element | undefined;
-        if (SettingsStore.getValue("developerMode")) {
-            viewSourceButton = (
-                <AccessibleButton onClick={this.onViewSourceClick}>{_t("action|view_source")}</AccessibleButton>
-            );
-        }
-
-        if (!redactButton && !viewSourceButton) {
-            // Hide the empty MessageActionBar
-            return null;
-        } else {
-            // disabled remove button when not allowed
-            return (
-                <div className="mx_MessageActionBar">
-                    {redactButton}
-                    {viewSourceButton}
-                </div>
-            );
-        }
+        return (
+            <ActionBarView vm={this.editHistoryActionBarViewModel} className="mx_ThreadActionBar mx_HistoryActionBar" />
+        );
     }
 
     public render(): React.ReactNode {
@@ -151,7 +151,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
-            contentContainer = <RedactedBody mxEvent={this.props.mxEvent} />;
+            contentContainer = <RedactedBodyFactory mxEvent={this.props.mxEvent} />;
         } else {
             let contentElements;
             if (this.props.previousEdit) {

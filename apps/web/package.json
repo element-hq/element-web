@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.12.12",
+    "version": "1.12.15",
     "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
@@ -63,11 +63,11 @@
         "css-tree": "^3.0.0",
         "diff-dom": "^5.0.0",
         "diff-match-patch": "^1.0.5",
-        "domutils": "^3.2.2",
+        "domutils": "^4.0.0",
         "emojibase-regex": "^17.0.0",
         "escape-html": "^1.0.3",
         "file-saver": "^2.0.5",
-        "filesize": "11.0.13",
+        "filesize": "11.0.15",
         "github-markdown-css": "^5.5.1",
         "glob-to-regexp": "^0.4.1",
         "highlight.js": "^11.3.1",
@@ -78,7 +78,7 @@
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
         "katex": "^0.16.0",
-        "lodash": "npm:lodash-es@^4.17.21",
+        "lodash": "npm:lodash-es@4.18.1",
         "maplibre-gl": "^5.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
@@ -89,7 +89,7 @@
         "opus-recorder": "^8.0.3",
         "pako": "^2.0.3",
         "png-chunks-extract": "^1.0.0",
-        "posthog-js": "1.360.2",
+        "posthog-js": "1.364.7",
         "qrcode": "1.5.4",
         "re-resizable": "6.11.2",
         "react": "catalog:",
@@ -101,7 +101,7 @@
         "react-transition-group": "^4.4.1",
         "rfc4648": "^1.4.0",
         "sanitize-filename": "^1.6.3",
-        "sanitize-html": "2.17.1",
+        "sanitize-html": "2.17.2",
         "tar-js": "^0.3.0",
         "ua-parser-js": "1.0.40",
         "uuid": "^13.0.0",
@@ -203,7 +203,7 @@
         "jest-raw-loader": "^1.0.1",
         "jsqr": "^1.4.0",
         "matrix-web-i18n": "catalog:",
-        "mini-css-extract-plugin": "2.10.1",
+        "mini-css-extract-plugin": "2.10.2",
         "modernizr": "^3.12.0",
         "playwright-core": "catalog:",
         "postcss": "8.5.8",
@@ -246,6 +246,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+    "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
     "private": true
 }

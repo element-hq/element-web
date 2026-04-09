@@ -9,11 +9,11 @@ import React, { memo, type JSX, type FocusEvent, type MouseEventHandler } from "
 import ChevronRightIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-right";
 import classNames from "classnames";
 
-import { useViewModel, type ViewModel } from "../../viewmodel";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
-import { Flex } from "../../utils/Flex";
-import { useI18n } from "../../utils/i18nContext";
-import { getGroupHeaderAccessibleProps } from "../../utils/VirtualizedList";
+import { Flex } from "../../core/utils/Flex";
+import { useI18n } from "../../core/i18n/i18nContext";
+import { getGroupHeaderAccessibleProps } from "../../core/VirtualizedList";
 
 /**
  * The observable state snapshot for a room list section header.
@@ -25,6 +25,8 @@ export interface RoomListSectionHeaderViewSnapshot {
     title: string;
     /** Whether the section is currently expanded. */
     isExpanded: boolean;
+    /** Whether the section is unread (has any unread rooms) */
+    isUnread: boolean;
 }
 
 /**
@@ -89,7 +91,7 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     roomCountInSection,
 }: Readonly<RoomListSectionHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { id, title, isExpanded } = useViewModel(vm);
+    const { id, title, isExpanded, isUnread } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
     return (
@@ -104,12 +106,17 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                     [styles.firstHeader]: sectionIndex === 0,
                     // If the section is collapsed and it's the last one
                     [styles.lastHeader]: !isExpanded && isLastSection,
+                    [styles.unread]: isUnread,
                 })}
                 onClick={vm.onClick}
                 aria-expanded={isExpanded}
                 onFocus={(e) => onFocus(id, e)}
                 tabIndex={isFocused ? 0 : -1}
-                aria-label={_t("room_list|section_header|toggle", { section: title })}
+                aria-label={
+                    isUnread
+                        ? _t("room_list|section_header|toggle_unread", { section: title })
+                        : _t("room_list|section_header|toggle", { section: title })
+                }
             >
                 <Flex className={styles.container} align="center" gap="var(--cpd-space-0-5x)">
                     <ChevronRightIcon width="24px" height="24px" fill="var(--cpd-color-icon-secondary)" />

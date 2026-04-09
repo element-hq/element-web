@@ -31,6 +31,7 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
 import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
+import * as EventTileFactory from "../../../../../src/events/EventTileFactory";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
@@ -42,6 +43,7 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -94,6 +96,7 @@ describe("EventTile", () => {
 
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
 
         mxEvent = mkMessage({
             room: room.roomId,
@@ -104,7 +107,7 @@ describe("EventTile", () => {
     });
 
     afterEach(() => {
-        jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
+        jest.restoreAllMocks();
     });
 
     describe("EventTile thread summary", () => {
@@ -198,6 +201,19 @@ describe("EventTile", () => {
                 expect(screen.getByText("Pinned message")).toBeInTheDocument();
             },
         );
+
+        it("renders the tile error fallback when tile rendering throws", async () => {
+            jest.spyOn(console, "error").mockImplementation(() => {});
+            jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
+                throw new Error("Boom");
+            });
+
+            getComponent();
+
+            await waitFor(() => {
+                expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
+            });
+        });
     });
 
     describe("EventTile in the right panel", () => {
@@ -218,6 +234,22 @@ describe("EventTile", () => {
         it("renders the sender for the thread list", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
             expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent("@alice:example.org");
+        });
+
+        it("renders the shared redacted body for thread previews", () => {
+            jest.spyOn(mxEvent, "isRedacted").mockReturnValue(true);
+            jest.spyOn(mxEvent, "getUnsigned").mockReturnValue({
+                redacted_because: {
+                    sender: "@moderator:example.org",
+                    origin_server_ts: Date.UTC(2022, 10, 17, 15, 58, 32),
+                },
+            } as any);
+
+            const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
+            const redactedBody = container.querySelector(".mx_RedactedBody");
+
+            expect(redactedBody).not.toBeNull();
+            expect(redactedBody).toHaveTextContent("Message deleted by @moderator:example.org");
         });
 
         it.each([
