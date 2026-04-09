@@ -55,5 +55,10 @@ export function MessageEventView({ vm, className, children, caption }: Readonly<
         return <>{children}</>;
     }
 
-    return <div className={classNames(styles.content, className)}>{children}{caption}</div>;
+    return (
+        <div className={classNames(styles.content, className)}>
+            {children}
+            {caption}
+        </div>
+    );
 }

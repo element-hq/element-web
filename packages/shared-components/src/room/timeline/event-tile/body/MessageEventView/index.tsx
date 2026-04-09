@@ -5,8 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export {
-    MessageEventView,
-    type MessageEventViewSnapshot,
-    type MessageEventViewModel,
-} from "./MessageEventView";
+export { MessageEventView, type MessageEventViewSnapshot, type MessageEventViewModel } from "./MessageEventView";
