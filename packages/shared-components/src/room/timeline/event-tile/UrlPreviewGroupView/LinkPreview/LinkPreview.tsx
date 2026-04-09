@@ -112,7 +112,7 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             )}
             <div className={classNames(styles.textContent, useInline && styles.inline)}>
                 {preview.author && (
-                    <Text as="span" size="lg" weight="semibold">
+                    <Text as="span" size="md" weight="semibold">
                         {preview.author}
                     </Text>
                 )}

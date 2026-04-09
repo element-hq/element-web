@@ -55,7 +55,11 @@ button.preview {
         }
 
         .siteAvatar {
-            margin: auto;
+            margin: auto 0;
+        }
+
+        .siteName {
+            margin: 0;
         }
     }
 

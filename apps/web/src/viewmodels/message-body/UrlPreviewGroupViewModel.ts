@@ -107,7 +107,7 @@ export class UrlPreviewGroupViewModel
                 ? response["og:site_name"].trim()
                 : new URL(link).hostname;
 
-        // If there is no title, or the title matches the description then only render one.
+        // If there is no title, use the description as the title.
         if (!title && description) {
             title = description;
             description = undefined;
@@ -117,6 +117,7 @@ export class UrlPreviewGroupViewModel
             title = link;
         }
 
+        // If the description matches the site name, don't bother with a description.
         if (description && description.toLowerCase() === siteName.toLowerCase()) {
             description = undefined;
         }
