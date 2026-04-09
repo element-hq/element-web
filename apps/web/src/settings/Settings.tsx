@@ -328,6 +328,10 @@ export interface Settings {
     }>;
     "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
+    /**
+     * This is the 2019-era low bandwidth that deals with disabling features of the
+     * client. It does NOT make any API or spec changes.
+     */
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
