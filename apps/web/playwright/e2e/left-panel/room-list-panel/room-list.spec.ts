@@ -328,6 +328,7 @@ test.describe("Room list", () => {
 
             const roomListView = getRoomList(page);
             const videoRoom = roomListView.getByRole("option", { name: "video room" });
+            await expect(videoRoom).toBeFocused();
 
             // focus the user menu to avoid to have hover decoration
             await page.getByRole("button", { name: "User menu" }).focus();
