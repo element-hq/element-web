@@ -47,19 +47,23 @@ export interface UrlPreview {
          */
         fileSize?: number;
         /**
-         * The width of the thumbnail. Must not exceed 100px.
+         * The width of the thumbnail.
          */
         width?: number;
         /**
-         * The height of the thumbnail. Must not exceed 100px.
+         * The height of the thumbnail.
          */
         height?: number;
+        /**
+         * Alt text for the image
+         */
+        alt?: string;
     };
 
-    author?: {
-        name: string;
-        username?: string;
-    };
+    /**
+     * Author of the content, if specified.
+     */
+    author?: string;
 
     /**
      * Is the media playable.

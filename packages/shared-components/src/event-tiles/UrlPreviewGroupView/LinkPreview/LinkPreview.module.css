@@ -5,13 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.thumbnail {
-    /* Thumbnails are always limited to a maxiumum of 100px */
-    max-height: 200px;
-    /* Ensure we don't stretch the image */
-    object-fit: cover;
-}
-
 .preview {
     display: flex;
     position: relative;
@@ -20,6 +13,11 @@
     background-size: cover;
     background-position: center;
     border: none;
+    padding: 0;
+    > img {
+        width: 100%;
+        object-fit: cover;
+    }
     .playButton[data-kind="primary"] {
         padding: 0;
         width: 50px;
@@ -32,18 +30,6 @@
             color: var(--cpd-color-gray-400);
         }
     }
-}
-
-.link {
-    color: var(--cpd-color-text-link-external);
-    text-decoration-line: none;
-    width: 100%;
-    height: 50px;
-    aspect-ratio: 1; /* will make width equal to height (500px container) */
-    object-fit: cover; /* use the one you need */
-    border-radius: 6px;
-    margin-top: auto;
-    margin-bottom: auto;
 }
 
 .container {
@@ -113,10 +99,5 @@
         vertical-align: middle;
         display: flex;
         gap: var(--cpd-space-1-5x);
-    }
-
-    .author {
-        display: flex;
-        flex-direction: column;
     }
 }

@@ -104,10 +104,7 @@ Social.args = {
     link: "https://matrix.org",
     siteName: "socialsite.example.org",
     title: "Test user (@test)",
-    author: {
-        username: "@test",
-        name: "Test user",
-    },
+    author: "Test user (@test)",
 };
 
 export const SocialWithImage = Template.bind({});
@@ -116,10 +113,7 @@ SocialWithImage.args = {
     title: "Test user (@test)",
     link: "https://matrix.org",
     siteName: "socialsite.example.org",
-    author: {
-        username: "@test",
-        name: "Test user",
-    },
+    author: "Test user (@test)",
     image: {
         imageThumb: imageFileWide,
         imageFull: imageFileWide,

@@ -6,7 +6,7 @@
  */
 
 import React, { type MouseEventHandler, type JSX, useCallback, useMemo } from "react";
-import { Tooltip, Text, Avatar, IconButton, Button } from "@vector-im/compound-web";
+import { Tooltip, Text, Avatar, Button } from "@vector-im/compound-web";
 import PlaySolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
 import classNames from "classnames";
 
@@ -76,13 +76,9 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             );
         } else {
             img = (
-                <button
-                    style={{
-                        backgroundImage: `image-set(url('${preview.image.imageThumb}') 1x, url('${preview.image.imageFull}') 2x)`,
-                    }}
-                    className={styles.preview}
-                    onClick={onImageClickHandler}
-                />
+                <button className={styles.preview} onClick={onImageClickHandler}>
+                    <img src={preview.image.imageThumb} alt={preview.image.alt} title={preview.image.alt} />
+                </button>
             );
         }
     }
@@ -114,14 +110,9 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
             )}
             <div className={classNames(styles.textContent)}>
                 {preview.author && (
-                    <div className={styles.author}>
-                        <Text as="span" size="md" weight="semibold">
-                            {preview.author.username}
-                        </Text>
-                        <Text as="span" size="sm" weight="regular">
-                            {preview.author.name}
-                        </Text>
-                    </div>
+                    <Text as="span" size="md" weight="semibold">
+                        {preview.author}
+                    </Text>
                 )}
                 {anchor && tooltipCaption ? <Tooltip label={tooltipCaption}>{anchor}</Tooltip> : anchor}
                 <LinkedText type="body" size="md" className={styles.description}>

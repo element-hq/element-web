@@ -7,8 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import "jest-canvas-mock";
+import { writeFile } from "fs/promises";
 
-import Favicon from "../../src/favicon";
+import Favicon, { BadgeOverlayRenderer } from "../../src/favicon";
 
 jest.useFakeTimers();
 
@@ -87,5 +88,21 @@ describe("Favicon", () => {
         img.onload();
 
         expect(favicon["canvas"].height).toBe(512);
+    });
+});
+
+describe.only("BadgeOverlayRenderer", () => {
+    beforeEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it("should create a link element if one doesn't yet exist", async () => {
+        const renderer = new BadgeOverlayRenderer();
+        console.log("Beep1");
+        const buffer = await renderer.render("1");
+        console.log("Beep2");
+        if (buffer) {
+            await writeFile(Buffer.from(buffer), "/tmp/badge.png");
+        }
     });
 });

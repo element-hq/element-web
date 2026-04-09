@@ -2,10 +2,13 @@
 
 exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:description': 'A description',\\n  'og:title': ''\\n} 1`] = `
 {
+  "author": undefined,
   "description": undefined,
   "image": undefined,
   "link": "https://example.org",
+  "playable": false,
   "showTooltipOnLink": undefined,
+  "siteIcon": undefined,
   "siteName": undefined,
   "title": "A description",
 }
@@ -13,10 +16,13 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
 
 exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:site_name': 'Site name',\\n  'og:title': ''\\n} 1`] = `
 {
+  "author": undefined,
   "description": undefined,
   "image": undefined,
   "link": "https://example.org",
+  "playable": false,
   "showTooltipOnLink": undefined,
+  "siteIcon": undefined,
   "siteName": undefined,
   "title": "Site name",
 }
@@ -24,10 +30,13 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
 
 exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Basic title'\\n} 1`] = `
 {
+  "author": undefined,
   "description": undefined,
   "image": undefined,
   "link": "https://example.org",
+  "playable": false,
   "showTooltipOnLink": undefined,
+  "siteIcon": undefined,
   "siteName": undefined,
   "title": "Basic title",
 }
@@ -35,27 +44,34 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
 
 exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Cool blog',\\n  'og:site_name': 'Cool site'\\n} 1`] = `
 {
+  "author": undefined,
   "description": undefined,
   "image": undefined,
   "link": "https://example.org",
+  "playable": false,
   "showTooltipOnLink": undefined,
+  "siteIcon": undefined,
   "siteName": "Cool site",
   "title": "Cool blog",
 }
 `;
 
-exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Media test',\\n  'og:image:height': '500',\\n  'og:image:width': 500,\\n  'matrix:image:size': 1024,\\n  'og:image': 'mxc://example.org/abc'\\n} 1`] = `
+exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses {\\n  'og:url': 'https://example.org',\\n  'og:type': 'document',\\n  'og:title': 'Media test',\\n  'og:image:height': '500',\\n  'og:image:width': 500,\\n  'matrix:image:size': 10000,\\n  'og:image': 'mxc://example.org/abc'\\n} 1`] = `
 {
+  "author": undefined,
   "description": undefined,
   "image": {
-    "fileSize": 1024,
-    "height": 100,
+    "alt": undefined,
+    "fileSize": 10000,
+    "height": 478,
     "imageFull": "https://example.org/image/src",
     "imageThumb": "https://example.org/image/thumb",
-    "width": 100,
+    "width": 478,
   },
   "link": "https://example.org",
+  "playable": false,
   "showTooltipOnLink": undefined,
+  "siteIcon": undefined,
   "siteName": undefined,
   "title": "Media test",
 }
@@ -67,10 +83,13 @@ exports[`UrlPreviewGroupViewModel should deduplicate multiple versions of the sa
   "overPreviewLimit": false,
   "previews": [
     {
+      "author": undefined,
       "description": "This is a description",
       "image": undefined,
       "link": "https://example.org",
+      "playable": false,
       "showTooltipOnLink": undefined,
+      "siteIcon": undefined,
       "siteName": "Example.org",
       "title": "This is an example!",
     },
@@ -96,10 +115,13 @@ exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the us
   "overPreviewLimit": false,
   "previews": [
     {
+      "author": undefined,
       "description": "This is a description",
       "image": undefined,
       "link": "https://example.org",
+      "playable": false,
       "showTooltipOnLink": undefined,
+      "siteIcon": undefined,
       "siteName": "Example.org",
       "title": "This is an example!",
     },
@@ -135,10 +157,13 @@ exports[`UrlPreviewGroupViewModel should ignore media when mediaVisible is false
   "overPreviewLimit": false,
   "previews": [
     {
+      "author": undefined,
       "description": undefined,
       "image": undefined,
       "link": "https://example.org",
+      "playable": false,
       "showTooltipOnLink": undefined,
+      "siteIcon": undefined,
       "siteName": undefined,
       "title": "This is an example!",
     },
@@ -154,16 +179,20 @@ exports[`UrlPreviewGroupViewModel should preview a URL with media 1`] = `
   "overPreviewLimit": false,
   "previews": [
     {
+      "author": undefined,
       "description": undefined,
       "image": {
+        "alt": undefined,
         "fileSize": 10000,
-        "height": 100,
+        "height": 128,
         "imageFull": "https://example.org/image/src",
         "imageThumb": "https://example.org/image/thumb",
-        "width": 100,
+        "width": 128,
       },
       "link": "https://example.org",
+      "playable": false,
       "showTooltipOnLink": undefined,
+      "siteIcon": undefined,
       "siteName": undefined,
       "title": "This is an example!",
     },
@@ -179,10 +208,13 @@ exports[`UrlPreviewGroupViewModel should preview a single valid URL 1`] = `
   "overPreviewLimit": false,
   "previews": [
     {
+      "author": undefined,
       "description": "This is a description",
       "image": undefined,
       "link": "https://example.org",
+      "playable": false,
       "showTooltipOnLink": undefined,
+      "siteIcon": undefined,
       "siteName": "Example.org",
       "title": "This is an example!",
     },

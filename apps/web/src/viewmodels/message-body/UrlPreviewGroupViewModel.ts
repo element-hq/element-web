@@ -34,8 +34,9 @@ export interface UrlPreviewGroupViewModelProps {
 }
 
 export const MAX_PREVIEWS_WHEN_LIMITED = 2;
-export const PREVIEW_WIDTH = 478;
-export const PREVIEW_HEIGHT = 200;
+export const PREVIEW_WIDTH_PX = 478;
+export const PREVIEW_HEIGHT_PX = 200;
+export const MIN_PREVIEW_PX = 96;
 export const MIN_IMAGE_SIZE_BYTES = 8192;
 
 export enum PreviewVisibility {
@@ -124,24 +125,47 @@ export class UrlPreviewGroupViewModel
     }
 
     /**
-     * Calculate the best possible title from an opengraph response.
+     * Calculate the best possible author from an opengraph response.
      * @param response The opengraph response
-     * @param link The link being used to preview.
-     * @returns The title value.
+     * @returns The author value, or undefined if no valid author could be found.
      */
     private static getAuthorFromResponse(response: IPreviewUrlResponse): UrlPreview["author"] {
+        let calculatedAuthor: string | undefined;
         if (response["og:type"] === "article") {
             if (typeof response["article:author"] === "string" && response["article:author"]) {
-                return {
-                    name: response["article:author"],
-                };
+                calculatedAuthor = response["article:author"];
             }
+            // Otherwise fall through to check the profile.
         }
         if (typeof response["profile:username"] === "string" && response["profile:username"]) {
-            return {
-                name: response["profile:username"],
-            };
+            calculatedAuthor = response["profile:username"];
         }
+        if (calculatedAuthor && URL.canParse(calculatedAuthor)) {
+            // Some sites return URLs as authors which doesn't look good in Element, so discard it.
+            return;
+        }
+        return calculatedAuthor;
+    }
+
+    /**
+     * Calculate whether the provided image from the preview response is an full size preview or
+     * a site icon.
+     * @returns `true` if the image should be used as a preview, otherwise `false`
+     */
+    private static isImagePreview(width?: number, height?: number, bytes?: number): boolean {
+        // We can't currently distinguish from a preview image and a favicon. Neither OpenGraph nor Matrix
+        // have a clear distinction, so we're using a heuristic here to check the dimensions & size of the file and
+        // deciding whether to render it as a full preview or icon.
+        if (width && width < MIN_PREVIEW_PX) {
+            return false;
+        }
+        if (height && height < MIN_PREVIEW_PX) {
+            return false;
+        }
+        if (bytes && bytes < MIN_IMAGE_SIZE_BYTES) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -315,15 +339,14 @@ export class UrlPreviewGroupViewModel
             const declaredHeight = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:height"]);
             const declaredWidth = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
             const imageSize = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]);
+            const alt = typeof preview["og:image:alt"] === "string" ? preview["og:image:alt"] : undefined;
 
-            // We can't currently distinguish from a preview image and a favicon. Neither OpenGraph nor Matrix
-            // have a clear distinction, so we're using a heuristic here to check the size of the file and
-            // deciding whether to render it as a full preview or icon.
-            const isIcon = imageSize && imageSize < MIN_IMAGE_SIZE_BYTES;
-            if (!isIcon) {
-                const width = Math.min(declaredWidth ?? PREVIEW_WIDTH, PREVIEW_WIDTH);
-                const height = thumbHeight(width, declaredHeight, PREVIEW_WIDTH, PREVIEW_WIDTH) ?? PREVIEW_WIDTH;
-                const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH, PREVIEW_HEIGHT, "scale");
+            const isImagePreview = UrlPreviewGroupViewModel.isImagePreview(declaredWidth, declaredHeight, imageSize);
+            if (isImagePreview) {
+                const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
+                const height =
+                    thumbHeight(width, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
+                const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "crop");
                 // No thumb, no preview.
                 if (thumb) {
                     image = {
@@ -332,6 +355,7 @@ export class UrlPreviewGroupViewModel
                         width,
                         height,
                         fileSize: UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
+                        alt,
                     };
                 }
             } else if (media.srcHttp) {
