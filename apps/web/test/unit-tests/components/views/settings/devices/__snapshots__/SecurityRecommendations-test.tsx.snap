@@ -9,11 +9,11 @@ exports[`<SecurityRecommendations /> renders both cards when user has both unver
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Security recommendations
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_description"
@@ -141,11 +141,11 @@ exports[`<SecurityRecommendations /> renders inactive devices section when user 
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Security recommendations
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_description"
@@ -273,11 +273,11 @@ exports[`<SecurityRecommendations /> renders unverified devices section when use
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Security recommendations
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_description"

@@ -2,6 +2,13 @@ name: CD # Continuous Delivery
 on:
     push:
         branches: [master, staging, develop]
+        paths:
+            - "**/Dockerfile"
+            - "**/dockerbuild"
+            - "**/docker"
+            - "**/docker-*"
+            - "pnpm-lock.yaml"
+
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
 
 permissions: {}

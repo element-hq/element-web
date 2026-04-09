@@ -828,8 +828,8 @@
         "invalid_device_key_id": "Invalid device key ID",
         "invalid_json": "Doesn't look like valid JSON.",
         "level": "Level",
-        "low_bandwidth_mode": "Low bandwidth mode",
-        "low_bandwidth_mode_description": "Requires compatible homeserver.",
+        "low_bandwidth_mode": "Disable bandwidth-heavy features",
+        "low_bandwidth_mode_description": "Disables encryption, presence, avatars, read receipts, and typing notifications",
         "main_timeline": "Main timeline",
         "manual_device_verification": "Manual device verification",
         "no_receipt_found": "No receipt found",
@@ -1362,9 +1362,6 @@
         "impossible_dialog_title": "Integrations not allowed"
     },
     "invite": {
-        "ask_anyway_description": "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?",
-        "ask_anyway_label": "Start DM anyway",
-        "ask_anyway_never_warn_label": "Start DM anyway and never warn me again",
         "email_caption": "Invite by email",
         "email_limit_one": "Invites by email can only be sent one at a time",
         "email_use_default_is": "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",

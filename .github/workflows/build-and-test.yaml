@@ -153,27 +153,11 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Get installed Playwright version
-              id: playwright
-              run: echo "version=$(pnpm --silent -- playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
-
-            - name: Cache playwright binaries
-              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
-              id: playwright-cache
+            - name: Setup playwright
+              uses: ./.github/actions/setup-playwright
               with:
-                  path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}
-
-            - name: Install Playwright browsers
-              if: steps.playwright-cache.outputs.cache-hit != 'true'
-              working-directory: apps/web
-              run: pnpm playwright install --with-deps --no-shell
-
-            - name: Install system dependencies for WebKit
-              # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
-              if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
-              working-directory: apps/web
-              run: pnpm playwright install-deps webkit
+                  needs-webkit: ${{ matrix.project == 'WebKit' }}
+                  write-cache: ${{ github.event_name != 'merge_group' }}
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests

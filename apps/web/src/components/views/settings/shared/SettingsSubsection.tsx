@@ -7,10 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type HTMLAttributes } from "react";
+import React, { type HTMLAttributes, useContext } from "react";
 import { Form, Separator } from "@vector-im/compound-web";
 
 import { SettingsSubsectionHeading } from "./SettingsSubsectionHeading";
+import { HeadingLevelContext } from "./SettingsSection.tsx";
 
 export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> {
     heading?: string | React.ReactNode;
@@ -45,6 +46,8 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
     formWrap,
     ...rest
 }) => {
+    const level = useContext(HeadingLevelContext);
+
     const content = (
         <div
             {...rest}
@@ -52,7 +55,11 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
                 mx_SettingsSubsection_newUi: !legacy,
             })}
         >
-            {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
+            {typeof heading === "string" ? (
+                <SettingsSubsectionHeading heading={heading} as={`h${level}`} />
+            ) : (
+                <>{heading}</>
+            )}
             {!!description && (
                 <div className="mx_SettingsSubsection_description">
                     <SettingsSubsectionText>{description}</SettingsSubsectionText>
