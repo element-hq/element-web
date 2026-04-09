@@ -248,6 +248,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     // What to focus on next component update, if anything
     private focusNext: FocusNextType;
     private subTitleStatus: string;
+    private notificationCount = 0;
+    private hasActivity = false;
+    private errorDidOccur = false;
     private prevWindowWidth: number;
 
     private readonly loggedInView = createRef<LoggedInViewType>();
@@ -2081,17 +2084,36 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private setPageSubtitle(subtitle = ""): void {
-        if (this.state.currentRoomId) {
-            const client = MatrixClientPeg.get();
-            const room = client?.getRoom(this.state.currentRoomId);
-            if (room) {
-                subtitle = `${this.subTitleStatus} | ${room.name} ${subtitle}`;
+        const brand = SdkConfig.get().brand;
+        const room = this.state.currentRoomId
+            ? MatrixClientPeg.get()?.getRoom(this.state.currentRoomId)
+            : undefined;
+
+        const customTitle = ModuleApi.instance.brand.renderTitle({
+            brand,
+            notificationCount: this.notificationCount || undefined,
+            hasActivity: this.hasActivity || undefined,
+            statusText: this.errorDidOccur ? _t("common|offline") : undefined,
+            roomId: this.state.currentRoomId ?? undefined,
+            roomName: room?.name,
+        });
+
+        if (customTitle !== undefined) {
+            if (document.title !== customTitle) {
+                document.title = customTitle;
             }
+            return;
+        }
+
+        const elementSuffix = brand !== "Element" ? " | Element" : "";
+
+        if (room) {
+            subtitle = `${this.subTitleStatus} | ${room.name} ${subtitle}`;
         } else {
             subtitle = `${this.subTitleStatus} ${subtitle}`;
         }
 
-        const title = `${SdkConfig.get().brand} ${subtitle}`;
+        const title = `${brand}${elementSuffix} ${subtitle}`;
 
         if (document.title !== title) {
             document.title = title;
@@ -2107,12 +2129,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         this.subTitleStatus = "";
-        if (state === SyncState.Error) {
+        this.errorDidOccur = state === SyncState.Error;
+        if (this.errorDidOccur) {
             this.subTitleStatus += `[${_t("common|offline")}] `;
         }
+        this.notificationCount = numUnreadRooms;
+        this.hasActivity = notificationState.level >= NotificationLevel.Activity;
         if (numUnreadRooms > 0) {
             this.subTitleStatus += `[${numUnreadRooms}]`;
-        } else if (notificationState.level >= NotificationLevel.Activity) {
+        } else if (this.hasActivity) {
             this.subTitleStatus += `*`;
         }
 

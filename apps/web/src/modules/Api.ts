@@ -33,6 +33,7 @@ import { StoresApi } from "./StoresApi.ts";
 import { WidgetLifecycleApi } from "./WidgetLifecycleApi.ts";
 import { WidgetApi } from "./WidgetApi.ts";
 import { CustomisationsApi } from "./customisationsApi.ts";
+import { ElementWebBrandApi } from "./BrandApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -87,6 +88,7 @@ export class ModuleApi implements Api {
     public readonly i18n = new I18nApi();
     public readonly customComponents = new CustomComponentsApi();
     public readonly customisations = new CustomisationsApi();
+    public readonly brand = new ElementWebBrandApi();
     public readonly extras = new ElementWebExtrasApi();
     public readonly builtins = new ElementWebBuiltinsApi();
     public readonly widgetLifecycle = new WidgetLifecycleApi();
