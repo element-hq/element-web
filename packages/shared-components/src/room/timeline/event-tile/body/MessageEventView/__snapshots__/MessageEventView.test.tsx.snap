@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MessageEventView > renders the caption layout when the event has a caption 1`] = `
+<div>
+  <div
+    class="content"
+  >
+    <div
+      data-testid="message-event-primary-body"
+    >
+      Primary body
+    </div>
+    <div
+      data-testid="message-event-caption-body"
+    >
+      Caption body
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MessageEventView > renders the default event body without a caption wrapper 1`] = `
+<div>
+  <div
+    data-testid="message-event-primary-body"
+  >
+    Primary body
+  </div>
+</div>
+`;
