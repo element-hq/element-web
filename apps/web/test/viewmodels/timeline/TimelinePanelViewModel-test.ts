@@ -25,9 +25,13 @@ jest.mock("../../../src/viewmodels/room/timeline/TimelinePanelPresenter", () => 
 }));
 
 describe("TimelinePanelViewModel", () => {
+    const unfilteredTimelineSet = {};
+    const liveTimeline = {
+        getTimelineSet: jest.fn(() => unfilteredTimelineSet),
+    };
     const room = {
         roomId: "!room:example.org",
-        getUnfilteredTimelineSet: jest.fn(() => ({})),
+        getUnfilteredTimelineSet: jest.fn(() => unfilteredTimelineSet),
         on: jest.fn(),
         off: jest.fn(),
     } as any;
@@ -56,6 +60,7 @@ describe("TimelinePanelViewModel", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        liveTimeline.getTimelineSet.mockReturnValue(unfilteredTimelineSet);
 
         presenterInstance = {
             buildItems: jest.fn(() => [{ key: "built", kind: "event" }]),
@@ -81,10 +86,30 @@ describe("TimelinePanelViewModel", () => {
             room,
             canPaginateBackward: expect.any(Function),
         });
+        expect(TimelineWindow).toHaveBeenCalledWith(client, room.getUnfilteredTimelineSet(), {
+            windowLimit: 200,
+        });
         expect(timelineWindowInstance.load).toHaveBeenCalledWith(undefined, 30);
         expect(presenterInstance.buildItems).toHaveBeenCalledWith([eventA]);
         expect(vm.getSnapshot().items).toEqual([{ key: "built", kind: "event" }]);
+        expect(vm.getSnapshot().initialFill).toBe("filling");
+        expect(vm.getSnapshot().canPaginateBackward).toBe(false);
+        expect(vm.getSnapshot().canPaginateForward).toBe(false);
         expect(room.on).toHaveBeenCalledWith(RoomEvent.Timeline, expect.any(Function));
+    });
+
+    it("stores an anchor after loading a specific event", async () => {
+        const vm = new TimelinePanelViewModel({ client, room, initialEventId: "$anchor" });
+        await flushPromises();
+
+        expect(timelineWindowInstance.load).toHaveBeenCalledWith("$anchor", 30);
+        expect(vm.getSnapshot().stuckAtBottom).toBe(false);
+        expect(vm.getSnapshot().initialFill).toBe("filling");
+        expect(vm.getSnapshot().pendingAnchor).toEqual({
+            targetKey: "$anchor",
+            position: 0.5,
+            highlight: true,
+        });
     });
 
     it("updates firstItemIndex when backward pagination prepends items", async () => {
@@ -107,6 +132,111 @@ describe("TimelinePanelViewModel", () => {
         expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Backward, 20);
         expect(vm.getFirstItemIndex()).toBe(99_999);
         expect(vm.getSnapshot().items).toEqual([
+            { key: "zero", kind: "event" },
+            { key: "one", kind: "event" },
+        ]);
+        expect(vm.getSnapshot().canPaginateBackward).toBe(true);
+        expect(vm.getSnapshot().canPaginateForward).toBe(false);
+    });
+
+    it("marks pagination as exhausted when the timeline can no longer paginate backward", async () => {
+        timelineWindowInstance.canPaginate.mockImplementationOnce(() => true).mockImplementation(() => false);
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        vm.paginate("backward");
+        await flushPromises();
+
+        expect(vm.getSnapshot().canPaginateBackward).toBe(false);
+        expect(vm.getSnapshot().backwardPagination).toBe("idle");
+    });
+
+    it("does not auto-extend the live window while scrolled up", async () => {
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        vm.onStuckAtBottomChanged(false);
+        room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
+
+        await flushPromises();
+
+        expect(timelineWindowInstance.paginate).not.toHaveBeenCalledWith(Direction.Forward, 1, false);
+        expect(vm.getSnapshot().canPaginateForward).toBe(true);
+    });
+
+    it("extends the live window without a network request when stuck at bottom", async () => {
+        new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
+        await flushPromises();
+
+        expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Forward, 1, false);
+    });
+
+    it("ignores pagination-driven timeline updates", async () => {
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        room.on.mock.calls[0]?.[1](eventA, room, true, false, { timeline: liveTimeline, liveEvent: false });
+        await flushPromises();
+
+        expect(timelineWindowInstance.paginate).not.toHaveBeenCalledWith(Direction.Forward, 1, false);
+        expect(vm.getSnapshot().canPaginateForward).toBe(false);
+    });
+
+    it("keeps startup fill active before the first backward probe", async () => {
+        timelineWindowInstance.canPaginate.mockImplementation(
+            (direction: Direction) => direction === Direction.Backward,
+        );
+        presenterInstance.buildItems
+            .mockReturnValueOnce([{ key: "one", kind: "event" }])
+            .mockReturnValueOnce([
+                { key: "zero", kind: "event" },
+                { key: "one", kind: "event" },
+            ]);
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        vm.onVisibleRangeChanged({ startIndex: 0, endIndex: 0 });
+        await flushPromises();
+
+        expect(vm.getSnapshot().initialFill).toBe("filling");
+        expect(timelineWindowInstance.paginate).not.toHaveBeenCalledWith(Direction.Backward, 20);
+    });
+
+    it("continues startup fill across multiple top-bound backward paginations", async () => {
+        timelineWindowInstance.canPaginate.mockImplementation(
+            (direction: Direction) => direction === Direction.Backward,
+        );
+        presenterInstance.buildItems
+            .mockReturnValueOnce([{ key: "one", kind: "event" }])
+            .mockReturnValueOnce([
+                { key: "zero", kind: "event" },
+                { key: "one", kind: "event" },
+            ])
+            .mockReturnValueOnce([
+                { key: "minus-one", kind: "event" },
+                { key: "zero", kind: "event" },
+                { key: "one", kind: "event" },
+            ]);
+
+        const vm = new TimelinePanelViewModel({ client, room });
+        await flushPromises();
+
+        vm.paginate("backward");
+        await flushPromises();
+
+        vm.onVisibleRangeChanged({ startIndex: 0, endIndex: 1 });
+        await flushPromises();
+
+        expect(timelineWindowInstance.paginate).toHaveBeenNthCalledWith(1, Direction.Backward, 20);
+        expect(timelineWindowInstance.paginate).toHaveBeenNthCalledWith(2, Direction.Backward, 20);
+        expect(vm.getSnapshot().initialFill).toBe("filling");
+        expect(vm.getSnapshot().items).toEqual([
+            { key: "minus-one", kind: "event" },
             { key: "zero", kind: "event" },
             { key: "one", kind: "event" },
         ]);

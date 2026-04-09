@@ -42,6 +42,8 @@ export interface VisibleRange {
 // ─── Loading & error ───────────────────────────────────────────────
 
 export type PaginationState = "idle" | "loading" | "error";
+/** Mount-time viewport fill state for the initial timeline window. */
+export type InitialFillState = "filling" | "done";
 
 // ─── Focus state ───────────────────────────────────────────────────
 
@@ -58,8 +60,16 @@ export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem>
     /** The ordered list of items to render. */
     items: TItem[];
 
+    /** Whether the initial window is still being backfilled to fill the viewport. */
+    initialFill: InitialFillState;
+
     /** Whether the viewport is pinned to the live (bottom) end. */
     stuckAtBottom: boolean;
+
+    /** Whether another backward pagination request is currently possible. */
+    canPaginateBackward: boolean;
+    /** Whether another forward pagination request is currently possible. */
+    canPaginateForward: boolean;
 
     /** Pagination state at each end of the loaded window. */
     backwardPagination: PaginationState;

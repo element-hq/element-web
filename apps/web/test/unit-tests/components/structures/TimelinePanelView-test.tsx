@@ -8,9 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { TimelinePanelView } from "../../../../src/components/structures/TimelinePanelView";
+import { TimelinePanelViewModel } from "../../../../src/viewmodels/room/timeline/TimelinePanelViewModel";
 
 jest.mock("@element-hq/web-shared-components", () => {
     const actual = jest.requireActual("@element-hq/web-shared-components");
@@ -129,5 +131,24 @@ describe("TimelinePanelView", () => {
         );
 
         expect(screen.getByTestId("room-creation-group")).toHaveTextContent("Alice created this room");
+    });
+
+    it("passes the restored event id to the timeline view model when present", () => {
+        const room = {
+            roomId: "!room:example.org",
+        } as any;
+        const client = {} as any;
+
+        render(
+            <MatrixClientContext.Provider value={client}>
+                <TimelinePanelView room={room} initialAnchorEventId="$restored" highlightedEventId="$highlighted" />
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(mocked(TimelinePanelViewModel)).toHaveBeenCalledWith({
+            client,
+            room,
+            initialEventId: "$restored",
+        });
     });
 });

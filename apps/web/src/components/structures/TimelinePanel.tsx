@@ -1841,7 +1841,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (SettingsStore.getValue("feature_new_timeline")) {
             const room = this.props.timelineSet.room;
             if (room) {
-                return <TimelinePanelView room={room} highlightedEventId={this.props.highlightedEventId} />;
+                return (
+                    <TimelinePanelView
+                        room={room}
+                        initialAnchorEventId={this.props.eventId}
+                        highlightedEventId={this.props.highlightedEventId}
+                    />
+                );
             }
         }
 

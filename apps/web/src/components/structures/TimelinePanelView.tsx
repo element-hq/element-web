@@ -17,7 +17,11 @@ import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../views/elements/GenericEventListSummary";
 
 interface TimelinePanelViewProps {
+    /** Room whose unfiltered timeline should be rendered. */
     room: Room;
+    /** Event to open the timeline around on first load, such as scroll-state restore or permalink navigation. */
+    initialAnchorEventId?: string;
+    /** Event to visually highlight after navigation, such as a search result target. */
     highlightedEventId?: string;
 }
 
@@ -36,7 +40,11 @@ const TypedTimelineView = TimelineView as (props: {
  * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
  * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
  */
-export function TimelinePanelView({ room, highlightedEventId }: TimelinePanelViewProps): JSX.Element {
+export function TimelinePanelView({
+    room,
+    initialAnchorEventId,
+    highlightedEventId,
+}: TimelinePanelViewProps): JSX.Element {
     const client: MatrixClient = useMatrixClientContext();
 
     const vm = useMemo(
@@ -44,9 +52,9 @@ export function TimelinePanelView({ room, highlightedEventId }: TimelinePanelVie
             new TimelinePanelViewModel({
                 client,
                 room,
-                initialEventId: highlightedEventId,
+                initialEventId: initialAnchorEventId ?? highlightedEventId,
             }),
-        [client, room, highlightedEventId],
+        [client, room, initialAnchorEventId, highlightedEventId],
     );
 
     const renderItem = useMemo(
