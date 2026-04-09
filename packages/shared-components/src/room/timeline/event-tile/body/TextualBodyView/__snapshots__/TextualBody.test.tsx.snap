@@ -31,8 +31,8 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
       Alice
     </button>
      
-    <div
-      class="annotated"
+    <span
+      class="annotated annotatedInline"
       dir="auto"
     >
       <span>
@@ -46,7 +46,7 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
           (edited)
         </span>
       </button>
-    </div>
+    </span>
   </div>
 </div>
 `;

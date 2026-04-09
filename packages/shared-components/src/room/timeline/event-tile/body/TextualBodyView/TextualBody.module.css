@@ -29,6 +29,10 @@
     display: flex;
 }
 
+.annotatedInline {
+    display: inline-flex;
+}
+
 .annotation {
     user-select: none;
     display: inline-block;

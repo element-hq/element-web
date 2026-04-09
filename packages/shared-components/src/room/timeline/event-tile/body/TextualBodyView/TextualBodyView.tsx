@@ -237,12 +237,22 @@ export function TextualBodyView({
     }
 
     if (markers.length > 0) {
-        renderedBody = (
-            <div dir="auto" className={styles.annotated}>
-                {renderedBody}
-                {markers}
-            </div>
-        );
+        const annotatedClasses = classNames(styles.annotated, {
+            [styles.annotatedInline]: kind === TextualBodyViewKind.EMOTE,
+        });
+
+        renderedBody =
+            kind === TextualBodyViewKind.EMOTE ? (
+                <span dir="auto" className={annotatedClasses}>
+                    {renderedBody}
+                    {markers}
+                </span>
+            ) : (
+                <div dir="auto" className={annotatedClasses}>
+                    {renderedBody}
+                    {markers}
+                </div>
+            );
     }
 
     if (kind === TextualBodyViewKind.EMOTE) {
