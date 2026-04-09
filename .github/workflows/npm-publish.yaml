@@ -1,6 +1,15 @@
-name: Publish shared component npm package
+name: Publish npm package
+run-name: Publish ${{ inputs.package }}
 on:
-    workflow_dispatch: {}
+    workflow_dispatch:
+        inputs:
+            package:
+                description: Which package to release
+                required: true
+                type: choice
+                options:
+                    - playwright-common
+                    - shared-components
 
 concurrency: release
 jobs:
@@ -29,10 +38,9 @@ jobs:
             - name: Update npm
               run: npm install -g npm@latest
 
-            # Need to setup element web too as it needs the translations
-            - name: 🛠️ Setup EW
+            - name: 🛠️ Install dependencies
               run: pnpm install --frozen-lockfile
 
             - name: 🚀 Publish to npm
-              working-directory: packages/shared-components
+              working-directory: packages/${{ inputs.package }}
               run: npm publish --access public --provenance
