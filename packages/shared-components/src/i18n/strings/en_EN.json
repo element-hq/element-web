@@ -219,12 +219,12 @@
         "message_timestamp_sent_at": "Sent at: %(dateTime)s",
         "url_preview": {
             "close": "Close preview",
+            "open_link": "Open link",
             "show_n_more": {
                 "one": "Show %(count)s other preview",
                 "other": "Show %(count)s other previews"
             },
-            "view_image": "View image",
-            "open_link": "Open link"
+            "view_image": "View image"
         }
     },
     "widget": {
