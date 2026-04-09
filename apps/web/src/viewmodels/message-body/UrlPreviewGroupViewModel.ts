@@ -102,19 +102,23 @@ export class UrlPreviewGroupViewModel
             typeof response["og:description"] === "string" && response["og:description"].trim()
                 ? response["og:description"].trim()
                 : undefined;
-        let siteName =
+        const siteName =
             typeof response["og:site_name"] === "string" && response["og:site_name"].trim()
                 ? response["og:site_name"].trim()
-                : undefined;
+                : new URL(link).hostname;
 
+        // If there is no title, or the title matches the description then only render one.
         if (!title && description) {
             title = description;
             description = undefined;
         } else if (!title && siteName) {
             title = siteName;
-            siteName = undefined;
         } else if (!title) {
             title = link;
+        }
+
+        if (description && description.toLowerCase() === siteName.toLowerCase()) {
+            description = undefined;
         }
 
         return {

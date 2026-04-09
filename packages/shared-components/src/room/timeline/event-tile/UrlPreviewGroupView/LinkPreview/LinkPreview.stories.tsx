@@ -15,7 +15,7 @@ import imageFile from "../../../../../../static/element.png";
 import imageFileWide from "../../../../../../static/wideImage.png";
 
 export default {
-    title: "UrlPreviewGroupView/LinkPreview",
+    title: "Event/UrlPreviewGroupView/LinkPreview",
     component: LinkPreview,
     tags: ["autodocs"],
     args: {
