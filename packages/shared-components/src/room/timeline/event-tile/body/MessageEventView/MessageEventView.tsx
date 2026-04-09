@@ -39,6 +39,14 @@ interface MessageEventViewProps {
     caption?: PropsWithChildren["children"];
 }
 
+/**
+ * Renders the message-event body with an optional caption layout shell.
+ *
+ * When the view-model snapshot marks the event as captioned and a caption node
+ * is provided, the primary body and caption are wrapped in a shared container
+ * that carries the event-content layout styling. Otherwise the primary body is
+ * returned unchanged, and no wrapper or `className` is applied.
+ */
 export function MessageEventView({ vm, className, children, caption }: Readonly<MessageEventViewProps>): JSX.Element {
     const { hasCaption } = useViewModel(vm);
     const shouldRenderCaptionLayout = hasCaption && caption !== undefined && caption !== null;
