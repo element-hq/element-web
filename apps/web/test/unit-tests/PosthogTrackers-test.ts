@@ -18,20 +18,10 @@ describe("PosthogTrackers", () => {
         const tracker = new PosthogTrackers();
         tracker.trackUrlPreview("$123456", false, [
             {
-                title: "A preview",
-                image: {
-                    imageThumb: "abc",
-                    imageFull: "abc",
-                },
-                link: "a-link",
+                image: {},
             },
         ]);
-        tracker.trackUrlPreview("$123456", false, [
-            {
-                title: "A second preview",
-                link: "a-link",
-            },
-        ]);
+        tracker.trackUrlPreview("$123456", false, [{}]);
         // Ignores subsequent calls.
         expect(PosthogAnalytics.instance.trackEvent).toHaveBeenCalledWith({
             eventName: "UrlPreviewRendered",

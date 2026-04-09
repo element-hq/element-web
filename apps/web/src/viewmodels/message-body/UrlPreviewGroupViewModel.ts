@@ -339,7 +339,6 @@ export class UrlPreviewGroupViewModel
             const declaredWidth = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
             const imageSize = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]);
             const alt = typeof preview["og:image:alt"] === "string" ? preview["og:image:alt"] : undefined;
-            const playable = !!preview["og:video"] || !!preview["og:video:type"] || !!preview["og:audio"];
 
             const isImagePreview = UrlPreviewGroupViewModel.isImagePreview(declaredWidth, declaredHeight, imageSize);
             if (isImagePreview) {
@@ -347,6 +346,7 @@ export class UrlPreviewGroupViewModel
                 const height =
                     thumbHeight(width, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
                 const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "crop");
+                const playable = !!preview["og:video"] || !!preview["og:video:type"] || !!preview["og:audio"];
                 // No thumb, no preview.
                 if (thumb) {
                     image = {

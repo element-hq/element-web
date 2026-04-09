@@ -323,7 +323,11 @@ describe("UrlPreviewGroupViewModel", () => {
             }
             return "https://example.org/image/src";
         });
-        client.getUrlPreview.mockResolvedValueOnce({ ...BASIC_PREVIEW_OGDATA, [property]: IMAGE_MXC });
+        client.getUrlPreview.mockResolvedValueOnce({
+            ...BASIC_PREVIEW_OGDATA,
+            "og:image": IMAGE_MXC,
+            [property]: "anything",
+        });
         const msg = document.createElement("div");
         msg.innerHTML = `<a href="https://example.org">test</a>`;
         await vm.updateEventElement(msg);

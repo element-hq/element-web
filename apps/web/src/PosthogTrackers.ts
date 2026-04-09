@@ -151,7 +151,7 @@ export default class PosthogTrackers {
      * @param isEncrypted Whether the event (and effectively the room) was encrypted.
      * @param previews The previews generated from the event.
      */
-    public trackUrlPreview(eventId: string, isEncrypted: boolean, previews: UrlPreview[]): void {
+    public trackUrlPreview(eventId: string, isEncrypted: boolean, previews: { image?: unknown }[]): void {
         // Discount any previews that we have already tracked.
         if (this.previewedEventIds.get(eventId)) {
             return;
