@@ -325,7 +325,6 @@ export class UrlPreviewGroupViewModel
 
         const { title, description, siteName } = UrlPreviewGroupViewModel.getBaseMetadataFromResponse(preview, link);
         const author = UrlPreviewGroupViewModel.getAuthorFromResponse(preview);
-        const playable = !!preview["og:video"] || !!preview["og:video:type"] || !!preview["og:audio"];
         const hasImage = preview["og:image"] && typeof preview?.["og:image"] === "string";
         // Ensure we have something relevant to render.
         // The title must not just be the link, or we must have an image.
@@ -340,6 +339,7 @@ export class UrlPreviewGroupViewModel
             const declaredWidth = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["og:image:width"]);
             const imageSize = UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]);
             const alt = typeof preview["og:image:alt"] === "string" ? preview["og:image:alt"] : undefined;
+            const playable = !!preview["og:video"] || !!preview["og:video:type"] || !!preview["og:audio"];
 
             const isImagePreview = UrlPreviewGroupViewModel.isImagePreview(declaredWidth, declaredHeight, imageSize);
             if (isImagePreview) {
@@ -356,6 +356,7 @@ export class UrlPreviewGroupViewModel
                         height,
                         fileSize: UrlPreviewGroupViewModel.getNumberFromOpenGraph(preview["matrix:image:size"]),
                         alt,
+                        playable,
                     };
                 }
             } else if (media.srcHttp) {
@@ -370,9 +371,8 @@ export class UrlPreviewGroupViewModel
             description,
             siteName,
             siteIcon,
-            showTooltipOnLink: link !== title && PlatformPeg.get()?.needsUrlTooltips(),
+            showTooltipOnLink: !!(link !== title && PlatformPeg.get()?.needsUrlTooltips()),
             image,
-            playable,
         } satisfies UrlPreview;
         this.previewCache.set(link, result);
         return result;

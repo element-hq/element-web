@@ -1,48 +1,127 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`LinkPreview > renders a preview 1`] = `
+exports[`LinkPreview > renders a playable preview that can be opened with a click 1`] = `
 <div>
   <div
     class="container"
   >
     <div
-      class="wrapImageCaption"
+      class="preview"
+      style="background-image: url("/static/wideImage.png");"
     >
-      <button
-        aria-label="View image"
-        class="image"
+      <a
+        aria-label="Open link"
+        class="_button_13vu4_8 playButton"
+        data-kind="primary"
+        data-size="lg"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
       >
-        <img
-          alt=""
-          class="thumbnail"
-          src="/static/element.png"
-        />
-      </button>
+        <svg
+          fill="currentColor"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743"
+          />
+        </svg>
+      </a>
+    </div>
+    <div
+      class="textContent"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A linked video
+      </a>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+      >
+        This is a link to a video. You cannot play the video inline yet, but you can click the play button to open the link
+      </p>
       <div
-        class="caption"
+        class="siteName"
       >
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+        <span
+          aria-label="blog.example.org"
+          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+          data-color="5"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 16px;"
         >
-          <a
-            class="link"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            A simple title
-          </a>
-          <span
-            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
-          >
-             - Site name
-          </span>
-        </p>
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+          b
+        </span>
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
-          A simple description
-        </p>
+          blog.example.org
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkPreview > renders a preview 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <button
+      aria-label="View image"
+      class="preview"
+    >
+      <img
+        alt="Element logo"
+        src="/static/element.png"
+        title="Element logo"
+      />
+    </button>
+    <div
+      class="textContent"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A simple title
+      </a>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+      >
+        A simple description
+      </p>
+      <div
+        class="siteName"
+      >
+        <span
+          aria-label="Site name"
+          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+          data-color="3"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 16px;"
+        >
+          S
+        </span>
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        >
+          Site name
+        </span>
       </div>
     </div>
   </div>
@@ -52,26 +131,44 @@ exports[`LinkPreview > renders a preview 1`] = `
 exports[`LinkPreview > renders a preview with just a title 1`] = `
 <div>
   <div
-    class="container"
+    class="container inline"
   >
     <div
-      class="wrapImageCaption"
+      class="siteAvatar"
     >
-      <div
-        class="caption"
+      <span
+        aria-label="A simple title"
+        class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+        data-color="6"
+        data-type="square"
+        role="img"
+        style="--cpd-avatar-size: 48px;"
       >
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+        A
+      </span>
+    </div>
+    <div
+      class="textContent"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A simple title
+      </a>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+      />
+      <div
+        class="siteName"
+      >
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
-          <a
-            class="link"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            A simple title
-          </a>
-        </p>
+          matrix.org
+        </span>
       </div>
     </div>
   </div>
@@ -81,39 +178,54 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
 exports[`LinkPreview > renders a preview with just a title and description 1`] = `
 <div>
   <div
-    class="container"
+    class="container inline"
   >
     <div
-      class="wrapImageCaption"
+      class="siteAvatar"
     >
-      <div
-        class="caption"
+      <span
+        aria-label="A simple title"
+        class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+        data-color="6"
+        data-type="square"
+        role="img"
+        style="--cpd-avatar-size: 48px;"
       >
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+        A
+      </span>
+    </div>
+    <div
+      class="textContent"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A simple title
+      </a>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+      >
+        A simple description with a link to 
+        <a
+          data-linkified="true"
+          href="https://matrix.org"
+          rel="noreferrer noopener"
+          target="_blank"
         >
-          <a
-            class="link"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            A simple title
-          </a>
-        </p>
-        <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+          https://matrix.org
+        </a>
+      </p>
+      <div
+        class="siteName"
+      >
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
-          A simple description with a link to 
-          <a
-            data-linkified="true"
-            href="https://matrix.org"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            https://matrix.org
-          </a>
-        </p>
+          matrix.org
+        </span>
       </div>
     </div>
   </div>

@@ -13,7 +13,7 @@ export interface UrlPreview {
     /**
      * Should the link have a tooltip. Should be `true` if the platform does not provide a tooltip.
      */
-    showTooltipOnLink?: boolean;
+    showTooltipOnLink: boolean;
     /**
      * The title of the page being previewed.
      */
@@ -58,15 +58,15 @@ export interface UrlPreview {
          * Alt text for the image
          */
         alt?: string;
+
+        /**
+         * Is the media playable.
+         */
+        playable: boolean;
     };
 
     /**
      * Author of the content, if specified.
      */
     author?: string;
-
-    /**
-     * Is the media playable.
-     */
-    playable?: boolean;
 }

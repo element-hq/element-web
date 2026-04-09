@@ -327,6 +327,6 @@ describe("UrlPreviewGroupViewModel", () => {
         const msg = document.createElement("div");
         msg.innerHTML = `<a href="https://example.org">test</a>`;
         await vm.updateEventElement(msg);
-        expect(vm.getSnapshot().previews[0].playable).toEqual(true);
+        expect(vm.getSnapshot().previews[0].image?.playable).toEqual(true);
     });
 });

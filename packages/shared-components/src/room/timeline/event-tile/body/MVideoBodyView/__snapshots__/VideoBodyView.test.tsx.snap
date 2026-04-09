@@ -79,7 +79,7 @@ exports[`VideoBodyView > matches snapshot for ready story 1`] = `
         crossorigin="anonymous"
         poster="/static/element.png"
         preload="none"
-        src="http://localhost:63315/static/videoBodyDemo.webm"
+        src="http://127.0.0.1:63315/static/videoBodyDemo.webm"
       />
     </div>
     <div>

@@ -50,8 +50,8 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
 
     let img: JSX.Element | undefined;
     // Don't render a button to show the image, just hide it outright
-    if (preview.image?.imageThumb) {
-        if (preview.playable) {
+    if (preview.image) {
+        if (preview.image.playable) {
             img = (
                 <div
                     style={{
@@ -59,24 +59,26 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
                     }}
                     className={styles.preview}
                 >
-                    {preview.playable && (
-                        <Button
-                            as="a"
-                            href={preview.link}
-                            aria-label={_t("timeline|url_preview|view_image")}
-                            className={styles.playButton}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            kind="primary"
-                        >
-                            <PlaySolidIcon width="24px" height="24px" />
-                        </Button>
-                    )}
+                    <Button
+                        as="a"
+                        href={preview.link}
+                        aria-label={_t("timeline|url_preview|open_link")}
+                        className={styles.playButton}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        kind="primary"
+                    >
+                        <PlaySolidIcon width="24px" height="24px" />
+                    </Button>
                 </div>
             );
         } else {
             img = (
-                <button className={styles.preview} onClick={onImageClickHandler}>
+                <button
+                    className={styles.preview}
+                    onClick={onImageClickHandler}
+                    aria-label={_t("timeline|url_preview|view_image")}
+                >
                     <img src={preview.image.imageThumb} alt={preview.image.alt} title={preview.image.alt} />
                 </button>
             );

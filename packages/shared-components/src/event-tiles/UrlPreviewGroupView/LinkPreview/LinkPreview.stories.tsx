@@ -21,6 +21,16 @@ export default {
     args: {
         onImageClick: fn(),
     },
+    argTypes: {
+        siteName: {
+            control: "text",
+        },
+        author: {
+            control: "text",
+        },
+        siteIcon: { control: { type: "file", accept: ".png" } },
+        image: {},
+    },
     parameters: {
         design: {
             type: "figma",
@@ -44,6 +54,8 @@ Default.args = {
     image: {
         imageThumb: imageFile,
         imageFull: imageFile,
+        alt: "Element logo",
+        playable: false,
     },
 };
 
@@ -60,6 +72,15 @@ TitleAndDescription.args = {
     description: "A simple description with a link to https://matrix.org",
     link: "https://matrix.org",
     siteName: "matrix.org",
+};
+
+export const WithSiteIcon = Template.bind({});
+WithSiteIcon.args = {
+    title: "A simple title",
+    description: "A simple description with a link to https://matrix.org",
+    link: "https://matrix.org",
+    siteName: "matrix.org",
+    siteIcon: imageFile,
 };
 
 export const WithTooltip = Template.bind({});
@@ -81,6 +102,8 @@ Article.args = {
     image: {
         imageThumb: imageFileWide,
         imageFull: imageFileWide,
+        alt: "A dog",
+        playable: false,
     },
 };
 
@@ -91,10 +114,11 @@ Video.args = {
         "This is a link to a video. You cannot play the video inline yet, but you can click the play button to open the link",
     link: "https://matrix.org",
     siteName: "blog.example.org",
-    playable: true,
     image: {
         imageThumb: imageFileWide,
         imageFull: imageFileWide,
+        alt: "A dog",
+        playable: true,
     },
 };
 
@@ -117,6 +141,8 @@ SocialWithImage.args = {
     image: {
         imageThumb: imageFileWide,
         imageFull: imageFileWide,
+        alt: "A dog",
+        playable: false,
     },
 };
 
@@ -130,5 +156,7 @@ WithVeryLongText.args = {
     image: {
         imageThumb: imageFile,
         imageFull: imageFile,
+        alt: "Element logo",
+        playable: false,
     },
 };

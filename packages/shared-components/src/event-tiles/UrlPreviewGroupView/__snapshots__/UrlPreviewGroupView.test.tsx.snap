@@ -11,40 +11,32 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="The element logo"
+            src="/static/element.png"
+            title="The element logo"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/element.png"
-            />
-          </button>
-          <div
-            class="caption"
+            A simple title
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                A simple title
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              A simple description
-            </p>
-          </div>
+            A simple description
+          </p>
         </div>
       </div>
     </div>
@@ -88,118 +80,94 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="The element logo"
+            src="/static/element.png"
+            title="The element logo"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/element.png"
-            />
-          </button>
-          <div
-            class="caption"
+            One
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                One
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              A regular square image.
-            </p>
-          </div>
+            A regular square image.
+          </p>
         </div>
       </div>
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="A dog"
+            src="/static/tallImage.png"
+            title="A dog"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/tallImage.png"
-            />
-          </button>
-          <div
-            class="caption"
+            Two
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                Two
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              This one has a taller image which should crop nicely.
-            </p>
-          </div>
+            This one has a taller image which should crop nicely.
+          </p>
         </div>
       </div>
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="The element logo"
+            src="/static/element.png"
+            title="The element logo"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/element.png"
-            />
-          </button>
-          <div
-            class="caption"
+            Three
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                Three
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              One more description
-            </p>
-          </div>
+            One more description
+          </p>
         </div>
       </div>
       <button
@@ -252,40 +220,32 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="The element logo"
+            src="/static/element.png"
+            title="The element logo"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/element.png"
-            />
-          </button>
-          <div
-            class="caption"
+            A simple title
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                A simple title
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              A simple description
-            </p>
-          </div>
+            A simple description
+          </p>
         </div>
       </div>
       <button
@@ -338,118 +298,94 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="The element logo"
+            src="/static/element.png"
+            title="The element logo"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/element.png"
-            />
-          </button>
-          <div
-            class="caption"
+            One
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                One
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              A regular square image.
-            </p>
-          </div>
+            A regular square image.
+          </p>
         </div>
       </div>
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="A dog"
+            src="/static/tallImage.png"
+            title="A dog"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/tallImage.png"
-            />
-          </button>
-          <div
-            class="caption"
+            Two
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                Two
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              This one has a taller image which should crop nicely.
-            </p>
-          </div>
+            This one has a taller image which should crop nicely.
+          </p>
         </div>
       </div>
       <div
         class="container"
       >
-        <div
-          class="wrapImageCaption"
+        <button
+          aria-label="View image"
+          class="preview"
         >
-          <button
-            aria-label="View image"
-            class="image"
+          <img
+            alt="The element logo"
+            src="/static/element.png"
+            title="The element logo"
+          />
+        </button>
+        <div
+          class="textContent"
+        >
+          <a
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
+            href="https://matrix.org"
+            rel="noreferrer noopener"
+            target="_blank"
           >
-            <img
-              alt=""
-              class="thumbnail"
-              src="/static/element.png"
-            />
-          </button>
-          <div
-            class="caption"
+            Three
+          </a>
+          <p
+            class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
           >
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
-            >
-              <a
-                class="link"
-                href="https://matrix.org"
-                rel="noreferrer noopener"
-                target="_blank"
-              >
-                Three
-              </a>
-            </p>
-            <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-            >
-              One more description
-            </p>
-          </div>
+            One more description
+          </p>
         </div>
       </div>
       <button
