@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MailpitClient } from "mailpit-api";
 import { Network, type StartedNetwork } from "testcontainers";
-import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
+import { type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
 import {
     type SynapseConfig,
@@ -22,6 +22,7 @@ import { Logger } from "../utils/logger.js";
 // We want to avoid using `mergeTests` in index.ts because it drops useful type information about the fixtures. Instead,
 // we add `axe` into our fixture suite by using its `test` as a base, so that there is a linear hierarchy.
 import { test as base } from "./axe.js";
+import { makePostgres } from "../testcontainers/postgres.js";
 
 /**
  * Test-scoped fixtures available in the test
@@ -101,27 +102,7 @@ export const test = base.extend<TestFixtures, WorkerOptions & Services>({
     ],
     postgres: [
         async ({ logger, network }, use) => {
-            const container = await new PostgreSqlContainer("postgres:13.3-alpine")
-                .withNetwork(network)
-                .withNetworkAliases("postgres")
-                .withLogConsumer(logger.getConsumer("postgres"))
-                .withTmpFs({
-                    "/dev/shm/pgdata/data": "",
-                })
-                .withEnvironment({
-                    PG_DATA: "/dev/shm/pgdata/data",
-                })
-                .withCommand([
-                    "-c",
-                    "shared_buffers=128MB",
-                    "-c",
-                    `fsync=off`,
-                    "-c",
-                    `synchronous_commit=off`,
-                    "-c",
-                    "full_page_writes=off",
-                ])
-                .start();
+            const container = await makePostgres(network, logger);
             await use(container);
             await container.stop();
         },
