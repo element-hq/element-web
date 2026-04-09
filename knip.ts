@@ -5,13 +5,9 @@ process.env.GITHUB_ACTIONS = "1";
 
 export default {
     workspaces: {
-        "packages/shared-components": {
-            ignoreDependencies: [
-                // Used for vitest browser tests
-                "@playwright/test",
-            ],
-        },
+        "packages/shared-components": {},
         "packages/playwright-common": {
+            entry: ["src/stale-screenshot-reporter.ts", "src/fixtures/index.ts", "src/testcontainers/index.ts"],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",

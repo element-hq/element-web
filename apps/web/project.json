@@ -44,7 +44,7 @@
                 "parallel": false,
                 "cwd": "apps/web"
             },
-            "dependsOn": ["^build"]
+            "dependsOn": ["^build", "^build:playwright"]
         },
         "test:unit": {
             "executor": "@nx/jest:jest",

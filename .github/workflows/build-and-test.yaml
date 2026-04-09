@@ -165,7 +165,7 @@ jobs:
             - name: Run Playwright tests
               working-directory: apps/web
               run: |
-                  pnpm playwright test \
+                  pnpm test:playwright \
                       --shard "$SHARD" \
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
