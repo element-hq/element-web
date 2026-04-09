@@ -3,7 +3,7 @@
     "productName": "Element",
     "main": "lib/electron-main.js",
     "exports": "./lib/electron-main.js",
-    "version": "1.12.13",
+    "version": "1.12.15",
     "description": "Element: the future of secure communication",
     "author": {
         "name": "Element",
@@ -18,7 +18,7 @@
     "type": "module",
     "files": [],
     "engines": {
-        "node": ">=18.0.0"
+        "node": ">=22.18"
     },
     "scripts": {
         "i18n": "matrix-gen-i18n && pnpm i18n:sort && pnpm i18n:lint",
@@ -26,7 +26,7 @@
         "i18n:lint": "prettier --log-level=silent  --write src/i18n/strings/ --ignore-path /dev/null",
         "i18n:diff": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && pnpm i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
         "mkdirs": "mkdirp packages deploys",
-        "fetch": "pnpm run mkdirs && tsx scripts/fetch-package.ts",
+        "fetch": "pnpm run mkdirs && node scripts/fetch-package.ts",
         "asar-webapp": "asar p webapp webapp.asar",
         "start": "pnpm run build:ts && pnpm run build:res && electron .",
         "lint": "pnpm lint:types && pnpm lint:js",
@@ -44,13 +44,13 @@
         "build:universal": "pnpm run build:ts && pnpm run build:res && electron-builder --universal",
         "build": "pnpm run build:ts && pnpm run build:res && electron-builder",
         "build:ts": "tsc",
-        "build:res": "tsx scripts/copy-res.ts",
+        "build:res": "node scripts/copy-res.ts",
         "docker:setup": "docker build --platform linux/amd64 -t element-desktop-dockerbuild -f dockerbuild/Dockerfile .",
         "docker:build:native": "scripts/in-docker.sh pnpm run hak",
         "docker:build": "scripts/in-docker.sh pnpm run build",
         "docker:install": "scripts/in-docker.sh pnpm install",
         "clean": "rimraf webapp.asar dist packages deploys lib",
-        "hak": "tsx scripts/hak/index.ts",
+        "hak": "node scripts/hak/index.ts",
         "test": "playwright test",
         "test:open": "pnpm test --ui",
         "test:screenshots:build": "docker build playwright -t element-desktop-playwright --platform linux/amd64",
@@ -71,7 +71,7 @@
         "@babel/core": "^7.18.10",
         "@babel/preset-env": "^7.18.10",
         "@babel/preset-typescript": "^7.18.6",
-        "@electron/asar": "4.1.0",
+        "@electron/asar": "4.1.2",
         "@playwright/test": "catalog:",
         "@stylistic/eslint-plugin": "^5.0.0",
         "@types/auto-launch": "^5.0.1",
@@ -84,7 +84,7 @@
         "app-builder-lib": "26.8.2",
         "chokidar": "^5.0.0",
         "detect-libc": "^2.0.0",
-        "electron": "41.0.3",
+        "electron": "41.1.0",
         "electron-builder": "26.8.2",
         "electron-builder-squirrel-windows": "26.8.2",
         "electron-devtools-installer": "^4.0.0",
@@ -102,11 +102,10 @@
         "prettier": "^3.0.0",
         "rimraf": "^6.0.0",
         "tar": "^7.5.8",
-        "tsx": "^4.19.2",
         "typescript": "5.9.3"
     },
     "hakDependencies": {
         "matrix-seshat": "^4.0.1"
     },
-    "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
+    "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
 }

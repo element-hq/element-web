@@ -26,7 +26,6 @@
         "cancel": "Hætta við",
         "change": "Breyta",
         "clear": "Hreinsa",
-        "click": "Smelltu",
         "click_to_copy": "Smelltu til að afrita",
         "close": "Loka",
         "collapse": "Fella saman",
@@ -2304,7 +2303,6 @@
         },
         "creation_summary_dm": "%(creator)s bjó til oþessi beinu skilaboð.",
         "creation_summary_room": "%(creator)s bjó til og stillti spjallrásina.",
-        "download_action_decrypting": "Afkóðun",
         "download_action_downloading": "Sæki",
         "edits": {
             "tooltip_label": "Breytt þann %(date)s. Smelltu hér til að skoða breytingar.",
@@ -2490,10 +2488,7 @@
             "removed": "%(widgetName)s viðmótshluti var fjarlægður af %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Fella saman tilvitnanir",
             "copy_link_thread": "Afrita tengil á spjallþráð",
-            "expand_reply_chain": "Fletta út tilvitnunum",
-            "label": "Aðgerðir skilaboða",
             "view_in_room": "Skoða á spjallrás"
         },
         "mjolnir": {

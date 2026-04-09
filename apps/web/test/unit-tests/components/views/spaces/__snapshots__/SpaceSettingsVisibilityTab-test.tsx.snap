@@ -173,11 +173,11 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
             <div
               class="mx_SettingsSection"
             >
-              <h2
-                class="mx_Heading_h3"
+              <h3
+                class="mx_Heading_h4"
               >
                 Address
-              </h2>
+              </h3>
               <div
                 class="mx_SettingsSection_subSections"
               >

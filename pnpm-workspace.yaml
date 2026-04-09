@@ -13,13 +13,13 @@ catalog:
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@element-hq/element-web-playwright-common": 2.2.7
-    "@playwright/test": 1.58.2
-    "playwright-core": 1.58.2
+    "@element-hq/element-web-playwright-common": 2.4.0
+    "@playwright/test": 1.59.1
+    "playwright-core": 1.59.1
     # Module API
     "@element-hq/element-web-module-api": 1.13.0
     # Compound
-    "@vector-im/compound-design-tokens": 7.0.0
+    "@vector-im/compound-design-tokens": 8.0.0
     "@vector-im/compound-web": 8.4.0
     # i18n
     matrix-web-i18n: 3.6.0

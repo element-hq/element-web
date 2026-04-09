@@ -25,6 +25,7 @@ interface IProps {
     label?: string;
     isExplicit?: boolean;
     hideIfCannotSet?: boolean;
+    requires?: BooleanSettingKey[];
     onChange?(checked: boolean): void;
 }
 
@@ -45,6 +46,12 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         defaultWatchManager.watchSetting(this.props.name, this.props.roomId ?? null, this.onSettingChange);
+        if (this.props.requires) {
+            // If we have any dependencies for this feature, also watch those features to ensure we catch the disabled state.
+            for (const flag of this.props.requires) {
+                defaultWatchManager.watchSetting(flag, this.props.roomId ?? null, this.onSettingChange);
+            }
+        }
     }
 
     public componentWillUnmount(): void {

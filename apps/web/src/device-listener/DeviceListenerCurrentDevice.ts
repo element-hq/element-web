@@ -153,7 +153,6 @@ export class DeviceListenerCurrentDevice {
             return;
         }
 
-        const crossSigningReady = await crypto.isCrossSigningReady();
         const secretStorageStatus = await crypto.getSecretStorageStatus();
         const crossSigningStatus = await crypto.getCrossSigningStatus();
         const allCrossSigningSecretsCached =
@@ -238,7 +237,6 @@ export class DeviceListenerCurrentDevice {
                 // missing locally, that is handled by the
                 // `!allCrossSigningSecretsCached` branch above.
                 logSpan.warn("4S is missing secrets or backup key not cached", {
-                    crossSigningReady,
                     secretStorageStatus,
                     allCrossSigningSecretsCached,
                     isCurrentDeviceTrusted,

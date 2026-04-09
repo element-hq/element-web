@@ -30,7 +30,6 @@
         "cancel": "취소",
         "change": "변경",
         "clear": "지우기",
-        "click": "클릭",
         "click_to_copy": "복사하려면 클릭하세요.",
         "close": "닫기",
         "collapse": "접기",
@@ -64,7 +63,6 @@
         "go": "이동",
         "go_back": "돌아가기",
         "got_it": "확인",
-        "hide": "숨기기",
         "hide_advanced": "고급 숨기기",
         "hold": "대기",
         "ignore": "무시",
@@ -1352,9 +1350,6 @@
         "impossible_dialog_title": "통합이 허용되지 않습니다"
     },
     "invite": {
-        "ask_anyway_description": "아래에 나열된 매트릭스 ID에 대한 프로필을 찾을 수 없습니다 - 그래도 DM을 시작하시겠습니까?",
-        "ask_anyway_label": "그래도 DM 시작하기",
-        "ask_anyway_never_warn_label": "어쨌든 DM을 시작하고 다시는 경고하지 마세요",
         "email_caption": "이메일로 초대",
         "email_limit_one": "이메일 초대는 한 번에 하나씩만 보낼 수 있습니다",
         "email_use_default_is": "이메일로 초대하기 위해 ID 서버를 사용합니다. <default>기본 (%(defaultIdentityServerName)s)을(를) 사용하거나</default> <settings>설정</settings>에서 관리하세요.",
@@ -1553,6 +1548,7 @@
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
         "report_to_moderators": "관리자에게 신고하기",
         "report_to_moderators_description": "운영자가 관리하는 방에서는 '신고' 버튼으로 관리자에게 문제를 신고할 수 있습니다.",
+        "room_list_sections": "대화방 목록 섹션",
         "share_history_on_invite": "새 멤버에게 암호화 된 기록을 공유합니다.",
         "share_history_on_invite_description": "기록 공개 설정이 '공유'로 설정된 암호화된 방으로 사용자를 초대할 때, 해당 사용자와 암호화된 기록을 공유하고, 그러한 방에 초대받았을 때는 암호화된 기록을 수락하세요.",
         "share_history_on_invite_warning": "이 기능은 실험용 기능으로, 모든 보안 조치가 구현되어 있지는 않습니다. 실제 운영 계정에서는 활성화하지 마십시오.",
@@ -2122,6 +2118,11 @@
         "notification_options": "알림 옵션",
         "redacting_messages_status": {
             "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
+        },
+        "section": {
+            "chats": "채팅",
+            "favourites": "즐겨찾기",
+            "low_priority": "낮은 우선순위"
         },
         "show_less": "간단히 표시",
         "show_n_more": {
@@ -3248,7 +3249,6 @@
         },
         "empty_description": "메시지 위에 마우스를 올렸을 때 \"%(replyInThread)s\"를 사용하세요.",
         "empty_title": "스레드는 대화를 주제 중심으로 유지하고 쉽게 추적할 수 있도록 도와줍니다.",
-        "error_start_thread_existing_relation": "기존 관계가 있는 이벤트로부터 스레드를 생성할 수 없습니다",
         "mark_all_read": "모두 읽음으로 표시",
         "my_threads": "내 스레드",
         "my_threads_description": "참여한 모든 스레드를 표시합니다",
@@ -3292,7 +3292,6 @@
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "복호화 중",
         "download_action_downloading": "다운로드 중",
         "download_failed": "다운로드 실패",
         "download_failed_description": "이 파일을 다운로드하는 동안 오류가 발생했습니다.",
@@ -3489,10 +3488,7 @@
             "removed": "%(senderName)s님이 제거한 %(widgetName)s 위젯"
         },
         "mab": {
-            "collapse_reply_chain": "인용문 접기",
             "copy_link_thread": "스레드 링크 복사",
-            "expand_reply_chain": "인용문 확장",
-            "label": "메시지 동작",
             "view_in_room": "방에서 보기"
         },
         "mjolnir": {
