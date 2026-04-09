@@ -30,9 +30,9 @@
         "lint:types": "nx lint:types",
         "lint:style": "stylelint \"res/css/**/*.pcss\"",
         "test": "nx test:unit",
-        "test:playwright": "nx test:playwright",
-        "test:playwright:open": "nx test:playwright --ui",
-        "test:playwright:screenshots": "nx test:playwright:screenshots",
+        "test:playwright": "nx test:playwright --",
+        "test:playwright:open": "nx test:playwright -- --ui",
+        "test:playwright:screenshots": "nx test:playwright:screenshots --",
         "coverage": "pnpm test --coverage",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp"
     },
