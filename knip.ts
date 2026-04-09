@@ -5,7 +5,12 @@ process.env.GITHUB_ACTIONS = "1";
 
 export default {
     workspaces: {
-        "packages/shared-components": {},
+        "packages/shared-components": {
+            ignoreDependencies: [
+                // Used for vitest browser tests
+                "@playwright/test",
+            ],
+        },
         "packages/playwright-common": {
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
