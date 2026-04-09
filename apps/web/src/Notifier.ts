@@ -94,7 +94,7 @@ function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
         return plainBody;
     }
 
-    // Recursively walk HTML tree to hide spoilers
+    /** Recursively walks HTML tree to hide spoilers. */
     function replaceSpoilers(node: Node): Node {
         if (node.nodeType !== Node.ELEMENT_NODE || !(node instanceof Element)) {
             return node;
@@ -114,8 +114,20 @@ function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
     }
 
     try {
+        // Dev note: ideally we would reuse more of the existing rendering stack
+        // rather than re-parsing and updating the generated HTML here. However,
+        // that rendering stack is currently quite consolidated and cannot
+        // easily be refactored to allow the call-site to control how spoilers
+        // are rendered. The problem is that we now need two different output
+        // formats:
+        // - The existing format where spoilers are wrapped in html <span> tags
+        // - The new format where the spoilered text is replaced with [Spoiler]
+
         const parser = new DOMParser();
         const doc = parser.parseFromString(formattedBody, "text/html");
+
+        // Use textContent rather than innerHTML/outerHTML since textContent is
+        // XSS-safe and the input is untrusted.
         return replaceSpoilers(doc.body).textContent ?? plainBody;
     } catch {
         return plainBody;
