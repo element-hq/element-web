@@ -188,6 +188,7 @@ jobs:
         uses: element-hq/element-modules/.github/workflows/reusable-playwright-tests.yml@main # zizmor: ignore[unpinned-uses]
         with:
             webapp-artifact: webapp
+            reporter: blob
 
     prepare_ed:
         name: "Prepare Element Desktop"
