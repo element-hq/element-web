@@ -1546,7 +1546,6 @@
         "mjolnir": "Új lehetőség emberek figyelmen kívül hagyására",
         "msc3531_hide_messages_pending_moderation": "A moderátorok kitakarhatják a még nem moderált üzeneteket.",
         "new_room_list": "Új szobalista engedélyezése",
-        "new_timeline": "Új idővonal (MVVM)",
         "notification_settings": "Új értesítési beállítások",
         "notification_settings_beta_caption": "Bemutatjuk az értesítési beállítások módosításának egyszerűbb módját. Testreszabhatja a sajátját, ahogy tetszik itt: %(brand)s.",
         "notification_settings_beta_title": "Értesítési beállítások",
