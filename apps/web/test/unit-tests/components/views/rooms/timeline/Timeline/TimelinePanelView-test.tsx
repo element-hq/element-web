@@ -10,9 +10,9 @@ import { render, screen } from "jest-matrix-react";
 import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
-import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import { TimelinePanelView } from "../../../../src/components/structures/TimelinePanelView";
-import { TimelinePanelViewModel } from "../../../../src/viewmodels/room/timeline/TimelinePanelViewModel";
+import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
+import { TimelinePanelView } from "../../../../../../../src/components/views/rooms/timeline/Timeline";
+import { TimelinePanelViewModel } from "../../../../../../../src/viewmodels/room/timeline/TimelinePanelViewModel";
 
 jest.mock("@element-hq/web-shared-components", () => {
     const actual = jest.requireActual("@element-hq/web-shared-components");
@@ -29,12 +29,12 @@ jest.mock("@element-hq/web-shared-components", () => {
     };
 });
 
-jest.mock("../../../../src/components/views/rooms/NewRoomIntro", () => ({
+jest.mock("../../../../../../../src/components/views/rooms/NewRoomIntro", () => ({
     __esModule: true,
     default: () => <div data-testid="new-room-intro">room creation</div>,
 }));
 
-jest.mock("../../../../src/components/views/elements/GenericEventListSummary", () => ({
+jest.mock("../../../../../../../src/components/views/elements/GenericEventListSummary", () => ({
     __esModule: true,
     default: ({ summaryText, children }: any) => (
         <div data-testid="room-creation-group">
@@ -44,7 +44,7 @@ jest.mock("../../../../src/components/views/elements/GenericEventListSummary", (
     ),
 }));
 
-jest.mock("../../../../src/components/views/rooms/LegacyEventTileAdapter", () => ({
+jest.mock("../../../../../../../src/components/views/rooms/LegacyEventTileAdapter", () => ({
     __esModule: true,
     LegacyEventTileAdapter: ({ mxEvent }: any) => <div data-testid="legacy-event">{mxEvent.getId()}</div>,
 }));
@@ -60,7 +60,7 @@ const mockGroupedEvent = new MatrixEvent({
 
 const timelineVmInstances: any[] = [];
 
-jest.mock("../../../../src/viewmodels/room/timeline/TimelinePanelViewModel", () => ({
+jest.mock("../../../../../../../src/viewmodels/room/timeline/TimelinePanelViewModel", () => ({
     TimelinePanelViewModel: jest.fn().mockImplementation(() => {
         const instance = {
             isDisposed: false,

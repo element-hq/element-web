@@ -17,7 +17,7 @@ import {
 import { BaseViewModel } from "@element-hq/web-shared-components";
 
 import type { TimelineModelItem } from "../../../models/rooms/TimelineModel";
-import { TimelinePanelPresenter } from "./TimelinePanelPresenter";
+import { TimelinePanelPresenter } from "../../../components/views/rooms/timeline/Timeline";
 import type {
     TimelineViewSnapshot,
     TimelineViewActions,

@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { EventType, M_BEACON_INFO, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { wantsDateSeparator } from "../../../DateUtils";
-import type { TimelineModelItem } from "../../../models/rooms/TimelineModel";
-import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t } from "../../../languageHandler";
-import { DateSeparatorViewModel } from "./DateSeparatorViewModel";
+import { wantsDateSeparator } from "../../../../../DateUtils";
+import type { TimelineModelItem } from "../../../../../models/rooms/TimelineModel";
+import DMRoomMap from "../../../../../utils/DMRoomMap";
+import { _t } from "../../../../../languageHandler";
+import { DateSeparatorViewModel } from "../../../../../viewmodels/room/timeline/DateSeparatorViewModel";
 
 export interface TimelinePanelPresenterOpts {
     room: Room;

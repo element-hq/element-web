@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventType } from "matrix-js-sdk/src/matrix";
 
-import { mkEvent } from "../../test-utils";
-import { DateSeparatorViewModel } from "../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
-import { TimelinePanelPresenter } from "../../../src/viewmodels/room/timeline/TimelinePanelPresenter";
+import { mkEvent } from "../../../../../../test-utils";
+import { DateSeparatorViewModel } from "../../../../../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
+import { TimelinePanelPresenter } from "../../../../../../../src/components/views/rooms/timeline/Timeline";
 
-jest.mock("../../../src/utils/DMRoomMap", () => ({
+jest.mock("../../../../../../../src/utils/DMRoomMap", () => ({
     __esModule: true,
     default: {
         shared: jest.fn(() => ({

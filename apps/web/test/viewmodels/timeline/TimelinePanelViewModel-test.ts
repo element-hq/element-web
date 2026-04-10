@@ -9,7 +9,7 @@ import { mocked } from "jest-mock";
 import { Direction, EventType, RoomEvent, TimelineWindow } from "matrix-js-sdk/src/matrix";
 
 import { flushPromises, mkEvent } from "../../test-utils";
-import { TimelinePanelPresenter } from "../../../src/viewmodels/room/timeline/TimelinePanelPresenter";
+import { TimelinePanelPresenter } from "../../../src/components/views/rooms/timeline/Timeline";
 import { TimelinePanelViewModel } from "../../../src/viewmodels/room/timeline/TimelinePanelViewModel";
 
 jest.mock("matrix-js-sdk/src/matrix", () => {
@@ -20,7 +20,7 @@ jest.mock("matrix-js-sdk/src/matrix", () => {
     };
 });
 
-jest.mock("../../../src/viewmodels/room/timeline/TimelinePanelPresenter", () => ({
+jest.mock("../../../src/components/views/rooms/timeline/Timeline", () => ({
     TimelinePanelPresenter: jest.fn(),
 }));
 
@@ -82,15 +82,13 @@ describe("TimelinePanelViewModel", () => {
         await flushPromises();
 
         expect(TimelinePanelPresenter).toHaveBeenCalledWith({
-            client,
             room,
-            canPaginateBackward: expect.any(Function),
         });
         expect(TimelineWindow).toHaveBeenCalledWith(client, room.getUnfilteredTimelineSet(), {
             windowLimit: 200,
         });
         expect(timelineWindowInstance.load).toHaveBeenCalledWith(undefined, 30);
-        expect(presenterInstance.buildItems).toHaveBeenCalledWith([eventA]);
+        expect(presenterInstance.buildItems).toHaveBeenCalledWith([eventA], false);
         expect(vm.getSnapshot().items).toEqual([{ key: "built", kind: "event" }]);
         expect(vm.getSnapshot().canPaginateBackward).toBe(false);
         expect(vm.getSnapshot().canPaginateForward).toBe(false);

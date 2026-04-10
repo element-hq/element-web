@@ -9,12 +9,12 @@ import React, { useMemo, type JSX, type ReactNode } from "react";
 import { DateSeparatorView, TimelineView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { TimelinePanelViewModel } from "../../viewmodels/room/timeline/TimelinePanelViewModel";
-import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
-import type { TimelineModelItem } from "../../models/rooms/TimelineModel";
-import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
-import NewRoomIntro from "../views/rooms/NewRoomIntro";
-import GenericEventListSummary from "../views/elements/GenericEventListSummary";
+import { TimelinePanelViewModel } from "../../../../../viewmodels/room/timeline/TimelinePanelViewModel";
+import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
+import type { TimelineModelItem } from "../../../../../models/rooms/TimelineModel";
+import { LegacyEventTileAdapter } from "../../LegacyEventTileAdapter";
+import NewRoomIntro from "../../NewRoomIntro";
+import GenericEventListSummary from "../../../elements/GenericEventListSummary";
 
 interface TimelinePanelViewProps {
     /** Room whose unfiltered timeline should be rendered. */
