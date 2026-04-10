@@ -2,7 +2,9 @@
 # It uploads the received images and diffs to netlify, printing the URLs to the console
 name: Upload Shared Component Visual Test Diffs
 on:
-    workflow_run:
+    # Privilege escalation necessary to deploy to Netlify
+    # 🚨 We must not execute any checked out code here.
+    workflow_run: # zizmor: ignore[dangerous-triggers]
         workflows: ["Shared Component Visual Tests"]
         types:
             - completed
