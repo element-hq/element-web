@@ -111,6 +111,29 @@ export class ModuleApi implements Api {
     public static patchClientForEnvelopeTransforms(): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const proto = MatrixClient.prototype as any;
+
+        // Patch sendCompleteEvent to apply plaintext content transforms before
+        // encryption. This is the single funnel point for all event sends
+        // (messages, edits, media, stickers, etc.) and has a clean
+        // { roomId, eventObject: { type, content } } shape.
+        const originalSendComplete = proto.sendCompleteEvent;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        proto.sendCompleteEvent = function (this: MatrixClient, params: any) {
+            if (
+                params?.roomId &&
+                params?.eventObject?.content &&
+                ModuleApi._instance?.extras.eventContentTransformCallbacks.length
+            ) {
+                let content = params.eventObject.content;
+                for (const cb of ModuleApi._instance.extras.eventContentTransformCallbacks) {
+                    content = cb(params.roomId, content);
+                }
+                params.eventObject.content = content;
+            }
+            return originalSendComplete.call(this, params);
+        };
+
+        // Patch sendEventHttpRequest to apply envelope transforms after encryption.
         const original = proto.sendEventHttpRequest;
         proto.sendEventHttpRequest = function (
             this: MatrixClient,

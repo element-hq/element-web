@@ -28,7 +28,6 @@ import { createRedactEventDialog } from "../../../dialogs/ConfirmRedactDialog";
 import { endEditing, cancelPreviousPendingEdit } from "./editing";
 import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { createMessageContent, EMOTE_PREFIX } from "./createMessageContent";
-import { ModuleApi } from "../../../../../modules/Api";
 import { isContentModified } from "./isContentModified";
 import { CommandCategories, getCommand } from "../../../../../slash-commands/SlashCommands";
 import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/commands";
@@ -121,11 +120,6 @@ export async function sendMessage(
     // don't bother sending an empty message
     if (!content.body.trim()) {
         return;
-    }
-
-    // Apply module event content transforms
-    for (const cb of ModuleApi.instance.extras.eventContentTransformCallbacks) {
-        content = cb(roomId, content as Record<string, unknown>) as RoomMessageEventContent;
     }
 
     if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
