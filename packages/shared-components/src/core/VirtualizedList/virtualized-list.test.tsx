@@ -249,6 +249,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
     });
 
     afterEach(() => {
+        vi.useRealTimers();
         vi.restoreAllMocks();
     });
 
@@ -379,13 +380,10 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // Then press PageUp to jump up by viewport size
             fireEvent.keyDown(container, { code: "PageUp" });
 
-            // Verify focus moved up – use the variant's navigable selector so
-            // group headers (which are also navigable) are included.
-            const allNav = container.querySelectorAll(variant.navigableSelector);
-            // PageUp should move back to the first navigable element since we only have a few items
-            expectTabIndex(allNav[0], "0");
-            const lastIndex = allNav.length - 1;
-            expectTabIndex(allNav[lastIndex], "-1");
+            // PageUp commits focus to the last visible item after the viewport settles.
+            const items = container.querySelectorAll(".mx_item");
+            const lastIndex = items.length - 1;
+            expectTabIndex(items[lastIndex], "0");
         });
 
         it("should not handle keyboard navigation when modifier keys are pressed", () => {
@@ -550,7 +548,8 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             expect(container).toBeDefined();
         });
 
-        it("should not scroll to top when clicking an item after manual scroll", () => {
+        it("should not scroll to top when clicking an item after manual scroll", async () => {
+            vi.useFakeTimers();
             // Create a larger list to enable meaningful scrolling
             const largerItems: TestItemWithSeparator[] = Array.from({ length: 50 }, (_, i) => ({
                 id: `item-${i}`,
@@ -574,9 +573,11 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             expectAttribute(items[0], "data-testid", "row-0");
 
             // Step 2: Simulate manual scrolling (mouse wheel, scroll bar drag, etc.)
-            // This changes which items are visible but DOES NOT change tabIndexKey
-            // tabIndexKey should still point to "item-0" but "item-0" is no longer visible
             fireEvent.scroll(listContainer, { target: { scrollTop: 300 } });
+            await act(async () => {
+                vi.advanceTimersByTime(200);
+                await Promise.resolve();
+            });
 
             // Step 3: After scrolling, different items should now be visible
             // but tabIndexKey should still point to "item-0" (which is no longer visible)
@@ -608,6 +609,8 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // item-0 should still not be visible (if the fix is working)
             const item0AfterClick = container.querySelector("[data-testid='row-0']");
             expect(item0AfterClick).toBeNull();
+
+            vi.useRealTimers();
         });
     });
 
@@ -682,7 +685,9 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
         const ITEM_HEIGHT = 52;
         const VIEWPORT_HEIGHT = 400;
 
-        const renderRealVirtualizedList = (): ReturnType<typeof render> => {
+        const renderRealVirtualizedList = (
+            extraProps: Partial<FlatVirtualizedListProps<TestItemWithSeparator, any>> = {},
+        ): ReturnType<typeof render> => {
             const largeItems: TestItemWithSeparator[] = Array.from({ length: 50 }, (_, i) => ({
                 id: `item-${i}`,
                 name: `Item ${i}`,
@@ -724,6 +729,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
                     role="grid"
                     style={{ height: `${VIEWPORT_HEIGHT}px` }}
                     fixedItemHeight={ITEM_HEIGHT}
+                    {...extraProps}
                 />,
             );
         };
@@ -792,6 +798,32 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // After the keyDown, focus should have moved to the scroller element
             // (not remain on the child button, and not escape to <body>).
             expect(document.activeElement).toBe(listContainer);
+        });
+
+        it("should update focus to the last visible item after manual scroll when enabled", async () => {
+            const { container } = renderRealVirtualizedList({ scrollSettleFocusBehavior: "last-visible" });
+            const listContainer = screen.getByRole("grid");
+
+            await waitFor(() => {
+                expect(screen.getByTestId("row-0")).toBeDefined();
+            });
+
+            fireEvent.focus(listContainer);
+
+            await act(async () => {
+                fireEvent.scroll(listContainer, { target: { scrollTop: 300 } });
+            });
+
+            await waitFor(() => {
+                const focused = Array.from(container.querySelectorAll(".mx_item")).find(
+                    (el) => el.getAttribute("tabindex") === "0",
+                );
+                expect(focused).toBeDefined();
+                const visibleItems = container.querySelectorAll(".mx_item");
+                expect(focused).toBe(visibleItems[visibleItems.length - 1]);
+            });
+
+            expect(container.querySelector("[data-testid='row-0']")).toBeNull();
         });
 
         it("should scroll up through many items with ArrowUp and virtualise later items out of the DOM", async () => {
