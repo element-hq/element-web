@@ -182,6 +182,16 @@ export class RoomListViewModel
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
 
+        // When a filter is toggled on, expand sections that have results so they're visible
+        if (newFilter) {
+            for (const section of this.roomsResult.sections) {
+                if (section.rooms.length > 0) {
+                    const sectionHeaderVM = this.roomSectionHeaderViewModels.get(section.tag);
+                    if (sectionHeaderVM) sectionHeaderVM.isExpanded = true;
+                }
+            }
+        }
+
         this.updateRoomListData();
     };
 

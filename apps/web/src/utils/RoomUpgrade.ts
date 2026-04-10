@@ -10,13 +10,13 @@ import { ClientEvent, EventType, type MatrixClient, type Room } from "matrix-js-
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { inviteMultipleToRoom, showAnyInviteErrors } from "../RoomInvite";
+import { showAnyInviteErrors } from "../RoomInvite";
 import Modal, { type IHandle } from "../Modal";
 import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import SpaceStore from "../stores/spaces/SpaceStore";
 import Spinner from "../components/views/elements/Spinner";
-import type { MultiInviterOptions } from "./MultiInviter";
+import MultiInviter, { type MultiInviterOptions } from "./MultiInviter";
 
 export interface RoomUpgradeProgress {
     roomUpgraded: boolean;
@@ -158,7 +158,8 @@ async function inviteUsersToRoom(
     userIds: string[],
     inviteOptions: MultiInviterOptions,
 ): Promise<void> {
-    const result = await inviteMultipleToRoom(client, roomId, userIds, inviteOptions);
+    const inviter = new MultiInviter(client, roomId, inviteOptions);
+    const states = await inviter.invite(userIds);
     const room = client.getRoom(roomId)!;
-    showAnyInviteErrors(result.states, room, result.inviter);
+    showAnyInviteErrors(states, room, inviter);
 }

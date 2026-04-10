@@ -5,8 +5,6 @@ on:
         types: [checks_requested]
     push:
         branches: [develop, master]
-    repository_dispatch:
-        types: [element-web-notify]
     workflow_call:
         inputs:
             disable_coverage:

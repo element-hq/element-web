@@ -885,6 +885,33 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server"]);
             });
 
+            it("should expand collapsed sections that have results when a filter is toggled on", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Collapse the favourite section
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                favHeader.onClick();
+                expect(favHeader.isExpanded).toBe(false);
+
+                // Toggle a filter that returns rooms in the favourite section
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1] },
+                        { tag: CHATS_TAG, rooms: [] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                    filterKeys: [FilterEnum.UnreadFilter],
+                });
+                viewModel.onToggleFilter("unread");
+
+                // The favourite section should be expanded and its rooms visible
+                expect(favHeader.isExpanded).toBe(true);
+                const snapshot = viewModel.getSnapshot();
+                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection!.roomIds).toEqual(["!fav1:server"]);
+            });
+
             it("should apply sticky room within the correct section", async () => {
                 stubClient();
                 viewModel = new RoomListViewModel({ client: matrixClient });
