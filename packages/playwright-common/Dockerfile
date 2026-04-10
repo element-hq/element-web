@@ -16,7 +16,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 #
 # (The problem is that PID 1 doesn't get default signal handlers, and
 # playwright server doesn't register a SIGTERM handler, so if that ends up as
-# PID 1, then it ignores SIGTERM. Likewise bash doesn't retstart a SIGTERM handler by default.
+# PID 1, then it ignores SIGTERM. Likewise bash doesn't set a SIGTERM handler by default.
 #
 # The easiest solution is to use docker-init, which is in fact `tini` (https://github.com/krallin/tini).
 #
