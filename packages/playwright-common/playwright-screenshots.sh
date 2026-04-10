@@ -19,14 +19,11 @@ WS_PORT=3000
 PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
 IMAGE_NAME="ghcr.io/element-hq/element-web/playwright-server:$PW_VERSION"
 
-# If we don't already have the image, and it exists in the repository, pull it;
-# failing that build it.
+# If the image exists in the repository, pull it; otherwise, build it.
 #
-# (This series of explicit tests gives the user clearer progress info than just
+# (This explicit test gives the user clearer progress info than just
 # `docker pull 2>/dev/null || build_image`.)
-if docker image inspect "$IMAGE_NAME" &>/dev/null; then
-    echo "Using local copy of image $IMAGE_NAME"
-elif docker manifest inspect "$IMAGE_NAME" &>/dev/null; then
+if docker manifest inspect "$IMAGE_NAME" &>/dev/null; then
     docker pull "$IMAGE_NAME"
 else
     build_image "$IMAGE_NAME"
