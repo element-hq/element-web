@@ -21,6 +21,7 @@ export enum RightPanelPhases {
     EncryptionPanel = "EncryptionPanel",
     RoomSummary = "RoomSummary",
     Widget = "Widget",
+    StickerPicker = "StickerPicker",
     PinnedMessages = "PinnedMessages",
     Timeline = "Timeline",
     Extensions = "Extensions",

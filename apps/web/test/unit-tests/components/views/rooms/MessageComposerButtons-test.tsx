@@ -71,7 +71,7 @@ describe("MessageComposerButtons", () => {
             false,
         );
 
-        expect(getButtonLabels()).toEqual(["Emoji", "Attachment", "More options"]);
+        expect(getButtonLabels()).toEqual(["Emoji", "Sticker", "Attachment", "More options"]);
     });
 
     it("Renders other buttons in menu in wide mode", async () => {
@@ -91,9 +91,10 @@ describe("MessageComposerButtons", () => {
         await waitFor(() => {
             expect(getButtonLabels()).toEqual([
                 "Emoji",
+                "Sticker",
                 "Attachment",
                 "More options",
-                ["Sticker", "Voice Message", "Poll", "Location"],
+                ["Voice Message", "Poll", "Location"],
             ]);
         });
     });

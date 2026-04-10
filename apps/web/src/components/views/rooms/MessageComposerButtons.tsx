@@ -53,6 +53,7 @@ interface IProps {
     onRecordStartEndClick: () => void;
     relation?: IEventRelation;
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
+    toggleStickerPickerOpen: () => void;
     showLocationButton: boolean;
     showPollsButton: boolean;
     showStickersButton: boolean;
@@ -106,10 +107,10 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
+            showStickersButton(props),
             uploadButton(), // props passed via UploadButtonContext
         ];
         moreButtons = [
-            showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
@@ -257,7 +258,7 @@ function showStickersButton(props: IProps): ReactElement | null {
             id="stickersButton"
             key="controls_stickers"
             className="mx_MessageComposer_button"
-            onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
+            onClick={props.toggleStickerPickerOpen}
             title={props.isStickerPickerOpen ? _t("composer|close_sticker_picker") : _t("common|sticker")}
         >
             <StickerIcon />

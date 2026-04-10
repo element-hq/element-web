@@ -8,11 +8,9 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type IWidget } from "matrix-widget-api";
 
 import { _t, _td } from "../../../languageHandler";
-import AppTile from "../elements/AppTile";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import Spinner from "../elements/Spinner";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
 import WidgetUtils, { type UserWidget } from "../../../utils/WidgetUtils";
@@ -26,19 +24,15 @@ import type ScalarAuthClient from "../../../ScalarAuthClient";
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-
-// This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
-// We sit in a context menu, so this should be given to the context menu.
-const STICKERPICKER_Z_INDEX = 3500;
-
-// Key to store the widget's AppTile under in PersistedElement
-const PERSISTED_ELEMENT_KEY = "stickerPicker";
+import { setStickerpickerAttachedToSidebar } from "./StickerpickerSidebarStore";
+import StickerpickerHost, { PERSISTED_ELEMENT_KEY, STICKERPICKER_Z_INDEX } from "./StickerpickerHost";
 
 interface IProps {
     room: Room;
     threadId?: string | null;
     isStickerPickerOpen: boolean;
     menuPosition?: any;
+    displayMode?: "popover" | "sidebar";
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
 }
 
@@ -46,21 +40,22 @@ interface IState {
     imError: string | null;
     stickerpickerWidget: UserWidget | null;
     widgetId: string | null;
+    widgetStateLoaded: boolean;
 }
 
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         threadId: null,
+        displayMode: "popover",
     };
 
     public static currentWidget?: UserWidget;
 
     private dispatcherRef?: string;
-
     private prevSentVisibility?: boolean;
 
-    private popoverWidth = 300;
-    private popoverHeight = 300;
+    private popoverWidth = 340;
+    private popoverHeight = 450;
     // This is loaded by _acquireScalarClient on an as-needed basis.
     private scalarClient: ScalarAuthClient | null = null;
 
@@ -70,6 +65,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             imError: null,
             stickerpickerWidget: null,
             widgetId: null,
+            widgetStateLoaded: false,
         };
     }
 
@@ -129,17 +125,20 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         this.dispatcherRef = dis.register(this.onAction);
 
         // Track updates to widget state in account data
-        MatrixClientPeg.safeGet().on(ClientEvent.AccountData, this.updateWidget);
+        this.props.room.client.on(ClientEvent.AccountData, this.updateWidget);
 
-        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        if (this.props.displayMode === "popover") {
+            RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        }
         // Initialise widget state from current account data
         this.updateWidget();
     }
 
     public componentWillUnmount(): void {
-        const client = MatrixClientPeg.get();
-        if (client) client.removeListener(ClientEvent.AccountData, this.updateWidget);
-        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        this.props.room.client.removeListener(ClientEvent.AccountData, this.updateWidget);
+        if (this.props.displayMode === "popover") {
+            RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
+        }
         window.removeEventListener("resize", this.onResize);
         dis.unregister(this.dispatcherRef);
     }
@@ -160,7 +159,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets(this.props.room.client)[0];
         if (!stickerpickerWidget) {
             Stickerpicker.currentWidget = undefined;
-            this.setState({ stickerpickerWidget: null, widgetId: null });
+            this.setState({ stickerpickerWidget: null, widgetId: null, widgetStateLoaded: true });
             return;
         }
 
@@ -177,6 +176,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         this.setState({
             stickerpickerWidget,
             widgetId: stickerpickerWidget ? stickerpickerWidget.id : null,
+            widgetStateLoaded: true,
         });
     };
 
@@ -199,6 +199,15 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         this.props.setStickerPickerOpen(false);
     };
 
+    private attachToSidebar = (): void => {
+        setStickerpickerAttachedToSidebar(true);
+        this.props.setStickerPickerOpen(false);
+        dis.dispatch({
+            action: "stickerpicker_attach_to_sidebar",
+            roomId: this.props.room.roomId,
+        });
+    };
+
     private defaultStickerpickerContent(): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const imgSrc = require("../../../../res/img/stickerpack-placeholder.png");
@@ -219,6 +228,14 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         );
     }
 
+    private loadingStickerpickerContent(): JSX.Element {
+        return (
+            <div className="mx_Stickers_loading">
+                <Spinner message={_t("common|loading")} />
+            </div>
+        );
+    }
+
     private sendVisibilityToWidget(visible: boolean): void {
         if (!this.state.stickerpickerWidget) return;
         const messaging = WidgetMessagingStore.instance.getMessagingForUid(
@@ -232,85 +249,51 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public getStickerpickerContent(): JSX.Element {
-        // Handle integration manager errors
+    private renderStickerpickerWidget(displayMode: "popover" | "sidebar"): JSX.Element {
         if (this.state.imError) {
             return this.errorStickerpickerContent();
         }
 
-        // Stickers
-        // TODO - Add support for Stickerpickers from multiple app stores.
-        // Render content from multiple stickerpack sources, each within their
-        // own iframe, within the stickerpicker UI element.
-        const stickerpickerWidget = this.state.stickerpickerWidget;
-        let stickersContent: JSX.Element | undefined;
-
-        // Use a separate ReactDOM tree to render the AppTile separately so that it persists and does
-        // not unmount when we (a) close the sticker picker (b) switch rooms. It's properties are still
-        // updated.
-
-        // Load stickerpack content
-        if (!!stickerpickerWidget?.content?.url) {
-            // Set default name
-            stickerpickerWidget.content.name = stickerpickerWidget.content.name || _t("common|stickerpack");
-
-            // FIXME: could this use the same code as other apps?
-            const stickerApp: IWidget = {
-                id: stickerpickerWidget.id,
-                url: stickerpickerWidget.content.url,
-                name: stickerpickerWidget.content.name,
-                type: stickerpickerWidget.content.type,
-                data: stickerpickerWidget.content.data,
-                creatorUserId: stickerpickerWidget.content.creatorUserId || stickerpickerWidget.sender,
-            };
-
-            stickersContent = (
-                <div className="mx_Stickers_content_container">
-                    <div
-                        id="stickersContent"
-                        className="mx_Stickers_content"
-                        style={{
-                            border: "none",
-                            height: this.popoverHeight,
-                            width: this.popoverWidth,
-                        }}
-                    >
-                        <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} zIndex={STICKERPICKER_Z_INDEX}>
-                            <AppTile
-                                app={stickerApp}
-                                room={this.props.room}
-                                threadId={this.props.threadId}
-                                fullWidth={true}
-                                userId={MatrixClientPeg.safeGet().credentials.userId!}
-                                creatorUserId={
-                                    stickerpickerWidget.sender || MatrixClientPeg.safeGet().credentials.userId!
-                                }
-                                waitForIframeLoad={true}
-                                showMenubar={true}
-                                onEditClick={this.launchManageIntegrations}
-                                onDeleteClick={this.removeStickerpickerWidgets}
-                                showTitle={false}
-                                showPopout={false}
-                                handleMinimisePointerEvents={true}
-                                userWidget={true}
-                                showLayoutButtons={false}
-                            />
-                        </PersistedElement>
-                    </div>
-                </div>
+        if (this.state.stickerpickerWidget?.content?.url) {
+            return (
+                <StickerpickerHost
+                    room={this.props.room}
+                    threadId={this.props.threadId}
+                    stickerpickerWidget={this.state.stickerpickerWidget}
+                    displayMode={displayMode}
+                    popoverWidth={this.popoverWidth}
+                    popoverHeight={this.popoverHeight}
+                    onEditClick={this.launchManageIntegrations}
+                    onDeleteClick={this.removeStickerpickerWidgets}
+                    onAttachToSidebarClick={this.attachToSidebar}
+                />
             );
-        } else {
-            // Default content to show if stickerpicker widget not added
-            stickersContent = this.defaultStickerpickerContent();
         }
-        return stickersContent;
+
+        return this.defaultStickerpickerContent();
+    }
+
+    public getStickerpickerContent(): JSX.Element {
+        return this.renderStickerpickerWidget("popover");
+    }
+
+    public getSidebarStickerpickerContent(): JSX.Element {
+        if (!this.state.widgetStateLoaded) {
+            return <div className="mx_Stickers_sidebar">{this.loadingStickerpickerContent()}</div>;
+        }
+
+        if (this.state.imError) {
+            return this.errorStickerpickerContent();
+        }
+
+        return <div className="mx_Stickers_sidebar">{this.renderStickerpickerWidget("sidebar")}</div>;
     }
 
     /**
      * Called when the window is resized
      */
     private onResize = (): void => {
-        if (this.props.isStickerPickerOpen) {
+        if (this.props.displayMode === "popover" && this.props.isStickerPickerOpen) {
             this.props.setStickerPickerOpen(false);
         }
     };
@@ -336,6 +319,10 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
     public render(): React.ReactNode {
         if (!this.props.isStickerPickerOpen) return null;
+
+        if (this.props.displayMode === "sidebar") {
+            return this.getSidebarStickerpickerContent();
+        }
 
         return (
             <ContextMenu

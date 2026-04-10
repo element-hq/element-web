@@ -14,11 +14,11 @@ import BaseCard from "./BaseCard";
 import WidgetUtils, { useWidgets } from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
-import { ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
+import { ContextMenuButton, toLeftOrRightOf, useContextMenu } from "../../structures/ContextMenu";
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import Heading from "../typography/Heading";
-import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel";
+import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 
 interface IProps {
     room: Room;
@@ -46,20 +46,22 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     if (!app || !isRight) return null;
 
     const contextMenu: JSX.Element = (
-        <WidgetContextMenu
-            trigger={
-                <ContextMenuButton
-                    className="mx_BaseCard_header_title_button--option"
-                    ref={handle}
-                    onClick={openMenu}
-                    isExpanded={menuDisplayed}
-                    label={_t("common|options")}
+        <>
+            <ContextMenuButton
+                className="mx_BaseCard_header_title_button--option"
+                ref={handle}
+                onClick={openMenu}
+                isExpanded={menuDisplayed}
+                label={_t("common|options")}
+            />
+            {menuDisplayed && handle.current && (
+                <WidgetContextMenu
+                    onFinished={closeMenu}
+                    app={app}
+                    {...toLeftOrRightOf(handle.current.getBoundingClientRect())}
                 />
-            }
-            onFinished={closeMenu}
-            app={app}
-            menuDisplayed={menuDisplayed}
-        />
+            )}
+        </>
     );
 
     const header = (

@@ -4,11 +4,11 @@
 
 .mx_Stickers_content_container {
     overflow: hidden;
-    height: 300px;
+    height: 450px;
 }
 
 #mx_persistedElement_stickerPicker {
-    .mx_AppTileFullWidth {
+    .mx_Stickers_hostInner_popover .mx_AppTileFullWidth {
         height: unset;
         box-sizing: border-box;
         border-left: none;
@@ -16,13 +16,34 @@
         border-bottom: none;
     }
 
-    .mx_AppTileMenuBar {
+    .mx_Stickers_hostInner_popover .mx_AppTileMenuBar {
         padding: 0;
     }
 
-    iframe {
-        /* Sticker picker depends on the fixed height previously used for all tiles */
-        height: 283px; /* height of the popout minus the AppTile menu bar */
+    .mx_Stickers_hostInner_popover iframe {
+        /* Sticker picker depends on a fixed popover height */
+        height: 433px; /* 450px popover minus the AppTile menu bar */
+    }
+
+    .mx_Stickers_hostInner_sidebar,
+    .mx_Stickers_hostInner_sidebar .mx_AppTileFullWidth,
+    .mx_Stickers_hostInner_sidebar .mx_AppTileBody--large,
+    .mx_Stickers_hostInner_sidebar .mx_AppTile_persistedWrapper {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+    }
+
+    .mx_Stickers_hostInner_sidebar .mx_AppTileFullWidth,
+    .mx_Stickers_hostInner_sidebar .mx_AppTileBody--large,
+    .mx_Stickers_hostInner_sidebar .mx_AppTile_persistedWrapper {
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: column;
+    }
+
+    .mx_Stickers_hostInner_sidebar iframe {
+        height: 100%;
     }
 }
 
@@ -43,4 +64,69 @@
     display: inline;
     cursor: pointer;
     color: $accent;
+}
+
+.mx_Stickers_sidebar {
+    display: flex;
+    flex: 1 1 0;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+
+    > div {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+    }
+
+    > div > div {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.mx_Stickers_host {
+    display: flex;
+    width: 100%;
+    min-height: 0;
+}
+
+.mx_Stickers_host_popover {
+    height: 100%;
+}
+
+.mx_Stickers_host_sidebar {
+    flex: 1 1 0;
+    height: 100%;
+}
+
+.mx_Stickers_hostInner {
+    display: flex;
+    min-height: 0;
+}
+
+.mx_Stickers_hostInner_sidebar {
+    flex: 1 1 0;
+}
+
+.mx_Stickers_sidebarPlaceholder {
+    display: flex;
+    flex: 1 1 0;
+    width: 100%;
+    min-height: 0;
+}
+
+.mx_Stickers_loading {
+    display: flex;
+    flex: 1 1 0;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.mx_WidgetCard > .mx_Stickers_sidebar,
+.mx_WidgetCard > .mx_Stickers_sidebarPlaceholder {
+    flex: 1 1 0;
+    min-height: 0;
 }
