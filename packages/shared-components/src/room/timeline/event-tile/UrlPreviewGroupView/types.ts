@@ -21,7 +21,7 @@ export interface UrlPreview {
     /**
      * The site name to be displayed alongside the title.
      */
-    siteName?: string;
+    siteName: string;
     /**
      * The HTTP URI of the the sites icon.
      */

@@ -14,6 +14,7 @@ import { useI18n } from "../../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "../types";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
+import { isPropValid } from "storybook/theming";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
@@ -21,19 +22,69 @@ export interface LinkPreviewActions {
 
 export type LinkPreviewProps = UrlPreview & LinkPreviewActions;
 
+function LinkTitle({
+    title,
+    showTooltipOnLink,
+    link,
+}: Pick<LinkPreviewProps, "title" | "showTooltipOnLink" | "link">): JSX.Element {
+    const caption = new URL(link).toString();
+    const anchor = (
+        <Text
+            as="a"
+            type="body"
+            weight="semibold"
+            size="lg"
+            className={styles.title}
+            href={link}
+            target="_blank"
+            rel="noreferrer noopener"
+        >
+            {title}
+        </Text>
+    );
+    return showTooltipOnLink ? <Tooltip label={caption}>{anchor}</Tooltip> : anchor;
+}
+
+function LinkSiteName({ siteIcon, siteName }: { siteIcon?: string; siteName: string }): JSX.Element {
+    return (
+        <div className={styles.siteName}>
+            <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />
+            <Text as="span" size="sm" weight="regular">
+                {siteName}
+            </Text>
+        </div>
+    );
+}
+
+/**
+ * A condensed link preview that only contains the site icon, the title of the link and the site name.
+ */
+function LinkPreviewInline({
+    title,
+    showTooltipOnLink,
+    siteIcon,
+    siteName,
+    link,
+}: Omit<LinkPreviewProps, "image" | "description" | "author" | "onImageClick">): JSX.Element {
+    return (
+        <div className={classNames(styles.container, styles.inline)}>
+            <div className={styles.siteAvatar}>
+                <Avatar type="square" size="48px" name={title} id={title} src={siteIcon} />
+            </div>
+            <div className={classNames(styles.textContent, styles.inline)}>
+                <LinkTitle title={title} showTooltipOnLink={showTooltipOnLink} link={link} />
+                {siteName && <LinkSiteName siteName={siteName} siteIcon={siteIcon} />}
+            </div>
+        </div>
+    );
+}
+
 /**
  * LinkPreview renders a single preview component for a single link on an event. It is usually rendered as part of
  * a `UrlPreviewGroupView`.
  */
 export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX.Element {
     const { translate: _t } = useI18n();
-
-    const tooltipCaption = useMemo(() => {
-        if (preview.showTooltipOnLink) {
-            return new URL(preview.link, window.location.href).toString();
-        }
-        return null;
-    }, [preview.link, preview.showTooltipOnLink]);
 
     const onImageClickHandler = useCallback<MouseEventHandler>(
         (ev) => {
@@ -48,10 +99,17 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
         [preview.image?.imageFull, onImageClick],
     );
 
+    if (!preview.image && !preview.author && !preview.description) {
+        return <LinkPreviewInline {...preview} />;
+    }
+
     let img: JSX.Element | undefined;
-    // Don't render a button to show the image, just hide it outright
+
     if (preview.image) {
         if (preview.image.playable) {
+            // Playable media do not have clickable images so we don't
+            // overlay buttons atop buttons, instead we render a
+            // button for them to open the media.
             img = (
                 <div
                     style={{
@@ -73,6 +131,7 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
                 </div>
             );
         } else {
+            // Otherwise, the preview can be clicked on.
             img = (
                 <button
                     className={styles.preview}
@@ -85,51 +144,20 @@ export function LinkPreview({ onImageClick, ...preview }: LinkPreviewProps): JSX
         }
     }
 
-    const anchor = (
-        <Text
-            as="a"
-            type="body"
-            weight="semibold"
-            size="lg"
-            className={styles.title}
-            href={preview.link}
-            target="_blank"
-            rel="noreferrer noopener"
-        >
-            {preview.title}
-        </Text>
-    );
-
-    const useInline = !preview.image && !preview.author && !preview.description;
-
     return (
-        <div className={classNames(styles.container, useInline && styles.inline)}>
+        <div className={styles.container}>
             {img}
-            {useInline && (
-                <div className={styles.siteAvatar}>
-                    <Avatar type="square" size="48px" name={preview.title} id={preview.title} src={preview.siteIcon} />
-                </div>
-            )}
-            <div className={classNames(styles.textContent, useInline && styles.inline)}>
+            <div className={styles.textContent}>
                 {preview.author && (
                     <Text as="span" size="md" weight="semibold">
                         {preview.author}
                     </Text>
                 )}
-                {anchor && tooltipCaption ? <Tooltip label={tooltipCaption}>{anchor}</Tooltip> : anchor}
+                <LinkTitle title={preview.title} showTooltipOnLink={preview.showTooltipOnLink} link={preview.link} />
                 <LinkedText type="body" size="md" className={styles.description}>
                     {preview.description}
                 </LinkedText>
-                {preview.siteName && (
-                    <div className={styles.siteName}>
-                        {!useInline && (
-                            <Avatar size="16px" name={preview.siteName} id={preview.siteName} src={preview.siteIcon} />
-                        )}
-                        <Text as="span" size="sm" weight="regular">
-                            {preview.siteName}
-                        </Text>
-                    </div>
-                )}
+                {preview.siteName && <LinkSiteName siteName={preview.siteName} siteIcon={preview.siteIcon} />}
             </div>
         </div>
     );
