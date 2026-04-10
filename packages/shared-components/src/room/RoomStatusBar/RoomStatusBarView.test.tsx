@@ -6,8 +6,9 @@
  */
 
 import React from "react";
-import { fireEvent, render } from "@test-utils";
+import { render, waitFor } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
+import userEvent from "@testing-library/user-event";
 import { describe, it, vi, expect } from "vitest";
 
 import * as stories from "./RoomStatusBarView.stories.tsx";
@@ -38,24 +39,29 @@ describe("RoomStatusBarView", () => {
         expect(container).toMatchSnapshot();
     });
     it("renders unsent messages and deletes all", async () => {
+        const user = userEvent.setup();
         const onDeleteAllClick = vi.fn();
         const { container, getByRole } = render(<WithUnsentMessages onDeleteAllClick={onDeleteAllClick} />);
         expect(container).toMatchSnapshot();
 
         const button = getByRole("button", { name: "Delete all" });
-        fireEvent.click(button);
+        await waitFor(() => expect(window.getComputedStyle(button).pointerEvents).not.toBe("none"));
+        await user.click(button);
         expect(onDeleteAllClick).toHaveBeenCalled();
     });
     it("renders unsent messages and resends all", async () => {
+        const user = userEvent.setup();
         const onResendAllClick = vi.fn();
         const { container, getByRole } = render(<WithUnsentMessages onResendAllClick={onResendAllClick} />);
         expect(container).toMatchSnapshot();
 
         const button = getByRole("button", { name: "Retry all" });
-        fireEvent.click(button);
+        await waitFor(() => expect(window.getComputedStyle(button).pointerEvents).not.toBe("none"));
+        await user.click(button);
         expect(onResendAllClick).toHaveBeenCalled();
     });
     it("renders local room error", async () => {
+        const user = userEvent.setup();
         const onRetryRoomCreationClick = vi.fn();
         const { container, getByRole } = render(
             <WithLocalRoomRetry onRetryRoomCreationClick={onRetryRoomCreationClick} />,
@@ -63,7 +69,8 @@ describe("RoomStatusBarView", () => {
         expect(container).toMatchSnapshot();
 
         const button = getByRole("button", { name: "Retry" });
-        fireEvent.click(button);
+        await waitFor(() => expect(window.getComputedStyle(button).pointerEvents).not.toBe("none"));
+        await user.click(button);
         expect(onRetryRoomCreationClick).toHaveBeenCalled();
     });
 });
