@@ -2736,6 +2736,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             if (b) extraButtons.push(b);
         }
 
+        const roomBanners: JSX.Element[] = [];
+        for (const cb of ModuleApi.instance.extras.roomBannerCallbacks) {
+            const b = cb(this.state.room.roomId);
+            if (b) roomBanners.push(b);
+        }
+
         return (
             <ScopedRoomContextProvider {...this.state} roomViewStore={this.roomViewStore}>
                 <div
@@ -2767,6 +2773,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                         extraButtons={<>{extraButtons}</>}
                                     />
                                 )}
+                                {roomBanners}
                                 {mainSplitBody}
                             </div>
                         </MainSplit>

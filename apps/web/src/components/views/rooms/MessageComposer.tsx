@@ -54,6 +54,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { ModuleApi } from "../../../modules/Api";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -665,6 +666,14 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         const showSendButton = canSendMessages && (!this.state.isComposerEmpty || this.state.haveRecording);
 
+        const composerLeftComponents: JSX.Element[] = [];
+        if (canSendMessages) {
+            for (const cb of ModuleApi.instance.extras.composerLeftComponentCallbacks) {
+                const c = cb(this.props.room.roomId);
+                if (c) composerLeftComponents.push(c);
+            }
+        }
+
         const classes = classNames({
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
@@ -682,6 +691,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                     />
                     <div className="mx_MessageComposer_row">
                         {leftIcon}
+                        {composerLeftComponents}
                         {composer}
                         <div className="mx_MessageComposer_actions">
                             {controls}

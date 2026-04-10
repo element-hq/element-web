@@ -17,4 +17,19 @@ export class ClientApi implements IClientApi {
         if (sdkRoom) return new ModuleRoom(sdkRoom);
         return null;
     }
+
+    public async downloadMxc(mxcUrl: string): Promise<string> {
+        const client = MatrixClientPeg.safeGet();
+        // useAuthentication=true produces the authenticated /_matrix/client/v1/media/download URL
+        const httpUrl = client.mxcUrlToHttp(mxcUrl, undefined, undefined, undefined, false, true);
+        if (!httpUrl) throw new Error(`Cannot resolve mxc URL: ${mxcUrl}`);
+        const accessToken = client.getAccessToken();
+        const response = await fetch(httpUrl, {
+            headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status} downloading ${mxcUrl}`);
+        }
+        return response.text();
+    }
 }

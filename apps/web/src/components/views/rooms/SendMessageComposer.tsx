@@ -60,6 +60,7 @@ import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation } from "../../../utils/messages";
+import { ModuleApi } from "../../../modules/Api";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -415,6 +416,11 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
+
+            // Apply module event content transforms
+            for (const cb of ModuleApi.instance.extras.eventContentTransformCallbacks) {
+                content = cb(roomId, content as Record<string, unknown>) as RoomMessageEventContent;
+            }
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

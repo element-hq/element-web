@@ -55,6 +55,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
         }
         return {
             content: mxEvent.getContent(),
+            wireContent: mxEvent.getWireContent(),
             eventId,
             originServerTs: mxEvent.getTs(),
             roomId,
