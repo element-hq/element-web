@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, M_BEACON_INFO, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { EventType, M_BEACON_INFO, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { wantsDateSeparator } from "../../../DateUtils";
@@ -15,9 +15,7 @@ import { _t } from "../../../languageHandler";
 import { DateSeparatorViewModel } from "./DateSeparatorViewModel";
 
 export interface TimelinePanelPresenterOpts {
-    client: MatrixClient;
     room: Room;
-    canPaginateBackward: () => boolean;
 }
 
 export class TimelinePanelPresenter {
@@ -32,12 +30,12 @@ export class TimelinePanelPresenter {
         this.dateSeparatorVms.clear();
     }
 
-    public buildItems(events: MatrixEvent[]): TimelineModelItem[] {
+    public buildItems(events: MatrixEvent[], canPaginateBackward: boolean): TimelineModelItem[] {
         const items: TimelineModelItem[] = [];
         let prevEvent: MatrixEvent | null = null;
         let startIndex = 0;
 
-        if (!this.opts.canPaginateBackward()) {
+        if (!canPaginateBackward) {
             const creationItems = this.buildInitialCreationItems(events);
             if (creationItems) {
                 items.push(...creationItems.items);
@@ -50,7 +48,7 @@ export class TimelinePanelPresenter {
             const eventId = event.getId();
             if (!eventId) continue;
 
-            if (this.shouldInsertDateSeparator(prevEvent, event)) {
+            if (this.shouldInsertDateSeparator(prevEvent, event, canPaginateBackward)) {
                 items.push(this.buildDateSeparatorItem(event));
             }
 
@@ -65,9 +63,13 @@ export class TimelinePanelPresenter {
         return items;
     }
 
-    private shouldInsertDateSeparator(prevEvent: MatrixEvent | null, event: MatrixEvent): boolean {
+    private shouldInsertDateSeparator(
+        prevEvent: MatrixEvent | null,
+        event: MatrixEvent,
+        canPaginateBackward: boolean,
+    ): boolean {
         if (prevEvent === null) {
-            return !this.opts.canPaginateBackward();
+            return !canPaginateBackward;
         }
 
         return wantsDateSeparator(prevEvent.getDate() || undefined, event.getDate() || undefined);
@@ -108,7 +110,7 @@ export class TimelinePanelPresenter {
     }
 
     private shouldIncludeInCreationGroup(createEvent: MatrixEvent, event: MatrixEvent): boolean {
-        if (this.shouldInsertDateSeparator(createEvent, event)) {
+        if (createEvent === null) {
             return false;
         }
 

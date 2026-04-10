@@ -74,9 +74,7 @@ export class TimelinePanelViewModel
             windowLimit: WINDOW_LIMIT,
         });
         this.presenter = new TimelinePanelPresenter({
-            client: opts.client,
             room: opts.room,
-            canPaginateBackward: () => this.timelineWindow.canPaginate(Direction.Backward),
         });
         this.disposables.trackListener(opts.room, RoomEvent.Timeline, this.onRoomTimelineListener);
         this.disposables.track({
@@ -134,9 +132,9 @@ export class TimelinePanelViewModel
                 return;
             }
 
-            const items = this.buildItems();
             const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
             const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
+            const items = this.buildItems(canPaginateBackward);
 
             this.mergeSnapshot({
                 items,
@@ -183,8 +181,8 @@ export class TimelinePanelViewModel
         this.mergeSnapshot({ stuckAtBottom });
     };
 
-    private buildItems(): TimelineModelItem[] {
-        return this.presenter.buildItems(this.timelineWindow.getEvents());
+    private buildItems(canPaginateBackward: boolean): TimelineModelItem[] {
+        return this.presenter.buildItems(this.timelineWindow.getEvents(), canPaginateBackward);
     }
 
     private mergeSnapshot(update: Partial<TimelineViewSnapshot<TimelineModelItem>>): void {
@@ -225,9 +223,9 @@ export class TimelinePanelViewModel
                     return;
                 }
 
-                const items = this.buildItems();
                 const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
                 const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
+                const items = this.buildItems(canPaginateBackward);
                 this.mergeSnapshot({
                     items,
                     canPaginateBackward,

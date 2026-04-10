@@ -24,7 +24,6 @@ describe("TimelinePanelPresenter", () => {
     const room = {
         roomId: "!room:example.org",
     } as any;
-    const client = {} as any;
 
     const eventA = mkEvent({
         id: "$eventA",
@@ -83,24 +82,22 @@ describe("TimelinePanelPresenter", () => {
         topicEvent.sender = createEvent.sender;
     });
 
-    function makePresenter(canPaginateBackward: boolean): TimelinePanelPresenter {
+    function makePresenter(): TimelinePanelPresenter {
         return new TimelinePanelPresenter({
-            client,
             room,
-            canPaginateBackward: () => canPaginateBackward,
         });
     }
 
     it("does not insert a date separator before the first event when the timeline can paginate backward", () => {
-        const presenter = makePresenter(true);
+        const presenter = makePresenter();
 
-        expect(presenter.buildItems([eventA])).toEqual([{ key: eventA.getId()!, kind: "event" }]);
+        expect(presenter.buildItems([eventA], true)).toEqual([{ key: eventA.getId()!, kind: "event" }]);
     });
 
     it("matches legacy creation ordering at the start of history", () => {
-        const presenter = makePresenter(false);
+        const presenter = makePresenter();
 
-        const items = presenter.buildItems([createEvent, encryptionEvent, topicEvent]);
+        const items = presenter.buildItems([createEvent, encryptionEvent, topicEvent], false);
         expect(items).toHaveLength(4);
         expect(items[1]).toMatchObject({
             key: encryptionEvent.getId(),
@@ -128,9 +125,9 @@ describe("TimelinePanelPresenter", () => {
     });
 
     it("still inserts a date separator when the day changes between loaded events", () => {
-        const presenter = makePresenter(true);
+        const presenter = makePresenter();
 
-        const items = presenter.buildItems([eventA, eventB]);
+        const items = presenter.buildItems([eventA, eventB], true);
         expect(items).toHaveLength(3);
         expect(items[0]).toEqual({ key: eventA.getId()!, kind: "event" });
         expect(items[1]).toMatchObject({
@@ -142,5 +139,36 @@ describe("TimelinePanelPresenter", () => {
             DateSeparatorViewModel,
         );
         expect(items[2]).toEqual({ key: eventB.getId()!, kind: "event" });
+    });
+
+    it("adds start events on a later rebuild when backward pagination is no longer possible", () => {
+        const presenter = makePresenter();
+
+        expect(presenter.buildItems([createEvent, encryptionEvent, topicEvent], true)).toEqual([
+            { key: createEvent.getId()!, kind: "event" },
+            { key: encryptionEvent.getId()!, kind: "event" },
+            { key: topicEvent.getId()!, kind: "event" },
+        ]);
+
+        expect(presenter.buildItems([createEvent, encryptionEvent, topicEvent], false)).toMatchObject([
+            {
+                key: `date-${new Date(createEvent.getTs()).toDateString()}`,
+                kind: "virtual",
+                type: "date-separator",
+            },
+            {
+                key: encryptionEvent.getId(),
+                kind: "event",
+            },
+            {
+                key: "new-room",
+                kind: "virtual",
+                type: "new-room",
+            },
+            {
+                kind: "group",
+                type: "room-creation",
+            },
+        ]);
     });
 });

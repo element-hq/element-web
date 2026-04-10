@@ -15,6 +15,7 @@ import { BaseViewModel } from "../../../core/viewmodel";
 import {
     getPostInitialFillBottomSnapIndex,
     getScrollLocationOnChange,
+    shouldPaginateBackwardAtTopScroll,
     shouldIgnoreStartReached,
     shouldIgnoreAtBottomStateChange,
     TimelineView,
@@ -121,6 +122,19 @@ describe("TimelineView", () => {
                 initialFillState: "done",
                 stuckAtBottom: true,
                 hasPendingAnchor: false,
+            }),
+        ).toBe(true);
+    });
+
+    it("allows backward pagination when the user scrolls to the top after initial fill", () => {
+        expect(
+            shouldPaginateBackwardAtTopScroll({
+                initialFillState: "done",
+                stuckAtBottom: false,
+                hasPendingAnchor: false,
+                backwardPagination: "idle",
+                canPaginateBackward: true,
+                scrollTop: 0,
             }),
         ).toBe(true);
     });
