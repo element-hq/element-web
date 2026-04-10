@@ -137,7 +137,7 @@ export const expect = baseExpect.extend<Expectations>({
             .mx_RoomView_MessageList {
                 height: auto !important;
             }
-            .mx_DisambiguatedProfile_displayName {
+            .mx_DisambiguatedProfile [data-part="display-name"] {
                 color: var(--cpd-color-blue-1200) !important;
             }
             .mx_BaseAvatar {

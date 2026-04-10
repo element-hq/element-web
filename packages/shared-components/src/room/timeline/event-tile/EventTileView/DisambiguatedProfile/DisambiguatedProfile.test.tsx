@@ -8,7 +8,7 @@
 import { composeStories } from "@storybook/react-vite";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { createEvent, fireEvent } from "@testing-library/dom";
+import { fireEvent } from "@testing-library/dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@test-utils";
 
@@ -69,6 +69,14 @@ describe("DisambiguatedProfileView", () => {
         }
     }
 
+    const getProfileLink = (displayName: string): HTMLAnchorElement => {
+        const profileContainer = screen.getByText(displayName).closest("a");
+        if (!profileContainer) {
+            throw new Error("Expected profile container to exist");
+        }
+        return profileContainer;
+    };
+
     const getProfileContainer = (displayName: string): HTMLDivElement => {
         const profileContainer = screen.getByText(displayName).closest("div");
         if (!profileContainer) {
@@ -112,20 +120,6 @@ describe("DisambiguatedProfileView", () => {
     });
 
     it("should set button semantics when onClick is provided", () => {
-        const vm = new DisambiguatedProfileViewModel(
-            {
-                displayName: "Keyboard User",
-            },
-            { onClick: vi.fn() },
-        );
-
-        render(<DisambiguatedProfileView vm={vm} />);
-        const profileContainer = getProfileContainer("Keyboard User");
-        expect(profileContainer).toHaveAttribute("role", "button");
-        expect(profileContainer).toHaveAttribute("tabIndex", "0");
-    });
-
-    it("should call onClick on keyboard activation keys", () => {
         const onClick = vi.fn();
         const vm = new DisambiguatedProfileViewModel(
             {
@@ -135,17 +129,45 @@ describe("DisambiguatedProfileView", () => {
         );
 
         render(<DisambiguatedProfileView vm={vm} />);
-        const profileContainer = getProfileContainer("Keyboard User");
+        const profileContainer = getProfileLink("Keyboard User");
+        expect(profileContainer).toHaveAttribute("role", "link");
+        expect(profileContainer).toHaveAttribute("tabIndex", "0");
+    });
 
-        const enterEvent = createEvent.keyDown(profileContainer, { key: "Enter" });
-        fireEvent(profileContainer, enterEvent);
+    it("should not call onClick on Enter when focused", async () => {
+        const onClick = vi.fn();
+        const user = userEvent.setup();
+        const vm = new DisambiguatedProfileViewModel(
+            {
+                displayName: "Keyboard User",
+            },
+            { onClick },
+        );
 
-        const spaceEvent = createEvent.keyDown(profileContainer, { key: " " });
-        fireEvent(profileContainer, spaceEvent);
+        render(<DisambiguatedProfileView vm={vm} />);
+        const profileContainer = getProfileLink("Keyboard User");
+        profileContainer.focus();
 
-        expect(enterEvent.defaultPrevented).toBe(true);
-        expect(spaceEvent.defaultPrevented).toBe(true);
-        expect(onClick).toHaveBeenCalledTimes(2);
+        await user.keyboard("{Enter}");
+        expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it("should not call onClick on Space when focused", async () => {
+        const onClick = vi.fn();
+        const user = userEvent.setup();
+        const vm = new DisambiguatedProfileViewModel(
+            {
+                displayName: "Keyboard User",
+            },
+            { onClick },
+        );
+
+        render(<DisambiguatedProfileView vm={vm} />);
+        const profileContainer = getProfileLink("Keyboard User");
+        profileContainer.focus();
+
+        await user.keyboard(" ");
+        expect(onClick).not.toHaveBeenCalled();
     });
 
     it("should not call onClick for non-activation keys", () => {
@@ -207,7 +229,8 @@ describe("DisambiguatedProfileView", () => {
 
         render(<DisambiguatedProfileView vm={vm} />);
         const displayNameElement = screen.getByText("Emphasized User");
-        expect(displayNameElement).toHaveClass("mx_DisambiguatedProfile_displayName");
+        expect(displayNameElement).toHaveClass("disambiguatedProfile_displayName");
+        expect(displayNameElement).toHaveAttribute("data-part", "display-name");
     });
 
     it("should apply custom className to the profile container", () => {

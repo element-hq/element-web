@@ -34,7 +34,7 @@ const getEventTilesWithBodies = (page: Page): Locator => {
 };
 
 const expectDisplayName = async (e: Locator, displayName: string): Promise<void> => {
-    await expect(e.locator(".mx_DisambiguatedProfile_displayName")).toHaveText(displayName);
+    await expect(e.locator(".mx_DisambiguatedProfile [data-part='display-name']")).toHaveText(displayName);
 };
 
 const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise<void> => {
@@ -399,7 +399,7 @@ test.describe("Timeline", () => {
                 ).toHaveCSS("padding-inline-start", "150px");
                 // Check width and spacing values of elements in .mx_EventTile, which should be equal to 150px
                 // --right-padding should be applied
-                for (const locator of await page.locator(".mx_EventTile > a").all()) {
+                for (const locator of await page.locator(".mx_EventTile > .mx_MessageTimestamp").all()) {
                     if (await locator.isVisible()) {
                         await expect(locator).toHaveCSS("margin-right", "5px");
                     }
@@ -414,7 +414,7 @@ test.describe("Timeline", () => {
                     await expect(locator).toHaveCSS("width", "14px");
                 }
                 // var(--MessageTimestamp-width) should be applied
-                for (const locator of await page.locator(".mx_EventTile > a").all()) {
+                for (const locator of await page.locator(".mx_EventTile > .mx_MessageTimestamp").all()) {
                     await expect(locator).toHaveCSS("min-width", "46px");
                 }
                 // Record alignment of collapsed GELS and messages on messagePanel

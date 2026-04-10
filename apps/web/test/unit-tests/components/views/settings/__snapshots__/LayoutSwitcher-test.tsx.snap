@@ -70,18 +70,22 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 data-self="true"
                 tabindex="-1"
               >
-                <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_oa3at_8"
-                  role="button"
+                <a
+                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_1v0z5_8"
+                  data-kind="primary"
+                  data-size="lg"
+                  role="link"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_oa3at_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                    data-emphasized="true"
+                    data-part="display-name"
                     dir="auto"
                   >
                     Alice
                   </span>
-                </div>
+                </a>
                 <div
                   class="mx_EventTile_avatar"
                 >
@@ -164,18 +168,22 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 data-self="true"
                 tabindex="-1"
               >
-                <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_oa3at_8"
-                  role="button"
+                <a
+                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_1v0z5_8"
+                  data-kind="primary"
+                  data-size="lg"
+                  role="link"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_oa3at_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                    data-emphasized="true"
+                    data-part="display-name"
                     dir="auto"
                   >
                     Alice
                   </span>
-                </div>
+                </a>
                 <div
                   class="mx_EventTile_avatar"
                 >
@@ -261,18 +269,22 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 <span
                   class="mx_MessageTimestamp"
                 />
-                <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_oa3at_8"
-                  role="button"
+                <a
+                  class="_button_13vu4_8 mx_DisambiguatedProfile _disambiguatedProfile_1v0z5_8"
+                  data-kind="primary"
+                  data-size="lg"
+                  role="link"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_oa3at_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_1v0z5_28"
+                    data-emphasized="true"
+                    data-part="display-name"
                     dir="auto"
                   >
                     Alice
                   </span>
-                </div>
+                </a>
                 <div
                   class="mx_EventTile_avatar"
                 >

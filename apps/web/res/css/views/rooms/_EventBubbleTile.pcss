@@ -120,7 +120,7 @@ Please see LICENSE files in the repository root for full details.
     > .mx_DisambiguatedProfile {
         white-space: normal; /* display mxid */
 
-        .mx_DisambiguatedProfile_displayName {
+        [data-part="display-name"] {
             white-space: nowrap; /* truncate long display names */
             margin-inline-end: 5px;
 
@@ -129,7 +129,7 @@ Please see LICENSE files in the repository root for full details.
             direction: ltr;
         }
 
-        .mx_DisambiguatedProfile_mxid {
+        [data-part="mxid"] {
             margin-inline-start: 0; /* Align mxid with truncated displayName
                 inside mx_EventTile[data-layout="bubble"] */
         }

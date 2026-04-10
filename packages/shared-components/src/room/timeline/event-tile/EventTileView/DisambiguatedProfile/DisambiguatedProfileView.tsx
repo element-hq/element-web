@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
+import React, { type JSX, type MouseEventHandler } from "react";
 import classNames from "classnames";
+import { Button } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import styles from "./DisambiguatedProfile.module.css";
@@ -47,7 +48,7 @@ export interface DisambiguatedProfileViewActions {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: MouseEventHandler<HTMLDivElement>;
+    onClick?: MouseEventHandler<HTMLAnchorElement>;
 }
 
 /**
@@ -82,36 +83,47 @@ interface DisambiguatedProfileViewProps {
 export function DisambiguatedProfileView({ vm, className }: Readonly<DisambiguatedProfileViewProps>): JSX.Element {
     const { displayName, colorClass, displayIdentifier, title, emphasizeDisplayName } = useViewModel(vm);
 
-    const displayNameClasses = classNames(colorClass, {
-        [styles.disambiguatedProfile_displayName]: emphasizeDisplayName,
-        mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
-    });
+    const displayNameClasses = classNames(colorClass, emphasizeDisplayName && styles.disambiguatedProfile_displayName);
 
-    // Handle keyboard interaction for accessibility if onClick is provided
-    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = vm.onClick
-        ? (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick?.(event as unknown as React.MouseEvent<HTMLDivElement>);
-              }
-          }
-        : undefined;
+    if (vm.onClick) {
+        return (
+            <Button
+                as="a"
+                className={classNames(className, styles.disambiguatedProfile)}
+                title={title}
+                onClick={vm.onClick}
+            >
+                <span
+                    className={displayNameClasses}
+                    data-part="display-name"
+                    data-emphasized={emphasizeDisplayName ? "true" : undefined}
+                    dir="auto"
+                >
+                    {displayName}
+                </span>
+                {/* data-part hooks are used by app CSS selectors such as .mx_MemberTileView .mx_DisambiguatedProfile > [data-part="mxid"] */}
+                {displayIdentifier && (
+                    <span className={styles.disambiguatedProfile_mxid} data-part="mxid">
+                        {displayIdentifier}
+                    </span>
+                )}
+            </Button>
+        );
+    }
 
     return (
-        <div
-            className={classNames(className, styles.disambiguatedProfile)}
-            title={title}
-            onClick={vm.onClick}
-            onKeyDown={handleKeyDown}
-            role={vm.onClick ? "button" : undefined}
-            tabIndex={vm.onClick ? 0 : undefined}
-        >
-            <span className={displayNameClasses} dir="auto">
+        <div className={classNames(className, styles.disambiguatedProfile)} title={title}>
+            <span
+                className={displayNameClasses}
+                data-part="display-name"
+                data-emphasized={emphasizeDisplayName ? "true" : undefined}
+                dir="auto"
+            >
                 {displayName}
             </span>
-            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
+            {/* data-part hooks are used by app CSS selectors such as .mx_MemberTileView .mx_DisambiguatedProfile > [data-part="mxid"] */}
             {displayIdentifier && (
-                <span className={classNames("mx_DisambiguatedProfile_mxid", styles.disambiguatedProfile_mxid)}>
+                <span className={styles.disambiguatedProfile_mxid} data-part="mxid">
                     {displayIdentifier}
                 </span>
             )}
