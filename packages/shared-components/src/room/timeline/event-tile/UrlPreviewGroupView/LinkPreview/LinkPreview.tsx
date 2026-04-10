@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type MouseEventHandler, type JSX, useCallback, useMemo } from "react";
+import React, { type MouseEventHandler, type JSX, useCallback } from "react";
 import { Tooltip, Text, Avatar, Button } from "@vector-im/compound-web";
 import PlaySolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/play-solid";
 import classNames from "classnames";
@@ -14,7 +14,6 @@ import { useI18n } from "../../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "../types";
 import { LinkedText } from "../../../../../core/utils/LinkedText";
 import styles from "./LinkPreview.module.css";
-import { isPropValid } from "storybook/theming";
 
 export interface LinkPreviewActions {
     onImageClick: () => void;
