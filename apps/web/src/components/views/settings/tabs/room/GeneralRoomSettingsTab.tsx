@@ -15,14 +15,11 @@ import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
 import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
-import SettingsStore from "../../../../../settings/SettingsStore";
-import { UIFeature } from "../../../../../settings/UIFeature";
 import AliasSettings from "../../../room_settings/AliasSettings";
 import PosthogTrackers from "../../../../../PosthogTrackers";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
 import { MediaPreviewAccountSettings } from "../user/MediaPreviewAccountSettings";
 
 interface IProps {
@@ -62,10 +59,6 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
         const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
         const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", "") ?? undefined;
 
-        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ? (
-            <UrlPreviewSettings room={room} />
-        ) : null;
-
         let leaveSection;
         if (room.getMyMembership() === KnownMembership.Join) {
             leaveSection = (
@@ -99,7 +92,6 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
                     </SettingsSection>
 
                     <SettingsSection heading={_t("room_settings|general|other_section")}>
-                        {urlPreviewSettings}
                         <SettingsSubsection heading={_t("common|moderation_and_safety")} legacy={false}>
                             <MediaPreviewAccountSettings roomId={room.roomId} />
                         </SettingsSubsection>

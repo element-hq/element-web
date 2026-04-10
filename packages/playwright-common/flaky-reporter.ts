@@ -24,6 +24,8 @@ type PaginationLinks = {
     first?: string;
 };
 
+const ANSI_COLOUR_REGEX = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
+
 // We see quite a few test flakes which are caused by the app exploding
 // so we have some magic strings we check the logs for to better track the flake with its cause
 const SPECIAL_CASES: Record<string, string> = {
@@ -38,18 +40,35 @@ class FlakyReporter implements Reporter {
     public onTestEnd(test: TestCase): void {
         // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
         if (["Dendrite", "Pinecone"].includes(test.parent.project()!.name!)) return;
-        let failures = [`${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`];
+
         if (test.outcome() === "flaky") {
+            const failures: string[] = [];
+
             const timedOutRuns = test.results.filter((result) => result.status === "timedOut");
             const pageLogs = timedOutRuns.flatMap((result) =>
                 result.attachments.filter((attachment) => attachment.name.startsWith("page-")),
             );
+
             // If a test failed due to a systemic fault then the test is not flaky, the app is, record it as such.
             const specialCases = Object.keys(SPECIAL_CASES).filter((log) =>
                 pageLogs.some((attachment) => attachment.name.startsWith("page-") && attachment.body?.includes(log)),
             );
             if (specialCases.length > 0) {
-                failures = specialCases.map((specialCase) => SPECIAL_CASES[specialCase]);
+                failures.push(...specialCases.map((specialCase) => SPECIAL_CASES[specialCase]));
+            }
+
+            // Check for fixtures failing to set up
+            const errorMessages = timedOutRuns
+                .map((r) => r.error?.message?.replace(ANSI_COLOUR_REGEX, ""))
+                .filter(Boolean) as string[];
+            for (const error of errorMessages) {
+                if (error.startsWith("Fixture") && error.endsWith("exceeded during setup.")) {
+                    failures.push(error);
+                }
+            }
+
+            if (failures.length < 1) {
+                failures.push(`${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`);
             }
 
             for (const title of failures) {

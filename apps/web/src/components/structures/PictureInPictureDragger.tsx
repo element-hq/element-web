@@ -37,9 +37,7 @@ interface IChildrenOptions {
 }
 
 interface IProps {
-    className?: string;
     children: Array<CreatePipChildren>;
-    draggable: boolean;
     onDoubleClick?: () => void;
     onMove?: () => void;
 }
@@ -181,9 +179,6 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     };
 
     private onStartMoving = (event: React.MouseEvent | MouseEvent): void => {
-        event.preventDefault();
-        event.stopPropagation();
-
         this.mouseHeld = true;
         this.startingPositionX = event.clientX;
         this.startingPositionY = event.clientY;
@@ -217,9 +212,6 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     private onEndMoving = (event: MouseEvent): void => {
         if (!this.mouseHeld) return;
 
-        event.preventDefault();
-        event.stopPropagation();
-
         this.mouseHeld = false;
         // Delaying this to the next event loop tick is necessary for click
         // event cancellation to work
@@ -250,7 +242,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
 
         return (
             <aside
-                className={this.props.className}
+                className="mx_PictureInPictureDragger"
                 style={style}
                 ref={this.callViewWrapper}
                 onClickCapture={this.onClickCapture}
