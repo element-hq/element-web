@@ -73,9 +73,16 @@ TitleAndDescription.args = {
     link: "https://matrix.org",
     siteName: "matrix.org",
 };
-
 export const WithSiteIcon = Template.bind({});
 WithSiteIcon.args = {
+    title: "A simple title",
+    link: "https://matrix.org",
+    siteName: "matrix.org",
+    siteIcon: imageFile,
+};
+
+export const WithSiteIconAndDescription = Template.bind({});
+WithSiteIconAndDescription.args = {
     title: "A simple title",
     description: "A simple description with a link to https://matrix.org",
     link: "https://matrix.org",

@@ -53,16 +53,6 @@ exports[`LinkPreview > renders a playable preview that can be opened with a clic
         class="siteName"
       >
         <span
-          aria-label="blog.example.org"
-          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
-          data-color="5"
-          data-type="round"
-          role="img"
-          style="--cpd-avatar-size: 16px;"
-        >
-          b
-        </span>
-        <span
           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
           blog.example.org
@@ -108,16 +98,6 @@ exports[`LinkPreview > renders a preview 1`] = `
         class="siteName"
       >
         <span
-          aria-label="Site name"
-          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
-          data-color="3"
-          data-type="round"
-          role="img"
-          style="--cpd-avatar-size: 16px;"
-        >
-          S
-        </span>
-        <span
           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
           Site name
@@ -134,20 +114,6 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
     class="container inline"
   >
     <div
-      class="siteAvatar"
-    >
-      <span
-        aria-label="A simple title"
-        class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
-        data-color="6"
-        data-type="square"
-        role="img"
-        style="--cpd-avatar-size: 48px;"
-      >
-        A
-      </span>
-    </div>
-    <div
       class="textContent inline"
     >
       <a
@@ -161,16 +127,6 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
       <div
         class="siteName"
       >
-        <span
-          aria-label="matrix.org"
-          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
-          data-color="4"
-          data-type="round"
-          role="img"
-          style="--cpd-avatar-size: 16px;"
-        >
-          m
-        </span>
         <span
           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
@@ -214,16 +170,6 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
       <div
         class="siteName"
       >
-        <span
-          aria-label="matrix.org"
-          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
-          data-color="4"
-          data-type="round"
-          role="img"
-          style="--cpd-avatar-size: 16px;"
-        >
-          m
-        </span>
         <span
           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >

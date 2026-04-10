@@ -47,7 +47,7 @@ function LinkTitle({
 function LinkSiteName({ siteIcon, siteName }: { siteIcon?: string; siteName: string }): JSX.Element {
     return (
         <div className={styles.siteName}>
-            <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />
+            {siteIcon && <Avatar size="16px" name={siteName} id={siteName} src={siteIcon} />}
             <Text as="span" size="sm" weight="regular">
                 {siteName}
             </Text>
@@ -67,12 +67,14 @@ function LinkPreviewInline({
 }: Omit<LinkPreviewProps, "image" | "description" | "author" | "onImageClick">): JSX.Element {
     return (
         <div className={classNames(styles.container, styles.inline)}>
-            <div className={styles.siteAvatar}>
-                <Avatar type="square" size="48px" name={title} id={title} src={siteIcon} />
-            </div>
+            {siteIcon && (
+                <div className={styles.siteAvatar}>
+                    <Avatar type="square" size="48px" name={title} id={title} src={siteIcon} />
+                </div>
+            )}
             <div className={classNames(styles.textContent, styles.inline)}>
                 <LinkTitle title={title} showTooltipOnLink={showTooltipOnLink} link={link} />
-                {siteName && <LinkSiteName siteName={siteName} siteIcon={siteIcon} />}
+                {siteName && <LinkSiteName siteName={siteName} />}
             </div>
         </div>
     );
