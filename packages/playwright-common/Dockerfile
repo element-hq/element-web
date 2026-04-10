@@ -21,4 +21,4 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 # The easiest solution is to use docker-init, which is in fact `tini` (https://github.com/krallin/tini).
 #
 # See https://github.com/krallin/tini/issues/8#issuecomment-146135930 for a good explanation of all this.)
-ENTRYPOINT ["/usr/bin/docker-init" "/docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/docker-init", "/docker-entrypoint.sh"]
