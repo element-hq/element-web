@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
     .mx_PollCreateDialog_busy {
         position: absolute;
         inset: 0;
-        background-color: $overlay-background;
+        background-color: var(--cpd-color-alpha-gray-1300);
         z-index: 1;
     }
 
@@ -19,22 +19,22 @@ Please see LICENSE files in the repository root for full details.
         font-size: $font-15px;
         line-height: $font-24px;
         margin-top: 0;
-        margin-bottom: 8px;
+        margin-bottom: var(--cpd-space-2x);
 
         &:nth-child(n + 2) {
-            margin-top: 20px;
+            margin-top: var(--cpd-space-5x);
         }
     }
 
     p {
-        color: $secondary-content;
+        color: var(--cpd-color-text-secondary);
     }
 
     .mx_PollCreateDialog_option {
         display: flex;
         align-items: center;
-        margin-top: 11px;
-        margin-bottom: 16px; /* 11px from the top will collapse, so this creates a 16px gap between options */
+        margin-top: var(--cpd-space-2-5x);
+        margin-bottom: var(--cpd-space-4x); /* 11px from the top will collapse, so this creates a 16px gap between options */
 
         .mx_Field {
             flex: 1;
@@ -42,25 +42,61 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_PollCreateDialog_removeOption {
-            margin-left: 12px;
-            width: 16px;
-            height: 16px;
+            margin-left: var(--cpd-space-3x);
+            width: var(--cpd-space-4x);
+            height: var(--cpd-space-4x);
             padding: var(--cpd-space-0-5x);
             border-radius: 50%;
-            background-color: $quinary-content;
+            background-color: var(--cpd-color-gray-400);
             cursor: pointer;
 
             svg {
                 width: inherit;
                 height: inherit;
-                color: $secondary-content;
+                color: var(--cpd-color-text-secondary);
             }
         }
     }
 
     .mx_PollCreateDialog_addOption {
         padding: 0;
-        margin-bottom: 40px; /* arbitrary to create scrollable area under the poll */
+        margin-bottom: var(--cpd-space-10x); /* arbitrary to create scrollable area under the poll */
+    }
+
+    .mx_PollCreateDialog_maxSelections {
+        display: flex;
+        align-items: center;
+        gap: var(--cpd-space-4x);
+
+        .mx_PollCreateDialog_maxSelectionsButton {
+            width: var(--cpd-space-8x);
+            height: var(--cpd-space-8x);
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--cpd-color-gray-400);
+            cursor: pointer;
+
+            svg {
+                width: var(--cpd-space-4x);
+                height: var(--cpd-space-4x);
+                color: var(--cpd-color-text-secondary);
+            }
+
+            &:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+        }
+
+        .mx_PollCreateDialog_maxSelectionsValue {
+            font-weight: var(--cpd-font-weight-semibold);
+            font-size: $font-15px;
+            min-width: var(--cpd-space-15x);
+            text-align: center;
+        }
     }
 
     .mx_AccessibleButton_disabled {
