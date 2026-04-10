@@ -37,6 +37,25 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
           >
             A simple description
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -106,6 +125,25 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           >
             A regular square image.
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -137,6 +175,25 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           >
             This one has a taller image which should crop nicely.
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -168,6 +225,25 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
           >
             One more description
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
       <button
@@ -246,6 +322,25 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
           >
             A simple description
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
       <button
@@ -324,6 +419,25 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
           >
             A regular square image.
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -355,6 +469,25 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
           >
             This one has a taller image which should crop nicely.
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -386,6 +519,25 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
           >
             One more description
           </p>
+          <div
+            class="siteName"
+          >
+            <span
+              aria-label="matrix.org"
+              class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+              data-color="4"
+              data-type="round"
+              role="img"
+              style="--cpd-avatar-size: 16px;"
+            >
+              m
+            </span>
+            <span
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              matrix.org
+            </span>
+          </div>
         </div>
       </div>
       <button

@@ -148,7 +148,7 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
       </span>
     </div>
     <div
-      class="textContent"
+      class="textContent inline"
     >
       <a
         class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 title"
@@ -158,12 +158,19 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
       >
         A simple title
       </a>
-      <p
-        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
-      />
       <div
         class="siteName"
       >
+        <span
+          aria-label="matrix.org"
+          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+          data-color="4"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 16px;"
+        >
+          m
+        </span>
         <span
           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
@@ -178,22 +185,8 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
 exports[`LinkPreview > renders a preview with just a title and description 1`] = `
 <div>
   <div
-    class="container inline"
+    class="container"
   >
-    <div
-      class="siteAvatar"
-    >
-      <span
-        aria-label="A simple title"
-        class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
-        data-color="6"
-        data-type="square"
-        role="img"
-        style="--cpd-avatar-size: 48px;"
-      >
-        A
-      </span>
-    </div>
     <div
       class="textContent"
     >
@@ -221,6 +214,16 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
       <div
         class="siteName"
       >
+        <span
+          aria-label="matrix.org"
+          class="_avatar_zysgz_8 _avatar-imageless_zysgz_55"
+          data-color="4"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 16px;"
+        >
+          m
+        </span>
         <span
           class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
         >
