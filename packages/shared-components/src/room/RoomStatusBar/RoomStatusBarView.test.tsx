@@ -6,9 +6,8 @@
  */
 
 import React from "react";
-import { render } from "@test-utils";
+import { fireEvent, render } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
-import userEvent from "@testing-library/user-event";
 import { describe, it, vi, expect } from "vitest";
 
 import * as stories from "./RoomStatusBarView.stories.tsx";
@@ -44,7 +43,7 @@ describe("RoomStatusBarView", () => {
         expect(container).toMatchSnapshot();
 
         const button = getByRole("button", { name: "Delete all" });
-        await userEvent.click(button);
+        fireEvent.click(button);
         expect(onDeleteAllClick).toHaveBeenCalled();
     });
     it("renders unsent messages and resends all", async () => {
@@ -53,7 +52,7 @@ describe("RoomStatusBarView", () => {
         expect(container).toMatchSnapshot();
 
         const button = getByRole("button", { name: "Retry all" });
-        await userEvent.click(button);
+        fireEvent.click(button);
         expect(onResendAllClick).toHaveBeenCalled();
     });
     it("renders local room error", async () => {
@@ -64,7 +63,7 @@ describe("RoomStatusBarView", () => {
         expect(container).toMatchSnapshot();
 
         const button = getByRole("button", { name: "Retry" });
-        await userEvent.click(button);
+        fireEvent.click(button);
         expect(onRetryRoomCreationClick).toHaveBeenCalled();
     });
 });
