@@ -350,7 +350,7 @@ export class UrlPreviewGroupViewModel
                 const width = Math.min(declaredWidth ?? PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX);
                 const height =
                     thumbHeight(width, declaredHeight, PREVIEW_WIDTH_PX, PREVIEW_WIDTH_PX) ?? PREVIEW_WIDTH_PX;
-                const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "crop");
+                const thumb = media.getThumbnailOfSourceHttp(PREVIEW_WIDTH_PX, PREVIEW_HEIGHT_PX, "scale");
                 const playable = !!preview["og:video"] || !!preview["og:video:type"] || !!preview["og:audio"];
                 // No thumb, no preview.
                 if (thumb) {
