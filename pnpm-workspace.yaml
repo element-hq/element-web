@@ -16,7 +16,7 @@ catalog:
     "@playwright/test": 1.59.1
     "playwright-core": 1.59.1
     # Module API
-    "@element-hq/element-web-module-api": 1.12.0
+    "@element-hq/element-web-module-api": 1.13.0
     # Compound
     "@vector-im/compound-design-tokens": 8.0.0
     "@vector-im/compound-web": 8.4.0
