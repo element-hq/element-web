@@ -5,7 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { forwardRef } from "react";
+import { mergeRefs } from "react-merge-refs";
 import { Heading, Tooltip } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
@@ -33,18 +34,16 @@ export interface DateSeparatorButtonProps {
 }
 
 /** Interactive date separator button that opens the jump-to-date menu. */
-export function DateSeparatorButton({
-    label,
-    tooltipOpen,
-    className,
-    buttonRef,
-    ...props
-}: DateSeparatorButtonProps): React.ReactNode {
+export const DateSeparatorButton = forwardRef<HTMLDivElement, DateSeparatorButtonProps>(function DateSeparatorButton(
+    { label, tooltipOpen, className, buttonRef, ...props },
+    forwardedRef,
+): React.ReactNode {
     const { translate: _t } = useI18n();
+
     return (
         <Tooltip description={_t("room|jump_to_date")} placement="right" open={tooltipOpen}>
             <Flex
-                ref={buttonRef}
+                ref={mergeRefs([buttonRef, forwardedRef])}
                 data-testid="jump-to-date-separator-button"
                 className={className}
                 aria-live="off"
@@ -60,4 +59,4 @@ export function DateSeparatorButton({
             </Flex>
         </Tooltip>
     );
-}
+});
