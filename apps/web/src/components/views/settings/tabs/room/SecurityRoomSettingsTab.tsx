@@ -28,6 +28,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import AccessibleButton from "../../../elements/AccessibleButton";
+import { ModuleApi } from "../../../../../modules/Api";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import createRoom from "../../../../../createRoom";
 import CreateRoomDialog from "../../../dialogs/CreateRoomDialog";
@@ -575,6 +576,10 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                 </>
                             )}
                         </SettingsFieldset>
+                        {ModuleApi.instance.extras.roomSettingsSecurityCallbacks.map((cb, i) => {
+                            const el = cb(this.props.room.roomId);
+                            return el ? <React.Fragment key={i}>{el}</React.Fragment> : null;
+                        })}
                         {this.renderJoinRule()}
                         {historySection}
                     </SettingsSection>

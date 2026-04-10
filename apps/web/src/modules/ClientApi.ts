@@ -4,7 +4,7 @@ Copyright 2025 Element Creations Ltd.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import type { ClientApi as IClientApi, Room } from "@element-hq/element-web-module-api";
+import type { ClientApi as IClientApi, Room, MatrixEvent as ModuleMatrixEvent } from "@element-hq/element-web-module-api";
 import { Room as ModuleRoom } from "./models/Room";
 import { AccountDataApi } from "./AccountDataApi";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -16,6 +16,35 @@ export class ClientApi implements IClientApi {
         const sdkRoom = MatrixClientPeg.safeGet().getRoom(roomId);
         if (sdkRoom) return new ModuleRoom(sdkRoom);
         return null;
+    }
+
+    public async uploadContent(content: Blob | File, contentType?: string): Promise<string> {
+        const client = MatrixClientPeg.safeGet();
+        const { content_uri: mxcUrl } = await client.uploadContent(content, {
+            includeFilename: false,
+            type: contentType,
+        });
+        return mxcUrl;
+    }
+
+    public async sendStateEvent(
+        roomId: string,
+        eventType: string,
+        content: Record<string, unknown>,
+        stateKey: string = "",
+    ): Promise<void> {
+        const client = MatrixClientPeg.safeGet();
+        await client.sendStateEvent(roomId, eventType, content, stateKey);
+    }
+
+    public stateEventListeners: Array<(event: ModuleMatrixEvent) => void> = [];
+
+    public onStateEvent(callback: (event: ModuleMatrixEvent) => void): () => void {
+        this.stateEventListeners.push(callback);
+        return () => {
+            const idx = this.stateEventListeners.indexOf(callback);
+            if (idx >= 0) this.stateEventListeners.splice(idx, 1);
+        };
     }
 
     public async downloadMxc(mxcUrl: string): Promise<string> {

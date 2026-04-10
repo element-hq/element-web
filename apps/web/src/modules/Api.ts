@@ -136,6 +136,7 @@ export class ModuleApi implements Api {
             }
             return original.call(this, event, ...args);
         };
+
     }
 }
 
