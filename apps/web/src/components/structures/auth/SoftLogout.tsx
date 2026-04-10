@@ -43,10 +43,7 @@ const STATIC_FLOWS_TO_VIEWS: Record<string, LoginView> = {
 };
 
 interface IProps {
-    // Query parameters from MatrixChat
-    realQueryParams: {
-        loginToken?: string;
-    };
+    loginToken?: string;
     fragmentAfterLogin?: string;
 
     // Called when the SSO login completes
@@ -98,8 +95,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     };
 
     private async initLogin(): Promise<void> {
-        const queryParams = this.props.realQueryParams;
-        const hasAllParams = queryParams?.["loginToken"];
+        const hasAllParams = !!this.props.loginToken;
         if (hasAllParams) {
             this.setState({ loginView: LoginView.Loading });
 
@@ -189,7 +185,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         const isUrl = localStorage.getItem(SSO_ID_SERVER_URL_KEY) || MatrixClientPeg.safeGet().getIdentityServerUrl();
         const loginType = "m.login.token";
         const loginParams = {
-            token: this.props.realQueryParams["loginToken"],
+            token: this.props.loginToken,
             device_id: MatrixClientPeg.safeGet().getDeviceId() ?? undefined,
         };
 

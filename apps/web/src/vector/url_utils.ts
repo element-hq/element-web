@@ -5,12 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type QueryDict, decodeParams } from "matrix-js-sdk/src/utils";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
 //
-export function parseQsFromFragment(location: Location): { location: string; params: QueryDict } {
+export function parseQsFromFragment(location: Location): { location: string; params?: URLSearchParams } {
     // if we have a fragment, it will start with '#', which we need to drop.
     // (if we don't, this will return '').
     const fragment = location.hash.substring(1);
@@ -22,15 +22,25 @@ export function parseQsFromFragment(location: Location): { location: string; par
 
     const result = {
         location: decodeURIComponent(hashparts[0]),
-        params: <QueryDict>{},
+        params: undefined as URLSearchParams | undefined,
     };
 
     if (hashparts.length > 1) {
-        result.params = decodeParams(hashparts[1]);
+        result.params = new URLSearchParams(hashparts[1]);
     }
     return result;
 }
 
-export function parseQs(location: Location): QueryDict {
-    return decodeParams(location.search.substring(1));
+/**
+ * Convert a URLSearchParams object to QueryDict
+ * Any keys with multiple values will be grouped into an array
+ * @param params the URLSearchParams to convert
+ */
+export function searchParamsToQueryDict(params: URLSearchParams): QueryDict {
+    const queryDict: QueryDict = {};
+    for (const key of params.keys()) {
+        const val = params.getAll(key);
+        queryDict[key] = val.length === 1 ? val[0] : val;
+    }
+    return queryDict;
 }

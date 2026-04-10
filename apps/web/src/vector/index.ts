@@ -142,7 +142,7 @@ async function start(): Promise<void> {
         // verifying a 3pid (but after we've loaded the config)
         // or if the user is following a deep link
         // (https://github.com/element-hq/element-web/issues/7378)
-        const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
+        const preventRedirect = fragparts.params?.has("client_secret") || fragparts.location.length > 0;
 
         if (!preventRedirect) {
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -232,7 +232,7 @@ async function start(): Promise<void> {
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
         // run on the components.
-        await loadApp(fragparts.params);
+        await loadApp(fragparts.params ?? new URLSearchParams());
     } catch (err) {
         logger.error(err);
         // Like the compatibility page, AWOOOOOGA at the user

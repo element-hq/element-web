@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "matrix-js-sdk/src/oidc/authorize";
-import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { type IdTokenClaims } from "oidc-client-ts";
@@ -59,9 +58,9 @@ export const startOidcLogin = async (
  * @returns code and state
  * @throws when code and state are not valid strings
  */
-const getCodeAndStateFromQueryParams = (queryParams: QueryDict): { code: string; state: string } => {
-    const code = queryParams["code"];
-    const state = queryParams["state"];
+const getCodeAndStateFromQueryParams = (queryParams: URLSearchParams): { code: string; state: string } => {
+    const code = queryParams.get("code");
+    const state = queryParams.get("state");
 
     if (!code || typeof code !== "string" || !state || typeof state !== "string") {
         throw new Error(OidcClientError.InvalidQueryParameters);
@@ -93,7 +92,7 @@ type CompleteOidcLoginResponse = {
  * @returns Promise that resolves with a CompleteOidcLoginResponse when login was successful
  * @throws When we failed to get a valid access token
  */
-export const completeOidcLogin = async (queryParams: QueryDict): Promise<CompleteOidcLoginResponse> => {
+export const completeOidcLogin = async (queryParams: URLSearchParams): Promise<CompleteOidcLoginResponse> => {
     const { code, state } = getCodeAndStateFromQueryParams(queryParams);
     const { homeserverUrl, tokenResponse, idTokenClaims, identityServerUrl, oidcClientSettings } =
         await completeAuthorizationCodeGrant(code, state);

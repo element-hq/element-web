@@ -169,7 +169,7 @@ describe("Lifecycle", () => {
             const prom = Lifecycle.loadSession({
                 enableGuest: true,
                 guestHsUrl: "https://guest.server",
-                fragmentQueryParams: { guest_user_id: "a", guest_access_token: "b" },
+                fragmentQueryParams: new URLSearchParams({ guest_user_id: "a", guest_access_token: "b" }),
                 abortSignal: abortController.signal,
             });
             abortController.abort();

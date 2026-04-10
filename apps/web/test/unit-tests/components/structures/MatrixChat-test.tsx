@@ -223,7 +223,7 @@ describe("<MatrixChat />", () => {
             },
             onNewScreen: jest.fn(),
             onTokenLoginCompleted: jest.fn(),
-            realQueryParams: {},
+            realQueryParams: new URLSearchParams(),
         };
 
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
@@ -320,10 +320,10 @@ describe("<MatrixChat />", () => {
 
         const code = "test-oidc-auth-code";
         const state = "test-oidc-state";
-        const realQueryParams = {
+        const realQueryParams = new URLSearchParams({
             code,
             state: state,
-        };
+        });
 
         const deviceId = "test-device-id";
         const accessToken = "test-access-token-from-oidc";
@@ -383,10 +383,10 @@ describe("<MatrixChat />", () => {
         });
 
         it("should fail when query params do not include valid code and state", async () => {
-            const queryParams = {
-                code: 123,
+            const queryParams = new URLSearchParams({
+                code: "",
                 state: "abc",
-            };
+            });
             getComponent({ realQueryParams: queryParams });
 
             await flushPromises();
@@ -1120,9 +1120,9 @@ describe("<MatrixChat />", () => {
 
             describe("when query params have a loginToken", () => {
                 const loginToken = "test-login-token";
-                const realQueryParams = {
+                const realQueryParams = new URLSearchParams({
                     loginToken,
-                };
+                });
 
                 let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
                 const deviceId = "test-device-id";
@@ -1400,9 +1400,9 @@ describe("<MatrixChat />", () => {
 
     describe("when query params have a loginToken", () => {
         const loginToken = "test-login-token";
-        const realQueryParams = {
+        const realQueryParams = new URLSearchParams({
             loginToken,
-        };
+        });
 
         let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
         const deviceId = "test-device-id";
@@ -1589,6 +1589,7 @@ describe("<MatrixChat />", () => {
             getComponent({
                 initialScreenAfterLogin: {
                     screen: "start_sso",
+                    params: {},
                 },
             });
 
@@ -1604,6 +1605,7 @@ describe("<MatrixChat />", () => {
             getComponent({
                 initialScreenAfterLogin: {
                     screen: "start_cas",
+                    params: {},
                 },
             });
 

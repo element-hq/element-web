@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { parseQsFromFragment, parseQs } from "../../../src/vector/url_utils";
+import { parseQsFromFragment, searchParamsToQueryDict } from "../../../src/vector/url_utils";
 
 describe("url_utils.ts", function () {
     // @ts-ignore
@@ -18,24 +18,20 @@ describe("url_utils.ts", function () {
         location.hash = "/home?foo=bar";
         expect(parseQsFromFragment(location)).toEqual({
             location: "home",
-            params: {
+            params: new URLSearchParams({
                 foo: "bar",
-            },
+            }),
         });
     });
 
-    it("parseQs", function () {
-        location.search = "?foo=bar";
-        expect(parseQs(location)).toEqual({
-            foo: "bar",
-        });
-    });
-
-    it("parseQs with arrays", function () {
-        location.search = "?via=s1&via=s2&via=s2&foo=bar";
-        expect(parseQs(location)).toEqual({
-            via: ["s1", "s2", "s2"],
-            foo: "bar",
+    describe("searchParamsToQueryDict", () => {
+        it("should handle arrays correctly", () => {
+            const u = new URLSearchParams("a=b&b=c&c=d&a=e&a=f");
+            expect(searchParamsToQueryDict(u)).toEqual({
+                a: ["b", "e", "f"],
+                b: "c",
+                c: "d",
+            });
         });
     });
 });

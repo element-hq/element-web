@@ -20,7 +20,6 @@ import {
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -141,6 +140,7 @@ import Markdown from "../../Markdown";
 import { LinkedTextConfiguration, sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
+import { type IScreen } from "../../vector/routing.ts";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -152,19 +152,14 @@ const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password",
 // re-factoring to be included in this list in future.
 const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, Action.CreateChat, Action.CreateRoom];
 
-interface IScreen {
-    screen: string;
-    params?: QueryDict;
-}
-
 interface IProps {
     config: ConfigOptions;
     onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
-    realQueryParams: QueryDict;
+    realQueryParams: URLSearchParams;
     // the initial queryParams extracted from the hash-fragment of the URI
-    startingFragmentQueryParams?: QueryDict;
+    startingFragmentQueryParams?: URLSearchParams;
     // called when we have completed a token login
     onTokenLoginCompleted: () => void;
     // Represents the screen to display as a result of parsing the initial window.location
@@ -227,9 +222,7 @@ interface IState {
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
     public static displayName = "MatrixChat";
 
-    public static defaultProps = {
-        realQueryParams: {},
-        startingFragmentQueryParams: {},
+    public static defaultProps: Partial<IProps> = {
         config: {},
         onTokenLoginCompleted: (): void => {},
     };
@@ -360,9 +353,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // remove the loginToken or auth code from the URL regardless
         if (
-            this.props.realQueryParams?.loginToken ||
-            this.props.realQueryParams?.code ||
-            this.props.realQueryParams?.state
+            this.props.realQueryParams.has("loginToken") ||
+            this.props.realQueryParams.has("code") ||
+            this.props.realQueryParams.has("state")
         ) {
             this.props.onTokenLoginCompleted();
         }
@@ -1835,7 +1828,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public showScreen(screen: string, params?: { [key: string]: any }): void {
+    public showScreen(screen: string, params?: Record<string, any>): void {
         logger.debug(`showScreen ${screen}`);
 
         const cli = MatrixClientPeg.get();
@@ -2267,14 +2260,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
-                    defaultUsername={this.props.startingFragmentQueryParams?.defaultUsername as string | undefined}
+                    defaultUsername={this.props.startingFragmentQueryParams?.get("defaultUsername") ?? undefined}
                     {...this.getServerProperties()}
                 />
             );
         } else if (this.state.view === Views.SOFT_LOGOUT) {
             view = (
                 <SoftLogout
-                    realQueryParams={this.props.realQueryParams}
+                    loginToken={this.props.realQueryParams.get("loginToken") ?? undefined}
                     onTokenLoginCompleted={this.props.onTokenLoginCompleted}
                     fragmentAfterLogin={fragmentAfterLogin}
                 />
