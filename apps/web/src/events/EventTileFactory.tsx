@@ -368,11 +368,9 @@ export function renderReplyTile(
 
     const factory = pickFactory(props.mxEvent, cli, showHiddenEvents);
     if (!factory) {
-        // If we don't have a factory for this event, attempt
-        // to find a custom component that can render it.
-        // Will return null if no custom component can render it.
         return ModuleApi.instance.customComponents.renderMessage({
             mxEvent: props.mxEvent,
+            isReplyTile: true,
         });
     }
 
@@ -395,6 +393,7 @@ export function renderReplyTile(
     return ModuleApi.instance.customComponents.renderMessage(
         {
             mxEvent: props.mxEvent,
+            isReplyTile: true,
         },
         (origProps) =>
             factory(ref, {
