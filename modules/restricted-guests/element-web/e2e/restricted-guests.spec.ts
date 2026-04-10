@@ -12,8 +12,7 @@ import {
     type SynapseContainer,
 } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 import { type Credentials } from "@element-hq/element-web-playwright-common/lib/utils/api";
-import { makePostgres } from "@element-hq/element-web-playwright-common/lib/testcontainers/postgres.js";
-import { makeMas } from "@element-hq/element-web-playwright-common/lib/testcontainers/mas.js";
+import { makePostgres, makeMas } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
 import { RestrictedGuestsSynapseContainer, RestrictedGuestsSynapseWithMasContainer } from "./services";
 import { test as subBase, expect } from "../../../../playwright/element-web-test";
