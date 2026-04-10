@@ -66,6 +66,7 @@ Default.args = {
             description: "A simple description",
             link: "https://matrix.org",
             showTooltipOnLink: false,
+            siteName: "matrix.org",
             image: {
                 imageThumb: imageFile,
                 imageFull: imageFile,
@@ -78,20 +79,7 @@ Default.args = {
 
 export const MultiplePreviewsHidden = Template.bind({});
 MultiplePreviewsHidden.args = {
-    previews: [
-        {
-            title: "A simple title",
-            description: "A simple description",
-            link: "https://matrix.org",
-            showTooltipOnLink: false,
-            image: {
-                imageThumb: imageFile,
-                imageFull: imageFile,
-                alt: "The element logo",
-                playable: false,
-            },
-        },
-    ],
+    previews: Default.args.previews,
     overPreviewLimit: true,
     previewsLimited: true,
     totalPreviewCount: 10,
@@ -104,6 +92,7 @@ MultiplePreviewsVisible.args = {
             title: "One",
             description: "A regular square image.",
             link: "https://matrix.org",
+            siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
                 imageThumb: imageFile,
@@ -117,6 +106,7 @@ MultiplePreviewsVisible.args = {
             title: "Two",
             description: "This one has a taller image which should crop nicely.",
             link: "https://matrix.org",
+            siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
                 imageThumb: tallImageFile,
@@ -129,6 +119,7 @@ MultiplePreviewsVisible.args = {
             title: "Three",
             description: "One more description",
             link: "https://matrix.org",
+            siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
                 imageThumb: imageFile,
