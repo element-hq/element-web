@@ -135,9 +135,6 @@ importers:
       '@action-validator/core':
         specifier: ^0.6.0
         version: 0.6.0
-      '@element-hq/element-web-playwright-common':
-        specifier: workspace:*
-        version: link:packages/playwright-common
       '@nx-tools/nx-container':
         specifier: ^7.2.1
         version: 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.5.4))(dotenv@17.4.0)(nx@22.5.4)(tslib@2.8.1)

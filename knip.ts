@@ -7,7 +7,7 @@ export default {
     workspaces: {
         "packages/shared-components": {},
         "packages/playwright-common": {
-            entry: ["src/stale-screenshot-reporter.ts", "src/fixtures/index.ts", "src/testcontainers/index.ts"],
+            entry: ["src/fixtures/index.ts", "src/testcontainers/index.ts"],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",

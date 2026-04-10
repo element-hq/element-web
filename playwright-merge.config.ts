@@ -14,7 +14,7 @@ export default defineConfig({
     testDir: "apps/web/playwright/e2e",
     reporter: [
         ["html", { open: "never" }],
-        ["./packages/playwright-common/flaky-reporter.ts"],
-        ["@element-hq/element-web-playwright-common/lib/stale-screenshot-reporter.js"],
+        ["./packages/playwright-common/src/flaky-reporter.ts"],
+        ["./packages/playwright-common/src/stale-screenshot-reporter.ts"],
     ],
 });
