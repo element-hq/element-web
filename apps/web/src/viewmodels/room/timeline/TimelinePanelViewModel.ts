@@ -28,8 +28,6 @@ import type {
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 30;
 const WINDOW_LIMIT = 200;
-
-const log = (...args: unknown[]): void => console.log("[TimelineVM]", ...args);
 type RoomTimelineListenerArgs = [
     ev: MatrixEvent,
     room: Room | undefined,
@@ -114,7 +112,6 @@ export class TimelinePanelViewModel
         }
 
         const { stuckAtBottom } = this.snapshot.current;
-        log("onRoomTimeline fired, stuckAtBottom:", stuckAtBottom);
         if (!stuckAtBottom) {
             this.mergeSnapshot({
                 canPaginateForward: true,
@@ -126,7 +123,6 @@ export class TimelinePanelViewModel
     };
 
     private async load(eventId?: string): Promise<void> {
-        log("load() start, eventId:", eventId);
         this.mergeSnapshot({
             backwardPagination: "loading",
             forwardPagination: "loading",
@@ -142,8 +138,6 @@ export class TimelinePanelViewModel
             const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
             const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
 
-            log("load() done, items:", items.length, "canBack:", canPaginateBackward, "canFwd:", canPaginateForward);
-
             this.mergeSnapshot({
                 items,
                 canPaginateBackward,
@@ -152,8 +146,7 @@ export class TimelinePanelViewModel
                 forwardPagination: "idle",
                 pendingAnchor: eventId ? { targetKey: eventId, position: 0.5, highlight: true } : null,
             });
-        } catch (e) {
-            log("load() error:", e);
+        } catch {
             this.mergeSnapshot({
                 canPaginateBackward: false,
                 canPaginateForward: false,
@@ -209,8 +202,6 @@ export class TimelinePanelViewModel
         const currentState = this.snapshot.current[stateKey];
         const canPaginate = this.timelineWindow.canPaginate(dir);
 
-        log("paginate()", direction, "canPaginate:", canPaginate, "currentState:", currentState, "size:", size);
-
         if (currentState === "loading") {
             return;
         }
@@ -224,7 +215,6 @@ export class TimelinePanelViewModel
 
         this.mergeSnapshot({ [stateKey]: "loading" as PaginationState });
 
-        const prevItemCount = this.snapshot.current.items.length;
         const paginationRequest = allowRequest
             ? this.timelineWindow.paginate(dir, size)
             : this.timelineWindow.paginate(dir, size, false);
@@ -238,7 +228,6 @@ export class TimelinePanelViewModel
                 const items = this.buildItems();
                 const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
                 const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
-                log("paginate()", direction, "success:", success, "items:", prevItemCount, "->", items.length);
                 this.mergeSnapshot({
                     items,
                     canPaginateBackward,
@@ -247,7 +236,6 @@ export class TimelinePanelViewModel
                 });
             })
             .catch((e) => {
-                log("paginate()", direction, "error:", e);
                 this.mergeSnapshot({
                     canPaginateBackward: this.timelineWindow.canPaginate(Direction.Backward),
                     canPaginateForward: this.timelineWindow.canPaginate(Direction.Forward),

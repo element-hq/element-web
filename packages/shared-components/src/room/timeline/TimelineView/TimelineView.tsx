@@ -11,7 +11,7 @@ import { Virtuoso, type ListRange, type ScrollIntoViewLocation } from "react-vir
 import type { ScrollIntoViewOnChange } from "../../../core/VirtualizedList";
 import { useVirtualizedList } from "../../../core/VirtualizedList/virtualized-list";
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import type { TimelineItem, TimelineViewProps, VisibleRange } from "./types";
+import type { NavigationAnchor, TimelineItem, TimelineViewProps, VisibleRange } from "./types";
 
 /**
  * Shared virtualized timeline container.
@@ -27,7 +27,15 @@ const OVERSCAN_PX = 600;
 const MAX_INITIAL_FILL_ROUNDS = 3;
 const INITIAL_FIRST_ITEM_INDEX = 100_000;
 
-const log = (...args: unknown[]): void => console.log("[TimelineView]", ...args);
+type TimelineScrollLocation = ScrollIntoViewLocation | false;
+
+function debugTimelineView(message: string, details?: Record<string, unknown>): void {
+    if (details) {
+        console.log(`[TimelineView] ${message}`, details);
+    } else {
+        console.log(`[TimelineView] ${message}`);
+    }
+}
 
 function countPrependedItems<TItem extends TimelineItem>(prevItems: TItem[], nextItems: TItem[]): number {
     if (prevItems.length === 0 || nextItems.length <= prevItems.length) {
@@ -44,10 +52,139 @@ function countPrependedItems<TItem extends TimelineItem>(prevItems: TItem[], nex
     return prependedCount;
 }
 
+export function getScrollLocationOnChange<TItem extends TimelineItem>({
+    items,
+    pendingAnchor,
+    stuckAtBottom,
+    totalCount,
+    lastAnchoredKey,
+    initialBottomSnapDone,
+}: {
+    items: TItem[];
+    pendingAnchor: NavigationAnchor | null;
+    stuckAtBottom: boolean;
+    totalCount: number;
+    lastAnchoredKey: string | null;
+    initialBottomSnapDone: boolean;
+}): TimelineScrollLocation {
+    if (totalCount === 0) {
+        return false;
+    }
+
+    if (!pendingAnchor) {
+        return getInitialBottomScrollLocation({
+            stuckAtBottom,
+            totalCount,
+            initialBottomSnapDone,
+        });
+    }
+
+    if (lastAnchoredKey === pendingAnchor.targetKey) {
+        return false;
+    }
+
+    return getAnchorScrollLocation(items, pendingAnchor);
+}
+
+function getInitialBottomScrollLocation({
+    stuckAtBottom,
+    totalCount,
+    initialBottomSnapDone,
+}: {
+    stuckAtBottom: boolean;
+    totalCount: number;
+    initialBottomSnapDone: boolean;
+}): TimelineScrollLocation {
+    if (!stuckAtBottom || initialBottomSnapDone) {
+        return false;
+    }
+
+    return {
+        index: totalCount - 1,
+        align: "end",
+        behavior: "auto",
+    };
+}
+
+function getAnchorScrollLocation<TItem extends TimelineItem>(
+    items: TItem[],
+    pendingAnchor: NavigationAnchor,
+): TimelineScrollLocation {
+    const targetIndex = items.findIndex((item) => item.key === pendingAnchor.targetKey);
+    if (targetIndex === -1) {
+        return false;
+    }
+
+    const align =
+        pendingAnchor.position === undefined || pendingAnchor.position <= 0
+            ? "start"
+            : pendingAnchor.position >= 1
+              ? "end"
+              : "center";
+
+    return {
+        index: targetIndex,
+        align,
+        behavior: "auto",
+    };
+}
+
+export function getPostInitialFillBottomSnapIndex({
+    initialFillState,
+    stuckAtBottom,
+    hasPendingAnchor,
+    itemCount,
+    firstItemIndex,
+    postInitialFillBottomSnapDone,
+}: {
+    initialFillState: "filling" | "done";
+    stuckAtBottom: boolean;
+    hasPendingAnchor: boolean;
+    itemCount: number;
+    firstItemIndex: number;
+    postInitialFillBottomSnapDone: boolean;
+}): number | null {
+    if (
+        initialFillState !== "done" ||
+        !stuckAtBottom ||
+        hasPendingAnchor ||
+        itemCount === 0 ||
+        postInitialFillBottomSnapDone
+    ) {
+        return null;
+    }
+
+    return firstItemIndex + itemCount - 1;
+}
+
+export function shouldIgnoreAtBottomStateChange({
+    initialFillState,
+    hasPendingAnchor,
+}: {
+    initialFillState: "filling" | "done";
+    hasPendingAnchor: boolean;
+}): boolean {
+    return initialFillState === "filling" && !hasPendingAnchor;
+}
+
+export function shouldIgnoreStartReached({
+    initialFillState,
+    stuckAtBottom,
+    hasPendingAnchor,
+}: {
+    initialFillState: "filling" | "done";
+    stuckAtBottom: boolean;
+    hasPendingAnchor: boolean;
+}): boolean {
+    return initialFillState === "done" && stuckAtBottom && !hasPendingAnchor;
+}
+
 export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: TimelineViewProps<TItem>): JSX.Element {
     const snapshot = useViewModel(vm);
     const previousVmRef = useRef(vm);
     const lastAnchoredKeyRef = useRef<string | null>(null);
+    const initialBottomSnapDoneRef = useRef(false);
+    const postInitialFillBottomSnapDoneRef = useRef(false);
     const previousItemsRef = useRef<TItem[]>([]);
     const lastVisibleRangeRef = useRef<VisibleRange | null>(null);
     const [initialFillState, setInitialFillState] = useState<"filling" | "done">("filling");
@@ -62,10 +199,13 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
             return;
         }
 
+        debugTimelineView("reset view state for new vm");
         previousVmRef.current = vm;
         setInitialFillState("filling");
         setFirstItemIndex(INITIAL_FIRST_ITEM_INDEX);
         lastAnchoredKeyRef.current = null;
+        initialBottomSnapDoneRef.current = false;
+        postInitialFillBottomSnapDoneRef.current = false;
         lastVisibleRangeRef.current = null;
         initialFillRoundsRef.current = 0;
         sawInitialRangeRef.current = false;
@@ -74,6 +214,12 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
 
     useEffect(() => {
         if (initialFillState === "done") {
+            debugTimelineView("initial fill completed", {
+                itemCount: snapshot.items.length,
+                canPaginateForward: snapshot.canPaginateForward,
+                forwardPagination: snapshot.forwardPagination,
+                lastVisibleRange: lastVisibleRangeRef.current,
+            });
             vm.onInitialFillCompleted();
 
             const lastVisibleRange = lastVisibleRangeRef.current;
@@ -90,9 +236,17 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
         previousItemsRef.current = snapshot.items;
 
         if (prependedItems > 0) {
+            debugTimelineView("preserve viewport after prepend", {
+                prependedItems,
+                previousFirstItemIndex: firstItemIndex,
+                nextFirstItemIndex: firstItemIndex - prependedItems,
+                itemCount: snapshot.items.length,
+                initialFillState,
+                stuckAtBottom: snapshot.stuckAtBottom,
+            });
             setFirstItemIndex((currentIndex) => currentIndex - prependedItems);
         }
-    }, [snapshot.items]);
+    }, [firstItemIndex, initialFillState, snapshot.items, snapshot.stuckAtBottom]);
 
     const itemContent = useCallback(
         (index: number, item: TItem): JSX.Element => {
@@ -108,6 +262,14 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
                 endIndex: range.endIndex,
             };
             lastVisibleRangeRef.current = visibleRange;
+            debugTimelineView("range changed", {
+                visibleRange,
+                initialFillState,
+                itemCount: snapshot.items.length,
+                canPaginateBackward: snapshot.canPaginateBackward,
+                backwardPagination: snapshot.backwardPagination,
+                pendingAnchor: snapshot.pendingAnchor?.targetKey ?? null,
+            });
             vm.onVisibleRangeChanged(visibleRange);
 
             if (initialFillState !== "filling") {
@@ -132,15 +294,28 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
             if (!sawInitialRangeRef.current) {
                 sawInitialRangeRef.current = true;
                 if (!canContinueInitialFill) {
+                    debugTimelineView("stop initial fill after first range", {
+                        visibleRange,
+                        canContinueInitialFill,
+                    });
                     setInitialFillState("done");
                     return;
                 }
             } else if (!canContinueInitialFill) {
+                debugTimelineView("stop initial fill", {
+                    visibleRange,
+                    canContinueInitialFill,
+                });
                 setInitialFillState("done");
                 return;
             }
 
             initialFillRoundsRef.current += 1;
+            debugTimelineView("paginate backward during initial fill", {
+                initialFillRounds: initialFillRoundsRef.current,
+                visibleRange,
+                itemCount: snapshot.items.length,
+            });
             vm.paginate("backward");
         },
         [
@@ -155,20 +330,54 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
 
     const handleAtBottomStateChange = useCallback(
         (atBottom: boolean) => {
+            if (
+                shouldIgnoreAtBottomStateChange({
+                    initialFillState,
+                    hasPendingAnchor: !!snapshot.pendingAnchor,
+                })
+            ) {
+                debugTimelineView("ignore atBottom state change during initial fill", {
+                    atBottom,
+                    initialFillState,
+                    itemCount: snapshot.items.length,
+                    pendingAnchor: snapshot.pendingAnchor?.targetKey ?? null,
+                });
+                return;
+            }
+
+            debugTimelineView("atBottom state changed", {
+                atBottom,
+                initialFillState,
+                itemCount: snapshot.items.length,
+            });
             vm.onStuckAtBottomChanged(atBottom);
         },
-        [vm],
+        [initialFillState, snapshot.items.length, snapshot.pendingAnchor, vm],
     );
 
     const handleStartReached = useCallback(() => {
-        log(
-            "startReached fired, backwardPagination:",
-            snapshot.backwardPagination,
-            "canPaginateBackward:",
-            snapshot.canPaginateBackward,
-            "initialFill:",
+        if (
+            shouldIgnoreStartReached({
+                initialFillState,
+                stuckAtBottom: snapshot.stuckAtBottom,
+                hasPendingAnchor: !!snapshot.pendingAnchor,
+            })
+        ) {
+            debugTimelineView("ignore startReached while pinned to live bottom", {
+                initialFillState,
+                stuckAtBottom: snapshot.stuckAtBottom,
+                pendingAnchor: snapshot.pendingAnchor?.targetKey ?? null,
+            });
+            return;
+        }
+
+        debugTimelineView("startReached", {
+            backwardPagination: snapshot.backwardPagination,
+            canPaginateBackward: snapshot.canPaginateBackward,
             initialFillState,
-        );
+            pendingAnchor: snapshot.pendingAnchor?.targetKey ?? null,
+            initialFillRounds: initialFillRoundsRef.current,
+        });
         if (snapshot.backwardPagination !== "idle" || !snapshot.canPaginateBackward) {
             return;
         }
@@ -184,17 +393,21 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
         }
 
         vm.paginate("backward");
-    }, [vm, initialFillState, snapshot.backwardPagination, snapshot.canPaginateBackward, snapshot.pendingAnchor]);
+    }, [
+        vm,
+        initialFillState,
+        snapshot.backwardPagination,
+        snapshot.canPaginateBackward,
+        snapshot.pendingAnchor,
+        snapshot.stuckAtBottom,
+    ]);
 
     const handleEndReached = useCallback(() => {
-        log(
-            "endReached fired, forwardPagination:",
-            snapshot.forwardPagination,
-            "canPaginateForward:",
-            snapshot.canPaginateForward,
-            "initialFill:",
+        debugTimelineView("endReached", {
+            forwardPagination: snapshot.forwardPagination,
+            canPaginateForward: snapshot.canPaginateForward,
             initialFillState,
-        );
+        });
         if (initialFillState === "done" && snapshot.forwardPagination === "idle" && snapshot.canPaginateForward) {
             vm.paginate("forward");
         }
@@ -202,36 +415,41 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
 
     const scrollIntoViewOnChange = useCallback<ScrollIntoViewOnChange<TItem, undefined>>(
         ({ totalCount }): ScrollIntoViewLocation | null | undefined | false => {
-            const pendingAnchor = snapshot.pendingAnchor;
-            if (!pendingAnchor || totalCount === 0) {
+            const scrollLocation = getScrollLocationOnChange({
+                items: snapshot.items,
+                pendingAnchor: snapshot.pendingAnchor,
+                stuckAtBottom: snapshot.stuckAtBottom,
+                totalCount,
+                lastAnchoredKey: lastAnchoredKeyRef.current,
+                initialBottomSnapDone: initialBottomSnapDoneRef.current,
+            });
+
+            debugTimelineView("scrollIntoViewOnChange", {
+                totalCount,
+                itemCount: snapshot.items.length,
+                pendingAnchor: snapshot.pendingAnchor?.targetKey ?? null,
+                stuckAtBottom: snapshot.stuckAtBottom,
+                initialBottomSnapDone: initialBottomSnapDoneRef.current,
+                scrollLocation,
+            });
+
+            if (!scrollLocation) {
                 lastAnchoredKeyRef.current = null;
                 return false;
             }
 
-            if (lastAnchoredKeyRef.current === pendingAnchor.targetKey) {
-                return false;
+            if (!snapshot.pendingAnchor) {
+                initialBottomSnapDoneRef.current = true;
+                lastAnchoredKeyRef.current = null;
+                return scrollLocation;
             }
 
-            const targetIndex = snapshot.items.findIndex((item) => item.key === pendingAnchor.targetKey);
-            if (targetIndex === -1) {
-                return false;
-            }
-
-            lastAnchoredKeyRef.current = pendingAnchor.targetKey;
+            lastAnchoredKeyRef.current = snapshot.pendingAnchor.targetKey;
             vm.onAnchorReached();
 
-            return {
-                index: targetIndex,
-                align:
-                    pendingAnchor.position === undefined || pendingAnchor.position <= 0
-                        ? "start"
-                        : pendingAnchor.position >= 1
-                          ? "end"
-                          : "center",
-                behavior: "auto",
-            };
+            return scrollLocation;
         },
-        [snapshot.items, snapshot.pendingAnchor, vm],
+        [snapshot.items, snapshot.pendingAnchor, snapshot.stuckAtBottom, vm],
     );
 
     const { onFocusForGetItemComponent: _onFocusForGetItemComponent, ...virtuosoProps } = useVirtualizedList<
@@ -243,6 +461,7 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
         increaseViewportBy,
         getItemKey: (item) => item.key,
         isItemFocusable: () => true,
+        mapRangeIndex: (virtuosoIndex) => Math.max(0, virtuosoIndex - firstItemIndex),
         rangeChanged: handleRangeChanged,
         atBottomStateChange: handleAtBottomStateChange,
         startReached: handleStartReached,
@@ -252,18 +471,31 @@ export function TimelineView<TItem extends TimelineItem>({ vm, renderItem }: Tim
         style: { height: "100%", width: "100%" },
     });
 
-    log(
-        "render, items:",
-        snapshot.items.length,
-        "firstItemIndex:",
-        firstItemIndex,
-        "initialFill:",
-        initialFillState,
-        "backPag:",
-        snapshot.backwardPagination,
-        "fwdPag:",
-        snapshot.forwardPagination,
-    );
+    useLayoutEffect(() => {
+        const bottomSnapIndex = getPostInitialFillBottomSnapIndex({
+            initialFillState,
+            stuckAtBottom: snapshot.stuckAtBottom,
+            hasPendingAnchor: !!snapshot.pendingAnchor,
+            itemCount: snapshot.items.length,
+            firstItemIndex,
+            postInitialFillBottomSnapDone: postInitialFillBottomSnapDoneRef.current,
+        });
+
+        if (bottomSnapIndex === null) {
+            return;
+        }
+
+        debugTimelineView("post-initial-fill bottom snap", {
+            bottomSnapIndex,
+            itemCount: snapshot.items.length,
+        });
+        postInitialFillBottomSnapDoneRef.current = true;
+        virtuosoProps.ref.current?.scrollIntoView({
+            index: bottomSnapIndex,
+            align: "end",
+            behavior: "auto",
+        });
+    }, [initialFillState, firstItemIndex, snapshot.stuckAtBottom, snapshot.pendingAnchor, snapshot.items.length, virtuosoProps.ref]);
 
     return <Virtuoso data={snapshot.items} itemContent={itemContent} {...virtuosoProps} />;
 }

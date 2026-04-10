@@ -12,7 +12,13 @@ import { VirtuosoMockContext } from "react-virtuoso";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BaseViewModel } from "../../../core/viewmodel";
-import { TimelineView } from "./TimelineView";
+import {
+    getPostInitialFillBottomSnapIndex,
+    getScrollLocationOnChange,
+    shouldIgnoreStartReached,
+    shouldIgnoreAtBottomStateChange,
+    TimelineView,
+} from "./TimelineView";
 import type { TimelineItem, TimelineViewActions, TimelineViewSnapshot } from "./types";
 
 class TestTimelineViewModel
@@ -68,6 +74,55 @@ describe("TimelineView", () => {
         expect(screen.getByText("alpha")).toBeTruthy();
         expect(screen.getByText("beta")).toBeTruthy();
         expect(screen.getByText("gamma")).toBeTruthy();
+    });
+
+    it("requests an initial scroll to the bottom when mounted at the live end", () => {
+        expect(
+            getScrollLocationOnChange({
+                items: makeSnapshot().items,
+                pendingAnchor: null,
+                stuckAtBottom: true,
+                totalCount: 3,
+                lastAnchoredKey: null,
+                initialBottomSnapDone: false,
+            }),
+        ).toMatchObject({
+            index: 2,
+            align: "end",
+            behavior: "auto",
+        });
+    });
+
+    it("requests a post-fill bottom snap after startup backfill completes", () => {
+        expect(
+            getPostInitialFillBottomSnapIndex({
+                initialFillState: "done",
+                stuckAtBottom: true,
+                hasPendingAnchor: false,
+                itemCount: 5,
+                firstItemIndex: 100,
+                postInitialFillBottomSnapDone: false,
+            }),
+        ).toBe(104);
+    });
+
+    it("ignores atBottom state changes during initial fill for live timelines", () => {
+        expect(
+            shouldIgnoreAtBottomStateChange({
+                initialFillState: "filling",
+                hasPendingAnchor: false,
+            }),
+        ).toBe(true);
+    });
+
+    it("ignores startReached when already pinned to the live bottom", () => {
+        expect(
+            shouldIgnoreStartReached({
+                initialFillState: "done",
+                stuckAtBottom: true,
+                hasPendingAnchor: false,
+            }),
+        ).toBe(true);
     });
 
     it("reports visible range and bottom state", async () => {

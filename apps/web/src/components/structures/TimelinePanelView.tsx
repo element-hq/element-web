@@ -44,14 +44,17 @@ export function TimelinePanelView({ room, anchoredEventId, highlightedEventId }:
     const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const viewKey = `${room.roomId}|${effectiveAnchorEventId ?? ""}`;
 
-    return <TimelinePanelViewContent key={viewKey} room={room} anchoredEventId={anchoredEventId} highlightedEventId={highlightedEventId} />;
+    return (
+        <TimelinePanelViewContent
+            key={viewKey}
+            room={room}
+            anchoredEventId={anchoredEventId}
+            highlightedEventId={highlightedEventId}
+        />
+    );
 }
 
-function TimelinePanelViewContent({
-    room,
-    anchoredEventId,
-    highlightedEventId,
-}: TimelinePanelViewProps): JSX.Element {
+function TimelinePanelViewContent({ room, anchoredEventId, highlightedEventId }: TimelinePanelViewProps): JSX.Element {
     const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const client: MatrixClient = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
