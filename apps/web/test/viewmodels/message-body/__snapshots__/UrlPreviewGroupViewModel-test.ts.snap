@@ -8,7 +8,7 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
   "link": "https://example.org",
   "showTooltipOnLink": false,
   "siteIcon": undefined,
-  "siteName": undefined,
+  "siteName": "example.org",
   "title": "A description",
 }
 `;
@@ -21,7 +21,7 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
   "link": "https://example.org",
   "showTooltipOnLink": false,
   "siteIcon": undefined,
-  "siteName": undefined,
+  "siteName": "Site name",
   "title": "Site name",
 }
 `;
@@ -34,7 +34,7 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
   "link": "https://example.org",
   "showTooltipOnLink": false,
   "siteIcon": undefined,
-  "siteName": undefined,
+  "siteName": "example.org",
   "title": "Basic title",
 }
 `;
@@ -68,7 +68,7 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
   "link": "https://example.org",
   "showTooltipOnLink": false,
   "siteIcon": undefined,
-  "siteName": undefined,
+  "siteName": "example.org",
   "title": "Media test",
 }
 `;
@@ -157,7 +157,7 @@ exports[`UrlPreviewGroupViewModel should ignore media when mediaVisible is false
       "link": "https://example.org",
       "showTooltipOnLink": false,
       "siteIcon": undefined,
-      "siteName": undefined,
+      "siteName": "example.org",
       "title": "This is an example!",
     },
   ],
@@ -186,7 +186,7 @@ exports[`UrlPreviewGroupViewModel should preview a URL with media 1`] = `
       "link": "https://example.org",
       "showTooltipOnLink": false,
       "siteIcon": undefined,
-      "siteName": undefined,
+      "siteName": "example.org",
       "title": "This is an example!",
     },
   ],
