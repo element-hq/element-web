@@ -30,7 +30,7 @@ export interface DateSeparatorButtonProps {
     onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }
 
-/** Interactive date separator button that opens the jump-to-date menu. */
+/** Interactive date separator button that forwards its ref to the underlying trigger element used by Compound Menu. */
 export const DateSeparatorButton = forwardRef<HTMLDivElement, DateSeparatorButtonProps>(function DateSeparatorButton(
     { label, tooltipOpen, className, ...props },
     forwardedRef,
