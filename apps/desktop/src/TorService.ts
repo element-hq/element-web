@@ -22,7 +22,7 @@ export interface BootstrapEvent {
     summary: string;
 }
 
-type TorPlatform = "linux-x64" | "linux-arm64" | "darwin-x64" | "darwin-arm64" | "win32-x64";
+type TorPlatform = "linux-x64" | "linux-arm64" | "mac-x64" | "mac-arm64" | "win-x64";
 
 export class TorService extends EventEmitter {
     static readonly EVENT_BOOTSTRAP = "bootstrap";
@@ -155,7 +155,7 @@ export class TorService extends EventEmitter {
 
     private resolveBinaryPath(): string {
         const platform = this.detectPlatform();
-        const binaryName = platform.startsWith("win32") ? "tor.exe" : "tor";
+        const binaryName = platform.startsWith("win") ? "tor.exe" : "tor";
 
         let binaryPath: string;
 
@@ -193,9 +193,9 @@ export class TorService extends EventEmitter {
 
         if (p === "linux" && a === "x64") return "linux-x64";
         if (p === "linux" && a === "arm64") return "linux-arm64";
-        if (p === "darwin" && a === "x64") return "darwin-x64";
-        if (p === "darwin" && a === "arm64") return "darwin-arm64";
-        if (p === "win32" && a === "x64") return "win32-x64";
+        if (p === "darwin" && a === "x64") return "mac-x64";
+        if (p === "darwin" && a === "arm64") return "mac-arm64";
+        if (p === "win32" && a === "x64") return "win-x64";
 
         throw new Error(`Unsupported platform: ${p} ${a}`);
     }

@@ -44,3 +44,5 @@ storybook-static
 /docs/.vitepress/cache
 Elementor.code-workspace
 apps/webapp
+apps/desktop/webapp
+apps/desktop/webapp.asar

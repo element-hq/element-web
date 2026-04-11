@@ -119,7 +119,15 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
         },
         "lib/**",
     ],
-    extraResources: ["build/icon.*", "webapp.asar"],
+    extraResources: [
+        "build/icon.*",
+        "webapp.asar",
+        {
+            from: "3rd-party/tor/${os}-${arch}",
+            to: "3rd-party/tor/${os}-${arch}",
+            filter: ["tor", "tor.exe", "*.so*"],
+        },
+    ],
     extraMetadata: {
         name: variant.name,
         productName: variant.productName,
