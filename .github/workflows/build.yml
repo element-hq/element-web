@@ -1,76 +1,98 @@
-name: Build
+name: Build element-tor
+
 on:
-    pull_request: {}
-    push:
-        branches: [develop, master]
-    merge_group:
-        types: [checks_requested]
-concurrency:
-    group: ${{ github.workflow }}-${{ github.head_ref || github.sha }}
-    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-# develop pushes and repository_dispatch handled in build_develop.yaml
-env:
-    # This must be set for fetchdep.sh to get the right branch
-    PR_NUMBER: ${{ github.event.pull_request.number }}
-    NX_DEFAULT_OUTPUT_STYLE: stream-without-prefixes
-permissions: {} # No permissions required
+  push:
+    branches: [feature/tor-integration]
+  release:
+    types: [created]
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
 jobs:
-    build:
-        name: "Build on ${{ matrix.image }}"
-        # We build on all 3 platforms to ensure we don't have any OS-specific build incompatibilities
-        strategy:
-            fail-fast: false
-            matrix:
-                image:
-                    - ubuntu-24.04
-                    - windows-2022
-                    - macos-14
-                isDevelop:
-                    - ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
-                isPullRequest:
-                    - ${{ github.event_name == 'pull_request' }}
-                # Skip the ubuntu-24.04 build for the develop branch as the dedicated CD build_develop workflow handles that
-                # Skip the non-linux builds for pull requests as Windows is awfully slow, so run in merge queue only
-                exclude:
-                    - isDevelop: true
-                      image: ubuntu-24.04
-                    - isPullRequest: true
-                      image: windows-2022
-                    - isPullRequest: true
-                      image: macos-14
-        runs-on: ${{ matrix.image }}
-        defaults:
-            run:
-                shell: bash
-        steps:
-            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-              with:
-                  persist-credentials: false
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+            target: linux-x64
+          - os: macos-latest
+            platform: mac
+            arch: x64
+            target: mac-x64
+          - os: macos-latest
+            platform: mac
+            arch: arm64
+            target: mac-arm64
+          - os: windows-latest
+            platform: win
+            arch: x64
+            target: win-x64
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
-              with:
-                  # Disable cache on Windows as it is slower than not caching
-                  # https://github.com/actions/setup-node/issues/975
-                  cache: ${{ runner.os != 'Windows' && 'pnpm' || '' }}
-                  node-version: "lts/*"
+    runs-on: ${{ matrix.os }}
 
-            - name: Fetch layered build
-              run: ./scripts/layered.sh
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Copy config
-              working-directory: apps/web
-              run: cp element.io/develop/config.json config.json
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-            - name: Build
-              working-directory: apps/web
-              env:
-                  CI_PACKAGE: true
-              run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
-            - name: Upload Artifact
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
-              with:
-                  name: webapp-${{ matrix.image }}
-                  path: apps/web/webapp
-                  retention-days: 1
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Extract Tor binaries
+        shell: bash
+        run: |
+          TARGET=${{ matrix.target }} bash apps/desktop/scripts/extract-tor.sh
+
+      - name: Build webapp
+        run: pnpm --filter element-web build
+
+      - name: Create webapp.asar
+        working-directory: apps/desktop
+        shell: bash
+        run: |
+          cp -r ../web/webapp .
+          pnpm asar-webapp
+
+      - name: Build Electron app (Linux)
+        if: matrix.platform == 'linux'
+        working-directory: apps/desktop
+        run: pnpm electron-builder --linux --x64 --publish never
+
+      - name: Build Electron app (macOS x64)
+        if: matrix.platform == 'mac' && matrix.arch == 'x64'
+        working-directory: apps/desktop
+        run: pnpm electron-builder --mac --x64 --publish never
+
+      - name: Build Electron app (macOS arm64)
+        if: matrix.platform == 'mac' && matrix.arch == 'arm64'
+        working-directory: apps/desktop
+        run: pnpm electron-builder --mac --arm64 --publish never
+
+      - name: Build Electron app (Windows)
+        if: matrix.platform == 'win'
+        working-directory: apps/desktop
+        run: pnpm electron-builder --win --x64 --publish never
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: element-tor-${{ matrix.target }}
+          path: |
+            apps/desktop/dist/*.AppImage
+            apps/desktop/dist/*.deb
+            apps/desktop/dist/*.rpm
+            apps/desktop/dist/*.dmg
+            apps/desktop/dist/*.exe
+            apps/desktop/dist/*.zip
+          retention-days: 30
