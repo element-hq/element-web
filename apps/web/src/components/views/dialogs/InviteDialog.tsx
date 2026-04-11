@@ -25,7 +25,7 @@ import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../.
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
 import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import { type IInviteResult, inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
+import { showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
@@ -63,6 +63,7 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
+import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -409,10 +410,14 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             .map((member) => ({ userId: member.userId, user: toMember(member) }));
     }
 
-    private shouldAbortAfterInviteError(result: IInviteResult, room: Room): boolean {
+    private shouldAbortAfterInviteError(
+        states: MultiInviterCompletionStates,
+        inviter: MultiInviter,
+        room: Room,
+    ): boolean {
         this.setState({ busy: false });
         const userMap = new Map<string, Member>(this.state.targets.map((member) => [member.userId, member]));
-        return !showAnyInviteErrors(result.states, room, result.inviter, userMap);
+        return !showAnyInviteErrors(states, room, inviter, userMap);
     }
 
     private convertFilter(): Member[] {
@@ -483,11 +488,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         try {
-            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds, {
+            const inviter = new MultiInviter(cli, this.props.roomId, {
                 // We show our own progress body, so don't pop up a separate dialog.
                 inhibitProgressDialog: true,
             });
-            if (!this.shouldAbortAfterInviteError(result, room)) {
+            const states = await inviter.invite(targetIds);
+            if (!this.shouldAbortAfterInviteError(states, inviter, room)) {
                 // handles setting error message too
                 this.props.onFinished(true);
             }

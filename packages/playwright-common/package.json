@@ -1,5 +1,5 @@
 {
-    "name": "@element-hq/element-web-playwright-common-local",
+    "name": "@element-hq/element-web-playwright-common",
     "type": "module",
     "version": "3.0.0",
     "license": "SEE LICENSE IN README.md",
@@ -12,10 +12,34 @@
     "engines": {
         "node": ">=20.0.0"
     },
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
     "bin": {
-        "playwright-screenshots-experimental": "playwright-screenshots.sh"
+        "playwright-screenshots": "playwright-screenshots.sh"
+    },
+    "scripts": {
+        "prepack": "nx build:playwright",
+        "lint:types": "tsc --noEmit"
     },
     "devDependencies": {
+        "@element-hq/element-web-module-api": "*",
+        "@types/lodash-es": "^4.17.12",
+        "typescript": "^5.8.2",
         "wait-on": "^9.0.4"
+    },
+    "dependencies": {
+        "@axe-core/playwright": "^4.10.1",
+        "@testcontainers/postgresql": "^11.0.0",
+        "glob": "^13.0.5",
+        "lodash-es": "^4.17.23",
+        "mailpit-api": "^1.2.0",
+        "strip-ansi": "^7.1.0",
+        "testcontainers": "^11.0.0",
+        "yaml": "^2.7.0"
+    },
+    "peerDependencies": {
+        "@element-hq/element-web-module-api": "*",
+        "@playwright/test": "catalog:",
+        "playwright-core": "catalog:"
     }
 }

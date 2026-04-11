@@ -44,7 +44,7 @@
                 "parallel": false,
                 "cwd": "apps/web"
             },
-            "dependsOn": ["^build"]
+            "dependsOn": ["^build", "^build:playwright"]
         },
         "test:unit": {
             "executor": "@nx/jest:jest",
@@ -53,6 +53,16 @@
                 "cwd": "apps/web"
             },
             "dependsOn": ["^build"]
+        },
+        "test:playwright": {
+            "command": "playwright test",
+            "options": { "cwd": "apps/web" },
+            "dependsOn": ["^build:playwright"]
+        },
+        "test:playwright:screenshots": {
+            "command": "playwright-screenshots nx test:playwright --update-snapshots --project=Chrome --grep @screenshot",
+            "options": { "cwd": "apps/web" },
+            "dependsOn": ["^build:playwright"]
         }
     }
 }
