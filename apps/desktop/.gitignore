@@ -20,3 +20,6 @@ yarn-error.log
 .DS_Store
 /playwright-report
 .pnpm-store
+# Binaires Tor (extraits au build)
+3rd-party/tor/*/tor
+3rd-party/tor/*/tor.exe
