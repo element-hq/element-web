@@ -3743,7 +3743,11 @@
             "one_user": "%(displayName)s is typing …",
             "two_users": "%(names)s and %(lastPerson)s are typing …"
         },
-        "undecryptable_tooltip": "This message could not be decrypted"
+        "undecryptable_tooltip": "This message could not be decrypted",
+        "gallery": {
+            "caption_default": "Gallery",
+            "upload_failed": "Failed to upload gallery"
+        }
     },
     "truncated_list_n_more": {
         "other": "And %(count)s more..."

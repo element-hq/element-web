@@ -33,6 +33,7 @@ import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
+import MGalleryBody from "./MGalleryBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 import {
     DecryptionFailureBodyFactory,
@@ -63,6 +64,8 @@ export interface IOperableEventTile {
     getEventTileOps(): IEventTileOps | null;
 }
 
+const MSG_TYPE_GALLERY = "dm.filament.gallery";
+
 const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Text, TextualBody],
     [MsgType.Notice, TextualBody],
@@ -71,6 +74,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyFactory],
+    [MSG_TYPE_GALLERY, MGalleryBody],
 ]);
 const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [EventType.Sticker, MStickerBody],
@@ -294,9 +298,10 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
 
         const hasCaption =
-            [MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
-            content.filename &&
-            content.filename !== content.body;
+            ([MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video].includes(msgtype as MsgType) &&
+                content.filename &&
+                content.filename !== content.body) ||
+            msgtype === MSG_TYPE_GALLERY;
         const bodyProps: IBodyProps = {
             ref: this.body,
             mxEvent: this.props.mxEvent,

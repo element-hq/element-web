@@ -16,9 +16,26 @@ import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 import { type MediaPreviewConfig } from "./media_preview.ts";
 import { type INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "./invite-rules.ts";
+import type { ImageInfo, VideoInfo, AudioInfo, FileInfo } from "matrix-js-sdk/src/types";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
+    export interface GalleryItemContent {
+        itemtype: string;
+        body: string;
+        url?: string;
+        file?: EncryptedFile;
+        info?: ImageInfo | VideoInfo | AudioInfo | FileInfo;
+    }
+
+    export interface GalleryContent {
+        msgtype: "dm.filament.gallery";
+        body: string;
+        format?: "org.matrix.custom.html";
+        formatted_body?: string;
+        itemtypes: GalleryItemContent[];
+    }
+
     export interface FileInfo {
         /**
          * @see https://github.com/matrix-org/matrix-spec-proposals/pull/2448
