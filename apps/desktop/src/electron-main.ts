@@ -48,7 +48,8 @@ import { setupMediaAuth } from "./media-auth.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
-import { TorService } from "./TorService.js";
+import { TorService, type BootstrapEvent } from "./TorService.js";
+import { TorSplash } from "./TorSplash.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -253,6 +254,17 @@ if (store.get("disableHardwareAcceleration")) {
 // Global TorService instance — lives in the main process only
 const torService = new TorService();
 
+// Ensure Tor is killed on OS-level signals and synchronous exits
+for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"] as const) {
+    process.on(sig, () => {
+        torService.stop();
+        setTimeout(() => process.exit(0), 500);
+    });
+}
+process.on("exit", () => {
+    torService.stop();
+});
+
 app.on("ready", async () => {
     console.debug("Reached Electron ready state");
 
@@ -267,19 +279,21 @@ app.on("ready", async () => {
         return;
     }
 
-    // Start Tor and apply SOCKS5h proxy before opening any window
+    // Show splash screen while Tor bootstraps
+    const splash = new TorSplash();
+    splash.show();
+
     try {
         console.log("[Tor] Starting Tor bootstrap...");
 
-        torService.on(TorService.EVENT_BOOTSTRAP, ({ percent, summary }) => {
-            console.log(`[Tor] Bootstrap ${percent}% — ${summary}`);
+        torService.on(TorService.EVENT_BOOTSTRAP, (event: BootstrapEvent) => {
+            console.log(`[Tor] Bootstrap ${event.percent}% — ${event.summary}`);
+            splash.update(event);
         });
 
         await torService.start();
         console.log("[Tor] Bootstrap complete, applying proxy...");
 
-        // Apply SOCKS5h proxy to the default session
-        // SOCKS5h = DNS resolution happens inside Tor (no DNS leaks)
         await session.defaultSession.setProxy({
             proxyRules: torService.proxyUrl,
             proxyBypassRules: "<local>",
@@ -288,8 +302,23 @@ app.on("ready", async () => {
         console.log(`[Tor] Proxy set: ${torService.proxyUrl}`);
     } catch (e) {
         console.error("[Tor] Failed to start Tor:", e);
-        // Non-fatal for now: app continues without Tor
-        // TODO: show user-facing error dialog in step 5
+        splash.close();
+        const errorMessage = e instanceof Error ? e.message : String(e);
+        const { response } = await dialog.showMessageBox({
+            type: "error",
+            title: "Failed to connect to Tor",
+            message: "element-tor could not connect to the Tor network.",
+            detail: errorMessage,
+            buttons: ["Quit", "Continue without Tor"],
+            defaultId: 0,
+            cancelId: 1,
+        });
+        if (response === 0) {
+            app.exit(1);
+            return;
+        }
+    } finally {
+        splash.close();
     }
 
     if (argv["devtools"]) {
@@ -448,7 +477,7 @@ app.on("ready", async () => {
             if (shouldCancelCloseRequest) return;
         }
 
-        app.exit();
+        app.quit();
     });
 
     global.mainWindow.on("closed", () => {
@@ -516,8 +545,13 @@ app.on("activate", () => {
 function beforeQuit(): void {
     global.appQuitting = true;
     global.mainWindow?.webContents.send("before-quit");
-    // Kill Tor process cleanly on app exit
     torService.stop();
+
+    // Delay app exit slightly to allow Tor exit event to flush
+    app.on("will-quit", (e) => {
+        e.preventDefault();
+        setTimeout(() => app.exit(0), 500);
+    });
 }
 
 app.on("before-quit", beforeQuit);

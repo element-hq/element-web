@@ -7,7 +7,7 @@
  *  - Spawn Tor as a child process with a minimal torrc
  *  - Parse Tor bootstrap progress from stdout/stderr
  *  - Expose the SOCKS5h proxy address once bootstrap reaches 100%
- *  - Kill Tor cleanly on app exit
+ *  - Kill Tor cleanly on app exit, with a forced kill fallback
  */
 
 import { ChildProcess, spawn } from "child_process";
@@ -17,32 +17,32 @@ import * as os from "os";
 import * as path from "path";
 import { app } from "electron";
 
-// Bootstrap progress event payload
 export interface BootstrapEvent {
     percent: number;
     summary: string;
 }
 
-// Supported platform/arch combinations
 type TorPlatform = "linux-x64" | "linux-arm64" | "darwin-x64" | "darwin-arm64" | "win32-x64";
 
 export class TorService extends EventEmitter {
-    /** Emitted repeatedly during bootstrap with { percent, summary } */
     static readonly EVENT_BOOTSTRAP = "bootstrap";
-    /** Emitted once when bootstrap reaches 100% */
     static readonly EVENT_READY = "ready";
-    /** Emitted if Tor exits unexpectedly or fails to start */
     static readonly EVENT_ERROR = "error";
+
+    /** How long to wait for Tor to exit gracefully before sending SIGKILL (ms) */
+    private static readonly STOP_TIMEOUT_MS = 5_000;
+
+    /** How long to wait for bootstrap before giving up (ms) */
+    private static readonly BOOTSTRAP_TIMEOUT_MS = 120_000;
 
     private torProcess: ChildProcess | null = null;
     private dataDir: string;
-    private socksPort: number = 19050; // Use non-standard port to avoid conflicts
+    private socksPort: number = 19050;
     private controlPort: number = 19051;
     private _isReady: boolean = false;
 
     constructor() {
         super();
-        // Store Tor runtime data in the OS temp dir, scoped to this app
         this.dataDir = path.join(os.tmpdir(), "element-tor-data");
     }
 
@@ -50,7 +50,6 @@ export class TorService extends EventEmitter {
     // Public API
     // -------------------------------------------------------------------------
 
-    /** Returns the SOCKS5h proxy URL for use with session.setProxy() */
     get proxyUrl(): string {
         return `socks5://127.0.0.1:${this.socksPort}`;
     }
@@ -59,12 +58,10 @@ export class TorService extends EventEmitter {
         return this._isReady;
     }
 
-    /** Start the Tor process. Resolves when bootstrap is complete. */
     async start(): Promise<void> {
         const binaryPath = this.resolveBinaryPath();
         const torrcPath = await this.writeTorrc();
 
-        // Set LD_LIBRARY_PATH so tor can find its bundled libs (Linux)
         const libDir = path.dirname(binaryPath);
         const env = {
             ...process.env,
@@ -88,11 +85,15 @@ export class TorService extends EventEmitter {
             this.parseBootstrap(data.toString());
         });
 
-        this.torProcess.on("exit", (code) => {
-            console.warn(`[TorService] Tor exited with code ${code}`);
+        this.torProcess.on("exit", (code, signal) => {
+            console.warn(`[TorService] Tor exited — code=${code} signal=${signal}`);
             if (!this._isReady) {
-                this.emit(TorService.EVENT_ERROR, new Error(`Tor exited before bootstrap (code ${code})`));
+                this.emit(
+                    TorService.EVENT_ERROR,
+                    new Error(`Tor exited before bootstrap completed (code=${code})`),
+                );
             }
+            this.torProcess = null;
         });
 
         this.torProcess.on("error", (err) => {
@@ -100,11 +101,10 @@ export class TorService extends EventEmitter {
             this.emit(TorService.EVENT_ERROR, err);
         });
 
-        // Wait for bootstrap to complete (timeout: 2 minutes)
         return new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
-                reject(new Error("Tor bootstrap timed out after 120s"));
-            }, 120_000);
+                reject(new Error(`Tor bootstrap timed out after ${TorService.BOOTSTRAP_TIMEOUT_MS / 1000}s`));
+            }, TorService.BOOTSTRAP_TIMEOUT_MS);
 
             this.once(TorService.EVENT_READY, () => {
                 clearTimeout(timeout);
@@ -118,25 +118,41 @@ export class TorService extends EventEmitter {
         });
     }
 
-    /** Kill the Tor process. Called on app quit. */
+    /**
+     * Gracefully stop Tor with a forced kill fallback.
+     * Sends SIGTERM and waits up to STOP_TIMEOUT_MS before sending SIGKILL.
+     */
     stop(): void {
-        if (this.torProcess) {
-            console.log("[TorService] Stopping Tor...");
-            this.torProcess.kill("SIGTERM");
-            this.torProcess = null;
-            this._isReady = false;
-        }
+        if (!this.torProcess) return;
+
+        console.log("[TorService] Stopping Tor (SIGTERM)...");
+        this.torProcess.kill("SIGTERM");
+        this._isReady = false;
+
+        const proc = this.torProcess;
+        this.torProcess = null;
+
+        const forceKill = setTimeout(() => {
+            if (!proc.killed) {
+                console.warn("[TorService] Tor did not exit in time, sending SIGKILL...");
+                proc.kill("SIGKILL");
+            }
+        }, TorService.STOP_TIMEOUT_MS);
+
+        proc.once("exit", (code, signal) => {
+            clearTimeout(forceKill);
+            console.log(`[TorService] Tor process exited cleanly (code=${code} signal=${signal}).`);
+        });
+
+        // Give the event loop a chance to flush before the process exits
+        // by keeping a reference alive briefly
+        setImmediate(() => {});
     }
 
     // -------------------------------------------------------------------------
     // Private helpers
     // -------------------------------------------------------------------------
 
-    /**
-     * Resolve the path to the Tor binary for the current platform and arch.
-     * In development: relative to project root.
-     * In production (packaged app): relative to app.getAppPath() or process.resourcesPath.
-     */
     private resolveBinaryPath(): string {
         const platform = this.detectPlatform();
         const binaryName = platform.startsWith("win32") ? "tor.exe" : "tor";
@@ -144,36 +160,33 @@ export class TorService extends EventEmitter {
         let binaryPath: string;
 
         if (app.isPackaged) {
-            // In packaged app, binaries are in resources/3rd-party/tor/
             binaryPath = path.join(
                 process.resourcesPath,
                 "3rd-party",
                 "tor",
                 platform,
-                binaryName
+                binaryName,
             );
         } else {
-            // In development, binaries are in apps/desktop/3rd-party/tor/
             binaryPath = path.join(
                 app.getAppPath(),
                 "3rd-party",
                 "tor",
                 platform,
-                binaryName
+                binaryName,
             );
         }
 
         if (!fs.existsSync(binaryPath)) {
             throw new Error(
                 `Tor binary not found at ${binaryPath}. ` +
-                `Run 'bash scripts/extract-tor.sh' first.`
+                `Run 'bash scripts/extract-tor.sh' first.`,
             );
         }
 
         return binaryPath;
     }
 
-    /** Detect the current platform/arch combination */
     private detectPlatform(): TorPlatform {
         const p = process.platform;
         const a = process.arch;
@@ -187,7 +200,6 @@ export class TorService extends EventEmitter {
         throw new Error(`Unsupported platform: ${p} ${a}`);
     }
 
-    /** Write a minimal torrc to a temp directory */
     private async writeTorrc(): Promise<string> {
         fs.mkdirSync(this.dataDir, { recursive: true });
 
@@ -198,23 +210,17 @@ export class TorService extends EventEmitter {
             `DataDirectory ${this.dataDir}`,
             `Log notice stdout`,
             `AvoidDiskWrites 1`,
+            `CookieAuthentication 1`,
         ].join("\n");
 
         fs.writeFileSync(torrcPath, torrcContent, "utf-8");
         return torrcPath;
     }
 
-    /**
-     * Parse Tor bootstrap progress from log output.
-     * Tor emits lines like:
-     *   [notice] Bootstrapped 10% (conn): Connecting to a relay
-     *   [notice] Bootstrapped 100% (done): Done
-     */
     private parseBootstrap(output: string): void {
         const lines = output.split("\n");
 
         for (const line of lines) {
-            // Forward all logs to console for debugging
             if (line.trim()) console.log(`[Tor] ${line.trim()}`);
 
             const match = line.match(/Bootstrapped (\d+)%[^:]*:\s*(.+)/);
