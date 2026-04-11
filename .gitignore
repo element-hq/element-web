@@ -42,3 +42,5 @@ storybook-static
 # vitepress
 /docs/.vitepress/dist
 /docs/.vitepress/cache
+Elementor.code-workspace
+apps/webapp
