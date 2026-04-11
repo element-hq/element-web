@@ -21,6 +21,7 @@ import {
     session,
     protocol,
     desktopCapturer,
+    shell,
 } from "electron";
 // eslint-disable-next-line n/file-extension-in-import
 import * as Sentry from "@sentry/electron/main";
@@ -264,6 +265,48 @@ for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"] as const) {
 process.on("exit", () => {
     torService.stop();
 });
+
+/**
+ * Intercept any attempt to open Element Call (WebRTC/UDP).
+ * WebRTC uses UDP which cannot be routed through Tor's SOCKS5 proxy,
+ * so calls would either fail or leak the user's real IP.
+ */
+function setupElementCallWarning(): void {
+    app.on("web-contents-created", (_, contents) => {
+        contents.on("will-navigate", (event, url) => {
+            if (url.includes("element-call") || url.includes("call.element.io")) {
+                event.preventDefault();
+                void dialog.showMessageBox({
+                    type: "warning",
+                    title: "Calls not supported over Tor",
+                    message: "Element Call uses WebRTC/UDP which cannot be routed through Tor.",
+                    detail:
+                        "Allowing this call would bypass the Tor proxy and expose your real IP address. " +
+                        "The call has been blocked to protect your anonymity.",
+                    buttons: ["OK"],
+                });
+            }
+        });
+
+        contents.setWindowOpenHandler(({ url }) => {
+            if (url.includes("element-call") || url.includes("call.element.io")) {
+                void dialog.showMessageBox({
+                    type: "warning",
+                    title: "Calls not supported over Tor",
+                    message: "Element Call uses WebRTC/UDP which cannot be routed through Tor.",
+                    detail:
+                        "Allowing this call would bypass the Tor proxy and expose your real IP address. " +
+                        "The call has been blocked to protect your anonymity.",
+                    buttons: ["OK"],
+                });
+                return { action: "deny" };
+            }
+            return { action: "deny" };
+        });
+    });
+}
+
+setupElementCallWarning();
 
 app.on("ready", async () => {
     console.debug("Reached Electron ready state");
