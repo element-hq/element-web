@@ -48,6 +48,7 @@ import { setupMediaAuth } from "./media-auth.js";
 import { getBuildConfig } from "./build-config.js";
 import { getAsarPath } from "./asar.js";
 import { getIconPath } from "./icon.js";
+import { TorService } from "./TorService.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -79,9 +80,6 @@ if (argv["help"]) {
 const LocalConfigLocation = process.env.ELEMENT_DESKTOP_CONFIG_JSON ?? argv["config"];
 const LocalConfigFilename = "config.json";
 
-// Electron creates the user data directory (with just an empty 'Dictionaries' directory...)
-// as soon as the app path is set, so pick a random path in it that must exist if it's a
-// real user data directory.
 function isRealUserDataDir(d: string): boolean {
     return fs.existsSync(path.join(d, "IndexedDB"));
 }
@@ -89,7 +87,6 @@ function isRealUserDataDir(d: string): boolean {
 const buildConfig = getBuildConfig();
 const protocolHandler = new ProtocolHandler(buildConfig.protocol);
 
-// check if we are passed a profile in the SSO callback url
 let userDataPath: string;
 
 const userDataPathInProtocol = protocolHandler.getProfileFromDeeplink(argv["_"]);
@@ -134,8 +131,6 @@ function loadLocalConfigFile(): Json {
 }
 
 let loadConfigPromise: Promise<void> | undefined;
-// Loads the config from asar, and applies a config.json from userData atop if one exists
-// Writes config to `global.vectorConfig`. Idempotent, returns the same promise on subsequent calls.
 function loadConfig(): Promise<void> {
     if (loadConfigPromise) return loadConfigPromise;
 
@@ -146,22 +141,13 @@ function loadConfig(): Promise<void> {
             console.log(`Loading app config: ${path.join(asarPath, LocalConfigFilename)}`);
             global.vectorConfig = loadJsonFile(asarPath, LocalConfigFilename);
         } catch {
-            // it would be nice to check the error code here and bail if the config
-            // is unparsable, but we get MODULE_NOT_FOUND in the case of a missing
-            // file or invalid json, so node is just very unhelpful.
-            // Continue with the defaults (ie. an empty config)
             global.vectorConfig = {};
         }
 
         try {
-            // Load local config and use it to override values from the one baked with the build
             const localConfig = loadLocalConfigFile();
 
-            // If the local config has a homeserver defined, don't use the homeserver from the build
-            // config. This is to avoid a problem where Riot thinks there are multiple homeservers
-            // defined, and panics as a result.
             if (Object.keys(localConfig).find((k) => homeserverProps.includes(<any>k))) {
-                // Rip out all the homeserver options from the vector config
                 global.vectorConfig = Object.keys(global.vectorConfig)
                     .filter((k) => !homeserverProps.includes(<any>k))
                     .reduce(
@@ -186,11 +172,8 @@ function loadConfig(): Promise<void> {
                     detail: e.message || "",
                 });
             }
-
-            // Could not load local config, this is expected in most cases.
         }
 
-        // Tweak modules paths as they assume the root is at the same level as webapp, but for `vector://vector/webapp` it is not.
         if (Array.isArray(global.vectorConfig.modules)) {
             global.vectorConfig.modules = global.vectorConfig.modules.map((m) => {
                 if (m.startsWith("/")) {
@@ -204,7 +187,6 @@ function loadConfig(): Promise<void> {
     return loadConfigPromise;
 }
 
-// Configure Electron Sentry and crashReporter using sentry.dsn in config.json if one is present.
 async function configureSentry(): Promise<void> {
     await loadConfig();
     const { dsn, environment } = global.vectorConfig.sentry || {};
@@ -213,7 +195,6 @@ async function configureSentry(): Promise<void> {
         Sentry.init({
             dsn,
             environment,
-            // We don't actually use this IPC, but we do not want Sentry injecting preloads
             ipcMode: Sentry.IPCMode.Classic,
         });
     }
@@ -230,12 +211,6 @@ const exitShortcuts: Array<(input: Input, platform: string) => boolean> = [
 
 void configureSentry();
 
-// handle uncaught errors otherwise it displays
-// stack traces in popup dialogs, which is terrible (which
-// it will do any time the auto update poke fails, and there's
-// no other way to catch this error).
-// Assuming we generally run from the console when developing,
-// this is far preferable.
 process.on("uncaughtException", function (error: Error): void {
     console.log("Unhandled exception", error);
 });
@@ -251,14 +226,8 @@ if (!gotLock) {
     app.exit();
 }
 
-// do this after we know we are the primary instance of the app
 protocolHandler.initialise(userDataPath);
 
-// Register the scheme the app is served from as 'standard'
-// which allows things like relative URLs and IndexedDB to
-// work.
-// Also mark it as secure (ie. accessing resources from this
-// protocol and HTTPS won't trigger mixed content warnings).
 protocol.registerSchemesAsPrivileged([
     {
         scheme: "vector",
@@ -270,27 +239,19 @@ protocol.registerSchemesAsPrivileged([
     },
 ]);
 
-// Turn the sandbox on for *all* windows we might generate. Doing this means we don't
-// have to specify a `sandbox: true` to each BrowserWindow.
-//
-// This also fixes an issue with window.open where if we only specified the sandbox
-// on the main window we'd run into cryptic "ipc_renderer be broke" errors. Turns out
-// it's trying to jump the sandbox and make some calls into electron, which it can't
-// do when half of it is sandboxed. By turning on the sandbox for everything, the new
-// window (no matter how temporary it may be) is also sandboxed, allowing for a clean
-// transition into the user's browser.
 app.enableSandbox();
 
-// We disable media controls here. We do this because calls use audio and video elements and they sometimes capture the media keys. See https://github.com/vector-im/element-web/issues/15704
 app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling,MediaSessionService");
 
-const store = Store.initialize(argv["storage-mode"]); // must be called before any async actions
+const store = Store.initialize(argv["storage-mode"]);
 
-// Disable hardware acceleration if the setting has been set.
 if (store.get("disableHardwareAcceleration")) {
     console.log("Disabling hardware acceleration.");
     app.disableHardwareAcceleration();
 }
+
+// Global TorService instance — lives in the main process only
+const torService = new TorService();
 
 app.on("ready", async () => {
     console.debug("Reached Electron ready state");
@@ -303,11 +264,32 @@ app.on("ready", async () => {
     } catch (e) {
         console.log("App setup failed: exiting", e);
         process.exit(1);
-        // process.exit doesn't cause node to stop running code immediately,
-        // so return (we could let the exception propagate but then we end up
-        // with node printing all sorts of stuff about unhandled exceptions
-        // when we want the actual error to be as obvious as possible).
         return;
+    }
+
+    // Start Tor and apply SOCKS5h proxy before opening any window
+    try {
+        console.log("[Tor] Starting Tor bootstrap...");
+
+        torService.on(TorService.EVENT_BOOTSTRAP, ({ percent, summary }) => {
+            console.log(`[Tor] Bootstrap ${percent}% — ${summary}`);
+        });
+
+        await torService.start();
+        console.log("[Tor] Bootstrap complete, applying proxy...");
+
+        // Apply SOCKS5h proxy to the default session
+        // SOCKS5h = DNS resolution happens inside Tor (no DNS leaks)
+        await session.defaultSession.setProxy({
+            proxyRules: torService.proxyUrl,
+            proxyBypassRules: "<local>",
+        });
+
+        console.log(`[Tor] Proxy set: ${torService.proxyUrl}`);
+    } catch (e) {
+        console.error("[Tor] Failed to start Tor:", e);
+        // Non-fatal for now: app continues without Tor
+        // TODO: show user-facing error dialog in step 5
     }
 
     if (argv["devtools"]) {
@@ -323,25 +305,24 @@ app.on("ready", async () => {
 
     protocol.registerFileProtocol("vector", (request, callback) => {
         if (request.method !== "GET") {
-            callback({ error: -322 }); // METHOD_NOT_SUPPORTED from chromium/src/net/base/net_error_list.h
+            callback({ error: -322 });
             return null;
         }
 
         const parsedUrl = new URL(request.url);
         if (parsedUrl.protocol !== "vector:") {
-            callback({ error: -302 }); // UNKNOWN_URL_SCHEME
+            callback({ error: -302 });
             return;
         }
         if (parsedUrl.host !== "vector") {
-            callback({ error: -105 }); // NAME_NOT_RESOLVED
+            callback({ error: -105 });
             return;
         }
 
         const target = parsedUrl.pathname.split("/");
 
-        // path starts with a '/'
         if (target[0] !== "") {
-            callback({ error: -6 }); // FILE_NOT_FOUND
+            callback({ error: -6 });
             return;
         }
 
@@ -353,17 +334,15 @@ app.on("ready", async () => {
         if (target[1] === "webapp") {
             baseDir = asarPath;
         } else {
-            callback({ error: -6 }); // FILE_NOT_FOUND
+            callback({ error: -6 });
             return;
         }
 
-        // Normalise the base dir and the target path separately, then make sure
-        // the target path isn't trying to back out beyond its root
         baseDir = path.normalize(baseDir);
 
         const relTarget = path.normalize(path.join(...target.slice(2)));
         if (relTarget.startsWith("..")) {
-            callback({ error: -6 }); // FILE_NOT_FOUND
+            callback({ error: -6 });
             return;
         }
         const absTarget = path.join(baseDir, relTarget);
@@ -373,7 +352,6 @@ app.on("ready", async () => {
         });
     });
 
-    // Minimist parses `--no-`-prefixed arguments as booleans with value `false` rather than verbatim.
     if (argv["update"] === false) {
         console.log("Auto update disabled via command line flag");
     } else if (global.vectorConfig["update_base_url"]) {
@@ -382,13 +360,11 @@ app.on("ready", async () => {
         console.log("No update_base_url is defined: auto update is disabled");
     }
 
-    // Set up i18n before loading storage as we need translations for dialogs
     global.appLocalization = new AppLocalization({
         components: [(): void => tray.initApplicationMenu(), (): void => Menu.setApplicationMenu(buildMenuTemplate())],
         store,
     });
 
-    // Load the previous window state with fallback to defaults
     const mainWindowState = windowStateKeeper({
         defaultWidth: 1024,
         defaultHeight: 768,
@@ -397,16 +373,12 @@ app.on("ready", async () => {
     console.debug("Opening main window");
     const preloadScript = path.normalize(`${__dirname}/preload.cjs`);
     global.mainWindow = new BrowserWindow({
-        // https://www.electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
         backgroundColor: "#fff",
-
         titleBarStyle: process.platform === "darwin" ? "hidden" : "default",
         trafficLightPosition: { x: 9, y: 8 },
-
         icon: await getIconPath(),
         show: false,
         autoHideMenuBar: store.get("autoHideMenuBar"),
-
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
@@ -414,7 +386,6 @@ app.on("ready", async () => {
         webPreferences: {
             preload: preloadScript,
             nodeIntegration: false,
-            //sandbox: true, // We enable sandboxing from app.enableSandbox() above
             contextIsolation: true,
             webgl: true,
         },
@@ -436,11 +407,8 @@ app.on("ready", async () => {
         setupMacosTitleBar(global.mainWindow);
     }
 
-    // Handle spellchecker
-    // For some reason spellCheckerEnabled isn't persisted, so we have to use the store here
     global.mainWindow.webContents.session.setSpellCheckerEnabled(store.get("spellCheckerEnabled", true));
 
-    // Create trayIcon icon
     if (store.get("minimizeToTray")) await tray.create();
 
     global.mainWindow.once("ready-to-show", () => {
@@ -450,7 +418,6 @@ app.on("ready", async () => {
         if (!argv["hidden"]) {
             global.mainWindow.show();
         } else {
-            // hide here explicitly because window manage above sometimes shows it
             global.mainWindow.hide();
         }
     });
@@ -459,13 +426,10 @@ app.on("ready", async () => {
         const exitShortcutPressed =
             input.type === "keyDown" && exitShortcuts.some((shortcutFn) => shortcutFn(input, process.platform));
 
-        // We only care about the exit shortcuts here
         if (!exitShortcutPressed || !global.mainWindow) return;
 
-        // Prevent the default behaviour
         event.preventDefault();
 
-        // Let's ask the user if they really want to exit the app
         const shouldWarnBeforeExit = store.get("warnBeforeExit", true);
         if (shouldWarnBeforeExit) {
             const shouldCancelCloseRequest =
@@ -484,24 +448,19 @@ app.on("ready", async () => {
             if (shouldCancelCloseRequest) return;
         }
 
-        // Exit the app
         app.exit();
     });
 
     global.mainWindow.on("closed", () => {
         global.mainWindow = null;
     });
+
     global.mainWindow.on("close", async (e) => {
-        // If we are not quitting and have a tray icon then minimize to tray
         if (!global.appQuitting && (tray.hasTray() || process.platform === "darwin")) {
-            // On Mac, closing the window just hides it
-            // (this is generally how single-window Mac apps
-            // behave, eg. Mail.app)
             e.preventDefault();
 
             if (global.mainWindow?.isFullScreen()) {
                 global.mainWindow.once("leave-full-screen", () => global.mainWindow?.hide());
-
                 global.mainWindow.setFullScreen(false);
             } else {
                 global.mainWindow?.hide();
@@ -512,7 +471,6 @@ app.on("ready", async () => {
     });
 
     if (process.platform === "win32") {
-        // Handle forward/backward mouse buttons in Windows
         global.mainWindow.on("app-command", (e, cmd) => {
             if (cmd === "browser-backward" && global.mainWindow?.webContents.canGoBack()) {
                 global.mainWindow.webContents.goBack();
@@ -527,17 +485,14 @@ app.on("ready", async () => {
     session.defaultSession.setDisplayMediaRequestHandler(
         (_, callback) => {
             if (process.env.XDG_SESSION_TYPE === "wayland") {
-                // On Wayland, calling getSources() opens the xdg-desktop-portal picker.
-                // The user can only select a single source there, so Electron will return an array with exactly one entry.
                 desktopCapturer
                     .getSources({ types: ["screen", "window"] })
                     .then((sources) => {
                         callback({ video: sources[0] });
                     })
                     .catch((err) => {
-                        // If the user cancels the dialog an error occurs "Failed to get sources"
                         console.error("Wayland: failed to get user-selected source:", err);
-                        callback({ video: { id: "", name: "" } }); // The promise does not return if no dummy is passed here as source
+                        callback({ video: { id: "", name: "" } });
                     });
             } else {
                 global.mainWindow?.webContents.send("openDesktopCapturerSourcePicker");
@@ -545,7 +500,7 @@ app.on("ready", async () => {
             setDisplayMediaCallback(callback);
         },
         { useSystemPicker: true },
-    ); // Use Mac OS 15+ native picker
+    );
 
     setupMediaAuth(global.mainWindow);
 });
@@ -561,16 +516,16 @@ app.on("activate", () => {
 function beforeQuit(): void {
     global.appQuitting = true;
     global.mainWindow?.webContents.send("before-quit");
+    // Kill Tor process cleanly on app exit
+    torService.stop();
 }
 
 app.on("before-quit", beforeQuit);
 autoUpdater.on("before-quit-for-update", beforeQuit);
 
 app.on("second-instance", (ev, commandLine, workingDirectory) => {
-    // If other instance launched with --hidden then skip showing window
     if (commandLine.includes("--hidden")) return;
 
-    // Someone tried to run a second instance, we should focus our window.
     if (global.mainWindow) {
         if (!global.mainWindow.isVisible()) global.mainWindow.show();
         if (global.mainWindow.isMinimized()) global.mainWindow.restore();
@@ -578,9 +533,4 @@ app.on("second-instance", (ev, commandLine, workingDirectory) => {
     }
 });
 
-// This is required to make notification handlers work
-// on Windows 8.1/10/11 (and is a noop on other platforms);
-// It must also match the ID found in 'electron-builder'
-// in order to get the title and icon to show up correctly.
-// Ref: https://stackoverflow.com/a/77314604/3525780
 app.setAppUserModelId(buildConfig.appId);
