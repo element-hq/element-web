@@ -87,7 +87,7 @@ describe("TimelinePanelViewModel", () => {
         expect(TimelineWindow).toHaveBeenCalledWith(client, room.getUnfilteredTimelineSet(), {
             windowLimit: 200,
         });
-        expect(timelineWindowInstance.load).toHaveBeenCalledWith(undefined, 30);
+        expect(timelineWindowInstance.load).toHaveBeenCalledWith(undefined, 40);
         expect(presenterInstance.buildItems).toHaveBeenCalledWith([eventA], false);
         expect(vm.getSnapshot().items).toEqual([{ key: "built", kind: "event" }]);
         expect(vm.getSnapshot().canPaginateBackward).toBe(false);
@@ -99,12 +99,12 @@ describe("TimelinePanelViewModel", () => {
         const vm = new TimelinePanelViewModel({ client, room, initialEventId: "$anchor" });
         await flushPromises();
 
-        expect(timelineWindowInstance.load).toHaveBeenCalledWith("$anchor", 30);
-        expect(vm.getSnapshot().stuckAtBottom).toBe(false);
-        expect(vm.getSnapshot().pendingAnchor).toEqual({
+        expect(timelineWindowInstance.load).toHaveBeenCalledWith("$anchor", 40);
+        expect(vm.getSnapshot().isAtLiveEdge).toBe(false);
+        expect(vm.getSnapshot().scrollTarget).toEqual({
             targetKey: "$anchor",
-            position: 0.5,
-            highlight: true,
+            position: "bottom",
+            highlight: undefined,
         });
     });
 
@@ -120,7 +120,7 @@ describe("TimelinePanelViewModel", () => {
         const vm = new TimelinePanelViewModel({ client, room });
         await flushPromises();
 
-        vm.paginate("backward");
+        vm.onRequestMoreItems("backward");
         await flushPromises();
 
         expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Backward, 20);
@@ -146,8 +146,8 @@ describe("TimelinePanelViewModel", () => {
         const vm = new TimelinePanelViewModel({ client, room });
         await flushPromises();
 
-        vm.paginate("backward");
-        vm.paginate("backward");
+        vm.onRequestMoreItems("backward");
+        vm.onRequestMoreItems("backward");
 
         expect(timelineWindowInstance.paginate).toHaveBeenCalledTimes(1);
         expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Backward, 20);
@@ -165,7 +165,7 @@ describe("TimelinePanelViewModel", () => {
         const vm = new TimelinePanelViewModel({ client, room });
         await flushPromises();
 
-        vm.paginate("backward");
+        vm.onRequestMoreItems("backward");
         await flushPromises();
 
         expect(vm.getSnapshot().canPaginateBackward).toBe(false);
@@ -176,7 +176,7 @@ describe("TimelinePanelViewModel", () => {
         const vm = new TimelinePanelViewModel({ client, room });
         await flushPromises();
 
-        vm.onStuckAtBottomChanged(false);
+        vm.onIsAtLiveEdgeChanged(false);
         room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
 
         await flushPromises();
@@ -250,11 +250,11 @@ describe("TimelinePanelViewModel", () => {
         const vm = new TimelinePanelViewModel({ client, room });
         await flushPromises();
 
-        vm.paginate("forward");
+        vm.onRequestMoreItems("forward");
         expect(timelineWindowInstance.paginate).not.toHaveBeenCalledWith(Direction.Forward, 20);
 
         vm.onInitialFillCompleted();
-        vm.paginate("forward");
+        vm.onRequestMoreItems("forward");
         await flushPromises();
 
         expect(timelineWindowInstance.paginate).toHaveBeenCalledWith(Direction.Forward, 20);
@@ -317,7 +317,7 @@ describe("TimelinePanelViewModel", () => {
         const vm = new TimelinePanelViewModel({ client, room });
         await flushPromises();
 
-        vm.paginate("backward");
+        vm.onRequestMoreItems("backward");
         expect(vm.getSnapshot().backwardPagination).toBe("loading");
 
         vm.dispose();

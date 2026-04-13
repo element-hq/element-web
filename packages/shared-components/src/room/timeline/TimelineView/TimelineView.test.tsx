@@ -13,6 +13,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BaseViewModel } from "../../../core/viewmodel";
 import {
+    getContiguousWindowShift,
     getPostInitialFillBottomSnapIndex,
     getScrollLocationOnChange,
     shouldPaginateBackwardAtTopScroll,
@@ -30,11 +31,11 @@ class TestTimelineViewModel
         super(undefined, snapshot);
     }
 
-    public paginate = vi.fn();
+    public onRequestMoreItems = vi.fn();
     public onInitialFillCompleted = vi.fn();
     public onVisibleRangeChanged = vi.fn();
-    public onAnchorReached = vi.fn();
-    public onStuckAtBottomChanged = vi.fn();
+    public onScrollTargetReached = vi.fn();
+    public onIsAtLiveEdgeChanged = vi.fn();
 }
 
 function makeSnapshot(partial?: Partial<TimelineViewSnapshot<TimelineItem>>): TimelineViewSnapshot<TimelineItem> {
@@ -44,12 +45,12 @@ function makeSnapshot(partial?: Partial<TimelineViewSnapshot<TimelineItem>>): Ti
             { key: "beta", kind: "event" },
             { key: "gamma", kind: "event" },
         ],
-        stuckAtBottom: true,
+        isAtLiveEdge: true,
         canPaginateBackward: false,
         canPaginateForward: false,
         backwardPagination: "idle",
         forwardPagination: "idle",
-        pendingAnchor: null,
+        scrollTarget: null,
         ...partial,
     };
 }
@@ -81,8 +82,8 @@ describe("TimelineView", () => {
         expect(
             getScrollLocationOnChange({
                 items: makeSnapshot().items,
-                pendingAnchor: null,
-                stuckAtBottom: true,
+                scrollTarget: null,
+                isAtLiveEdge: true,
                 totalCount: 3,
                 lastAnchoredKey: null,
                 initialBottomSnapDone: false,
@@ -98,8 +99,8 @@ describe("TimelineView", () => {
         expect(
             getPostInitialFillBottomSnapIndex({
                 initialFillState: "done",
-                stuckAtBottom: true,
-                hasPendingAnchor: false,
+                isAtLiveEdge: true,
+                hasScrollTarget: false,
                 itemCount: 5,
                 firstItemIndex: 100,
                 postInitialFillBottomSnapDone: false,
@@ -111,7 +112,7 @@ describe("TimelineView", () => {
         expect(
             shouldIgnoreAtBottomStateChange({
                 initialFillState: "filling",
-                hasPendingAnchor: false,
+                hasScrollTarget: false,
             }),
         ).toBe(true);
     });
@@ -120,8 +121,8 @@ describe("TimelineView", () => {
         expect(
             shouldIgnoreStartReached({
                 initialFillState: "done",
-                stuckAtBottom: true,
-                hasPendingAnchor: false,
+                isAtLiveEdge: true,
+                hasScrollTarget: false,
             }),
         ).toBe(true);
     });
@@ -130,13 +131,26 @@ describe("TimelineView", () => {
         expect(
             shouldPaginateBackwardAtTopScroll({
                 initialFillState: "done",
-                stuckAtBottom: false,
-                hasPendingAnchor: false,
+                isAtLiveEdge: false,
+                hasScrollTarget: false,
                 backwardPagination: "idle",
                 canPaginateBackward: true,
                 scrollTop: 0,
             }),
         ).toBe(true);
+    });
+
+    it("detects a backward sliding-window shift when older items are prepended and newer tail items are trimmed", () => {
+        const prevItems: TimelineItem[] = Array.from({ length: 60 }, (_, index) => ({
+            key: `event-${index + 31}`,
+            kind: "event",
+        }));
+        const nextItems: TimelineItem[] = Array.from({ length: 70 }, (_, index) => ({
+            key: `event-${index + 11}`,
+            kind: "event",
+        }));
+
+        expect(getContiguousWindowShift(prevItems, nextItems)).toBe(20);
     });
 
     it("reports visible range and bottom state", async () => {
@@ -145,7 +159,7 @@ describe("TimelineView", () => {
         renderTimeline(vm);
 
         await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
-        await waitFor(() => expect(vm.onStuckAtBottomChanged).toHaveBeenCalled());
+        await waitFor(() => expect(vm.onIsAtLiveEdgeChanged).toHaveBeenCalled());
     });
 
     it("requests forward pagination when the end is reachable and forward pagination is enabled", async () => {
@@ -160,8 +174,8 @@ describe("TimelineView", () => {
 
         await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
         await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
-        await waitFor(() => expect(vm.paginate).toHaveBeenCalledWith("forward"));
-        expect(vm.paginate).not.toHaveBeenCalledWith("backward");
+        await waitFor(() => expect(vm.onRequestMoreItems).toHaveBeenCalledWith("forward"));
+        expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
     });
 
     it("allows the initial backward probe while suppressing forward pagination during initial fill", async () => {
@@ -174,21 +188,21 @@ describe("TimelineView", () => {
 
         renderTimeline(vm);
 
-        await waitFor(() => expect(vm.paginate).toHaveBeenCalledWith("backward"));
-        expect(vm.paginate).not.toHaveBeenCalledWith("forward");
+        await waitFor(() => expect(vm.onRequestMoreItems).toHaveBeenCalledWith("backward"));
+        expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("forward");
         expect(vm.onInitialFillCompleted).not.toHaveBeenCalled();
     });
 
-    it("acknowledges a pending anchor when the anchored item is present", async () => {
+    it("acknowledges a scroll target when the target item is present", async () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
-                pendingAnchor: { targetKey: "beta", position: 0.5, highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
             }),
         );
 
         renderTimeline(vm);
 
-        await waitFor(() => expect(vm.onAnchorReached).toHaveBeenCalledOnce());
+        await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
     });
 
     it("marks initial fill complete without probing backward when no backfill is available", async () => {
@@ -202,38 +216,38 @@ describe("TimelineView", () => {
         renderTimeline(vm);
 
         await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
-        expect(vm.paginate).not.toHaveBeenCalledWith("backward");
+        expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
     });
 
-    it("suppresses the initial backward probe while a pending anchor is being resolved", async () => {
+    it("suppresses the initial backward probe while a scroll target is being resolved", async () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
                 canPaginateBackward: true,
-                pendingAnchor: { targetKey: "beta", position: 0.5, highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
             }),
         );
 
         renderTimeline(vm);
 
-        await waitFor(() => expect(vm.onAnchorReached).toHaveBeenCalledOnce());
-        expect(vm.paginate).not.toHaveBeenCalledWith("backward");
+        await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
+        expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
     });
 
     it("resets anchor tracking when the view model instance changes", async () => {
         const firstVm = new TestTimelineViewModel(
             makeSnapshot({
-                pendingAnchor: { targetKey: "beta", position: 0.5, highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
             }),
         );
 
         const secondVm = new TestTimelineViewModel(
             makeSnapshot({
-                pendingAnchor: { targetKey: "beta", position: 0.5, highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
             }),
         );
 
         const view = renderTimeline(firstVm);
-        await waitFor(() => expect(firstVm.onAnchorReached).toHaveBeenCalledOnce());
+        await waitFor(() => expect(firstVm.onScrollTargetReached).toHaveBeenCalledOnce());
 
         view.rerender(
             <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
@@ -241,6 +255,6 @@ describe("TimelineView", () => {
             </VirtuosoMockContext.Provider>,
         );
 
-        await waitFor(() => expect(secondVm.onAnchorReached).toHaveBeenCalledOnce());
+        await waitFor(() => expect(secondVm.onScrollTargetReached).toHaveBeenCalledOnce());
     });
 });

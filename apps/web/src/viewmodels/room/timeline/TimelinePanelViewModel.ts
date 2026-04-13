@@ -26,7 +26,7 @@ import type {
 } from "@element-hq/web-shared-components";
 
 const PAGINATE_SIZE = 20;
-const INITIAL_SIZE = 30;
+const INITIAL_SIZE = 40;
 const WINDOW_LIMIT = 200;
 type RoomTimelineListenerArgs = [
     ev: MatrixEvent,
@@ -62,12 +62,12 @@ export class TimelinePanelViewModel
     public constructor(opts: TimelinePanelViewModelOpts) {
         super(opts, {
             items: [],
-            stuckAtBottom: !opts.initialEventId,
+            isAtLiveEdge: !opts.initialEventId,
             canPaginateBackward: false,
             canPaginateForward: false,
             backwardPagination: "idle",
             forwardPagination: "idle",
-            pendingAnchor: null,
+            scrollTarget: opts.initialEventId ? { targetKey: opts.initialEventId, position: "bottom" } : null,
         });
 
         this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet(), {
@@ -109,8 +109,7 @@ export class TimelinePanelViewModel
             return;
         }
 
-        const { stuckAtBottom } = this.snapshot.current;
-        if (!stuckAtBottom) {
+        if (!this.snapshot.current?.isAtLiveEdge) {
             this.mergeSnapshot({
                 canPaginateForward: true,
             });
@@ -120,7 +119,7 @@ export class TimelinePanelViewModel
         this.paginateDirection(Direction.Forward, 1, false, false);
     };
 
-    private async load(eventId?: string): Promise<void> {
+    private async load(eventId?: string, highlight?: boolean): Promise<void> {
         this.mergeSnapshot({
             backwardPagination: "loading",
             forwardPagination: "loading",
@@ -142,7 +141,7 @@ export class TimelinePanelViewModel
                 canPaginateForward,
                 backwardPagination: "idle",
                 forwardPagination: "idle",
-                pendingAnchor: eventId ? { targetKey: eventId, position: 0.5, highlight: true } : null,
+                scrollTarget: eventId ? { targetKey: eventId, position: "bottom", highlight } : null,
             });
         } catch {
             this.mergeSnapshot({
@@ -156,7 +155,7 @@ export class TimelinePanelViewModel
 
     // ── TimelineViewActions ──────────────────────────────────────────
 
-    public paginate = (direction: "backward" | "forward"): void => {
+    public onRequestMoreItems = (direction: "backward" | "forward"): void => {
         if (direction === "forward" && !this.initialFillCompleted) {
             return;
         }
@@ -173,12 +172,12 @@ export class TimelinePanelViewModel
         this.visibleRange = range;
     };
 
-    public onAnchorReached = (): void => {
-        this.mergeSnapshot({ pendingAnchor: null });
+    public onScrollTargetReached = (): void => {
+        this.mergeSnapshot({ scrollTarget: null });
     };
 
-    public onStuckAtBottomChanged = (stuckAtBottom: boolean): void => {
-        this.mergeSnapshot({ stuckAtBottom });
+    public onIsAtLiveEdgeChanged = (isAtLiveEdge: boolean): void => {
+        this.mergeSnapshot({ isAtLiveEdge });
     };
 
     private buildItems(canPaginateBackward: boolean): TimelineModelItem[] {
@@ -234,9 +233,11 @@ export class TimelinePanelViewModel
                 });
             })
             .catch((e) => {
+                const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
+                const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
                 this.mergeSnapshot({
-                    canPaginateBackward: this.timelineWindow.canPaginate(Direction.Backward),
-                    canPaginateForward: this.timelineWindow.canPaginate(Direction.Forward),
+                    canPaginateBackward,
+                    canPaginateForward,
                     [stateKey]: "error" as PaginationState,
                 });
             });

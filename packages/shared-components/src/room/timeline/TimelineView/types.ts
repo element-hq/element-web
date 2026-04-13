@@ -10,13 +10,11 @@ import type { ViewModel } from "../../../core/viewmodel/ViewModel";
 
 // ─── Timeline item: one renderable row ─────────────────────────────
 
-/** Discriminated union of every row kind the timeline can render. */
-export type TimelineItemKind = "event" | "virtual" | "group";
-
 export interface TimelineItem {
     /** Stable, unique key for React reconciliation and scroll-token anchoring. */
     key: string;
-    kind: TimelineItemKind;
+    /** Discriminated union of every row kind the timeline can render. */
+    kind: "event" | "virtual" | "group";
 }
 
 // ─── Navigation anchor ─────────────────────────────────────────────
@@ -24,8 +22,8 @@ export interface TimelineItem {
 export interface NavigationAnchor {
     /** The `TimelineItem.key` to scroll to. */
     targetKey: string;
-    /** Where in the viewport to place the target. 0 = top, 0.5 = centre, 1 = bottom. */
-    position?: number;
+    /** Where in the viewport to place the target. */
+    position?: "top" | "center" | "bottom";
     /** Whether to visually highlight the target item after scrolling. */
     highlight?: boolean;
 }
@@ -50,7 +48,7 @@ export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem>
     items: TItem[];
 
     /** Whether the viewport is pinned to the live (bottom) end. */
-    stuckAtBottom: boolean;
+    isAtLiveEdge: boolean;
 
     /** Whether another backward pagination request is currently possible. */
     canPaginateBackward: boolean;
@@ -62,15 +60,15 @@ export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem>
     forwardPagination: PaginationState;
 
     /**
-     * If set, the container should scroll to this anchor on the
+     * If set, the container should scroll to this target on the
      * next render. The container clears it after executing the scroll.
      */
-    pendingAnchor: NavigationAnchor | null;
+    scrollTarget: NavigationAnchor | null;
 }
 
 export interface TimelineViewActions {
     /** Request more items at the given end. */
-    paginate(direction: "backward" | "forward"): void;
+    onRequestMoreItems(direction: "backward" | "forward"): void;
 
     /** Report that the shared mount-time initial fill has completed. */
     onInitialFillCompleted(): void;
@@ -78,11 +76,11 @@ export interface TimelineViewActions {
     /** Report the currently visible range after every scroll. */
     onVisibleRangeChanged(range: VisibleRange): void;
 
-    /** Report that the container has scrolled to the pending anchor. */
-    onAnchorReached(): void;
+    /** Report that the container has scrolled to the current scroll target. */
+    onScrollTargetReached(): void;
 
-    /** Report that the user has scrolled to or away from the bottom. */
-    onStuckAtBottomChanged(stuckAtBottom: boolean): void;
+    /** Report that the user has scrolled to or away from the live end. */
+    onIsAtLiveEdgeChanged(isAtLiveEdge: boolean): void;
 }
 
 export type TimelineViewModel<TItem extends TimelineItem = TimelineItem> = ViewModel<
@@ -94,7 +92,8 @@ export type TimelineViewModel<TItem extends TimelineItem = TimelineItem> = ViewM
 
 export interface TimelineViewProps<TItem extends TimelineItem = TimelineItem> {
     vm: TimelineViewModel<TItem>;
-
+    /** Optional CSS class names to apply to the component container.*/
+    className?: string;
     /**
      * Render callback for each timeline item.
      * The shared container calls this for every visible item.
