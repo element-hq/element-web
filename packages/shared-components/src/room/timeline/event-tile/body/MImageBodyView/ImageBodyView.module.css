@@ -87,15 +87,13 @@
 .gifLabel {
     position: absolute;
     display: block;
-    top: 0;
+    top: 0px;
     left: 14px;
-    margin: 0;
     padding: 5px;
-    border: 2px solid rgb(0 0 0 / 0.2);
     border-radius: 5px;
-    background-color: rgb(0 0 0 / 0.7);
-    color: #f4f6fa;
-    font: var(--cpd-font-body-sm-semibold);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 1);
     pointer-events: none;
 }
 
