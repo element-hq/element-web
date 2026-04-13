@@ -4,15 +4,15 @@ exports[`TileErrorView > renders the bubble layout variant 1`] = `
 <div>
   <ul>
     <li
-      class="tileErrorView bubble"
+      class="TileErrorView-module_tileErrorView TileErrorView-module_bubble"
       data-layout="bubble"
     >
       <div
-        class="line"
+        class="TileErrorView-module_line"
         role="status"
       >
         <span
-          class="message"
+          class="TileErrorView-module_message"
         >
           Can't load this message
            (m.room.message)
@@ -27,7 +27,7 @@ exports[`TileErrorView > renders the bubble layout variant 1`] = `
           Submit debug logs
         </button>
         <button
-          class="viewSourceButton"
+          class="TileErrorView-module_viewSourceButton"
           type="button"
         >
           View source
@@ -42,15 +42,15 @@ exports[`TileErrorView > renders the default tile error state 1`] = `
 <div>
   <ul>
     <li
-      class="tileErrorView"
+      class="TileErrorView-module_tileErrorView"
       data-layout="group"
     >
       <div
-        class="line"
+        class="TileErrorView-module_line"
         role="status"
       >
         <span
-          class="message"
+          class="TileErrorView-module_message"
         >
           Can't load this message
            (m.room.message)
@@ -65,7 +65,7 @@ exports[`TileErrorView > renders the default tile error state 1`] = `
           Submit debug logs
         </button>
         <button
-          class="viewSourceButton"
+          class="TileErrorView-module_viewSourceButton"
           type="button"
         >
           View source
