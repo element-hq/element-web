@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Page } from "@playwright/test";
 import { sample, uniqueId } from "lodash-es";
 
-import { test as base } from "./services.js";
+import { test as base } from "./toasts.js";
 import { type Credentials } from "../utils/api.js";
 
 /** Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials. */
