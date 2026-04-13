@@ -585,8 +585,8 @@ importers:
         specifier: ^7.12.7
         version: 7.28.5(@babel/core@7.29.0)
       '@casualbot/jest-sonar-reporter':
-        specifier: 2.5.0
-        version: 2.5.0
+        specifier: 2.5.1
+        version: 2.5.1
       '@element-hq/element-call-embedded':
         specifier: 0.18.0
         version: 0.18.0
@@ -998,7 +998,7 @@ importers:
         version: 4.3.2
       lodash:
         specifier: npm:lodash-es@^4.17.21
-        version: 4.18.1
+        version: lodash-es@4.18.1
       matrix-web-i18n:
         specifier: 'catalog:'
         version: 3.6.0
@@ -1976,8 +1976,8 @@ packages:
   '@cacheable/utils@2.4.1':
     resolution: {integrity: sha512-eiFgzCbIneyMlLOmNG4g9xzF7Hv3Mga4LjxjcSC/ues6VYq2+gUbQI8JqNuw/ZM8tJIeIaBGpswAsqV2V7ApgA==}
 
-  '@casualbot/jest-sonar-reporter@2.5.0':
-    resolution: {integrity: sha512-2/kaSndRYHPqxrnWLszHCzKD5kkmoDq9X54x68ghSxLWzLDEwKzTRiJcRsjRHtqOeMJmwf0EgS/nuv/1BDGI8g==}
+  '@casualbot/jest-sonar-reporter@2.5.1':
+    resolution: {integrity: sha512-aN0Dju7mZQcPz6rHca7e0PAIAf2///5DwvUhTdkSbhj36zMUIY/GiPDaLJKJQCZzSSSzPOMLfIKM1c/02S7kJA==}
     engines: {node: '>=14.0.0'}
 
   '@chevrotain/cst-dts-gen@12.0.0':
@@ -14423,7 +14423,7 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
-  '@casualbot/jest-sonar-reporter@2.5.0':
+  '@casualbot/jest-sonar-reporter@2.5.1':
     dependencies:
       mkdirp: 1.0.4
       uuid: 8.3.2
