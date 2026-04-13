@@ -19,6 +19,7 @@ import type {
     CustomLoginRenderFunction,
     CustomComposerPreviewRenderFunction,
     CustomComposerPreviewComponentProps,
+    CustomMessageComposerRenderFunction,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -70,6 +71,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             stateKey: mxEvent.getStateKey(),
             type: mxEvent.getType(),
             unsigned: mxEvent.getUnsigned(),
+            wireContent: mxEvent.getWireContent(),
         };
     }
 
@@ -206,5 +208,15 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             }
         }
         return null;
+    }
+
+    private _messageComposerRenderer?: CustomMessageComposerRenderFunction;
+
+    public get messageComposerRenderer(): CustomMessageComposerRenderFunction | undefined {
+        return this._messageComposerRenderer;
+    }
+
+    public registerMessageComposerComponent(renderer: CustomMessageComposerRenderFunction): void {
+        this._messageComposerRenderer = renderer;
     }
 }
