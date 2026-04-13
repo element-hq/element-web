@@ -228,7 +228,7 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
     const resolvedImageSrc = hoverOrFocus && showAnimatedContentOnHover && src ? src : resolvedThumbnailSrc;
 
     // Reserve the media box on the container itself so the timeline doesn't jump
-    // while the video element or loading state is still settling.
+    // while the image element or loading state is still settling.
     const resolvedWidth = maxWidth === undefined ? undefined : `min(100%, ${maxWidth}px)`;
     const containerStyle: CSSProperties = {
         width: resolvedWidth,
