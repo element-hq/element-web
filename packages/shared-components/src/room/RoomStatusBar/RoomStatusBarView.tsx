@@ -270,7 +270,6 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                         size="sm"
                                         kind="secondary"
                                         Icon={DeleteIcon}
-                                        disabled={snapshot.isResending}
                                         className={styles.secondaryAction}
                                         onClick={deleteAllClick}
                                     >
@@ -282,7 +281,6 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                         size="sm"
                                         kind="primary"
                                         Icon={RestartIcon}
-                                        disabled={snapshot.isResending}
                                         onClick={resendClick}
                                         className={styles.primaryAction}
                                     >

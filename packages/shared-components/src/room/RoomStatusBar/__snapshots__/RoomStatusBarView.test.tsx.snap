@@ -281,7 +281,6 @@ exports[`RoomStatusBarView > renders unsent messages 1`] = `
       class="actions"
     >
       <button
-        aria-disabled="false"
         class="_button_13vu4_8 secondaryAction _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
@@ -303,7 +302,6 @@ exports[`RoomStatusBarView > renders unsent messages 1`] = `
         Delete all
       </button>
       <button
-        aria-disabled="false"
         class="_button_13vu4_8 primaryAction _has-icon_13vu4_60"
         data-kind="primary"
         data-size="sm"
@@ -376,7 +374,6 @@ exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
       class="actions"
     >
       <button
-        aria-disabled="false"
         class="_button_13vu4_8 secondaryAction _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
@@ -398,7 +395,6 @@ exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
         Delete all
       </button>
       <button
-        aria-disabled="false"
         class="_button_13vu4_8 primaryAction _has-icon_13vu4_60"
         data-kind="primary"
         data-size="sm"
@@ -471,7 +467,6 @@ exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
       class="actions"
     >
       <button
-        aria-disabled="false"
         class="_button_13vu4_8 secondaryAction _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
@@ -493,7 +488,6 @@ exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
         Delete all
       </button>
       <button
-        aria-disabled="false"
         class="_button_13vu4_8 primaryAction _has-icon_13vu4_60"
         data-kind="primary"
         data-size="sm"
