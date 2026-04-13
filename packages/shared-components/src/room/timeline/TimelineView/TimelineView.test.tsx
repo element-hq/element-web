@@ -35,6 +35,10 @@ class TestTimelineViewModel
     public onVisibleRangeChanged = vi.fn();
     public onScrollTargetReached = vi.fn();
     public onIsAtLiveEdgeChanged = vi.fn();
+
+    public updateSnapshot(partial: Partial<TimelineViewSnapshot<TimelineItem>>): void {
+        this.snapshot.merge(partial);
+    }
 }
 
 function makeSnapshot(partial?: Partial<TimelineViewSnapshot<TimelineItem>>): TimelineViewSnapshot<TimelineItem> {
@@ -309,6 +313,33 @@ describe("TimelineView", () => {
 
         await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
         expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
+    });
+
+    it("notifies initial fill completion only once per view model lifecycle", async () => {
+        const vm = new TestTimelineViewModel(
+            makeSnapshot({
+                canPaginateBackward: false,
+                canPaginateForward: true,
+                forwardPagination: "loading",
+            }),
+        );
+
+        renderTimeline(vm);
+
+        await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+
+        vm.updateSnapshot({
+            items: [
+                { key: "alpha", kind: "event" },
+                { key: "beta", kind: "event" },
+                { key: "gamma", kind: "event" },
+                { key: "delta", kind: "event" },
+            ],
+            forwardPagination: "idle",
+        });
+
+        await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
+        expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce();
     });
 
     it("suppresses the initial backward probe while a scroll target is being resolved", async () => {

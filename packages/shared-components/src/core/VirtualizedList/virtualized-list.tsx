@@ -8,6 +8,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type ListRange, type VirtuosoHandle, type VirtuosoProps } from "react-virtuoso";
 
+const EMPTY_CONTEXT: Record<string, never> = {};
+
 /**
  * Keyboard key codes
  */
@@ -181,6 +183,8 @@ export function useVirtualizedList<Item, Context>(
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
     const virtuosoDomRef = useRef<HTMLElement | Window>(null);
+    /** Track the active HTMLElement scroller so effects follow node replacement. */
+    const [scrollerElement, setScrollerElement] = useState<HTMLElement | null>(null);
     /** Key of the item that should have tabIndex == 0 */
     const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(
         props.items[0] ? getItemKey(props.items[0]) : undefined,
@@ -359,11 +363,14 @@ export function useVirtualizedList<Item, Context>(
      */
     const scrollerRef = useCallback((element: HTMLElement | Window | null) => {
         virtuosoDomRef.current = element;
+        const nextScrollerElement = element instanceof HTMLElement ? element : null;
+        setScrollerElement((currentElement) =>
+            currentElement === nextScrollerElement ? currentElement : nextScrollerElement,
+        );
     }, []);
 
     useEffect(() => {
-        const scroller = virtuosoDomRef.current;
-        if (!(scroller instanceof HTMLElement)) {
+        if (!scrollerElement) {
             return;
         }
 
@@ -385,12 +392,12 @@ export function useVirtualizedList<Item, Context>(
             }, SCROLL_SETTLE_DELAY_MS);
         };
 
-        scroller.addEventListener("scroll", onScroll, { passive: true });
+        scrollerElement.addEventListener("scroll", onScroll, { passive: true });
         return () => {
             clearScrollSettleTimeout();
-            scroller.removeEventListener("scroll", onScroll);
+            scrollerElement.removeEventListener("scroll", onScroll);
         };
-    }, [commitFocusToLastVisibleItem, scrollSettleFocusBehavior]);
+    }, [commitFocusToLastVisibleItem, scrollSettleFocusBehavior, scrollerElement]);
 
     /**
      * Focus handler passed to each item component.
@@ -446,9 +453,9 @@ export function useVirtualizedList<Item, Context>(
         () => ({
             tabIndexKey: tabIndexKey,
             focused: isFocused,
-            context: props.context || ({} as Context),
+            context: (context ?? EMPTY_CONTEXT) as Context,
         }),
-        [tabIndexKey, isFocused, props.context],
+        [tabIndexKey, isFocused, context],
     );
 
     // Combine internal range tracking with optional external callback
@@ -462,13 +469,14 @@ export function useVirtualizedList<Item, Context>(
                 commitFocusToLastVisibleItem(internalRange);
                 pendingViewportFocusCommitRef.current = false;
             }
-            rangeChanged?.(range);
+            rangeChanged?.(internalRange);
         },
         [commitFocusToLastVisibleItem, rangeChanged, mapRangeIndex],
     );
 
     return {
         ...virtuosoProps,
+        totalCount,
         ref: virtuosoHandleRef,
         scrollerRef,
         onKeyDown: keyDownCallback,

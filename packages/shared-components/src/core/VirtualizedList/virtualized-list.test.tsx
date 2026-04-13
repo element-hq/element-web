@@ -259,6 +259,63 @@ function HookHarness({ items, onKeyDown, rangeChanged, mapRangeIndex }: HookHarn
     );
 }
 
+function SwappableScrollerHarness({ items }: { items: TestItem[] }): React.JSX.Element {
+    const [useAlternateScroller, setUseAlternateScroller] = React.useState(false);
+    const list = useVirtualizedList<TestItem, undefined>({
+        items,
+        getItemKey: (item) => item.id,
+        isItemFocusable: (item) => item.isFocusable !== false,
+        scrollSettleFocusBehavior: "last-visible",
+    });
+
+    return (
+        <div>
+            <button
+                type="button"
+                data-testid="swap-scroller"
+                onClick={() => setUseAlternateScroller((current) => !current)}
+            >
+                swap
+            </button>
+            <button
+                type="button"
+                data-testid="range-a"
+                onClick={() => list.rangeChanged({ startIndex: 0, endIndex: 4 })}
+            >
+                range a
+            </button>
+            <button
+                type="button"
+                data-testid="range-b"
+                onClick={() => list.rangeChanged({ startIndex: 2, endIndex: 6 })}
+            >
+                range b
+            </button>
+            <div
+                ref={(element) => list.scrollerRef(element)}
+                data-testid={useAlternateScroller ? "hook-scroller-b" : "hook-scroller-a"}
+                role="grid"
+                tabIndex={0}
+                onKeyDown={list.onKeyDown}
+                onFocus={list.onFocus}
+                onBlur={list.onBlur}
+            >
+                {items.map((item, index) => (
+                    <button
+                        key={item.id}
+                        type="button"
+                        data-testid={`swap-row-${index}`}
+                        tabIndex={list.context.tabIndexKey === item.id ? 0 : -1}
+                        onFocus={(e) => list.onFocusForGetItemComponent(item, e)}
+                    >
+                        {item.name}
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant) => {
     const mockGetItemComponent = vi.fn();
     const mockIsItemFocusable = vi.fn();
@@ -942,6 +999,23 @@ describe("useVirtualizedList hook", () => {
         expect(onKeyDown.mock.calls[0][0].code).toBe("Enter");
     });
 
+    it("forwards totalCount through the hook result", () => {
+        function TotalCountHarness(): React.JSX.Element {
+            const list = useVirtualizedList<TestItem, undefined>({
+                items: hookItems.slice(0, 3),
+                totalCount: 42,
+                getItemKey: (item) => item.id,
+                isItemFocusable: () => true,
+            });
+
+            return <div data-testid="observed-total-count">{String(list.totalCount)}</div>;
+        }
+
+        render(<TotalCountHarness />);
+
+        expect(screen.getByTestId("observed-total-count")).toHaveTextContent("42");
+    });
+
     it("keeps the list focused when blur moves focus to another element inside the list", () => {
         render(<HookHarness items={hookItems} />);
 
@@ -969,7 +1043,7 @@ describe("useVirtualizedList hook", () => {
         expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("blurred");
     });
 
-    it("maps visible ranges internally while forwarding the original range to callers", () => {
+    it("maps visible ranges before forwarding them to callers", () => {
         const rangeChanged = vi.fn();
         const mapRangeIndex = vi.fn((index: number) => index + 1);
 
@@ -981,9 +1055,36 @@ describe("useVirtualizedList hook", () => {
         fireEvent.focus(container);
         fireEvent.keyDown(container, { code: "PageDown" });
 
-        expect(rangeChanged).toHaveBeenCalledWith({ startIndex: 0, endIndex: 4 });
+        expect(rangeChanged).toHaveBeenCalledWith({ startIndex: 1, endIndex: 5 });
         expect(mapRangeIndex).toHaveBeenCalledWith(0);
         expect(mapRangeIndex).toHaveBeenCalledWith(4);
         expect(screen.getByTestId("hook-row-5")).toHaveAttribute("tabindex", "0");
+    });
+
+    it("reattaches the scroll-settle listener when the scroller element is replaced", async () => {
+        vi.useFakeTimers();
+
+        render(<SwappableScrollerHarness items={hookItems} />);
+
+        fireEvent.click(screen.getByTestId("range-a"));
+        fireEvent.scroll(screen.getByTestId("hook-scroller-a"), { target: { scrollTop: 100 } });
+
+        await act(async () => {
+            vi.advanceTimersByTime(200);
+            await Promise.resolve();
+        });
+
+        expect(screen.getByTestId("swap-row-4")).toHaveAttribute("tabindex", "0");
+
+        fireEvent.click(screen.getByTestId("swap-scroller"));
+        fireEvent.click(screen.getByTestId("range-b"));
+        fireEvent.scroll(screen.getByTestId("hook-scroller-b"), { target: { scrollTop: 200 } });
+
+        await act(async () => {
+            vi.advanceTimersByTime(200);
+            await Promise.resolve();
+        });
+
+        expect(screen.getByTestId("swap-row-6")).toHaveAttribute("tabindex", "0");
     });
 });

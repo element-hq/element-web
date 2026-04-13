@@ -97,15 +97,21 @@ function hasUnexpectedTrailingOverlap<TItem extends TimelineItem>(
 }
 
 export function getContiguousWindowShift<TItem extends TimelineItem>(prevItems: TItem[], nextItems: TItem[]): number {
-    if (prevItems.length === 0 || nextItems.length === 0) {
+    if (prevItems === nextItems || prevItems.length === 0 || nextItems.length === 0) {
+        return 0;
+    }
+
+    const previousFirstKey = prevItems[0]?.key;
+    const previousLastKey = prevItems[prevItems.length - 1]?.key;
+    const nextFirstKey = nextItems[0]?.key;
+    const nextLastKey = nextItems[nextItems.length - 1]?.key;
+
+    // Most updates keep the same visible window; avoid rebuilding overlap indexes for that case.
+    if (prevItems.length === nextItems.length && previousFirstKey === nextFirstKey && previousLastKey === nextLastKey) {
         return 0;
     }
 
     const nextIndexesByKey = new Map<string, number>();
-    const prevKeys = new Set<string>();
-    for (const item of prevItems) {
-        prevKeys.add(item.key);
-    }
     for (let index = 0; index < nextItems.length; index += 1) {
         nextIndexesByKey.set(nextItems[index].key, index);
     }
@@ -119,6 +125,11 @@ export function getContiguousWindowShift<TItem extends TimelineItem>(prevItems: 
     const overlapLength = getOverlapLength(prevItems, nextItems, prevOverlapStart, nextOverlapStart);
     if (overlapLength === 0) {
         return 0;
+    }
+
+    const prevKeys = new Set<string>();
+    for (const item of prevItems) {
+        prevKeys.add(item.key);
     }
 
     if (
@@ -288,6 +299,23 @@ export function shouldPaginateBackwardAtTopScroll({
     );
 }
 
+/**
+ * Renders a virtualized timeline backed by a timeline view model.
+ *
+ * This shared container owns the scrolling and pagination lifecycle for a
+ * timeline window:
+ * - subscribes to the supplied view model snapshot
+ * - restores scroll position when the loaded window shifts
+ * - resolves one-shot anchor navigation requests
+ * - performs the mount-time initial fill/backfill flow
+ * - reports visible-range and live-edge changes back to the view model
+ *
+ * Row rendering remains application-owned through `renderItem`.
+ *
+ * @typeParam TItem - The concrete timeline item shape used by the caller.
+ * @param props - Timeline view model, optional class name, and row renderer.
+ * @returns A virtualized timeline view driven by `react-virtuoso`.
+ */
 export function TimelineView<TItem extends TimelineItem>({
     vm,
     className,
@@ -303,6 +331,7 @@ export function TimelineView<TItem extends TimelineItem>({
     // after startup backfill completes. These refs ensure each step only runs once.
     const initialBottomSnapDoneRef = useRef(false);
     const postInitialFillBottomSnapDoneRef = useRef(false);
+    const initialFillCompletedNotifiedRef = useRef(false);
     // Used to detect prepend-only updates so firstItemIndex can be shifted without moving the viewport.
     const previousItemsRef = useRef<TItem[]>([]);
     // Cache the latest visible range for forward-pagination and focus/scroll restoration decisions.
@@ -362,6 +391,7 @@ export function TimelineView<TItem extends TimelineItem>({
         lastAnchoredKeyRef.current = null;
         initialBottomSnapDoneRef.current = false;
         postInitialFillBottomSnapDoneRef.current = false;
+        initialFillCompletedNotifiedRef.current = false;
         lastVisibleRangeRef.current = null;
         initialFillRoundsRef.current = 0;
         sawInitialRangeRef.current = false;
@@ -369,17 +399,22 @@ export function TimelineView<TItem extends TimelineItem>({
     }, [vm]);
 
     useEffect(() => {
-        if (initialFillState === "done") {
-            // Once startup fill is complete, notify the VM and immediately resume forward
-            // pagination if the visible range is already at the live end.
-            vm.onInitialFillCompleted();
+        if (initialFillState !== "done") {
+            return;
+        }
 
-            const lastVisibleRange = lastVisibleRangeRef.current;
-            const isAtEnd =
-                lastVisibleRange !== null && lastVisibleRange.endIndex >= Math.max(0, snapshot.items.length - 1);
-            if (isAtEnd && snapshot.forwardPagination === "idle" && snapshot.canPaginateForward) {
-                vm.onRequestMoreItems("forward");
-            }
+        // Once startup fill is complete, notify the VM exactly once per timeline lifecycle.
+        if (!initialFillCompletedNotifiedRef.current) {
+            initialFillCompletedNotifiedRef.current = true;
+            vm.onInitialFillCompleted();
+        }
+
+        // Forward pagination can still be resumed on subsequent updates while fill is done.
+        const lastVisibleRange = lastVisibleRangeRef.current;
+        const isAtEnd =
+            lastVisibleRange !== null && lastVisibleRange.endIndex >= Math.max(0, snapshot.items.length - 1);
+        if (isAtEnd && snapshot.forwardPagination === "idle" && snapshot.canPaginateForward) {
+            vm.onRequestMoreItems("forward");
         }
     }, [initialFillState, snapshot.items.length, snapshot.forwardPagination, snapshot.canPaginateForward, vm]);
 
@@ -535,7 +570,9 @@ export function TimelineView<TItem extends TimelineItem>({
             });
 
             if (!scrollLocation) {
-                lastAnchoredKeyRef.current = null;
+                if (!snapshot.scrollTarget) {
+                    lastAnchoredKeyRef.current = null;
+                }
                 return false;
             }
 
@@ -593,6 +630,7 @@ export function TimelineView<TItem extends TimelineItem>({
     const {
         onFocusForGetItemComponent,
         context: listContext,
+        scrollerRef: virtualizedScrollerRef,
         ...virtuosoProps
     } = useVirtualizedList<TItem, undefined>({
         items: snapshot.items,
@@ -625,11 +663,11 @@ export function TimelineView<TItem extends TimelineItem>({
 
     const handleScrollerRef = useCallback(
         (element: HTMLElement | Window | null) => {
-            virtuosoProps.scrollerRef(element);
+            virtualizedScrollerRef(element);
             const nextElement = element instanceof HTMLElement ? element : null;
             setScrollerElement((currentElement) => (currentElement === nextElement ? currentElement : nextElement));
         },
-        [virtuosoProps],
+        [virtualizedScrollerRef],
     );
 
     useLayoutEffect(() => {

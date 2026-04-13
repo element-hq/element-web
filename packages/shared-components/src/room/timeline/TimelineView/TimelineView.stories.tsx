@@ -12,6 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BaseViewModel } from "../../../core/viewmodel";
 import { TimelineView } from "./TimelineView";
 import type { TimelineItem, TimelineViewActions, TimelineViewSnapshot, VisibleRange } from "./types";
+import { withViewDocs } from "../../../../.storybook/withViewDocs";
 
 type MockTimelineItem = TimelineItem & {
     author: string;
@@ -201,7 +202,7 @@ const rowStyle: CSSProperties = {
     background: "#ffffff",
 };
 
-function TimelineViewStoryWrapper({ items, onItemsChanged }: Readonly<TimelineViewStoryProps>): JSX.Element {
+function TimelineViewStoryWrapperImpl({ items, onItemsChanged }: Readonly<TimelineViewStoryProps>): JSX.Element {
     const vmRef = useRef<StoryTimelineViewModel | null>(null);
     const callbacksRef = useRef<StoryTimelineCallbacks>({
         onRequestMoreItems: () => undefined,
@@ -247,6 +248,8 @@ function TimelineViewStoryWrapper({ items, onItemsChanged }: Readonly<TimelineVi
         </div>
     );
 }
+
+const TimelineViewStoryWrapper = withViewDocs(TimelineViewStoryWrapperImpl, TimelineView);
 
 const meta = {
     title: "Room/Timeline/TimelineView",
