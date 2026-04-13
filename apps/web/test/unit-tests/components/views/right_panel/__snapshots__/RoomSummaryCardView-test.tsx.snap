@@ -49,7 +49,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         class="mx_RoomSummaryCard_container"
       >
         <span
-          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+          class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -181,9 +181,9 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
             style="--mx-box-flex: 1;"
           >
             <a
-              class="_link_1v5rz_8"
+              class="_link_k9ljz_8"
               data-kind="primary"
-              data-size="medium"
+              data-size="md"
               rel="noreferrer noopener"
             >
               <p
@@ -196,7 +196,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         </section>
       </header>
       <div
-        class="_separator_cqpyv_8"
+        class="_separator_13qwf_8"
         data-kind="primary"
         data-orientation="horizontal"
         role="separator"
@@ -283,7 +283,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -490,7 +490,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -647,7 +647,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -788,7 +788,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         class="mx_RoomSummaryCard_container"
       >
         <span
-          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+          class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -878,9 +878,9 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
             style="--mx-box-flex: 1;"
           >
             <a
-              class="_link_1v5rz_8"
+              class="_link_k9ljz_8"
               data-kind="primary"
-              data-size="medium"
+              data-size="md"
               rel="noreferrer noopener"
             >
               <p
@@ -893,7 +893,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </section>
       </header>
       <div
-        class="_separator_cqpyv_8"
+        class="_separator_13qwf_8"
         data-kind="primary"
         data-orientation="horizontal"
         role="separator"
@@ -980,7 +980,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -1187,7 +1187,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -1344,7 +1344,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -1485,7 +1485,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         class="mx_RoomSummaryCard_container"
       >
         <span
-          class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+          class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -1617,9 +1617,9 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
             style="--mx-box-flex: 1;"
           >
             <a
-              class="_link_1v5rz_8"
+              class="_link_k9ljz_8"
               data-kind="primary"
-              data-size="medium"
+              data-size="md"
               rel="noreferrer noopener"
             >
               <p
@@ -1632,7 +1632,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         </section>
       </header>
       <div
-        class="_separator_cqpyv_8"
+        class="_separator_13qwf_8"
         data-kind="primary"
         data-orientation="horizontal"
         role="separator"
@@ -1719,7 +1719,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -1926,7 +1926,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -2083,7 +2083,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           </svg>
         </button>
         <div
-          class="_separator_cqpyv_8"
+          class="_separator_13qwf_8"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
