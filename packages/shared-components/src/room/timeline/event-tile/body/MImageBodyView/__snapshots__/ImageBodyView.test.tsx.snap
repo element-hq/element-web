@@ -3,26 +3,26 @@
 exports[`ImageBodyView > matches snapshot for animated-preview story 1`] = `
 <div>
   <div
-    class="root"
+    class="ImageBodyView-module_root"
   >
     <a
-      class="link"
+      class="ImageBodyView-module_link"
       href="http://localhost:63315/static/image-body/install-spinner.gif"
     >
       <div
-        class="thumbnailContainer"
+        class="ImageBodyView-module_thumbnailContainer"
         style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
-          class="mediaContent"
+          class="ImageBodyView-module_mediaContent"
         >
           <img
             alt="Element logo"
-            class="image"
+            class="ImageBodyView-module_image"
             src="http://localhost:63315/static/image-body/install-spinner.png"
           />
           <p
-            class="gifLabel"
+            class="ImageBodyView-module_gifLabel"
           >
             GIF
           </p>
@@ -39,22 +39,22 @@ exports[`ImageBodyView > matches snapshot for animated-preview story 1`] = `
 exports[`ImageBodyView > matches snapshot for default story 1`] = `
 <div>
   <div
-    class="root"
+    class="ImageBodyView-module_root"
   >
     <a
-      class="link"
+      class="ImageBodyView-module_link"
       href="http://localhost:63315/static/image-body/install-spinner.png"
     >
       <div
-        class="thumbnailContainer"
+        class="ImageBodyView-module_thumbnailContainer"
         style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
-          class="mediaContent"
+          class="ImageBodyView-module_mediaContent"
         >
           <img
             alt="Element logo"
-            class="image"
+            class="ImageBodyView-module_image"
             src="http://localhost:63315/static/image-body/install-spinner.png"
           />
         </div>
@@ -70,7 +70,7 @@ exports[`ImageBodyView > matches snapshot for default story 1`] = `
 exports[`ImageBodyView > matches snapshot for error story 1`] = `
 <div>
   <span
-    class="root error"
+    class="ImageBodyView-module_root ImageBodyView-module_error"
   >
     <svg
       fill="currentColor"
@@ -94,21 +94,21 @@ exports[`ImageBodyView > matches snapshot for error story 1`] = `
 exports[`ImageBodyView > matches snapshot for hidden story 1`] = `
 <div>
   <div
-    class="root"
+    class="ImageBodyView-module_root"
   >
     <div
-      class="thumbnailContainer"
+      class="ImageBodyView-module_thumbnailContainer"
       style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
     >
       <div
-        class="mediaContent"
+        class="ImageBodyView-module_mediaContent"
       >
         <button
-          class="hiddenButton"
+          class="ImageBodyView-module_hiddenButton"
           type="button"
         >
           <div
-            class="hiddenButtonContent"
+            class="ImageBodyView-module_hiddenButtonContent"
           >
             <svg
               fill="currentColor"
@@ -138,21 +138,21 @@ exports[`ImageBodyView > matches snapshot for hidden story 1`] = `
 exports[`ImageBodyView > matches snapshot for loading-with-blurhash story 1`] = `
 <div>
   <div
-    class="root"
+    class="ImageBodyView-module_root"
   >
     <a
-      class="link"
+      class="ImageBodyView-module_link"
       href="http://localhost:63315/static/image-body/install-spinner.png"
     >
       <div
-        class="thumbnailContainer"
+        class="ImageBodyView-module_thumbnailContainer"
         style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
-          class="placeholder placeholderBlurhash"
+          class="ImageBodyView-module_placeholder ImageBodyView-module_placeholderBlurhash"
         >
           <div
-            class="blurhash"
+            class="ImageBodyView-module_blurhash"
             style="display: inline-block; height: 320px; width: 320px; position: relative;"
           >
             <canvas
@@ -163,11 +163,11 @@ exports[`ImageBodyView > matches snapshot for loading-with-blurhash story 1`] = 
           </div>
         </div>
         <div
-          class="mediaContent"
+          class="ImageBodyView-module_mediaContent"
         >
           <img
             alt="Element logo"
-            class="image"
+            class="ImageBodyView-module_image"
             src="http://localhost:63315/static/image-body/install-spinner.png"
           />
         </div>
@@ -183,18 +183,18 @@ exports[`ImageBodyView > matches snapshot for loading-with-blurhash story 1`] = 
 exports[`ImageBodyView > matches snapshot for loading-with-spinner story 1`] = `
 <div>
   <div
-    class="root"
+    class="ImageBodyView-module_root"
   >
     <a
-      class="link"
+      class="ImageBodyView-module_link"
       href="http://localhost:63315/static/image-body/install-spinner.png"
     >
       <div
-        class="thumbnailContainer"
+        class="ImageBodyView-module_thumbnailContainer"
         style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
-          class="placeholder"
+          class="ImageBodyView-module_placeholder"
         >
           <svg
             aria-label="Loading..."
@@ -215,11 +215,11 @@ exports[`ImageBodyView > matches snapshot for loading-with-spinner story 1`] = `
           </svg>
         </div>
         <div
-          class="mediaContent"
+          class="ImageBodyView-module_mediaContent"
         >
           <img
             alt="Element logo"
-            class="image"
+            class="ImageBodyView-module_image"
             src="http://localhost:63315/static/image-body/install-spinner.png"
           />
         </div>
