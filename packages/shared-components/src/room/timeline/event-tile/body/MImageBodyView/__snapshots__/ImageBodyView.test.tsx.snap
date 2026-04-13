@@ -11,7 +11,7 @@ exports[`ImageBodyView > matches snapshot for animated-preview story 1`] = `
     >
       <div
         class="thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 240px; aspect-ratio: 4 / 3;"
+        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="mediaContent"
@@ -47,7 +47,7 @@ exports[`ImageBodyView > matches snapshot for default story 1`] = `
     >
       <div
         class="thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 240px; aspect-ratio: 4 / 3;"
+        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="mediaContent"
@@ -98,7 +98,7 @@ exports[`ImageBodyView > matches snapshot for hidden story 1`] = `
   >
     <div
       class="thumbnailContainer"
-      style="width: min(100%, 320px); max-width: 320px; max-height: 240px; aspect-ratio: 4 / 3;"
+      style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
     >
       <div
         class="mediaContent"
@@ -146,14 +146,14 @@ exports[`ImageBodyView > matches snapshot for loading-with-blurhash story 1`] = 
     >
       <div
         class="thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 240px; aspect-ratio: 4 / 3;"
+        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="placeholder placeholderBlurhash"
         >
           <div
             class="blurhash"
-            style="display: inline-block; height: 240px; width: 320px; position: relative;"
+            style="display: inline-block; height: 320px; width: 320px; position: relative;"
           >
             <canvas
               height="32"
@@ -191,7 +191,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-spinner story 1`] = `
     >
       <div
         class="thumbnailContainer"
-        style="width: min(100%, 320px); max-width: 320px; max-height: 240px; aspect-ratio: 4 / 3;"
+        style="width: min(100%, 320px); max-width: 320px; max-height: 320px; aspect-ratio: 1 / 1;"
       >
         <div
           class="placeholder"
