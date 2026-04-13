@@ -17,6 +17,7 @@ import type {
     MatrixEvent as ModuleMatrixEvent,
     CustomRoomPreviewBarRenderFunction,
     CustomLoginRenderFunction,
+    CustomMessageComposerRenderFunction,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -62,6 +63,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             stateKey: mxEvent.getStateKey(),
             type: mxEvent.getType(),
             unsigned: mxEvent.getUnsigned(),
+            wireContent: mxEvent.getWireContent(),
         };
     }
 
@@ -170,5 +172,15 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      */
     public registerLoginComponent(renderer: CustomLoginRenderFunction): void {
         this._loginRenderer = renderer;
+    }
+
+    private _messageComposerRenderer?: CustomMessageComposerRenderFunction;
+
+    public get messageComposerRenderer(): CustomMessageComposerRenderFunction | undefined {
+        return this._messageComposerRenderer;
+    }
+
+    public registerMessageComposerComponent(renderer: CustomMessageComposerRenderFunction): void {
+        this._messageComposerRenderer = renderer;
     }
 }

@@ -1617,6 +1617,29 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // ignore if we don't have a room yet
         if (!this.state.room || this.state.room.roomId !== state.roomId || !this.context.client) return;
 
+        // Notify module state event listeners and force a re-render so
+        // module-provided UI (banners, composer components) updates.
+        const listeners = ModuleApi.instance.client.stateEventListeners;
+        if (listeners.length) {
+            const eventId = ev.getId();
+            const roomId = ev.getRoomId();
+            const sender = ev.getSender();
+            if (eventId && roomId && sender) {
+                const moduleEvent = {
+                    content: ev.getContent(),
+                    eventId,
+                    originServerTs: ev.getTs(),
+                    roomId,
+                    sender,
+                    stateKey: ev.getStateKey(),
+                    type: ev.getType(),
+                    unsigned: ev.getUnsigned(),
+                };
+                for (const cb of listeners) cb(moduleEvent);
+                this.forceUpdate();
+            }
+        }
+
         switch (ev.getType()) {
             case EventType.RoomTombstone:
                 this.setState({ tombstone: this.getRoomTombstone() });
@@ -2735,6 +2758,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             if (b) extraButtons.push(b);
         }
 
+        const roomBanners: JSX.Element[] = [];
+        for (const cb of ModuleApi.instance.extras.roomBannerCallbacks) {
+            const b = cb(this.state.room.roomId);
+            if (b) roomBanners.push(b);
+        }
+
         return (
             <ScopedRoomContextProvider {...this.state} roomViewStore={this.roomViewStore}>
                 <div
@@ -2766,6 +2795,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                         extraButtons={<>{extraButtons}</>}
                                     />
                                 )}
+                                {roomBanners}
                                 {mainSplitBody}
                             </div>
                         </MainSplit>

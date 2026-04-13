@@ -43,6 +43,7 @@ import SdkConfig from "../../../../../SdkConfig";
 import { shouldForceDisableEncryption } from "../../../../../utils/crypto/shouldForceDisableEncryption";
 import { Caption } from "../../../typography/Caption";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../../utils/crypto";
+import { ModuleApi } from "../../../../../modules/Api";
 
 interface IProps {
     room: Room;
@@ -532,6 +533,12 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const historySection = this.renderHistory();
 
+        const additionalSettings: JSX.Element[] = [];
+        for (const cb of ModuleApi.instance.extras.roomSettingsSecurityCallbacks) {
+            const b = cb(room.roomId);
+            additionalSettings.push(b!);
+        }
+
         return (
             <SettingsTab>
                 <Form.Root
@@ -575,6 +582,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                 </>
                             )}
                         </SettingsFieldset>
+                        {additionalSettings}
                         {this.renderJoinRule()}
                         {historySection}
                     </SettingsSection>

@@ -11,6 +11,9 @@ import {
     type SpacePanelItemProps,
     type ExtrasApi,
     type RoomHeaderButtonsCallback,
+    type RoomBannerCallback,
+    type EventContentTransformCallback,
+    type RoomSettingsSecurityCallback,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
@@ -32,6 +35,10 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
     public roomHeaderButtonsCallbacks: RoomHeaderButtonsCallback[] = [];
+    public roomBannerCallbacks: RoomBannerCallback[] = [];
+    public eventContentTransformCallbacks: EventContentTransformCallback[] = [];
+    public encryptedEnvelopeTransformCallbacks: EventContentTransformCallback[] = [];
+    public roomSettingsSecurityCallbacks: RoomSettingsSecurityCallback[] = [];
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -44,6 +51,22 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
 
     public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
         this.roomHeaderButtonsCallbacks.push(cb);
+    }
+
+    public addRoomBannerCallback(cb: RoomBannerCallback): void {
+        this.roomBannerCallbacks.push(cb);
+    }
+
+    public addEventContentTransformCallback(cb: EventContentTransformCallback): void {
+        this.eventContentTransformCallbacks.push(cb);
+    }
+
+    public addEncryptedEnvelopeTransformCallback(cb: EventContentTransformCallback): void {
+        this.encryptedEnvelopeTransformCallbacks.push(cb);
+    }
+
+    public addRoomSettingsSecurityCallback(cb: RoomSettingsSecurityCallback): void {
+        this.roomSettingsSecurityCallbacks.push(cb);
     }
 }
 

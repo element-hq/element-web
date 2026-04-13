@@ -54,6 +54,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import { ModuleApi } from "../../../modules/Api";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -723,4 +724,16 @@ export class MessageComposer extends React.Component<IProps, IState> {
 }
 
 const MessageComposerWithMatrixClient = withMatrixClientHOC(MessageComposer);
-export default MessageComposerWithMatrixClient;
+
+const WrappedMessageComposer: React.FC<IProps> = (props) => {
+    const renderer = ModuleApi.instance.customComponents.messageComposerRenderer;
+    if (renderer) {
+        return renderer({ ...props, roomId: props.room.roomId }, (props) => (
+            <MessageComposerWithMatrixClient {...props} />
+        ));
+    }
+
+    return <MessageComposerWithMatrixClient {...props} />;
+};
+
+export default WrappedMessageComposer;

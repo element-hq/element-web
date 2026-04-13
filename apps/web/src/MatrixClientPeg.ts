@@ -152,6 +152,12 @@ export interface IMatrixClientPeg {
      *          see {@link ICreateClientOpts.tokenRefreshFunction}
      */
     replaceUsingCreds(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void;
+
+    /**
+     * Returns a promise that resolve with MatrixClient is available.
+     * Useful when you want to access the matrix client early on the app lifecycle.
+     */
+    clientReadyPromise: Promise<void>;
 }
 
 /**
@@ -172,6 +178,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     private matrixClient: MatrixClient | null = null;
     private justRegisteredUserId: string | null = null;
 
+    private matrixClientReady = Promise.withResolvers<void>();
+
     public get(): MatrixClient | null {
         return this.matrixClient;
     }
@@ -181,6 +189,10 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             throw new UserFriendlyError("error_user_not_logged_in");
         }
         return this.matrixClient;
+    }
+
+    public get clientReadyPromise(): Promise<void> {
+        return this.matrixClientReady.promise;
     }
 
     public unset(): void {
@@ -373,6 +385,9 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         logger.log(`MatrixClientPeg: really starting MatrixClient`);
         await this.matrixClient!.startClient(opts);
         logger.log(`MatrixClientPeg: MatrixClient started`);
+
+        console.log("Resolving client ready promise");
+        this.matrixClientReady.resolve();
     }
 
     private namesToRoomName(names: string[], count: number): string | undefined {

@@ -373,6 +373,7 @@ export function renderReplyTile(
         // Will return null if no custom component can render it.
         return ModuleApi.instance.customComponents.renderMessage({
             mxEvent: props.mxEvent,
+            isReplyTile: true,
         });
     }
 
@@ -395,6 +396,7 @@ export function renderReplyTile(
     return ModuleApi.instance.customComponents.renderMessage(
         {
             mxEvent: props.mxEvent,
+            isReplyTile: true,
         },
         (origProps) =>
             factory(ref, {
