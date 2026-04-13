@@ -12,7 +12,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import { FlatVirtualizedList, type FlatVirtualizedListProps } from "./FlatVirtualizedList";
 import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "./GroupedVirtualizedList";
-import type { VirtualizedListContext } from "./virtualized-list";
+import { useVirtualizedList, type VirtualizedListContext } from "./virtualized-list";
 
 // ─── Test types ──────────────────────────────────────────────────────────────
 
@@ -209,6 +209,55 @@ const virtuosoWrapper = ({ children }: PropsWithChildren): React.JSX.Element => 
         {children}
     </VirtuosoMockContext.Provider>
 );
+
+interface HookHarnessProps {
+    items: TestItem[];
+    onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+    rangeChanged?: (range: { startIndex: number; endIndex: number }) => void;
+    mapRangeIndex?: (index: number) => number;
+}
+
+function HookHarness({ items, onKeyDown, rangeChanged, mapRangeIndex }: HookHarnessProps): React.JSX.Element {
+    const list = useVirtualizedList<TestItem, undefined>({
+        items,
+        getItemKey: (item) => item.id,
+        isItemFocusable: (item) => item.isFocusable !== false,
+        onKeyDown,
+        rangeChanged,
+        mapRangeIndex,
+    });
+
+    return (
+        <div
+            ref={(element) => list.scrollerRef(element)}
+            role="grid"
+            tabIndex={0}
+            onKeyDown={list.onKeyDown}
+            onFocus={list.onFocus}
+            onBlur={list.onBlur}
+        >
+            <div data-testid="hook-focused-state">{list.context.focused ? "focused" : "blurred"}</div>
+            <button
+                type="button"
+                data-testid="hook-range-trigger"
+                onClick={() => list.rangeChanged({ startIndex: 0, endIndex: 4 })}
+            >
+                apply range
+            </button>
+            {items.map((item, index) => (
+                <button
+                    key={item.id}
+                    type="button"
+                    data-testid={`hook-row-${index}`}
+                    tabIndex={list.context.tabIndexKey === item.id ? 0 : -1}
+                    onFocus={(e) => list.onFocusForGetItemComponent(item, e)}
+                >
+                    {item.name}
+                </button>
+            ))}
+        </div>
+    );
+}
 
 describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant) => {
     const mockGetItemComponent = vi.fn();
@@ -869,5 +918,72 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // Items near the bottom (e.g. item-30) should have been virtualised out.
             expect(container.querySelector("[data-testid='row-30']")).toBeNull();
         });
+    });
+});
+
+describe("useVirtualizedList hook", () => {
+    const hookItems: TestItem[] = Array.from({ length: 8 }, (_, index) => ({
+        id: `item-${index}`,
+        name: `Item ${index}`,
+    }));
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    it("forwards unhandled key presses to the custom onKeyDown callback", () => {
+        const onKeyDown = vi.fn();
+
+        render(<HookHarness items={hookItems} onKeyDown={onKeyDown} />);
+
+        fireEvent.keyDown(screen.getByRole("grid"), { code: "Enter" });
+
+        expect(onKeyDown).toHaveBeenCalledOnce();
+        expect(onKeyDown.mock.calls[0][0].code).toBe("Enter");
+    });
+
+    it("keeps the list focused when blur moves focus to another element inside the list", () => {
+        render(<HookHarness items={hookItems} />);
+
+        const container = screen.getByRole("grid");
+        const nextItem = screen.getByTestId("hook-row-1");
+
+        fireEvent.focus(container);
+        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("focused");
+
+        fireEvent.blur(container, { relatedTarget: nextItem });
+
+        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("focused");
+    });
+
+    it("clears the focused state when blur leaves the list", () => {
+        render(<HookHarness items={hookItems} />);
+
+        const container = screen.getByRole("grid");
+
+        fireEvent.focus(container);
+        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("focused");
+
+        fireEvent.blur(container, { relatedTarget: document.body });
+
+        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("blurred");
+    });
+
+    it("maps visible ranges internally while forwarding the original range to callers", () => {
+        const rangeChanged = vi.fn();
+        const mapRangeIndex = vi.fn((index: number) => index + 1);
+
+        render(<HookHarness items={hookItems} rangeChanged={rangeChanged} mapRangeIndex={mapRangeIndex} />);
+
+        const container = screen.getByRole("grid");
+
+        fireEvent.click(screen.getByTestId("hook-range-trigger"));
+        fireEvent.focus(container);
+        fireEvent.keyDown(container, { code: "PageDown" });
+
+        expect(rangeChanged).toHaveBeenCalledWith({ startIndex: 0, endIndex: 4 });
+        expect(mapRangeIndex).toHaveBeenCalledWith(0);
+        expect(mapRangeIndex).toHaveBeenCalledWith(4);
+        expect(screen.getByTestId("hook-row-5")).toHaveAttribute("tabindex", "0");
     });
 });

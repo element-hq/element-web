@@ -1,4 +1,3 @@
-/* @vitest-environment jsdom */
 /*
 Copyright 2026 Element Creations Ltd.
 
@@ -95,6 +94,45 @@ describe("TimelineView", () => {
         });
     });
 
+    it("does not request an initial bottom scroll when not at the live end", () => {
+        expect(
+            getScrollLocationOnChange({
+                items: makeSnapshot().items,
+                scrollTarget: null,
+                isAtLiveEdge: false,
+                totalCount: 3,
+                lastAnchoredKey: null,
+                initialBottomSnapDone: false,
+            }),
+        ).toBe(false);
+    });
+
+    it("does not request another scroll when the current target key was already anchored", () => {
+        expect(
+            getScrollLocationOnChange({
+                items: makeSnapshot().items,
+                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
+                isAtLiveEdge: false,
+                totalCount: 3,
+                lastAnchoredKey: "beta",
+                initialBottomSnapDone: true,
+            }),
+        ).toBe(false);
+    });
+
+    it("does not request a scroll when the target item is missing", () => {
+        expect(
+            getScrollLocationOnChange({
+                items: makeSnapshot().items,
+                scrollTarget: { targetKey: "missing", position: "bottom", highlight: false },
+                isAtLiveEdge: false,
+                totalCount: 3,
+                lastAnchoredKey: null,
+                initialBottomSnapDone: true,
+            }),
+        ).toBe(false);
+    });
+
     it("requests a post-fill bottom snap after startup backfill completes", () => {
         expect(
             getPostInitialFillBottomSnapIndex({
@@ -106,6 +144,19 @@ describe("TimelineView", () => {
                 postInitialFillBottomSnapDone: false,
             }),
         ).toBe(104);
+    });
+
+    it("does not request a post-fill bottom snap when a scroll target is pending", () => {
+        expect(
+            getPostInitialFillBottomSnapIndex({
+                initialFillState: "done",
+                isAtLiveEdge: true,
+                hasScrollTarget: true,
+                itemCount: 5,
+                firstItemIndex: 100,
+                postInitialFillBottomSnapDone: false,
+            }),
+        ).toBeNull();
     });
 
     it("ignores atBottom state changes during initial fill for live timelines", () => {
@@ -151,6 +202,47 @@ describe("TimelineView", () => {
         }));
 
         expect(getContiguousWindowShift(prevItems, nextItems)).toBe(20);
+    });
+
+    it("detects a forward sliding-window shift when older head items are trimmed", () => {
+        const prevItems: TimelineItem[] = Array.from({ length: 70 }, (_, index) => ({
+            key: `event-${index + 11}`,
+            kind: "event",
+        }));
+        const nextItems: TimelineItem[] = Array.from({ length: 60 }, (_, index) => ({
+            key: `event-${index + 31}`,
+            kind: "event",
+        }));
+
+        expect(getContiguousWindowShift(prevItems, nextItems)).toBe(-20);
+    });
+
+    it("ignores non-contiguous overlap when computing a window shift", () => {
+        const prevItems: TimelineItem[] = [
+            { key: "alpha", kind: "event" },
+            { key: "beta", kind: "event" },
+            { key: "gamma", kind: "event" },
+        ];
+        const nextItems: TimelineItem[] = [
+            { key: "prepended", kind: "event" },
+            { key: "alpha", kind: "event" },
+            { key: "gamma", kind: "event" },
+        ];
+
+        expect(getContiguousWindowShift(prevItems, nextItems)).toBe(0);
+    });
+
+    it("does not paginate backward from top scroll when a request is already loading", () => {
+        expect(
+            shouldPaginateBackwardAtTopScroll({
+                initialFillState: "done",
+                isAtLiveEdge: false,
+                hasScrollTarget: false,
+                backwardPagination: "loading",
+                canPaginateBackward: true,
+                scrollTop: 0,
+            }),
+        ).toBe(false);
     });
 
     it("reports visible range and bottom state", async () => {

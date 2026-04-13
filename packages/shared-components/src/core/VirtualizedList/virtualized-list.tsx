@@ -350,15 +350,7 @@ export function useVirtualizedList<Item, Context>(
                 onKeyDown?.(e);
             }
         },
-        [
-            commitFocusToLastVisibleItem,
-            scrollToIndex,
-            scrollToItem,
-            tabIndexKey,
-            keyToIndexMap,
-            items,
-            onKeyDown,
-        ],
+        [commitFocusToLastVisibleItem, scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, items, onKeyDown],
     );
 
     /**

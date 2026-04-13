@@ -6,16 +6,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
 
 import { mkEvent } from "../../../../../../test-utils";
 import { DateSeparatorViewModel } from "../../../../../../../src/viewmodels/room/timeline/DateSeparatorViewModel";
 import { TimelinePanelPresenter } from "../../../../../../../src/components/views/rooms/timeline/Timeline";
+import DMRoomMap from "../../../../../../../src/utils/DMRoomMap";
+
+const mockGetUserIdForRoomId = jest.fn();
 
 jest.mock("../../../../../../../src/utils/DMRoomMap", () => ({
     __esModule: true,
     default: {
         shared: jest.fn(() => ({
-            getUserIdForRoomId: jest.fn(() => undefined),
+            getUserIdForRoomId: mockGetUserIdForRoomId,
         })),
     },
 }));
@@ -70,9 +74,20 @@ describe("TimelinePanelPresenter", () => {
         ts: new Date("2026-04-08T08:02:00.000Z").getTime(),
         event: true,
     });
+    const creatorJoinEvent = mkEvent({
+        id: "$join",
+        type: EventType.RoomMember,
+        room: room.roomId,
+        user: "@alice:example.org",
+        skey: "@alice:example.org",
+        content: { membership: "join" },
+        ts: new Date("2026-04-08T08:01:30.000Z").getTime(),
+        event: true,
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();
+        mockGetUserIdForRoomId.mockReturnValue(undefined);
         createEvent.sender = {
             userId: "@alice:example.org",
             name: "Alice",
@@ -80,6 +95,7 @@ describe("TimelinePanelPresenter", () => {
         } as any;
         encryptionEvent.sender = createEvent.sender;
         topicEvent.sender = createEvent.sender;
+        creatorJoinEvent.sender = createEvent.sender;
     });
 
     function makePresenter(): TimelinePanelPresenter {
@@ -122,6 +138,18 @@ describe("TimelinePanelPresenter", () => {
         });
         expect(items[3]?.kind === "group" && items[3].summaryText).toContain("Alice");
         expect(items[3]?.kind === "group" && items[3].events).toEqual([createEvent, topicEvent]);
+    });
+
+    it("includes the creator self-join event in the room creation group", () => {
+        const presenter = makePresenter();
+
+        const items = presenter.buildItems([createEvent, creatorJoinEvent, topicEvent], false);
+
+        expect(items[2]).toMatchObject({
+            kind: "group",
+            type: "room-creation",
+            events: [createEvent, creatorJoinEvent, topicEvent],
+        });
     });
 
     it("still inserts a date separator when the day changes between loaded events", () => {
@@ -170,5 +198,47 @@ describe("TimelinePanelPresenter", () => {
                 type: "room-creation",
             },
         ]);
+    });
+
+    it("uses the DM room creation summary when the room is a direct message", () => {
+        mockGetUserIdForRoomId.mockReturnValue("@bob:example.org");
+        const presenter = makePresenter();
+
+        const items = presenter.buildItems([createEvent, topicEvent], false);
+
+        expect(mocked(DMRoomMap.shared)).toHaveBeenCalled();
+        expect(items[1]).toEqual({
+            key: "new-room",
+            kind: "virtual",
+            type: "new-room",
+        });
+        expect(items[2]).toMatchObject({
+            kind: "group",
+            type: "room-creation",
+            summaryText: "Alice created this DM.",
+        });
+    });
+
+    it("reuses cached date separator view models and disposes them", () => {
+        const presenter = makePresenter();
+
+        const firstItems = presenter.buildItems([eventA], false);
+        const secondItems = presenter.buildItems([eventA], false);
+        const firstVm =
+            firstItems[0]?.kind === "virtual" && firstItems[0].type === "date-separator"
+                ? (firstItems[0].vm as DateSeparatorViewModel)
+                : null;
+        const secondVm =
+            secondItems[0]?.kind === "virtual" && secondItems[0].type === "date-separator"
+                ? (secondItems[0].vm as DateSeparatorViewModel)
+                : null;
+
+        expect(firstVm).toBeInstanceOf(DateSeparatorViewModel);
+        expect(secondVm).toBe(firstVm);
+        expect(firstVm?.isDisposed).toBe(false);
+
+        presenter.dispose();
+
+        expect(firstVm?.isDisposed).toBe(true);
     });
 });

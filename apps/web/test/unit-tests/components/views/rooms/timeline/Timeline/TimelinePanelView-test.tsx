@@ -154,6 +154,47 @@ describe("TimelinePanelView", () => {
         expect(screen.getByTestId("room-creation-group")).toHaveTextContent("Alice created this room");
     });
 
+    it("renders legacy event rows from room events", () => {
+        const liveEvent = new MatrixEvent({
+            event_id: "$live",
+            room_id: "!room:example.org",
+            sender: "@alice:example.org",
+            type: EventType.RoomMessage,
+            content: { body: "Hello", msgtype: "m.text" },
+            origin_server_ts: 1712563200000,
+        });
+        const room = {
+            roomId: "!room:example.org",
+            findEventById: jest.fn().mockReturnValue(liveEvent),
+        } as any;
+        const client = {} as any;
+
+        mocked(TimelinePanelViewModel).mockImplementationOnce(() => {
+            const instance = {
+                isDisposed: false,
+                getSnapshot: () => ({
+                    items: [{ key: "$live", kind: "event" }],
+                }),
+                subscribe: () => () => {},
+                dispose: jest.fn(),
+            };
+            instance.dispose.mockImplementation(() => {
+                instance.isDisposed = true;
+            });
+            timelineVmInstances.push(instance);
+            return instance as any;
+        });
+
+        render(
+            <MatrixClientContext.Provider value={client}>
+                <TimelinePanelView room={room} />
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(room.findEventById).toHaveBeenCalledWith("$live");
+        expect(screen.getByTestId("legacy-event")).toHaveTextContent("$live");
+    });
+
     it("passes the restored event id to the timeline view model when present", () => {
         const room = {
             roomId: "!room:example.org",
@@ -170,6 +211,25 @@ describe("TimelinePanelView", () => {
             client,
             room,
             initialEventId: "$restored",
+        });
+    });
+
+    it("uses the highlighted event id as the initial anchor when no restored event id is present", () => {
+        const room = {
+            roomId: "!room:example.org",
+        } as any;
+        const client = {} as any;
+
+        render(
+            <MatrixClientContext.Provider value={client}>
+                <TimelinePanelView room={room} highlightedEventId="$highlighted" />
+            </MatrixClientContext.Provider>,
+        );
+
+        expect(mocked(TimelinePanelViewModel)).toHaveBeenCalledWith({
+            client,
+            room,
+            initialEventId: "$highlighted",
         });
     });
 
