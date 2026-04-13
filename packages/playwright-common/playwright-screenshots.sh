@@ -19,8 +19,15 @@ WS_PORT=3000
 PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
 IMAGE_NAME="ghcr.io/element-hq/element-web/playwright-server:$PW_VERSION"
 
-# Pull the image, failing that build the image
-docker pull "$IMAGE_NAME" 2>/dev/null || build_image "$IMAGE_NAME"
+# If the image exists in the repository, pull it; otherwise, build it.
+#
+# (This explicit test gives the user clearer progress info than just
+# `docker pull 2>/dev/null || build_image`.)
+if docker manifest inspect "$IMAGE_NAME" &>/dev/null; then
+    docker pull "$IMAGE_NAME"
+else
+    build_image "$IMAGE_NAME"
+fi
 
 # Start the playwright-server in docker
 CONTAINER=$(docker run --network=host -v /tmp:/tmp --rm -d -e PORT="$WS_PORT" "$IMAGE_NAME")

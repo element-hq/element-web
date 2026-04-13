@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "target": "esnext",
+        "lib": ["dom", "es2022", "esnext"],
+        "esModuleInterop": true,
+        "strict": true,
+        "declaration": true,
+        "outDir": "lib",
+        "declarationMap": true,
+        "module": "es2022",
+        "moduleResolution": "bundler",
+        "types": [],
+        "allowImportingTsExtensions": false
+    },
+    "include": ["src"]
+}
