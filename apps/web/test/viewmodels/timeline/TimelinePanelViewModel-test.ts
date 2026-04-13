@@ -78,9 +78,7 @@ describe("TimelinePanelViewModel", () => {
     });
 
     function createStartedViewModel(initialEventId?: string): TimelinePanelViewModel {
-        const vm = new TimelinePanelViewModel(
-            initialEventId ? { client, room, initialEventId } : { client, room },
-        );
+        const vm = new TimelinePanelViewModel(initialEventId ? { client, room, initialEventId } : { client, room });
         vm.start();
         return vm;
     }

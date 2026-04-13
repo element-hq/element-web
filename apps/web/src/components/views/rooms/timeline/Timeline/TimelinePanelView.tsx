@@ -104,7 +104,14 @@ export function TimelinePanelView({
     const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const viewKey = `${room.roomId}|${effectiveAnchorEventId ?? ""}`;
 
-    return <TimelinePanelViewInner key={viewKey} room={room} highlightedEventId={highlightedEventId} anchoredEventId={anchoredEventId} />;
+    return (
+        <TimelinePanelViewInner
+            key={viewKey}
+            room={room}
+            highlightedEventId={highlightedEventId}
+            anchoredEventId={anchoredEventId}
+        />
+    );
 }
 
 function TimelinePanelViewInner({
