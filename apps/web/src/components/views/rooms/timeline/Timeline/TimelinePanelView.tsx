@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useMemo, type JSX, type ReactNode } from "react";
+import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
 import { DateSeparatorView, TimelineView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
@@ -30,31 +30,88 @@ function findEventById(room: Room, eventId: string): MatrixEvent | undefined {
     return room.findEventById(eventId) ?? undefined;
 }
 
-/** Typed TimelineView alias for the web timeline row model. */
-const TypedTimelineView = TimelineView as (props: {
-    vm: TimelinePanelViewModel;
-    renderItem: (item: TimelineModelItem) => ReactNode;
-}) => JSX.Element;
+function renderVirtualItem(item: Extract<TimelineModelItem, { kind: "virtual" }>): ReactNode {
+    if (item.type === "date-separator") {
+        return <DateSeparatorView key={item.key} vm={item.vm} className="mx_TimelineSeparator" />;
+    }
+
+    if (item.type === "new-room") {
+        return <NewRoomIntro key={item.key} />;
+    }
+
+    if (item.type === "read-marker") {
+        return <hr key={item.key} className="mx_RoomView_myReadMarker" />;
+    }
+
+    if (item.type === "loading") {
+        return <div key={item.key}>Loading...</div>;
+    }
+
+    if (item.type === "gap") {
+        return <div key={item.key}>Gap</div>;
+    }
+
+    return null;
+}
+
+function renderGroupItem(item: Extract<TimelineModelItem, { kind: "group" }>): ReactNode {
+    if (item.type !== "room-creation") {
+        return null;
+    }
+
+    return (
+        <GenericEventListSummary
+            key={item.key}
+            events={item.events}
+            summaryMembers={item.summaryMembers}
+            summaryText={item.summaryText}
+        >
+            {item.events.map((event) => (
+                <li key={event.getId()!}>
+                    <LegacyEventTileAdapter mxEvent={event} />
+                </li>
+            ))}
+        </GenericEventListSummary>
+    );
+}
+
+function renderTimelineItem(room: Room, item: TimelineModelItem): ReactNode {
+    if (item.kind === "event") {
+        const event = findEventById(room, item.key);
+        return event ? <LegacyEventTileAdapter key={item.key} mxEvent={event} /> : null;
+    }
+
+    if (item.kind === "virtual") {
+        return renderVirtualItem(item);
+    }
+
+    if (item.kind === "group") {
+        return renderGroupItem(item);
+    }
+
+    return null;
+}
 
 /**
  * New MVVM-based timeline panel, rendered behind the `feature_new_timeline` Labs flag.
  * Uses the shared TimelineView from shared-components with a RoomTimelineViewModel.
  */
-export function TimelinePanelView({ room, anchoredEventId, highlightedEventId }: TimelinePanelViewProps): JSX.Element {
+export function TimelinePanelView({
+    room,
+    anchoredEventId,
+    highlightedEventId,
+}: Readonly<TimelinePanelViewProps>): JSX.Element {
     const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const viewKey = `${room.roomId}|${effectiveAnchorEventId ?? ""}`;
 
-    return (
-        <TimelinePanelViewContent
-            key={viewKey}
-            room={room}
-            anchoredEventId={anchoredEventId}
-            highlightedEventId={highlightedEventId}
-        />
-    );
+    return <TimelinePanelViewInner key={viewKey} room={room} highlightedEventId={highlightedEventId} anchoredEventId={anchoredEventId} />;
 }
 
-function TimelinePanelViewContent({ room, anchoredEventId, highlightedEventId }: TimelinePanelViewProps): JSX.Element {
+function TimelinePanelViewInner({
+    room,
+    anchoredEventId,
+    highlightedEventId,
+}: Readonly<TimelinePanelViewProps>): JSX.Element {
     const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const client: MatrixClient = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(
@@ -65,63 +122,15 @@ function TimelinePanelViewContent({ room, anchoredEventId, highlightedEventId }:
                 initialEventId: effectiveAnchorEventId,
             }),
     );
+    const renderItem = useMemo(() => renderTimelineItem.bind(null, room), [room]);
 
-    const renderItem = useMemo(
-        () =>
-            (item: TimelineModelItem): ReactNode => {
-                switch (item.kind) {
-                    case "event":
-                        // For now, all events go through the legacy adapter.
-                        // As tiles are migrated to MVVM, this switch will
-                        // send migrated types to their shared views instead.
-                        return <LegacyEventTileAdapter key={item.key} mxEvent={findEventById(room, item.key)!} />;
-                    case "virtual":
-                        switch (item.type) {
-                            case "date-separator":
-                                return (
-                                    <DateSeparatorView key={item.key} vm={item.vm} className="mx_TimelineSeparator" />
-                                );
-                            case "new-room":
-                                return <NewRoomIntro key={item.key} />;
-                            case "read-marker":
-                                return <hr key={item.key} className="mx_RoomView_myReadMarker" />;
-                            case "loading":
-                                return <div key={item.key}>Loading...</div>;
-                            case "gap":
-                                return <div key={item.key}>Gap</div>;
-                            default:
-                                return null;
-                        }
-                    case "group":
-                        switch (item.type) {
-                            case "room-creation":
-                                return (
-                                    <GenericEventListSummary
-                                        key={item.key}
-                                        events={item.events}
-                                        summaryMembers={item.summaryMembers}
-                                        summaryText={item.summaryText}
-                                    >
-                                        {item.events.map((event) => (
-                                            <li key={event.getId()!}>
-                                                <LegacyEventTileAdapter mxEvent={event} />
-                                            </li>
-                                        ))}
-                                    </GenericEventListSummary>
-                                );
-                            default:
-                                return null;
-                        }
-                    default:
-                        return null;
-                }
-            },
-        [room],
-    );
+    useEffect(() => {
+        vm.start();
+    }, [vm]);
 
     return (
         <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper" style={{ height: "100%" }}>
-            <TypedTimelineView vm={vm} renderItem={renderItem} />
+            <TimelineView<TimelineModelItem> vm={vm} renderItem={renderItem} />
         </div>
     );
 }

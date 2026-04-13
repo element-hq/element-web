@@ -60,46 +60,53 @@ const mockGroupedEvent = new MatrixEvent({
 
 const timelineVmInstances: any[] = [];
 
+function createTimelinePanelViewModelMockInstance(items?: any[]): any {
+    const instance = {
+        isDisposed: false,
+        start: jest.fn(),
+        getSnapshot: () => ({
+            items: items ?? [
+                {
+                    key: "new-room",
+                    kind: "virtual",
+                    type: "new-room",
+                },
+                {
+                    key: "date-row",
+                    kind: "virtual",
+                    type: "date-separator",
+                    vm: {
+                        props: { roomId: "!room:example.org", ts: 1712563200000 },
+                        getSnapshot: () => ({ label: "ignored" }),
+                        subscribe: () => () => {},
+                    },
+                },
+                {
+                    key: "creation-group",
+                    kind: "group",
+                    type: "room-creation",
+                    events: [mockGroupedEvent],
+                    summaryMembers: undefined,
+                    summaryText: "Alice created this room",
+                },
+            ],
+        }),
+        subscribe: () => () => {},
+        dispose: jest.fn(),
+    };
+    instance.dispose.mockImplementation(() => {
+        instance.isDisposed = true;
+    });
+    timelineVmInstances.push(instance);
+    return instance;
+}
+
+function mockTimelinePanelViewModelConstructor(): any {
+    return createTimelinePanelViewModelMockInstance();
+}
+
 jest.mock("../../../../../../../src/viewmodels/room/timeline/TimelinePanelViewModel", () => ({
-    TimelinePanelViewModel: jest.fn().mockImplementation(() => {
-        const instance = {
-            isDisposed: false,
-            getSnapshot: () => ({
-                items: [
-                    {
-                        key: "new-room",
-                        kind: "virtual",
-                        type: "new-room",
-                    },
-                    {
-                        key: "date-row",
-                        kind: "virtual",
-                        type: "date-separator",
-                        vm: {
-                            props: { roomId: "!room:example.org", ts: 1712563200000 },
-                            getSnapshot: () => ({ label: "ignored" }),
-                            subscribe: () => () => {},
-                        },
-                    },
-                    {
-                        key: "creation-group",
-                        kind: "group",
-                        type: "room-creation",
-                        events: [mockGroupedEvent],
-                        summaryMembers: undefined,
-                        summaryText: "Alice created this room",
-                    },
-                ],
-            }),
-            subscribe: () => () => {},
-            dispose: jest.fn(),
-        };
-        instance.dispose.mockImplementation(() => {
-            instance.isDisposed = true;
-        });
-        timelineVmInstances.push(instance);
-        return instance;
-    }),
+    TimelinePanelViewModel: jest.fn(mockTimelinePanelViewModelConstructor),
 }));
 
 describe("TimelinePanelView", () => {
@@ -169,21 +176,9 @@ describe("TimelinePanelView", () => {
         } as any;
         const client = {} as any;
 
-        mocked(TimelinePanelViewModel).mockImplementationOnce(() => {
-            const instance = {
-                isDisposed: false,
-                getSnapshot: () => ({
-                    items: [{ key: "$live", kind: "event" }],
-                }),
-                subscribe: () => () => {},
-                dispose: jest.fn(),
-            };
-            instance.dispose.mockImplementation(() => {
-                instance.isDisposed = true;
-            });
-            timelineVmInstances.push(instance);
-            return instance as any;
-        });
+        mocked(TimelinePanelViewModel).mockImplementationOnce(
+            () => createTimelinePanelViewModelMockInstance([{ key: "$live", kind: "event" }]) as any,
+        );
 
         render(
             <MatrixClientContext.Provider value={client}>

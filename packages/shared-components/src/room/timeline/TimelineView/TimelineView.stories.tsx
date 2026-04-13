@@ -68,7 +68,7 @@ function getItemNumber(item: MockTimelineItem): number {
 
 function createSnapshot(items: MockTimelineItem[]): TimelineViewSnapshot<MockTimelineItem> {
     const firstItemNumber = items[0] ? getItemNumber(items[0]) : EARLIEST_ITEM_NUMBER;
-    const lastItem = items[items.length - 1];
+    const lastItem = items.at(-1);
     const lastItemNumber = lastItem ? getItemNumber(lastItem) : LATEST_ITEM_NUMBER;
 
     return {
@@ -90,7 +90,7 @@ class StoryTimelineViewModel
     extends BaseViewModel<TimelineViewSnapshot<MockTimelineItem>, undefined>
     implements TimelineViewActions
 {
-    private callbacks: StoryTimelineCallbacks;
+    private readonly callbacks: StoryTimelineCallbacks;
     private pendingPaginationTimer: ReturnType<typeof setTimeout> | null = null;
 
     public constructor(snapshot: TimelineViewSnapshot<MockTimelineItem>, callbacks: StoryTimelineCallbacks) {
@@ -141,7 +141,7 @@ class StoryTimelineViewModel
             const latestSnapshot = this.getSnapshot();
             const latestItems = latestSnapshot.items;
             const latestFirstItemNumber = latestItems[0] ? getItemNumber(latestItems[0]) : EARLIEST_ITEM_NUMBER;
-            const latestLastItem = latestItems[latestItems.length - 1];
+            const latestLastItem = latestItems.at(-1);
             const latestLastItemNumber = latestLastItem ? getItemNumber(latestLastItem) : 0;
             const latestPrependStart = Math.max(EARLIEST_ITEM_NUMBER, latestFirstItemNumber - PAGE_SIZE);
             const latestPrependCount = Math.max(0, latestFirstItemNumber - latestPrependStart);
@@ -153,7 +153,7 @@ class StoryTimelineViewModel
                     ? [...createMockItems(latestPrependCount, latestPrependStart), ...latestItems]
                     : [...latestItems, ...createMockItems(appendCount, appendStart)];
             const nextFirstItemNumber = nextItems[0] ? getItemNumber(nextItems[0]) : EARLIEST_ITEM_NUMBER;
-            const nextLastItem = nextItems[nextItems.length - 1];
+            const nextLastItem = nextItems.at(-1);
             const nextLastItemNumber = nextLastItem ? getItemNumber(nextLastItem) : LATEST_ITEM_NUMBER;
 
             this.snapshot.merge({
@@ -201,7 +201,7 @@ const rowStyle: CSSProperties = {
     background: "#ffffff",
 };
 
-function TimelineViewStoryWrapper({ items, onItemsChanged }: TimelineViewStoryProps): JSX.Element {
+function TimelineViewStoryWrapper({ items, onItemsChanged }: Readonly<TimelineViewStoryProps>): JSX.Element {
     const vmRef = useRef<StoryTimelineViewModel | null>(null);
     const callbacksRef = useRef<StoryTimelineCallbacks>({
         onRequestMoreItems: () => undefined,

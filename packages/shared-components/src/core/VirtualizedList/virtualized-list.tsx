@@ -195,7 +195,7 @@ export function useVirtualizedList<Item, Context>(
     }, [items, getItemKey]);
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const pendingViewportFocusCommitRef = useRef<boolean>(false);
-    const scrollSettleTimeoutRef = useRef<number | null>(null);
+    const scrollSettleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Ensure the tabIndexKey is set if there is none already or if the existing key is no longer displayed
     useEffect(() => {
@@ -369,7 +369,7 @@ export function useVirtualizedList<Item, Context>(
 
         const clearScrollSettleTimeout = (): void => {
             if (scrollSettleTimeoutRef.current !== null) {
-                window.clearTimeout(scrollSettleTimeoutRef.current);
+                globalThis.clearTimeout(scrollSettleTimeoutRef.current);
                 scrollSettleTimeoutRef.current = null;
             }
         };
@@ -379,7 +379,7 @@ export function useVirtualizedList<Item, Context>(
                 return;
             }
             clearScrollSettleTimeout();
-            scrollSettleTimeoutRef.current = window.setTimeout(() => {
+            scrollSettleTimeoutRef.current = globalThis.setTimeout(() => {
                 commitFocusToLastVisibleItem();
                 scrollSettleTimeoutRef.current = null;
             }, SCROLL_SETTLE_DELAY_MS);

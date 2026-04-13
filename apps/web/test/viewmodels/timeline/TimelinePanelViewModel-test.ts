@@ -77,8 +77,16 @@ describe("TimelinePanelViewModel", () => {
         mocked(TimelineWindow).mockImplementation(() => timelineWindowInstance as any);
     });
 
+    function createStartedViewModel(initialEventId?: string): TimelinePanelViewModel {
+        const vm = new TimelinePanelViewModel(
+            initialEventId ? { client, room, initialEventId } : { client, room },
+        );
+        vm.start();
+        return vm;
+    }
+
     it("delegates item building to the presenter on load", async () => {
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         expect(TimelinePanelPresenter).toHaveBeenCalledWith({
@@ -96,7 +104,7 @@ describe("TimelinePanelViewModel", () => {
     });
 
     it("stores an anchor after loading a specific event", async () => {
-        const vm = new TimelinePanelViewModel({ client, room, initialEventId: "$anchor" });
+        const vm = createStartedViewModel("$anchor");
         await flushPromises();
 
         expect(timelineWindowInstance.load).toHaveBeenCalledWith("$anchor", 40);
@@ -117,7 +125,7 @@ describe("TimelinePanelViewModel", () => {
             { key: "one", kind: "event" },
         ]);
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.onRequestMoreItems("backward");
@@ -143,7 +151,7 @@ describe("TimelinePanelViewModel", () => {
         });
         timelineWindowInstance.paginate.mockReturnValue(paginationPromise);
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.onRequestMoreItems("backward");
@@ -162,7 +170,7 @@ describe("TimelinePanelViewModel", () => {
     it("marks pagination as exhausted when the timeline can no longer paginate backward", async () => {
         timelineWindowInstance.canPaginate.mockImplementationOnce(() => true).mockImplementation(() => false);
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.onRequestMoreItems("backward");
@@ -173,7 +181,7 @@ describe("TimelinePanelViewModel", () => {
     });
 
     it("does not auto-extend the live window while scrolled up", async () => {
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.onIsAtLiveEdgeChanged(false);
@@ -186,7 +194,7 @@ describe("TimelinePanelViewModel", () => {
     });
 
     it("extends the live window without a network request when stuck at bottom", async () => {
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
@@ -203,7 +211,7 @@ describe("TimelinePanelViewModel", () => {
         });
         timelineWindowInstance.paginate.mockReturnValue(paginationPromise);
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
@@ -222,7 +230,7 @@ describe("TimelinePanelViewModel", () => {
     it("marks forward pagination as error when live-end extension fails", async () => {
         timelineWindowInstance.paginate.mockRejectedValueOnce(new Error("boom"));
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
@@ -232,7 +240,7 @@ describe("TimelinePanelViewModel", () => {
     });
 
     it("ignores pagination-driven timeline updates", async () => {
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         room.on.mock.calls[0]?.[1](eventA, room, true, false, { timeline: liveTimeline, liveEvent: false });
@@ -247,7 +255,7 @@ describe("TimelinePanelViewModel", () => {
             (direction: Direction) => direction === Direction.Forward,
         );
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.onRequestMoreItems("forward");
@@ -261,7 +269,7 @@ describe("TimelinePanelViewModel", () => {
     });
 
     it("tracks the latest visible range without triggering pagination", async () => {
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.onVisibleRangeChanged({ startIndex: 0, endIndex: 0 });
@@ -272,7 +280,7 @@ describe("TimelinePanelViewModel", () => {
     });
 
     it("disposes the presenter and unsubscribes from room updates", async () => {
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.dispose();
@@ -289,7 +297,7 @@ describe("TimelinePanelViewModel", () => {
             }),
         );
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
 
         expect(vm.getSnapshot().backwardPagination).toBe("loading");
         vm.dispose();
@@ -314,7 +322,7 @@ describe("TimelinePanelViewModel", () => {
             }),
         );
 
-        const vm = new TimelinePanelViewModel({ client, room });
+        const vm = createStartedViewModel();
         await flushPromises();
 
         vm.onRequestMoreItems("backward");

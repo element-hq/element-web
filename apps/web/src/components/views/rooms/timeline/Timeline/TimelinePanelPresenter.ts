@@ -19,7 +19,7 @@ export interface TimelinePanelPresenterOpts {
 }
 
 export class TimelinePanelPresenter {
-    private dateSeparatorVms = new Map<string, DateSeparatorViewModel>();
+    private readonly dateSeparatorVms = new Map<string, DateSeparatorViewModel>();
 
     public constructor(private readonly opts: TimelinePanelPresenterOpts) {}
 
@@ -131,7 +131,7 @@ export class TimelinePanelPresenter {
     }
 
     private buildRoomCreationGroupItem(events: MatrixEvent[]): TimelineModelItem {
-        const latestEvent = events[events.length - 1];
+        const latestEvent = events.at(-1) ?? events[0];
         const roomId = latestEvent.getRoomId();
         const creator = latestEvent.sender?.name ?? latestEvent.getSender();
         const summaryText =
@@ -171,10 +171,12 @@ export class TimelinePanelPresenter {
             index += 1;
         }
 
-        const items: TimelineModelItem[] = [this.buildDateSeparatorItem(createEvent)];
-        items.push(...ejectedEvents.map((event) => ({ key: event.getId()!, kind: "event" as const })));
-        items.push(this.buildRoomCreationItem());
-        items.push(this.buildRoomCreationGroupItem(groupedEvents));
+        const items: TimelineModelItem[] = [
+            this.buildDateSeparatorItem(createEvent),
+            ...ejectedEvents.map((event) => ({ key: event.getId()!, kind: "event" as const })),
+            this.buildRoomCreationItem(),
+            this.buildRoomCreationGroupItem(groupedEvents),
+        ];
 
         return { items, consumedCount: index };
     }

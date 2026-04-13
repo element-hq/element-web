@@ -32,6 +32,70 @@ const TOP_SCROLL_THRESHOLD_PX = 1;
 
 type TimelineScrollLocation = ScrollIntoViewLocation | false;
 
+function findFirstOverlap<TItem extends TimelineItem>(
+    prevItems: TItem[],
+    nextIndexesByKey: Map<string, number>,
+): { prevOverlapStart: number; nextOverlapStart: number } | null {
+    for (let index = 0; index < prevItems.length; index += 1) {
+        const candidateIndex = nextIndexesByKey.get(prevItems[index].key);
+        if (candidateIndex !== undefined) {
+            return {
+                prevOverlapStart: index,
+                nextOverlapStart: candidateIndex,
+            };
+        }
+    }
+
+    return null;
+}
+
+function getOverlapLength<TItem extends TimelineItem>(
+    prevItems: TItem[],
+    nextItems: TItem[],
+    prevOverlapStart: number,
+    nextOverlapStart: number,
+): number {
+    let overlapLength = 0;
+    while (
+        prevOverlapStart + overlapLength < prevItems.length &&
+        nextOverlapStart + overlapLength < nextItems.length &&
+        prevItems[prevOverlapStart + overlapLength].key === nextItems[nextOverlapStart + overlapLength].key
+    ) {
+        overlapLength += 1;
+    }
+
+    return overlapLength;
+}
+
+function hasUnexpectedLeadingOverlap<TItem extends TimelineItem>(
+    prevItems: TItem[],
+    prevOverlapStart: number,
+    nextIndexesByKey: Map<string, number>,
+): boolean {
+    for (let index = 0; index < prevOverlapStart; index += 1) {
+        if (nextIndexesByKey.has(prevItems[index].key)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function hasUnexpectedTrailingOverlap<TItem extends TimelineItem>(
+    nextItems: TItem[],
+    nextOverlapStart: number,
+    overlapLength: number,
+    prevKeys: Set<string>,
+): boolean {
+    for (let index = nextOverlapStart + overlapLength; index < nextItems.length; index += 1) {
+        if (prevKeys.has(nextItems[index].key)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 export function getContiguousWindowShift<TItem extends TimelineItem>(prevItems: TItem[], nextItems: TItem[]): number {
     if (prevItems.length === 0 || nextItems.length === 0) {
         return 0;
@@ -46,44 +110,22 @@ export function getContiguousWindowShift<TItem extends TimelineItem>(prevItems: 
         nextIndexesByKey.set(nextItems[index].key, index);
     }
 
-    let prevOverlapStart = -1;
-    let nextOverlapStart = -1;
-    for (let index = 0; index < prevItems.length; index += 1) {
-        const candidateIndex = nextIndexesByKey.get(prevItems[index].key);
-        if (candidateIndex !== undefined) {
-            prevOverlapStart = index;
-            nextOverlapStart = candidateIndex;
-            break;
-        }
-    }
-
-    if (prevOverlapStart === -1 || nextOverlapStart === -1) {
+    const overlap = findFirstOverlap(prevItems, nextIndexesByKey);
+    if (!overlap) {
         return 0;
     }
 
-    let overlapLength = 0;
-    while (
-        prevOverlapStart + overlapLength < prevItems.length &&
-        nextOverlapStart + overlapLength < nextItems.length &&
-        prevItems[prevOverlapStart + overlapLength].key === nextItems[nextOverlapStart + overlapLength].key
-    ) {
-        overlapLength += 1;
-    }
-
+    const { prevOverlapStart, nextOverlapStart } = overlap;
+    const overlapLength = getOverlapLength(prevItems, nextItems, prevOverlapStart, nextOverlapStart);
     if (overlapLength === 0) {
         return 0;
     }
 
-    for (let index = 0; index < prevOverlapStart; index += 1) {
-        if (nextIndexesByKey.has(prevItems[index].key)) {
-            return 0;
-        }
-    }
-
-    for (let index = nextOverlapStart + overlapLength; index < nextItems.length; index += 1) {
-        if (prevKeys.has(nextItems[index].key)) {
-            return 0;
-        }
+    if (
+        hasUnexpectedLeadingOverlap(prevItems, prevOverlapStart, nextIndexesByKey) ||
+        hasUnexpectedTrailingOverlap(nextItems, nextOverlapStart, overlapLength, prevKeys)
+    ) {
+        return 0;
     }
 
     return nextOverlapStart - prevOverlapStart;
@@ -152,18 +194,23 @@ function getAnchorScrollLocation<TItem extends TimelineItem>(
         return false;
     }
 
-    const align =
-        scrollTarget.position === undefined || scrollTarget.position === "top"
-            ? "start"
-            : scrollTarget.position === "bottom"
-              ? "end"
-              : "center";
-
     return {
         index: targetIndex,
-        align,
+        align: getScrollAlign(scrollTarget.position),
         behavior: "auto",
     };
+}
+
+function getScrollAlign(position: NavigationAnchor["position"]): ScrollIntoViewLocation["align"] {
+    if (position === undefined || position === "top") {
+        return "start";
+    }
+
+    if (position === "bottom") {
+        return "end";
+    }
+
+    return "center";
 }
 
 export function getPostInitialFillBottomSnapIndex({
@@ -245,7 +292,7 @@ export function TimelineView<TItem extends TimelineItem>({
     vm,
     className,
     renderItem,
-}: TimelineViewProps<TItem>): JSX.Element {
+}: Readonly<TimelineViewProps<TItem>>): JSX.Element {
     const snapshot = useViewModel(vm);
     // Track when the view model instance changes so all scroll/fill bookkeeping can be reset.
     const previousVmRef = useRef(vm);

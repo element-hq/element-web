@@ -53,10 +53,11 @@ export class TimelinePanelViewModel
     extends BaseViewModel<TimelineViewSnapshot<TimelineModelItem>, TimelinePanelViewModelOpts>
     implements TimelineViewActions
 {
-    private timelineWindow: TimelineWindow;
-    private presenter: TimelinePanelPresenter;
+    private readonly timelineWindow: TimelineWindow;
+    private readonly presenter: TimelinePanelPresenter;
     private initialFillCompleted = false;
-    // TODO: Use visibleRange for read receipts
+    private started = false;
+    // Stored for upcoming read-receipt integration.
     public visibleRange: VisibleRange = { startIndex: 0, endIndex: 0 };
 
     public constructor(opts: TimelinePanelViewModelOpts) {
@@ -80,15 +81,22 @@ export class TimelinePanelViewModel
         this.disposables.track({
             dispose: () => this.presenter.dispose(),
         });
-
-        this.load(opts.initialEventId);
     }
 
-    private onRoomTimelineListener = (...args: unknown[]): void => {
+    public start(): void {
+        if (this.started) {
+            return;
+        }
+
+        this.started = true;
+        void this.load(this.props.initialEventId);
+    }
+
+    private readonly onRoomTimelineListener = (...args: unknown[]): void => {
         this.onRoomTimeline(...(args as RoomTimelineListenerArgs));
     };
 
-    private onRoomTimeline = (
+    private readonly onRoomTimeline = (
         _ev: MatrixEvent,
         room: Room | undefined,
         toStartOfTimeline: boolean | undefined,
