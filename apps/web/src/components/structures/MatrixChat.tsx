@@ -160,7 +160,7 @@ interface IProps {
     // the params extracted from the [real] query-string & fragment of the URI
     urlParams: URLParams;
     // called when we have completed a token login
-    onTokenLoginCompleted: () => void;
+    onTokenLoginCompleted: (urlParams: URLParams, fragmentAfterLogin: string) => void;
     // Represents the screen to display as a result of parsing the initial window.location
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
@@ -223,7 +223,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     public static defaultProps: Partial<IProps> = {
         config: {},
-        onTokenLoginCompleted: (): void => {},
     };
 
     private firstSyncComplete = false;
@@ -352,7 +351,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // remove the loginToken or auth code from the URL regardless
         if (!!this.props.urlParams.legacy_sso || !!this.props.urlParams.oidc) {
-            this.props.onTokenLoginCompleted();
+            this.props.onTokenLoginCompleted(this.props.urlParams, this.getFragmentAfterLogin());
         }
 
         if (delegatedAuthSucceeded) {

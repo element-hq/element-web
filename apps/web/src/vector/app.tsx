@@ -40,20 +40,22 @@ logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
 
-function onTokenLoginCompleted(): void {
-    // if we did a token login, we're now left with the token, hs and is
-    // url as query params in the url;
-    // if we did an oidc authorization code flow login, we're left with the auth code and state
-    // as query params in the url;
-    // a little nasty but let's redirect to clear them.
+function onTokenLoginCompleted(urlParams: URLParams, fragmentAfterLogin: string): void {
     const url = new URL(window.location.href);
 
-    url.searchParams.delete("no_universal_links");
-    url.searchParams.delete("loginToken");
-    url.searchParams.delete("state");
-    url.searchParams.delete("code");
+    // if we did a token login, we're now left with the login token as query param in the url; clear it out
+    for (const param in { ...urlParams.legacy_sso }) {
+        url.searchParams.delete(param);
+    }
 
-    logger.log(`Redirecting to ${url.href} to drop delegated authentication params from queryparams`);
+    // Added by OIDC auth to avoid being hijacked by Element X on macOS
+    url.searchParams.delete("no_universal_links");
+
+    // if we did an oidc authorization code flow login, we're left with the auth code and state in the fragment in the url,
+    // we clear it out by using the fragmentAfterLogin
+    url.hash = fragmentAfterLogin;
+
+    logger.log(`Redirecting to ${url.href} to drop authentication params from url`);
     window.history.replaceState(null, "", url.href);
 }
 

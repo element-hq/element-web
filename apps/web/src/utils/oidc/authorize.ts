@@ -47,6 +47,7 @@ export const startOidcLogin = async (
         nonce,
         prompt,
         urlState: PlatformPeg.get()?.getOidcClientState(),
+        responseMode: "fragment",
     });
 
     window.location.href = authorizationUrl;
@@ -98,7 +99,7 @@ export const completeOidcLogin = async (
 ): Promise<CompleteOidcLoginResponse> => {
     const { code, state } = getCodeAndStateFromParams(urlParams);
     const { homeserverUrl, tokenResponse, idTokenClaims, identityServerUrl, oidcClientSettings } =
-        await completeAuthorizationCodeGrant(code, state);
+        await completeAuthorizationCodeGrant(code, state, "fragment");
 
     return {
         homeserverUrl,

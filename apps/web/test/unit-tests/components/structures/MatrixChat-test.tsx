@@ -408,7 +408,7 @@ describe("<MatrixChat />", () => {
 
             await flushPromises();
 
-            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state);
+            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state, "fragment");
         });
 
         it("should look up userId using access token", async () => {

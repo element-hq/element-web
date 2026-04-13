@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import { type QueryDict } from "matrix-js-sdk/src/utils";
 
 // We want to support some name / value pairs in the fragment
-// so we're re-using query string like format
-//
+// so we're re-using query string like format, where we accept a `?key=value&key2=value2` string at the end of the hash
+// but we also accept a hash like `key=value&key2=value2` for compatibility with oAuth response_mode = fragment
 export function parseQsFromFragment(url: Location | URL): { location: string; params?: URLSearchParams } {
     // if we have a fragment, it will start with '#', which we need to drop.
     // (if we don't, this will return '').
@@ -18,17 +18,20 @@ export function parseQsFromFragment(url: Location | URL): { location: string; pa
     // our fragment may contain a query-param-like section. we need to fish
     // this out *before* URI-decoding because the params may contain ? and &
     // characters which are only URI-encoded once.
-    const hashparts = fragment.split("?");
+    const [main, query] = fragment.split("?", 2);
 
-    const result = {
-        location: decodeURIComponent(hashparts[0]),
-        params: undefined as URLSearchParams | undefined,
-    };
-
-    if (hashparts.length > 1) {
-        result.params = new URLSearchParams(hashparts[1]);
+    // Handle oAuth-style fragment parameters
+    if (main.includes("=")) {
+        return {
+            location: "",
+            params: new URLSearchParams(main),
+        };
     }
-    return result;
+
+    return {
+        location: decodeURIComponent(main),
+        params: query ? new URLSearchParams(query) : undefined,
+    };
 }
 
 /**
@@ -51,10 +54,10 @@ const urlParameterConfig = {
         keys: ["loginToken"],
         location: "query",
     },
-    // Query or fragment params for OIDC login, added by the Identity Provider
+    // Fragment params for OIDC login, added by the Identity Provider
     oidc: {
         keys: ["code", "state"],
-        location: "query",
+        location: "fragment",
     },
     // Fragment params relating to 3pid (email) invites, added in url within the invite email itself
     threepid: {
@@ -75,7 +78,9 @@ const urlParameterConfig = {
     string,
     {
         keys: string[];
-        location: "query" | "fragment" | "either";
+        // Query params live in the query string, in the middle of the URL, after a `?`, in a `key=value` format, delimited by `&`.
+        // Fragment params live in the fragment string, at the end of the URL, after a `?`, in a `key=value` format, delimited by `&`.
+        location: "query" | "fragment";
     }
 >;
 
@@ -100,32 +105,29 @@ export function parseAppUrl(url: Location | URL): {
     const queryParams = new URLSearchParams(url.search);
     const parsedFragment = parseQsFromFragment(url);
 
-    const params: Partial<URLParams> = {};
+    const urlParams: Partial<URLParams> = {};
 
     for (const group in urlParameterConfig) {
         const groupKey = group as keyof URLParams;
-        const value = urlParameterConfig[groupKey];
+        const groupConfig = urlParameterConfig[groupKey];
+
+        const params = groupConfig.location === "fragment" ? parsedFragment.params : queryParams;
+        if (!params) continue; // no params
 
         const target: Record<string, string> = {};
+        for (const k of groupConfig.keys) {
+            const key = k as (typeof groupConfig)["keys"][number];
 
-        for (const k of value.keys) {
-            const key = k as (typeof value)["keys"][number];
-
-            const queryVal = queryParams.get(key);
-            const fragVal = parsedFragment.params?.get(key) ?? null;
-
-            if (value.location !== "fragment" && queryVal !== null) {
-                target[key] = queryVal!;
-            }
-            if (value.location !== "query" && fragVal !== null) {
-                target[key] = fragVal;
+            const value = params.get(key);
+            if (value !== null) {
+                target[key] = value;
             }
         }
 
         if (Object.keys(target).length > 0) {
-            params[groupKey] = target;
+            urlParams[groupKey] = target;
         }
     }
 
-    return { params: params as URLParams, location: parsedFragment.location };
+    return { params: urlParams as URLParams, location: parsedFragment.location };
 }

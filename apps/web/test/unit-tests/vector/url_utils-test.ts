@@ -13,13 +13,15 @@ const location: Location = {
     search: "",
 };
 
-it("parseQsFromFragment", function () {
-    location.hash = "/home?foo=bar";
-    expect(parseQsFromFragment(location)).toEqual({
-        location: "home",
-        params: new URLSearchParams({
-            foo: "bar",
-        }),
+describe("parseQsFromFragment", () => {
+    it("should parse correctly", () => {
+        location.hash = "#/home?foo=bar";
+        expect(parseQsFromFragment(location)).toEqual({
+            location: "/home",
+            params: new URLSearchParams({
+                foo: "bar",
+            }),
+        });
     });
 });
 
@@ -35,8 +37,14 @@ describe("searchParamsToQueryDict", () => {
 });
 
 describe("parseUrlParameters", () => {
-    it("should parse oidc parameters", () => {
-        const u = new URL("https://app.element.io?code=foobar&state=barfoo");
+    it("should parse legacy sso parameters from query", () => {
+        const u = new URL("https://app.element.io?loginToken=foobar");
+        const parsed = parseAppUrl(u);
+        expect(parsed.params.legacy_sso?.loginToken).toEqual("foobar");
+    });
+
+    it("should parse oidc parameters from oauth-fragment", () => {
+        const u = new URL("https://app.element.io/#code=foobar&state=barfoo");
         const parsed = parseAppUrl(u);
         expect(parsed.params.oidc?.code).toEqual("foobar");
         expect(parsed.params.oidc?.state).toEqual("barfoo");

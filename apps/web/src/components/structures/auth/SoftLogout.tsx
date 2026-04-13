@@ -44,11 +44,11 @@ const STATIC_FLOWS_TO_VIEWS: Record<string, LoginView> = {
 };
 
 interface IProps {
-    urlParams?: URLParams;
-    fragmentAfterLogin?: string;
+    urlParams: URLParams;
+    fragmentAfterLogin: string;
 
     // Called when the SSO login completes
-    onTokenLoginCompleted: () => void;
+    onTokenLoginCompleted: (urlParams: URLParams, fragmentAfterLogin: string) => void;
 }
 
 interface IState {
@@ -201,9 +201,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
         return Lifecycle.hydrateSession(credentials)
             .then(() => {
-                if (this.props.onTokenLoginCompleted) {
-                    this.props.onTokenLoginCompleted();
-                }
+                this.props.onTokenLoginCompleted(this.props.urlParams, this.props.fragmentAfterLogin);
                 return true;
             })
             .catch((e) => {
