@@ -4,19 +4,19 @@ exports[`AudioPlayerView > renders the audio player in default state 1`] = `
 <div>
   <div
     aria-label="Audio player"
-    class="mx_MediaBody mediaBody audioPlayer"
+    class="mx_MediaBody MediaBody-module_mediaBody AudioPlayerView-module_audioPlayer"
     role="region"
     tabindex="0"
   >
     <div
-      class="flex"
+      class="Flex-module_flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-disabled="false"
         aria-label="Play"
         aria-labelledby="_r_0_"
-        class="_icon-button_1215g_8 button"
+        class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -40,17 +40,17 @@ exports[`AudioPlayerView > renders the audio player in default state 1`] = `
         </div>
       </button>
       <div
-        class="flex mediaInfo"
+        class="Flex-module_flex AudioPlayerView-module_mediaInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="mediaName"
+          class="AudioPlayerView-module_mediaName"
           data-testid="audio-player-name"
         >
           Sample Audio
         </span>
         <div
-          class="flex byline"
+          class="Flex-module_flex AudioPlayerView-module_byline"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
         >
           <time
@@ -64,13 +64,13 @@ exports[`AudioPlayerView > renders the audio player in default state 1`] = `
       </div>
     </div>
     <div
-      class="flex"
+      class="Flex-module_flex"
       data-testid="audio-player-seek"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <input
         aria-label="Audio seek bar"
-        class="seekBar"
+        class="SeekBar-module_seekBar"
         max="100"
         min="0"
         step="1"
@@ -80,7 +80,7 @@ exports[`AudioPlayerView > renders the audio player in default state 1`] = `
         value="30"
       />
       <time
-        class="mx_Clock clock"
+        class="mx_Clock AudioPlayerView-module_clock"
         datetime="PT2M"
         role="timer"
       >
@@ -95,19 +95,19 @@ exports[`AudioPlayerView > renders the audio player in error state 1`] = `
 <div>
   <div
     aria-label="Audio player"
-    class="mx_MediaBody mediaBody audioPlayer"
+    class="mx_MediaBody MediaBody-module_mediaBody AudioPlayerView-module_audioPlayer"
     role="region"
     tabindex="0"
   >
     <div
-      class="flex"
+      class="Flex-module_flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-disabled="false"
         aria-label="Play"
         aria-labelledby="_r_i_"
-        class="_icon-button_1215g_8 button"
+        class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -131,17 +131,17 @@ exports[`AudioPlayerView > renders the audio player in error state 1`] = `
         </div>
       </button>
       <div
-        class="flex mediaInfo"
+        class="Flex-module_flex AudioPlayerView-module_mediaInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="mediaName"
+          class="AudioPlayerView-module_mediaName"
           data-testid="audio-player-name"
         >
           Sample Audio
         </span>
         <div
-          class="flex byline"
+          class="Flex-module_flex AudioPlayerView-module_byline"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
         >
           <time
@@ -155,13 +155,13 @@ exports[`AudioPlayerView > renders the audio player in error state 1`] = `
       </div>
     </div>
     <div
-      class="flex"
+      class="Flex-module_flex"
       data-testid="audio-player-seek"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <input
         aria-label="Audio seek bar"
-        class="seekBar"
+        class="SeekBar-module_seekBar"
         max="100"
         min="0"
         step="1"
@@ -171,7 +171,7 @@ exports[`AudioPlayerView > renders the audio player in error state 1`] = `
         value="30"
       />
       <time
-        class="mx_Clock clock"
+        class="mx_Clock AudioPlayerView-module_clock"
         datetime="PT2M"
         role="timer"
       >
@@ -180,7 +180,7 @@ exports[`AudioPlayerView > renders the audio player in error state 1`] = `
     </div>
   </div>
   <span
-    class="error"
+    class="AudioPlayerView-module_error"
   >
     Error downloading audio
   </span>
@@ -191,19 +191,19 @@ exports[`AudioPlayerView > renders the audio player without media name 1`] = `
 <div>
   <div
     aria-label="Audio player"
-    class="mx_MediaBody mediaBody audioPlayer"
+    class="mx_MediaBody MediaBody-module_mediaBody AudioPlayerView-module_audioPlayer"
     role="region"
     tabindex="0"
   >
     <div
-      class="flex"
+      class="Flex-module_flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-disabled="false"
         aria-label="Play"
         aria-labelledby="_r_6_"
-        class="_icon-button_1215g_8 button"
+        class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -227,17 +227,17 @@ exports[`AudioPlayerView > renders the audio player without media name 1`] = `
         </div>
       </button>
       <div
-        class="flex mediaInfo"
+        class="Flex-module_flex AudioPlayerView-module_mediaInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="mediaName"
+          class="AudioPlayerView-module_mediaName"
           data-testid="audio-player-name"
         >
           Unnamed audio
         </span>
         <div
-          class="flex byline"
+          class="Flex-module_flex AudioPlayerView-module_byline"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
         >
           <time
@@ -251,13 +251,13 @@ exports[`AudioPlayerView > renders the audio player without media name 1`] = `
       </div>
     </div>
     <div
-      class="flex"
+      class="Flex-module_flex"
       data-testid="audio-player-seek"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <input
         aria-label="Audio seek bar"
-        class="seekBar"
+        class="SeekBar-module_seekBar"
         max="100"
         min="0"
         step="1"
@@ -267,7 +267,7 @@ exports[`AudioPlayerView > renders the audio player without media name 1`] = `
         value="30"
       />
       <time
-        class="mx_Clock clock"
+        class="mx_Clock AudioPlayerView-module_clock"
         datetime="PT2M"
         role="timer"
       >
@@ -282,19 +282,19 @@ exports[`AudioPlayerView > renders the audio player without size 1`] = `
 <div>
   <div
     aria-label="Audio player"
-    class="mx_MediaBody mediaBody audioPlayer"
+    class="mx_MediaBody MediaBody-module_mediaBody AudioPlayerView-module_audioPlayer"
     role="region"
     tabindex="0"
   >
     <div
-      class="flex"
+      class="Flex-module_flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-disabled="false"
         aria-label="Play"
         aria-labelledby="_r_c_"
-        class="_icon-button_1215g_8 button"
+        class="_icon-button_1215g_8 PlayPauseButton-module_button"
         data-kind="primary"
         role="button"
         style="--cpd-icon-button-size: 32px;"
@@ -318,17 +318,17 @@ exports[`AudioPlayerView > renders the audio player without size 1`] = `
         </div>
       </button>
       <div
-        class="flex mediaInfo"
+        class="Flex-module_flex AudioPlayerView-module_mediaInfo"
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="mediaName"
+          class="AudioPlayerView-module_mediaName"
           data-testid="audio-player-name"
         >
           Sample Audio
         </span>
         <div
-          class="flex byline"
+          class="Flex-module_flex AudioPlayerView-module_byline"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
         >
           <time
@@ -341,13 +341,13 @@ exports[`AudioPlayerView > renders the audio player without size 1`] = `
       </div>
     </div>
     <div
-      class="flex"
+      class="Flex-module_flex"
       data-testid="audio-player-seek"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <input
         aria-label="Audio seek bar"
-        class="seekBar"
+        class="SeekBar-module_seekBar"
         max="100"
         min="0"
         step="1"
@@ -357,7 +357,7 @@ exports[`AudioPlayerView > renders the audio player without size 1`] = `
         value="30"
       />
       <time
-        class="mx_Clock clock"
+        class="mx_Clock AudioPlayerView-module_clock"
         datetime="PT2M"
         role="timer"
       >

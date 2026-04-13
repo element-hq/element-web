@@ -4,19 +4,19 @@ exports[`ReactionsRowButton > renders the default reaction button 1`] = `
 <div>
   <button
     aria-label="Alice and Bob reacted with 👍"
-    class="reactionsRowButton"
+    class="ReactionsRowButton-module_reactionsRowButton"
     tabindex="0"
     type="button"
   >
     <span
       aria-hidden="true"
-      class="reactionsRowButtonContent"
+      class="ReactionsRowButton-module_reactionsRowButtonContent"
     >
       👍
     </span>
     <span
       aria-hidden="true"
-      class="reactionsRowButtonCount"
+      class="ReactionsRowButton-module_reactionsRowButtonCount"
     >
       2
     </span>
@@ -28,19 +28,19 @@ exports[`ReactionsRowButton > renders the selected reaction button 1`] = `
 <div>
   <button
     aria-label="Alice and Bob reacted with 👍"
-    class="reactionsRowButton reactionsRowButtonSelected"
+    class="ReactionsRowButton-module_reactionsRowButton ReactionsRowButton-module_reactionsRowButtonSelected"
     tabindex="0"
     type="button"
   >
     <span
       aria-hidden="true"
-      class="reactionsRowButtonContent"
+      class="ReactionsRowButton-module_reactionsRowButtonContent"
     >
       👍
     </span>
     <span
       aria-hidden="true"
-      class="reactionsRowButtonCount"
+      class="ReactionsRowButton-module_reactionsRowButtonCount"
     >
       2
     </span>
