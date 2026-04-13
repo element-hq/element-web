@@ -40,7 +40,7 @@ describe("Loading server config", function () {
                 },
             },
         });
-        await loadApp(new URLSearchParams(), null);
+        await loadApp({}, null);
         expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
     });
 
@@ -48,7 +48,7 @@ describe("Loading server config", function () {
         SdkConfig.put({
             default_server_name: "matrix.org",
         });
-        await loadApp(new URLSearchParams(), null);
+        await loadApp({}, null);
         expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
     });
 
@@ -65,7 +65,7 @@ describe("Loading server config", function () {
                     },
                 },
             });
-            await loadApp(new URLSearchParams(), null);
+            await loadApp({}, null);
             expect((SdkConfig.get("validated_server_config") || {}).hsUrl).toBe("https://matrix-client.matrix.org");
         },
     );

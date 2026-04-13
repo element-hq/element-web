@@ -53,14 +53,14 @@ describe("loadApp", () => {
     });
 
     it("should set window.matrixChat to the MatrixChat instance", async () => {
-        await loadApp(new URLSearchParams());
+        await loadApp({});
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
     });
 
     it("should pass onTokenLoginCompleted which strips searchParams to MatrixChat", async () => {
         const spy = jest.spyOn(window.history, "replaceState");
 
-        await loadApp(new URLSearchParams());
+        await loadApp({});
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
         window.matrixChat!.props.onTokenLoginCompleted();
 

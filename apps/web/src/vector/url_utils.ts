@@ -10,10 +10,10 @@ import { type QueryDict } from "matrix-js-sdk/src/utils";
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
 //
-export function parseQsFromFragment(location: Location): { location: string; params?: URLSearchParams } {
+export function parseQsFromFragment(url: Location | URL): { location: string; params?: URLSearchParams } {
     // if we have a fragment, it will start with '#', which we need to drop.
     // (if we don't, this will return '').
-    const fragment = location.hash.substring(1);
+    const fragment = url.hash.substring(1);
 
     // our fragment may contain a query-param-like section. we need to fish
     // this out *before* URI-decoding because the params may contain ? and &
@@ -43,4 +43,89 @@ export function searchParamsToQueryDict(params: URLSearchParams): QueryDict {
         queryDict[key] = val.length === 1 ? val[0] : val;
     }
     return queryDict;
+}
+
+const urlParameterConfig = {
+    // Query string params for legacy SSO login, added by the Matrix homeserver
+    legacy_sso: {
+        keys: ["loginToken"],
+        location: "query",
+    },
+    // Query or fragment params for OIDC login, added by the Identity Provider
+    oidc: {
+        keys: ["code", "state"],
+        location: "query",
+    },
+    // Fragment params relating to 3pid (email) invites, added in url within the invite email itself
+    threepid: {
+        keys: ["client_secret", "session_id", "hs_url", "is_url", "sid"],
+        location: "fragment",
+    },
+    // XXX: unclear where, if anywhere, this is set
+    defaults: {
+        keys: ["defaultUsername"],
+        location: "fragment",
+    },
+    // XXX: Fragment params seemingly relating to 3pid invites, though the code in the area doubts they are ever specified
+    guest: {
+        keys: ["guest_user_id", "guest_access_token"],
+        location: "fragment",
+    },
+} as const satisfies Record<
+    string,
+    {
+        keys: string[];
+        location: "query" | "fragment" | "either";
+    }
+>;
+
+export type URLParams = Partial<{
+    -readonly [K in keyof typeof urlParameterConfig]: Partial<{
+        [P in (typeof urlParameterConfig)[K]["keys"][number]]: string;
+    }>;
+}>;
+
+/**
+ * Utility to parse parameters held in the app's URL.
+ * Currently focusing only on at-load URL parameters.
+ * @param url - the URL to parse.
+ * @return an object keyed by the groups defined in {@link urlParameterConfig} with values for each key listed,
+ *     sourced from the location (query/fragment/either) specified. If no parameters in a group are found the entire group
+ *     will be omitted from the returned object to simplify presence checking.
+ */
+export function parseAppUrl(url: Location | URL): {
+    location: string;
+    params: URLParams;
+} {
+    const queryParams = new URLSearchParams(url.search);
+    const parsedFragment = parseQsFromFragment(url);
+
+    const params: Partial<URLParams> = {};
+
+    for (const group in urlParameterConfig) {
+        const groupKey = group as keyof URLParams;
+        const value = urlParameterConfig[groupKey];
+
+        const target: Record<string, string> = {};
+
+        for (const k of value.keys) {
+            const key = k as (typeof value)["keys"][number];
+
+            const queryVal = queryParams.get(key);
+            const fragVal = parsedFragment.params?.get(key) ?? null;
+
+            if (value.location !== "fragment" && queryVal !== null) {
+                target[key] = queryVal!;
+            }
+            if (value.location !== "query" && fragVal !== null) {
+                target[key] = fragVal;
+            }
+        }
+
+        if (Object.keys(target).length > 0) {
+            params[groupKey] = target;
+        }
+    }
+
+    return { params: params as URLParams, location: parsedFragment.location };
 }

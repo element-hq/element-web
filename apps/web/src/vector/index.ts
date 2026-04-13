@@ -14,7 +14,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { shouldPolyfill as shouldPolyFillIntlSegmenter } from "@formatjs/intl-segmenter/should-polyfill.js";
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
-import { parseQsFromFragment } from "./url_utils";
+import { parseAppUrl } from "./url_utils";
 import "./modernizr.cjs";
 
 // Import shared components CSS
@@ -136,13 +136,13 @@ async function start(): Promise<void> {
         // give rageshake a chance to load/fail, we don't actually assert rageshake loads, we allow it to fail if no IDB
         await settled(rageshakePromise);
 
-        const fragparts = parseQsFromFragment(window.location);
+        const parsedUrl = parseAppUrl(window.location);
 
         // don't try to redirect to the native apps if we're
         // verifying a 3pid (but after we've loaded the config)
         // or if the user is following a deep link
         // (https://github.com/element-hq/element-web/issues/7378)
-        const preventRedirect = fragparts.params?.has("client_secret") || fragparts.location.length > 0;
+        const preventRedirect = !!parsedUrl.params.threepid || parsedUrl.location.length > 0;
 
         if (!preventRedirect) {
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -232,7 +232,7 @@ async function start(): Promise<void> {
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
         // run on the components.
-        await loadApp(fragparts.params ?? new URLSearchParams());
+        await loadApp(parsedUrl.params);
     } catch (err) {
         logger.error(err);
         // Like the compatibility page, AWOOOOOGA at the user

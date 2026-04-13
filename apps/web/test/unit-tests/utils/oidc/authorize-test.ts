@@ -95,10 +95,10 @@ describe("OIDC authorization", () => {
     describe("completeOidcLogin()", () => {
         const state = "test-state-444";
         const code = "test-code-777";
-        const queryDict = new URLSearchParams({
+        const params = {
             code,
             state: state,
-        });
+        };
 
         const tokenResponse: BearerTokenResponse = {
             access_token: "abc123",
@@ -131,19 +131,19 @@ describe("OIDC authorization", () => {
         });
 
         it("should throw when query params do not include state and code", async () => {
-            await expect(async () => await completeOidcLogin(new URLSearchParams())).rejects.toThrow(
+            await expect(async () => await completeOidcLogin({})).rejects.toThrow(
                 OidcClientError.InvalidQueryParameters,
             );
         });
 
         it("should make request complete authorization code grant", async () => {
-            await completeOidcLogin(queryDict);
+            await completeOidcLogin(params);
 
             expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state);
         });
 
         it("should return accessToken, configured homeserver and identityServer", async () => {
-            const result = await completeOidcLogin(queryDict);
+            const result = await completeOidcLogin(params);
 
             expect(result).toEqual({
                 accessToken: tokenResponse.access_token,

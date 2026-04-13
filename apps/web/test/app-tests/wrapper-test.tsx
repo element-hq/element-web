@@ -63,7 +63,7 @@ describe("Wrapper", () => {
         });
 
         const ref = React.createRef<MatrixChat>();
-        const matrixChatResult: RenderResult = render(await loadApp(new URLSearchParams(), ref));
+        const matrixChatResult: RenderResult = render(await loadApp({}, ref));
 
         // at this point, we're trying to do a guest registration;
         // we expect a spinner

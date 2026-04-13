@@ -13,6 +13,7 @@ import { type IdTokenClaims } from "oidc-client-ts";
 
 import { OidcClientError } from "./error";
 import PlatformPeg from "../../PlatformPeg";
+import { type URLParams } from "../../vector/url_utils.ts";
 
 /**
  * Start OIDC authorization code flow
@@ -52,16 +53,16 @@ export const startOidcLogin = async (
 };
 
 /**
- * Gets `code` and `state` query params
+ * Gets `code` and `state` response params
  *
- * @param queryParams
+ * @param urlParams - the parameters to read
  * @returns code and state
  * @throws when code and state are not valid strings
  */
-const getCodeAndStateFromQueryParams = (queryParams: URLSearchParams): { code: string; state: string } => {
-    const code = queryParams.get("code");
-    const state = queryParams.get("state");
-
+const getCodeAndStateFromParams = ({
+    code,
+    state,
+}: NonNullable<URLParams["oidc"]>): { code: string; state: string } => {
     if (!code || typeof code !== "string" || !state || typeof state !== "string") {
         throw new Error(OidcClientError.InvalidQueryParameters);
     }
@@ -88,12 +89,14 @@ type CompleteOidcLoginResponse = {
 };
 /**
  * Attempt to complete authorization code flow to get an access token
- * @param queryParams the query-parameters extracted from the real query-string of the starting URI.
+ * @param urlParams the parameters extracted from the app-load URI.
  * @returns Promise that resolves with a CompleteOidcLoginResponse when login was successful
  * @throws When we failed to get a valid access token
  */
-export const completeOidcLogin = async (queryParams: URLSearchParams): Promise<CompleteOidcLoginResponse> => {
-    const { code, state } = getCodeAndStateFromQueryParams(queryParams);
+export const completeOidcLogin = async (
+    urlParams: NonNullable<URLParams["oidc"]>,
+): Promise<CompleteOidcLoginResponse> => {
+    const { code, state } = getCodeAndStateFromParams(urlParams);
     const { homeserverUrl, tokenResponse, idTokenClaims, identityServerUrl, oidcClientSettings } =
         await completeAuthorizationCodeGrant(code, state);
 

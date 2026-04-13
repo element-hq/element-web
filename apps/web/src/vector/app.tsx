@@ -27,6 +27,7 @@ import MatrixChat from "../components/structures/MatrixChat";
 import { type ValidatedServerConfig } from "../utils/ValidatedServerConfig";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
+import { type URLParams } from "./url_utils.ts";
 import { UserFriendlyError } from "../languageHandler";
 import { ModuleApi } from "../modules/Api";
 import { RoomView } from "../components/structures/RoomView";
@@ -85,10 +86,7 @@ async function redirectToSso(config: ValidatedServerConfig): Promise<boolean> {
     return false;
 }
 
-export async function loadApp(
-    fragParams: URLSearchParams,
-    matrixChatRef: React.Ref<MatrixChat>,
-): Promise<ReactElement> {
+export async function loadApp(urlParams: URLParams, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
     // XXX: This lives here because certain components import so many things that importing it in a sensible place (eg.
     // the builtins module or init.tsx) causes a circular dependency.
     ModuleApi.instance.builtins.setComponents({
@@ -99,8 +97,6 @@ export async function loadApp(
 
     initRouting();
     const platform = PlatformPeg.get();
-
-    const params = new URL(window.location.href).searchParams;
 
     const urlWithoutQuery = window.location.protocol + "//" + window.location.host + window.location.pathname;
     logger.log("Vector starting at " + urlWithoutQuery);
@@ -114,7 +110,7 @@ export async function loadApp(
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
     const hasPossibleToken = !!userId;
-    const isReturningFromSso = params.has("loginToken") || (params.has("code") && params.has("state"));
+    const isReturningFromSso = !!urlParams.legacy_sso || !!urlParams.oidc;
     const ssoRedirects = config.sso_redirect_options || {};
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
@@ -156,8 +152,7 @@ export async function loadApp(
                     ref={matrixChatRef}
                     onNewScreen={onNewScreen}
                     config={config}
-                    realQueryParams={params}
-                    startingFragmentQueryParams={fragParams}
+                    urlParams={urlParams}
                     enableGuest={!config.disable_guests}
                     onTokenLoginCompleted={onTokenLoginCompleted}
                     initialScreenAfterLogin={initialScreenAfterLogin}

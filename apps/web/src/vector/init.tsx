@@ -25,6 +25,7 @@ import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
+import { type URLParams } from "./url_utils.ts";
 
 export const rageshakePromise = initRageshake();
 
@@ -85,7 +86,7 @@ export async function loadTheme(): Promise<void> {
     return setTheme();
 }
 
-export async function loadApp(fragParams: URLSearchParams): Promise<void> {
+export async function loadApp(urlParams: URLParams): Promise<void> {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "element-web-app" */
@@ -95,7 +96,7 @@ export async function loadApp(fragParams: URLSearchParams): Promise<void> {
     function setWindowMatrixChat(matrixChat: MatrixChat): void {
         window.matrixChat = matrixChat;
     }
-    const app = await module.loadApp(fragParams, setWindowMatrixChat);
+    const app = await module.loadApp(urlParams, setWindowMatrixChat);
     const root = createRoot(document.getElementById("matrixchat")!);
     root.render(app);
 }
