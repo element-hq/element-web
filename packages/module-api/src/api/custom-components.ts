@@ -20,6 +20,12 @@ export type CustomMessageComponentProps = {
      * @alpha
      */
     mxEvent: MatrixEvent;
+    /**
+     * Whether this message is being rendered as a reply preview tile.
+     * Modules may choose to skip decorations (e.g. labels) in this context.
+     * @alpha
+     */
+    isReplyTile?: boolean;
 };
 
 /**
@@ -158,6 +164,12 @@ export type ExtendablePropsRenderFunction<BaseProps> = <P extends BaseProps>(
  */
 export type CustomLoginRenderFunction = ExtendablePropsRenderFunction<CustomLoginComponentProps>;
 
+export type CustomMessageComposerComponentProps = React.PropsWithChildren<{
+    roomId: string;
+}>;
+
+export type CustomMessageComposerRenderFunction = ExtendablePropsRenderFunction<CustomMessageComposerComponentProps>;
+
 /**
  * Properties for composer preview.
  * @alpha Subject to change.
@@ -282,4 +294,6 @@ export interface CustomComponentsApi {
         filterFn: (composerText: string, roomId: string) => boolean,
         renderer: CustomComposerPreviewRenderFunction,
     ): void;
+
+    registerMessageComposerComponent(renderer: CustomMessageComposerRenderFunction): void;
 }

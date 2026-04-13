@@ -53,6 +53,25 @@ export interface SpacePanelItemProps {
 export type RoomHeaderButtonsCallback = (roomId: string) => JSX.Element | undefined;
 
 /**
+ * A callback that returns a JSX element representing a banner to display below the room header.
+ *
+ * @alpha
+ * @param roomId - The ID of the room for which the banner is being rendered.
+ * @returns A JSX element representing the banner, or undefined if no banner should be rendered.
+ */
+export type RoomBannerCallback = (roomId: string) => JSX.Element | undefined;
+
+/**
+ * A callback that returns a JSX element to display in the Security & Privacy
+ * section of Room Settings.
+ *
+ * @alpha
+ * @param roomId - The ID of the room whose settings are being displayed.
+ * @returns A JSX element to render, or undefined if nothing should be shown.
+ */
+export type RoomSettingsSecurityCallback = (roomId: string) => JSX.Element | undefined;
+
+/**
  * API for inserting extra UI into Element Web.
  * @alpha Subject to change.
  */
@@ -83,4 +102,19 @@ export interface ExtrasApi {
      * @param cb - A callback that returns a JSX element representing the buttons (see {@link RoomHeaderButtonsCallback}).
      */
     addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void;
+
+    /**
+     * Adds a callback to get a banner element to display below the room header in the room view.
+     *
+     * @param cb - A callback that returns a JSX element representing the banner (see {@link RoomBannerCallback}).
+     */
+    addRoomBannerCallback(cb: RoomBannerCallback): void;
+
+    /**
+     * Adds a callback to render a component in the Security & Privacy section
+     * of Room Settings, beneath the Encryption settings.
+     *
+     * @param cb - A callback that returns a JSX element (see {@link RoomSettingsSecurityCallback}).
+     */
+    addRoomSettingsSecurityCallback(cb: RoomSettingsSecurityCallback): void;
 }

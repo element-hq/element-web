@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Watchable } from "../api/watchable";
+import type { MatrixEvent } from "./event";
 
 /**
  * Represents a room from element-web.
@@ -25,4 +26,11 @@ export interface Room {
      * @returns last active timestamp
      */
     getLastActiveTimestamp: () => number;
+    /**
+     * Get a state event from the room's current state.
+     * @param eventType - The type of state event to retrieve.
+     * @param stateKey - The state key to look up. Defaults to the empty string.
+     * @returns The state event, or null if not found.
+     */
+    getStateEvent: (eventType: string, stateKey?: string) => Watchable<MatrixEvent | null>;
 }

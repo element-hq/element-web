@@ -29,6 +29,14 @@ export interface MatrixEvent {
      */
     content: Record<string, unknown>;
     /**
+     * The wire content of the event — i.e. the content as it appeared on the
+     * wire before decryption. For unencrypted events this is the same as
+     * `content`. For encrypted events this is the outer `m.room.encrypted`
+     * content (ciphertext, device_id, sender_key, etc.) which may also
+     * contain fields exposed outside the E2EE envelope.
+     */
+    wireContent?: Record<string, unknown>;
+    /**
      * Contains optional extra information about the event.
      */
     unsigned: Record<string, unknown>;
