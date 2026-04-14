@@ -10,6 +10,7 @@
 **/.pnpm-store
 **/tsconfig.node.tsbuildinfo
 **/*.md
+!**/*.api.md
 **/*.rst
 
 .idea/
