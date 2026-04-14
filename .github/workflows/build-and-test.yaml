@@ -55,7 +55,7 @@ jobs:
             num-runners: ${{ env.NUM_RUNNERS }}
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
             # Skip pull_request runs on renovate PRs to speed up CI time, delegating to the full run in merge queue
-            skip: ${{ inputs.skip || (startsWith(github.ref_name, 'renovate/') && github.event_name == 'pull_request') }}
+            skip: ${{ inputs.skip || (github.event_name == 'pull_request' && startsWith(github.head_ref, 'renovate/')) }}
         steps:
             - name: Checkout code
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
