@@ -21,7 +21,6 @@ import {
     waitForVerificationRequest,
 } from "./utils";
 import { type Bot } from "../../pages/bot";
-import { Toasts } from "../../pages/toasts.ts";
 import type { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Device verification", { tag: "@no-webkit" }, () => {
@@ -82,7 +81,11 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     );
 
     // Regression test for https://github.com/element-hq/element-web/issues/29110
-    test("No toast after verification, even if the secrets take a while to arrive", async ({ page, credentials }) => {
+    test("No toast after verification, even if the secrets take a while to arrive", async ({
+        page,
+        credentials,
+        toasts,
+    }) => {
         // Before we log in, the bot creates an encrypted room, so that we can test the toast behaviour that only happens
         // when we are in an encrypted room.
         await aliceBotClient.createRoom({
@@ -121,7 +124,6 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await infoDialog.getByRole("button", { name: "Got it" }).click();
 
         // There should be no toast (other than the notifications one)
-        const toasts = new Toasts(page);
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
 
