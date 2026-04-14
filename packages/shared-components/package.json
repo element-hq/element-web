@@ -51,7 +51,7 @@
         "lint:types": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json"
     },
     "dependencies": {
-        "@element-hq/element-web-module-api": "catalog:",
+        "@element-hq/element-web-module-api": "workspace:*",
         "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "catalog:",
         "classnames": "^2.5.1",

@@ -15,11 +15,9 @@ catalog:
     # playwright
     "@playwright/test": 1.59.1
     "playwright-core": 1.59.1
-    # Module API
-    "@element-hq/element-web-module-api": 1.13.0
     # Compound
-    "@vector-im/compound-design-tokens": 8.0.0
-    "@vector-im/compound-web": 9.0.1
+    "@vector-im/compound-design-tokens": 10.1.0
+    "@vector-im/compound-web": 9.1.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts

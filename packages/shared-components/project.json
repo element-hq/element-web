@@ -7,7 +7,8 @@
             "command": "vite build",
             "inputs": ["src"],
             "outputs": ["{projectRoot}/dist"],
-            "options": { "cwd": "packages/shared-components" }
+            "options": { "cwd": "packages/shared-components" },
+            "dependsOn": ["^build"]
         },
         "start": {
             "command": "vite build --watch",
@@ -19,7 +20,8 @@
             "command": "typedoc",
             "inputs": ["src"],
             "outputs": ["{projectRoot}/typedoc"],
-            "options": { "cwd": "packages/shared-components" }
+            "options": { "cwd": "packages/shared-components" },
+            "dependsOn": ["^build"]
         },
         "storybook": {
             "cache": "true",
