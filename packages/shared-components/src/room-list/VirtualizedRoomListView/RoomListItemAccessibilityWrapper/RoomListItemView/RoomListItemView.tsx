@@ -9,14 +9,14 @@ import React, { type JSX, memo, useEffect, useRef, type ReactNode } from "react"
 import classNames from "classnames";
 import { Text } from "@vector-im/compound-web";
 
-import { Flex } from "../../core/utils/Flex";
+import { Flex } from "../../../../core/utils/Flex";
 import { NotificationDecoration, type NotificationDecorationData } from "./NotificationDecoration";
 import { RoomListItemHoverMenu } from "./RoomListItemHoverMenu";
 import { RoomListItemContextMenu } from "./RoomListItemContextMenu";
 import { type RoomNotifState } from "./RoomNotifs";
 import styles from "./RoomListItemView.module.css";
-import { useViewModel, type ViewModel } from "../../core/viewmodel";
-import { _t } from "../../core/i18n/i18n";
+import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
+import { _t } from "../../../../core/i18n/i18n";
 
 /**
  * Opaque type representing a Room object from the parent application

@@ -11,7 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 
 import { RoomListItemMoreOptionsMenu } from "./RoomListItemMoreOptionsMenu";
-import { useMockedViewModel } from "../../core/viewmodel";
+import { useMockedViewModel } from "../../../../core/viewmodel";
 import type { RoomListItemViewSnapshot } from "./RoomListItemView";
 import { defaultSnapshot } from "./default-snapshot";
 
