@@ -127,7 +127,7 @@ export class TimelinePanelViewModel
         this.paginateDirection(Direction.Forward, 1, false, false);
     };
 
-    private async load(eventId?: string, highlight?: boolean): Promise<void> {
+    private async load(eventId?: string): Promise<void> {
         this.mergeSnapshot({
             backwardPagination: "loading",
             forwardPagination: "loading",
@@ -149,7 +149,7 @@ export class TimelinePanelViewModel
                 canPaginateForward,
                 backwardPagination: "idle",
                 forwardPagination: "idle",
-                scrollTarget: eventId ? { targetKey: eventId, position: "bottom", highlight } : null,
+                scrollTarget: eventId ? { targetKey: eventId, position: "bottom" } : null,
             });
         } catch {
             this.mergeSnapshot({

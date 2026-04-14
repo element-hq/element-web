@@ -12,21 +12,23 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BaseViewModel } from "../../../core/viewmodel";
 import {
+    TimelineView,
+} from "./TimelineView";
+import {
     getContiguousWindowShift,
     getForwardPaginationAnchorAdjustment,
     getForwardPaginationAnchorIndex,
     getIsAtLiveEdgeFromBottomState,
-    getLastVisibleTimelineItemElement,
     getPostInitialFillBottomSnapIndex,
     getScrollLocationOnChange,
-    shouldMarkInitialBottomSnapDoneOnScrollTarget,
     shouldDisableFollowOutputOnScroll,
+    shouldIgnoreAtBottomStateChange,
+    shouldIgnoreStartReached,
+    shouldMarkInitialBottomSnapDoneOnScrollTarget,
     shouldPaginateBackwardAtTopScroll,
     shouldReplayPendingForwardPaginationAfterInitialFill,
-    shouldIgnoreStartReached,
-    shouldIgnoreAtBottomStateChange,
-    TimelineView,
-} from "./TimelineView";
+} from "./TimelineViewBehavior";
+import { getLastVisibleTimelineItemElement } from "./TimelineViewDom";
 import type { TimelineItem, TimelineViewActions, TimelineViewSnapshot } from "./types";
 
 class TestTimelineViewModel
@@ -546,7 +548,12 @@ describe("TimelineView", () => {
             }),
         );
 
-        renderTimeline(vm);
+        const view = renderTimeline(vm);
+        view.rerender(
+            <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
+                <TimelineView vm={vm} renderItem={(item) => <div>{item.key}</div>} />
+            </VirtuosoMockContext.Provider>,
+        );
 
         await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
     });
@@ -636,7 +643,12 @@ describe("TimelineView", () => {
             }),
         );
 
-        renderTimeline(vm);
+        const view = renderTimeline(vm);
+        view.rerender(
+            <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
+                <TimelineView vm={vm} renderItem={(item) => <div>{item.key}</div>} />
+            </VirtuosoMockContext.Provider>,
+        );
 
         await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
         expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
@@ -652,7 +664,12 @@ describe("TimelineView", () => {
             }),
         );
 
-        renderTimeline(vm);
+        const view = renderTimeline(vm);
+        view.rerender(
+            <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
+                <TimelineView vm={vm} renderItem={(item) => <div>{item.key}</div>} />
+            </VirtuosoMockContext.Provider>,
+        );
 
         await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
         vm.updateSnapshot({ scrollTarget: null });
@@ -675,6 +692,11 @@ describe("TimelineView", () => {
         );
 
         const view = renderTimeline(firstVm);
+        view.rerender(
+            <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
+                <TimelineView vm={firstVm} renderItem={(item) => <div>{item.key}</div>} />
+            </VirtuosoMockContext.Provider>,
+        );
         await waitFor(() => expect(firstVm.onScrollTargetReached).toHaveBeenCalledOnce());
 
         view.rerender(
