@@ -5,7 +5,7 @@
     "packageRules": [
         {
             "groupName": "testcontainers docker digests",
-            "groupSlug": "{{manager}}-docker-digests",
+            "groupSlug": "testcontainers-docker",
             "matchDepTypes": ["testcontainers-docker"],
             "matchPackageNames": ["*"]
         }
