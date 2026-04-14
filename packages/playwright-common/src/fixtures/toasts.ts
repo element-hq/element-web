@@ -7,6 +7,9 @@
 
 import { expect, type Locator, type Page } from "@playwright/test";
 
+// We want to avoid using `mergeTests` in index.ts because it drops useful type
+// information about the fixtures. Instead, we add `services` into our fixture
+// suite by using its `test` as a base, so that there is a linear hierarchy.
 import { test as base } from "./services.js";
 
 // This fixture provides convenient handling of Element Web's toasts.
