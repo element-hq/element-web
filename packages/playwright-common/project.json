@@ -8,7 +8,13 @@
             "command": "tsc",
             "inputs": ["src"],
             "outputs": ["{projectRoot}/lib"],
-            "options": { "cwd": "packages/playwright-common" }
+            "options": { "cwd": "packages/playwright-common" },
+            "dependsOn": ["^build"]
+        },
+        "lint:types": {
+            "command": "pnpm exec tsc --noEmit",
+            "options": { "cwd": "packages/playwright-common" },
+            "dependsOn": ["^build"]
         },
         "docker:prebuild": {
             "cache": true,

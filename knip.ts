@@ -14,6 +14,7 @@ export default {
             ],
             ignoreBinaries: ["awk"],
         },
+        "packages/module-api": {},
         "apps/web": {
             entry: [
                 "src/serviceworker/index.ts",
