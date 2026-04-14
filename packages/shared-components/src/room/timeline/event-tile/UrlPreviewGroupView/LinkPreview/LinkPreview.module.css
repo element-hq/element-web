@@ -1,0 +1,124 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+button.preview {
+    background: #fff;
+}
+
+.preview {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border: none;
+    padding: 0;
+    > img {
+        width: 100%;
+        object-fit: cover;
+    }
+    .playButton[data-kind="primary"] {
+        padding: 0;
+        width: 50px;
+        height: 50px;
+        margin: auto;
+        background: var(--cpd-color-text-on-solid-primary);
+        > svg {
+            margin: auto;
+            border-radius: 50px;
+            color: var(--cpd-color-icon-primary);
+        }
+    }
+}
+
+.container {
+    max-width: 478px;
+    display: flex;
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: 12px; /* Get radius from cpd */
+    flex-direction: column;
+    color: var(--cpd-color-gray-900);
+    overflow: clip;
+
+    &.inline {
+        flex-direction: row;
+        gap: var(--cpd-space-4x);
+        padding: var(--cpd-space-3x) var(--cpd-space-4x);
+
+        .title {
+            margin: 0;
+        }
+
+        .siteAvatar {
+            margin: auto 0;
+        }
+
+        .siteName {
+            margin: 0;
+        }
+    }
+
+    .textContent {
+        padding: var(--cpd-space-3x) var(--cpd-space-4x);
+        &.inline {
+            padding: 0;
+        }
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-2x);
+    }
+
+    .caption {
+        display: inline-flex;
+        flex-direction: column;
+        min-width: 0; /* Prevent blowout */
+    }
+    .caption {
+        flex: 1;
+        overflow: hidden; /* cause it to wrap rather than clip */
+    }
+
+    .title,
+    .description {
+        display: inline-block;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        white-space: normal;
+    }
+
+    .title {
+        display: inline-block;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        margin: var(--cpd-space-1x) 0;
+        font-weight: var(--cpd-font-weight-semibold);
+        color: var(--cpd-color-text-primary);
+        text-decoration-line: none;
+    }
+
+    .description {
+        font-size: var(--cpd-font-size-body-lg);
+        margin: 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .siteName {
+        margin-top: var(--cpd-space-2x);
+        vertical-align: middle;
+        display: flex;
+        gap: var(--cpd-space-1-5x);
+        > * {
+            /* Center everything */
+            margin: auto 0;
+        }
+    }
+}

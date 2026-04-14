@@ -10,8 +10,8 @@ import { Button, IconButton } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import classNames from "classnames";
 
-import { useViewModel, type ViewModel } from "../../core/viewmodel";
-import { useI18n } from "../../core/i18n/i18nContext";
+import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
+import { useI18n } from "../../../../core/i18n/i18nContext";
 import type { UrlPreview } from "./types";
 import { LinkPreview } from "./LinkPreview";
 import styles from "./UrlPreviewGroupView.module.css";
@@ -65,7 +65,12 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
                 ))}
                 {toggleButton}
             </div>
-            <IconButton size="20px" onClick={vm.onHideClick} aria-label={_t("timeline|url_preview|close")}>
+            <IconButton
+                kind="secondary"
+                size="28px"
+                onClick={vm.onHideClick}
+                aria-label={_t("timeline|url_preview|close")}
+            >
                 <CloseIcon />
             </IconButton>
         </div>

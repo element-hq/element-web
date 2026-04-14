@@ -1,0 +1,182 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LinkPreview > renders a playable preview that can be opened with a click 1`] = `
+<div>
+  <div
+    class="LinkPreview-module_container"
+  >
+    <div
+      class="LinkPreview-module_preview"
+      style="background-image: url("/static/wideImage.png");"
+    >
+      <a
+        aria-label="Open link"
+        class="_button_13vu4_8 LinkPreview-module_playButton"
+        data-kind="primary"
+        data-size="lg"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        role="link"
+        tabindex="0"
+        target="_blank"
+      >
+        <svg
+          fill="currentColor"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m8.98 4.677 9.921 5.58c1.36.764 1.36 2.722 0 3.486l-9.92 5.58C7.647 20.073 6 19.11 6 17.58V6.42c0-1.53 1.647-2.493 2.98-1.743"
+          />
+        </svg>
+      </a>
+    </div>
+    <div
+      class="LinkPreview-module_textContent"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 LinkPreview-module_title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A linked video
+      </a>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
+      >
+        This is a link to a video. You cannot play the video inline yet, but you can click the play button to open the link
+      </p>
+      <div
+        class="LinkPreview-module_siteName"
+      >
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        >
+          blog.example.org
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkPreview > renders a preview 1`] = `
+<div>
+  <div
+    class="LinkPreview-module_container"
+  >
+    <button
+      aria-label="View image"
+      class="LinkPreview-module_preview"
+    >
+      <img
+        alt="Element logo"
+        src="/static/element.png"
+        title="Element logo"
+      />
+    </button>
+    <div
+      class="LinkPreview-module_textContent"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 LinkPreview-module_title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A simple title
+      </a>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
+      >
+        A simple description
+      </p>
+      <div
+        class="LinkPreview-module_siteName"
+      >
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        >
+          Site name
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkPreview > renders a preview with just a title 1`] = `
+<div>
+  <div
+    class="LinkPreview-module_container LinkPreview-module_inline"
+  >
+    <div
+      class="LinkPreview-module_textContent LinkPreview-module_inline"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 LinkPreview-module_title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A simple title
+      </a>
+      <div
+        class="LinkPreview-module_siteName"
+      >
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        >
+          matrix.org
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`LinkPreview > renders a preview with just a title and description 1`] = `
+<div>
+  <div
+    class="LinkPreview-module_container"
+  >
+    <div
+      class="LinkPreview-module_textContent"
+    >
+      <a
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 LinkPreview-module_title"
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        A simple title
+      </a>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
+      >
+        A simple description with a link to 
+        <a
+          data-linkified="true"
+          href="https://matrix.org"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          https://matrix.org
+        </a>
+      </p>
+      <div
+        class="LinkPreview-module_siteName"
+      >
+        <span
+          class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+        >
+          matrix.org
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

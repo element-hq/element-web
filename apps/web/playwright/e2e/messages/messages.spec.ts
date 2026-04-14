@@ -252,6 +252,7 @@ test.describe("Message url previews", () => {
                         "og:title": "A simple site",
                         "og:description": "And with a brief description",
                         "og:image": mxc,
+                        "og:image:alt": "The riot logo",
                     },
                 });
             });
