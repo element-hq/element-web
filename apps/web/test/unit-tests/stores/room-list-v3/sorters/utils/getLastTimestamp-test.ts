@@ -63,7 +63,32 @@ describe("getLastTimestamp", () => {
         expect(getLastTimestamp(room, "@john:matrix.org")).toBe(500);
     });
 
-    it("should return bump stamp when using sliding sync", () => {
+    it("should return the newer timestamp when live timeline is ahead of bump stamp", () => {
+        const cli = stubClient();
+        const room = new Room("room123", cli, "@john:matrix.org");
+
+        const event1 = mkMessage({
+            room: room.roomId,
+            msg: "Hello world!",
+            user: "@alice:matrix.org",
+            ts: 5,
+            event: true,
+        });
+        const event2 = mkMessage({
+            room: room.roomId,
+            msg: "Howdy!",
+            user: "@bob:matrix.org",
+            ts: 10,
+            event: true,
+        });
+
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        jest.spyOn(room, "getBumpStamp").mockReturnValue(8);
+        room.addLiveEvents([event1, event2], { addToState: true });
+        expect(getLastTimestamp(room, "@john:matrix.org")).toBe(10);
+    });
+
+    it("should still use bump stamp when it is newer than the live timeline", () => {
         const cli = stubClient();
         const room = new Room("room123", cli, "@john:matrix.org");
 

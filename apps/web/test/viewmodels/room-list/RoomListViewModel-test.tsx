@@ -239,7 +239,7 @@ describe("RoomListViewModel", () => {
     });
 
     describe("Sticky room behavior", () => {
-        it("should keep selected room at same index when room list updates", async () => {
+        it("should move the selected room with the updated room list order", async () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
             // Select room at index 1
@@ -260,9 +260,9 @@ describe("RoomListViewModel", () => {
 
             RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
-            // Active room should still be at index 1 (sticky behavior)
-            expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(1);
-            expect(viewModel.getSnapshot().sections[0].roomIds[1]).toBe("!room2:server");
+            // Active room should now be at index 0 to match the updated sort order
+            expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
+            expect(viewModel.getSnapshot().sections[0].roomIds[0]).toBe("!room2:server");
         });
 
         it("should not apply sticky behavior when user changes rooms", async () => {
@@ -912,7 +912,7 @@ describe("RoomListViewModel", () => {
                 expect(favSection!.roomIds).toEqual(["!fav1:server"]);
             });
 
-            it("should apply sticky room within the correct section", async () => {
+            it("should keep section order in sync with the updated room list order", async () => {
                 stubClient();
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
@@ -938,10 +938,11 @@ describe("RoomListViewModel", () => {
 
                 RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
-                // Sticky room should keep favRoom1 at index 0 within the favourites section
+                // The favourites section should reflect the updated order
                 const snapshot = viewModel.getSnapshot();
-                expect(snapshot.sections[0].roomIds[0]).toBe("!fav1:server");
-                expect(snapshot.roomListState.activeRoomIndex).toBe(0);
+                expect(snapshot.sections[0].roomIds[0]).toBe("!fav2:server");
+                expect(snapshot.sections[0].roomIds[1]).toBe("!fav1:server");
+                expect(snapshot.roomListState.activeRoomIndex).toBe(1);
             });
         });
     });
