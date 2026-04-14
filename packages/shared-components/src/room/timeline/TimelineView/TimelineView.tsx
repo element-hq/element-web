@@ -225,6 +225,29 @@ function getScrollAlign(position: NavigationAnchor["position"]): ScrollIntoViewL
     return "center";
 }
 
+export function shouldMarkInitialBottomSnapDoneOnScrollTarget<TItem extends TimelineItem>({
+    items,
+    scrollTarget,
+    isAtLiveEdge,
+    initialBottomSnapDone,
+}: {
+    items: TItem[];
+    scrollTarget: NavigationAnchor | null;
+    isAtLiveEdge: boolean;
+    initialBottomSnapDone: boolean;
+}): boolean {
+    if (initialBottomSnapDone || !isAtLiveEdge || !scrollTarget) {
+        return false;
+    }
+
+    const lastItem = items.at(-1);
+    if (!lastItem || lastItem.key !== scrollTarget.targetKey) {
+        return false;
+    }
+
+    return scrollTarget.position === undefined || scrollTarget.position === "bottom";
+}
+
 export function getPostInitialFillBottomSnapIndex({
     initialFillState,
     isAtLiveEdge,
@@ -261,6 +284,16 @@ export function shouldIgnoreAtBottomStateChange({
     hasScrollTarget: boolean;
 }): boolean {
     return initialFillState === "filling" && !hasScrollTarget;
+}
+
+export function getIsAtLiveEdgeFromBottomState({
+    atBottom,
+    canPaginateForward,
+}: {
+    atBottom: boolean;
+    canPaginateForward: boolean;
+}): boolean {
+    return atBottom && !canPaginateForward;
 }
 
 export function shouldIgnoreStartReached({
@@ -349,6 +382,25 @@ export function getForwardPaginationAnchorAdjustment({
     currentBottomOffset: number;
 }): number {
     return desiredBottomOffset - currentBottomOffset;
+}
+
+export function shouldDisableFollowOutputOnScroll({
+    previousScrollTop,
+    currentScrollTop,
+    isAtLiveEdge,
+    followOutputEnabled,
+}: {
+    previousScrollTop: number | null;
+    currentScrollTop: number;
+    isAtLiveEdge: boolean;
+    followOutputEnabled: boolean;
+}): boolean {
+    return (
+        followOutputEnabled &&
+        isAtLiveEdge &&
+        previousScrollTop !== null &&
+        currentScrollTop < previousScrollTop
+    );
 }
 
 export function getLastVisibleTimelineItemElement(scrollerElement: HTMLElement): HTMLElement | null {
@@ -453,6 +505,7 @@ export function TimelineView<TItem extends TimelineItem>({
     const [scrollerElement, setScrollerElement] = useState<HTMLElement | null>(null);
     const initialFillRoundsRef = useRef(0);
     const sawInitialRangeRef = useRef(false);
+    const [followOutputEnabled, setFollowOutputEnabled] = useState(snapshot.isAtLiveEdge);
     const forwardPaginationContextRef = useRef<{
         anchorKey: string | null;
         lastVisibleRange: VisibleRange | null;
@@ -461,6 +514,7 @@ export function TimelineView<TItem extends TimelineItem>({
     } | null>(null);
     // Prevent repeated top-edge pagination requests until the outstanding request resolves.
     const topScrollPaginationRequestedRef = useRef(false);
+    const lastScrollTopRef = useRef<number | null>(null);
     // Keep the latest gating state in a ref so the native scroll listener stays stable while still
     // reading fresh pagination flags on every event.
     const latestTopScrollStateRef = useRef({
@@ -524,6 +578,7 @@ export function TimelineView<TItem extends TimelineItem>({
         lastVisibleRangeRef.current = null;
         initialFillRoundsRef.current = 0;
         sawInitialRangeRef.current = false;
+        setFollowOutputEnabled(snapshot.isAtLiveEdge);
         forwardPaginationContextRef.current = null;
         previousRenderStateRef.current = {
             items: [],
@@ -535,7 +590,11 @@ export function TimelineView<TItem extends TimelineItem>({
             items: snapshot.items,
             firstItemIndex: INITIAL_FIRST_ITEM_INDEX,
         };
-    }, [vm, snapshot.items]);
+    }, [vm, snapshot.isAtLiveEdge, snapshot.items]);
+
+    useEffect(() => {
+        setFollowOutputEnabled(snapshot.isAtLiveEdge);
+    }, [snapshot.isAtLiveEdge]);
 
     useEffect(() => {
         if (initialFillState !== "done") {
@@ -547,7 +606,7 @@ export function TimelineView<TItem extends TimelineItem>({
             initialFillCompletedNotifiedRef.current = true;
             vm.onInitialFillCompleted();
         }
-    }, [initialFillState, vm]);
+    }, [initialFillState, snapshot.items.length, snapshot.isAtLiveEdge, vm]);
 
     useEffect(() => {
         if (initialFillState !== "filling") {
@@ -652,6 +711,15 @@ export function TimelineView<TItem extends TimelineItem>({
 
     const handleAtBottomStateChange = useCallback(
         (atBottom: boolean) => {
+            if (!atBottom) {
+                setFollowOutputEnabled(false);
+            }
+
+            const nextIsAtLiveEdge = getIsAtLiveEdgeFromBottomState({
+                atBottom,
+                canPaginateForward: snapshot.canPaginateForward,
+            });
+
             if (
                 shouldIgnoreAtBottomStateChange({
                     initialFillState,
@@ -660,9 +728,9 @@ export function TimelineView<TItem extends TimelineItem>({
             ) {
                 return;
             }
-            vm.onIsAtLiveEdgeChanged(atBottom);
+            vm.onIsAtLiveEdgeChanged(nextIsAtLiveEdge);
         },
-        [initialFillState, snapshot.scrollTarget, vm],
+        [initialFillState, snapshot.canPaginateForward, snapshot.scrollTarget, vm],
     );
 
     const handleStartReached = useCallback(() => {
@@ -752,6 +820,17 @@ export function TimelineView<TItem extends TimelineItem>({
                 return scrollLocation;
             }
 
+            const markInitialBottomSnapDone = shouldMarkInitialBottomSnapDoneOnScrollTarget({
+                items: snapshot.items,
+                scrollTarget: snapshot.scrollTarget,
+                isAtLiveEdge: snapshot.isAtLiveEdge,
+                initialBottomSnapDone: initialBottomSnapDoneRef.current,
+            });
+
+            if (markInitialBottomSnapDone) {
+                initialBottomSnapDoneRef.current = true;
+            }
+
             lastAnchoredKeyRef.current = snapshot.scrollTarget.targetKey;
             vm.onScrollTargetReached();
 
@@ -765,27 +844,41 @@ export function TimelineView<TItem extends TimelineItem>({
             return;
         }
 
+        lastScrollTopRef.current = scrollerElement.scrollTop;
+
         const onScroll = (): void => {
             // This listener handles the "user manually scrolled to the top" pagination path.
             // It is intentionally separate from startReached because top-edge detection during
             // prepend-heavy timelines is easier to reason about from raw scrollTop.
             const currentScrollTop = scrollerElement.scrollTop;
+            const previousScrollTop = lastScrollTopRef.current;
+            lastScrollTopRef.current = currentScrollTop;
+            const latest = latestTopScrollStateRef.current;
+            const disableFollowOutput = shouldDisableFollowOutputOnScroll({
+                previousScrollTop,
+                currentScrollTop,
+                isAtLiveEdge: latest.isAtLiveEdge,
+                followOutputEnabled,
+            });
+
+            if (disableFollowOutput) {
+                setFollowOutputEnabled(false);
+            }
 
             if (topScrollPaginationRequestedRef.current) {
                 return;
             }
 
-            const latest = latestTopScrollStateRef.current;
-            if (
-                !shouldPaginateBackwardAtTopScroll({
-                    initialFillState: latest.initialFillState,
-                    isAtLiveEdge: latest.isAtLiveEdge,
-                    hasScrollTarget: latest.hasScrollTarget,
-                    backwardPagination: latest.backwardPagination,
-                    canPaginateBackward: latest.canPaginateBackward,
-                    scrollTop: currentScrollTop,
-                })
-            ) {
+            const shouldPaginate = shouldPaginateBackwardAtTopScroll({
+                initialFillState: latest.initialFillState,
+                isAtLiveEdge: latest.isAtLiveEdge,
+                hasScrollTarget: latest.hasScrollTarget,
+                backwardPagination: latest.backwardPagination,
+                canPaginateBackward: latest.canPaginateBackward,
+                scrollTop: currentScrollTop,
+            });
+
+            if (!shouldPaginate) {
                 return;
             }
 
@@ -797,7 +890,7 @@ export function TimelineView<TItem extends TimelineItem>({
         return () => {
             scrollerElement.removeEventListener("scroll", onScroll);
         };
-    }, [scrollerElement]);
+    }, [followOutputEnabled, scrollerElement]);
 
     const {
         onFocusForGetItemComponent,
@@ -817,7 +910,7 @@ export function TimelineView<TItem extends TimelineItem>({
         endReached: handleEndReached,
         scrollIntoViewOnChange,
         scrollSettleFocusBehavior: "last-visible",
-        followOutput: snapshot.isAtLiveEdge ? "smooth" : false,
+        followOutput: snapshot.isAtLiveEdge && followOutputEnabled ? "smooth" : false,
     });
 
     useLayoutEffect(() => {
@@ -931,6 +1024,7 @@ export function TimelineView<TItem extends TimelineItem>({
     }, [
         initialFillState,
         firstItemIndex,
+        scrollerElement,
         snapshot.isAtLiveEdge,
         snapshot.scrollTarget,
         snapshot.items.length,

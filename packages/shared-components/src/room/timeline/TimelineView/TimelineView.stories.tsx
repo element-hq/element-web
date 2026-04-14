@@ -267,7 +267,7 @@ function TimelineViewStoryWrapperImpl({
         <div
             style={{
                 height: "calc(100vh - 32px)",
-                width: "calc(100vw - 32px)",
+                width: "100%",
                 boxSizing: "border-box",
                 overflow: "hidden",
             }}

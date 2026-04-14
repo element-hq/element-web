@@ -15,9 +15,12 @@ import {
     getContiguousWindowShift,
     getForwardPaginationAnchorAdjustment,
     getForwardPaginationAnchorIndex,
+    getIsAtLiveEdgeFromBottomState,
     getLastVisibleTimelineItemElement,
     getPostInitialFillBottomSnapIndex,
     getScrollLocationOnChange,
+    shouldMarkInitialBottomSnapDoneOnScrollTarget,
+    shouldDisableFollowOutputOnScroll,
     shouldPaginateBackwardAtTopScroll,
     shouldIgnoreStartReached,
     shouldIgnoreAtBottomStateChange,
@@ -127,6 +130,28 @@ describe("TimelineView", () => {
         ).toBe(false);
     });
 
+    it("treats an initial live-edge bottom scroll target as satisfying the initial bottom snap", () => {
+        expect(
+            shouldMarkInitialBottomSnapDoneOnScrollTarget({
+                items: makeSnapshot().items,
+                scrollTarget: { targetKey: "gamma", position: "bottom", highlight: false },
+                isAtLiveEdge: true,
+                initialBottomSnapDone: false,
+            }),
+        ).toBe(true);
+    });
+
+    it("does not treat non-terminal scroll targets as satisfying the initial bottom snap", () => {
+        expect(
+            shouldMarkInitialBottomSnapDoneOnScrollTarget({
+                items: makeSnapshot().items,
+                scrollTarget: { targetKey: "beta", position: "bottom", highlight: false },
+                isAtLiveEdge: true,
+                initialBottomSnapDone: false,
+            }),
+        ).toBe(false);
+    });
+
     it("does not request a scroll when the target item is missing", () => {
         expect(
             getScrollLocationOnChange({
@@ -175,6 +200,24 @@ describe("TimelineView", () => {
         ).toBe(true);
     });
 
+    it("does not treat the bottom of a paginatable forward window as the live edge", () => {
+        expect(
+            getIsAtLiveEdgeFromBottomState({
+                atBottom: true,
+                canPaginateForward: true,
+            }),
+        ).toBe(false);
+    });
+
+    it("treats the bottom of a non-paginatable forward window as the live edge", () => {
+        expect(
+            getIsAtLiveEdgeFromBottomState({
+                atBottom: true,
+                canPaginateForward: false,
+            }),
+        ).toBe(true);
+    });
+
     it("ignores startReached when already pinned to the live bottom", () => {
         expect(
             shouldIgnoreStartReached({
@@ -196,6 +239,28 @@ describe("TimelineView", () => {
                 scrollTop: 0,
             }),
         ).toBe(true);
+    });
+
+    it("disables followOutput immediately when the user scrolls upward from the live edge", () => {
+        expect(
+            shouldDisableFollowOutputOnScroll({
+                previousScrollTop: 1137,
+                currentScrollTop: 1101,
+                isAtLiveEdge: true,
+                followOutputEnabled: true,
+            }),
+        ).toBe(true);
+    });
+
+    it("keeps followOutput enabled for downward scrolls while at the live edge", () => {
+        expect(
+            shouldDisableFollowOutputOnScroll({
+                previousScrollTop: 664,
+                currentScrollTop: 1137,
+                isAtLiveEdge: true,
+                followOutputEnabled: true,
+            }),
+        ).toBe(false);
     });
 
     it("detects a backward sliding-window shift when older items are prepended and newer tail items are trimmed", () => {
