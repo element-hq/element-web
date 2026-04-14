@@ -122,7 +122,7 @@ describe("TimelineView", () => {
         expect(
             getScrollLocationOnChange({
                 items: makeSnapshot().items,
-                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center" },
                 isAtLiveEdge: false,
                 totalCount: 3,
                 lastAnchoredKey: "beta",
@@ -135,7 +135,7 @@ describe("TimelineView", () => {
         expect(
             shouldMarkInitialBottomSnapDoneOnScrollTarget({
                 items: makeSnapshot().items,
-                scrollTarget: { targetKey: "gamma", position: "bottom", highlight: false },
+                scrollTarget: { targetKey: "gamma", position: "bottom" },
                 isAtLiveEdge: true,
                 initialBottomSnapDone: false,
             }),
@@ -146,7 +146,7 @@ describe("TimelineView", () => {
         expect(
             shouldMarkInitialBottomSnapDoneOnScrollTarget({
                 items: makeSnapshot().items,
-                scrollTarget: { targetKey: "beta", position: "bottom", highlight: false },
+                scrollTarget: { targetKey: "beta", position: "bottom" },
                 isAtLiveEdge: true,
                 initialBottomSnapDone: false,
             }),
@@ -157,7 +157,7 @@ describe("TimelineView", () => {
         expect(
             getScrollLocationOnChange({
                 items: makeSnapshot().items,
-                scrollTarget: { targetKey: "missing", position: "bottom", highlight: false },
+                scrollTarget: { targetKey: "missing", position: "bottom" },
                 isAtLiveEdge: false,
                 totalCount: 3,
                 lastAnchoredKey: null,
@@ -542,13 +542,49 @@ describe("TimelineView", () => {
     it("acknowledges a scroll target when the target item is present", async () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
-                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center" },
             }),
         );
 
         renderTimeline(vm);
 
         await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
+    });
+
+    it("does not acknowledge a scroll target until the scroller has a measurable height", async () => {
+        const vm = new TestTimelineViewModel(
+            makeSnapshot({
+                scrollTarget: { targetKey: "beta", position: "center" },
+            }),
+        );
+
+        let forceZeroScrollerHeight = true;
+        const clientHeightSpy = vi
+            .spyOn(HTMLElement.prototype, "clientHeight", "get")
+            .mockImplementation(() => (forceZeroScrollerHeight ? 0 : 200));
+
+        try {
+            const view = render(<TimelineView vm={vm} renderItem={(item) => <div>{item.key}</div>} />, {
+                wrapper: ({ children }) => (
+                    <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
+                        {children}
+                    </VirtuosoMockContext.Provider>
+                ),
+            });
+
+            expect(vm.onScrollTargetReached).not.toHaveBeenCalled();
+
+            forceZeroScrollerHeight = false;
+            view.rerender(
+                <VirtuosoMockContext.Provider value={{ viewportHeight: 200, itemHeight: 48 }}>
+                    <TimelineView vm={vm} renderItem={(item) => <div>{item.key}</div>} />
+                </VirtuosoMockContext.Provider>,
+            );
+
+            await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
+        } finally {
+            clientHeightSpy.mockRestore();
+        }
     });
 
     it("marks initial fill complete without probing backward when no backfill is available", async () => {
@@ -596,7 +632,7 @@ describe("TimelineView", () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
                 canPaginateBackward: true,
-                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center" },
             }),
         );
 
@@ -612,7 +648,7 @@ describe("TimelineView", () => {
                 canPaginateBackward: true,
                 canPaginateForward: true,
                 isAtLiveEdge: false,
-                scrollTarget: { targetKey: "beta", position: "bottom", highlight: true },
+                scrollTarget: { targetKey: "beta", position: "bottom" },
             }),
         );
 
@@ -628,13 +664,13 @@ describe("TimelineView", () => {
     it("resets anchor tracking when the view model instance changes", async () => {
         const firstVm = new TestTimelineViewModel(
             makeSnapshot({
-                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center" },
             }),
         );
 
         const secondVm = new TestTimelineViewModel(
             makeSnapshot({
-                scrollTarget: { targetKey: "beta", position: "center", highlight: true },
+                scrollTarget: { targetKey: "beta", position: "center" },
             }),
         );
 

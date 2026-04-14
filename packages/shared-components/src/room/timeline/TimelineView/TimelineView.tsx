@@ -810,12 +810,7 @@ export function TimelineView<TItem extends TimelineItem>({
         }
 
         if (scrollerElement.clientHeight === 0) {
-            ignoreNextEndReachedRef.current = true;
-            initialAnchorResolvedRef.current = initialFillState === "filling";
-            if (initialAnchorResolvedRef.current) {
-                pendingForwardPaginationAfterInitialFillRef.current = false;
-            }
-            vm.onScrollTargetReached();
+            // Defer anchor completion until the scroller has a measurable viewport.
             return;
         }
 

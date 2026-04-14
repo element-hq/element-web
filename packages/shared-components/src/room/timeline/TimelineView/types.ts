@@ -24,8 +24,6 @@ export interface NavigationAnchor {
     targetKey: string;
     /** Where in the viewport to place the target. */
     position?: "top" | "center" | "bottom";
-    /** Whether to visually highlight the target item after scrolling. */
-    highlight?: boolean;
 }
 
 // ─── Visible range ─────────────────────────────────────────────────
