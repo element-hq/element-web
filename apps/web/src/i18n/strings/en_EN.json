@@ -1114,7 +1114,7 @@
         "verification_requested_toast_title": "Verification requested",
         "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "As of end of April 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_description": "As of end of October 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
         "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },

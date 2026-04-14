@@ -23,6 +23,7 @@ const chromeProject: Project<PlaywrightTestOptions, WorkerOptions & PlaywrightWo
     channel: "chromium",
     permissions: ["clipboard-write", "clipboard-read", "microphone"],
     launchOptions: {
+        executablePath: "/usr/bin/chromium",
         args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
     },
     connectOptions: process.env.PW_TEST_CONNECT_WS_ENDPOINT

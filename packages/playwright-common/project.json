@@ -3,6 +3,13 @@
     "projectType": "library",
     "root": "packages/playwright-common",
     "targets": {
+        "build:playwright": {
+            "cache": true,
+            "command": "tsc",
+            "inputs": ["src"],
+            "outputs": ["{projectRoot}/lib"],
+            "options": { "cwd": "packages/playwright-common" }
+        },
         "docker:prebuild": {
             "cache": true,
             "command": "echo PLAYWRIGHT_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}') > .env.docker:build",

@@ -3,10 +3,10 @@
 exports[`AvatarWithDetails > renders a banner with an action 1`] = `
 <div>
   <div
-    class="banner"
+    class="Banner-module_banner"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -27,7 +27,7 @@ exports[`AvatarWithDetails > renders a banner with an action 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <p>
         Alice's (
@@ -43,7 +43,7 @@ exports[`AvatarWithDetails > renders a banner with an action 1`] = `
       </p>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
         class="_button_13vu4_8"
@@ -71,10 +71,10 @@ exports[`AvatarWithDetails > renders a banner with an action 1`] = `
 exports[`AvatarWithDetails > renders a banner with an avatar iamge 1`] = `
 <div>
   <div
-    class="banner"
+    class="Banner-module_banner"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <img
         alt="Example"
@@ -82,14 +82,14 @@ exports[`AvatarWithDetails > renders a banner with an avatar iamge 1`] = `
       />
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <p>
         Hello! This is a status banner.
       </p>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
         class="_button_13vu4_8"
@@ -108,11 +108,11 @@ exports[`AvatarWithDetails > renders a banner with an avatar iamge 1`] = `
 exports[`AvatarWithDetails > renders a critical banner 1`] = `
 <div>
   <div
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -128,14 +128,14 @@ exports[`AvatarWithDetails > renders a critical banner 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <p>
         Hello! This is a status banner.
       </p>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
         class="_button_13vu4_8"
@@ -154,10 +154,10 @@ exports[`AvatarWithDetails > renders a critical banner 1`] = `
 exports[`AvatarWithDetails > renders a default banner 1`] = `
 <div>
   <div
-    class="banner"
+    class="Banner-module_banner"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -178,14 +178,14 @@ exports[`AvatarWithDetails > renders a default banner 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <p>
         Hello! This is a status banner.
       </p>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
         class="_button_13vu4_8"
@@ -204,11 +204,11 @@ exports[`AvatarWithDetails > renders a default banner 1`] = `
 exports[`AvatarWithDetails > renders a info banner 1`] = `
 <div>
   <div
-    class="banner"
+    class="Banner-module_banner"
     data-type="info"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -229,14 +229,14 @@ exports[`AvatarWithDetails > renders a info banner 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <p>
         Hello! This is a status banner.
       </p>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
         class="_button_13vu4_8"
@@ -255,11 +255,11 @@ exports[`AvatarWithDetails > renders a info banner 1`] = `
 exports[`AvatarWithDetails > renders a success banner 1`] = `
 <div>
   <div
-    class="banner"
+    class="Banner-module_banner"
     data-type="success"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -275,14 +275,14 @@ exports[`AvatarWithDetails > renders a success banner 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <p>
         Hello! This is a status banner.
       </p>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
         class="_button_13vu4_8"

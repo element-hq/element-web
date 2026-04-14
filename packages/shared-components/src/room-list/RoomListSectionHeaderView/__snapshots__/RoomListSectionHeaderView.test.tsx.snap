@@ -17,13 +17,13 @@ exports[`<RoomListSectionHeaderView /> stories > renders Default story 1`] = `
       <button
         aria-expanded="true"
         aria-label="Toggle Favourites section"
-        class="header"
+        class="RoomListSectionHeaderView-module_header"
         role="gridcell"
         tabindex="-1"
         type="button"
       >
         <div
-          class="flex container"
+          class="Flex-module_flex RoomListSectionHeaderView-module_container"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
         >
           <svg
@@ -38,7 +38,7 @@ exports[`<RoomListSectionHeaderView /> stories > renders Default story 1`] = `
             />
           </svg>
           <span
-            class="title"
+            class="RoomListSectionHeaderView-module_title"
           >
             Favourites
           </span>

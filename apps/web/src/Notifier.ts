@@ -81,6 +81,59 @@ const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
     },
 };
 
+/**
+ * Extracts plain text from a message body, replacing any spoilered content
+ * with '[Spoiler]' to prevent spoilers in desktop notifications.
+ */
+function getNotificationBodyWithoutSpoilers(ev: MatrixEvent): string {
+    const content = ev.getContent();
+    const plainBody = content.body ?? "";
+    const formattedBody = content.formatted_body;
+
+    if (typeof formattedBody !== "string" || !formattedBody.length) {
+        return plainBody;
+    }
+
+    /** Recursively walks HTML tree to hide spoilers. */
+    function replaceSpoilers(node: Node): Node {
+        if (node.nodeType !== Node.ELEMENT_NODE || !(node instanceof Element)) {
+            return node;
+        }
+
+        if (node.hasAttribute("data-mx-spoiler")) {
+            const e = document.createElement("span");
+            e.appendChild(document.createTextNode("[Spoiler]"));
+            return e;
+        }
+
+        for (const childNode of node.childNodes) {
+            node.replaceChild(replaceSpoilers(childNode), childNode);
+        }
+
+        return node;
+    }
+
+    try {
+        // Dev note: ideally we would reuse more of the existing rendering stack
+        // rather than re-parsing and updating the generated HTML here. However,
+        // that rendering stack is currently quite consolidated and cannot
+        // easily be refactored to allow the call-site to control how spoilers
+        // are rendered. The problem is that we now need two different output
+        // formats:
+        // - The existing format where spoilers are wrapped in html <span> tags
+        // - The new format where the spoilered text is replaced with [Spoiler]
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(formattedBody, "text/html");
+
+        // Use textContent rather than innerHTML/outerHTML since textContent is
+        // XSS-safe and the input is untrusted.
+        return replaceSpoilers(doc.body).textContent ?? plainBody;
+    } catch {
+        return plainBody;
+    }
+}
+
 export const enum NotifierEvent {
     NotificationHiddenChange = "notification_hidden_change",
 }
@@ -134,7 +187,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             // notificationMessageForEvent includes sender, but we already have the sender here
             const msgType = ev.getContent().msgtype;
             if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
-                msg = stripPlainReply(ev.getContent().body);
+                msg = stripPlainReply(getNotificationBodyWithoutSpoilers(ev));
             }
         } else if (ev.getType() === "m.room.member") {
             // context is all in the message here, we don't need
@@ -145,7 +198,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
             // notificationMessageForEvent includes sender, but we've just out sender in the title
             const msgType = ev.getContent().msgtype;
             if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
-                msg = stripPlainReply(ev.getContent().body);
+                msg = stripPlainReply(getNotificationBodyWithoutSpoilers(ev));
             }
         }
 
