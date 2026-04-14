@@ -187,6 +187,21 @@ function renderPlaceholder({
     }
 }
 
+/**
+ * Renders the body of an image message with ready, hidden, and error states.
+ *
+ * The media frame supports thumbnail fallbacks, optional loading placeholders,
+ * animated-content preview on hover/focus, and optional tooltip/banner labels.
+ * Supplemental content such as a file body row can be rendered after the image
+ * through `children`.
+ *
+ * @example
+ * ```tsx
+ * <ImageBodyView vm={imageBodyViewModel}>
+ *     <div>File body slot</div>
+ * </ImageBodyView>
+ * ```
+ */
 export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyViewProps>): JSX.Element {
     const {
         state,
