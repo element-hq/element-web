@@ -143,6 +143,13 @@ function attachBodyRef(body: ReactElement, bodyRef?: TextualBodyContentRef): Rea
     return cloneElement(body as ReactElement<{ ref?: TextualBodyContentRef }>, { ref: bodyRef });
 }
 
+/**
+ * Renders a textual message body for timeline events.
+ *
+ * The view supports text, notice, emote, and caption layouts, optional
+ * link or action wrappers, edited and moderation markers, and appended
+ * URL previews.
+ */
 export function TextualBodyView({
     vm,
     body,
