@@ -11,7 +11,7 @@ import {
 } from "@element-hq/element-web-playwright-common/lib/testcontainers/index.js";
 
 const DOCKER_IMAGE =
-    "ghcr.io/element-hq/matrix-authentication-service:main@sha256:f54c2214354ec3294694a525523debb5f38c8580c1a5afc8cdec0f8372374ef3";
+    "ghcr.io/element-hq/matrix-authentication-service:main@sha256:51b79f0bb1914b412bd87b5f0817820d140af84c08c22d7816ba675ee0c67150";
 
 /**
  * MatrixAuthenticationServiceContainer which freezes the docker digest to

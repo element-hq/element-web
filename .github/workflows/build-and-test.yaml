@@ -18,8 +18,6 @@ on:
     push:
         # We do not build on push to develop as the merge_group check handles that
         branches: [staging, master]
-    repository_dispatch:
-        types: [element-web-notify]
 
     # support triggering from other workflows
     workflow_call:
@@ -86,7 +84,7 @@ jobs:
               run: VERSION=$(scripts/get-version-from-git.sh) pnpm run build
 
             - name: Upload Artifact
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: webapp
                   path: apps/web/webapp
@@ -94,7 +92,7 @@ jobs:
 
             - name: Calculate runner variables
               id: runner-vars
-              uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+              uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
               with:
                   script: |
                       const numRunners = parseInt(process.env.NUM_RUNNERS, 10);
@@ -155,33 +153,17 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Get installed Playwright version
-              id: playwright
-              run: echo "version=$(pnpm --silent -- playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
-
-            - name: Cache playwright binaries
-              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
-              id: playwright-cache
+            - name: Setup playwright
+              uses: ./.github/actions/setup-playwright
               with:
-                  path: ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright.outputs.version }}
-
-            - name: Install Playwright browsers
-              if: steps.playwright-cache.outputs.cache-hit != 'true'
-              working-directory: apps/web
-              run: pnpm playwright install --with-deps --no-shell
-
-            - name: Install system dependencies for WebKit
-              # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
-              if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
-              working-directory: apps/web
-              run: pnpm playwright install-deps webkit
+                  needs-webkit: ${{ matrix.project == 'WebKit' }}
+                  write-cache: ${{ github.event_name != 'merge_group' }}
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
               working-directory: apps/web
               run: |
-                  pnpm playwright test \
+                  pnpm test:playwright \
                       --shard "$SHARD" \
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
@@ -190,7 +172,7 @@ jobs:
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
                   path: apps/web/blob-report
@@ -204,6 +186,7 @@ jobs:
         uses: element-hq/element-modules/.github/workflows/reusable-playwright-tests.yml@main # zizmor: ignore[unpinned-uses]
         with:
             webapp-artifact: webapp
+            reporter: blob
 
     prepare_ed:
         name: "Prepare Element Desktop"
@@ -214,7 +197,7 @@ jobs:
             contents: read
         with:
             config: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'element.io/nightly' || 'element.io/release' }}
-            version: ${{ (github.event.pull_request.base.ref || github.ref_name) == 'develop' && 'develop' || '' }}
+            version: ${{ case((github.event.pull_request.base.ref || github.ref_name) == 'develop' || github.event_name == 'merge_group', 'develop', '') }}
             webapp-artifact: webapp
 
     build_ed_windows:
@@ -262,6 +245,7 @@ jobs:
         needs:
             - playwright_ew
             - downstream-modules
+            - prepare_ed
             - build_ed_windows
             - build_ed_linux
             - build_ed_macos
@@ -308,7 +292,7 @@ jobs:
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
               if: always() && inputs.skip != true
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: html-report
                   path: playwright-report

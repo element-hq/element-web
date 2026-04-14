@@ -42,6 +42,12 @@ interface RedactedBodyViewProps {
     ref?: Ref<HTMLSpanElement>;
 }
 
+/**
+ * Renders the body for a redacted event.
+ *
+ * The view shows the delete icon with localized redaction text and can
+ * optionally wrap the content in a tooltip for extra context.
+ */
 export function RedactedBodyView({ vm, className, ref }: Readonly<RedactedBodyViewProps>): JSX.Element {
     const { text, tooltip } = useViewModel(vm);
 

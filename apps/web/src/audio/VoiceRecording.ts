@@ -103,10 +103,14 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
     private async makeRecorder(): Promise<void> {
         try {
+            const requestedDeviceId = MediaDeviceHandler.getAudioInput();
+            const deviceIdConstraint =
+                requestedDeviceId && requestedDeviceId !== "default" ? { deviceId: { exact: requestedDeviceId } } : {};
+
             this.recorderStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     channelCount: CHANNELS,
-                    deviceId: MediaDeviceHandler.getAudioInput(),
+                    ...deviceIdConstraint,
                     autoGainControl: { ideal: MediaDeviceHandler.getAudioAutoGainControl() },
                     echoCancellation: { ideal: MediaDeviceHandler.getAudioEchoCancellation() },
                     noiseSuppression: { ideal: MediaDeviceHandler.getAudioNoiseSuppression() },

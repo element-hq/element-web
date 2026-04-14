@@ -1,0 +1,77 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TileErrorView > renders the bubble layout variant 1`] = `
+<div>
+  <ul>
+    <li
+      class="TileErrorView-module_tileErrorView TileErrorView-module_bubble"
+      data-layout="bubble"
+    >
+      <div
+        class="TileErrorView-module_line"
+        role="status"
+      >
+        <span
+          class="TileErrorView-module_message"
+        >
+          Can't load this message
+           (m.room.message)
+        </span>
+        <button
+          class="_button_13vu4_8"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          Submit debug logs
+        </button>
+        <button
+          class="TileErrorView-module_viewSourceButton"
+          type="button"
+        >
+          View source
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`TileErrorView > renders the default tile error state 1`] = `
+<div>
+  <ul>
+    <li
+      class="TileErrorView-module_tileErrorView"
+      data-layout="group"
+    >
+      <div
+        class="TileErrorView-module_line"
+        role="status"
+      >
+        <span
+          class="TileErrorView-module_message"
+        >
+          Can't load this message
+           (m.room.message)
+        </span>
+        <button
+          class="_button_13vu4_8"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          Submit debug logs
+        </button>
+        <button
+          class="TileErrorView-module_viewSourceButton"
+          type="button"
+        >
+          View source
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
+`;

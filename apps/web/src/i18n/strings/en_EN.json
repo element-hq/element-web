@@ -828,8 +828,8 @@
         "invalid_device_key_id": "Invalid device key ID",
         "invalid_json": "Doesn't look like valid JSON.",
         "level": "Level",
-        "low_bandwidth_mode": "Low bandwidth mode",
-        "low_bandwidth_mode_description": "Requires compatible homeserver.",
+        "low_bandwidth_mode": "Disable bandwidth-heavy features",
+        "low_bandwidth_mode_description": "Disables encryption, presence, avatars, read receipts, and typing notifications",
         "main_timeline": "Main timeline",
         "manual_device_verification": "Manual device verification",
         "no_receipt_found": "No receipt found",
@@ -1114,7 +1114,7 @@
         "verification_requested_toast_title": "Verification requested",
         "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "As of end of April 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_description": "As of end of October 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
         "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },
@@ -2238,8 +2238,6 @@
             "aliases_section": "Room Addresses",
             "avatar_field_label": "Room avatar",
             "canonical_alias_field_label": "Main address",
-            "default_url_previews_off": "URL previews are disabled by default for participants in this room.",
-            "default_url_previews_on": "URL previews are enabled by default for participants in this room.",
             "description_space": "Edit settings relating to your space.",
             "error_creating_alias_description": "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.",
             "error_creating_alias_title": "Error creating address",
@@ -2270,12 +2268,7 @@
             "published_aliases_explainer_space": "Published addresses can be used by anyone on any server to join your space.",
             "published_aliases_section": "Published Addresses",
             "save": "Save Changes",
-            "topic_field_label": "Room Topic",
-            "url_preview_encryption_warning": "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.",
-            "url_preview_explainer": "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.",
-            "url_previews_section": "URL Previews",
-            "user_url_previews_default_off": "You have <a>disabled</a> URL previews by default.",
-            "user_url_previews_default_on": "You have <a>enabled</a> URL previews by default."
+            "topic_field_label": "Room Topic"
         },
         "notifications": {
             "browse_button": "Browse",
@@ -2697,9 +2690,8 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
-        "inline_url_previews_default": "Enable inline URL previews by default",
-        "inline_url_previews_room": "Enable URL previews by default for participants in this room",
-        "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
+        "inline_url_previews_default": "Enable previews",
+        "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms"
@@ -2837,6 +2829,8 @@
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
             "keyboard_heading": "Keyboard shortcuts",
             "keyboard_view_shortcuts_button": "To view all keyboard shortcuts, <a>click here</a>.",
+            "link_previews_description": "Shows information about links underneath messages",
+            "link_previews_heading": "Link previews",
             "media_heading": "Images, GIFs and videos",
             "presence_description": "Share your activity and status with others.",
             "publish_timezone": "Publish timezone on public profile",
@@ -4003,6 +3997,7 @@
             "change_name_this_room": "Change the name of this room",
             "change_topic_active_room": "Change the topic of your active room",
             "change_topic_this_room": "Change the topic of this room",
+            "download_file": "Download files from the media repository",
             "receive_membership_active_room": "See when people join, leave, or are invited to your active room",
             "receive_membership_this_room": "See when people join, leave, or are invited to this room",
             "remove_ban_invite_leave_active_room": "Remove, ban, or invite people to your active room, and make you leave",

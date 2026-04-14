@@ -101,11 +101,11 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
               <div
                 class="mx_DeviceTile_info"
               >
-                <h4
+                <h3
                   class="mx_Heading_h4"
                 >
                   My Device
-                </h4>
+                </h3>
                 <div
                   class="mx_DeviceTile_metadata"
                 >

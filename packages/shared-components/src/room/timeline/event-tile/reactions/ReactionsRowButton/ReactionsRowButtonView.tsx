@@ -64,7 +64,10 @@ interface ReactionsRowButtonViewProps {
 }
 
 /**
- * Renders the reaction button in a reactions row.
+ * Renders a single reaction button within a reactions row.
+ *
+ * The button supports text or image reactions, selected and disabled
+ * styling, and wraps its content in the reactions tooltip view.
  */
 export function ReactionsRowButtonView({ vm }: Readonly<ReactionsRowButtonViewProps>): JSX.Element {
     const snapshot = useViewModel(vm) as ReactionsRowButtonViewSnapshot & { ariaLabel?: string };
