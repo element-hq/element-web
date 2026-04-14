@@ -261,6 +261,15 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 return;
             }
 
+            const aligned = isScrollTargetAligned({
+                scrollerElement: effectiveScrollerElement,
+                targetElement,
+                position: snapshot.scrollTarget!.position,
+            });
+            if (!aligned) {
+                return;
+            }
+
             markAnchorResolved();
         }, 0);
 
@@ -538,6 +547,15 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         }
 
         if (snapshot.backwardPagination === "loading") {
+            return;
+        }
+
+        const aligned = isScrollTargetAligned({
+            scrollerElement: effectiveScrollerElement,
+            targetElement,
+            position: snapshot.scrollTarget.position,
+        });
+        if (!aligned) {
             return;
         }
 
