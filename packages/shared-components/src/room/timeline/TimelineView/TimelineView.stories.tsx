@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useRef, type CSSProperties, type JSX } from "react";
+import React, { useEffect, useRef, type JSX } from "react";
 import { useArgs } from "storybook/preview-api";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -22,7 +22,10 @@ type MockTimelineItem = TimelineItem & {
 
 type TimelineViewStoryProps = {
     items: MockTimelineItem[];
+    itemsSummary?: string;
+    isAtLiveEdgeSummary?: boolean;
     onItemsChanged?: (items: MockTimelineItem[]) => void;
+    onIsAtLiveEdgeChanged?: (isAtLiveEdge: boolean) => void;
 };
 
 const AUTHORS = ["Alice", "Bob", "Charlie", "Dani", "Elliot", "Frank", "Greta", "Hana", "Isaac", "Jules"];
@@ -80,6 +83,15 @@ function haveSameItemKeys(left: MockTimelineItem[], right: MockTimelineItem[]): 
     }
 
     return true;
+}
+
+function formatItemsSummary(items: MockTimelineItem[]): string {
+    const firstItem = items[0];
+    const lastItem = items.at(-1);
+    const firstIndex = firstItem ? getItemNumber(firstItem) : 0;
+    const lastIndex = lastItem ? getItemNumber(lastItem) : 0;
+
+    return `[${firstIndex}]...[${lastIndex}]`;
 }
 
 function applyWindowLimit(items: MockTimelineItem[], direction: "backward" | "forward"): MockTimelineItem[] {
@@ -225,24 +237,23 @@ class StoryTimelineViewModel
     }
 }
 
-const rowStyle: CSSProperties = {
-    padding: "12px 16px",
-    borderBottom: "1px solid #e6e8eb",
-    background: "#ffffff",
-};
-
-function TimelineViewStoryWrapperImpl({ items, onItemsChanged }: Readonly<TimelineViewStoryProps>): JSX.Element {
+function TimelineViewStoryWrapperImpl({
+    items,
+    onItemsChanged,
+    onIsAtLiveEdgeChanged,
+}: Readonly<TimelineViewStoryProps>): JSX.Element {
     const vmRef = useRef<StoryTimelineViewModel | null>(null);
     const callbacksRef = useRef<StoryTimelineCallbacks>({
         onRequestMoreItems: () => undefined,
         onInitialFillCompleted: () => undefined,
         onVisibleRangeChanged: () => undefined,
         onScrollTargetReached: () => undefined,
-        onIsAtLiveEdgeChanged: () => undefined,
+        onIsAtLiveEdgeChanged: (isAtLiveEdge) => onIsAtLiveEdgeChanged?.(isAtLiveEdge),
         onItemsChanged: (nextItems) => onItemsChanged?.(nextItems),
     });
 
     callbacksRef.current.onItemsChanged = (nextItems) => onItemsChanged?.(nextItems);
+    callbacksRef.current.onIsAtLiveEdgeChanged = (isAtLiveEdge) => onIsAtLiveEdgeChanged?.(isAtLiveEdge);
 
     if (!vmRef.current) {
         vmRef.current = new StoryTimelineViewModel(createSnapshot(items), callbacksRef.current);
@@ -253,11 +264,23 @@ function TimelineViewStoryWrapperImpl({ items, onItemsChanged }: Readonly<Timeli
     }, [items]);
 
     return (
-        <div style={{ height: "400px", width: "600px", border: "1px solid #d8dee4", overflow: "hidden" }}>
+        <div
+            style={{
+                height: "calc(100vh - 32px)",
+                width: "calc(100vw - 32px)",
+                boxSizing: "border-box",
+                overflow: "hidden",
+            }}
+        >
             <TimelineView
                 vm={vmRef.current}
                 renderItem={(item) => (
-                    <article style={rowStyle}>
+                    <article
+                        style={{
+                            padding: "12px 16px",
+                            borderBottom: "1px solid",
+                        }}
+                    >
                         <div
                             style={{
                                 display: "flex",
@@ -268,9 +291,9 @@ function TimelineViewStoryWrapperImpl({ items, onItemsChanged }: Readonly<Timeli
                             }}
                         >
                             <strong>{item.author}</strong>
-                            <span style={{ fontSize: 12, color: "#57606a" }}>{item.timestamp}</span>
+                            <span style={{ fontSize: 12 }}>{item.timestamp}</span>
                         </div>
-                        <div style={{ color: "#1f2328", lineHeight: 1.4 }}>{item.body}</div>
+                        <div style={{ lineHeight: 1.4 }}>{item.body}</div>
                     </article>
                 )}
             />
@@ -291,19 +314,52 @@ const meta = {
     },
     args: {
         items: createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX),
+        itemsSummary: formatItemsSummary(createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX)),
+        isAtLiveEdgeSummary: true,
     },
     render: function Render(args): JSX.Element {
         const [, updateArgs] = useArgs<TimelineViewStoryProps>();
-        return <TimelineViewStoryWrapper {...args} onItemsChanged={(items) => updateArgs({ items })} />;
+        return (
+            <TimelineViewStoryWrapper
+                {...args}
+                onItemsChanged={(items) =>
+                    updateArgs({
+                        items,
+                        itemsSummary: formatItemsSummary(items),
+                    })
+                }
+                onIsAtLiveEdgeChanged={(isAtLiveEdge) =>
+                    updateArgs({
+                        isAtLiveEdgeSummary: isAtLiveEdge,
+                    })
+                }
+            />
+        );
     },
     argTypes: {
         items: {
-            control: { type: "object" },
+            control: false,
+            table: { disable: true },
+        },
+        itemsSummary: {
+            control: { type: "text" },
+            name: "items",
             table: {
-                type: { summary: "MockTimelineItem[]" },
+                type: { summary: "string" },
+            },
+        },
+        isAtLiveEdgeSummary: {
+            control: { type: "boolean" },
+            name: "isAtLiveEdge",
+            table: {
+                type: { summary: "boolean" },
             },
         },
         onItemsChanged: {
+            control: false,
+            table: { disable: true },
+        },
+        onIsAtLiveEdgeChanged: {
             control: false,
             table: { disable: true },
         },
