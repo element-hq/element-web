@@ -6,11 +6,11 @@ exports[`<SettingsSubsectionHeading /> renders with children 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         test
-      </h3>
+      </h2>
       <a
         href="/#"
       >
@@ -27,11 +27,11 @@ exports[`<SettingsSubsectionHeading /> renders without children 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         test
-      </h3>
+      </h2>
     </div>
   </div>,
 }

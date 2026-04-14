@@ -232,7 +232,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
       class="mx_SettingsTab_sections"
     >
       <nav
-        class="_breadcrumb_1xygz_8"
+        class="_breadcrumb_t96w3_8"
       >
         <button
           aria-label="Back"
@@ -260,13 +260,13 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           </div>
         </button>
         <ol
-          class="_pages_1xygz_17"
+          class="_pages_t96w3_17"
         >
           <li>
             <a
-              class="_link_1v5rz_8"
+              class="_link_k9ljz_8"
               data-kind="primary"
-              data-size="small"
+              data-size="sm"
               rel="noreferrer noopener"
               role="button"
               tabindex="0"
@@ -277,7 +277,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           <li>
             <span
               aria-current="page"
-              class="_last-page_1xygz_30"
+              class="_last-page_t96w3_30"
             >
               Reset encryption
             </span>
@@ -291,8 +291,9 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           class="mx_EncryptionCard_header"
         >
           <div
-            class="_content_1r8kr_8 _destructive_1r8kr_34"
-            data-size="large"
+            class="_big-icon_1ssbv_8"
+            data-kind="critical"
+            data-size="lg"
           >
             <svg
               fill="currentColor"
@@ -317,7 +318,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <ul
-            class="_visual-list_1mgc1_8"
+            class="_visual-list_6zpfn_8"
           >
             <li
               class="_visual-list-item_1nc1y_8"

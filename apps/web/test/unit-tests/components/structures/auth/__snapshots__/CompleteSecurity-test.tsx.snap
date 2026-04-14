@@ -53,8 +53,9 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_content_1r8kr_8"
-                    data-size="large"
+                    class="_big-icon_1ssbv_8"
+                    data-kind="primary"
+                    data-size="lg"
                   >
                     <svg
                       fill="currentColor"
@@ -245,8 +246,9 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_content_1r8kr_8"
-                    data-size="large"
+                    class="_big-icon_1ssbv_8"
+                    data-kind="primary"
+                    data-size="lg"
                   >
                     <svg
                       fill="currentColor"

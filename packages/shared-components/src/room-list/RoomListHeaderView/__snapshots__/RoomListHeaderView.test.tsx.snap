@@ -4,16 +4,16 @@ exports[`RoomListHeaderView > renders the default state 1`] = `
 <div>
   <header
     aria-label="Room options"
-    class="flex header"
+    class="Flex-module_flex RoomListHeaderView-module_header"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: end; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex container"
+      class="Flex-module_flex RoomListHeaderView-module_container"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <div
-        class="flex title"
+        class="Flex-module_flex RoomListHeaderView-module_title"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
         <h1
@@ -27,7 +27,7 @@ exports[`RoomListHeaderView > renders the default state 1`] = `
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Open space menu"
-          class="_icon-button_1215g_8 button"
+          class="_icon-button_1215g_8 SpaceMenuView-module_button"
           data-kind="primary"
           data-state="closed"
           id="radix-_r_0_"
@@ -55,7 +55,7 @@ exports[`RoomListHeaderView > renders the default state 1`] = `
         </button>
       </div>
       <div
-        class="flex"
+        class="Flex-module_flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <button
@@ -137,16 +137,16 @@ exports[`RoomListHeaderView > renders without compose menu 1`] = `
 <div>
   <header
     aria-label="Room options"
-    class="flex header"
+    class="Flex-module_flex RoomListHeaderView-module_header"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: end; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex container"
+      class="Flex-module_flex RoomListHeaderView-module_container"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <div
-        class="flex title"
+        class="Flex-module_flex RoomListHeaderView-module_title"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
         <h1
@@ -160,7 +160,7 @@ exports[`RoomListHeaderView > renders without compose menu 1`] = `
           aria-expanded="false"
           aria-haspopup="menu"
           aria-label="Open space menu"
-          class="_icon-button_1215g_8 button"
+          class="_icon-button_1215g_8 SpaceMenuView-module_button"
           data-kind="primary"
           data-state="closed"
           id="radix-_r_i_"
@@ -188,7 +188,7 @@ exports[`RoomListHeaderView > renders without compose menu 1`] = `
         </button>
       </div>
       <div
-        class="flex"
+        class="Flex-module_flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <button
@@ -265,16 +265,16 @@ exports[`RoomListHeaderView > renders without space menu 1`] = `
 <div>
   <header
     aria-label="Room options"
-    class="flex header"
+    class="Flex-module_flex RoomListHeaderView-module_header"
     data-testid="room-list-header"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: end; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex container"
+      class="Flex-module_flex RoomListHeaderView-module_container"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <div
-        class="flex title"
+        class="Flex-module_flex RoomListHeaderView-module_title"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
         <h1
@@ -285,7 +285,7 @@ exports[`RoomListHeaderView > renders without space menu 1`] = `
         </h1>
       </div>
       <div
-        class="flex"
+        class="Flex-module_flex"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
       >
         <button

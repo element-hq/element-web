@@ -11,7 +11,7 @@ exports[`<RoomListItemView /> > renders Bold story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room Team Updates"
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView bold"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -19,7 +19,7 @@ exports[`<RoomListItemView /> > renders Bold story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -30,28 +30,28 @@ exports[`<RoomListItemView /> > renders Bold story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="Team Updates"
             >
               Team Updates
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -121,7 +121,7 @@ exports[`<RoomListItemView /> > renders Bold story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           />
         </div>
       </div>
@@ -141,7 +141,7 @@ exports[`<RoomListItemView /> > renders Default story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General"
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -149,7 +149,7 @@ exports[`<RoomListItemView /> > renders Default story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -160,28 +160,28 @@ exports[`<RoomListItemView /> > renders Default story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -251,7 +251,7 @@ exports[`<RoomListItemView /> > renders Default story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           />
         </div>
       </div>
@@ -271,7 +271,7 @@ exports[`<RoomListItemView /> > renders Invitation story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room Secret Project invitation."
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -279,7 +279,7 @@ exports[`<RoomListItemView /> > renders Invitation story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -290,28 +290,28 @@ exports[`<RoomListItemView /> > renders Invitation story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="Secret Project"
             >
               Secret Project
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Bob invited you"
             >
               Bob invited you
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -381,10 +381,10 @@ exports[`<RoomListItemView /> > renders Invitation story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           >
             <div
-              class="flex"
+              class="Flex-module_flex"
               data-testid="notification-decoration"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
             >
@@ -419,7 +419,7 @@ exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General"
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -427,7 +427,7 @@ exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -438,14 +438,14 @@ exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
@@ -453,7 +453,7 @@ exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -523,7 +523,7 @@ exports[`<RoomListItemView /> > renders NoMessagePreview story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           />
         </div>
       </div>
@@ -543,7 +543,7 @@ exports[`<RoomListItemView /> > renders Selected story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General"
       aria-selected="true"
-      class="flex roomListItem mx_RoomListItemView selected mx_RoomListItemView_selected"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_selected mx_RoomListItemView_selected"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -551,7 +551,7 @@ exports[`<RoomListItemView /> > renders Selected story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -562,28 +562,28 @@ exports[`<RoomListItemView /> > renders Selected story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -653,7 +653,7 @@ exports[`<RoomListItemView /> > renders Selected story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           />
         </div>
       </div>
@@ -673,7 +673,7 @@ exports[`<RoomListItemView /> > renders UnsentMessage story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General with an unsent message."
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -681,7 +681,7 @@ exports[`<RoomListItemView /> > renders UnsentMessage story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -692,28 +692,28 @@ exports[`<RoomListItemView /> > renders UnsentMessage story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Failed to send message"
             >
               Failed to send message
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -783,10 +783,10 @@ exports[`<RoomListItemView /> > renders UnsentMessage story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           >
             <div
-              class="flex"
+              class="Flex-module_flex"
               data-testid="notification-decoration"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
             >
@@ -821,7 +821,7 @@ exports[`<RoomListItemView /> > renders WithHoverMenu story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General"
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -829,7 +829,7 @@ exports[`<RoomListItemView /> > renders WithHoverMenu story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -840,28 +840,28 @@ exports[`<RoomListItemView /> > renders WithHoverMenu story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -931,7 +931,7 @@ exports[`<RoomListItemView /> > renders WithHoverMenu story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           />
         </div>
       </div>
@@ -951,7 +951,7 @@ exports[`<RoomListItemView /> > renders WithMention story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General with 1 unread mention."
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView bold"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -959,7 +959,7 @@ exports[`<RoomListItemView /> > renders WithMention story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -970,28 +970,28 @@ exports[`<RoomListItemView /> > renders WithMention story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -1061,10 +1061,10 @@ exports[`<RoomListItemView /> > renders WithMention story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           >
             <div
-              class="flex"
+              class="Flex-module_flex"
               data-testid="notification-decoration"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
             >
@@ -1104,7 +1104,7 @@ exports[`<RoomListItemView /> > renders WithNotification story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General with 3 unread messages."
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView bold"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -1112,7 +1112,7 @@ exports[`<RoomListItemView /> > renders WithNotification story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -1123,28 +1123,28 @@ exports[`<RoomListItemView /> > renders WithNotification story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -1214,10 +1214,10 @@ exports[`<RoomListItemView /> > renders WithNotification story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           >
             <div
-              class="flex"
+              class="Flex-module_flex"
               data-testid="notification-decoration"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
             >
@@ -1246,7 +1246,7 @@ exports[`<RoomListItemView /> > renders WithVideoCall story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General with a video call."
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView bold"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -1254,7 +1254,7 @@ exports[`<RoomListItemView /> > renders WithVideoCall story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -1265,28 +1265,28 @@ exports[`<RoomListItemView /> > renders WithVideoCall story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -1356,10 +1356,10 @@ exports[`<RoomListItemView /> > renders WithVideoCall story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           >
             <div
-              class="flex"
+              class="Flex-module_flex"
               data-testid="notification-decoration"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
             >
@@ -1394,7 +1394,7 @@ exports[`<RoomListItemView /> > renders WithVoiceCall story 1`] = `
       aria-haspopup="menu"
       aria-label="Open room General with a voice call."
       aria-selected="false"
-      class="flex roomListItem mx_RoomListItemView bold"
+      class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
       data-state="closed"
       role="option"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -1402,7 +1402,7 @@ exports[`<RoomListItemView /> > renders WithVoiceCall story 1`] = `
       type="button"
     >
       <div
-        class="flex container"
+        class="Flex-module_flex RoomListItemView-module_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <div
@@ -1413,28 +1413,28 @@ exports[`<RoomListItemView /> > renders WithVoiceCall story 1`] = `
           GE
         </div>
         <div
-          class="flex content"
+          class="Flex-module_flex RoomListItemView-module_content"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
-            class="ellipsis"
+            class="RoomListItemView-module_ellipsis"
           >
             <div
-              class="roomName"
+              class="RoomListItemView-module_roomName"
               data-testid="room-name"
               title="General"
             >
               General
             </div>
             <div
-              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
               title="Alice: Hey everyone!"
             >
               Alice: Hey everyone!
             </div>
           </div>
           <div
-            class="flex hoverMenu"
+            class="Flex-module_flex RoomListItemView-module_hoverMenu"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
           >
             <button
@@ -1504,10 +1504,10 @@ exports[`<RoomListItemView /> > renders WithVoiceCall story 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="notificationDecoration"
+            class="RoomListItemView-module_notificationDecoration"
           >
             <div
-              class="flex"
+              class="Flex-module_flex"
               data-testid="notification-decoration"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
             >

@@ -4,12 +4,12 @@ exports[`RoomStatusBarView > renders connection lost 1`] = `
 <div>
   <div
     aria-labelledby="_r_0_"
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
     role="status"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -25,26 +25,26 @@ exports[`RoomStatusBarView > renders connection lost 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <div
-        class="container"
+        class="RoomStatusBarView-module_container"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 title"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
           id="_r_0_"
         >
           Connectivity to the server has been lost.
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 RoomStatusBarView-module_description"
         >
           Sent messages will be stored until your connection has returned.
         </p>
       </div>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     />
   </div>
 </div>
@@ -54,12 +54,12 @@ exports[`RoomStatusBarView > renders consent link 1`] = `
 <div>
   <div
     aria-labelledby="_r_2_"
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
     role="status"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -75,13 +75,13 @@ exports[`RoomStatusBarView > renders consent link 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <div
-        class="container"
+        class="RoomStatusBarView-module_container"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 title"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
           id="_r_2_"
         >
           You can't send any messages until you review and agree to our terms and conditions.
@@ -89,10 +89,10 @@ exports[`RoomStatusBarView > renders consent link 1`] = `
       </div>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <a
-        class="_button_13vu4_8 primaryAction"
+        class="_button_13vu4_8 RoomStatusBarView-module_primaryAction"
         data-kind="primary"
         data-size="sm"
         href="#example"
@@ -112,12 +112,12 @@ exports[`RoomStatusBarView > renders local room error 1`] = `
 <div>
   <div
     aria-labelledby="_r_6_"
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
     role="status"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -133,20 +133,20 @@ exports[`RoomStatusBarView > renders local room error 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <p
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 title"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
         id="_r_6_"
       >
         Could not start a chat with this user
       </p>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
-        class="_button_13vu4_8 primaryAction _has-icon_13vu4_60"
+        class="_button_13vu4_8 RoomStatusBarView-module_primaryAction _has-icon_13vu4_60"
         data-kind="primary"
         data-size="sm"
         role="button"
@@ -175,12 +175,12 @@ exports[`RoomStatusBarView > renders resource limit error 1`] = `
 <div>
   <div
     aria-labelledby="_r_1_"
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
     role="status"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -196,26 +196,26 @@ exports[`RoomStatusBarView > renders resource limit error 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <div
-        class="container"
+        class="RoomStatusBarView-module_container"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 title"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
           id="_r_1_"
         >
           Your message wasn't sent because this homeserver has been blocked by its administrator.
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 RoomStatusBarView-module_description"
         >
           Please contact your service administrator to continue using the service.
         </p>
       </div>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <a
         class="_button_13vu4_8"
@@ -238,12 +238,12 @@ exports[`RoomStatusBarView > renders unsent messages 1`] = `
 <div>
   <div
     aria-labelledby="_r_3_"
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
     role="status"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -259,30 +259,29 @@ exports[`RoomStatusBarView > renders unsent messages 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <div
-        class="container"
+        class="RoomStatusBarView-module_container"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 title"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
           id="_r_3_"
         >
           Some of your messages have not been sent
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 RoomStatusBarView-module_description"
         >
           You can select all or individual messages to retry or delete
         </p>
       </div>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
-        aria-disabled="false"
-        class="_button_13vu4_8 secondaryAction _has-icon_13vu4_60"
+        class="_button_13vu4_8 RoomStatusBarView-module_secondaryAction _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -303,8 +302,7 @@ exports[`RoomStatusBarView > renders unsent messages 1`] = `
         Delete all
       </button>
       <button
-        aria-disabled="false"
-        class="_button_13vu4_8 primaryAction _has-icon_13vu4_60"
+        class="_button_13vu4_8 RoomStatusBarView-module_primaryAction _has-icon_13vu4_60"
         data-kind="primary"
         data-size="sm"
         role="button"
@@ -333,12 +331,12 @@ exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
 <div>
   <div
     aria-labelledby="_r_4_"
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
     role="status"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -354,30 +352,29 @@ exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <div
-        class="container"
+        class="RoomStatusBarView-module_container"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 title"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
           id="_r_4_"
         >
           Some of your messages have not been sent
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 RoomStatusBarView-module_description"
         >
           You can select all or individual messages to retry or delete
         </p>
       </div>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
-        aria-disabled="false"
-        class="_button_13vu4_8 secondaryAction _has-icon_13vu4_60"
+        class="_button_13vu4_8 RoomStatusBarView-module_secondaryAction _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -398,8 +395,7 @@ exports[`RoomStatusBarView > renders unsent messages and deletes all 1`] = `
         Delete all
       </button>
       <button
-        aria-disabled="false"
-        class="_button_13vu4_8 primaryAction _has-icon_13vu4_60"
+        class="_button_13vu4_8 RoomStatusBarView-module_primaryAction _has-icon_13vu4_60"
         data-kind="primary"
         data-size="sm"
         role="button"
@@ -428,12 +424,12 @@ exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
 <div>
   <div
     aria-labelledby="_r_5_"
-    class="banner"
+    class="Banner-module_banner"
     data-type="critical"
     role="status"
   >
     <div
-      class="icon"
+      class="Banner-module_icon"
     >
       <svg
         fill="currentColor"
@@ -449,30 +445,29 @@ exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
       </svg>
     </div>
     <div
-      class="content"
+      class="Banner-module_content"
     >
       <div
-        class="container"
+        class="RoomStatusBarView-module_container"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 title"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 RoomStatusBarView-module_title"
           id="_r_5_"
         >
           Some of your messages have not been sent
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 RoomStatusBarView-module_description"
         >
           You can select all or individual messages to retry or delete
         </p>
       </div>
     </div>
     <div
-      class="actions"
+      class="Banner-module_actions"
     >
       <button
-        aria-disabled="false"
-        class="_button_13vu4_8 secondaryAction _has-icon_13vu4_60"
+        class="_button_13vu4_8 RoomStatusBarView-module_secondaryAction _has-icon_13vu4_60"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -493,8 +488,7 @@ exports[`RoomStatusBarView > renders unsent messages and resends all 1`] = `
         Delete all
       </button>
       <button
-        aria-disabled="false"
-        class="_button_13vu4_8 primaryAction _has-icon_13vu4_60"
+        class="_button_13vu4_8 RoomStatusBarView-module_primaryAction _has-icon_13vu4_60"
         data-kind="primary"
         data-size="sm"
         role="button"

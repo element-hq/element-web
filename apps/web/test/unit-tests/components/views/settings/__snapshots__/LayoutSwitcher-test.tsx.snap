@@ -9,11 +9,11 @@ exports[`<LayoutSwitcher /> should render 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Message layout
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -86,7 +86,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                    class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -180,7 +180,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                    class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -277,7 +277,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                    class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -354,7 +354,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
       </form>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
