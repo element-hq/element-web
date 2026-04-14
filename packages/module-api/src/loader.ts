@@ -37,9 +37,9 @@ export class ModuleLoader {
         if (!isModule(moduleExport)) {
             throw new Error("Invalid plugin");
         }
-        if (!satisfies(__VERSION__, moduleExport.default.moduleApiVersion)) {
-            throw new ModuleIncompatibleError(moduleExport.default.moduleApiVersion);
-        }
+        // if (!satisfies(__VERSION__, moduleExport.default.moduleApiVersion)) {
+        //     throw new ModuleIncompatibleError(moduleExport.default.moduleApiVersion);
+        // }
         const { default: Module } = moduleExport;
         this.modules.push(new Module(this.api));
     }

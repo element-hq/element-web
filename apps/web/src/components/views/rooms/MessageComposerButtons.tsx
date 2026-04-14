@@ -23,6 +23,8 @@ import {
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ComposorApiFileUploadLocal } from "@element-hq/element-web-module-api";
+import { MultiOptionButton } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -43,6 +45,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { ModuleApi } from "../../../modules/Api.ts";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -89,7 +92,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            uploadButton(), // props passed via UploadButtonContext
+            <UploadButton key="uploads" />, // props passed via UploadButtonContext
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -106,7 +109,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
-            uploadButton(), // props passed via UploadButtonContext
+            <UploadButton key="uploads" />, // props passed via UploadButtonContext
         ];
         moreButtons = [
             showStickersButton(props),
@@ -164,9 +167,43 @@ function emojiButton(props: IProps): ReactElement {
     );
 }
 
-function uploadButton(): ReactElement {
-    return <UploadButton key="controls_upload" />;
-}
+const UploadButton: React.FC = () => {
+    const overflowMenuCloser = useContext(OverflowMenuContext);
+    const onLocalUploadClick = useContext(UploadButtonContext);
+    const { room } = useScopedRoomContext("room");
+
+    const onLocalClick = (): void => {
+        onLocalUploadClick?.();
+        overflowMenuCloser?.(); // close overflow menu
+    };
+
+    const options = [...ModuleApi.instance.composor.fileUploadOptions.values()].map((uploadOption) => {
+        if (uploadOption.type === ComposorApiFileUploadLocal) {
+            return {
+                icon: AttachmentIcon,
+                label: _t("common|attachment"),
+                onSelect: onLocalClick,
+            };
+        } else {
+            return {
+                icon: uploadOption.icon,
+                label: uploadOption.label,
+                onSelect: () => {
+                    uploadOption.onSelected(room!.roomId, (res) => {
+                        console.log("Do something with the result", res);
+                    });
+                },
+            };
+        }
+    });
+
+    return (
+        <MultiOptionButton
+            options={options}
+            multipleOptionsButton={{ label: _t("action|upload_file"), icon: AttachmentIcon }}
+        />
+    );
+};
 
 type UploadButtonFn = () => void;
 export const UploadButtonContext = createContext<UploadButtonFn | null>(null);
@@ -231,23 +268,6 @@ const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, rel
                 onChange={onUploadFileInputChange}
             />
         </UploadButtonContext.Provider>
-    );
-};
-
-// Must be rendered within an UploadButtonContextProvider
-const UploadButton: React.FC = () => {
-    const overflowMenuCloser = useContext(OverflowMenuContext);
-    const uploadButtonFn = useContext(UploadButtonContext);
-
-    const onClick = (): void => {
-        uploadButtonFn?.();
-        overflowMenuCloser?.(); // close overflow menu
-    };
-
-    return (
-        <CollapsibleButton className="mx_MessageComposer_button" onClick={onClick} title={_t("common|attachment")}>
-            <AttachmentIcon />
-        </CollapsibleButton>
     );
 };
 

@@ -11,6 +11,7 @@ import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
+import { SVGAttributes } from 'react';
 
 // @public
 export interface AccountAuthApiExtension {
@@ -47,6 +48,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly builtins: BuiltinsApi;
     readonly client: ClientApi;
+    // @alpha
+    readonly composor: ComposorApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
     // @alpha
@@ -96,6 +99,23 @@ export interface ClientApi {
 export interface ComponentVisibilityCustomisations {
     shouldShowComponent?(component: "UIComponent.sendInvites" | "UIComponent.roomCreation" | "UIComponent.spaceCreation" | "UIComponent.exploreRooms" | "UIComponent.addIntegrations" | "UIComponent.filterContainer" | "UIComponent.roomOptionsMenu"): boolean;
 }
+
+// @alpha
+export interface ComposorApi {
+    addFileUploadOption(option: ComposorApiFileUploadOption): void;
+    disableFileUploadOption(type: string): boolean;
+}
+
+// @alpha
+export const ComposorApiFileUploadLocal = "local";
+
+// @alpha
+export type ComposorApiFileUploadOption = {
+    type: string;
+    label: string;
+    icon: ComponentType<SVGAttributes<SVGElement>>;
+    onSelected: (roomId: string, onFileSelected: (result: FileUploadResult) => void) => Promise<void> | void;
+};
 
 // @public
 export interface Config {
@@ -215,6 +235,17 @@ export interface ExtrasApi {
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
+
+// @alpha
+export type FileUploadResult = {
+    mxc: string;
+} | {
+    link: string;
+} | {
+    file: File;
+} | {
+    blob: Blob;
+} | null;
 
 // @public
 export interface I18nApi {

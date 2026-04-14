@@ -21,6 +21,7 @@ export * from "./room/timeline/event-tile/body/TextualBodyView";
 export * from "./room/timeline/event-tile/EventTileView/TileErrorView";
 export * from "./core/pill-input/Pill";
 export * from "./core/pill-input/PillInput";
+export * from "./core/MultiOptionButton";
 export * from "./room/RoomStatusBar";
 export * from "./room/WidgetPip";
 export * from "./room/HistoryVisibilityBadge";

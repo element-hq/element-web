@@ -23,6 +23,7 @@ import { type ClientApi } from "./client.ts";
 import { type WidgetLifecycleApi } from "./widget-lifecycle.ts";
 import { type WidgetApi } from "./widget.ts";
 import { type CustomisationsApi } from "./customisations.ts";
+import { type ComposorApi } from "./composor.ts";
 
 /**
  * Module interface for modules to implement.
@@ -158,6 +159,12 @@ export interface Api
      * @alpha Subject to change.
      */
     readonly customisations: CustomisationsApi;
+
+    /**
+     * Allows modules to customise the message composor.
+     * @alpha
+     */
+    readonly composor: ComposorApi;
 
     /**
      * Create a ReactDOM root for rendering React components.

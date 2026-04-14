@@ -33,6 +33,7 @@ import { StoresApi } from "./StoresApi.ts";
 import { WidgetLifecycleApi } from "./WidgetLifecycleApi.ts";
 import { WidgetApi } from "./WidgetApi.ts";
 import { CustomisationsApi } from "./customisationsApi.ts";
+import { ComposorApi } from "./ComposorApi.ts";
 
 const legacyCustomisationsFactory = <T extends object>(baseCustomisations: T) => {
     let used = false;
@@ -94,6 +95,7 @@ export class ModuleApi implements Api {
     public readonly rootNode = document.getElementById("matrixchat")!;
     public readonly client = new ClientApi();
     public readonly stores = new StoresApi();
+    public readonly composor = new ComposorApi();
 
     public createRoot(element: Element): Root {
         return createRoot(element);
