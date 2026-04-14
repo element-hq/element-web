@@ -9,7 +9,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--cpd-space-2x);
-    min-width: 0;
+    min-width: var(--cpd-space-0x);
 }
 
 .link {
@@ -28,7 +28,7 @@
 
 .placeholder {
     position: absolute;
-    inset: 0;
+    inset: var(--cpd-space-0x);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,7 +64,7 @@
 }
 
 .mediaFallback {
-    min-height: 1px;
+    min-height: 1px; /* This is required because of the orignal component is set to 1px in  */
 }
 
 .banner {
@@ -87,10 +87,10 @@
 .gifLabel {
     position: absolute;
     display: block;
-    top: 0px;
-    left: 14px;
-    padding: 5px;
-    border-radius: 5px;
+    top: var(--cpd-space-0x);
+    left: 14px; /* Giftlabel in _MImageBody.pcss is hardcoded to 14px */
+    padding: 5px; /* GiftLabel in _MImageBody.pcss is hardcoded to 5px in .mx_MImageBody_gifLabel  */
+    border-radius: 5px; /* Border Radius is is set to 5px in Giftlabel class in .mx_MImageBody_gifLabel  */
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid rgba(0, 0, 0, 0.2);
     color: rgba(255, 255, 255, 1);
@@ -101,8 +101,8 @@
     border: none;
     width: 100%;
     height: 100%;
-    padding: 0;
-    inset: 0;
+    padding: var(--cpd-space-0x);
+    inset: var(--cpd-space-0x);
     display: flex;
     align-items: center;
     justify-content: center;
