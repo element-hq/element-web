@@ -212,7 +212,7 @@ jobs:
 
             - name: Stash packages.element.io
               if: needs.prepare.outputs.deploy == 'false'
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: packages.element.io
                   path: packages.element.io
@@ -250,7 +250,7 @@ jobs:
 
             - name: Stash debs
               if: needs.prepare.outputs.deploy == 'false' && needs.linux.result == 'success'
-              uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: debs
                   path: |
@@ -289,7 +289,7 @@ jobs:
             id-token: write # This is required for requesting the JWT
         steps:
             - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6
+              uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6
               with:
                   role-to-assume: arn:aws:iam::264135176173:role/Push-ElementDesktop-MSI
                   role-session-name: githubaction-run-${{ github.run_id }}
