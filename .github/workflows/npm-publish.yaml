@@ -10,6 +10,7 @@ on:
                 options:
                     - playwright-common
                     - shared-components
+                    - module-api
 
 concurrency: release
 jobs:
