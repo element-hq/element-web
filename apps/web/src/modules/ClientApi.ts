@@ -55,8 +55,9 @@ export class ClientApi implements IClientApi {
 
     public async downloadMxc(mxcUrl: string): Promise<string> {
         const client = MatrixClientPeg.safeGet();
-        // useAuthentication=true produces the authenticated /_matrix/client/v1/media/download URL
-        const httpUrl = client.mxcUrlToHttp(mxcUrl, undefined, undefined, undefined, false, true);
+        // useAuthentication=true (7th param) produces /_matrix/client/v1/media/download
+        // which is required for servers that enforce authenticated media.
+        const httpUrl = client.mxcUrlToHttp(mxcUrl, undefined, undefined, undefined, false, true, true);
         if (!httpUrl) throw new Error(`Cannot resolve mxc URL: ${mxcUrl}`);
         const accessToken = client.getAccessToken();
         const response = await fetch(httpUrl, {
