@@ -56,7 +56,7 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
               with:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -146,7 +146,7 @@ jobs:
               run: "pnpm install"
 
             - name: Cache storybook & vitest
-              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
               with:
                   path: |
                       packages/${{ matrix.package }}/node_modules/.cache
