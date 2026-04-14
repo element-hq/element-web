@@ -22,6 +22,7 @@ import {
     shouldMarkInitialBottomSnapDoneOnScrollTarget,
     shouldDisableFollowOutputOnScroll,
     shouldPaginateBackwardAtTopScroll,
+    shouldReplayPendingForwardPaginationAfterInitialFill,
     shouldIgnoreStartReached,
     shouldIgnoreAtBottomStateChange,
     TimelineView,
@@ -239,6 +240,39 @@ describe("TimelineView", () => {
                 scrollTop: 0,
             }),
         ).toBe(true);
+    });
+
+    it("replays a pending forward pagination request after initial fill completes", () => {
+        expect(
+            shouldReplayPendingForwardPaginationAfterInitialFill({
+                initialFillState: "done",
+                hasPendingEndReached: true,
+                forwardPagination: "idle",
+                canPaginateForward: true,
+            }),
+        ).toBe(true);
+    });
+
+    it("does not replay pending forward pagination before initial fill completes", () => {
+        expect(
+            shouldReplayPendingForwardPaginationAfterInitialFill({
+                initialFillState: "filling",
+                hasPendingEndReached: true,
+                forwardPagination: "idle",
+                canPaginateForward: true,
+            }),
+        ).toBe(false);
+    });
+
+    it("does not replay forward pagination after anchor-driven startup scrolls", () => {
+        expect(
+            shouldReplayPendingForwardPaginationAfterInitialFill({
+                initialFillState: "done",
+                hasPendingEndReached: false,
+                forwardPagination: "idle",
+                canPaginateForward: true,
+            }),
+        ).toBe(false);
     });
 
     it("disables followOutput immediately when the user scrolls upward from the live edge", () => {
@@ -570,6 +604,25 @@ describe("TimelineView", () => {
 
         await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
         expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
+    });
+
+    it("treats resolving an initial scroll target as completing startup fill", async () => {
+        const vm = new TestTimelineViewModel(
+            makeSnapshot({
+                canPaginateBackward: true,
+                canPaginateForward: true,
+                isAtLiveEdge: false,
+                scrollTarget: { targetKey: "beta", position: "bottom", highlight: true },
+            }),
+        );
+
+        renderTimeline(vm);
+
+        await waitFor(() => expect(vm.onScrollTargetReached).toHaveBeenCalledOnce());
+        vm.updateSnapshot({ scrollTarget: null });
+        await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+        expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
+        expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("forward");
     });
 
     it("resets anchor tracking when the view model instance changes", async () => {

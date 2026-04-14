@@ -11,19 +11,21 @@ import { useArgs } from "storybook/preview-api";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BaseViewModel } from "../../../core/viewmodel";
 import { TimelineView } from "./TimelineView";
-import type { TimelineItem, TimelineViewActions, TimelineViewSnapshot, VisibleRange } from "./types";
+import type { NavigationAnchor, TimelineItem, TimelineViewActions, TimelineViewSnapshot, VisibleRange } from "./types";
 import { withViewDocs } from "../../../../.storybook/withViewDocs";
 
 type MockTimelineItem = TimelineItem & {
     author: string;
     body: string;
-    timestamp: string;
 };
 
 type TimelineViewStoryProps = {
     items: MockTimelineItem[];
+    itemsVersion?: number;
     itemsSummary?: string;
     isAtLiveEdgeSummary?: boolean;
+    initialScrollTarget?: NavigationAnchor | null;
+    initialScrollTargetSummary?: string;
     onItemsChanged?: (items: MockTimelineItem[]) => void;
     onIsAtLiveEdgeChanged?: (isAtLiveEdge: boolean) => void;
 };
@@ -53,16 +55,12 @@ function createMockItems(count: number, startIndex = 1): MockTimelineItem[] {
         const itemNumber = startIndex + index;
         const fragment = MESSAGE_FRAGMENTS[(itemNumber - 1) % MESSAGE_FRAGMENTS.length];
         const extraLines = " Additional detail.".repeat((itemNumber - 1) % 4);
-        const totalMinutes = 9 * 60 + 10 + itemNumber;
-        const hours = Math.floor(totalMinutes / 60) % 24;
-        const minutes = totalMinutes % 60;
 
         return {
             key: `event-${itemNumber}`,
             kind: "event",
             author: AUTHORS[(itemNumber - 1) % AUTHORS.length],
             body: `${fragment}${extraLines}`,
-            timestamp: `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
         };
     });
 }
@@ -102,19 +100,36 @@ function applyWindowLimit(items: MockTimelineItem[], direction: "backward" | "fo
     return direction === "backward" ? items.slice(0, MODEL_WINDOW_LIMIT) : items.slice(-MODEL_WINDOW_LIMIT);
 }
 
-function createSnapshot(items: MockTimelineItem[]): TimelineViewSnapshot<MockTimelineItem> {
+function formatScrollTargetSummary(scrollTarget: NavigationAnchor | null | undefined): string {
+    if (!scrollTarget) {
+        return "null";
+    }
+
+    const position = scrollTarget.position ?? "default";
+    return `${scrollTarget.targetKey} (${position})`;
+}
+
+function createSnapshot(
+    items: MockTimelineItem[],
+    options?: {
+        isAtLiveEdge?: boolean;
+        scrollTarget?: NavigationAnchor | null;
+    },
+): TimelineViewSnapshot<MockTimelineItem> {
     const firstItemNumber = items[0] ? getItemNumber(items[0]) : EARLIEST_ITEM_NUMBER;
     const lastItem = items.at(-1);
     const lastItemNumber = lastItem ? getItemNumber(lastItem) : LATEST_ITEM_NUMBER;
+    const isAtLiveEdge = options?.isAtLiveEdge ?? true;
+    const scrollTarget = options?.scrollTarget ?? (lastItem ? { targetKey: lastItem.key, position: "bottom" } : null);
 
     return {
         items,
-        isAtLiveEdge: true,
+        isAtLiveEdge,
         canPaginateBackward: firstItemNumber > EARLIEST_ITEM_NUMBER,
         canPaginateForward: lastItemNumber < LATEST_ITEM_NUMBER,
         backwardPagination: "idle",
         forwardPagination: "idle",
-        scrollTarget: lastItem ? { targetKey: lastItem.key, position: "bottom" } : null,
+        scrollTarget,
     };
 }
 
@@ -128,16 +143,22 @@ class StoryTimelineViewModel
 {
     private readonly callbacks: StoryTimelineCallbacks;
     private pendingPaginationTimer: ReturnType<typeof setTimeout> | null = null;
+    private itemsVersion = 0;
 
     public constructor(snapshot: TimelineViewSnapshot<MockTimelineItem>, callbacks: StoryTimelineCallbacks) {
         super(undefined, snapshot);
         this.callbacks = callbacks;
     }
 
-    public syncItems(items: MockTimelineItem[]): void {
+    public syncItems(items: MockTimelineItem[], version = 0): void {
+        if (version < this.itemsVersion) {
+            return;
+        }
+
         const currentSnapshot = this.getSnapshot();
         const nextItems = items.slice(-MODEL_WINDOW_LIMIT);
         if (haveSameItemKeys(currentSnapshot.items, nextItems)) {
+            this.itemsVersion = version;
             return;
         }
 
@@ -150,6 +171,7 @@ class StoryTimelineViewModel
             scrollTarget: currentSnapshot.scrollTarget,
             isAtLiveEdge: currentSnapshot.isAtLiveEdge,
         });
+        this.itemsVersion = version;
     }
 
     public onRequestMoreItems(direction: "backward" | "forward"): void {
@@ -239,6 +261,8 @@ class StoryTimelineViewModel
 
 function TimelineViewStoryWrapperImpl({
     items,
+    itemsVersion = 0,
+    initialScrollTarget,
     onItemsChanged,
     onIsAtLiveEdgeChanged,
 }: Readonly<TimelineViewStoryProps>): JSX.Element {
@@ -256,12 +280,18 @@ function TimelineViewStoryWrapperImpl({
     callbacksRef.current.onIsAtLiveEdgeChanged = (isAtLiveEdge) => onIsAtLiveEdgeChanged?.(isAtLiveEdge);
 
     if (!vmRef.current) {
-        vmRef.current = new StoryTimelineViewModel(createSnapshot(items), callbacksRef.current);
+        vmRef.current = new StoryTimelineViewModel(
+            createSnapshot(items, {
+                isAtLiveEdge: !initialScrollTarget,
+                scrollTarget: initialScrollTarget,
+            }),
+            callbacksRef.current,
+        );
     }
 
     useEffect(() => {
-        vmRef.current?.syncItems(items);
-    }, [items]);
+        vmRef.current?.syncItems(items, itemsVersion);
+    }, [items, itemsVersion]);
 
     return (
         <div
@@ -291,7 +321,7 @@ function TimelineViewStoryWrapperImpl({
                             }}
                         >
                             <strong>{item.author}</strong>
-                            <span style={{ fontSize: 12 }}>{item.timestamp}</span>
+                            <span style={{ fontSize: 12 }}>{item.key}</span>
                         </div>
                         <div style={{ lineHeight: 1.4 }}>{item.body}</div>
                     </article>
@@ -314,20 +344,35 @@ const meta = {
     },
     args: {
         items: createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX),
+        itemsVersion: 0,
         itemsSummary: formatItemsSummary(createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX)),
         isAtLiveEdgeSummary: true,
+        initialScrollTarget: null,
+        initialScrollTargetSummary: formatScrollTargetSummary(null),
     },
     render: function Render(args): JSX.Element {
         const [, updateArgs] = useArgs<TimelineViewStoryProps>();
+        const itemsVersionRef = React.useRef(args.itemsVersion ?? 0);
+        itemsVersionRef.current = Math.max(itemsVersionRef.current, args.itemsVersion ?? 0);
+
         return (
             <TimelineViewStoryWrapper
                 {...args}
-                onItemsChanged={(items) =>
+                onItemsChanged={(items) => {
+                    const nextItemsVersion = itemsVersionRef.current + 1;
+                    itemsVersionRef.current = nextItemsVersion;
+                    if (args.initialScrollTarget) {
+                        updateArgs({
+                            itemsSummary: formatItemsSummary(items),
+                        });
+                        return;
+                    }
                     updateArgs({
                         items,
+                        itemsVersion: nextItemsVersion,
                         itemsSummary: formatItemsSummary(items),
-                    })
-                }
+                    });
+                }}
                 onIsAtLiveEdgeChanged={(isAtLiveEdge) =>
                     updateArgs({
                         isAtLiveEdgeSummary: isAtLiveEdge,
@@ -338,6 +383,10 @@ const meta = {
     },
     argTypes: {
         items: {
+            control: false,
+            table: { disable: true },
+        },
+        itemsVersion: {
             control: false,
             table: { disable: true },
         },
@@ -355,6 +404,17 @@ const meta = {
                 type: { summary: "boolean" },
             },
         },
+        initialScrollTarget: {
+            control: false,
+            table: { disable: true },
+        },
+        initialScrollTargetSummary: {
+            control: { type: "text" },
+            name: "initialScrollTarget",
+            table: {
+                type: { summary: "string" },
+            },
+        },
         onItemsChanged: {
             control: false,
             table: { disable: true },
@@ -369,4 +429,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const IsAtLiveEdge: Story = {};
+
+const anchorItems = createMockItems(INITIAL_ITEM_COUNT, 41);
+const anchorScrollTarget: NavigationAnchor = {
+    targetKey: "event-45",
+    position: "bottom",
+    highlight: true,
+};
+
+export const IsAtTarget: Story = {
+    args: {
+        items: anchorItems,
+        itemsSummary: formatItemsSummary(anchorItems),
+        isAtLiveEdgeSummary: false,
+        initialScrollTarget: anchorScrollTarget,
+        initialScrollTargetSummary: formatScrollTargetSummary(anchorScrollTarget),
+    },
+};
