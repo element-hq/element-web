@@ -20,7 +20,7 @@ jobs:
               with:
                   persist-credentials: false
 
-            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: pnpm/action-setup@08c4be7e2e672a47d11bd04269e27e5f3e8529cb # v6
               with:
                   package_json_file: package.json
             - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
