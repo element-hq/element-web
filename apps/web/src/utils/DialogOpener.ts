@@ -57,7 +57,7 @@ export class DialogOpener {
                     {
                         roomId: payload.room_id || SdkContextClass.instance.roomViewStore.getRoomId(),
                         initialTabId: payload.initial_tab_id,
-                        sdkContext: SdkContextClass.instance
+                        sdkContext: SdkContextClass.instance,
                     },
                     /*className=*/ undefined,
                     /*isPriority=*/ false,
