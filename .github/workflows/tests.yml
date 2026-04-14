@@ -56,7 +56,7 @@ jobs:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Jest Cache
-              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
               with:
                   path: /tmp/jest_cache
                   key: ${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -100,7 +100,7 @@ jobs:
 
     complete:
         name: jest-tests
-        needs: [jest_ew, vitest_sc]
+        needs: [jest_ew, vitest]
         if: always()
         runs-on: ubuntu-24.04
         permissions:
@@ -120,8 +120,13 @@ jobs:
                   sha: ${{ github.sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-    vitest_sc:
-        name: Vitest (Shared Components)
+    vitest:
+        name: Vitest
+        strategy:
+            matrix:
+                package:
+                    - shared-components
+                    - module-api
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout code
@@ -137,32 +142,32 @@ jobs:
                   node-version: "lts/*"
                   cache: "pnpm"
 
-            - name: Install Shared Component Deps
-              working-directory: "packages/shared-components"
+            - name: Install Deps
               run: "pnpm install"
 
             - name: Cache storybook & vitest
-              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+              uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
               with:
                   path: |
-                      packages/shared-components/node_modules/.cache
-                      packages/shared-components/node_modules/.vite/vitest
+                      packages/${{ matrix.package }}/node_modules/.cache
+                      packages/${{ matrix.package }}/node_modules/.vite/vitest
                   key: ${{ hashFiles('pnpm-lock.yaml') }}
 
             - name: Setup playwright
               uses: ./.github/actions/setup-playwright
+              if: matrix.package == 'shared-components'
               with:
                   write-cache: ${{ github.event_name != 'merge_group' }}
 
             - name: Run tests
-              working-directory: "packages/shared-components"
+              working-directory: "packages/${{ matrix.package }}"
               run: pnpm test:unit --coverage=$ENABLE_COVERAGE
 
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
               uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
               with:
-                  name: coverage-sharedcomponents
+                  name: coverage-${{ matrix.package }}
                   path: |
-                      packages/shared-components/coverage
-                      !packages/shared-components/coverage/lcov-report
+                      packages/${{ matrix.package }}/coverage
+                      !packages/${{ matrix.package }}/coverage/lcov-report
