@@ -4,11 +4,11 @@ exports[`ReadMarker > renders the current read marker 1`] = `
 <div>
   <ul>
     <li
-      class="readMarker"
+      class="ReadMarker-module_readMarker"
       data-scroll-tokens="$event"
     >
       <hr
-        class="line"
+        class="ReadMarker-module_line"
       />
     </li>
   </ul>
@@ -19,10 +19,10 @@ exports[`ReadMarker > renders the ghost read marker 1`] = `
 <div>
   <ul>
     <li
-      class="readMarker"
+      class="ReadMarker-module_readMarker"
     >
       <hr
-        class="line"
+        class="ReadMarker-module_line"
         data-eventid="$event"
       />
     </li>
@@ -34,7 +34,7 @@ exports[`ReadMarker > renders the hidden current read marker without a line 1`] 
 <div>
   <ul>
     <li
-      class="readMarker"
+      class="ReadMarker-module_readMarker"
       data-scroll-tokens="$event"
     />
   </ul>
