@@ -3,13 +3,13 @@
 exports[`RoomListSearchView > Storybook snapshots > renders the default state 1`] = `
 <div>
   <div
-    class="flex view"
+    class="Flex-module_flex RoomListSearchView-module_view"
     data-testid="room-list-search"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 search _has-icon_13vu4_60"
+      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"
@@ -29,11 +29,11 @@ exports[`RoomListSearchView > Storybook snapshots > renders the default state 1`
         />
       </svg>
       <span
-        class="flex search_container"
+        class="Flex-module_flex RoomListSearchView-module_search_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="search_text"
+          class="RoomListSearchView-module_search_text"
         >
           Search
         </span>
@@ -70,13 +70,13 @@ exports[`RoomListSearchView > Storybook snapshots > renders the default state 1`
 exports[`RoomListSearchView > Storybook snapshots > renders with all buttons visible 1`] = `
 <div>
   <div
-    class="flex view"
+    class="Flex-module_flex RoomListSearchView-module_view"
     data-testid="room-list-search"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 search _has-icon_13vu4_60"
+      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"
@@ -96,11 +96,11 @@ exports[`RoomListSearchView > Storybook snapshots > renders with all buttons vis
         />
       </svg>
       <span
-        class="flex search_container"
+        class="Flex-module_flex RoomListSearchView-module_search_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="search_text"
+          class="RoomListSearchView-module_search_text"
         >
           Search
         </span>
@@ -158,13 +158,13 @@ exports[`RoomListSearchView > Storybook snapshots > renders with all buttons vis
 exports[`RoomListSearchView > Storybook snapshots > renders with dial pad button 1`] = `
 <div>
   <div
-    class="flex view"
+    class="Flex-module_flex RoomListSearchView-module_view"
     data-testid="room-list-search"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 search _has-icon_13vu4_60"
+      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"
@@ -184,11 +184,11 @@ exports[`RoomListSearchView > Storybook snapshots > renders with dial pad button
         />
       </svg>
       <span
-        class="flex search_container"
+        class="Flex-module_flex RoomListSearchView-module_search_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="search_text"
+          class="RoomListSearchView-module_search_text"
         >
           Search
         </span>
@@ -246,13 +246,13 @@ exports[`RoomListSearchView > Storybook snapshots > renders with dial pad button
 exports[`RoomListSearchView > Storybook snapshots > renders without explore button 1`] = `
 <div>
   <div
-    class="flex view"
+    class="Flex-module_flex RoomListSearchView-module_view"
     data-testid="room-list-search"
     role="search"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <button
-      class="_button_13vu4_8 search _has-icon_13vu4_60"
+      class="_button_13vu4_8 RoomListSearchView-module_search _has-icon_13vu4_60"
       data-kind="secondary"
       data-size="sm"
       id="room-list-search-button"
@@ -272,11 +272,11 @@ exports[`RoomListSearchView > Storybook snapshots > renders without explore butt
         />
       </svg>
       <span
-        class="flex search_container"
+        class="Flex-module_flex RoomListSearchView-module_search_container"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <span
-          class="search_text"
+          class="RoomListSearchView-module_search_text"
         >
           Search
         </span>

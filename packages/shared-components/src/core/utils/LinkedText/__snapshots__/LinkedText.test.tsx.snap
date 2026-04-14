@@ -3,7 +3,7 @@
 exports[`LinkedText > renders a custom href 1`] = `
 <div>
   <p
-    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container"
   >
     I love working on 
     <a
@@ -22,7 +22,7 @@ exports[`LinkedText > renders a custom href 1`] = `
 exports[`LinkedText > renders a custom target 1`] = `
 <div>
   <p
-    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container"
   >
     I love working on 
     <a
@@ -41,7 +41,7 @@ exports[`LinkedText > renders a custom target 1`] = `
 exports[`LinkedText > renders a room alias 1`] = `
 <div>
   <p
-    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container"
   >
     I love talking in 
     <a
@@ -60,7 +60,7 @@ exports[`LinkedText > renders a room alias 1`] = `
 exports[`LinkedText > renders a standard link 1`] = `
 <div>
   <p
-    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container"
   >
     I love working on 
     <a
@@ -79,7 +79,7 @@ exports[`LinkedText > renders a standard link 1`] = `
 exports[`LinkedText > renders a user ID 1`] = `
 <div>
   <p
-    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container"
+    class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container"
   >
     I love talking to 
     <a

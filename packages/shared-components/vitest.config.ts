@@ -142,8 +142,8 @@ export default defineConfig({
                 },
                 css: {
                     modules: {
-                        // Stabilise snapshots by stripping the hash component of the CSS module class name
-                        generateScopedName: (name) => name,
+                        // Stabilise snapshots while keeping names distinct across CSS modules.
+                        generateScopedName: "[name]_[local]",
                     },
                 },
             },

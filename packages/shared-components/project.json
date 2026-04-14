@@ -40,17 +40,17 @@
         "test:storybook": {
             "command": "vitest --project=storybook",
             "options": { "cwd": "packages/shared-components" },
-            "dependsOn": ["typedoc"]
+            "dependsOn": ["typedoc", "^build:playwright"]
         },
         "test:storybook:update": {
-            "command": "playwright-screenshots-experimental nx test:storybook --run --update",
+            "command": "playwright-screenshots nx test:storybook --run --update",
             "options": {
                 "env": {
                     "CI": "1"
                 },
                 "cwd": "packages/shared-components"
             },
-            "dependsOn": ["typedoc"]
+            "dependsOn": ["typedoc", "^build:playwright"]
         }
     }
 }
