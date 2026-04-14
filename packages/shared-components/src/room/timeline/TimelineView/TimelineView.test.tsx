@@ -13,6 +13,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BaseViewModel } from "../../../core/viewmodel";
 import {
     getContiguousWindowShift,
+    getForwardPaginationAnchorAdjustment,
+    getForwardPaginationAnchorIndex,
+    getLastVisibleTimelineItemElement,
     getPostInitialFillBottomSnapIndex,
     getScrollLocationOnChange,
     shouldPaginateBackwardAtTopScroll,
@@ -221,6 +224,154 @@ describe("TimelineView", () => {
         expect(getContiguousWindowShift(prevItems, nextItems)).toBe(-20);
     });
 
+    it("anchors forward pagination to the previous last visible item when items are appended", () => {
+        const previousItems: TimelineItem[] = [
+            { key: "alpha", kind: "event" },
+            { key: "beta", kind: "event" },
+            { key: "gamma", kind: "event" },
+        ];
+        const nextItems: TimelineItem[] = [
+            ...previousItems,
+            { key: "delta", kind: "event" },
+            { key: "epsilon", kind: "event" },
+        ];
+
+        expect(
+            getForwardPaginationAnchorIndex({
+                previousItems,
+                nextItems,
+                forwardPaginationContext: {
+                    anchorKey: "gamma",
+                    lastVisibleRange: { startIndex: 0, endIndex: 2 },
+                    bottomOffsetPx: 0,
+                    requestedAtLiveEdge: false,
+                },
+                previousForwardPagination: "loading",
+                forwardPagination: "idle",
+                hasScrollTarget: false,
+                firstItemIndex: 100,
+                windowShift: 0,
+            }),
+        ).toBe(102);
+    });
+
+    it("does not apply forward anchor restore when a capped sliding window shift already preserved the viewport", () => {
+        const previousItems: TimelineItem[] = Array.from({ length: 50 }, (_, index) => ({
+            key: `event-${index + 21}`,
+            kind: "event",
+        }));
+        const nextItems: TimelineItem[] = Array.from({ length: 50 }, (_, index) => ({
+            key: `event-${index + 31}`,
+            kind: "event",
+        }));
+
+        expect(
+            getForwardPaginationAnchorIndex({
+                previousItems,
+                nextItems,
+                forwardPaginationContext: {
+                    anchorKey: "event-70",
+                    lastVisibleRange: { startIndex: 39, endIndex: 49 },
+                    bottomOffsetPx: 0,
+                    requestedAtLiveEdge: false,
+                },
+                previousForwardPagination: "loading",
+                forwardPagination: "idle",
+                hasScrollTarget: false,
+                firstItemIndex: 99940,
+                windowShift: -10,
+            }),
+        ).toBeNull();
+    });
+
+    it("does not anchor forward pagination when the request started at the live end", () => {
+        const previousItems: TimelineItem[] = [
+            { key: "alpha", kind: "event" },
+            { key: "beta", kind: "event" },
+        ];
+        const nextItems: TimelineItem[] = [...previousItems, { key: "gamma", kind: "event" }];
+
+        expect(
+            getForwardPaginationAnchorIndex({
+                previousItems,
+                nextItems,
+                forwardPaginationContext: {
+                    anchorKey: "beta",
+                    lastVisibleRange: { startIndex: 0, endIndex: 1 },
+                    bottomOffsetPx: 0,
+                    requestedAtLiveEdge: true,
+                },
+                previousForwardPagination: "loading",
+                forwardPagination: "idle",
+                hasScrollTarget: false,
+                firstItemIndex: 100,
+                windowShift: 0,
+            }),
+        ).toBeNull();
+    });
+
+    it("computes a scroll adjustment that preserves the previous bottom offset", () => {
+        expect(
+            getForwardPaginationAnchorAdjustment({
+                desiredBottomOffset: 24,
+                currentBottomOffset: 8,
+            }),
+        ).toBe(16);
+        expect(
+            getForwardPaginationAnchorAdjustment({
+                desiredBottomOffset: 8,
+                currentBottomOffset: 24,
+            }),
+        ).toBe(-16);
+    });
+
+    it("prefers the last fully visible row over a lower partially visible row when capturing the forward anchor", () => {
+        const scrollerElement = document.createElement("div");
+        const fullyVisibleElement = document.createElement("div");
+        const partiallyVisibleElement = document.createElement("div");
+
+        fullyVisibleElement.dataset.timelineItemKey = "event-64";
+        partiallyVisibleElement.dataset.timelineItemKey = "event-65";
+
+        scrollerElement.append(fullyVisibleElement, partiallyVisibleElement);
+
+        vi.spyOn(scrollerElement, "getBoundingClientRect").mockReturnValue({
+            x: 0,
+            y: 0,
+            top: 0,
+            right: 300,
+            bottom: 500,
+            left: 0,
+            width: 300,
+            height: 500,
+            toJSON: () => ({}),
+        });
+        vi.spyOn(fullyVisibleElement, "getBoundingClientRect").mockReturnValue({
+            x: 0,
+            y: 0,
+            top: 420,
+            right: 300,
+            bottom: 499.5,
+            left: 0,
+            width: 300,
+            height: 79.5,
+            toJSON: () => ({}),
+        });
+        vi.spyOn(partiallyVisibleElement, "getBoundingClientRect").mockReturnValue({
+            x: 0,
+            y: 0,
+            top: 470,
+            right: 300,
+            bottom: 540,
+            left: 0,
+            width: 300,
+            height: 70,
+            toJSON: () => ({}),
+        });
+
+        expect(getLastVisibleTimelineItemElement(scrollerElement)).toBe(fullyVisibleElement);
+    });
+
     it("ignores non-contiguous overlap when computing a window shift", () => {
         const prevItems: TimelineItem[] = [
             { key: "alpha", kind: "event" },
@@ -258,7 +409,7 @@ describe("TimelineView", () => {
         await waitFor(() => expect(vm.onIsAtLiveEdgeChanged).toHaveBeenCalled());
     });
 
-    it("requests forward pagination when the end is reachable and forward pagination is enabled", async () => {
+    it("auto-requests forward pagination during initial fill when only forward fill is available", async () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
                 canPaginateForward: true,
@@ -269,8 +420,8 @@ describe("TimelineView", () => {
         renderTimeline(vm);
 
         await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
-        await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
         await waitFor(() => expect(vm.onRequestMoreItems).toHaveBeenCalledWith("forward"));
+        await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
         expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
     });
 

@@ -39,6 +39,7 @@ const MESSAGE_FRAGMENTS = [
     "Closing note with enough text to avoid every item looking identical in the default Storybook example.",
 ];
 const PAGE_SIZE = 10;
+const MODEL_WINDOW_LIMIT = 50;
 const EARLIEST_ITEM_NUMBER = 1;
 const LATEST_ITEM_NUMBER = 100;
 const INITIAL_ITEM_COUNT = 10;
@@ -65,6 +66,28 @@ function createMockItems(count: number, startIndex = 1): MockTimelineItem[] {
 
 function getItemNumber(item: MockTimelineItem): number {
     return Number(item.key.replace("event-", ""));
+}
+
+function haveSameItemKeys(left: MockTimelineItem[], right: MockTimelineItem[]): boolean {
+    if (left.length !== right.length) {
+        return false;
+    }
+
+    for (let index = 0; index < left.length; index += 1) {
+        if (left[index]?.key !== right[index]?.key) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function applyWindowLimit(items: MockTimelineItem[], direction: "backward" | "forward"): MockTimelineItem[] {
+    if (items.length <= MODEL_WINDOW_LIMIT) {
+        return items;
+    }
+
+    return direction === "backward" ? items.slice(0, MODEL_WINDOW_LIMIT) : items.slice(-MODEL_WINDOW_LIMIT);
 }
 
 function createSnapshot(items: MockTimelineItem[]): TimelineViewSnapshot<MockTimelineItem> {
@@ -101,7 +124,12 @@ class StoryTimelineViewModel
 
     public syncItems(items: MockTimelineItem[]): void {
         const currentSnapshot = this.getSnapshot();
-        const nextSnapshot = createSnapshot(items);
+        const nextItems = items.slice(-MODEL_WINDOW_LIMIT);
+        if (haveSameItemKeys(currentSnapshot.items, nextItems)) {
+            return;
+        }
+
+        const nextSnapshot = createSnapshot(nextItems);
 
         this.snapshot.merge({
             ...nextSnapshot,
@@ -153,18 +181,19 @@ class StoryTimelineViewModel
                 direction === "backward"
                     ? [...createMockItems(latestPrependCount, latestPrependStart), ...latestItems]
                     : [...latestItems, ...createMockItems(appendCount, appendStart)];
-            const nextFirstItemNumber = nextItems[0] ? getItemNumber(nextItems[0]) : EARLIEST_ITEM_NUMBER;
-            const nextLastItem = nextItems.at(-1);
+            const windowedItems = applyWindowLimit(nextItems, direction);
+            const nextFirstItemNumber = windowedItems[0] ? getItemNumber(windowedItems[0]) : EARLIEST_ITEM_NUMBER;
+            const nextLastItem = windowedItems.at(-1);
             const nextLastItemNumber = nextLastItem ? getItemNumber(nextLastItem) : LATEST_ITEM_NUMBER;
 
             this.snapshot.merge({
-                items: nextItems,
+                items: windowedItems,
                 backwardPagination: "idle",
                 forwardPagination: "idle",
                 canPaginateBackward: nextFirstItemNumber > EARLIEST_ITEM_NUMBER,
                 canPaginateForward: nextLastItemNumber < LATEST_ITEM_NUMBER,
             });
-            this.callbacks.onItemsChanged(nextItems);
+            this.callbacks.onItemsChanged(windowedItems);
             this.pendingPaginationTimer = null;
         }, 1000);
     }
