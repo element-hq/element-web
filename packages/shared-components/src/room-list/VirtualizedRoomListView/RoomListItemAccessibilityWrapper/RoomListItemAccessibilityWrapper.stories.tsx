@@ -10,7 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
-import { createMockRoomItemViewModel, renderAvatar } from "../story-mocks";
+import { createMockRoomItemViewModel, renderAvatar } from "../../story-mocks";
 
 const meta = {
     title: "Room List/RoomListItemAccessibiltyWrapper",
