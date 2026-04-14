@@ -45,7 +45,7 @@ jobs:
                       assert-diff: true
                     - name: Docs
                       install: layered
-                      command: "docs:build"
+                      command: "docs:buildd"
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:
