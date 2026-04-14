@@ -13,6 +13,7 @@ export * from "./core/AvatarWithDetails";
 export * from "./composer/Banner";
 export * from "./crypto/SasEmoji";
 export * from "./event-tiles/UrlPreviewGroupView";
+export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
 export * from "./room/timeline/event-tile/body/RedactedBodyView";
 export * from "./room/timeline/event-tile/body/MFileBodyView";
