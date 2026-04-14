@@ -13,7 +13,7 @@ import { CONFIG_KEY, WidgetTogglesConfig } from "./config";
 import { WidgetToggle } from "./toggle";
 
 class WidgetToggleModule implements Module {
-    public static readonly moduleApiVersion = "^1.0.0";
+    public static readonly moduleApiVersion = "^1.12.0";
     private config?: WidgetTogglesConfig;
 
     public constructor(private api: Api) {}
