@@ -52,9 +52,9 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
     <button
       aria-label="Close preview"
       class="_icon-button_1215g_8"
-      data-kind="primary"
+      data-kind="secondary"
       role="button"
-      style="--cpd-icon-button-size: 20px;"
+      style="--cpd-icon-button-size: 28px;"
       tabindex="0"
     >
       <div
@@ -219,9 +219,9 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
     <button
       aria-label="Close preview"
       class="_icon-button_1215g_8"
-      data-kind="primary"
+      data-kind="secondary"
       role="button"
-      style="--cpd-icon-button-size: 20px;"
+      style="--cpd-icon-button-size: 28px;"
       tabindex="0"
     >
       <div
@@ -306,9 +306,9 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
     <button
       aria-label="Close preview"
       class="_icon-button_1215g_8"
-      data-kind="primary"
+      data-kind="secondary"
       role="button"
-      style="--cpd-icon-button-size: 20px;"
+      style="--cpd-icon-button-size: 28px;"
       tabindex="0"
     >
       <div
@@ -473,9 +473,9 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
     <button
       aria-label="Close preview"
       class="_icon-button_1215g_8"
-      data-kind="primary"
+      data-kind="secondary"
       role="button"
-      style="--cpd-icon-button-size: 20px;"
+      style="--cpd-icon-button-size: 28px;"
       tabindex="0"
     >
       <div
