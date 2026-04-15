@@ -18,6 +18,9 @@ import { getMockedRooms } from "./getMockedRooms";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";
 import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
+import { FavouriteFilter } from "../../../../../src/stores/room-list-v3/skip-list/filters/FavouriteFilter";
+import { FilterEnum } from "../../../../../src/stores/room-list-v3/skip-list/filters";
+import { DefaultTagID } from "../../../../../src/stores/room-list-v3/skip-list/tag";
 
 describe("RoomSkipList", () => {
     function generateSkipList(roomCount?: number): {
@@ -97,6 +100,26 @@ describe("RoomSkipList", () => {
         const { skipList, rooms } = generateSkipList();
         const room = rooms[5];
         expect(() => skipList.addNewRoom(room)).toThrow("Can't add room to skiplist");
+    });
+
+    it("Filters are applied to existing nodes when useNewFilters is called", () => {
+        const { skipList, rooms } = generateSkipList(10);
+
+        // Mark some rooms as favourite
+        const favouriteRooms = [rooms[2], rooms[5], rooms[8]];
+        for (const room of favouriteRooms) {
+            room.tags = { [DefaultTagID.Favourite]: { order: 0 } };
+        }
+
+        // No filters yet — all rooms are in the list
+        expect(skipList.size).toEqual(10);
+
+        // Apply the favourite filter
+        skipList.useNewFilters([new FavouriteFilter()]);
+
+        // Only favourite rooms should be returned when filtering by favourite
+        const filteredRooms = Array.from(skipList.getRoomsInActiveSpace([FilterEnum.FavouriteFilter]));
+        expect(filteredRooms).toHaveLength(favouriteRooms.length);
     });
 
     it("Re-sort works when sorter is swapped", () => {
