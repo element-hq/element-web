@@ -829,7 +829,7 @@
         "invalid_json": "Ne semble pas être du JSON valide.",
         "level": "Rang",
         "low_bandwidth_mode": "Mode faible bande passante",
-        "low_bandwidth_mode_description": "Nécessite un serveur d’accueil compatible.",
+        "low_bandwidth_mode_description": "Désactive le chiffrement, la présence, les avatars, les accusés de lecture et les notifications de saisie.",
         "main_timeline": "Historique principal",
         "manual_device_verification": "Vérification manuelle de l'appareil",
         "no_receipt_found": "Aucun accusé disponible",
@@ -1114,7 +1114,7 @@
         "verification_requested_toast_title": "Vérification requise",
         "verified_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
         "verified_identity_changed_no_displayname": "L'identité de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus </a>",
-        "verify_toast_description": "À compter de fin avril 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
+        "verify_toast_description": "À compter de fin octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
         "verify_toast_title": "Vérifiez cet appareil",
         "withdraw_verification_action": "Révoquer la vérification"
     },
@@ -2237,8 +2237,6 @@
             "aliases_section": "Adresses du salon",
             "avatar_field_label": "Avatar du salon",
             "canonical_alias_field_label": "Adresse principale",
-            "default_url_previews_off": "Les aperçus d'URL sont désactivés par défaut pour les participants de ce salon.",
-            "default_url_previews_on": "Les aperçus d'URL sont activés par défaut pour les participants de ce salon.",
             "description_space": "Modifiez les paramètres de votre espace.",
             "error_creating_alias_description": "Une erreur est survenue lors de la création de l’adresse. Ce n’est peut-être pas autorisé par le serveur ou une erreur temporaire est survenue.",
             "error_creating_alias_title": "Erreur lors de la création de l’adresse",
@@ -2269,12 +2267,7 @@
             "published_aliases_explainer_space": "Les adresses publiées peuvent être utilisées par tout le monde sur tous les serveurs pour rejoindre votre espace.",
             "published_aliases_section": "Adresses publiées",
             "save": "Enregistrer les modifications",
-            "topic_field_label": "Sujet du salon",
-            "url_preview_encryption_warning": "Dans les salons chiffrés, comme celui-ci, l’aperçu des liens est désactivé par défaut pour s’assurer que le serveur d’accueil (où sont générés les aperçus) ne puisse pas collecter d’informations sur les liens qui apparaissent dans ce salon.",
-            "url_preview_explainer": "Quand quelqu’un met un lien dans son message, un aperçu du lien peut être affiché afin de fournir plus d’informations sur ce lien comme le titre, la description et une image du site.",
-            "url_previews_section": "Aperçus des liens",
-            "user_url_previews_default_off": "Vous avez <a>désactivé</a> les aperçus d’URL par défaut.",
-            "user_url_previews_default_on": "Vous avez <a>activé</a> les aperçus d’URL par défaut."
+            "topic_field_label": "Sujet du salon"
         },
         "notifications": {
             "browse_button": "Parcourir",
@@ -2696,9 +2689,8 @@
             "unable_to_load_msisdns": "Impossible de charger les numéros de téléphone",
             "username": "Nom d’utilisateur"
         },
-        "inline_url_previews_default": "Activer l’aperçu des URL par défaut",
-        "inline_url_previews_room": "Activer l’aperçu des URL par défaut pour les participants de ce salon",
-        "inline_url_previews_room_account": "Activer l’aperçu des URL pour ce salon (n’affecte que vous)",
+        "inline_url_previews_default": "Activer les aperçus",
+        "inline_url_previews_encrypted": "Activer les aperçus dans les sallons chiffrés",
         "insert_trailing_colon_mentions": "Insérer deux-points après les mentions de l'utilisateur au début d'un message",
         "invite_controls": {
             "default_label": "Autoriser les utilisateurs à vous inviter dans les salons"
@@ -2836,6 +2828,8 @@
             "enable_tray_icon": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
             "keyboard_heading": "Raccourcis clavier",
             "keyboard_view_shortcuts_button": "Pour voir tous les raccourcis claviers, <a>cliquez ici</a>.",
+            "link_previews_description": "Affiche des informations sur les liens sous les messages",
+            "link_previews_heading": "Aperçus des liens",
             "media_heading": "Images, GIF et vidéos",
             "presence_description": "Partager votre activité et votre statut avec les autres.",
             "publish_timezone": "Publier le fuseau horaire sur le profil public",
@@ -4002,6 +3996,7 @@
             "change_name_this_room": "Changer le nom de ce salon",
             "change_topic_active_room": "Changer le sujet dans le salon actuel",
             "change_topic_this_room": "Changer le sujet de ce salon",
+            "download_file": "Télécharger des fichiers depuis le dépôt multimédia",
             "receive_membership_active_room": "Afficher quand des personnes rejoignent, partent, ou sont invités dans votre salon actif",
             "receive_membership_this_room": "Voir quand une personne rejoint, quitte ou est invitée sur ce salon",
             "remove_ban_invite_leave_active_room": "Expulser, bannir ou inviter des personnes dans votre salon actif et en partir",

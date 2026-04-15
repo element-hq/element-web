@@ -2195,8 +2195,6 @@
             "aliases_section": "Endereços da sala",
             "avatar_field_label": "Foto da sala",
             "canonical_alias_field_label": "Endereço principal",
-            "default_url_previews_off": "Pré-visualizações de links estão desativadas por padrão para participantes desta sala.",
-            "default_url_previews_on": "Pré-visualizações de links estão ativadas por padrão para participantes desta sala.",
             "description_space": "Editar configurações relacionadas ao seu espaço.",
             "error_creating_alias_description": "Ocorreu um erro ao criar esse endereço. Isso pode não ser permitido pelo servidor ou houve um problema temporário.",
             "error_creating_alias_title": "Erro ao criar o endereço",
@@ -2225,12 +2223,7 @@
             "published_aliases_explainer_space": "Endereços publicados podem ser usados por qualquer um em qualquer servidor para entrar em seu espaço.",
             "published_aliases_section": "Endereços publicados",
             "save": "Salvar alterações",
-            "topic_field_label": "Descrição da sala",
-            "url_preview_encryption_warning": "Em salas criptografadas, como esta, as pré-visualizações de links estão desativadas por padrão para garantir que o seu servidor local (onde as visualizações são geradas) não possa coletar informações sobre os links que você vê nesta sala.",
-            "url_preview_explainer": "Quando alguém inclui um link em uma mensagem, a pré-visualização do link pode ser exibida para fornecer mais informações sobre esse link, como o título, a descrição e uma imagem do site.",
-            "url_previews_section": "Pré-visualização de links",
-            "user_url_previews_default_off": "Você <a>desativou</a> pré-visualizações de links por padrão.",
-            "user_url_previews_default_on": "Você <a>ativou</a> pré-visualizações de links por padrão."
+            "topic_field_label": "Descrição da sala"
         },
         "notifications": {
             "browse_button": "Buscar",
@@ -2650,8 +2643,6 @@
             "username": "Nome de usuário"
         },
         "inline_url_previews_default": "Ativar, por padrão, a visualização de resumo de links",
-        "inline_url_previews_room": "Ativar, para todos os participantes desta sala, a visualização de links",
-        "inline_url_previews_room_account": "Ativar, para esta sala, a visualização de links (só afeta você)",
         "insert_trailing_colon_mentions": "Insira dois pontos à direita após o usuário mencionar no início de uma mensagem",
         "invite_controls": {
             "default_label": "Permitir que usuários convidem você para salas"

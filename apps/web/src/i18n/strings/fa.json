@@ -1253,8 +1253,6 @@
             "aliases_section": "آدرس‌های اتاق",
             "avatar_field_label": "آواتار اتاق",
             "canonical_alias_field_label": "آدرس اصلی",
-            "default_url_previews_off": "پیش نمایش URL به طور پیش فرض برای شرکت کنندگان در این اتاق غیرفعال است.",
-            "default_url_previews_on": "پیش نمایش URL به طور پیش فرض برای شرکت کنندگان در این اتاق فعال است.",
             "description_space": "تنظیمات مربوط به فضای کاری خود را ویرایش کنید.",
             "error_creating_alias_description": "هنگام ایجاد آدرس خطایی روی داد. ممکن است سرور مجاز نباشد و یا اینکه خطایی موقت رخ داده باشد.",
             "error_creating_alias_title": "خطا در ایجاد آدرس",
@@ -1276,12 +1274,7 @@
             "publish_toggle": "این اتاق را در فهرست اتاق %(domain)s برای عموم منتشر شود؟",
             "published_aliases_section": "آدرس‌های منتشر شده",
             "save": "ذخیره تغییرات",
-            "topic_field_label": "موضوع اتاق",
-            "url_preview_encryption_warning": "در اتاق های رمزگذاری شده، مانند این اتاق، پیش نمایش URL به طور پیش فرض غیرفعال است تا اطمینان حاصل شود که سرور شما (جایی که پیش نمایش ها ایجاد می شود) نمی تواند اطلاعات مربوط به پیوندهایی را که در این اتاق مشاهده می کنید جمع آوری کند.",
-            "url_preview_explainer": "هنگامی که فردی یک URL را در پیام خود قرار می دهد، می توان با مشاهده پیش نمایش آن URL، اطلاعات بیشتری در مورد آن پیوند مانند عنوان ، توضیحات و یک تصویر از وب سایت دریافت کرد.",
-            "url_previews_section": "پیش‌نمایش URL",
-            "user_url_previews_default_off": "شما به طور پیش فرض پیش نمایش url را <a>غیر فعال</a> کرده اید.",
-            "user_url_previews_default_on": "شما به طور پیش فرض پیش نمایش url را <a>فعال</a> کرده اید."
+            "topic_field_label": "موضوع اتاق"
         },
         "notifications": {
             "browse_button": "جستجو",
@@ -1460,8 +1453,6 @@
             "remove_msisdn_prompt": "%(phone)s را پاک می‌کنید؟"
         },
         "inline_url_previews_default": "فعال‌سازی پیش‌نمایش URL به صورت پیش‌فرض",
-        "inline_url_previews_room": "امکان پیش‌نمایش URL را به صورت پیش‌فرض برای اعضای این اتاق فعال کن",
-        "inline_url_previews_room_account": "فعال‌سازی پیش‌نمایش URL برای این اتاق (تنها شما را تحت تاثیر قرار می‌دهد)",
         "jump_to_bottom_on_send": "زمانی که پیام ارسال می‌کنید، به صورت خودکار به آخرین پیام پرش کن",
         "key_backup": {
             "setup_secure_backup": {

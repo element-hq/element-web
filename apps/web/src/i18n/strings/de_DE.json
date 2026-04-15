@@ -2219,8 +2219,6 @@
             "aliases_section": "Chatadressen",
             "avatar_field_label": "Chat Avatar",
             "canonical_alias_field_label": "Primäre Adresse",
-            "default_url_previews_off": "URL-Vorschau ist für Mitglieder des Chats standardmäßig deaktiviert.",
-            "default_url_previews_on": "URL-Vorschau ist für Mitglieder des Chats standardmäßig aktiviert.",
             "description_space": "Einstellungen vom Space bearbeiten.",
             "error_creating_alias_description": "Es gab einen Fehler beim Anlegen der Adresse. Entweder erlaubt es der Server nicht oder es gab ein temporäres Problem.",
             "error_creating_alias_title": "Fehler beim Anlegen der Adresse",
@@ -2251,12 +2249,7 @@
             "published_aliases_explainer_space": "Veröffentlichte Adressen erlauben jedem, den Space zu betreten.",
             "published_aliases_section": "Öffentliche Adresse",
             "save": "Speichern",
-            "topic_field_label": "Chat-Thema",
-            "url_preview_encryption_warning": "In verschlüsselten Chats wie diesem ist die Linkvorschau standardmäßig deaktiviert, damit dein Homeserver (der die Vorschau erzeugt) keine Informationen über Links in diesem Chat erhält.",
-            "url_preview_explainer": "Die URL-Vorschau kann Informationen wie den Titel, die Beschreibung sowie ein Vorschaubild der Website enthalten.",
-            "url_previews_section": "URL-Vorschau",
-            "user_url_previews_default_off": "Du hast die URL-Vorschau <a>standardmäßig deaktiviert</a>.",
-            "user_url_previews_default_on": "Du hast die URL-Vorschau <a>standardmäßig aktiviert</a>."
+            "topic_field_label": "Chat-Thema"
         },
         "notifications": {
             "browse_button": "Durchsuchen",
@@ -2678,8 +2671,6 @@
             "username": "Benutzername"
         },
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
-        "inline_url_previews_room": "URL-Vorschau für Chat Mitglieder",
-        "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Chat",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "invite_controls": {
             "default_label": "Nutzern erlauben, dich in Chats einzuladen"

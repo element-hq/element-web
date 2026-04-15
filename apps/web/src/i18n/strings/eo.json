@@ -1381,8 +1381,6 @@
             "aliases_section": "Adresoj de ĉambro",
             "avatar_field_label": "Profilbildo de ĉambro",
             "canonical_alias_field_label": "Ĉefa adreso",
-            "default_url_previews_off": "Antaŭrigardoj de URL-oj estas implicite malŝaltitaj por anoj de tiu ĉi ĉambro.",
-            "default_url_previews_on": "Antaŭrigardoj de URL-oj estas implicite ŝaltitaj por anoj de tiu ĉi ĉambro.",
             "description_space": "Redaktu agordojn pri via aro.",
             "error_creating_alias_description": "Eraris kreado de tiu adreso. Eble ĝi ne estas permesata de la servilo, aŭ okazis portempa fiasko.",
             "error_creating_alias_title": "Eraris kreado de adreso",
@@ -1409,12 +1407,7 @@
             "published_aliases_explainer_space": "Publikigitajn adresojn povas uzi ajna persono sur ajna servilo por aliĝi al via aro.",
             "published_aliases_section": "Publikigitaj adresoj",
             "save": "Konservi ŝanĝojn",
-            "topic_field_label": "Temo de ĉambro",
-            "url_preview_encryption_warning": "En ĉifritaj ĉambroj, kiel ĉi tiu, antaŭrigardoj al URL-oj estas implicite malŝaltitaj por certigi, ke via hejmservilo (kie la antaŭrigardoj estas generataj) ne povas kolekti informojn pri ligiloj en ĉi tiu ĉambro.",
-            "url_preview_explainer": "Kiam iu metas URL-on en sian mesaĝon, antaŭrigardo al tiu URL povas montriĝi, por doni pliajn informojn pri tiu ligilo, kiel ekzemple la titolon, priskribon, kaj bildon el la retejo.",
-            "url_previews_section": "Antaŭrigardoj al retpaĝoj",
-            "user_url_previews_default_off": "Vi <a>malŝaltis</a> implicitajn antaŭrigardojn al retpaĝoj.",
-            "user_url_previews_default_on": "Vi <a>ŝaltis</a> implicitajn antaŭrigardojn al retpaĝoj."
+            "topic_field_label": "Temo de ĉambro"
         },
         "notifications": {
             "browse_button": "Foliumi",
@@ -1657,8 +1650,6 @@
             "remove_msisdn_prompt": "Ĉu forigi %(phone)s?"
         },
         "inline_url_previews_default": "Ŝalti entekstan antaŭrigardon al retadresoj",
-        "inline_url_previews_room": "Ŝalti URL-antaŭrigardon por anoj de ĉi tiu ĉambro",
-        "inline_url_previews_room_account": "Ŝalti URL-antaŭrigardon en ĉi tiu ĉambro (nur por vi)",
         "jump_to_bottom_on_send": "Salti al subo de historio sendinte mesaĝon",
         "key_backup": {
             "setup_secure_backup": {
