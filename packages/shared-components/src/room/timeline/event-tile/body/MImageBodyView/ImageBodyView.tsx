@@ -25,24 +25,20 @@ import styles from "./ImageBodyView.module.css";
 /**
  * High-level rendering state for the shared image body view.
  */
-export const ImageBodyViewState = {
-    ERROR: "ERROR",
-    HIDDEN: "HIDDEN",
-    READY: "READY",
-} as const;
-
-export type ImageBodyViewState = (typeof ImageBodyViewState)[keyof typeof ImageBodyViewState];
+export const enum ImageBodyViewState {
+    ERROR = "ERROR",
+    HIDDEN = "HIDDEN",
+    READY = "READY",
+}
 
 /**
  * Placeholder variant shown over the media frame while the image is still settling.
  */
-export const ImageBodyViewPlaceholder = {
-    NONE: "NONE",
-    SPINNER: "SPINNER",
-    BLURHASH: "BLURHASH",
-} as const;
-
-export type ImageBodyViewPlaceholder = (typeof ImageBodyViewPlaceholder)[keyof typeof ImageBodyViewPlaceholder];
+export const enum ImageBodyViewPlaceholder {
+    NONE = "NONE",
+    SPINNER = "SPINNER",
+    BLURHASH = "BLURHASH",
+}
 
 export interface ImageBodyViewSnapshot {
     /**

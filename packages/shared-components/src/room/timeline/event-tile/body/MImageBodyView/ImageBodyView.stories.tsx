@@ -23,6 +23,12 @@ const imageSrc = new URL("../../../../../../static/image-body/install-spinner.pn
 const thumbnailSrc = new URL("../../../../../../static/image-body/install-spinner.png", import.meta.url).href;
 const animatedGifSrc = new URL("../../../../../../static/image-body/install-spinner.gif", import.meta.url).href;
 const demoBlurhash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
+const imageBodyViewStateOptions = [ImageBodyViewState.ERROR, ImageBodyViewState.HIDDEN, ImageBodyViewState.READY];
+const imageBodyViewPlaceholderOptions = [
+    ImageBodyViewPlaceholder.NONE,
+    ImageBodyViewPlaceholder.SPINNER,
+    ImageBodyViewPlaceholder.BLURHASH,
+];
 
 type ImageBodyViewProps = ImageBodyViewSnapshot &
     ImageBodyViewActions & {
@@ -61,15 +67,11 @@ const meta = {
     tags: ["autodocs"],
     argTypes: {
         state: {
-            options: Object.entries(ImageBodyViewState)
-                .filter(([key, value]) => key === value)
-                .map(([key]) => key),
+            options: imageBodyViewStateOptions,
             control: { type: "select" },
         },
         placeholder: {
-            options: Object.entries(ImageBodyViewPlaceholder)
-                .filter(([key, value]) => key === value)
-                .map(([key]) => key),
+            options: imageBodyViewPlaceholderOptions,
             control: { type: "select" },
         },
         className: { control: "text" },
