@@ -2219,8 +2219,6 @@
             "aliases_section": "Jututubade aadressid",
             "avatar_field_label": "Jututoa tunnuspilt ehk avatar",
             "canonical_alias_field_label": "Põhiaadress",
-            "default_url_previews_off": "URL'ide eelvaated on vaikimisi lülitatud välja selles jututoas osalejate jaoks.",
-            "default_url_previews_on": "URL'ide eelvaated on vaikimisi kasutusel selles jututoas osalejate jaoks.",
             "description_space": "Muuda oma kogukonnakeskuse seadistusi.",
             "error_creating_alias_description": "Aadressi loomisel tekkis viga. See kas on serveri poolt keelatud või tekkis ajutine tõrge.",
             "error_creating_alias_title": "Viga aadressi loomisel",
@@ -2251,12 +2249,7 @@
             "published_aliases_explainer_space": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu kogukonnakeskusega.",
             "published_aliases_section": "Avaldatud aadressid",
             "save": "Salvesta muutused",
-            "topic_field_label": "Jututoa teema",
-            "url_preview_encryption_warning": "Krüptitud jututubades, nagu see praegune, URL'ide eelvaated ei ole vaikimisi kasutusel. See tagab, et sinu koduserver (kus eelvaated luuakse) ei saaks koguda teavet viidete kohta, mida sa siin jututoas näed.",
-            "url_preview_explainer": "Kui keegi lisab oma sõnumisse URL'i, siis võidakse näidata selle URL'i eelvaadet, mis annab lisateavet tema kohta, nagu näiteks pealkiri, kirjeldus ja kuidas ta välja näeb.",
-            "url_previews_section": "URL'ide eelvaated",
-            "user_url_previews_default_off": "Vaikimisi oled URL'ide eelvaated <a>lülitanud välja</a>.",
-            "user_url_previews_default_on": "Vaikimisi oled URL'ide eelvaated <a>võtnud kasutusele</a>."
+            "topic_field_label": "Jututoa teema"
         },
         "notifications": {
             "browse_button": "Sirvi",
@@ -2678,8 +2671,6 @@
             "username": "Kasutajanimi"
         },
         "inline_url_previews_default": "Luba URL'ide vaikimisi eelvaated",
-        "inline_url_previews_room": "Luba URL'ide vaikimisi eelvaated selles jututoas osalejate jaoks",
-        "inline_url_previews_room_account": "Luba URL'ide eelvaated selle jututoa jaoks (mõjutab vaid sind)",
         "insert_trailing_colon_mentions": "Mainimiste järel näita sõnumi alguses koolonit",
         "invite_controls": {
             "default_label": "Luba kasutajatel sind kutsida jututubadesse"

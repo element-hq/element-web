@@ -2184,8 +2184,6 @@
             "aliases_section": "Adresy pokoju",
             "avatar_field_label": "Awatar pokoju",
             "canonical_alias_field_label": "Główny adres",
-            "default_url_previews_off": "Podgląd linków są domyślnie wyłączone dla uczestników tego pokoju.",
-            "default_url_previews_on": "Podgląd linków są domyślnie włączone dla uczestników tego pokoju.",
             "description_space": "Edytuj ustawienia powiązane z twoją przestrzenią.",
             "error_creating_alias_description": "Wystąpił błąd podczas aktualizowania tego adresu. Serwer mógł odrzucić żądanie lub wystąpił błąd tymczasowy.",
             "error_creating_alias_title": "Wystąpił błąd podczas tworzenia adresu",
@@ -2214,12 +2212,7 @@
             "published_aliases_explainer_space": "Opublikowane adresy mogą być używane przez każdego, kto dołączył do Twojej przestrzeni.",
             "published_aliases_section": "Opublikowane adresy",
             "save": "Zapisz zmiany",
-            "topic_field_label": "Temat pokoju",
-            "url_preview_encryption_warning": "W pokojach szyfrowanych, takich jak ten, podgląd adresów URL jest domyślnie wyłączony, aby upewnić się, że serwer (na którym generowane są podglądy) nie może zbierać informacji o linkach, które widzisz w pokoju.",
-            "url_preview_explainer": "Gdy ktoś umieści URL w wiadomości, można wyświetlić podgląd adresu URL, aby podać więcej informacji o tym łączu, takich jak tytuł, opis i obraz ze strony internetowej.",
-            "url_previews_section": "Podgląd linków",
-            "user_url_previews_default_off": "Podgląd linków jest domyślnie <a>wyłączony</a>.",
-            "user_url_previews_default_on": "Podgląd linków jest domyślnie <a>włączony</a>."
+            "topic_field_label": "Temat pokoju"
         },
         "notifications": {
             "browse_button": "Przeglądaj",
@@ -2639,8 +2632,6 @@
             "username": "Nazwa użytkownika"
         },
         "inline_url_previews_default": "Włącz domyślny podgląd URL w tekście",
-        "inline_url_previews_room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
-        "inline_url_previews_room_account": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
         "invite_controls": {
             "default_label": "Zezwól użytkownikom na zapraszanie Cię do pokojów"
