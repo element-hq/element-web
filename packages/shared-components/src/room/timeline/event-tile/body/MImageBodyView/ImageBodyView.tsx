@@ -19,6 +19,7 @@ import { Blurhash } from "react-blurhash";
 import { ImageErrorIcon, VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { InlineSpinner, Tooltip } from "@vector-im/compound-web";
 
+import { useI18n } from "../../../../../core/i18n/i18nContext";
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import styles from "./ImageBodyView.module.css";
 
@@ -158,11 +159,14 @@ function renderPlaceholder({
     blurhash,
     maxWidth,
     maxHeight,
-}: Pick<ImageBodyViewSnapshot, "placeholder" | "blurhash" | "maxWidth" | "maxHeight">): JSX.Element | null {
+    loadingLabel,
+}: Pick<ImageBodyViewSnapshot, "placeholder" | "blurhash" | "maxWidth" | "maxHeight"> & {
+    loadingLabel: string;
+}): JSX.Element | null {
     switch (placeholder) {
         case ImageBodyViewPlaceholder.BLURHASH:
             if (!blurhash) {
-                return <InlineSpinner aria-label="Loading..." role="progressbar" />;
+                return <InlineSpinner aria-label={loadingLabel} role="progressbar" />;
             }
 
             return (
@@ -175,7 +179,7 @@ function renderPlaceholder({
             );
 
         case ImageBodyViewPlaceholder.SPINNER:
-            return <InlineSpinner aria-label="Loading..." role="progressbar" />;
+            return <InlineSpinner aria-label={loadingLabel} role="progressbar" />;
 
         case ImageBodyViewPlaceholder.NONE:
         default:
@@ -199,6 +203,7 @@ function renderPlaceholder({
  * ```
  */
 export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyViewProps>): JSX.Element {
+    const { translate: _t } = useI18n();
     const {
         state,
         alt,
@@ -255,7 +260,13 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
           }
         : undefined;
 
-    const placeholderNode = renderPlaceholder({ placeholder, blurhash, maxWidth, maxHeight });
+    const placeholderNode = renderPlaceholder({
+        placeholder,
+        blurhash,
+        maxWidth,
+        maxHeight,
+        loadingLabel: _t("common|loading"),
+    });
     const showPlaceholder = placeholderNode !== null;
 
     const media =

@@ -202,7 +202,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-spinner story 1`] = `
           class="ImageBodyView-module_placeholder"
         >
           <svg
-            aria-label="Loading..."
+            aria-label="Loading…"
             class="_icon_11k6c_18"
             fill="currentColor"
             height="1em"
