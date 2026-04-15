@@ -16,8 +16,8 @@ catalogs:
       specifier: 10.1.0
       version: 10.1.0
     '@vector-im/compound-web':
-      specifier: 9.1.0
-      version: 9.1.0
+      specifier: 9.2.0
+      version: 9.2.0
     matrix-web-i18n:
       specifier: 3.6.0
       version: 3.6.0
@@ -361,7 +361,7 @@ importers:
         version: 10.1.0(@types/react@19.2.10)(react@19.2.5)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 9.1.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.10)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        version: 9.2.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.10)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@vector-im/matrix-wysiwyg':
         specifier: 2.40.0
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.2.5)
@@ -1136,7 +1136,7 @@ importers:
         version: 8.58.0(eslint@8.57.1)(typescript@5.9.3)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 9.1.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.10)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        version: 9.2.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.10)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@vitest/browser-playwright':
         specifier: ^4.0.17
         version: 4.1.2(playwright@1.59.1)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.6.1)(sugarss@5.0.1(postcss@8.5.8))(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vitest@4.1.2)
@@ -5859,8 +5859,8 @@ packages:
       react:
         optional: true
 
-  '@vector-im/compound-web@9.1.0':
-    resolution: {integrity: sha512-eKyGVp8E7erd2yCMpUS7sJSu/Pytezp/C8Yw6kHay+d5aPxKJ53Hy1OgeO7sjnhZTETck17Ypj6V2zfH+Bdbwg==}
+  '@vector-im/compound-web@9.2.0':
+    resolution: {integrity: sha512-jHbABGEQ2yqNtm5xRIkklQs198VEfSk9AJQolI+e4WSJ0xg8Ozyv9t9KIuKQAmjdSV9aow5G6hDE861XB6DQgw==}
     peerDependencies:
       '@fontsource/inconsolata': ^5
       '@fontsource/inter': ^5
@@ -18667,7 +18667,7 @@ snapshots:
       '@types/react': 19.2.10
       react: 19.2.5
 
-  '@vector-im/compound-web@9.1.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.10)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@vector-im/compound-web@9.2.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.10)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
       '@floating-ui/react': 0.27.17(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@fontsource/inconsolata': 5.2.8
