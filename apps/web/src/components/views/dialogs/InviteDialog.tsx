@@ -12,10 +12,9 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
-import { RichList, RichItem, PillInput, Pill } from "@element-hq/web-shared-components";
+import { Pill, PillInput, RichList } from "@element-hq/web-shared-components";
 import { DialPadIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
@@ -31,8 +30,6 @@ import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { mediaFromMxc } from "../../../customisations/Media";
-import BaseAvatar from "../avatars/BaseAvatar";
 import { SearchResultAvatar } from "../avatars/SearchResultAvatar";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { selectText } from "../../../utils/strings";
@@ -43,7 +40,6 @@ import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import LegacyCallHandler from "../../../LegacyCallHandler";
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import CopyableText from "../elements/CopyableText";
 import { type ScreenName } from "../../../PosthogTrackers";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -64,6 +60,7 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
+import { DMRoomTile } from "./invite/DMRoomTile.tsx";
 
 interface Result {
     userId: string;
@@ -113,62 +110,6 @@ const toMember = (member: RoomMember | Member): Member => {
           })
         : member;
 };
-
-interface IDMRoomTileProps {
-    member: Member;
-    lastActiveTs?: number;
-    onToggle(member: Member): void;
-    isSelected: boolean;
-}
-
-class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
-    private onClick = (e: ButtonEvent): void => {
-        // Stop the browser from highlighting text
-        e.preventDefault();
-        e.stopPropagation();
-
-        this.props.onToggle(this.props.member);
-    };
-
-    public render(): React.ReactNode {
-        const avatarSize = "32px";
-        const avatar = (this.props.member as ThreepidMember).isEmail ? (
-            <EmailPillAvatarIcon width={avatarSize} height={avatarSize} />
-        ) : (
-            <BaseAvatar
-                url={
-                    this.props.member.getMxcAvatarUrl()
-                        ? mediaFromMxc(this.props.member.getMxcAvatarUrl()!).getSquareThumbnailHttp(
-                              parseInt(avatarSize, 10),
-                          )
-                        : null
-                }
-                name={this.props.member.name}
-                idName={this.props.member.userId}
-                size={avatarSize}
-            />
-        );
-
-        const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.props.member.userId, {
-            withDisplayName: true,
-        });
-
-        const caption = (this.props.member as ThreepidMember).isEmail
-            ? _t("invite|email_caption")
-            : userIdentifier || this.props.member.userId;
-
-        return (
-            <RichItem
-                avatar={avatar}
-                title={this.props.member.name}
-                description={caption}
-                timestamp={this.props.lastActiveTs}
-                onClick={this.onClick}
-                selected={this.props.isSelected}
-            />
-        );
-    }
-}
 
 interface BaseProps {
     // Takes a boolean which is true if a user / users were invited /
