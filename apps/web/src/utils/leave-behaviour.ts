@@ -65,8 +65,8 @@ export async function leaveRoomBehaviour(
     if (activeCall) {
         try {
             await activeCall.disconnect();
-        } catch {
-            logger.warn("Failed to disconnect call before leaving room.");
+        } catch (e) {
+            logger.warn("Failed to disconnect call before leaving room: " + e);
         }
     }
 
