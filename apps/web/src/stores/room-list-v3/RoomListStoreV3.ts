@@ -40,6 +40,7 @@ import { DefaultTagID } from "./skip-list/tag";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
+import { createSection } from "./section";
 
 /**
  * These are the filters passed to the room skip list.
@@ -59,6 +60,8 @@ export enum RoomListStoreV3Event {
     ListsUpdate = "lists_update",
     // The event which is called when the room list is loaded.
     ListsLoaded = "lists_loaded",
+    /** Fired when a new section is created in the room list. */
+    SectionCreated = "section_created",
 }
 
 // The result object for returning rooms from the store
@@ -89,6 +92,8 @@ export const CHATS_TAG = "chats";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
+export const SECTION_CREATED_EVENT = RoomListStoreV3Event.SectionCreated;
+
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
  * This is the third such implementation hence the "V3".
@@ -108,7 +113,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Defines the display order of sections.
      */
-    private readonly sortedTags: string[] = [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority];
+    private sortedTags: string[] = [DefaultTagID.Favourite, CHATS_TAG, DefaultTagID.LowPriority];
 
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
@@ -125,6 +130,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             this.onActiveSpaceChanged();
         });
         SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
+        SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
     }
 
     /**
@@ -196,6 +202,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
+        this.loadCustomSections();
+
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
 
         this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
@@ -462,6 +470,37 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filters) || []),
             };
         });
+    }
+
+    /**
+     * Handle changes to the order of custom sections.
+     * Reloads the custom sections, updates the skip list filters to reflect the new order and emits an update.
+     * Emit {@link LISTS_UPDATE_EVENT}.
+     */
+    private onOrderedCustomSectionsChange(): void {
+        this.loadCustomSections();
+        if (!this.roomSkipList) return;
+        this.roomSkipList.useNewFilters(this.getSkipListFilters());
+        this.scheduleEmit();
+    }
+
+    /**
+     * Create a new section.
+     * Emits {@link SECTION_CREATED_EVENT} and  {@link LISTS_UPDATE_EVENT} if the section was successfully created.
+     */
+    public async createSection(): Promise<void> {
+        const sectionIsCreated = await createSection();
+        if (!sectionIsCreated) return;
+        this.emit(SECTION_CREATED_EVENT);
+        this.scheduleEmit();
+    }
+
+    /**
+     * Load the custom sections from the settings store and update the sorted tags.
+     */
+    private loadCustomSections(): void {
+        const orderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
+        this.sortedTags = [DefaultTagID.Favourite, ...orderedCustomSections, CHATS_TAG, DefaultTagID.LowPriority];
     }
 }
 
