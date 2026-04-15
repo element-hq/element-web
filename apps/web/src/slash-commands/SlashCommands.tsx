@@ -841,7 +841,7 @@ export const Commands = [
             if (additionalSegment) {
                 return reject(new UserFriendlyError("slash_command|status|too_long_emoji"));
             }
-            if (text && !userStatusTextWithinMaxLength(text)) {
+            if (!userStatusTextWithinMaxLength(text)) {
                 return reject(new UserFriendlyError("slash_command|status|too_long_text"));
             }
             return success(
