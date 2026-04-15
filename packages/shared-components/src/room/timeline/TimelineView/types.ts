@@ -8,8 +8,12 @@ Please see LICENSE files in the repository root for full details.
 import type { ReactNode } from "react";
 import type { ViewModel } from "../../../core/viewmodel/ViewModel";
 
-// ─── Timeline item: one renderable row ─────────────────────────────
-
+/**
+ * Minimal row contract consumed by {@link TimelineView}.
+ *
+ * Concrete products can extend this shape with the data needed to render each
+ * timeline entry while preserving a stable key and row classification.
+ */
 export interface TimelineItem {
     /** Stable, unique key for React reconciliation and scroll-token anchoring. */
     key: string;
@@ -17,8 +21,10 @@ export interface TimelineItem {
     kind: "event" | "virtual" | "group";
 }
 
-// ─── Navigation anchor ─────────────────────────────────────────────
-
+/**
+ * Describes a timeline item that should be brought into view and where it should
+ * be aligned within the viewport.
+ */
 export interface NavigationAnchor {
     /** The `TimelineItem.key` to scroll to. */
     targetKey: string;
@@ -26,8 +32,9 @@ export interface NavigationAnchor {
     position?: "top" | "center" | "bottom";
 }
 
-// ─── Visible range ─────────────────────────────────────────────────
-
+/**
+ * Reports which portion of the loaded timeline window is currently visible.
+ */
 export interface VisibleRange {
     /** Index of the first visible item in the items array. */
     startIndex: number;
@@ -35,12 +42,17 @@ export interface VisibleRange {
     endIndex: number;
 }
 
-// ─── Loading & error ───────────────────────────────────────────────
-
+/**
+ * Represents the loading state for pagination at either end of the timeline.
+ */
 export type PaginationState = "idle" | "loading" | "error";
 
-// ─── Timeline view model contract ──────────────────────────────────
-
+/**
+ * Snapshot consumed by {@link TimelineView} on each render.
+ *
+ * It combines the loaded item window with pagination, live-edge, and scroll
+ * target state so the presenter can keep the viewport stable.
+ */
 export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem> {
     /** The ordered list of items to render. */
     items: TItem[];
@@ -64,6 +76,10 @@ export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem>
     scrollTarget: NavigationAnchor | null;
 }
 
+/**
+ * Callbacks emitted by {@link TimelineView} to let the owning view model drive
+ * pagination, live-edge state, and one-shot scroll targets.
+ */
 export interface TimelineViewActions {
     /** Request more items at the given end. */
     onRequestMoreItems(direction: "backward" | "forward"): void;
@@ -81,13 +97,17 @@ export interface TimelineViewActions {
     onIsAtLiveEdgeChanged(isAtLiveEdge: boolean): void;
 }
 
+/**
+ * View model contract required by {@link TimelineView}.
+ */
 export type TimelineViewModel<TItem extends TimelineItem = TimelineItem> = ViewModel<
     TimelineViewSnapshot<TItem>,
     TimelineViewActions
 >;
 
-// ─── Shared timeline view props ────────────────────────────────────
-
+/**
+ * Props for rendering a virtualized timeline against a {@link TimelineViewModel}.
+ */
 export interface TimelineViewProps<TItem extends TimelineItem = TimelineItem> {
     vm: TimelineViewModel<TItem>;
     /** Optional CSS class names to apply to the component container.*/

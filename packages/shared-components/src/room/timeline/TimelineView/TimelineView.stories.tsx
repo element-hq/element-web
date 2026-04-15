@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useRef, useState, type JSX } from "react";
+import { useArgs } from "storybook/preview-api";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BaseViewModel } from "../../../core/viewmodel";
@@ -28,6 +29,10 @@ type TimelineViewStoryProps = {
     initialScrollTargetSummary?: string;
     onItemsChanged?: (items: MockTimelineItem[]) => void;
     onIsAtLiveEdgeChanged?: (isAtLiveEdge: boolean) => void;
+};
+
+type TimelineViewStoryRendererProps = TimelineViewStoryProps & {
+    updateArgs: (args: Partial<TimelineViewStoryProps>) => void;
 };
 
 const AUTHORS = ["Alice", "Bob", "Charlie", "Dani", "Elliot", "Frank", "Greta", "Hana", "Isaac", "Jules"];
@@ -335,7 +340,7 @@ const TimelineViewStoryWrapperImpl = ({
 
 const TimelineViewStoryWrapper = withViewDocs(TimelineViewStoryWrapperImpl, TimelineView);
 
-const TimelineViewStoryRenderer = (args: TimelineViewStoryProps): JSX.Element => {
+const TimelineViewStoryRenderer = ({ updateArgs, ...args }: TimelineViewStoryRendererProps): JSX.Element => {
     const [renderedItems, setRenderedItems] = useState(args.items);
     const [renderedItemsVersion, setRenderedItemsVersion] = useState(args.itemsVersion ?? 0);
     const [renderedIsAtLiveEdge, setRenderedIsAtLiveEdge] = useState(
@@ -350,10 +355,9 @@ const TimelineViewStoryRenderer = (args: TimelineViewStoryProps): JSX.Element =>
         itemsVersionRef.current = nextItemsVersion;
         setRenderedItems(args.items);
         setRenderedItemsVersion(nextItemsVersion);
-        setRenderedIsAtLiveEdge(args.isAtLiveEdgeSummary ?? !args.initialScrollTarget);
         autoAppendAwaitingLiveEdgeCycleRef.current = false;
         autoAppendSawNotLiveEdgeRef.current = false;
-    }, [args.items, args.itemsVersion, args.isAtLiveEdgeSummary, args.initialScrollTarget]);
+    }, [args.items, args.itemsVersion, args.initialScrollTarget]);
 
     useEffect(() => {
         if (!autoAppendAwaitingLiveEdgeCycleRef.current) {
@@ -393,6 +397,9 @@ const TimelineViewStoryRenderer = (args: TimelineViewStoryProps): JSX.Element =>
             itemsVersionRef.current = nextItemsVersion;
             setRenderedItems(nextItems);
             setRenderedItemsVersion(nextItemsVersion);
+            updateArgs({
+                itemsSummary: formatItemsSummary(nextItems),
+            });
             autoAppendAwaitingLiveEdgeCycleRef.current = true;
             autoAppendSawNotLiveEdgeRef.current = false;
         }, 500);
@@ -400,11 +407,11 @@ const TimelineViewStoryRenderer = (args: TimelineViewStoryProps): JSX.Element =>
         return () => {
             window.clearInterval(timerId);
         };
-    }, [args.triggerAppendAtLiveEdge, renderedIsAtLiveEdge, renderedItems]);
+    }, [args.triggerAppendAtLiveEdge, renderedIsAtLiveEdge, renderedItems, updateArgs]);
 
     return (
         <TimelineViewStoryWrapper
-            key={`${args.initialScrollTargetSummary ?? "null"}:${formatItemsSummary(args.items)}`}
+            key={args.initialScrollTargetSummary ?? "null"}
             {...args}
             items={renderedItems}
             itemsVersion={renderedItemsVersion}
@@ -415,8 +422,14 @@ const TimelineViewStoryRenderer = (args: TimelineViewStoryProps): JSX.Element =>
                 itemsVersionRef.current = nextItemsVersion;
                 setRenderedItems(items);
                 setRenderedItemsVersion(nextItemsVersion);
+                updateArgs({
+                    itemsSummary: formatItemsSummary(items),
+                });
             }}
-            onIsAtLiveEdgeChanged={(isAtLiveEdge) => setRenderedIsAtLiveEdge(isAtLiveEdge)}
+            onIsAtLiveEdgeChanged={(isAtLiveEdge) => {
+                setRenderedIsAtLiveEdge(isAtLiveEdge);
+                updateArgs({ isAtLiveEdgeSummary: isAtLiveEdge });
+            }}
         />
     );
 };
@@ -445,7 +458,10 @@ const meta = {
         initialScrollTarget: null,
         initialScrollTargetSummary: formatScrollTargetSummary(null),
     },
-    render: (args): JSX.Element => <TimelineViewStoryRenderer {...args} />,
+    render: function Render(args): JSX.Element {
+        const [, updateArgs] = useArgs();
+        return <TimelineViewStoryRenderer {...args} updateArgs={updateArgs} />;
+    },
     argTypes: {
         items: {
             control: false,

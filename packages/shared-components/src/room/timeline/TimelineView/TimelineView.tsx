@@ -13,6 +13,21 @@ import { useTimelineViewPresenter } from "./TimelineViewPresenter";
 import styles from "./TimelineView.module.css";
 import type { TimelineItem, TimelineViewProps } from "./types";
 
+/**
+ * Renders a virtualized room timeline backed by a {@link TimelineViewModel}.
+ *
+ * The component owns the mechanics of timeline scrolling so feature code can
+ * focus on producing a snapshot and rendering rows. It preserves the viewport
+ * across pagination, follows the live edge when appropriate, and executes
+ * one-shot anchor jumps exposed through the view model.
+ *
+ * Consumers provide the row renderer through {@link TimelineViewProps.renderItem}
+ * and update the timeline state through the view-model callbacks declared by
+ * {@link TimelineViewActions}. The rendered list is powered by `react-virtuoso`
+ * to keep large timelines responsive while only mounting the visible window.
+ *
+ * @typeParam TItem - Concrete timeline item shape rendered by the timeline.
+ */
 export function TimelineView<TItem extends TimelineItem>({
     vm,
     className,

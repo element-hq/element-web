@@ -8,12 +8,35 @@ Please see LICENSE files in the repository root for full details.
 import type { ScrollIntoViewLocation } from "react-virtuoso";
 import type { NavigationAnchor, PaginationState, TimelineItem, VisibleRange } from "./types";
 
+/**
+ * Pure behavior helpers for `TimelineView`.
+ *
+ * This module encodes the timeline's implicit state machines as small predicates
+ * and selectors so the presenter can stay imperative while the decision logic
+ * remains easy to test.
+ *
+ * The behavior is split into five cooperating flows:
+ * 1. Window shift detection identifies when the loaded slice moved contiguously.
+ * 2. Initial fill bootstraps the first stable viewport before normal callbacks
+ *    are allowed to drive more behavior.
+ * 3. Anchor navigation turns one-shot scroll targets into concrete scroll
+ *    requests and avoids replaying fulfilled anchors.
+ * 4. Live-edge tracking distinguishes "at the bottom of the loaded window" from
+ *    "at the true live edge" and controls follow-output.
+ * 5. Pagination continuity decides when backward or forward pagination may run
+ *    and how to preserve viewport position when newer items arrive.
+ *
+ * These helpers are intentionally pure. `TimelineViewPresenter` owns refs,
+ * effects, and callback ordering.
+ */
 export const OVERSCAN_PX = 600;
 export const MAX_INITIAL_FILL_ROUNDS = 3;
 export const INITIAL_FIRST_ITEM_INDEX = 100_000;
 export const TOP_SCROLL_THRESHOLD_PX = 1;
 
 type TimelineScrollLocation = ScrollIntoViewLocation | false;
+
+// Window shift detection ----------------------------------------------------
 
 function findFirstOverlap<TItem extends TimelineItem>(
     prevItems: TItem[],
@@ -79,6 +102,14 @@ function hasUnexpectedTrailingOverlap<TItem extends TimelineItem>(
     return false;
 }
 
+/**
+ * Computes how far the loaded item window moved when two arrays still describe
+ * the same contiguous slice after pagination.
+ *
+ * The result is intentionally conservative. If the overlap is ambiguous,
+ * duplicated, or non-contiguous, the function returns `0` so the presenter does
+ * not make unsafe index-preservation assumptions.
+ */
 export function getContiguousWindowShift<TItem extends TimelineItem>(prevItems: TItem[], nextItems: TItem[]): number {
     if (prevItems === nextItems || prevItems.length === 0 || nextItems.length === 0) {
         return 0;
@@ -124,6 +155,19 @@ export function getContiguousWindowShift<TItem extends TimelineItem>(prevItems: 
     return nextOverlapStart - prevOverlapStart;
 }
 
+// Initial fill --------------------------------------------------------------
+
+/**
+ * Initial fill state machine.
+ *
+ * The timeline starts in `"filling"` while it acquires enough content to make
+ * the initial viewport meaningful. During this phase the presenter suppresses
+ * callback paths that would otherwise misinterpret startup layout churn as user
+ * intent.
+ *
+ * Once the presenter transitions to `"done"`, normal pagination and live-edge
+ * behavior can resume.
+ */
 function getInitialBottomScrollLocation({
     isAtLiveEdge,
     totalCount,
@@ -147,6 +191,8 @@ function getInitialBottomScrollLocation({
         behavior: "auto",
     };
 }
+
+// Anchor navigation ---------------------------------------------------------
 
 function getScrollAlign(position: NavigationAnchor["position"]): ScrollIntoViewLocation["align"] {
     if (position === undefined || position === "top") {
@@ -176,6 +222,14 @@ function getAnchorScrollLocation<TItem extends TimelineItem>(
     };
 }
 
+/**
+ * Anchor navigation state machine.
+ *
+ * A `scrollTarget` is a one-shot request from the view model to bring a
+ * specific item into view. Explicit anchors take priority over the default
+ * startup snap to the live end, and anchors that were already satisfied are not
+ * replayed.
+ */
 export function getScrollLocationOnChange<TItem extends TimelineItem>({
     items,
     scrollTarget,
@@ -210,6 +264,10 @@ export function getScrollLocationOnChange<TItem extends TimelineItem>({
     return getAnchorScrollLocation(items, scrollTarget);
 }
 
+/**
+ * Treats a bottom-aligned anchor to the terminal item as satisfying the initial
+ * live-edge snap, so startup does not attempt an additional redundant scroll.
+ */
 export function shouldMarkInitialBottomSnapDoneOnScrollTarget<TItem extends TimelineItem>({
     items,
     scrollTarget,
@@ -233,6 +291,10 @@ export function shouldMarkInitialBottomSnapDoneOnScrollTarget<TItem extends Time
     return scrollTarget.position === undefined || scrollTarget.position === "bottom";
 }
 
+/**
+ * After the initial backfill settles, requests a final snap to the terminal
+ * item so live timelines end in a stable bottom-aligned state.
+ */
 export function getPostInitialFillBottomSnapIndex({
     initialFillState,
     isAtLiveEdge,
@@ -261,6 +323,10 @@ export function getPostInitialFillBottomSnapIndex({
     return firstItemIndex + itemCount - 1;
 }
 
+/**
+ * Ignores transient `atBottom` notifications during startup while the timeline
+ * is still performing its initial fill and no explicit anchor is being sought.
+ */
 export function shouldIgnoreAtBottomStateChange({
     initialFillState,
     hasScrollTarget,
@@ -271,6 +337,14 @@ export function shouldIgnoreAtBottomStateChange({
     return initialFillState === "filling" && !hasScrollTarget;
 }
 
+// Live-edge tracking --------------------------------------------------------
+
+/**
+ * Live-edge tracking state machine.
+ *
+ * Being at the bottom of the currently loaded window only counts as being at
+ * the true live edge when forward pagination is exhausted.
+ */
 export function getIsAtLiveEdgeFromBottomState({
     atBottom,
     canPaginateForward,
@@ -281,6 +355,32 @@ export function getIsAtLiveEdgeFromBottomState({
     return atBottom && !canPaginateForward;
 }
 
+/**
+ * Disables follow-output once the user scrolls upward while the timeline was
+ * previously following live content.
+ */
+export function shouldDisableFollowOutputOnScroll({
+    previousScrollTop,
+    currentScrollTop,
+    isAtLiveEdge,
+    followOutputEnabled,
+}: {
+    previousScrollTop: number | null;
+    currentScrollTop: number;
+    isAtLiveEdge: boolean;
+    followOutputEnabled: boolean;
+}): boolean {
+    return followOutputEnabled && isAtLiveEdge && previousScrollTop !== null && currentScrollTop < previousScrollTop;
+}
+
+// Backward pagination -------------------------------------------------------
+
+/**
+ * Backward pagination trigger state machine.
+ *
+ * Older-history pagination is only allowed once startup is complete and the
+ * user is no longer pinned to the live end or navigating to an explicit anchor.
+ */
 export function shouldIgnoreStartReached({
     initialFillState,
     isAtLiveEdge,
@@ -318,6 +418,14 @@ export function shouldPaginateBackwardAtTopScroll({
     );
 }
 
+// Forward pagination continuity --------------------------------------------
+
+/**
+ * Forward pagination continuity state machine.
+ *
+ * End-reached signals that occur during startup may need to be replayed once
+ * initial fill completes and the forward edge is allowed to paginate normally.
+ */
 export function shouldReplayPendingForwardPaginationAfterInitialFill({
     initialFillState,
     hasPendingEndReached,
@@ -332,6 +440,14 @@ export function shouldReplayPendingForwardPaginationAfterInitialFill({
     return initialFillState === "done" && hasPendingEndReached && forwardPagination === "idle" && canPaginateForward;
 }
 
+/**
+ * When newer items are appended while the user is browsing away from the live
+ * edge, returns the absolute index of the anchor item that should be restored
+ * to preserve viewport position.
+ *
+ * Restoration is skipped for live-edge requests, anchor jumps, and
+ * non-contiguous window shifts.
+ */
 export function getForwardPaginationAnchorIndex<TItem extends TimelineItem>({
     previousItems,
     nextItems,
@@ -375,6 +491,10 @@ export function getForwardPaginationAnchorIndex<TItem extends TimelineItem>({
     return nextAnchorIndex >= 0 ? firstItemIndex + nextAnchorIndex : null;
 }
 
+/**
+ * Computes the scroll adjustment needed to restore the previous bottom offset of
+ * the chosen anchor after forward pagination settles.
+ */
 export function getForwardPaginationAnchorAdjustment({
     desiredBottomOffset,
     currentBottomOffset,
@@ -383,18 +503,4 @@ export function getForwardPaginationAnchorAdjustment({
     currentBottomOffset: number;
 }): number {
     return desiredBottomOffset - currentBottomOffset;
-}
-
-export function shouldDisableFollowOutputOnScroll({
-    previousScrollTop,
-    currentScrollTop,
-    isAtLiveEdge,
-    followOutputEnabled,
-}: {
-    previousScrollTop: number | null;
-    currentScrollTop: number;
-    isAtLiveEdge: boolean;
-    followOutputEnabled: boolean;
-}): boolean {
-    return followOutputEnabled && isAtLiveEdge && previousScrollTop !== null && currentScrollTop < previousScrollTop;
 }
