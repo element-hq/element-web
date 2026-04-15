@@ -5,8 +5,8 @@
     "packageRules": [
         {
             "groupName": "testcontainers docker digests",
-            "groupSlug": "{{manager}}-docker-digests",
-            "matchManagers": ["custom.regex"],
+            "groupSlug": "testcontainers-docker",
+            "matchDepTypes": ["testcontainers-docker"],
             "matchPackageNames": ["*"]
         }
     ],
@@ -17,7 +17,16 @@
             "versioningTemplate": "loose",
             "description": "Update testcontainers docker digests",
             "managerFilePatterns": ["**/testcontainers/*.ts"],
-            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""]
+            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""],
+            "depTypeTemplate": "testcontainers-docker"
+        },
+        {
+            "customType": "jsonata",
+            "fileMatch": ["(^|/)package\\.json$"],
+            "fileFormat": "json",
+            "matchStrings": ["hakDependencies.$each(function($v, $k) { { 'packageName': $k, 'currentValue': $v } })"],
+            "datasourceTemplate": "npm",
+            "depTypeTemplate": "hak"
         }
     ]
 }
