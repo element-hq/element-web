@@ -26,7 +26,7 @@ import {
     shouldPaginateBackwardAtTopScroll,
     shouldReplayPendingForwardPaginationAfterInitialFill,
 } from "./TimelineViewBehavior";
-import { getLastVisibleTimelineItemElement } from "./TimelineViewDom";
+import { canSnapToBottom, getLastVisibleTimelineItemElement } from "./TimelineViewDom";
 import type { TimelineItem, TimelineViewActions, TimelineViewSnapshot } from "./types";
 
 class TestTimelineViewModel
@@ -362,6 +362,7 @@ describe("TimelineView", () => {
                     lastVisibleRange: { startIndex: 0, endIndex: 2 },
                     bottomOffsetPx: 0,
                     requestedAtLiveEdge: false,
+                    requestedWhileSeekingLiveEdge: false,
                 },
                 previousForwardPagination: "loading",
                 forwardPagination: "idle",
@@ -391,6 +392,7 @@ describe("TimelineView", () => {
                     lastVisibleRange: { startIndex: 39, endIndex: 49 },
                     bottomOffsetPx: 0,
                     requestedAtLiveEdge: false,
+                    requestedWhileSeekingLiveEdge: false,
                 },
                 previousForwardPagination: "loading",
                 forwardPagination: "idle",
@@ -417,6 +419,34 @@ describe("TimelineView", () => {
                     lastVisibleRange: { startIndex: 0, endIndex: 1 },
                     bottomOffsetPx: 0,
                     requestedAtLiveEdge: true,
+                    requestedWhileSeekingLiveEdge: true,
+                },
+                previousForwardPagination: "loading",
+                forwardPagination: "idle",
+                hasScrollTarget: false,
+                firstItemIndex: 100,
+                windowShift: 0,
+            }),
+        ).toBeNull();
+    });
+
+    it("does not anchor forward pagination when the request started while seeking the live edge", () => {
+        const previousItems: TimelineItem[] = [
+            { key: "alpha", kind: "event" },
+            { key: "beta", kind: "event" },
+        ];
+        const nextItems: TimelineItem[] = [...previousItems, { key: "gamma", kind: "event" }];
+
+        expect(
+            getForwardPaginationAnchorIndex({
+                previousItems,
+                nextItems,
+                forwardPaginationContext: {
+                    anchorKey: "beta",
+                    lastVisibleRange: { startIndex: 0, endIndex: 1 },
+                    bottomOffsetPx: 0,
+                    requestedAtLiveEdge: false,
+                    requestedWhileSeekingLiveEdge: true,
                 },
                 previousForwardPagination: "loading",
                 forwardPagination: "idle",
@@ -487,6 +517,26 @@ describe("TimelineView", () => {
         });
 
         expect(getLastVisibleTimelineItemElement(scrollerElement)).toBe(fullyVisibleElement);
+    });
+
+    it("treats a scroller within the bottom snap threshold as close enough to the live edge", () => {
+        const scrollerElement = document.createElement("div");
+
+        vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(1200);
+        vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(400);
+        vi.spyOn(scrollerElement, "scrollTop", "get").mockReturnValue(784);
+
+        expect(canSnapToBottom(scrollerElement)).toBe(true);
+    });
+
+    it("does not treat a scroller outside the bottom snap threshold as live-edge pinned", () => {
+        const scrollerElement = document.createElement("div");
+
+        vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(1200);
+        vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(400);
+        vi.spyOn(scrollerElement, "scrollTop", "get").mockReturnValue(700);
+
+        expect(canSnapToBottom(scrollerElement)).toBe(false);
     });
 
     it("ignores non-contiguous overlap when computing a window shift", () => {
@@ -646,6 +696,55 @@ describe("TimelineView", () => {
 
         await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
         expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce();
+    });
+
+    it("scrolls to the exact bottom when items append while already at the live edge", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: false,
+                    canPaginateForward: false,
+                    isAtLiveEdge: true,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(() => undefined);
+            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(260);
+            const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
+            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockReturnValue(0);
+
+            scrollToSpy.mockClear();
+
+            vm.updateSnapshot({
+                items: [
+                    { key: "alpha", kind: "event" },
+                    { key: "beta", kind: "event" },
+                    { key: "gamma", kind: "event" },
+                    { key: "delta", kind: "event" },
+                ],
+                isAtLiveEdge: true,
+                canPaginateForward: false,
+            });
+
+            await waitFor(() =>
+                expect(scrollToSpy).toHaveBeenCalledWith({
+                    top: 60,
+                }),
+            );
+
+            scrollHeightSpy.mockRestore();
+            clientHeightSpy.mockRestore();
+            scrollTopSpy.mockRestore();
+            scrollToSpy.mockRestore();
+        });
     });
 
     it("suppresses the initial backward probe while a scroll target is being resolved", async () => {

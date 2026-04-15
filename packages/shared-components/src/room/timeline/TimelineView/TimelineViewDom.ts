@@ -9,7 +9,8 @@ import type { NavigationAnchor } from "./types";
 
 export const MAX_LOCAL_ANCHOR_CORRECTION_ATTEMPTS = 6;
 export const REQUIRED_STABLE_ANCHOR_ALIGNMENT_CHECKS = 2;
-const VISIBILITY_EPSILON_PX = 1;
+const SNAP_TO_TARGET_OFFSET_EPSILON_PX = 1;
+export const SNAP_TO_BOTTOM_OFFSET_EPSILON_PX = 16;
 
 export function findTimelineItemElement(scrollerElement: HTMLElement, targetKey: string): HTMLElement | null {
     return scrollerElement.querySelector<HTMLElement>(`[data-timeline-item-key="${targetKey}"]`);
@@ -28,16 +29,16 @@ export function isScrollTargetAligned({
     const targetRect = targetElement.getBoundingClientRect();
 
     if (position === undefined || position === "top") {
-        return Math.abs(targetRect.top - scrollerRect.top) <= VISIBILITY_EPSILON_PX;
+        return Math.abs(targetRect.top - scrollerRect.top) <= SNAP_TO_TARGET_OFFSET_EPSILON_PX;
     }
 
     if (position === "bottom") {
-        return Math.abs(scrollerRect.bottom - targetRect.bottom) <= VISIBILITY_EPSILON_PX;
+        return Math.abs(scrollerRect.bottom - targetRect.bottom) <= SNAP_TO_TARGET_OFFSET_EPSILON_PX;
     }
 
     const scrollerCenter = (scrollerRect.top + scrollerRect.bottom) / 2;
     const targetCenter = (targetRect.top + targetRect.bottom) / 2;
-    return Math.abs(targetCenter - scrollerCenter) <= VISIBILITY_EPSILON_PX;
+    return Math.abs(targetCenter - scrollerCenter) <= SNAP_TO_TARGET_OFFSET_EPSILON_PX;
 }
 
 export function getScrollTargetAdjustment({
@@ -68,7 +69,7 @@ export function getScrollTargetAdjustment({
 export function canAdjustScrollTop(currentScrollTop: number, scrollAdjustment: number): boolean {
     const nextScrollTop = currentScrollTop + scrollAdjustment;
     const clampedScrollTop = Math.max(0, nextScrollTop);
-    return Math.abs(clampedScrollTop - currentScrollTop) > VISIBILITY_EPSILON_PX;
+    return Math.abs(clampedScrollTop - currentScrollTop) > SNAP_TO_TARGET_OFFSET_EPSILON_PX;
 }
 
 export function cannotAlignWithinLoadedWindow(currentScrollTop: number, scrollAdjustment: number): boolean {
@@ -83,6 +84,11 @@ export function getBottomOffset(scrollerElement: HTMLElement, targetElement: HTM
     return scrollerElement.getBoundingClientRect().bottom - targetElement.getBoundingClientRect().bottom;
 }
 
+export function canSnapToBottom(scrollerElement: HTMLElement): boolean {
+    const remainingScrollPx = scrollerElement.scrollHeight - scrollerElement.clientHeight - scrollerElement.scrollTop;
+    return remainingScrollPx <= SNAP_TO_BOTTOM_OFFSET_EPSILON_PX;
+}
+
 export function getLastVisibleTimelineItemElement(scrollerElement: HTMLElement): HTMLElement | null {
     const scrollerRect = scrollerElement.getBoundingClientRect();
     const itemElements = scrollerElement.querySelectorAll<HTMLElement>("[data-timeline-item-key]");
@@ -95,8 +101,8 @@ export function getLastVisibleTimelineItemElement(scrollerElement: HTMLElement):
     for (const itemElement of itemElements) {
         const itemRect = itemElement.getBoundingClientRect();
         const intersectsViewport =
-            itemRect.bottom > scrollerRect.top + VISIBILITY_EPSILON_PX &&
-            itemRect.top < scrollerRect.bottom - VISIBILITY_EPSILON_PX;
+            itemRect.bottom > scrollerRect.top + SNAP_TO_TARGET_OFFSET_EPSILON_PX &&
+            itemRect.top < scrollerRect.bottom - SNAP_TO_TARGET_OFFSET_EPSILON_PX;
         if (!intersectsViewport) {
             continue;
         }
@@ -107,8 +113,8 @@ export function getLastVisibleTimelineItemElement(scrollerElement: HTMLElement):
         }
 
         const isFullyVisible =
-            itemRect.top >= scrollerRect.top - VISIBILITY_EPSILON_PX &&
-            itemRect.bottom <= scrollerRect.bottom + VISIBILITY_EPSILON_PX;
+            itemRect.top >= scrollerRect.top - SNAP_TO_TARGET_OFFSET_EPSILON_PX &&
+            itemRect.bottom <= scrollerRect.bottom + SNAP_TO_TARGET_OFFSET_EPSILON_PX;
         if (!isFullyVisible) {
             continue;
         }

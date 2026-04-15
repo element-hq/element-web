@@ -137,6 +137,10 @@ function getInitialBottomScrollLocation({
         return false;
     }
 
+    if (!Number.isFinite(totalCount) || totalCount <= 0) {
+        return false;
+    }
+
     return {
         index: totalCount - 1,
         align: "end",
@@ -187,7 +191,7 @@ export function getScrollLocationOnChange<TItem extends TimelineItem>({
     lastAnchoredKey: string | null;
     initialBottomSnapDone: boolean;
 }): TimelineScrollLocation {
-    if (totalCount === 0) {
+    if (!Number.isFinite(totalCount) || totalCount <= 0) {
         return false;
     }
 
@@ -345,6 +349,7 @@ export function getForwardPaginationAnchorIndex<TItem extends TimelineItem>({
         lastVisibleRange: VisibleRange | null;
         bottomOffsetPx: number | null;
         requestedAtLiveEdge: boolean;
+        requestedWhileSeekingLiveEdge: boolean;
     } | null;
     previousForwardPagination: PaginationState;
     forwardPagination: PaginationState;
@@ -359,6 +364,7 @@ export function getForwardPaginationAnchorIndex<TItem extends TimelineItem>({
         previousItems.length === 0 ||
         !forwardPaginationContext ||
         forwardPaginationContext.requestedAtLiveEdge ||
+        forwardPaginationContext.requestedWhileSeekingLiveEdge ||
         !forwardPaginationContext.anchorKey ||
         windowShift !== 0
     ) {

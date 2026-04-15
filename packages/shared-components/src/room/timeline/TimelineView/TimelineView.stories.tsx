@@ -5,8 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useRef, type JSX } from "react";
-import { useArgs } from "storybook/preview-api";
+import React, { useEffect, useRef, useState, type JSX } from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BaseViewModel } from "../../../core/viewmodel";
@@ -24,6 +23,7 @@ type TimelineViewStoryProps = {
     itemsVersion?: number;
     itemsSummary?: string;
     isAtLiveEdgeSummary?: boolean;
+    triggerAppendAtLiveEdge?: boolean;
     initialScrollTarget?: NavigationAnchor | null;
     initialScrollTargetSummary?: string;
     onItemsChanged?: (items: MockTimelineItem[]) => void;
@@ -47,6 +47,7 @@ const PAGE_SIZE = 10;
 const MODEL_WINDOW_LIMIT = 50;
 const EARLIEST_ITEM_NUMBER = 1;
 const LATEST_ITEM_NUMBER = 100;
+const AUTO_APPEND_STORY_LATEST_ITEM_NUMBER = 120;
 const INITIAL_ITEM_COUNT = 10;
 const INITIAL_START_INDEX = 91;
 
@@ -229,7 +230,7 @@ class StoryTimelineViewModel
             });
             this.callbacks.onItemsChanged(windowedItems);
             this.pendingPaginationTimer = null;
-        }, 1000);
+        }, 100);
     }
 
     public onInitialFillCompleted(): void {
@@ -259,13 +260,13 @@ class StoryTimelineViewModel
     }
 }
 
-function TimelineViewStoryWrapperImpl({
+const TimelineViewStoryWrapperImpl = ({
     items,
     itemsVersion = 0,
     initialScrollTarget,
     onItemsChanged,
     onIsAtLiveEdgeChanged,
-}: Readonly<TimelineViewStoryProps>): JSX.Element {
+}: Readonly<TimelineViewStoryProps>): JSX.Element => {
     const vmRef = useRef<StoryTimelineViewModel | null>(null);
     const callbacksRef = useRef<StoryTimelineCallbacks>({
         onRequestMoreItems: () => undefined,
@@ -308,6 +309,7 @@ function TimelineViewStoryWrapperImpl({
                     <article
                         style={{
                             padding: "12px 16px",
+                            marginRight: "12px",
                             borderBottom: "1px solid",
                         }}
                     >
@@ -329,9 +331,95 @@ function TimelineViewStoryWrapperImpl({
             />
         </div>
     );
-}
+};
 
 const TimelineViewStoryWrapper = withViewDocs(TimelineViewStoryWrapperImpl, TimelineView);
+
+const TimelineViewStoryRenderer = (args: TimelineViewStoryProps): JSX.Element => {
+    const [renderedItems, setRenderedItems] = useState(args.items);
+    const [renderedItemsVersion, setRenderedItemsVersion] = useState(args.itemsVersion ?? 0);
+    const [renderedIsAtLiveEdge, setRenderedIsAtLiveEdge] = useState(
+        args.isAtLiveEdgeSummary ?? !args.initialScrollTarget,
+    );
+    const itemsVersionRef = React.useRef(args.itemsVersion ?? 0);
+    const autoAppendAwaitingLiveEdgeCycleRef = React.useRef(false);
+    const autoAppendSawNotLiveEdgeRef = React.useRef(false);
+
+    useEffect(() => {
+        const nextItemsVersion = args.itemsVersion ?? 0;
+        itemsVersionRef.current = nextItemsVersion;
+        setRenderedItems(args.items);
+        setRenderedItemsVersion(nextItemsVersion);
+        setRenderedIsAtLiveEdge(args.isAtLiveEdgeSummary ?? !args.initialScrollTarget);
+        autoAppendAwaitingLiveEdgeCycleRef.current = false;
+        autoAppendSawNotLiveEdgeRef.current = false;
+    }, [args.items, args.itemsVersion, args.isAtLiveEdgeSummary, args.initialScrollTarget]);
+
+    useEffect(() => {
+        if (!autoAppendAwaitingLiveEdgeCycleRef.current) {
+            return;
+        }
+
+        if (!renderedIsAtLiveEdge) {
+            autoAppendSawNotLiveEdgeRef.current = true;
+            return;
+        }
+
+        if (autoAppendSawNotLiveEdgeRef.current) {
+            autoAppendAwaitingLiveEdgeCycleRef.current = false;
+            autoAppendSawNotLiveEdgeRef.current = false;
+        }
+    }, [renderedIsAtLiveEdge]);
+
+    useEffect(() => {
+        if (!args.triggerAppendAtLiveEdge || !renderedIsAtLiveEdge) {
+            return;
+        }
+
+        const timerId = window.setInterval(() => {
+            if (autoAppendAwaitingLiveEdgeCycleRef.current) {
+                return;
+            }
+
+            const lastItem = renderedItems.at(-1);
+            const nextItemNumber = lastItem ? getItemNumber(lastItem) + 1 : EARLIEST_ITEM_NUMBER;
+
+            if (nextItemNumber > AUTO_APPEND_STORY_LATEST_ITEM_NUMBER) {
+                return;
+            }
+
+            const nextItems = applyWindowLimit([...renderedItems, ...createMockItems(1, nextItemNumber)], "forward");
+            const nextItemsVersion = itemsVersionRef.current + 1;
+            itemsVersionRef.current = nextItemsVersion;
+            setRenderedItems(nextItems);
+            setRenderedItemsVersion(nextItemsVersion);
+            autoAppendAwaitingLiveEdgeCycleRef.current = true;
+            autoAppendSawNotLiveEdgeRef.current = false;
+        }, 500);
+
+        return () => {
+            window.clearInterval(timerId);
+        };
+    }, [args.triggerAppendAtLiveEdge, renderedIsAtLiveEdge, renderedItems]);
+
+    return (
+        <TimelineViewStoryWrapper
+            key={`${args.initialScrollTargetSummary ?? "null"}:${formatItemsSummary(args.items)}`}
+            {...args}
+            items={renderedItems}
+            itemsVersion={renderedItemsVersion}
+            itemsSummary={formatItemsSummary(renderedItems)}
+            isAtLiveEdgeSummary={renderedIsAtLiveEdge}
+            onItemsChanged={(items) => {
+                const nextItemsVersion = itemsVersionRef.current + 1;
+                itemsVersionRef.current = nextItemsVersion;
+                setRenderedItems(items);
+                setRenderedItemsVersion(nextItemsVersion);
+            }}
+            onIsAtLiveEdgeChanged={(isAtLiveEdge) => setRenderedIsAtLiveEdge(isAtLiveEdge)}
+        />
+    );
+};
 
 const meta = {
     title: "Room/Timeline/TimelineView",
@@ -341,46 +429,23 @@ const meta = {
         controls: {
             expanded: false,
         },
+        docs: {
+            description: {
+                component:
+                    (TimelineView as { __docgenInfo?: { description?: string } }).__docgenInfo?.description ?? "",
+            },
+        },
     },
     args: {
         items: createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX),
         itemsVersion: 0,
         itemsSummary: formatItemsSummary(createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX)),
         isAtLiveEdgeSummary: true,
+        triggerAppendAtLiveEdge: false,
         initialScrollTarget: null,
         initialScrollTargetSummary: formatScrollTargetSummary(null),
     },
-    render: function Render(args): JSX.Element {
-        const [, updateArgs] = useArgs<TimelineViewStoryProps>();
-        const itemsVersionRef = React.useRef(args.itemsVersion ?? 0);
-        itemsVersionRef.current = Math.max(itemsVersionRef.current, args.itemsVersion ?? 0);
-
-        return (
-            <TimelineViewStoryWrapper
-                {...args}
-                onItemsChanged={(items) => {
-                    const nextItemsVersion = itemsVersionRef.current + 1;
-                    itemsVersionRef.current = nextItemsVersion;
-                    if (args.initialScrollTarget) {
-                        updateArgs({
-                            itemsSummary: formatItemsSummary(items),
-                        });
-                        return;
-                    }
-                    updateArgs({
-                        items,
-                        itemsVersion: nextItemsVersion,
-                        itemsSummary: formatItemsSummary(items),
-                    });
-                }}
-                onIsAtLiveEdgeChanged={(isAtLiveEdge) =>
-                    updateArgs({
-                        isAtLiveEdgeSummary: isAtLiveEdge,
-                    })
-                }
-            />
-        );
-    },
+    render: (args): JSX.Element => <TimelineViewStoryRenderer {...args} />,
     argTypes: {
         items: {
             control: false,
@@ -400,6 +465,12 @@ const meta = {
         isAtLiveEdgeSummary: {
             control: { type: "boolean" },
             name: "isAtLiveEdge",
+            table: {
+                type: { summary: "boolean" },
+            },
+        },
+        triggerAppendAtLiveEdge: {
+            control: { type: "boolean" },
             table: {
                 type: { summary: "boolean" },
             },
@@ -428,22 +499,51 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+const disableDocsStoryRendering = {
+    docs: {
+        disable: true,
+    },
+} as const;
 
-export const IsAtLiveEdge: Story = {};
+const startAtLiveEdgeItems = createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX);
 
-const anchorItems = createMockItems(INITIAL_ITEM_COUNT, 41);
-const anchorScrollTarget: NavigationAnchor = {
+export const StartAtLiveEdge: Story = {
+    parameters: disableDocsStoryRendering,
+    args: {
+        items: startAtLiveEdgeItems,
+        itemsSummary: formatItemsSummary(startAtLiveEdgeItems),
+        isAtLiveEdgeSummary: true,
+    },
+};
+
+const startAtTargetItems = createMockItems(INITIAL_ITEM_COUNT, 41);
+const startAtTargetScrollTarget: NavigationAnchor = {
     targetKey: "event-45",
     position: "bottom",
 };
 
-export const IsAtTarget: Story = {
-    tags: ["!snapshot"], // TODO - Make playwright match screenshot after target scroll have settled
+export const StartAtTarget: Story = {
+    parameters: disableDocsStoryRendering,
     args: {
-        items: anchorItems,
-        itemsSummary: formatItemsSummary(anchorItems),
+        items: startAtTargetItems,
+        itemsSummary: formatItemsSummary(startAtTargetItems),
         isAtLiveEdgeSummary: false,
-        initialScrollTarget: anchorScrollTarget,
-        initialScrollTargetSummary: formatScrollTargetSummary(anchorScrollTarget),
+        initialScrollTarget: startAtTargetScrollTarget,
+        initialScrollTargetSummary: formatScrollTargetSummary(startAtTargetScrollTarget),
+    },
+};
+
+const liveEdgeTriggerAppendItems = createMockItems(INITIAL_ITEM_COUNT, INITIAL_START_INDEX);
+
+export const LiveEdgeTriggerAppend: Story = {
+    parameters: disableDocsStoryRendering,
+    args: {
+        items: liveEdgeTriggerAppendItems,
+        itemsVersion: 0,
+        itemsSummary: formatItemsSummary(liveEdgeTriggerAppendItems),
+        isAtLiveEdgeSummary: true,
+        triggerAppendAtLiveEdge: true,
+        initialScrollTarget: null,
+        initialScrollTargetSummary: formatScrollTargetSummary(null),
     },
 };
