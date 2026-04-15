@@ -5,6 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import {} from "@element-hq/element-web-playwright-common/src/utils/toasts";
+
 import { test, expect } from "../../element-web-test";
 
 test.describe("PSTN", () => {
@@ -20,9 +22,9 @@ test.describe("PSTN", () => {
         });
     });
 
-    test("should render dialpad as expected", { tag: "@screenshot" }, async ({ page, user, toasts }) => {
-        await toasts.rejectToast("Notifications");
-        await toasts.assertNoToasts();
+    test("should render dialpad as expected", { tag: "@screenshot" }, async ({ page, user }) => {
+        await rejectToast(page, "Notifications");
+        await assertNoToasts(page);
 
         await expect(page.getByTestId("room-list-search")).toMatchScreenshot("dialpad-trigger.png");
         await page.getByLabel("Open dial pad").click();

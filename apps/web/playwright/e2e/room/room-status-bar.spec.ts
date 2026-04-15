@@ -4,6 +4,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { getToast } from "@element-hq/element-web-playwright-common/src/utils/toasts";
+
 import { test, expect } from "../../element-web-test";
 
 test.describe("Room Status Bar", () => {
@@ -38,7 +40,7 @@ test.describe("Room Status Bar", () => {
         await expect(banner).toBeVisible({ timeout: 15000 });
         await expect(banner).toMatchScreenshot("connectivity_lost.png");
     });
-    test("should NOT an error when a resource limit is hit", async ({ page, user, app, room, axe, toasts }) => {
+    test("should NOT an error when a resource limit is hit", async ({ page, user, app, room, axe }) => {
         await app.viewRoomById(room.roomId);
         await page.route("**/_matrix/client/*/sync*", async (route, req) => {
             await route.fulfill({
@@ -54,7 +56,7 @@ test.describe("Room Status Bar", () => {
         });
         await app.client.sendMessage(room.roomId, "forcing sync to run");
         // Wait for the MAU warning toast to appear so we know this status bar would have appeared.
-        await toasts.getToast("Warning", 15000);
+        await getToast(page, "Warning", 15000);
         await expect(page.getByRole("region", { name: "Room status bar" })).not.toBeVisible();
     });
     test(
