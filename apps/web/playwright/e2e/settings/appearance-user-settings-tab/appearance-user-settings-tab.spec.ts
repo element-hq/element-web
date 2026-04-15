@@ -13,7 +13,7 @@ test.describe("Appearance user settings tab", () => {
         displayName: "Hanako",
     });
 
-    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, user, app }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, user, app, axe }) => {
         const tab = await app.settings.openUserSettings("Appearance");
 
         // Click "Show advanced" link button
@@ -23,6 +23,8 @@ test.describe("Appearance user settings tab", () => {
         await expect(tab.getByRole("button", { name: "Hide advanced" })).toBeVisible();
 
         await expect(tab).toMatchScreenshot("appearance-tab.png");
+
+        await expect(axe).toHaveNoViolations();
     });
 
     test(

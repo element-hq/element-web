@@ -15,7 +15,6 @@
         "cancel": "გაუქმება",
         "change": "ცვლილება",
         "clear": "გასუფთავება",
-        "click": "დააწკაპუნეთ",
         "click_to_copy": "დააწკაპუნეთ კოპირებისთვის",
         "close": "დახურვა",
         "collapse": "აკეცვა",
@@ -899,9 +898,6 @@
         "other": "In%(spaceName)s და%(count)s სხვა სივრცეები."
     },
     "invite": {
-        "ask_anyway_description": "ქვემოთ ჩამოთვლილი Matrix ID-ების პროფილების პოვნა ვერ ხერხდება - მაინც გსურთ DM-ის დაწყება?",
-        "ask_anyway_label": "მაინც დაიწყე DM",
-        "ask_anyway_never_warn_label": "მაინც დაიწყე DM და აღარასოდეს გამაფრთხილო",
         "email_caption": "მოიწვიე ელექტრონული ფოსტით",
         "email_limit_one": "მოწვევები ელექტრონული ფოსტით შეიძლება გაიგზავნოს მხოლოდ ერთ ჯერზე",
         "email_use_default_is": "გამოიყენეთ საიდენტიფიკაციო სერვერი ელექტრონული ფოსტით მოსაწვევად.<default> გამოიყენეთ ნაგულისხმევი (%(defaultIdentityServerName)s )</default> ან მართეთ<settings> პარამეტრები</settings> .",
@@ -1390,8 +1386,6 @@
             "aliases_section": "ოთახის მისამართები",
             "avatar_field_label": "ოთახის ავატარი",
             "canonical_alias_field_label": "მთავარი მისამართი",
-            "default_url_previews_off": "URL-ის გადახედვა ნაგულისხმევად გამორთულია ამ ოთახში მონაწილეებისთვის.",
-            "default_url_previews_on": "URL-ის გადახედვა ნაგულისხმევად ჩართულია ამ ოთახში მონაწილეებისთვის.",
             "description_space": "შეცვალეთ პარამეტრები, რომლებიც დაკავშირებულია თქვენს სივრცესთან.",
             "error_creating_alias_description": "ამ მისამართის შექმნისას მოხდა შეცდომა. ეს შეიძლება არ იყოს დაშვებული სერვერის მიერ ან მოხდა დროებითი უკმარისობა.",
             "error_creating_alias_title": "შეცდომა მისამართის შექმნისას",
@@ -1418,12 +1412,7 @@
             "published_aliases_explainer_space": "გამოქვეყნებული მისამართები შეიძლება გამოყენებულ იქნას ნებისმიერ სერვერზე, რათა შეუერთდეს თქვენს სივრცეს.",
             "published_aliases_section": "გამოქვეყნებული მისამართები",
             "save": "ცვლილებების შენახვა",
-            "topic_field_label": "ოთახის თემა",
-            "url_preview_encryption_warning": "დაშიფრულ ოთახებში, როგორიცაა ეს, URL-ის გადახედვა ნაგულისხმევად გამორთულია, რათა უზრუნველყოს, რომ თქვენი სახლის სერვერი (სადაც იქმნება გადახედვები) ვერ შეაგროვებს ინფორმაციას ამ ოთახში ნახულ ბმულებზე.",
-            "url_preview_explainer": "როდესაც ვინმე ათავსებს URL-ს თავის შეტყობინებაში, URL-ის გადახედვა შეიძლება ნაჩვენები იყოს ამ ბმულის შესახებ მეტი ინფორმაციის მისაღებად, როგორიცაა სათაური, აღწერა და სურათი ვებსაიტიდან.",
-            "url_previews_section": "URL გადახედვები",
-            "user_url_previews_default_off": "თქვენ გაქვთ<a> ინვალიდი</a> URL-ის გადახედვა ნაგულისხმევად.",
-            "user_url_previews_default_on": "თქვენ გაქვთ<a> ჩართულია</a> URL-ის გადახედვა ნაგულისხმევად."
+            "topic_field_label": "ოთახის თემა"
         },
         "notifications": {
             "browse_button": "დათვალიერება",
@@ -1689,8 +1678,6 @@
             "spell_check_locale_placeholder": "აირჩიეთ ლოკალი"
         },
         "inline_url_previews_default": "ნაგულისხმევად ჩართული URL-ის გადახედვის ჩართვა",
-        "inline_url_previews_room": "URL-ის გადახედვის ჩართვა ნაგულისხმევად ამ ოთახში მონაწილეებისთვის",
-        "inline_url_previews_room_account": "ამ ოთახისთვის URL-ის გადახედვის ჩართვა (მხოლოდ თქვენზე მოქმედებს)",
         "insert_trailing_colon_mentions": "ჩადეთ ბოლო ორწერტილი მას შემდეგ, რაც მომხმარებელი აღნიშნავს შეტყობინების დასაწყისში",
         "jump_to_bottom_on_send": "შეტყობინების გაგზავნისას გადადით ქრონოლოგიის ბოლოში",
         "key_backup": {
@@ -2198,7 +2185,6 @@
         "creation_summary_dm": "%(creator)sშექმნა ეს DM.",
         "creation_summary_room": "%(creator)sოთახის შექმნა და კონფიგურაცია.",
         "disambiguated_profile": "%(displayName)s(%(matrixId)s )",
-        "download_action_decrypting": "გაშიფვრა",
         "download_action_downloading": "ჩამოტვირთვა",
         "edits": {
             "tooltip_label": "რედაქტირებულია%(date)s . დააწკაპუნეთ რედაქტირების სანახავად.",
@@ -2386,10 +2372,7 @@
             "removed": "%(widgetName)sვიჯეტი ამოღებულია %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "ციტატების ჩაკეცვა",
             "copy_link_thread": "დააკოპირეთ ბმული თემაში",
-            "expand_reply_chain": "ციტატების გაფართოება",
-            "label": "შეტყობინების მოქმედებები",
             "view_in_room": "ხედი ოთახში"
         },
         "mjolnir": {

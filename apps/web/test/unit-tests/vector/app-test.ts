@@ -85,7 +85,7 @@ describe("sso_redirect_options", () => {
 
             await loadApp({}, jest.fn());
             expect(startOidcLoginSpy).toHaveBeenCalledWith(
-                "https://auth.org/auth?client_id=12345&redirect_uri=https%3A%2F%2Fapp.element.io%2F%3Fno_universal_links%3Dtrue&response_type=code&scope=openid+urn%3Amatrix%3Aorg.matrix.msc2967.client%3Aapi%3A*+urn%3Amatrix%3Aorg.matrix.msc2967.client%3Adevice%3AwKpa6hpi3Y&nonce=38QgU2Pomx&state=10000000100040008000100000000000&code_challenge=awE81eIsGff70JahvrTqWRbGKLI10ooyo_Xm1sxuZvU&code_challenge_method=S256&response_mode=query",
+                "https://auth.org/auth?client_id=12345&redirect_uri=https%3A%2F%2Fapp.element.io%2F%3Fno_universal_links%3Dtrue&response_type=code&scope=openid+urn%3Amatrix%3Aorg.matrix.msc2967.client%3Aapi%3A*+urn%3Amatrix%3Aorg.matrix.msc2967.client%3Adevice%3AwKpa6hpi3Y&nonce=38QgU2Pomx&state=10000000100040008000100000000000&code_challenge=awE81eIsGff70JahvrTqWRbGKLI10ooyo_Xm1sxuZvU&code_challenge_method=S256&response_mode=fragment",
             );
         });
     });

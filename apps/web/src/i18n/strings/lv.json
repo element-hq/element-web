@@ -33,7 +33,6 @@
         "cancel": "Atcelt",
         "change": "Mainīt",
         "clear": "Notīrīt",
-        "click": "Noklikšķiniet",
         "click_to_copy": "Noklikšķiniet, lai kopētu",
         "close": "Aizvērt",
         "collapse": "Sakļaut",
@@ -1126,9 +1125,6 @@
         "disabled_dialog_title": "Integrācijas ir atspējotas"
     },
     "invite": {
-        "ask_anyway_description": "Nevar atrast profilus zemāk uzskaitītajiem Matrix ID. Vai jūs tomēr vēlētos sākt DM jebkurā gadījumā?",
-        "ask_anyway_label": "Sākt DM jebkurā gadījumā",
-        "ask_anyway_never_warn_label": "Sākt DM jebkurā gadījumā un nekad vairs nebrīdināt mani",
         "email_caption": "Uzaicināt pa e-pastu",
         "email_limit_one": "Uzaicinājumus pa e-pastu var nosūtīt tikai pa vienam",
         "email_use_default_is": "Izmantot identitātes serveri, lai uzaicinātu pa e-pastu. <default>Izmantojiet noklusējumu (%(defaultIdentityServerName)s)</default> vai pārvaldiet <settings>Iestatījumos</settings>.",
@@ -1845,8 +1841,6 @@
             "aliases_section": "Istabas adreses",
             "avatar_field_label": "Istabas avatars",
             "canonical_alias_field_label": "Galvenā adrese",
-            "default_url_previews_off": "ULR priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir atspējoti.",
-            "default_url_previews_on": "URL priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir iespējoti.",
             "description_space": "Rediģējiet ar jūsu telpu saistītos iestatījumus.",
             "error_creating_alias_description": "Veidojot šo adresi, radās kļūda. Iespējams, serveris to neatļauj vai arī ir radusies īslaicīga kļūme.",
             "error_creating_alias_title": "Veidojot adresi, radās kļūda",
@@ -1873,12 +1867,7 @@
             "published_aliases_explainer_space": "Publicētās adreses var izmantot ikviens jebkurā serverī, lai pievienotos jūsu telpai.",
             "published_aliases_section": "Publiskotās adreses",
             "save": "Saglabāt izmaiņas",
-            "topic_field_label": "Istabas temats",
-            "url_preview_encryption_warning": "Šifrētās istabās, tādās kā šī, URL priekšskatījumi pēc noklusējumi ir atspējoti, lai nodrošinātu, ka mājasserveris (kurā priekšskatījumi tiek izveidoti) nevar iegūt informāciju par šajā istabā redzamajām saitēm.",
-            "url_preview_explainer": "Kad kāds savā ziņā ievieto URL, var tikt parādīts priekšskatījums, lai sniegtu vairāk informācijas par saiti, kā piemēram, virsraksts, apraksts un attēls no tīmekļvietnes.",
-            "url_previews_section": "URL priekšskatījumi",
-            "user_url_previews_default_off": "Tu pēc noklusējuma esi <a>atspējojis</a> URL priekšskatījumus.",
-            "user_url_previews_default_on": "Tu pēc noklusējuma esi <a>iespējojis</a> URL priekšskatījumus."
+            "topic_field_label": "Istabas temats"
         },
         "notifications": {
             "browse_button": "Pārlūkot",
@@ -2168,8 +2157,6 @@
             "spell_check_locale_placeholder": "Izvēlieties lokalizāciju"
         },
         "inline_url_previews_default": "Iespējot URL priekšskatījumus pēc noklusējuma",
-        "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
-        "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai Tevi)",
         "insert_trailing_colon_mentions": "Jāievieto beigu kols pēc lietotāja pieminēšanas ziņas sākumā",
         "jump_to_bottom_on_send": "Nosūtot ziņu, pāriet uz laika skalas beigām",
         "key_backup": {
@@ -2768,7 +2755,6 @@
         "creation_summary_dm": "%(creator)s uzsāka šo tiešo saraksti.",
         "creation_summary_room": "%(creator)s izveidoja un nokonfigurēja istabu.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Atšifrē",
         "download_action_downloading": "Lejupielādē",
         "edits": {
             "tooltip_label": "Labots %(date)s. Klikšķināt, lai skatītu labojumus.",
@@ -2957,10 +2943,7 @@
             "removed": "Ekrānvadīklu %(widgetName)s noņēma %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Sakļaut citātus",
             "copy_link_thread": "Kopēt saiti uz pavedienu",
-            "expand_reply_chain": "Izvērst citātus",
-            "label": "Darbības ar ziņu",
             "view_in_room": "Skats istabā"
         },
         "mjolnir": {

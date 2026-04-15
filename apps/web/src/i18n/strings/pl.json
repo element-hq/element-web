@@ -32,7 +32,6 @@
         "cancel": "Anuluj",
         "change": "Zmień",
         "clear": "Wyczyść",
-        "click": "Kliknij",
         "click_to_copy": "Kliknij, aby skopiować",
         "close": "Zamknij",
         "collapse": "Zwiń",
@@ -66,7 +65,6 @@
         "go": "Przejdź",
         "go_back": "Wróć",
         "got_it": "Rozumiem",
-        "hide": "Ukryj",
         "hide_advanced": "Ukryj zaawansowane",
         "hold": "Wstrzymaj",
         "ignore": "Ignoruj",
@@ -1328,9 +1326,6 @@
         "impossible_dialog_title": "Integracje nie są dozwolone"
     },
     "invite": {
-        "ask_anyway_description": "Nie znaleziono profilów dla identyfikatorów Matrix wymienionych poniżej - czy chcesz rozpocząć wiadomość prywatną mimo to?",
-        "ask_anyway_label": "Rozpocznij wiadomość prywatną mimo to",
-        "ask_anyway_never_warn_label": "Rozpocznij wiadomość prywatną mimo to i nie ostrzegaj ponownie",
         "email_caption": "Zaproś przez e-mail",
         "email_limit_one": "Zaproszenie e-mail może zostać wysłane tylko jedno na raz",
         "email_use_default_is": "Użyj serwera identyfikacji, aby zaprosić przez e-mail. <default>Użyj domyślnego (%(defaultIdentityServerName)s)</default> lub zarządzaj w <settings>Ustawieniach</settings>.",
@@ -2189,8 +2184,6 @@
             "aliases_section": "Adresy pokoju",
             "avatar_field_label": "Awatar pokoju",
             "canonical_alias_field_label": "Główny adres",
-            "default_url_previews_off": "Podgląd linków są domyślnie wyłączone dla uczestników tego pokoju.",
-            "default_url_previews_on": "Podgląd linków są domyślnie włączone dla uczestników tego pokoju.",
             "description_space": "Edytuj ustawienia powiązane z twoją przestrzenią.",
             "error_creating_alias_description": "Wystąpił błąd podczas aktualizowania tego adresu. Serwer mógł odrzucić żądanie lub wystąpił błąd tymczasowy.",
             "error_creating_alias_title": "Wystąpił błąd podczas tworzenia adresu",
@@ -2219,12 +2212,7 @@
             "published_aliases_explainer_space": "Opublikowane adresy mogą być używane przez każdego, kto dołączył do Twojej przestrzeni.",
             "published_aliases_section": "Opublikowane adresy",
             "save": "Zapisz zmiany",
-            "topic_field_label": "Temat pokoju",
-            "url_preview_encryption_warning": "W pokojach szyfrowanych, takich jak ten, podgląd adresów URL jest domyślnie wyłączony, aby upewnić się, że serwer (na którym generowane są podglądy) nie może zbierać informacji o linkach, które widzisz w pokoju.",
-            "url_preview_explainer": "Gdy ktoś umieści URL w wiadomości, można wyświetlić podgląd adresu URL, aby podać więcej informacji o tym łączu, takich jak tytuł, opis i obraz ze strony internetowej.",
-            "url_previews_section": "Podgląd linków",
-            "user_url_previews_default_off": "Podgląd linków jest domyślnie <a>wyłączony</a>.",
-            "user_url_previews_default_on": "Podgląd linków jest domyślnie <a>włączony</a>."
+            "topic_field_label": "Temat pokoju"
         },
         "notifications": {
             "browse_button": "Przeglądaj",
@@ -2644,8 +2632,6 @@
             "username": "Nazwa użytkownika"
         },
         "inline_url_previews_default": "Włącz domyślny podgląd URL w tekście",
-        "inline_url_previews_room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
-        "inline_url_previews_room_account": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
         "invite_controls": {
             "default_label": "Zezwól użytkownikom na zapraszanie Cię do pokojów"
@@ -3254,7 +3240,6 @@
         },
         "empty_description": "Użyj „%(replyInThread)s” podczas najechania kursorem na wiadomość.",
         "empty_title": "Wątki pomagają utrzymać tematykę rozmów i łatwo je śledzić.",
-        "error_start_thread_existing_relation": "Nie można utworzyć wątku z wydarzenia z istniejącą relacją",
         "mark_all_read": "Oznacz wszystkie jako przeczytane",
         "my_threads": "Moje wątki",
         "my_threads_description": "Pokazuje wszystkie wątki, w których brałeś udział",
@@ -3298,7 +3283,6 @@
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Rozszyfrowuję",
         "download_action_downloading": "Pobieranie",
         "download_failed": "Błąd pobierania",
         "download_failed_description": "Wystąpił błąd podczas pobierania tego pliku",
@@ -3496,10 +3480,7 @@
             "removed": "Widżet %(widgetName)s został usunięty przez %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Zwiń cytaty",
             "copy_link_thread": "Kopiuj link do wątku",
-            "expand_reply_chain": "Rozwiń cytaty",
-            "label": "Działania na wiadomościach",
             "view_in_room": "Wyświetl w pokoju"
         },
         "mjolnir": {

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, type JSX, type ReactNode, type SyntheticEvent } from "react";
-import { EventType, MatrixError, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -25,7 +25,7 @@ import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../.
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
 import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import { type IInviteResult, inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
+import { showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
@@ -60,38 +60,13 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { type NonEmptyArray } from "../../../@types/common";
-import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
-import AskInviteAnywayDialog, { type UnknownProfiles } from "./AskInviteAnywayDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
+import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
-
-const extractTargetUnknownProfiles = async (
-    targets: Member[],
-    profilesStores: UserProfilesStore,
-): Promise<UnknownProfiles> => {
-    const directoryMembers = targets.filter((t): t is DirectoryMember => t instanceof DirectoryMember);
-    await Promise.all(directoryMembers.map((t) => profilesStores.getOrFetchProfile(t.userId)));
-    return directoryMembers.reduce<UnknownProfiles>((unknownProfiles: UnknownProfiles, target: DirectoryMember) => {
-        const lookupError = profilesStores.getProfileLookupError(target.userId);
-
-        if (
-            lookupError instanceof MatrixError &&
-            lookupError.errcode &&
-            UNKNOWN_PROFILE_ERRORS.includes(lookupError.errcode)
-        ) {
-            unknownProfiles.push({
-                userId: target.userId,
-                errorText: lookupError.data.error || "",
-            });
-        }
-
-        return unknownProfiles;
-    }, []);
-};
 
 interface Result {
     userId: string;
@@ -435,10 +410,14 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             .map((member) => ({ userId: member.userId, user: toMember(member) }));
     }
 
-    private shouldAbortAfterInviteError(result: IInviteResult, room: Room): boolean {
+    private shouldAbortAfterInviteError(
+        states: MultiInviterCompletionStates,
+        inviter: MultiInviter,
+        room: Room,
+    ): boolean {
         this.setState({ busy: false });
         const userMap = new Map<string, Member>(this.state.targets.map((member) => [member.userId, member]));
-        return !showAnyInviteErrors(result.states, room, result.inviter, userMap);
+        return !showAnyInviteErrors(states, room, inviter, userMap);
     }
 
     private convertFilter(): Member[] {
@@ -467,26 +446,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return newTargets;
     }
 
-    /**
-     * Check if there are unknown profiles if promptBeforeInviteUnknownUsers setting is enabled.
-     * If so show the "invite anyway?" dialog. Otherwise directly create the DM local room.
-     */
-    private checkProfileAndStartDm = async (): Promise<void> => {
-        this.setBusy(true);
-        const targets = this.convertFilter();
-
-        if (SettingsStore.getValue("promptBeforeInviteUnknownUsers")) {
-            const unknownProfileUsers = await extractTargetUnknownProfiles(targets, this.profilesStore);
-
-            if (unknownProfileUsers.length) {
-                this.showAskInviteAnywayDialog(unknownProfileUsers);
-                return;
-            }
-        }
-
-        await this.startDm();
-    };
-
     private startDm = async (): Promise<void> => {
         this.setBusy(true);
 
@@ -510,19 +469,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         });
     }
 
-    private showAskInviteAnywayDialog(unknownProfileUsers: { userId: string; errorText: string }[]): void {
-        Modal.createDialog(AskInviteAnywayDialog, {
-            unknownProfileUsers,
-            onInviteAnyways: () => this.startDm(),
-            onGiveUp: () => {
-                this.setBusy(false);
-            },
-            description: _t("invite|ask_anyway_description"),
-            inviteNeverWarnLabel: _t("invite|ask_anyway_never_warn_label"),
-            inviteLabel: _t("invite|ask_anyway_label"),
-        });
-    }
-
     private inviteUsers = async (): Promise<void> => {
         if (this.props.kind !== InviteKind.Invite) return;
         this.setState({ busy: true });
@@ -542,11 +488,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         try {
-            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds, {
+            const inviter = new MultiInviter(cli, this.props.roomId, {
                 // We show our own progress body, so don't pop up a separate dialog.
                 inhibitProgressDialog: true,
             });
-            if (!this.shouldAbortAfterInviteError(result, room)) {
+            const states = await inviter.invite(targetIds);
+            if (!this.shouldAbortAfterInviteError(states, inviter, room)) {
                 // handles setting error message too
                 this.props.onFinished(true);
             }
@@ -1283,7 +1230,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             }
 
             buttonText = _t("action|go");
-            goButtonFn = this.checkProfileAndStartDm;
+            goButtonFn = this.startDm;
         } else if (this.props.kind === InviteKind.Invite) {
             const roomId = this.props.roomId;
             const room = MatrixClientPeg.get()?.getRoom(roomId);

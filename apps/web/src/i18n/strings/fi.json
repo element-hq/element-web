@@ -32,7 +32,6 @@
         "cancel": "Peruuta",
         "change": "Muuta",
         "clear": "Tyhjennä",
-        "click": "Napsauta",
         "click_to_copy": "Kopioi napsauttamalla",
         "close": "Sulje",
         "collapse": "Supista",
@@ -64,7 +63,6 @@
         "go": "Mene",
         "go_back": "Takaisin",
         "got_it": "Asia selvä",
-        "hide": "Piilota",
         "hide_advanced": "Piilota lisäasetukset",
         "hold": "Pidä",
         "ignore": "Sivuuta",
@@ -1841,8 +1839,6 @@
             "aliases_section": "Huoneen osoitteet",
             "avatar_field_label": "Huoneen kuva",
             "canonical_alias_field_label": "Pääosoite",
-            "default_url_previews_off": "URL-esikatselut ovat oletuksena pois päältä tämän huoneen jäsenillä.",
-            "default_url_previews_on": "URL-esikatselut on päällä oletusarvoisesti tämän huoneen jäsenillä.",
             "description_space": "Muokkaa tilaasi liittyviä asetuksia.",
             "error_creating_alias_description": "Osoitetta luotaessa tapahtui virhe. Voi olla, että palvelin ei salli sitä tai kyseessä oli tilapäinen virhe.",
             "error_creating_alias_title": "Virhe osoitetta luotaessa",
@@ -1871,12 +1867,7 @@
             "published_aliases_explainer_space": "Julkaistuja osoitteita voi käyttää kuka tahansa millä tahansa palvelimella liittyäkseen tilaasi.",
             "published_aliases_section": "Julkaistut osoitteet",
             "save": "Tallenna muutokset",
-            "topic_field_label": "Huoneen aihe",
-            "url_preview_encryption_warning": "Salatuissa huoneissa, kuten tässä, osoitteiden esikatselut ovat oletuksena pois käytöstä, jotta kotipalvelimesi (missä osoitteiden esikatselut luodaan) ei voi kerätä tietoa siitä, mitä linkkejä näet tässä huoneessa.",
-            "url_preview_explainer": "Kun joku asettaa osoitteen linkiksi viestiinsä, URL-esikatselu voi näyttää tietoja linkistä kuten otsikon, kuvauksen ja kuvan verkkosivulta.",
-            "url_previews_section": "URL-esikatselut",
-            "user_url_previews_default_off": "Olet oletusarvoisesti ottanut URL-esikatselut <a>pois käytöstä</a>.",
-            "user_url_previews_default_on": "Olet oletusarvoisesti ottanut URL-esikatselut <a>käyttöön</a>."
+            "topic_field_label": "Huoneen aihe"
         },
         "notifications": {
             "browse_button": "Selaa",
@@ -2224,8 +2215,6 @@
             "username": "Käyttäjätunnus"
         },
         "inline_url_previews_default": "Ota linkkien esikatselu käyttöön oletusarvoisesti",
-        "inline_url_previews_room": "Ota linkkien esikatselu käyttöön kaikille huoneen jäsenille",
-        "inline_url_previews_room_account": "Ota linkkien esikatselut käyttöön tässä huoneessa (koskee ainoastaan sinua)",
         "insert_trailing_colon_mentions": "Lisää kaksoispiste käyttäjän maininnan perään viestin alussa",
         "jump_to_bottom_on_send": "Siirry aikajanan pohjalle, kun lähetät viestin",
         "key_backup": {
@@ -2802,7 +2791,6 @@
             "unable_to_decrypt": "Viestin salausta ei voi purkaa"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Puretaan salausta",
         "download_action_downloading": "Ladataan",
         "download_failed": "Lataus epäonnistui",
         "download_failed_description": "Tiedostoa ladattaessa tapahtui virhe",
@@ -2992,10 +2980,7 @@
             "removed": "%(senderName)s poisti sovelman %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Supista lainaukset",
             "copy_link_thread": "Kopioi linkki ketjuun",
-            "expand_reply_chain": "Laajenna lainaukset",
-            "label": "Viestitoiminnot",
             "view_in_room": "Näytä huoneessa"
         },
         "mjolnir": {

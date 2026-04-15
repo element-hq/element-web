@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
-import { Tooltip } from "@vector-im/compound-web";
+import React, { forwardRef } from "react";
+import { Heading, Tooltip } from "@vector-im/compound-web";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 
 import { Flex } from "../../../core/utils/Flex";
@@ -20,8 +20,6 @@ export interface DateSeparatorButtonProps {
     tooltipOpen?: boolean;
     /** Extra CSS classes to apply to the component. */
     className?: string;
-    /** Optional ref for the button container element. */
-    buttonRef?: React.Ref<HTMLDivElement>;
     /** Called when the pointer enters the button trigger. */
     onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
     /** Called when the pointer leaves the button trigger. */
@@ -32,19 +30,17 @@ export interface DateSeparatorButtonProps {
     onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }
 
-/** Interactive date separator button that opens the jump-to-date menu. */
-export function DateSeparatorButton({
-    label,
-    tooltipOpen,
-    className,
-    buttonRef,
-    ...props
-}: DateSeparatorButtonProps): React.ReactNode {
+/** Interactive date separator button that forwards its ref to the underlying trigger element used by Compound Menu. */
+export const DateSeparatorButton = forwardRef<HTMLDivElement, DateSeparatorButtonProps>(function DateSeparatorButton(
+    { label, tooltipOpen, className, ...props },
+    forwardedRef,
+): React.ReactNode {
     const { translate: _t } = useI18n();
+
     return (
         <Tooltip description={_t("room|jump_to_date")} placement="right" open={tooltipOpen}>
             <Flex
-                ref={buttonRef}
+                ref={forwardedRef}
                 data-testid="jump-to-date-separator-button"
                 className={className}
                 aria-live="off"
@@ -53,9 +49,11 @@ export function DateSeparatorButton({
                 tabIndex={0}
                 {...props}
             >
-                <h2 aria-hidden="true">{label}</h2>
+                <Heading as="h2" size="lg" aria-hidden="true">
+                    {label}
+                </Heading>
                 <ChevronDownIcon />
             </Flex>
         </Tooltip>
     );
-}
+});

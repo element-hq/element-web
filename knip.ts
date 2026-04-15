@@ -7,12 +7,14 @@ export default {
     workspaces: {
         "packages/shared-components": {},
         "packages/playwright-common": {
+            entry: ["src/fixtures/index.ts", "src/testcontainers/index.ts"],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
             ignoreBinaries: ["awk"],
         },
+        "packages/module-api": {},
         "apps/web": {
             entry: [
                 "src/serviceworker/index.ts",
@@ -74,6 +76,9 @@ export default {
     },
     nx: {
         config: ["{nx,package,project}.json", "{apps,packages,modules}/**/{package,project}.json"],
+    },
+    playwright: {
+        config: ["playwright.config.ts", "playwright-merge.config.ts"],
     },
     tags: ["-knipignore"],
 } satisfies KnipConfig;

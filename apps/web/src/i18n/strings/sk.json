@@ -34,7 +34,6 @@
         "cancel": "Zrušiť",
         "change": "Zmeniť",
         "clear": "Vyčistiť",
-        "click": "Kliknúť",
         "click_to_copy": "Kliknutím skopírujete",
         "close": "Zavrieť",
         "collapse": "Zbaliť",
@@ -68,7 +67,6 @@
         "go": "Spustiť",
         "go_back": "Naspäť",
         "got_it": "Rozumiem",
-        "hide": "Skryť",
         "hide_advanced": "Skryť pokročilé možnosti",
         "hold": "Podržať",
         "ignore": "Ignorovať",
@@ -1365,9 +1363,6 @@
         "impossible_dialog_title": "Integrácie nie sú povolené"
     },
     "invite": {
-        "ask_anyway_description": "Nie je možné nájsť používateľské profily pre Matrix ID zobrazené nižšie - chcete aj tak začať priamu správu?",
-        "ask_anyway_label": "Spustiť priamu správu aj tak",
-        "ask_anyway_never_warn_label": "Spustiť priamu správu aj tak a nikdy ma už nevarovať",
         "email_caption": "Pozvať e-mailom",
         "email_limit_one": "Pozvánky e-mailom sa môžu posielať len po jednej",
         "email_use_default_is": "Na pozvanie e-mailom použite server identity. <default>Použite predvolený (%(defaultIdentityServerName)s)</default> alebo spravujte v <settings>nastaveniach</settings>.",
@@ -2256,8 +2251,6 @@
             "aliases_section": "Adresy miestnosti",
             "avatar_field_label": "Obrázok miestnosti",
             "canonical_alias_field_label": "Hlavná adresa",
-            "default_url_previews_off": "Náhľady URL adries sú predvolene zakázané pre členov tejto miestnosti.",
-            "default_url_previews_on": "Náhľady URL adries sú predvolene povolené pre členov tejto miestnosti.",
             "description_space": "Upravte nastavenia týkajúce sa vášho priestoru.",
             "error_creating_alias_description": "Pri vytváraní tejto adresy došlo k chybe. Je možné, že ju server nepovoľuje alebo došlo k dočasnému zlyhaniu.",
             "error_creating_alias_title": "Chyba pri vytváraní adresy",
@@ -2288,12 +2281,7 @@
             "published_aliases_explainer_space": "Zverejnené adresy môže použiť ktokoľvek na akomkoľvek serveri, aby sa pripojil k vášmu priestoru.",
             "published_aliases_section": "Zverejnené adresy",
             "save": "Uložiť zmeny",
-            "topic_field_label": "Téma miestnosti",
-            "url_preview_encryption_warning": "Náhľady URL adries sú v šifrovaných miestnostiach ako je táto predvolene zakázané, aby ste si mohli byť istí, že obsah odkazov z vašej konverzácii nebude zaznamenaný na vašom domovskom serveri počas ich generovania.",
-            "url_preview_explainer": "Ak niekto vo svojej správe pošle URL adresu, môže byť zobrazený jej náhľad obsahujúci názov, popis a obrázok z cieľovej web stránky.",
-            "url_previews_section": "Náhľady URL adries",
-            "user_url_previews_default_off": "Predvolene máte <a>zakázané</a> náhľady URL adries.",
-            "user_url_previews_default_on": "Predvolene máte <a>povolené</a> náhľady URL adries."
+            "topic_field_label": "Téma miestnosti"
         },
         "notifications": {
             "browse_button": "Prechádzať",
@@ -2718,8 +2706,6 @@
             "username": "Používateľské meno"
         },
         "inline_url_previews_default": "Predvolene povoliť náhľady URL adries",
-        "inline_url_previews_room": "Predvolene povoliť náhľady URL adries pre členov tejto miestnosti",
-        "inline_url_previews_room_account": "Povoliť náhľady URL adries pre túto miestnosť (ovplyvňuje len vás)",
         "insert_trailing_colon_mentions": "Vložiť na koniec dvojbodku za zmienkou používateľa na začiatku správy",
         "invite_controls": {
             "default_label": "Povoliť používateľom pozývať vás do miestností"
@@ -3335,7 +3321,6 @@
         },
         "empty_description": "Použite „%(replyInThread)s“, keď umiestnite kurzor myši nad správu.",
         "empty_title": "Vlákna pomáhajú udržiavať vaše konverzácie k téme a ľahko sledovateľné.",
-        "error_start_thread_existing_relation": "Nie je možné vytvoriť vlákno z udalosti s existujúcim vzťahom",
         "mark_all_read": "Označiť všetko ako prečítané",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazí všetky vlákna, v ktorých ste sa zúčastnili",
@@ -3379,7 +3364,6 @@
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrovanie",
         "download_action_downloading": "Preberanie",
         "download_failed": "Sťahovanie zlyhalo",
         "download_failed_description": "Pri sťahovaní tohto súboru sa vyskytla chyba",
@@ -3578,10 +3562,7 @@
             "removed": "%(senderName)s odstránil widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Zbaliť citácie",
             "copy_link_thread": "Kopírovať odkaz na vlákno",
-            "expand_reply_chain": "Rozbaliť citácie",
-            "label": "Akcie správy",
             "view_in_room": "Zobraziť v miestnosti"
         },
         "mjolnir": {

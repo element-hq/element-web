@@ -32,7 +32,6 @@
         "cancel": "Cancel",
         "change": "Change",
         "clear": "Clear",
-        "click": "Click",
         "click_to_copy": "Click to copy",
         "close": "Close",
         "collapse": "Collapse",
@@ -66,7 +65,6 @@
         "go": "Go",
         "go_back": "Go back",
         "got_it": "Got it",
-        "hide": "Hide",
         "hide_advanced": "Hide advanced",
         "hold": "Hold",
         "ignore": "Ignore",
@@ -830,8 +828,8 @@
         "invalid_device_key_id": "Invalid device key ID",
         "invalid_json": "Doesn't look like valid JSON.",
         "level": "Level",
-        "low_bandwidth_mode": "Low bandwidth mode",
-        "low_bandwidth_mode_description": "Requires compatible homeserver.",
+        "low_bandwidth_mode": "Disable bandwidth-heavy features",
+        "low_bandwidth_mode_description": "Disables encryption, presence, avatars, read receipts, and typing notifications",
         "main_timeline": "Main timeline",
         "manual_device_verification": "Manual device verification",
         "no_receipt_found": "No receipt found",
@@ -1116,7 +1114,7 @@
         "verification_requested_toast_title": "Verification requested",
         "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) digital identity was reset. <a>Learn more</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s digital identity was reset. <a>Learn more</a>",
-        "verify_toast_description": "As of end of April 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
+        "verify_toast_description": "As of end of October 2026, unverified devices will not be able to send and receive messages. <a>Learn more</a>",
         "verify_toast_title": "Verify this device",
         "withdraw_verification_action": "Withdraw verification"
     },
@@ -1364,9 +1362,6 @@
         "impossible_dialog_title": "Integrations not allowed"
     },
     "invite": {
-        "ask_anyway_description": "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?",
-        "ask_anyway_label": "Start DM anyway",
-        "ask_anyway_never_warn_label": "Start DM anyway and never warn me again",
         "email_caption": "Invite by email",
         "email_limit_one": "Invites by email can only be sent one at a time",
         "email_use_default_is": "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
@@ -1572,6 +1567,7 @@
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
         "report_to_moderators": "Report to moderators",
         "report_to_moderators_description": "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
+        "room_list_sections": "Room list sections",
         "share_history_on_invite": "Share encrypted history with new members",
         "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
         "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
@@ -2169,6 +2165,11 @@
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
         },
+        "section": {
+            "chats": "Chats",
+            "favourites": "Favourites",
+            "low_priority": "Low Priority"
+        },
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
@@ -2242,8 +2243,6 @@
             "aliases_section": "Room Addresses",
             "avatar_field_label": "Room avatar",
             "canonical_alias_field_label": "Main address",
-            "default_url_previews_off": "URL previews are disabled by default for participants in this room.",
-            "default_url_previews_on": "URL previews are enabled by default for participants in this room.",
             "description_space": "Edit settings relating to your space.",
             "error_creating_alias_description": "There was an error creating that address. It may not be allowed by the server or a temporary failure occurred.",
             "error_creating_alias_title": "Error creating address",
@@ -2274,12 +2273,7 @@
             "published_aliases_explainer_space": "Published addresses can be used by anyone on any server to join your space.",
             "published_aliases_section": "Published Addresses",
             "save": "Save Changes",
-            "topic_field_label": "Room Topic",
-            "url_preview_encryption_warning": "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.",
-            "url_preview_explainer": "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.",
-            "url_previews_section": "URL Previews",
-            "user_url_previews_default_off": "You have <a>disabled</a> URL previews by default.",
-            "user_url_previews_default_on": "You have <a>enabled</a> URL previews by default."
+            "topic_field_label": "Room Topic"
         },
         "notifications": {
             "browse_button": "Browse",
@@ -2701,9 +2695,8 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
-        "inline_url_previews_default": "Enable inline URL previews by default",
-        "inline_url_previews_room": "Enable URL previews by default for participants in this room",
-        "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
+        "inline_url_previews_default": "Enable previews",
+        "inline_url_previews_encrypted": "Enable previews in encrypted rooms",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_controls": {
             "default_label": "Allow users to invite you to rooms"
@@ -2841,6 +2834,8 @@
             "enable_tray_icon": "Show tray icon and minimise window to it on close",
             "keyboard_heading": "Keyboard shortcuts",
             "keyboard_view_shortcuts_button": "To view all keyboard shortcuts, <a>click here</a>.",
+            "link_previews_description": "Shows information about links underneath messages",
+            "link_previews_heading": "Link previews",
             "media_heading": "Images, GIFs and videos",
             "presence_description": "Share your activity and status with others.",
             "publish_timezone": "Publish timezone on public profile",
@@ -3323,7 +3318,6 @@
         },
         "empty_description": "Use “%(replyInThread)s” when hovering over a message.",
         "empty_title": "Threads help keep your conversations on-topic and easy to track.",
-        "error_start_thread_existing_relation": "Can't create a thread from an event with an existing relation",
         "mark_all_read": "Mark all as read",
         "my_threads": "My threads",
         "my_threads_description": "Shows all threads you've participated in",
@@ -3367,7 +3361,6 @@
             "unable_to_decrypt": "Unable to decrypt message"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decrypting",
         "download_action_downloading": "Downloading",
         "download_failed": "Download failed",
         "download_failed_description": "An error occurred while downloading this file",
@@ -3567,10 +3560,7 @@
             "removed": "%(widgetName)s widget removed by %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Collapse quotes",
             "copy_link_thread": "Copy link to thread",
-            "expand_reply_chain": "Expand quotes",
-            "label": "Message Actions",
             "view_in_room": "View in room"
         },
         "mjolnir": {
@@ -4020,6 +4010,7 @@
             "change_name_this_room": "Change the name of this room",
             "change_topic_active_room": "Change the topic of your active room",
             "change_topic_this_room": "Change the topic of this room",
+            "download_file": "Download files from the media repository",
             "receive_membership_active_room": "See when people join, leave, or are invited to your active room",
             "receive_membership_this_room": "See when people join, leave, or are invited to this room",
             "remove_ban_invite_leave_active_room": "Remove, ban, or invite people to your active room, and make you leave",

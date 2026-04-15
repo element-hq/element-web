@@ -1,0 +1,49 @@
+name: Setup playwright
+description: Installs playwright browsers and sets up a cache
+inputs:
+    needs-webkit:
+        description: Whether to install the additional dependencies for webkit
+        required: false
+        default: "false"
+    write-cache:
+        description: Whether to write the cache back
+        required: true
+runs:
+    using: composite
+    steps:
+        - name: Calculate cache key
+          id: key
+          run: |
+              PW_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}')
+              echo "key=${PREFIX}-playwright-${PW_VERSION}" >> $GITHUB_OUTPUT
+          shell: bash
+          env:
+              PREFIX: ${{ runner.os }}-${{ runner.arch }}
+
+        - name: Cache playwright binaries
+          uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+          if: inputs.write-cache == 'true'
+          id: cache
+          with:
+              path: ~/.cache/ms-playwright
+              key: ${{ steps.key.outputs.key }}
+
+        # When running in merge queue only restore the cache, never write it
+        - name: Restore playwright binaries cache
+          uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
+          if: inputs.write-cache != 'true'
+          id: cache-restore
+          with:
+              path: ~/.cache/ms-playwright
+              key: ${{ steps.key.outputs.key }}
+
+        - name: Install Playwright browsers
+          if: (steps.cache.outputs.cache-hit || steps.cache-restore.outputs.cache-hit) != 'true'
+          shell: bash
+          run: pnpm playwright install --with-deps
+
+        # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
+        - name: Install system dependencies for WebKit
+          if: inputs.needs-webkit == 'true' && (steps.cache.outputs.cache-hit || steps.cache-restore.outputs.cache-hit) == 'true'
+          shell: bash
+          run: pnpm playwright install-deps webkit

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Page, Request, Route } from "@playwright/test";
+import type { Page, Request, Route, Disposable } from "@playwright/test";
 import type { Client } from "./client";
 
 /**
@@ -16,7 +16,7 @@ import type { Client } from "./client";
  */
 export class Network {
     private isOffline = false;
-    private setupPromise?: Promise<void>;
+    private setupPromise?: Promise<Disposable>;
 
     constructor(
         private page: Page,

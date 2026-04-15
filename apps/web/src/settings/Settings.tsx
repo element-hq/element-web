@@ -52,6 +52,7 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
+import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -224,6 +225,7 @@ export interface Settings {
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
     "feature_new_room_list": IFeature;
+    "feature_room_list_sections": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
@@ -328,6 +330,10 @@ export interface Settings {
     }>;
     "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
+    /**
+     * This is the 2019-era low bandwidth that deals with disabling features of the
+     * client. It does NOT make any API or spec changes.
+     */
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
@@ -695,6 +701,15 @@ export const SETTINGS: Settings = {
         description: _td("labs|under_active_development"),
         isFeature: true,
         default: true,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_room_list_sections": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|room_list_sections"),
+        description: _td("labs|under_active_development"),
+        isFeature: true,
+        default: false,
         controller: new ReloadOnChangeController(),
     },
     /**
@@ -1152,22 +1167,22 @@ export const SETTINGS: Settings = {
         controller: new UIFeatureController(UIFeature.AdvancedEncryption),
     },
     "urlPreviewsEnabled": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: {
-            "default": _td("settings|inline_url_previews_default"),
-            "room-account": _td("settings|inline_url_previews_room_account"),
-            "room": _td("settings|inline_url_previews_room"),
-        },
+        // Enabled by default and client configurable as this setting only allows unencrypted
+        // messages to be previewed.
+        supportedLevels: [SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_default"),
         default: true,
         controller: new UIFeatureController(UIFeature.URLPreviews),
     },
     "urlPreviewsEnabled_e2ee": {
-        supportedLevels: [SettingLevel.ROOM_DEVICE],
-        displayName: {
-            "room-device": _td("settings|inline_url_previews_room_account"),
-        },
+        // Can only be enabled per-device to ensure neither the homeserver nor client config
+        // can impact the user's choices.
+        supportedLevels: [SettingLevel.DEVICE],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_encrypted"),
         default: false,
-        controller: new UIFeatureController(UIFeature.URLPreviews),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

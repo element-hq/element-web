@@ -24,7 +24,6 @@ import type { IConfigOptions } from "../src/IConfigOptions";
 import { type Credentials } from "./plugins/homeserver";
 import { ElementAppPage } from "./pages/ElementAppPage";
 import { Crypto } from "./pages/crypto";
-import { Toasts } from "./pages/toasts";
 import { Bot, type CreateBotOpts } from "./pages/bot";
 import { Webserver } from "./plugins/webserver";
 import { type WorkerOptions, type Services, test as base } from "./services";
@@ -52,7 +51,6 @@ export interface TestFixtures extends BaseTestFixtures {
 
     crypto: Crypto;
     room?: { roomId: string };
-    toasts: Toasts;
     uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
     botCreateOpts: CreateBotOpts;
     bot: Bot;
@@ -91,9 +89,6 @@ export const test = base.extend<TestFixtures>({
     },
     crypto: async ({ page, homeserver, request }, use) => {
         await use(new Crypto(page, homeserver, request));
-    },
-    toasts: async ({ page }, use) => {
-        await use(new Toasts(page));
     },
 
     botCreateOpts: {},

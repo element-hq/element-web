@@ -4,7 +4,7 @@ exports[`DateSeparatorView > renders default story 1`] = `
 <div>
   <div
     aria-label="Today"
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -12,11 +12,12 @@ exports[`DateSeparatorView > renders default story 1`] = `
       role="none"
     />
     <div
-      class="flex content"
+      class="Flex-module_flex DateSeparatorView-module_content"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Today
       </h2>
@@ -32,7 +33,7 @@ exports[`DateSeparatorView > renders long localized label story 1`] = `
 <div>
   <div
     aria-label="Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time"
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -40,11 +41,12 @@ exports[`DateSeparatorView > renders long localized label story 1`] = `
       role="none"
     />
     <div
-      class="flex content"
+      class="Flex-module_flex DateSeparatorView-module_content"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Wednesday, December 17, 2025 at 11:59 PM Coordinated Universal Time
       </h2>
@@ -60,7 +62,7 @@ exports[`DateSeparatorView > renders with extra class names 1`] = `
 <div>
   <div
     aria-label="Today"
-    class="flex extra_class_1 extra_class_2 timelineSeparator"
+    class="Flex-module_flex extra_class_1 extra_class_2 TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -68,11 +70,12 @@ exports[`DateSeparatorView > renders with extra class names 1`] = `
       role="none"
     />
     <div
-      class="flex content"
+      class="Flex-module_flex DateSeparatorView-module_content"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Today
       </h2>
@@ -87,7 +90,7 @@ exports[`DateSeparatorView > renders with extra class names 1`] = `
 exports[`DateSeparatorView > renders with jump to date picker story 1`] = `
 <div>
   <div
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="none"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -102,7 +105,7 @@ exports[`DateSeparatorView > renders with jump to date picker story 1`] = `
       aria-haspopup="menu"
       aria-label="Jump to date"
       aria-live="off"
-      class="flex content"
+      class="Flex-module_flex DateSeparatorView-module_content"
       data-state="open"
       data-testid="jump-to-date-separator-button"
       id="radix-_r_0_"
@@ -113,6 +116,7 @@ exports[`DateSeparatorView > renders with jump to date picker story 1`] = `
     >
       <h2
         aria-hidden="true"
+        class="_typography_6v6n8_153 _font-heading-lg-regular_6v6n8_121"
       >
         Today
       </h2>

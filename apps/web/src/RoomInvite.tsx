@@ -7,9 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps } from "react";
-import { EventType, type MatrixClient, type MatrixEvent, type Room, type User } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent, type Room, type User } from "matrix-js-sdk/src/matrix";
 
-import MultiInviter, { type CompletionStates, type MultiInviterOptions } from "./utils/MultiInviter";
+import type MultiInviter from "./utils/MultiInviter";
+import { type CompletionStates } from "./utils/MultiInviter";
 import Modal from "./Modal";
 import { _t } from "./languageHandler";
 import InviteDialog from "./components/views/dialogs/InviteDialog";
@@ -18,33 +19,6 @@ import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { InviteKind } from "./components/views/dialogs/InviteDialogTypes";
 import { type Member } from "./utils/direct-messages";
-
-export interface IInviteResult {
-    states: CompletionStates;
-    inviter: MultiInviter;
-}
-
-/**
- * Invites multiple addresses to a room.
- *
- * Simpler interface to {@link MultiInviter}.
- *
- * Any failures are returned via the `states` in the result.
- *
- * @param {string} roomId The ID of the room to invite to
- * @param {string[]} addresses Array of strings of addresses to invite. May be matrix IDs or 3pids.
- * @param options Options object.
- * @returns {Promise} Promise
- */
-export async function inviteMultipleToRoom(
-    client: MatrixClient,
-    roomId: string,
-    addresses: string[],
-    options: MultiInviterOptions = {},
-): Promise<IInviteResult> {
-    const inviter = new MultiInviter(client, roomId, options);
-    return { states: await inviter.invite(addresses), inviter };
-}
 
 export function showStartChatInviteDialog(initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.

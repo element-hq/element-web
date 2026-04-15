@@ -4,69 +4,69 @@ exports[`ReactionsRowView > renders the default reactions row 1`] = `
 <div>
   <div
     aria-label="Reactions"
-    class="reactionsRow"
+    class="ReactionsRow-module_reactionsRow"
     role="toolbar"
   >
     <button
       aria-label="4 reactions for 👍"
-      class="reactionsRowButton reactionsRowButtonSelected"
+      class="ReactionsRowButton-module_reactionsRowButton ReactionsRowButton-module_reactionsRowButtonSelected"
       tabindex="0"
       type="button"
     >
       <span
         aria-hidden="true"
-        class="reactionsRowButtonContent"
+        class="ReactionsRowButton-module_reactionsRowButtonContent"
       >
         👍
       </span>
       <span
         aria-hidden="true"
-        class="reactionsRowButtonCount"
+        class="ReactionsRowButton-module_reactionsRowButtonCount"
       >
         4
       </span>
     </button>
     <button
       aria-label="2 reactions for 🎉"
-      class="reactionsRowButton"
+      class="ReactionsRowButton-module_reactionsRowButton"
       tabindex="0"
       type="button"
     >
       <span
         aria-hidden="true"
-        class="reactionsRowButtonContent"
+        class="ReactionsRowButton-module_reactionsRowButtonContent"
       >
         🎉
       </span>
       <span
         aria-hidden="true"
-        class="reactionsRowButtonCount"
+        class="ReactionsRowButton-module_reactionsRowButtonCount"
       >
         2
       </span>
     </button>
     <button
       aria-label="1 reactions for 👀"
-      class="reactionsRowButton"
+      class="ReactionsRowButton-module_reactionsRowButton"
       tabindex="0"
       type="button"
     >
       <span
         aria-hidden="true"
-        class="reactionsRowButtonContent"
+        class="ReactionsRowButton-module_reactionsRowButtonContent"
       >
         👀
       </span>
       <span
         aria-hidden="true"
-        class="reactionsRowButtonCount"
+        class="ReactionsRowButton-module_reactionsRowButtonCount"
       >
         1
       </span>
     </button>
     <button
       aria-label="Add reaction"
-      class="addReactionButton addReactionButtonVisible"
+      class="ReactionsRow-module_addReactionButton ReactionsRow-module_addReactionButtonVisible"
       type="button"
     >
       <svg
@@ -92,75 +92,75 @@ exports[`ReactionsRowView > renders the row with a show-all button 1`] = `
 <div>
   <div
     aria-label="Reactions"
-    class="reactionsRow"
+    class="ReactionsRow-module_reactionsRow"
     role="toolbar"
   >
     <button
       aria-label="4 reactions for 👍"
-      class="reactionsRowButton reactionsRowButtonSelected"
+      class="ReactionsRowButton-module_reactionsRowButton ReactionsRowButton-module_reactionsRowButtonSelected"
       tabindex="0"
       type="button"
     >
       <span
         aria-hidden="true"
-        class="reactionsRowButtonContent"
+        class="ReactionsRowButton-module_reactionsRowButtonContent"
       >
         👍
       </span>
       <span
         aria-hidden="true"
-        class="reactionsRowButtonCount"
+        class="ReactionsRowButton-module_reactionsRowButtonCount"
       >
         4
       </span>
     </button>
     <button
       aria-label="2 reactions for 🎉"
-      class="reactionsRowButton"
+      class="ReactionsRowButton-module_reactionsRowButton"
       tabindex="0"
       type="button"
     >
       <span
         aria-hidden="true"
-        class="reactionsRowButtonContent"
+        class="ReactionsRowButton-module_reactionsRowButtonContent"
       >
         🎉
       </span>
       <span
         aria-hidden="true"
-        class="reactionsRowButtonCount"
+        class="ReactionsRowButton-module_reactionsRowButtonCount"
       >
         2
       </span>
     </button>
     <button
       aria-label="1 reactions for 👀"
-      class="reactionsRowButton"
+      class="ReactionsRowButton-module_reactionsRowButton"
       tabindex="0"
       type="button"
     >
       <span
         aria-hidden="true"
-        class="reactionsRowButtonContent"
+        class="ReactionsRowButton-module_reactionsRowButtonContent"
       >
         👀
       </span>
       <span
         aria-hidden="true"
-        class="reactionsRowButtonCount"
+        class="ReactionsRowButton-module_reactionsRowButtonCount"
       >
         1
       </span>
     </button>
     <button
-      class="showAllButton"
+      class="ReactionsRow-module_showAllButton"
       type="button"
     >
       Show all
     </button>
     <button
       aria-label="Add reaction"
-      class="addReactionButton addReactionButtonVisible"
+      class="ReactionsRow-module_addReactionButton ReactionsRow-module_addReactionButtonVisible"
       type="button"
     >
       <svg

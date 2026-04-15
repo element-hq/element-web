@@ -46,7 +46,7 @@ export function EncryptionCard({
     return (
         <div className={classNames("mx_EncryptionCard", className)}>
             <div className="mx_EncryptionCard_header">
-                <BigIcon destructive={destructive}>
+                <BigIcon kind={destructive ? "critical" : "primary"}>
                     <Icon />
                 </BigIcon>
                 <Heading as="h2" size="sm" weight="semibold">

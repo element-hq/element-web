@@ -32,7 +32,6 @@
         "cancel": "Annulla",
         "change": "Cambia",
         "clear": "Svuota",
-        "click": "Clicca",
         "click_to_copy": "Clicca per copiare",
         "close": "Chiudi",
         "collapse": "Riduci",
@@ -1130,9 +1129,6 @@
         "impossible_dialog_title": "Integrazioni non permesse"
     },
     "invite": {
-        "ask_anyway_description": "Impossibile trovare profili per gli ID Matrix elencati sotto - vuoi comunque iniziare un messaggio diretto?",
-        "ask_anyway_label": "Inizia il messaggio lo stesso",
-        "ask_anyway_never_warn_label": "Inizia il messaggio lo stesso e non avvisarmi più",
         "email_caption": "Invita per email",
         "email_limit_one": "Gli inviti per email possono essere inviati uno per volta",
         "email_use_default_is": "Usa un server d'identità per invitare via email. <default>Usa quello predefinito (%(defaultIdentityServerName)s)</default> o gestiscilo nelle <settings>impostazioni</settings>.",
@@ -1912,8 +1908,6 @@
             "aliases_section": "Indirizzi stanza",
             "avatar_field_label": "Avatar della stanza",
             "canonical_alias_field_label": "Indirizzo principale",
-            "default_url_previews_off": "Le anteprime degli URL sono inattive in modo predefinito per i partecipanti di questa stanza.",
-            "default_url_previews_on": "Le anteprime degli URL sono attive in modo predefinito per i partecipanti di questa stanza.",
             "description_space": "Modifica le impostazioni relative al tuo spazio.",
             "error_creating_alias_description": "Si è verificato un errore creando l'indirizzo. Potrebbe non essere permesso dal server o un problema temporaneo.",
             "error_creating_alias_title": "Errore creazione indirizzo",
@@ -1940,12 +1934,7 @@
             "published_aliases_explainer_space": "Gli indirizzi pubblicati possono essere usati da chiunque su tutti i server per entrare nel tuo spazio.",
             "published_aliases_section": "Indirizzi pubblicati",
             "save": "Salva modifiche",
-            "topic_field_label": "Argomento stanza",
-            "url_preview_encryption_warning": "Nelle stanze criptate, come questa, le anteprime degli URL sono disattivate in modo predefinito per garantire che il tuo homeserver (dove vengono generate le anteprime) non possa raccogliere informazioni sui collegamenti che vedi in questa stanza.",
-            "url_preview_explainer": "Quando qualcuno inserisce un URL nel proprio messaggio, è possibile mostrare un'anteprima dell'URL per fornire maggiori informazioni su quel collegamento, come il titolo, la descrizione e un'immagine dal sito web.",
-            "url_previews_section": "Anteprime URL",
-            "user_url_previews_default_off": "Hai <a>disattivato</a> le anteprime degli URL in modo predefinito.",
-            "user_url_previews_default_on": "Hai <a>attivato</a> le anteprime degli URL in modo predefinito."
+            "topic_field_label": "Argomento stanza"
         },
         "notifications": {
             "browse_button": "Sfoglia",
@@ -2251,8 +2240,6 @@
             "spell_check_locale_placeholder": "Scegli una lingua"
         },
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",
-        "inline_url_previews_room": "Attiva le anteprime URL in modo predefinito per i partecipanti in questa stanza",
-        "inline_url_previews_room_account": "Attiva le anteprime URL in questa stanza (riguarda solo te)",
         "insert_trailing_colon_mentions": "Inserisci dei due punti dopo le citazioni degli utenti all'inizio di un messaggio",
         "jump_to_bottom_on_send": "Salta in fondo alla linea temporale quando invii un messaggio",
         "key_backup": {
@@ -2804,7 +2791,6 @@
             "one": "%(count)s risposta",
             "other": "%(count)s risposte"
         },
-        "error_start_thread_existing_relation": "Impossibile creare una conversazione da un evento con una relazione esistente",
         "my_threads": "Le mie conversazioni",
         "my_threads_description": "Mostra tutte le conversazioni a cui hai partecipato",
         "open_thread": "Apri conversazione",
@@ -2841,7 +2827,6 @@
         "creation_summary_dm": "%(creator)s ha creato questo MD.",
         "creation_summary_room": "%(creator)s ha creato e configurato la stanza.",
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Decifrazione",
         "download_action_downloading": "Scaricamento",
         "edits": {
             "tooltip_label": "Modificato alle %(date)s. Clicca per vedere le modifiche.",
@@ -3033,10 +3018,7 @@
             "removed": "Widget %(widgetName)s rimosso da %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Riduci le citazioni",
             "copy_link_thread": "Copia link nella conversazione",
-            "expand_reply_chain": "Espandi le citazioni",
-            "label": "Azioni messaggio",
             "view_in_room": "Vedi nella stanza"
         },
         "mjolnir": {

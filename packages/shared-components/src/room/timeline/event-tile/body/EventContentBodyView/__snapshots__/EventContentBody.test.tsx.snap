@@ -1,0 +1,106 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`EventContentBodyView > renders HTML content correctly 1`] = `
+<div>
+  <div
+    class="EventContentBody-module_EventTile_body EventContentBody-module_markdownBody"
+    dir="auto"
+  >
+    <p>
+      This is 
+      <strong>
+        bold
+      </strong>
+       and 
+      <em>
+        italic
+      </em>
+       text with a 
+      <a
+        href="https://matrix.org"
+      >
+        link
+      </a>
+      .
+    </p>
+  </div>
+</div>
+`;
+
+exports[`EventContentBodyView > renders as span when specified 1`] = `
+<div>
+  <span
+    class="EventContentBody-module_EventTile_body"
+    dir="auto"
+  >
+    This is rendered as a span element.
+  </span>
+</div>
+`;
+
+exports[`EventContentBodyView > renders big emoji correctly 1`] = `
+<div>
+  <div
+    class="EventContentBody-module_EventTile_body EventContentBody-module_EventTile_bigEmoji"
+    dir="auto"
+  >
+    <span
+      class="EventContentBody-module_Emoji"
+      title=":wave:"
+    >
+      👋
+    </span>
+    <span
+      class="EventContentBody-module_Emoji"
+      title=":smile:"
+    >
+      😊
+    </span>
+  </div>
+</div>
+`;
+
+exports[`EventContentBodyView > renders code block correctly 1`] = `
+<div>
+  <div
+    class="EventContentBody-module_EventTile_body EventContentBody-module_markdownBody"
+    dir="auto"
+  >
+    <pre>
+      <code>
+        function hello() {
+  console.log("Hello, world!");
+}
+      </code>
+    </pre>
+  </div>
+</div>
+`;
+
+exports[`EventContentBodyView > renders highlighted content correctly 1`] = `
+<div>
+  <div
+    class="EventContentBody-module_EventTile_body"
+    dir="auto"
+  >
+    Message with a 
+    <span
+      class="EventContentBody-module_EventTile_searchHighlight"
+    >
+      highlighted
+    </span>
+     word.
+  </div>
+</div>
+`;
+
+exports[`EventContentBodyView > renders plain text correctly 1`] = `
+<div>
+  <div
+    class="EventContentBody-module_EventTile_body"
+    dir="auto"
+  >
+    Hello, this is a plain text message.
+  </div>
+</div>
+`;

@@ -30,7 +30,6 @@
         "cancel": "취소",
         "change": "변경",
         "clear": "지우기",
-        "click": "클릭",
         "click_to_copy": "복사하려면 클릭하세요.",
         "close": "닫기",
         "collapse": "접기",
@@ -64,7 +63,6 @@
         "go": "이동",
         "go_back": "돌아가기",
         "got_it": "확인",
-        "hide": "숨기기",
         "hide_advanced": "고급 숨기기",
         "hold": "대기",
         "ignore": "무시",
@@ -1352,9 +1350,6 @@
         "impossible_dialog_title": "통합이 허용되지 않습니다"
     },
     "invite": {
-        "ask_anyway_description": "아래에 나열된 매트릭스 ID에 대한 프로필을 찾을 수 없습니다 - 그래도 DM을 시작하시겠습니까?",
-        "ask_anyway_label": "그래도 DM 시작하기",
-        "ask_anyway_never_warn_label": "어쨌든 DM을 시작하고 다시는 경고하지 마세요",
         "email_caption": "이메일로 초대",
         "email_limit_one": "이메일 초대는 한 번에 하나씩만 보낼 수 있습니다",
         "email_use_default_is": "이메일로 초대하기 위해 ID 서버를 사용합니다. <default>기본 (%(defaultIdentityServerName)s)을(를) 사용하거나</default> <settings>설정</settings>에서 관리하세요.",
@@ -1553,6 +1548,7 @@
         "render_reaction_images_description": "때로는 \"사용자 정의 이모지\"라고도 불립니다.",
         "report_to_moderators": "관리자에게 신고하기",
         "report_to_moderators_description": "운영자가 관리하는 방에서는 '신고' 버튼으로 관리자에게 문제를 신고할 수 있습니다.",
+        "room_list_sections": "대화방 목록 섹션",
         "share_history_on_invite": "새 멤버에게 암호화 된 기록을 공유합니다.",
         "share_history_on_invite_description": "기록 공개 설정이 '공유'로 설정된 암호화된 방으로 사용자를 초대할 때, 해당 사용자와 암호화된 기록을 공유하고, 그러한 방에 초대받았을 때는 암호화된 기록을 수락하세요.",
         "share_history_on_invite_warning": "이 기능은 실험용 기능으로, 모든 보안 조치가 구현되어 있지는 않습니다. 실제 운영 계정에서는 활성화하지 마십시오.",
@@ -2123,6 +2119,11 @@
         "redacting_messages_status": {
             "other": "현재 %(count)s 방에서 메시지를 삭제 중입니다"
         },
+        "section": {
+            "chats": "채팅",
+            "favourites": "즐겨찾기",
+            "low_priority": "낮은 우선순위"
+        },
         "show_less": "간단히 표시",
         "show_n_more": {
             "other": "%(count)s개 더 보기"
@@ -2195,8 +2196,6 @@
             "aliases_section": "방 주소",
             "avatar_field_label": "방 아바타",
             "canonical_alias_field_label": "기본 주소",
-            "default_url_previews_off": "기본으로 URL 미리 보기가 이 방에 참여한 사람들 모두에게 꺼졌습니다.",
-            "default_url_previews_on": "기본으로 URL 미리 보기가 이 방에 참여한 사람들 모두에게 켜졌습니다.",
             "description_space": "스페이스와 관련된 설정을 편집하세요.",
             "error_creating_alias_description": "해당 주소를 생성하는 과정에서 오류가 발생했습니다. 서버에서 허용하지 않거나 일시적인 오류가 발생했을 수 있습니다.",
             "error_creating_alias_title": "주소 생성 중 오류 발생",
@@ -2225,12 +2224,7 @@
             "published_aliases_explainer_space": "공개된 주소는 어떤 서버의 누구든지 귀하의 공간에 참여하는 데 사용할 수 있습니다.",
             "published_aliases_section": "공개된 주소",
             "save": "변경 사항 저장",
-            "topic_field_label": "방 주제",
-            "url_preview_encryption_warning": "지금 이 방처럼, 암호화된 방에서는 홈서버 (미리 보기가 만들어지는 곳)에서 이 방에서 보여지는 링크에 대해 알 수 없도록 기본으로 URL 미리 보기가 꺼집니다.",
-            "url_preview_explainer": "누군가 메시지에 URL을 넣으면, URL 미리 보기로 웹사이트에서 온 제목, 설명, 그리고 이미지 등 그 링크에 대한 정보가 표시됩니다.",
-            "url_previews_section": "URL 미리보기",
-            "user_url_previews_default_off": "기본으로 URL 미리 보기를 <a>껐습니다</a>.",
-            "user_url_previews_default_on": "기본으로 URL 미리 보기를 <a>켰습니다</a>."
+            "topic_field_label": "방 주제"
         },
         "notifications": {
             "browse_button": "찾기",
@@ -2647,8 +2641,6 @@
             "username": "사용자 이름"
         },
         "inline_url_previews_default": "기본으로 인라인 URL 미리 보기 사용하기",
-        "inline_url_previews_room": "이 방에 참여한 모두에게 기본으로 URL 미리보기 사용하기",
-        "inline_url_previews_room_account": "이 방에서 URL 미리보기 사용하기 (오직 나만 영향을 받음)",
         "insert_trailing_colon_mentions": "메시지 시작 부분에 사용자 언급 뒤에 콜론을 추가합니다",
         "invite_controls": {
             "default_label": "사용자가 방에 초대할 수 있도록 허용"
@@ -3248,7 +3240,6 @@
         },
         "empty_description": "메시지 위에 마우스를 올렸을 때 \"%(replyInThread)s\"를 사용하세요.",
         "empty_title": "스레드는 대화를 주제 중심으로 유지하고 쉽게 추적할 수 있도록 도와줍니다.",
-        "error_start_thread_existing_relation": "기존 관계가 있는 이벤트로부터 스레드를 생성할 수 없습니다",
         "mark_all_read": "모두 읽음으로 표시",
         "my_threads": "내 스레드",
         "my_threads_description": "참여한 모든 스레드를 표시합니다",
@@ -3292,7 +3283,6 @@
             "unable_to_decrypt": "메시지를 해독할 수 없습니다."
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "복호화 중",
         "download_action_downloading": "다운로드 중",
         "download_failed": "다운로드 실패",
         "download_failed_description": "이 파일을 다운로드하는 동안 오류가 발생했습니다.",
@@ -3489,10 +3479,7 @@
             "removed": "%(senderName)s님이 제거한 %(widgetName)s 위젯"
         },
         "mab": {
-            "collapse_reply_chain": "인용문 접기",
             "copy_link_thread": "스레드 링크 복사",
-            "expand_reply_chain": "인용문 확장",
-            "label": "메시지 동작",
             "view_in_room": "방에서 보기"
         },
         "mjolnir": {

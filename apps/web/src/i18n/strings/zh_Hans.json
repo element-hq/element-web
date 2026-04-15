@@ -27,7 +27,6 @@
         "cancel": "取消",
         "change": "更改",
         "clear": "清除",
-        "click": "点击",
         "click_to_copy": "点击复制",
         "close": "关闭",
         "collapse": "折叠",
@@ -1710,8 +1709,6 @@
             "aliases_section": "房间地址",
             "avatar_field_label": "房间头像",
             "canonical_alias_field_label": "主要地址",
-            "default_url_previews_off": "已对此房间的参与者默认禁用URL预览。",
-            "default_url_previews_on": "已对此房间的参与者默认启用URL预览。",
             "description_space": "编辑关于你的空间的设置。",
             "error_creating_alias_description": "创建地址时出现错误。可能是服务器不允许，也可能是出现了一个暂时的错误。",
             "error_creating_alias_title": "创建地址时出现错误",
@@ -1738,12 +1735,7 @@
             "published_aliases_explainer_space": "任何服务器上的人均可通过公布的地址加入你的空间。",
             "published_aliases_section": "公布的地址",
             "save": "保存修改",
-            "topic_field_label": "房间话题",
-            "url_preview_encryption_warning": "在加密的房间中，比如此房间，URL预览默认是禁用的，以确保你的家服务器（生成预览的地方）无法收集与你在此房间中看到的链接有关的信息。",
-            "url_preview_explainer": "当有人在他们的消息里放置URL时，可显示URL预览以给出更多有关链接的信息，如其网站的标题、描述以及图片。",
-            "url_previews_section": "URL预览",
-            "user_url_previews_default_off": "你已经默认<a>禁用</a>URL预览。",
-            "user_url_previews_default_on": "你已经默认<a>启用</a>URL预览。"
+            "topic_field_label": "房间话题"
         },
         "notifications": {
             "browse_button": "浏览",
@@ -2024,8 +2016,6 @@
             "spell_check_locale_placeholder": "选择区域设置"
         },
         "inline_url_previews_default": "默认启用行内URL预览",
-        "inline_url_previews_room": "对此房间的所有参与者默认启用URL预览",
-        "inline_url_previews_room_account": "对此房间启用URL预览（仅影响你）",
         "insert_trailing_colon_mentions": "在消息开头的提及用户的地方后面插入尾随冒号",
         "jump_to_bottom_on_send": "发送消息时跳转到时间线底部",
         "key_backup": {
@@ -2493,7 +2483,6 @@
             "one": "%(count)s 条回复",
             "other": "%(count)s 条回复"
         },
-        "error_start_thread_existing_relation": "无法从既有关系的事件创建消息列",
         "my_threads": "我的消息列",
         "my_threads_description": "显示您参与的所有消息列",
         "open_thread": "打开消息列",
@@ -2526,7 +2515,6 @@
         },
         "creation_summary_dm": "%(creator)s 创建了此私聊。",
         "creation_summary_room": "%(creator)s 创建并配置了此房间。",
-        "download_action_decrypting": "解密中",
         "download_action_downloading": "下载中",
         "edits": {
             "tooltip_label": "编辑于 %(date)s。点击以查看编辑历史。",
@@ -2709,10 +2697,7 @@
             "removed": "%(senderName)s 移除了 %(widgetName)s 挂件"
         },
         "mab": {
-            "collapse_reply_chain": "折叠引号",
             "copy_link_thread": "复制到消息列的链接",
-            "expand_reply_chain": "展开引号",
-            "label": "消息操作",
             "view_in_room": "在房间内查看"
         },
         "mjolnir": {

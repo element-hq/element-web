@@ -26,6 +26,7 @@ import Spinner from "../../views/elements/Spinner";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
 import { SDKContext } from "../../../contexts/SDKContext";
+import { type URLParams } from "../../../vector/url_utils.ts";
 
 enum LoginView {
     Loading,
@@ -43,14 +44,11 @@ const STATIC_FLOWS_TO_VIEWS: Record<string, LoginView> = {
 };
 
 interface IProps {
-    // Query parameters from MatrixChat
-    realQueryParams: {
-        loginToken?: string;
-    };
-    fragmentAfterLogin?: string;
+    urlParams: URLParams;
+    fragmentAfterLogin: string;
 
     // Called when the SSO login completes
-    onTokenLoginCompleted: () => void;
+    onTokenLoginCompleted: (urlParams: URLParams, fragmentAfterLogin: string) => void;
 }
 
 interface IState {
@@ -98,8 +96,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     };
 
     private async initLogin(): Promise<void> {
-        const queryParams = this.props.realQueryParams;
-        const hasAllParams = queryParams?.["loginToken"];
+        const hasAllParams = !!this.props.urlParams?.legacy_sso;
         if (hasAllParams) {
             this.setState({ loginView: LoginView.Loading });
 
@@ -189,7 +186,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         const isUrl = localStorage.getItem(SSO_ID_SERVER_URL_KEY) || MatrixClientPeg.safeGet().getIdentityServerUrl();
         const loginType = "m.login.token";
         const loginParams = {
-            token: this.props.realQueryParams["loginToken"],
+            token: this.props.urlParams?.legacy_sso?.loginToken,
             device_id: MatrixClientPeg.safeGet().getDeviceId() ?? undefined,
         };
 
@@ -204,9 +201,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
 
         return Lifecycle.hydrateSession(credentials)
             .then(() => {
-                if (this.props.onTokenLoginCompleted) {
-                    this.props.onTokenLoginCompleted();
-                }
+                this.props.onTokenLoginCompleted(this.props.urlParams, this.props.fragmentAfterLogin);
                 return true;
             })
             .catch((e) => {

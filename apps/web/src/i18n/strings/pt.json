@@ -32,7 +32,6 @@
         "cancel": "Cancelar",
         "change": "Alterar",
         "clear": "Limpar",
-        "click": "Clica",
         "click_to_copy": "Clica para copiar",
         "close": "Fechar",
         "collapse": "Colapsar",
@@ -64,7 +63,6 @@
         "go": "Ir",
         "go_back": "Voltar",
         "got_it": "Entendi",
-        "hide": "Ocultar",
         "hide_advanced": "Ocultar avançadas",
         "hold": "Espera",
         "ignore": "Ignorar",
@@ -1254,9 +1252,6 @@
         "impossible_dialog_title": "Integrações não permitidas"
     },
     "invite": {
-        "ask_anyway_description": "Não foi possível encontrar perfis para os IDs de Matrix listados abaixo - gostarias de iniciar uma MD na mesma?",
-        "ask_anyway_label": "Começa a MD na mesma",
-        "ask_anyway_never_warn_label": "Começa a MD na mesma e não me avises mais",
         "email_caption": "Convida por e-mail",
         "email_limit_one": "Os convites por e-mail só podem ser enviados um de cada vez",
         "email_use_default_is": "Utiliza um servidor de identidade para convidar por e-mail. <default>Utiliza a predefinição (%(defaultIdentityServerName)s)</default> ou gere em <settings>Definições</settings>.",
@@ -2087,8 +2082,6 @@
             "aliases_section": "Endereços de salas",
             "avatar_field_label": "Avatar da sala",
             "canonical_alias_field_label": "Endereço principal",
-            "default_url_previews_off": "As pré-visualizações de URL estão desactivadas por predefinição para os participantes nesta sala.",
-            "default_url_previews_on": "As pré-visualizações de URL estão activadas por predefinição para os participantes nesta sala.",
             "description_space": "Edita as definições relativas ao teu espaço.",
             "error_creating_alias_description": "Ocorreu um erro ao criares esse endereço. Pode não ser permitido pelo servidor ou ocorreu uma falha temporária.",
             "error_creating_alias_title": "Erro ao criar o endereço",
@@ -2117,12 +2110,7 @@
             "published_aliases_explainer_space": "Os endereços publicados podem ser usados por qualquer pessoa em qualquer servidor para se juntar ao teu espaço.",
             "published_aliases_section": "Endereços publicados",
             "save": "Salvar Alterações",
-            "topic_field_label": "Tópico da sala",
-            "url_preview_encryption_warning": "Em salas encriptadas, como esta, as pré-visualizações de URL são desactivadas por predefinição para garantir que o teu servidor doméstico (onde as pré-visualizações são geradas) não pode recolher informações sobre as ligações que vês nesta sala.",
-            "url_preview_explainer": "Quando alguém coloca um URL na sua mensagem, pode ser mostrada uma pré-visualização do URL para dar mais informações sobre essa ligação, como o título, a descrição e uma imagem do sítio Web.",
-            "url_previews_section": "Pré-visualização de links",
-            "user_url_previews_default_off": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
-            "user_url_previews_default_on": "Você <a>habilitou</a> pré-visualizações de links por padrão."
+            "topic_field_label": "Tópico da sala"
         },
         "notifications": {
             "browse_button": "Navegar",
@@ -2525,8 +2513,6 @@
             "username": "Nome de utilizador"
         },
         "inline_url_previews_default": "Ativar pré-visualizações de URL embutidas por predefinição",
-        "inline_url_previews_room": "Ativar pré-visualizações de URL por defeito para os participantes nesta sala",
-        "inline_url_previews_room_account": "Ativar pré-visualizações URL para esta sala (só te afeta a ti)",
         "insert_trailing_colon_mentions": "Insere dois pontos após as menções do utilizador no início de uma mensagem",
         "jump_to_bottom_on_send": "Salta para o fundo da linha de tempo quando enviar uma mensagem",
         "key_backup": {
@@ -3109,7 +3095,6 @@
         },
         "empty_description": "Utiliza \"%(replyInThread)s\" quando passares o cursor sobre uma mensagem.",
         "empty_title": "Os tópicos ajudam a manter as tuas conversas dentro do tópico e são fáceis de seguir.",
-        "error_start_thread_existing_relation": "Não é possível criar um tópico a partir de um evento com uma relação existente",
         "mark_all_read": "Marcar tudo como lido",
         "my_threads": "Os meus tópicos",
         "my_threads_description": "Mostra todos os tópicos em que participaste",
@@ -3153,7 +3138,6 @@
             "unable_to_decrypt": "Não é possível desencriptar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Descriptografando",
         "download_action_downloading": "A transferir…",
         "download_failed": "A transferência falhou",
         "download_failed_description": "Ocorreu um erro ao transferir este ficheiro",
@@ -3350,10 +3334,7 @@
             "removed": "Widget %(widgetName)s removido por %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Recolher citações",
             "copy_link_thread": "Copia o link para o tópico",
-            "expand_reply_chain": "Expandir cotações",
-            "label": "Acções de mensagens",
             "view_in_room": "Vista na sala"
         },
         "mjolnir": {
