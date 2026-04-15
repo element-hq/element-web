@@ -29,6 +29,7 @@ import { Action } from "../../../src/dispatcher/actions";
 import { CallStore } from "../../../src/stores/CallStore";
 import { CallEvent, type Call } from "../../../src/models/Call";
 import { RoomListItemViewModel } from "../../../src/viewmodels/room-list/RoomListItemViewModel";
+import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(true),
@@ -501,6 +502,20 @@ describe("RoomListItemViewModel", () => {
         });
     });
 
+    describe("canMoveToSection", () => {
+        it.each([
+            [true, true],
+            [false, false],
+        ])("should be %s when feature_room_list_sections is %s", (featureEnabled, expected) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "feature_room_list_sections") return featureEnabled;
+                return false;
+            });
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().canMoveToSection).toBe(expected);
+        });
+    });
+
     describe("Actions", () => {
         it("should dispatch view room action on openRoom", () => {
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
@@ -571,6 +586,13 @@ describe("RoomListItemViewModel", () => {
                 action: "forget_room",
                 room_id: "!room:server",
             });
+        });
+
+        it("should call createSection on RoomListStoreV3 when onCreateSection is called", () => {
+            const createSectionSpy = jest.spyOn(RoomListStoreV3.instance, "createSection").mockResolvedValue();
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            viewModel.onCreateSection();
+            expect(createSectionSpy).toHaveBeenCalled();
         });
     });
 

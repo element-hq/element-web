@@ -37,6 +37,7 @@ import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
+import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 
 interface RoomItemProps {
     room: Room;
@@ -276,6 +277,8 @@ export class RoomListItemViewModel
         const callType =
             call?.callType === CallType.Voice ? "voice" : call?.callType === CallType.Video ? "video" : undefined;
 
+        const canMoveToSection = SettingsStore.getValue("feature_room_list_sections");
+
         return {
             id: room.roomId,
             room,
@@ -303,8 +306,7 @@ export class RoomListItemViewModel
             canMarkAsRead,
             canMarkAsUnread,
             roomNotifState,
-            // To be implemented when custom section creation is added in vms
-            canMoveToSection: false,
+            canMoveToSection,
         };
     }
 
@@ -385,6 +387,6 @@ export class RoomListItemViewModel
     };
 
     public onCreateSection = (): void => {
-        // To be implemented when custom section creation is added in vms
+        RoomListStoreV3.instance.createSection();
     };
 }

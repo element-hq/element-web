@@ -159,6 +159,23 @@ describe("RoomListHeaderViewModel", () => {
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
         });
+
+        it.each([
+            [true, true, false],
+            [false, false, true],
+        ])(
+            "when feature_room_list_sections is %s: canCreateSection=%s, useComposeIcon=%s",
+            (featureEnabled, expectedCanCreateSection, expectedUseComposeIcon) => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                    if (settingName === "feature_room_list_sections") return featureEnabled;
+                    return false;
+                });
+
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+                expect(vm.getSnapshot().canCreateSection).toBe(expectedCanCreateSection);
+                expect(vm.getSnapshot().useComposeIcon).toBe(expectedUseComposeIcon);
+            },
+        );
     });
 
     describe("event listeners", () => {
@@ -294,6 +311,13 @@ describe("RoomListHeaderViewModel", () => {
                 SortingAlgorithm.Alphabetic,
                 SortingAlgorithm.Unread,
             );
+        });
+
+        it("should call createSection on RoomListStoreV3 when createSection is called", () => {
+            const createSectionSpy = jest.spyOn(RoomListStoreV3.instance, "createSection").mockResolvedValue();
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            vm.createSection();
+            expect(createSectionSpy).toHaveBeenCalled();
         });
 
         it("should toggle message preview from enabled to disabled", () => {
