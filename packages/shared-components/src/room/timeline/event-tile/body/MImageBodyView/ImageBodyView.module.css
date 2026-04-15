@@ -84,9 +84,9 @@
     position: absolute;
     display: block;
     top: var(--cpd-space-0x);
-    left: 14px; /* Giftlabel in _MImageBody.pcss is hardcoded to 14px */
-    padding: 5px; /* GiftLabel in _MImageBody.pcss is hardcoded to 5px in .mx_MImageBody_gifLabel  */
-    border-radius: 5px; /* Border Radius is is set to 5px in Giftlabel class in .mx_MImageBody_gifLabel  */
+    left: 14px; /* Preserve the original GIF badge offset from _MImageBody.pcss. */
+    padding: 5px; /* Preserve the original GIF badge padding from _MImageBody.pcss. */
+    border-radius: 5px; /* Preserve the original GIF badge corner radius from _MImageBody.pcss. */
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid rgba(0, 0, 0, 0.2);
     color: rgba(255, 255, 255, 1);
