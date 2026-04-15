@@ -11,7 +11,7 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import { AvatarWithDetails } from "./AvatarWithDetails";
 
 const meta = {
-    title: "core/AvatarWithDetails",
+    title: "Core/AvatarWithDetails",
     component: AvatarWithDetails,
     tags: ["autodocs"],
     args: {

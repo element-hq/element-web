@@ -45,7 +45,7 @@ const WidgetContextMenuViewWrapperImpl = ({
 const WidgetContextMenuViewWrapper = withViewDocs(WidgetContextMenuViewWrapperImpl, WidgetContextMenuView);
 
 const meta = {
-    title: "RightPanel/WidgetContextMenuView",
+    title: "Room/RightPanel/WidgetContextMenuView",
     component: WidgetContextMenuViewWrapper,
     tags: ["autodocs"],
     args: {

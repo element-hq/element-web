@@ -14,7 +14,7 @@ import { LinkPreview } from "./LinkPreview";
 import { LinkedTextContext } from "../../../core/utils/LinkedText";
 
 export default {
-    title: "Event/UrlPreviewGroupView/LinkPreview",
+    title: "EventTiles/UrlPreviewGroupView/LinkPreview",
     component: LinkPreview,
     tags: ["autodocs"],
     args: {

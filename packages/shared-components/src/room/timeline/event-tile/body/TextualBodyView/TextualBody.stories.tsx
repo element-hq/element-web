@@ -76,7 +76,7 @@ const TEXTUAL_BODY_VIEW_BODY_WRAPPER_KIND_OPTIONS = [
 ];
 
 const meta = {
-    title: "MessageBody/TextualBody",
+    title: "Room/Timeline/EventTile/Body/TextualBodyView/TextualBody",
     component: TextualBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {

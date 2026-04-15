@@ -14,7 +14,7 @@ import { RichItem } from "./RichItem";
 const currentTimestamp = new Date("2025-03-09T12:00:00Z").getTime();
 
 const meta = {
-    title: "RichList/RichItem",
+    title: "Core/RichList/RichItem",
     component: RichItem,
     tags: ["autodocs"],
     args: {

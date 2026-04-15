@@ -13,7 +13,7 @@ import { Button } from "@vector-im/compound-web";
 import { Banner } from "./Banner";
 
 const meta = {
-    title: "room/Banner",
+    title: "Room/Composer/Banner",
     component: Banner,
     tags: ["autodocs"],
     args: {

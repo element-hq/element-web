@@ -37,7 +37,7 @@ const RoomStatusBarViewWrapperImpl = ({
 const RoomStatusBarViewWrapper = withViewDocs(RoomStatusBarViewWrapperImpl, RoomStatusBarView);
 
 const meta = {
-    title: "room/RoomStatusBarView",
+    title: "Room/RoomStatusBar/RoomStatusBarView",
     component: RoomStatusBarViewWrapper,
     tags: ["autodocs"],
     argTypes: {},

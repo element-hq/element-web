@@ -43,7 +43,7 @@ const UrlPreviewGroupViewWrapperImpl = ({
 const UrlPreviewGroupViewWrapper = withViewDocs(UrlPreviewGroupViewWrapperImpl, UrlPreviewGroupView);
 
 export default {
-    title: "Event/UrlPreviewGroupView",
+    title: "EventTiles/UrlPreviewGroupView",
     component: UrlPreviewGroupViewWrapper,
     tags: ["autodocs"],
     args: {

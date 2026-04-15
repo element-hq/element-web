@@ -25,7 +25,7 @@ const EncryptionEventViewWrapperImpl = ({
 const EncryptionEventViewWrapper = withViewDocs(EncryptionEventViewWrapperImpl, EncryptionEventView);
 
 const meta = {
-    title: "Event/EncryptionEvent",
+    title: "Room/Timeline/EventTile/EventTileView/EncryptionEventView",
     component: EncryptionEventViewWrapper,
     tags: ["autodocs"],
     argTypes: {

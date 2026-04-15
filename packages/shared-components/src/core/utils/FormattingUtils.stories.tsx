@@ -13,7 +13,7 @@ import formatBytesDoc from "../../../typedoc/functions/formatBytes.md?raw";
 import formatSecondsDoc from "../../../typedoc/functions/formatSeconds.md?raw";
 
 const meta = {
-    title: "utils/FormattingUtils",
+    title: "Core/Utils/FormattingUtils",
     parameters: {
         docs: {
             page: () => (

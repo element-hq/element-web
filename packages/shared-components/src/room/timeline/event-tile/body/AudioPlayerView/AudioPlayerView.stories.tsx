@@ -30,7 +30,7 @@ const AudioPlayerViewWrapperImpl = ({
 const AudioPlayerViewWrapper = withViewDocs(AudioPlayerViewWrapperImpl, AudioPlayerView);
 
 const meta = {
-    title: "Audio/AudioPlayerView",
+    title: "Room/Timeline/EventTile/Body/AudioPlayerView",
     component: AudioPlayerViewWrapper,
     tags: ["autodocs"],
     argTypes: {

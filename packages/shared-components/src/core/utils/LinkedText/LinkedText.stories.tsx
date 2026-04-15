@@ -13,7 +13,7 @@ import { LinkedText } from "./LinkedText";
 import { LinkedTextContext } from "./LinkedTextContext";
 
 const meta = {
-    title: "Utils/LinkedText",
+    title: "Core/Utils/LinkedText",
     component: LinkedText,
     decorators: [
         (Story, { args }) => (

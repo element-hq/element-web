@@ -29,7 +29,7 @@ const DecryptionFailureBodyViewWrapperImpl = ({
 const DecryptionFailureBodyViewWrapper = withViewDocs(DecryptionFailureBodyViewWrapperImpl, DecryptionFailureBodyView);
 
 const meta = {
-    title: "MessageBody/DecryptionFailureBodyView",
+    title: "Room/Timeline/EventTile/Body/DecryptionFailureBodyView",
     component: DecryptionFailureBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {

@@ -13,7 +13,7 @@ import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWra
 import { createMockRoomItemViewModel, renderAvatar } from "../../story-mocks";
 
 const meta = {
-    title: "Room List/RoomListItemAccessibiltyWrapper",
+    title: "RoomList/VirtualizedRoomListView/RoomListItemAccessibilityWrapper",
     component: RoomListItemAccessibilityWrapper,
     tags: ["autodocs"],
     args: {

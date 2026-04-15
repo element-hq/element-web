@@ -37,7 +37,7 @@ const Wrapper = ({ onLeftPanelResize, setPanelHandle, ...snapshot }: LeftResizab
 const LeftResizablePanelViewWrapper = withViewDocs(Wrapper, LeftResizablePanelView);
 
 const meta = {
-    title: "Resize/LeftResizablePanelView",
+    title: "Resize/Panel/LeftResizablePanelView",
     component: LeftResizablePanelViewWrapper,
     // This is a structural component, so nothing to visually test.
     tags: ["autodocs", "!snapshot"],

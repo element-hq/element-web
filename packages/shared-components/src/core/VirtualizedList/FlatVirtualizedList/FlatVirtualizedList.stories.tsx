@@ -14,7 +14,7 @@ import { items, SimpleItemComponent } from "../story-mock";
 import { getContainerAccessibleProps, getItemAccessibleProps } from "../accessbility";
 
 const meta = {
-    title: "Utils/VirtualizedList/FlatVirtualizedList",
+    title: "Core/VirtualizedList/FlatVirtualizedList",
     component: FlatVirtualizedList<SimpleItemComponent, undefined>,
     parameters: {
         docs: {

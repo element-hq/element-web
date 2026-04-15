@@ -17,7 +17,7 @@ import { getContainerAccessibleProps, getGroupHeaderAccessibleProps, getItemAcce
 const totalRows = groups.reduce((total, group) => total + 1 + group.items.length, 0);
 
 const meta = {
-    title: "Utils/VirtualizedList/GroupedVirtualizedList",
+    title: "Core/VirtualizedList/GroupedVirtualizedList",
     component: GroupedVirtualizedList<SimpleGroupHeader, SimpleItemComponent, undefined>,
     parameters: {
         docs: {

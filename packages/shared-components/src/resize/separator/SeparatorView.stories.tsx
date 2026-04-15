@@ -24,7 +24,7 @@ const Wrapper = ({ onFocus, onBlur, onSeparatorClick, ...snapshot }: SeparatorVi
 const SeparatorViewWrapper = withViewDocs(Wrapper, SeparatorView);
 
 const meta = {
-    title: "Resize/SeparatorView",
+    title: "Resize/Separator/SeparatorView",
     component: SeparatorViewWrapper,
     tags: ["autodocs"],
     args: {

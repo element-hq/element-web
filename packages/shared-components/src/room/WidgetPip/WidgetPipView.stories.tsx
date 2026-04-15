@@ -38,7 +38,7 @@ const WidgetPipViewWrapperImpl = ({
 const WidgetPipViewWrapper = withViewDocs(WidgetPipViewWrapperImpl, WidgetPipView);
 
 export default {
-    title: "room/WidgetPipView",
+    title: "Room/WidgetPip/WidgetPipView",
     component: WidgetPipViewWrapper,
     tags: ["autodocs"],
     argTypes: {},

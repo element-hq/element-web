@@ -29,7 +29,7 @@ const DateSeparatorViewWrapperImpl = ({
 const DateSeparatorViewWrapper = withViewDocs(DateSeparatorViewWrapperImpl, DateSeparatorView);
 
 const meta = {
-    title: "Timeline/DateSeparatorView",
+    title: "Room/Timeline/DateSeparatorView",
     component: DateSeparatorViewWrapper,
     tags: ["autodocs"],
     argTypes: {

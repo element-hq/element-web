@@ -38,7 +38,7 @@ const Wrapper = ({ onLeftPanelResized }: GroupViewProps): JSX.Element => {
 const GroupViewWrapper = withViewDocs(Wrapper, GroupView);
 
 const meta = {
-    title: "Resize/GroupView",
+    title: "Resize/Group/GroupView",
     component: GroupViewWrapper,
     // This is a structural component, so nothing to visually test.
     tags: ["autodocs", "!snapshot"],

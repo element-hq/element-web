@@ -30,7 +30,7 @@ const DisambiguatedProfileViewWrapperImpl = ({
 const DisambiguatedProfileViewWrapper = withViewDocs(DisambiguatedProfileViewWrapperImpl, DisambiguatedProfileView);
 
 const meta = {
-    title: "Profile/DisambiguatedProfile",
+    title: "Room/Timeline/EventTile/EventTileView/DisambiguatedProfile",
     component: DisambiguatedProfileViewWrapper,
     tags: ["autodocs"],
     argTypes: {

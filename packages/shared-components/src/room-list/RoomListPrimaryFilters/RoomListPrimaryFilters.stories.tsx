@@ -13,7 +13,7 @@ import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
 import type { FilterId } from "./useVisibleFilters";
 
 const meta = {
-    title: "Room List/RoomListPrimaryFilters",
+    title: "RoomList/RoomListPrimaryFilters",
     component: RoomListPrimaryFilters,
     tags: ["autodocs"],
     args: {
