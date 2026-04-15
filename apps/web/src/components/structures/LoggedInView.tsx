@@ -796,7 +796,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         const roomView = <div className="mx_RoomView_wrapper">{pageElement}</div>;
         const content =
-            useNewRoomList && this.resizerViewModel ? (
+            useNewRoomList && this.resizerViewModel && !moduleRenderer ? (
                 <GroupView vm={this.resizerViewModel}>
                     <SpacePanel />
                     <LeftResizablePanelView
@@ -813,6 +813,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 </GroupView>
             ) : (
                 <>
+                    {useNewRoomList && <SpacePanel />}
                     {leftPanel}
                     {!moduleRenderer && <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />}
                     {roomView}
