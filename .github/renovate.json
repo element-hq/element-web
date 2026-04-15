@@ -22,7 +22,7 @@
         },
         {
             "customType": "jsonata",
-            "fileMatch": ["(^|/)package\\.json$"],
+            "managerFilePatterns": ["/(^|/)package\\.json$/"],
             "fileFormat": "json",
             "matchStrings": ["hakDependencies.$each(function($v, $k) { { 'packageName': $k, 'currentValue': $v } })"],
             "datasourceTemplate": "npm",
