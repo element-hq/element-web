@@ -302,20 +302,23 @@ export function getPostInitialFillBottomSnapIndex({
     itemCount,
     firstItemIndex,
     postInitialFillBottomSnapDone,
+    suppressForUpwardScrollDuringInitialFill,
 }: {
-    initialFillState: "filling" | "done";
+    initialFillState: "filling" | "settling" | "done";
     isAtLiveEdge: boolean;
     hasScrollTarget: boolean;
     itemCount: number;
     firstItemIndex: number;
     postInitialFillBottomSnapDone: boolean;
+    suppressForUpwardScrollDuringInitialFill?: boolean;
 }): number | null {
     if (
         initialFillState !== "done" ||
         !isAtLiveEdge ||
         hasScrollTarget ||
         itemCount === 0 ||
-        postInitialFillBottomSnapDone
+        postInitialFillBottomSnapDone ||
+        suppressForUpwardScrollDuringInitialFill
     ) {
         return null;
     }
@@ -331,10 +334,10 @@ export function shouldIgnoreAtBottomStateChange({
     initialFillState,
     hasScrollTarget,
 }: {
-    initialFillState: "filling" | "done";
+    initialFillState: "filling" | "settling" | "done";
     hasScrollTarget: boolean;
 }): boolean {
-    return initialFillState === "filling" && !hasScrollTarget;
+    return initialFillState !== "done" && !hasScrollTarget;
 }
 
 // Live-edge tracking --------------------------------------------------------
@@ -386,7 +389,7 @@ export function shouldIgnoreStartReached({
     isAtLiveEdge,
     hasScrollTarget,
 }: {
-    initialFillState: "filling" | "done";
+    initialFillState: "filling" | "settling" | "done";
     isAtLiveEdge: boolean;
     hasScrollTarget: boolean;
 }): boolean {
@@ -401,7 +404,7 @@ export function shouldPaginateBackwardAtTopScroll({
     canPaginateBackward,
     scrollTop,
 }: {
-    initialFillState: "filling" | "done";
+    initialFillState: "filling" | "settling" | "done";
     isAtLiveEdge: boolean;
     hasScrollTarget: boolean;
     backwardPagination: PaginationState;
@@ -432,7 +435,7 @@ export function shouldReplayPendingForwardPaginationAfterInitialFill({
     forwardPagination,
     canPaginateForward,
 }: {
-    initialFillState: "filling" | "done";
+    initialFillState: "filling" | "settling" | "done";
     hasPendingEndReached: boolean;
     forwardPagination: PaginationState;
     canPaginateForward: boolean;
@@ -503,4 +506,41 @@ export function getForwardPaginationAnchorAdjustment({
     currentBottomOffset: number;
 }): number {
     return desiredBottomOffset - currentBottomOffset;
+}
+
+/**
+ * Determines whether a completed forward pagination may use the original
+ * Virtuoso sliding-rebase location for the current range.
+ *
+ * A range that already fell back to DOM-based recovery must not re-arm the
+ * Virtuoso path again, but later ranges may still use it.
+ */
+export function shouldUseForwardSlidingRebaseLocation({
+    previousForwardPagination,
+    forwardPagination,
+    continuityMode,
+    windowShift,
+    hasShiftedVisibleRange,
+    currentRangeKey,
+    blockedRangeKey,
+    handledRangeKey,
+}: {
+    previousForwardPagination: PaginationState;
+    forwardPagination: PaginationState;
+    continuityMode: "anchor" | "bottom" | "shifted-range" | null;
+    windowShift: number;
+    hasShiftedVisibleRange: boolean;
+    currentRangeKey: string;
+    blockedRangeKey: string | null;
+    handledRangeKey: string | null;
+}): boolean {
+    return (
+        previousForwardPagination === "loading" &&
+        forwardPagination === "idle" &&
+        continuityMode === "shifted-range" &&
+        windowShift < 0 &&
+        hasShiftedVisibleRange &&
+        blockedRangeKey !== currentRangeKey &&
+        handledRangeKey !== currentRangeKey
+    );
 }

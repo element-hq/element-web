@@ -168,6 +168,7 @@ class StoryTimelineViewModel
         this.callbacks.onRequestMoreItems(direction);
 
         const currentSnapshot = this.getSnapshot();
+
         if (direction === "backward" && !currentSnapshot.canPaginateBackward) {
             return;
         }
@@ -261,16 +262,24 @@ const TimelineViewStoryWrapperImpl = ({
 }: Readonly<TimelineViewStoryProps>): JSX.Element => {
     const vmRef = useRef<StoryTimelineViewModel | null>(null);
     const storyInstanceIdRef = useRef<string | undefined>(storyInstanceId);
+    const latestVisibleRangeRef = useRef<VisibleRange | null>(null);
     const callbacksRef = useRef<StoryTimelineCallbacks>({
         onRequestMoreItems: () => undefined,
         onInitialFillCompleted: () => undefined,
-        onVisibleRangeChanged: () => undefined,
+        onVisibleRangeChanged: (range) => {
+            latestVisibleRangeRef.current = range;
+        },
         onScrollTargetReached: () => undefined,
         onIsAtLiveEdgeChanged: (isAtLiveEdge) => onIsAtLiveEdgeChanged?.(isAtLiveEdge),
         onItemsChanged: (nextItems) => onItemsChanged?.(nextItems),
     });
 
-    callbacksRef.current.onItemsChanged = (nextItems) => onItemsChanged?.(nextItems);
+    callbacksRef.current.onItemsChanged = (nextItems) => {
+        onItemsChanged?.(nextItems);
+    };
+    callbacksRef.current.onVisibleRangeChanged = (range) => {
+        latestVisibleRangeRef.current = range;
+    };
     callbacksRef.current.onIsAtLiveEdgeChanged = (isAtLiveEdge) => onIsAtLiveEdgeChanged?.(isAtLiveEdge);
 
     if (storyInstanceIdRef.current !== storyInstanceId) {
@@ -475,6 +484,7 @@ export const StartAtLiveEdge: Story = {
     args: {
         items: startAtLiveEdgeItems,
         initialIsAtLiveEdge: true,
+        initialScrollTarget: null,
     },
     async play(): Promise<void> {
         await waitForStoryToSettle();

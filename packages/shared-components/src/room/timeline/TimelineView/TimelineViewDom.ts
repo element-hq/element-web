@@ -160,6 +160,10 @@ export function getBottomOffset(scrollerElement: HTMLElement, targetElement: HTM
     return scrollerElement.getBoundingClientRect().bottom - targetElement.getBoundingClientRect().bottom;
 }
 
+export function getTopOffset(scrollerElement: HTMLElement, targetElement: HTMLElement): number {
+    return targetElement.getBoundingClientRect().top - scrollerElement.getBoundingClientRect().top;
+}
+
 /**
  * Returns whether the scroller is already close enough to the bottom that a
  * final live-edge snap can be treated as safe and visually stable.
@@ -213,4 +217,37 @@ export function getLastVisibleTimelineItemElement(scrollerElement: HTMLElement):
     }
 
     return lastFullyVisibleElement ?? lastIntersectingElement;
+}
+
+/**
+ * Returns the topmost timeline item that is meaningfully visible in the viewport.
+ *
+ * For backward-pagination preservation we need the actual topmost visible row,
+ * even when it is partially clipped. Using the first fully visible row allows
+ * earlier partially visible rows to slide in above the anchor after a window
+ * shift, which looks like a jump even if the chosen anchor stayed aligned.
+ */
+export function getFirstVisibleTimelineItemElement(scrollerElement: HTMLElement): HTMLElement | null {
+    const scrollerRect = scrollerElement.getBoundingClientRect();
+    const itemElements = scrollerElement.querySelectorAll<HTMLElement>("[data-timeline-item-key]");
+
+    let firstIntersectingElement: HTMLElement | null = null;
+    let firstIntersectingTop = Number.POSITIVE_INFINITY;
+
+    for (const itemElement of itemElements) {
+        const itemRect = itemElement.getBoundingClientRect();
+        const intersectsViewport =
+            itemRect.bottom > scrollerRect.top + SNAP_TO_TARGET_OFFSET_EPSILON_PX &&
+            itemRect.top < scrollerRect.bottom - SNAP_TO_TARGET_OFFSET_EPSILON_PX;
+        if (!intersectsViewport) {
+            continue;
+        }
+
+        if (itemRect.top <= firstIntersectingTop) {
+            firstIntersectingTop = itemRect.top;
+            firstIntersectingElement = itemElement;
+        }
+    }
+
+    return firstIntersectingElement;
 }

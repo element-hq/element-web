@@ -19,6 +19,7 @@ import {
     getIsAtLiveEdgeFromBottomState,
     getPostInitialFillBottomSnapIndex,
     getScrollLocationOnChange,
+    shouldUseForwardSlidingRebaseLocation,
     shouldDisableFollowOutputOnScroll,
     shouldIgnoreAtBottomStateChange,
     shouldIgnoreStartReached,
@@ -63,6 +64,13 @@ function makeSnapshot(partial?: Partial<TimelineViewSnapshot<TimelineItem>>): Ti
         scrollTarget: null,
         ...partial,
     };
+}
+
+function makeItems(count: number, prefix = "item"): TimelineItem[] {
+    return Array.from({ length: count }, (_, index) => ({
+        key: `${prefix}-${index + 1}`,
+        kind: "event",
+    }));
 }
 
 function renderTimeline(vm: TestTimelineViewModel): ReturnType<typeof render> {
@@ -209,6 +217,7 @@ describe("TimelineView", () => {
                 itemCount: 5,
                 firstItemIndex: 100,
                 postInitialFillBottomSnapDone: false,
+                suppressForUpwardScrollDuringInitialFill: false,
             }),
         ).toBe(104);
     });
@@ -222,6 +231,21 @@ describe("TimelineView", () => {
                 itemCount: 5,
                 firstItemIndex: 100,
                 postInitialFillBottomSnapDone: false,
+                suppressForUpwardScrollDuringInitialFill: false,
+            }),
+        ).toBeNull();
+    });
+
+    it("does not request a post-fill bottom snap after upward scrolling during initial fill", () => {
+        expect(
+            getPostInitialFillBottomSnapIndex({
+                initialFillState: "done",
+                isAtLiveEdge: true,
+                hasScrollTarget: false,
+                itemCount: 5,
+                firstItemIndex: 100,
+                postInitialFillBottomSnapDone: false,
+                suppressForUpwardScrollDuringInitialFill: true,
             }),
         ).toBeNull();
     });
@@ -473,6 +497,47 @@ describe("TimelineView", () => {
         ).toBeNull();
     });
 
+    it("allows forward sliding rebase only once per recovered range", () => {
+        expect(
+            shouldUseForwardSlidingRebaseLocation({
+                previousForwardPagination: "loading",
+                forwardPagination: "idle",
+                continuityMode: "shifted-range",
+                windowShift: -10,
+                hasShiftedVisibleRange: true,
+                currentRangeKey: "event-31..event-80 (50)",
+                blockedRangeKey: null,
+                handledRangeKey: null,
+            }),
+        ).toBe(true);
+
+        expect(
+            shouldUseForwardSlidingRebaseLocation({
+                previousForwardPagination: "loading",
+                forwardPagination: "idle",
+                continuityMode: "shifted-range",
+                windowShift: -10,
+                hasShiftedVisibleRange: true,
+                currentRangeKey: "event-31..event-80 (50)",
+                blockedRangeKey: null,
+                handledRangeKey: "event-31..event-80 (50)",
+            }),
+        ).toBe(false);
+
+        expect(
+            shouldUseForwardSlidingRebaseLocation({
+                previousForwardPagination: "loading",
+                forwardPagination: "idle",
+                continuityMode: "shifted-range",
+                windowShift: -10,
+                hasShiftedVisibleRange: true,
+                currentRangeKey: "event-41..event-90 (50)",
+                blockedRangeKey: null,
+                handledRangeKey: "event-31..event-80 (50)",
+            }),
+        ).toBe(true);
+    });
+
     it("computes a scroll adjustment that preserves the previous bottom offset", () => {
         expect(
             getForwardPaginationAnchorAdjustment({
@@ -621,7 +686,6 @@ describe("TimelineView", () => {
             renderTimeline(vm);
 
             await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
-            await waitFor(() => expect(vm.onIsAtLiveEdgeChanged).toHaveBeenCalled());
 
             vm.onRequestMoreItems.mockClear();
 
@@ -648,6 +712,40 @@ describe("TimelineView", () => {
         await waitFor(() => expect(vm.onRequestMoreItems).toHaveBeenCalledWith("backward"));
         expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("forward");
         expect(vm.onInitialFillCompleted).not.toHaveBeenCalled();
+    });
+
+    it("does not issue the startup backward probe before the live-edge view settles", async () => {
+        const vm = new TestTimelineViewModel(
+            makeSnapshot({
+                items: makeItems(40, "event"),
+                canPaginateBackward: true,
+                canPaginateForward: false,
+                isAtLiveEdge: true,
+            }),
+        );
+
+        renderTimeline(vm);
+
+        await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
+        expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
+    });
+
+    it("completes live-edge startup without probing backward when no startup backfill ran", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    items: makeItems(40, "event"),
+                    canPaginateBackward: true,
+                    canPaginateForward: false,
+                    isAtLiveEdge: true,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
+            expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
+        });
     });
 
     it("acknowledges a scroll target when the target item is present", async () => {
@@ -825,14 +923,23 @@ describe("TimelineView", () => {
 
             let currentScrollHeight = 260;
             let currentScrollTop = 0;
-            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(({ top }: ScrollToOptions) => {
-                currentScrollTop = top ?? currentScrollTop;
-            });
-            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockImplementation(
-                () => currentScrollHeight,
-            );
+            const scrollToSpy = vi
+                .spyOn(scrollerElement, "scrollTo")
+                .mockImplementation((leftOrOptions?: number | ScrollToOptions, top?: number): void => {
+                    if (typeof leftOrOptions === "number") {
+                        currentScrollTop = top ?? currentScrollTop;
+                        return;
+                    }
+
+                    currentScrollTop = leftOrOptions?.top ?? currentScrollTop;
+                });
+            const scrollHeightSpy = vi
+                .spyOn(scrollerElement, "scrollHeight", "get")
+                .mockImplementation(() => currentScrollHeight);
             const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
-            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+            const scrollTopSpy = vi
+                .spyOn(scrollerElement, "scrollTop", "get")
+                .mockImplementation(() => currentScrollTop);
 
             scrollToSpy.mockClear();
 
@@ -931,14 +1038,23 @@ describe("TimelineView", () => {
 
             let currentScrollHeight = 260;
             let currentScrollTop = 0;
-            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(({ top }: ScrollToOptions) => {
-                currentScrollTop = top ?? currentScrollTop;
-            });
-            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockImplementation(
-                () => currentScrollHeight,
-            );
+            const scrollToSpy = vi
+                .spyOn(scrollerElement, "scrollTo")
+                .mockImplementation((leftOrOptions?: number | ScrollToOptions, top?: number): void => {
+                    if (typeof leftOrOptions === "number") {
+                        currentScrollTop = top ?? currentScrollTop;
+                        return;
+                    }
+
+                    currentScrollTop = leftOrOptions?.top ?? currentScrollTop;
+                });
+            const scrollHeightSpy = vi
+                .spyOn(scrollerElement, "scrollHeight", "get")
+                .mockImplementation(() => currentScrollHeight);
             const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
-            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+            const scrollTopSpy = vi
+                .spyOn(scrollerElement, "scrollTop", "get")
+                .mockImplementation(() => currentScrollTop);
 
             const flushAnimationFrame = async (): Promise<void> => {
                 const frameCallbacks = Array.from(scheduledAnimationFrames.values());
@@ -1127,12 +1243,21 @@ describe("TimelineView", () => {
             });
 
             let currentScrollTop = 100;
-            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(({ top }: ScrollToOptions) => {
-                currentScrollTop = top ?? currentScrollTop;
-            });
+            const scrollToSpy = vi
+                .spyOn(scrollerElement, "scrollTo")
+                .mockImplementation((leftOrOptions?: number | ScrollToOptions, top?: number): void => {
+                    if (typeof leftOrOptions === "number") {
+                        currentScrollTop = top ?? currentScrollTop;
+                        return;
+                    }
+
+                    currentScrollTop = leftOrOptions?.top ?? currentScrollTop;
+                });
             const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(300);
             const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
-            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+            const scrollTopSpy = vi
+                .spyOn(scrollerElement, "scrollTop", "get")
+                .mockImplementation(() => currentScrollTop);
 
             currentScrollTop = 90;
             await act(async () => {
@@ -1149,6 +1274,68 @@ describe("TimelineView", () => {
             expect(scrollToSpy).toHaveBeenCalledWith({
                 top: 100,
             });
+
+            scrollHeightSpy.mockRestore();
+            clientHeightSpy.mockRestore();
+            scrollTopSpy.mockRestore();
+            scrollToSpy.mockRestore();
+        });
+    });
+
+    it("does not re-enable followOutput from the bottom of a paginatable window", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: false,
+                    canPaginateForward: true,
+                    isAtLiveEdge: false,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            let currentScrollTop = 100;
+            const scrollToSpy = vi
+                .spyOn(scrollerElement, "scrollTo")
+                .mockImplementation((leftOrOptions?: number | ScrollToOptions, top?: number): void => {
+                    if (typeof leftOrOptions === "number") {
+                        currentScrollTop = top ?? currentScrollTop;
+                        return;
+                    }
+
+                    currentScrollTop = leftOrOptions?.top ?? currentScrollTop;
+                });
+            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(300);
+            const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
+            const scrollTopSpy = vi
+                .spyOn(scrollerElement, "scrollTop", "get")
+                .mockImplementation(() => currentScrollTop);
+
+            currentScrollTop = 90;
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            scrollToSpy.mockClear();
+            vm.onRequestMoreItems.mockClear();
+
+            currentScrollTop = 96;
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            expect(scrollToSpy).toHaveBeenCalledWith({
+                top: 100,
+            });
+            expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("forward");
 
             scrollHeightSpy.mockRestore();
             clientHeightSpy.mockRestore();
@@ -1176,8 +1363,10 @@ describe("TimelineView", () => {
                 return element!;
             });
 
-            let currentScrollTop = 0;
-            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+            const currentScrollTop = 0;
+            const scrollTopSpy = vi
+                .spyOn(scrollerElement, "scrollTop", "get")
+                .mockImplementation(() => currentScrollTop);
 
             vm.updateSnapshot({
                 canPaginateBackward: true,
