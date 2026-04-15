@@ -78,7 +78,7 @@ const meta = {
         state: ImageBodyViewState.READY,
         alt: "Element logo",
         hiddenButtonLabel: "Show image",
-        errorLabel: "Error loading image",
+        errorLabel: "Unable to show image due to error",
         src: imageSrc,
         thumbnailSrc,
         showAnimatedContentOnHover: false,

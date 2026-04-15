@@ -63,10 +63,6 @@
     height: 100%;
 }
 
-.mediaFallback {
-    min-height: 1px; /* This is required because of the orignal component is set to 1px in  */
-}
-
 .banner {
     position: absolute;
     bottom: var(--cpd-space-2x);
@@ -118,8 +114,6 @@
 
 .hiddenButtonContent {
     display: flex;
-    align-items: center;
-    gap: var(--cpd-space-1x);
     color: var(--cpd-color-text-action-accent);
 }
 
@@ -129,10 +123,13 @@
 }
 
 .error {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--cpd-space-1x);
+    display: block;
     color: var(--cpd-color-text-critical-primary);
+}
+
+.errorIcon {
+    margin-right: var(--cpd-space-1x);
+    vertical-align: text-top;
 }
 
 @keyframes blurhashPulse {

@@ -233,7 +233,7 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
     if (state === ImageBodyViewState.ERROR) {
         return (
             <span className={classNames(rootClassName, styles.error)}>
-                <ImageErrorIcon width="16" height="16" />
+                <ImageErrorIcon className={styles.errorIcon} width="16" height="16" />
                 {errorLabel}
             </span>
         );
@@ -264,12 +264,14 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
 
     const media =
         state === ImageBodyViewState.HIDDEN ? (
-            <button type="button" className={styles.hiddenButton} onClick={vm.onHiddenButtonClick}>
-                <div className={styles.hiddenButtonContent}>
-                    <VisibilityOnIcon />
-                    <span>{hiddenButtonLabel}</span>
-                </div>
-            </button>
+            <div style={{ width: maxWidth, height: maxHeight }}>
+                <button type="button" className={styles.hiddenButton} onClick={vm.onHiddenButtonClick}>
+                    <div className={styles.hiddenButtonContent}>
+                        <VisibilityOnIcon />
+                        <span>{hiddenButtonLabel}</span>
+                    </div>
+                </button>
+            </div>
         ) : resolvedImageSrc ? (
             <img
                 className={styles.image}
@@ -280,9 +282,7 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
                 onMouseEnter={(): void => setHover(true)}
                 onMouseLeave={(): void => setHover(false)}
             />
-        ) : (
-            <div className={styles.mediaFallback} />
-        );
+        ) : null;
 
     const banner =
         state === ImageBodyViewState.READY && bannerLabel && hoverOrFocus ? (
