@@ -39,7 +39,7 @@ jobs:
 
             - name: Build and load
               id: test-build
-              uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
+              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7
               with:
                   context: .
                   file: apps/web/Dockerfile
@@ -97,14 +97,14 @@ jobs:
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
 
             - name: Login to Docker Hub
-              uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
+              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
               if: github.event_name != 'pull_request'
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Login to GitHub Container Registry
-              uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
+              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: ghcr.io
@@ -140,7 +140,7 @@ jobs:
                       services/web-repositories/secret/data/oci.element.io password | OCI_PASSWORD ;
 
             - name: Login to oci.element.io Registry
-              uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
+              uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
               if: github.event_name != 'pull_request'
               with:
                   registry: oci-push.vpn.infra.element.io
@@ -149,7 +149,7 @@ jobs:
 
             - name: Build and push
               id: build-and-push
-              uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
+              uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7
               if: github.event_name != 'pull_request'
               with:
                   context: .

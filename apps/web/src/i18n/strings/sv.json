@@ -2141,8 +2141,6 @@
             "aliases_section": "Rumsadresser",
             "avatar_field_label": "Rumsavatar",
             "canonical_alias_field_label": "Huvudadress",
-            "default_url_previews_off": "URL-förhandsgranskning är inaktiverat som förval för deltagare i detta rum.",
-            "default_url_previews_on": "URL-förhandsgranskning är aktiverat som förval för deltagare i detta rum.",
             "description_space": "Redigera inställningar relaterat till ditt utrymme.",
             "error_creating_alias_description": "Ett fel inträffade vid skapande av adressen. Det kanske inte tillåts av servern, eller så inträffade ett tillfälligt fel.",
             "error_creating_alias_title": "Fel vid skapande av adress",
@@ -2171,12 +2169,7 @@
             "published_aliases_explainer_space": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt utrymme.",
             "published_aliases_section": "Publicerade adresser",
             "save": "Spara ändringar",
-            "topic_field_label": "Rumsämne",
-            "url_preview_encryption_warning": "I krypterade rum, som detta, är URL-förhandsgranskning inaktiverad som förval för att säkerställa att din hemserver (där förhandsgranskningar genereras) inte kan samla information om länkar du ser i rummet.",
-            "url_preview_explainer": "När någon lägger en URL i sitt meddelande, kan URL-förhandsgranskning ge mer information om länken, såsom titel, beskrivning, och en bild från webbplatsen.",
-            "url_previews_section": "URL-förhandsgranskning",
-            "user_url_previews_default_off": "Du har <a>inaktiverat</a> URL-förhandsgranskning som förval.",
-            "user_url_previews_default_on": "Du har <a>aktiverat</a> URL-förhandsgranskning som förval."
+            "topic_field_label": "Rumsämne"
         },
         "notifications": {
             "browse_button": "Bläddra",
@@ -2589,8 +2582,6 @@
             "username": "Användarnamn"
         },
         "inline_url_previews_default": "Aktivera inbäddad URL-förhandsgranskning som standard",
-        "inline_url_previews_room": "Aktivera URL-förhandsgranskning som standard för deltagare i detta rum",
-        "inline_url_previews_room_account": "Aktivera URL-förhandsgranskning för detta rum (påverkar bara dig)",
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
         "invite_controls": {
             "default_label": "Tillåt användare att bjuda in dig till rum"

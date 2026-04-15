@@ -125,7 +125,9 @@ jobs:
     # Dummy job to simplify branch protections
     ci:
         name: Static Analysis
-        needs: [lint, i18n]
+        needs: [lint, i18n, zizmor]
+        if: always()
         runs-on: ubuntu-24.04
         steps:
-            - run: echo "Ok"
+            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+              run: exit 1
