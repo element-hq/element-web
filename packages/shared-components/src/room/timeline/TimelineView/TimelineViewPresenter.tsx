@@ -88,7 +88,10 @@ function getEffectiveScrollerElement(scrollerElement: HTMLElement | null): HTMLE
 const FOLLOW_OUTPUT_DISABLE_SCROLL_EPSILON_PX = 4;
 const VIRTUOSO_AT_BOTTOM_THRESHOLD_PX = 4;
 const LIVE_EDGE_CLAMP_EPSILON_PX = 4;
+const LIVE_EDGE_RECOVERY_EPSILON_PX = 64;
 const STARTUP_ANCHOR_RESOLUTION_TOLERANCE_PX = 12;
+const MAX_LIVE_EDGE_APPEND_CORRECTION_FRAMES = 8;
+const REQUIRED_STABLE_LIVE_EDGE_APPEND_FRAMES = 2;
 
 /**
  * Adapts a {@link TimelineViewModel} into the props and callbacks required by the
@@ -139,6 +142,13 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
     const initialAnchorResolvedRef = useRef(false);
     const anchorResolutionRetryCountRef = useRef(0);
     const lastScrollTopRef = useRef<number | null>(null);
+    const liveEdgeAppendCorrectionFrameIdsRef = useRef<number[]>([]);
+    const liveEdgeAppendCorrectionInProgressRef = useRef(false);
+    const latestLiveEdgeIntentRef = useRef({
+        isAtLiveEdge: snapshot.isAtLiveEdge,
+        canPaginateForward: snapshot.canPaginateForward,
+        followOutputEnabled,
+    });
     const [anchorResolutionRetryNonce, setAnchorResolutionRetryNonce] = useState(0);
     const latestTopScrollStateRef = useRef<TopScrollState<TItem>>({
         vm,
@@ -167,11 +177,98 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
     const firstItemIndex = firstItemIndexRenderStateRef.current.firstItemIndex;
     const increaseViewportBy = useMemo(() => ({ top: OVERSCAN_PX, bottom: OVERSCAN_PX }), []);
 
+    latestTopScrollStateRef.current = {
+        vm,
+        initialFillState,
+        isAtLiveEdge: snapshot.isAtLiveEdge,
+        hasScrollTarget: !!snapshot.scrollTarget,
+        backwardPagination: snapshot.backwardPagination,
+        canPaginateBackward: snapshot.canPaginateBackward,
+    };
+
     const suppressNextProgrammaticCallbacks = useCallback(() => {
         ignoreNextEndReachedRef.current = true;
         ignoreNextStartReachedRef.current = true;
         ignoreNextTopScrollPaginationRef.current = true;
     }, []);
+
+    const cancelPendingLiveEdgeAppendCorrection = useCallback(() => {
+        for (const frameId of liveEdgeAppendCorrectionFrameIdsRef.current) {
+            window.cancelAnimationFrame(frameId);
+        }
+        liveEdgeAppendCorrectionFrameIdsRef.current = [];
+        liveEdgeAppendCorrectionInProgressRef.current = false;
+    }, []);
+
+    const scheduleLiveEdgeAppendCorrection = useCallback(
+        (targetScrollerElement: HTMLElement) => {
+            cancelPendingLiveEdgeAppendCorrection();
+            liveEdgeAppendCorrectionInProgressRef.current = true;
+
+            // Real event tiles can continue growing for a few frames after the
+            // append commit (media sizing, URL previews, grouped layout, etc).
+            // A single snap can therefore compute the "exact bottom" from a
+            // stale scrollHeight and leave the viewport behind once layout
+            // settles. Treat live-edge following as an intent and keep
+            // re-checking for a short, bounded window until the measured bottom
+            // stops moving.
+            const scheduleFrame = (
+                attempt: number,
+                previousExactBottomScrollTop: number | null,
+                stableFrameCount: number,
+            ): void => {
+                const frameId = window.requestAnimationFrame(() => {
+                    liveEdgeAppendCorrectionFrameIdsRef.current = liveEdgeAppendCorrectionFrameIdsRef.current.filter(
+                        (candidateId) => candidateId !== frameId,
+                    );
+
+                    if (!targetScrollerElement.isConnected) {
+                        return;
+                    }
+
+                    const latestLiveEdgeIntent = latestLiveEdgeIntentRef.current;
+                    if (
+                        !latestLiveEdgeIntent.isAtLiveEdge ||
+                        latestLiveEdgeIntent.canPaginateForward ||
+                        !latestLiveEdgeIntent.followOutputEnabled
+                    ) {
+                        return;
+                    }
+
+                    const exactBottomScrollTop = Math.max(
+                        0,
+                        targetScrollerElement.scrollHeight - targetScrollerElement.clientHeight,
+                    );
+                    const nextStableFrameCount =
+                        targetScrollerElement.scrollTop >= exactBottomScrollTop &&
+                        previousExactBottomScrollTop === exactBottomScrollTop
+                            ? stableFrameCount + 1
+                            : 0;
+
+                    if (targetScrollerElement.scrollTop < exactBottomScrollTop) {
+                        targetScrollerElement.scrollTo({
+                            top: exactBottomScrollTop,
+                        });
+                    }
+
+                    if (
+                        attempt >= MAX_LIVE_EDGE_APPEND_CORRECTION_FRAMES ||
+                        nextStableFrameCount >= REQUIRED_STABLE_LIVE_EDGE_APPEND_FRAMES
+                    ) {
+                        liveEdgeAppendCorrectionInProgressRef.current = false;
+                        return;
+                    }
+
+                    scheduleFrame(attempt + 1, exactBottomScrollTop, nextStableFrameCount);
+                });
+
+                liveEdgeAppendCorrectionFrameIdsRef.current.push(frameId);
+            };
+
+            scheduleFrame(1, null, 0);
+        },
+        [cancelPendingLiveEdgeAppendCorrection],
+    );
 
     const markAnchorResolved = useCallback(() => {
         const currentTargetKey = snapshot.scrollTarget?.targetKey ?? null;
@@ -193,24 +290,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         ignoreNextStartReachedRef.current = true;
         ignoreNextTopScrollPaginationRef.current = true;
     }, []);
-
-    useEffect(() => {
-        latestTopScrollStateRef.current = {
-            vm,
-            initialFillState,
-            isAtLiveEdge: snapshot.isAtLiveEdge,
-            hasScrollTarget: !!snapshot.scrollTarget,
-            backwardPagination: snapshot.backwardPagination,
-            canPaginateBackward: snapshot.canPaginateBackward,
-        };
-    }, [
-        vm,
-        initialFillState,
-        snapshot.isAtLiveEdge,
-        snapshot.scrollTarget,
-        snapshot.backwardPagination,
-        snapshot.canPaginateBackward,
-    ]);
 
     useEffect(() => {
         if (previousVmRef.current === vm) {
@@ -259,6 +338,20 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             acknowledgedScrollTargetKeyRef.current = null;
         }
     }, [snapshot.scrollTarget]);
+
+    useEffect(() => {
+        latestLiveEdgeIntentRef.current = {
+            isAtLiveEdge: snapshot.isAtLiveEdge,
+            canPaginateForward: snapshot.canPaginateForward,
+            followOutputEnabled,
+        };
+    }, [snapshot.isAtLiveEdge, snapshot.canPaginateForward, followOutputEnabled]);
+
+    useEffect(() => {
+        return () => {
+            cancelPendingLiveEdgeAppendCorrection();
+        };
+    }, [cancelPendingLiveEdgeAppendCorrection]);
 
     useEffect(() => {
         if (!snapshot.scrollTarget || acknowledgedScrollTargetKeyRef.current === snapshot.scrollTarget.targetKey) {
@@ -359,7 +452,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         vm,
     ]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (snapshot.backwardPagination !== "loading") {
             topScrollPaginationRequestedRef.current = false;
         }
@@ -384,6 +477,36 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         vm.onRequestMoreItems("forward");
         return true;
     }, [followOutputEnabled, scrollerElement, snapshot.isAtLiveEdge, snapshot.items, vm]);
+
+    useEffect(() => {
+        if (
+            initialFillState !== "done" ||
+            !snapshot.isAtLiveEdge ||
+            !snapshot.canPaginateForward ||
+            snapshot.forwardPagination !== "idle" ||
+            !followOutputEnabled ||
+            !!snapshot.scrollTarget ||
+            !scrollerElement ||
+            scrollerElement.clientHeight <= 0
+        ) {
+            return;
+        }
+
+        if (!wasAtBottomRef.current && !canSnapToBottom(scrollerElement)) {
+            return;
+        }
+
+        requestForwardPagination();
+    }, [
+        followOutputEnabled,
+        initialFillState,
+        requestForwardPagination,
+        scrollerElement,
+        snapshot.canPaginateForward,
+        snapshot.forwardPagination,
+        snapshot.isAtLiveEdge,
+        snapshot.scrollTarget,
+    ]);
 
     useEffect(() => {
         const previousForwardPagination = previousForwardPaginationRef.current;
@@ -712,11 +835,23 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         (atBottom: boolean) => {
             const transitionedToBottom = atBottom && !wasAtBottomRef.current;
             wasAtBottomRef.current = atBottom;
+            const remainingToExactBottom =
+                scrollerElement !== null
+                    ? Math.max(0, scrollerElement.scrollHeight - scrollerElement.clientHeight - scrollerElement.scrollTop)
+                    : null;
 
-            const nextIsAtLiveEdge = getIsAtLiveEdgeFromBottomState({
+            const computedIsAtLiveEdge = getIsAtLiveEdgeFromBottomState({
                 atBottom,
                 canPaginateForward: snapshot.canPaginateForward,
             });
+            const shouldPreserveLiveEdgeDuringCorrection =
+                !atBottom &&
+                snapshot.isAtLiveEdge &&
+                !snapshot.scrollTarget &&
+                !snapshot.canPaginateForward &&
+                remainingToExactBottom !== null &&
+                remainingToExactBottom <= LIVE_EDGE_RECOVERY_EPSILON_PX;
+            const nextIsAtLiveEdge = shouldPreserveLiveEdgeDuringCorrection ? true : computedIsAtLiveEdge;
 
             if (
                 shouldIgnoreAtBottomStateChange({
@@ -725,6 +860,17 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 })
             ) {
                 return;
+            }
+
+            if (
+                shouldPreserveLiveEdgeDuringCorrection &&
+                scrollerElement &&
+                scrollerElement.clientHeight > 0
+            ) {
+                if (!followOutputEnabled) {
+                    setFollowOutputEnabled(true);
+                }
+                scheduleLiveEdgeAppendCorrection(scrollerElement);
             }
 
             if (
@@ -744,8 +890,10 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         [
             initialFillState,
             requestForwardPagination,
+            scheduleLiveEdgeAppendCorrection,
             snapshot.canPaginateForward,
             snapshot.forwardPagination,
+            snapshot.isAtLiveEdge,
             snapshot.scrollTarget,
             followOutputEnabled,
             scrollerElement,
@@ -881,6 +1029,11 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 }) &&
                 upwardDelta !== null &&
                 upwardDelta > FOLLOW_OUTPUT_DISABLE_SCROLL_EPSILON_PX &&
+                // The correction loop intentionally nudges scrollTop while
+                // holding live-edge intent. Ignore those layout-driven deltas so
+                // they are not mistaken for "the user scrolled up; stop
+                // following live output".
+                !liveEdgeAppendCorrectionInProgressRef.current &&
                 !snapCandidate;
 
             if (shouldDisableFollowOutput) {
@@ -1003,6 +1156,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             scrollerElement.scrollTo({
                 top: exactBottomScrollTop,
             });
+            scheduleLiveEdgeAppendCorrection(scrollerElement);
         }
 
         previousRenderStateRef.current = {
@@ -1023,6 +1177,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         snapshot.items,
         snapshot.forwardPagination,
         snapshot.scrollTarget,
+        scheduleLiveEdgeAppendCorrection,
     ]);
 
     const itemContent = useCallback(

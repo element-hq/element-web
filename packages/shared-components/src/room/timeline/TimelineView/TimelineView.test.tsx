@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, waitFor } from "@test-utils";
+import { act, render, screen, waitFor } from "@test-utils";
 import { VirtuosoMockContext } from "react-virtuoso";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -104,6 +104,22 @@ describe("TimelineView", () => {
         expect(screen.getByText("alpha")).toBeTruthy();
         expect(screen.getByText("beta")).toBeTruthy();
         expect(screen.getByText("gamma")).toBeTruthy();
+    });
+
+    it("forwards focus capture from an item wrapper", async () => {
+        renderTimeline(new TestTimelineViewModel(makeSnapshot()));
+
+        const itemWrapper = await waitFor(() => {
+            const element = screen.getByText("beta").closest<HTMLElement>("[data-timeline-item-key='beta']");
+            expect(element).toBeTruthy();
+            return element!;
+        });
+
+        await act(async () => {
+            itemWrapper.dispatchEvent(new FocusEvent("focus", { bubbles: true }));
+        });
+
+        expect(screen.getByText("beta")).toBeTruthy();
     });
 
     it("requests an initial scroll to the bottom when mounted at the live end", () => {
@@ -592,6 +608,33 @@ describe("TimelineView", () => {
         expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("backward");
     });
 
+    it("requests forward pagination when the window becomes paginatable while already pinned to the live edge", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateForward: false,
+                    canPaginateBackward: false,
+                    isAtLiveEdge: true,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+            await waitFor(() => expect(vm.onIsAtLiveEdgeChanged).toHaveBeenCalled());
+
+            vm.onRequestMoreItems.mockClear();
+
+            vm.updateSnapshot({
+                canPaginateForward: true,
+                isAtLiveEdge: true,
+                forwardPagination: "idle",
+            });
+
+            await waitFor(() => expect(vm.onRequestMoreItems).toHaveBeenCalledWith("forward"));
+        });
+    });
+
     it("allows the initial backward probe while suppressing forward pagination during initial fill", async () => {
         const vm = new TestTimelineViewModel(
             makeSnapshot({
@@ -747,6 +790,212 @@ describe("TimelineView", () => {
         });
     });
 
+    it("keeps correcting to the exact bottom while live append layout continues growing", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: false,
+                    canPaginateForward: false,
+                    isAtLiveEdge: true,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            const scheduledAnimationFrames = new Map<number, FrameRequestCallback>();
+            let nextAnimationFrameId = 1;
+            const requestAnimationFrameSpy = vi
+                .spyOn(window, "requestAnimationFrame")
+                .mockImplementation((callback: FrameRequestCallback): number => {
+                    const frameId = nextAnimationFrameId++;
+                    scheduledAnimationFrames.set(frameId, callback);
+                    return frameId;
+                });
+            const cancelAnimationFrameSpy = vi
+                .spyOn(window, "cancelAnimationFrame")
+                .mockImplementation((frameId: number): void => {
+                    scheduledAnimationFrames.delete(frameId);
+                });
+
+            let currentScrollHeight = 260;
+            let currentScrollTop = 0;
+            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(({ top }: ScrollToOptions) => {
+                currentScrollTop = top ?? currentScrollTop;
+            });
+            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockImplementation(
+                () => currentScrollHeight,
+            );
+            const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
+            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+
+            scrollToSpy.mockClear();
+
+            const flushAnimationFrame = async (): Promise<void> => {
+                const frameCallbacks = Array.from(scheduledAnimationFrames.values());
+                scheduledAnimationFrames.clear();
+
+                await act(async () => {
+                    for (const callback of frameCallbacks) {
+                        callback(0);
+                    }
+                });
+            };
+
+            vm.updateSnapshot({
+                items: [
+                    { key: "alpha", kind: "event" },
+                    { key: "beta", kind: "event" },
+                    { key: "gamma", kind: "event" },
+                    { key: "delta", kind: "event" },
+                ],
+                isAtLiveEdge: true,
+                canPaginateForward: false,
+            });
+
+            await waitFor(() =>
+                expect(scrollToSpy).toHaveBeenCalledWith({
+                    top: 60,
+                }),
+            );
+
+            currentScrollHeight = 330;
+
+            await flushAnimationFrame();
+
+            await waitFor(() =>
+                expect(scrollToSpy).toHaveBeenCalledWith({
+                    top: 130,
+                }),
+            );
+
+            currentScrollHeight = 360;
+
+            await flushAnimationFrame();
+
+            await waitFor(() =>
+                expect(scrollToSpy).toHaveBeenCalledWith({
+                    top: 160,
+                }),
+            );
+
+            await flushAnimationFrame();
+            await flushAnimationFrame();
+
+            requestAnimationFrameSpy.mockRestore();
+            cancelAnimationFrameSpy.mockRestore();
+            scrollHeightSpy.mockRestore();
+            clientHeightSpy.mockRestore();
+            scrollTopSpy.mockRestore();
+            scrollToSpy.mockRestore();
+        });
+    });
+
+    it("preserves live-edge intent and re-corrects when a late near-bottom reflow happens", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: false,
+                    canPaginateForward: false,
+                    isAtLiveEdge: true,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            const scheduledAnimationFrames = new Map<number, FrameRequestCallback>();
+            let nextAnimationFrameId = 1;
+            const requestAnimationFrameSpy = vi
+                .spyOn(window, "requestAnimationFrame")
+                .mockImplementation((callback: FrameRequestCallback): number => {
+                    const frameId = nextAnimationFrameId++;
+                    scheduledAnimationFrames.set(frameId, callback);
+                    return frameId;
+                });
+            const cancelAnimationFrameSpy = vi
+                .spyOn(window, "cancelAnimationFrame")
+                .mockImplementation((frameId: number): void => {
+                    scheduledAnimationFrames.delete(frameId);
+                });
+
+            let currentScrollHeight = 260;
+            let currentScrollTop = 0;
+            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(({ top }: ScrollToOptions) => {
+                currentScrollTop = top ?? currentScrollTop;
+            });
+            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockImplementation(
+                () => currentScrollHeight,
+            );
+            const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
+            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+
+            const flushAnimationFrame = async (): Promise<void> => {
+                const frameCallbacks = Array.from(scheduledAnimationFrames.values());
+                scheduledAnimationFrames.clear();
+
+                await act(async () => {
+                    for (const callback of frameCallbacks) {
+                        callback(0);
+                    }
+                });
+            };
+
+            vm.updateSnapshot({
+                items: [
+                    { key: "alpha", kind: "event" },
+                    { key: "beta", kind: "event" },
+                    { key: "gamma", kind: "event" },
+                    { key: "delta", kind: "event" },
+                ],
+                isAtLiveEdge: true,
+                canPaginateForward: false,
+            });
+
+            await waitFor(() =>
+                expect(scrollToSpy).toHaveBeenCalledWith({
+                    top: 60,
+                }),
+            );
+
+            await flushAnimationFrame();
+            await flushAnimationFrame();
+            scrollToSpy.mockClear();
+
+            currentScrollHeight = 293;
+
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            await flushAnimationFrame();
+
+            await waitFor(() =>
+                expect(scrollToSpy).toHaveBeenCalledWith({
+                    top: 93,
+                }),
+            );
+            expect(vm.onIsAtLiveEdgeChanged).not.toHaveBeenCalledWith(false);
+
+            requestAnimationFrameSpy.mockRestore();
+            cancelAnimationFrameSpy.mockRestore();
+            scrollHeightSpy.mockRestore();
+            clientHeightSpy.mockRestore();
+            scrollTopSpy.mockRestore();
+            scrollToSpy.mockRestore();
+        });
+    });
+
     it("does not snap to the exact bottom when items append while the viewport is away from the live edge", async () => {
         await withMeasuredScrollerHeight(async () => {
             const vm = new TestTimelineViewModel(
@@ -854,6 +1103,108 @@ describe("TimelineView", () => {
             );
 
             await waitFor(() => expect(secondVm.onScrollTargetReached).toHaveBeenCalledOnce());
+        });
+    });
+
+    it("re-enables followOutput and snaps to the exact bottom when the user scrolls back down near the live edge", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: false,
+                    canPaginateForward: false,
+                    isAtLiveEdge: true,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            let currentScrollTop = 100;
+            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(({ top }: ScrollToOptions) => {
+                currentScrollTop = top ?? currentScrollTop;
+            });
+            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(300);
+            const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
+            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+
+            currentScrollTop = 90;
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            scrollToSpy.mockClear();
+
+            currentScrollTop = 96;
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            expect(scrollToSpy).toHaveBeenCalledWith({
+                top: 100,
+            });
+
+            scrollHeightSpy.mockRestore();
+            clientHeightSpy.mockRestore();
+            scrollTopSpy.mockRestore();
+            scrollToSpy.mockRestore();
+        });
+    });
+
+    it("deduplicates top-scroll backward pagination until the loading state clears", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: false,
+                    isAtLiveEdge: false,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            let currentScrollTop = 0;
+            const scrollTopSpy = vi.spyOn(scrollerElement, "scrollTop", "get").mockImplementation(() => currentScrollTop);
+
+            vm.updateSnapshot({
+                canPaginateBackward: true,
+                isAtLiveEdge: false,
+                backwardPagination: "idle",
+            });
+
+            await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
+            await act(async () => {});
+
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            expect(vm.onRequestMoreItems).toHaveBeenCalledOnce();
+            expect(vm.onRequestMoreItems).toHaveBeenCalledWith("backward");
+
+            vm.onRequestMoreItems.mockClear();
+
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            expect(vm.onRequestMoreItems).not.toHaveBeenCalled();
+
+            scrollTopSpy.mockRestore();
         });
     });
 });

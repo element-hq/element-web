@@ -28,6 +28,7 @@ import type {
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 40;
 const WINDOW_LIMIT = 200;
+
 type RoomTimelineListenerArgs = [
     ev: MatrixEvent,
     room: Room | undefined,
@@ -57,6 +58,7 @@ export class TimelinePanelViewModel
     private readonly presenter: TimelinePanelPresenter;
     private initialFillCompleted = false;
     private started = false;
+    private lifecycleTracked = false;
     // Stored for upcoming read-receipt integration.
     public visibleRange: VisibleRange = { startIndex: 0, endIndex: 0 };
 
@@ -77,10 +79,6 @@ export class TimelinePanelViewModel
         this.presenter = new TimelinePanelPresenter({
             room: opts.room,
         });
-        this.disposables.trackListener(opts.room, RoomEvent.Timeline, this.onRoomTimelineListener);
-        this.disposables.track({
-            dispose: () => this.presenter.dispose(),
-        });
     }
 
     public start(): void {
@@ -89,7 +87,18 @@ export class TimelinePanelViewModel
         }
 
         this.started = true;
+        if (!this.lifecycleTracked) {
+            this.lifecycleTracked = true;
+            this.disposables.trackListener(this.props.room, RoomEvent.Timeline, this.onRoomTimelineListener);
+            this.disposables.track({
+                dispose: () => this.presenter.dispose(),
+            });
+        }
         void this.load(this.props.initialEventId);
+    }
+
+    public override dispose(): void {
+        super.dispose();
     }
 
     private readonly onRoomTimelineListener = (...args: unknown[]): void => {
@@ -238,6 +247,7 @@ export class TimelinePanelViewModel
                 const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
                 const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
                 const items = this.buildItems(canPaginateBackward);
+
                 this.mergeSnapshot({
                     items,
                     canPaginateBackward,
