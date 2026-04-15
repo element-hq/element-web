@@ -2218,8 +2218,6 @@
             "aliases_section": "Rom-adresser",
             "avatar_field_label": "Rommets avatar",
             "canonical_alias_field_label": "Hovedadresse",
-            "default_url_previews_off": "URL-forhåndsvisninger er skrudd av som standard for deltakerene i dette rommet.",
-            "default_url_previews_on": "URL-forhåndsvisninger er skrudd på som standard for deltakerene i dette rommet.",
             "description_space": "Rediger innstillinger knyttet til området ditt.",
             "error_creating_alias_description": "Det oppstod en feil ved opprettelsen av adressen. Det kan hende at serveren ikke tillater det, eller at det oppstod en midlertidig feil.",
             "error_creating_alias_title": "Feil ved oppretting av adresse",
@@ -2250,12 +2248,7 @@
             "published_aliases_explainer_space": "Publiserte adresser kan brukes av hvem som helst på hvilken som helst server for å bli med i ditt område.",
             "published_aliases_section": "Publiserte adresser",
             "save": "Lagre endringer",
-            "topic_field_label": "Rommets tema",
-            "url_preview_encryption_warning": "I krypterte rom som denne, er URL-forhåndsvisninger skrudd av som standard for å sikre at hjemmeserveren din (der forhåndsvisningene blir generert) ikke kan samle inn informasjon om lenkene som du ser i dette rommet.",
-            "url_preview_explainer": "Når noen legger til en URL i meldingene deres, kan en URL-forhåndsvisning bli vist for å gi mere informasjonen om den lenken, f.eks. tittelen, beskrivelsen, og et bilde fra nettstedet.",
-            "url_previews_section": "URL-forhåndsvisninger",
-            "user_url_previews_default_off": "Du har <a>skrudd av</a> URL-forhåndsvisninger som standard.",
-            "user_url_previews_default_on": "Du har <a>skrudd på</a> URL-forhåndsvisninger som standard."
+            "topic_field_label": "Rommets tema"
         },
         "notifications": {
             "browse_button": "Bla",
@@ -2677,8 +2670,6 @@
             "username": "Brukernavn"
         },
         "inline_url_previews_default": "Skru på URL-forhåndsvisninger inni meldinger som standard",
-        "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
-        "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
         "insert_trailing_colon_mentions": "Sett inn et etterfølgende kolon etter at brukeromtaler i starten av en melding",
         "invite_controls": {
             "default_label": "Tillat brukere å invitere deg til rom"

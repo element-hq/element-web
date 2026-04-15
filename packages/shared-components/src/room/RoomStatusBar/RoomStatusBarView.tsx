@@ -12,7 +12,7 @@ import { Button, InlineSpinner, Text } from "@vector-im/compound-web";
 import styles from "./RoomStatusBarView.module.css";
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
-import { Banner } from "../../composer/Banner";
+import { Banner } from "../composer/Banner";
 export interface RoomStatusBarViewActions {
     /**
      * Called when the user clicks on the 'resend all' button in the 'unsent messages' bar.

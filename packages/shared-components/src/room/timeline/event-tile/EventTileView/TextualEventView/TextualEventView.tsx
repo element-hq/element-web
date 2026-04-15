@@ -17,6 +17,12 @@ export interface Props {
     vm: ViewModel<TextualEventViewSnapshot>;
 }
 
+/**
+ * Renders a plain textual timeline event without message-body decorations.
+ *
+ * This view is used for simple informational timeline entries where the
+ * content is already prepared by the view model.
+ */
 export function TextualEventView({ vm }: Props): JSX.Element {
     const snapshot = useViewModel(vm);
     return <div className="mx_TextualEvent">{snapshot.content}</div>;

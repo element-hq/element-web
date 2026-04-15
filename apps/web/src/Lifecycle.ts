@@ -18,7 +18,6 @@ import {
     decodeBase64,
 } from "matrix-js-sdk/src/matrix";
 import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
-import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
@@ -81,6 +80,7 @@ import {
 } from "./utils/tokens/tokens";
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
+import { type URLParams } from "./vector/url_utils.ts";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -148,7 +148,7 @@ interface ILoadSessionOpts {
     guestIsUrl?: string;
     ignoreGuest?: boolean;
     defaultDeviceDisplayName?: string;
-    fragmentQueryParams?: QueryDict;
+    urlParams?: URLParams;
     abortSignal?: AbortSignal;
 }
 
@@ -187,7 +187,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         let enableGuest = opts.enableGuest || false;
         const guestHsUrl = opts.guestHsUrl;
         const guestIsUrl = opts.guestIsUrl;
-        const fragmentQueryParams = opts.fragmentQueryParams || {};
+        const urlParams = opts.urlParams;
         const defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
 
         if (enableGuest && !guestHsUrl) {
@@ -195,12 +195,12 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             enableGuest = false;
         }
 
-        if (enableGuest && guestHsUrl && fragmentQueryParams.guest_user_id && fragmentQueryParams.guest_access_token) {
+        if (enableGuest && guestHsUrl && urlParams?.guest?.guest_user_id && urlParams?.guest?.guest_access_token) {
             logger.log("Using guest access credentials");
             await doSetLoggedIn(
                 {
-                    userId: fragmentQueryParams.guest_user_id as string,
-                    accessToken: fragmentQueryParams.guest_access_token as string,
+                    userId: urlParams.guest.guest_user_id,
+                    accessToken: urlParams.guest.guest_access_token,
                     homeserverUrl: guestHsUrl,
                     identityServerUrl: guestIsUrl,
                     guest: true,
@@ -264,38 +264,36 @@ export async function getStoredSessionOwner(): Promise<[string, boolean] | [null
  * If query string includes OIDC authorization code flow parameters attempt to login using oidc flow
  * Else, we may be returning from SSO - attempt token login
  *
- * @param {Object} queryParams    string->string map of the
- *     query-parameters extracted from the real query-string of the starting
- *     URI.
+ * @param urlParams the parameters read in at app load time from the url
  *
- * @param {string} defaultDeviceDisplayName
- * @param {string} fragmentAfterLogin path to go to after a successful login, only used for "Try again"
+ * @param defaultDeviceDisplayName
+ * @param fragmentAfterLogin path to go to after a successful login, only used for "Try again"
  *
- * @returns {Promise} promise which resolves to true if we completed the delegated auth login
+ * @returns promise which resolves to true if we completed the delegated auth login
  *      else false
  */
 export async function attemptDelegatedAuthLogin(
-    queryParams: QueryDict,
+    urlParams: URLParams,
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
-    if (queryParams.code && queryParams.state) {
+    if (urlParams.oidc) {
         console.log("We have OIDC params - attempting OIDC login");
-        return attemptOidcNativeLogin(queryParams);
+        return attemptOidcNativeLogin(urlParams["oidc"]);
     }
 
-    return attemptTokenLogin(queryParams, defaultDeviceDisplayName, fragmentAfterLogin);
+    return attemptTokenLogin(urlParams["legacy_sso"], defaultDeviceDisplayName, fragmentAfterLogin);
 }
 
 /**
  * Attempt to login by completing OIDC authorization code flow
- * @param queryParams string->string map of the query-parameters extracted from the real query-string of the starting URI.
- * @returns Promise that resolves to true when login succceeded, else false
+ * @param urlParams subset of app-load url parameters relating to oidc auth
+ * @returns Promise that resolves to true when login succeeded, else false
  */
-async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> {
+async function attemptOidcNativeLogin(urlParams: NonNullable<URLParams["oidc"]>): Promise<boolean> {
     try {
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
-            await completeOidcLogin(queryParams);
+            await completeOidcLogin(urlParams);
 
         const {
             user_id: userId,
@@ -354,22 +352,20 @@ async function getUserIdFromAccessToken(
 }
 
 /**
- * @param {QueryDict} queryParams    string->string map of the
- *     query-parameters extracted from the real query-string of the starting
- *     URI.
+ @param urlParams subset of app-load url parameters relating to legacy sso auth
  *
- * @param {string} defaultDeviceDisplayName
- * @param {string} fragmentAfterLogin path to go to after a successful login, only used for "Try again"
+ * @param defaultDeviceDisplayName
+ * @param fragmentAfterLogin path to go to after a successful login, only used for "Try again"
  *
- * @returns {Promise} promise which resolves to true if we completed the token
+ * @returns promise which resolves to true if we completed the token
  *    login, else false
  */
 export function attemptTokenLogin(
-    queryParams: QueryDict,
+    urlParams: URLParams["legacy_sso"],
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
-    if (!queryParams.loginToken) {
+    if (!urlParams?.loginToken) {
         return Promise.resolve(false);
     }
 
@@ -384,7 +380,7 @@ export function attemptTokenLogin(
     }
 
     return sendLoginRequest(homeserver, identityServer, "m.login.token", {
-        token: queryParams.loginToken as string,
+        token: urlParams.loginToken,
         initial_device_display_name: defaultDeviceDisplayName,
     })
         .then(async function (creds) {

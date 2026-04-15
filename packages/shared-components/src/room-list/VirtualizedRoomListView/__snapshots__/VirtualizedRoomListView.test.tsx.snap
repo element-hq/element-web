@@ -36,7 +36,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="1"
                 aria-selected="true"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView selected bold firstItem mx_RoomListItemView_selected"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_selected RoomListItemView-module_bold RoomListItemView-module_firstItem mx_RoomListItemView_selected"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -44,7 +44,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -55,28 +55,28 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     GE
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="General"
                       >
                         General
                       </div>
                       <div
-                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
                         title="Last message in General"
                       >
                         Last message in General
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -146,10 +146,10 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     >
                       <div
-                        class="flex"
+                        class="Flex-module_flex"
                         data-testid="notification-decoration"
                         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                       >
@@ -185,7 +185,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="2"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -193,7 +193,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -204,14 +204,14 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     RA
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Random"
                       >
@@ -219,7 +219,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -289,7 +289,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>
@@ -307,7 +307,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="3"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -315,7 +315,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -326,28 +326,28 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     EN
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Engineering"
                       >
                         Engineering
                       </div>
                       <div
-                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
                         title="Last message in Engineering"
                       >
                         Last message in Engineering
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -417,7 +417,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>
@@ -435,7 +435,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="4"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView bold"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -443,7 +443,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -454,14 +454,14 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     DE
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Design"
                       >
@@ -469,7 +469,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -539,7 +539,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>
@@ -557,7 +557,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="5"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -565,7 +565,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -576,28 +576,28 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     PR
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Product"
                       >
                         Product
                       </div>
                       <div
-                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
                         title="Last message in Product"
                       >
                         Last message in Product
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -667,7 +667,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>
@@ -685,7 +685,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="6"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -693,7 +693,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -704,14 +704,14 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     MA
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Marketing"
                       >
@@ -719,7 +719,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -789,10 +789,10 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     >
                       <div
-                        class="flex"
+                        class="Flex-module_flex"
                         data-testid="notification-decoration"
                         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                       >
@@ -830,7 +830,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="7"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView bold"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -838,7 +838,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -849,28 +849,28 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     SA
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Sales"
                       >
                         Sales
                       </div>
                       <div
-                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
                         title="Last message in Sales"
                       >
                         Last message in Sales
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -940,7 +940,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>
@@ -958,7 +958,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="8"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -966,7 +966,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -977,14 +977,14 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     SU
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Support"
                       >
@@ -992,7 +992,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -1062,7 +1062,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>
@@ -1080,7 +1080,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="9"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -1088,7 +1088,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -1099,28 +1099,28 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     AN
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Announcements"
                       >
                         Announcements
                       </div>
                       <div
-                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 ellipsis"
+                        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 RoomListItemView-module_ellipsis"
                         title="Last message in Announcements"
                       >
                         Last message in Announcements
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -1190,7 +1190,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>
@@ -1208,7 +1208,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 aria-posinset="10"
                 aria-selected="false"
                 aria-setsize="10"
-                class="flex roomListItem mx_RoomListItemView bold lastItem"
+                class="Flex-module_flex RoomListItemView-module_roomListItem mx_RoomListItemView RoomListItemView-module_bold RoomListItemView-module_lastItem"
                 data-state="closed"
                 role="option"
                 style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
@@ -1216,7 +1216,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                 type="button"
               >
                 <div
-                  class="flex container"
+                  class="Flex-module_flex RoomListItemView-module_container"
                   style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
                 >
                   <div
@@ -1227,14 +1227,14 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     OF
                   </div>
                   <div
-                    class="flex content"
+                    class="Flex-module_flex RoomListItemView-module_content"
                     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
                   >
                     <div
-                      class="ellipsis"
+                      class="RoomListItemView-module_ellipsis"
                     >
                       <div
-                        class="roomName"
+                        class="RoomListItemView-module_roomName"
                         data-testid="room-name"
                         title="Off-topic"
                       >
@@ -1242,7 +1242,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                       </div>
                     </div>
                     <div
-                      class="flex hoverMenu"
+                      class="Flex-module_flex RoomListItemView-module_hoverMenu"
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
                     >
                       <button
@@ -1312,7 +1312,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
                     </div>
                     <div
                       aria-hidden="true"
-                      class="notificationDecoration"
+                      class="RoomListItemView-module_notificationDecoration"
                     />
                   </div>
                 </div>

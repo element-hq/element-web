@@ -6,29 +6,29 @@ exports[`RichItem > renders the list 1`] = `
     style="height: 220px; overflow: hidden;"
   >
     <div
-      class="flex richList"
+      class="Flex-module_flex RichList-module_richList"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <span
-        class="title"
+        class="RichList-module_title"
         id="_r_0_"
       >
         Rich List Title
       </span>
       <ul
         aria-labelledby="_r_0_"
-        class="content"
+        class="RichList-module_content"
         role="listbox"
         tabindex="0"
       >
         <li
           aria-label="First Item"
-          class="richItem"
+          class="RichItem-module_richItem"
           role="option"
           tabindex="-1"
         >
           <div
-            class="flex avatar"
+            class="Flex-module_flex RichItem-module_avatar"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             <div
@@ -36,12 +36,12 @@ exports[`RichItem > renders the list 1`] = `
             />
           </div>
           <span
-            class="title"
+            class="RichItem-module_title"
           >
             First Item
           </span>
           <span
-            class="description"
+            class="RichItem-module_description"
           >
             description
           </span>
@@ -49,13 +49,13 @@ exports[`RichItem > renders the list 1`] = `
         <li
           aria-label="Second Item"
           aria-selected="true"
-          class="richItem"
+          class="RichItem-module_richItem"
           role="option"
           tabindex="-1"
         >
           <div
             aria-hidden="true"
-            class="flex checkmark"
+            class="Flex-module_flex RichItem-module_checkmark"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             <svg
@@ -72,24 +72,24 @@ exports[`RichItem > renders the list 1`] = `
             </svg>
           </div>
           <span
-            class="title"
+            class="RichItem-module_title"
           >
             Second Item
           </span>
           <span
-            class="description"
+            class="RichItem-module_description"
           >
             description
           </span>
         </li>
         <li
           aria-label="Third Item"
-          class="richItem"
+          class="RichItem-module_richItem"
           role="option"
           tabindex="-1"
         >
           <div
-            class="flex avatar"
+            class="Flex-module_flex RichItem-module_avatar"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             <div
@@ -97,24 +97,24 @@ exports[`RichItem > renders the list 1`] = `
             />
           </div>
           <span
-            class="title"
+            class="RichItem-module_title"
           >
             Third Item
           </span>
           <span
-            class="description"
+            class="RichItem-module_description"
           >
             description
           </span>
         </li>
         <li
           aria-label="Fourth Item"
-          class="richItem"
+          class="RichItem-module_richItem"
           role="option"
           tabindex="-1"
         >
           <div
-            class="flex avatar"
+            class="Flex-module_flex RichItem-module_avatar"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             <div
@@ -122,24 +122,24 @@ exports[`RichItem > renders the list 1`] = `
             />
           </div>
           <span
-            class="title"
+            class="RichItem-module_title"
           >
             Fourth Item
           </span>
           <span
-            class="description"
+            class="RichItem-module_description"
           >
             description
           </span>
         </li>
         <li
           aria-label="Fifth Item"
-          class="richItem"
+          class="RichItem-module_richItem"
           role="option"
           tabindex="-1"
         >
           <div
-            class="flex avatar"
+            class="Flex-module_flex RichItem-module_avatar"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             <div
@@ -147,12 +147,12 @@ exports[`RichItem > renders the list 1`] = `
             />
           </div>
           <span
-            class="title"
+            class="RichItem-module_title"
           >
             Fifth Item
           </span>
           <span
-            class="description"
+            class="RichItem-module_description"
           >
             description
           </span>
@@ -169,17 +169,17 @@ exports[`RichItem > renders the list with isEmpty=true 1`] = `
     style="height: 220px; overflow: hidden;"
   >
     <div
-      class="flex richList"
+      class="Flex-module_flex RichList-module_richList"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <span
-        class="title"
+        class="RichList-module_title"
         id="_r_1_"
       >
         Rich List Title
       </span>
       <span
-        class="empty"
+        class="RichList-module_empty"
       >
         No items available
       </span>
