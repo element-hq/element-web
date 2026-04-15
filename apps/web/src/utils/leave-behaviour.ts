@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { sleep } from "matrix-js-sdk/src/utils";
 import React, { type ReactNode } from "react";
 import { EventStatus, MatrixEventEvent, type Room, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { logger } from "@sentry/browser";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import Modal, { type IHandle } from "../Modal";
 import Spinner from "../components/views/elements/Spinner";
