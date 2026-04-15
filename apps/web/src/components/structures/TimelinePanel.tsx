@@ -1846,6 +1846,17 @@ class TimelinePanel extends React.Component<IProps, IState> {
                         room={room}
                         anchoredEventId={this.props.eventId}
                         highlightedEventId={this.props.highlightedEventId}
+                        showReactions={this.props.showReactions}
+                        showUrlPreview={this.props.showUrlPreview}
+                        isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                        alwaysShowTimestamps={
+                            this.props.alwaysShowTimestamps ??
+                            this.context?.alwaysShowTimestamps ??
+                            this.state.alwaysShowTimestamps
+                        }
+                        layout={this.props.layout}
+                        getRelationsForEvent={this.getRelationsForEvent}
+                        permalinkCreator={this.props.permalinkCreator}
                     />
                 );
             }

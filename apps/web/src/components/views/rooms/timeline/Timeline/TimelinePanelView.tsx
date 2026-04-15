@@ -8,13 +8,16 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, useMemo, type JSX, type ReactNode } from "react";
 import { DateSeparatorView, TimelineView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
-import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { TimelinePanelViewModel } from "../../../../../viewmodels/room/timeline/TimelinePanelViewModel";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import type { TimelineModelItem } from "../../../../../models/rooms/TimelineModel";
 import { LegacyEventTileAdapter } from "../../LegacyEventTileAdapter";
+import type { GetRelationsForEvent } from "../../EventTile";
 import NewRoomIntro from "../../NewRoomIntro";
 import GenericEventListSummary from "../../../elements/GenericEventListSummary";
+import type { Layout } from "../../../../../settings/enums/Layout";
+import type { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
 
 interface TimelinePanelViewProps {
     /** Room whose unfiltered timeline should be rendered. */
@@ -23,12 +26,25 @@ interface TimelinePanelViewProps {
     anchoredEventId?: string;
     /** Event to visually highlight after navigation, such as a search result target. */
     highlightedEventId?: string;
+    showReactions?: boolean;
+    showUrlPreview?: boolean;
+    isTwelveHour?: boolean;
+    alwaysShowTimestamps?: boolean;
+    layout?: Layout;
+    getRelationsForEvent?: GetRelationsForEvent;
+    permalinkCreator?: RoomPermalinkCreator;
 }
 
-/** Look up a MatrixEvent by ID from the room's timelines. */
-function findEventById(room: Room, eventId: string): MatrixEvent | undefined {
-    return room.findEventById(eventId) ?? undefined;
-}
+type LegacyEventTileRenderProps = Pick<
+    TimelinePanelViewProps,
+    | "showReactions"
+    | "showUrlPreview"
+    | "isTwelveHour"
+    | "alwaysShowTimestamps"
+    | "layout"
+    | "getRelationsForEvent"
+    | "permalinkCreator"
+>;
 
 function renderVirtualItem(item: Extract<TimelineModelItem, { kind: "virtual" }>): ReactNode {
     if (item.type === "date-separator") {
@@ -54,7 +70,10 @@ function renderVirtualItem(item: Extract<TimelineModelItem, { kind: "virtual" }>
     return null;
 }
 
-function renderGroupItem(item: Extract<TimelineModelItem, { kind: "group" }>): ReactNode {
+function renderGroupItem(
+    item: Extract<TimelineModelItem, { kind: "group" }>,
+    tileProps: LegacyEventTileRenderProps,
+): ReactNode {
     if (item.type !== "room-creation") {
         return null;
     }
@@ -68,17 +87,16 @@ function renderGroupItem(item: Extract<TimelineModelItem, { kind: "group" }>): R
         >
             {item.events.map((event) => (
                 <li key={event.getId()!}>
-                    <LegacyEventTileAdapter mxEvent={event} />
+                    <LegacyEventTileAdapter mxEvent={event} {...tileProps} />
                 </li>
             ))}
         </GenericEventListSummary>
     );
 }
 
-function renderTimelineItem(room: Room, item: TimelineModelItem): ReactNode {
+function renderTimelineItem(_room: Room, tileProps: LegacyEventTileRenderProps, item: TimelineModelItem): ReactNode {
     if (item.kind === "event") {
-        const event = findEventById(room, item.key);
-        return event ? <LegacyEventTileAdapter key={item.key} mxEvent={event} /> : null;
+        return <LegacyEventTileAdapter key={item.key} mxEvent={item.event} {...tileProps} />;
     }
 
     if (item.kind === "virtual") {
@@ -86,7 +104,7 @@ function renderTimelineItem(room: Room, item: TimelineModelItem): ReactNode {
     }
 
     if (item.kind === "group") {
-        return renderGroupItem(item);
+        return renderGroupItem(item, tileProps);
     }
 
     return null;
@@ -100,6 +118,13 @@ export function TimelinePanelView({
     room,
     anchoredEventId,
     highlightedEventId,
+    showReactions,
+    showUrlPreview,
+    isTwelveHour,
+    alwaysShowTimestamps,
+    layout,
+    getRelationsForEvent,
+    permalinkCreator,
 }: Readonly<TimelinePanelViewProps>): JSX.Element {
     const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const viewKey = `${room.roomId}|${effectiveAnchorEventId ?? ""}`;
@@ -110,6 +135,13 @@ export function TimelinePanelView({
             room={room}
             highlightedEventId={highlightedEventId}
             anchoredEventId={anchoredEventId}
+            showReactions={showReactions}
+            showUrlPreview={showUrlPreview}
+            isTwelveHour={isTwelveHour}
+            alwaysShowTimestamps={alwaysShowTimestamps}
+            layout={layout}
+            getRelationsForEvent={getRelationsForEvent}
+            permalinkCreator={permalinkCreator}
         />
     );
 }
@@ -118,6 +150,13 @@ function TimelinePanelViewInner({
     room,
     anchoredEventId,
     highlightedEventId,
+    showReactions,
+    showUrlPreview,
+    isTwelveHour,
+    alwaysShowTimestamps,
+    layout,
+    getRelationsForEvent,
+    permalinkCreator,
 }: Readonly<TimelinePanelViewProps>): JSX.Element {
     const effectiveAnchorEventId = anchoredEventId ?? highlightedEventId;
     const client: MatrixClient = useMatrixClientContext();
@@ -129,7 +168,28 @@ function TimelinePanelViewInner({
                 initialEventId: effectiveAnchorEventId,
             }),
     );
-    const renderItem = useMemo(() => renderTimelineItem.bind(null, room), [room]);
+    const renderItem = useMemo(
+        () =>
+            renderTimelineItem.bind(null, room, {
+                showReactions,
+                showUrlPreview,
+                isTwelveHour,
+                alwaysShowTimestamps,
+                layout,
+                getRelationsForEvent,
+                permalinkCreator,
+            }),
+        [
+            room,
+            showReactions,
+            showUrlPreview,
+            isTwelveHour,
+            alwaysShowTimestamps,
+            layout,
+            getRelationsForEvent,
+            permalinkCreator,
+        ],
+    );
 
     useEffect(() => {
         vm.start();

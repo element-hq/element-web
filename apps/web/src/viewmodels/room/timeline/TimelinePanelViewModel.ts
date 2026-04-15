@@ -117,13 +117,18 @@ export class TimelinePanelViewModel
             return;
         }
 
-        if (!this.snapshot.current?.isAtLiveEdge) {
+        const windowIsBehindLive = this.timelineWindow.canPaginate(Direction.Forward);
+
+        if (windowIsBehindLive) {
             this.mergeSnapshot({
                 canPaginateForward: true,
             });
             return;
         }
 
+        // Extend the loaded window when it was already caught up to the previous
+        // newest event. Whether the viewport is visually pinned to bottom is the
+        // TimelineView's concern, not the room timeline model's.
         this.paginateDirection(Direction.Forward, 1, false, false);
     };
 

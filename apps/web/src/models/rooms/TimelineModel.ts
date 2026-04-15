@@ -12,6 +12,7 @@ export type TimelineModelItem =
     | {
           key: string;
           kind: "event";
+          event: MatrixEvent;
       }
     | {
           key: string;

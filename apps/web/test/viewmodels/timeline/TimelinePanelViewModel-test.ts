@@ -178,11 +178,14 @@ describe("TimelinePanelViewModel", () => {
         expect(vm.getSnapshot().backwardPagination).toBe("idle");
     });
 
-    it("does not auto-extend the live window while scrolled up", async () => {
+    it("does not auto-extend the live window when the loaded window is already behind", async () => {
+        timelineWindowInstance.canPaginate.mockImplementation(
+            (direction: Direction) => direction === Direction.Forward,
+        );
+
         const vm = createStartedViewModel();
         await flushPromises();
 
-        vm.onIsAtLiveEdgeChanged(false);
         room.on.mock.calls[0]?.[1](eventA, room, false, false, { timeline: liveTimeline, liveEvent: true });
 
         await flushPromises();
@@ -191,7 +194,7 @@ describe("TimelinePanelViewModel", () => {
         expect(vm.getSnapshot().canPaginateForward).toBe(true);
     });
 
-    it("extends the live window without a network request when stuck at bottom", async () => {
+    it("extends the live window without a network request when the loaded window was caught up", async () => {
         const vm = createStartedViewModel();
         await flushPromises();
 

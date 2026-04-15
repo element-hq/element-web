@@ -161,7 +161,7 @@ describe("TimelinePanelView", () => {
         expect(screen.getByTestId("room-creation-group")).toHaveTextContent("Alice created this room");
     });
 
-    it("renders legacy event rows from room events", () => {
+    it("renders legacy event rows from timeline items", () => {
         const liveEvent = new MatrixEvent({
             event_id: "$live",
             room_id: "!room:example.org",
@@ -172,12 +172,11 @@ describe("TimelinePanelView", () => {
         });
         const room = {
             roomId: "!room:example.org",
-            findEventById: jest.fn().mockReturnValue(liveEvent),
         } as any;
         const client = {} as any;
 
         mocked(TimelinePanelViewModel).mockImplementationOnce(
-            () => createTimelinePanelViewModelMockInstance([{ key: "$live", kind: "event" }]) as any,
+            () => createTimelinePanelViewModelMockInstance([{ key: "$live", kind: "event", event: liveEvent }]) as any,
         );
 
         render(
@@ -186,7 +185,6 @@ describe("TimelinePanelView", () => {
             </MatrixClientContext.Provider>,
         );
 
-        expect(room.findEventById).toHaveBeenCalledWith("$live");
         expect(screen.getByTestId("legacy-event")).toHaveTextContent("$live");
     });
 

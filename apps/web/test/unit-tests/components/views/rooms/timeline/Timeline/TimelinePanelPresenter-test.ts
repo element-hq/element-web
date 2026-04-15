@@ -107,7 +107,7 @@ describe("TimelinePanelPresenter", () => {
     it("does not insert a date separator before the first event when the timeline can paginate backward", () => {
         const presenter = makePresenter();
 
-        expect(presenter.buildItems([eventA], true)).toEqual([{ key: eventA.getId()!, kind: "event" }]);
+        expect(presenter.buildItems([eventA], true)).toEqual([{ key: eventA.getId()!, kind: "event", event: eventA }]);
     });
 
     it("matches legacy creation ordering at the start of history", () => {
@@ -157,7 +157,7 @@ describe("TimelinePanelPresenter", () => {
 
         const items = presenter.buildItems([eventA, eventB], true);
         expect(items).toHaveLength(3);
-        expect(items[0]).toEqual({ key: eventA.getId()!, kind: "event" });
+        expect(items[0]).toEqual({ key: eventA.getId()!, kind: "event", event: eventA });
         expect(items[1]).toMatchObject({
             key: `date-${new Date(eventB.getTs()).toDateString()}`,
             kind: "virtual",
@@ -166,16 +166,16 @@ describe("TimelinePanelPresenter", () => {
         expect(items[1]?.kind === "virtual" && items[1].type === "date-separator" && items[1].vm).toBeInstanceOf(
             DateSeparatorViewModel,
         );
-        expect(items[2]).toEqual({ key: eventB.getId()!, kind: "event" });
+        expect(items[2]).toEqual({ key: eventB.getId()!, kind: "event", event: eventB });
     });
 
     it("adds start events on a later rebuild when backward pagination is no longer possible", () => {
         const presenter = makePresenter();
 
         expect(presenter.buildItems([createEvent, encryptionEvent, topicEvent], true)).toEqual([
-            { key: createEvent.getId()!, kind: "event" },
-            { key: encryptionEvent.getId()!, kind: "event" },
-            { key: topicEvent.getId()!, kind: "event" },
+            { key: createEvent.getId()!, kind: "event", event: createEvent },
+            { key: encryptionEvent.getId()!, kind: "event", event: encryptionEvent },
+            { key: topicEvent.getId()!, kind: "event", event: topicEvent },
         ]);
 
         expect(presenter.buildItems([createEvent, encryptionEvent, topicEvent], false)).toMatchObject([

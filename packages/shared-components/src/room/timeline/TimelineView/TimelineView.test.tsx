@@ -747,6 +747,52 @@ describe("TimelineView", () => {
         });
     });
 
+    it("does not snap to the exact bottom when items append while the viewport is away from the live edge", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: true,
+                    canPaginateForward: false,
+                    isAtLiveEdge: false,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            const scrollToSpy = vi.spyOn(scrollerElement, "scrollTo").mockImplementation(() => undefined);
+            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(260);
+            const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
+
+            scrollToSpy.mockClear();
+
+            vm.updateSnapshot({
+                items: [
+                    { key: "alpha", kind: "event" },
+                    { key: "beta", kind: "event" },
+                    { key: "gamma", kind: "event" },
+                    { key: "delta", kind: "event" },
+                ],
+                isAtLiveEdge: false,
+                canPaginateForward: false,
+            });
+
+            await waitFor(() => expect(vm.onVisibleRangeChanged).toHaveBeenCalled());
+            expect(scrollToSpy).not.toHaveBeenCalledWith({
+                top: 60,
+            });
+
+            scrollHeightSpy.mockRestore();
+            clientHeightSpy.mockRestore();
+            scrollToSpy.mockRestore();
+        });
+    });
+
     it("suppresses the initial backward probe while a scroll target is being resolved", async () => {
         await withMeasuredScrollerHeight(async () => {
             const vm = new TestTimelineViewModel(

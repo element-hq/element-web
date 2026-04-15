@@ -55,6 +55,7 @@ export class TimelinePanelPresenter {
             items.push({
                 key: eventId,
                 kind: "event",
+                event,
             });
 
             prevEvent = event;
@@ -173,7 +174,7 @@ export class TimelinePanelPresenter {
 
         const items: TimelineModelItem[] = [
             this.buildDateSeparatorItem(createEvent),
-            ...ejectedEvents.map((event) => ({ key: event.getId()!, kind: "event" as const })),
+            ...ejectedEvents.map((event) => ({ key: event.getId()!, kind: "event" as const, event })),
             this.buildRoomCreationItem(),
             this.buildRoomCreationGroupItem(groupedEvents),
         ];
