@@ -50,9 +50,13 @@ interface IProps {
     // CSS class to apply to dialog div
     "className"?: string;
 
-    // if true, dialog container is 60% of the viewport width. Otherwise,
-    // the container will have no fixed size, allowing its contents to
-    // determine its size. Default: true.
+    /**
+     * If true, dialog container is between 60% of the viewport width and 704 pixels (depending on screen size and dialog contents).
+     *
+     * Otherwise, the container will have no fixed width, allowing its contents to determine its size.
+     *
+     * Default: true.
+     */
     "fixedWidth"?: boolean;
 
     // To be displayed at the top of the dialog. Even above the title.
