@@ -52,6 +52,7 @@ import InviteRulesConfigController from "./controllers/InviteRulesConfigControll
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
+import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -373,6 +374,8 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
+    "RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1370,6 +1373,22 @@ export const SETTINGS: Settings = {
     "releaseAnnouncementData": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the custom section data for the room list
+     */
+    "RoomList.CustomSectionData": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the ordering of the custom sections for the room list
+     */
+    "RoomList.OrderedCustomSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: [],
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
