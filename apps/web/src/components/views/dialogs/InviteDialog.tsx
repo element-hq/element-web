@@ -444,6 +444,21 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
+    /**
+     * Start the process of actually sending invites or creating a DM.
+     *
+     * Called once we have shown the user all the necessary warnings.
+     */
+    private async startDmOrSendInvites(): Promise<void> {
+        if (this.props.kind === InviteKind.Dm) {
+            await this.startDm();
+        } else if (this.props.kind === InviteKind.Invite) {
+            await this.inviteUsers();
+        } else {
+            throw new Error("Unknown InviteKind: " + this.props.kind);
+        }
+    }
+
     private transferCall = async (): Promise<void> => {
         if (this.props.kind !== InviteKind.CallTransfer) return;
         if (this.state.currentTabId == TabId.UserDirectory) {
@@ -1129,8 +1144,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private renderMainTab(): JSX.Element {
         let helpText;
         let buttonText;
-        let goButtonFn: (() => Promise<void>) | null = null;
-
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
 
         const cli = MatrixClientPeg.safeGet();
@@ -1167,7 +1180,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             }
 
             buttonText = _t("action|go");
-            goButtonFn = this.startDm;
         } else if (this.props.kind === InviteKind.Invite) {
             const roomId = this.props.roomId;
             const room = MatrixClientPeg.get()?.getRoom(roomId);
@@ -1211,10 +1223,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             );
 
             buttonText = _t("action|invite");
-            goButtonFn = this.inviteUsers;
         } else {
             throw new Error("Unknown InviteDialog kind: " + this.props.kind);
         }
+
+        const onGoButtonPressed = (): void => {
+            this.startDmOrSendInvites().catch((e) => logErrorAndShowErrorDialog("Error processing invites", e));
+        };
 
         return (
             <React.Fragment>
@@ -1223,7 +1238,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     {this.renderEditor()}
                     <AccessibleButton
                         kind="primary"
-                        onClick={goButtonFn}
+                        onClick={onGoButtonPressed}
                         className="mx_InviteDialog_goButton"
                         disabled={this.state.busy || !this.hasSelection()}
                     >
