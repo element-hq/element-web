@@ -88,6 +88,7 @@ function getEffectiveScrollerElement(scrollerElement: HTMLElement | null): HTMLE
 const FOLLOW_OUTPUT_DISABLE_SCROLL_EPSILON_PX = 4;
 const VIRTUOSO_AT_BOTTOM_THRESHOLD_PX = 4;
 const LIVE_EDGE_CLAMP_EPSILON_PX = 4;
+const STARTUP_ANCHOR_RESOLUTION_TOLERANCE_PX = 12;
 
 /**
  * Adapts a {@link TimelineViewModel} into the props and callbacks required by the
@@ -505,6 +506,16 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         if (
             !aligned &&
             initialFillState === "filling" &&
+            snapshot.backwardPagination !== "loading" &&
+            Math.abs(scrollAdjustment) <= STARTUP_ANCHOR_RESOLUTION_TOLERANCE_PX
+        ) {
+            markAnchorResolved();
+            return;
+        }
+
+        if (
+            !aligned &&
+            initialFillState === "filling" &&
             snapshot.backwardPagination === "loading" &&
             !canAdjustScrollTop(effectiveScrollerElement.scrollTop, scrollAdjustment)
         ) {
@@ -797,7 +808,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             }
             return;
         }
-    }, [initialFillState, snapshot.forwardPagination, snapshot.canPaginateForward, snapshot.scrollTarget]);
+    }, [initialFillState, snapshot.scrollTarget]);
 
     const followOutput = useCallback((isAtBottom: boolean): "auto" | false => {
         return false;
@@ -874,14 +885,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
 
             if (shouldDisableFollowOutput) {
                 setFollowOutputEnabled(false);
-            } else if (
-                shouldDisableFollowOutputOnScroll({
-                    previousScrollTop,
-                    currentScrollTop,
-                    isAtLiveEdge: latest.isAtLiveEdge,
-                    followOutputEnabled,
-                })
-            ) {
             }
 
             if (previousScrollTop !== null && currentScrollTop > previousScrollTop && snapCandidate) {
