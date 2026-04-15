@@ -6,10 +6,11 @@
  */
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
-import { type Locator, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
 
 import { expect, test } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { getFilterCollapseButton, getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
 
 test.describe("Room list filters and sort", () => {
     test.use({
@@ -20,22 +21,6 @@ test.describe("Room list filters and sort", () => {
         },
         labsFlags: ["feature_new_room_list"],
     });
-
-    function getPrimaryFilters(page: Page): Locator {
-        return page.getByTestId("primary-filters");
-    }
-
-    function getRoomOptionsMenu(page: Page): Locator {
-        return page.getByRole("button", { name: "Room Options" });
-    }
-
-    function getFilterExpandButton(page: Page): Locator {
-        return getPrimaryFilters(page).getByRole("button", { name: "Expand filter list" });
-    }
-
-    function getFilterCollapseButton(page: Page): Locator {
-        return getPrimaryFilters(page).getByRole("button", { name: "Collapse filter list" });
-    }
 
     /**
      * Get the room list

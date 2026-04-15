@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type Locator, type Page } from "@playwright/test";
-
 import { expect, test } from "../../../element-web-test";
+import { getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
 
 test.describe("Room list sections", () => {
     test.use({
@@ -18,34 +17,6 @@ test.describe("Room list sections", () => {
             autoAcceptInvites: true,
         },
     });
-
-    /**
-     * Get the room list
-     * @param page
-     */
-    function getRoomList(page: Page): Locator {
-        return page.getByTestId("room-list");
-    }
-
-    /**
-     * Get the primary filters
-     * @param page
-     */
-    function getPrimaryFilters(page: Page): Locator {
-        return page.getByTestId("primary-filters");
-    }
-
-    /**
-     * Get a section header toggle button by section name
-     * @param page
-     * @param sectionName The display name of the section (e.g. "Favourites", "Chats", "Low Priority")
-     * @param isUnread Whether to look for the unread version of the section header
-     */
-    function getSectionHeader(page: Page, sectionName: string, isUnread = false): Locator {
-        return getRoomList(page).getByRole("gridcell", {
-            name: isUnread ? `Toggle ${sectionName} section with unread room(s)` : `Toggle ${sectionName} section`,
-        });
-    }
 
     test.beforeEach(async ({ page, app, user }) => {
         // The notification toast is displayed above the search section
