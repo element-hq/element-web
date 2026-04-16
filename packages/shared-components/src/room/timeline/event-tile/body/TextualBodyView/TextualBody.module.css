@@ -37,7 +37,7 @@
     user-select: none;
     display: inline-block;
     margin-inline-start: 9px; /* Preserve legacy EventTile spacing for inline annotations like (edited) */
-    font: var(--cpd-font-body-xs-regular);
+    font-size: 12px; /* Match the legacy EventTile edited-marker size */
     color: var(--cpd-color-text-secondary);
 }
 
@@ -47,6 +47,10 @@
     border: none;
     padding: 0;
     cursor: pointer;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
 }
 
 .bodyLink,
