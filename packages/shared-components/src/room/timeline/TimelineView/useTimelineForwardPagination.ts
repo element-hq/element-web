@@ -9,6 +9,7 @@ import { useCallback, useEffect } from "react";
 
 import {
     canSnapToBottom,
+    findTimelineItemElement,
     getBottomOffset,
     getFirstVisibleTimelineItemElement,
     getLastVisibleTimelineItemElement,
@@ -18,25 +19,59 @@ import type { PaginationState, TimelineItem, VisibleRange } from "./types";
 
 type InitialFillState = "filling" | "settling" | "done";
 
+function logTimelineForwardPagination(...parts: Array<string | number | boolean | null | undefined>): void {
+    console.log("[TimelineForwardPagination]", ...parts);
+}
+
+function getShiftedRangeAnchorCandidate<TItem extends TimelineItem>({
+    items,
+    visibleRange,
+    scrollerElement,
+    reason,
+}: {
+    items: TItem[];
+    visibleRange: VisibleRange | null;
+    scrollerElement: HTMLElement | null;
+    reason: string;
+}): { key: string | null; topOffsetPx: number | null; bottomOffsetPx: number | null } {
+    if (!scrollerElement || !visibleRange) {
+        return { key: null, topOffsetPx: null, bottomOffsetPx: null };
+    }
+
+    const startIndex = Math.max(0, Math.min(items.length - 1, visibleRange.startIndex));
+    const endIndex = Math.max(startIndex, Math.min(items.length - 1, visibleRange.endIndex));
+    const visibleLength = endIndex - startIndex + 1;
+    const preferredIndexWithinRange = reason === "at-bottom state change" ? Math.max(0, visibleLength - 1) : 0;
+    const anchorIndex = Math.min(endIndex, startIndex + preferredIndexWithinRange);
+    const anchorKey = items[anchorIndex]?.key ?? null;
+    const anchorElement = anchorKey ? findTimelineItemElement(scrollerElement, anchorKey) : null;
+
+    if (!anchorElement) {
+        return { key: null, topOffsetPx: null, bottomOffsetPx: null };
+    }
+
+    return {
+        key: anchorKey,
+        topOffsetPx: getTopOffset(scrollerElement, anchorElement),
+        bottomOffsetPx: getBottomOffset(scrollerElement, anchorElement),
+    };
+}
+
 /**
  * Captures the DOM state needed to restore visual continuity after a forward
  * pagination request completes.
  */
 export interface ForwardPaginationContext {
-    continuityMode: "anchor" | "bottom" | "shifted-range";
+    continuityMode: "anchor" | "bottom" | "shifted-range" | "none";
     requestReason: string;
     anchorKey: string | null;
     lastVisibleRange: VisibleRange | null;
     bottomOffsetPx: number | null;
     shiftedRangeAnchorKey: string | null;
     shiftedRangeTopOffsetPx: number | null;
+    shiftedRangeBottomOffsetPx: number | null;
     requestedAtLiveEdge: boolean;
     requestedWhileSeekingLiveEdge: boolean;
-}
-
-interface BottomTriggeredForwardPaginationScrollLock {
-    gestureGeneration: number;
-    lockedScrollTop: number;
 }
 
 interface UseTimelineForwardPaginationParams<TItem extends TimelineItem> {
@@ -57,7 +92,6 @@ interface UseTimelineForwardPaginationParams<TItem extends TimelineItem> {
     setForwardPaginationContext: (context: ForwardPaginationContext | null) => void;
     getLastBottomTriggeredForwardPaginationGesture: () => number | null;
     getScrollGestureGeneration: () => number;
-    setBottomTriggeredForwardPaginationScrollLock: (lock: BottomTriggeredForwardPaginationScrollLock | null) => void;
     setWasAtBottom: (wasAtBottom: boolean) => void;
     onRequestMoreItems: () => void;
 }
@@ -84,7 +118,6 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
     setForwardPaginationContext,
     getLastBottomTriggeredForwardPaginationGesture,
     getScrollGestureGeneration,
-    setBottomTriggeredForwardPaginationScrollLock,
     setWasAtBottom,
     onRequestMoreItems,
 }: UseTimelineForwardPaginationParams<TItem>): {
@@ -94,32 +127,73 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
         (reason: string) => {
             const tailKey = items.at(-1)?.key ?? null;
             if (!tailKey || getLastForwardRequestedTailKey() === tailKey) {
+                logTimelineForwardPagination(
+                    "requestForwardPagination:skip",
+                    "reason",
+                    reason,
+                    "tailKey",
+                    tailKey,
+                    "lastForwardRequestedTailKey",
+                    getLastForwardRequestedTailKey(),
+                );
                 return false;
             }
 
             setLastForwardRequestedTailKey(tailKey);
+            const visibleRange = getLastVisibleRange();
             const anchorElement = scrollerElement ? getLastVisibleTimelineItemElement(scrollerElement) : null;
-            const shiftedRangeAnchorElement = scrollerElement
-                ? getFirstVisibleTimelineItemElement(scrollerElement)
-                : null;
-            const shouldPreserveBottomContinuity =
-                reason === "live-edge auto paginate" || reason === "post-forward continue seeking live edge";
-            const continuityMode: ForwardPaginationContext["continuityMode"] = shouldPreserveBottomContinuity
-                ? "bottom"
-                : "anchor";
+            const continuityMode: ForwardPaginationContext["continuityMode"] =
+                reason === "live-edge auto paginate" || reason === "post-forward continue seeking live edge"
+                    ? "bottom"
+                    : reason === "at-bottom state change"
+                      ? "shifted-range"
+                      : "anchor";
+            const shiftedRangeAnchorCandidate = getShiftedRangeAnchorCandidate({
+                items,
+                visibleRange,
+                scrollerElement,
+                reason,
+            });
+            const shiftedRangeAnchorElement =
+                shiftedRangeAnchorCandidate.key && scrollerElement
+                    ? findTimelineItemElement(scrollerElement, shiftedRangeAnchorCandidate.key)
+                    : null;
+
+            logTimelineForwardPagination(
+                "requestForwardPagination",
+                "reason",
+                reason,
+                "tailKey",
+                tailKey,
+                "continuityMode",
+                continuityMode,
+                "isAtLiveEdge",
+                isAtLiveEdge,
+                "followOutputEnabled",
+                followOutputEnabled,
+                "hasScrollerElement",
+                !!scrollerElement,
+            );
 
             setForwardPaginationContext({
                 continuityMode,
                 requestReason: reason,
                 anchorKey: anchorElement?.dataset.timelineItemKey ?? null,
-                lastVisibleRange: getLastVisibleRange(),
+                lastVisibleRange: visibleRange,
                 bottomOffsetPx:
                     scrollerElement && anchorElement ? getBottomOffset(scrollerElement, anchorElement) : null,
-                shiftedRangeAnchorKey: shiftedRangeAnchorElement?.dataset.timelineItemKey ?? null,
+                shiftedRangeAnchorKey:
+                    shiftedRangeAnchorCandidate.key ?? shiftedRangeAnchorElement?.dataset.timelineItemKey ?? null,
                 shiftedRangeTopOffsetPx:
-                    scrollerElement && shiftedRangeAnchorElement
+                    shiftedRangeAnchorCandidate.topOffsetPx ??
+                    (scrollerElement && shiftedRangeAnchorElement
                         ? getTopOffset(scrollerElement, shiftedRangeAnchorElement)
-                        : null,
+                        : null),
+                shiftedRangeBottomOffsetPx:
+                    shiftedRangeAnchorCandidate.bottomOffsetPx ??
+                    (scrollerElement && shiftedRangeAnchorElement
+                        ? getBottomOffset(scrollerElement, shiftedRangeAnchorElement)
+                        : null),
                 requestedAtLiveEdge: isAtLiveEdge,
                 requestedWhileSeekingLiveEdge: followOutputEnabled,
             });
@@ -140,6 +214,27 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
     );
 
     useEffect(() => {
+        logTimelineForwardPagination(
+            "effect:autoPaginateCheck",
+            "initialFillState",
+            initialFillState,
+            "isAtLiveEdge",
+            isAtLiveEdge,
+            "canPaginateForward",
+            canPaginateForward,
+            "forwardPagination",
+            forwardPagination,
+            "followOutputEnabled",
+            followOutputEnabled,
+            "suppressForwardLiveEdgeSeekAfterAnchor",
+            suppressForwardLiveEdgeSeekAfterAnchor,
+            "hasScrollTarget",
+            hasScrollTarget,
+            "hasScrollerElement",
+            !!scrollerElement,
+            "wasAtBottom",
+            wasAtBottom,
+        );
         if (
             initialFillState !== "done" ||
             !isAtLiveEdge ||
@@ -186,14 +281,27 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
             return;
         }
 
-        if (getForwardPaginationContext()?.requestReason === "at-bottom state change" && !isAtLiveEdge) {
-            setBottomTriggeredForwardPaginationScrollLock({
-                gestureGeneration: getLastBottomTriggeredForwardPaginationGesture() ?? getScrollGestureGeneration(),
-                lockedScrollTop: scrollerElement.scrollTop,
-            });
-        } else {
-            setBottomTriggeredForwardPaginationScrollLock(null);
-        }
+        logTimelineForwardPagination(
+            "effect:postForwardCheck",
+            "currentTailKey",
+            currentTailKey,
+            "requestReason",
+            getForwardPaginationContext()?.requestReason ?? null,
+            "isAtLiveEdge",
+            isAtLiveEdge,
+            "canPaginateForward",
+            canPaginateForward,
+            "forwardPagination",
+            forwardPagination,
+            "followOutputEnabled",
+            followOutputEnabled,
+            "suppressForwardLiveEdgeSeekAfterAnchor",
+            suppressForwardLiveEdgeSeekAfterAnchor,
+            "hasScrollTarget",
+            hasScrollTarget,
+            "scrollTop",
+            scrollerElement.scrollTop,
+        );
 
         let cancelled = false;
         const frameId = window.requestAnimationFrame(() => {
@@ -211,6 +319,21 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
                 followOutputEnabled &&
                 !suppressForwardLiveEdgeSeekAfterAnchor &&
                 snapToBottomAfterLayout;
+            logTimelineForwardPagination(
+                "effect:postForwardFrame",
+                "snapToBottomAfterLayout",
+                snapToBottomAfterLayout,
+                "shouldContinueSeekingLiveEdge",
+                shouldContinueSeekingLiveEdge,
+                "isAtLiveEdge",
+                isAtLiveEdge,
+                "canPaginateForward",
+                canPaginateForward,
+                "followOutputEnabled",
+                followOutputEnabled,
+                "suppressForwardLiveEdgeSeekAfterAnchor",
+                suppressForwardLiveEdgeSeekAfterAnchor,
+            );
             if (shouldContinueSeekingLiveEdge) {
                 requestForwardPagination("post-forward continue seeking live edge");
             }
@@ -234,7 +357,6 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
         items,
         requestForwardPagination,
         scrollerElement,
-        setBottomTriggeredForwardPaginationScrollLock,
         setLastForwardRequestedTailKey,
         setWasAtBottom,
         suppressForwardLiveEdgeSeekAfterAnchor,

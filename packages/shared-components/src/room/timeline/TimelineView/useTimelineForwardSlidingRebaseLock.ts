@@ -9,6 +9,10 @@ import { useCallback, useEffect, useRef } from "react";
 
 import type { VisibleRange } from "./types";
 
+function logTimelineForwardSlidingRebaseLock(...parts: Array<string | number | boolean | null | undefined>): void {
+    console.log("[TimelineForwardSlidingRebaseLock]", ...parts);
+}
+
 interface UseTimelineForwardSlidingRebaseLockParams {
     onVisibleRangeChanged: (visibleRange: VisibleRange) => void;
 }
@@ -35,6 +39,17 @@ export function useTimelineForwardSlidingRebaseLock({
     const pendingVisibleRangeDuringForwardSlidingRebaseLockRef = useRef<VisibleRange | null>(null);
 
     const cancelPendingForwardPaginationSlidingRebaseLock = useCallback(() => {
+        logTimelineForwardSlidingRebaseLock(
+            "cancel",
+            "active",
+            forwardPaginationSlidingRebaseLockActiveRef.current,
+            "virtuosoRestoreActive",
+            forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current,
+            "pendingStart",
+            pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current?.startIndex ?? null,
+            "pendingEnd",
+            pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current?.endIndex ?? null,
+        );
         for (const frameId of forwardPaginationSlidingRebaseLockFrameIdsRef.current) {
             window.cancelAnimationFrame(frameId);
         }
@@ -46,6 +61,7 @@ export function useTimelineForwardSlidingRebaseLock({
     const armForwardPaginationSlidingRebaseLock = useCallback(() => {
         cancelPendingForwardPaginationSlidingRebaseLock();
         forwardPaginationSlidingRebaseLockActiveRef.current = true;
+        logTimelineForwardSlidingRebaseLock("arm");
 
         const scheduleReleaseFrame = (remainingFrames: number): void => {
             const frameId = window.requestAnimationFrame(() => {
@@ -57,6 +73,13 @@ export function useTimelineForwardSlidingRebaseLock({
                 if (remainingFrames <= 1) {
                     forwardPaginationSlidingRebaseLockActiveRef.current = false;
                     forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = false;
+                    logTimelineForwardSlidingRebaseLock(
+                        "release",
+                        "pendingStart",
+                        pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current?.startIndex ?? null,
+                        "pendingEnd",
+                        pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current?.endIndex ?? null,
+                    );
                     const pendingVisibleRange = pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current;
                     if (pendingVisibleRange !== null) {
                         pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = null;
@@ -84,13 +107,22 @@ export function useTimelineForwardSlidingRebaseLock({
 
     const setForwardPaginationSlidingRebaseVirtuosoRestoreActive = useCallback((active: boolean) => {
         forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = active;
+        logTimelineForwardSlidingRebaseLock("setVirtuosoRestoreActive", active);
     }, []);
 
     const setPendingVisibleRangeDuringForwardSlidingRebaseLock = useCallback((visibleRange: VisibleRange | null) => {
         pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = visibleRange;
+        logTimelineForwardSlidingRebaseLock(
+            "setPendingVisibleRange",
+            "start",
+            visibleRange?.startIndex ?? null,
+            "end",
+            visibleRange?.endIndex ?? null,
+        );
     }, []);
 
     const clearPendingVisibleRangeDuringForwardSlidingRebaseLock = useCallback(() => {
+        logTimelineForwardSlidingRebaseLock("clearPendingVisibleRange");
         pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = null;
     }, []);
 

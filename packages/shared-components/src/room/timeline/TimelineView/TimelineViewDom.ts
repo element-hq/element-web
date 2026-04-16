@@ -23,6 +23,7 @@ import type { NavigationAnchor } from "./types";
  */
 const SNAP_TO_TARGET_OFFSET_EPSILON_PX = 1;
 const SNAP_TO_BOTTOM_TARGET_OFFSET_EPSILON_PX = 0;
+const TARGET_ALIGNMENT_SCROLL_ADJUSTMENT_EPSILON_PX = 0;
 
 /**
  * Acceptable pixel distance from the true bottom for considering a scroller
@@ -120,6 +121,20 @@ export function canAdjustScrollTop(currentScrollTop: number, scrollAdjustment: n
 }
 
 /**
+ * Returns whether applying the requested local correction would change
+ * `scrollTop` enough to matter for precise target alignment.
+ *
+ * Target anchoring uses a stricter threshold than generic scroll correction so
+ * sub-pixel residual offsets can still be nudged into place when bottom
+ * alignment requires an exact match.
+ */
+export function canAdjustScrollTopForTargetAlignment(currentScrollTop: number, scrollAdjustment: number): boolean {
+    const nextScrollTop = currentScrollTop + scrollAdjustment;
+    const clampedScrollTop = Math.max(0, nextScrollTop);
+    return Math.abs(clampedScrollTop - currentScrollTop) > TARGET_ALIGNMENT_SCROLL_ADJUSTMENT_EPSILON_PX;
+}
+
+/**
  * Returns whether the requested correction would need to scroll above the start
  * of the currently loaded window, which means local DOM adjustment alone
  * cannot satisfy the anchor.
@@ -152,6 +167,24 @@ export function getBottomOffset(scrollerElement: HTMLElement, targetElement: HTM
 
 export function getTopOffset(scrollerElement: HTMLElement, targetElement: HTMLElement): number {
     return targetElement.getBoundingClientRect().top - scrollerElement.getBoundingClientRect().top;
+}
+
+/**
+ * Returns whether the entire target element is currently visible inside the
+ * scroller viewport.
+ *
+ * This is used as a fallback completion signal for scroll targets that are
+ * visually settled but cannot be driven to an exact pixel-perfect anchor due
+ * to browser `scrollTop` quantization.
+ */
+export function isTimelineItemFullyVisible(scrollerElement: HTMLElement, targetElement: HTMLElement): boolean {
+    const scrollerRect = scrollerElement.getBoundingClientRect();
+    const targetRect = targetElement.getBoundingClientRect();
+
+    return (
+        targetRect.top >= scrollerRect.top - SNAP_TO_TARGET_OFFSET_EPSILON_PX &&
+        targetRect.bottom <= scrollerRect.bottom + SNAP_TO_TARGET_OFFSET_EPSILON_PX
+    );
 }
 
 /**

@@ -236,6 +236,7 @@ export function getScrollLocationOnChange<TItem extends TimelineItem>({
     isAtLiveEdge,
     totalCount,
     lastAnchoredKey,
+    allowReplayPendingAnchor,
     initialBottomSnapDone,
 }: {
     items: TItem[];
@@ -243,6 +244,7 @@ export function getScrollLocationOnChange<TItem extends TimelineItem>({
     isAtLiveEdge: boolean;
     totalCount: number;
     lastAnchoredKey: string | null;
+    allowReplayPendingAnchor: boolean;
     initialBottomSnapDone: boolean;
 }): TimelineScrollLocation {
     if (!Number.isFinite(totalCount) || totalCount <= 0) {
@@ -257,7 +259,7 @@ export function getScrollLocationOnChange<TItem extends TimelineItem>({
         });
     }
 
-    if (lastAnchoredKey === scrollTarget.targetKey) {
+    if (lastAnchoredKey === scrollTarget.targetKey && !allowReplayPendingAnchor) {
         return false;
     }
 
