@@ -25,7 +25,6 @@ import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
-import TextualBody from "./TextualBody";
 import MImageBody from "./MImageBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MStickerBody from "./MStickerBody";
@@ -38,6 +37,7 @@ import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
     RedactedBodyFactory,
+    TextualBodyFactory,
     VideoBodyFactory,
     renderMBody,
 } from "./MBodyFactory";
@@ -64,9 +64,9 @@ export interface IOperableEventTile {
 }
 
 const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
-    [MsgType.Text, TextualBody],
-    [MsgType.Notice, TextualBody],
-    [MsgType.Emote, TextualBody],
+    [MsgType.Text, TextualBodyFactory],
+    [MsgType.Notice, TextualBodyFactory],
+    [MsgType.Emote, TextualBodyFactory],
     [MsgType.Image, MImageBody],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
@@ -329,6 +329,6 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
 }) => (
     <div className="mx_EventTile_content">
         <WrappedBodyType {...props} />
-        <TextualBody {...{ ...props, ref: undefined }} />
+        <TextualBodyFactory {...{ ...props, ref: undefined }} />
     </div>
 );

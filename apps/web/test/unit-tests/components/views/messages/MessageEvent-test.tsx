@@ -34,6 +34,7 @@ jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     DecryptionFailureBodyFactory: () => <div data-testid="decryption-failure-body" />,
     FileBodyFactory: () => <div data-testid="file-body" />,
     RedactedBodyFactory: () => <div className="mx_RedactedBody">Message deleted by Moderator</div>,
+    TextualBodyFactory: () => <div data-testid="textual-body" />,
     VideoBodyFactory: () => <video data-testid="video-body" />,
     renderMBody: () => <div data-testid="file-body" />,
 }));
@@ -51,11 +52,6 @@ jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
 jest.mock("../../../../../src/components/views/messages/MStickerBody", () => ({
     __esModule: true,
     default: () => <div data-testid="sticker-body" />,
-}));
-
-jest.mock("../../../../../src/components/views/messages/TextualBody.tsx", () => ({
-    __esModule: true,
-    default: () => <div data-testid="textual-body" />,
 }));
 
 describe("MessageEvent", () => {

@@ -195,6 +195,7 @@ export function TextualBodyView({
                 type="button"
                 className={classNames(styles.annotation, styles.editedMarker)}
                 onClick={onEditedMarkerClick}
+                data-textual-body-edited-marker=""
             >
                 <span>{editedMarkerText}</span>
             </button>
@@ -218,7 +219,7 @@ export function TextualBodyView({
 
     if (showPendingModerationMarker) {
         markers.push(
-            <span key="pending-moderation-marker" className={styles.annotation}>
+            <span key="pending-moderation-marker" className={styles.annotation} data-textual-body-pending-moderation="">
                 {pendingModerationText}
             </span>,
         );
