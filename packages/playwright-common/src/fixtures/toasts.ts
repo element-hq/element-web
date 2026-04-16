@@ -81,7 +81,7 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async acceptToast(title: string): Promise<void> {
-        return await this.handleToast(title, "primary");
+        return await handleToast(this, title, "primary");
     }
 
     /**
@@ -93,7 +93,7 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async acceptToastIfExists(title: string): Promise<void> {
-        return await this.handleToast(title, "primary", 2000, false);
+        return await handleToast(this, title, "primary", 2000, false);
     }
 
     /**
@@ -104,7 +104,7 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async rejectToast(title: string): Promise<void> {
-        return await this.handleToast(title, "secondary");
+        return await handleToast(this, title, "secondary");
     }
 
     /**
@@ -116,39 +116,40 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async rejectToastIfExists(title: string): Promise<void> {
-        return await this.handleToast(title, "secondary", 2000, false);
+        return await handleToast(this, title, "secondary", 2000, false);
     }
+}
 
-    /**
-     * Find the toast with the supplied title and click a button on it.
-     *
-     * Only works if this toast is at the top of the stack of toasts.
-     *
-     * If `required` is false, you should supply a relatively short `timeout`
-     * (e.g. 2000, meaning 2 seconds) to prevent your test taking too long.
-     *
-     * @param title - Expected title of the toast.
-     * @param button - Which button to click on the toast. Allowed values are
-     *                 "primary", which will accept the toast, or "secondary",
-     *                 which will reject it.
-     * @param timeout - Time in ms before we give up and decide the toast does
-     *                  not exist. If `required` is true, defaults to `timeout`
-     *                  in `TestConfig.expect`. Otherwise, defaults to 2000 (2
-     *                  seconds).
-     * @param required - If true, fail the test (throw an exception) if the
-     *                   toast is not visible. Otherwise, just return after
-     *                   `timeout` if the toast is not visible.
-     */
-    async handleToast(
-        title: string,
-        button: "primary" | "secondary",
-        timeout?: number,
-        required = true,
-    ): Promise<void> {
-        const toast = await this.getToast(title, timeout, required);
+/**
+ * Find the toast with the supplied title and click a button on it.
+ *
+ * Only works if this toast is at the top of the stack of toasts.
+ *
+ * If `required` is false, you should supply a relatively short `timeout`
+ * (e.g. 2000, meaning 2 seconds) to prevent your test taking too long.
+ *
+ * @param title - Expected title of the toast.
+ * @param button - Which button to click on the toast. Allowed values are
+ *                 "primary", which will accept the toast, or "secondary",
+ *                 which will reject it.
+ * @param timeout - Time in ms before we give up and decide the toast does
+ *                  not exist. If `required` is true, defaults to `timeout`
+ *                  in `TestConfig.expect`. Otherwise, defaults to 2000 (2
+ *                  seconds).
+ * @param required - If true, fail the test (throw an exception) if the
+ *                   toast is not visible. Otherwise, just return after
+ *                   `timeout` if the toast is not visible.
+ */
+async function handleToast(
+    toasts: Toasts,
+    title: string,
+    button: "primary" | "secondary",
+    timeout?: number,
+    required = true,
+): Promise<void> {
+    const toast = await toasts.getToast(title, timeout, required);
 
-        if (toast) {
-            await toast.locator(`.mx_Toast_buttons button[data-kind="${button}"]`).click();
-        }
+    if (toast) {
+        await toast.locator(`.mx_Toast_buttons button[data-kind="${button}"]`).click();
     }
 }
