@@ -1847,8 +1847,6 @@
             "aliases_section": "Direcciones de la sala",
             "avatar_field_label": "Avatar de la sala",
             "canonical_alias_field_label": "Dirección principal",
-            "default_url_previews_off": "La vista previa de URLs se desactiva por defecto para los participantes de esta sala.",
-            "default_url_previews_on": "La vista previa de URLs se activa por defecto en los participantes de esta sala.",
             "description_space": "Edita los ajustes de tu espacio.",
             "error_creating_alias_description": "Hubo un error al crear esa dirección. Es posible que el servidor no lo permita o que haya ocurrido una falla temporal.",
             "error_creating_alias_title": "Error al crear la dirección",
@@ -1875,12 +1873,7 @@
             "published_aliases_explainer_space": "Los espacios publicados pueden usarse por cualquiera, independientemente de su servidor base.",
             "published_aliases_section": "Direcciones publicadas",
             "save": "Guardar cambios",
-            "topic_field_label": "Asunto de la sala",
-            "url_preview_encryption_warning": "En salas cifradas como ésta, la vista previa de las URLs se desactiva por defecto para asegurar que el servidor base (donde se generan) no pueda recopilar información de los enlaces que veas en esta sala.",
-            "url_preview_explainer": "Cuando alguien incluya una dirección URL en su mensaje, puede mostrarse una vista previa para ofrecer información sobre el enlace, que incluirá el título, descripción, y una imagen del sitio web.",
-            "url_previews_section": "Vista previa de enlaces",
-            "user_url_previews_default_off": "Has <a>desactivado</a> la vista previa de URLs por defecto.",
-            "user_url_previews_default_on": "Has <a>activado</a> las vista previa de URLs por defecto."
+            "topic_field_label": "Asunto de la sala"
         },
         "notifications": {
             "browse_button": "Seleccionar",
@@ -2172,8 +2165,6 @@
             "spell_check_locale_placeholder": "Elige un idioma"
         },
         "inline_url_previews_default": "Activar la vista previa de URLs en línea por defecto",
-        "inline_url_previews_room": "Activar la vista previa de URLs por defecto para los participantes de esta sala",
-        "inline_url_previews_room_account": "Activar la vista previa de URLs en esta sala (solo para ti)",
         "insert_trailing_colon_mentions": "Inserta automáticamente dos puntos después de las menciones que hagas al principio de los mensajes",
         "jump_to_bottom_on_send": "Saltar abajo del todo al enviar un mensaje",
         "key_backup": {

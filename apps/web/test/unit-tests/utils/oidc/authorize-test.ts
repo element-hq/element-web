@@ -75,7 +75,7 @@ describe("OIDC authorization", () => {
 
             const authUrl = new URL(window.location.href);
 
-            expect(authUrl.searchParams.get("response_mode")).toEqual("query");
+            expect(authUrl.searchParams.get("response_mode")).toEqual("fragment");
             expect(authUrl.searchParams.get("response_type")).toEqual("code");
             expect(authUrl.searchParams.get("client_id")).toEqual(clientId);
             expect(authUrl.searchParams.get("code_challenge_method")).toEqual("S256");
@@ -95,7 +95,7 @@ describe("OIDC authorization", () => {
     describe("completeOidcLogin()", () => {
         const state = "test-state-444";
         const code = "test-code-777";
-        const queryDict = {
+        const params = {
             code,
             state: state,
         };
@@ -137,13 +137,13 @@ describe("OIDC authorization", () => {
         });
 
         it("should make request complete authorization code grant", async () => {
-            await completeOidcLogin(queryDict);
+            await completeOidcLogin(params);
 
-            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state);
+            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state, "fragment");
         });
 
         it("should return accessToken, configured homeserver and identityServer", async () => {
-            const result = await completeOidcLogin(queryDict);
+            const result = await completeOidcLogin(params);
 
             expect(result).toEqual({
                 accessToken: tokenResponse.access_token,

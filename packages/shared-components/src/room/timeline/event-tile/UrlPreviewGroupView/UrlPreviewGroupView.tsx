@@ -37,7 +37,10 @@ export interface UrlPreviewGroupViewActions {
 export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, UrlPreviewGroupViewActions>;
 
 /**
- * UrlPreviewGroupView renders a list of URL previews for a single event.
+ * Renders the URL preview group attached to a single event.
+ *
+ * The view lays out one or more link previews, can collapse or expand
+ * overflowed previews, and exposes a control to hide the group.
  */
 export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();

@@ -81,6 +81,12 @@ interface ReactionsRowViewProps {
     children?: PropsWithChildren["children"];
 }
 
+/**
+ * Renders the reactions toolbar for an event tile.
+ *
+ * The row can show individual reaction buttons, an optional "show all"
+ * control, and the add-reaction affordance.
+ */
 export function ReactionsRowView({ vm, className, children }: Readonly<ReactionsRowViewProps>): JSX.Element {
     const {
         ariaLabel,

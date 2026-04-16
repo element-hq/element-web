@@ -1726,8 +1726,6 @@
             "aliases_section": "Các địa chỉ Phòng",
             "avatar_field_label": "Hình đại diện phòng",
             "canonical_alias_field_label": "Địa chỉ chính",
-            "default_url_previews_off": "Xem trước URL bị tắt theo mặc định đối với những người tham gia trong phòng này.",
-            "default_url_previews_on": "Xem trước URL được bật theo mặc định cho những người tham gia trong phòng này.",
             "description_space": "Chỉnh sửa cài đặt liên quan đến space của bạn.",
             "error_creating_alias_description": "Đã xảy ra lỗi khi tạo địa chỉ đó. Nó có thể không được máy chủ cho phép hoặc xảy ra lỗi tạm thời.",
             "error_creating_alias_title": "Lỗi khi tạo địa chỉ",
@@ -1754,12 +1752,7 @@
             "published_aliases_explainer_space": "Địa chỉ đã xuất bản có thể được sử dụng bởi bất kỳ ai trên bất kỳ máy chủ nào để tham gia space của bạn.",
             "published_aliases_section": "Các địa chỉ công khai",
             "save": "Lưu thay đổi",
-            "topic_field_label": "Chủ đề phòng",
-            "url_preview_encryption_warning": "Trong các phòng được mã hóa, như phòng này, tính năng xem trước URL bị tắt theo mặc định để đảm bảo rằng máy chủ của bạn (nơi tạo bản xem trước) không thể thu thập thông tin về các liên kết mà bạn nhìn thấy trong phòng này.",
-            "url_preview_explainer": "Khi ai đó đặt URL trong tin nhắn của họ, bản xem trước URL có thể được hiển thị để cung cấp thêm thông tin về liên kết đó như tiêu đề, mô tả và hình ảnh từ trang web.",
-            "url_previews_section": "Xem trước URL",
-            "user_url_previews_default_off": "Bạn đã tắt <a>disabled</a> xem trước URL theo mặc định.",
-            "user_url_previews_default_on": "Bạn đã bật <a>enabled</a> URL xem trước URL theo mặc định."
+            "topic_field_label": "Chủ đề phòng"
         },
         "notifications": {
             "browse_button": "Duyệt qua",
@@ -2053,8 +2046,6 @@
             "spell_check_locale_placeholder": "Chọn vùng miền"
         },
         "inline_url_previews_default": "Bật xem trước nội dung liên kết theo mặc định",
-        "inline_url_previews_room": "Bật xem trước nội dung liên kết cho mọi người trong phòng này",
-        "inline_url_previews_room_account": "Bật xem trước nội dung liên kết trong phòng này (chỉ với bạn)",
         "insert_trailing_colon_mentions": "Chèn dấu hai chấm phía sau các đề cập người dùng ở đầu một tin nhắn",
         "jump_to_bottom_on_send": "Chuyển đến cuối dòng thời gian khi bạn gửi tin nhắn",
         "key_backup": {
