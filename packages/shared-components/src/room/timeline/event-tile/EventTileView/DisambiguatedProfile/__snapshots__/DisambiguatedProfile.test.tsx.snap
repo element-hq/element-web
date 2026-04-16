@@ -36,6 +36,11 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
     >
       @eve:matrix.org
     </span>
+    <span
+      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 DisambiguatedProfile-module_userStatus"
+    >
+      🏝️
+    </span>
   </div>
 </div>
 `;
