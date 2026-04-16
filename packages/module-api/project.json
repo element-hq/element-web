@@ -14,6 +14,12 @@
                 "cwd": "packages/module-api"
             }
         },
+        "start": {
+            "command": "vite build --watch",
+            "options": { "cwd": "packages/module-api" },
+            "dependsOn": ["^start"],
+            "continuous": true
+        },
         "lint:types": {
             "command": "pnpm exec tsc --noEmit",
             "options": { "cwd": "packages/module-api" }
