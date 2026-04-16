@@ -81,7 +81,7 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async acceptToast(title: string): Promise<void> {
-        return await handleToast(this, title, "primary");
+        return await clickToastButton(this, title, "primary");
     }
 
     /**
@@ -93,7 +93,7 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async acceptToastIfExists(title: string): Promise<void> {
-        return await handleToast(this, title, "primary", 2000, false);
+        return await clickToastButton(this, title, "primary", 2000, false);
     }
 
     /**
@@ -104,7 +104,7 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async rejectToast(title: string): Promise<void> {
-        return await handleToast(this, title, "secondary");
+        return await clickToastButton(this, title, "secondary");
     }
 
     /**
@@ -116,7 +116,7 @@ class Toasts {
      * @param title - Expected title of the toast.
      */
     public async rejectToastIfExists(title: string): Promise<void> {
-        return await handleToast(this, title, "secondary", 2000, false);
+        return await clickToastButton(this, title, "secondary", 2000, false);
     }
 }
 
@@ -140,7 +140,7 @@ class Toasts {
  *                   toast is not visible. Otherwise, just return after
  *                   `timeout` if the toast is not visible.
  */
-async function handleToast(
+async function clickToastButton(
     toasts: Toasts,
     title: string,
     button: "primary" | "secondary",
