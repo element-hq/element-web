@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type ComponentType, type JSX } from "react";
+import React, { type ComponentType, type JSX, type MouseEventHandler } from "react";
 import { Toast } from "@vector-im/compound-web";
-import { type MouseEventHandler } from "react";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
 import styles from "./RoomListToast.module.css";
