@@ -350,7 +350,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         );
 
         // remove the loginToken or auth code from the URL regardless
-        if (!!this.props.urlParams.legacy_sso || !!this.props.urlParams.oidc) {
+        if (
+            !!this.props.urlParams.legacy_sso ||
+            !!this.props.urlParams.oidc_fragment ||
+            !!this.props.urlParams.oidc_query
+        ) {
             this.props.onTokenLoginCompleted(this.props.urlParams, this.getFragmentAfterLogin());
         }
 
