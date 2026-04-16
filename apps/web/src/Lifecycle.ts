@@ -297,7 +297,43 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
             await completeOidcLogin(queryParams);
 
-        const {
+        await configureFromCompletedOAuthLogin({
+            accessToken,
+            refreshToken,
+            homeserverUrl,
+            identityServerUrl,
+            clientId,
+            issuer,
+            idToken,
+        });
+
+        return true;
+    } catch (error) {
+        logger.error("Failed to login via OIDC", error);
+
+        onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
+        return false;
+    }
+}
+
+export async function configureFromCompletedOAuthLogin({
+    accessToken,
+    refreshToken,
+    homeserverUrl,
+    identityServerUrl,
+    clientId,
+    issuer,
+    idToken,
+}: {
+    accessToken: string;
+    refreshToken?: string;
+    homeserverUrl: string;
+    identityServerUrl?: string;
+    clientId: string;
+    issuer: string;
+    idToken: string;
+}): Promise<IMatrixClientCreds> {
+            const {
             user_id: userId,
             device_id: deviceId,
             is_guest: isGuest,
@@ -317,14 +353,8 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
         await onSuccessfulDelegatedAuthLogin(credentials);
         // this needs to happen after success handler which clears storages
         persistOidcAuthenticatedSettings(clientId, issuer, idToken);
-        return true;
-    } catch (error) {
-        logger.error("Failed to login via OIDC", error);
-
-        onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
-        return false;
+        return credentials;
     }
-}
 
 /**
  * Gets information about the owner of a given access token.

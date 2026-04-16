@@ -9,11 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, memo, type ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
+import { type SSOFlow, type MatrixClient, SSOAction } from "matrix-js-sdk/src/matrix";
 import { Button } from "@vector-im/compound-web";
+import { QrCodeIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
-import Login, { type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
+import Login, { type LoginWithQrFlow, type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import AuthPage from "../../views/auth/AuthPage";
@@ -33,6 +35,9 @@ import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig
 import { filterBoolean } from "../../../utils/arrays";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
 import { ModuleApi } from "../../../modules/Api.ts";
+import LoginWithQR from "../../views/auth/LoginWithQR.tsx";
+import { Mode } from "../../views/auth/LoginWithQR-types.ts";
+import createMatrixClient from "../../../utils/createMatrixClient.ts";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -51,7 +56,8 @@ interface IProps {
 
     // Called when the user has logged in. Params:
     // - The object returned by the login API
-    onLoggedIn(data: IMatrixClientCreds): void;
+    // - alreadySignedIn: true if the user was already signed in (e.g. QR login) and only the post login setup is needed
+    onLoggedIn(data: IMatrixClientCreds, alreadySignedIn?: boolean): void;
 
     // login shouldn't know or care how registration, password recovery, etc is done.
     onRegisterClick?(): void;
@@ -79,6 +85,9 @@ interface IState {
     serverIsAlive: boolean;
     serverErrorIsFatal: boolean;
     serverDeadError?: ReactNode;
+
+    loginWithQrInProgress: boolean;
+    loginWithQrClient?: MatrixClient;
 }
 
 type OnPasswordLogin = {
@@ -110,6 +119,8 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             serverIsAlive: true,
             serverErrorIsFatal: false,
             serverDeadError: "",
+
+            loginWithQrInProgress: false,
         };
 
         // map from login step type to a function which will render a control
@@ -123,6 +134,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             "m.login.sso": () => this.renderSsoStep("sso"),
             "oidcNativeFlow": () => this.renderOidcNativeStep(),
+            "loginWithQrFlow": () => this.renderLoginWithQRStep(),
         };
     }
 
@@ -402,7 +414,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
         if (!this.state.flows) return null;
 
         // this is the ideal order we want to show the flows in
-        const order = ["oidcNativeFlow", "m.login.password", "m.login.sso"];
+        const order = ["loginWithQrFlow", "oidcNativeFlow", "m.login.password", "m.login.sso"];
 
         const flows = filterBoolean(order.map((type) => this.state.flows?.find((flow) => flow.type === type)));
         return (
@@ -451,7 +463,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                     );
                 }}
             >
-                {_t("action|continue")}
+                {_t("Sign in manually")}
             </Button>
         );
     };
@@ -471,6 +483,42 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             />
         );
     };
+
+    private startLoginWithQR = (): void => {
+        if (this.state.loginWithQrInProgress) return;
+        // pick our device ID
+        const deviceId = secureRandomString(10);
+        const loginWithQrClient = createMatrixClient({
+            baseUrl: this.loginLogic.getHomeserverUrl(),
+            idBaseUrl: this.loginLogic.getIdentityServerUrl(),
+            deviceId,
+        });
+        this.setState({ loginWithQrInProgress: true, loginWithQrClient });
+    };
+
+    private renderLoginWithQRStep = (): JSX.Element => {
+        return (
+            <>
+                <Button className="mx_Login_fullWidthButton" kind="primary" size="sm" onClick={this.startLoginWithQR}>
+                    <QrCodeIcon />
+                    {_t("Sign in with QR code")}
+                </Button>
+            </>
+        );
+    };
+
+    private onLoginWithQRFinished = (success: boolean, credentials?: IMatrixClientCreds): void => {
+        if (credentials) {
+            this.props.onLoggedIn(credentials, true);
+        } else if (!success) {
+            this.state.loginWithQrClient?.stopClient();
+            this.setState({ loginWithQrInProgress: false, loginWithQrClient: undefined });
+        }
+    };
+
+    private get qrClientId(): string {
+        return (this.state.flows?.find((flow) => flow.type === "loginWithQrFlow") as LoginWithQrFlow).clientId ?? "";
+    }
 
     public render(): React.ReactNode {
         const loader =
@@ -532,20 +580,34 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             <AuthPage>
                 <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
                 <AuthBody>
-                    <h1>
-                        {_t("action|sign_in")}
-                        {loader}
-                    </h1>
-                    {errorTextSection}
-                    {serverDeadSection}
-                    <ServerPicker
-                        serverConfig={this.props.serverConfig}
-                        onServerConfigChange={this.props.onServerConfigChange}
-                        disabled={this.isBusy()}
-                    />
-                    {this.renderLoginComponentForFlows()}
-                    {this.props.children}
-                    {footer}
+                    {this.state.loginWithQrInProgress ? (
+                        <>
+                            <LoginWithQR
+                                onFinished={this.onLoginWithQRFinished}
+                                mode={Mode.Show}
+                                client={this.state.loginWithQrClient!}
+                                clientId={this.qrClientId}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            {" "}
+                            <h1>
+                                {_t("action|sign_in")}
+                                {loader}
+                            </h1>
+                            {errorTextSection}
+                            {serverDeadSection}
+                            <ServerPicker
+                                serverConfig={this.props.serverConfig}
+                                onServerConfigChange={this.props.onServerConfigChange}
+                                disabled={this.isBusy()}
+                            />
+                            {this.renderLoginComponentForFlows()}
+                            {this.props.children}
+                            {footer}
+                        </>
+                    )}
                 </AuthBody>
             </AuthPage>
         );

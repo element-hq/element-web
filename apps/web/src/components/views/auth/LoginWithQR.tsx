@@ -9,24 +9,27 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import {
     ClientRendezvousFailureReason,
+    linkNewDeviceByGeneratingQR,
     MSC4108FailureReason,
-    MSC4108RendezvousSession,
-    MSC4108SecureChannel,
     MSC4108SignInWithQR,
     RendezvousError,
     type RendezvousFailureReason,
     RendezvousIntent,
+    signInByGeneratingQR,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
+import { configureFromCompletedOAuthLogin, restoreSessionFromStorage } from "../../../Lifecycle";
+import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     client: MatrixClient;
+    clientId: string;
     mode: Mode;
-    onFinished(...args: any): void;
+    onFinished(success: boolean, credentials?: IMatrixClientCreds): void;
 }
 
 interface IState {
@@ -37,6 +40,8 @@ interface IState {
     userCode?: string;
     checkCode?: string;
     failureReason?: FailureReason;
+    homeserverName?: string;
+    newClient?: MatrixClient;
 }
 
 export enum LoginWithQRFailureReason {
@@ -65,7 +70,9 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     }
 
     private get ourIntent(): RendezvousIntent {
-        return RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
+        return this.props.client.getUserId()
+            ? RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
+            : RendezvousIntent.LOGIN_ON_NEW_DEVICE;
     }
 
     public componentDidMount(): void {
@@ -99,23 +106,18 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     }
 
-    private onFinished(success: boolean): void {
+    private onFinished(success: boolean, credentials?: IMatrixClientCreds): void {
         this.finished = true;
-        this.props.onFinished(success);
+        this.props.onFinished(success, credentials);
     }
 
     private generateAndShowCode = async (): Promise<void> => {
         let rendezvous: MSC4108SignInWithQR;
         try {
-            const transport = new MSC4108RendezvousSession({
-                onFailure: this.onFailure,
-                client: this.props.client,
-            });
-            await transport.send("");
-            const channel = new MSC4108SecureChannel(transport, undefined, this.onFailure);
-            rendezvous = new MSC4108SignInWithQR(channel, false, this.props.client, this.onFailure);
-
-            await rendezvous.generateCode();
+            rendezvous =
+                this.ourIntent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
+                    ? await signInByGeneratingQR(this.props.client, this.onFailure)
+                    : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure);
             this.setState({
                 phase: Phase.ShowingQR,
                 rendezvous,
@@ -135,6 +137,12 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 this.setState({
                     phase: Phase.OutOfBandConfirmation,
                     verificationUri,
+                });
+            } else {
+                const { serverName } = await rendezvous.negotiateProtocols();
+                this.setState({
+                    phase: Phase.OutOfBandConfirmation,
+                    homeserverName: serverName,
                 });
             }
 
@@ -175,8 +183,75 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 // done
                 this.onFinished(true);
             } else {
-                this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-                throw new Error("New device flows around OIDC are not yet implemented");
+                if (!this.state.homeserverName) {
+                    this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+                    throw new Error("Homeserver name not found in state");
+                }
+
+                // in the 2025 version we would check if the homeserver is on a different base URL, but for the 2024 version
+                // we can't do this as the temporary client doesn't know the server name.
+
+                const metadata = await this.props.client.getAuthMetadata();
+                const deviceId = this.props.client.getDeviceId()!;
+                const { userCode } = await this.state.rendezvous.deviceAuthorizationGrant({
+                    metadata,
+                    clientId: this.props.clientId,
+                    deviceId,
+                });
+                this.setState({ phase: Phase.WaitingForDevice, userCode });
+
+                const datr = await this.state.rendezvous.completeLoginOnNewDevice({
+                    clientId: this.props.clientId,
+                });
+
+                if (datr) {
+                    // the 2024 version of the spec only gives the server name, but the 2025 version will give the base URL
+                    // so, we do a discovery for now.
+                    const homeserverUrl = (await AutoDiscovery.findClientConfig(this.state.homeserverName))?.["m.homeserver"]?.base_url;
+
+                    if (!homeserverUrl) {
+                        this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+                        logger.error("Failed to discover homeserver URL");
+                        throw new Error("Failed to discover homeserver URL");
+                    }
+
+                    // TODO: this is not the right way to do this
+
+                    // store and use the new credentials
+                    const credentials = await configureFromCompletedOAuthLogin({
+                        accessToken: datr.access_token,
+                        refreshToken: datr.refresh_token,
+                        homeserverUrl,
+                        clientId: this.props.clientId,
+                        idToken: datr.id_token ?? "", // I'm not sure the idToken is actually required
+                        issuer: metadata!.issuer,
+                        identityServerUrl: undefined, // PROTOTYPE: we should have stored this from before
+                    });
+
+                    const { secrets } = await this.state.rendezvous.shareSecrets();
+
+                    await restoreSessionFromStorage();
+
+                    if (secrets) {
+                        const crypto = MatrixClientPeg.safeGet().getCrypto();
+                        if (crypto?.importSecretsBundle) {
+                            await crypto.importSecretsBundle(secrets);
+                            // it should be sufficient to just upload the device keys with the signature
+                            // but this seems to do the job for now
+                            await crypto.crossSignDevice(deviceId);
+
+                            // PROTOTYPE: this is a fudge to bypass the complete security step
+                            window.location.reload();
+                        } else {
+                            logger.warn("Crypto not initialised");
+                            logger.warn("Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login");
+                        }                    } else {
+                        logger.warn("No secrets received from QR login");
+                    }
+
+                    // done
+                    this.onFinished(true, credentials);
+                }
             }
         } catch (e: RendezvousError | unknown) {
             logger.error("Error whilst approving sign in", e);
