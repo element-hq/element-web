@@ -159,6 +159,7 @@ describe("TimelineView", () => {
                 isAtLiveEdge: true,
                 totalCount: 3,
                 lastAnchoredKey: null,
+                allowReplayPendingAnchor: false,
                 initialBottomSnapDone: false,
             }),
         ).toMatchObject({
@@ -176,6 +177,7 @@ describe("TimelineView", () => {
                 isAtLiveEdge: false,
                 totalCount: 3,
                 lastAnchoredKey: null,
+                allowReplayPendingAnchor: false,
                 initialBottomSnapDone: false,
             }),
         ).toBe(false);
@@ -189,6 +191,7 @@ describe("TimelineView", () => {
                 isAtLiveEdge: false,
                 totalCount: 3,
                 lastAnchoredKey: "beta",
+                allowReplayPendingAnchor: false,
                 initialBottomSnapDone: true,
             }),
         ).toBe(false);
@@ -224,6 +227,7 @@ describe("TimelineView", () => {
                 isAtLiveEdge: false,
                 totalCount: 3,
                 lastAnchoredKey: null,
+                allowReplayPendingAnchor: false,
                 initialBottomSnapDone: true,
             }),
         ).toBe(false);
