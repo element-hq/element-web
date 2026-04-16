@@ -198,7 +198,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_w1dit_8 _text_w1dit_13"
               id="_r_r_"
             >
               <div
@@ -279,7 +279,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_w1dit_8 _text_w1dit_13"
               id="_r_13_"
             >
               <div
@@ -426,7 +426,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_w1dit_8 _text_w1dit_13"
               id="_r_10l_"
             >
               <div
@@ -507,7 +507,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_w1dit_8 _text_w1dit_13"
               id="_r_10t_"
             >
               <div
