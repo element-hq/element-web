@@ -1072,10 +1072,7 @@ describe("ElementCall", () => {
 
             async function simulateWidgetHangup() {
                 await new Promise<void>((r) => setTimeout(r, 400));
-                widgetApi.emit(
-                    `action:${ElementWidgetActions.HangupCall}`,
-                    new CustomEvent("widgetapirequest", {}),
-                );
+                widgetApi.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
             }
 
             bob.membership = KnownMembership.Leave;
