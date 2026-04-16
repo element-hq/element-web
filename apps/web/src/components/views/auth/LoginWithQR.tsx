@@ -258,20 +258,20 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
 
                     if (secrets) {
                         const crypto = MatrixClientPeg.safeGet().getCrypto();
-                        if (crypto) {
-                            await crypto.importSecretsBundle?.(secrets);
+                        if (crypto?.importSecretsBundle) {
+                            await crypto.importSecretsBundle(secrets);
                             // it should be sufficient to just upload the device keys with the signature
                             // but this seems to do the job for now
                             await crypto.crossSignDevice(deviceId);
+
+                            // PROTOTYPE: this is a fudge to bypass the complete security step
+                            window.location.reload();
                         } else {
-                            logger.warn("Crypto not initialised");
+                            logger.warn("Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login");
                         }
                     } else {
                         logger.warn("No secrets received from QR login");
                     }
-
-                    // PROTOTYPE: fudge to try and allow the self verification to complete before we change screen
-                    await new Promise((resolve) => setTimeout(resolve, 1000));
 
                     // done
                     this.onFinished(true, credentials);
