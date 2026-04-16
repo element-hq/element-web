@@ -8,6 +8,7 @@
 import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
 import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
+import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { Flex } from "../../core/utils/Flex";
@@ -59,6 +60,14 @@ export interface RoomListHeaderViewSnapshot {
      * Whether message previews are enabled in the room list.
      */
     isMessagePreviewEnabled: boolean;
+    /**
+     * Whether the user can create sections in the room list.
+     */
+    canCreateSection: boolean;
+    /**
+     * Whether to use the compose icon instead of the create icon.
+     */
+    useComposeIcon: boolean;
 }
 
 export interface RoomListHeaderViewActions {
@@ -98,6 +107,10 @@ export interface RoomListHeaderViewActions {
      * Toggle message preview display in the room list.
      */
     toggleMessagePreview: () => void;
+    /**
+     * Create a new section in the room list.
+     */
+    createSection: () => void;
 }
 
 /**
@@ -123,7 +136,7 @@ interface RoomListHeaderViewProps {
  */
 export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { title, displaySpaceMenu, displayComposeMenu } = useViewModel(vm);
+    const { title, displaySpaceMenu, displayComposeMenu, useComposeIcon } = useViewModel(vm);
 
     return (
         <Flex
@@ -153,7 +166,11 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                             onClick={(e) => vm.createChatRoom(e.nativeEvent)}
                             tooltip={_t("action|new_conversation")}
                         >
-                            <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            {useComposeIcon ? (
+                                <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            ) : (
+                                <PlusIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                            )}
                         </IconButton>
                     )}
                 </Flex>

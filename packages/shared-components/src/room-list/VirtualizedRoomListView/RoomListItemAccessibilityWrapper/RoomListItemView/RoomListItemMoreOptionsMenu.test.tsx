@@ -10,7 +10,7 @@ import { render, screen } from "@test-utils";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 
-import { RoomListItemMoreOptionsMenu } from "./RoomListItemMoreOptionsMenu";
+import { RoomListItemMoreOptionsMenu, MoreOptionContent } from "./RoomListItemMoreOptionsMenu";
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import type { RoomListItemViewSnapshot } from "./RoomListItemView";
 import { defaultSnapshot } from "./default-snapshot";
@@ -26,6 +26,7 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         onCopyRoomLink: vi.fn(),
         onLeaveRoom: vi.fn(),
         onSetRoomNotifState: vi.fn(),
+        onCreateSection: vi.fn(),
     };
 
     const renderMenu = (overrides: Partial<RoomListItemViewSnapshot> = {}): ReturnType<typeof render> => {
@@ -223,5 +224,20 @@ describe("<RoomListItemMoreOptionsMenu />", () => {
         await user.click(leaveRoomOption);
 
         expect(mockCallbacks.onLeaveRoom).toHaveBeenCalled();
+    });
+
+    it("should call onCreateSection when new section is clicked", async () => {
+        const user = userEvent.setup();
+        // We need to render the MoreOptionContent directly here as radix is kind of messing in the test env
+        const TestComponent = (): JSX.Element => {
+            const vm = useMockedViewModel(defaultSnapshot, mockCallbacks);
+            return <MoreOptionContent vm={vm} />;
+        };
+        render(<TestComponent />);
+
+        const newSection = screen.getByRole("menuitem", { name: "New section" });
+        await user.click(newSection);
+
+        expect(mockCallbacks.onCreateSection).toHaveBeenCalled();
     });
 });

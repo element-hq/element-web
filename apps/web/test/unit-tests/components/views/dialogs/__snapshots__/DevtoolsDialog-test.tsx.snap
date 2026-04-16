@@ -29,11 +29,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     >
       Toolbox
     </div>
-    <div
+    <span
       class="mx_CopyableText mx_DevTools_label_right"
     >
       Room ID: !id
-      <div
+      <button
         aria-describedby="_r_2_"
         aria-label="Copy"
         class="mx_AccessibleButton mx_CopyableText_copyButton"
@@ -54,8 +54,8 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
           />
         </svg>
-      </div>
-    </div>
+      </button>
+    </span>
     <div
       class="mx_DevTools_label_bottom"
     />
