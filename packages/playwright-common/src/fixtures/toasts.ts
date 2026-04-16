@@ -128,6 +128,7 @@ class Toasts {
  * If `required` is false, you should supply a relatively short `timeout`
  * (e.g. 2000, meaning 2 seconds) to prevent your test taking too long.
  *
+ * @param toasts - A Toasts instance.
  * @param title - Expected title of the toast.
  * @param button - Which button to click on the toast. Allowed values are
  *                 "primary", which will accept the toast, or "secondary",
