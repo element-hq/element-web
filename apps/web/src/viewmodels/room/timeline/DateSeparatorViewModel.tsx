@@ -175,7 +175,7 @@ export class DateSeparatorViewModel
             }
         } catch (err) {
             logger.error(
-                `Error occured while trying to find event in ${roomIdForJumpRequest} ` +
+                `Error occurred while trying to find event in ${roomIdForJumpRequest} ` +
                     `at timestamp=${unixTimestamp}:`,
                 err,
             );
@@ -186,7 +186,7 @@ export class DateSeparatorViewModel
             // room.
             const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
             if (currentRoomId === roomIdForJumpRequest) {
-                let friendlyErrorMessage = "An error occured while trying to find and jump to the given date.";
+                let friendlyErrorMessage = "An error occurred while trying to find and jump to the given date.";
                 let submitDebugLogsContent: React.ReactElement = <></>;
 
                 if (err instanceof ConnectionError) {
@@ -251,7 +251,7 @@ export class DateSeparatorViewModel
     public onBugReport = (err?: Error): void => {
         Modal.createDialog(BugReportDialog, {
             error: err,
-            initialText: "Error occured while using jump to date #jump-to-date",
+            initialText: "Error occurred while using jump to date #jump-to-date",
         });
     };
 
