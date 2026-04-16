@@ -9,5 +9,5 @@
     "namedInputs": {
         "src": ["{projectRoot}/src/**/*"]
     },
-    "analytics": true
+    "analytics": false
 }
