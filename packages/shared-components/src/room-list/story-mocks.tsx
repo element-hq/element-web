@@ -105,6 +105,7 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
+    canMoveToSection: true,
 });
 
 export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
@@ -121,6 +122,7 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
         onCopyRoomLink: fn(),
         onLeaveRoom: fn(),
         onSetRoomNotifState: fn(),
+        onCreateSection: fn(),
     };
 }
 
