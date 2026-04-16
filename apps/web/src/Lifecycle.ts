@@ -1043,7 +1043,7 @@ export function isLoggingOut(): boolean {
  * By the time this method is called, we have successfully logged in if necessary, and the client has been set up with
  * the access token.
  *
- * Emits {@link Acction.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
+ * Emits {@link Action.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
  * been started.
  *
  * @param client the matrix client to start

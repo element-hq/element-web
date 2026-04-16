@@ -23,6 +23,7 @@ import { type URLParams } from "../../vector/url_utils.ts";
  * @param clientId this client's id as registered with configured issuer
  * @param homeserverUrl target homeserver
  * @param identityServerUrl OPTIONAL target identity server
+ * @param isRegistration if true will set the prompt to "create"
  * @returns Promise that resolves after we have navigated to auth endpoint
  */
 export const startOidcLogin = async (

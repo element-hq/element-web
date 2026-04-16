@@ -412,7 +412,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * {@link onWillStartClient} and {@link onClientStarted} will already have been called (but not necessarily
      * completed).
      *
-     * This method either calls {@link onLiggedIn} directly, or switches to {@link Views.E2E_SETUP} or
+     * This method either calls {@link onLoggedIn} directly, or switches to {@link Views.E2E_SETUP} or
      * {@link Views.COMPLETE_SECURITY}, which will later call {@link onCompleteSecurityE2eSetupFinished}.
      */
     private async postLoginSetup(): Promise<void> {
