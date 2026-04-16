@@ -1055,6 +1055,9 @@ importers:
       matrix-web-i18n:
         specifier: 'catalog:'
         version: 3.6.0
+      react-blurhash:
+        specifier: ^0.3.0
+        version: 0.3.0(patch_hash=58bc7f075478017ce27bcc252e8509876390db106246bd5b0a7446642cc4b505)(blurhash@2.0.5)(react@19.2.5)
       react-merge-refs:
         specifier: ^3.0.2
         version: 3.0.2(react@19.2.5)
