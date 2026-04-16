@@ -100,7 +100,7 @@ exports[`<RecoveryPanel /> should be in loading state when checking the recovery
     </div>
     <svg
       aria-label="Loading…"
-      class="_icon_11k6c_18"
+      class="_icon_1855a_18"
       fill="currentColor"
       height="1em"
       style="width: 20px; height: 20px;"

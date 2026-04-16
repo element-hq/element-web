@@ -141,7 +141,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -222,7 +222,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -369,7 +369,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -450,7 +450,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"

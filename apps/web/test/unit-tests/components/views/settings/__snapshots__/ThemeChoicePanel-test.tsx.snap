@@ -212,7 +212,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             >
               <input
                 aria-describedby="radix-_r_2e_"
-                class="_control_sqdq4_10"
+                class="_control_d83jn_10"
                 id="radix-_r_2d_"
                 name="input"
                 title=""
@@ -491,7 +491,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             >
               <input
                 aria-describedby="radix-_r_16_"
-                class="_control_sqdq4_10"
+                class="_control_d83jn_10"
                 id="radix-_r_15_"
                 name="input"
                 title=""

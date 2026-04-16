@@ -229,7 +229,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
+                            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -323,7 +323,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
+                            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -420,7 +420,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
+                            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -650,7 +650,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                 >
                   <svg
                     aria-label="Loading…"
-                    class="_icon_11k6c_18"
+                    class="_icon_1855a_18"
                     data-testid="spinner"
                     fill="currentColor"
                     height="1em"

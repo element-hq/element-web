@@ -59,7 +59,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should fall back to userId if ro
       <span
         aria-hidden="true"
         aria-live="off"
-        class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
+        class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -99,7 +99,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         aria-hidden="true"
         aria-label="Profile picture"
         aria-live="off"
-        class="_avatar_7h2br_8 mx_BaseAvatar"
+        class="_avatar_va14e_8 mx_BaseAvatar"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -107,7 +107,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
       >
         <img
           alt=""
-          class="_image_7h2br_43"
+          class="_image_va14e_43"
           data-type="round"
           height="24px"
           loading="lazy"

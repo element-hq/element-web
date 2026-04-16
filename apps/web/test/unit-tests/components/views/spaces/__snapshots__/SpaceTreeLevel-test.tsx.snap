@@ -88,7 +88,7 @@ exports[`SpaceItem should render a space with subspaces 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_7h2br_8 mx_BaseAvatar"
+            class="_avatar_va14e_8 mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
             data-type="round"
@@ -96,7 +96,7 @@ exports[`SpaceItem should render a space with subspaces 1`] = `
           >
             <img
               alt=""
-              class="_image_7h2br_43"
+              class="_image_va14e_43"
               data-type="round"
               height="32px"
               loading="lazy"
@@ -177,7 +177,7 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_7h2br_8 mx_BaseAvatar"
+            class="_avatar_va14e_8 mx_BaseAvatar"
             data-color="3"
             data-testid="avatar-img"
             data-type="round"
@@ -185,7 +185,7 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
           >
             <img
               alt=""
-              class="_image_7h2br_43"
+              class="_image_va14e_43"
               data-type="round"
               height="32px"
               loading="lazy"
@@ -245,7 +245,7 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
             >
               <span
                 aria-label="Avatar"
-                class="_avatar_7h2br_8 mx_BaseAvatar"
+                class="_avatar_va14e_8 mx_BaseAvatar"
                 data-color="4"
                 data-testid="avatar-img"
                 data-type="round"
@@ -253,7 +253,7 @@ exports[`SpaceItem should render a space with subspaces 2`] = `
               >
                 <img
                   alt=""
-                  class="_image_7h2br_43"
+                  class="_image_va14e_43"
                   data-type="round"
                   height="24px"
                   loading="lazy"
