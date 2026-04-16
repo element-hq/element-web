@@ -44,7 +44,9 @@ class Toasts {
      *
      * @param title - Expected title of the toast.
      * @param timeout - Time in ms before we give up and decide the toast does
-     *                  not exist. Defaults to `timeout` in `TestConfig.expect`.
+     *                  not exist. If `required` is true, defaults to `timeout`
+     *                  in `TestConfig.expect`. Otherwise, defaults to 2000 (2
+     *                  seconds).
      * @param required - If true, fail the test (throw an exception) if the
      *                   toast is not visible. Otherwise, just return null if
      *                   the toast is not visible.
@@ -58,6 +60,10 @@ class Toasts {
             await expect(toast).toBeVisible({ timeout });
             return toast;
         } else {
+            // If we don't set a timeout, waitFor will wait forever. Since
+            // required is false, we definitely don't want to wait forever.
+            timeout = timeout ?? 2000;
+
             try {
                 await toast.waitFor({ state: "visible", timeout });
                 return toast;
@@ -126,7 +132,9 @@ class Toasts {
      *                 "primary", which will accept the toast, or "secondary",
      *                 which will reject it.
      * @param timeout - Time in ms before we give up and decide the toast does
-     *                  not exist. Defaults to `timeout` in `TestConfig.expect`.
+     *                  not exist. If `required` is true, defaults to `timeout`
+     *                  in `TestConfig.expect`. Otherwise, defaults to 2000 (2
+     *                  seconds).
      * @param required - If true, fail the test (throw an exception) if the
      *                   toast is not visible. Otherwise, just return after
      *                   `timeout` if the toast is not visible.
