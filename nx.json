@@ -8,5 +8,6 @@
     },
     "namedInputs": {
         "src": ["{projectRoot}/src/**/*"]
-    }
+    },
+    "analytics": true
 }
