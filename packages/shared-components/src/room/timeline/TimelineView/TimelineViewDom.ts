@@ -33,6 +33,7 @@ export const MAX_LOCAL_ANCHOR_CORRECTION_ATTEMPTS = 6;
  */
 export const REQUIRED_STABLE_ANCHOR_ALIGNMENT_CHECKS = 2;
 const SNAP_TO_TARGET_OFFSET_EPSILON_PX = 1;
+const SNAP_TO_BOTTOM_TARGET_OFFSET_EPSILON_PX = 0;
 
 /**
  * Acceptable pixel distance from the true bottom for considering a scroller
@@ -77,7 +78,7 @@ export function isScrollTargetAligned({
     }
 
     if (position === "bottom") {
-        return Math.abs(scrollerRect.bottom - targetRect.bottom) <= SNAP_TO_TARGET_OFFSET_EPSILON_PX;
+        return Math.abs(scrollerRect.bottom - targetRect.bottom) <= SNAP_TO_BOTTOM_TARGET_OFFSET_EPSILON_PX;
     }
 
     const scrollerCenter = (scrollerRect.top + scrollerRect.bottom) / 2;

@@ -130,6 +130,27 @@ describe("TimelineView", () => {
         expect(screen.getByText("beta")).toBeTruthy();
     });
 
+    it("makes timeline item wrappers focusable for roving focus", async () => {
+        renderTimeline(new TestTimelineViewModel(makeSnapshot()));
+
+        const alphaWrapper = await waitFor(() => {
+            const element = screen.getByText("alpha").closest<HTMLElement>("[data-timeline-item-key='alpha']");
+            expect(element).toBeTruthy();
+            return element!;
+        });
+        const betaWrapper = screen.getByText("beta").closest<HTMLElement>("[data-timeline-item-key='beta']");
+
+        expect(alphaWrapper.tabIndex).toBe(0);
+        expect(betaWrapper?.tabIndex).toBe(-1);
+
+        await act(async () => {
+            betaWrapper?.focus();
+        });
+
+        expect(alphaWrapper.tabIndex).toBe(-1);
+        expect(betaWrapper?.tabIndex).toBe(0);
+    });
+
     it("requests an initial scroll to the bottom when mounted at the live end", () => {
         expect(
             getScrollLocationOnChange({
@@ -748,6 +769,44 @@ describe("TimelineView", () => {
         });
     });
 
+    it("disconnects the startup live-edge settle observer once the quiet period completes", async () => {
+        vi.useFakeTimers();
+
+        const originalResizeObserver = globalThis.ResizeObserver;
+        const disconnect = vi.fn();
+
+        globalThis.ResizeObserver = class MockResizeObserver {
+            public constructor(_callback: ResizeObserverCallback) {}
+            public observe = vi.fn();
+            public unobserve = vi.fn();
+            public disconnect = disconnect;
+        } as unknown as typeof ResizeObserver;
+
+        try {
+            await withMeasuredScrollerHeight(async () => {
+                const vm = new TestTimelineViewModel(
+                    makeSnapshot({
+                        items: makeItems(40, "event"),
+                        canPaginateBackward: true,
+                        canPaginateForward: false,
+                        isAtLiveEdge: true,
+                    }),
+                );
+
+                renderTimeline(vm);
+
+                await act(async () => {
+                    vi.advanceTimersByTime(250);
+                });
+
+                expect(disconnect).toHaveBeenCalled();
+            });
+        } finally {
+            globalThis.ResizeObserver = originalResizeObserver;
+            vi.useRealTimers();
+        }
+    });
+
     it("acknowledges a scroll target when the target item is present", async () => {
         await withMeasuredScrollerHeight(async () => {
             const vm = new TestTimelineViewModel(
@@ -1282,6 +1341,84 @@ describe("TimelineView", () => {
         });
     });
 
+    it("keeps followOutput disabled after upward scroll until live-edge state actually changes", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    canPaginateBackward: false,
+                    canPaginateForward: false,
+                    isAtLiveEdge: true,
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+
+            const scrollerElement = await waitFor(() => {
+                const element = document.querySelector<HTMLElement>("[data-virtuoso-scroller='true']");
+                expect(element).toBeTruthy();
+                return element!;
+            });
+
+            let currentScrollTop = 100;
+            const scrollToSpy = vi
+                .spyOn(scrollerElement, "scrollTo")
+                .mockImplementation((leftOrOptions?: number | ScrollToOptions, top?: number): void => {
+                    if (typeof leftOrOptions === "number") {
+                        currentScrollTop = top ?? currentScrollTop;
+                        return;
+                    }
+
+                    currentScrollTop = leftOrOptions?.top ?? currentScrollTop;
+                });
+            const scrollHeightSpy = vi.spyOn(scrollerElement, "scrollHeight", "get").mockReturnValue(300);
+            const clientHeightSpy = vi.spyOn(scrollerElement, "clientHeight", "get").mockReturnValue(200);
+            const scrollTopSpy = vi
+                .spyOn(scrollerElement, "scrollTop", "get")
+                .mockImplementation(() => currentScrollTop);
+
+            currentScrollTop = 100;
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            currentScrollTop = 20;
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            await act(async () => {
+                vm.updateSnapshot({
+                    items: [
+                        { key: "alpha", kind: "event" },
+                        { key: "beta", kind: "event" },
+                        { key: "gamma", kind: "event" },
+                        { key: "delta", kind: "event" },
+                    ],
+                    isAtLiveEdge: true,
+                    canPaginateForward: false,
+                });
+            });
+
+            scrollToSpy.mockClear();
+
+            currentScrollTop = 10;
+            await act(async () => {
+                scrollerElement.dispatchEvent(new Event("scroll"));
+            });
+
+            expect(scrollToSpy).not.toHaveBeenCalledWith({
+                top: 100,
+            });
+
+            scrollHeightSpy.mockRestore();
+            clientHeightSpy.mockRestore();
+            scrollTopSpy.mockRestore();
+            scrollToSpy.mockRestore();
+        });
+    });
+
     it("does not re-enable followOutput from the bottom of a paginatable window", async () => {
         await withMeasuredScrollerHeight(async () => {
             const vm = new TestTimelineViewModel(
@@ -1332,7 +1469,7 @@ describe("TimelineView", () => {
                 scrollerElement.dispatchEvent(new Event("scroll"));
             });
 
-            expect(scrollToSpy).toHaveBeenCalledWith({
+            expect(scrollToSpy).not.toHaveBeenCalledWith({
                 top: 100,
             });
             expect(vm.onRequestMoreItems).not.toHaveBeenCalledWith("forward");
