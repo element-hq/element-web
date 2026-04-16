@@ -434,7 +434,7 @@ export class PosthogAnalytics {
     }
 
     private trackNewUserEvent(): void {
-        // This is the only event that could have occured before analytics opt-in
+        // This is the only event that could have occurred before analytics opt-in
         // that we want to accumulate before the user has given consent
         // All other scenarios should not track a user before they have given
         // explicit consent that they are ok with their analytics data being collected
