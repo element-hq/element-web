@@ -1013,7 +1013,7 @@ export class ElementCall extends Call {
         this.close(); // User is done with the call; tell the UI to close it
     };
 
-    public async clean(): Promise<void> {
+    public clean(): Promise<void> {
         return Promise.resolve();
     }
 }
