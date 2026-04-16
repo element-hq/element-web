@@ -159,7 +159,7 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
     }
     // ensure removal of escape backslashes in non-Markdown messages
     if (md.indexOf("\\") > -1) {
-        return parser.toPlaintext();
+        return parser.toHTML();
     }
 }
 
