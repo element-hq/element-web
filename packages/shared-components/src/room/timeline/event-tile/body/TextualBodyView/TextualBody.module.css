@@ -38,6 +38,7 @@
     display: inline-block;
     margin-inline-start: 9px; /* Preserve legacy EventTile spacing for inline annotations like (edited) */
     font-size: 12px; /* Match the legacy EventTile edited-marker size */
+    letter-spacing: inherit;
     color: var(--cpd-color-text-secondary);
 }
 
@@ -50,7 +51,6 @@
     font-family: inherit;
     font-weight: inherit;
     line-height: inherit;
-    letter-spacing: inherit;
 }
 
 .bodyLink,
