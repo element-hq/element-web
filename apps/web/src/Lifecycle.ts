@@ -277,9 +277,10 @@ export async function attemptDelegatedAuthLogin(
     defaultDeviceDisplayName?: string,
     fragmentAfterLogin?: string,
 ): Promise<boolean> {
-    if (urlParams.oidc) {
-        console.log("We have OIDC params - attempting OIDC login");
-        return attemptOidcNativeLogin(urlParams["oidc"]);
+    if (urlParams.oidc_fragment) {
+        return attemptOidcNativeLogin(urlParams.oidc_fragment, "fragment");
+    } else if (urlParams.oidc_query) {
+        return attemptOidcNativeLogin(urlParams.oidc_query, "query");
     }
 
     return attemptTokenLogin(urlParams["legacy_sso"], defaultDeviceDisplayName, fragmentAfterLogin);
@@ -288,12 +289,18 @@ export async function attemptDelegatedAuthLogin(
 /**
  * Attempt to login by completing OIDC authorization code flow
  * @param urlParams subset of app-load url parameters relating to oidc auth
+ * @param responseMode - the response_mode used in the auth request
  * @returns Promise that resolves to true when login succeeded, else false
  */
-async function attemptOidcNativeLogin(urlParams: NonNullable<URLParams["oidc"]>): Promise<boolean> {
+async function attemptOidcNativeLogin(
+    urlParams: NonNullable<URLParams["oidc_fragment"]>,
+    responseMode: "fragment" | "query",
+): Promise<boolean> {
+    console.log("We have OIDC params - attempting OIDC login");
+
     try {
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
-            await completeOidcLogin(urlParams);
+            await completeOidcLogin(urlParams, responseMode);
 
         const {
             user_id: userId,
@@ -1036,7 +1043,7 @@ export function isLoggingOut(): boolean {
  * By the time this method is called, we have successfully logged in if necessary, and the client has been set up with
  * the access token.
  *
- * Emits {@link Acction.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
+ * Emits {@link Action.WillStartClient} before starting the client, and {@link Action.ClientStarted} when the client has
  * been started.
  *
  * @param client the matrix client to start
