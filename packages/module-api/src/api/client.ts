@@ -118,4 +118,11 @@ export interface ClientApi {
      * early in the app lifecycle.
      */
     waitForClient(): Promise<void>;
+    /**
+     * Query the homeserver's advertised capabilities.
+     * Wraps GET /_matrix/client/v3/capabilities.
+     *
+     * @returns The `capabilities` object from the server response.
+     */
+    getCapabilities(): Promise<Record<string, unknown>>;
 }
