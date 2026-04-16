@@ -21,7 +21,7 @@ const MAX_FORWARD_PAGINATION_SHIFTED_RANGE_SYNCHRONOUS_LAYOUT_STEPS = 4;
 function logTimelineForwardPaginationShiftedRangeRestore(
     ...parts: Array<string | number | boolean | null | undefined>
 ): void {
-    console.log("[TimelineForwardPaginationShiftedRangeRestore]", ...parts);
+    void parts;
 }
 
 interface UseTimelineForwardPaginationShiftedRangeRestoreParams {
@@ -165,13 +165,9 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                 const nextStableFrameCount = Math.abs(scrollAdjustment) <= 1 ? stableFrameCount + 1 : 0;
                 if (scrollAdjustment !== 0) {
                     const nextScrollTop = targetScrollerElement.scrollTop + scrollAdjustment;
-                    if (phase === "layout" && shouldUseBottomOffset) {
-                        targetScrollerElement.scrollTop = nextScrollTop;
-                    } else {
-                        targetScrollerElement.scrollTo({
-                            top: nextScrollTop,
-                        });
-                    }
+                    targetScrollerElement.scrollTo({
+                        top: nextScrollTop,
+                    });
                 }
 
                 if (

@@ -100,7 +100,7 @@ function summarizeTimelineItems<TItem extends TimelineItem>(items: TItem[]): str
 }
 
 function logTimelineViewPresenter(...parts: Array<string | number | boolean | null | undefined>): void {
-    console.log("[TimelinePresenter]", ...parts);
+    void parts;
 }
 
 /**

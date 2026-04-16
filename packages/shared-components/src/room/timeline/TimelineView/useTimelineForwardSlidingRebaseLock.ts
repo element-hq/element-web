@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef } from "react";
 import type { VisibleRange } from "./types";
 
 function logTimelineForwardSlidingRebaseLock(...parts: Array<string | number | boolean | null | undefined>): void {
-    console.log("[TimelineForwardSlidingRebaseLock]", ...parts);
+    void parts;
 }
 
 interface UseTimelineForwardSlidingRebaseLockParams {

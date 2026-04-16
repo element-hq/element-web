@@ -11,7 +11,6 @@ import {
     canSnapToBottom,
     findTimelineItemElement,
     getBottomOffset,
-    getFirstVisibleTimelineItemElement,
     getLastVisibleTimelineItemElement,
     getTopOffset,
 } from "./TimelineViewDom";
@@ -20,7 +19,7 @@ import type { PaginationState, TimelineItem, VisibleRange } from "./types";
 type InitialFillState = "filling" | "settling" | "done";
 
 function logTimelineForwardPagination(...parts: Array<string | number | boolean | null | undefined>): void {
-    console.log("[TimelineForwardPagination]", ...parts);
+    void parts;
 }
 
 function getShiftedRangeAnchorCandidate<TItem extends TimelineItem>({

@@ -21,7 +21,7 @@ import type { TimelineItem, TimelineViewModel, TimelineViewSnapshot } from "./ty
 type InitialFillState = "filling" | "settling" | "done";
 
 function logTimelineAnchorResolution(...parts: Array<string | number | boolean | null | undefined>): void {
-    console.log("[TimelineAnchorResolution]", ...parts);
+    void parts;
 }
 
 /**
@@ -99,7 +99,7 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
             "initialFillState",
             initialFillState,
         );
-    }, [resetAnchorResolutionRetryCount, vm, snapshot.scrollTarget]);
+    }, [initialFillState, resetAnchorResolutionRetryCount, vm, snapshot.scrollTarget]);
 
     useEffect(() => {
         if (!snapshot.scrollTarget || acknowledgedScrollTargetRef.current === snapshot.scrollTarget.targetKey) {

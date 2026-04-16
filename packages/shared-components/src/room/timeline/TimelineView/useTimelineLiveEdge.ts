@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } fr
 type InitialFillState = "filling" | "settling" | "done";
 
 function logTimelineLiveEdge(...parts: Array<string | number | boolean | null | undefined>): void {
-    console.log("[TimelineLiveEdge]", ...parts);
+    void parts;
 }
 
 const MAX_LIVE_EDGE_APPEND_CORRECTION_FRAMES = 8;
