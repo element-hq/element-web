@@ -16,6 +16,7 @@ import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 import { type MediaPreviewConfig } from "./media_preview.ts";
 import { type INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "./invite-rules.ts";
+import { type LegacyRecentEmojiData } from "../emojipicker/recent.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
@@ -71,7 +72,7 @@ declare module "matrix-js-sdk/src/types" {
         [key: `io.element.matrix_client_information.${string}`]: DeviceClientInformation;
         // Element settings account data events
         "im.vector.setting.breadcrumbs": { recent_rooms: string[] };
-        "io.element.recent_emoji": { recent_emoji: string[] };
+        "io.element.recent_emoji": { recent_emoji: LegacyRecentEmojiData };
         "im.vector.setting.integration_provisioning": { enabled: boolean };
         "im.vector.riot.breadcrumb_rooms": { rooms: string[] };
         "im.vector.web.settings": Record<string, any>;

@@ -8,16 +8,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { orderBy } from "lodash";
+import { type AccountDataEvents } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 
-interface ILegacyFormat {
-    [emoji: string]: [number, number]; // [count, date]
-}
-
-// New format tries to be more space efficient for synchronization. Ordered by Date descending.
-export type RecentEmojiData = [emoji: string, count: number][];
+export type RecentEmojiData = AccountDataEvents["m.recent_emoji"]["recent_emoji"];
+export type LegacyRecentEmojiData = [emoji: string, count: number][];
 
 const SETTING_NAME = "recent_emoji";
 
@@ -25,43 +22,57 @@ const SETTING_NAME = "recent_emoji";
 // even if you haven't used your typically favourite emoji for a little while.
 const STORAGE_LIMIT = 100;
 
-// TODO remove this after some time
-function migrate(): void {
-    const data: ILegacyFormat = JSON.parse(window.localStorage.mx_reaction_count || "{}");
-    const sorted = Object.entries(data).sort(([, [count1, date1]], [, [count2, date2]]) => date2 - date1);
-    const newFormat = sorted.map(([emoji, [count, date]]) => [emoji, count]);
-    SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, newFormat.slice(0, STORAGE_LIMIT));
-}
-
 function getRecentEmoji(): RecentEmojiData {
     return SettingsStore.getValue(SETTING_NAME) || [];
 }
 
+export function translateLegacyEmojiData(legacyData: LegacyRecentEmojiData): RecentEmojiData {
+    return legacyData.map(([emoji, total]) => ({
+        emoji,
+        total,
+    }));
+}
+
+export function mergeEmojiData(data1: RecentEmojiData, data2?: RecentEmojiData): RecentEmojiData {
+    if (!data2) return data1;
+
+    return Object.values(
+        [...data1, ...data2].reduce(
+            (acc, item) => {
+                const existing = acc[item.emoji];
+
+                // If it doesn't exist or the current total is higher, update it
+                if (!existing || item.total > existing.total) {
+                    acc[item.emoji] = item;
+                }
+
+                return acc;
+            },
+            {} as Record<string, RecentEmojiData[number]>,
+        ),
+    );
+}
+
 export function add(emoji: string): void {
     const recents = getRecentEmoji();
-    const i = recents.findIndex(([e]) => e === emoji);
+    const i = recents.findIndex((entry) => entry.emoji === emoji);
 
-    let newEntry;
+    let newEntry: RecentEmojiData[number];
     if (i >= 0) {
         // first remove the existing tuple so that we can increment it and push it to the front
         [newEntry] = recents.splice(i, 1);
-        newEntry[1]++; // increment the usage count
+        newEntry.total++; // increment the usage count
     } else {
-        newEntry = [emoji, 1];
+        newEntry = { emoji, total: 1 };
     }
 
     SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, [newEntry, ...recents].slice(0, STORAGE_LIMIT));
 }
 
 export function get(limit = 24): string[] {
-    let recents = getRecentEmoji();
-
-    if (recents.length < 1) {
-        migrate();
-        recents = getRecentEmoji();
-    }
+    const recents = getRecentEmoji();
 
     // perform a stable sort on `count` to keep the recent (date) order as a secondary sort factor
     const sorted = orderBy(recents, "1", "desc");
-    return sorted.slice(0, limit).map(([emoji]) => emoji);
+    return sorted.slice(0, limit).map(({ emoji }) => emoji);
 }

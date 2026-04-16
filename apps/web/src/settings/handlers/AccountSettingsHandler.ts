@@ -16,11 +16,13 @@ import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
 import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 import { type SettingKey, type Settings } from "../Settings.tsx";
+import { mergeEmojiData, type RecentEmojiData, translateLegacyEmojiData } from "../../emojipicker/recent.ts";
 
 const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
 const BREADCRUMBS_EVENT_TYPES = [BREADCRUMBS_LEGACY_EVENT_TYPE, BREADCRUMBS_EVENT_TYPE];
-const RECENT_EMOJI_EVENT_TYPE = "io.element.recent_emoji";
+const LEGACY_RECENT_EMOJI_EVENT_TYPE = "io.element.recent_emoji";
+const RECENT_EMOJI_EVENT_TYPE = "m.recent_emoji";
 const INTEG_PROVISIONING_EVENT_TYPE = "im.vector.setting.integration_provisioning";
 const ANALYTICS_EVENT_TYPE = "im.vector.analytics";
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
@@ -66,8 +68,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (event.getType() === INTEG_PROVISIONING_EVENT_TYPE) {
             const val = event.getContent()["enabled"];
             this.watchers.notifyUpdate("integrationProvisioning", null, SettingLevel.ACCOUNT, val);
-        } else if (event.getType() === RECENT_EMOJI_EVENT_TYPE) {
-            const val = event.getContent()["enabled"];
+        } else if (event.getType() === RECENT_EMOJI_EVENT_TYPE || event.getType() === LEGACY_RECENT_EMOJI_EVENT_TYPE) {
+            const val = this.getRecentEmoji();
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
         } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
             this.watchers.notifyUpdate("mediaPreviewConfig", null, SettingLevel.ROOM_ACCOUNT, event.getContent());
@@ -102,8 +104,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         // Special case recent emoji
         if (settingName === "recent_emoji") {
-            const content = this.getSettings(RECENT_EMOJI_EVENT_TYPE);
-            return content ? content["recent_emoji"] : null;
+            const val = this.getRecentEmoji();
+            return val ?? null;
         }
 
         // Special case integration manager provisioning
@@ -264,5 +266,16 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             return; // for sanity, not because we expect to be here.
         }
         this.watchers.notifyUpdate("breadcrumb_rooms", null, SettingLevel.ACCOUNT, val || []);
+    }
+
+    private getRecentEmoji(): RecentEmojiData {
+        let val = this.getSettings(RECENT_EMOJI_EVENT_TYPE)?.recent_emoji || [];
+
+        const legacyVal = this.getSettings(LEGACY_RECENT_EMOJI_EVENT_TYPE)?.recent_emoji;
+        if (legacyVal) {
+            val = mergeEmojiData(val, translateLegacyEmojiData(legacyVal));
+        }
+
+        return val;
     }
 }
