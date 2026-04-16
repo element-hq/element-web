@@ -560,7 +560,7 @@ exports[`ActionBarView > story snapshots > renders DecryptingAttachment 1`] = `
     >
       <svg
         aria-hidden="true"
-        class="_icon_11k6c_18"
+        class="_icon_1855a_18"
         fill="currentColor"
         height="20"
         style="width: 20px; height: 20px;"
@@ -730,7 +730,7 @@ exports[`ActionBarView > story snapshots > renders DownloadingAttachment 1`] = `
     >
       <svg
         aria-hidden="true"
-        class="_icon_11k6c_18"
+        class="_icon_1855a_18"
         fill="currentColor"
         height="20"
         style="width: 20px; height: 20px;"
