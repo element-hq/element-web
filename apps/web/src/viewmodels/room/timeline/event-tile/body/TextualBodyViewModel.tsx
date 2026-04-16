@@ -96,12 +96,17 @@ export class TextualBodyViewModel
         props: TextualBodyViewModelProps,
     ): Pick<
         TextualBodyViewSnapshot,
-        "showEditedMarker" | "editedMarkerText" | "editedMarkerTooltip" | "editedMarkerCaption"
+        | "showEditedMarker"
+        | "editedMarkerText"
+        | "editedMarkerAriaLabel"
+        | "editedMarkerTooltip"
+        | "editedMarkerCaption"
     > => {
         if (!props.replacingEventId) {
             return {
                 showEditedMarker: false,
                 editedMarkerText: undefined,
+                editedMarkerAriaLabel: undefined,
                 editedMarkerTooltip: undefined,
                 editedMarkerCaption: undefined,
             };
@@ -113,6 +118,7 @@ export class TextualBodyViewModel
         return {
             showEditedMarker: true,
             editedMarkerText: `(${_t("common|edited")})`,
+            editedMarkerAriaLabel: _t("timeline|edits|tooltip_label", { date }),
             editedMarkerTooltip: _t("timeline|edits|tooltip_title", { date }),
             editedMarkerCaption: _t("timeline|edits|tooltip_sub"),
         };

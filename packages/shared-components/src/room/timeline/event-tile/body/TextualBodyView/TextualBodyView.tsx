@@ -63,6 +63,10 @@ export interface TextualBodyViewSnapshot {
      */
     editedMarkerText?: string;
     /**
+     * Accessible label announced for the edited marker action.
+     */
+    editedMarkerAriaLabel?: string;
+    /**
      * Tooltip description for the edited marker.
      */
     editedMarkerTooltip?: string;
@@ -165,6 +169,7 @@ export function TextualBodyView({
         bodyActionAriaLabel,
         showEditedMarker,
         editedMarkerText,
+        editedMarkerAriaLabel,
         editedMarkerTooltip,
         editedMarkerCaption,
         showPendingModerationMarker,
@@ -195,6 +200,7 @@ export function TextualBodyView({
                 type="button"
                 className={classNames(styles.annotation, styles.editedMarker)}
                 onClick={onEditedMarkerClick}
+                aria-label={editedMarkerAriaLabel}
                 data-textual-body-edited-marker=""
             >
                 <span>{editedMarkerText}</span>
