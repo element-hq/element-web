@@ -31,7 +31,7 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import EmptyState from "./EmptyState";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
-import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
+import { WidgetContextMenu } from "../../../viewmodels/room/right-panel/WidgetContextMenuViewModel.tsx";
 
 interface Props {
     room: Room;

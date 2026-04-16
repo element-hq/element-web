@@ -12,7 +12,7 @@ import { Button, InlineSpinner, Text } from "@vector-im/compound-web";
 import styles from "./RoomStatusBarView.module.css";
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
-import { Banner } from "../../composer/Banner";
+import { Banner } from "../composer/Banner";
 export interface RoomStatusBarViewActions {
     /**
      * Called when the user clicks on the 'resend all' button in the 'unsent messages' bar.
@@ -270,7 +270,6 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                         size="sm"
                                         kind="secondary"
                                         Icon={DeleteIcon}
-                                        disabled={snapshot.isResending}
                                         className={styles.secondaryAction}
                                         onClick={deleteAllClick}
                                     >
@@ -282,7 +281,6 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                                         size="sm"
                                         kind="primary"
                                         Icon={RestartIcon}
-                                        disabled={snapshot.isResending}
                                         onClick={resendClick}
                                         className={styles.primaryAction}
                                     >

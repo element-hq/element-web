@@ -27,7 +27,6 @@
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
         "@action-validator/core": "^0.6.0",
-        "@element-hq/element-web-playwright-common": "catalog:",
         "@nx-tools/nx-container": "^7.2.1",
         "@nx/jest": "^22.5.0",
         "@playwright/test": "catalog:",
@@ -40,7 +39,7 @@
         "lodash": "^4.17.21",
         "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
-        "nx": "22.5.4",
+        "nx": "22.6.5",
         "prettier": "3.8.1",
         "typescript": "catalog:",
         "vitepress": "^1.6.4",
@@ -122,7 +121,8 @@
             "yaml@2.8.2": "2.8.3",
             "undici@7.22.2": "7.24.7",
             "@xmldom/xmldom@0.8.11": "0.9.9",
-            "esbuild@<=0.24.2": ">=0.25.0",
+            "esbuild@<=0.24.2": "0.27.4",
+            "esbuild@~0.27.0": "0.27.4",
             "minimatch@>=10.0.0 <10.2.3": ">=10.2.3"
         }
     },

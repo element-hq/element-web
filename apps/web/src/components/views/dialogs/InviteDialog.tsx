@@ -65,9 +65,6 @@ import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
 
-// we have a number of types defined from the Matrix spec which can't reasonably be altered here.
-/* eslint-disable camelcase */
-
 interface Result {
     userId: string;
     user: Member;
@@ -1186,8 +1183,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     /**
-     * Render content of the common "users" tab that is shown whether we have a regular invite dialog or a
-     * "CallTransfer" one.
+     * Render content of the "users" that is used for both invites and "start chat".
      */
     private renderMainTab(): JSX.Element {
         let helpText;
@@ -1275,26 +1271,23 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
             buttonText = _t("action|invite");
             goButtonFn = this.inviteUsers;
+        } else {
+            throw new Error("Unknown InviteDialog kind: " + this.props.kind);
         }
-
-        const goButton =
-            this.props.kind == InviteKind.CallTransfer ? null : (
-                <AccessibleButton
-                    kind="primary"
-                    onClick={goButtonFn}
-                    className="mx_InviteDialog_goButton"
-                    disabled={this.state.busy || !this.hasSelection()}
-                >
-                    {buttonText}
-                </AccessibleButton>
-            );
 
         return (
             <React.Fragment>
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
                 <div className="mx_InviteDialog_addressBar">
                     {this.renderEditor()}
-                    {goButton}
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={goButtonFn}
+                        className="mx_InviteDialog_goButton"
+                        disabled={this.state.busy || !this.hasSelection()}
+                    >
+                        {buttonText}
+                    </AccessibleButton>
                 </div>
                 {this.state.busy ? <InviteProgressBody /> : this.renderSuggestions()}
             </React.Fragment>
@@ -1342,7 +1335,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
      * See also: {@link renderRegularDialog}.
      */
     private renderCallTransferDialog(): React.ReactNode {
-        const usersSection = this.renderMainTab();
+        const usersSection = (
+            <React.Fragment>
+                <div className="mx_InviteDialog_addressBar">{this.renderEditor()}</div>
+                {this.state.busy ? <InviteProgressBody /> : this.renderSuggestions()}
+            </React.Fragment>
+        );
 
         const tabs: NonEmptyArray<Tab<TabId>> = [
             new Tab(

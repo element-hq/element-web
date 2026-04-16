@@ -60,7 +60,7 @@ jobs:
             - run: mv dist/element-*.tar.gz dist/develop.tar.gz
               working-directory: apps/web
 
-            - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
+            - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: webapp
                   path: apps/web/dist/develop.tar.gz
@@ -111,7 +111,7 @@ jobs:
                   running-workflow-name: "Build & Deploy develop.element.io"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
-                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages|Upload|Netlify).)*$
+                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages|Upload|Netlify|Report).)*$
 
             # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
             # as the expires after 24h and requires auth to download.

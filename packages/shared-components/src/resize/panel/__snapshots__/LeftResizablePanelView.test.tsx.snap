@@ -21,7 +21,7 @@ exports[`<LeftResizablePanelView /> > renders Default story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             LEFT CONTENT
@@ -51,7 +51,7 @@ exports[`<LeftResizablePanelView /> > renders Default story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             MAIN CONTENT

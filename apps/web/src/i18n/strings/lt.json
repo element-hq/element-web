@@ -1197,8 +1197,6 @@
             "aliases_section": "Kambario Adresai",
             "avatar_field_label": "Kambario pseudoportretas",
             "canonical_alias_field_label": "Pagrindinis adresas",
-            "default_url_previews_off": "URL nuorodų peržiūros šio kambario dalyviams yra išjungtos kaip numatytosios.",
-            "default_url_previews_on": "URL nuorodų peržiūros šio kambario dalyviams yra įjungtos kaip numatytosios.",
             "description_space": "Redaguoti su savo erdve susijusius nustatymus.",
             "error_creating_alias_description": "Kuriant šį adresą įvyko klaida. Gali būti, kad serveris jo neleidžia arba įvyko laikina klaida.",
             "error_creating_alias_title": "Klaida kuriant adresą",
@@ -1225,12 +1223,7 @@
             "published_aliases_explainer_space": "Paskelbtus adresus gali naudoti bet kas bet kuriame serveryje, prisijungimui prie jūsų erdvės.",
             "published_aliases_section": "Paskelbti Adresai",
             "save": "Išsaugoti Pakeitimus",
-            "topic_field_label": "Kambario Tema",
-            "url_preview_encryption_warning": "Šifruotuose kambariuose, tokiuose kaip šis, URL nuorodų peržiūros pagal numatymą yra išjungtos, kad būtų užtikrinta, jog jūsų serveris (kur yra generuojamos peržiūros) negali rinkti informacijos apie jūsų šiame kambaryje peržiūrėtas nuorodas.",
-            "url_preview_explainer": "Kai kas nors į savo žinutę įtraukia URL, gali būti rodoma URL peržiūra, suteikianti daugiau informacijos apie tą nuorodą, tokios kaip pavadinimas, aprašymas ir vaizdas iš svetainės.",
-            "url_previews_section": "URL nuorodų peržiūros",
-            "user_url_previews_default_off": "Jūs <a>išjungėte</a> URL nuorodų peržiūras kaip numatytasias.",
-            "user_url_previews_default_on": "Jūs <a>įjungėte</a> URL nuorodų peržiūras kaip numatytasias."
+            "topic_field_label": "Kambario Tema"
         },
         "notifications": {
             "browse_button": "Naršyti",
@@ -1475,8 +1468,6 @@
             "remove_msisdn_prompt": "Pašalinti %(phone)s?"
         },
         "inline_url_previews_default": "Įjungti URL nuorodų peržiūras kaip numatytasias",
-        "inline_url_previews_room": "Įjungti URL nuorodų peržiūras kaip numatytasias šiame kambaryje esantiems dalyviams",
-        "inline_url_previews_room_account": "Įjungti URL nuorodų peržiūras šiame kambaryje (įtakoja tik jus)",
         "insert_trailing_colon_mentions": "Įterpti dvitaškį po naudotojo paminėjimų žinutės pradžioje",
         "jump_to_bottom_on_send": "Peršokti į laiko juostos apačią, kai siunčiate žinutę",
         "key_backup": {

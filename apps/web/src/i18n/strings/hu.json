@@ -2219,8 +2219,6 @@
             "aliases_section": "Szobacímek",
             "avatar_field_label": "Szoba profilképe",
             "canonical_alias_field_label": "Fő cím",
-            "default_url_previews_off": "A webcím-előnézet alapértelmezetten tiltva van a szobában lévőknek.",
-            "default_url_previews_on": "A webcím-előnézet alapértelmezetten engedélyezve van a szobában lévőknek.",
             "description_space": "A tér beállításainak szerkesztése.",
             "error_creating_alias_description": "Hiba történt a cím létrehozása során. Nincs engedélyezve a kiszolgálón, vagy átmeneti hiba történt.",
             "error_creating_alias_title": "Cím beállítási hiba",
@@ -2251,12 +2249,7 @@
             "published_aliases_explainer_space": "A közzétett címet bárki használhatja a térbe való belépéshez, bármelyik kiszolgálóról.",
             "published_aliases_section": "Nyilvánosságra hozott cím",
             "save": "Változtatások mentése",
-            "topic_field_label": "Szoba témája",
-            "url_preview_encryption_warning": "A titkosított szobákban, mint például ez is, a webcím-előnézet alapértelmezetten ki van kapcsolva, hogy biztosított legyen, hogy a Matrix-kiszolgáló (amelyen az előnézet készül) ne tudjon információt gyűjteni arról, hogy milyen hivatkozásokat lát ebben a szobában.",
-            "url_preview_explainer": "Ha valaki webcímet helyez az üzenetébe, akkor lehetőség van egy előnézet megjelenítésére, amellyel további információt kaphat a hivatkozásról, mint a cím, a leírás és a weboldal képe.",
-            "url_previews_section": "Webcím-előnézet",
-            "user_url_previews_default_off": "A webcím-előnézet alapból <a>tiltva</a> van.",
-            "user_url_previews_default_on": "A webcím-előnézet alapból <a>engedélyezve</a> van."
+            "topic_field_label": "Szoba témája"
         },
         "notifications": {
             "browse_button": "Böngészés",
@@ -2678,8 +2671,6 @@
             "username": "Felhasználónév"
         },
         "inline_url_previews_default": "Beágyazott webcím-előnézetek alapértelmezett engedélyezése",
-        "inline_url_previews_room": "Webcím-előnézetek alapértelmezett engedélyezése a szobatagok számára",
-        "inline_url_previews_room_account": "Webcím-előnézetek engedélyezése ebben a szobában (csak Önt érinti)",
         "insert_trailing_colon_mentions": "Záró kettőspont beszúrása egy felhasználó üzenet elején való megemlítésekor",
         "invite_controls": {
             "default_label": "Felhasználók meghívhatják szobákba"

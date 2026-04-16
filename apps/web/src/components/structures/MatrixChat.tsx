@@ -20,7 +20,6 @@ import {
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -141,6 +140,8 @@ import Markdown from "../../Markdown";
 import { LinkedTextConfiguration, sanitizeHtmlParams } from "../../Linkify";
 import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
+import { type IScreen } from "../../vector/routing.ts";
+import { type URLParams } from "../../vector/url_utils.ts";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -152,21 +153,14 @@ const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password",
 // re-factoring to be included in this list in future.
 const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, Action.CreateChat, Action.CreateRoom];
 
-interface IScreen {
-    screen: string;
-    params?: QueryDict;
-}
-
 interface IProps {
     config: ConfigOptions;
     onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
-    // the queryParams extracted from the [real] query-string of the URI
-    realQueryParams: QueryDict;
-    // the initial queryParams extracted from the hash-fragment of the URI
-    startingFragmentQueryParams?: QueryDict;
+    // the params extracted from the [real] query-string & fragment of the URI
+    urlParams: URLParams;
     // called when we have completed a token login
-    onTokenLoginCompleted: () => void;
+    onTokenLoginCompleted: (urlParams: URLParams, fragmentAfterLogin: string) => void;
     // Represents the screen to display as a result of parsing the initial window.location
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
@@ -227,11 +221,8 @@ interface IState {
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
     public static displayName = "MatrixChat";
 
-    public static defaultProps = {
-        realQueryParams: {},
-        startingFragmentQueryParams: {},
+    public static defaultProps: Partial<IProps> = {
         config: {},
-        onTokenLoginCompleted: (): void => {},
     };
 
     private firstSyncComplete = false;
@@ -353,18 +344,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Otherwise, the first thing to do is to try the token params in the query-string
         const delegatedAuthSucceeded = await Lifecycle.attemptDelegatedAuthLogin(
-            this.props.realQueryParams,
+            this.props.urlParams,
             this.props.defaultDeviceDisplayName,
             this.getFragmentAfterLogin(),
         );
 
         // remove the loginToken or auth code from the URL regardless
         if (
-            this.props.realQueryParams?.loginToken ||
-            this.props.realQueryParams?.code ||
-            this.props.realQueryParams?.state
+            !!this.props.urlParams.legacy_sso ||
+            !!this.props.urlParams.oidc_fragment ||
+            !!this.props.urlParams.oidc_query
         ) {
-            this.props.onTokenLoginCompleted();
+            this.props.onTokenLoginCompleted(this.props.urlParams, this.getFragmentAfterLogin());
         }
 
         if (delegatedAuthSucceeded) {
@@ -421,7 +412,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * {@link onWillStartClient} and {@link onClientStarted} will already have been called (but not necessarily
      * completed).
      *
-     * This method either calls {@link onLiggedIn} directly, or switches to {@link Views.E2E_SETUP} or
+     * This method either calls {@link onLoggedIn} directly, or switches to {@link Views.E2E_SETUP} or
      * {@link Views.COMPLETE_SECURITY}, which will later call {@link onCompleteSecurityE2eSetupFinished}.
      */
     private async postLoginSetup(): Promise<void> {
@@ -592,7 +583,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return Promise.resolve()
             .then(() => {
                 return Lifecycle.loadSession({
-                    fragmentQueryParams: this.props.startingFragmentQueryParams,
+                    urlParams: this.props.urlParams,
                     enableGuest: this.props.enableGuest,
                     guestHsUrl: this.getServerProperties().serverConfig.hsUrl,
                     guestIsUrl: this.getServerProperties().serverConfig.isUrl,
@@ -1835,7 +1826,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public showScreen(screen: string, params?: { [key: string]: any }): void {
+    public showScreen(screen: string, params?: Record<string, any>): void {
         logger.debug(`showScreen ${screen}`);
 
         const cli = MatrixClientPeg.get();
@@ -2267,14 +2258,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
-                    defaultUsername={this.props.startingFragmentQueryParams?.defaultUsername as string | undefined}
+                    defaultUsername={this.props.urlParams?.defaults?.defaultUsername}
                     {...this.getServerProperties()}
                 />
             );
         } else if (this.state.view === Views.SOFT_LOGOUT) {
             view = (
                 <SoftLogout
-                    realQueryParams={this.props.realQueryParams}
+                    urlParams={this.props.urlParams}
                     onTokenLoginCompleted={this.props.onTokenLoginCompleted}
                     fragmentAfterLogin={fragmentAfterLogin}
                 />

@@ -2251,8 +2251,6 @@
             "aliases_section": "Adresy miestnosti",
             "avatar_field_label": "Obrázok miestnosti",
             "canonical_alias_field_label": "Hlavná adresa",
-            "default_url_previews_off": "Náhľady URL adries sú predvolene zakázané pre členov tejto miestnosti.",
-            "default_url_previews_on": "Náhľady URL adries sú predvolene povolené pre členov tejto miestnosti.",
             "description_space": "Upravte nastavenia týkajúce sa vášho priestoru.",
             "error_creating_alias_description": "Pri vytváraní tejto adresy došlo k chybe. Je možné, že ju server nepovoľuje alebo došlo k dočasnému zlyhaniu.",
             "error_creating_alias_title": "Chyba pri vytváraní adresy",
@@ -2283,12 +2281,7 @@
             "published_aliases_explainer_space": "Zverejnené adresy môže použiť ktokoľvek na akomkoľvek serveri, aby sa pripojil k vášmu priestoru.",
             "published_aliases_section": "Zverejnené adresy",
             "save": "Uložiť zmeny",
-            "topic_field_label": "Téma miestnosti",
-            "url_preview_encryption_warning": "Náhľady URL adries sú v šifrovaných miestnostiach ako je táto predvolene zakázané, aby ste si mohli byť istí, že obsah odkazov z vašej konverzácii nebude zaznamenaný na vašom domovskom serveri počas ich generovania.",
-            "url_preview_explainer": "Ak niekto vo svojej správe pošle URL adresu, môže byť zobrazený jej náhľad obsahujúci názov, popis a obrázok z cieľovej web stránky.",
-            "url_previews_section": "Náhľady URL adries",
-            "user_url_previews_default_off": "Predvolene máte <a>zakázané</a> náhľady URL adries.",
-            "user_url_previews_default_on": "Predvolene máte <a>povolené</a> náhľady URL adries."
+            "topic_field_label": "Téma miestnosti"
         },
         "notifications": {
             "browse_button": "Prechádzať",
@@ -2713,8 +2706,6 @@
             "username": "Používateľské meno"
         },
         "inline_url_previews_default": "Predvolene povoliť náhľady URL adries",
-        "inline_url_previews_room": "Predvolene povoliť náhľady URL adries pre členov tejto miestnosti",
-        "inline_url_previews_room_account": "Povoliť náhľady URL adries pre túto miestnosť (ovplyvňuje len vás)",
         "insert_trailing_colon_mentions": "Vložiť na koniec dvojbodku za zmienkou používateľa na začiatku správy",
         "invite_controls": {
             "default_label": "Povoliť používateľom pozývať vás do miestností"
