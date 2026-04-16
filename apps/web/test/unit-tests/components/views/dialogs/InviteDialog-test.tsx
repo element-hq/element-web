@@ -13,6 +13,7 @@ import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk/sr
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { mocked, type Mocked } from "jest-mock";
+import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";
 import { InviteKind } from "../../../../../src/components/views/dialogs/InviteDialogTypes";
@@ -103,6 +104,11 @@ describe("InviteDialog", () => {
 
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
+            getCrypto: jest.fn().mockReturnValue({
+                getUserVerificationStatus: jest
+                    .fn()
+                    .mockResolvedValue(new UserVerificationStatus(false, false, true, false)),
+            }),
             getDomain: jest.fn().mockReturnValue(serverDomain),
             getUserId: jest.fn().mockReturnValue(bobId),
             getSafeUserId: jest.fn().mockReturnValue(bobId),
