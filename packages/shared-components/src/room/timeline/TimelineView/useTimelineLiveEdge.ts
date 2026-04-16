@@ -9,10 +9,6 @@ import { useCallback, useEffect, useRef, type Dispatch, type SetStateAction } fr
 
 type InitialFillState = "filling" | "settling" | "done";
 
-function logTimelineLiveEdge(...parts: Array<string | number | boolean | null | undefined>): void {
-    void parts;
-}
-
 const MAX_LIVE_EDGE_APPEND_CORRECTION_FRAMES = 8;
 const REQUIRED_STABLE_LIVE_EDGE_APPEND_FRAMES = 2;
 const REQUIRED_INITIAL_LIVE_EDGE_SETTLE_QUIET_PERIOD_MS = 200;
@@ -93,15 +89,6 @@ export function useTimelineLiveEdge({
         (targetScrollerElement: HTMLElement) => {
             cancelPendingLiveEdgeAppendCorrection();
             liveEdgeAppendCorrectionInProgressRef.current = true;
-            logTimelineLiveEdge(
-                "scheduleLiveEdgeAppendCorrection:start",
-                "scrollTop",
-                targetScrollerElement.scrollTop,
-                "scrollHeight",
-                targetScrollerElement.scrollHeight,
-                "clientHeight",
-                targetScrollerElement.clientHeight,
-            );
 
             const scheduleFrame = (
                 attempt: number,
@@ -114,7 +101,6 @@ export function useTimelineLiveEdge({
                     );
 
                     if (!targetScrollerElement.isConnected) {
-                        logTimelineLiveEdge("scheduleLiveEdgeAppendCorrection:disconnected", "attempt", attempt);
                         return;
                     }
 
@@ -124,17 +110,6 @@ export function useTimelineLiveEdge({
                         latestLiveEdgeIntent.canPaginateForward ||
                         !latestLiveEdgeIntent.followOutputEnabled
                     ) {
-                        logTimelineLiveEdge(
-                            "scheduleLiveEdgeAppendCorrection:abort-intent",
-                            "attempt",
-                            attempt,
-                            "isAtLiveEdge",
-                            latestLiveEdgeIntent.isAtLiveEdge,
-                            "canPaginateForward",
-                            latestLiveEdgeIntent.canPaginateForward,
-                            "followOutputEnabled",
-                            latestLiveEdgeIntent.followOutputEnabled,
-                        );
                         return;
                     }
 
@@ -148,22 +123,6 @@ export function useTimelineLiveEdge({
                             ? stableFrameCount + 1
                             : 0;
 
-                    logTimelineLiveEdge(
-                        "scheduleLiveEdgeAppendCorrection:frame",
-                        "attempt",
-                        attempt,
-                        "scrollTop",
-                        targetScrollerElement.scrollTop,
-                        "exactBottomScrollTop",
-                        exactBottomScrollTop,
-                        "previousExactBottomScrollTop",
-                        previousExactBottomScrollTop,
-                        "stableFrameCount",
-                        stableFrameCount,
-                        "nextStableFrameCount",
-                        nextStableFrameCount,
-                    );
-
                     if (targetScrollerElement.scrollTop < exactBottomScrollTop) {
                         targetScrollerElement.scrollTo({
                             top: exactBottomScrollTop,
@@ -175,13 +134,6 @@ export function useTimelineLiveEdge({
                         nextStableFrameCount >= REQUIRED_STABLE_LIVE_EDGE_APPEND_FRAMES
                     ) {
                         liveEdgeAppendCorrectionInProgressRef.current = false;
-                        logTimelineLiveEdge(
-                            "scheduleLiveEdgeAppendCorrection:complete",
-                            "attempt",
-                            attempt,
-                            "nextStableFrameCount",
-                            nextStableFrameCount,
-                        );
                         return;
                     }
 
@@ -198,21 +150,11 @@ export function useTimelineLiveEdge({
 
     const scheduleInitialLiveEdgeSettleCorrection = useCallback(() => {
         if (initialLiveEdgeSettleInProgressRef.current || !isAtLiveEdge || hasScrollTarget) {
-            logTimelineLiveEdge(
-                "scheduleInitialLiveEdgeSettleCorrection:skip",
-                "inProgress",
-                initialLiveEdgeSettleInProgressRef.current,
-                "isAtLiveEdge",
-                isAtLiveEdge,
-                "hasScrollTarget",
-                hasScrollTarget,
-            );
             return;
         }
 
         const effectiveScrollerElement = getEffectiveScrollerElement(scrollerElement);
         if (!effectiveScrollerElement) {
-            logTimelineLiveEdge("scheduleInitialLiveEdgeSettleCorrection:no-scroller");
             setInitialFillState("done");
             return;
         }
@@ -238,27 +180,12 @@ export function useTimelineLiveEdge({
             if (!initialLiveEdgeSettleInProgressRef.current) {
                 return;
             }
-
-            logTimelineLiveEdge(
-                "scheduleInitialLiveEdgeSettleCorrection:finish",
-                "scrollTop",
-                effectiveScrollerElement.scrollTop,
-            );
             settleToExactBottom();
             cancelPendingInitialLiveEdgeSettleCorrection();
             setInitialFillState("done");
         };
 
         const restartQuietPeriod = (): void => {
-            logTimelineLiveEdge(
-                "scheduleInitialLiveEdgeSettleCorrection:restartQuietPeriod",
-                "scrollTop",
-                effectiveScrollerElement.scrollTop,
-                "scrollHeight",
-                effectiveScrollerElement.scrollHeight,
-                "clientHeight",
-                effectiveScrollerElement.clientHeight,
-            );
             settleToExactBottom();
             if (initialLiveEdgeSettleQuietTimeoutRef.current !== null) {
                 window.clearTimeout(initialLiveEdgeSettleQuietTimeoutRef.current);

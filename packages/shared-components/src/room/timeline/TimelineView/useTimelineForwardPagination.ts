@@ -18,10 +18,6 @@ import type { PaginationState, TimelineItem, VisibleRange } from "./types";
 
 type InitialFillState = "filling" | "settling" | "done";
 
-function logTimelineForwardPagination(...parts: Array<string | number | boolean | null | undefined>): void {
-    void parts;
-}
-
 function getShiftedRangeAnchorCandidate<TItem extends TimelineItem>({
     items,
     visibleRange,
@@ -61,7 +57,7 @@ function getShiftedRangeAnchorCandidate<TItem extends TimelineItem>({
  * pagination request completes.
  */
 export interface ForwardPaginationContext {
-    continuityMode: "anchor" | "bottom" | "shifted-range" | "none";
+    continuityMode: "anchor" | "bottom" | "shifted-range";
     requestReason: string;
     anchorKey: string | null;
     lastVisibleRange: VisibleRange | null;
@@ -126,15 +122,6 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
         (reason: string) => {
             const tailKey = items.at(-1)?.key ?? null;
             if (!tailKey || getLastForwardRequestedTailKey() === tailKey) {
-                logTimelineForwardPagination(
-                    "requestForwardPagination:skip",
-                    "reason",
-                    reason,
-                    "tailKey",
-                    tailKey,
-                    "lastForwardRequestedTailKey",
-                    getLastForwardRequestedTailKey(),
-                );
                 return false;
             }
 
@@ -157,22 +144,6 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
                 shiftedRangeAnchorCandidate.key && scrollerElement
                     ? findTimelineItemElement(scrollerElement, shiftedRangeAnchorCandidate.key)
                     : null;
-
-            logTimelineForwardPagination(
-                "requestForwardPagination",
-                "reason",
-                reason,
-                "tailKey",
-                tailKey,
-                "continuityMode",
-                continuityMode,
-                "isAtLiveEdge",
-                isAtLiveEdge,
-                "followOutputEnabled",
-                followOutputEnabled,
-                "hasScrollerElement",
-                !!scrollerElement,
-            );
 
             setForwardPaginationContext({
                 continuityMode,
@@ -213,27 +184,6 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
     );
 
     useEffect(() => {
-        logTimelineForwardPagination(
-            "effect:autoPaginateCheck",
-            "initialFillState",
-            initialFillState,
-            "isAtLiveEdge",
-            isAtLiveEdge,
-            "canPaginateForward",
-            canPaginateForward,
-            "forwardPagination",
-            forwardPagination,
-            "followOutputEnabled",
-            followOutputEnabled,
-            "suppressForwardLiveEdgeSeekAfterAnchor",
-            suppressForwardLiveEdgeSeekAfterAnchor,
-            "hasScrollTarget",
-            hasScrollTarget,
-            "hasScrollerElement",
-            !!scrollerElement,
-            "wasAtBottom",
-            wasAtBottom,
-        );
         if (
             initialFillState !== "done" ||
             !isAtLiveEdge ||
@@ -280,28 +230,6 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
             return;
         }
 
-        logTimelineForwardPagination(
-            "effect:postForwardCheck",
-            "currentTailKey",
-            currentTailKey,
-            "requestReason",
-            getForwardPaginationContext()?.requestReason ?? null,
-            "isAtLiveEdge",
-            isAtLiveEdge,
-            "canPaginateForward",
-            canPaginateForward,
-            "forwardPagination",
-            forwardPagination,
-            "followOutputEnabled",
-            followOutputEnabled,
-            "suppressForwardLiveEdgeSeekAfterAnchor",
-            suppressForwardLiveEdgeSeekAfterAnchor,
-            "hasScrollTarget",
-            hasScrollTarget,
-            "scrollTop",
-            scrollerElement.scrollTop,
-        );
-
         let cancelled = false;
         const frameId = window.requestAnimationFrame(() => {
             if (cancelled) {
@@ -318,21 +246,6 @@ export function useTimelineForwardPagination<TItem extends TimelineItem>({
                 followOutputEnabled &&
                 !suppressForwardLiveEdgeSeekAfterAnchor &&
                 snapToBottomAfterLayout;
-            logTimelineForwardPagination(
-                "effect:postForwardFrame",
-                "snapToBottomAfterLayout",
-                snapToBottomAfterLayout,
-                "shouldContinueSeekingLiveEdge",
-                shouldContinueSeekingLiveEdge,
-                "isAtLiveEdge",
-                isAtLiveEdge,
-                "canPaginateForward",
-                canPaginateForward,
-                "followOutputEnabled",
-                followOutputEnabled,
-                "suppressForwardLiveEdgeSeekAfterAnchor",
-                suppressForwardLiveEdgeSeekAfterAnchor,
-            );
             if (shouldContinueSeekingLiveEdge) {
                 requestForwardPagination("post-forward continue seeking live edge");
             }

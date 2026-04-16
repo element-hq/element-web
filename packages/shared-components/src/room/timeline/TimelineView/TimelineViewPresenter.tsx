@@ -99,10 +99,6 @@ function summarizeTimelineItems<TItem extends TimelineItem>(items: TItem[]): str
     return `${firstKey}..${lastKey} (${items.length})`;
 }
 
-function logTimelineViewPresenter(...parts: Array<string | number | boolean | null | undefined>): void {
-    void parts;
-}
-
 /**
  * Detects when a forward sliding rebase restore was interrupted by additional
  * layout movement and re-primes the shifted-range restore flow from the
@@ -617,13 +613,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
     const markAnchorResolved = useCallback(() => {
         const currentTargetKey = snapshot.scrollTarget?.targetKey ?? null;
         if (currentTargetKey !== null && acknowledgedScrollTargetKeyRef.current === currentTargetKey) {
-            logTimelineViewPresenter(
-                "markAnchorResolved:skip-acknowledged",
-                "targetKey",
-                currentTargetKey,
-                "initialFillState",
-                initialFillState,
-            );
             return;
         }
 
@@ -637,19 +626,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         setFollowOutputEnabled(false);
         lastAnchoredKeyRef.current = currentTargetKey;
         acknowledgedScrollTargetKeyRef.current = currentTargetKey;
-        logTimelineViewPresenter(
-            "markAnchorResolved",
-            "targetKey",
-            currentTargetKey,
-            "initialFillState",
-            initialFillState,
-            "initialAnchorResolved",
-            initialAnchorResolvedRef.current,
-            "suppressForwardPaginationUntilUserScrollAfterAnchor",
-            suppressForwardPaginationUntilUserScrollAfterAnchorRef.current,
-            "suppressForwardLiveEdgeSeekAfterAnchor",
-            suppressForwardLiveEdgeSeekAfterAnchorRef.current,
-        );
         vm.onScrollTargetReached();
     }, [initialFillState, snapshot.scrollTarget, vm]);
 
@@ -860,15 +836,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         if (initialFillState !== "filling" || snapshot.scrollTarget || !initialAnchorResolvedRef.current) {
             return;
         }
-        logTimelineViewPresenter(
-            "initialFill:complete-after-anchor",
-            "itemCount",
-            snapshot.items.length,
-            "isAtLiveEdge",
-            snapshot.isAtLiveEdge,
-            "firstItemIndex",
-            firstItemIndex,
-        );
         pendingForwardPaginationAfterInitialFillRef.current = false;
         suppressForwardPaginationUntilUserScrollAfterAnchorRef.current = false;
         suppressForwardLiveEdgeSeekAfterAnchorRef.current = false;
@@ -1041,21 +1008,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
 
     const handleRangeChanged = useCallback(
         (range: ListRange) => {
-            logTimelineViewPresenter(
-                "rangeChanged",
-                "rawStart",
-                range.startIndex,
-                "rawEnd",
-                range.endIndex,
-                "rawStartKey",
-                snapshot.items[range.startIndex]?.key ?? null,
-                "rawEndKey",
-                snapshot.items[range.endIndex]?.key ?? null,
-                "previousVisibleStart",
-                lastVisibleRangeRef.current?.startIndex ?? null,
-                "previousVisibleEnd",
-                lastVisibleRangeRef.current?.endIndex ?? null,
-            );
             const previousRange = lastVisibleRangeRef.current;
             const hasRangeChanged =
                 previousRange === null ||
@@ -1201,13 +1153,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
 
             if (shouldSuppressBottomReassertAfterBottomTriggeredForwardPagination) {
                 wasAtBottomRef.current = false;
-                logTimelineViewPresenter(
-                    "atBottomStateChange:suppress-bottom-reassert-after-forward-pagination",
-                    "remainingToExactBottom",
-                    remainingToExactBottom,
-                    "canPaginateForward",
-                    snapshot.canPaginateForward,
-                );
                 return;
             }
 
@@ -1235,28 +1180,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 lastBottomTriggeredForwardPaginationGestureRef.current !== scrollGestureGenerationRef.current &&
                 !suppressForwardPaginationUntilUserScrollAfterAnchorRef.current &&
                 !suppressForwardLiveEdgeSeekAfterAnchorRef.current;
-
-            logTimelineViewPresenter(
-                "atBottomStateChange",
-                "atBottom",
-                atBottom,
-                "normalizedAtBottom",
-                normalizedAtBottom,
-                "remainingToExactBottom",
-                remainingToExactBottom,
-                "snapshotIsAtLiveEdge",
-                snapshot.isAtLiveEdge,
-                "nextIsAtLiveEdge",
-                nextIsAtLiveEdge,
-                "followOutputEnabled",
-                followOutputEnabled,
-                "suppressForwardPaginationUntilUserScrollAfterAnchor",
-                suppressForwardPaginationUntilUserScrollAfterAnchorRef.current,
-                "suppressForwardLiveEdgeSeekAfterAnchor",
-                suppressForwardLiveEdgeSeekAfterAnchorRef.current,
-                "canPaginateForward",
-                snapshot.canPaginateForward,
-            );
 
             if (
                 shouldIgnoreAtBottomStateChange({
@@ -1369,23 +1292,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             const windowShift = getContiguousWindowShift(previousRenderState.items, snapshot.items);
             const lastVisibleRange = lastVisibleRangeRef.current;
             const currentRangeKey = summarizeTimelineItems(snapshot.items);
-            logTimelineViewPresenter(
-                "scrollIntoViewOnChange:windowShift",
-                "previousRangeKey",
-                summarizeTimelineItems(previousRenderState.items),
-                "currentRangeKey",
-                currentRangeKey,
-                "windowShift",
-                windowShift,
-                "continuityMode",
-                forwardPaginationContextRef.current?.continuityMode ?? null,
-                "requestReason",
-                forwardPaginationContextRef.current?.requestReason ?? null,
-                "lastVisibleRangeStart",
-                lastVisibleRange?.startIndex ?? null,
-                "lastVisibleRangeEnd",
-                lastVisibleRange?.endIndex ?? null,
-            );
             const shiftedVisibleRange =
                 lastVisibleRange === null
                     ? null
@@ -1412,21 +1318,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                           index: firstItemIndex + scrollLocation.index,
                       }
                     : scrollLocation;
-            logTimelineViewPresenter(
-                "scrollIntoViewOnChange",
-                "totalCount",
-                totalCount,
-                "targetKey",
-                snapshot.scrollTarget?.targetKey ?? null,
-                "isAtLiveEdge",
-                snapshot.isAtLiveEdge,
-                "lastAnchoredKey",
-                lastAnchoredKeyRef.current,
-                "mappedIndex",
-                mappedScrollLocation && "index" in mappedScrollLocation ? mappedScrollLocation.index : null,
-                "mappedAlign",
-                mappedScrollLocation && "align" in mappedScrollLocation ? mappedScrollLocation.align : null,
-            );
             const activeForwardSlidingRebaseScrollLocation =
                 activeForwardPaginationSlidingRebaseScrollLocationRef.current;
             const shouldBypassForwardSlidingRebaseVirtuosoLocation =
@@ -1447,35 +1338,13 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             const shouldUseForwardSlidingRebaseLocationForCurrentRange = shouldUseForwardSlidingRebaseLocation({
                 previousForwardPagination: previousRenderState.forwardPagination,
                 forwardPagination: snapshot.forwardPagination,
-                continuityMode:
-                    forwardPaginationContextRef.current?.continuityMode === "none"
-                        ? null
-                        : (forwardPaginationContextRef.current?.continuityMode ?? null),
+                continuityMode: forwardPaginationContextRef.current?.continuityMode ?? null,
                 windowShift,
                 hasShiftedVisibleRange: shiftedVisibleRange !== null,
                 currentRangeKey,
                 blockedRangeKey: blockedForwardPaginationSlidingRebaseRangeRef.current,
                 handledRangeKey: handledForwardPaginationSlidingRebaseRangeRef.current,
             });
-            logTimelineViewPresenter(
-                "scrollIntoViewOnChange:shiftedRangeDecision",
-                "shouldUseForwardSlidingRebaseLocationForCurrentRange",
-                shouldUseForwardSlidingRebaseLocationForCurrentRange,
-                "handledRangeMatchesCurrent",
-                handledForwardPaginationSlidingRebaseRangeRef.current === currentRangeKey,
-                "blockedRangeMatchesCurrent",
-                blockedForwardPaginationSlidingRebaseRangeRef.current === currentRangeKey,
-                "hasActiveForwardSlidingRebaseScrollLocation",
-                activeForwardSlidingRebaseScrollLocation !== null,
-                "shiftedVisibleRangeStart",
-                shiftedVisibleRange?.startIndex ?? null,
-                "shiftedVisibleRangeEnd",
-                shiftedVisibleRange?.endIndex ?? null,
-                "windowShift",
-                windowShift,
-                "currentRangeKey",
-                currentRangeKey,
-            );
 
             if (shouldUseForwardSlidingRebaseLocationForCurrentRange && shiftedVisibleRange !== null) {
                 if (shouldBypassForwardSlidingRebaseVirtuosoLocation) {
@@ -1676,44 +1545,9 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 !isLiveEdgeAppendCorrectionInProgress() &&
                 !matchesExpectedProgrammaticTargetScroll;
 
-            logTimelineViewPresenter(
-                "scroll",
-                "currentScrollTop",
-                currentScrollTop,
-                "previousScrollTop",
-                previousScrollTop,
-                "upwardDelta",
-                upwardDelta,
-                "snapCandidate",
-                snapCandidate,
-                "isLikelyUserScroll",
-                isLikelyUserScroll,
-                "followOutputEnabled",
-                followOutputEnabled,
-                "snapshotIsAtLiveEdge",
-                snapshot.isAtLiveEdge,
-                "hasScrollTarget",
-                latest.hasScrollTarget,
-                "suppressForwardPaginationUntilUserScrollAfterAnchor",
-                suppressForwardPaginationUntilUserScrollAfterAnchorRef.current,
-                "suppressForwardLiveEdgeSeekAfterAnchor",
-                suppressForwardLiveEdgeSeekAfterAnchorRef.current,
-                "liveEdgeAppendCorrectionInProgress",
-                isLiveEdgeAppendCorrectionInProgress(),
-            );
-
             if (isLikelyUserScroll) {
                 if (latest.hasScrollTarget && latest.initialFillState !== "filling") {
                     advanceScrollTargetCorrectionGeneration();
-                    logTimelineViewPresenter(
-                        "scroll:abandonPendingTargetOnUserScroll",
-                        "targetKey",
-                        snapshot.scrollTarget?.targetKey ?? null,
-                        "currentScrollTop",
-                        currentScrollTop,
-                        "previousScrollTop",
-                        previousScrollTop,
-                    );
                     markAnchorResolved();
                 }
 
@@ -1750,13 +1584,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 !latest.hasScrollTarget &&
                 isLikelyUserScroll
             ) {
-                logTimelineViewPresenter(
-                    "scroll:clear-anchor-suppression",
-                    "currentScrollTop",
-                    currentScrollTop,
-                    "previousScrollTop",
-                    previousScrollTop,
-                );
                 suppressForwardPaginationUntilUserScrollAfterAnchorRef.current = false;
                 suppressForwardLiveEdgeSeekAfterAnchorRef.current = false;
             }
@@ -1861,31 +1688,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         const previousRenderState = previousRenderStateRef.current;
         const currentRangeKey = summarizeTimelineItems(snapshot.items);
         const windowShift = getContiguousWindowShift(previousRenderState.items, snapshot.items);
-        logTimelineViewPresenter(
-            "forwardCompletion:windowShift",
-            "previousRangeKey",
-            summarizeTimelineItems(previousRenderState.items),
-            "currentRangeKey",
-            currentRangeKey,
-            "previousFirstKey",
-            previousRenderState.items[0]?.key ?? null,
-            "previousLastKey",
-            previousRenderState.items.at(-1)?.key ?? null,
-            "currentFirstKey",
-            snapshot.items[0]?.key ?? null,
-            "currentLastKey",
-            snapshot.items.at(-1)?.key ?? null,
-            "windowShift",
-            windowShift,
-            "continuityMode",
-            forwardPaginationContextRef.current?.continuityMode ?? null,
-            "requestReason",
-            forwardPaginationContextRef.current?.requestReason ?? null,
-            "lastVisibleRangeStart",
-            lastVisibleRangeRef.current?.startIndex ?? null,
-            "lastVisibleRangeEnd",
-            lastVisibleRangeRef.current?.endIndex ?? null,
-        );
         const lastVisibleRange = lastVisibleRangeRef.current;
         const shiftedVisibleRange =
             lastVisibleRange === null
@@ -1944,45 +1746,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             previousRenderState.isAtLiveEdge &&
             snapshot.isAtLiveEdge &&
             previousRenderState.items.at(-1)?.key !== snapshot.items.at(-1)?.key;
-        logTimelineViewPresenter(
-            "forwardCompletion:summary",
-            "forwardPaginationCompleted",
-            forwardPaginationCompleted,
-            "previousVisibleStartKey",
-            lastVisibleRangeRef.current
-                ? (previousRenderState.items[lastVisibleRangeRef.current.startIndex]?.key ?? null)
-                : null,
-            "previousVisibleEndKey",
-            lastVisibleRangeRef.current
-                ? (previousRenderState.items[lastVisibleRangeRef.current.endIndex]?.key ?? null)
-                : null,
-            "shiftedVisibleRangeStart",
-            shiftedVisibleRange?.startIndex ?? null,
-            "shiftedVisibleRangeEnd",
-            shiftedVisibleRange?.endIndex ?? null,
-            "shiftedVisibleStartKey",
-            shiftedVisibleRange ? (snapshot.items[shiftedVisibleRange.startIndex]?.key ?? null) : null,
-            "shiftedVisibleEndKey",
-            shiftedVisibleRange ? (snapshot.items[shiftedVisibleRange.endIndex]?.key ?? null) : null,
-            "windowShift",
-            windowShift,
-            "continuityMode",
-            forwardPaginationContextRef.current?.continuityMode ?? null,
-            "requestReason",
-            forwardPaginationContextRef.current?.requestReason ?? null,
-            "shouldRestoreForwardPaginationAnchor",
-            shouldRestoreForwardPaginationAnchor,
-            "shouldApplyImmediateAtBottomForwardPaginationAnchorRestore",
-            shouldApplyImmediateAtBottomForwardPaginationAnchorRestore,
-            "shouldRestoreForwardPaginationShiftedRange",
-            shouldRestoreForwardPaginationShiftedRange,
-            "handledRangeMatchesCurrent",
-            handledForwardPaginationSlidingRebaseRangeRef.current === currentRangeKey,
-            "blockedRangeMatchesCurrent",
-            blockedForwardPaginationSlidingRebaseRangeRef.current === currentRangeKey,
-            "forwardSlidingRebaseLockActive",
-            isForwardPaginationSlidingRebaseLockActive(),
-        );
 
         applyForwardPaginationCompletion({
             scrollerElement,

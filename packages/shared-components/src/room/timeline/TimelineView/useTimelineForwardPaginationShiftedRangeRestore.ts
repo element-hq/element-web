@@ -18,12 +18,6 @@ const REQUIRED_STABLE_FORWARD_PAGINATION_SHIFTED_RANGE_VIRTUOSO_FOLLOWUP_FRAMES 
 const BLOCKED_FORWARD_PAGINATION_SHIFTED_RANGE_RESTORE_EPSILON_PX = 24;
 const MAX_FORWARD_PAGINATION_SHIFTED_RANGE_SYNCHRONOUS_LAYOUT_STEPS = 4;
 
-function logTimelineForwardPaginationShiftedRangeRestore(
-    ...parts: Array<string | number | boolean | null | undefined>
-): void {
-    void parts;
-}
-
 interface UseTimelineForwardPaginationShiftedRangeRestoreParams {
     getForwardPaginationContext: () => ForwardPaginationContext | null;
     getCurrentRangeKey: () => string;
@@ -70,13 +64,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
     const forwardPaginationShiftedRangeRestoreGenerationRef = useRef(0);
 
     const cancelPendingForwardPaginationShiftedRangeRestore = useCallback(() => {
-        logTimelineForwardPaginationShiftedRangeRestore(
-            "cancel",
-            "inProgress",
-            forwardPaginationShiftedRangeRestoreInProgressRef.current,
-            "generation",
-            forwardPaginationShiftedRangeRestoreGenerationRef.current,
-        );
         forwardPaginationShiftedRangeRestoreGenerationRef.current += 1;
         for (const frameId of forwardPaginationShiftedRangeRestoreFrameIdsRef.current) {
             window.cancelAnimationFrame(frameId);
@@ -90,7 +77,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
             cancelPendingForwardPaginationShiftedRangeRestore();
             forwardPaginationShiftedRangeRestoreInProgressRef.current = true;
             const restoreGeneration = forwardPaginationShiftedRangeRestoreGenerationRef.current;
-            logTimelineForwardPaginationShiftedRangeRestore("followup:start", "generation", restoreGeneration);
 
             const applyCorrection = (
                 attempt: number,
@@ -100,15 +86,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                     restoreGeneration !== forwardPaginationShiftedRangeRestoreGenerationRef.current ||
                     !targetScrollerElement.isConnected
                 ) {
-                    logTimelineForwardPaginationShiftedRangeRestore(
-                        "followup:abort-generation-or-detached",
-                        "generation",
-                        restoreGeneration,
-                        "currentGeneration",
-                        forwardPaginationShiftedRangeRestoreGenerationRef.current,
-                        "connected",
-                        targetScrollerElement.isConnected,
-                    );
                     forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
                     return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
                 }
@@ -118,28 +95,12 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                 const desiredBottomOffset = getForwardPaginationContext()?.shiftedRangeBottomOffsetPx;
                 const shouldUseBottomOffset = false;
                 if (!anchorKey || (shouldUseBottomOffset ? desiredBottomOffset == null : desiredTopOffset == null)) {
-                    logTimelineForwardPaginationShiftedRangeRestore(
-                        "followup:abort-missing-context",
-                        "anchorKey",
-                        anchorKey,
-                        "useBottomOffset",
-                        shouldUseBottomOffset,
-                        "desiredTopOffset",
-                        desiredTopOffset,
-                        "desiredBottomOffset",
-                        desiredBottomOffset,
-                    );
                     forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
                     return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
                 }
 
                 const anchorElement = findTimelineItemElement(targetScrollerElement, anchorKey);
                 if (!anchorElement) {
-                    logTimelineForwardPaginationShiftedRangeRestore(
-                        "followup:abort-missing-anchor-element",
-                        "anchorKey",
-                        anchorKey,
-                    );
                     forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
                     return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
                 }
@@ -149,19 +110,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                     : getTopOffset(targetScrollerElement, anchorElement);
                 const desiredOffset = shouldUseBottomOffset ? desiredBottomOffset : desiredTopOffset;
                 const scrollAdjustment = currentOffset - (desiredOffset ?? 0);
-                logTimelineForwardPaginationShiftedRangeRestore(
-                    "followup:apply",
-                    "attempt",
-                    attempt,
-                    "useBottomOffset",
-                    shouldUseBottomOffset,
-                    "currentOffset",
-                    currentOffset,
-                    "desiredOffset",
-                    desiredOffset ?? null,
-                    "scrollAdjustment",
-                    scrollAdjustment,
-                );
                 const nextStableFrameCount = Math.abs(scrollAdjustment) <= 1 ? stableFrameCount + 1 : 0;
                 if (scrollAdjustment !== 0) {
                     const nextScrollTop = targetScrollerElement.scrollTop + scrollAdjustment;
@@ -230,20 +178,12 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
     const scheduleForwardPaginationShiftedRangeRestore = useCallback(
         (targetScrollerElement: HTMLElement, options?: { skipInitialBlockedRebasePrime?: boolean }) => {
             if (isForwardPaginationSlidingRebaseVirtuosoRestoreActive()) {
-                logTimelineForwardPaginationShiftedRangeRestore("restore:skip-virtuoso-restore-active");
                 return;
             }
 
             const anchorKey = getForwardPaginationContext()?.shiftedRangeAnchorKey;
             const desiredTopOffset = getForwardPaginationContext()?.shiftedRangeTopOffsetPx;
             if (!anchorKey || desiredTopOffset === null || desiredTopOffset === undefined) {
-                logTimelineForwardPaginationShiftedRangeRestore(
-                    "restore:skip-missing-initial-context",
-                    "anchorKey",
-                    anchorKey,
-                    "desiredTopOffset",
-                    desiredTopOffset,
-                );
                 return;
             }
 
@@ -251,13 +191,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
             forwardPaginationShiftedRangeRestoreInProgressRef.current = true;
             const restoreGeneration = forwardPaginationShiftedRangeRestoreGenerationRef.current;
             const skipInitialBlockedRebasePrime = options?.skipInitialBlockedRebasePrime ?? false;
-            logTimelineForwardPaginationShiftedRangeRestore(
-                "restore:start",
-                "generation",
-                restoreGeneration,
-                "skipInitialBlockedRebasePrime",
-                skipInitialBlockedRebasePrime,
-            );
 
             const applyRestoreStep = (
                 attempt: number,
@@ -268,11 +201,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                 const blockedForwardSlidingRebaseRecoveryActive =
                     getBlockedForwardPaginationSlidingRebaseRange() === currentRangeKey;
                 if (blockedForwardSlidingRebaseRecoveryActive) {
-                    logTimelineForwardPaginationShiftedRangeRestore(
-                        "restore:blocked-recovery-active",
-                        "currentRangeKey",
-                        currentRangeKey,
-                    );
                     armForwardPaginationSlidingRebaseLock();
                 }
 
@@ -280,21 +208,11 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                     restoreGeneration !== forwardPaginationShiftedRangeRestoreGenerationRef.current ||
                     isForwardPaginationSlidingRebaseVirtuosoRestoreActive()
                 ) {
-                    logTimelineForwardPaginationShiftedRangeRestore(
-                        "restore:abort-generation-or-virtuoso-active",
-                        "generation",
-                        restoreGeneration,
-                        "currentGeneration",
-                        forwardPaginationShiftedRangeRestoreGenerationRef.current,
-                        "virtuosoRestoreActive",
-                        isForwardPaginationSlidingRebaseVirtuosoRestoreActive(),
-                    );
                     forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
                     return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
                 }
 
                 if (!targetScrollerElement.isConnected) {
-                    logTimelineForwardPaginationShiftedRangeRestore("restore:abort-detached");
                     forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
                     return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
                 }
@@ -309,17 +227,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                         ? currentDesiredBottomOffset === null || currentDesiredBottomOffset === undefined
                         : currentDesiredTopOffset === null || currentDesiredTopOffset === undefined)
                 ) {
-                    logTimelineForwardPaginationShiftedRangeRestore(
-                        "restore:abort-missing-context",
-                        "anchorKey",
-                        currentAnchorKey,
-                        "useBottomOffset",
-                        shouldUseBottomOffset,
-                        "desiredTopOffset",
-                        currentDesiredTopOffset,
-                        "desiredBottomOffset",
-                        currentDesiredBottomOffset,
-                    );
                     forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
                     return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
                 }
@@ -332,13 +239,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                         attempt === 0 &&
                         phase === "layout";
                     if (shouldDeferInitialBlockedForwardSlidingRebasePrime) {
-                        logTimelineForwardPaginationShiftedRangeRestore(
-                            "restore:defer-initial-blocked-prime",
-                            "attempt",
-                            attempt,
-                            "phase",
-                            phase,
-                        );
                         return { shouldContinue: true, nextStableFrameCount: 0 };
                     }
                     const shouldPrimeBlockedForwardSlidingRebaseRecovery =
@@ -346,13 +246,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                         targetScrollerElement.clientHeight > 0 &&
                         attempt < MAX_BACKWARD_PAGINATION_ANCHOR_CORRECTION_FRAMES;
                     if (shouldPrimeBlockedForwardSlidingRebaseRecovery) {
-                        logTimelineForwardPaginationShiftedRangeRestore(
-                            "restore:prime-blocked-recovery",
-                            "attempt",
-                            attempt,
-                            "phase",
-                            phase,
-                        );
                         const primeStepPx = Math.min(
                             MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX,
                             targetScrollerElement.clientHeight,
@@ -365,11 +258,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                         }
                         return { shouldContinue: true, nextStableFrameCount: 0 };
                     }
-                    logTimelineForwardPaginationShiftedRangeRestore(
-                        "restore:abort-missing-anchor-element",
-                        "anchorKey",
-                        currentAnchorKey,
-                    );
                     forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
                     return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
                 }
@@ -397,29 +285,6 @@ export function useTimelineForwardPaginationShiftedRangeRestore({
                               -maxClampedAdjustmentPx,
                               Math.min(maxClampedAdjustmentPx, unclampedScrollAdjustment),
                           );
-                logTimelineForwardPaginationShiftedRangeRestore(
-                    "restore:apply",
-                    "attempt",
-                    attempt,
-                    "phase",
-                    phase,
-                    "useBottomOffset",
-                    shouldUseBottomOffset,
-                    "currentOffset",
-                    currentOffset,
-                    "desiredOffset",
-                    desiredOffset ?? null,
-                    "rawScrollAdjustment",
-                    rawScrollAdjustment,
-                    "unclampedScrollAdjustment",
-                    unclampedScrollAdjustment,
-                    "scrollAdjustment",
-                    scrollAdjustment,
-                    "clamped",
-                    maxClampedAdjustmentPx != null && scrollAdjustment !== unclampedScrollAdjustment,
-                    "acceptBlockedResidualOffset",
-                    shouldAcceptBlockedForwardSlidingRebaseResidualOffset,
-                );
                 const nextStableFrameCount = shouldAcceptBlockedForwardSlidingRebaseResidualOffset
                     ? REQUIRED_STABLE_BACKWARD_PAGINATION_ANCHOR_FRAMES
                     : Math.abs(scrollAdjustment) <= 1

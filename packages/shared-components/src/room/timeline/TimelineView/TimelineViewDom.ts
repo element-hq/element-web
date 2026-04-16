@@ -111,16 +111,6 @@ export function getScrollTargetAdjustment({
 // Local scroll correction ---------------------------------------------------
 
 /**
- * Returns whether applying the requested local correction would produce a
- * meaningful `scrollTop` change after clamping to the top of the scroller.
- */
-export function canAdjustScrollTop(currentScrollTop: number, scrollAdjustment: number): boolean {
-    const nextScrollTop = currentScrollTop + scrollAdjustment;
-    const clampedScrollTop = Math.max(0, nextScrollTop);
-    return Math.abs(clampedScrollTop - currentScrollTop) > SNAP_TO_TARGET_OFFSET_EPSILON_PX;
-}
-
-/**
  * Returns whether applying the requested local correction would change
  * `scrollTop` enough to matter for precise target alignment.
  *

@@ -20,10 +20,6 @@ import type { TimelineItem, TimelineViewModel, TimelineViewSnapshot } from "./ty
 
 type InitialFillState = "filling" | "settling" | "done";
 
-function logTimelineAnchorResolution(...parts: Array<string | number | boolean | null | undefined>): void {
-    void parts;
-}
-
 /**
  * Maximum number of local DOM-based retries when trying to align an anchor
  * after virtualization or pagination changes the rendered geometry.
@@ -92,13 +88,6 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
 
     useEffect(() => {
         resetAnchorResolutionRetryCount();
-        logTimelineAnchorResolution(
-            "resetRetryCount",
-            "targetKey",
-            snapshot.scrollTarget?.targetKey ?? null,
-            "initialFillState",
-            initialFillState,
-        );
     }, [initialFillState, resetAnchorResolutionRetryCount, vm, snapshot.scrollTarget]);
 
     useEffect(() => {
@@ -109,21 +98,11 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
         const timeoutId = window.setTimeout(() => {
             const effectiveScrollerElement = getEffectiveScrollerElement(scrollerElement);
             if (!effectiveScrollerElement || effectiveScrollerElement.clientHeight === 0) {
-                logTimelineAnchorResolution(
-                    "ackCheck:skip-no-scroller",
-                    "targetKey",
-                    snapshot.scrollTarget?.targetKey ?? null,
-                );
                 return;
             }
 
             const targetElement = findTimelineItemElement(effectiveScrollerElement, snapshot.scrollTarget!.targetKey);
             if (!targetElement) {
-                logTimelineAnchorResolution(
-                    "ackCheck:skip-no-target-element",
-                    "targetKey",
-                    snapshot.scrollTarget?.targetKey ?? null,
-                );
                 return;
             }
 
@@ -140,17 +119,6 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
             const fullyVisible = isTimelineItemFullyVisible(effectiveScrollerElement, targetElement);
             if (!aligned) {
                 if (initialFillState !== "filling" && isSettledTargetAlignment(scrollAdjustment)) {
-                    logTimelineAnchorResolution(
-                        "ackCheck:settled-fallback",
-                        "targetKey",
-                        snapshot.scrollTarget?.targetKey ?? null,
-                        "position",
-                        snapshot.scrollTarget?.position ?? null,
-                        "scrollTop",
-                        effectiveScrollerElement.scrollTop,
-                        "scrollAdjustment",
-                        scrollAdjustment,
-                    );
                     markAnchorResolved();
                     return;
                 }
@@ -160,53 +128,15 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
                     fullyVisible &&
                     !canAdjustScrollTopForTargetAlignment(effectiveScrollerElement.scrollTop, scrollAdjustment)
                 ) {
-                    logTimelineAnchorResolution(
-                        "ackCheck:fully-visible-fallback",
-                        "targetKey",
-                        snapshot.scrollTarget?.targetKey ?? null,
-                        "position",
-                        snapshot.scrollTarget?.position ?? null,
-                        "scrollTop",
-                        effectiveScrollerElement.scrollTop,
-                        "scrollAdjustment",
-                        scrollAdjustment,
-                    );
                     markAnchorResolved();
                     return;
                 }
 
                 if (initialFillState !== "filling") {
-                    logTimelineAnchorResolution(
-                        "ackCheck:retry-layout",
-                        "targetKey",
-                        snapshot.scrollTarget?.targetKey ?? null,
-                        "position",
-                        snapshot.scrollTarget?.position ?? null,
-                        "scrollTop",
-                        effectiveScrollerElement.scrollTop,
-                        "scrollAdjustment",
-                        scrollAdjustment,
-                    );
                     setAnchorResolutionRetryNonce((currentNonce) => currentNonce + 1);
                 }
-
-                logTimelineAnchorResolution(
-                    "ackCheck:not-aligned",
-                    "targetKey",
-                    snapshot.scrollTarget?.targetKey ?? null,
-                    "position",
-                    snapshot.scrollTarget?.position ?? null,
-                );
                 return;
             }
-
-            logTimelineAnchorResolution(
-                "ackCheck:aligned",
-                "targetKey",
-                snapshot.scrollTarget?.targetKey ?? null,
-                "position",
-                snapshot.scrollTarget?.position ?? null,
-            );
             markAnchorResolved();
         }, 0);
 
@@ -241,17 +171,6 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
 
         const targetElement = findTimelineItemElement(effectiveScrollerElement, snapshot.scrollTarget.targetKey);
         if (!targetElement) {
-            logTimelineAnchorResolution(
-                "layout:no-target-element",
-                "targetKey",
-                snapshot.scrollTarget.targetKey,
-                "initialFillState",
-                initialFillState,
-                "backwardPagination",
-                snapshot.backwardPagination,
-                "canPaginateBackward",
-                snapshot.canPaginateBackward,
-            );
             if (
                 initialFillState === "filling" &&
                 snapshot.backwardPagination === "idle" &&
@@ -282,23 +201,6 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
             targetElement,
             position: snapshot.scrollTarget.position,
         });
-        logTimelineAnchorResolution(
-            "layout:check",
-            "targetKey",
-            snapshot.scrollTarget.targetKey,
-            "position",
-            snapshot.scrollTarget.position ?? null,
-            "aligned",
-            aligned,
-            "scrollTop",
-            effectiveScrollerElement.scrollTop,
-            "scrollAdjustment",
-            scrollAdjustment,
-            "initialFillState",
-            initialFillState,
-            "backwardPagination",
-            snapshot.backwardPagination,
-        );
 
         if (
             !aligned &&
@@ -362,17 +264,6 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
                         }
 
                         if (initialFillState !== "filling" && isSettledTargetAlignment(adjustmentAfterCorrection)) {
-                            logTimelineAnchorResolution(
-                                "verify:settled-fallback",
-                                "targetKey",
-                                targetKey,
-                                "position",
-                                targetPosition ?? null,
-                                "scrollTop",
-                                effectiveScrollerElement.scrollTop,
-                                "scrollAdjustment",
-                                adjustmentAfterCorrection,
-                            );
                             markAnchorResolved();
                             return;
                         }
@@ -385,17 +276,6 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
                                 adjustmentAfterCorrection,
                             )
                         ) {
-                            logTimelineAnchorResolution(
-                                "verify:fully-visible-fallback",
-                                "targetKey",
-                                targetKey,
-                                "position",
-                                targetPosition ?? null,
-                                "scrollTop",
-                                effectiveScrollerElement.scrollTop,
-                                "scrollAdjustment",
-                                adjustmentAfterCorrection,
-                            );
                             markAnchorResolved();
                             return;
                         }
@@ -473,17 +353,6 @@ export function useTimelineAnchorResolution<TItem extends TimelineItem>({
         }
 
         if (!aligned && initialFillState !== "filling" && isSettledTargetAlignment(scrollAdjustment)) {
-            logTimelineAnchorResolution(
-                "layout:settled-fallback",
-                "targetKey",
-                snapshot.scrollTarget.targetKey,
-                "position",
-                snapshot.scrollTarget.position ?? null,
-                "scrollTop",
-                effectiveScrollerElement.scrollTop,
-                "scrollAdjustment",
-                scrollAdjustment,
-            );
             markAnchorResolved();
             return;
         }
