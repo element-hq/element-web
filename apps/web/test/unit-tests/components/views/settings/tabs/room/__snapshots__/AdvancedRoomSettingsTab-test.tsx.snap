@@ -38,11 +38,11 @@ exports[`AdvancedRoomSettingsTab should render as expected 1`] = `
                 <span>
                   Internal room ID
                 </span>
-                <div
+                <span
                   class="mx_CopyableText mx_CopyableText_border"
                 >
                   !room:example.com
-                  <div
+                  <button
                     aria-label="Copy"
                     class="mx_AccessibleButton mx_CopyableText_copyButton"
                     role="button"
@@ -62,8 +62,8 @@ exports[`AdvancedRoomSettingsTab should render as expected 1`] = `
                         d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                       />
                     </svg>
-                  </div>
-                </div>
+                  </button>
+                </span>
               </div>
             </div>
           </div>
