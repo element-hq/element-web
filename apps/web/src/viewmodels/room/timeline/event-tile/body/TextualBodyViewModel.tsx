@@ -25,7 +25,7 @@ import { tryTransformPermalinkToLocalHref } from "../../../../../utils/permalink
 import { Action } from "../../../../../dispatcher/actions";
 import QuestionDialog from "../../../../../components/views/dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../../../../../components/views/dialogs/MessageEditHistoryDialog";
-import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
+import { type TimelineRenderingType } from "../../../../../contexts/RoomContext";
 
 const CAPTION_MESSAGE_TYPES = new Set<MsgType>([MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video]);
 
