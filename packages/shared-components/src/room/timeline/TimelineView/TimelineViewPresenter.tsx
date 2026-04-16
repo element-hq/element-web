@@ -16,7 +16,6 @@ import {
     INITIAL_FIRST_ITEM_INDEX,
     OVERSCAN_PX,
     getContiguousWindowShift,
-    getForwardPaginationAnchorAdjustment,
     getForwardPaginationAnchorIndex,
     getIsAtLiveEdgeFromBottomState,
     getPostInitialFillBottomSnapIndex,
@@ -30,34 +29,21 @@ import {
     shouldReplayPendingForwardPaginationAfterInitialFill,
 } from "./TimelineViewBehavior";
 import {
-    MAX_LOCAL_ANCHOR_CORRECTION_ATTEMPTS,
-    REQUIRED_STABLE_ANCHOR_ALIGNMENT_CHECKS,
     canSnapToBottom,
-    cannotAlignWithinLoadedWindow,
     findTimelineItemElement,
     getFirstVisibleTimelineItemElement,
-    getBottomOffset,
     getClampedScrollTop,
-    getLastVisibleTimelineItemElement,
     getTopOffset,
-    getScrollTargetAdjustment,
-    isScrollTargetAligned,
 } from "./TimelineViewDom";
 import type { PaginationState, TimelineItem, TimelineViewModel, VisibleRange } from "./types";
+import { useTimelineAnchorResolution } from "./useTimelineAnchorResolution";
+import { type ForwardPaginationContext, useTimelineForwardPagination } from "./useTimelineForwardPagination";
+import { useTimelineForwardPaginationAnchorRestore } from "./useTimelineForwardPaginationAnchorRestore";
+import { useTimelineForwardPaginationShiftedRangeRestore } from "./useTimelineForwardPaginationShiftedRangeRestore";
+import { useTimelineForwardSlidingRebaseLock } from "./useTimelineForwardSlidingRebaseLock";
+import { useTimelineLiveEdge } from "./useTimelineLiveEdge";
 
 type InitialFillState = "filling" | "settling" | "done";
-
-interface ForwardPaginationContext {
-    continuityMode: "anchor" | "bottom" | "shifted-range";
-    requestReason: string;
-    anchorKey: string | null;
-    lastVisibleRange: VisibleRange | null;
-    bottomOffsetPx: number | null;
-    shiftedRangeAnchorKey: string | null;
-    shiftedRangeTopOffsetPx: number | null;
-    requestedAtLiveEdge: boolean;
-    requestedWhileSeekingLiveEdge: boolean;
-}
 
 interface BackwardPaginationContext {
     anchorKey: string | null;
@@ -100,24 +86,279 @@ const FOLLOW_OUTPUT_DISABLE_SCROLL_EPSILON_PX = 4;
 const VIRTUOSO_AT_BOTTOM_THRESHOLD_PX = 4;
 const LIVE_EDGE_CLAMP_EPSILON_PX = 4;
 const LIVE_EDGE_RECOVERY_EPSILON_PX = 64;
-const MAX_LIVE_EDGE_APPEND_CORRECTION_FRAMES = 8;
-const REQUIRED_STABLE_LIVE_EDGE_APPEND_FRAMES = 2;
 const MAX_BACKWARD_PAGINATION_ANCHOR_CORRECTION_FRAMES = 8;
-const REQUIRED_STABLE_BACKWARD_PAGINATION_ANCHOR_FRAMES = 2;
-const MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_FRAMES = 8;
-const REQUIRED_STABLE_FORWARD_PAGINATION_ANCHOR_FRAMES = 2;
 const MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX = 96;
-const MAX_FORWARD_PAGINATION_SHIFTED_RANGE_VIRTUOSO_FOLLOWUP_FRAMES = 6;
-const REQUIRED_STABLE_FORWARD_PAGINATION_SHIFTED_RANGE_VIRTUOSO_FOLLOWUP_FRAMES = 2;
-const BLOCKED_FORWARD_PAGINATION_SHIFTED_RANGE_RESTORE_EPSILON_PX = 24;
-const REQUIRED_INITIAL_LIVE_EDGE_SETTLE_QUIET_PERIOD_MS = 200;
-const MAX_INITIAL_LIVE_EDGE_SETTLE_DURATION_MS = 2000;
+const REQUIRED_STABLE_BACKWARD_PAGINATION_ANCHOR_FRAMES = 2;
 const USER_SCROLL_GESTURE_IDLE_GAP_MS = 200;
 
 function summarizeTimelineItems<TItem extends TimelineItem>(items: TItem[]): string {
     const firstKey = items[0]?.key ?? "none";
     const lastKey = items.at(-1)?.key ?? "none";
     return `${firstKey}..${lastKey} (${items.length})`;
+}
+
+/**
+ * Detects when a forward sliding rebase restore was interrupted by additional
+ * layout movement and re-primes the shifted-range restore flow from the
+ * scroller's current DOM state.
+ *
+ * This remains in the presenter because it coordinates presenter-owned refs and
+ * the extracted shifted-range/lock hooks rather than owning a separate state
+ * machine.
+ */
+function handleBlockedForwardSlidingRebaseRecovery({
+    scrollerElement,
+    currentRangeKey,
+    previousScrollTop,
+    currentScrollTop,
+    exactBottomScrollTop,
+    ignoreNextEndReached,
+    activeForwardSlidingRebaseRange,
+    blockedForwardSlidingRebaseRange,
+    blockedRecoverySettledRangeKey,
+    blockedRecoverySettledScrollTop,
+    blockedRecoveryAnchorKey,
+    blockedRecoveryDesiredTopOffset,
+    setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+    setHandledForwardPaginationSlidingRebaseRange,
+    setBlockedForwardPaginationSlidingRebaseRange,
+    setActiveForwardPaginationSlidingRebaseScrollLocation,
+    clearPendingVisibleRangeDuringForwardSlidingRebaseLock,
+    cancelPendingForwardPaginationShiftedRangeRestore,
+    cancelPendingForwardPaginationSlidingRebaseLock,
+    armForwardPaginationSlidingRebaseLock,
+    scheduleForwardPaginationShiftedRangeRestore,
+}: {
+    scrollerElement: HTMLElement;
+    currentRangeKey: string;
+    previousScrollTop: number | null;
+    currentScrollTop: number;
+    exactBottomScrollTop: number;
+    ignoreNextEndReached: boolean;
+    activeForwardSlidingRebaseRange: boolean;
+    blockedForwardSlidingRebaseRange: boolean;
+    blockedRecoverySettledRangeKey: string | null;
+    blockedRecoverySettledScrollTop: number | null;
+    blockedRecoveryAnchorKey: string | null;
+    blockedRecoveryDesiredTopOffset: number | null;
+    setForwardPaginationSlidingRebaseVirtuosoRestoreActive: (active: boolean) => void;
+    setHandledForwardPaginationSlidingRebaseRange: (rangeKey: string | null) => void;
+    setBlockedForwardPaginationSlidingRebaseRange: (rangeKey: string | null) => void;
+    setActiveForwardPaginationSlidingRebaseScrollLocation: (scrollLocation: ScrollIntoViewLocation | null) => void;
+    clearPendingVisibleRangeDuringForwardSlidingRebaseLock: () => void;
+    cancelPendingForwardPaginationShiftedRangeRestore: () => void;
+    cancelPendingForwardPaginationSlidingRebaseLock: () => void;
+    armForwardPaginationSlidingRebaseLock: () => void;
+    scheduleForwardPaginationShiftedRangeRestore: (
+        targetScrollerElement: HTMLElement,
+        options?: { skipInitialBlockedRebasePrime?: boolean },
+    ) => void;
+}): boolean {
+    if (
+        !(activeForwardSlidingRebaseRange || blockedForwardSlidingRebaseRange) ||
+        previousScrollTop === null ||
+        currentScrollTop - previousScrollTop <= 128 ||
+        (exactBottomScrollTop - currentScrollTop > 96 && !ignoreNextEndReached)
+    ) {
+        return false;
+    }
+
+    if (activeForwardSlidingRebaseRange) {
+        setForwardPaginationSlidingRebaseVirtuosoRestoreActive(false);
+        setHandledForwardPaginationSlidingRebaseRange(null);
+        setBlockedForwardPaginationSlidingRebaseRange(currentRangeKey);
+        setActiveForwardPaginationSlidingRebaseScrollLocation(null);
+    }
+
+    const settledBlockedRecoveryScrollTop =
+        blockedForwardSlidingRebaseRange &&
+        blockedRecoverySettledRangeKey === currentRangeKey &&
+        blockedRecoverySettledScrollTop !== null
+            ? blockedRecoverySettledScrollTop
+            : null;
+    const blockedRecoveryAnchorElement =
+        blockedRecoveryAnchorKey != null ? findTimelineItemElement(scrollerElement, blockedRecoveryAnchorKey) : null;
+
+    if (settledBlockedRecoveryScrollTop !== null) {
+        cancelPendingForwardPaginationShiftedRangeRestore();
+        cancelPendingForwardPaginationSlidingRebaseLock();
+        setForwardPaginationSlidingRebaseVirtuosoRestoreActive(false);
+        clearPendingVisibleRangeDuringForwardSlidingRebaseLock();
+        scrollerElement.scrollTo({
+            top: settledBlockedRecoveryScrollTop,
+        });
+        return true;
+    }
+
+    if (blockedForwardSlidingRebaseRange && blockedRecoveryAnchorElement && blockedRecoveryDesiredTopOffset != null) {
+        const currentTopOffset = getTopOffset(scrollerElement, blockedRecoveryAnchorElement);
+        const scrollAdjustment = currentTopOffset - blockedRecoveryDesiredTopOffset;
+        if (scrollAdjustment !== 0) {
+            scrollerElement.scrollTo({
+                top: scrollerElement.scrollTop + scrollAdjustment,
+            });
+        }
+    } else {
+        const shouldRevertForwardSlidingRebaseRecoveryToPreviousScrollTop =
+            previousScrollTop < currentScrollTop &&
+            (activeForwardSlidingRebaseRange || blockedForwardSlidingRebaseRange);
+        const primeStepPx = Math.min(MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX, scrollerElement.clientHeight);
+        const primedScrollTop = shouldRevertForwardSlidingRebaseRecoveryToPreviousScrollTop
+            ? previousScrollTop
+            : getClampedScrollTop(currentScrollTop, -primeStepPx);
+        if (primedScrollTop !== currentScrollTop) {
+            scrollerElement.scrollTo({
+                top: primedScrollTop,
+            });
+        }
+    }
+
+    armForwardPaginationSlidingRebaseLock();
+    scheduleForwardPaginationShiftedRangeRestore(scrollerElement, {
+        skipInitialBlockedRebasePrime: blockedRecoveryAnchorElement === null,
+    });
+    return true;
+}
+
+/**
+ * Applies the post-forward-pagination continuity strategy selected by the
+ * presenter after a render completes.
+ *
+ * Depending on the captured continuity mode this schedules anchor restoration,
+ * shifted-range restoration, or exact-bottom preservation, and it clears
+ * pagination contexts once no further restore loop is active.
+ */
+function applyForwardPaginationCompletion({
+    scrollerElement,
+    currentRangeKey,
+    windowShift,
+    forwardPaginationCompleted,
+    forwardPaginationAnchorIndex,
+    shouldRestoreForwardPaginationAnchor,
+    shouldRestoreForwardPaginationShiftedRange,
+    shouldPreserveForwardPaginationBottom,
+    backwardPaginationCompleted,
+    hasBackwardPaginationAnchor,
+    appendedWhileAtLiveEdge,
+    hasHandledForwardSlidingRebaseRangeForCurrentRange,
+    hasActiveForwardPaginationSlidingRebaseScrollLocation,
+    isForwardPaginationAnchorCorrectionInProgress,
+    isForwardPaginationShiftedRangeRestoreInProgress,
+    armForwardPaginationSlidingRebaseLock,
+    setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+    cancelPendingForwardPaginationShiftedRangeRestore,
+    setHandledForwardPaginationSlidingRebaseRange,
+    scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection,
+    scheduleForwardPaginationShiftedRangeRestore,
+    scheduleForwardPaginationAnchorCorrection,
+    scheduleBackwardPaginationAnchorCorrection,
+    scheduleLiveEdgeAppendCorrection,
+    clearForwardPaginationContext,
+    clearBackwardPaginationContext,
+}: {
+    scrollerElement: HTMLElement | null;
+    currentRangeKey: string;
+    windowShift: number;
+    forwardPaginationCompleted: boolean;
+    shouldRestoreForwardPaginationAnchor: boolean;
+    shouldRestoreForwardPaginationShiftedRange: boolean;
+    shouldPreserveForwardPaginationBottom: boolean;
+    backwardPaginationCompleted: boolean;
+    hasBackwardPaginationAnchor: boolean;
+    appendedWhileAtLiveEdge: boolean;
+    hasHandledForwardSlidingRebaseRangeForCurrentRange: boolean;
+    hasActiveForwardPaginationSlidingRebaseScrollLocation: boolean;
+    isForwardPaginationAnchorCorrectionInProgress: boolean;
+    isForwardPaginationShiftedRangeRestoreInProgress: boolean;
+    armForwardPaginationSlidingRebaseLock: () => void;
+    setForwardPaginationSlidingRebaseVirtuosoRestoreActive: (active: boolean) => void;
+    cancelPendingForwardPaginationShiftedRangeRestore: () => void;
+    setHandledForwardPaginationSlidingRebaseRange: (rangeKey: string | null) => void;
+    scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection: (targetScrollerElement: HTMLElement) => void;
+    scheduleForwardPaginationShiftedRangeRestore: (
+        targetScrollerElement: HTMLElement,
+        options?: { skipInitialBlockedRebasePrime?: boolean },
+    ) => void;
+    scheduleForwardPaginationAnchorCorrection: (
+        targetScrollerElement: HTMLElement,
+        windowShift: number,
+        forwardPaginationAnchorIndex: number | null,
+    ) => void;
+    scheduleBackwardPaginationAnchorCorrection: (targetScrollerElement: HTMLElement) => void;
+    scheduleLiveEdgeAppendCorrection: (targetScrollerElement: HTMLElement) => void;
+    clearForwardPaginationContext: () => void;
+    clearBackwardPaginationContext: () => void;
+} & { forwardPaginationAnchorIndex: number | null }): void {
+    if (shouldRestoreForwardPaginationAnchor && scrollerElement) {
+        scheduleForwardPaginationAnchorCorrection(scrollerElement, windowShift, forwardPaginationAnchorIndex);
+    }
+
+    if (shouldRestoreForwardPaginationShiftedRange) {
+        if (!scrollerElement) {
+            return;
+        }
+        if (windowShift < 0) {
+            if (
+                hasHandledForwardSlidingRebaseRangeForCurrentRange &&
+                hasActiveForwardPaginationSlidingRebaseScrollLocation
+            ) {
+                armForwardPaginationSlidingRebaseLock();
+                if (!isForwardPaginationShiftedRangeRestoreInProgress) {
+                    scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection(scrollerElement);
+                }
+                return;
+            }
+            armForwardPaginationSlidingRebaseLock();
+            setForwardPaginationSlidingRebaseVirtuosoRestoreActive(false);
+            cancelPendingForwardPaginationShiftedRangeRestore();
+            setHandledForwardPaginationSlidingRebaseRange(null);
+            scheduleForwardPaginationShiftedRangeRestore(scrollerElement);
+            return;
+        }
+        setForwardPaginationSlidingRebaseVirtuosoRestoreActive(false);
+        scheduleForwardPaginationShiftedRangeRestore(scrollerElement);
+    }
+
+    if (shouldPreserveForwardPaginationBottom && scrollerElement) {
+        const exactBottomScrollTop = Math.max(0, scrollerElement.scrollHeight - scrollerElement.clientHeight);
+        scrollerElement.scrollTo({
+            top: exactBottomScrollTop,
+        });
+        window.requestAnimationFrame(() => {
+            if (!scrollerElement.isConnected) {
+                return;
+            }
+            const latestExactBottomScrollTop = Math.max(0, scrollerElement.scrollHeight - scrollerElement.clientHeight);
+            if (scrollerElement.scrollTop < latestExactBottomScrollTop) {
+                scrollerElement.scrollTo({
+                    top: latestExactBottomScrollTop,
+                });
+            }
+        });
+    }
+
+    if (backwardPaginationCompleted && scrollerElement && hasBackwardPaginationAnchor) {
+        scheduleBackwardPaginationAnchorCorrection(scrollerElement);
+    }
+
+    if (appendedWhileAtLiveEdge && scrollerElement) {
+        const exactBottomScrollTop = Math.max(0, scrollerElement.scrollHeight - scrollerElement.clientHeight);
+        scrollerElement.scrollTo({
+            top: exactBottomScrollTop,
+        });
+        scheduleLiveEdgeAppendCorrection(scrollerElement);
+    }
+
+    if (
+        forwardPaginationCompleted &&
+        !isForwardPaginationAnchorCorrectionInProgress &&
+        !isForwardPaginationShiftedRangeRestoreInProgress
+    ) {
+        clearForwardPaginationContext();
+    }
+    if (backwardPaginationCompleted && !hasBackwardPaginationAnchor) {
+        clearBackwardPaginationContext();
+    }
 }
 
 /**
@@ -160,7 +401,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
     const forwardPaginationContextRef = useRef<ForwardPaginationContext | null>(null);
     const backwardPaginationContextRef = useRef<BackwardPaginationContext | null>(null);
     const topScrollPaginationRequestedRef = useRef(false);
-    const previousForwardPaginationRef = useRef(snapshot.forwardPagination);
     const lastForwardRequestedTailKeyRef = useRef<string | null>(null);
     const wasAtBottomRef = useRef(false);
     const pendingForwardPaginationAfterInitialFillRef = useRef(false);
@@ -180,18 +420,8 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
     const suppressForwardLiveEdgeSeekAfterAnchorRef = useRef(false);
     const anchorResolutionRetryCountRef = useRef(0);
     const lastScrollTopRef = useRef<number | null>(null);
-    const liveEdgeAppendCorrectionFrameIdsRef = useRef<number[]>([]);
-    const liveEdgeAppendCorrectionInProgressRef = useRef(false);
     const backwardPaginationAnchorCorrectionFrameIdsRef = useRef<number[]>([]);
     const backwardPaginationAnchorCorrectionInProgressRef = useRef(false);
-    const forwardPaginationAnchorCorrectionFrameIdsRef = useRef<number[]>([]);
-    const forwardPaginationAnchorCorrectionInProgressRef = useRef(false);
-    const forwardPaginationShiftedRangeRestoreFrameIdsRef = useRef<number[]>([]);
-    const forwardPaginationShiftedRangeRestoreInProgressRef = useRef(false);
-    const forwardPaginationShiftedRangeRestoreGenerationRef = useRef(0);
-    const forwardPaginationSlidingRebaseLockFrameIdsRef = useRef<number[]>([]);
-    const forwardPaginationSlidingRebaseLockActiveRef = useRef(false);
-    const forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef = useRef(false);
     const handledForwardPaginationSlidingRebaseRangeRef = useRef<string | null>(null);
     const blockedForwardPaginationSlidingRebaseRangeRef = useRef<string | null>(null);
     const blockedForwardPaginationSlidingRebaseSettledScrollStateRef = useRef<{
@@ -202,17 +432,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         scrollTop: null,
     });
     const activeForwardPaginationSlidingRebaseScrollLocationRef = useRef<ScrollIntoViewLocation | null>(null);
-    const pendingVisibleRangeDuringForwardSlidingRebaseLockRef = useRef<VisibleRange | null>(null);
-    const initialLiveEdgeSettleObserverRef = useRef<ResizeObserver | null>(null);
-    const initialLiveEdgeSettleQuietTimeoutRef = useRef<number | null>(null);
-    const initialLiveEdgeSettleMaxTimeoutRef = useRef<number | null>(null);
-    const initialLiveEdgeSettleInProgressRef = useRef(false);
     const suppressPostInitialFillBottomSnapRef = useRef(false);
-    const latestLiveEdgeIntentRef = useRef({
-        isAtLiveEdge: snapshot.isAtLiveEdge,
-        canPaginateForward: snapshot.canPaginateForward,
-        followOutputEnabled,
-    });
     const [anchorResolutionRetryNonce, setAnchorResolutionRetryNonce] = useState(0);
     const latestTopScrollStateRef = useRef<TopScrollState<TItem>>({
         vm,
@@ -258,13 +478,17 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         ignoreNextTopScrollPaginationRef.current = true;
     }, []);
 
-    const cancelPendingLiveEdgeAppendCorrection = useCallback(() => {
-        for (const frameId of liveEdgeAppendCorrectionFrameIdsRef.current) {
-            window.cancelAnimationFrame(frameId);
-        }
-        liveEdgeAppendCorrectionFrameIdsRef.current = [];
-        liveEdgeAppendCorrectionInProgressRef.current = false;
-    }, []);
+    const {
+        cancelPendingForwardPaginationSlidingRebaseLock,
+        armForwardPaginationSlidingRebaseLock,
+        isForwardPaginationSlidingRebaseLockActive,
+        isForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+        setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+        setPendingVisibleRangeDuringForwardSlidingRebaseLock,
+        clearPendingVisibleRangeDuringForwardSlidingRebaseLock,
+    } = useTimelineForwardSlidingRebaseLock({
+        onVisibleRangeChanged: (visibleRange) => vm.onVisibleRangeChanged(visibleRange),
+    });
 
     const cancelPendingBackwardPaginationAnchorCorrection = useCallback(() => {
         for (const frameId of backwardPaginationAnchorCorrectionFrameIdsRef.current) {
@@ -273,408 +497,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         backwardPaginationAnchorCorrectionFrameIdsRef.current = [];
         backwardPaginationAnchorCorrectionInProgressRef.current = false;
     }, []);
-
-    const cancelPendingForwardPaginationAnchorCorrection = useCallback(() => {
-        for (const frameId of forwardPaginationAnchorCorrectionFrameIdsRef.current) {
-            window.cancelAnimationFrame(frameId);
-        }
-        forwardPaginationAnchorCorrectionFrameIdsRef.current = [];
-        forwardPaginationAnchorCorrectionInProgressRef.current = false;
-    }, []);
-
-    const cancelPendingForwardPaginationShiftedRangeRestore = useCallback(() => {
-        forwardPaginationShiftedRangeRestoreGenerationRef.current += 1;
-        for (const frameId of forwardPaginationShiftedRangeRestoreFrameIdsRef.current) {
-            window.cancelAnimationFrame(frameId);
-        }
-        forwardPaginationShiftedRangeRestoreFrameIdsRef.current = [];
-        forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-    }, []);
-
-    const cancelPendingForwardPaginationSlidingRebaseLock = useCallback(() => {
-        for (const frameId of forwardPaginationSlidingRebaseLockFrameIdsRef.current) {
-            window.cancelAnimationFrame(frameId);
-        }
-        forwardPaginationSlidingRebaseLockFrameIdsRef.current = [];
-        forwardPaginationSlidingRebaseLockActiveRef.current = false;
-        pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = null;
-    }, []);
-
-    const armForwardPaginationSlidingRebaseLock = useCallback(() => {
-        cancelPendingForwardPaginationSlidingRebaseLock();
-        forwardPaginationSlidingRebaseLockActiveRef.current = true;
-
-        const scheduleReleaseFrame = (remainingFrames: number): void => {
-            const frameId = window.requestAnimationFrame(() => {
-                forwardPaginationSlidingRebaseLockFrameIdsRef.current =
-                    forwardPaginationSlidingRebaseLockFrameIdsRef.current.filter(
-                        (candidateId) => candidateId !== frameId,
-                    );
-
-                if (remainingFrames <= 1) {
-                    forwardPaginationSlidingRebaseLockActiveRef.current = false;
-                    forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = false;
-                    const pendingVisibleRange = pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current;
-                    if (pendingVisibleRange !== null) {
-                        pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = null;
-                        vm.onVisibleRangeChanged(pendingVisibleRange);
-                    }
-                    return;
-                }
-
-                scheduleReleaseFrame(remainingFrames - 1);
-            });
-
-            forwardPaginationSlidingRebaseLockFrameIdsRef.current.push(frameId);
-        };
-
-        scheduleReleaseFrame(8);
-    }, [cancelPendingForwardPaginationSlidingRebaseLock, vm]);
-
-    const scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection = useCallback(
-        (targetScrollerElement: HTMLElement) => {
-            cancelPendingForwardPaginationShiftedRangeRestore();
-            forwardPaginationShiftedRangeRestoreInProgressRef.current = true;
-            const restoreGeneration = forwardPaginationShiftedRangeRestoreGenerationRef.current;
-
-            const applyCorrection = (
-                attempt: number,
-                stableFrameCount: number,
-                phase: "frame" | "layout",
-            ): { shouldContinue: boolean; nextStableFrameCount: number } => {
-                if (
-                    restoreGeneration !== forwardPaginationShiftedRangeRestoreGenerationRef.current ||
-                    !targetScrollerElement.isConnected
-                ) {
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
-                }
-
-                const anchorKey = forwardPaginationContextRef.current?.shiftedRangeAnchorKey;
-                const desiredTopOffset = forwardPaginationContextRef.current?.shiftedRangeTopOffsetPx;
-                if (!anchorKey || desiredTopOffset == null) {
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
-                }
-
-                const anchorElement = findTimelineItemElement(targetScrollerElement, anchorKey);
-                if (!anchorElement) {
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
-                }
-
-                const currentTopOffset = getTopOffset(targetScrollerElement, anchorElement);
-                const scrollAdjustment = currentTopOffset - desiredTopOffset;
-                const nextStableFrameCount = Math.abs(scrollAdjustment) <= 1 ? stableFrameCount + 1 : 0;
-                if (scrollAdjustment !== 0) {
-                    targetScrollerElement.scrollTo({
-                        top: targetScrollerElement.scrollTop + scrollAdjustment,
-                    });
-                }
-
-                if (
-                    attempt >= MAX_FORWARD_PAGINATION_SHIFTED_RANGE_VIRTUOSO_FOLLOWUP_FRAMES ||
-                    nextStableFrameCount >= REQUIRED_STABLE_FORWARD_PAGINATION_SHIFTED_RANGE_VIRTUOSO_FOLLOWUP_FRAMES
-                ) {
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount };
-                }
-
-                return { shouldContinue: true, nextStableFrameCount };
-            };
-
-            const scheduleFrame = (attempt: number, stableFrameCount: number): void => {
-                const frameId = window.requestAnimationFrame(() => {
-                    forwardPaginationShiftedRangeRestoreFrameIdsRef.current =
-                        forwardPaginationShiftedRangeRestoreFrameIdsRef.current.filter(
-                            (candidateId) => candidateId !== frameId,
-                        );
-
-                    const correction = applyCorrection(attempt, stableFrameCount, "frame");
-                    if (!correction.shouldContinue) {
-                        return;
-                    }
-
-                    scheduleFrame(attempt + 1, correction.nextStableFrameCount);
-                });
-
-                forwardPaginationShiftedRangeRestoreFrameIdsRef.current.push(frameId);
-            };
-
-            const firstLayoutFrameId = window.requestAnimationFrame(() => {
-                forwardPaginationShiftedRangeRestoreFrameIdsRef.current =
-                    forwardPaginationShiftedRangeRestoreFrameIdsRef.current.filter(
-                        (candidateId) => candidateId !== firstLayoutFrameId,
-                    );
-
-                const secondLayoutFrameId = window.requestAnimationFrame(() => {
-                    forwardPaginationShiftedRangeRestoreFrameIdsRef.current =
-                        forwardPaginationShiftedRangeRestoreFrameIdsRef.current.filter(
-                            (candidateId) => candidateId !== secondLayoutFrameId,
-                        );
-
-                    const correction = applyCorrection(0, 0, "layout");
-                    if (!correction.shouldContinue) {
-                        return;
-                    }
-
-                    scheduleFrame(1, correction.nextStableFrameCount);
-                });
-
-                forwardPaginationShiftedRangeRestoreFrameIdsRef.current.push(secondLayoutFrameId);
-            });
-
-            forwardPaginationShiftedRangeRestoreFrameIdsRef.current.push(firstLayoutFrameId);
-        },
-        [cancelPendingForwardPaginationShiftedRangeRestore],
-    );
-
-    const scheduleForwardPaginationShiftedRangeRestore = useCallback(
-        (
-            targetScrollerElement: HTMLElement,
-            options?: {
-                skipInitialBlockedRebasePrime?: boolean;
-            },
-        ) => {
-            if (forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current) {
-                return;
-            }
-
-            const anchorKey = forwardPaginationContextRef.current?.shiftedRangeAnchorKey;
-            const desiredTopOffset = forwardPaginationContextRef.current?.shiftedRangeTopOffsetPx;
-            if (!anchorKey || desiredTopOffset === null || desiredTopOffset === undefined) {
-                return;
-            }
-
-            cancelPendingForwardPaginationShiftedRangeRestore();
-            forwardPaginationShiftedRangeRestoreInProgressRef.current = true;
-            const restoreGeneration = forwardPaginationShiftedRangeRestoreGenerationRef.current;
-            const skipInitialBlockedRebasePrime = options?.skipInitialBlockedRebasePrime ?? false;
-
-            const applyRestoreStep = (
-                attempt: number,
-                stableFrameCount: number,
-                phase: "layout" | "frame",
-            ): { shouldContinue: boolean; nextStableFrameCount: number } => {
-                const currentRangeKey = summarizeTimelineItems(snapshot.items);
-                const blockedForwardSlidingRebaseRecoveryActive =
-                    blockedForwardPaginationSlidingRebaseRangeRef.current === currentRangeKey;
-                if (blockedForwardSlidingRebaseRecoveryActive) {
-                    armForwardPaginationSlidingRebaseLock();
-                }
-
-                if (
-                    restoreGeneration !== forwardPaginationShiftedRangeRestoreGenerationRef.current ||
-                    forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current
-                ) {
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
-                }
-
-                if (!targetScrollerElement.isConnected) {
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
-                }
-
-                const currentAnchorKey = forwardPaginationContextRef.current?.shiftedRangeAnchorKey;
-                const currentDesiredTopOffset = forwardPaginationContextRef.current?.shiftedRangeTopOffsetPx;
-                if (!currentAnchorKey || currentDesiredTopOffset === null || currentDesiredTopOffset === undefined) {
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
-                }
-
-                const anchorElement = findTimelineItemElement(targetScrollerElement, currentAnchorKey);
-                if (!anchorElement) {
-                    const shouldDeferInitialBlockedForwardSlidingRebasePrime =
-                        blockedForwardSlidingRebaseRecoveryActive &&
-                        skipInitialBlockedRebasePrime &&
-                        attempt === 0 &&
-                        phase === "layout";
-                    if (shouldDeferInitialBlockedForwardSlidingRebasePrime) {
-                        return { shouldContinue: true, nextStableFrameCount: 0 };
-                    }
-                    const shouldPrimeBlockedForwardSlidingRebaseRecovery =
-                        blockedForwardSlidingRebaseRecoveryActive &&
-                        targetScrollerElement.clientHeight > 0 &&
-                        attempt < MAX_BACKWARD_PAGINATION_ANCHOR_CORRECTION_FRAMES;
-                    if (shouldPrimeBlockedForwardSlidingRebaseRecovery) {
-                        const primeStepPx = Math.min(
-                            MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX,
-                            targetScrollerElement.clientHeight,
-                        );
-                        const nextScrollTop = getClampedScrollTop(targetScrollerElement.scrollTop, -primeStepPx);
-                        if (nextScrollTop !== targetScrollerElement.scrollTop) {
-                            targetScrollerElement.scrollTo({
-                                top: nextScrollTop,
-                            });
-                        }
-                        return { shouldContinue: true, nextStableFrameCount: 0 };
-                    }
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount: stableFrameCount };
-                }
-
-                const currentTopOffset = getTopOffset(targetScrollerElement, anchorElement);
-                const rawScrollAdjustment = currentTopOffset - currentDesiredTopOffset;
-                const shouldAcceptBlockedForwardSlidingRebaseResidualOffset =
-                    blockedForwardSlidingRebaseRecoveryActive &&
-                    Math.abs(rawScrollAdjustment) <= BLOCKED_FORWARD_PAGINATION_SHIFTED_RANGE_RESTORE_EPSILON_PX;
-                const scrollAdjustment = shouldAcceptBlockedForwardSlidingRebaseResidualOffset
-                    ? 0
-                    : rawScrollAdjustment;
-                const nextStableFrameCount = shouldAcceptBlockedForwardSlidingRebaseResidualOffset
-                    ? REQUIRED_STABLE_BACKWARD_PAGINATION_ANCHOR_FRAMES
-                    : Math.abs(scrollAdjustment) <= 1
-                      ? stableFrameCount + 1
-                      : 0;
-
-                if (scrollAdjustment !== 0) {
-                    targetScrollerElement.scrollTo({
-                        top: targetScrollerElement.scrollTop + scrollAdjustment,
-                    });
-                }
-
-                if (
-                    attempt >= MAX_BACKWARD_PAGINATION_ANCHOR_CORRECTION_FRAMES ||
-                    nextStableFrameCount >= REQUIRED_STABLE_BACKWARD_PAGINATION_ANCHOR_FRAMES
-                ) {
-                    const settledBlockedForwardSlidingRebaseRange =
-                        blockedForwardPaginationSlidingRebaseRangeRef.current ===
-                        summarizeTimelineItems(snapshot.items);
-                    if (settledBlockedForwardSlidingRebaseRange) {
-                        handledForwardPaginationSlidingRebaseRangeRef.current = summarizeTimelineItems(snapshot.items);
-                        blockedForwardPaginationSlidingRebaseSettledScrollStateRef.current = {
-                            rangeKey: summarizeTimelineItems(snapshot.items),
-                            scrollTop: targetScrollerElement.scrollTop,
-                        };
-                        pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = null;
-                        cancelPendingForwardPaginationSlidingRebaseLock();
-                    }
-                    forwardPaginationShiftedRangeRestoreInProgressRef.current = false;
-                    return { shouldContinue: false, nextStableFrameCount };
-                }
-
-                return { shouldContinue: true, nextStableFrameCount };
-            };
-
-            const initialStep = applyRestoreStep(0, 0, "layout");
-            if (!initialStep.shouldContinue) {
-                return;
-            }
-
-            const scheduleFrame = (attempt: number, stableFrameCount: number): void => {
-                const frameId = window.requestAnimationFrame(() => {
-                    forwardPaginationShiftedRangeRestoreFrameIdsRef.current =
-                        forwardPaginationShiftedRangeRestoreFrameIdsRef.current.filter(
-                            (candidateId) => candidateId !== frameId,
-                        );
-
-                    const step = applyRestoreStep(attempt, stableFrameCount, "frame");
-                    if (!step.shouldContinue) {
-                        return;
-                    }
-
-                    scheduleFrame(attempt + 1, step.nextStableFrameCount);
-                });
-
-                forwardPaginationShiftedRangeRestoreFrameIdsRef.current.push(frameId);
-            };
-
-            scheduleFrame(1, initialStep.nextStableFrameCount);
-        },
-        [
-            armForwardPaginationSlidingRebaseLock,
-            cancelPendingForwardPaginationShiftedRangeRestore,
-            cancelPendingForwardPaginationSlidingRebaseLock,
-            snapshot.items,
-        ],
-    );
-
-    const cancelPendingInitialLiveEdgeSettleCorrection = useCallback(() => {
-        if (initialLiveEdgeSettleObserverRef.current) {
-            initialLiveEdgeSettleObserverRef.current.disconnect();
-            initialLiveEdgeSettleObserverRef.current = null;
-        }
-        if (initialLiveEdgeSettleQuietTimeoutRef.current !== null) {
-            window.clearTimeout(initialLiveEdgeSettleQuietTimeoutRef.current);
-            initialLiveEdgeSettleQuietTimeoutRef.current = null;
-        }
-        if (initialLiveEdgeSettleMaxTimeoutRef.current !== null) {
-            window.clearTimeout(initialLiveEdgeSettleMaxTimeoutRef.current);
-            initialLiveEdgeSettleMaxTimeoutRef.current = null;
-        }
-        initialLiveEdgeSettleInProgressRef.current = false;
-    }, []);
-
-    const scheduleLiveEdgeAppendCorrection = useCallback(
-        (targetScrollerElement: HTMLElement) => {
-            cancelPendingLiveEdgeAppendCorrection();
-            liveEdgeAppendCorrectionInProgressRef.current = true;
-
-            // Real event tiles can continue growing for a few frames after the
-            // append commit (media sizing, URL previews, grouped layout, etc).
-            // A single snap can therefore compute the "exact bottom" from a
-            // stale scrollHeight and leave the viewport behind once layout
-            // settles. Treat live-edge following as an intent and keep
-            // re-checking for a short, bounded window until the measured bottom
-            // stops moving.
-            const scheduleFrame = (
-                attempt: number,
-                previousExactBottomScrollTop: number | null,
-                stableFrameCount: number,
-            ): void => {
-                const frameId = window.requestAnimationFrame(() => {
-                    liveEdgeAppendCorrectionFrameIdsRef.current = liveEdgeAppendCorrectionFrameIdsRef.current.filter(
-                        (candidateId) => candidateId !== frameId,
-                    );
-
-                    if (!targetScrollerElement.isConnected) {
-                        return;
-                    }
-
-                    const latestLiveEdgeIntent = latestLiveEdgeIntentRef.current;
-                    if (
-                        !latestLiveEdgeIntent.isAtLiveEdge ||
-                        latestLiveEdgeIntent.canPaginateForward ||
-                        !latestLiveEdgeIntent.followOutputEnabled
-                    ) {
-                        return;
-                    }
-
-                    const exactBottomScrollTop = Math.max(
-                        0,
-                        targetScrollerElement.scrollHeight - targetScrollerElement.clientHeight,
-                    );
-                    const nextStableFrameCount =
-                        targetScrollerElement.scrollTop >= exactBottomScrollTop &&
-                        previousExactBottomScrollTop === exactBottomScrollTop
-                            ? stableFrameCount + 1
-                            : 0;
-
-                    if (targetScrollerElement.scrollTop < exactBottomScrollTop) {
-                        targetScrollerElement.scrollTo({
-                            top: exactBottomScrollTop,
-                        });
-                    }
-
-                    if (
-                        attempt >= MAX_LIVE_EDGE_APPEND_CORRECTION_FRAMES ||
-                        nextStableFrameCount >= REQUIRED_STABLE_LIVE_EDGE_APPEND_FRAMES
-                    ) {
-                        liveEdgeAppendCorrectionInProgressRef.current = false;
-                        return;
-                    }
-
-                    scheduleFrame(attempt + 1, exactBottomScrollTop, nextStableFrameCount);
-                });
-
-                liveEdgeAppendCorrectionFrameIdsRef.current.push(frameId);
-            };
-
-            scheduleFrame(1, null, 0);
-        },
-        [cancelPendingLiveEdgeAppendCorrection],
-    );
 
     const scheduleBackwardPaginationAnchorCorrection = useCallback(
         (targetScrollerElement: HTMLElement) => {
@@ -745,108 +567,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         [cancelPendingBackwardPaginationAnchorCorrection],
     );
 
-    const scheduleForwardPaginationAnchorCorrection = useCallback(
-        (targetScrollerElement: HTMLElement, windowShift: number, forwardPaginationAnchorIndex: number | null) => {
-            const anchorKey = forwardPaginationContextRef.current?.anchorKey;
-            const desiredBottomOffset = forwardPaginationContextRef.current?.bottomOffsetPx;
-            if (!anchorKey || desiredBottomOffset === null) {
-                return;
-            }
-
-            cancelPendingForwardPaginationAnchorCorrection();
-            forwardPaginationAnchorCorrectionInProgressRef.current = true;
-
-            const scheduleFrame = (attempt: number, stableFrameCount: number): void => {
-                const frameId = window.requestAnimationFrame(() => {
-                    forwardPaginationAnchorCorrectionFrameIdsRef.current =
-                        forwardPaginationAnchorCorrectionFrameIdsRef.current.filter(
-                            (candidateId) => candidateId !== frameId,
-                        );
-
-                    if (!targetScrollerElement.isConnected) {
-                        forwardPaginationAnchorCorrectionInProgressRef.current = false;
-                        forwardPaginationContextRef.current = null;
-                        return;
-                    }
-
-                    const currentAnchorKey = forwardPaginationContextRef.current?.anchorKey;
-                    const currentDesiredBottomOffset = forwardPaginationContextRef.current?.bottomOffsetPx;
-                    const currentRequestedAtLiveEdge =
-                        forwardPaginationContextRef.current?.requestedAtLiveEdge ?? false;
-                    const currentRequestedWhileSeekingLiveEdge =
-                        forwardPaginationContextRef.current?.requestedWhileSeekingLiveEdge ?? false;
-                    if (!currentAnchorKey || currentDesiredBottomOffset == null) {
-                        forwardPaginationAnchorCorrectionInProgressRef.current = false;
-                        forwardPaginationContextRef.current = null;
-                        return;
-                    }
-
-                    const anchorElement = findTimelineItemElement(targetScrollerElement, currentAnchorKey);
-                    if (!anchorElement) {
-                        forwardPaginationAnchorCorrectionInProgressRef.current = false;
-                        forwardPaginationContextRef.current = null;
-                        return;
-                    }
-
-                    const currentBottomOffset = getBottomOffset(targetScrollerElement, anchorElement);
-                    const rawScrollAdjustment = getForwardPaginationAnchorAdjustment({
-                        desiredBottomOffset: currentDesiredBottomOffset,
-                        currentBottomOffset,
-                    });
-                    const exactBottomScrollTop = Math.max(
-                        0,
-                        targetScrollerElement.scrollHeight - targetScrollerElement.clientHeight,
-                    );
-                    const remainingToExactBottom = exactBottomScrollTop - targetScrollerElement.scrollTop;
-                    const isNearExactBottom =
-                        remainingToExactBottom >= 0 && remainingToExactBottom <= LIVE_EDGE_CLAMP_EPSILON_PX;
-                    const shouldDeferInitialCorrection = attempt === 1;
-                    const shouldProtectNearBottomState =
-                        currentRequestedAtLiveEdge || currentRequestedWhileSeekingLiveEdge;
-                    const shouldAbortNearBottomCorrection =
-                        shouldProtectNearBottomState &&
-                        isNearExactBottom &&
-                        Math.abs(rawScrollAdjustment) > MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX;
-                    const scrollAdjustment =
-                        shouldDeferInitialCorrection || shouldAbortNearBottomCorrection
-                            ? 0
-                            : Math.max(
-                                  -MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX,
-                                  Math.min(MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX, rawScrollAdjustment),
-                              );
-                    const nextStableFrameCount =
-                        Math.abs(rawScrollAdjustment) <= 1 ||
-                        shouldDeferInitialCorrection ||
-                        shouldAbortNearBottomCorrection
-                            ? stableFrameCount + 1
-                            : 0;
-
-                    if (scrollAdjustment !== 0) {
-                        targetScrollerElement.scrollTo({
-                            top: targetScrollerElement.scrollTop + scrollAdjustment,
-                        });
-                    }
-
-                    if (
-                        attempt >= MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_FRAMES ||
-                        nextStableFrameCount >= REQUIRED_STABLE_FORWARD_PAGINATION_ANCHOR_FRAMES
-                    ) {
-                        forwardPaginationAnchorCorrectionInProgressRef.current = false;
-                        forwardPaginationContextRef.current = null;
-                        return;
-                    }
-
-                    scheduleFrame(attempt + 1, nextStableFrameCount);
-                });
-
-                forwardPaginationAnchorCorrectionFrameIdsRef.current.push(frameId);
-            };
-
-            scheduleFrame(1, 0);
-        },
-        [cancelPendingForwardPaginationAnchorCorrection],
-    );
-
     const markAnchorResolved = useCallback(() => {
         const currentTargetKey = snapshot.scrollTarget?.targetKey ?? null;
         if (currentTargetKey !== null && acknowledgedScrollTargetKeyRef.current === currentTargetKey) {
@@ -865,79 +585,31 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         vm.onScrollTargetReached();
     }, [initialFillState, snapshot.scrollTarget, vm]);
 
-    const scheduleInitialLiveEdgeSettleCorrection = useCallback(() => {
-        if (initialLiveEdgeSettleInProgressRef.current || !snapshot.isAtLiveEdge || snapshot.scrollTarget) {
-            return;
-        }
-
-        const effectiveScrollerElement = getEffectiveScrollerElement(scrollerElement);
-        if (!effectiveScrollerElement) {
-            setInitialFillState("done");
-            return;
-        }
-
-        initialLiveEdgeSettleInProgressRef.current = true;
-
-        const settleToExactBottom = (): number => {
-            const exactBottomScrollTop = Math.max(
-                0,
-                effectiveScrollerElement.scrollHeight - effectiveScrollerElement.clientHeight,
-            );
-
-            if (effectiveScrollerElement.scrollTop < exactBottomScrollTop) {
-                effectiveScrollerElement.scrollTo({
-                    top: exactBottomScrollTop,
-                });
-            }
-
-            return exactBottomScrollTop;
-        };
-
-        const finishSettling = (reason: "quiet-period" | "max-duration"): void => {
-            if (!initialLiveEdgeSettleInProgressRef.current) {
-                return;
-            }
-
-            settleToExactBottom();
-            cancelPendingInitialLiveEdgeSettleCorrection();
-            setInitialFillState("done");
-        };
-
-        const restartQuietPeriod = (): void => {
-            settleToExactBottom();
-            if (initialLiveEdgeSettleQuietTimeoutRef.current !== null) {
-                window.clearTimeout(initialLiveEdgeSettleQuietTimeoutRef.current);
-            }
-            initialLiveEdgeSettleQuietTimeoutRef.current = window.setTimeout(() => {
-                finishSettling("quiet-period");
-            }, REQUIRED_INITIAL_LIVE_EDGE_SETTLE_QUIET_PERIOD_MS);
-        };
-
-        const observer = new ResizeObserver(() => {
-            restartQuietPeriod();
-        });
-        initialLiveEdgeSettleObserverRef.current = observer;
-
-        observer.observe(effectiveScrollerElement);
-        const viewportElement = effectiveScrollerElement.firstElementChild;
-        if (viewportElement instanceof HTMLElement) {
-            observer.observe(viewportElement);
-            const itemListElement = viewportElement.firstElementChild;
-            if (itemListElement instanceof HTMLElement) {
-                observer.observe(itemListElement);
-            }
-        }
-
-        restartQuietPeriod();
-        initialLiveEdgeSettleMaxTimeoutRef.current = window.setTimeout(() => {
-            finishSettling("max-duration");
-        }, MAX_INITIAL_LIVE_EDGE_SETTLE_DURATION_MS);
-    }, [cancelPendingInitialLiveEdgeSettleCorrection, scrollerElement, snapshot.isAtLiveEdge, snapshot.scrollTarget]);
-
     const prepareBackwardAnchorFetch = useCallback(() => {
         lastAnchoredKeyRef.current = null;
         ignoreNextStartReachedRef.current = true;
         ignoreNextTopScrollPaginationRef.current = true;
+    }, []);
+
+    const getScrollTargetCorrectionGeneration = useCallback(() => {
+        return scrollTargetCorrectionGenerationRef.current;
+    }, []);
+
+    const advanceScrollTargetCorrectionGeneration = useCallback(() => {
+        scrollTargetCorrectionGenerationRef.current += 1;
+        return scrollTargetCorrectionGenerationRef.current;
+    }, []);
+
+    const resetAnchorResolutionRetryCount = useCallback(() => {
+        anchorResolutionRetryCountRef.current = 0;
+    }, []);
+
+    const getAnchorResolutionRetryCount = useCallback(() => {
+        return anchorResolutionRetryCountRef.current;
+    }, []);
+
+    const incrementAnchorResolutionRetryCount = useCallback(() => {
+        anchorResolutionRetryCountRef.current += 1;
     }, []);
 
     const captureBackwardPaginationContext = useCallback(() => {
@@ -954,6 +626,77 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 anchorElement instanceof HTMLElement ? getTopOffset(effectiveScrollerElement, anchorElement) : null,
         };
     }, [scrollerElement]);
+
+    const {
+        cancelPendingInitialLiveEdgeSettleCorrection,
+        scheduleInitialLiveEdgeSettleCorrection,
+        scheduleLiveEdgeAppendCorrection,
+        isLiveEdgeAppendCorrectionInProgress,
+    } = useTimelineLiveEdge({
+        initialFillState,
+        scrollerElement,
+        isAtLiveEdge: snapshot.isAtLiveEdge,
+        canPaginateForward: snapshot.canPaginateForward,
+        hasScrollTarget: !!snapshot.scrollTarget,
+        followOutputEnabled,
+        setInitialFillState,
+    });
+
+    const getLastVisibleRange = useCallback(() => {
+        return lastVisibleRangeRef.current;
+    }, []);
+
+    const getLastForwardRequestedTailKey = useCallback(() => {
+        return lastForwardRequestedTailKeyRef.current;
+    }, []);
+
+    const setLastForwardRequestedTailKey = useCallback((tailKey: string | null) => {
+        lastForwardRequestedTailKeyRef.current = tailKey;
+    }, []);
+
+    const getForwardPaginationContext = useCallback(() => {
+        return forwardPaginationContextRef.current;
+    }, []);
+
+    const setForwardPaginationContext = useCallback((context: ForwardPaginationContext | null) => {
+        forwardPaginationContextRef.current = context;
+    }, []);
+
+    const getCurrentRangeKey = useCallback(() => {
+        return summarizeTimelineItems(snapshot.items);
+    }, [snapshot.items]);
+
+    const getBlockedForwardPaginationSlidingRebaseRange = useCallback(() => {
+        return blockedForwardPaginationSlidingRebaseRangeRef.current;
+    }, []);
+
+    const setHandledForwardPaginationSlidingRebaseRange = useCallback((rangeKey: string | null) => {
+        handledForwardPaginationSlidingRebaseRangeRef.current = rangeKey;
+    }, []);
+
+    const setBlockedForwardPaginationSlidingRebaseSettledScrollState = useCallback(
+        (state: { rangeKey: string | null; scrollTop: number | null }) => {
+            blockedForwardPaginationSlidingRebaseSettledScrollStateRef.current = state;
+        },
+        [],
+    );
+
+    const {
+        cancelPendingForwardPaginationShiftedRangeRestore,
+        scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection,
+        scheduleForwardPaginationShiftedRangeRestore,
+        isForwardPaginationShiftedRangeRestoreInProgress,
+    } = useTimelineForwardPaginationShiftedRangeRestore({
+        getForwardPaginationContext,
+        getCurrentRangeKey,
+        getBlockedForwardPaginationSlidingRebaseRange,
+        setHandledForwardPaginationSlidingRebaseRange,
+        setBlockedForwardPaginationSlidingRebaseSettledScrollState,
+        armForwardPaginationSlidingRebaseLock,
+        cancelPendingForwardPaginationSlidingRebaseLock,
+        isForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+        clearPendingVisibleRangeDuringForwardSlidingRebaseLock,
+    });
 
     useEffect(() => {
         if (previousVmRef.current === vm) {
@@ -999,30 +742,10 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
     }, [cancelPendingInitialLiveEdgeSettleCorrection, vm, snapshot.isAtLiveEdge, snapshot.items]);
 
     useEffect(() => {
-        anchorResolutionRetryCountRef.current = 0;
-    }, [vm, snapshot.scrollTarget]);
-
-    useEffect(() => {
         if (!snapshot.scrollTarget) {
             acknowledgedScrollTargetKeyRef.current = null;
         }
     }, [snapshot.scrollTarget]);
-
-    useEffect(() => {
-        if (initialFillState === "filling") {
-            return;
-        }
-
-        cancelPendingInitialLiveEdgeSettleCorrection();
-    }, [cancelPendingInitialLiveEdgeSettleCorrection, initialFillState]);
-
-    useEffect(() => {
-        latestLiveEdgeIntentRef.current = {
-            isAtLiveEdge: snapshot.isAtLiveEdge,
-            canPaginateForward: snapshot.canPaginateForward,
-            followOutputEnabled,
-        };
-    }, [snapshot.isAtLiveEdge, snapshot.canPaginateForward, followOutputEnabled]);
 
     useEffect(() => {
         if (snapshot.isAtLiveEdge) {
@@ -1032,54 +755,15 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
 
     useEffect(() => {
         return () => {
-            cancelPendingLiveEdgeAppendCorrection();
-            cancelPendingInitialLiveEdgeSettleCorrection();
             cancelPendingBackwardPaginationAnchorCorrection();
-            cancelPendingForwardPaginationAnchorCorrection();
             cancelPendingForwardPaginationShiftedRangeRestore();
             cancelPendingForwardPaginationSlidingRebaseLock();
         };
     }, [
         cancelPendingBackwardPaginationAnchorCorrection,
-        cancelPendingForwardPaginationAnchorCorrection,
         cancelPendingForwardPaginationSlidingRebaseLock,
         cancelPendingForwardPaginationShiftedRangeRestore,
-        cancelPendingInitialLiveEdgeSettleCorrection,
-        cancelPendingLiveEdgeAppendCorrection,
     ]);
-
-    useEffect(() => {
-        if (!snapshot.scrollTarget || acknowledgedScrollTargetKeyRef.current === snapshot.scrollTarget.targetKey) {
-            return;
-        }
-
-        const timeoutId = window.setTimeout(() => {
-            const effectiveScrollerElement = getEffectiveScrollerElement(scrollerElement);
-            if (!effectiveScrollerElement || effectiveScrollerElement.clientHeight === 0) {
-                return;
-            }
-
-            const targetElement = findTimelineItemElement(effectiveScrollerElement, snapshot.scrollTarget!.targetKey);
-            if (!targetElement) {
-                return;
-            }
-
-            const aligned = isScrollTargetAligned({
-                scrollerElement: effectiveScrollerElement,
-                targetElement,
-                position: snapshot.scrollTarget!.position,
-            });
-            if (!aligned) {
-                return;
-            }
-
-            markAnchorResolved();
-        }, 0);
-
-        return () => {
-            window.clearTimeout(timeoutId);
-        };
-    }, [markAnchorResolved, scrollerElement, snapshot.scrollTarget]);
 
     useEffect(() => {
         if (initialFillState !== "filling") {
@@ -1166,145 +850,53 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         }
     }, [firstItemIndex, snapshot.backwardPagination, snapshot.items]);
 
-    const requestForwardPagination = useCallback(
-        (reason: string) => {
-            const tailKey = snapshot.items.at(-1)?.key ?? null;
-            if (!tailKey || lastForwardRequestedTailKeyRef.current === tailKey) {
-                return false;
-            }
+    const getLastBottomTriggeredForwardPaginationGesture = useCallback(() => {
+        return lastBottomTriggeredForwardPaginationGestureRef.current;
+    }, []);
 
-            lastForwardRequestedTailKeyRef.current = tailKey;
-            const anchorElement = scrollerElement ? getLastVisibleTimelineItemElement(scrollerElement) : null;
-            const shiftedRangeAnchorElement = scrollerElement
-                ? getFirstVisibleTimelineItemElement(scrollerElement)
-                : null;
-            const shouldPreserveBottomContinuity =
-                reason === "live-edge auto paginate" || reason === "post-forward continue seeking live edge";
-            const continuityMode: ForwardPaginationContext["continuityMode"] = shouldPreserveBottomContinuity
-                ? "bottom"
-                : reason === "at-bottom state change"
-                  ? "anchor"
-                  : "anchor";
+    const getScrollGestureGeneration = useCallback(() => {
+        return scrollGestureGenerationRef.current;
+    }, []);
 
-            forwardPaginationContextRef.current = {
-                continuityMode,
-                requestReason: reason,
-                anchorKey: anchorElement?.dataset.timelineItemKey ?? null,
-                lastVisibleRange: lastVisibleRangeRef.current,
-                bottomOffsetPx:
-                    scrollerElement && anchorElement ? getBottomOffset(scrollerElement, anchorElement) : null,
-                shiftedRangeAnchorKey: shiftedRangeAnchorElement?.dataset.timelineItemKey ?? null,
-                shiftedRangeTopOffsetPx:
-                    scrollerElement && shiftedRangeAnchorElement
-                        ? getTopOffset(scrollerElement, shiftedRangeAnchorElement)
-                        : null,
-                requestedAtLiveEdge: snapshot.isAtLiveEdge,
-                requestedWhileSeekingLiveEdge: followOutputEnabled,
-            };
-            vm.onRequestMoreItems("forward");
-            return true;
+    const setBottomTriggeredForwardPaginationScrollLock = useCallback(
+        (lock: { gestureGeneration: number; lockedScrollTop: number } | null) => {
+            bottomTriggeredForwardPaginationScrollLockRef.current = lock;
         },
-        [followOutputEnabled, scrollerElement, snapshot.isAtLiveEdge, snapshot.items, vm],
+        [],
     );
 
-    useEffect(() => {
-        if (
-            initialFillState !== "done" ||
-            !snapshot.isAtLiveEdge ||
-            !snapshot.canPaginateForward ||
-            snapshot.forwardPagination !== "idle" ||
-            !followOutputEnabled ||
-            suppressForwardLiveEdgeSeekAfterAnchorRef.current ||
-            !!snapshot.scrollTarget ||
-            !scrollerElement ||
-            scrollerElement.clientHeight <= 0
-        ) {
-            return;
-        }
+    const setWasAtBottom = useCallback((wasAtBottom: boolean) => {
+        wasAtBottomRef.current = wasAtBottom;
+    }, []);
 
-        if (!wasAtBottomRef.current && !canSnapToBottom(scrollerElement)) {
-            return;
-        }
-        requestForwardPagination("live-edge auto paginate");
-    }, [
-        followOutputEnabled,
-        firstItemIndex,
+    const { requestForwardPagination } = useTimelineForwardPagination({
+        items: snapshot.items,
         initialFillState,
-        requestForwardPagination,
         scrollerElement,
-        snapshot.canPaginateForward,
-        snapshot.forwardPagination,
-        snapshot.isAtLiveEdge,
-        snapshot.scrollTarget,
-    ]);
+        isAtLiveEdge: snapshot.isAtLiveEdge,
+        canPaginateForward: snapshot.canPaginateForward,
+        forwardPagination: snapshot.forwardPagination,
+        hasScrollTarget: !!snapshot.scrollTarget,
+        followOutputEnabled,
+        suppressForwardLiveEdgeSeekAfterAnchor: suppressForwardLiveEdgeSeekAfterAnchorRef.current,
+        wasAtBottom: wasAtBottomRef.current,
+        getLastVisibleRange,
+        getLastForwardRequestedTailKey,
+        setLastForwardRequestedTailKey,
+        getForwardPaginationContext,
+        setForwardPaginationContext,
+        getLastBottomTriggeredForwardPaginationGesture,
+        getScrollGestureGeneration,
+        setBottomTriggeredForwardPaginationScrollLock,
+        setWasAtBottom,
+        onRequestMoreItems: () => vm.onRequestMoreItems("forward"),
+    });
 
-    useEffect(() => {
-        const previousForwardPagination = previousForwardPaginationRef.current;
-        previousForwardPaginationRef.current = snapshot.forwardPagination;
-
-        if (previousForwardPagination !== "loading" || snapshot.forwardPagination === "loading") {
-            return;
-        }
-
-        const currentTailKey = snapshot.items.at(-1)?.key ?? null;
-        if (currentTailKey !== lastForwardRequestedTailKeyRef.current) {
-            lastForwardRequestedTailKeyRef.current = null;
-        }
-
-        if (!snapshot.isAtLiveEdge && snapshot.canPaginateForward) {
-            wasAtBottomRef.current = false;
-        }
-
-        if (!scrollerElement) {
-            return;
-        }
-
-        if (forwardPaginationContextRef.current?.requestReason === "at-bottom state change" && !snapshot.isAtLiveEdge) {
-            bottomTriggeredForwardPaginationScrollLockRef.current = {
-                gestureGeneration:
-                    lastBottomTriggeredForwardPaginationGestureRef.current ?? scrollGestureGenerationRef.current,
-                lockedScrollTop: scrollerElement.scrollTop,
-            };
-        } else {
-            bottomTriggeredForwardPaginationScrollLockRef.current = null;
-        }
-
-        let cancelled = false;
-        const frameId = window.requestAnimationFrame(() => {
-            if (cancelled) {
-                return;
-            }
-
-            const snapToBottomAfterLayout = canSnapToBottom(scrollerElement);
-            const shouldContinueSeekingLiveEdge =
-                snapshot.forwardPagination === "idle" &&
-                initialFillState === "done" &&
-                !snapshot.scrollTarget &&
-                !snapshot.isAtLiveEdge &&
-                snapshot.canPaginateForward &&
-                followOutputEnabled &&
-                !suppressForwardLiveEdgeSeekAfterAnchorRef.current &&
-                snapToBottomAfterLayout;
-            if (shouldContinueSeekingLiveEdge) {
-                requestForwardPagination("post-forward continue seeking live edge");
-            }
+    const { scheduleForwardPaginationAnchorCorrection, isForwardPaginationAnchorCorrectionInProgress } =
+        useTimelineForwardPaginationAnchorRestore({
+            getForwardPaginationContext,
+            setForwardPaginationContext,
         });
-
-        return () => {
-            cancelled = true;
-            window.cancelAnimationFrame(frameId);
-        };
-    }, [
-        followOutputEnabled,
-        initialFillState,
-        requestForwardPagination,
-        scrollerElement,
-        snapshot.canPaginateForward,
-        snapshot.forwardPagination,
-        snapshot.isAtLiveEdge,
-        snapshot.items,
-        snapshot.scrollTarget,
-    ]);
 
     useLayoutEffect(() => {
         if (!scrollerElement || !snapshot.isAtLiveEdge || snapshot.canPaginateForward || snapshot.scrollTarget) {
@@ -1323,239 +915,22 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         });
     }, [scrollerElement, snapshot.canPaginateForward, snapshot.isAtLiveEdge, snapshot.scrollTarget, snapshot.items]);
 
-    useLayoutEffect(() => {
-        if (!snapshot.scrollTarget) {
-            return;
-        }
-
-        const effectiveScrollerElement = getEffectiveScrollerElement(scrollerElement);
-        if (!effectiveScrollerElement) {
-            return;
-        }
-
-        const targetElement = findTimelineItemElement(effectiveScrollerElement, snapshot.scrollTarget.targetKey);
-        if (!targetElement) {
-            if (
-                initialFillState === "filling" &&
-                snapshot.backwardPagination === "idle" &&
-                snapshot.canPaginateBackward
-            ) {
-                prepareBackwardAnchorFetch();
-                vm.onRequestMoreItems("backward");
-            } else if (anchorResolutionRetryCountRef.current < 2) {
-                anchorResolutionRetryCountRef.current += 1;
-                setAnchorResolutionRetryNonce((currentNonce) => currentNonce + 1);
-            }
-            return;
-        }
-
-        if (effectiveScrollerElement.clientHeight === 0) {
-            if (anchorResolutionRetryCountRef.current < 2) {
-                anchorResolutionRetryCountRef.current += 1;
-                setAnchorResolutionRetryNonce((currentNonce) => currentNonce + 1);
-            }
-            return;
-        }
-
-        anchorResolutionRetryCountRef.current = 0;
-
-        const scrollAdjustment = getScrollTargetAdjustment({
-            scrollerElement: effectiveScrollerElement,
-            targetElement,
-            position: snapshot.scrollTarget.position,
-        });
-        const aligned = isScrollTargetAligned({
-            scrollerElement: effectiveScrollerElement,
-            targetElement,
-            position: snapshot.scrollTarget.position,
-        });
-        const canPreciselyAdjustScrollTop = (adjustment: number): boolean => {
-            return (
-                getClampedScrollTop(effectiveScrollerElement.scrollTop, adjustment) !==
-                effectiveScrollerElement.scrollTop
-            );
-        };
-
-        if (
-            !aligned &&
-            initialFillState === "filling" &&
-            snapshot.backwardPagination === "loading" &&
-            !canPreciselyAdjustScrollTop(scrollAdjustment)
-        ) {
-            return;
-        }
-
-        const correctionGeneration = ++scrollTargetCorrectionGenerationRef.current;
-
-        if (!aligned && canPreciselyAdjustScrollTop(scrollAdjustment)) {
-            effectiveScrollerElement.scrollTo({
-                top: getClampedScrollTop(effectiveScrollerElement.scrollTop, scrollAdjustment),
-            });
-
-            const targetKey = snapshot.scrollTarget.targetKey;
-            const targetPosition = snapshot.scrollTarget.position;
-            const verifyLocalAnchorCorrection = (attempt = 0, stableAlignmentChecks = 0): void => {
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        if (scrollTargetCorrectionGenerationRef.current !== correctionGeneration) {
-                            return;
-                        }
-
-                        const latestTargetElement = findTimelineItemElement(effectiveScrollerElement, targetKey);
-                        if (!latestTargetElement) {
-                            return;
-                        }
-
-                        const adjustmentAfterCorrection = getScrollTargetAdjustment({
-                            scrollerElement: effectiveScrollerElement,
-                            targetElement: latestTargetElement,
-                            position: targetPosition,
-                        });
-                        const alignedAfterAdjustment = isScrollTargetAligned({
-                            scrollerElement: effectiveScrollerElement,
-                            targetElement: latestTargetElement,
-                            position: targetPosition,
-                        });
-
-                        if (alignedAfterAdjustment) {
-                            if (snapshot.backwardPagination === "loading") {
-                                return;
-                            }
-
-                            if (stableAlignmentChecks + 1 < REQUIRED_STABLE_ANCHOR_ALIGNMENT_CHECKS) {
-                                verifyLocalAnchorCorrection(attempt + 1, stableAlignmentChecks + 1);
-                                return;
-                            }
-
-                            markAnchorResolved();
-                            return;
-                        }
-
-                        if (
-                            canPreciselyAdjustScrollTop(adjustmentAfterCorrection) &&
-                            attempt < MAX_LOCAL_ANCHOR_CORRECTION_ATTEMPTS
-                        ) {
-                            effectiveScrollerElement.scrollTo({
-                                top: getClampedScrollTop(effectiveScrollerElement.scrollTop, adjustmentAfterCorrection),
-                            });
-                            verifyLocalAnchorCorrection(attempt + 1, 0);
-                            return;
-                        }
-
-                        if (initialFillState === "filling") {
-                            if (
-                                snapshot.backwardPagination === "idle" &&
-                                snapshot.canPaginateBackward &&
-                                cannotAlignWithinLoadedWindow(
-                                    effectiveScrollerElement.scrollTop,
-                                    adjustmentAfterCorrection,
-                                )
-                            ) {
-                                prepareBackwardAnchorFetch();
-                                vm.onRequestMoreItems("backward");
-                                return;
-                            }
-
-                            if (anchorResolutionRetryCountRef.current < 2) {
-                                anchorResolutionRetryCountRef.current += 1;
-                                setAnchorResolutionRetryNonce((currentNonce) => currentNonce + 1);
-                            }
-                            return;
-                        }
-                    });
-                });
-            };
-
-            verifyLocalAnchorCorrection();
-            return;
-        }
-
-        if (
-            !aligned &&
-            cannotAlignWithinLoadedWindow(effectiveScrollerElement.scrollTop, scrollAdjustment) &&
-            initialFillState === "filling" &&
-            snapshot.backwardPagination === "idle" &&
-            snapshot.canPaginateBackward
-        ) {
-            prepareBackwardAnchorFetch();
-            vm.onRequestMoreItems("backward");
-            return;
-        }
-
-        if (
-            !aligned &&
-            cannotAlignWithinLoadedWindow(effectiveScrollerElement.scrollTop, scrollAdjustment) &&
-            initialFillState === "filling" &&
-            snapshot.canPaginateBackward
-        ) {
-            return;
-        }
-
-        if (!aligned && initialFillState === "filling") {
-            if (anchorResolutionRetryCountRef.current < 2) {
-                anchorResolutionRetryCountRef.current += 1;
-                setAnchorResolutionRetryNonce((currentNonce) => currentNonce + 1);
-            }
-            return;
-        }
-
-        if (!aligned) {
-            return;
-        }
-
-        markAnchorResolved();
-    }, [
+    useTimelineAnchorResolution({
         vm,
+        snapshot,
         initialFillState,
+        scrollerElement,
+        acknowledgedScrollTargetKeyRef,
+        getScrollTargetCorrectionGeneration,
+        advanceScrollTargetCorrectionGeneration,
+        resetAnchorResolutionRetryCount,
+        getAnchorResolutionRetryCount,
+        incrementAnchorResolutionRetryCount,
+        anchorResolutionRetryNonce,
+        setAnchorResolutionRetryNonce,
         markAnchorResolved,
         prepareBackwardAnchorFetch,
-        scrollerElement,
-        anchorResolutionRetryNonce,
-        snapshot.scrollTarget,
-        snapshot.backwardPagination,
-        snapshot.canPaginateBackward,
-    ]);
-
-    useEffect(() => {
-        if (!snapshot.scrollTarget) {
-            return;
-        }
-
-        if (initialFillState === "filling") {
-            return;
-        }
-
-        const effectiveScrollerElement = getEffectiveScrollerElement(scrollerElement);
-        if (!effectiveScrollerElement || effectiveScrollerElement.clientHeight === 0) {
-            return;
-        }
-
-        const targetElement = findTimelineItemElement(effectiveScrollerElement, snapshot.scrollTarget.targetKey);
-        if (!targetElement) {
-            return;
-        }
-
-        if (snapshot.backwardPagination === "loading") {
-            return;
-        }
-
-        const aligned = isScrollTargetAligned({
-            scrollerElement: effectiveScrollerElement,
-            targetElement,
-            position: snapshot.scrollTarget.position,
-        });
-        if (!aligned) {
-            return;
-        }
-        markAnchorResolved();
-    }, [
-        initialFillState,
-        markAnchorResolved,
-        scrollerElement,
-        snapshot.scrollTarget,
-        snapshot.backwardPagination,
-        snapshot.items,
-    ]);
+    });
 
     const handleRangeChanged = useCallback(
         (range: ListRange) => {
@@ -1589,28 +964,27 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
 
             if (hasRangeChanged) {
                 const suppressVisibleRangeCallbackForForwardSlidingRebaseLock =
-                    forwardPaginationSlidingRebaseLockActiveRef.current;
+                    isForwardPaginationSlidingRebaseLockActive();
                 if (shouldSuppressBlockedForwardSlidingRebaseTailVisibleRangeRebound) {
                     return;
                 }
                 lastVisibleRangeRef.current = visibleRange;
                 if (suppressVisibleRangeCallbackForForwardSlidingRebaseLock) {
-                    pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = visibleRange;
+                    setPendingVisibleRangeDuringForwardSlidingRebaseLock(visibleRange);
                 } else {
                     vm.onVisibleRangeChanged(visibleRange);
                 }
 
                 if (
                     scrollerElement &&
-                    (forwardPaginationSlidingRebaseLockActiveRef.current ||
-                        forwardPaginationShiftedRangeRestoreInProgressRef.current)
+                    (isForwardPaginationSlidingRebaseLockActive() || isForwardPaginationShiftedRangeRestoreInProgress())
                 ) {
-                    if (forwardPaginationSlidingRebaseLockActiveRef.current) {
+                    if (isForwardPaginationSlidingRebaseLockActive()) {
                         armForwardPaginationSlidingRebaseLock();
                     }
                     if (
-                        !forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current &&
-                        !forwardPaginationShiftedRangeRestoreInProgressRef.current
+                        !isForwardPaginationSlidingRebaseVirtuosoRestoreActive() &&
+                        !isForwardPaginationShiftedRangeRestoreInProgress()
                     ) {
                         scheduleForwardPaginationShiftedRangeRestore(scrollerElement);
                     }
@@ -1668,10 +1042,14 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         },
         [
             armForwardPaginationSlidingRebaseLock,
+            isForwardPaginationSlidingRebaseLockActive,
+            isForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+            isForwardPaginationShiftedRangeRestoreInProgress,
             vm,
             initialFillState,
             scrollerElement,
             scheduleForwardPaginationShiftedRangeRestore,
+            setPendingVisibleRangeDuringForwardSlidingRebaseLock,
             snapshot.backwardPagination,
             snapshot.canPaginateBackward,
             snapshot.isAtLiveEdge,
@@ -1722,11 +1100,11 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 return;
             }
 
-            if (forwardPaginationShiftedRangeRestoreInProgressRef.current) {
+            if (isForwardPaginationShiftedRangeRestoreInProgress()) {
                 return;
             }
 
-            if (forwardPaginationSlidingRebaseLockActiveRef.current) {
+            if (isForwardPaginationSlidingRebaseLockActive()) {
                 return;
             }
 
@@ -1758,6 +1136,8 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             initialFillState,
             requestForwardPagination,
             scheduleLiveEdgeAppendCorrection,
+            isForwardPaginationSlidingRebaseLockActive,
+            isForwardPaginationShiftedRangeRestoreInProgress,
             snapshot.canPaginateForward,
             snapshot.forwardPagination,
             snapshot.isAtLiveEdge,
@@ -1870,7 +1250,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 !snapshot.scrollTarget &&
                 forwardPaginationContextRef.current?.continuityMode === "shifted-range"
             ) {
-                forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = true;
+                setForwardPaginationSlidingRebaseVirtuosoRestoreActive(true);
                 suppressNextProgrammaticCallbacks();
                 return activeForwardSlidingRebaseScrollLocation;
             }
@@ -1894,7 +1274,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 };
                 handledForwardPaginationSlidingRebaseRangeRef.current = currentRangeKey;
                 activeForwardPaginationSlidingRebaseScrollLocationRef.current = forwardSlidingRebaseScrollLocation;
-                forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = true;
+                setForwardPaginationSlidingRebaseVirtuosoRestoreActive(true);
                 suppressNextProgrammaticCallbacks();
                 return forwardSlidingRebaseScrollLocation;
             }
@@ -1942,6 +1322,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             snapshot.forwardPagination,
             snapshot.items,
             snapshot.scrollTarget,
+            setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
             suppressNextProgrammaticCallbacks,
         ],
     );
@@ -1977,87 +1358,49 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 wasAtBottomRef.current = false;
             }
 
-            if (
-                (activeForwardSlidingRebaseRange || blockedForwardSlidingRebaseRange) &&
-                previousScrollTop !== null &&
-                currentScrollTop - previousScrollTop > 128 &&
-                (exactBottomScrollTop - currentScrollTop <= 96 || ignoreNextEndReachedRef.current)
-            ) {
-                if (activeForwardSlidingRebaseRange) {
-                    forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = false;
-                    handledForwardPaginationSlidingRebaseRangeRef.current = null;
-                    blockedForwardPaginationSlidingRebaseRangeRef.current = currentRangeKey;
-                    activeForwardPaginationSlidingRebaseScrollLocationRef.current = null;
-                }
-                const blockedRecoverySettledScrollState =
-                    blockedForwardPaginationSlidingRebaseSettledScrollStateRef.current;
-                const settledBlockedRecoveryScrollTop =
-                    blockedForwardSlidingRebaseRange &&
-                    blockedRecoverySettledScrollState.rangeKey === currentRangeKey &&
-                    blockedRecoverySettledScrollState.scrollTop !== null
-                        ? blockedRecoverySettledScrollState.scrollTop
-                        : null;
-                const blockedRecoveryAnchorKey = forwardPaginationContextRef.current?.shiftedRangeAnchorKey;
-                const blockedRecoveryDesiredTopOffset = forwardPaginationContextRef.current?.shiftedRangeTopOffsetPx;
-                const blockedRecoveryAnchorElement =
-                    blockedRecoveryAnchorKey != null
-                        ? findTimelineItemElement(scrollerElement, blockedRecoveryAnchorKey)
-                        : null;
-                if (settledBlockedRecoveryScrollTop !== null) {
-                    cancelPendingForwardPaginationShiftedRangeRestore();
-                    cancelPendingForwardPaginationSlidingRebaseLock();
-                    forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = false;
-                    pendingVisibleRangeDuringForwardSlidingRebaseLockRef.current = null;
-                    scrollerElement.scrollTo({
-                        top: settledBlockedRecoveryScrollTop,
-                    });
-                    return;
-                }
-                if (
-                    blockedForwardSlidingRebaseRange &&
-                    blockedRecoveryAnchorElement &&
-                    blockedRecoveryDesiredTopOffset != null
-                ) {
-                    const currentTopOffset = getTopOffset(scrollerElement, blockedRecoveryAnchorElement);
-                    const scrollAdjustment = currentTopOffset - blockedRecoveryDesiredTopOffset;
-                    if (scrollAdjustment !== 0) {
-                        scrollerElement.scrollTo({
-                            top: scrollerElement.scrollTop + scrollAdjustment,
-                        });
-                    }
-                } else {
-                    const shouldRevertForwardSlidingRebaseRecoveryToPreviousScrollTop =
-                        previousScrollTop !== null &&
-                        previousScrollTop < currentScrollTop &&
-                        (activeForwardSlidingRebaseRange || blockedForwardSlidingRebaseRange);
-                    const primeStepPx = Math.min(
-                        MAX_FORWARD_PAGINATION_ANCHOR_CORRECTION_STEP_PX,
-                        scrollerElement.clientHeight,
-                    );
-                    const primedScrollTop = shouldRevertForwardSlidingRebaseRecoveryToPreviousScrollTop
-                        ? previousScrollTop
-                        : getClampedScrollTop(currentScrollTop, -primeStepPx);
-                    if (primedScrollTop !== currentScrollTop) {
-                        scrollerElement.scrollTo({
-                            top: primedScrollTop,
-                        });
-                    }
-                }
-                armForwardPaginationSlidingRebaseLock();
-                scheduleForwardPaginationShiftedRangeRestore(scrollerElement, {
-                    skipInitialBlockedRebasePrime: blockedRecoveryAnchorElement === null,
-                });
+            const blockedRecoveryHandled = handleBlockedForwardSlidingRebaseRecovery({
+                scrollerElement,
+                currentRangeKey,
+                previousScrollTop,
+                currentScrollTop,
+                exactBottomScrollTop,
+                ignoreNextEndReached: ignoreNextEndReachedRef.current,
+                activeForwardSlidingRebaseRange,
+                blockedForwardSlidingRebaseRange,
+                blockedRecoverySettledRangeKey:
+                    blockedForwardPaginationSlidingRebaseSettledScrollStateRef.current.rangeKey,
+                blockedRecoverySettledScrollTop:
+                    blockedForwardPaginationSlidingRebaseSettledScrollStateRef.current.scrollTop,
+                blockedRecoveryAnchorKey: forwardPaginationContextRef.current?.shiftedRangeAnchorKey ?? null,
+                blockedRecoveryDesiredTopOffset: forwardPaginationContextRef.current?.shiftedRangeTopOffsetPx ?? null,
+                setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+                setHandledForwardPaginationSlidingRebaseRange: (rangeKey) => {
+                    handledForwardPaginationSlidingRebaseRangeRef.current = rangeKey;
+                },
+                setBlockedForwardPaginationSlidingRebaseRange: (rangeKey) => {
+                    blockedForwardPaginationSlidingRebaseRangeRef.current = rangeKey;
+                },
+                setActiveForwardPaginationSlidingRebaseScrollLocation: (scrollLocation) => {
+                    activeForwardPaginationSlidingRebaseScrollLocationRef.current = scrollLocation;
+                },
+                clearPendingVisibleRangeDuringForwardSlidingRebaseLock,
+                cancelPendingForwardPaginationShiftedRangeRestore,
+                cancelPendingForwardPaginationSlidingRebaseLock,
+                armForwardPaginationSlidingRebaseLock,
+                scheduleForwardPaginationShiftedRangeRestore,
+            });
+            if (blockedRecoveryHandled) {
                 return;
             }
 
-            if (forwardPaginationShiftedRangeRestoreInProgressRef.current) {
+            if (isForwardPaginationShiftedRangeRestoreInProgress()) {
                 return;
             }
 
-            if (forwardPaginationSlidingRebaseLockActiveRef.current) {
+            if (isForwardPaginationSlidingRebaseLockActive()) {
                 if (
-                    !forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current &&
-                    !forwardPaginationShiftedRangeRestoreInProgressRef.current
+                    !isForwardPaginationSlidingRebaseVirtuosoRestoreActive() &&
+                    !isForwardPaginationShiftedRangeRestoreInProgress()
                 ) {
                     scheduleForwardPaginationShiftedRangeRestore(scrollerElement);
                 }
@@ -2068,7 +1411,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 latest.initialFillState === "filling" &&
                 upwardDelta !== null &&
                 upwardDelta > FOLLOW_OUTPUT_DISABLE_SCROLL_EPSILON_PX &&
-                !liveEdgeAppendCorrectionInProgressRef.current
+                !isLiveEdgeAppendCorrectionInProgress()
             ) {
                 suppressPostInitialFillBottomSnapRef.current = true;
             }
@@ -2086,7 +1429,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                 // holding live-edge intent. Ignore those layout-driven deltas so
                 // they are not mistaken for "the user scrolled up; stop
                 // following live output".
-                !liveEdgeAppendCorrectionInProgressRef.current &&
+                !isLiveEdgeAppendCorrectionInProgress() &&
                 !snapCandidate;
 
             if (shouldDisableFollowOutput) {
@@ -2096,7 +1439,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             const isLikelyUserScroll =
                 previousScrollTop !== null &&
                 Math.abs(currentScrollTop - previousScrollTop) > FOLLOW_OUTPUT_DISABLE_SCROLL_EPSILON_PX &&
-                !liveEdgeAppendCorrectionInProgressRef.current;
+                !isLiveEdgeAppendCorrectionInProgress();
 
             if (isLikelyUserScroll) {
                 const now = performance.now();
@@ -2134,7 +1477,7 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             if (
                 activeForwardSlidingRebaseRange &&
                 isLikelyUserScroll &&
-                !forwardPaginationSlidingRebaseLockActiveRef.current
+                !isForwardPaginationSlidingRebaseLockActive()
             ) {
                 handledForwardPaginationSlidingRebaseRangeRef.current = null;
                 activeForwardPaginationSlidingRebaseScrollLocationRef.current = null;
@@ -2142,8 +1485,8 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             if (
                 blockedForwardSlidingRebaseRange &&
                 isLikelyUserScroll &&
-                !forwardPaginationSlidingRebaseLockActiveRef.current &&
-                !forwardPaginationShiftedRangeRestoreInProgressRef.current &&
+                !isForwardPaginationSlidingRebaseLockActive() &&
+                !isForwardPaginationShiftedRangeRestoreInProgress() &&
                 currentScrollTop < exactBottomScrollTop - 128
             ) {
                 handledForwardPaginationSlidingRebaseRangeRef.current = currentRangeKey;
@@ -2165,8 +1508,8 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                     !suppressForwardLiveEdgeSeekAfterAnchorRef.current;
                 const shouldSnapToExactBottom =
                     !snapshot.canPaginateForward &&
-                    !forwardPaginationAnchorCorrectionInProgressRef.current &&
-                    !forwardPaginationShiftedRangeRestoreInProgressRef.current &&
+                    !isForwardPaginationAnchorCorrectionInProgress() &&
+                    !isForwardPaginationShiftedRangeRestoreInProgress() &&
                     !blockedForwardSlidingRebaseRange;
                 if (!followOutputEnabled && shouldAutoReenableFollowOutput) {
                     setFollowOutputEnabled(true);
@@ -2213,9 +1556,16 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         armForwardPaginationSlidingRebaseLock,
         cancelPendingForwardPaginationShiftedRangeRestore,
         cancelPendingForwardPaginationSlidingRebaseLock,
+        clearPendingVisibleRangeDuringForwardSlidingRebaseLock,
         followOutputEnabled,
+        isForwardPaginationAnchorCorrectionInProgress,
+        isForwardPaginationSlidingRebaseLockActive,
+        isForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+        isForwardPaginationShiftedRangeRestoreInProgress,
+        isLiveEdgeAppendCorrectionInProgress,
         scrollerElement,
         scheduleForwardPaginationShiftedRangeRestore,
+        setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
         snapshot.canPaginateForward,
         snapshot.items,
     ]);
@@ -2255,9 +1605,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
                   };
         const forwardPaginationCompleted =
             previousRenderState.forwardPagination === "loading" && snapshot.forwardPagination !== "loading";
-        const exactBottomScrollTop = scrollerElement
-            ? Math.max(0, scrollerElement.scrollHeight - scrollerElement.clientHeight)
-            : 0;
         const forwardPaginationAnchorIndex = getForwardPaginationAnchorIndex({
             previousItems: previousRenderState.items,
             nextItems: snapshot.items,
@@ -2270,9 +1617,9 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         });
         const shouldRestoreForwardPaginationAnchor =
             forwardPaginationCompleted &&
-            scrollerElement &&
+            !!scrollerElement &&
             forwardPaginationContextRef.current?.continuityMode === "anchor" &&
-            forwardPaginationContextRef.current?.anchorKey &&
+            forwardPaginationContextRef.current?.anchorKey != null &&
             forwardPaginationContextRef.current.bottomOffsetPx !== null;
         const shouldRestoreForwardPaginationShiftedRange =
             forwardPaginationCompleted &&
@@ -2280,65 +1627,11 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             shiftedVisibleRange !== null;
         const shouldPreserveForwardPaginationBottom =
             forwardPaginationCompleted &&
-            scrollerElement &&
+            !!scrollerElement &&
             forwardPaginationContextRef.current?.continuityMode === "bottom";
-
-        if (shouldRestoreForwardPaginationAnchor) {
-            scheduleForwardPaginationAnchorCorrection(scrollerElement, windowShift, forwardPaginationAnchorIndex);
-        }
-
-        if (shouldRestoreForwardPaginationShiftedRange) {
-            if (!scrollerElement) {
-                return;
-            }
-            if (windowShift < 0) {
-                if (
-                    scrollerElement &&
-                    handledForwardPaginationSlidingRebaseRangeRef.current === currentRangeKey &&
-                    activeForwardPaginationSlidingRebaseScrollLocationRef.current
-                ) {
-                    armForwardPaginationSlidingRebaseLock();
-                    if (!forwardPaginationShiftedRangeRestoreInProgressRef.current) {
-                        scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection(scrollerElement);
-                    }
-                    return;
-                }
-                armForwardPaginationSlidingRebaseLock();
-                forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = false;
-                cancelPendingForwardPaginationShiftedRangeRestore();
-                handledForwardPaginationSlidingRebaseRangeRef.current = null;
-                scheduleForwardPaginationShiftedRangeRestore(scrollerElement);
-                return;
-            }
-            forwardPaginationSlidingRebaseVirtuosoRestoreActiveRef.current = false;
-            scheduleForwardPaginationShiftedRangeRestore(scrollerElement);
-        }
-
-        if (shouldPreserveForwardPaginationBottom) {
-            scrollerElement.scrollTo({
-                top: exactBottomScrollTop,
-            });
-            window.requestAnimationFrame(() => {
-                if (!scrollerElement.isConnected) {
-                    return;
-                }
-                const latestExactBottomScrollTop = Math.max(
-                    0,
-                    scrollerElement.scrollHeight - scrollerElement.clientHeight,
-                );
-                if (scrollerElement.scrollTop < latestExactBottomScrollTop) {
-                    scrollerElement.scrollTo({
-                        top: latestExactBottomScrollTop,
-                    });
-                }
-            });
-        }
 
         const backwardPaginationCompleted =
             previousRenderState.backwardPagination === "loading" && snapshot.backwardPagination !== "loading";
-        if (backwardPaginationCompleted && scrollerElement && backwardPaginationContextRef.current?.anchorKey) {
-            scheduleBackwardPaginationAnchorCorrection(scrollerElement);
-        }
 
         const appendedWhileAtLiveEdge =
             scrollerElement &&
@@ -2346,13 +1639,42 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             snapshot.isAtLiveEdge &&
             previousRenderState.items.at(-1)?.key !== snapshot.items.at(-1)?.key;
 
-        if (appendedWhileAtLiveEdge) {
-            const exactBottomScrollTop = Math.max(0, scrollerElement.scrollHeight - scrollerElement.clientHeight);
-            scrollerElement.scrollTo({
-                top: exactBottomScrollTop,
-            });
-            scheduleLiveEdgeAppendCorrection(scrollerElement);
-        }
+        applyForwardPaginationCompletion({
+            scrollerElement,
+            currentRangeKey,
+            windowShift,
+            forwardPaginationCompleted,
+            shouldRestoreForwardPaginationAnchor,
+            shouldRestoreForwardPaginationShiftedRange,
+            shouldPreserveForwardPaginationBottom,
+            backwardPaginationCompleted,
+            hasBackwardPaginationAnchor: !!backwardPaginationContextRef.current?.anchorKey,
+            appendedWhileAtLiveEdge: !!appendedWhileAtLiveEdge,
+            hasHandledForwardSlidingRebaseRangeForCurrentRange:
+                handledForwardPaginationSlidingRebaseRangeRef.current === currentRangeKey,
+            hasActiveForwardPaginationSlidingRebaseScrollLocation:
+                activeForwardPaginationSlidingRebaseScrollLocationRef.current !== null,
+            isForwardPaginationAnchorCorrectionInProgress: isForwardPaginationAnchorCorrectionInProgress(),
+            isForwardPaginationShiftedRangeRestoreInProgress: isForwardPaginationShiftedRangeRestoreInProgress(),
+            armForwardPaginationSlidingRebaseLock,
+            setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+            cancelPendingForwardPaginationShiftedRangeRestore,
+            setHandledForwardPaginationSlidingRebaseRange: (rangeKey) => {
+                handledForwardPaginationSlidingRebaseRangeRef.current = rangeKey;
+            },
+            scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection,
+            scheduleForwardPaginationShiftedRangeRestore,
+            scheduleForwardPaginationAnchorCorrection,
+            scheduleBackwardPaginationAnchorCorrection,
+            scheduleLiveEdgeAppendCorrection,
+            clearForwardPaginationContext: () => {
+                forwardPaginationContextRef.current = null;
+            },
+            clearBackwardPaginationContext: () => {
+                backwardPaginationContextRef.current = null;
+            },
+            forwardPaginationAnchorIndex,
+        });
 
         previousRenderStateRef.current = {
             items: snapshot.items,
@@ -2361,13 +1683,6 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
             forwardPagination: snapshot.forwardPagination,
         };
 
-        if (
-            forwardPaginationCompleted &&
-            !forwardPaginationAnchorCorrectionInProgressRef.current &&
-            !forwardPaginationShiftedRangeRestoreInProgressRef.current
-        ) {
-            forwardPaginationContextRef.current = null;
-        }
         if (backwardPaginationCompleted && !backwardPaginationAnchorCorrectionInProgressRef.current) {
             backwardPaginationContextRef.current = null;
         }
@@ -2382,6 +1697,9 @@ export function useTimelineViewPresenter<TItem extends TimelineItem>({
         snapshot.scrollTarget,
         armForwardPaginationSlidingRebaseLock,
         cancelPendingForwardPaginationShiftedRangeRestore,
+        setForwardPaginationSlidingRebaseVirtuosoRestoreActive,
+        isForwardPaginationAnchorCorrectionInProgress,
+        isForwardPaginationShiftedRangeRestoreInProgress,
         scheduleLiveEdgeAppendCorrection,
         scheduleForwardPaginationAnchorCorrection,
         scheduleForwardPaginationShiftedRangeVirtuosoFollowupCorrection,

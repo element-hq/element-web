@@ -21,17 +21,6 @@ import type { NavigationAnchor } from "./types";
  * 3. Bottom-edge and visible-item measurement used for live-edge and forward
  *    pagination continuity.
  */
-/**
- * Maximum number of local DOM-based retries when trying to align an anchor
- * after virtualization or pagination changes the rendered geometry.
- */
-export const MAX_LOCAL_ANCHOR_CORRECTION_ATTEMPTS = 6;
-
-/**
- * Number of consecutive successful alignment checks required before the
- * presenter considers an anchor stably resolved.
- */
-export const REQUIRED_STABLE_ANCHOR_ALIGNMENT_CHECKS = 2;
 const SNAP_TO_TARGET_OFFSET_EPSILON_PX = 1;
 const SNAP_TO_BOTTOM_TARGET_OFFSET_EPSILON_PX = 0;
 
