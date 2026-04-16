@@ -739,7 +739,7 @@ export interface SearchInfo {
      */
     count?: number;
     /**
-     * Describe the error if any occured.
+     * Describe the error if any occurred.
      */
     error?: Error;
 }
