@@ -88,4 +88,9 @@ export class ClientApi implements IClientApi {
         const client = MatrixClientPeg.safeGet();
         return client.registerEventContentTransform(transform);
     }
+
+    public async getCapabilities(): Promise<Record<string, unknown>> {
+        const client = MatrixClientPeg.safeGet();
+        return client.getCapabilities();
+    }
 }
