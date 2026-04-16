@@ -12,6 +12,7 @@ import { waitFor } from "jest-matrix-react";
 import {
     RoomType,
     type Room,
+    RoomStateEvent,
     RoomEvent,
     MatrixEvent,
     type MatrixClient,
@@ -481,6 +482,7 @@ describe("ElementCall", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
     let alice: RoomMember;
+    let bob: RoomMember;
     let roomSession: Mocked<MatrixRTCSession>;
     function setRoomMembers(memberIds: string[]) {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue(
@@ -495,7 +497,7 @@ describe("ElementCall", () => {
 
     beforeEach(() => {
         jest.useFakeTimers();
-        ({ client, room, alice, roomSession } = setUpClientRoomAndStores());
+        ({ client, room, alice, bob, roomSession } = setUpClientRoomAndStores());
     });
 
     afterEach(() => {
@@ -1056,6 +1058,32 @@ describe("ElementCall", () => {
             enabledSettings.delete("feature_disable_call_per_sender_encryption");
             roomSpy.mockRestore();
             addWidgetSpy.mockRestore();
+        });
+
+        it("disconnects the call if other user leaving results in an empty room", async () => {
+            await connect(call, widgetApi);
+            expect(call.connectionState).toBe(ConnectionState.Connected);
+
+            call.session.memberships = [
+                { sender: alice.userId, deviceId: "alices_device" } as CallMembership,
+                { sender: bob.userId, deviceId: "bobs_device" } as CallMembership,
+            ];
+            call.session.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
+
+            async function simulateWidgetHangup() {
+                await new Promise<void>((r) => setTimeout(r, 400));
+                widgetApi.emit(
+                    `action:${ElementWidgetActions.HangupCall}`,
+                    new CustomEvent("widgetapirequest", {}),
+                );
+            }
+
+            bob.membership = KnownMembership.Leave;
+            simulateWidgetHangup();
+            room.emit(RoomStateEvent.Members, {} as MatrixEvent, room.currentState, bob);
+
+            jest.advanceTimersByTime(500);
+            await waitFor(() => expect(call.connectionState).toBe(ConnectionState.Disconnected), { interval: 5 });
         });
     });
 

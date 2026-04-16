@@ -27,6 +27,7 @@ import { bulkSpaceBehaviour } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
 import SettingsStore from "../settings/SettingsStore";
 import { CallStore } from "../stores/CallStore";
+import LegacyCallHandler from "../LegacyCallHandler";
 
 export async function leaveRoomBehaviour(
     matrixClient: MatrixClient,
@@ -61,6 +62,10 @@ export async function leaveRoomBehaviour(
         throw new Error(`Expected to find room for id ${roomId}`);
     }
 
+    // hang up legacy based calls
+    LegacyCallHandler.instance.hangupOrReject(roomId);
+
+    // hang up widget based calls
     const activeCall = CallStore.instance.getActiveCall(roomId);
     if (activeCall) {
         try {
