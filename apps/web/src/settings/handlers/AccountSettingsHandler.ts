@@ -15,6 +15,7 @@ import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
 import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
+import { type SettingKey, type Settings } from "../Settings.tsx";
 
 const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
@@ -76,24 +77,27 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
     public getValue(settingName: string, roomId: string): any {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this.getSettings("org.matrix.preview_urls") || {};
+            const content = this.getSettings("org.matrix.preview_urls");
 
             // Check to make sure that we actually got a boolean
-            if (typeof content["disable"] !== "boolean") return null;
+            if (typeof content?.["disable"] !== "boolean") return null;
             return !content["disable"];
         }
 
         // Special case for breadcrumbs
         if (settingName === "breadcrumb_rooms") {
             let content = this.getSettings(BREADCRUMBS_EVENT_TYPE);
-            if (!content || !content["recent_rooms"]) {
-                content = this.getSettings(BREADCRUMBS_LEGACY_EVENT_TYPE);
+            if (!content?.["recent_rooms"]) {
+                const legacyContent = this.getSettings(BREADCRUMBS_LEGACY_EVENT_TYPE);
 
-                // This is a bit of a hack, but it makes things slightly easier
-                if (content) content["recent_rooms"] = content["rooms"];
+                if (legacyContent) {
+                    content = {
+                        recent_rooms: legacyContent["rooms"],
+                    };
+                }
             }
 
-            return content && content["recent_rooms"] ? content["recent_rooms"] : [];
+            return content?.["recent_rooms"] ?? [];
         }
 
         // Special case recent emoji
@@ -109,15 +113,15 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         }
 
         if (settingName === "pseudonymousAnalyticsOptIn") {
-            const content = this.getSettings(ANALYTICS_EVENT_TYPE) || {};
+            const content = this.getSettings(ANALYTICS_EVENT_TYPE);
             // Check to make sure that we actually got a boolean
-            if (typeof content[settingName] !== "boolean") return null;
+            if (typeof content?.[settingName] !== "boolean") return null;
             return content[settingName];
         }
 
         if (settingName === "MessageComposerInput.insertTrailingColon") {
-            const content = this.getSettings() || {};
-            const value = content[settingName];
+            const content = this.getSettings();
+            const value = content?.[settingName];
             if (value === null || value === undefined) {
                 // Write true as it is the default. This will give us the option
                 // of making this opt-in in the future, without affecting old
@@ -128,13 +132,13 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             return value;
         }
 
-        const settings = this.getSettings() || {};
-        let preferredValue = settings[settingName];
+        const settings = this.getSettings();
+        let preferredValue = settings?.[settingName];
 
         if (preferredValue === null || preferredValue === undefined) {
             // Honour the old setting on read only
             if (settingName === "hideAvatarChanges" || settingName === "hideDisplaynameChanges") {
-                preferredValue = settings["hideAvatarDisplaynameChanges"];
+                preferredValue = settings?.["hideAvatarDisplaynameChanges"];
             }
         }
 
@@ -150,11 +154,11 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
     ): Promise<void> {
         let content = this.getSettings(eventType);
         if (legacyEventType && !content?.[field]) {
-            content = this.getSettings(legacyEventType);
+            content = this.getSettings(legacyEventType) as AccountDataEvents[K];
         }
 
         if (!content) {
-            content = {};
+            content = {} as AccountDataEvents[K];
         }
 
         content[field] = value;
@@ -175,7 +179,11 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         await deferred.promise;
     }
 
-    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+    public async setValue<S extends SettingKey>(
+        settingName: S,
+        roomId: string,
+        newValue: Settings[S]["default"],
+    ): Promise<void> {
         switch (settingName) {
             // Special case URL previews
             case "urlPreviewsEnabled":
@@ -186,21 +194,33 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
                 return this.setAccountData(
                     BREADCRUMBS_EVENT_TYPE,
                     "recent_rooms",
-                    newValue,
+                    <Settings["breadcrumb_rooms"]["default"]>newValue,
                     BREADCRUMBS_LEGACY_EVENT_TYPE,
                 );
 
             // Special case recent emoji
             case "recent_emoji":
-                return this.setAccountData(RECENT_EMOJI_EVENT_TYPE, "recent_emoji", newValue);
+                return this.setAccountData(
+                    RECENT_EMOJI_EVENT_TYPE,
+                    "recent_emoji",
+                    <Settings["recent_emoji"]["default"]>newValue,
+                );
 
             // Special case integration manager provisioning
             case "integrationProvisioning":
-                return this.setAccountData(INTEG_PROVISIONING_EVENT_TYPE, "enabled", newValue);
+                return this.setAccountData(
+                    INTEG_PROVISIONING_EVENT_TYPE,
+                    "enabled",
+                    <Settings["integrationProvisioning"]["default"]>newValue,
+                );
 
             // Special case analytics
             case "pseudonymousAnalyticsOptIn":
-                return this.setAccountData(ANALYTICS_EVENT_TYPE, "pseudonymousAnalyticsOptIn", newValue);
+                return this.setAccountData(
+                    ANALYTICS_EVENT_TYPE,
+                    "pseudonymousAnalyticsOptIn",
+                    <Settings["pseudonymousAnalyticsOptIn"]["default"]>newValue ?? undefined,
+                );
             case "mediaPreviewConfig":
                 // Handled in MediaPreviewConfigController.
                 return;
@@ -220,13 +240,15 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return this.client && !this.client.isGuest();
     }
 
-    private getSettings(eventType: keyof AccountDataEvents = "im.vector.web.settings"): any {
-        // TODO: [TS] Types on return
+    private getSettings(): AccountDataEvents["im.vector.web.settings"] | null;
+    private getSettings<E extends keyof AccountDataEvents>(eventType: E): AccountDataEvents[E] | null;
+    private getSettings<E extends keyof AccountDataEvents>(eventType?: E): AccountDataEvents[E] | null {
         if (!this.client) return null;
 
-        const event = this.client.getAccountData(eventType);
-        if (!event || !event.getContent()) return null;
-        return objectClone(event.getContent()); // clone to prevent mutation
+        const event = this.client.getAccountData(eventType ?? "im.vector.web.settings");
+        const content = event?.getContent<AccountDataEvents[E]>();
+        if (!content) return null;
+        return objectClone(content); // clone to prevent mutation
     }
 
     private notifyBreadcrumbsUpdate(event: MatrixEvent): void {
