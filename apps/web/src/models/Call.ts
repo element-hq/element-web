@@ -856,7 +856,6 @@ export class ElementCall extends Call {
 
         this.session.on(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.on(MatrixRTCSessionManagerEvents.SessionEnded, this.checkDestroy);
-        this.room.on(RoomStateEvent.Members, this.onRoomMemberChanged);
         SettingsStore.watchSetting(
             "feature_disable_call_per_sender_encryption",
             null,
@@ -935,7 +934,6 @@ export class ElementCall extends Call {
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.widget.roomId);
         this.session.off(MatrixRTCSessionEvent.MembershipsChanged, this.onMembershipChanged);
         this.client.matrixRTC.off(MatrixRTCSessionManagerEvents.SessionEnded, this.checkDestroy);
-        this.room.off(RoomStateEvent.Members, this.onRoomMemberChanged);
 
         SettingsStore.unwatchSetting(this.settingsStoreCallEncryptionWatcher);
         clearTimeout(this.terminationTimer);
@@ -953,18 +951,6 @@ export class ElementCall extends Call {
     private readonly onMembershipChanged = (): void => {
         this.updateParticipants();
         this.callType = this.session.getConsensusCallIntent() === "audio" ? CallType.Voice : CallType.Video;
-    };
-
-    private readonly onRoomMemberChanged = (_event: unknown, _state: unknown, member: RoomMember): void => {
-        if (!this.connected || member.membership === KnownMembership.Join) return;
-        if (!this.participants.has(member)) return;
-
-        const joinedParticipants = [...this.participants.keys()].filter((p) => p.membership === KnownMembership.Join);
-        if (joinedParticipants.length <= 1) {
-            this.disconnect().catch((e) => {
-                logger.warn("Failed to auto-disconnect from empty call: ", e);
-            });
-        }
     };
 
     private updateParticipants(): void {

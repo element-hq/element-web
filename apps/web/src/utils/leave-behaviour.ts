@@ -62,8 +62,12 @@ export async function leaveRoomBehaviour(
         throw new Error(`Expected to find room for id ${roomId}`);
     }
 
-    // hang up legacy based calls
-    LegacyCallHandler.instance.hangupOrReject(roomId);
+    // attempt to hang up legacy based calls
+    try {
+        LegacyCallHandler.instance.hangupOrReject(roomId);
+    } catch (e) {
+        logger.warn("Failed to hangup call before leaving room: ", e);
+    }
 
     // hang up widget based calls
     const activeCall = CallStore.instance.getActiveCall(roomId);
