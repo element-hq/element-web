@@ -34,6 +34,7 @@ const RoomListWrapperImpl = ({
     getRoomItemViewModel,
     getSectionHeaderViewModel,
     updateVisibleRooms,
+    closeToast,
     renderAvatar: renderAvatarProp,
     ...rest
 }: RoomListStoryProps): JSX.Element => {
@@ -44,6 +45,7 @@ const RoomListWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        closeToast,
     });
 
     return (
@@ -82,6 +84,7 @@ const meta = {
         updateVisibleRooms: fn(),
         renderAvatar,
         isFlatList: true,
+        closeToast: fn(),
     },
     parameters: {
         design: {

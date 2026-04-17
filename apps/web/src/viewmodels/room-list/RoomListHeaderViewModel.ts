@@ -199,8 +199,11 @@ export class RoomListHeaderViewModel
         SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, isMessagePreviewEnabled);
         this.snapshot.merge({ isMessagePreviewEnabled });
     };
-}
 
+    public createSection = (): void => {
+        // To be implemented when custom section creation is added in vms
+    };
+}
 /**
  * Get the initial snapshot for the RoomListHeaderViewModel.
  * @param spaceStore - The space store instance.
@@ -280,5 +283,8 @@ function computeHeaderSpaceState(
         displaySpaceMenu,
         canInviteInSpace,
         canAccessSpaceSettings,
+        // To be implemented when custom section creation is added in vms
+        canCreateSection: false,
+        useComposeIcon: true,
     };
 }

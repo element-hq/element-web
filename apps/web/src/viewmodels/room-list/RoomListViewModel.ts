@@ -572,6 +572,12 @@ export class RoomListViewModel
             });
         }
     };
+
+    public closeToast: () => void = () => {
+        this.snapshot.merge({
+            toast: undefined,
+        });
+    };
 }
 
 /**

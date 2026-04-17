@@ -99,11 +99,11 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
           <p
             class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 mx_UserInfo_profile_mxid"
           >
-            <div
+            <span
               class="mx_CopyableText"
             >
               customUserIdentifier
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -123,8 +123,8 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </p>
         </div>
         <div
@@ -401,11 +401,11 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
           <p
             class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 mx_UserInfo_profile_mxid"
           >
-            <div
+            <span
               class="mx_CopyableText"
             >
               customUserIdentifier
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -425,8 +425,8 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </p>
         </div>
         <div
