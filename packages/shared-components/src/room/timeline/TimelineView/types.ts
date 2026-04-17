@@ -36,10 +36,10 @@ export interface NavigationAnchor {
  * Reports which portion of the loaded timeline window is currently visible.
  */
 export interface VisibleRange {
-    /** Index of the first visible item in the items array. */
-    startIndex: number;
-    /** Index of the last visible item in the items array. */
-    endIndex: number;
+    /** Key of the first visible item in the items array. */
+    startKey: string;
+    /** Key of the last visible item in the items array. */
+    endKey: string;
 }
 
 /**
@@ -56,9 +56,6 @@ export type PaginationState = "idle" | "loading" | "error";
 export interface TimelineViewSnapshot<TItem extends TimelineItem = TimelineItem> {
     /** The ordered list of items to render. */
     items: TItem[];
-
-    /** Whether the viewport is pinned to the live (bottom) end. */
-    isAtLiveEdge: boolean;
 
     /** Whether another backward pagination request is currently possible. */
     canPaginateBackward: boolean;

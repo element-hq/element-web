@@ -60,12 +60,12 @@ export class TimelinePanelViewModel
     private started = false;
     private lifecycleTracked = false;
     // Stored for upcoming read-receipt integration.
-    public visibleRange: VisibleRange = { startIndex: 0, endIndex: 0 };
+    public visibleRange: VisibleRange = { startKey: "", endKey: "" };
+    public isAtLiveEdge = false;
 
     public constructor(opts: TimelinePanelViewModelOpts) {
         super(opts, {
             items: [],
-            isAtLiveEdge: !opts.initialEventId,
             canPaginateBackward: false,
             canPaginateForward: false,
             backwardPagination: "idle",
@@ -199,7 +199,7 @@ export class TimelinePanelViewModel
     };
 
     public onIsAtLiveEdgeChanged = (isAtLiveEdge: boolean): void => {
-        this.mergeSnapshot({ isAtLiveEdge });
+        this.isAtLiveEdge = isAtLiveEdge;
     };
 
     private buildItems(canPaginateBackward: boolean): TimelineModelItem[] {

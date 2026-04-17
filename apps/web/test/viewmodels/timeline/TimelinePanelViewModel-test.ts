@@ -273,10 +273,10 @@ describe("TimelinePanelViewModel", () => {
         const vm = createStartedViewModel();
         await flushPromises();
 
-        vm.onVisibleRangeChanged({ startIndex: 0, endIndex: 0 });
+        vm.onVisibleRangeChanged({ startKey: "event-a", endKey: "event-a" });
         await flushPromises();
 
-        expect(vm.visibleRange).toEqual({ startIndex: 0, endIndex: 0 });
+        expect(vm.visibleRange).toEqual({ startKey: "event-a", endKey: "event-a" });
         expect(timelineWindowInstance.paginate).not.toHaveBeenCalledWith(Direction.Backward, 20);
     });
 
