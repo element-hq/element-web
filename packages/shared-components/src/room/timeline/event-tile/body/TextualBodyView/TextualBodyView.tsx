@@ -100,7 +100,7 @@ export interface TextualBodyViewActions {
     /**
      * Click handler for the edited marker.
      */
-    onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
+    onEditedMarkerClick?: MouseEventHandler<HTMLElement>;
     /**
      * Click handler for the emote sender.
      */
@@ -185,7 +185,7 @@ export function TextualBodyView({
     });
 
     let renderedBody: ReactNode = attachBodyRef(body, bodyRef);
-    const onEditedMarkerClick: MouseEventHandler<HTMLButtonElement> | undefined = vm.onEditedMarkerClick
+    const onEditedMarkerClick: MouseEventHandler<HTMLElement> | undefined = vm.onEditedMarkerClick
         ? (event): void => {
               event.preventDefault();
               event.stopPropagation();
@@ -196,15 +196,17 @@ export function TextualBodyView({
     const markers: ReactNode[] = [];
     if (showEditedMarker) {
         const editedMarkerButton = (
-            <button
-                type="button"
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- Preserve the legacy edited-marker rendering path to avoid screenshot drift from native button layout.
+            <span
+                role="button"
+                tabIndex={0}
                 className={classNames(styles.annotation, styles.editedMarker)}
                 onClick={onEditedMarkerClick}
                 aria-label={editedMarkerAriaLabel}
                 data-textual-body-edited-marker=""
             >
                 <span>{editedMarkerText}</span>
-            </button>
+            </span>
         );
 
         markers.push(

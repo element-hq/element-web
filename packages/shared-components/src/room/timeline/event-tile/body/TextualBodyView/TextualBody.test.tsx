@@ -73,7 +73,7 @@ describe("TextualBodyView", () => {
             extends MockViewModel<TextualBodyViewSnapshot>
             implements TextualBodyViewActions
         {
-            public onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
+            public onEditedMarkerClick?: MouseEventHandler<HTMLElement>;
             public onBodyActionClick?: MouseEventHandler<HTMLElement>;
             public onEmoteSenderClick?: MouseEventHandler<HTMLElement>;
 
@@ -120,7 +120,7 @@ describe("TextualBodyView", () => {
             extends MockViewModel<TextualBodyViewSnapshot>
             implements TextualBodyViewActions
         {
-            public onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
+            public onEditedMarkerClick?: MouseEventHandler<HTMLElement>;
 
             public constructor(snapshot: TextualBodyViewSnapshot, actions: TextualBodyViewActions) {
                 super(snapshot);

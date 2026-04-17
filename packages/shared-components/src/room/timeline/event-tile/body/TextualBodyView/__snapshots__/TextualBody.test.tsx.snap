@@ -39,15 +39,16 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
       <span>
         waves enthusiastically
       </span>
-      <button
+      <span
         class="TextualBody-module_annotation TextualBody-module_editedMarker"
         data-textual-body-edited-marker=""
-        type="button"
+        role="button"
+        tabindex="0"
       >
         <span>
           (edited)
         </span>
-      </button>
+      </span>
     </span>
   </div>
 </div>
