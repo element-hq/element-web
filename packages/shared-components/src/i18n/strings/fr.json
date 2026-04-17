@@ -34,6 +34,7 @@
     "common": {
         "attachment": "Pièce jointe",
         "encryption_enabled": "Chiffrement activé",
+        "loading": "Chargement…",
         "options": "Options",
         "preferences": "Préférences",
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"

@@ -201,7 +201,7 @@ export class RoomListHeaderViewModel
     };
 
     public createSection = (): void => {
-        // To be implemented when custom section creation is added in vms
+        RoomListStoreV3.instance.createSection();
     };
 }
 /**
@@ -275,6 +275,10 @@ function computeHeaderSpaceState(
     );
     const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
 
+    const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
+    const useComposeIcon = !isSectionFeatureEnabled;
+    const canCreateSection = isSectionFeatureEnabled;
+
     return {
         title,
         canCreateRoom,
@@ -283,8 +287,7 @@ function computeHeaderSpaceState(
         displaySpaceMenu,
         canInviteInSpace,
         canAccessSpaceSettings,
-        // To be implemented when custom section creation is added in vms
-        canCreateSection: false,
-        useComposeIcon: true,
+        canCreateSection,
+        useComposeIcon,
     };
 }
