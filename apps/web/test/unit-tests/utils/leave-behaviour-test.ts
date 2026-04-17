@@ -22,6 +22,9 @@ import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../src/stores/spaces";
 import { type ActionPayload } from "../../../src/dispatcher/payloads";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { CallStore } from "../../../src/stores/CallStore";
+import { type Call } from "../../../src/models/Call";
+import LegacyCallHandler from "../../../src/LegacyCallHandler";
 
 describe("leaveRoomBehaviour", () => {
     SdkContextClass.instance.constructEagerStores(); // Initialize RoomViewStore
@@ -75,6 +78,28 @@ describe("leaveRoomBehaviour", () => {
         expect(dispatcherSpy).toHaveBeenCalledWith(payload);
         defaultDispatcher.unregister(dispatcherRef);
     };
+
+    it("hangs up legacy calls when leaving a room", async () => {
+        const hangupSpy = jest.spyOn(LegacyCallHandler.instance, "hangupOrReject").mockImplementation(() => {});
+
+        viewRoom(room);
+        await leaveRoomBehaviour(client, room.roomId);
+
+        expect(hangupSpy).toHaveBeenCalledWith(room.roomId);
+    });
+
+    it("disconnects widget-based calls when leaving a room", async () => {
+        const mockCall = {
+            disconnect: jest.fn().mockResolvedValue(undefined),
+        } as unknown as Call;
+
+        jest.spyOn(CallStore.instance, "getActiveCall").mockReturnValue(mockCall);
+
+        viewRoom(room);
+        await leaveRoomBehaviour(client, room.roomId);
+
+        expect(mockCall.disconnect).toHaveBeenCalled();
+    });
 
     it("returns to the home page after leaving a room outside of a space that was being viewed", async () => {
         viewRoom(room);
