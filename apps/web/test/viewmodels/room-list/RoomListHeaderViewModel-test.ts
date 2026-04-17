@@ -61,6 +61,7 @@ describe("RoomListHeaderViewModel", () => {
             if (settingName === "RoomList.preferredSorting") return SortingAlgorithm.Recency;
             if (settingName === "feature_video_rooms") return true;
             if (settingName === "feature_element_call_video_rooms") return true;
+            if (settingName === "RoomList.OrderedCustomSections") return [];
             return false;
         });
     });

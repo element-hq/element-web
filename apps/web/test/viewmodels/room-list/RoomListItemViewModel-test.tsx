@@ -76,6 +76,7 @@ describe("RoomListItemViewModel", () => {
 
         jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             if (setting === "RoomList.showMessagePreview") return false;
+            if (setting === "RoomList.OrderedCustomSections") return [];
             return false;
         });
         jest.spyOn(SettingsStore, "watchSetting").mockImplementation(() => "watcher-id");
