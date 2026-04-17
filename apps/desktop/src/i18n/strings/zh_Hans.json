@@ -22,7 +22,9 @@
         "about": "关于",
         "brand_help": "%(brand)s帮助",
         "help": "帮助",
-        "preferences": "偏好"
+        "no": "不",
+        "preferences": "偏好",
+        "yes": "是"
     },
     "confirm_quit": "你确定要退出吗？",
     "edit_menu": {
@@ -30,8 +32,19 @@
         "speech_start_speaking": "开始讲话",
         "speech_stop_speaking": "停止讲话"
     },
+    "eol": {
+        "no_more_updates": "您正在使用不受支持的macOS版本。请升级以获取%(brand)s 更新。",
+        "title": "系统不支持",
+        "warning": "您正在使用不受支持的macOS版本。请升级系统以确保%(brand)s 能持续正常运行。"
+    },
     "file_menu": {
         "label": "文件"
+    },
+    "icon_overlay": {
+        "description_error": "错误",
+        "description_notifications": {
+            "other": "您有%(count)s 条未读通知。"
+        }
     },
     "menu": {
         "hide": "隐藏",
@@ -48,6 +61,21 @@
         "save_image_as": "保存图片为……",
         "save_image_as_error_description": "图片保存失败",
         "save_image_as_error_title": "图片保存失败"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "清除数据并重新加载？",
+            "backend_changed_detail": "无法从系统密钥环访问密钥，该密钥似乎已被更改。",
+            "backend_changed_title": "数据库加载失败",
+            "backend_no_encryption": "您的系统支持密钥环，但加密功能不可用。",
+            "backend_no_encryption_detail": "Electron检测到您的密钥环%(backend)s 不支持加密功能。请确保已安装该密钥环。若已安装，请重启设备后重试。您也可选择允许%(brand)s 使用较弱的加密方式。",
+            "backend_no_encryption_title": "不支持加密",
+            "unsupported_keyring": "您的系统存在未受支持的密钥环，这意味着无法打开数据库。",
+            "unsupported_keyring_detail": "Electron的密钥环检测未找到受支持的后端。您可以尝试通过命令行参数启动%(brand)s 来手动配置后端，此操作仅需执行一次。详情请参阅：%(link)s 。",
+            "unsupported_keyring_title": "系统不支持",
+            "unsupported_keyring_use_basic_text": "使用较弱的加密",
+            "unsupported_keyring_use_plaintext": "不使用加密"
+        }
     },
     "view_menu": {
         "actual_size": "实际大小",
