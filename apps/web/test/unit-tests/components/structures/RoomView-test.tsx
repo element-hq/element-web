@@ -948,7 +948,10 @@ describe("RoomView", () => {
                 expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
             });
 
-            await userEvent.hover(getByText("search term"));
+            const searchResultTile = getByText("search term").closest(".mx_EventTile");
+            expect(searchResultTile).not.toBeNull();
+
+            await userEvent.hover(searchResultTile!);
             await userEvent.click(await findByLabelText("Edit"));
 
             await waitFor(() => {
@@ -1014,7 +1017,10 @@ describe("RoomView", () => {
             });
             const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
 
-            await userEvent.hover(getByText("search term"));
+            const searchResultTile = getByText("search term").closest(".mx_EventTile");
+            expect(searchResultTile).not.toBeNull();
+
+            await userEvent.hover(searchResultTile!);
             await userEvent.click(await findByLabelText("Edit"));
 
             await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));

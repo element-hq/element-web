@@ -32,7 +32,6 @@
         "cancel": "Annuleer",
         "change": "Wijzig",
         "clear": "Wis",
-        "click": "Klik",
         "click_to_copy": "Klik om te kopiëren",
         "close": "Sluiten",
         "collapse": "Invouwen",
@@ -1620,8 +1619,6 @@
             "aliases_section": "Kameradressen",
             "avatar_field_label": "Kamerafbeelding",
             "canonical_alias_field_label": "Hoofdadres",
-            "default_url_previews_off": "URL-voorvertoningen zijn voor deelnemers van deze kamer standaard uitgeschakeld.",
-            "default_url_previews_on": "URL-voorvertoningen zijn voor deelnemers van deze kamer standaard ingeschakeld.",
             "description_space": "Bewerk instellingen gerelateerd aan jouw space.",
             "error_creating_alias_description": "Er is een fout opgetreden bij het aanmaken van dit adres. Dit wordt mogelijk niet toegestaan door de server, of er is een tijdelijk probleem opgetreden.",
             "error_creating_alias_title": "Fout bij aanmaken van het adres",
@@ -1648,12 +1645,7 @@
             "published_aliases_explainer_space": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om jouw Space te betreden.",
             "published_aliases_section": "Gepubliceerde adressen",
             "save": "Wijzigingen opslaan",
-            "topic_field_label": "Kameronderwerp",
-            "url_preview_encryption_warning": "In versleutelde kamers zoals deze zijn URL-voorvertoningen standaard uitgeschakeld, om te voorkomen dat jouw homeserver (waar de voorvertoningen worden gemaakt) informatie kan verzamelen over de koppelingen die je hier ziet.",
-            "url_preview_explainer": "Als iemand een URL in een bericht invoegt, kan er een URL-voorvertoning weergegeven worden met meer informatie over de koppeling, zoals de titel, omschrijving en een afbeelding van de website.",
-            "url_previews_section": "URL-voorvertoningen",
-            "user_url_previews_default_off": "Je hebt URL-voorvertoningen standaard <a>uitgeschakeld</a>.",
-            "user_url_previews_default_on": "Je hebt URL-voorvertoningen standaard <a>ingeschakeld</a>."
+            "topic_field_label": "Kameronderwerp"
         },
         "notifications": {
             "browse_button": "Bladeren",
@@ -1925,8 +1917,6 @@
             "spell_check_locale_placeholder": "Kies een landinstelling"
         },
         "inline_url_previews_default": "Inline URL-voorvertoning standaard inschakelen",
-        "inline_url_previews_room": "URL-voorvertoning voor alle deelnemers aan deze kamer standaard inschakelen",
-        "inline_url_previews_room_account": "URL-voorvertoning in dit kamer inschakelen (geldt alleen voor jou)",
         "insert_trailing_colon_mentions": "Voeg een dubbele punt in nadat de persoon het aan het begin van een bericht heeft vermeld",
         "jump_to_bottom_on_send": "Naar de onderkant van de tijdlijn springen wanneer je een bericht verstuurd",
         "key_backup": {
@@ -2391,7 +2381,6 @@
             "one": "%(count)s reactie",
             "other": "%(count)s reacties"
         },
-        "error_start_thread_existing_relation": "Kan geen discussie maken van een gebeurtenis met een bestaande relatie",
         "my_threads": "Mijn discussies",
         "my_threads_description": "Toon alle threads waarin je hebt bijgedragen",
         "open_thread": "Open discussie",
@@ -2422,7 +2411,6 @@
         },
         "creation_summary_dm": "%(creator)s maakte deze directe chat.",
         "creation_summary_room": "Kamer gestart en ingesteld door %(creator)s.",
-        "download_action_decrypting": "Ontsleutelen",
         "download_action_downloading": "Downloaden",
         "edits": {
             "tooltip_label": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
@@ -2605,10 +2593,7 @@
             "removed": "%(widgetName)s-widget verwijderd door %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Citaten invouwen",
             "copy_link_thread": "Kopieer link naar draad",
-            "expand_reply_chain": "Citaten uitvouwen",
-            "label": "Berichtacties",
             "view_in_room": "In kamer bekijken"
         },
         "mjolnir": {

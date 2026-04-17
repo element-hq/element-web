@@ -72,7 +72,7 @@ const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
 
     return (
         <div className="mx_QuickThemeSwitcher">
-            <h4 className="mx_QuickThemeSwitcher_heading">{_t("common|theme")}</h4>
+            <h3 className="mx_QuickThemeSwitcher_heading">{_t("common|theme")}</h3>
             <Dropdown
                 id="mx_QuickSettingsButton_themePickerDropdown"
                 onOptionChange={onOptionChange}

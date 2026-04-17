@@ -12,8 +12,8 @@ import childProcess from "node:child_process";
 import { glob } from "glob";
 import { mkdirp } from "mkdirp";
 
-import type HakEnv from "./hakEnv.js";
-import type { DependencyInfo } from "./dep.js";
+import type HakEnv from "./hakEnv.ts";
+import type { DependencyInfo } from "./dep.ts";
 
 export default async function copy(hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
     if (moduleInfo.cfg.copy) {

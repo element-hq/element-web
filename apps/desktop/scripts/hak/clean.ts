@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import path from "node:path";
 import { rimraf } from "rimraf";
 
-import type { DependencyInfo } from "./dep.js";
-import type HakEnv from "./hakEnv.js";
+import type { DependencyInfo } from "./dep.ts";
+import type HakEnv from "./hakEnv.ts";
 
 export default async function clean(hakEnv: HakEnv, moduleInfo: DependencyInfo): Promise<void> {
     await rimraf(moduleInfo.moduleDotHakDir);

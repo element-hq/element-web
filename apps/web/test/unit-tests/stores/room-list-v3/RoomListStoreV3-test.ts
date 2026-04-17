@@ -11,7 +11,12 @@ import { mocked } from "jest-mock";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
-import { LISTS_UPDATE_EVENT, RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
+import {
+    CHATS_TAG,
+    LISTS_UPDATE_EVENT,
+    RoomListStoreV3Class,
+    type Section,
+} from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { mkEvent, mkMessage, mkSpace, mkStubRoom, stubClient, upsertRoomStateEvents } from "../../../test-utils";
@@ -21,7 +26,7 @@ import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
 import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
-import { FilterKey } from "../../../../src/stores/room-list-v3/skip-list/filters";
+import { FilterEnum } from "../../../../src/stores/room-list-v3/skip-list/filters";
 import { RoomNotificationStateStore } from "../../../../src/stores/notifications/RoomNotificationStateStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { SortingAlgorithm } from "../../../../src/stores/room-list-v3/skip-list/sorters";
@@ -502,7 +507,10 @@ describe("RoomListStoreV3", () => {
                 store.on(LISTS_UPDATE_EVENT, fn);
 
                 // The rooms which belong to the space should not be shown
-                const result = store.getSortedRoomsInActiveSpace().rooms.map((r) => r.roomId);
+                const result = store
+                    .getSortedRoomsInActiveSpace()
+                    .sections.flatMap((s) => s.rooms)
+                    .map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result).not.toContain(id);
                 }
@@ -511,7 +519,10 @@ describe("RoomListStoreV3", () => {
                 jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
                 SpaceStore.instance.emit(UPDATE_SELECTED_SPACE);
                 expect(fn).toHaveBeenCalled();
-                const result2 = store.getSortedRoomsInActiveSpace().rooms.map((r) => r.roomId);
+                const result2 = store
+                    .getSortedRoomsInActiveSpace()
+                    .sections.flatMap((s) => s.rooms)
+                    .map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result2).toContain(id);
                 }
@@ -534,7 +545,9 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]).rooms;
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.FavouriteFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(3);
                 for (const i of [8, 27, 75]) {
                     expect(result).toContain(rooms[i]);
@@ -569,7 +582,9 @@ describe("RoomListStoreV3", () => {
                 expect(fn).toHaveBeenCalled();
 
                 // Sorted, filtered rooms should be 27 and 75
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]).rooms;
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.FavouriteFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(2);
                 for (const i of [8, 75]) {
                     expect(result).toContain(rooms[i]);
@@ -594,7 +609,9 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]).rooms;
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(2);
                 for (const i of [8, 27]) {
                     expect(result).toContain(rooms[i]);
@@ -611,7 +628,9 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Since there's no unread yet, we expect zero results
-                let result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]).rooms;
+                let result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(0);
 
                 // Mock so that room at index 8 is marked as unread
@@ -626,7 +645,7 @@ describe("RoomListStoreV3", () => {
                 );
 
                 // Now we expect room at index 8 to show as unread
-                result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]).rooms;
+                result = store.getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter]).sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(1);
                 expect(result).toContain(rooms[8]);
             });
@@ -649,14 +668,18 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
-                const peopleRooms = store.getSortedRoomsInActiveSpace([FilterKey.PeopleFilter]).rooms;
+                const peopleRooms = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.PeopleFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(peopleRooms).toHaveLength(2);
                 for (const i of [8, 27]) {
                     expect(peopleRooms).toContain(rooms[i]);
                 }
 
                 // Rest are normal rooms
-                const nonDms = store.getSortedRoomsInActiveSpace([FilterKey.RoomsFilter]).rooms;
+                const nonDms = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.RoomsFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(nonDms).toHaveLength(3);
                 for (const i of [6, 13, 75]) {
                     expect(nonDms).toContain(rooms[i]);
@@ -680,7 +703,9 @@ describe("RoomListStoreV3", () => {
                 const store = new RoomListStoreV3Class(dispatcher);
                 await store.start();
 
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]).rooms;
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.InvitesFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(5);
                 for (const room of invitedRooms) {
                     expect(result).toContain(room);
@@ -705,7 +730,9 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should only give us rooms at index 8 and 27
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.MentionsFilter]).rooms;
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.MentionsFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(2);
                 for (const i of [8, 27]) {
                     expect(result).toContain(rooms[i]);
@@ -727,7 +754,9 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Sorted, filtered rooms should be 8, 27 and 75
-                const result = store.getSortedRoomsInActiveSpace([FilterKey.LowPriorityFilter]).rooms;
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.LowPriorityFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(3);
                 for (const i of [8, 27, 75]) {
                     expect(result).toContain(rooms[i]);
@@ -755,10 +784,9 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 // Should give us only room at 8 since that's the only room which matches both filters
-                const result = store.getSortedRoomsInActiveSpace([
-                    FilterKey.UnreadFilter,
-                    FilterKey.FavouriteFilter,
-                ]).rooms;
+                const result = store
+                    .getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter, FilterEnum.FavouriteFilter])
+                    .sections.flatMap((s) => s.rooms);
                 expect(result).toHaveLength(1);
                 expect(result).toContain(rooms[8]);
             });
@@ -777,7 +805,9 @@ describe("RoomListStoreV3", () => {
                     },
                     true,
                 );
-                expect(store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]).rooms).not.toContain(room);
+                expect(
+                    store.getSortedRoomsInActiveSpace([FilterEnum.InvitesFilter]).sections.flatMap((s) => s.rooms),
+                ).not.toContain(room);
 
                 room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
                 dispatcher.dispatch(
@@ -789,8 +819,193 @@ describe("RoomListStoreV3", () => {
                     },
                     true,
                 );
-                expect(store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]).rooms).toContain(room);
+                expect(
+                    store.getSortedRoomsInActiveSpace([FilterEnum.InvitesFilter]).sections.flatMap((s) => s.rooms),
+                ).toContain(room);
             });
+        });
+    });
+
+    describe("Sections", () => {
+        function enableSections(): void {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                if (setting === "feature_room_list_sections") return true;
+                return false;
+            });
+        }
+
+        function findSection(sections: Section[], tag: string): Section | undefined {
+            return sections.find((s) => s.tag === tag);
+        }
+
+        function getClientAndRooms() {
+            const client = stubClient();
+            const rooms = getMockedRooms(client);
+            client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
+            jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
+            return { client, rooms };
+        }
+
+        it("returns a single chats section when sections feature is disabled", async () => {
+            const { rooms } = getClientAndRooms();
+            // Mark some rooms as favourite so we can verify they are NOT split out
+            [0, 1, 2].forEach((i) => {
+                rooms[i].tags[DefaultTagID.Favourite] = {};
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const result = store.getSortedRoomsInActiveSpace();
+            expect(result.sections).toHaveLength(1);
+            expect(result.sections[0].tag).toBe(CHATS_TAG);
+            // All rooms, including favourites, are in the single section
+            for (const i of [0, 1, 2]) {
+                expect(result.sections[0].rooms).toContain(rooms[i]);
+            }
+        });
+
+        it("returns three sections in the correct order when enabled", async () => {
+            enableSections();
+            getClientAndRooms();
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const result = store.getSortedRoomsInActiveSpace();
+            expect(result.sections).toHaveLength(3);
+            expect(result.sections[0].tag).toBe(DefaultTagID.Favourite);
+            expect(result.sections[1].tag).toBe(CHATS_TAG);
+            expect(result.sections[2].tag).toBe(DefaultTagID.LowPriority);
+        });
+
+        it.each([
+            { tag: DefaultTagID.Favourite, label: "Favourite" },
+            { tag: DefaultTagID.LowPriority, label: "LowPriority" },
+        ])("places tagged rooms only in the $label section", async ({ tag }) => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            // Mark rooms 3, 7 with the given tag
+            [3, 7].forEach((i) => {
+                rooms[i].tags[tag] = {};
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            const targetSection = findSection(sections, tag)!;
+            const chatsSection = findSection(sections, CHATS_TAG)!;
+
+            for (const i of [3, 7]) {
+                expect(targetSection.rooms).toContain(rooms[i]);
+                expect(chatsSection.rooms).not.toContain(rooms[i]);
+            }
+        });
+
+        it("places regular rooms only in the Chats section", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            // Mark some rooms as favourite / low priority so the rest are regular
+            rooms[0].tags[DefaultTagID.Favourite] = {};
+            rooms[1].tags[DefaultTagID.LowPriority] = {};
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            const favSection = findSection(sections, DefaultTagID.Favourite)!;
+            const chatsSection = findSection(sections, CHATS_TAG)!;
+            const lowPrioritySection = findSection(sections, DefaultTagID.LowPriority)!;
+
+            // A regular room (index 5) should be in chats only
+            expect(chatsSection.rooms).toContain(rooms[5]);
+            expect(favSection.rooms).not.toContain(rooms[5]);
+            expect(lowPrioritySection.rooms).not.toContain(rooms[5]);
+        });
+
+        it("all rooms are accounted for across all sections", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            [2, 5].forEach((i) => {
+                rooms[i].tags[DefaultTagID.Favourite] = {};
+            });
+            [11].forEach((i) => {
+                rooms[i].tags[DefaultTagID.LowPriority] = {};
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            const totalRooms = sections.flatMap((s) => s.rooms).length;
+            // All 100 rooms should be distributed across the three sections
+            expect(totalRooms).toBe(rooms.length);
+        });
+
+        it("applies additional filter keys within each section", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            // Rooms 3 and 7 are favourites; room 7 is also unread
+            [3, 7].forEach((i) => {
+                rooms[i].tags[DefaultTagID.Favourite] = {};
+            });
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                const state = {
+                    hasUnreadCount: room === rooms[7],
+                } as unknown as RoomNotificationState;
+                return state;
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace([FilterEnum.UnreadFilter]);
+            const favSection = findSection(sections, DefaultTagID.Favourite)!;
+
+            // Only room 7 is both favourite AND unread
+            expect(favSection.rooms).toHaveLength(1);
+            expect(favSection.rooms).toContain(rooms[7]);
+        });
+
+        it("sections respect space filtering", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            // Room 3 is a favourite room in the space
+            rooms[3].tags[DefaultTagID.Favourite] = {};
+
+            const spaceRoomId = "!space1:matrix.org";
+            const inSpaceIds = [3, 10, 20].map((i) => rooms[i].roomId);
+            jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
+                if (space === spaceRoomId && inSpaceIds.includes(id)) return true;
+                return false;
+            });
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoomId);
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections, spaceId } = store.getSortedRoomsInActiveSpace();
+            expect(spaceId).toBe(spaceRoomId);
+
+            const allRooms = sections.flatMap((s) => s.rooms);
+            const allRoomIds = allRooms.map((r) => r.roomId);
+
+            // Only rooms in the space should appear
+            for (const id of inSpaceIds) {
+                expect(allRoomIds).toContain(id);
+            }
+            // Rooms not in the space should not appear
+            expect(allRoomIds).not.toContain(rooms[50].roomId);
+
+            // Room 3 should be in the Favourite section specifically
+            const favSection = findSection(sections, DefaultTagID.Favourite)!;
+            expect(favSection.rooms).toContain(rooms[3]);
         });
     });
 

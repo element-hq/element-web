@@ -140,7 +140,7 @@ import { type FocusMessageSearchPayload } from "../../dispatcher/payloads/FocusM
 import { isRoomEncrypted } from "../../hooks/useIsEncrypted";
 import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
-import { EncryptionEventViewModel } from "../../viewmodels/event-tiles/EncryptionEventViewModel.ts";
+import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
 
 const DEBUG = false;
@@ -1380,12 +1380,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         if (ev.getType() === "org.matrix.room.preview_urls") {
-            this.updatePreviewUrlVisibility(room);
+            this.updatePreviewUrlVisibility();
         }
 
         if (ev.getType() === "m.room.encryption") {
             this.updateE2EStatus(room);
-            this.updatePreviewUrlVisibility(room);
+            this.updatePreviewUrlVisibility();
         }
 
         // ignore anything but real-time updates at the end of the room:
@@ -1541,15 +1541,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     }
 
-    private updatePreviewUrlVisibility(room: Room): void {
+    private updatePreviewUrlVisibility(): void {
         this.setState(({ isRoomEncrypted }) => ({
-            showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
+            showUrlPreview: this.getPreviewUrlVisibility(isRoomEncrypted),
         }));
     }
 
-    private getPreviewUrlVisibility({ roomId }: Room, isRoomEncrypted: boolean | null): boolean {
-        const key = isRoomEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled";
-        return SettingsStore.getValue(key, roomId);
+    private getPreviewUrlVisibility(isRoomEncrypted: boolean | null): boolean {
+        return SettingsStore.getValue(isRoomEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled");
     }
 
     private onRoom = (room: Room): void => {
@@ -1608,9 +1607,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private onUrlPreviewsEnabledChange = (): void => {
-        if (this.state.room) {
-            this.updatePreviewUrlVisibility(this.state.room);
-        }
+        this.updatePreviewUrlVisibility();
     };
 
     private onRoomStateEvents = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
@@ -1638,7 +1635,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         this.setState({
             isRoomEncrypted,
-            showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
+            showUrlPreview: this.getPreviewUrlVisibility(isRoomEncrypted),
             ...(newE2EStatus && { e2eStatus: newE2EStatus }),
         });
     }
@@ -2563,7 +2560,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     term={this.state.search.term}
                     scope={this.state.search.scope}
                     promise={this.state.search.promise}
-                    abortController={this.state.search.abortController}
                     inProgress={!!this.state.search.inProgress}
                     className={this.messagePanelClassNames}
                     onUpdate={this.onSearchUpdate}

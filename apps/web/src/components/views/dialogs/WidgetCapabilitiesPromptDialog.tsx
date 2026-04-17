@@ -104,7 +104,12 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
 
             return (
                 <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap + i}>
-                    <StyledCheckbox checked={isChecked} onChange={() => this.onToggle(cap)} description={text.byline}>
+                    <StyledCheckbox
+                        checked={isChecked}
+                        onChange={() => this.onToggle(cap)}
+                        description={text.byline}
+                        formWrap={false}
+                    >
                         {text.primary}
                     </StyledCheckbox>
                 </div>

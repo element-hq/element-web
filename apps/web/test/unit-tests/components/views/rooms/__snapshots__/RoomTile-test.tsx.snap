@@ -14,7 +14,7 @@ exports[`RoomTile when message previews are enabled and there is a message in a 
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+        class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -112,7 +112,7 @@ exports[`RoomTile when message previews are enabled and there is a message in th
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+        class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -218,7 +218,7 @@ exports[`RoomTile when message previews are enabled should render a room without
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+        class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -304,7 +304,7 @@ exports[`RoomTile when message previews are not enabled should render the room 1
       class="mx_DecoratedRoomAvatar"
     >
       <span
-        class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+        class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"

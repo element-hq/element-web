@@ -16,16 +16,3 @@ index d451e0ab75c530b794e6925466e18e798b7df960..ca4eeb240ef200fe8996453276451327
          ...plugins.map(id => toDeferResolve(id)),
          ...(plugins.includes('@babel/plugin-transform-runtime')
              ? [toDeferResolve('@babel/runtime', { optional: true })]
-diff --git a/dist/typescript/pragmas/custom.js b/dist/typescript/pragmas/custom.js
-index 6ab98ae60cf8f07047a0ad7132c11a0da780bfbc..7c8818e81cde7e4ee9c11084d55043441e37208e 100644
---- a/dist/typescript/pragmas/custom.js
-+++ b/dist/typescript/pragmas/custom.js
-@@ -2,7 +2,7 @@ import { IMPORT_FLAGS } from "../../constants.js";
- import { getEnvSpecifier } from "../../plugins/vitest/helpers.js";
- import { isAbsolute, isInternal } from "../../util/path.js";
- import { getLeadingComments, stripQuotes } from "../ast-helpers.js";
--const VITEST_ENV = /@(vitest|jest)-environment\s+(\S+)/g;
-+const VITEST_ENV = /@(vitest)-environment\s+(\S+)/g;
- export const collectCustomImports = (sourceFile) => {
-     const comments = getLeadingComments(sourceFile);
-     if (!comments.length)

@@ -141,7 +141,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
+              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -211,7 +211,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
           </div>
         </div>
         <div
-          class="_separator_cqpyv_8 mx_PinnedMessagesCard_Separator"
+          class="_separator_13qwf_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -222,7 +222,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
+              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -369,7 +369,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
+              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -439,7 +439,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
           </div>
         </div>
         <div
-          class="_separator_cqpyv_8 mx_PinnedMessagesCard_Separator"
+          class="_separator_13qwf_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -450,7 +450,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_zysgz_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_zysgz_55"
+              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"

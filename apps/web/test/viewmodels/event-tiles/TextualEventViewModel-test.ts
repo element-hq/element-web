@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 
-import { TextualEventViewModel } from "../../../src/viewmodels/event-tiles/TextualEventViewModel";
+import { TextualEventViewModel } from "../../../src/viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { stubClient } from "../../test-utils";
 
 jest.mock("../../../src/TextForEvent.tsx", () => ({

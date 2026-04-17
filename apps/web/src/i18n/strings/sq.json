@@ -26,7 +26,6 @@
         "cancel": "Anuloje",
         "change": "Ndërroje",
         "clear": "Spastroje",
-        "click": "Klikim",
         "click_to_copy": "Klikoni që të kopjohet",
         "close": "Mbylle",
         "collapse": "Tkurre",
@@ -1069,9 +1068,6 @@
         "impossible_dialog_title": "Integrimet s’lejohen"
     },
     "invite": {
-        "ask_anyway_description": "S’arrihet të gjenden profile për ID-të Matrix radhitur më poshtë - doni të niset një MD sido që të jetë?",
-        "ask_anyway_label": "Nis MD sido qoftë",
-        "ask_anyway_never_warn_label": "Nis MD sido qoftë dhe mos më sinjalizo kurrë më",
         "email_caption": "Ftojeni me email",
         "email_limit_one": "Ftesat me email mund të dërgohen vetëm një në herë",
         "email_use_default_is": "Përdorni një shërbyes identitetesh për të ftuar me email. <default>Përdorni parazgjedhjen (%(defaultIdentityServerName)s)</default> ose administrojeni që nga <settings>Rregullimet</settings>.",
@@ -1790,8 +1786,6 @@
             "aliases_section": "Adresa Dhomash",
             "avatar_field_label": "Avatar dhome",
             "canonical_alias_field_label": "Adresë kryesore",
-            "default_url_previews_off": "Për pjesëmarrësit në këtë dhomë paraparja e URL-ve është e çaktivizuar, si parazgjedhje.",
-            "default_url_previews_on": "Për pjesëmarrësit në këtë dhomë paraparja e URL-ve është e aktivizuar, si parazgjedhje.",
             "description_space": "Përpunoni rregullime që lidhen me hapësirën tuaj.",
             "error_creating_alias_description": "Pati një gabim në krijimin e asaj adrese. Mund të mos lejohet nga shërbyesi, ose ndodhi një gabim i përkohshëm.",
             "error_creating_alias_title": "Gabim në krijim adrese",
@@ -1818,12 +1812,7 @@
             "published_aliases_explainer_space": "Adresat e publikuara mund të përdoren nga cilido, në cilindo shërbyes, për të hyrë në hapësirën tuaj.",
             "published_aliases_section": "Adresa të Publikuara",
             "save": "Ruaji Ndryshimet",
-            "topic_field_label": "Temë Dhome",
-            "url_preview_encryption_warning": "Në dhoma të fshehtëzuara, si kjo, paraparja e URL-ve është e çaktivizuar, si parazgjedhje, për të garantuar që shërbyesi juaj home (ku edhe prodhohen paraparjet) të mos grumbullojë të dhëna rreth lidhjesh që shihni në këtë dhomë.",
-            "url_preview_explainer": "Kur dikush vë një URL në mesazh, për të dhënë rreth lidhjes më tepër të dhëna, të tilla si titulli, përshkrimi dhe një figurë e sajtit, do të shfaqet një paraparje e URL-së.",
-            "url_previews_section": "Paraparje URL-sh",
-            "user_url_previews_default_off": "E keni <a>çaktivizuar</a>, si parazgjedhje, paraparjen e URL-ve.",
-            "user_url_previews_default_on": "E keni <a>aktivizuar</a>, si parazgjedhje, paraparjen e URL-ve."
+            "topic_field_label": "Temë Dhome"
         },
         "notifications": {
             "browse_button": "Shfletoni",
@@ -2112,8 +2101,6 @@
             "spell_check_locale_placeholder": "Zgjidhni vendore"
         },
         "inline_url_previews_default": "Aktivizo, si parazgjedhje, paraparje URL-sh brendazi",
-        "inline_url_previews_room": "Aktivizo, si parazgjedhje, paraparje URL-sh për pjesëmarrësit në këtë dhomë",
-        "inline_url_previews_room_account": "Aktivizo paraparje URL-sh për këtë dhomë (prek vetëm ju)",
         "insert_trailing_colon_mentions": "Fut dy pika pas përmendjesh përdoruesi, në fillim të një mesazhi",
         "jump_to_bottom_on_send": "Kalo te fundi i rrjedhës kohore, kur dërgoni një mesazh",
         "key_backup": {
@@ -2622,7 +2609,6 @@
             "one": "%(count)s përgjigje",
             "other": "%(count)s përgjigje"
         },
-        "error_start_thread_existing_relation": "S’mund të krijohet një rrjedhë prej një akti me një marrëdhënie ekzistuese",
         "my_threads": "Rrjedhat e mia",
         "my_threads_description": "Shfaq krejt rrjedhat ku keni marrë pjesë",
         "open_thread": "Hape rrjedhën",
@@ -2648,7 +2634,6 @@
         },
         "creation_summary_dm": "%(creator)s krijoi këtë DM.",
         "creation_summary_room": "%(creator)s krijoi dhe formësoi dhomën.",
-        "download_action_decrypting": "Po shfshehtëzohet",
         "download_action_downloading": "Shkarkim",
         "edits": {
             "tooltip_label": "Përpunuar më %(date)s. Klikoni që të shihni përpunimet.",
@@ -2838,10 +2823,7 @@
             "removed": "Widget-i %(widgetName)s u hoq nga %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Tkurri thonjëzat",
             "copy_link_thread": "Kopjoje lidhjen te rrjedha",
-            "expand_reply_chain": "Zgjeroji thonjëzat",
-            "label": "Veprime Mesazhesh",
             "view_in_room": "Shiheni në dhomë"
         },
         "mjolnir": {

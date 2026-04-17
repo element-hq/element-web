@@ -3,7 +3,7 @@
 exports[`<ChangeRecoveryKey /> flow to change the recovery key should display the recovery key 1`] = `
 <DocumentFragment>
   <nav
-    class="_breadcrumb_1xygz_8"
+    class="_breadcrumb_t96w3_8"
   >
     <button
       aria-label="Back"
@@ -31,13 +31,13 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
       </div>
     </button>
     <ol
-      class="_pages_1xygz_17"
+      class="_pages_t96w3_17"
     >
       <li>
         <a
-          class="_link_1v5rz_8"
+          class="_link_k9ljz_8"
           data-kind="primary"
-          data-size="small"
+          data-size="sm"
           rel="noreferrer noopener"
           role="button"
           tabindex="0"
@@ -48,7 +48,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
       <li>
         <span
           aria-current="page"
-          class="_last-page_1xygz_30"
+          class="_last-page_t96w3_30"
         >
           Change recovery key
         </span>
@@ -62,8 +62,9 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
@@ -165,7 +166,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
 exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user to enter the recovery key 1`] = `
 <DocumentFragment>
   <nav
-    class="_breadcrumb_1xygz_8"
+    class="_breadcrumb_t96w3_8"
   >
     <button
       aria-label="Back"
@@ -193,13 +194,13 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       </div>
     </button>
     <ol
-      class="_pages_1xygz_17"
+      class="_pages_t96w3_17"
     >
       <li>
         <a
-          class="_link_1v5rz_8"
+          class="_link_k9ljz_8"
           data-kind="primary"
-          data-size="small"
+          data-size="sm"
           rel="noreferrer noopener"
           role="button"
           tabindex="0"
@@ -210,7 +211,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       <li>
         <span
           aria-current="page"
-          class="_last-page_1xygz_30"
+          class="_last-page_t96w3_30"
         >
           Get recovery key
         </span>
@@ -224,8 +225,9 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
@@ -324,7 +326,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
 exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user to enter the recovery key 2`] = `
 <DocumentFragment>
   <nav
-    class="_breadcrumb_1xygz_8"
+    class="_breadcrumb_t96w3_8"
   >
     <button
       aria-label="Back"
@@ -352,13 +354,13 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       </div>
     </button>
     <ol
-      class="_pages_1xygz_17"
+      class="_pages_t96w3_17"
     >
       <li>
         <a
-          class="_link_1v5rz_8"
+          class="_link_k9ljz_8"
           data-kind="primary"
-          data-size="small"
+          data-size="sm"
           rel="noreferrer noopener"
           role="button"
           tabindex="0"
@@ -369,7 +371,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       <li>
         <span
           aria-current="page"
-          class="_last-page_1xygz_30"
+          class="_last-page_t96w3_30"
         >
           Get recovery key
         </span>
@@ -383,8 +385,9 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
@@ -505,7 +508,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
 exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display information about the recovery key 1`] = `
 <DocumentFragment>
   <nav
-    class="_breadcrumb_1xygz_8"
+    class="_breadcrumb_t96w3_8"
   >
     <button
       aria-label="Back"
@@ -533,13 +536,13 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
       </div>
     </button>
     <ol
-      class="_pages_1xygz_17"
+      class="_pages_t96w3_17"
     >
       <li>
         <a
-          class="_link_1v5rz_8"
+          class="_link_k9ljz_8"
           data-kind="primary"
-          data-size="small"
+          data-size="sm"
           rel="noreferrer noopener"
           role="button"
           tabindex="0"
@@ -550,7 +553,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
       <li>
         <span
           aria-current="page"
-          class="_last-page_1xygz_30"
+          class="_last-page_t96w3_30"
         >
           Get recovery key
         </span>
@@ -564,8 +567,9 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
@@ -622,7 +626,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
 exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the recovery key 1`] = `
 <DocumentFragment>
   <nav
-    class="_breadcrumb_1xygz_8"
+    class="_breadcrumb_t96w3_8"
   >
     <button
       aria-label="Back"
@@ -650,13 +654,13 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
       </div>
     </button>
     <ol
-      class="_pages_1xygz_17"
+      class="_pages_t96w3_17"
     >
       <li>
         <a
-          class="_link_1v5rz_8"
+          class="_link_k9ljz_8"
           data-kind="primary"
-          data-size="small"
+          data-size="sm"
           rel="noreferrer noopener"
           role="button"
           tabindex="0"
@@ -667,7 +671,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
       <li>
         <span
           aria-current="page"
-          class="_last-page_1xygz_30"
+          class="_last-page_t96w3_30"
         >
           Get recovery key
         </span>
@@ -681,8 +685,9 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
       >
         <svg
           fill="currentColor"

@@ -9,11 +9,11 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Font size
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"

@@ -7,7 +7,7 @@
 
 import { type MouseEvent } from "react";
 
-import { ReactionsRowViewModel } from "../../../src/viewmodels/message-body/ReactionsRowViewModel";
+import { ReactionsRowViewModel } from "../../../src/viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 
 describe("ReactionsRowViewModel", () => {
     const createVm = (

@@ -9,11 +9,11 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Theme
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -270,7 +270,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
       </div>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
@@ -288,11 +288,11 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Theme
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -549,7 +549,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
       </div>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
@@ -567,11 +567,11 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Theme
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -719,7 +719,7 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
       </form>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"

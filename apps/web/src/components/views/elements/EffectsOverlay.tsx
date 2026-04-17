@@ -27,13 +27,12 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
         if (!name) return null;
         let effect: ICanvasEffect | null = effectsRef.current.get(name) || null;
         if (effect === null) {
-            const options = CHAT_EFFECTS.find((e) => e.command === name)?.options;
+            const definition = CHAT_EFFECTS.find((e) => e.command === name)!;
             try {
-                const { default: Effect } = await import(`../../../effects/${name}`);
-                effect = new Effect(options);
-                effectsRef.current.set(name, effect!);
+                effect = await definition.getRenderer();
+                effectsRef.current.set(name, effect);
             } catch (err) {
-                logger.warn(`Unable to load effect module at '../../../effects/${name}.`, err);
+                logger.warn(`Unable to run effect module.`, err);
             }
         }
         return effect;

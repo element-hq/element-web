@@ -14,7 +14,8 @@ webpack-stats.json
 .vscode/
 .env
 coverage
-# Auto-generated file
+# Auto-generated files
+*.api.md
 /apps/web/src/modules.ts
 /apps/web/src/modules.js
 src/i18n/strings

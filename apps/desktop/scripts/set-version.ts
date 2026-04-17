@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npx tsx
+#!/usr/bin/env node
 
 /*
  * Checks for the presence of a webapp, inspects its version and sets the

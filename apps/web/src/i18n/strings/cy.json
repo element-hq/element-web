@@ -34,7 +34,6 @@
         "cancel": "Canslo",
         "change": "Newid",
         "clear": "Clirio",
-        "click": "Clicio",
         "click_to_copy": "Clicio i gopïo",
         "close": "Cau",
         "collapse": "Cau",
@@ -68,7 +67,6 @@
         "go": "Mynd",
         "go_back": "Nôl",
         "got_it": "Iawn",
-        "hide": "Cuddio",
         "hide_advanced": "Cuddio uwch",
         "hold": "Dal",
         "ignore": "Anwybyddu",
@@ -1364,9 +1362,6 @@
         "impossible_dialog_title": "Nid yw integreiddiadau yn cael eu caniatâu"
     },
     "invite": {
-        "ask_anyway_description": "Methu dod o hyd i broffiliau ar gyfer yr IDau Matrics a restrir isod - a hoffech chi ddechrau DM beth bynnag?",
-        "ask_anyway_label": "Dechreuwch DM beth bynnag",
-        "ask_anyway_never_warn_label": "Dechreuwch DM beth bynnag a pheidiwch byth â fy rhybuddio eto",
         "email_caption": "Gwahodd trwy e-bost",
         "email_limit_one": "Dim ond un ar y tro y mae moddanfon gwahoddiadau trwy e-bost",
         "email_use_default_is": "Defnyddiwch weinydd hunaniaeth i wahodd trwy e-bost.<default> Defnyddiwch y rhagosodiad (%(defaultIdentityServerName)s)</default> neu reoli mewn<settings> Gosodiadau</settings>.",
@@ -2232,8 +2227,6 @@
             "aliases_section": "Cyfeiriadau Ystafell",
             "avatar_field_label": "Afatar ystafell",
             "canonical_alias_field_label": "Prif gyfeiriad",
-            "default_url_previews_off": "Mae rhagolygon URL wedi'u hanalluogi fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon.",
-            "default_url_previews_on": "Mae rhagolygon URL wedi'u galluogi fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon.",
             "description_space": "Golygu gosodiadau sy'n ymwneud â'ch gofod.",
             "error_creating_alias_description": "Bu gwall wrth greu'r cyfeiriad hwnnw. Mae'n bosib na chaiff ei ganiatáu gan y gweinydd neu fe ddigwyddodd methiant dros dro.",
             "error_creating_alias_title": "Gwall wrth greu cyfeiriad",
@@ -2264,12 +2257,7 @@
             "published_aliases_explainer_space": "Gall unrhyw un ar unrhyw weinydd ddefnyddio cyfeiriadau cyhoeddedig i ymuno â'ch gofod.",
             "published_aliases_section": "Cyfeiriadau Cyhoeddedig",
             "save": "Cadw'r Newidiadau",
-            "topic_field_label": "Pwnc yr Ystafell",
-            "url_preview_encryption_warning": "Mewn ystafelloedd wedi'u hamgryptio, fel yr un hon, mae rhagolygon URL yn cael eu hanalluogi fel rhagosodiad i sicrhau na all eich gweinydd cartref (lle mae'r rhagolygon yn cael eu cynhyrchu) gasglu gwybodaeth am ddolenni welwch yn yr ystafell hon.",
-            "url_preview_explainer": "Pan fydd rhywun yn rhoi URL yn eu neges, mae modd dangos rhagolwg URL i roi mwy o wybodaeth am y ddolen honno fel y teitl, disgrifiad, a delwedd o'r wefan.",
-            "url_previews_section": "Rhagolygon URL",
-            "user_url_previews_default_off": "Rydych wedi <a>analluogi</a> rhagolygon URL fel rhagosodiad.",
-            "user_url_previews_default_on": "Rydych chi wedi <a>galluogi</a> rhagolygon URL fel rhagosodiad."
+            "topic_field_label": "Pwnc yr Ystafell"
         },
         "notifications": {
             "browse_button": "Pori",
@@ -2690,8 +2678,6 @@
             "username": "Enw defnyddiwr"
         },
         "inline_url_previews_default": "Galluogi rhagolygon URL mewnol fel rhagosodiad",
-        "inline_url_previews_room": "Galluogi rhagolygon URL fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon",
-        "inline_url_previews_room_account": "Galluogi rhagolygon URL ar gyfer yr ystafell hon (yn effeithio arnoch chi yn unig)",
         "insert_trailing_colon_mentions": "Mewnosod colon sy'n llusgo ar ôl i'r defnyddiwr sôn amdano ar ddechrau neges",
         "invite_controls": {
             "default_label": "Caniatáu i ddefnyddwyr eich gwahodd i ystafelloedd"
@@ -3298,7 +3284,6 @@
         },
         "empty_description": "Defnyddio “%(replyInThread)s” wrth hofran dros neges.",
         "empty_title": "Mae edafedd yn helpu i gadw'ch sgyrsiau ar y pwnc ac yn hawdd eu holrhain.",
-        "error_start_thread_existing_relation": "Methu â chreu edefyn o ddigwyddiad gyda pherthynas sy'n bodoli eisoes",
         "mark_all_read": "Marcio'r cyfan wedi'u darllen",
         "my_threads": "Fy edafedd",
         "my_threads_description": "Yn dangos pob edefyn rydych chi wedi cymryd rhan ynddo",
@@ -3342,7 +3327,6 @@
             "unable_to_decrypt": "Methu dadgryptio'r neges"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dadgryptio",
         "download_action_downloading": "Yn llwytho i lawr",
         "download_failed": "Methodd y llwytho i lawr",
         "download_failed_description": "Bu gwall wrth lawrlwytho'r ffeil hon",
@@ -3539,10 +3523,7 @@
             "removed": "Tynnwyd y teclyn %(widgetName)s gan %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Crebachu dyfyniadau",
             "copy_link_thread": "Copïo dolen i'r edefyn",
-            "expand_reply_chain": "Ehangu dyfyniadau",
-            "label": "Camau Gweithredu Neges",
             "view_in_room": "Golwg yn yr ystafell"
         },
         "mjolnir": {

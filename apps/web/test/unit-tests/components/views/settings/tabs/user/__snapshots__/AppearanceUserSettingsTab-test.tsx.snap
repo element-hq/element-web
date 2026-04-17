@@ -22,11 +22,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Theme
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -139,7 +139,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               </form>
             </div>
             <div
-              class="_separator_cqpyv_8"
+              class="_separator_13qwf_8"
               data-kind="primary"
               data-orientation="horizontal"
               role="separator"
@@ -152,11 +152,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Message layout
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -229,7 +229,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                            class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -254,53 +254,6 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               Hey you. You're the best!
                             </div>
                           </div>
-                          <div
-                            aria-label="Message Actions"
-                            aria-live="off"
-                            class="mx_MessageActionBar"
-                            role="toolbar"
-                          >
-                            <div
-                              aria-label="Edit"
-                              class="mx_AccessibleButton mx_MessageActionBar_iconButton"
-                              role="button"
-                              tabindex="0"
-                            >
-                              <svg
-                                fill="currentColor"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                width="1em"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  clip-rule="evenodd"
-                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
-                                  fill-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <div
-                              aria-expanded="false"
-                              aria-haspopup="true"
-                              aria-label="Options"
-                              class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
-                              role="button"
-                              tabindex="-1"
-                            >
-                              <svg
-                                fill="currentColor"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                width="1em"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-                                />
-                              </svg>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -312,7 +265,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="Message bubbles"
                     class="_label_19upo_59"
-                    for="radix-_r_c_"
+                    for="radix-_r_4_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -322,7 +275,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1ug7n_18"
-                          id="radix-_r_c_"
+                          id="radix-_r_4_"
                           name="layout"
                           title=""
                           type="radio"
@@ -370,7 +323,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                            class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -395,53 +348,6 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               Hey you. You're the best!
                             </div>
                           </div>
-                          <div
-                            aria-label="Message Actions"
-                            aria-live="off"
-                            class="mx_MessageActionBar"
-                            role="toolbar"
-                          >
-                            <div
-                              aria-label="Edit"
-                              class="mx_AccessibleButton mx_MessageActionBar_iconButton"
-                              role="button"
-                              tabindex="0"
-                            >
-                              <svg
-                                fill="currentColor"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                width="1em"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  clip-rule="evenodd"
-                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
-                                  fill-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <div
-                              aria-expanded="false"
-                              aria-haspopup="true"
-                              aria-label="Options"
-                              class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
-                              role="button"
-                              tabindex="-1"
-                            >
-                              <svg
-                                fill="currentColor"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                width="1em"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-                                />
-                              </svg>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -453,7 +359,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   <label
                     aria-label="IRC (experimental)"
                     class="_label_19upo_59"
-                    for="radix-_r_l_"
+                    for="radix-_r_5_"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
@@ -463,7 +369,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       >
                         <input
                           class="_input_1ug7n_18"
-                          id="radix-_r_l_"
+                          id="radix-_r_5_"
                           name="layout"
                           title=""
                           type="radio"
@@ -514,7 +420,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                            class="_avatar_7h2br_8 mx_BaseAvatar _avatar-imageless_7h2br_55"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -539,53 +445,6 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                               Hey you. You're the best!
                             </div>
                           </div>
-                          <div
-                            aria-label="Message Actions"
-                            aria-live="off"
-                            class="mx_MessageActionBar"
-                            role="toolbar"
-                          >
-                            <div
-                              aria-label="Edit"
-                              class="mx_AccessibleButton mx_MessageActionBar_iconButton"
-                              role="button"
-                              tabindex="0"
-                            >
-                              <svg
-                                fill="currentColor"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                width="1em"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  clip-rule="evenodd"
-                                  d="M15.706 2.637a2 2 0 0 1 2.829 0l2.828 2.828a2 2 0 0 1 0 2.829L9.605 20.052a1 1 0 0 1-.465.263L3.483 21.73a1 1 0 0 1-1.212-1.213l1.414-5.657a1 1 0 0 1 .263-.465zm1.224 7.262L14.102 7.07l-8.544 8.544-.943 3.771 3.771-.943z"
-                                  fill-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <div
-                              aria-expanded="false"
-                              aria-haspopup="true"
-                              aria-label="Options"
-                              class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
-                              role="button"
-                              tabindex="-1"
-                            >
-                              <svg
-                                fill="currentColor"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                width="1em"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
-                                />
-                              </svg>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -605,9 +464,9 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                       class="_container_udcm8_10"
                     >
                       <input
-                        aria-describedby="radix-_r_v_"
+                        aria-describedby="radix-_r_7_"
                         class="_input_udcm8_24"
-                        id="radix-_r_u_"
+                        id="radix-_r_6_"
                         name="compactLayout"
                         role="switch"
                         title=""
@@ -623,13 +482,13 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="radix-_r_u_"
+                      for="radix-_r_6_"
                     >
                       Show compact text and messages
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_v_"
+                      id="radix-_r_7_"
                     >
                       Modern layout must be selected to use this feature.
                     </span>
@@ -638,7 +497,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               </form>
             </div>
             <div
-              class="_separator_cqpyv_8"
+              class="_separator_13qwf_8"
               data-kind="primary"
               data-orientation="horizontal"
               role="separator"
@@ -651,11 +510,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Font size
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
@@ -833,11 +692,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
             <div
               class="mx_SettingsSubsectionHeading"
             >
-              <h3
+              <h2
                 class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
               >
                 Image size in the timeline
-              </h3>
+              </h2>
             </div>
             <div
               class="mx_SettingsSubsection_content"

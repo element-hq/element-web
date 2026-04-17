@@ -6,7 +6,7 @@
  */
 
 import * as DateUtils from "../../../src/DateUtils";
-import { MessageTimestampViewModel } from "../../../src/viewmodels/message-body/MessageTimestampViewModel";
+import { MessageTimestampViewModel } from "../../../src/viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 
 jest.mock("../../../src/settings/SettingsStore");
 

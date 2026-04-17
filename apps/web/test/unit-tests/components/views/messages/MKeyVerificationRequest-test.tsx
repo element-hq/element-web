@@ -11,8 +11,6 @@ import { type RenderResult, render } from "jest-matrix-react";
 import { type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import MKeyVerificationRequest from "../../../../../src/components/views/messages/MKeyVerificationRequest";
-import TileErrorBoundary from "../../../../../src/components/views/messages/TileErrorBoundary";
-import { Layout } from "../../../../../src/settings/enums/Layout";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { filterConsole } from "../../../../test-utils";
 
@@ -60,22 +58,49 @@ describe("MKeyVerificationRequest", () => {
     });
 });
 
+interface TestTileErrorBoundaryProps {
+    children: React.ReactNode;
+}
+
+interface TestTileErrorBoundaryState {
+    error?: Error;
+}
+
+class TestTileErrorBoundary extends React.Component<TestTileErrorBoundaryProps, TestTileErrorBoundaryState> {
+    public constructor(props: TestTileErrorBoundaryProps) {
+        super(props);
+        this.state = {};
+    }
+
+    public static getDerivedStateFromError(error: Error): Partial<TestTileErrorBoundaryState> {
+        return { error };
+    }
+
+    public render(): React.ReactNode {
+        if (this.state.error) {
+            return "Can't load this message";
+        }
+
+        return this.props.children;
+    }
+}
+
 function renderEventNoClient(event: MatrixEvent): RenderResult {
     return render(
-        <TileErrorBoundary mxEvent={event} layout={Layout.Group}>
+        <TestTileErrorBoundary>
             <MKeyVerificationRequest mxEvent={event} />
-        </TileErrorBoundary>,
+        </TestTileErrorBoundary>,
     );
 }
 
 function renderEvent(client: MatrixClient, event: MatrixEvent): RenderResult {
     return render(
-        <TileErrorBoundary mxEvent={event} layout={Layout.Group}>
+        <TestTileErrorBoundary>
             <MatrixClientContext.Provider value={client}>
                 <MKeyVerificationRequest mxEvent={event} />
             </MatrixClientContext.Provider>
             ,
-        </TileErrorBoundary>,
+        </TestTileErrorBoundary>,
     );
 }
 

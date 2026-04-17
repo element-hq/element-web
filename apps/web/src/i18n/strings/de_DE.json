@@ -32,7 +32,6 @@
         "cancel": "Abbrechen",
         "change": "Ändern",
         "clear": "Zurücksetzen",
-        "click": "Klick",
         "click_to_copy": "Klicken um zu kopieren",
         "close": "Schließen",
         "collapse": "Verbergen",
@@ -66,7 +65,6 @@
         "go": "Los",
         "go_back": "Zurück",
         "got_it": "Verstanden",
-        "hide": "Verstecken",
         "hide_advanced": "Erweiterte Einstellungen ausblenden",
         "hold": "Halten",
         "ignore": "Ignorieren",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Integrationen sind nicht erlaubt"
     },
     "invite": {
-        "ask_anyway_description": "Konnte keine Profile für die folgenden Matrix-IDs finden – möchtest du dennoch eine Direktnachricht beginnen?",
-        "ask_anyway_label": "Dennoch DM beginnen",
-        "ask_anyway_never_warn_label": "Dennoch DM beginnen und mich nicht mehr warnen",
         "email_caption": "Via Email einladen",
         "email_limit_one": "E-Mail-Einladungen können nur nacheinander gesendet werden",
         "email_use_default_is": "Verwende einen Identitäts-Server, um per E-Mail einzuladen. <default>Nutze den Standardidentitäts-Server (%(defaultIdentityServerName)s)</default> oder konfiguriere einen in den <settings>Einstellungen</settings>.",
@@ -2224,8 +2219,6 @@
             "aliases_section": "Chatadressen",
             "avatar_field_label": "Chat Avatar",
             "canonical_alias_field_label": "Primäre Adresse",
-            "default_url_previews_off": "URL-Vorschau ist für Mitglieder des Chats standardmäßig deaktiviert.",
-            "default_url_previews_on": "URL-Vorschau ist für Mitglieder des Chats standardmäßig aktiviert.",
             "description_space": "Einstellungen vom Space bearbeiten.",
             "error_creating_alias_description": "Es gab einen Fehler beim Anlegen der Adresse. Entweder erlaubt es der Server nicht oder es gab ein temporäres Problem.",
             "error_creating_alias_title": "Fehler beim Anlegen der Adresse",
@@ -2256,12 +2249,7 @@
             "published_aliases_explainer_space": "Veröffentlichte Adressen erlauben jedem, den Space zu betreten.",
             "published_aliases_section": "Öffentliche Adresse",
             "save": "Speichern",
-            "topic_field_label": "Chat-Thema",
-            "url_preview_encryption_warning": "In verschlüsselten Chats wie diesem ist die Linkvorschau standardmäßig deaktiviert, damit dein Homeserver (der die Vorschau erzeugt) keine Informationen über Links in diesem Chat erhält.",
-            "url_preview_explainer": "Die URL-Vorschau kann Informationen wie den Titel, die Beschreibung sowie ein Vorschaubild der Website enthalten.",
-            "url_previews_section": "URL-Vorschau",
-            "user_url_previews_default_off": "Du hast die URL-Vorschau <a>standardmäßig deaktiviert</a>.",
-            "user_url_previews_default_on": "Du hast die URL-Vorschau <a>standardmäßig aktiviert</a>."
+            "topic_field_label": "Chat-Thema"
         },
         "notifications": {
             "browse_button": "Durchsuchen",
@@ -2683,8 +2671,6 @@
             "username": "Benutzername"
         },
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
-        "inline_url_previews_room": "URL-Vorschau für Chat Mitglieder",
-        "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Chat",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "invite_controls": {
             "default_label": "Nutzern erlauben, dich in Chats einzuladen"
@@ -3296,7 +3282,6 @@
         },
         "empty_description": "Verwende \"%(replyInThread)s\" beim Hovern über eine Nachricht.",
         "empty_title": "Threads helfen, Unterhaltungen beim Thema zu halten und sie leichter zu verfolgen.",
-        "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten",
         "mark_all_read": "Alle als gelesen markieren",
         "my_threads": "Meine Threads",
         "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
@@ -3340,7 +3325,6 @@
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Entschlüsseln",
         "download_action_downloading": "Herunterladen",
         "download_failed": "Herunterladen fehlgeschlagen",
         "download_failed_description": "Beim Herunterladen dieser Datei ist ein Fehler aufgetreten",
@@ -3538,10 +3522,7 @@
             "removed": "%(senderName)s hat das Widget %(widgetName)s entfernt"
         },
         "mab": {
-            "collapse_reply_chain": "Zitate einklappen",
             "copy_link_thread": "Link zu Thread kopieren",
-            "expand_reply_chain": "Zitate ausklappen",
-            "label": "Nachrichtenaktionen",
             "view_in_room": "Im Chat anzeigen"
         },
         "mjolnir": {
