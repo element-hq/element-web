@@ -49,6 +49,19 @@ As for your PR description, it should include these things:
 Please **_do not use force push_** in your PRs. Doing so means we can't see what
 has changed. We use squash merge to get a "clean" git history.
 
+### Adding a new feature or enhancement
+
+To make a great product with a great user experience, all the small efforts need to go in the same direction and be aligned and consistent with each other.
+
+Before making your contribution, please consider the following:
+
+* One product can’t do everything well. Element is focusing on private end-to-end encrypted messaging and voice - this can either be for consumers (e.g. friends and family) or for professional teams and organizations. Public forums and other types of chats without E2EE remain supported but are not the primary use case in case UX compromises need to be made.
+* There are 3 platforms - Web, [Android](https://github.com/element-hq/element-x-android) and [iOS](https://github.com/element-hq/element-x-ios). These platforms need to have feature parity and design consistency. For some features, supporting all platforms is a must have, in some cases exceptions can be made to have it on one platform only.
+* To make sure your idea fits both from a design/solution and use case perspective, please open a new issue (or find an existing issue) in [element-meta](https://github.com/element-hq/element-meta/issues) repository describing the use case and how you plan to tackle it. Do not just describe what feature is missing, explain why the users need it with a couple of real life examples from the field.
+  * In case of an existing issue, please comment that you're planning to contribute. If you create a new issue, please specify that in the issue. In such a case we will try to review the issue ASAP and provide you with initial feedback so you can be confident if and at which conditions your contributions will be accepted.
+
+Once we know that you want to contribute and have confirmed that the new feature is overall aligned with the product direction, the designers of the core team will help you with the designs and any other type of guidance when it comes to the user experience. We try to unblock you as quickly as we can, but it may not be instant. Having a clear understanding of the use case and the impact of the feature will help us with the prioritization and faster responses.
+
 ### Changelogs
 
 There's no need to manually add Changelog entries: we use information in the
