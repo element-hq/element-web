@@ -7,11 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import {
-    type IServerVersions,
-    type OidcClientConfig,
-    type MatrixClient,
-} from "matrix-js-sdk/src/matrix";
+import { type IServerVersions, type OidcClientConfig, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
 import { Text } from "@vector-im/compound-web";
 import { isSignInWithQRAvailable } from "matrix-js-sdk/src/rendezvous";
@@ -37,16 +33,16 @@ export async function shouldShowQrForLinkNewDevice(
 ): Promise<boolean> {
     const doesServerHaveSupport = await isSignInWithQRAvailable(cli);
 
-    return (
-        doesServerHaveSupport &&
-        !!cli.getCrypto()?.exportSecretsBundle &&
-        isCrossSigningReady
-    );
+    return doesServerHaveSupport && !!cli.getCrypto()?.exportSecretsBundle && isCrossSigningReady;
 }
 
 const LoginWithQRSection: React.FC<IProps> = ({ onShowQr, versions, oidcClientConfig, isCrossSigningReady }) => {
     const cli = useMatrixClientContext();
-    const offerShowQr = useAsyncMemo(() => shouldShowQrForLinkNewDevice(cli, !!isCrossSigningReady, oidcClientConfig, versions), [cli, isCrossSigningReady, oidcClientConfig, versions], false);
+    const offerShowQr = useAsyncMemo(
+        () => shouldShowQrForLinkNewDevice(cli, !!isCrossSigningReady, oidcClientConfig, versions),
+        [cli, isCrossSigningReady, oidcClientConfig, versions],
+        false,
+    );
 
     return (
         <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>

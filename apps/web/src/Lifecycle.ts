@@ -338,28 +338,28 @@ export async function configureFromCompletedOAuthLogin({
     issuer: string;
     idToken: string;
 }): Promise<IMatrixClientCreds> {
-            const {
-            user_id: userId,
-            device_id: deviceId,
-            is_guest: isGuest,
-        } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
+    const {
+        user_id: userId,
+        device_id: deviceId,
+        is_guest: isGuest,
+    } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
 
-        const credentials = {
-            accessToken,
-            refreshToken,
-            homeserverUrl,
-            identityServerUrl,
-            deviceId,
-            userId,
-            isGuest,
-        };
+    const credentials = {
+        accessToken,
+        refreshToken,
+        homeserverUrl,
+        identityServerUrl,
+        deviceId,
+        userId,
+        isGuest,
+    };
 
-        logger.debug("Logged in via OIDC native flow");
-        await onSuccessfulDelegatedAuthLogin(credentials);
-        // this needs to happen after success handler which clears storages
-        persistOidcAuthenticatedSettings(clientId, issuer, idToken);
-        return credentials;
-    }
+    logger.debug("Logged in via OIDC native flow");
+    await onSuccessfulDelegatedAuthLogin(credentials);
+    // this needs to happen after success handler which clears storages
+    persistOidcAuthenticatedSettings(clientId, issuer, idToken);
+    return credentials;
+}
 
 /**
  * Gets information about the owner of a given access token.

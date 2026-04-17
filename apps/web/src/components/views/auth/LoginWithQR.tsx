@@ -207,7 +207,9 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 if (datr) {
                     // the 2024 version of the spec only gives the server name, but the 2025 version will give the base URL
                     // so, we do a discovery for now.
-                    const homeserverUrl = (await AutoDiscovery.findClientConfig(this.state.homeserverName))?.["m.homeserver"]?.base_url;
+                    const homeserverUrl = (await AutoDiscovery.findClientConfig(this.state.homeserverName))?.[
+                        "m.homeserver"
+                    ]?.base_url;
 
                     if (!homeserverUrl) {
                         this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
@@ -244,8 +246,11 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                             window.location.reload();
                         } else {
                             logger.warn("Crypto not initialised");
-                            logger.warn("Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login");
-                        }                    } else {
+                            logger.warn(
+                                "Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login",
+                            );
+                        }
+                    } else {
                         logger.warn("No secrets received from QR login");
                     }
 
