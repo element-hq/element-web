@@ -163,6 +163,11 @@ jobs:
               working-directory: "packages/${{ matrix.package }}"
               run: pnpm test:unit --coverage=$ENABLE_COVERAGE
 
+            # Dump the disk usage on failure, because this job seems to fail with disk fills sometimes
+            - name: df
+              run: df
+              if: ${{ failure() }}
+
             - name: Upload Artifact
               if: env.ENABLE_COVERAGE == 'true'
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
