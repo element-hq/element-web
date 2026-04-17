@@ -12,7 +12,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BaseViewModel } from "../../../core/viewmodel";
 import { TimelineView } from "./TimelineView";
-import { getContiguousWindowShift, getIsAtLiveEdgeFromBottomState } from "./utils";
+import { getContiguousWindowShift, getIsAtLiveEdgeFromBottomState, getUpdatedStableMeasurementCount } from "./utils";
 import type { TimelineItem, TimelineViewActions, TimelineViewSnapshot } from "./types";
 
 class TestTimelineViewModel
@@ -115,6 +115,39 @@ describe("TimelineView", () => {
         });
     });
 
+    it("does not acknowledge a visible scroll target before a range update after scrolling", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    items: makeItems(["alpha", "beta", "gamma", "delta", "epsilon"]),
+                    scrollTarget: { targetKey: "gamma", position: "bottom" },
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+            expect(vm.onScrollTargetReached).not.toHaveBeenCalled();
+        });
+    });
+
+    it("does not request forward pagination while a scroll target is active", async () => {
+        await withMeasuredScrollerHeight(async () => {
+            const vm = new TestTimelineViewModel(
+                makeSnapshot({
+                    items: makeItems(["alpha", "beta", "gamma", "delta", "epsilon"]),
+                    canPaginateForward: true,
+                    scrollTarget: { targetKey: "gamma", position: "bottom" },
+                }),
+            );
+
+            renderTimeline(vm);
+
+            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
+            expect(vm.onRequestMoreItems).not.toHaveBeenCalled();
+        });
+    });
+
     it("signals live-edge changes", async () => {
         const vm = new TestTimelineViewModel(makeSnapshot());
 
@@ -145,5 +178,33 @@ describe("TimelineView utils", () => {
                 canPaginateForward: true,
             }),
         ).toBe(false);
+    });
+
+    it("tracks stable measurements only when consecutive values stay within tolerance", () => {
+        const tolerance = 4;
+
+        let stableCount = getUpdatedStableMeasurementCount({
+            previousValue: null,
+            nextValue: 358,
+            currentCount: 0,
+            tolerance,
+        });
+        expect(stableCount).toBe(1);
+
+        stableCount = getUpdatedStableMeasurementCount({
+            previousValue: 358,
+            nextValue: 380,
+            currentCount: stableCount,
+            tolerance,
+        });
+        expect(stableCount).toBe(1);
+
+        stableCount = getUpdatedStableMeasurementCount({
+            previousValue: 380,
+            nextValue: 380,
+            currentCount: stableCount,
+            tolerance,
+        });
+        expect(stableCount).toBe(2);
     });
 });

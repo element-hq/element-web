@@ -138,3 +138,25 @@ export function getIsAtLiveEdgeFromBottomState({
 }): boolean {
     return atBottom && !canPaginateForward;
 }
+
+/**
+ * Updates a "stable consecutive measurements" counter by comparing the current
+ * numeric measurement to the previous one within a tolerance.
+ */
+export function getUpdatedStableMeasurementCount({
+    previousValue,
+    nextValue,
+    currentCount,
+    tolerance,
+}: {
+    previousValue: number | null;
+    nextValue: number;
+    currentCount: number;
+    tolerance: number;
+}): number {
+    if (previousValue !== null && Math.abs(previousValue - nextValue) <= tolerance) {
+        return currentCount + 1;
+    }
+
+    return 1;
+}

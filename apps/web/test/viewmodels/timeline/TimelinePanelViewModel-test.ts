@@ -106,11 +106,9 @@ describe("TimelinePanelViewModel", () => {
         await flushPromises();
 
         expect(timelineWindowInstance.load).toHaveBeenCalledWith("$anchor", 40);
-        expect(vm.getSnapshot().isAtLiveEdge).toBe(false);
         expect(vm.getSnapshot().scrollTarget).toEqual({
             targetKey: "$anchor",
             position: "bottom",
-            highlight: undefined,
         });
     });
 

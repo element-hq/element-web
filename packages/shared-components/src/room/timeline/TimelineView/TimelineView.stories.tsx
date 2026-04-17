@@ -504,7 +504,7 @@ export const StartAtLiveEdge: Story = {
     },
 };
 
-const startAtTargetItems = createMockItems(10, 41);
+const startAtTargetItems = createMockItems(15, 36);
 const startAtTargetScrollTarget: NavigationAnchor = {
     targetKey: "event-45",
     position: "bottom",
