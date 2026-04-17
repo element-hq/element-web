@@ -14,9 +14,11 @@ import type { RoomNotificationState } from "../../../../src/stores/notifications
 import {
     CHATS_TAG,
     LISTS_UPDATE_EVENT,
+    SECTION_CREATED_EVENT,
     RoomListStoreV3Class,
     type Section,
 } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
+import * as sectionModule from "../../../../src/stores/room-list-v3/section";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { mkEvent, mkMessage, mkSpace, mkStubRoom, stubClient, upsertRoomStateEvents } from "../../../test-utils";
@@ -830,6 +832,7 @@ describe("RoomListStoreV3", () => {
         function enableSections(): void {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
+                if (setting === "RoomList.OrderedCustomSections") return [];
                 return false;
             });
         }
@@ -1006,6 +1009,84 @@ describe("RoomListStoreV3", () => {
             // Room 3 should be in the Favourite section specifically
             const favSection = findSection(sections, DefaultTagID.Favourite)!;
             expect(favSection.rooms).toContain(rooms[3]);
+        });
+
+        describe("createSection", () => {
+            it("emits SECTION_CREATED_EVENT and LISTS_UPDATE_EVENT when section is created", async () => {
+                enableSections();
+                getClientAndRooms();
+                jest.spyOn(sectionModule, "createSection").mockResolvedValue(true);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const sectionCreatedListener = jest.fn();
+                const listsUpdateListener = jest.fn();
+                store.on(SECTION_CREATED_EVENT, sectionCreatedListener);
+                store.on(LISTS_UPDATE_EVENT, listsUpdateListener);
+
+                await store.createSection();
+
+                expect(sectionCreatedListener).toHaveBeenCalled();
+                expect(listsUpdateListener).toHaveBeenCalled();
+            });
+
+            it("does not emit when section creation is cancelled", async () => {
+                enableSections();
+                getClientAndRooms();
+                jest.spyOn(sectionModule, "createSection").mockResolvedValue(false);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const sectionCreatedListener = jest.fn();
+                store.on(SECTION_CREATED_EVENT, sectionCreatedListener);
+
+                await store.createSection();
+
+                expect(sectionCreatedListener).not.toHaveBeenCalled();
+            });
+        });
+
+        it("updates sections when RoomList.OrderedCustomSections setting changes", async () => {
+            enableSections();
+            const { rooms } = getClientAndRooms();
+
+            let settingsWatcher: (settingName: string) => void = () => {};
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, callback) => {
+                if (settingName === "RoomList.OrderedCustomSections") settingsWatcher = callback as () => void;
+                return "watcher-id";
+            });
+
+            const customTag = "element.io.section.custom";
+
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                if (setting === "feature_room_list_sections") return true;
+                if (setting === "RoomList.OrderedCustomSections") return [];
+                return false;
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            // Initial state: 3 sections (Favourite, Chats, LowPriority)
+            expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(3);
+
+            // Mark a room with the custom tag and update the settings
+            rooms[0].tags = { [customTag]: { order: 0 } };
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
+                if (setting === "feature_room_list_sections") return true;
+                if (setting === "RoomList.OrderedCustomSections") return [customTag];
+                return false;
+            });
+
+            // Trigger the settings watcher
+            settingsWatcher("RoomList.OrderedCustomSections");
+
+            // Now there should be 4 sections (Favourite, custom, Chats, LowPriority)
+            expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(4);
+            const customSection = findSection(store.getSortedRoomsInActiveSpace().sections, customTag)!;
+            expect(customSection.rooms).toContain(rooms[0]);
         });
     });
 
