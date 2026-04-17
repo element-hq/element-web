@@ -24,12 +24,13 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
     dir="auto"
   >
     * 
-    <button
+    <span
       class="TextualBody-module_emoteSender"
-      type="button"
+      role="button"
+      tabindex="0"
     >
       Alice
-    </button>
+    </span>
      
     <span
       class="TextualBody-module_annotated TextualBody-module_annotatedInline"
