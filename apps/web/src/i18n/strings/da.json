@@ -114,7 +114,7 @@
         "show_advanced": "Vis avanceret",
         "show_all": "Vis alle",
         "sign_in": "Log ind",
-        "sign_out": "Log ud",
+        "sign_out": "Fjern denne enhed",
         "skip": "Spring over",
         "start": "Start",
         "start_chat": "Start samtale",
@@ -705,6 +705,7 @@
     "decline_invitation_dialog": {
         "title": "Afvis invitation"
     },
+    "desktop_default_device_name": "%(brand)s Skrivebord: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktive widgets",
         "category_other": "Andre",
@@ -979,6 +980,8 @@
         "unknown_error_code": "Ukendt fejlkode",
         "update_power_level": "Kunne ikke ændre effektniveau"
     },
+    "error_app_open_in_another_tab_title": "%(brand)s er åbnet i et andet faneblad",
+    "error_app_opened_in_another_window": "%(brand)s er åben i et andet vindue. Klik på \"%(label)s\" for at bruge %(brand)s her og frakoble det andet vindue.",
     "error_database_closed_description": {
         "for_desktop": "Din disk er måske fyldt. Vær venlig at rydde noget plads og genindlæse.",
         "for_web": "Hvis du har ryddet browserdata, er denne meddelelse forventet. %(brand)s kan også være åben i en anden fane, eller din disk er fuld. Ryd venligst lidt plads og genindlæs"
@@ -1146,6 +1149,7 @@
         "continue": "Fortsæt alligevel",
         "linux": "Linux",
         "macos": "Mac",
+        "title": "%(brand)s understøtter ikke denne browser",
         "windows_64bit": "Windows (64-bit)",
         "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
@@ -1938,8 +1942,6 @@
             "aliases_section": "Rummets adresser",
             "avatar_field_label": "Avatar for rummet",
             "canonical_alias_field_label": "Hovedadresse",
-            "default_url_previews_off": "URL-forhåndsvisninger er som standard deaktiveret for deltagere i dette rum.",
-            "default_url_previews_on": "URL-forhåndsvisninger er som standard aktiveret for deltagere i dette rum.",
             "description_space": "Redigér indstillinger for din klynge.",
             "error_creating_alias_description": "Der opstod en fejl under oprettelsen af ​​adressen. Den er muligvis ikke tilladt af serveren, eller der er opstået en midlertidig fejl.",
             "error_creating_alias_title": "Fejl ved oprettelse af adresse",
@@ -1966,12 +1968,7 @@
             "published_aliases_explainer_space": "Publicerede adresser kan bruges af alle til at tilslutte sig din klynge.",
             "published_aliases_section": "Offentliggjorte adresser",
             "save": "Gem ændringer",
-            "topic_field_label": "Rummets emne",
-            "url_preview_encryption_warning": "I krypterede rum, som dette, er URL-forhåndsvisninger som standard deaktiveret for at sikre, at din hjemmeserver (hvor forhåndsvisningerne genereres) ikke kan indsamle oplysninger om links, du ser i dette rum.",
-            "url_preview_explainer": "Når nogen indtaster en URL i sin besked, kan der vises en forhåndsvisning af URL'en, der giver flere oplysninger om linket, f.eks. titel, beskrivelse og et billede fra webstedet.",
-            "url_previews_section": "URL-forhåndsvisninger",
-            "user_url_previews_default_off": "Du har <a>deaktiveret</a> URL-forhåndsvisning som standard.",
-            "user_url_previews_default_on": "Du har <a>aktiveret</a> URL-forhåndsvisninger som standard."
+            "topic_field_label": "Rummets emne"
         },
         "notifications": {
             "browse_button": "Gennemse",
@@ -2291,9 +2288,7 @@
             "remove_msisdn_prompt": "Fjern %(phone)s?",
             "spell_check_locale_placeholder": "Vælg en lokalitet"
         },
-        "inline_url_previews_default": "Aktivér indbyggede URL-forhåndsvisninger som standard",
-        "inline_url_previews_room": "Aktivér forhåndsvisning af URL-adresser som standard for deltagere i dette rum",
-        "inline_url_previews_room_account": "Aktivér forhåndsvisning af URL-adresser for dette rum (påvirker kun dig)",
+        "inline_url_previews_default": "Aktivér forhåndsvisninger",
         "insert_trailing_colon_mentions": "Indsæt et afsluttende kolon efter brugeromtaler i starten af en meddelelse",
         "jump_to_bottom_on_send": "Gå til bunden af tidslinjen, når du sender en besked",
         "key_backup": {
@@ -2462,20 +2457,20 @@
             "best_security_note": "For at opnå den bedste sikkerhed skal du bekræfte dine sessioner og logge ud fra enhver session, som du ikke genkender eller bruger længere.",
             "browser": "Browser",
             "confirm_sign_out": {
-                "one": "Bekræft, at du logger af denne enhed",
-                "other": "Bekræft, at du logger af disse enheder"
+                "one": "Bekræft fjernelse af denne enhed",
+                "other": "Bekræft fjernelse af disse enheder"
             },
             "confirm_sign_out_body": {
-                "one": "Klik på knappen herunder for at bekræfte, at du logger af denne enhed.",
-                "other": "Klik på knappen herunder for at bekræfte, at du logger af disse enheder."
+                "one": "Klik på knappen nedenfor for at bekræfte fjernelse af denne enhed.",
+                "other": "Klik på knappen nedenfor for at bekræfte fjernelse af disse enheder."
             },
             "confirm_sign_out_continue": {
-                "one": "Log ud af enheden",
-                "other": "Log ud af enheder"
+                "one": "Fjern enhed",
+                "other": "Fjern enheder"
             },
             "confirm_sign_out_sso": {
-                "one": "Bekræft, at du logger af denne enhed ved at bruge Single Sign On for at bevise din identitet.",
-                "other": "Bekræft, at du logger af disse enheder ved at bruge Single Sign On for at bevise din identitet."
+                "one": "Bekræft fjernelse af denne enhed ved at bruge Single Sign-On til at bevise din identitet.",
+                "other": "Bekræft fjernelse af disse enheder ved at bruge Single Sign-On til at bevise din identitet."
             },
             "current_session": "Nuværende session",
             "desktop_session": "Skrivebordssession",
@@ -2526,7 +2521,7 @@
             "sign_in_with_qr": "Forbind ny enhed",
             "sign_in_with_qr_button": "Vis QR-kode",
             "sign_in_with_qr_description": "Brug en QR-kode til at logge ind på en anden enhed og opsætte sikker beskedkommunikation.",
-            "sign_out": "Log ud af denne session",
+            "sign_out": "Fjern denne session",
             "sign_out_all_other_sessions": "Log ud af alle andre sessioner (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
                 "one": "Er du sikker på, at du vil logge ud af %(count)s sessionen?",
@@ -3284,6 +3279,9 @@
     "truncated_list_n_more": {
         "other": "Og %(count)s mere..."
     },
+    "unsupported_browser": {
+        "title": "%(brand)s understøtter ikke denne browser"
+    },
     "unsupported_server_description": "Denne server bruger en ældre version af Matrix. Opgrader til Matrix %(version)s for at kunne bruge %(brand)s uden fejl.",
     "unsupported_server_title": "Din server er ikke understøttet",
     "update": {
@@ -3487,6 +3485,7 @@
         "voice_call": "Stemmeopkald",
         "you_are_presenting": "Du præsenterer"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
     "welcome_to_element": "Velkommen til Element",
     "widget": {
         "added_by": "Widget tilføjet af",

@@ -150,7 +150,11 @@ export default defineConfig({
         ],
     },
     optimizeDeps: {
-        include: ["vite-plugin-node-polyfills/shims/buffer", "vite-plugin-node-polyfills/shims/process"],
+        include: [
+            "vite-plugin-node-polyfills/shims/buffer",
+            "vite-plugin-node-polyfills/shims/process",
+            "@vector-im/compound-design-tokens/assets/web/icons",
+        ],
     },
     resolve: {
         alias: {

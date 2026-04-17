@@ -1,14 +1,140 @@
 {
+    "a11y": {
+        "seek_bar_label": "音频定位栏"
+    },
     "action": {
+        "back": "返回",
+        "click": "点击",
+        "collapse": "折叠",
         "delete": "删除",
         "dismiss": "忽略",
+        "download": "下载",
+        "edit": "编辑",
         "explore_rooms": "查找房间",
+        "go": "转到",
+        "hide": "隐藏",
+        "invite": "邀请",
+        "new_room": "新房间",
+        "new_video_room": "新视频房间",
         "pause": "暂停",
+        "pin": "置顶",
         "play": "播放",
-        "search": "搜索"
+        "react": "反应",
+        "remove": "移除",
+        "reply": "回复",
+        "reply_in_thread": "在消息列中回复",
+        "retry": "重试",
+        "search": "搜索",
+        "start_chat": "开始聊天",
+        "unpin": "取消置顶",
+        "view_source": "查看源代码"
+    },
+    "common": {
+        "attachment": "附件",
+        "encryption_enabled": "加密已启用",
+        "options": "选项",
+        "preferences": "偏好",
+        "state_encryption_enabled": "实验性的状态加密已启用"
     },
     "left_panel": {
         "open_dial_pad": "打开拨号键盘"
+    },
+    "notifications": {
+        "all_messages": "所有消息",
+        "default_settings": "跟随系统设置",
+        "mentions_keywords": "提及与关键词",
+        "mute_room": "静默房间"
+    },
+    "room": {
+        "context_menu": {
+            "title": "房间选项"
+        },
+        "history_visibility_badge": {
+            "private": "新成员不能看到历史",
+            "shared": "新成员可以看到历史",
+            "world_readable": "任何人都可以看到历史"
+        },
+        "jump_to_date": "跳转到日期",
+        "jump_to_date_beginning": "房间的开头",
+        "jump_to_date_prompt": "选择日期以跳转",
+        "pinned_message_badge": "已被置顶的消息",
+        "status_bar": {
+            "delete_all": "全部删除",
+            "exceeded_resource_limit_description": "要继续使用此服务请联系服务器管理员。",
+            "exceeded_resource_limit_title": "你的消息未能发送，因为此服务器已超出资源限制。",
+            "failed_to_create_room_title": "无法与此用户开始聊天",
+            "homeserver_blocked_title": "你的消息未能发送，因为此服务器已被其管理员屏蔽。",
+            "monthly_user_limit_reached_title": "你的消息未能发送，因为此服务器已达到每月活跃用户上限。",
+            "requires_consent_agreement_title": "你需要同意我们的条款与条件才能发送任意消息。",
+            "retry_all": "全部重试",
+            "select_messages_to_retry": "你可以选择全部或个别消息以重试或删除。",
+            "server_connectivity_lost_description": "已发送的消息将保存直到恢复连接。",
+            "server_connectivity_lost_title": "已断开与服务器的连接。",
+            "some_messages_not_sent": "你的某些消息未能发送。"
+        }
+    },
+    "room_list": {
+        "appearance": "外观",
+        "collapse_filters": "折叠过滤器列表",
+        "empty": {
+            "no_chats": "暂无聊天",
+            "no_chats_description": "首先向人们发送消息或创建房间。",
+            "no_chats_description_no_room_rights": "开始向某人发送消息",
+            "no_favourites": "你还没有收藏聊天",
+            "no_favourites_description": "你可以在聊天设置中将聊天添加到收藏夹",
+            "no_invites": "你没有任何未读邀请",
+            "no_lowpriority": "你没有任何低优先级房间",
+            "no_mentions": "你没有任何未读提及",
+            "no_people": "你尚未与任何人私聊",
+            "no_people_description": "你可以取消选择筛选条件，以便查看其它聊天记录",
+            "no_rooms": "尚未处于任何房间",
+            "no_rooms_description": "你可以取消选择筛选条件，以便查看其它聊天记录",
+            "no_unread": "恭喜！你没有任何未读消息",
+            "show_activity": "查看所有活动",
+            "show_chats": "显示所有聊天"
+        },
+        "expand_filters": "展开过滤器列表",
+        "filters": {
+            "favourite": "收藏",
+            "invites": "邀请",
+            "low_priority": "低优先级",
+            "mentions": "提及",
+            "people": "人员",
+            "rooms": "房间",
+            "unread": "未读"
+        },
+        "list_title": "房间列表",
+        "more_options": {
+            "copy_link": "复制房间链接",
+            "favourited": "已收藏",
+            "leave_room": "离开房间",
+            "low_priority": "低优先级",
+            "mark_read": "设为已读",
+            "mark_unread": "设为未读"
+        },
+        "notification_options": "通知选项",
+        "open_space_menu": "打开空间菜单",
+        "primary_filters": "房间列表筛选器",
+        "room": {
+            "more_options": "更多选项"
+        },
+        "room_options": "房间选项",
+        "show_message_previews": "显示消息预览",
+        "sort": "排序",
+        "sort_type": {
+            "activity": "活动",
+            "unread_first": "未读优先"
+        },
+        "space_menu": {
+            "home": "空间主页",
+            "space_settings": "空间设置"
+        }
+    },
+    "terms": {
+        "tac_button": "阅读条款与条件"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "无法从现有相关的事件中创建消息列"
     },
     "time": {
         "about_day_ago": "约一天前",
@@ -27,9 +153,61 @@
         "n_minutes_ago": "%(num)s分钟前"
     },
     "timeline": {
+        "decryption_failure": {
+            "blocked": "由于你的设备未经验证，发件人已阻止你接收此消息。",
+            "historical_event_no_key_backup": "消息历史在此设备上不可用",
+            "historical_event_unverified_device": "你需要验证此设备才能访问历史消息",
+            "historical_event_user_not_joined": "你无权访问此消息",
+            "sender_identity_previously_verified": "发送者的数字身份已重置。",
+            "sender_unsigned_device": "从不安全的设备发送。",
+            "unable_to_decrypt": "无法解密消息"
+        },
+        "download_action_decrypting": "正在解密",
+        "download_action_downloading": "正在下载",
         "m.audio": {
+            "audio_player": "音频播放器",
             "error_downloading_audio": "下载音频时出错",
             "unnamed_audio": "未命名的音频"
+        },
+        "m.file": {
+            "error_invalid": "无效文件"
+        },
+        "m.room.encryption": {
+            "disable_attempt": "已忽略尝试禁用加密",
+            "disabled": "加密未启用",
+            "enabled": "此处的消息是端到端加密的。当人员加入时，你可以在其个人资料中点击其头像验证。",
+            "enabled_dm": "此处的消息是端到端加密的。点击其个人资料图像以验证 %(displayName)s。",
+            "enabled_local": "此聊天中的消息将被端到端加密。",
+            "parameters_changed": "某些加密参数已被更改。",
+            "state_enabled": "此房间内的消息与状态事件已被端到端加密。当人员加入时，你可以点击他们的头像以验证其身份。",
+            "unsupported": "该房间使用的加密方式不受支持。"
+        },
+        "mab": {
+            "collapse_reply_chain": "折叠引用",
+            "copy_link_thread": "复制关联到此消息列的链接",
+            "expand_reply_chain": "展开引用",
+            "label": "消息操作",
+            "view_in_room": "在房间中查看"
+        },
+        "message_timestamp_received_at": "接收于 %(dateTime)s",
+        "message_timestamp_sent_at": "发送于 %(dateTime)s",
+        "url_preview": {
+            "close": "关闭预览",
+            "show_n_more": {
+                "one": "显示剩余 %(count)s 个预览",
+                "other": "显示剩余 %(count)s 个预览"
+            },
+            "view_image": "查看图像"
+        }
+    },
+    "widget": {
+        "context_menu": {
+            "move_left": "向左移动",
+            "move_right": "向右移动",
+            "remove": "为所有人移除",
+            "revoke": "撤消权限",
+            "screenshot": "拍摄照片",
+            "start_audio_stream": "开始音频串流"
         }
     }
 }

@@ -1325,8 +1325,6 @@
             "aliases_section": "כתובות חדרים",
             "avatar_field_label": "אוואטר של החדר",
             "canonical_alias_field_label": "כתובת ראשית",
-            "default_url_previews_off": "תצוגות מקדימות של כתובות אתרים מושבתות כברירת מחדל עבור משתתפים בחדר זה.",
-            "default_url_previews_on": "תצוגות מקדימות של כתובות אתרים מופעלות כברירת מחדל עבור משתתפים בחדר זה.",
             "description_space": "שינוי הגדרות הנוגעות למרחב העבודה שלכם.",
             "error_creating_alias_description": "אירעה שגיאה ביצירת כתובת זו. ייתכן שהשרת אינו מאפשר זאת או שהתרחש כשל זמני.",
             "error_creating_alias_title": "שגיאה ביצירת כתובת",
@@ -1353,12 +1351,7 @@
             "published_aliases_explainer_space": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף למרחב העבודה שלכם.",
             "published_aliases_section": "כתובות מפורסמות",
             "save": "שמור שינוייים",
-            "topic_field_label": "נושא החדר",
-            "url_preview_encryption_warning": "בחדרים מוצפנים, כמו זה, תצוגות מקדימות של כתובות אתרים מושבתות כברירת מחדל כדי להבטיח ששרת הבית שלך (במקום בו נוצרות התצוגות המקדימות) אינו יכול לאסוף מידע על קישורים שאתה רואה בחדר זה.",
-            "url_preview_explainer": "כאשר מישהו מכניס כתובת URL להודעה שלו, ניתן להציג תצוגה מקדימה של כתובת אתר כדי לתת מידע נוסף על קישור זה, כמו הכותרת, התיאור והתמונה מהאתר.",
-            "url_previews_section": "תצוגת קישורים",
-            "user_url_previews_default_off": "יש לך <a> השבת </a> תצוגות מקדימות של כתובות אתרים כברירת מחדל.",
-            "user_url_previews_default_on": "כברירת מחדל, <a> הפעלת </a> תצוגה מקדימה של כתובות אתרים."
+            "topic_field_label": "נושא החדר"
         },
         "notifications": {
             "browse_button": "דפדף",
@@ -1587,8 +1580,6 @@
             "remove_msisdn_prompt": "הסר מספרי %(phone)s ?"
         },
         "inline_url_previews_default": "אפשר צפייה של תצוגת קישורים בצאט כברירת מחדל",
-        "inline_url_previews_room": "אפשר לחברים בחדר זה לצפות בתצוגת קישורים",
-        "inline_url_previews_room_account": "הראה תצוגה מקדימה של קישורים בחדר זה (משפיע רק עליכם)",
         "insert_trailing_colon_mentions": "הוסף נקודתיים לאחר אזכור המשתמש בתחילת ההודעה",
         "jump_to_bottom_on_send": "קפוץ לתחתית השיחה בעת שליחת הודעה",
         "key_backup": {

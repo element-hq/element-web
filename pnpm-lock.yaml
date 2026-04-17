@@ -53,13 +53,16 @@ overrides:
   ajv@>=8 <8.18.0: 8.18.0
   axios@>1.0.0 <1.15.0: 1.15.0
   picomatch@>=4.0.0 <4.0.4: 4.0.4
-  esbuild@<=0.24.2: '>=0.25.0'
+  esbuild@<=0.24.2: 0.27.4
+  esbuild@~0.27.0: 0.27.4
   minimatch@>=10.0.0 <10.2.3: '>=10.2.3'
   lodash@4.17.23: 4.18.1
   follow-redirects@1.15.11: 1.16.0
   '@actions/github@6.0.1': 8.0.1
+  dompurify@>=3.0.0 <=3.3.3: 3.4.0
+  protobufjs@>=7.0.0 <7.5.5: 7.5.5
 
-packageExtensionsChecksum: sha256-OFePh8Fn8A1ZEWgJF51vTMPT/HEVyXQyj6YGIztPb0w=
+packageExtensionsChecksum: sha256-EMEi1vcyzQthk7O/0AcntvnHgJaKCoFBlzp6iX/qNYk=
 
 patchedDependencies:
   '@matrix-org/react-sdk-module-api':
@@ -117,10 +120,10 @@ importers:
         version: 0.6.0
       '@nx-tools/nx-container':
         specifier: ^7.2.1
-        version: 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.5.4))(dotenv@17.4.0)(nx@22.5.4)(tslib@2.8.1)
+        version: 7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.6.5))(dotenv@17.4.0)(nx@22.6.5)(tslib@2.8.1)
       '@nx/jest':
         specifier: ^22.5.0
-        version: 22.5.3(@babel/traverse@7.29.0)(@types/node@18.19.130)(babel-plugin-macros@3.1.0)(nx@22.5.4)(typescript@5.9.3)
+        version: 22.5.3(@babel/traverse@7.29.0)(@types/node@18.19.130)(babel-plugin-macros@3.1.0)(nx@22.6.5)(typescript@5.9.3)
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.59.1
@@ -152,8 +155,8 @@ importers:
         specifier: ^1.2.6
         version: 1.2.8
       nx:
-        specifier: 22.5.4
-        version: 22.5.4
+        specifier: 22.6.5
+        version: 22.6.5
       prettier:
         specifier: 3.8.1
         version: 3.8.1
@@ -439,7 +442,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8bc3d96f6b2733106906b47ff0ff4356e88d024f
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -498,8 +501,8 @@ importers:
         specifier: ^1.6.3
         version: 1.6.3
       sanitize-html:
-        specifier: 2.17.2
-        version: 2.17.2
+        specifier: 2.17.3
+        version: 2.17.3
       tar-js:
         specifier: ^0.3.0
         version: 0.3.0
@@ -1037,6 +1040,9 @@ importers:
       matrix-web-i18n:
         specifier: 'catalog:'
         version: 3.6.0
+      react-blurhash:
+        specifier: ^0.3.0
+        version: 0.3.0(patch_hash=58bc7f075478017ce27bcc252e8509876390db106246bd5b0a7446642cc4b505)(blurhash@2.0.5)(react@19.2.4)
       react-merge-refs:
         specifier: ^3.0.2
         version: 3.0.2(react@19.2.4)
@@ -3274,8 +3280,8 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
-  '@nx/nx-darwin-arm64@22.5.4':
-    resolution: {integrity: sha512-Ib9znwSLQZSZ/9hhg5ODplpNhE/RhGVXzdfRj6YonTuWSj/kH3dLMio+4JEkjRdTQVm06cDW0KdwSgnwovqMGg==}
+  '@nx/nx-darwin-arm64@22.6.5':
+    resolution: {integrity: sha512-qT77Omkg5xQuL2+pDbneX2tI+XW5ZeayMylu7UUgK8OhTrAkJLKjpuYRH4xT5XBipxbDtlxmO3aLS3Ib1pKzJQ==}
     cpu: [arm64]
     os: [darwin]
 
@@ -3284,8 +3290,8 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@nx/nx-darwin-x64@22.5.4':
-    resolution: {integrity: sha512-DjyXuQMc93MPU2XdRsJYjzbv1tgCzMi+zm7O0gc4x3h+ECFjKkjzQBg67pqGdhE3TV27MAlVRKrgHStyK9iigg==}
+  '@nx/nx-darwin-x64@22.6.5':
+    resolution: {integrity: sha512-9jICxb7vfJ56y/7Yuh3b/n1QJqWxO9xnXKYEs6SO8xPoW/KomVckILGc1C6RQSs6/3ixVJC7k1Dh1wm5tKPFrg==}
     cpu: [x64]
     os: [darwin]
 
@@ -3294,8 +3300,8 @@ packages:
     cpu: [x64]
     os: [freebsd]
 
-  '@nx/nx-freebsd-x64@22.5.4':
-    resolution: {integrity: sha512-DhxdP8AhIfN0yCtFhZQcbp32MVN3L7UiTotYqqnOgwW922NRGSd5e+KEAWiJVrIO6TdgnI7prxpg1hfQQK0WDw==}
+  '@nx/nx-freebsd-x64@22.6.5':
+    resolution: {integrity: sha512-6B1wEKpqz5dI3AGMqttAVnA6M3DB/besAtuGyQiymK9ROlta1iuWgCcIYwcCQyhLn2Rx7vqj447KKcgCa8HlVw==}
     cpu: [x64]
     os: [freebsd]
 
@@ -3304,8 +3310,8 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@nx/nx-linux-arm-gnueabihf@22.5.4':
-    resolution: {integrity: sha512-pv1x1afTaLAOxPxVhQneLeXgjclp11f9ORxR7jA4E86bSgc9OL92dLSCkXtLQzqPNOej6SZ2fO+PPHVMZwtaPQ==}
+  '@nx/nx-linux-arm-gnueabihf@22.6.5':
+    resolution: {integrity: sha512-xV50B8mnDPboct7JkAHftajI02s+8FszA8WTzhore+YGR+lEKHTLpucwGEaQuMlSdLplH7pQix4B4uK5pcMhZw==}
     cpu: [arm]
     os: [linux]
 
@@ -3315,8 +3321,8 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@nx/nx-linux-arm64-gnu@22.5.4':
-    resolution: {integrity: sha512-mPji9PzleWPvXpmFDKaXpTymRgZkk/hW8JHGhvEZpKHHXMYgTGWC+BqOEM2A4dYC4bu4fi9RrteL7aouRRWJoQ==}
+  '@nx/nx-linux-arm64-gnu@22.6.5':
+    resolution: {integrity: sha512-2JkWuMGj+HpW6oPAvU5VdAx1afTnEbiM10Y3YOrl3fipWV4BiP5VDx762QTrfCraP4hl6yqTgvTe7F9xaby+jQ==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
@@ -3327,8 +3333,8 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@nx/nx-linux-arm64-musl@22.5.4':
-    resolution: {integrity: sha512-hF/HvEhbCjcFpTgY7RbP1tUTbp0M1adZq4ckyW8mwhDWQ/MDsc8FnOHwCO3Bzy9ZeJM0zQUES6/m0Onz8geaEA==}
+  '@nx/nx-linux-arm64-musl@22.6.5':
+    resolution: {integrity: sha512-Z/zMqFClnEyqDXouJKEPoWVhMQIif5F0YuECWBYjd3ZLwQsXGTItoh+6Wm3XF/nGMA2uLOHyTq/X7iFXQY3RzA==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
@@ -3339,8 +3345,8 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@nx/nx-linux-x64-gnu@22.5.4':
-    resolution: {integrity: sha512-1+vicSYEOtc7CNMoRCjo59no4gFe8w2nGIT127wk1yeW3EJzRVNlOA7Deu10NUUbzLeOvHc8EFOaU7clT+F7XQ==}
+  '@nx/nx-linux-x64-gnu@22.6.5':
+    resolution: {integrity: sha512-FlotSyqNnaXSn0K+yWw+hRdYBwusABrPgKLyixfJIYRzsy+xPKN6pON6vZfqGwzuWF/9mEGReRz+iM8PiW0XSg==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
@@ -3351,8 +3357,8 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@nx/nx-linux-x64-musl@22.5.4':
-    resolution: {integrity: sha512-/KjndxVB14yU0SJOhqADHOWoTy4Y45h5RjW3cxcXlPSJZz7ar1FnlLne1rWMMMUttepc8ku+3T//SGKi2eu+Nw==}
+  '@nx/nx-linux-x64-musl@22.6.5':
+    resolution: {integrity: sha512-RVOe2qcwhoIx6mxQURPjUfAW5SEOmT2gdhewvdcvX9ICq1hj5B2VarmkhTg0qroO7xiyqOqwq26mCzoV2I3NgQ==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
@@ -3362,8 +3368,8 @@ packages:
     cpu: [arm64]
     os: [win32]
 
-  '@nx/nx-win32-arm64-msvc@22.5.4':
-    resolution: {integrity: sha512-CrYt9FwhjOI6ZNy/G6YHLJmZuXCFJ24BCxugPXiZ7knDx7eGrr7owGgfht4SSiK3KCX40CvWCBJfqR4ZSgaSUA==}
+  '@nx/nx-win32-arm64-msvc@22.6.5':
+    resolution: {integrity: sha512-ZqurqI8VuYnsr2Kn4K4t+Gx6j/BZdf6qz/6Tv4A7XQQ6oNYVQgTqoNEFj+CCkVaIe6aIdCWpousFLqs+ZgBqYQ==}
     cpu: [arm64]
     os: [win32]
 
@@ -3372,8 +3378,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@nx/nx-win32-x64-msvc@22.5.4':
-    resolution: {integrity: sha512-g5YByv4XsYwsYZvFe24A9bvfhZA+mwtIQt6qZtEVduZTT1hfhIsq0LXGHhkGoFLYwRMXSracWOqkalY0KT4IQw==}
+  '@nx/nx-win32-x64-msvc@22.6.5':
+    resolution: {integrity: sha512-i2QFBJIuaYg9BHxrrnBV4O7W9rVL2k0pSIdk/rRp3EYJEU93iUng+qbZiY9wh1xvmXuUCE2G7TRd+8/SG/RFKg==}
     cpu: [x64]
     os: [win32]
 
@@ -4996,7 +5002,7 @@ packages:
   '@storybook/csf-plugin@10.2.19':
     resolution: {integrity: sha512-BpjYIOdyQn/Rm6MjUAc5Gl8HlARZrskD/OhUNShiOh2fznb523dHjiE5mbU1kKM/+L1uvRlEqqih40rTx+xCrg==}
     peerDependencies:
-      esbuild: '>=0.25.0'
+      esbuild: 0.27.4
       rollup: '*'
       storybook: ^10.2.19
       vite: '*'
@@ -7714,8 +7720,8 @@ packages:
     resolution: {integrity: sha512-gYzvtM72ZtxQO0T048kd6HWSbbGCNOUwcnfQ01cqIJ4X2IYKFFHZ5mKvrQETcFXxsRObZulDaKmy//R7TPtsBg==}
     engines: {node: '>=20.19.0'}
 
-  dompurify@3.3.3:
-    resolution: {integrity: sha512-Oj6pzI2+RqBfFG+qOaOLbFXLQ90ARpcGG6UePL82bJLtdsa6CYJD7nmiU8MW9nQNOtCHV3lZ/Bzq1X0QYbBZCA==}
+  dompurify@3.4.0:
+    resolution: {integrity: sha512-nolgK9JcaUXMSmW+j1yaSvaEaoXYHwWyGJlkoCTghc97KgGDDSnpoU/PlEnw63Ah+TGKFOyY+X5LnxaWbCSfXg==}
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -7766,6 +7772,11 @@ packages:
   ejs@3.1.10:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
     engines: {node: '>=0.10.0'}
+    hasBin: true
+
+  ejs@5.0.1:
+    resolution: {integrity: sha512-COqBPFMxuPTPspXl2DkVYaDS3HtrD1GpzOGkNTJ1IYkifq/r9h8SVEFrjA3D9/VJGOEoMQcrlhpntcSUrM8k6A==}
+    engines: {node: '>=0.12.18'}
     hasBin: true
 
   electron-builder-squirrel-windows@26.8.2:
@@ -9883,8 +9894,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8bc3d96f6b2733106906b47ff0ff4356e88d024f:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8bc3d96f6b2733106906b47ff0ff4356e88d024f}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013}
     version: 41.3.0
     engines: {node: '>=22.0.0'}
 
@@ -10325,8 +10336,8 @@ packages:
       '@swc/core':
         optional: true
 
-  nx@22.5.4:
-    resolution: {integrity: sha512-L8wL7uCjnmpyvq4r2mN9s+oriUE4lY+mX9VgOpjj0ucRd5nzaEaBQppVs0zQGkbKC0BnHS8PGtnAglspd5Gh1Q==}
+  nx@22.6.5:
+    resolution: {integrity: sha512-VRKhDAt684dXNSz9MNjE7MekkCfQF41P2PSx5jEWQjDEP1Z4jFZbyeygWs5ZyOroG7/n0MoWAJTe6ftvIcBOAg==}
     hasBin: true
     peerDependencies:
       '@swc-node/register': ^1.11.1
@@ -11205,8 +11216,8 @@ packages:
   property-information@7.1.0:
     resolution: {integrity: sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ==}
 
-  protobufjs@7.5.4:
-    resolution: {integrity: sha512-CvexbZtbov6jW2eXAvLukXjXUW1TzFaivC46BpWc/3BpcCysb5Vffu+B3XHMm8lVEuy2Mm4XGex8hBSg1yapPg==}
+  protobufjs@7.5.5:
+    resolution: {integrity: sha512-3wY1AxV+VBNW8Yypfd1yQY9pXnqTAN+KwQxL8iYm3/BjKYMNg4i0owhEe26PWDOMaIrzeeF98Lqd5NGz4omiIg==}
     engines: {node: '>=12.0.0'}
 
   protocol-buffers-schema@3.6.1:
@@ -11734,8 +11745,8 @@ packages:
   sanitize-filename@1.6.3:
     resolution: {integrity: sha512-y/52Mcy7aw3gRm7IrcGDFx/bCk4AhRh2eI9luHOQM86nZsqwiRkkq2GekHXBBD+SmPidc8i2PqtYZl+pWJ8Oeg==}
 
-  sanitize-html@2.17.2:
-    resolution: {integrity: sha512-EnffJUl46VE9uvZ0XeWzObHLurClLlT12gsOk1cHyP2Ol1P0BnBnsXmShlBmWVJM+dKieQI68R0tsPY5m/B+Jg==}
+  sanitize-html@2.17.3:
+    resolution: {integrity: sha512-Kn4srCAo2+wZyvCNKCSyB2g8RQ8IkX/gQs2uqoSRNu5t9I2qvUyAVvRDiFUVAiX3N3PNuwStY0eNr+ooBHVWEg==}
 
   sax@1.6.0:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
@@ -12956,7 +12967,7 @@ packages:
     peerDependencies:
       '@types/node': 18.19.130
       '@vitejs/devtools': ^0.1.0
-      esbuild: ^0.27.0 || ^0.28.0
+      esbuild: 0.27.4
       jiti: '>=1.21.0'
       less: ^4.0.0
       sass: ^1.70.0
@@ -15207,14 +15218,14 @@ snapshots:
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.3.2
-      protobufjs: 7.5.4
+      protobufjs: 7.5.5
       yargs: 17.7.2
 
   '@grpc/proto-loader@0.8.0':
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.3.2
-      protobufjs: 7.5.4
+      protobufjs: 7.5.5
       yargs: 17.7.2
 
   '@hapi/address@5.1.1':
@@ -15897,10 +15908,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nx-tools/ci-context@7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)':
+  '@nx-tools/ci-context@7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)':
     dependencies:
       '@actions/github': 8.0.1
-      '@nx-tools/core': 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)
+      '@nx-tools/core': 7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)
       '@octokit/openapi-types': 22.2.0
       properties-file: 3.6.4
       std-env: 3.10.0
@@ -15908,11 +15919,11 @@ snapshots:
     transitivePeerDependencies:
       - '@nx/devkit'
 
-  '@nx-tools/container-metadata@7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)':
+  '@nx-tools/container-metadata@7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)':
     dependencies:
-      '@nx-tools/ci-context': 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)
-      '@nx-tools/core': 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)
-      '@nx/devkit': 22.5.3(nx@22.5.4)
+      '@nx-tools/ci-context': 7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)
+      '@nx-tools/core': 7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)
+      '@nx/devkit': 22.5.3(nx@22.6.5)
       '@renovatebot/pep440': 4.2.1
       csv-parse: 5.6.0
       handlebars: 4.7.9
@@ -15920,26 +15931,26 @@ snapshots:
       semver: 7.7.4
       tslib: 2.8.1
 
-  '@nx-tools/core@7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)':
+  '@nx-tools/core@7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)':
     dependencies:
       '@actions/io': 1.1.3
-      '@nx/devkit': 22.5.3(nx@22.5.4)
+      '@nx/devkit': 22.5.3(nx@22.6.5)
       csv-parse: 5.6.0
       std-env: 3.10.0
       tinyexec: 1.0.2
       tinyrainbow: 3.0.3
       tslib: 2.8.1
 
-  '@nx-tools/nx-container@7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.5.4))(dotenv@17.4.0)(nx@22.5.4)(tslib@2.8.1)':
+  '@nx-tools/nx-container@7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.6.5))(dotenv@17.4.0)(nx@22.6.5)(tslib@2.8.1)':
     dependencies:
-      '@nx-tools/container-metadata': 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)
-      '@nx-tools/core': 7.2.1(@nx/devkit@22.5.3(nx@22.5.4))(tslib@2.8.1)
-      '@nx/devkit': 22.5.3(nx@22.5.4)
-      '@nx/js': 22.5.3(@babel/traverse@7.29.0)(nx@22.5.4)
+      '@nx-tools/container-metadata': 7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)
+      '@nx-tools/core': 7.2.1(@nx/devkit@22.5.3(nx@22.6.5))(tslib@2.8.1)
+      '@nx/devkit': 22.5.3(nx@22.6.5)
+      '@nx/js': 22.5.3(@babel/traverse@7.29.0)(nx@22.6.5)
       csv-parse: 5.6.0
       dotenv: 17.4.0
       handlebars: 4.7.9
-      nx: 22.5.4
+      nx: 22.6.5
       semver: 7.7.4
       tmp: 0.2.5
       tslib: 2.8.1
@@ -15955,23 +15966,23 @@ snapshots:
       tslib: 2.8.1
       yargs-parser: 21.1.1
 
-  '@nx/devkit@22.5.3(nx@22.5.4)':
+  '@nx/devkit@22.5.3(nx@22.6.5)':
     dependencies:
       '@zkochan/js-yaml': 0.0.7
       ejs: 3.1.10
       enquirer: 2.3.6
       minimatch: 10.2.5
-      nx: 22.5.4
+      nx: 22.6.5
       semver: 7.7.4
       tslib: 2.8.1
       yargs-parser: 21.1.1
 
-  '@nx/jest@22.5.3(@babel/traverse@7.29.0)(@types/node@18.19.130)(babel-plugin-macros@3.1.0)(nx@22.5.4)(typescript@5.9.3)':
+  '@nx/jest@22.5.3(@babel/traverse@7.29.0)(@types/node@18.19.130)(babel-plugin-macros@3.1.0)(nx@22.6.5)(typescript@5.9.3)':
     dependencies:
       '@jest/reporters': 30.3.0
       '@jest/test-result': 30.3.0
-      '@nx/devkit': 22.5.3(nx@22.5.4)
-      '@nx/js': 22.5.3(@babel/traverse@7.29.0)(nx@22.5.4)
+      '@nx/devkit': 22.5.3(nx@22.6.5)
+      '@nx/js': 22.5.3(@babel/traverse@7.29.0)(nx@22.6.5)
       '@phenomnomnominal/tsquery': 6.1.4(typescript@5.9.3)
       identity-obj-proxy: 3.0.0
       jest-config: 30.3.0(@types/node@18.19.130)(babel-plugin-macros@3.1.0)
@@ -15998,7 +16009,7 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.5.4)':
+  '@nx/js@22.5.3(@babel/traverse@7.29.0)(nx@22.6.5)':
     dependencies:
       '@babel/core': 7.29.0
       '@babel/plugin-proposal-decorators': 7.29.0(@babel/core@7.29.0)
@@ -16007,7 +16018,7 @@ snapshots:
       '@babel/preset-env': 7.29.0(@babel/core@7.29.0)
       '@babel/preset-typescript': 7.28.5(@babel/core@7.29.0)
       '@babel/runtime': 7.28.6
-      '@nx/devkit': 22.5.3(nx@22.5.4)
+      '@nx/devkit': 22.5.3(nx@22.6.5)
       '@nx/workspace': 22.5.3
       '@zkochan/js-yaml': 0.0.7
       babel-plugin-const-enum: 1.2.0(@babel/core@7.29.0)
@@ -16037,61 +16048,61 @@ snapshots:
   '@nx/nx-darwin-arm64@22.5.3':
     optional: true
 
-  '@nx/nx-darwin-arm64@22.5.4':
+  '@nx/nx-darwin-arm64@22.6.5':
     optional: true
 
   '@nx/nx-darwin-x64@22.5.3':
     optional: true
 
-  '@nx/nx-darwin-x64@22.5.4':
+  '@nx/nx-darwin-x64@22.6.5':
     optional: true
 
   '@nx/nx-freebsd-x64@22.5.3':
     optional: true
 
-  '@nx/nx-freebsd-x64@22.5.4':
+  '@nx/nx-freebsd-x64@22.6.5':
     optional: true
 
   '@nx/nx-linux-arm-gnueabihf@22.5.3':
     optional: true
 
-  '@nx/nx-linux-arm-gnueabihf@22.5.4':
+  '@nx/nx-linux-arm-gnueabihf@22.6.5':
     optional: true
 
   '@nx/nx-linux-arm64-gnu@22.5.3':
     optional: true
 
-  '@nx/nx-linux-arm64-gnu@22.5.4':
+  '@nx/nx-linux-arm64-gnu@22.6.5':
     optional: true
 
   '@nx/nx-linux-arm64-musl@22.5.3':
     optional: true
 
-  '@nx/nx-linux-arm64-musl@22.5.4':
+  '@nx/nx-linux-arm64-musl@22.6.5':
     optional: true
 
   '@nx/nx-linux-x64-gnu@22.5.3':
     optional: true
 
-  '@nx/nx-linux-x64-gnu@22.5.4':
+  '@nx/nx-linux-x64-gnu@22.6.5':
     optional: true
 
   '@nx/nx-linux-x64-musl@22.5.3':
     optional: true
 
-  '@nx/nx-linux-x64-musl@22.5.4':
+  '@nx/nx-linux-x64-musl@22.6.5':
     optional: true
 
   '@nx/nx-win32-arm64-msvc@22.5.3':
     optional: true
 
-  '@nx/nx-win32-arm64-msvc@22.5.4':
+  '@nx/nx-win32-arm64-msvc@22.6.5':
     optional: true
 
   '@nx/nx-win32-x64-msvc@22.5.3':
     optional: true
 
-  '@nx/nx-win32-x64-msvc@22.5.4':
+  '@nx/nx-win32-x64-msvc@22.6.5':
     optional: true
 
   '@nx/workspace@22.5.3':
@@ -16439,7 +16450,7 @@ snapshots:
       '@opentelemetry/sdk-logs': 0.208.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-metrics': 2.2.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 2.2.0(@opentelemetry/api@1.9.0)
-      protobufjs: 7.5.4
+      protobufjs: 7.5.5
 
   '@opentelemetry/redis-common@0.38.2': {}
 
@@ -20841,7 +20852,7 @@ snapshots:
       '@grpc/grpc-js': 1.14.3
       '@grpc/proto-loader': 0.7.15
       docker-modem: 5.0.7
-      protobufjs: 7.5.4
+      protobufjs: 7.5.5
       tar-fs: 2.1.4
       uuid: 10.0.0
     transitivePeerDependencies:
@@ -20904,7 +20915,7 @@ snapshots:
     dependencies:
       domelementtype: 3.0.0
 
-  dompurify@3.3.3:
+  dompurify@3.4.0:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -20960,6 +20971,8 @@ snapshots:
   ejs@3.1.10:
     dependencies:
       jake: 10.9.4
+
+  ejs@5.0.1: {}
 
   electron-builder-squirrel-windows@26.8.2(dmg-builder@26.8.2):
     dependencies:
@@ -23572,7 +23585,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8bc3d96f6b2733106906b47ff0ff4356e88d024f:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
@@ -23685,7 +23698,7 @@ snapshots:
       d3-sankey: 0.12.3
       dagre-d3-es: 7.0.14
       dayjs: 1.11.20
-      dompurify: 3.3.3
+      dompurify: 3.4.0
       katex: 0.16.45
       khroma: 2.1.0
       lodash-es: 4.18.1
@@ -24119,7 +24132,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  nx@22.5.4:
+  nx@22.6.5:
     dependencies:
       '@napi-rs/wasm-runtime': 0.2.4
       '@yarnpkg/lockfile': 1.1.0
@@ -24131,7 +24144,7 @@ snapshots:
       cliui: 8.0.1
       dotenv: 16.4.7
       dotenv-expand: 11.0.7
-      ejs: 3.1.10
+      ejs: 5.0.1
       enquirer: 2.3.6
       figures: 3.2.0
       flat: 5.0.2
@@ -24141,13 +24154,13 @@ snapshots:
       jsonc-parser: 3.2.0
       lines-and-columns: 2.0.3
       minimatch: 10.2.4
-      node-machine-id: 1.1.12
       npm-run-path: 4.0.1
       open: 8.4.2
       ora: 5.3.0
       picocolors: 1.1.1
       resolve.exports: 2.0.3
       semver: 7.7.4
+      smol-toml: 1.6.1
       string-width: 4.2.3
       tar-stream: 2.2.0
       tmp: 0.2.5
@@ -24158,16 +24171,16 @@ snapshots:
       yargs: 17.7.2
       yargs-parser: 21.1.1
     optionalDependencies:
-      '@nx/nx-darwin-arm64': 22.5.4
-      '@nx/nx-darwin-x64': 22.5.4
-      '@nx/nx-freebsd-x64': 22.5.4
-      '@nx/nx-linux-arm-gnueabihf': 22.5.4
-      '@nx/nx-linux-arm64-gnu': 22.5.4
-      '@nx/nx-linux-arm64-musl': 22.5.4
-      '@nx/nx-linux-x64-gnu': 22.5.4
-      '@nx/nx-linux-x64-musl': 22.5.4
-      '@nx/nx-win32-arm64-msvc': 22.5.4
-      '@nx/nx-win32-x64-msvc': 22.5.4
+      '@nx/nx-darwin-arm64': 22.6.5
+      '@nx/nx-darwin-x64': 22.6.5
+      '@nx/nx-freebsd-x64': 22.6.5
+      '@nx/nx-linux-arm-gnueabihf': 22.6.5
+      '@nx/nx-linux-arm64-gnu': 22.6.5
+      '@nx/nx-linux-arm64-musl': 22.6.5
+      '@nx/nx-linux-x64-gnu': 22.6.5
+      '@nx/nx-linux-x64-musl': 22.6.5
+      '@nx/nx-win32-arm64-msvc': 22.6.5
+      '@nx/nx-win32-x64-msvc': 22.6.5
     transitivePeerDependencies:
       - debug
 
@@ -25086,7 +25099,7 @@ snapshots:
       '@posthog/core': 1.24.6
       '@posthog/types': 1.364.7
       core-js: 3.48.0
-      dompurify: 3.3.3
+      dompurify: 3.4.0
       fflate: 0.4.8
       preact: 10.28.3
       query-selector-shadow-dom: 1.0.1
@@ -25162,7 +25175,7 @@ snapshots:
 
   property-information@7.1.0: {}
 
-  protobufjs@7.5.4:
+  protobufjs@7.5.5:
     dependencies:
       '@protobufjs/aspromise': 1.1.2
       '@protobufjs/base64': 1.1.2
@@ -25793,7 +25806,7 @@ snapshots:
     dependencies:
       truncate-utf8-bytes: 1.0.2
 
-  sanitize-html@2.17.2:
+  sanitize-html@2.17.3:
     dependencies:
       deepmerge: 4.3.1
       escape-string-regexp: 4.0.0

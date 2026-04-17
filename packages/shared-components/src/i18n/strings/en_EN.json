@@ -5,6 +5,7 @@
     "action": {
         "back": "Back",
         "click": "Click",
+        "close": "Close",
         "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
@@ -16,6 +17,7 @@
         "invite": "Invite",
         "new_conversation": "New conversation",
         "new_room": "New room",
+        "new_section": "New section",
         "new_video_room": "New video room",
         "open_menu": "Open menu",
         "pause": "Pause",
@@ -34,6 +36,7 @@
     "common": {
         "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
+        "loading": "Loading…",
         "options": "Options",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
@@ -131,7 +134,8 @@
             "leave_room": "Leave room",
             "low_priority": "Low priority",
             "mark_read": "Mark as read",
-            "mark_unread": "Mark as unread"
+            "mark_unread": "Mark as unread",
+            "move_to_section": "Move to"
         },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
@@ -140,6 +144,7 @@
             "more_options": "More Options"
         },
         "room_options": "Room Options",
+        "section_created": "Section created",
         "section_header": {
             "toggle": "Toggle %(section)s section",
             "toggle_unread": "Toggle %(section)s section with unread room(s)"

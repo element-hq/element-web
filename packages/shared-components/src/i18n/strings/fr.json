@@ -4,6 +4,7 @@
     },
     "action": {
         "back": "Retour",
+        "click": "Clic",
         "collapse": "Réduire",
         "delete": "Supprimer",
         "dismiss": "Ignorer",
@@ -11,23 +12,35 @@
         "edit": "Modifier",
         "explore_rooms": "Parcourir les salons",
         "go": "C’est parti",
+        "hide": "Masquer",
         "invite": "Inviter",
         "new_conversation": "Nouvelle conversation",
         "new_room": "Nouveau salon",
         "new_video_room": "Nouveau salon visio",
         "open_menu": "Ouvrir le menu",
         "pause": "Pause",
+        "pin": "Épingler",
         "play": "Lecture",
+        "react": "Réagir",
         "remove": "Supprimer",
+        "reply": "Répondre",
+        "reply_in_thread": "Répondre dans le fil de discussion",
         "retry": "Réessayer",
         "search": "Rechercher",
-        "start_chat": "Démarrer une discussion"
+        "start_chat": "Démarrer une discussion",
+        "unpin": "Désépingler",
+        "view_source": "Voir la source"
     },
     "common": {
         "attachment": "Pièce jointe",
         "encryption_enabled": "Chiffrement activé",
+        "loading": "Chargement…",
+        "options": "Options",
         "preferences": "Préférences",
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
+    },
+    "keyboard": {
+        "shift": "Maj"
     },
     "left_panel": {
         "open_dial_pad": "Ouvrir le pavé de numérotation",
@@ -129,7 +142,8 @@
         },
         "room_options": "Options du salon",
         "section_header": {
-            "toggle": "Afficher/masquer la section %(section)s"
+            "toggle": "Afficher/masquer la section %(section)s",
+            "toggle_unread": "Afficher ou masquer la section « %(section)s s » contenant un ou plusieurs salon non lus"
         },
         "show_message_previews": "Afficher les aperçus des messages",
         "sort": "Trier",
@@ -145,6 +159,9 @@
     },
     "terms": {
         "tac_button": "Voir les conditions générales"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante"
     },
     "time": {
         "about_day_ago": "il y a environ un jour",
@@ -172,6 +189,8 @@
             "sender_unsigned_device": "Envoyé depuis un appareil non sécurisé.",
             "unable_to_decrypt": "Impossible de déchiffrer le message"
         },
+        "download_action_decrypting": "Déchiffrement",
+        "download_action_downloading": "Téléchargement en cours",
         "m.audio": {
             "audio_player": "Lecteur audio",
             "error_downloading_audio": "Erreur lors du téléchargement de l’audio",
@@ -189,6 +208,13 @@
             "parameters_changed": "Certains paramètres de chiffrement ont été changés.",
             "state_enabled": "Les messages et les événements de ce salon sont chiffrés de bout en bout. Lorsque des personnes rejoignent le salon, vous pouvez les vérifier dans leur profil en cliquant sur leur photo de profil.",
             "unsupported": "Le chiffrement utilisé par ce salon n’est pas pris en charge."
+        },
+        "mab": {
+            "collapse_reply_chain": "Réduire les citations",
+            "copy_link_thread": "Copier le lien du fil de discussion",
+            "expand_reply_chain": "Étendre les citations",
+            "label": "Actions de message",
+            "view_in_room": "Voir dans le salon"
         },
         "message_timestamp_received_at": "Reçu à : %(dateTime)s",
         "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",

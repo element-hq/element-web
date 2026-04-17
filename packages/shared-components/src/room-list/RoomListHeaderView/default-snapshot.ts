@@ -17,4 +17,6 @@ export const defaultSnapshot: RoomListHeaderViewSnapshot = {
     canAccessSpaceSettings: true,
     activeSortOption: "recent",
     isMessagePreviewEnabled: true,
+    useComposeIcon: true,
+    canCreateSection: true,
 };

@@ -27,4 +27,8 @@ packageExtensions:
         dependencies:
             # Fix missing type dependency
             "@types/picomatch": 4.0.2
+    "@joshwooding/vite-plugin-react-docgen-typescript":
+        peerDependencies:
+            # Silence warning
+            vite: "^8.0.0"
 ignorePatchFailures: false
