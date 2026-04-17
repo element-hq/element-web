@@ -75,7 +75,7 @@ describe("TextualBodyView", () => {
         {
             public onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
             public onBodyActionClick?: MouseEventHandler<HTMLElement>;
-            public onEmoteSenderClick?: MouseEventHandler<HTMLButtonElement>;
+            public onEmoteSenderClick?: MouseEventHandler<HTMLElement>;
 
             public constructor(snapshot: TextualBodyViewSnapshot, actions: TextualBodyViewActions) {
                 super(snapshot);

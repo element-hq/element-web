@@ -104,7 +104,7 @@ export interface TextualBodyViewActions {
     /**
      * Click handler for the emote sender.
      */
-    onEmoteSenderClick?: MouseEventHandler<HTMLButtonElement>;
+    onEmoteSenderClick?: MouseEventHandler<HTMLElement>;
 }
 
 export type TextualBodyViewModel = ViewModel<TextualBodyViewSnapshot, TextualBodyViewActions>;
@@ -273,9 +273,10 @@ export function TextualBodyView({
         return (
             <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} dir="auto">
                 *&nbsp;
-                <button type="button" className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events -- Preserve legacy inline emote sender rendering, which avoids the RTL screenshot drift caused by a native button here. */}
+                <span role="button" tabIndex={0} className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
                     {emoteSenderName}
-                </button>
+                </span>
                 &nbsp;
                 {renderedBody}
                 {urlPreviews}
