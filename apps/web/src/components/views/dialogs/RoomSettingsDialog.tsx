@@ -42,6 +42,7 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";
+import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
 
 export const enum RoomSettingsTab {
     General = "ROOM_GENERAL_TAB",
@@ -59,6 +60,7 @@ interface IProps {
     roomId: string;
     onFinished: (success?: boolean) => void;
     initialTabId?: RoomSettingsTab;
+    sdkContext: SdkContextClass;
 }
 
 interface IState {
@@ -238,21 +240,23 @@ class RoomSettingsDialog extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const roomName = this.state.room.name;
         return (
-            <BaseDialog
-                className="mx_RoomSettingsDialog"
-                hasCancel={true}
-                onFinished={this.props.onFinished}
-                title={_t("room_settings|title", { roomName })}
-            >
-                <div className="mx_SettingsDialog_content">
-                    <TabbedView
-                        tabs={this.getTabs()}
-                        activeTabId={this.state.activeTabId}
-                        screenName="RoomSettings"
-                        onChange={this.onTabChange}
-                    />
-                </div>
-            </BaseDialog>
+            <SDKContext.Provider value={this.props.sdkContext}>
+                <BaseDialog
+                    className="mx_RoomSettingsDialog"
+                    hasCancel={true}
+                    onFinished={this.props.onFinished}
+                    title={_t("room_settings|title", { roomName })}
+                >
+                    <div className="mx_SettingsDialog_content">
+                        <TabbedView
+                            tabs={this.getTabs()}
+                            activeTabId={this.state.activeTabId}
+                            screenName="RoomSettings"
+                            onChange={this.onTabChange}
+                        />
+                    </div>
+                </BaseDialog>
+            </SDKContext.Provider>
         );
     }
 }
