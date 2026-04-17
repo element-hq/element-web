@@ -30,7 +30,7 @@ export function userStatusTextWithinMaxLength(text: string): boolean {
 export function useUserStatus(userId: string | undefined): UserStatus | undefined {
     const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
-    const [rawUserStatus, setRawUserStatus] = useState<unknown | undefined>();
+    const [rawUserStatus, setRawUserStatus] = useState<unknown>();
 
     useTypedEventEmitter(matrixClient, ClientEvent.UserProfileUpdate, (syncedUserId, syncProfile) => {
         if (syncedUserId !== userId) {

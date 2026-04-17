@@ -47,7 +47,7 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         super();
     }
 
-    public async onChange(): Promise<void> {
+    public onChange(): void {
         if (this.forceReload) {
             PlatformPeg.get()?.reload();
         }
