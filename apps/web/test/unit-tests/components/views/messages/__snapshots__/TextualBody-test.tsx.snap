@@ -59,7 +59,7 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
         </code>
       </div>
     </pre>
-    <div
+    <button
       aria-label="Copy"
       class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
       role="button"
@@ -79,7 +79,7 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
           d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
         />
       </svg>
-    </div>
+    </button>
   </div>
   
 
@@ -278,7 +278,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
         </code>
       </div>
     </pre>
-    <div
+    <button
       aria-label="Copy"
       class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton"
       role="button"
@@ -298,7 +298,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills do not appear 
           d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
         />
       </svg>
-    </div>
+    </button>
   </div>
   
 
@@ -482,7 +482,7 @@ num_sqrt = num **
         />
       </svg>
     </span>
-    <div
+    <button
       aria-label="Copy"
       class="mx_AccessibleButton mx_EventTile_button mx_EventTile_copyButton mx_EventTile_buttonBottom"
       role="button"
@@ -502,7 +502,7 @@ num_sqrt = num **
           d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
         />
       </svg>
-    </div>
+    </button>
   </div>
   
 

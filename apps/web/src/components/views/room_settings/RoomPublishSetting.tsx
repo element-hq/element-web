@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEventHandler } from "react";
 import { JoinRule, Visibility } from "matrix-js-sdk/src/matrix";
-import { SettingsToggleInput } from "@vector-im/compound-web";
+import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -16,6 +16,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import DirectoryCustomisations from "../../../customisations/Directory";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
+import { onSubmitPreventDefault } from "../../../utils/form.ts";
 
 interface IProps {
     roomId: string;
@@ -90,16 +91,18 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         const enabled = canSetCanonicalAlias && (isRoomPublishable || this.state.isRoomPublished);
 
         return (
-            <SettingsToggleInput
-                name="room-publish"
-                checked={this.state.isRoomPublished}
-                onChange={this.onRoomPublishChange}
-                disabled={!enabled || this.state.busy}
-                disabledMessage={disabledMessage}
-                label={_t("room_settings|general|publish_toggle", {
-                    domain: client.getDomain(),
-                })}
-            />
+            <Form.Root onSubmit={onSubmitPreventDefault}>
+                <SettingsToggleInput
+                    name="room-publish"
+                    checked={this.state.isRoomPublished}
+                    onChange={this.onRoomPublishChange}
+                    disabled={!enabled || this.state.busy}
+                    disabledMessage={disabledMessage}
+                    label={_t("room_settings|general|publish_toggle", {
+                        domain: client.getDomain(),
+                    })}
+                />
+            </Form.Root>
         );
     }
 }
