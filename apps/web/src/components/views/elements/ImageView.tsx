@@ -42,7 +42,7 @@ import { useDownloadMedia } from "../../../hooks/useDownloadMedia.ts";
 import {
     MessageTimestampViewModel,
     type MessageTimestampViewModelProps,
-} from "../../../viewmodels/message-body/MessageTimestampViewModel.ts";
+} from "../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel.ts";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;

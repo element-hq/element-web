@@ -32,7 +32,6 @@
         "cancel": "İptal",
         "change": "Değiştir",
         "clear": "Temizle",
-        "click": "Tıklayın",
         "click_to_copy": "Kopyalamak için tıklayın",
         "close": "Kapat",
         "collapse": "Başarısız",
@@ -1252,9 +1251,6 @@
         "impossible_dialog_title": "Entegrasyonlara izin verilmiyor"
     },
     "invite": {
-        "ask_anyway_description": "Aşağıda listelenen Matrix Kimlikleri için profil bulunamadı - yine de bir DM başlatmak ister misiniz?",
-        "ask_anyway_label": "Yine de DM'ye başla",
-        "ask_anyway_never_warn_label": "Yine de DM'yi başlat ve beni bir daha uyarma",
         "email_caption": "E-posta ile davet et",
         "email_limit_one": "E-posta yoluyla davetler yalnızca birer birer gönderilebilir",
         "email_use_default_is": "E-posta ile davet etmek için bir kimlik sunucusu kullan. <default> Varsayılanı kullan (%(defaultIdentityServerName)s</default> ya da <settings>Ayarlar</settings> kullanarak yönetin.",
@@ -2082,8 +2078,6 @@
             "aliases_section": "Oda Adresleri",
             "avatar_field_label": "Oda avatarı",
             "canonical_alias_field_label": "Ana adres",
-            "default_url_previews_off": "URL ön izlemeleri, bu odadaki kullanıcılar için varsayılan olarak devre dışı bıraktırılmıştır.",
-            "default_url_previews_on": "URL önizlemeleri, bu odadaki katılımcılar için varsayılan olarak etkin.",
             "description_space": "Alanınızla ilgili ayarları düzenleyin.",
             "error_creating_alias_description": "Adres oluşturulurken hata ile karşılaşıldı. Sunucu tarafından izin verilmemiş yada geçici bir hata olabilir.",
             "error_creating_alias_title": "Adres oluşturulurken hata",
@@ -2112,12 +2106,7 @@
             "published_aliases_explainer_space": "Yayınlanan adresler, herhangi bir sunucudaki herkes tarafından alanınıza katılmak için kullanılabilir.",
             "published_aliases_section": "Yayınlanmış adresler",
             "save": "Değişiklikleri Kaydet",
-            "topic_field_label": "Oda Başlığı",
-            "url_preview_encryption_warning": "Bunun gibi şifreli odalarda, ana sunucunuzun (önizlemelerin oluşturulduğu yer) bu odada gördüğünüz bağlantılar hakkında bilgi toplayamamasını sağlamak için URL önizlemeleri varsayılan olarak devre dışı bırakılır.",
-            "url_preview_explainer": "Birisi mesajına bir URL eklediğinde, bu bağlantı hakkında başlık, açıklama ve web sitesinden bir görüntü gibi daha fazla bilgi vermek için bir URL önizlemesi gösterilebilir.",
-            "url_previews_section": "URL önizlemeleri",
-            "user_url_previews_default_off": "URL önizlemelerini varsayılan olarak <a> devre dışı </a> bıraktınız.",
-            "user_url_previews_default_on": "URL önizlemelerini varsayılan olarak <a>etkinleştirdiniz</a>."
+            "topic_field_label": "Oda Başlığı"
         },
         "notifications": {
             "browse_button": "Gözat",
@@ -2514,8 +2503,6 @@
             "username": "Kullanıcı Adı"
         },
         "inline_url_previews_default": "Varsayılan olarak satır içi URL önizlemeleri aç",
-        "inline_url_previews_room": "Bu odadaki katılımcılar için URL önizlemeyi varsayılan olarak açık hale getir",
-        "inline_url_previews_room_account": "Bu oda için URL önizlemeyi aç (sadece sizi etkiler)",
         "insert_trailing_colon_mentions": "Mesajın başında kullanıcı etiketlerinden sonra iki nokta üst üste ekle",
         "jump_to_bottom_on_send": "Mesaj gönderdiğinizde zaman çizelgesinin en sonuna atla",
         "key_backup": {
@@ -3099,7 +3086,6 @@
         },
         "empty_description": "Bir mesajın üzerine geldiğinizde \"%(replyInThread)s\" kullan.",
         "empty_title": "Mesaj dizileri, konuşmalarınızın konuyla ilgili ve takip edilmesi kolay kalmasına yardımcı olur.",
-        "error_start_thread_existing_relation": "Varolan bir ilişkiye sahip mesaj dizisinden dolayı, mesaj dizisi oluşturulamıyor",
         "mark_all_read": "Tümünü okundu olarak işaretle",
         "my_threads": "Mesaj dizilerim",
         "my_threads_description": "Katıldığınız tüm mesaj dizilerini gösterir",
@@ -3143,7 +3129,6 @@
             "unable_to_decrypt": "Mesaj şifresi çözülemedi"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Şifre çözülüyor",
         "download_action_downloading": "İndiriliyor",
         "download_failed": "İndirme başarısız oldu",
         "download_failed_description": "Bu dosya indirilirken bir hata oluştu",
@@ -3340,10 +3325,7 @@
             "removed": "%(widgetName)s görsel bileşeni %(senderName)s tarafından silindi"
         },
         "mab": {
-            "collapse_reply_chain": "Alıntıları daralt",
             "copy_link_thread": "Bağlantıyı konuya kopyala",
-            "expand_reply_chain": "Alıntıları genişlet",
-            "label": "Mesaj Eylemleri",
             "view_in_room": "Odada görüntüle"
         },
         "mjolnir": {

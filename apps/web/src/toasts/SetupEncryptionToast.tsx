@@ -365,7 +365,12 @@ export const showToast = (state: DeviceStateForToast): void => {
             overrideWidth: state === "key_storage_out_of_sync" ? "366px" : undefined,
         },
         component: GenericToast,
-        priority: state === "verify_this_session" ? 95 : 40,
+        // verify_this_session is more important than most toasts, but
+        // needs to appear below an incoming verification request, so we can fix
+        // the problem by accepting it.
+        //
+        // Other states are less urgent.
+        priority: state === "verify_this_session" ? 85 : 40,
     });
 };
 

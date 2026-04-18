@@ -3,35 +3,35 @@
 exports[`UrlPreviewGroupView > renders a single preview 1`] = `
 <div>
   <div
-    class="wrapper"
+    class="UrlPreviewGroupView-module_wrapper"
   >
     <div
-      class="previewGroup"
+      class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/element.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -40,7 +40,7 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               A simple description
             </p>
@@ -80,35 +80,35 @@ exports[`UrlPreviewGroupView > renders a single preview 1`] = `
 exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
 <div>
   <div
-    class="wrapper"
+    class="UrlPreviewGroupView-module_wrapper"
   >
     <div
-      class="previewGroup"
+      class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/element.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -117,7 +117,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               A regular square image.
             </p>
@@ -125,29 +125,29 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         </div>
       </div>
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/tallImage.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -156,7 +156,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               This one has a taller image which should crop nicely.
             </p>
@@ -164,29 +164,29 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         </div>
       </div>
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/element.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -195,7 +195,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               One more description
             </p>
@@ -203,7 +203,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         </div>
       </div>
       <button
-        class="_button_13vu4_8 toggleButton"
+        class="_button_13vu4_8 UrlPreviewGroupView-module_toggleButton"
         data-kind="tertiary"
         data-size="sm"
         role="button"
@@ -244,35 +244,35 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
 exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = `
 <div>
   <div
-    class="wrapper"
+    class="UrlPreviewGroupView-module_wrapper"
   >
     <div
-      class="previewGroup"
+      class="UrlPreviewGroupView-module_previewGroup"
     >
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/element.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -281,7 +281,7 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               A simple description
             </p>
@@ -289,7 +289,7 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
         </div>
       </div>
       <button
-        class="_button_13vu4_8 toggleButton"
+        class="_button_13vu4_8 UrlPreviewGroupView-module_toggleButton"
         data-kind="tertiary"
         data-size="sm"
         role="button"
@@ -330,35 +330,35 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
 exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
 <div>
   <div
-    class="wrapper"
+    class="UrlPreviewGroupView-module_wrapper"
   >
     <div
-      class="previewGroup compactLayout"
+      class="UrlPreviewGroupView-module_previewGroup UrlPreviewGroupView-module_compactLayout"
     >
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/element.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -367,7 +367,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               A regular square image.
             </p>
@@ -375,29 +375,29 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
         </div>
       </div>
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/tallImage.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -406,7 +406,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               This one has a taller image which should crop nicely.
             </p>
@@ -414,29 +414,29 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
         </div>
       </div>
       <div
-        class="container"
+        class="LinkPreview-module_container"
       >
         <div
-          class="wrapImageCaption"
+          class="LinkPreview-module_wrapImageCaption"
         >
           <button
             aria-label="View image"
-            class="image"
+            class="LinkPreview-module_image"
           >
             <img
               alt=""
-              class="thumbnail"
+              class="LinkPreview-module_thumbnail"
               src="/static/element.png"
             />
           </button>
           <div
-            class="caption"
+            class="LinkPreview-module_caption"
           >
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
             >
               <a
-                class="link"
+                class="LinkPreview-module_link"
                 href="https://matrix.org"
                 rel="noreferrer noopener"
                 target="_blank"
@@ -445,7 +445,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
               </a>
             </p>
             <p
-              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+              class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
             >
               One more description
             </p>
@@ -453,7 +453,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
         </div>
       </div>
       <button
-        class="_button_13vu4_8 toggleButton"
+        class="_button_13vu4_8 UrlPreviewGroupView-module_toggleButton"
         data-kind="tertiary"
         data-size="sm"
         role="button"

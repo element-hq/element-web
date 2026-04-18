@@ -5,8 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Filter } from ".";
-import { FilterKey } from ".";
+import { type Filter, FilterEnum } from ".";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 
 export class RoomsFilter implements Filter {
@@ -15,7 +14,7 @@ export class RoomsFilter implements Filter {
         return !DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     }
 
-    public get key(): FilterKey.RoomsFilter {
-        return FilterKey.RoomsFilter;
+    public get key(): FilterEnum.RoomsFilter {
+        return FilterEnum.RoomsFilter;
     }
 }

@@ -1,0 +1,143 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import { mocked } from "jest-mock";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+
+import Modal from "../../../src/Modal";
+import SdkConfig from "../../../src/SdkConfig";
+import { BugReportEndpointURLLocal } from "../../../src/IConfigOptions";
+import ViewSource from "../../../src/components/structures/ViewSource";
+import BugReportDialog from "../../../src/components/views/dialogs/BugReportDialog";
+import { TileErrorViewModel } from "../../../src/viewmodels/message-body/TileErrorViewModel";
+
+describe("TileErrorViewModel", () => {
+    const createEvent = (type = "m.room.message"): MatrixEvent =>
+        new MatrixEvent({
+            content: {},
+            event_id: `$${type}`,
+            origin_server_ts: Date.now(),
+            room_id: "!room:example.org",
+            sender: "@alice:example.org",
+            type,
+        });
+
+    const createVm = (
+        overrides: Partial<ConstructorParameters<typeof TileErrorViewModel>[0]> = {},
+    ): TileErrorViewModel => {
+        const error = overrides.error ?? new Error("Boom");
+        const mxEvent = overrides.mxEvent ?? createEvent();
+
+        return new TileErrorViewModel({
+            layout: "group",
+            developerMode: true,
+            error,
+            mxEvent,
+            ...overrides,
+        });
+    };
+
+    beforeEach(() => {
+        SdkConfig.reset();
+        jest.spyOn(Modal, "createDialog").mockImplementation(() => ({ close: jest.fn() }) as any);
+    });
+
+    afterEach(() => {
+        SdkConfig.reset();
+        jest.restoreAllMocks();
+    });
+
+    it("computes the initial snapshot from app state", () => {
+        SdkConfig.add({ bug_report_endpoint_url: "https://example.org" });
+        const vm = createVm();
+
+        expect(vm.getSnapshot()).toEqual({
+            layout: "group",
+            message: "Can't load this message",
+            eventType: "m.room.message",
+            bugReportCtaLabel: "Submit debug logs",
+            viewSourceCtaLabel: "View Source",
+        });
+    });
+
+    it("uses the download logs label for local bug reports", () => {
+        SdkConfig.add({ bug_report_endpoint_url: BugReportEndpointURLLocal });
+        const vm = createVm();
+
+        expect(vm.getSnapshot().bugReportCtaLabel).toBe("Download logs");
+    });
+
+    it("hides optional actions when unavailable", () => {
+        const vm = createVm({ developerMode: false });
+
+        expect(vm.getSnapshot().bugReportCtaLabel).toBeUndefined();
+        expect(vm.getSnapshot().viewSourceCtaLabel).toBeUndefined();
+    });
+
+    it("updates the layout when the host timeline layout changes", () => {
+        const vm = createVm();
+        const listener = jest.fn();
+        vm.subscribe(listener);
+
+        vm.setLayout("bubble");
+
+        expect(vm.getSnapshot().layout).toBe("bubble");
+        expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it("guards setters against unchanged values", () => {
+        const error = new Error("Boom");
+        const mxEvent = createEvent();
+        const vm = createVm({ developerMode: true, error, mxEvent });
+        const listener = jest.fn();
+        vm.subscribe(listener);
+
+        vm.setDeveloperMode(true);
+        vm.setError(error);
+        vm.setLayout("group");
+
+        expect(listener).not.toHaveBeenCalled();
+    });
+
+    it("opens the bug report dialog with the current error", () => {
+        SdkConfig.add({ bug_report_endpoint_url: "https://example.org" });
+        const originalError = new Error("Boom");
+        const updatedError = new Error("Updated boom");
+        const vm = createVm({ error: originalError });
+
+        vm.setError(updatedError);
+        vm.onBugReportClick({} as any);
+
+        expect(Modal.createDialog).toHaveBeenCalledWith(BugReportDialog, {
+            label: "react-tile-soft-crash",
+            error: updatedError,
+        });
+    });
+
+    it("opens the view source dialog with the current event", () => {
+        const mxEvent = createEvent("m.room.redaction");
+        const vm = createVm({ mxEvent });
+
+        vm.onViewSourceClick({} as any);
+
+        expect(Modal.createDialog).toHaveBeenCalledWith(
+            ViewSource,
+            {
+                mxEvent,
+            },
+            "mx_Dialog_viewsource",
+        );
+    });
+
+    it("does not open view source when developer mode is disabled", () => {
+        const vm = createVm({ developerMode: false });
+
+        vm.onViewSourceClick({} as any);
+
+        expect(mocked(Modal.createDialog)).not.toHaveBeenCalled();
+    });
+});

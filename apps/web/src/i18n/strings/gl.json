@@ -25,7 +25,6 @@
         "cancel": "Cancelar",
         "change": "Cambiar",
         "clear": "Limpar",
-        "click": "Premer",
         "click_to_copy": "Click para copiar",
         "close": "Pechar",
         "collapse": "Pechar",
@@ -1609,8 +1608,6 @@
             "aliases_section": "Enderezos da sala",
             "avatar_field_label": "Avatar da sala",
             "canonical_alias_field_label": "Enderezo principal",
-            "default_url_previews_off": "As vistas previas de URL están desactivadas por defecto para as participantes desta sala.",
-            "default_url_previews_on": "As vistas previas de URL están activas por defecto para os participantes desta sala.",
             "description_space": "Editar os axustes relativos ao teu espazo.",
             "error_creating_alias_description": "Algo fallou ao crear ese enderezo. Podería non estar autorizado polo servidor ou ser un fallo temporal.",
             "error_creating_alias_title": "Fallo ao crear o enderezo",
@@ -1637,12 +1634,7 @@
             "published_aliases_explainer_space": "Os enderezos publicados podense usar por calquera en calquera servidor para unirse ao teu espazo.",
             "published_aliases_section": "Enderezos publicados",
             "save": "Gardar cambios",
-            "topic_field_label": "Asunto da sala",
-            "url_preview_encryption_warning": "Nas salas cifradas, como é esta, está desactivado por defecto a previsualización das URL co fin de asegurarse de que o servidor local (que é onde se gardan as previsualizacións) non poida recoller información sobre das ligazóns que se ven nesta sala.",
-            "url_preview_explainer": "Cando alguén pon unha URL na mensaxe, esta previsualízarase para que así se coñezan xa cousas delas como o título, a descrición ou as imaxes que inclúe ese sitio web.",
-            "url_previews_section": "Vista previa de URL",
-            "user_url_previews_default_off": "<a>Desactivou</a> a vista previa de URL por defecto.",
-            "user_url_previews_default_on": "<a>Activou</a> a vista previa de URL por defecto."
+            "topic_field_label": "Asunto da sala"
         },
         "notifications": {
             "browse_button": "Buscar",
@@ -1908,8 +1900,6 @@
             "spell_check_locale_placeholder": "Elixe o idioma"
         },
         "inline_url_previews_default": "Activar por defecto as vistas previas en liña de URL",
-        "inline_url_previews_room": "Activar a vista previa de URL por defecto para as participantes nesta sala",
-        "inline_url_previews_room_account": "Activar vista previa de URL nesta sala (só che afecta a ti)",
         "insert_trailing_colon_mentions": "Inserir dous puntos tras mencionar a outra usuaria no inicio da mensaxe",
         "jump_to_bottom_on_send": "Ir ao final da cronoloxía cando envías unha mensaxe",
         "key_backup": {
@@ -2347,7 +2337,6 @@
             "one": "%(count)s resposta",
             "other": "%(count)s respostas"
         },
-        "error_start_thread_existing_relation": "Non se pode crear un tema con unha relación existente desde un evento",
         "my_threads": "As miñas conversas",
         "my_threads_description": "Mostra tódalas conversas nas que participaches",
         "open_thread": "Abrir fío",
@@ -2373,7 +2362,6 @@
         },
         "creation_summary_dm": "%(creator)s creou esta MD.",
         "creation_summary_room": "%(creator)s creou e configurou a sala.",
-        "download_action_decrypting": "Descifrando",
         "download_action_downloading": "Descargando",
         "edits": {
             "tooltip_label": "Editada o %(date)s. Preme para ver edicións.",
@@ -2554,10 +2542,7 @@
             "removed": "%(widgetName)s eliminado por %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Pregar as citas",
             "copy_link_thread": "Copiar ligazón da conversa",
-            "expand_reply_chain": "Despregar as citas",
-            "label": "Accións da mensaxe",
             "view_in_room": "Ver na sala"
         },
         "mjolnir": {

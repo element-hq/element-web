@@ -17,7 +17,7 @@ import { _t } from "../../../../../languageHandler";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
 import { type MemberWithSeparator } from "../../../../viewmodels/memberlist/MemberListViewModel";
-import { DisambiguatedProfileViewModel } from "../../../../../viewmodels/profile/DisambiguatedProfileViewModel";
+import { DisambiguatedProfileViewModel } from "../../../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 
 interface IProps {
     /**

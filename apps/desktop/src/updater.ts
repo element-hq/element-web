@@ -12,6 +12,7 @@ import os from "node:os";
 import { getSquirrelExecutable } from "./squirrelhooks.js";
 import { _t } from "./language-helper.js";
 import { initialisePromise } from "./ipc.js";
+import { getBrand } from "./config.js";
 
 const UPDATE_POLL_INTERVAL_MS = 60 * 60 * 1000;
 const INITIAL_UPDATE_DELAY_MS = 30 * 1000;
@@ -149,7 +150,7 @@ async function available(): Promise<boolean> {
             initialisePromise.then(() => {
                 ipcMain.emit("showToast", {
                     title: _t("eol|title"),
-                    description: _t("eol|no_more_updates", { brand: global.trayConfig.brand }),
+                    description: _t("eol|no_more_updates", { brand: getBrand() }),
                 });
             });
             console.warn("Auto update not supported, macOS version too old");
@@ -160,7 +161,7 @@ async function available(): Promise<boolean> {
             initialisePromise.then(() => {
                 ipcMain.emit("showToast", {
                     title: _t("eol|title"),
-                    description: _t("eol|warning", { brand: global.trayConfig.brand }),
+                    description: _t("eol|warning", { brand: getBrand() }),
                 });
             });
         }

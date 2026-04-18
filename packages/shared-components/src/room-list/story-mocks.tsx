@@ -13,8 +13,8 @@ import {
     type RoomListItemViewModel,
     type RoomListItemViewSnapshot,
     RoomNotifState,
-} from "./RoomListItemView";
-import { type RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderView";
+} from "./VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "./VirtualizedRoomListView/RoomListSectionHeaderView";
 import { MockViewModel } from "../core/viewmodel";
 
 /**
@@ -105,6 +105,7 @@ export const createMockRoomSnapshot = (id: string, name: string, index: number):
     canMarkAsRead: false,
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
+    canMoveToSection: true,
 });
 
 export function createMockRoomItemViewModel(roomId: string, name: string, index: number): RoomListItemViewModel {
@@ -121,6 +122,7 @@ export function createMockRoomItemViewModel(roomId: string, name: string, index:
         onCopyRoomLink: fn(),
         onLeaveRoom: fn(),
         onSetRoomNotifState: fn(),
+        onCreateSection: fn(),
     };
 }
 

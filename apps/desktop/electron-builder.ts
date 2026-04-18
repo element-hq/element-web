@@ -1,7 +1,7 @@
 import * as os from "node:os";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { type Configuration as BaseConfiguration, type Protocol } from "electron-builder";
+import { type Configuration as BaseConfiguration } from "electron-builder";
 
 /**
  * This script has different outputs depending on your os platform.
@@ -38,6 +38,7 @@ interface Metadata {
 interface ExtraMetadata extends Metadata {
     electron_appId: string;
     electron_protocol: string;
+    electron_windows_cert_sn?: string;
 }
 
 /**
@@ -208,6 +209,7 @@ if (variant["linux.deb.name"]) {
 if (process.env.ED_SIGNTOOL_SUBJECT_NAME && process.env.ED_SIGNTOOL_THUMBPRINT) {
     config.win.signtoolOptions!.certificateSubjectName = process.env.ED_SIGNTOOL_SUBJECT_NAME;
     config.win.signtoolOptions!.certificateSha1 = process.env.ED_SIGNTOOL_THUMBPRINT;
+    config.extraMetadata.electron_windows_cert_sn = config.win.signtoolOptions!.certificateSubjectName;
 }
 
 if (os.platform() === "linux") {

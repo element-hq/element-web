@@ -32,13 +32,13 @@ HTMLCollection [
         class="mx_DeviceSecurityCard_description"
       >
         This session doesn't support encryption and thus can't be verified.
-        <div
+        <button
           class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           role="button"
           tabindex="0"
         >
           Learn more
-        </div>
+        </button>
       </p>
     </div>
   </div>,
@@ -83,11 +83,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
   <div
     class="mx_SettingsSubsectionHeading"
   >
-    <h3
+    <h2
       class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
     >
       Current session
-    </h3>
+    </h2>
     <div
       aria-expanded="false"
       aria-haspopup="true"
@@ -159,11 +159,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
       <div
         class="mx_DeviceTile_info"
       >
-        <h4
+        <h3
           class="mx_Heading_h4"
         >
           Alices device
-        </h4>
+        </h3>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -238,13 +238,13 @@ exports[`<SessionManagerTab /> current session section renders current session s
           class="mx_DeviceSecurityCard_description"
         >
           Your current session is ready for secure messaging.
-          <div
+          <button
             class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
             tabindex="0"
           >
             Learn more
-          </div>
+          </button>
         </p>
       </div>
     </div>
@@ -260,11 +260,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
   <div
     class="mx_SettingsSubsectionHeading"
   >
-    <h3
+    <h2
       class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
     >
       Current session
-    </h3>
+    </h2>
     <div
       aria-expanded="false"
       aria-haspopup="true"
@@ -334,11 +334,11 @@ exports[`<SessionManagerTab /> current session section renders current session s
       <div
         class="mx_DeviceTile_info"
       >
-        <h4
+        <h3
           class="mx_Heading_h4"
         >
           Alices device
-        </h4>
+        </h3>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -411,13 +411,13 @@ exports[`<SessionManagerTab /> current session section renders current session s
           class="mx_DeviceSecurityCard_description"
         >
           Verify your current session for enhanced secure messaging.
-          <div
+          <button
             class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
             tabindex="0"
           >
             Learn more
-          </div>
+          </button>
         </p>
         <div
           class="mx_DeviceSecurityCard_actions"

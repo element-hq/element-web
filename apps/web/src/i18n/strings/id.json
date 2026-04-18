@@ -32,7 +32,6 @@
         "cancel": "Batalkan",
         "change": "Ubah",
         "clear": "Hapus",
-        "click": "Klik",
         "click_to_copy": "Klik untuk menyalin",
         "close": "Tutup",
         "collapse": "Tutup",
@@ -66,7 +65,6 @@
         "go": "Mulai",
         "go_back": "Kembali ke sebelumnya",
         "got_it": "Mengerti",
-        "hide": "Sembunyikan",
         "hide_advanced": "Sembunyikan lanjutan",
         "hold": "Jeda",
         "ignore": "Abaikan",
@@ -117,7 +115,7 @@
         "show_advanced": "Tampilkan lanjutan",
         "show_all": "Tampilkan semua",
         "sign_in": "Masuk",
-        "sign_out": "Keluar",
+        "sign_out": "Hapus perangkat ini",
         "skip": "Lewat",
         "start": "Mulai",
         "start_chat": "Mulai obrolan",
@@ -1352,9 +1350,6 @@
         "impossible_dialog_title": "Integrasi tidak diperbolehkan"
     },
     "invite": {
-        "ask_anyway_description": "Tidak dapat menemukan profil untuk ID Matrix yang disertakan di bawah — apakah Anda ingin memulai percakapan langsung saja?",
-        "ask_anyway_label": "Mulai percakapan langsung saja",
-        "ask_anyway_never_warn_label": "Mulai percakapan langsung saja dan jangan peringatkan saya lagi",
         "email_caption": "Undang melalui email",
         "email_limit_one": "Undangan lewat surel hanya dapat dikirim satu-satu",
         "email_use_default_is": "Gunakan sebuah server identitas untuk mengundang melalui email. <default>Gunakan bawaan (%(defaultIdentityServerName)s)</default> atau kelola di <settings>Pengaturan</settings>.",
@@ -2213,8 +2208,6 @@
             "aliases_section": "Alamat Ruangan",
             "avatar_field_label": "Avatar ruangan",
             "canonical_alias_field_label": "Alamat utama",
-            "default_url_previews_off": "Tampilan URL dinonaktifkan secara bawaan untuk anggota di ruangan ini.",
-            "default_url_previews_on": "Tampilan URL diaktifkan secara bawaan untuk anggota di ruangan ini.",
             "description_space": "Edit pengaturan yang berkaitan dengan space Anda.",
             "error_creating_alias_description": "Terjadi sebuah kesalahan membuat alamat. Ini mungkin tidak diperbolehkan oleh servernya atau ada kegagalan sementara.",
             "error_creating_alias_title": "Terjadi kesalahan membuat alamat",
@@ -2245,12 +2238,7 @@
             "published_aliases_explainer_space": "Alamat yang dipublikasikan dapat digunakan oleh siapa saja di server apa saja untuk bergabung dengan space Anda.",
             "published_aliases_section": "Alamat yang Dipublikasikan",
             "save": "Simpan Perubahan",
-            "topic_field_label": "Topik Ruangan",
-            "url_preview_encryption_warning": "Di ruangan terenkripsi, seperti ruangan ini, tampilan URL dinonaktifkan secara bawaan untuk memastikan homeserver Anda (di mana tampilannya dibuat) tidak mendapatkan informasi tentang tautan yang Anda lihat di ruangan ini.",
-            "url_preview_explainer": "Ketika seseorang menambahkan URL di pesannya, sebuah tampilan URL dapat ditampilkan untuk memberikan informasi lainnya tentang tautan itu seperti judul, deskripsi, dan sebuah gambar dari website.",
-            "url_previews_section": "Tampilan URL",
-            "user_url_previews_default_off": "Anda telah <a>menonaktifkan</a> tampilan URL secara bawaan.",
-            "user_url_previews_default_on": "Anda telah <a>mengaktifkan</a> tampilan URL secara bawaan."
+            "topic_field_label": "Topik Ruangan"
         },
         "notifications": {
             "browse_button": "Jelajahi",
@@ -2672,8 +2660,6 @@
             "username": "Nama pengguna"
         },
         "inline_url_previews_default": "Aktifkan tampilan URL secara bawaan",
-        "inline_url_previews_room": "Aktifkan tampilan URL secara bawaan untuk anggota di ruangan ini",
-        "inline_url_previews_room_account": "Aktifkan tampilan URL secara bawaan (hanya memengaruhi Anda)",
         "insert_trailing_colon_mentions": "Tambahkan sebuah karakter titik dua sesudah sebutan pengguna dari awal pesan",
         "invite_controls": {
             "default_label": "Izinkan pengguna mengundang Anda ke ruangan"
@@ -3283,7 +3269,6 @@
         },
         "empty_description": "Gunakan “%(replyInThread)s” ketika berada di atas pesan.",
         "empty_title": "Utas membantu percakapan Anda sesuai dengan topik dan mudah untuk dilacak.",
-        "error_start_thread_existing_relation": "Tidak dapat membuat utasan dari sebuah peristiwa dengan relasi yang sudah ada",
         "mark_all_read": "Tandai semua sebagai dibaca",
         "my_threads": "Utasan saya",
         "my_threads_description": "Menampilkan semua utasan yang Anda berpartisipasi",
@@ -3327,7 +3312,6 @@
             "unable_to_decrypt": "Tidak dapat mendekripsi pesan"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Mendekripsi",
         "download_action_downloading": "Mengunduh",
         "download_failed": "Pengunduhan gagal",
         "download_failed_description": "Terjadi kesalahan saat mengunduh berkas ini",
@@ -3525,10 +3509,7 @@
             "removed": "Widget %(widgetName)s dihapus oleh %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Tutup kutip",
             "copy_link_thread": "Salin tautan ke utasan",
-            "expand_reply_chain": "Buka kutip",
-            "label": "Aksi Pesan",
             "view_in_room": "Tampilkan di ruangan"
         },
         "mjolnir": {

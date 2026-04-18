@@ -31,6 +31,7 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 import { getByTestId } from "@testing-library/dom";
 
 import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
+import * as EventTileFactory from "../../../../../src/events/EventTileFactory";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { type RoomContextType, TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
@@ -106,7 +107,7 @@ describe("EventTile", () => {
     });
 
     afterEach(() => {
-        jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
+        jest.restoreAllMocks();
     });
 
     describe("EventTile thread summary", () => {
@@ -200,6 +201,19 @@ describe("EventTile", () => {
                 expect(screen.getByText("Pinned message")).toBeInTheDocument();
             },
         );
+
+        it("renders the tile error fallback when tile rendering throws", async () => {
+            jest.spyOn(console, "error").mockImplementation(() => {});
+            jest.spyOn(EventTileFactory, "renderTile").mockImplementation(() => {
+                throw new Error("Boom");
+            });
+
+            getComponent();
+
+            await waitFor(() => {
+                expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
+            });
+        });
     });
 
     describe("EventTile in the right panel", () => {

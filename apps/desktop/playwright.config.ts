@@ -8,25 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { defineConfig } from "@playwright/test";
 
-const projects = [
-    "macos",
-    "win-x64",
-    "win-ia32",
-    "win-arm64",
-    "linux-amd64-sqlcipher-system",
-    "linux-amd64-sqlcipher-static",
-    "linux-arm64-sqlcipher-system",
-    "linux-arm64-sqlcipher-static",
-];
-
 export default defineConfig({
-    // Allows the GitHub action to specify a project name (OS + arch) for the combined report to make sense
-    // workaround for https://github.com/microsoft/playwright/issues/33521
-    projects: process.env.CI
-        ? projects.map((name) => ({
-              name,
-          }))
-        : undefined,
+    projects: [{ name: "Desktop" }],
+    tag: process.env.PW_TAG ? `@${process.env.PW_TAG}` : undefined,
     use: {
         viewport: { width: 1280, height: 720 },
         video: "retain-on-failure",

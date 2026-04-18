@@ -9,8 +9,9 @@ exports[`ConfirmKeyStorageOffDialog renders 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8 _destructive_1r8kr_34"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"

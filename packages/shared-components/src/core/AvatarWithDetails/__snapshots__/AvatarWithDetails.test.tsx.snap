@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AvatarWithDetails > renders a textual event 1`] = `
+<div>
+  <div
+    class="AvatarWithDetails-module_avatarWithDetails"
+  >
+    <div
+      style="width: 40px; height: 40px; background-color: rgb(136, 136, 136); border-radius: 50%;"
+    />
+    <div
+      class="Flex-module_flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+    >
+      <span
+        class="AvatarWithDetails-module_title"
+      >
+        Room Name
+      </span>
+      <span
+        class="AvatarWithDetails-module_details"
+      >
+        Details about the avatar go here
+      </span>
+    </div>
+  </div>
+</div>
+`;

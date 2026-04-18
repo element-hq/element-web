@@ -3,29 +3,29 @@
 exports[`LinkPreview > renders a preview 1`] = `
 <div>
   <div
-    class="container"
+    class="LinkPreview-module_container"
   >
     <div
-      class="wrapImageCaption"
+      class="LinkPreview-module_wrapImageCaption"
     >
       <button
         aria-label="View image"
-        class="image"
+        class="LinkPreview-module_image"
       >
         <img
           alt=""
-          class="thumbnail"
+          class="LinkPreview-module_thumbnail"
           src="/static/element.png"
         />
       </button>
       <div
-        class="caption"
+        class="LinkPreview-module_caption"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
         >
           <a
-            class="link"
+            class="LinkPreview-module_link"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -39,7 +39,7 @@ exports[`LinkPreview > renders a preview 1`] = `
           </span>
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
         >
           A simple description
         </p>
@@ -52,19 +52,19 @@ exports[`LinkPreview > renders a preview 1`] = `
 exports[`LinkPreview > renders a preview with just a title 1`] = `
 <div>
   <div
-    class="container"
+    class="LinkPreview-module_container"
   >
     <div
-      class="wrapImageCaption"
+      class="LinkPreview-module_wrapImageCaption"
     >
       <div
-        class="caption"
+        class="LinkPreview-module_caption"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
         >
           <a
-            class="link"
+            class="LinkPreview-module_link"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -81,19 +81,19 @@ exports[`LinkPreview > renders a preview with just a title 1`] = `
 exports[`LinkPreview > renders a preview with just a title and description 1`] = `
 <div>
   <div
-    class="container"
+    class="LinkPreview-module_container"
   >
     <div
-      class="wrapImageCaption"
+      class="LinkPreview-module_wrapImageCaption"
     >
       <div
-        class="caption"
+        class="LinkPreview-module_caption"
       >
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 title"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkPreview-module_title"
         >
           <a
-            class="link"
+            class="LinkPreview-module_link"
             href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
@@ -102,7 +102,7 @@ exports[`LinkPreview > renders a preview with just a title and description 1`] =
           </a>
         </p>
         <p
-          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 container description"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 LinkedText-module_container LinkPreview-module_description"
         >
           A simple description with a link to 
           <a

@@ -17,6 +17,7 @@ import { _t } from "../../languageHandler";
  */
 export enum OidcClientError {
     InvalidQueryParameters = "Invalid query parameters for OIDC native login. `code` and `state` are required.",
+    InvalidFragmentParameters = "Invalid fragment parameters for OIDC native login. `code` and `state` are required.",
 }
 
 /**
@@ -30,6 +31,7 @@ export const getOidcErrorMessage = (error: Error): string | ReactNode => {
         case OidcError.MissingOrInvalidStoredState:
             return _t("auth|oidc|missing_or_invalid_stored_state");
         case OidcClientError.InvalidQueryParameters:
+        case OidcClientError.InvalidFragmentParameters:
         case OidcError.CodeExchangeFailed:
         case OidcError.InvalidBearerTokenResponse:
         case OidcError.InvalidIdToken:

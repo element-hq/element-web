@@ -19,7 +19,11 @@ import {
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { FileBodyFactory, renderMBody } from "../../../../../src/components/views/messages/MBodyFactory";
+import {
+    FileBodyFactory,
+    VideoBodyFactory,
+    renderMBody,
+} from "../../../../../src/components/views/messages/MBodyFactory";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
@@ -90,8 +94,12 @@ describe("MBodyFactory", () => {
             expect(container).toMatchSnapshot();
         });
 
-        it.each(["m.audio", "m.video", "m.text"])("returns null for unsupported msgtype %s", (msgtype) => {
+        it.each(["m.audio", "m.text"])("returns null for unsupported msgtype %s", (msgtype) => {
             expect(renderMBody({ ...props, mxEvent: mkEvent(msgtype) })).toBeNull();
+        });
+
+        it("returns the video body factory for m.video", () => {
+            expect(renderMBody({ ...props, mxEvent: mkEvent("m.video") })?.type).toBe(VideoBodyFactory);
         });
 
         it("returns null when msgtype is missing", () => {
@@ -116,7 +124,7 @@ describe("MBodyFactory", () => {
         });
     });
 
-    it.each(["m.file", "m.audio", "m.video"])(
+    it.each(["m.file", "m.audio"])(
         "renderMBody fallback shows %s generic placeholder when showFileInfo is true",
         async (msgtype) => {
             const mediaEvent = new MatrixEvent({

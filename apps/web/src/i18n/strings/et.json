@@ -32,7 +32,6 @@
         "cancel": "Loobu",
         "change": "Muuda",
         "clear": "Eemalda",
-        "click": "Klõpsi",
         "click_to_copy": "Kopeerimiseks klõpsa",
         "close": "Sulge",
         "collapse": "Ahenda",
@@ -66,7 +65,6 @@
         "go": "Mine",
         "go_back": "Mine tagasi",
         "got_it": "Selge lugu",
-        "hide": "Peida",
         "hide_advanced": "Peida lisaseadistused",
         "hold": "Pane ootele",
         "ignore": "Eira",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Lõimingute kasutamine ei ole lubatud"
     },
     "invite": {
-        "ask_anyway_description": "Allpool loetletud Matrix'i kasutajatunnustele ei leidunud profiile. Kas sa ikkagi tahaksid nendega vestlust alustada?",
-        "ask_anyway_label": "Ikkagi alusta vestlust",
-        "ask_anyway_never_warn_label": "Alusta siiski ja ära hoiata mind enam",
         "email_caption": "Saada kutse e-kirjaga",
         "email_limit_one": "Kutseid saad e-posti teel saata vaid ükshaaval",
         "email_use_default_is": "E-posti teel kutse saatmiseks kasuta isikutuvastusserverit. Võid kasutada <default>vaikimisi serverit (%(defaultIdentityServerName)s)</default> või määrata muud serverid <settings>seadistustes</settings>.",
@@ -2224,8 +2219,6 @@
             "aliases_section": "Jututubade aadressid",
             "avatar_field_label": "Jututoa tunnuspilt ehk avatar",
             "canonical_alias_field_label": "Põhiaadress",
-            "default_url_previews_off": "URL'ide eelvaated on vaikimisi lülitatud välja selles jututoas osalejate jaoks.",
-            "default_url_previews_on": "URL'ide eelvaated on vaikimisi kasutusel selles jututoas osalejate jaoks.",
             "description_space": "Muuda oma kogukonnakeskuse seadistusi.",
             "error_creating_alias_description": "Aadressi loomisel tekkis viga. See kas on serveri poolt keelatud või tekkis ajutine tõrge.",
             "error_creating_alias_title": "Viga aadressi loomisel",
@@ -2256,12 +2249,7 @@
             "published_aliases_explainer_space": "Avaldatud aadresse saab igaüks igast serverist kasutada liitumiseks sinu kogukonnakeskusega.",
             "published_aliases_section": "Avaldatud aadressid",
             "save": "Salvesta muutused",
-            "topic_field_label": "Jututoa teema",
-            "url_preview_encryption_warning": "Krüptitud jututubades, nagu see praegune, URL'ide eelvaated ei ole vaikimisi kasutusel. See tagab, et sinu koduserver (kus eelvaated luuakse) ei saaks koguda teavet viidete kohta, mida sa siin jututoas näed.",
-            "url_preview_explainer": "Kui keegi lisab oma sõnumisse URL'i, siis võidakse näidata selle URL'i eelvaadet, mis annab lisateavet tema kohta, nagu näiteks pealkiri, kirjeldus ja kuidas ta välja näeb.",
-            "url_previews_section": "URL'ide eelvaated",
-            "user_url_previews_default_off": "Vaikimisi oled URL'ide eelvaated <a>lülitanud välja</a>.",
-            "user_url_previews_default_on": "Vaikimisi oled URL'ide eelvaated <a>võtnud kasutusele</a>."
+            "topic_field_label": "Jututoa teema"
         },
         "notifications": {
             "browse_button": "Sirvi",
@@ -2683,8 +2671,6 @@
             "username": "Kasutajanimi"
         },
         "inline_url_previews_default": "Luba URL'ide vaikimisi eelvaated",
-        "inline_url_previews_room": "Luba URL'ide vaikimisi eelvaated selles jututoas osalejate jaoks",
-        "inline_url_previews_room_account": "Luba URL'ide eelvaated selle jututoa jaoks (mõjutab vaid sind)",
         "insert_trailing_colon_mentions": "Mainimiste järel näita sõnumi alguses koolonit",
         "invite_controls": {
             "default_label": "Luba kasutajatel sind kutsida jututubadesse"
@@ -3296,7 +3282,6 @@
         },
         "empty_description": "Sõnumi kohtmenüüst vali „%(replyInThread)s“",
         "empty_title": "Jutulõngad aitavad hoida vestlusi teemakohastena ja hallatavatena.",
-        "error_start_thread_existing_relation": "Jutulõnga ei saa luua sõnumist, mis juba on jutulõnga osa",
         "mark_all_read": "Märgi kõik loetuks",
         "my_threads": "Minu jutulõngad",
         "my_threads_description": "Näitab kõiki jutulõngasid, kus sa oled osalenud",
@@ -3340,7 +3325,6 @@
             "unable_to_decrypt": "Sõnumi dekrüptimine ei õnnestu"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dekrüptin sisu",
         "download_action_downloading": "Laadin alla",
         "download_failed": "Allalaadimine ei õnnestunud",
         "download_failed_description": "Selle faili allalaadimisel tekkis viga",
@@ -3538,10 +3522,7 @@
             "removed": "%(senderName)s eemaldas vidina %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Peida viidatud sisu",
             "copy_link_thread": "Kopeeri jutulõnga link",
-            "expand_reply_chain": "Näita viidatud sisu",
-            "label": "Tegevused sõnumitega",
             "view_in_room": "Vaata jututoas"
         },
         "mjolnir": {

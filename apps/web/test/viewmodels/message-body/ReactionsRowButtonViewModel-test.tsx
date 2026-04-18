@@ -10,8 +10,8 @@ import { EventType, type MatrixClient, type MatrixEvent, RelationType, type Room
 import {
     ReactionsRowButtonViewModel,
     type ReactionsRowButtonViewModelProps,
-} from "../../../src/viewmodels/message-body/ReactionsRowButtonViewModel";
-import { type ReactionsRowButtonTooltipViewModel } from "../../../src/viewmodels/message-body/ReactionsRowButtonTooltipViewModel";
+} from "../../../src/viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
+import { type ReactionsRowButtonTooltipViewModel } from "../../../src/viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonTooltipViewModel";
 import { createTestClient, mkEvent, mkStubRoom } from "../../test-utils";
 import dis from "../../../src/dispatcher/dispatcher";
 
