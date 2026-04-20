@@ -244,7 +244,7 @@ describe("ImageBodyViewModel", () => {
         const vm = createVm({ mediaVisible: true });
         vm.loadInitialMediaIfVisible();
 
-        imageSizeWatcher?.(undefined, undefined, undefined, undefined, ImageSize.Small);
+        imageSizeWatcher?.(undefined, undefined, undefined, undefined, ImageSize.Large);
 
         expect(vm.getSnapshot()).toMatchObject({
             state: ImageBodyViewState.READY,
