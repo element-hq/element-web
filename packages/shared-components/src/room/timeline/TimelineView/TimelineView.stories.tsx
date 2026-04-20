@@ -170,6 +170,8 @@ class StoryTimelineViewModel
     }
 
     public onRequestMoreItems(direction: "backward" | "forward"): void {
+        logTimelineViewStoryEvent(this.loggingEnabled, "onRequestMoreItems(" + direction + ")");
+        
         this.callbacks.onRequestMoreItems(direction);
 
         const currentSnapshot = this.getSnapshot();

@@ -124,39 +124,3 @@ export function getContiguousWindowShift<TItem extends TimelineItem>(prevItems: 
 
     return nextOverlapStart - prevOverlapStart;
 }
-
-/**
- * Being at the bottom of the currently loaded window only counts as being at
- * the true live edge when forward pagination is exhausted.
- */
-export function getIsAtLiveEdgeFromBottomState({
-    atBottom,
-    canPaginateForward,
-}: {
-    atBottom: boolean;
-    canPaginateForward: boolean;
-}): boolean {
-    return atBottom && !canPaginateForward;
-}
-
-/**
- * Updates a "stable consecutive measurements" counter by comparing the current
- * numeric measurement to the previous one within a tolerance.
- */
-export function getUpdatedStableMeasurementCount({
-    previousValue,
-    nextValue,
-    currentCount,
-    tolerance,
-}: {
-    previousValue: number | null;
-    nextValue: number;
-    currentCount: number;
-    tolerance: number;
-}): number {
-    if (previousValue !== null && Math.abs(previousValue - nextValue) <= tolerance) {
-        return currentCount + 1;
-    }
-
-    return 1;
-}

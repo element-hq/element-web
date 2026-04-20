@@ -5,52 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useRef, useState, type JSX } from "react";
-import { Virtuoso, type ListRange, type VirtuosoHandle } from "react-virtuoso";
+import React, { useCallback, useRef, useState, type JSX } from "react";
+import { Virtuoso, type ListRange } from "react-virtuoso";
 import classNames from "classnames";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import {
-    getContiguousWindowShift,
-    getIsAtLiveEdgeFromBottomState,
-    getUpdatedStableMeasurementCount,
-    INITIAL_FIRST_ITEM_INDEX,
-} from "./utils";
+import { getContiguousWindowShift, INITIAL_FIRST_ITEM_INDEX } from "./utils";
 import styles from "./TimelineView.module.css";
 import type { TimelineItem, TimelineViewProps } from "./types";
-
-const SCROLL_ALIGNMENT_TOLERANCE_PX = 8;
-const SCROLL_STABILIZATION_TOLERANCE_PX = 4;
-const REQUIRED_STABLE_MEASUREMENTS = 2;
-const REQUIRED_STABLE_ALIGNMENT_MEASUREMENTS = 2;
-
-type ScrollTargetGeometry = {
-    localIndex: number;
-    scroller: HTMLElement;
-    targetTop: number;
-    targetHeight: number;
-    desiredScrollTop: number;
-    distanceToDesired: number;
-};
-
-function getDesiredScrollTop(params: {
-    position: "top" | "center" | "bottom" | undefined;
-    targetTop: number;
-    targetHeight: number;
-    scrollerClientHeight: number;
-}): number {
-    const { position, targetTop, targetHeight, scrollerClientHeight } = params;
-
-    if (position === "top") {
-        return targetTop;
-    }
-
-    if (position === "center") {
-        return targetTop - (scrollerClientHeight - targetHeight) / 2;
-    }
-
-    return targetTop + targetHeight - scrollerClientHeight;
-}
 
 /**
  * Renders a virtualized room timeline backed by a {@link TimelineViewModel}.
@@ -76,72 +38,13 @@ export function TimelineView<TItem extends TimelineItem>({
 
     // Track live viewport state and imperative Virtuoso access.
     const [isAtBottom, setIsAtBottom] = useState(false);
-    const virtuosoRef = useRef<VirtuosoHandle | null>(null);
-    const scrollerElementRef = useRef<HTMLElement | null>(null);
 
     // Remember one-shot timeline signals across renders.
-    const lastIsAtLiveEdgeRef = useRef<boolean | null>(null);
+    const latestIsAtLiveEdgeRef = useRef<boolean | null>(null);
     const initialFillCompletedRef = useRef(false);
     const latestVisibleRangeRef = useRef<ListRange | null>(null);
-    const lastRequestedScrollTargetRef = useRef<string | null>(null);
-    const scrollTargetRetryCountRef = useRef(0);
-    const lastMeasuredDesiredScrollTopRef = useRef<number | null>(null);
-    const stableMeasurementCountRef = useRef(0);
-    const stableAlignedMeasurementCountRef = useRef(0);
-    const pendingScrollTargetRef = useRef<{
-        key: string;
-        localIndex: number;
-    } | null>(null);
     const renderedItemsRef = useRef(snapshot.items);
     const renderedFirstItemIndexRef = useRef(INITIAL_FIRST_ITEM_INDEX);
-    const renderedScrollTargetRef = useRef(snapshot.scrollTarget);
-
-    const getScrollTargetGeometry = useCallback((): ScrollTargetGeometry | null => {
-        const scrollTarget = renderedScrollTargetRef.current;
-        if (!scrollTarget) {
-            return null;
-        }
-
-        const items = renderedItemsRef.current;
-        const localIndex = items.findIndex((item) => item.key === scrollTarget.targetKey);
-        if (localIndex < 0) {
-            return null;
-        }
-
-        const scroller = scrollerElementRef.current;
-        if (!scroller) {
-            return null;
-        }
-
-        const targetElement = scroller.querySelector<HTMLElement>(`[data-index="${localIndex}"]`);
-        if (!targetElement) {
-            return null;
-        }
-
-        const targetTop = targetElement.offsetTop;
-        const targetHeight = targetElement.offsetHeight;
-        const desiredScrollTop = Math.max(
-            0,
-            Math.min(
-                scroller.scrollHeight - scroller.clientHeight,
-                getDesiredScrollTop({
-                    position: scrollTarget.position,
-                    targetTop,
-                    targetHeight,
-                    scrollerClientHeight: scroller.clientHeight,
-                }),
-            ),
-        );
-
-        return {
-            localIndex,
-            scroller,
-            targetTop,
-            targetHeight,
-            desiredScrollTop,
-            distanceToDesired: desiredScrollTop - scroller.scrollTop,
-        };
-    }, []);
 
     // Keep Virtuoso's absolute index stable while the loaded window slides.
     const firstItemIndexRenderStateRef = useRef<{
@@ -162,12 +65,6 @@ export function TimelineView<TItem extends TimelineItem>({
         };
         initialFillCompletedRef.current = false;
         latestVisibleRangeRef.current = null;
-        lastRequestedScrollTargetRef.current = null;
-        scrollTargetRetryCountRef.current = 0;
-        lastMeasuredDesiredScrollTopRef.current = null;
-        stableMeasurementCountRef.current = 0;
-        stableAlignedMeasurementCountRef.current = 0;
-        pendingScrollTargetRef.current = null;
     } else if (firstItemIndexRenderStateRef.current.items !== snapshot.items) {
         const windowShift = getContiguousWindowShift(firstItemIndexRenderStateRef.current.items, snapshot.items);
         const previousFirstItemIndex = firstItemIndexRenderStateRef.current.firstItemIndex;
@@ -185,42 +82,6 @@ export function TimelineView<TItem extends TimelineItem>({
 
     renderedItemsRef.current = snapshot.items;
     renderedFirstItemIndexRef.current = firstItemIndex;
-    renderedScrollTargetRef.current = snapshot.scrollTarget;
-
-    // Acknowledge one-shot scroll targets only after the measured placement has
-    // stayed aligned for consecutive measurements.
-    const acknowledgePendingScrollTargetIfVisible = useCallback(
-        (range: ListRange) => {
-            const pendingScrollTarget = pendingScrollTargetRef.current;
-            if (!pendingScrollTarget) {
-                return;
-            }
-
-            const absoluteTargetIndex = firstItemIndex + pendingScrollTarget.localIndex;
-            if (absoluteTargetIndex < range.startIndex || absoluteTargetIndex > range.endIndex) {
-                return;
-            }
-
-            const geometry = getScrollTargetGeometry();
-            if (!geometry || Math.abs(geometry.distanceToDesired) > SCROLL_ALIGNMENT_TOLERANCE_PX) {
-                stableAlignedMeasurementCountRef.current = 0;
-                return;
-            }
-
-            stableAlignedMeasurementCountRef.current += 1;
-            if (stableAlignedMeasurementCountRef.current < REQUIRED_STABLE_ALIGNMENT_MEASUREMENTS) {
-                return;
-            }
-
-            pendingScrollTargetRef.current = null;
-            scrollTargetRetryCountRef.current = 0;
-            lastMeasuredDesiredScrollTopRef.current = null;
-            stableMeasurementCountRef.current = 0;
-            stableAlignedMeasurementCountRef.current = 0;
-            vm.onScrollTargetReached();
-        },
-        [firstItemIndex, getScrollTargetGeometry, vm],
-    );
 
     // Forward Virtuoso boundary and viewport events into the timeline view model.
     const handleStartReached = useCallback(() => {
@@ -242,92 +103,17 @@ export function TimelineView<TItem extends TimelineItem>({
     const handleBottomStateChange = useCallback(
         (nextIsAtBottom: boolean) => {
             setIsAtBottom(nextIsAtBottom);
-            const nextIsAtLiveEdge = getIsAtLiveEdgeFromBottomState({
-                atBottom: nextIsAtBottom,
-                canPaginateForward: snapshot.canPaginateForward,
-            });
 
-            if (lastIsAtLiveEdgeRef.current === nextIsAtLiveEdge) {
+            const nextIsAtLiveEdge = nextIsAtBottom && !snapshot.canPaginateForward;
+            if (latestIsAtLiveEdgeRef.current === nextIsAtLiveEdge) {
                 return;
             }
 
-            lastIsAtLiveEdgeRef.current = nextIsAtLiveEdge;
+            latestIsAtLiveEdgeRef.current = nextIsAtLiveEdge;
             vm.onIsAtLiveEdgeChanged(nextIsAtLiveEdge);
         },
         [snapshot.canPaginateForward, vm],
     );
-
-    // Drive explicit anchor jumps through the Virtuoso handle.
-    const tryApplyScrollTarget = useCallback((forceRetry = false) => {
-        if (!initialFillCompletedRef.current || !latestVisibleRangeRef.current) {
-            return;
-        }
-
-        const scrollTarget = renderedScrollTargetRef.current;
-        if (!scrollTarget) {
-            pendingScrollTargetRef.current = null;
-            lastRequestedScrollTargetRef.current = null;
-            scrollTargetRetryCountRef.current = 0;
-            lastMeasuredDesiredScrollTopRef.current = null;
-            stableMeasurementCountRef.current = 0;
-            stableAlignedMeasurementCountRef.current = 0;
-            return;
-        }
-
-        const scrollTargetDescriptor = `${scrollTarget.targetKey}:${scrollTarget.position ?? "bottom"}`;
-        if (lastRequestedScrollTargetRef.current !== scrollTargetDescriptor) {
-            scrollTargetRetryCountRef.current = 0;
-            lastMeasuredDesiredScrollTopRef.current = null;
-            stableMeasurementCountRef.current = 0;
-            stableAlignedMeasurementCountRef.current = 0;
-        } else if (!forceRetry) {
-            return;
-        } else if (scrollTargetRetryCountRef.current >= 3) {
-            return;
-        }
-
-        const items = renderedItemsRef.current;
-        const currentFirstItemIndex = renderedFirstItemIndexRef.current;
-        const localIndex = items.findIndex((item) => item.key === scrollTarget.targetKey);
-        if (localIndex < 0) {
-            return;
-        }
-
-        pendingScrollTargetRef.current = {
-            key: scrollTarget.targetKey,
-            localIndex,
-        };
-        lastRequestedScrollTargetRef.current = scrollTargetDescriptor;
-        const geometry = getScrollTargetGeometry();
-        if (geometry) {
-            stableMeasurementCountRef.current = getUpdatedStableMeasurementCount({
-                previousValue: lastMeasuredDesiredScrollTopRef.current,
-                nextValue: geometry.desiredScrollTop,
-                currentCount: stableMeasurementCountRef.current,
-                tolerance: SCROLL_STABILIZATION_TOLERANCE_PX,
-            });
-            lastMeasuredDesiredScrollTopRef.current = geometry.desiredScrollTop;
-
-            if (stableMeasurementCountRef.current < REQUIRED_STABLE_MEASUREMENTS) {
-                requestAnimationFrame(() => {
-                    tryApplyScrollTarget(true);
-                });
-                return;
-            }
-
-            scrollTargetRetryCountRef.current += 1;
-            virtuosoRef.current?.scrollTo({
-                top: geometry.desiredScrollTop,
-                behavior: "auto",
-            });
-        } else {
-            scrollTargetRetryCountRef.current += 1;
-            virtuosoRef.current?.scrollToIndex({
-                index: currentFirstItemIndex + localIndex,
-                behavior: "auto",
-            });
-        }
-    }, [getScrollTargetGeometry]);
 
     const handleRangeChanged = useCallback(
         (range: ListRange) => {
@@ -347,46 +133,19 @@ export function TimelineView<TItem extends TimelineItem>({
                     endKey: items[endIndex]!.key,
                 });
             }
-
-            acknowledgePendingScrollTargetIfVisible(range);
-            const geometry = getScrollTargetGeometry();
-            if (pendingScrollTargetRef.current && geometry) {
-                if (Math.abs(geometry.distanceToDesired) > SCROLL_ALIGNMENT_TOLERANCE_PX) {
-                    tryApplyScrollTarget(true);
-                    return;
-                }
-
-                // Keep observing aligned targets until acknowledgement is stable,
-                // even if we have exhausted the active scroll retry budget.
-                requestAnimationFrame(() => {
-                    acknowledgePendingScrollTargetIfVisible(range);
-                });
-            }
-
-            tryApplyScrollTarget();
         },
-        [acknowledgePendingScrollTargetIfVisible, getScrollTargetGeometry, tryApplyScrollTarget, vm],
+        [vm],
     );
 
     const handleItemsRendered = useCallback(() => {
-        if (initialFillCompletedRef.current) {
-            return;
+        if (!initialFillCompletedRef.current) {
+            initialFillCompletedRef.current = true;
+            vm.onInitialFillCompleted();
         }
-
-        initialFillCompletedRef.current = true;
-        vm.onInitialFillCompleted();
     }, [vm]);
-
-    useEffect(() => {
-        tryApplyScrollTarget();
-    }, [tryApplyScrollTarget, snapshot.scrollTarget, snapshot.items, firstItemIndex]);
 
     return (
         <Virtuoso
-            ref={virtuosoRef}
-            scrollerRef={(element) => {
-                scrollerElementRef.current = element instanceof HTMLElement ? element : null;
-            }}
             className={classNames(styles.timeline, className)}
             data={snapshot.items}
             firstItemIndex={firstItemIndex}
