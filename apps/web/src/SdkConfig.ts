@@ -20,6 +20,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     branding: {
         logo_link_url: "https://element.io",
         auth_header_logo_url: "themes/element/img/logos/element-logo.svg",
+        welcome_background_url: "themes/element/img/backgrounds/lake.jpg",
     },
     help_url: "https://element.io/help",
     help_encryption_url: "https://element.io/help#encryption",

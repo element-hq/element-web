@@ -53,7 +53,7 @@ export interface IConfigOptions {
 
     brand: string;
     branding: {
-        welcome_background_url?: string | string[]; // chosen at random if array
+        welcome_background_url: string | string[]; // chosen at random if array
         logo_link_url: string;
         auth_header_logo_url?: string;
         auth_footer_links?: { text: string; url: string }[];
