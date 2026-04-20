@@ -463,7 +463,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                     );
                 }}
             >
-                {_t("Sign in manually")}
+                {_t("auth|sign_in_manually")}
             </Button>
         );
     };
@@ -501,7 +501,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             <>
                 <Button className="mx_Login_fullWidthButton" kind="primary" size="sm" onClick={this.startLoginWithQR}>
                     <QrCodeIcon />
-                    {_t("Sign in with QR code")}
+                    {_t("auth|sign_in_with_qr")}
                 </Button>
             </>
         );

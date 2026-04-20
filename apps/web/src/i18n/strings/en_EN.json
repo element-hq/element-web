@@ -339,9 +339,11 @@
         "sign_in_description": "Use your account to continue.",
         "sign_in_instead": "Sign in instead",
         "sign_in_instead_prompt": "Already have an account? <a>Sign in here</a>",
+        "sign_in_manually": "Sign in manually",
         "sign_in_or_register": "Sign In or Create Account",
         "sign_in_or_register_description": "Use your account or create a new one to continue.",
         "sign_in_prompt": "Got an account? <a>Sign in</a>",
+        "sign_in_with_qr": "Sign in with QR code",
         "sign_in_with_sso": "Sign in with single sign-on",
         "signing_in": "Signing In…",
         "soft_logout": {
