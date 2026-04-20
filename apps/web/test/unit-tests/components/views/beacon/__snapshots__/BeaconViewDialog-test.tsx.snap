@@ -41,7 +41,7 @@ exports[`<BeaconViewDialog /> renders own beacon status when user is live sharin
   class="mx_DialogOwnBeaconStatus"
 >
   <span
-    class="_avatar_7h2br_8 mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar _avatar-imageless_7h2br_55"
+    class="_avatar_va14e_8 mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar _avatar-imageless_va14e_55"
     data-color="6"
     data-testid="avatar-img"
     data-type="round"
