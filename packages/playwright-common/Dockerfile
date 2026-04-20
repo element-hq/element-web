@@ -9,10 +9,13 @@ WORKDIR /work
 RUN apt-get update && \
     apt-get -y install docker.io fonts-dejavu && \
     apt-get purge -y --auto-remove && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/*
 
 # Install the matching playwright runtime, the docker image only includes browsers
 RUN npm i -g playwright@${PLAYWRIGHT_VERSION}
+
+# switch to pwuser
+USER 1001:1001
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
