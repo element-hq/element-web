@@ -146,7 +146,10 @@ export function ImageBodyFactory({
     permalinkCreator,
     showFileInfo,
 }: Readonly<
-    Pick<IBodyProps, "mxEvent" | "mediaEventHelper" | "forExport" | "maxImageHeight" | "permalinkCreator" | "showFileInfo">
+    Pick<
+        IBodyProps,
+        "mxEvent" | "mediaEventHelper" | "forExport" | "maxImageHeight" | "permalinkCreator" | "showFileInfo"
+    >
 >): JSX.Element {
     const { timelineRenderingType } = useContext(RoomContext);
     const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);

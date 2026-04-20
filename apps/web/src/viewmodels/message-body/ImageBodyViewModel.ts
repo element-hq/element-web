@@ -175,10 +175,10 @@ export class ImageBodyViewModel
         const autoplayGifs = SettingsStore.getValue("autoplayGifs") as boolean;
         const contentUrl = ImageBodyViewModel.getContentUrl(props, state);
         const thumbnailSrc = props.forExport
-            ? contentUrl ?? undefined
+            ? (contentUrl ?? undefined)
             : state.isAnimated && autoplayGifs
-              ? contentUrl ?? undefined
-              : state.thumbUrl ?? contentUrl ?? undefined;
+              ? (contentUrl ?? undefined)
+              : (state.thumbUrl ?? contentUrl ?? undefined);
 
         if (state.error || state.imgError) {
             return {
@@ -216,7 +216,11 @@ export class ImageBodyViewModel
 
     private static getContentUrl(props: ImageBodyViewModelProps, state: InternalState): string | null {
         if (props.forExport) {
-            return props.mxEvent.getContent<ImageContent>().url ?? props.mxEvent.getContent<ImageContent>().file?.url ?? null;
+            return (
+                props.mxEvent.getContent<ImageContent>().url ??
+                props.mxEvent.getContent<ImageContent>().file?.url ??
+                null
+            );
         }
 
         if (props.mediaEventHelper?.media.isEncrypted) {
@@ -268,7 +272,11 @@ export class ImageBodyViewModel
     }
 
     private scheduleBlurhashPlaceholder(): void {
-        if (!this.props.mxEvent.getContent<ImageContent>().info?.[BLURHASH_FIELD] || this.state.imgLoaded || this.state.imgError) {
+        if (
+            !this.props.mxEvent.getContent<ImageContent>().info?.[BLURHASH_FIELD] ||
+            this.state.imgLoaded ||
+            this.state.imgError
+        ) {
             return;
         }
 
@@ -384,8 +392,10 @@ export class ImageBodyViewModel
 
                 try {
                     if (
-                        (content.info as ImageInfoWithAnimationFlag | undefined)?.["org.matrix.msc4230.is_animated"] === false ||
-                        (this.props.mediaEventHelper && (await blobIsAnimated(await this.props.mediaEventHelper.sourceBlob.value)) === false)
+                        (content.info as ImageInfoWithAnimationFlag | undefined)?.["org.matrix.msc4230.is_animated"] ===
+                            false ||
+                        (this.props.mediaEventHelper &&
+                            (await blobIsAnimated(await this.props.mediaEventHelper.sourceBlob.value)) === false)
                     ) {
                         isAnimated = false;
                     }

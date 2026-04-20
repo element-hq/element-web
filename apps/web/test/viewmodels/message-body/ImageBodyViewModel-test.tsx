@@ -95,7 +95,9 @@ describe("ImageBodyViewModel", () => {
             downloadSource: jest.fn(),
         }) as unknown as Media;
 
-    const createVm = (overrides: Partial<ConstructorParameters<typeof ImageBodyViewModel>[0]> = {}): ImageBodyViewModel =>
+    const createVm = (
+        overrides: Partial<ConstructorParameters<typeof ImageBodyViewModel>[0]> = {},
+    ): ImageBodyViewModel =>
         new ImageBodyViewModel({
             mxEvent: createEvent(),
             mediaVisible: false,
@@ -193,11 +195,11 @@ describe("ImageBodyViewModel", () => {
             mxEvent: createEvent({
                 content: {
                     info: {
-                        w: 320,
-                        h: 240,
-                        size: 48_000,
-                        mimetype: "image/gif",
-                        thumbnail_info: { mimetype: "image/png" },
+                        "w": 320,
+                        "h": 240,
+                        "size": 48_000,
+                        "mimetype": "image/gif",
+                        "thumbnail_info": { mimetype: "image/png" },
                         "org.matrix.msc4230.is_animated": true,
                     },
                 },
