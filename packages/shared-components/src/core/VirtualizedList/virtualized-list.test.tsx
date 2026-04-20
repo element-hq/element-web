@@ -12,7 +12,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import { FlatVirtualizedList, type FlatVirtualizedListProps } from "./FlatVirtualizedList";
 import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "./GroupedVirtualizedList";
-import { useVirtualizedList, type VirtualizedListContext } from "./virtualized-list";
+import type { VirtualizedListContext } from "./virtualized-list";
 
 // ─── Test types ──────────────────────────────────────────────────────────────
 
@@ -210,112 +210,6 @@ const virtuosoWrapper = ({ children }: PropsWithChildren): React.JSX.Element => 
     </VirtuosoMockContext.Provider>
 );
 
-interface HookHarnessProps {
-    items: TestItem[];
-    onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-    rangeChanged?: (range: { startIndex: number; endIndex: number }) => void;
-    mapRangeIndex?: (index: number) => number;
-}
-
-function HookHarness({ items, onKeyDown, rangeChanged, mapRangeIndex }: HookHarnessProps): React.JSX.Element {
-    const list = useVirtualizedList<TestItem, undefined>({
-        items,
-        getItemKey: (item) => item.id,
-        isItemFocusable: (item) => item.isFocusable !== false,
-        onKeyDown,
-        rangeChanged,
-        mapRangeIndex,
-    });
-
-    return (
-        <div
-            ref={(element) => list.scrollerRef(element)}
-            role="grid"
-            tabIndex={0}
-            onKeyDown={list.onKeyDown}
-            onFocus={list.onFocus}
-            onBlur={list.onBlur}
-        >
-            <div data-testid="hook-focused-state">{list.context.focused ? "focused" : "blurred"}</div>
-            <button
-                type="button"
-                data-testid="hook-range-trigger"
-                onClick={() => list.rangeChanged({ startIndex: 0, endIndex: 4 })}
-            >
-                apply range
-            </button>
-            {items.map((item, index) => (
-                <button
-                    key={item.id}
-                    type="button"
-                    data-testid={`hook-row-${index}`}
-                    tabIndex={list.context.tabIndexKey === item.id ? 0 : -1}
-                    onFocus={(e) => list.onFocusForGetItemComponent(item, e)}
-                >
-                    {item.name}
-                </button>
-            ))}
-        </div>
-    );
-}
-
-function SwappableScrollerHarness({ items }: { items: TestItem[] }): React.JSX.Element {
-    const [useAlternateScroller, setUseAlternateScroller] = React.useState(false);
-    const list = useVirtualizedList<TestItem, undefined>({
-        items,
-        getItemKey: (item) => item.id,
-        isItemFocusable: (item) => item.isFocusable !== false,
-        scrollSettleFocusBehavior: "last-visible",
-    });
-
-    return (
-        <div>
-            <button
-                type="button"
-                data-testid="swap-scroller"
-                onClick={() => setUseAlternateScroller((current) => !current)}
-            >
-                swap
-            </button>
-            <button
-                type="button"
-                data-testid="range-a"
-                onClick={() => list.rangeChanged({ startIndex: 0, endIndex: 4 })}
-            >
-                range a
-            </button>
-            <button
-                type="button"
-                data-testid="range-b"
-                onClick={() => list.rangeChanged({ startIndex: 2, endIndex: 6 })}
-            >
-                range b
-            </button>
-            <div
-                ref={(element) => list.scrollerRef(element)}
-                data-testid={useAlternateScroller ? "hook-scroller-b" : "hook-scroller-a"}
-                role="grid"
-                tabIndex={0}
-                onKeyDown={list.onKeyDown}
-                onFocus={list.onFocus}
-                onBlur={list.onBlur}
-            >
-                {items.map((item, index) => (
-                    <button
-                        key={item.id}
-                        type="button"
-                        data-testid={`swap-row-${index}`}
-                        tabIndex={list.context.tabIndexKey === item.id ? 0 : -1}
-                        onFocus={(e) => list.onFocusForGetItemComponent(item, e)}
-                    >
-                        {item.name}
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
-}
-
 describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant) => {
     const mockGetItemComponent = vi.fn();
     const mockIsItemFocusable = vi.fn();
@@ -355,7 +249,6 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
     });
 
     afterEach(() => {
-        vi.useRealTimers();
         vi.restoreAllMocks();
     });
 
@@ -486,10 +379,13 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // Then press PageUp to jump up by viewport size
             fireEvent.keyDown(container, { code: "PageUp" });
 
-            // PageUp commits focus to the last visible item after the viewport settles.
-            const items = container.querySelectorAll(".mx_item");
-            const lastIndex = items.length - 1;
-            expectTabIndex(items[lastIndex], "0");
+            // Verify focus moved up – use the variant's navigable selector so
+            // group headers (which are also navigable) are included.
+            const allNav = container.querySelectorAll(variant.navigableSelector);
+            // PageUp should move back to the first navigable element since we only have a few items
+            expectTabIndex(allNav[0], "0");
+            const lastIndex = allNav.length - 1;
+            expectTabIndex(allNav[lastIndex], "-1");
         });
 
         it("should not handle keyboard navigation when modifier keys are pressed", () => {
@@ -654,8 +550,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             expect(container).toBeDefined();
         });
 
-        it("should not scroll to top when clicking an item after manual scroll", async () => {
-            vi.useFakeTimers();
+        it("should not scroll to top when clicking an item after manual scroll", () => {
             // Create a larger list to enable meaningful scrolling
             const largerItems: TestItemWithSeparator[] = Array.from({ length: 50 }, (_, i) => ({
                 id: `item-${i}`,
@@ -679,11 +574,9 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             expectAttribute(items[0], "data-testid", "row-0");
 
             // Step 2: Simulate manual scrolling (mouse wheel, scroll bar drag, etc.)
+            // This changes which items are visible but DOES NOT change tabIndexKey
+            // tabIndexKey should still point to "item-0" but "item-0" is no longer visible
             fireEvent.scroll(listContainer, { target: { scrollTop: 300 } });
-            await act(async () => {
-                vi.advanceTimersByTime(200);
-                await Promise.resolve();
-            });
 
             // Step 3: After scrolling, different items should now be visible
             // but tabIndexKey should still point to "item-0" (which is no longer visible)
@@ -715,8 +608,6 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // item-0 should still not be visible (if the fix is working)
             const item0AfterClick = container.querySelector("[data-testid='row-0']");
             expect(item0AfterClick).toBeNull();
-
-            vi.useRealTimers();
         });
     });
 
@@ -791,9 +682,7 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
         const ITEM_HEIGHT = 52;
         const VIEWPORT_HEIGHT = 400;
 
-        const renderRealVirtualizedList = (
-            extraProps: Partial<FlatVirtualizedListProps<TestItemWithSeparator, any>> = {},
-        ): ReturnType<typeof render> => {
+        const renderRealVirtualizedList = (): ReturnType<typeof render> => {
             const largeItems: TestItemWithSeparator[] = Array.from({ length: 50 }, (_, i) => ({
                 id: `item-${i}`,
                 name: `Item ${i}`,
@@ -835,7 +724,6 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
                     role="grid"
                     style={{ height: `${VIEWPORT_HEIGHT}px` }}
                     fixedItemHeight={ITEM_HEIGHT}
-                    {...extraProps}
                 />,
             );
         };
@@ -906,32 +794,6 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             expect(document.activeElement).toBe(listContainer);
         });
 
-        it("should update focus to the last visible item after manual scroll when enabled", async () => {
-            const { container } = renderRealVirtualizedList({ scrollSettleFocusBehavior: "last-visible" });
-            const listContainer = screen.getByRole("grid");
-
-            await waitFor(() => {
-                expect(screen.getByTestId("row-0")).toBeDefined();
-            });
-
-            fireEvent.focus(listContainer);
-
-            await act(async () => {
-                fireEvent.scroll(listContainer, { target: { scrollTop: 300 } });
-            });
-
-            await waitFor(() => {
-                const focused = Array.from(container.querySelectorAll(".mx_item")).find(
-                    (el) => el.getAttribute("tabindex") === "0",
-                );
-                expect(focused).toBeDefined();
-                const visibleItems = container.querySelectorAll(".mx_item");
-                expect(focused).toBe(visibleItems[visibleItems.length - 1]);
-            });
-
-            expect(container.querySelector("[data-testid='row-0']")).toBeNull();
-        });
-
         it("should scroll up through many items with ArrowUp and virtualise later items out of the DOM", async () => {
             const { container } = renderRealVirtualizedList();
             const listContainer = screen.getByRole("grid");
@@ -975,116 +837,5 @@ describe.each<ListTestVariant>([flatVariant, groupedVariant])("$name", (variant)
             // Items near the bottom (e.g. item-30) should have been virtualised out.
             expect(container.querySelector("[data-testid='row-30']")).toBeNull();
         });
-    });
-});
-
-describe("useVirtualizedList hook", () => {
-    const hookItems: TestItem[] = Array.from({ length: 8 }, (_, index) => ({
-        id: `item-${index}`,
-        name: `Item ${index}`,
-    }));
-
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it("forwards unhandled key presses to the custom onKeyDown callback", () => {
-        const onKeyDown = vi.fn();
-
-        render(<HookHarness items={hookItems} onKeyDown={onKeyDown} />);
-
-        fireEvent.keyDown(screen.getByRole("grid"), { code: "Enter" });
-
-        expect(onKeyDown).toHaveBeenCalledOnce();
-        expect(onKeyDown.mock.calls[0][0].code).toBe("Enter");
-    });
-
-    it("forwards totalCount through the hook result", () => {
-        function TotalCountHarness(): React.JSX.Element {
-            const list = useVirtualizedList<TestItem, undefined>({
-                items: hookItems.slice(0, 3),
-                totalCount: 42,
-                getItemKey: (item) => item.id,
-                isItemFocusable: () => true,
-            });
-
-            return <div data-testid="observed-total-count">{String(list.totalCount)}</div>;
-        }
-
-        render(<TotalCountHarness />);
-
-        expect(screen.getByTestId("observed-total-count")).toHaveTextContent("42");
-    });
-
-    it("keeps the list focused when blur moves focus to another element inside the list", () => {
-        render(<HookHarness items={hookItems} />);
-
-        const container = screen.getByRole("grid");
-        const nextItem = screen.getByTestId("hook-row-1");
-
-        fireEvent.focus(container);
-        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("focused");
-
-        fireEvent.blur(container, { relatedTarget: nextItem });
-
-        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("focused");
-    });
-
-    it("clears the focused state when blur leaves the list", () => {
-        render(<HookHarness items={hookItems} />);
-
-        const container = screen.getByRole("grid");
-
-        fireEvent.focus(container);
-        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("focused");
-
-        fireEvent.blur(container, { relatedTarget: document.body });
-
-        expect(screen.getByTestId("hook-focused-state")).toHaveTextContent("blurred");
-    });
-
-    it("maps visible ranges before forwarding them to callers", () => {
-        const rangeChanged = vi.fn();
-        const mapRangeIndex = vi.fn((index: number) => index + 1);
-
-        render(<HookHarness items={hookItems} rangeChanged={rangeChanged} mapRangeIndex={mapRangeIndex} />);
-
-        const container = screen.getByRole("grid");
-
-        fireEvent.click(screen.getByTestId("hook-range-trigger"));
-        fireEvent.focus(container);
-        fireEvent.keyDown(container, { code: "PageDown" });
-
-        expect(rangeChanged).toHaveBeenCalledWith({ startIndex: 1, endIndex: 5 });
-        expect(mapRangeIndex).toHaveBeenCalledWith(0);
-        expect(mapRangeIndex).toHaveBeenCalledWith(4);
-        expect(screen.getByTestId("hook-row-5")).toHaveAttribute("tabindex", "0");
-    });
-
-    it("reattaches the scroll-settle listener when the scroller element is replaced", async () => {
-        vi.useFakeTimers();
-
-        render(<SwappableScrollerHarness items={hookItems} />);
-
-        fireEvent.click(screen.getByTestId("range-a"));
-        fireEvent.scroll(screen.getByTestId("hook-scroller-a"), { target: { scrollTop: 100 } });
-
-        await act(async () => {
-            vi.advanceTimersByTime(200);
-            await Promise.resolve();
-        });
-
-        expect(screen.getByTestId("swap-row-4")).toHaveAttribute("tabindex", "0");
-
-        fireEvent.click(screen.getByTestId("swap-scroller"));
-        fireEvent.click(screen.getByTestId("range-b"));
-        fireEvent.scroll(screen.getByTestId("hook-scroller-b"), { target: { scrollTop: 200 } });
-
-        await act(async () => {
-            vi.advanceTimersByTime(200);
-            await Promise.resolve();
-        });
-
-        expect(screen.getByTestId("swap-row-6")).toHaveAttribute("tabindex", "0");
     });
 });

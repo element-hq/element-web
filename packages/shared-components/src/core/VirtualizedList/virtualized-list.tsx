@@ -8,8 +8,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type ListRange, type VirtuosoHandle, type VirtuosoProps } from "react-virtuoso";
 
-const EMPTY_CONTEXT: Record<string, never> = {};
-
 /**
  * Keyboard key codes
  */
@@ -48,12 +46,6 @@ export interface VirtualizedListProps<Item, Context> extends Omit<
     VirtuosoProps<Item, VirtualizedListContext<Context>>,
     "data" | "itemContent" | "context"
 > {
-    /**
-     * Controls whether scroll settling should update the roving focus target.
-     * Defaults to "none" so existing VirtualizedList consumers keep sticky focus.
-     */
-    scrollSettleFocusBehavior?: "none" | "last-visible";
-
     /**
      * The array of items to display in the virtualized list.
      * Each item will be passed to getItemComponent for rendering.
@@ -164,7 +156,6 @@ export interface UseVirtualizedListResult<Item, Context> extends Omit<
 export function useVirtualizedList<Item, Context>(
     props: VirtualizedListProps<Item, Context>,
 ): UseVirtualizedListResult<Item, Context> {
-    const SCROLL_SETTLE_DELAY_MS = 150;
     // Extract our custom props to avoid conflicts with Virtuoso props
     const {
         items,
@@ -176,21 +167,18 @@ export function useVirtualizedList<Item, Context>(
         rangeChanged,
         mapScrollIndex,
         mapRangeIndex,
-        scrollSettleFocusBehavior = "none",
         ...virtuosoProps
     } = props;
     /** Reference to the Virtuoso component for programmatic scrolling */
     const virtuosoHandleRef = useRef<VirtuosoHandle>(null);
     /** Reference to the DOM element containing the virtualized list */
     const virtuosoDomRef = useRef<HTMLElement | Window>(null);
-    /** Track the active HTMLElement scroller so effects follow node replacement. */
-    const [scrollerElement, setScrollerElement] = useState<HTMLElement | null>(null);
     /** Key of the item that should have tabIndex == 0 */
     const [tabIndexKey, setTabIndexKey] = useState<string | undefined>(
         props.items[0] ? getItemKey(props.items[0]) : undefined,
     );
     /** Range of currently visible items in the viewport */
-    const visibleRangeRef = useRef<ListRange | undefined>(undefined);
+    const [visibleRange, setVisibleRange] = useState<ListRange | undefined>(undefined);
     /** Map from item keys to their indices in the items array */
     const keyToIndexMap = useMemo(() => {
         const map = new Map<string, number>();
@@ -198,8 +186,6 @@ export function useVirtualizedList<Item, Context>(
         return map;
     }, [items, getItemKey]);
     const [isFocused, setIsFocused] = useState<boolean>(false);
-    const pendingViewportFocusCommitRef = useRef<boolean>(false);
-    const scrollSettleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Ensure the tabIndexKey is set if there is none already or if the existing key is no longer displayed
     useEffect(() => {
@@ -214,14 +200,12 @@ export function useVirtualizedList<Item, Context>(
      * synchronously, then asks Virtuoso to scroll the item into view.
      */
     const scrollToIndex = useCallback(
-        (index: number, align?: "center" | "end" | "start", updateFocus = true): void => {
+        (index: number, align?: "center" | "end" | "start"): void => {
             // Ensure index is within bounds
             const clampedIndex = Math.max(0, Math.min(index, items.length - 1));
             if (items[clampedIndex]) {
                 const key = getItemKey(items[clampedIndex]);
-                if (updateFocus) {
-                    setTabIndexKey(key);
-                }
+                setTabIndexKey(key);
                 const scrollIndex = mapScrollIndex ? mapScrollIndex(clampedIndex) : clampedIndex;
                 virtuosoHandleRef.current?.scrollIntoView({
                     index: scrollIndex,
@@ -231,26 +215,6 @@ export function useVirtualizedList<Item, Context>(
             }
         },
         [items, getItemKey, mapScrollIndex],
-    );
-
-    const commitFocusToLastVisibleItem = useCallback(
-        (range: ListRange | undefined = visibleRangeRef.current): void => {
-            if (!range) {
-                return;
-            }
-
-            const start = Math.max(0, range.startIndex);
-            const end = Math.min(range.endIndex, items.length - 1);
-
-            for (let index = end; index >= start; index -= 1) {
-                const item = items[index];
-                if (item && isItemFocusable(item)) {
-                    setTabIndexKey(getItemKey(item));
-                    return;
-                }
-            }
-        },
-        [getItemKey, isItemFocusable, items],
     );
 
     /**
@@ -285,7 +249,6 @@ export function useVirtualizedList<Item, Context>(
     const keyDownCallback = useCallback(
         (e: React.KeyboardEvent<HTMLDivElement>) => {
             const currentIndex = tabIndexKey ? keyToIndexMap.get(tabIndexKey) : undefined;
-            const visibleRange = visibleRangeRef.current;
             let handled = false;
 
             // Guard against null/undefined events and modified keys which we don't want to handle here but do
@@ -310,29 +273,11 @@ export function useVirtualizedList<Item, Context>(
                 handled = true;
             } else if (e.code === Key.PAGE_DOWN && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                const targetIndex = Math.min(currentIndex + numberDisplayed, items.length - 1);
-                const targetAlreadyVisible =
-                    targetIndex >= visibleRange.startIndex && targetIndex <= visibleRange.endIndex;
-                if (targetAlreadyVisible) {
-                    scrollToIndex(targetIndex, "start", false);
-                    commitFocusToLastVisibleItem(visibleRange);
-                } else {
-                    pendingViewportFocusCommitRef.current = true;
-                    scrollToIndex(targetIndex, "start", false);
-                }
+                scrollToItem(Math.min(currentIndex + numberDisplayed, items.length - 1), true, "start");
                 handled = true;
             } else if (e.code === Key.PAGE_UP && visibleRange && currentIndex !== undefined) {
                 const numberDisplayed = visibleRange.endIndex - visibleRange.startIndex;
-                const targetIndex = Math.max(currentIndex - numberDisplayed, 0);
-                const targetAlreadyVisible =
-                    targetIndex >= visibleRange.startIndex && targetIndex <= visibleRange.endIndex;
-                if (targetAlreadyVisible) {
-                    scrollToIndex(targetIndex, "start", false);
-                    commitFocusToLastVisibleItem(visibleRange);
-                } else {
-                    pendingViewportFocusCommitRef.current = true;
-                    scrollToIndex(targetIndex, "start", false);
-                }
+                scrollToItem(Math.max(currentIndex - numberDisplayed, 0), false, "start");
                 handled = true;
             }
 
@@ -354,7 +299,7 @@ export function useVirtualizedList<Item, Context>(
                 onKeyDown?.(e);
             }
         },
-        [commitFocusToLastVisibleItem, scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, items, onKeyDown],
+        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items, onKeyDown],
     );
 
     /**
@@ -363,41 +308,7 @@ export function useVirtualizedList<Item, Context>(
      */
     const scrollerRef = useCallback((element: HTMLElement | Window | null) => {
         virtuosoDomRef.current = element;
-        const nextScrollerElement = element instanceof HTMLElement ? element : null;
-        setScrollerElement((currentElement) =>
-            currentElement === nextScrollerElement ? currentElement : nextScrollerElement,
-        );
     }, []);
-
-    useEffect(() => {
-        if (!scrollerElement) {
-            return;
-        }
-
-        const clearScrollSettleTimeout = (): void => {
-            if (scrollSettleTimeoutRef.current !== null) {
-                globalThis.clearTimeout(scrollSettleTimeoutRef.current);
-                scrollSettleTimeoutRef.current = null;
-            }
-        };
-
-        const onScroll = (): void => {
-            if (scrollSettleFocusBehavior === "none") {
-                return;
-            }
-            clearScrollSettleTimeout();
-            scrollSettleTimeoutRef.current = globalThis.setTimeout(() => {
-                commitFocusToLastVisibleItem();
-                scrollSettleTimeoutRef.current = null;
-            }, SCROLL_SETTLE_DELAY_MS);
-        };
-
-        scrollerElement.addEventListener("scroll", onScroll, { passive: true });
-        return () => {
-            clearScrollSettleTimeout();
-            scrollerElement.removeEventListener("scroll", onScroll);
-        };
-    }, [commitFocusToLastVisibleItem, scrollSettleFocusBehavior, scrollerElement]);
 
     /**
      * Focus handler passed to each item component.
@@ -427,7 +338,6 @@ export function useVirtualizedList<Item, Context>(
 
             setIsFocused(true);
             const index = keyToIndexMap.get(tabIndexKey);
-            const visibleRange = visibleRangeRef.current;
             if (
                 index !== undefined &&
                 visibleRange &&
@@ -438,7 +348,7 @@ export function useVirtualizedList<Item, Context>(
             e.stopPropagation();
             e.preventDefault();
         },
-        [keyToIndexMap, scrollToIndex, tabIndexKey],
+        [keyToIndexMap, visibleRange, scrollToIndex, tabIndexKey],
     );
 
     const onBlur = useCallback((event: React.FocusEvent<HTMLDivElement>): void => {
@@ -453,9 +363,9 @@ export function useVirtualizedList<Item, Context>(
         () => ({
             tabIndexKey: tabIndexKey,
             focused: isFocused,
-            context: (context ?? EMPTY_CONTEXT) as Context,
+            context: props.context || ({} as Context),
         }),
-        [tabIndexKey, isFocused, context],
+        [tabIndexKey, isFocused, props.context],
     );
 
     // Combine internal range tracking with optional external callback
@@ -464,19 +374,14 @@ export function useVirtualizedList<Item, Context>(
             const internalRange = mapRangeIndex
                 ? { startIndex: mapRangeIndex(range.startIndex), endIndex: mapRangeIndex(range.endIndex) }
                 : range;
-            visibleRangeRef.current = internalRange;
-            if (pendingViewportFocusCommitRef.current) {
-                commitFocusToLastVisibleItem(internalRange);
-                pendingViewportFocusCommitRef.current = false;
-            }
-            rangeChanged?.(internalRange);
+            setVisibleRange(internalRange);
+            rangeChanged?.(range);
         },
-        [commitFocusToLastVisibleItem, rangeChanged, mapRangeIndex],
+        [rangeChanged, mapRangeIndex],
     );
 
     return {
         ...virtuosoProps,
-        totalCount,
         ref: virtuosoHandleRef,
         scrollerRef,
         onKeyDown: keyDownCallback,
