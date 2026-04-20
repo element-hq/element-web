@@ -25,18 +25,14 @@
             "command": "tsc",
             "inputs": ["src", "{projectRoot}/tsconfig.json"],
             "outputs": ["{projectRoot}/lib/*.js", "{projectRoot}/lib/*.d.ts"],
-            "options": {
-                "cwd": "apps/desktop"
-            }
+            "options": { "cwd": "apps/desktop" }
         },
         "build:res": {
             "cache": true,
             "command": "node scripts/copy-res.ts",
             "inputs": ["{projectRoot}/i18n"],
             "outputs": ["{projectRoot}/lib/i18n"],
-            "options": {
-                "cwd": "apps/desktop"
-            }
+            "options": { "cwd": "apps/desktop" }
         },
         "build": {
             "cache": true,
@@ -48,45 +44,40 @@
                 "{projectRoot}/webapp.asar"
             ],
             "outputs": ["{projectRoot}/dist"],
-            "options": {
-                "cwd": "apps/desktop"
-            },
+            "options": { "cwd": "apps/desktop" },
             "dependsOn": ["build:*"]
         },
         "start": {
             "command": "electron .",
-            "options": {
-                "cwd": "apps/desktop"
-            },
+            "options": { "cwd": "apps/desktop" },
             "dependsOn": ["build:*"]
         },
         "test:playwright": {
             "command": "playwright test",
-            "options": {
-                "cwd": "apps/desktop"
-            }
+            "options": { "cwd": "apps/desktop" }
         },
-        "test:playwright:build-app": {
-            "command": "pnpm run build -l --x64 --dir --publish=never",
+        "test:playwright:screenshots:build-app": {
+            "executor": "nx:run-commands",
             "options": {
+                "commands": [
+                    "pnpm run build -l --x64 --dir --publish=never",
+                    "pnpm exec electron-fuses write --app ./dist/linux-unpacked/element-desktop EnableNodeCliInspectArguments=on"
+                ],
+                "parallel": false,
                 "cwd": "apps/desktop"
             },
             "dependsOn": ["build:*"]
         },
-        "test:playwright:build-docker": {
+        "test:playwright:screenshots:build-docker": {
             "cache": true,
-            "command": "docker build playwright -t element-desktop-playwright --platform linux/amd64",
+            "command": "docker build -f playwright/Dockerfile -t element-desktop-playwright --platform linux/amd64 ../..",
             "inputs": ["{projectRoot}/playwright/Dockerfile", "{projectRoot}/playwright/docker-entrypoint.sh"],
-            "options": {
-                "cwd": "apps/desktop"
-            }
+            "options": { "cwd": "apps/desktop" }
         },
         "test:playwright:screenshots": {
             "command": "docker run --rm --network host -v $(pwd)/../../:/work/ --platform linux/amd64 -it element-desktop-playwright",
-            "options": {
-                "cwd": "apps/desktop"
-            },
-            "dependsOn": ["test:playwright:*"]
+            "options": { "cwd": "apps/desktop" },
+            "dependsOn": ["test:playwright:screenshots:*"]
         }
     }
 }

@@ -12,7 +12,8 @@ ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 ENV GITHUB_ACTIONS=1
 ENV DEBUG=pw:browser
 
+# switch to node user
 USER 1000:1000
 
-COPY docker-entrypoint.sh /opt/docker-entrypoint.sh
+COPY apps/desktop/playwright/docker-entrypoint.sh /opt/docker-entrypoint.sh
 ENTRYPOINT ["bash", "/opt/docker-entrypoint.sh"]
