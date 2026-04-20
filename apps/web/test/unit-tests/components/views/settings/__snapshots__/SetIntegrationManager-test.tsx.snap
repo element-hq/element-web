@@ -52,7 +52,7 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
       >
         <input
           class="_input_udcm8_24"
-          id="_r_0_"
+          id="test-id-0"
           role="switch"
           type="checkbox"
         />
@@ -66,7 +66,7 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
     >
       <label
         class="_label_19upo_59"
-        for="_r_0_"
+        for="test-id-0"
       >
         Enable the integration manager
       </label>

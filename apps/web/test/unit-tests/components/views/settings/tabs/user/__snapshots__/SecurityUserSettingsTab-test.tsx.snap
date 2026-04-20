@@ -86,7 +86,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_0_"
+                id="test-id-0"
                 role="switch"
                 type="checkbox"
               />
@@ -100,7 +100,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
           >
             <label
               class="_label_19upo_59"
-              for="_r_0_"
+              for="test-id-0"
             >
               Enable the integration manager
             </label>
@@ -223,7 +223,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-_r_2_"
+                        for="radix-test-id-2"
                       >
                         Enter a new identity server
                       </label>
@@ -232,7 +232,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                       >
                         <input
                           class="_control_d83jn_10"
-                          id="radix-_r_2_"
+                          id="radix-test-id-2"
                           name="input"
                           placeholder=""
                           title=""

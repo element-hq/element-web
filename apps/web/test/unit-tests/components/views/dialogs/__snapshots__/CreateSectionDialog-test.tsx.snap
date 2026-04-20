@@ -41,14 +41,14 @@ exports[`CreateSectionDialog renders the dialog 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="radix-_r_0_"
+            for="radix-0"
           >
              
             Section name
           </label>
           <input
             class="_control_d83jn_10"
-            id="radix-_r_0_"
+            id="radix-0"
             name="sectionName"
             required=""
             title=""

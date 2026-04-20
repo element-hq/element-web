@@ -45,7 +45,7 @@ let idCounter = 0;
 
 jest.spyOn(React, "useId").mockImplementation(() => {
     // IDs need to be consistent for re-renders of the same component otherwise Radix etc get confused.
-    // We can use a ref to store the one we generated 9which is broadly similar to how react's version
+    // We can use a ref to store the one we generated which is broadly similar to how react's version
     // works in that it generates one at mount time and returns that).
     const myId = useRef(`test-id-${idCounter++}`);
     return myId.current;

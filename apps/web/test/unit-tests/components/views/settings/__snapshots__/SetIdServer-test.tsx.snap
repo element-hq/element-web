@@ -30,7 +30,7 @@ exports[`<SetIdServer /> renders expected fields 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="radix-_r_0_"
+            for="radix-test-id-0"
           >
             Enter a new identity server
           </label>
@@ -39,7 +39,7 @@ exports[`<SetIdServer /> renders expected fields 1`] = `
           >
             <input
               class="_control_d83jn_10"
-              id="radix-_r_0_"
+              id="radix-test-id-0"
               name="input"
               placeholder=""
               title=""

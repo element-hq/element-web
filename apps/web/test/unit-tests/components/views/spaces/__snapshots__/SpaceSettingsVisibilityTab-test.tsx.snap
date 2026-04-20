@@ -4,7 +4,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space Access renders guest 
 <input
   checked=""
   class="_input_udcm8_24"
-  id="_r_h_"
+  id="test-id-20"
   role="switch"
   type="checkbox"
 />
@@ -133,7 +133,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                       <input
                         checked=""
                         class="_input_udcm8_24"
-                        id="_r_3j_"
+                        id="test-id-0"
                         role="switch"
                         type="checkbox"
                       />
@@ -147,13 +147,13 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r_3j_"
+                      for="test-id-0"
                     >
                       Preview space
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_3l_"
+                      id="radix-test-id-2"
                     >
                       Allow people to preview your space before they join.
                     </span>
@@ -248,7 +248,7 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                           <input
                             class="_input_udcm8_24"
                             disabled=""
-                            id="_r_3u_"
+                            id="test-id-27"
                             role="switch"
                             type="checkbox"
                           />
@@ -262,13 +262,13 @@ exports[`<SpaceSettingsVisibilityTab /> for a public space renders addresses sec
                       >
                         <label
                           class="_label_19upo_59"
-                          for="_r_3u_"
+                          for="test-id-27"
                         >
                           Publish this room to the public in matrix.org's room directory?
                         </label>
                         <span
                           class="_message_19upo_85 _help-message_19upo_91"
-                          id="radix-_r_40_"
+                          id="radix-test-id-29"
                         >
                           You must have permission to set the main address to publish this room.
                         </span>
@@ -500,7 +500,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                       <input
                         checked=""
                         class="_input_udcm8_24"
-                        id="_r_0_"
+                        id="test-id-0"
                         role="switch"
                         type="checkbox"
                       />
@@ -514,13 +514,13 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r_0_"
+                      for="test-id-0"
                     >
                       Preview space
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_2_"
+                      id="radix-test-id-2"
                     >
                       Allow people to preview your space before they join.
                     </span>

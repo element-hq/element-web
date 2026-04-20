@@ -10,14 +10,14 @@ exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_a_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_a_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -68,14 +68,14 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
     role="region"
   >
     <button
-      aria-describedby="_r_4_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_4_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -150,14 +150,14 @@ exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_7_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_7_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -208,14 +208,14 @@ exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_6_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_6_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -266,14 +266,14 @@ exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_9_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_9_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -324,14 +324,14 @@ exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_8_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_8_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -382,14 +382,14 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_2_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_2_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -460,14 +460,14 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_3_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_3_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"
@@ -542,14 +542,14 @@ exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
     role="region"
   >
     <button
-      aria-describedby="_r_1_"
+      aria-describedby="test-id-0"
       aria-label="View the pinned message in the timeline and the newest pinned message here"
       class="mx_PinnedMessageBanner_main"
       type="button"
     >
       <div
         class="mx_PinnedMessageBanner_content"
-        id="_r_1_"
+        id="test-id-0"
       >
         <div
           class="mx_PinnedMessageBanner_Indicators"

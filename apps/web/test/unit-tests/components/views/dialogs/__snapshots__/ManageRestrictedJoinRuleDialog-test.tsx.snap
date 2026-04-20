@@ -88,7 +88,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
                   class="_container_153f2_10"
                 >
                   <input
-                    aria-describedby="_r_5_"
+                    aria-describedby="test-id-1"
                     class="_input_153f2_18"
                     id="checkbox_vY7Q4uEh9K"
                     type="checkbox"
@@ -138,7 +138,7 @@ exports[`<ManageRestrictedJoinRuleDialog /> should list spaces which are not par
                 </label>
                 <span
                   class="_message_19upo_85 _help-message_19upo_91"
-                  id="_r_5_"
+                  id="test-id-1"
                 >
                   0 members
                 </span>

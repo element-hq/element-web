@@ -3,7 +3,7 @@
 exports[`<VideoRoomChatButton /> renders button with an unread marker when room is unread 1`] = `
 <button
   aria-label="Chat"
-  aria-labelledby="_r_6_"
+  aria-labelledby="test-id-0"
   class="_icon-button_1215g_8"
   data-indicator="default"
   data-kind="primary"

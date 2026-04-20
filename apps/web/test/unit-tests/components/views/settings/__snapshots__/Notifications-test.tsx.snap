@@ -16,7 +16,7 @@ exports[`<Notifications /> main notification switches renders only enable notifi
         >
           <input
             class="_input_udcm8_24"
-            id="_r_0_"
+            id="test-id-0"
             role="switch"
             type="checkbox"
           />
@@ -30,13 +30,13 @@ exports[`<Notifications /> main notification switches renders only enable notifi
       >
         <label
           class="_label_19upo_59"
-          for="_r_0_"
+          for="test-id-0"
         >
           Enable notifications for this account
         </label>
         <span
           class="_message_19upo_85 _help-message_19upo_91"
-          id="radix-_r_2_"
+          id="radix-test-id-2"
         >
           Turn off to disable notifications on all your devices and sessions
         </span>

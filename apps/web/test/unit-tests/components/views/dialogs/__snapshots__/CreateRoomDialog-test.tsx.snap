@@ -127,7 +127,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_72_"
+                id="_r_m_"
                 role="switch"
                 type="checkbox"
               />
@@ -141,13 +141,13 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
           >
             <label
               class="_label_19upo_59"
-              for="_r_72_"
+              for="_r_m_"
             >
               Enable end-to-end encryption
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_74_"
+              id="radix-test-id-9"
             >
               You can't disable this later. Bridges & most bots won't work yet.
             </span>
@@ -172,7 +172,7 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
               >
                 <input
                   class="_input_udcm8_24"
-                  id="_r_75_"
+                  id="_r_n_"
                   role="switch"
                   type="checkbox"
                 />
@@ -186,13 +186,13 @@ exports[`<CreateRoomDialog /> for a private room should create a private room 1`
             >
               <label
                 class="_label_19upo_59"
-                for="_r_75_"
+                for="_r_n_"
               >
                 Block anyone not part of server.org from ever joining this room.
               </label>
               <span
                 class="_message_19upo_85 _help-message_19upo_91"
-                id="radix-_r_77_"
+                id="radix-test-id-11"
               >
                 You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.
               </span>
@@ -376,7 +376,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_7k_"
+                id="_r_o_"
                 role="switch"
                 type="checkbox"
               />
@@ -390,13 +390,13 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           >
             <label
               class="_label_19upo_59"
-              for="_r_7k_"
+              for="_r_o_"
             >
               Enable end-to-end encryption
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_7m_"
+              id="radix-test-id-9"
             >
               You can't disable this later. Bridges & most bots won't work yet.
             </span>
@@ -413,7 +413,7 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
             >
               <input
                 class="_input_udcm8_24"
-                id="_r_7n_"
+                id="_r_p_"
                 role="switch"
                 type="checkbox"
               />
@@ -427,13 +427,13 @@ exports[`<CreateRoomDialog /> for a private room should render not the advanced 
           >
             <label
               class="_label_19upo_59"
-              for="_r_7n_"
+              for="_r_p_"
             >
               Encrypt state events
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_7p_"
+              id="radix-test-id-11"
             >
               Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
             </span>
@@ -618,7 +618,7 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
               <input
                 checked=""
                 class="_input_udcm8_24"
-                id="_r_86_"
+                id="_r_q_"
                 role="switch"
                 type="checkbox"
               />
@@ -632,13 +632,13 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
           >
             <label
               class="_label_19upo_59"
-              for="_r_86_"
+              for="_r_q_"
             >
               Enable end-to-end encryption
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_88_"
+              id="radix-test-id-9"
             >
               You can't disable this later. Bridges & most bots won't work yet.
             </span>
@@ -655,7 +655,7 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
             >
               <input
                 class="_input_udcm8_24"
-                id="_r_89_"
+                id="_r_r_"
                 role="switch"
                 type="checkbox"
               />
@@ -669,13 +669,13 @@ exports[`<CreateRoomDialog /> for a private room when the state encryption labs 
           >
             <label
               class="_label_19upo_59"
-              for="_r_89_"
+              for="_r_r_"
             >
               Encrypt state events
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_8b_"
+              id="radix-test-id-11"
             >
               Enables experimental support for encrypting state events, which hides metadata such as room names and topics from the server. This metadata will also be hidden from people joining rooms later, and people whose clients do not support MSC4362.
             </span>

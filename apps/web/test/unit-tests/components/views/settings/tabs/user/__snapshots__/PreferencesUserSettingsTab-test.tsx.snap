@@ -170,7 +170,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_4_"
+                      id="radix-test-id-4"
                     >
                       All rooms you're in will appear in Home.
                     </span>
@@ -403,7 +403,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_d_"
+                      id="radix-test-id-13"
                     >
                       Requires your server to support MSC4133
                     </span>
@@ -472,7 +472,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_g_"
+                      id="radix-test-id-16"
                     >
                       Your server doesn't support disabling sending read receipts.
                     </span>
@@ -597,7 +597,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_n_"
+                      id="radix-test-id-23"
                     >
                       <span>
                         Start messages with 
@@ -1484,7 +1484,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <input
                         class="_input_udcm8_24"
-                        id="_r_26_"
+                        id="test-id-70"
                         role="switch"
                         type="checkbox"
                       />
@@ -1498,7 +1498,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r_26_"
+                      for="test-id-70"
                     >
                       Hide avatars of room and inviter
                     </label>
@@ -1512,13 +1512,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 >
                   <label
                     class="_label_19upo_59"
-                    for="radix-_r_28_"
+                    for="radix-test-id-72"
                   >
                     Show media in timeline
                   </label>
                   <span
                     class="_message_19upo_85 _help-message_19upo_91 mx_MediaPreviewAccountSetting_RadioHelp"
-                    id="radix-_r_29_"
+                    id="radix-test-id-73"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
@@ -1631,7 +1631,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                         checked=""
                         class="_input_udcm8_24"
                         disabled=""
-                        id="_r_2d_"
+                        id="test-id-77"
                         role="switch"
                         type="checkbox"
                       />
@@ -1645,13 +1645,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <label
                       class="_label_19upo_59"
-                      for="_r_2d_"
+                      for="test-id-77"
                     >
                       Allow users to invite you to rooms
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="radix-_r_2f_"
+                      id="radix-test-id-79"
                     >
                       Your server does not implement this feature.
                     </span>

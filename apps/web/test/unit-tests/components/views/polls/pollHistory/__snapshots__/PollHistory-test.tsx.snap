@@ -118,7 +118,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
             tabindex="0"
           >
             <div
-              aria-labelledby="_r_a_"
+              aria-labelledby="test-id-10"
               class="mx_PollListItem_content"
             >
               <span>
@@ -152,7 +152,7 @@ exports[`<PollHistory /> renders a list of active polls when there are polls in 
             tabindex="0"
           >
             <div
-              aria-labelledby="_r_f_"
+              aria-labelledby="test-id-15"
               class="mx_PollListItem_content"
             >
               <span>

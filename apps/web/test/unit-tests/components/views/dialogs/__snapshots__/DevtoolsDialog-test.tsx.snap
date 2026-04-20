@@ -34,7 +34,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
     >
       Room ID: !id
       <button
-        aria-describedby="_r_2_"
+        aria-describedby="test-id-2"
         aria-label="Copy"
         class="mx_AccessibleButton mx_CopyableText_copyButton"
         role="button"
@@ -268,7 +268,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             </label>
             <span
               class="_message_19upo_85 _help-message_19upo_91"
-              id="radix-_r_c_"
+              id="radix-test-id-12"
             >
               <span>
                 <span
@@ -290,7 +290,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="radix-_r_d_"
+            for="radix-test-id-13"
           >
             Element Call URL
           </label>
@@ -299,7 +299,7 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
           >
             <input
               class="_control_d83jn_10"
-              id="radix-_r_d_"
+              id="radix-test-id-13"
               name="input"
               title=""
               value=""

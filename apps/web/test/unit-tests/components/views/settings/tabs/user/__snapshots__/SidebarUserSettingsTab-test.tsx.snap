@@ -51,7 +51,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_1_"
+                        aria-describedby="test-id-1"
                         checked=""
                         class="_input_153f2_18"
                         disabled=""
@@ -99,7 +99,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_1_"
+                      id="test-id-1"
                     >
                       Home is useful for getting an overview of everything.
                     </span>
@@ -119,7 +119,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_5_"
+                        aria-describedby="test-id-5"
                         class="_input_153f2_18"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         id="checkbox_38QgU2Pomx"
@@ -154,7 +154,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_5_"
+                      id="test-id-5"
                     >
                       Show all your rooms in Home, even if they're in a space.
                     </span>
@@ -174,7 +174,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_9_"
+                        aria-describedby="test-id-9"
                         class="_input_153f2_18"
                         id="checkbox_wKpa6hpi3Y"
                         type="checkbox"
@@ -208,7 +208,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_9_"
+                      id="test-id-9"
                     >
                       Group all your rooms that aren't part of a space in one place.
                     </span>
@@ -228,7 +228,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_d_"
+                        aria-describedby="test-id-13"
                         class="_input_153f2_18"
                         id="checkbox_EetmBG4yVC"
                         type="checkbox"
@@ -274,7 +274,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_d_"
+                      id="test-id-13"
                     >
                       Group all private video rooms and conferences. In conferences you can invite people outside of matrix.
                     </span>
@@ -341,7 +341,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_h_"
+                        aria-describedby="test-id-1"
                         checked=""
                         class="_input_153f2_18"
                         disabled=""
@@ -389,7 +389,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_h_"
+                      id="test-id-1"
                     >
                       Home is useful for getting an overview of everything.
                     </span>
@@ -409,7 +409,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_l_"
+                        aria-describedby="test-id-5"
                         class="_input_153f2_18"
                         data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                         id="checkbox_38QgU2Pomx"
@@ -444,7 +444,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_l_"
+                      id="test-id-5"
                     >
                       Show all your rooms in Home, even if they're in a space.
                     </span>
@@ -464,7 +464,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_p_"
+                        aria-describedby="test-id-9"
                         class="_input_153f2_18"
                         id="checkbox_wKpa6hpi3Y"
                         type="checkbox"
@@ -498,7 +498,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_p_"
+                      id="test-id-9"
                     >
                       Group all your rooms that aren't part of a space in one place.
                     </span>
@@ -518,7 +518,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                       class="_container_153f2_10"
                     >
                       <input
-                        aria-describedby="_r_t_"
+                        aria-describedby="test-id-13"
                         class="_input_153f2_18"
                         id="checkbox_EetmBG4yVC"
                         type="checkbox"
@@ -564,7 +564,7 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     </label>
                     <span
                       class="_message_19upo_85 _help-message_19upo_91"
-                      id="_r_t_"
+                      id="test-id-13"
                     >
                       Group all private video rooms and conferences.
                     </span>

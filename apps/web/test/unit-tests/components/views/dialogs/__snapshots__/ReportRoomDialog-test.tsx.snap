@@ -44,7 +44,7 @@ exports[`ReportRoomDialog displays admin message 1`] = `
         />
         <span
           class="_message_19upo_85 _help-message_19upo_91"
-          id="radix-_r_9_"
+          id="radix-3"
         >
           Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.
         </span>
@@ -76,7 +76,6 @@ exports[`ReportRoomDialog displays admin message 1`] = `
           >
             <input
               class="_input_udcm8_24"
-              id="_r_a_"
               role="switch"
               type="checkbox"
             />
@@ -90,7 +89,7 @@ exports[`ReportRoomDialog displays admin message 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="_r_a_"
+            for="radix-5"
           >
             Leave room
           </label>

@@ -258,25 +258,25 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       >
         <label
           class="_label_19upo_59"
-          for="radix-_r_0_"
+          for="radix-test-id-0"
         >
           Enter recovery key
         </label>
         <div
           class="_container_1s836_8 mx_KeyForm_password mx_no_textinput"
-          id="_r_1_"
+          id="_r_0_"
         >
           <input
             class="_control_d83jn_10 _control_1s836_13"
-            id="radix-_r_0_"
+            id="radix-test-id-0"
             name="recoveryKey"
             required=""
             title="Enter recovery key"
             type="password"
           />
           <button
-            aria-controls="_r_1_"
-            aria-labelledby="_r_2_"
+            aria-controls="_r_0_"
+            aria-labelledby="test-id-1"
             class="_action_1s836_24"
             type="button"
           >
@@ -420,28 +420,28 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
         <label
           class="_label_19upo_59"
           data-invalid="true"
-          for="radix-_r_0_"
+          for="radix-test-id-0"
         >
           Enter recovery key
         </label>
         <div
           class="_container_1s836_8 mx_KeyForm_password mx_no_textinput"
-          id="_r_1_"
+          id="_r_0_"
         >
           <input
-            aria-describedby="radix-_r_8_"
+            aria-describedby="radix-test-id-31"
             aria-invalid="true"
             class="_control_d83jn_10 _control_1s836_13"
             data-invalid="true"
-            id="radix-_r_0_"
+            id="radix-test-id-0"
             name="recoveryKey"
             required=""
             title="Enter recovery key"
             type="password"
           />
           <button
-            aria-controls="_r_1_"
-            aria-labelledby="_r_2_"
+            aria-controls="_r_0_"
+            aria-labelledby="test-id-1"
             class="_action_1s836_24"
             type="button"
           >
@@ -461,7 +461,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
         </div>
         <span
           class="_message_19upo_85 _error-message_19upo_95"
-          id="radix-_r_8_"
+          id="radix-test-id-31"
         >
           <svg
             fill="currentColor"

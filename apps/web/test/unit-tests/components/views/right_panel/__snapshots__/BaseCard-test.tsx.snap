@@ -19,7 +19,7 @@ exports[`<BaseCard /> should close when clicking X button 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby="_r_0_"
+        aria-labelledby="test-id-0"
         class="_icon-button_1215g_8"
         data-kind="secondary"
         data-testid="base-card-close-button"

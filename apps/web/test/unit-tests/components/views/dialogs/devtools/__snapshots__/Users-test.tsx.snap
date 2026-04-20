@@ -704,7 +704,7 @@ exports[`<Users /> should render a user list 1`] = `
             <input
               checked=""
               class="_input_udcm8_24"
-              id="_r_4_"
+              id="test-id-4"
               role="switch"
               type="checkbox"
             />
@@ -718,7 +718,7 @@ exports[`<Users /> should render a user list 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="_r_4_"
+            for="test-id-4"
           >
             Only joined users
           </label>

@@ -126,7 +126,7 @@ exports[`VerificationRequestDialog After we started verification here, says we a
       Once accepted you'll be able to continue with the verification.
     </div>
     <div
-      aria-describedby="_r_6_"
+      aria-describedby="test-id-2"
       aria-label="Close dialog"
       class="mx_AccessibleButton mx_Dialog_cancelButton"
       role="button"

@@ -27,14 +27,14 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
             aria-label="Options"
             class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
             data-state="closed"
-            id="radix-_r_0_"
+            id="radix-test-id-0"
             role="button"
             tabindex="0"
             type="button"
           />
         </div>
         <button
-          aria-labelledby="_r_2_"
+          aria-labelledby="test-id-2"
           class="_icon-button_1215g_8"
           data-kind="secondary"
           data-testid="base-card-close-button"
@@ -177,7 +177,7 @@ exports[`AppTile for a pinned widget should render 1`] = `
           aria-label="Options"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           data-state="closed"
-          id="radix-_r_1k_"
+          id="radix-test-id-8"
           role="button"
           tabindex="0"
           type="button"
@@ -293,7 +293,7 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
           aria-label="Options"
           class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
           data-state="closed"
-          id="radix-_r_30_"
+          id="radix-test-id-8"
           role="button"
           tabindex="0"
           type="button"
@@ -349,8 +349,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby="_r_33_"
-                aria-labelledby="_r_32_"
+                aria-describedby="test-id-11"
+                aria-labelledby="test-id-10"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg
@@ -488,7 +488,7 @@ exports[`AppTile preserves non-persisted widget on container move 1`] = `
                 aria-label="Options"
                 class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
                 data-state="closed"
-                id="radix-_r_10_"
+                id="radix-test-id-8"
                 role="button"
                 tabindex="0"
                 type="button"

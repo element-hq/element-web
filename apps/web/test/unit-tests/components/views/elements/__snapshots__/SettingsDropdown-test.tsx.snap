@@ -7,7 +7,7 @@ exports[`<SettingsDropdown /> should render a disabled setting 1`] = `
   >
     <label
       class="mx_SettingsDropdown_label"
-      for="_r_0_"
+      for="test-id-0"
     >
       <span
         class="mx_SettingsDropdown_labelText"
@@ -19,12 +19,12 @@ exports[`<SettingsDropdown /> should render a disabled setting 1`] = `
       class="mx_Dropdown mx_Dropdown_disabled"
     >
       <div
-        aria-describedby="_r_0__value"
+        aria-describedby="test-id-0_value"
         aria-disabled="true"
         aria-expanded="false"
         aria-haspopup="listbox"
         aria-label="Open %(brand)s when you log in to your computer"
-        aria-owns="_r_0__input"
+        aria-owns="test-id-0_input"
         class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput mx_AccessibleButton_disabled"
         disabled=""
         role="button"
@@ -32,7 +32,7 @@ exports[`<SettingsDropdown /> should render a disabled setting 1`] = `
       >
         <div
           class="mx_Dropdown_option"
-          id="_r_0__value"
+          id="test-id-0_value"
         >
           <div>
             No
