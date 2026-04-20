@@ -163,7 +163,6 @@ export function DecryptionFailureBodyFactory({ mxEvent, ref }: Pick<IBodyProps, 
 }
 
 // Message body factory registry for bodies that already route through view-model-backed wrappers.
-// Keep TextualBodyFactory separate so importing MBodyFactory does not pull in the heavier textual-body bridge.
 const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
     [MsgType.File, FileBodyFactory],
     [MsgType.Video, VideoBodyFactory],
