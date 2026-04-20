@@ -182,8 +182,6 @@ export class TextualBodyViewModel
     }
 
     public setId(id: string | undefined): void {
-        if (this.props.id === id) return;
-
         this.props = {
             ...this.props,
             id,
@@ -193,8 +191,6 @@ export class TextualBodyViewModel
     }
 
     public setEvent(mxEvent: MatrixEvent): void {
-        if (this.props.mxEvent === mxEvent) return;
-
         this.props = {
             ...this.props,
             mxEvent,
@@ -204,8 +200,6 @@ export class TextualBodyViewModel
     }
 
     public setHighlightLink(highlightLink: string | undefined): void {
-        if (this.props.highlightLink === highlightLink) return;
-
         this.props = {
             ...this.props,
             highlightLink,
@@ -215,8 +209,6 @@ export class TextualBodyViewModel
     }
 
     public setReplacingEventId(replacingEventId: string | undefined): void {
-        if (this.props.replacingEventId === replacingEventId) return;
-
         this.props = {
             ...this.props,
             replacingEventId,
@@ -228,8 +220,6 @@ export class TextualBodyViewModel
     public setIsSeeingThroughMessageHiddenForModeration(
         isSeeingThroughMessageHiddenForModeration: boolean | undefined,
     ): void {
-        if (this.props.isSeeingThroughMessageHiddenForModeration === isSeeingThroughMessageHiddenForModeration) return;
-
         this.props = {
             ...this.props,
             isSeeingThroughMessageHiddenForModeration,
@@ -239,8 +229,6 @@ export class TextualBodyViewModel
     }
 
     public setTimelineRenderingType(timelineRenderingType: TimelineRenderingType): void {
-        if (this.props.timelineRenderingType === timelineRenderingType) return;
-
         this.props = {
             ...this.props,
             timelineRenderingType,
