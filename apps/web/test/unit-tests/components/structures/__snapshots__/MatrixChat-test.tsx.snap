@@ -97,7 +97,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
     >
       <svg
         aria-label="Loading…"
-        class="_icon_1855a_18"
+        class="_icon_11k6c_18"
         data-testid="spinner"
         fill="currentColor"
         height="1em"
@@ -142,16 +142,73 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
           data-testid="mx_welcome_screen"
         >
           <div
-            class="mx_WelcomePage mx_WelcomePage_loggedIn"
+            class="mx_DefaultWelcome"
           >
-            <div
-              class="mx_WelcomePage_body"
+            <a
+              href="https://element.io"
+              rel="noopener"
+              target="_blank"
             >
-              <h1>
-                Hello
-              </h1>
+              <img
+                alt="Test"
+                class="mx_DefaultWelcome_logo"
+                src="themes/element/img/logos/element-logo.svg"
+              />
+            </a>
+            <h1
+              class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112"
+            >
+              Welcome to Element
+            </h1>
+            <h2
+              class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31"
+            >
+              <span>
+                Decentralised, encrypted chat & collaboration powered by 
+                <a
+                  aria-label="Matrix"
+                  href="https://matrix.org"
+                  rel="noreferrer noopener"
+                  target="_blank"
+                >
+                  <div
+                    class="mx_WelcomePage_logo"
+                    height="34"
+                    style="padding-left: 1px; vertical-align: middle;"
+                    width="79"
+                  />
+                </a>
+              </span>
+            </h2>
+            <div
+              class="mx_DefaultWelcome_buttons"
+            >
+              <a
+                class="mx_DefaultWelcome_buttons_login"
+                href="#/login"
+              >
+                <div />
+                Sign in
+              </a>
+              <a
+                class="mx_DefaultWelcome_buttons_register"
+                href="#/register"
+              >
+                <div />
+                Create Account
+              </a>
+              <div>
+                <a
+                  class="mx_DefaultWelcome_buttons_roomDirectory"
+                  href="#/directory"
+                >
+                  <div />
+                  Explore rooms
+                </a>
+              </div>
             </div>
           </div>
+          <hr />
           <div
             class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
           >
@@ -237,7 +294,7 @@ exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
     >
       <svg
         aria-label="Loading…"
-        class="_icon_1855a_18"
+        class="_icon_11k6c_18"
         data-testid="spinner"
         fill="currentColor"
         height="1em"

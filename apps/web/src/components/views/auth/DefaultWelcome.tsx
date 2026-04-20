@@ -29,7 +29,7 @@ const DefaultWelcome: React.FC = () => {
                 <img src={logoUrl} alt={brand} className="mx_DefaultWelcome_logo" />
             </a>
             <Heading as="h1" weight="semibold">
-                {_t("welcome_to_element")}
+                {_t("welcome|title", { brand })}
             </Heading>
             <Text as="h2" size="sm">
                 {_t(

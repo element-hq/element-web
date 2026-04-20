@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import "fake-indexeddb/auto";
 import React, { type ComponentProps } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
-import fetchMock from "@fetch-mock/jest";
 import { type Mocked, mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
 import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
@@ -1637,7 +1636,6 @@ describe("<MatrixChat />", () => {
 
         // Flaky test, see https://github.com/element-hq/element-web/issues/30337
         it("waits for other tab to stop during startup", async () => {
-            fetchMock.get("end:/welcome.html", { body: "<h1>Hello</h1>" });
             jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");
 
             // simulate an active window
@@ -1668,7 +1666,7 @@ describe("<MatrixChat />", () => {
             expect(Lifecycle.attemptDelegatedAuthLogin).toHaveBeenCalled();
 
             // should just show the welcome screen
-            await rendered.findByText("Hello");
+            await rendered.findByText("Welcome to Element");
             expect(rendered.container).toMatchSnapshot();
         });
 
