@@ -19,6 +19,74 @@
                     "tags": ["type=ref,event=branch"]
                 }
             }
+        },
+        "build:ts": {
+            "cache": true,
+            "command": "tsc",
+            "inputs": ["src", "{projectRoot}/tsconfig.json"],
+            "outputs": ["{projectRoot}/lib/*.js", "{projectRoot}/lib/*.d.ts"],
+            "options": {
+                "cwd": "apps/desktop"
+            }
+        },
+        "build:res": {
+            "cache": true,
+            "command": "node scripts/copy-res.ts",
+            "inputs": ["{projectRoot}/i18n"],
+            "outputs": ["{projectRoot}/lib/i18n"],
+            "options": {
+                "cwd": "apps/desktop"
+            }
+        },
+        "build": {
+            "cache": true,
+            "command": "pnpm exec electron-builder",
+            "inputs": [
+                "src",
+                "{projectRoot}/.hak/hakModules",
+                "{projectRoot}/electron-builder.json",
+                "{projectRoot}/webapp.asar"
+            ],
+            "outputs": ["{projectRoot}/dist"],
+            "options": {
+                "cwd": "apps/desktop"
+            },
+            "dependsOn": ["build:*"]
+        },
+        "start": {
+            "command": "electron .",
+            "options": {
+                "cwd": "apps/desktop"
+            },
+            "dependsOn": ["build:*"]
+        },
+        "test:playwright": {
+            "command": "playwright test",
+            "options": {
+                "cwd": "apps/desktop"
+            }
+        },
+        "test:playwright:build-app": {
+            "command": "pnpm run build -l --x64 --dir --publish=never",
+            "options": {
+                "cwd": "apps/desktop"
+            },
+            "dependsOn": ["build:*"]
+        },
+        "test:playwright:build-docker": {
+            "cache": true,
+            "command": "docker build playwright -t element-desktop-playwright --platform linux/amd64",
+            "inputs": ["{projectRoot}/playwright/Dockerfile", "{projectRoot}/playwright/docker-entrypoint.sh"],
+            "options": {
+                "cwd": "apps/desktop"
+            }
+        },
+        "test:playwright:screenshots": {
+            "command": "docker run --rm --network host -v $(pwd)/../../:/work/ --platform linux/amd64 -it element-desktop-playwright",
+            "options": {
+                "cwd": "apps/desktop"
+            },
+            "dependsOn": ["test:playwright:*"]
         }
     }
 }
