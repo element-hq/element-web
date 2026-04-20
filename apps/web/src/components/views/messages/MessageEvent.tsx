@@ -37,10 +37,10 @@ import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
     RedactedBodyFactory,
-    TextualBodyFactory,
     VideoBodyFactory,
     renderMBody,
 } from "./MBodyFactory";
+import { TextualBodyFactory } from "./TextualBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
