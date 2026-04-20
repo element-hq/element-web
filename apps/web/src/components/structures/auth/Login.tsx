@@ -464,7 +464,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                     );
                 }}
             >
-                {_t("auth|sign_in_manually")}
+                {_t("action|continue")}
             </Button>
         );
     };
