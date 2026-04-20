@@ -27,6 +27,9 @@ const startDMWithBob = async (page: Page, bob: Bot) => {
     await page.getByRole("option", { name: bob.credentials.displayName }).click();
     await expect(page.getByTestId("invite-dialog-input-wrapper").getByText("Bob")).toBeVisible();
     await page.getByRole("button", { name: "Go" }).click();
+
+    await expect(page.getByRole("heading", { name: "Start a chat with this new contact?" })).toBeVisible();
+    await page.getByRole("button", { name: "Continue" }).click();
 };
 
 const testMessages = async (page: Page, bob: Bot, bobRoomId: string) => {
