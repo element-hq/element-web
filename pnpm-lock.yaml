@@ -442,7 +442,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fd01b172368e0ac5479d4830f92ad261a7eccc6c
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -568,8 +568,8 @@ importers:
         specifier: ^7.12.7
         version: 7.28.5(@babel/core@7.29.0)
       '@casualbot/jest-sonar-reporter':
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 2.6.0
+        version: 2.6.0
       '@element-hq/element-call-embedded':
         specifier: 0.18.0
         version: 0.18.0
@@ -2017,8 +2017,8 @@ packages:
   '@cacheable/utils@2.4.1':
     resolution: {integrity: sha512-eiFgzCbIneyMlLOmNG4g9xzF7Hv3Mga4LjxjcSC/ues6VYq2+gUbQI8JqNuw/ZM8tJIeIaBGpswAsqV2V7ApgA==}
 
-  '@casualbot/jest-sonar-reporter@2.5.1':
-    resolution: {integrity: sha512-aN0Dju7mZQcPz6rHca7e0PAIAf2///5DwvUhTdkSbhj36zMUIY/GiPDaLJKJQCZzSSSzPOMLfIKM1c/02S7kJA==}
+  '@casualbot/jest-sonar-reporter@2.6.0':
+    resolution: {integrity: sha512-PzOeZXtexA9bchpjlRsFsnzUD9NY6Rdzvqs4B3QYUfiYOzDYbxpn4beH3tiAaqNUHrI17AAEB9UGBYTUZHuaag==}
     engines: {node: '>=14.0.0'}
 
   '@chevrotain/cst-dts-gen@12.0.0':
@@ -6094,6 +6094,7 @@ packages:
   '@xmldom/xmldom@0.8.12':
     resolution: {integrity: sha512-9k/gHF6n/pAi/9tqr3m3aqkuiNosYTurLLUtc7xQ9sxB/wm7WPygCv8GYa6mS0fLJEHhqMC1ATYhz++U/lRHqg==}
     engines: {node: '>=10.0.0'}
+    deprecated: this version has critical issues, please update to the latest version
 
   '@xtuc/ieee754@1.2.0':
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
@@ -9894,8 +9895,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fd01b172368e0ac5479d4830f92ad261a7eccc6c:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fd01b172368e0ac5479d4830f92ad261a7eccc6c}
     version: 41.3.0
     engines: {node: '>=22.0.0'}
 
@@ -14496,7 +14497,7 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
-  '@casualbot/jest-sonar-reporter@2.5.1':
+  '@casualbot/jest-sonar-reporter@2.6.0':
     dependencies:
       mkdirp: 1.0.4
       uuid: 8.3.2
@@ -23585,7 +23586,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb7acfb810d2989c0fe61c490083ff9d72c44013:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fd01b172368e0ac5479d4830f92ad261a7eccc6c:
     dependencies:
       '@babel/runtime': 7.28.6
       '@matrix-org/matrix-sdk-crypto-wasm': 18.0.0
