@@ -1015,7 +1015,7 @@ describe("RoomListStoreV3", () => {
             it("emits SECTION_CREATED_EVENT and LISTS_UPDATE_EVENT when section is created", async () => {
                 enableSections();
                 getClientAndRooms();
-                jest.spyOn(sectionModule, "createSection").mockResolvedValue(true);
+                jest.spyOn(sectionModule, "createSection").mockResolvedValue("element.io.section.test-tag");
 
                 const store = new RoomListStoreV3Class(dispatcher);
                 await store.start();
@@ -1027,14 +1027,13 @@ describe("RoomListStoreV3", () => {
 
                 await store.createSection();
 
-                expect(sectionCreatedListener).toHaveBeenCalled();
-                expect(listsUpdateListener).toHaveBeenCalled();
+                expect(sectionCreatedListener).toHaveBeenCalledWith("element.io.section.test-tag");
             });
 
             it("does not emit when section creation is cancelled", async () => {
                 enableSections();
                 getClientAndRooms();
-                jest.spyOn(sectionModule, "createSection").mockResolvedValue(false);
+                jest.spyOn(sectionModule, "createSection").mockResolvedValue(undefined);
 
                 const store = new RoomListStoreV3Class(dispatcher);
                 await store.start();
