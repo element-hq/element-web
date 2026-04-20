@@ -14,6 +14,7 @@ import {
     MSC4108FailureReason,
     MSC4108SignInWithQR,
     RendezvousError,
+    RendezvousIntent,
 } from "matrix-js-sdk/src/rendezvous";
 import { HTTPError, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
@@ -62,7 +63,8 @@ describe("<LoginWithQR />", () => {
         legacy: true,
         mode: Mode.Show,
         onFinished: jest.fn(),
-    };
+        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+    } as const;
 
     beforeEach(() => {
         mockedFlow.mockReset();

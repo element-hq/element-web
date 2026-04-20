@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type IServerVersions, type OidcClientConfig, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
 import { Text } from "@vector-im/compound-web";
 import { isSignInWithQRAvailable } from "matrix-js-sdk/src/rendezvous";
@@ -20,27 +20,20 @@ import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 
 interface IProps {
     onShowQr: () => void;
-    versions?: IServerVersions;
-    oidcClientConfig?: OidcClientConfig;
     isCrossSigningReady?: boolean;
 }
 
-export async function shouldShowQrForLinkNewDevice(
-    cli: MatrixClient,
-    isCrossSigningReady: boolean,
-    oidcClientConfig?: OidcClientConfig,
-    versions?: IServerVersions,
-): Promise<boolean> {
+export async function shouldShowQrForLinkNewDevice(cli: MatrixClient, isCrossSigningReady: boolean): Promise<boolean> {
     const doesServerHaveSupport = await isSignInWithQRAvailable(cli);
 
     return doesServerHaveSupport && !!cli.getCrypto()?.exportSecretsBundle && isCrossSigningReady;
 }
 
-const LoginWithQRSection: React.FC<IProps> = ({ onShowQr, versions, oidcClientConfig, isCrossSigningReady }) => {
+const LoginWithQRSection: React.FC<IProps> = ({ onShowQr, isCrossSigningReady }) => {
     const cli = useMatrixClientContext();
     const offerShowQr = useAsyncMemo(
-        () => shouldShowQrForLinkNewDevice(cli, !!isCrossSigningReady, oidcClientConfig, versions),
-        [cli, isCrossSigningReady, oidcClientConfig, versions],
+        () => shouldShowQrForLinkNewDevice(cli, !!isCrossSigningReady),
+        [cli, isCrossSigningReady],
         false,
     );
 

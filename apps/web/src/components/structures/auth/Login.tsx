@@ -13,6 +13,7 @@ import { type SSOFlow, type MatrixClient, SSOAction } from "matrix-js-sdk/src/ma
 import { Button } from "@vector-im/compound-web";
 import { QrCodeIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
 import Login, { type LoginWithQrFlow, type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
@@ -585,6 +586,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
                             <LoginWithQR
                                 onFinished={this.onLoginWithQRFinished}
                                 mode={Mode.Show}
+                                intent={RendezvousIntent.LOGIN_ON_NEW_DEVICE}
                                 client={this.state.loginWithQrClient!}
                                 clientId={this.qrClientId}
                             />

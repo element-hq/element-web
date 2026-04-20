@@ -18,19 +18,29 @@ import {
     signInByGeneratingQR,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { AutoDiscovery, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, type MatrixClient, type XOR } from "matrix-js-sdk/src/matrix";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
 import { configureFromCompletedOAuthLogin, restoreSessionFromStorage } from "../../../Lifecycle";
 import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 
-interface IProps {
+type BaseProps = {
     client: MatrixClient;
-    clientId: string;
-    mode: Mode;
     onFinished(success: boolean, credentials?: IMatrixClientCreds): void;
-}
+    mode: Mode;
+};
+
+type Props = XOR<
+    {
+        intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE;
+        clientId: string;
+    },
+    {
+        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
+    }
+> &
+    BaseProps;
 
 interface IState {
     phase: Phase;
@@ -58,10 +68,10 @@ export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
  *
  * This uses the unstable feature of MSC4108: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-export default class LoginWithQR extends React.Component<IProps, IState> {
+export default class LoginWithQR extends React.Component<Props, IState> {
     private finished = false;
 
-    public constructor(props: IProps) {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -69,17 +79,11 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         };
     }
 
-    private get ourIntent(): RendezvousIntent {
-        return this.props.client.getUserId()
-            ? RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE
-            : RendezvousIntent.LOGIN_ON_NEW_DEVICE;
-    }
-
     public componentDidMount(): void {
         this.updateMode(this.props.mode).then(() => {});
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+    public componentDidUpdate(prevProps: Readonly<Props>): void {
         if (prevProps.mode !== this.props.mode) {
             this.updateMode(this.props.mode).then(() => {});
         }
@@ -115,7 +119,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         let rendezvous: MSC4108SignInWithQR;
         try {
             rendezvous =
-                this.ourIntent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
+                this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
                     ? await signInByGeneratingQR(this.props.client, this.onFailure)
                     : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure);
             this.setState({
@@ -130,7 +134,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
 
         try {
-            if (this.ourIntent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
+            if (this.props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
                 // MSC4108-Flow: NewScanned
                 await rendezvous.negotiateProtocols();
                 const { verificationUri } = await rendezvous.deviceAuthorizationGrant();
@@ -167,7 +171,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
 
         try {
-            if (this.ourIntent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
+            if (this.props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
                 // MSC4108-Flow: NewScanned
                 this.setState({ phase: Phase.Loading });
 
@@ -200,11 +204,11 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 });
                 this.setState({ phase: Phase.WaitingForDevice, userCode });
 
-                const datr = await this.state.rendezvous.completeLoginOnNewDevice({
+                const tokenResponse = await this.state.rendezvous.completeLoginOnNewDevice({
                     clientId: this.props.clientId,
                 });
 
-                if (datr) {
+                if (tokenResponse) {
                     // the 2024 version of the spec only gives the server name, but the 2025 version will give the base URL
                     // so, we do a discovery for now.
                     const homeserverUrl = (await AutoDiscovery.findClientConfig(this.state.homeserverName))?.[
@@ -221,11 +225,11 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
 
                     // store and use the new credentials
                     const credentials = await configureFromCompletedOAuthLogin({
-                        accessToken: datr.access_token,
-                        refreshToken: datr.refresh_token,
+                        accessToken: tokenResponse.access_token,
+                        refreshToken: tokenResponse.refresh_token,
                         homeserverUrl,
                         clientId: this.props.clientId,
-                        idToken: datr.id_token ?? "", // I'm not sure the idToken is actually required
+                        idToken: tokenResponse.id_token ?? "", // I'm not sure the idToken is actually required
                         issuer: metadata!.issuer,
                         identityServerUrl: undefined, // PROTOTYPE: we should have stored this from before
                     });
