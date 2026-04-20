@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ReactNode } from "react";
 import classNames from "classnames";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
@@ -16,14 +16,12 @@ import { UIFeature } from "../../../settings/UIFeature";
 import LanguageSelector from "./LanguageSelector";
 import EmbeddedPage from "../../structures/EmbeddedPage";
 import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
+import DefaultWelcome from "./DefaultWelcome.tsx";
 
 export default class Welcome extends React.PureComponent<EmptyObject> {
     public render(): React.ReactNode {
         const pagesConfig = SdkConfig.getObject("embedded_pages");
-        let pageUrl: string | undefined;
-        if (pagesConfig) {
-            pageUrl = pagesConfig.get("welcome_url");
-        }
+        const pageUrl = pagesConfig?.get("welcome_url");
 
         const replaceMap: Record<string, string> = {
             "$brand": SdkConfig.get("brand"),
@@ -33,12 +31,11 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
             "[matrix]": MATRIX_LOGO_HTML,
         };
 
-        if (!pageUrl) {
-            // Fall back to default and replace $logoUrl in welcome.html
-            const brandingConfig = SdkConfig.getObject("branding");
-            const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
-            replaceMap["$logoUrl"] = logoUrl;
-            pageUrl = "welcome.html";
+        let body: ReactNode;
+        if (pageUrl) {
+            body = <EmbeddedPage className="mx_WelcomePage" url={pageUrl} replaceMap={replaceMap} />;
+        } else {
+            body = <DefaultWelcome />;
         }
 
         return (
@@ -49,7 +46,8 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
                     })}
                     data-testid="mx_welcome_screen"
                 >
-                    <EmbeddedPage className="mx_WelcomePage" url={pageUrl} replaceMap={replaceMap} />
+                    {body}
+                    <hr />
                     <LanguageSelector />
                 </div>
             </AuthPage>

@@ -1,0 +1,80 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_DefaultWelcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: var(--cpd-space-6x) var(--cpd-space-9x);
+    max-width: 480px;
+
+    .mx_DefaultWelcome_logo {
+        height: 48px;
+        aspect-ratio: auto;
+        margin-top: var(--cpd-space-2x);
+    }
+
+    h1 {
+        margin: var(--cpd-space-5x) 0 0;
+    }
+
+    h2 {
+        margin: var(--cpd-space-2x) 0 0;
+    }
+
+    .mx_DefaultWelcome_buttons {
+        margin: var(--cpd-space-5x) 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        gap: var(--cpd-space-5x);
+
+        a {
+            display: flex;
+            padding: 10px var(--cpd-space-5x);
+            padding-left: var(--cpd-space-6x);
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            width: 150px;
+            text-decoration: none;
+            color: var(--cpd-color-text-action-primary);
+            position: relative;
+
+            &.mx_DefaultWelcome_buttons_login {
+                background-color: #368bd6;
+                color: white !important;
+            }
+
+            &.mx_DefaultWelcome_buttons_register {
+                background-color: #0dbd8b;
+                color: white !important;
+            }
+
+            &.mx_DefaultWelcome_buttons_roomDirectory {
+                background-color: #ffffff;
+                color: #2e2f32;
+            }
+
+            svg {
+                height: 20px;
+                position: absolute;
+                left: 10px;
+            }
+        }
+    }
+}
+
+.mx_WelcomePage_registrationDisabled {
+    .mx_DefaultWelcome_buttons_register {
+        display: none;
+    }
+}
