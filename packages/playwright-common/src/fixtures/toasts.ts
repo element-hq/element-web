@@ -29,81 +29,128 @@ class Toasts {
     public constructor(public readonly page: Page) {}
 
     /**
-     * Assert that no toasts exist
+     * Assert that no toasts exist.
      */
     public async assertNoToasts(): Promise<void> {
         await expect(this.page.locator(".mx_Toast_toast")).not.toBeVisible();
     }
 
     /**
-     * Assert that a toast with the given title exists, and return it
+     * Return the toast with the supplied title. Fail or return null if it does
+     * not exist.
      *
-     * @param title - Expected title of the toast
-     * @param timeout - Time to retry the assertion for in milliseconds.
-     *                  Defaults to `timeout` in `TestConfig.expect`.
-     * @returns the Locator for the matching toast
+     * If `required` is false, you should supply a relatively short `timeout`
+     * (e.g. 2000, meaning 2 seconds) to prevent your test taking too long.
+     *
+     * @param title - Expected title of the toast.
+     * @param timeout - Time in ms before we give up and decide the toast does
+     *                  not exist. If `required` is true, defaults to `timeout`
+     *                  in `TestConfig.expect`. Otherwise, defaults to 2000 (2
+     *                  seconds).
+     * @param required - If true, fail the test (throw an exception) if the
+     *                   toast is not visible. Otherwise, just return null if
+     *                   the toast is not visible.
+     * @returns the Locator for the matching toast, or null if it is not
+     *          visible. (null will only be returned if `required` is false.)
      */
-    public async getToast(title: string, timeout?: number): Promise<Locator> {
-        const toast = this.getToastIfExists(title);
-        await expect(toast).toBeVisible({ timeout });
-        return toast;
+    public async getToast(title: string, timeout?: number, required = true): Promise<Locator | null> {
+        const toast = this.page.locator(".mx_Toast_toast", { hasText: title }).first();
+
+        if (required) {
+            await expect(toast).toBeVisible({ timeout });
+            return toast;
+        } else {
+            // If we don't set a timeout, waitFor will wait forever. Since
+            // required is false, we definitely don't want to wait forever.
+            timeout = timeout ?? 2000;
+
+            try {
+                await toast.waitFor({ state: "visible", timeout });
+                return toast;
+            } catch {
+                return null;
+            }
+        }
     }
 
     /**
-     * Find a toast with the given title, if it exists.
+     * Accept the toast with the supplied title, or fail if it does not exist.
      *
-     * @param title - Title of the toast.
-     * @returns the Locator for the matching toast, or an empty locator if it
-     *          doesn't exist.
-     */
-    public getToastIfExists(title: string): Locator {
-        return this.page.locator(".mx_Toast_toast", { hasText: title }).first();
-    }
-
-    /**
-     * Accept a toast with the given title. Only works for the first toast in
-     * the stack.
+     * Only works if this toast is at the top of the stack of toasts.
      *
-     * @param title - Expected title of the toast
+     * @param title - Expected title of the toast.
      */
     public async acceptToast(title: string): Promise<void> {
-        const toast = await this.getToast(title);
-        await toast.locator('.mx_Toast_buttons button[data-kind="primary"]').click();
+        return await clickToastButton(this, title, "primary");
     }
+
     /**
-     * Accept a toast with the given title, if it exists. Only works for the
-     * first toast in the stack.
+     * Accept the toast with the supplied title, if it exists, or return after 2
+     * seconds if it is not found.
      *
-     * @param title - Title of the toast
+     * Only works if this toast is at the top of the stack of toasts.
+     *
+     * @param title - Expected title of the toast.
      */
     public async acceptToastIfExists(title: string): Promise<void> {
-        const toast = this.getToastIfExists(title).locator('.mx_Toast_buttons button[data-kind="primary"]');
-        if ((await toast.count()) > 0) {
-            await toast.click();
-        }
+        return await clickToastButton(this, title, "primary", 2000, false);
     }
 
     /**
-     * Reject a toast with the given title. Only works for the first toast in
-     * the stack.
+     * Reject the toast with the supplied title, or fail if it does not exist.
      *
-     * @param title - Expected title of the toast
+     * Only works if this toast is at the top of the stack of toasts.
+     *
+     * @param title - Expected title of the toast.
      */
     public async rejectToast(title: string): Promise<void> {
-        const toast = await this.getToast(title);
-        await toast.locator('.mx_Toast_buttons button[data-kind="secondary"]').click();
+        return await clickToastButton(this, title, "secondary");
     }
 
     /**
-     * Reject a toast with the given title, if it exists. Only works for the
-     * first toast in the stack.
+     * Reject the toast with the supplied title, if it exists, or return after 2
+     * seconds if it is not found.
      *
-     * @param title - Title of the toast
+     * Only works if this toast is at the top of the stack of toasts.
+     *
+     * @param title - Expected title of the toast.
      */
     public async rejectToastIfExists(title: string): Promise<void> {
-        const toast = this.getToastIfExists(title).locator('.mx_Toast_buttons button[data-kind="secondary"]');
-        if ((await toast.count()) > 0) {
-            await toast.click();
-        }
+        return await clickToastButton(this, title, "secondary", 2000, false);
+    }
+}
+
+/**
+ * Find the toast with the supplied title and click a button on it.
+ *
+ * Only works if this toast is at the top of the stack of toasts.
+ *
+ * If `required` is false, you should supply a relatively short `timeout`
+ * (e.g. 2000, meaning 2 seconds) to prevent your test taking too long.
+ *
+ * @param toasts - A Toasts instance.
+ * @param title - Expected title of the toast.
+ * @param button - Which button to click on the toast. Allowed values are
+ *                 "primary", which will accept the toast, or "secondary",
+ *                 which will reject it.
+ * @param timeout - Time in ms before we give up and decide the toast does
+ *                  not exist. If `required` is true, defaults to `timeout`
+ *                  in `TestConfig.expect`. Otherwise, defaults to 2000 (2
+ *                  seconds).
+ * @param required - If true, fail the test (throw an exception) if the
+ *                   toast is not visible. Otherwise, just return after
+ *                   `timeout` if the toast is not visible.
+ */
+async function clickToastButton(
+    toasts: Toasts,
+    title: string,
+    button: "primary" | "secondary",
+    timeout?: number,
+    required = true,
+): Promise<void> {
+    const toast = await toasts.getToast(title, timeout, required);
+
+    if (toast) {
+        await toast.locator(`.mx_Toast_buttons button[data-kind="${button}"]`).click();
     }
 }

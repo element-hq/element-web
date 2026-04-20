@@ -681,6 +681,12 @@
         "unfederated_label_default_on": "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.",
         "unsupported_version": "The server does not support the room version specified."
     },
+    "create_section_dialog": {
+        "create_section": "Create section",
+        "description": "Sections are only for you",
+        "label": "Section name",
+        "title": "Create a section"
+    },
     "create_space": {
         "add_details_prompt": "Add some details to help people recognise it.",
         "add_details_prompt_2": "You can change these anytime.",

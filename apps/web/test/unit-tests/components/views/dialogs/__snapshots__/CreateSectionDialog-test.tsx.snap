@@ -1,16 +1,15 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`ConfirmUserActionDialog renders 1`] = `
-<DocumentFragment>
+exports[`CreateSectionDialog renders the dialog 1`] = `
+<div>
   <div
     data-focus-guard="true"
     style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
     tabindex="0"
   />
   <div
-    aria-describedby="mx_Dialog_content"
     aria-labelledby="mx_BaseDialog_title"
-    class="mx_ConfirmUserActionDialog mx_Dialog_fixedWidth"
+    class="mx_CreateSectionDialog mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
     tabindex="-1"
@@ -22,42 +21,40 @@ exports[`ConfirmUserActionDialog renders 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Ban this 
+        Create a section
       </h1>
     </div>
     <div
-      class="mx_Dialog_content"
-      id="mx_Dialog_content"
+      class="_flex_4dswl_9 mx_CreateSectionDialog_content"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
     >
-      <div
-        class="mx_ConfirmUserActionDialog_user"
+      <span
+        class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+      >
+        Sections are only for you
+      </span>
+      <form
+        class="_root_19upo_16 mx_CreateSectionDialog_form"
       >
         <div
-          class="mx_ConfirmUserActionDialog_avatar"
+          class="_field_19upo_26"
         >
-          <span
-            class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
-            data-color="3"
-            data-testid="avatar-img"
-            data-type="round"
-            role="presentation"
-            style="--cpd-avatar-size: 48px;"
-            title="@user:test.com"
+          <label
+            class="_label_19upo_59"
+            for="radix-_r_0_"
           >
-            u
-          </span>
+             
+            Section name
+          </label>
+          <input
+            class="_control_d83jn_10"
+            id="radix-_r_0_"
+            name="sectionName"
+            required=""
+            title=""
+          />
         </div>
-        <div
-          class="mx_ConfirmUserActionDialog_name"
-        >
-          @user:test.com
-        </div>
-        <div
-          class="mx_ConfirmUserActionDialog_userId"
-        >
-          @user:test.com
-        </div>
-      </div>
+      </form>
     </div>
     <div
       class="mx_Dialog_buttons"
@@ -74,9 +71,10 @@ exports[`ConfirmUserActionDialog renders 1`] = `
         <button
           class="mx_Dialog_primary"
           data-testid="dialog-primary-button"
+          disabled=""
           type="button"
         >
-          Ban
+          Create section
         </button>
       </span>
     </div>
@@ -104,5 +102,5 @@ exports[`ConfirmUserActionDialog renders 1`] = `
     style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
     tabindex="0"
   />
-</DocumentFragment>
+</div>
 `;
