@@ -84,6 +84,8 @@ export function useUserStatus(userId: string | undefined): UserStatus | undefine
 
     return {
         emoji: rawUserStatus.emoji,
-        text: userStatusTextWithinMaxLength(rawUserStatus.text) ? rawUserStatus.text : `${rawUserStatus.text}…`,
+        text: userStatusTextWithinMaxLength(rawUserStatus.text)
+            ? rawUserStatus.text
+            : `${rawUserStatus.text.slice(0, MAX_STATUS_TEXT_BYTES)}…`,
     };
 }
