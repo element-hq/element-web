@@ -26,7 +26,6 @@ import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
 import TextualBody from "./TextualBody";
-import MImageBody from "./MImageBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
@@ -37,6 +36,7 @@ import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTil
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
+    ImageBodyFactory,
     RedactedBodyFactory,
     VideoBodyFactory,
     renderMBody,
@@ -67,7 +67,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Text, TextualBody],
     [MsgType.Notice, TextualBody],
     [MsgType.Emote, TextualBody],
-    [MsgType.Image, MImageBody],
+    [MsgType.Image, ImageBodyFactory],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyFactory],
@@ -265,7 +265,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             }
 
             if (
-                ((BodyType === MImageBody || BodyType === VideoBodyFactory) &&
+                ((BodyType === ImageBodyFactory || BodyType === VideoBodyFactory) &&
                     !this.validateImageOrVideoMimetype(content)) ||
                 (BodyType === MStickerBody && !this.validateStickerMimetype(content))
             ) {

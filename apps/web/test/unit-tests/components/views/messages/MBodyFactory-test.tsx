@@ -21,6 +21,7 @@ import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import {
     FileBodyFactory,
+    ImageBodyFactory,
     VideoBodyFactory,
     renderMBody,
 } from "../../../../../src/components/views/messages/MBodyFactory";
@@ -100,6 +101,10 @@ describe("MBodyFactory", () => {
 
         it("returns the video body factory for m.video", () => {
             expect(renderMBody({ ...props, mxEvent: mkEvent("m.video") })?.type).toBe(VideoBodyFactory);
+        });
+
+        it("returns the image body factory for m.image", () => {
+            expect(renderMBody({ ...props, mxEvent: mkEvent("m.image") })?.type).toBe(ImageBodyFactory);
         });
 
         it("returns null when msgtype is missing", () => {
