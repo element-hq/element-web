@@ -11,6 +11,7 @@ import "@testing-library/jest-dom";
 import "blob-polyfill";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { mocked } from "jest-mock";
+import React, { useRef } from "react";
 
 import { PredictableRandom } from "./test-utils/predictableRandom";
 import * as rageshake from "../src/rageshake/rageshake";
@@ -37,6 +38,22 @@ beforeEach(() => {
         }
         return ret;
     });
+});
+
+// Mock useId to return a predictable, incrementing string
+let idCounter = 0;
+
+jest.spyOn(React, "useId").mockImplementation(() => {
+    // IDs need to be consistent for re-renders of the same component otherwise Radix etc get confused.
+    // We can use a ref to store the one we generated 9which is broadly similar to how react's version
+    // works in that it generates one at mount time and returns that).
+    const myId = useRef(`test-id-${idCounter++}`);
+    return myId.current;
+});
+
+// Reset the counter before each test so 'test-id-0' is always first
+beforeEach(() => {
+    idCounter = 0;
 });
 
 // Somewhat hacky workaround for https://github.com/jestjs/jest/issues/15747: if the GHA reporter is enabled,
