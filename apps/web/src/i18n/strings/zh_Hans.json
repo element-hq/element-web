@@ -430,7 +430,7 @@
         "uploading_logs": "正在上传日志",
         "waiting_for_server": "等待服务器响应"
     },
-    "cannot_invite_without_identity_server": "如果没有身份服务器，则无法通过邮件邀请用户。您可以连接到“设置”下的服务器。",
+    "cannot_invite_without_identity_server": "如果没有身份服务器，则无法通过邮件地址邀请用户。你可以在“设置”下连接到身份服务器。",
     "cannot_reach_homeserver": "无法连接主服务器",
     "cannot_reach_homeserver_detail": "确保具有良好的 Internet 连接，或联系服务器管理员",
     "cant_load_page": "无法载入页面",
@@ -936,7 +936,7 @@
         "cancel_search_label": "取消搜索"
     },
     "empty_room": "空房间",
-    "empty_room_was_name": "空房间（曾是%(oldName)s）",
+    "empty_room_was_name": "空房间（曾是 %(oldName)s）",
     "encryption": {
         "access_secret_storage_dialog": {
             "alternatives": "如果你有安全密钥或安全口令，这也会起作用。",
@@ -2334,7 +2334,7 @@
         },
         "security": {
             "cannot_change_to_private_due_to_missing_history_visiblity_permissions": {
-                "description": "您没有权限更改该频道的历史记录可见性。此操作存在风险，可能导致未加入频道的用户读取消息。",
+                "description": "你无权更改该频道的历史可见性。此操作存在风险，可能导致未加入的用户读取消息。",
                 "title": "无法将房间设为私有房间"
             },
             "enable_encryption_confirm_description": "房间的加密一旦启用就无法禁用。服务器无法看到在加密房间中发送的消息，只有房间内的参与者才能看到。启用加密可能会阻止大多数机器人与桥接器正常工作。<a>了解更多加密相关</a>",
@@ -2901,8 +2901,7 @@
                 "other": "移除设备"
             },
             "confirm_sign_out_sso": {
-                "one": "通过使用单点登录验证您的身份以确认移除此设备。",
-                "other": "通过使用单点登录验证您的身份以确认移除这些设备。"
+                "other": "通过使用单点登录验证你的身份以确认移除这些设备。"
             },
             "current_session": "当前会话",
             "desktop_session": "桌面会话",
