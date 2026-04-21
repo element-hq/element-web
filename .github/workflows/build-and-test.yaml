@@ -241,7 +241,8 @@ jobs:
         needs: prepare_ed
         name: "Desktop macOS"
         uses: ./.github/workflows/build_desktop_macos.yaml
-        # Skip Windows builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
+        # Skip macOS builds on PRs, as the Linux amd64 build is enough of a smoke test and includes the screenshot tests
+        # and we have a very low limit of concurrent macos runners (5) across the Github org.
         if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests')
         with:
             blob_report: true
