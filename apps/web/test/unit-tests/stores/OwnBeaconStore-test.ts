@@ -40,8 +40,6 @@ jest.mock("lodash", () => ({
     debounce: jest.fn().mockImplementation((callback) => callback),
 }));
 
-jest.useFakeTimers();
-
 describe("OwnBeaconStore", () => {
     let geolocation: Mocked<Geolocation>;
     // 14.03.2022 16:15
@@ -134,30 +132,26 @@ describe("OwnBeaconStore", () => {
         mockClient.emit(BeaconEvent.New, beaconInfoEvent, beacon);
     };
 
-    const localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);
-    const localStorageSetSpy = jest.spyOn(localStorage.__proto__, "setItem").mockImplementation(() => {});
+    let localStorageGetSpy: jest.SpyInstance<any, unknown[]>;
+    let localStorageSetSpy: jest.SpyInstance<any, unknown[]>;
 
     beforeEach(() => {
+        jest.useFakeTimers();
+
         geolocation = mockGeolocation();
         mockClient.getVisibleRooms.mockReturnValue([]);
         mockClient.unstable_setLiveBeacon.mockClear().mockResolvedValue({ event_id: "1" });
         mockClient.sendEvent.mockReset().mockResolvedValue({ event_id: "1" });
         jest.spyOn(global.Date, "now").mockReturnValue(now);
-        jest.spyOn(OwnBeaconStore.instance, "emit").mockRestore();
-        jest.spyOn(logger, "error").mockRestore();
 
-        localStorageGetSpy.mockClear().mockReturnValue(undefined);
-        localStorageSetSpy.mockClear();
+        localStorageGetSpy = jest.spyOn(localStorage.__proto__, "getItem").mockReturnValue(undefined);
+        localStorageSetSpy = jest.spyOn(localStorage.__proto__, "setItem").mockImplementation(() => {});
     });
 
     afterEach(async () => {
         await resetAsyncStoreWithClient(OwnBeaconStore.instance);
 
         jest.clearAllTimers();
-    });
-
-    afterAll(() => {
-        localStorageGetSpy.mockRestore();
     });
 
     describe("onReady()", () => {
