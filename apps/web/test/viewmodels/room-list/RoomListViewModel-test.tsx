@@ -619,6 +619,12 @@ describe("RoomListViewModel", () => {
                 expect(viewModel.getSnapshot().toast).toBe("section_created");
             });
 
+            it("should show toast when RoomTagged event fires", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.RoomTagged);
+                expect(viewModel.getSnapshot().toast).toBe("chat_moved");
+            });
+
             it("should clear toast when closeToast is called", () => {
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
