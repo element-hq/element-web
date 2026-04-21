@@ -1666,7 +1666,7 @@ describe("<MatrixChat />", () => {
             expect(Lifecycle.attemptDelegatedAuthLogin).toHaveBeenCalled();
 
             // should just show the welcome screen
-            await rendered.findByText("Welcome to Element");
+            await rendered.findByText("Welcome to Test");
             expect(rendered.container).toMatchSnapshot();
         });
 
