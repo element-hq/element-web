@@ -11,28 +11,19 @@ import { fn } from "storybook/test";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
-import { BaseViewModel, useCreateAutoDisposedViewModel } from "../../core/viewmodel";
-
-class MockUserMenuViewModel extends BaseViewModel<UserMenuViewSnapshot, undefined> implements UserMenuViewActions {
-    public constructor(snapshot: UserMenuViewSnapshot) {
-        super(undefined, snapshot);
-    }
-
-    public setOpen = (open: boolean): void => {
-        this.snapshot.merge({ open });
-    };
-
-    public createAccount: () => void = fn();
-    public signIn: () => void = fn();
-    public linkNewDevice: () => void = fn();
-    public openFeedback: () => void = fn();
-    public openHomePage: () => void = fn();
-    public openSecurity: () => void = fn();
-    public openSettings: () => void = fn();
-}
+import { BaseViewModel, useMockedViewModel } from "../../core/viewmodel";
 
 const UserMenuWrapper = (snapshot: UserMenuViewSnapshot): JSX.Element => {
-    const vm = useCreateAutoDisposedViewModel(() => new MockUserMenuViewModel(snapshot));
+    const vm = useMockedViewModel<UserMenuViewSnapshot, UserMenuViewActions>(snapshot, {
+        setOpen: fn(),
+        createAccount: fn(),
+        signIn: fn(),
+        linkNewDevice: fn(),
+        openFeedback: fn(),
+        openHomePage: fn(),
+        openSecurity: fn(),
+        openSettings: fn(),
+    });
     return <UserMenuView vm={vm} />;
 };
 
