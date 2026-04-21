@@ -240,6 +240,13 @@
             "view_image": "View image"
         }
     },
+    "user_menu": {
+        "link_new_device": "Link new device",
+        "open_feedback": "Feedback",
+        "open_home": "Home",
+        "open_security": "Security & Privacy",
+        "open_settings": "All settings"
+    },
     "widget": {
         "context_menu": {
             "move_left": "Move left",

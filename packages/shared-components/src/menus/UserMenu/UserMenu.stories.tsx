@@ -8,10 +8,6 @@
 import { type Meta, type StoryObj } from "@storybook/react-vite";
 import React, { type JSX } from "react";
 import { fn } from "storybook/test";
-import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
-import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
-import ChatProblemIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-problem";
-import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
@@ -25,6 +21,14 @@ class MockUserMenuViewModel extends BaseViewModel<UserMenuViewSnapshot, undefine
     public setOpen = (open: boolean): void => {
         this.snapshot.merge({ open });
     };
+
+    public createAccount: () => void = fn();
+    public signIn: () => void = fn();
+    public linkNewDevice: () => void = fn();
+    public openFeedback: () => void = fn();
+    public openHomePage: () => void = fn();
+    public openSecurity: () => void = fn();
+    public openSettings: () => void = fn();
 }
 
 const UserMenuWrapper = (snapshot: UserMenuViewSnapshot): JSX.Element => {
@@ -43,23 +47,12 @@ const meta = {
         userId: "@person-name:homeserver.com",
         manageAccountHref: "#",
         expanded: true,
-        actions: [
-            {
-                icon: CheckCircleIcon,
-                label: "One action",
-                onSelect: fn(),
-            },
-            {
-                icon: CheckCircleIcon,
-                label: "Another action",
-                onSelect: fn(),
-            },
-            {
-                icon: CheckCircleIcon,
-                label: "Third action",
-                onSelect: fn(),
-            },
-        ],
+        actions: {
+            linkNewDevice: true,
+            openSecurity: true,
+            openFeedback: true,
+            openSettings: true,
+        },
     },
     parameters: {
         design: {
@@ -128,25 +121,13 @@ export const Guest: Story = {
         userId: "@guest:attendees.example.org",
         manageAccountHref: undefined,
         showAvatar: false,
-        createAccount: fn(),
-        signIn: fn(),
-        actions: [
-            {
-                icon: HomeIcon,
-                label: "Home",
-                onSelect: fn(),
-            },
-            {
-                icon: ChatProblemIcon,
-                label: "Feedback",
-                onSelect: fn(),
-            },
-            {
-                icon: SettingsIcon,
-                label: "Settings",
-                onSelect: fn(),
-            },
-        ],
+        actions: {
+            createAccount: true,
+            signIn: true,
+            openHomePage: true,
+            openFeedback: true,
+            openSettings: true,
+        },
     },
 };
 
@@ -181,4 +162,22 @@ export const GuestOpen: Story = {
     // Only used for playwright tests for the menu.
     // Steals focus if actually opened on the storybook page
     tags: ["!dev", "!autodocs"],
+};
+
+export const AllOptions: Story = {
+    args: {
+        displayName: "Alice",
+        userId: "@alice:example.org",
+        manageAccountHref: "#",
+        showAvatar: true,
+        actions: {
+            createAccount: true,
+            signIn: true,
+            linkNewDevice: true,
+            openSecurity: true,
+            openHomePage: true,
+            openFeedback: true,
+            openSettings: true,
+        } satisfies Record<keyof UserMenuViewSnapshot["actions"], true>,
+    },
 };

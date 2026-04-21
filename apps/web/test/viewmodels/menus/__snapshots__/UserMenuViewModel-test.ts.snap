@@ -2,58 +2,39 @@
 
 exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
 {
-  "actions": [
-    {
-      "icon": {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      },
-      "label": "All settings",
-      "onSelect": [Function],
-    },
-  ],
+  "actions": {
+    "createAccount": false,
+    "linkNewDevice": true,
+    "openFeedback": false,
+    "openHomePage": false,
+    "openSecurity": true,
+    "openSettings": true,
+    "signIn": false,
+  },
   "avatarUrl": undefined,
-  "createAccount": [Function],
   "displayName": "@alice:domain",
   "expanded": false,
+  "manageAccountHref": undefined,
   "open": true,
-  "showAvatar": false,
-  "signIn": [Function],
   "userId": "@alice:domain",
 }
 `;
 
 exports[`UserMenuViewModel should generate a menu options for a logged in client 1`] = `
 {
-  "actions": [
-    {
-      "icon": {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      },
-      "label": "Link new device",
-      "onSelect": [Function],
-    },
-    {
-      "icon": {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      },
-      "label": "Security & Privacy",
-      "onSelect": [Function],
-    },
-    {
-      "icon": {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      },
-      "label": "All settings",
-      "onSelect": [Function],
-    },
-  ],
+  "actions": {
+    "createAccount": true,
+    "linkNewDevice": false,
+    "openFeedback": false,
+    "openHomePage": false,
+    "openSecurity": false,
+    "openSettings": true,
+    "signIn": true,
+  },
   "avatarUrl": undefined,
   "displayName": "@alice:domain",
   "expanded": false,
+  "manageAccountHref": undefined,
   "open": true,
   "userId": "@alice:domain",
 }

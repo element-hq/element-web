@@ -40,10 +40,19 @@ describe("UserMenuViewModel", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
         expect(vm.getSnapshot()).toMatchInlineSnapshot(`
 {
-  "actions": [],
+  "actions": {
+    "createAccount": true,
+    "linkNewDevice": false,
+    "openFeedback": false,
+    "openHomePage": false,
+    "openSecurity": false,
+    "openSettings": true,
+    "signIn": true,
+  },
   "avatarUrl": undefined,
   "displayName": "@alice:domain",
   "expanded": false,
+  "manageAccountHref": undefined,
   "open": false,
   "userId": "@alice:domain",
 }
@@ -69,21 +78,13 @@ describe("UserMenuViewModel", () => {
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
-        expect(vm.getSnapshot().actions).toContainEqual({
-            label: "Feedback",
-            onSelect: expect.anything(),
-            icon: expect.anything(),
-        });
+        expect(vm.getSnapshot().actions.openFeedback).toEqual(true);
     });
     it("should generate a menu options that includes a home page", () => {
         SdkConfig.put({ embedded_pages: { home_url: "https://example.org" } });
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
-        expect(vm.getSnapshot().actions).toContainEqual({
-            label: "Home",
-            onSelect: expect.anything(),
-            icon: expect.anything(),
-        });
+        expect(vm.getSnapshot().actions.openHomePage).toEqual(true);
     });
     it("can toggle menu", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
@@ -106,9 +107,7 @@ describe("UserMenuViewModel", () => {
         const dispatcherSpy = jest.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
-        vm.getSnapshot()
-            .actions.find((action) => action.label === "Home")!
-            .onSelect();
+        vm.openHomePage();
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewHomePage,
@@ -121,9 +120,7 @@ describe("UserMenuViewModel", () => {
         const dispatcherSpy = jest.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
-        vm.getSnapshot()
-            .actions.find((action) => action.label === "Link new device")!
-            .onSelect();
+        vm.linkNewDevice();
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
@@ -138,9 +135,7 @@ describe("UserMenuViewModel", () => {
         const dispatcherSpy = jest.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
-        vm.getSnapshot()
-            .actions.find((action) => action.label === "Security & Privacy")!
-            .onSelect();
+        vm.openSecurity();
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
@@ -156,9 +151,7 @@ describe("UserMenuViewModel", () => {
         const dispatcherSpy = jest.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
-        vm.getSnapshot()
-            .actions.find((action) => action.label === "Feedback")!
-            .onSelect();
+        vm.openFeedback();
         expect(Modal.createDialog).toHaveBeenCalledWith(FeedbackDialog);
     });
     it("can open the settings menu", async () => {
@@ -166,9 +159,7 @@ describe("UserMenuViewModel", () => {
         const dispatcherSpy = jest.fn();
         dispatcher.register(dispatcherSpy);
         vm.setOpen(true);
-        vm.getSnapshot()
-            .actions.find((action) => action.label === "All settings")!
-            .onSelect();
+        vm.openSettings();
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
@@ -181,7 +172,7 @@ describe("UserMenuViewModel", () => {
         dispatcher.register(dispatcherSpy);
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
-        vm.getSnapshot().createAccount!();
+        vm.createAccount();
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: "start_registration",
@@ -194,7 +185,7 @@ describe("UserMenuViewModel", () => {
         dispatcher.register(dispatcherSpy);
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
-        vm.getSnapshot().signIn!();
+        vm.signIn();
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith({
                 action: "start_login",

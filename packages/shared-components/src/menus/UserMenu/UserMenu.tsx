@@ -7,16 +7,19 @@
 
 import React, { type JSX } from "react";
 import { Avatar, Button, Link, Menu, MenuItem, Separator, Text } from "@vector-im/compound-web";
-import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
+import {
+    ChatProblemIcon,
+    DevicesIcon,
+    HomeSolidIcon,
+    LockIcon,
+    PopOutIcon,
+    SettingsIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 import classNames from "classnames";
 
 import styles from "./UserMenu.module.css";
 import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { useI18n } from "../../core/i18n/i18nContext";
-
-type Icon = React.ForwardRefExoticComponent<
-    Omit<React.SVGProps<SVGSVGElement>, "ref" | "children"> & React.RefAttributes<SVGSVGElement>
->;
 
 export interface UserMenuViewSnapshot {
     /**
@@ -32,7 +35,8 @@ export interface UserMenuViewSnapshot {
      */
     avatarUrl?: string;
     /**
-     * Hide the avatar if the user is a guest. Defaults to true
+     * Should the avatar be visible.
+     * @default true
      */
     showAvatar?: boolean;
     /**
@@ -50,28 +54,15 @@ export interface UserMenuViewSnapshot {
     /**
      * A set of actions that the user can perform from the menu.
      */
-    actions: {
-        /**
-         * Optional menu icon.
-         */
-        icon?: Icon;
-        /**
-         * Human-readable label.
-         */
-        label: string;
-        /**
-         * Callback to perform when the action is selected.
-         */
-        onSelect: () => void;
-    }[];
-    /**
-     * Optional action to create an account.
-     */
-    createAccount?: () => void;
-    /**
-     * Optional action to sign in.
-     */
-    signIn?: () => void;
+    actions: Partial<{
+        createAccount: boolean;
+        signIn: boolean;
+        openHomePage: boolean;
+        linkNewDevice: boolean;
+        openSecurity: boolean;
+        openFeedback: boolean;
+        openSettings: boolean;
+    }>;
 }
 
 export declare interface UserMenuViewActions {
@@ -79,6 +70,34 @@ export declare interface UserMenuViewActions {
      * Called when the menu is opened or closed.
      */
     setOpen: (open: boolean) => void;
+    /**
+     * Called to open the create new account view.
+     */
+    createAccount: () => void;
+    /**
+     * Called to open the sign in view.
+     */
+    signIn: () => void;
+    /**
+     * Called to change the view to the configured home page.
+     */
+    openHomePage: () => void;
+    /**
+     * Called to open the link new device flow.
+     */
+    linkNewDevice: () => void;
+    /**
+     * Called to open the security tab of the settings dialog.
+     */
+    openSecurity: () => void;
+    /**
+     * Called to open the feedback dialog.
+     */
+    openFeedback: () => void;
+    /**
+     * Called to open the settings dialog.
+     */
+    openSettings: () => void;
 }
 
 export type UserMenuViewProps = {
@@ -98,80 +117,81 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
         open,
         manageAccountHref,
         actions,
-        showAvatar,
-        createAccount,
-        signIn,
+        showAvatar = true,
     } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={classNames(styles.triggerButton)} aria-label={_t("menus|user_menu|title")}>
             <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
-            {expanded ? (
+            {expanded && (
                 <Text type="heading" size="sm" as="span" weight="semibold">
                     {displayName}
                 </Text>
-            ) : null}
+            )}
         </button>
     );
     return (
-        <>
-            <Menu
-                open={open}
-                showTitle={false}
-                title={_t("menus|user_menu|title")}
-                trigger={trigger}
-                onOpenChange={vm.setOpen}
-                align="start"
-                side="bottom"
-                className={classNames(styles.container, className)}
-            >
-                <section className={styles.profile}>
-                    {showAvatar !== false && (
-                        <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />
-                    )}
-                    <Text className={styles.displayname} type="heading" size="md" weight="semibold" as="span">
-                        {displayName}
+        <Menu
+            open={open}
+            showTitle={false}
+            title={_t("menus|user_menu|title")}
+            trigger={trigger}
+            onOpenChange={vm.setOpen}
+            align="start"
+            side="bottom"
+            className={classNames(styles.container, className)}
+        >
+            <section className={styles.profile}>
+                {showAvatar && <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />}
+                <Text className={styles.displayname} type="heading" size="md" weight="semibold" as="span">
+                    {displayName}
+                </Text>
+                <Text data-testid="userId" size="md" as="span" type="body">
+                    {userId}
+                </Text>
+                {manageAccountHref && (
+                    <Button as="a" size="sm" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
+                        {_t("menus|user_menu|manage_account")}
+                    </Button>
+                )}
+                {actions.createAccount && (
+                    <Button
+                        className={styles.createAccount}
+                        size="sm"
+                        as="button"
+                        kind="primary"
+                        onClick={vm.createAccount}
+                    >
+                        {_t("menus|user_menu|create_an_account")}
+                    </Button>
+                )}
+                {actions.signIn && (
+                    <Text as="span" weight="medium">
+                        {_t("menus|user_menu|got_an_account")}
+                        <Link as="button" onClick={vm.signIn}>
+                            {_t("menus|user_menu|sign_in")}
+                        </Link>
                     </Text>
-                    <Text data-testid="userId" size="md" as="span" type="body">
-                        {userId}
-                    </Text>
-                    {manageAccountHref && (
-                        <Button as="a" size="sm" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
-                            {_t("menus|user_menu|manage_account")}
-                        </Button>
-                    )}
-                    {createAccount && (
-                        <Button
-                            className={styles.createAccount}
-                            size="sm"
-                            as="button"
-                            kind="primary"
-                            onClick={createAccount}
-                        >
-                            {_t("menus|user_menu|create_an_account")}
-                        </Button>
-                    )}
-                    {signIn && (
-                        <Text as="span" weight="medium">
-                            {_t("menus|user_menu|got_an_account")}
-                            <Link as="button" onClick={signIn}>
-                                {_t("menus|user_menu|sign_in")}
-                            </Link>
-                        </Text>
-                    )}
-                </section>
-                <Separator />
-                <section className={styles.actions}>
-                    {actions.map((action) => (
-                        <MenuItem
-                            key={action.label}
-                            Icon={action.icon}
-                            label={action.label}
-                            onSelect={action.onSelect}
-                        />
-                    ))}
-                </section>
-            </Menu>
-        </>
+                )}
+            </section>
+            <Separator />
+            <section className={styles.actions}>
+                {actions.openHomePage && (
+                    <MenuItem Icon={HomeSolidIcon} label={_t("user_menu|open_home")} onSelect={vm.openHomePage} />
+                )}
+                {actions.linkNewDevice && (
+                    <MenuItem Icon={DevicesIcon} label={_t("user_menu|link_new_device")} onSelect={vm.linkNewDevice} />
+                )}
+                {actions.openSecurity && (
+                    <MenuItem Icon={LockIcon} label={_t("user_menu|open_security")} onSelect={vm.openSecurity} />
+                )}
+                {actions.openFeedback && (
+                    <MenuItem Icon={ChatProblemIcon} label={_t("user_menu|open_feedback")} onSelect={vm.openFeedback} />
+                )}
+                {actions.openSettings && (
+                    <MenuItem Icon={SettingsIcon} label={_t("user_menu|open_settings")} onSelect={vm.openSettings} />
+                )}
+            </section>
+        </Menu>
     );
 }
