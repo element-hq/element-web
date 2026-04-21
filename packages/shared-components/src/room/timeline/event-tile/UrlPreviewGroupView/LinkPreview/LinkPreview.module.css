@@ -39,11 +39,13 @@ button.preview {
 .container {
     max-width: 478px;
     display: flex;
-    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border: 1px solid var(--cpd-color-bg-subtle-secondary);
     border-radius: 12px; /* Get radius from cpd */
     flex-direction: column;
     color: var(--cpd-color-gray-900);
     overflow: clip;
+
+    background: var(--cpd-color-bg-subtle-secondary);
 
     &.inline {
         flex-direction: row;
@@ -70,7 +72,7 @@ button.preview {
         }
         display: flex;
         flex-direction: column;
-        gap: var(--cpd-space-2x);
+        gap: var(--cpd-space-1x);
     }
 
     .caption {
@@ -112,7 +114,7 @@ button.preview {
     }
 
     .siteName {
-        margin-top: var(--cpd-space-2x);
+        margin-top: var(--cpd-space-1x);
         vertical-align: middle;
         display: flex;
         gap: var(--cpd-space-1-5x);
