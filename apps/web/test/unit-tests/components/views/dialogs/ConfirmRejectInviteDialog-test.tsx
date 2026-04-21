@@ -19,7 +19,6 @@ describe("ConfirmRejectInviteDialog", () => {
 
     afterEach(() => {
         SdkConfig.reset();
-        jest.restoreAllMocks();
     });
 
     it("can close the dialog", async () => {

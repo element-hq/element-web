@@ -24,6 +24,7 @@ const config: Config = {
     globalSetup: "<rootDir>/test/globalSetup.ts",
     setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
+    restoreMocks: true,
     moduleNameMapper: {
         // Support CSS module
         "\\.(module.css)$": "identity-obj-proxy",
