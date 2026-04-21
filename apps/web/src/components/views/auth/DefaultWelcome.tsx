@@ -6,15 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Heading, Text } from "@vector-im/compound-web";
+import { Button, Heading, Text } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig.ts";
-import { Icon as MatrixIcon } from "../../../../res/img/matrix.svg";
-import { Icon as LoginIcon } from "../../../../res/welcome/images/icon-sign-in.svg";
-import { Icon as RegisterIcon } from "../../../../res/welcome/images/icon-create-account.svg";
-import { Icon as RoomDirectoryIcon } from "../../../../res/welcome/images/icon-room-directory.svg";
 import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
+import { isElementBranded } from "../../../branding.ts";
 
 const DefaultWelcome: React.FC = () => {
     const brand = SdkConfig.get("brand");
@@ -22,50 +19,29 @@ const DefaultWelcome: React.FC = () => {
     const logoUrl = branding.get("auth_header_logo_url");
 
     const showGuestFunctions = !!MatrixClientPeg.get();
+    const isElement = isElementBranded();
 
     return (
         <div className="mx_DefaultWelcome">
-            <a href={branding.get("logo_link_url")} target="_blank" rel="noopener">
-                <img src={logoUrl} alt={brand} className="mx_DefaultWelcome_logo" />
+            <a href={branding.get("logo_link_url")} target="_blank" rel="noopener" className="mx_DefaultWelcome_logo">
+                <img src={logoUrl} alt={brand} />
             </a>
             <Heading as="h1" weight="semibold">
-                {_t("welcome|title", { brand })}
+                {isElement ? _t("welcome|title_element") : _t("welcome|title_generic", { brand })}
             </Heading>
-            <Text as="h2" size="sm">
-                {_t(
-                    "powered_by_matrix_with_logo",
-                    {},
-                    {
-                        Logo: () => (
-                            <a href="https://matrix.org" target="_blank" rel="noreferrer noopener" aria-label="Matrix">
-                                <MatrixIcon
-                                    className="mx_WelcomePage_logo"
-                                    width="79"
-                                    height="34"
-                                    style={{ paddingLeft: "1px", verticalAlign: "middle" }}
-                                />
-                            </a>
-                        ),
-                    },
-                )}
-            </Text>
+            {isElement && <Text size="md">{_t("welcome|tagline_element")}</Text>}
 
             <div className="mx_DefaultWelcome_buttons">
-                <a href="#/login" className="mx_DefaultWelcome_buttons_login">
-                    <LoginIcon />
+                <Button as="a" href="#/login" kind="primary" size="sm">
                     {_t("action|sign_in")}
-                </a>
-                <a href="#/register" className="mx_DefaultWelcome_buttons_register">
-                    <RegisterIcon />
+                </Button>
+                <Button as="a" href="#/register" kind="secondary" size="sm">
                     {_t("action|create_account")}
-                </a>
+                </Button>
                 {showGuestFunctions && (
-                    <div>
-                        <a href="#/directory" className="mx_DefaultWelcome_buttons_roomDirectory">
-                            <RoomDirectoryIcon />
-                            {_t("action|explore_rooms")}
-                        </a>
-                    </div>
+                    <Button as="a" href="#/directory" kind="tertiary" size="sm">
+                        {_t("action|explore_rooms")}
+                    </Button>
                 )}
             </div>
         </div>

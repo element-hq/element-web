@@ -9,23 +9,20 @@ Please see LICENSE files in the repository root for full details.
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: var(--cpd-color-bg-canvas-default);
+    box-sizing: border-box;
+    padding: var(--cpd-space-11x) var(--cpd-space-12x) var(--cpd-space-4x);
 
     &.mx_WelcomePage_registrationDisabled {
         .mx_ButtonCreateAccount {
             display: none;
         }
     }
-
-    hr {
-        width: 80%;
-        border-top: none;
-        border-color: var(--cpd-color-separator-primary);
-    }
 }
 
 .mx_Welcome .mx_AuthBody_language {
     width: 160px;
-    margin-bottom: 10px;
+    margin: var(--cpd-space-1x) 0;
 }
 
 /* Invert image colours in dark mode. */

@@ -3982,7 +3982,9 @@
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
     "welcome": {
-        "title": "Welcome to %(brand)s"
+        "title_element": "Be in your element",
+        "title_generic": "Welcome to %(brand)s",
+        "tagline_element": "Supercharged for speed and simplicity."
     },
     "widget": {
         "added_by": "Widget added by",

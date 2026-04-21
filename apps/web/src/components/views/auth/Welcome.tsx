@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import classNames from "classnames";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { Glass } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
 import AuthPage from "./AuthPage";
@@ -39,17 +40,17 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
         }
 
         return (
-            <AuthPage>
-                <div
-                    className={classNames("mx_Welcome", {
-                        mx_WelcomePage_registrationDisabled: !SettingsStore.getValue(UIFeature.Registration),
-                    })}
-                    data-testid="mx_welcome_screen"
-                >
-                    {body}
-                    <hr />
-                    <LanguageSelector />
-                </div>
+            <AuthPage addBlur={false}>
+                <Glass>
+                    <div
+                        className={classNames("mx_Welcome", {
+                            mx_WelcomePage_registrationDisabled: !SettingsStore.getValue(UIFeature.Registration),
+                        })}
+                    >
+                        {body}
+                        <LanguageSelector />
+                    </div>
+                </Glass>
             </AuthPage>
         );
     }

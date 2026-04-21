@@ -6,69 +6,29 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_DefaultWelcome {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     text-align: center;
-    padding: var(--cpd-space-6x) var(--cpd-space-9x);
-    max-width: 480px;
 
-    .mx_DefaultWelcome_logo {
+    .mx_DefaultWelcome_logo img {
         height: 48px;
         aspect-ratio: auto;
-        margin-top: var(--cpd-space-2x);
     }
 
     h1 {
-        margin: var(--cpd-space-5x) 0 0;
+        margin: var(--cpd-space-4x) 0 var(--cpd-space-2x);
     }
 
-    h2 {
-        margin: var(--cpd-space-2x) 0 0;
+    p {
+        color: var(--cpd-color-text-secondary);
     }
 
     .mx_DefaultWelcome_buttons {
-        margin: var(--cpd-space-5x) 0 0;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        box-sizing: border-box;
-        gap: var(--cpd-space-5x);
+        margin: var(--cpd-space-6x) 0 var(--cpd-space-1x);
+        padding-bottom: var(--cpd-space-4x);
+        border-bottom: 1px solid var(--cpd-color-separator-primary);
 
         a {
-            display: flex;
-            padding: 10px var(--cpd-space-5x);
-            padding-left: var(--cpd-space-6x);
-            justify-content: center;
-            align-items: center;
-            border-radius: 4px;
-            width: 150px;
-            text-decoration: none;
-            color: var(--cpd-color-text-action-primary);
-            position: relative;
-
-            &.mx_DefaultWelcome_buttons_login {
-                background-color: #368bd6;
-                color: white !important;
-            }
-
-            &.mx_DefaultWelcome_buttons_register {
-                background-color: #0dbd8b;
-                color: white !important;
-            }
-
-            &.mx_DefaultWelcome_buttons_roomDirectory {
-                background-color: #ffffff;
-                color: #2e2f32;
-            }
-
-            svg {
-                height: 20px;
-                position: absolute;
-                left: 10px;
-            }
+            width: 380px;
+            margin-bottom: var(--cpd-space-4x);
         }
     }
 }
