@@ -13,6 +13,11 @@
             "matchDepTypes": ["pnpm.overrides"],
             "groupName": null,
             "additionalBranchPrefix": "overrides-"
+        },
+        {
+            "matchDepTypes": ["pnpm.overrides"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
         }
     ],
     "customManagers": [
