@@ -459,8 +459,8 @@ export class EmailIdentityAuthEntry extends React.Component<
                                 {
                                     a: (text: string) => (
                                         <Fragment>
-                                            <AccessibleButton kind="link_inline" onClick={null} disabled>
-                                                {text} <Spinner size={14} />
+                                            <AccessibleButton element="a" kind="link_inline" onClick={null} disabled>
+                                                {text} <Spinner as="span" size={14} />
                                             </AccessibleButton>
                                         </Fragment>
                                     ),
@@ -475,6 +475,7 @@ export class EmailIdentityAuthEntry extends React.Component<
                                 {
                                     a: (text: string) => (
                                         <AccessibleButton
+                                            element="a"
                                             kind="link_inline"
                                             title={
                                                 this.state.requested ? _t("auth|uia|email_resent") : _t("action|resend")

@@ -3,11 +3,11 @@
 exports[`RedactedBodyView > renders the default redacted body 1`] = `
 <div>
   <span
-    class="content"
+    class="RedactedBodyView-module_content"
   >
     <svg
       aria-hidden="true"
-      class="icon"
+      class="RedactedBodyView-module_icon"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"
@@ -28,11 +28,11 @@ exports[`RedactedBodyView > renders the default redacted body 1`] = `
 exports[`RedactedBodyView > renders without a tooltip when none is provided 1`] = `
 <div>
   <span
-    class="content"
+    class="RedactedBodyView-module_content"
   >
     <svg
       aria-hidden="true"
-      class="icon"
+      class="RedactedBodyView-module_icon"
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"

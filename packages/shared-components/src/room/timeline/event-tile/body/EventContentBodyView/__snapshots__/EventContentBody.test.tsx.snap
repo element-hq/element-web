@@ -3,7 +3,7 @@
 exports[`EventContentBodyView > renders HTML content correctly 1`] = `
 <div>
   <div
-    class="EventTile_body markdownBody"
+    class="EventContentBody-module_EventTile_body EventContentBody-module_markdownBody"
     dir="auto"
   >
     <p>
@@ -30,7 +30,7 @@ exports[`EventContentBodyView > renders HTML content correctly 1`] = `
 exports[`EventContentBodyView > renders as span when specified 1`] = `
 <div>
   <span
-    class="EventTile_body"
+    class="EventContentBody-module_EventTile_body"
     dir="auto"
   >
     This is rendered as a span element.
@@ -41,17 +41,17 @@ exports[`EventContentBodyView > renders as span when specified 1`] = `
 exports[`EventContentBodyView > renders big emoji correctly 1`] = `
 <div>
   <div
-    class="EventTile_body EventTile_bigEmoji"
+    class="EventContentBody-module_EventTile_body EventContentBody-module_EventTile_bigEmoji"
     dir="auto"
   >
     <span
-      class="Emoji"
+      class="EventContentBody-module_Emoji"
       title=":wave:"
     >
       👋
     </span>
     <span
-      class="Emoji"
+      class="EventContentBody-module_Emoji"
       title=":smile:"
     >
       😊
@@ -63,7 +63,7 @@ exports[`EventContentBodyView > renders big emoji correctly 1`] = `
 exports[`EventContentBodyView > renders code block correctly 1`] = `
 <div>
   <div
-    class="EventTile_body markdownBody"
+    class="EventContentBody-module_EventTile_body EventContentBody-module_markdownBody"
     dir="auto"
   >
     <pre>
@@ -80,12 +80,12 @@ exports[`EventContentBodyView > renders code block correctly 1`] = `
 exports[`EventContentBodyView > renders highlighted content correctly 1`] = `
 <div>
   <div
-    class="EventTile_body"
+    class="EventContentBody-module_EventTile_body"
     dir="auto"
   >
     Message with a 
     <span
-      class="EventTile_searchHighlight"
+      class="EventContentBody-module_EventTile_searchHighlight"
     >
       highlighted
     </span>
@@ -97,7 +97,7 @@ exports[`EventContentBodyView > renders highlighted content correctly 1`] = `
 exports[`EventContentBodyView > renders plain text correctly 1`] = `
 <div>
   <div
-    class="EventTile_body"
+    class="EventContentBody-module_EventTile_body"
     dir="auto"
   >
     Hello, this is a plain text message.

@@ -18,10 +18,11 @@ import {
 } from "./UrlPreviewGroupView";
 import { useMockedViewModel } from "../../core/viewmodel";
 import { LinkedTextContext } from "../../core/utils/LinkedText";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
-const UrlPreviewGroupViewWrapper = ({
+const UrlPreviewGroupViewWrapperImpl = ({
     onHideClick,
     onImageClick,
     onTogglePreviewLimit,
@@ -38,6 +39,8 @@ const UrlPreviewGroupViewWrapper = ({
         </LinkedTextContext.Provider>
     );
 };
+
+const UrlPreviewGroupViewWrapper = withViewDocs(UrlPreviewGroupViewWrapperImpl, UrlPreviewGroupView);
 
 export default {
     title: "Event/UrlPreviewGroupView",

@@ -199,8 +199,11 @@ export class RoomListHeaderViewModel
         SettingsStore.setValue("RoomList.showMessagePreview", null, SettingLevel.DEVICE, isMessagePreviewEnabled);
         this.snapshot.merge({ isMessagePreviewEnabled });
     };
-}
 
+    public createSection = (): void => {
+        RoomListStoreV3.instance.createSection();
+    };
+}
 /**
  * Get the initial snapshot for the RoomListHeaderViewModel.
  * @param spaceStore - The space store instance.
@@ -272,6 +275,10 @@ function computeHeaderSpaceState(
     );
     const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
 
+    const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
+    const useComposeIcon = !isSectionFeatureEnabled;
+    const canCreateSection = isSectionFeatureEnabled;
+
     return {
         title,
         canCreateRoom,
@@ -280,5 +287,7 @@ function computeHeaderSpaceState(
         displaySpaceMenu,
         canInviteInSpace,
         canAccessSpaceSettings,
+        canCreateSection,
+        useComposeIcon,
     };
 }

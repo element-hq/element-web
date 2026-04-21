@@ -255,7 +255,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         } else {
             body = (
                 <p>
-                    <Spinner />
+                    <Spinner as="span" />
                 </p>
             );
         }

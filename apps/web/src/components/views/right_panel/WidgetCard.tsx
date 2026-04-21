@@ -18,7 +18,7 @@ import { ContextMenuButton, useContextMenu } from "../../structures/ContextMenu"
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import Heading from "../typography/Heading";
-import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel";
+import { WidgetContextMenu } from "../../../viewmodels/room/right-panel/WidgetContextMenuViewModel";
 
 interface IProps {
     room: Room;

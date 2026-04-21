@@ -16,7 +16,6 @@ import dis from "../../dispatcher/dispatcher";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
 import { Action } from "../../dispatcher/actions";
 import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
-import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
 import ToastStore from "../../stores/ToastStore.ts";
 import GenericToast from "../../components/views/toasts/GenericToast.tsx";
@@ -174,8 +173,8 @@ export default class WebPlatform extends BasePlatform {
         // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
         console.log("startUpdater, current version is " + getNormalizedAppVersion(WebPlatform.VERSION));
         void this.pollForUpdate((version: string, newVersion: string) => {
-            const query = parseQs(location);
-            if (query.updated) {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has("updated")) {
                 console.log("Update reloaded but still on an old version, stopping");
                 // We just reloaded already and are still on the old version!
                 // Show the toast rather than reload in a loop.
@@ -184,7 +183,6 @@ export default class WebPlatform extends BasePlatform {
             }
 
             // Set updated as a cachebusting query param and reload the page.
-            const url = new URL(window.location.href);
             url.searchParams.set("updated", newVersion);
             console.log("Update reloading to " + url.toString());
             window.location.href = url.toString();

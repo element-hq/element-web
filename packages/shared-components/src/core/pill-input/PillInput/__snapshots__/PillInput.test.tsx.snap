@@ -3,13 +3,13 @@
 exports[`PillInput > renders only the input without children 1`] = `
 <div>
   <div
-    class="flex pillInput"
+    class="Flex-module_flex PillInput-module_pillInput"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
     <input
       aria-label="pill input"
       autocomplete="off"
-      class="input"
+      class="PillInput-module_input"
       placeholder="Type something..."
     />
   </div>
@@ -19,11 +19,11 @@ exports[`PillInput > renders only the input without children 1`] = `
 exports[`PillInput > renders the pill input 1`] = `
 <div>
   <div
-    class="flex pillInput"
+    class="Flex-module_flex PillInput-module_pillInput"
     style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
   >
     <div
-      class="flex"
+      class="Flex-module_flex"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: wrap;"
     >
       <div
@@ -36,7 +36,7 @@ exports[`PillInput > renders the pill input 1`] = `
     <input
       aria-label="pill input"
       autocomplete="off"
-      class="input largerInput"
+      class="PillInput-module_input PillInput-module_largerInput"
       placeholder="Type something..."
     />
   </div>

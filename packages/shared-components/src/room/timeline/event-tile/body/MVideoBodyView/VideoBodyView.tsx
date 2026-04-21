@@ -127,6 +127,12 @@ interface VideoBodyViewProps {
     children?: PropsWithChildren["children"];
 }
 
+/**
+ * Renders the body of a video message with ready, hidden, loading, and error states.
+ *
+ * The media frame preserves layout while loading and can render
+ * supplemental content such as a file body row after the video.
+ */
 export function VideoBodyView({
     vm,
     className,

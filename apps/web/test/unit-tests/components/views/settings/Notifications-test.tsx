@@ -37,7 +37,6 @@ import {
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { Form } from "@vector-im/compound-web";
 
 import Notifications from "../../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -249,12 +248,7 @@ const pushRules: IPushRules = {
 const flushPromises = async () => await new Promise((resolve) => window.setTimeout(resolve));
 
 describe("<Notifications />", () => {
-    const getComponent = () =>
-        render(
-            <Form.Root>
-                <Notifications />
-            </Form.Root>,
-        );
+    const getComponent = () => render(<Notifications />);
 
     // get component, wait for async data and force a render
     const getComponentAndWait = async () => {

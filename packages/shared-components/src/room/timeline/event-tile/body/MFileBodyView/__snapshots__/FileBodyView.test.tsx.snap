@@ -3,10 +3,10 @@
 exports[`FileBodyView > matches snapshot for audio-info story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
-      class="mx_MediaBody mediaBody"
+      class="mx_MediaBody MediaBody-module_mediaBody"
       data-type="info"
     >
       <button
@@ -44,7 +44,7 @@ exports[`FileBodyView > matches snapshot for audio-info story 1`] = `
 exports[`FileBodyView > matches snapshot for decryption-pending-download story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
       data-type="download"
@@ -78,10 +78,10 @@ exports[`FileBodyView > matches snapshot for decryption-pending-download story 1
 exports[`FileBodyView > matches snapshot for default story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
-      class="mx_MediaBody mediaBody"
+      class="mx_MediaBody MediaBody-module_mediaBody"
       data-type="info"
     >
       <button
@@ -144,7 +144,7 @@ exports[`FileBodyView > matches snapshot for default story 1`] = `
 exports[`FileBodyView > matches snapshot for encrypted-iframe-download story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
       data-type="download"
@@ -188,13 +188,13 @@ exports[`FileBodyView > matches snapshot for encrypted-iframe-download story 1`]
 exports[`FileBodyView > matches snapshot for export story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <a
       href="https://example.org/spec.pdf"
     >
       <div
-        class="mx_MediaBody mediaBody"
+        class="mx_MediaBody MediaBody-module_mediaBody"
         data-type="info"
       >
         <button
@@ -230,10 +230,10 @@ exports[`FileBodyView > matches snapshot for export story 1`] = `
 exports[`FileBodyView > matches snapshot for invalid story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
-      class="mx_MediaBody mediaBody"
+      class="mx_MediaBody MediaBody-module_mediaBody"
       data-type="info"
     >
       <button
@@ -263,7 +263,7 @@ exports[`FileBodyView > matches snapshot for invalid story 1`] = `
     </div>
   </span>
   <span
-    class="content invalid"
+    class="FileBodyView-module_content FileBodyView-module_invalid"
   >
     Invalid file
   </span>
@@ -273,7 +273,7 @@ exports[`FileBodyView > matches snapshot for invalid story 1`] = `
 exports[`FileBodyView > matches snapshot for long-filename-download story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
       data-type="download"
@@ -310,10 +310,10 @@ exports[`FileBodyView > matches snapshot for long-filename-download story 1`] = 
 exports[`FileBodyView > matches snapshot for long-filename-info story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
-      class="mx_MediaBody mediaBody"
+      class="mx_MediaBody MediaBody-module_mediaBody"
       data-type="info"
     >
       <button
@@ -348,7 +348,7 @@ exports[`FileBodyView > matches snapshot for long-filename-info story 1`] = `
 exports[`FileBodyView > matches snapshot for unencrypted-download story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
       data-type="download"
@@ -385,10 +385,10 @@ exports[`FileBodyView > matches snapshot for unencrypted-download story 1`] = `
 exports[`FileBodyView > matches snapshot for video-info story 1`] = `
 <div>
   <span
-    class="content"
+    class="FileBodyView-module_content"
   >
     <div
-      class="mx_MediaBody mediaBody"
+      class="mx_MediaBody MediaBody-module_mediaBody"
       data-type="info"
     >
       <button
