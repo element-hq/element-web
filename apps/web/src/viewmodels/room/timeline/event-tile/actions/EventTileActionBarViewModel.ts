@@ -14,6 +14,7 @@ import {
     MsgType,
     RelationType,
     RoomStateEvent,
+    type RoomState,
     type MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -103,6 +104,14 @@ export class EventTileActionBarViewModel
     extends BaseViewModel<ActionBarViewSnapshot, EventTileActionBarViewModelProps>
     implements ActionBarViewActions
 {
+    private static readonly roomStateListenerRegistry = new WeakMap<
+        RoomState,
+        {
+            listeners: Set<(event?: MatrixEvent) => void>;
+            handler: (event?: MatrixEvent) => void;
+        }
+    >();
+
     private listenerCleanups: Array<() => void> = [];
     private downloadPermissionRequestId = 0;
     private downloadRequestId = 0;
@@ -252,8 +261,10 @@ export class EventTileActionBarViewModel
         const { mxEvent } = this.props;
         const roomId = mxEvent.getRoomId();
         this.trackEvent(mxEvent, MatrixEventEvent.Status, this.refreshSnapshot);
-        this.trackEvent(mxEvent, MatrixEventEvent.Decrypted, this.refreshSnapshot);
         this.trackEvent(mxEvent, MatrixEventEvent.BeforeRedaction, this.refreshSnapshot);
+        if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
+            this.trackEventOnce(mxEvent, MatrixEventEvent.Decrypted, this.refreshSnapshot);
+        }
         this.watchSetting("mediaPreviewConfig", roomId ?? null);
         this.watchSetting("showMediaEventIds", null);
 
@@ -261,8 +272,7 @@ export class EventTileActionBarViewModel
             ? MatrixClientPeg.safeGet().getRoom(roomId)?.getLiveTimeline().getState(EventTimeline.FORWARDS)
             : undefined;
         if (roomState) {
-            roomState.on(RoomStateEvent.Events, this.onRoomEvent);
-            this.addListenerCleanup(() => roomState.off(RoomStateEvent.Events, this.onRoomEvent));
+            this.trackRoomState(roomState, this.onRoomEvent);
         }
 
         MatrixClientPeg.safeGet().decryptEventIfNeeded(mxEvent);
@@ -283,6 +293,44 @@ export class EventTileActionBarViewModel
     private trackEvent(event: MatrixEvent, eventName: MatrixEventEvent, callback: (...args: unknown[]) => void): void {
         event.on(eventName, callback);
         this.addListenerCleanup(() => event.off(eventName, callback));
+    }
+
+    private trackEventOnce(
+        event: MatrixEvent,
+        eventName: MatrixEventEvent,
+        callback: (...args: unknown[]) => void,
+    ): void {
+        event.once(eventName, callback);
+        this.addListenerCleanup(() => event.off(eventName, callback));
+    }
+
+    private trackRoomState(roomState: RoomState, callback: (event?: MatrixEvent) => void): void {
+        let entry = EventTileActionBarViewModel.roomStateListenerRegistry.get(roomState);
+
+        if (!entry) {
+            const listeners = new Set<(event?: MatrixEvent) => void>();
+            const handler = (event?: MatrixEvent): void => {
+                for (const listener of listeners) {
+                    listener(event);
+                }
+            };
+
+            entry = { listeners, handler };
+            EventTileActionBarViewModel.roomStateListenerRegistry.set(roomState, entry);
+            roomState.on(RoomStateEvent.Events, handler);
+        }
+
+        entry.listeners.add(callback);
+        this.addListenerCleanup(() => {
+            const currentEntry = EventTileActionBarViewModel.roomStateListenerRegistry.get(roomState);
+            if (!currentEntry) return;
+
+            currentEntry.listeners.delete(callback);
+            if (currentEntry.listeners.size === 0) {
+                roomState.off(RoomStateEvent.Events, currentEntry.handler);
+                EventTileActionBarViewModel.roomStateListenerRegistry.delete(roomState);
+            }
+        });
     }
 
     private watchSetting(settingName: SettingKey, roomId: string | null): void {

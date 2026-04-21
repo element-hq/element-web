@@ -12,6 +12,7 @@ import {
     MatrixEvent,
     PendingEventOrdering,
     Room,
+    ThreadEvent,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import {
@@ -805,6 +806,56 @@ describe("EventTileViewModel", () => {
             });
 
             expect(vm.getSnapshot().hasFooter).toBe(false);
+        });
+
+        it("shares a single room thread listener across many tile view models", () => {
+            const roomOnSpy = jest.spyOn(room, "on");
+            const roomOffSpy = jest.spyOn(room, "off");
+            const viewModels = Array.from({ length: 101 }, (_, index) =>
+                createViewModel({
+                    mxEvent: mkMessage({
+                        room: room.roomId,
+                        user: "@alice:example.org",
+                        msg: `Message ${index}`,
+                        event: true,
+                    }),
+                }),
+            );
+
+            expect(roomOnSpy).toHaveBeenCalledTimes(1);
+            expect(roomOnSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
+
+            viewModels.slice(0, -1).forEach((vm) => vm.dispose());
+            expect(roomOffSpy).not.toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
+
+            viewModels.at(-1)?.dispose();
+            expect(roomOffSpy).toHaveBeenCalledTimes(1);
+            expect(roomOffSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
+        });
+
+        it("shares a single trust listener across many tile view models", () => {
+            const cliOnSpy = jest.spyOn(client, "on");
+            const cliOffSpy = jest.spyOn(client, "off");
+            const viewModels = Array.from({ length: 11 }, (_, index) =>
+                createViewModel({
+                    mxEvent: mkMessage({
+                        room: room.roomId,
+                        user: `@user${index}:example.org`,
+                        msg: `Message ${index}`,
+                        event: true,
+                    }),
+                }),
+            );
+
+            expect(cliOnSpy).toHaveBeenCalledTimes(1);
+            expect(cliOnSpy).toHaveBeenCalledWith("userTrustStatusChanged", expect.any(Function));
+
+            viewModels.slice(0, -1).forEach((vm) => vm.dispose());
+            expect(cliOffSpy).not.toHaveBeenCalledWith("userTrustStatusChanged", expect.any(Function));
+
+            viewModels.at(-1)?.dispose();
+            expect(cliOffSpy).toHaveBeenCalledTimes(1);
+            expect(cliOffSpy).toHaveBeenCalledWith("userTrustStatusChanged", expect.any(Function));
         });
     });
 

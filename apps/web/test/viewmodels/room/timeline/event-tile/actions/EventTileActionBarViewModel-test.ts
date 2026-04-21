@@ -345,11 +345,58 @@ describe("EventTileActionBarViewModel", () => {
         vm.dispose();
 
         expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Status, expect.any(Function));
-        expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
         expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.BeforeRedaction, expect.any(Function));
         expect(roomStateOffSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
         expect(SettingsStore.unwatchSetting).toHaveBeenCalledWith("mediaPreviewConfig:!room:example.org");
         expect(SettingsStore.unwatchSetting).toHaveBeenCalledWith("showMediaEventIds:global");
+    });
+
+    it("shares a single room state listener across multiple action bars", () => {
+        const roomStateOnSpy = jest.spyOn(roomState, "on");
+        const roomStateOffSpy = jest.spyOn(roomState, "off");
+        const vms = Array.from({ length: 11 }, (_, index) =>
+            createVm({
+                mxEvent: createMessageEvent({ event_id: `$event-${index}` }),
+            }),
+        );
+
+        expect(roomStateOnSpy).toHaveBeenCalledTimes(1);
+        expect(roomStateOnSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+        vms.slice(0, -1).forEach((vm) => vm.dispose());
+        expect(roomStateOffSpy).not.toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+        vms.at(-1)?.dispose();
+        expect(roomStateOffSpy).toHaveBeenCalledTimes(1);
+        expect(roomStateOffSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+    });
+
+    it("only subscribes to decrypted while the event still needs decryption", () => {
+        const mxEvent = createMessageEvent();
+        jest.spyOn(mxEvent, "isBeingDecrypted").mockReturnValue(false);
+        jest.spyOn(mxEvent, "shouldAttemptDecryption").mockReturnValue(false);
+        const onSpy = jest.spyOn(mxEvent, "on");
+        const onceSpy = jest.spyOn(mxEvent, "once");
+
+        createVm({ mxEvent });
+
+        expect(onSpy).not.toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
+        expect(onceSpy).not.toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
+    });
+
+    it("subscribes once to decrypted when the event is still decrypting", () => {
+        const mxEvent = createMessageEvent();
+        jest.spyOn(mxEvent, "isBeingDecrypted").mockReturnValue(true);
+        jest.spyOn(mxEvent, "shouldAttemptDecryption").mockReturnValue(false);
+        const onceSpy = jest.spyOn(mxEvent, "once");
+        const offSpy = jest.spyOn(mxEvent, "off");
+        const vm = createVm({ mxEvent });
+
+        expect(onceSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
+
+        vm.dispose();
+
+        expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
     });
 
     it("routes resend and cancel actions to the actionable failed event variant", () => {

@@ -18,6 +18,7 @@ import {
     NotificationCountType,
     PendingEventOrdering,
     Room,
+    RoomEvent,
     type Thread,
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -42,6 +43,7 @@ import { type RoomContextType, TimelineRenderingType } from "../../../../../../s
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { LOCAL_ROOM_ID_PREFIX, LocalRoom } from "../../../../../../src/models/LocalRoom";
 import {
+    createTestClient,
     filterConsole,
     flushPromises,
     getRoomContext,
@@ -970,6 +972,48 @@ describe("EventTile", () => {
         });
 
         expect(offSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
+    });
+
+    it("subscribes to room receipts only once when the client context changes", () => {
+        const ownEvent = mkMessage({
+            room: room.roomId,
+            user: client.getSafeUserId(),
+            msg: "Hello world!",
+            event: true,
+        });
+        const roomContext = getRoomContext(room, {});
+        const { rerender } = render(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{
+                    mxEvent: ownEvent,
+                    replacingEventId: ownEvent.replacingEventId(),
+                    lastSuccessful: true,
+                    withErrorBoundary: false,
+                }}
+            />,
+        );
+
+        const secondClient = createTestClient();
+        jest.spyOn(secondClient, "getRoom").mockReturnValue(room);
+        jest.spyOn(secondClient, "decryptEventIfNeeded").mockResolvedValue();
+        const secondClientOnSpy = jest.spyOn(secondClient, "on");
+
+        client = secondClient;
+
+        rerender(
+            <WrappedEventTile
+                roomContext={roomContext}
+                eventTilePropertyOverrides={{
+                    mxEvent: ownEvent,
+                    replacingEventId: ownEvent.replacingEventId(),
+                    lastSuccessful: true,
+                    withErrorBoundary: false,
+                }}
+            />,
+        );
+
+        expect(secondClientOnSpy.mock.calls.filter(([eventName]) => eventName === RoomEvent.Receipt)).toHaveLength(1);
     });
 
     it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {

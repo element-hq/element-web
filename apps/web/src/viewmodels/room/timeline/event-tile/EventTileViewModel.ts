@@ -420,6 +420,22 @@ export type EventTileViewModelProps = EventTileCoreProps &
 
 /** Derives and maintains render state for a single timeline event tile. */
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
+    private static readonly cliTrustListenerRegistry = new WeakMap<
+        MatrixClient,
+        {
+            listeners: Set<(userId: string, trustStatus: UserVerificationStatus) => void>;
+            handler: (userId: string, trustStatus: UserVerificationStatus) => void;
+        }
+    >();
+
+    private static readonly roomThreadListenerRegistry = new WeakMap<
+        Room,
+        {
+            listeners: Set<(thread: Thread) => void>;
+            handler: (thread: Thread) => void;
+        }
+    >();
+
     private isListeningForReceipts = false;
     private verifyGeneration = 0;
     private currentCli: MatrixClient | null = null;
@@ -607,11 +623,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             this.unbindRoomListeners();
             this.bindRoomListeners(nextRoom);
         }
-
-        if (previousProps?.cli !== nextProps.cli) {
-            // Force receipt subscription to be re-evaluated against the newly bound client.
-            this.isListeningForReceipts = false;
-        }
     }
 
     private bindCliListeners(props: EventTileViewModelProps): void {
@@ -619,7 +630,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         if (props.forExport) return;
 
         // Re-verify the encryption shield when the sender's trust state changes.
-        props.cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+        this.trackCliTrust(props.cli, this.onUserVerificationChanged);
         if (this.isListeningForReceipts) {
             // Refresh sent/sending receipt state for tiles that currently display delivery receipts.
             props.cli.on(RoomEvent.Receipt, this.onRoomReceipt);
@@ -629,8 +640,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private unbindCliListeners(): void {
         if (this.currentCli && this.isListeningForUserTrust) {
-            // Drop trust updates before switching clients or exporting to avoid duplicate handlers.
-            this.currentCli.off(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+            const entry = EventTileViewModel.cliTrustListenerRegistry.get(this.currentCli);
+            entry?.listeners.delete(this.onUserVerificationChanged);
+            if (entry && entry.listeners.size === 0) {
+                this.currentCli.off(CryptoEvent.UserTrustStatusChanged, entry.handler);
+                EventTileViewModel.cliTrustListenerRegistry.delete(this.currentCli);
+            }
         }
         if (this.currentCli && this.isListeningForReceipts) {
             // Receipt listeners are opt-in and should only stay attached while this tile needs them.
@@ -638,6 +653,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         this.currentCli = null;
+        this.isListeningForReceipts = false;
         this.isListeningForUserTrust = false;
     }
 
@@ -683,12 +699,21 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private bindRoomListeners(room: Room | null): void {
         this.currentRoom = room;
         // Pick up the thread object later if this event becomes recognized as a thread root after initial render.
-        room?.on(ThreadEvent.New, this.onNewThread);
+        if (room) {
+            this.trackRoomThread(room, this.onNewThread);
+        }
     }
 
     private unbindRoomListeners(): void {
-        // Stop watching the old room once the tile moves to a different room context.
-        this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
+        if (!this.currentRoom) return;
+
+        const entry = EventTileViewModel.roomThreadListenerRegistry.get(this.currentRoom);
+        entry?.listeners.delete(this.onNewThread);
+        if (entry && entry.listeners.size === 0) {
+            this.currentRoom.off(ThreadEvent.New, entry.handler);
+            EventTileViewModel.roomThreadListenerRegistry.delete(this.currentRoom);
+        }
+
         this.currentRoom = null;
     }
 
@@ -696,6 +721,47 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.unbindRoomListeners();
         this.unbindEventListeners();
         this.unbindCliListeners();
+    }
+
+    private trackRoomThread(room: Room, callback: (thread: Thread) => void): void {
+        let entry = EventTileViewModel.roomThreadListenerRegistry.get(room);
+
+        if (!entry) {
+            const listeners = new Set<(thread: Thread) => void>();
+            const handler = (thread: Thread): void => {
+                for (const listener of listeners) {
+                    listener(thread);
+                }
+            };
+
+            entry = { listeners, handler };
+            EventTileViewModel.roomThreadListenerRegistry.set(room, entry);
+            room.on(ThreadEvent.New, handler);
+        }
+
+        entry.listeners.add(callback);
+    }
+
+    private trackCliTrust(
+        cli: MatrixClient,
+        callback: (userId: string, trustStatus: UserVerificationStatus) => void,
+    ): void {
+        let entry = EventTileViewModel.cliTrustListenerRegistry.get(cli);
+
+        if (!entry) {
+            const listeners = new Set<(userId: string, trustStatus: UserVerificationStatus) => void>();
+            const handler = (userId: string, trustStatus: UserVerificationStatus): void => {
+                for (const listener of listeners) {
+                    listener(userId, trustStatus);
+                }
+            };
+
+            entry = { listeners, handler };
+            EventTileViewModel.cliTrustListenerRegistry.set(cli, entry);
+            cli.on(CryptoEvent.UserTrustStatusChanged, handler);
+        }
+
+        entry.listeners.add(callback);
     }
 
     private updateSnapshot(partial?: Partial<EventTileViewSnapshot>): void {
