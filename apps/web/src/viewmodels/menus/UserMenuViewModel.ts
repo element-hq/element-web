@@ -29,7 +29,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
         accountManagementEndpoint?: string,
     ): UserMenuSnapshot {
         const hasHomePage = !!getHomePageUrl(SdkConfig.get(), client);
-        const isAuthenticated = client.isGuest();
+        const isAuthenticated = !client.isGuest();
         const userId = client.getSafeUserId();
         const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_PX) ?? undefined;
