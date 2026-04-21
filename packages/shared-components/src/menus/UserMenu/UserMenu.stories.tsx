@@ -11,9 +11,10 @@ import { fn } from "storybook/test";
 
 import { UserMenuView, type UserMenuViewSnapshot, type UserMenuViewActions } from "./UserMenu";
 import avatarUrl from "../../../static/element.png";
-import { BaseViewModel, useMockedViewModel } from "../../core/viewmodel";
+import { useMockedViewModel } from "../../core/viewmodel";
+import { withViewDocs } from "../../../.storybook/withViewDocs";
 
-const UserMenuWrapper = (snapshot: UserMenuViewSnapshot): JSX.Element => {
+const UserMenuWrapperImpl = (snapshot: UserMenuViewSnapshot): JSX.Element => {
     const vm = useMockedViewModel<UserMenuViewSnapshot, UserMenuViewActions>(snapshot, {
         setOpen: fn(),
         createAccount: fn(),
@@ -26,6 +27,8 @@ const UserMenuWrapper = (snapshot: UserMenuViewSnapshot): JSX.Element => {
     });
     return <UserMenuView vm={vm} />;
 };
+
+const UserMenuWrapper = withViewDocs(UserMenuWrapperImpl, UserMenuView);
 
 const meta = {
     title: "Menus/UserMenu",
