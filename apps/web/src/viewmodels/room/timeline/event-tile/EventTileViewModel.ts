@@ -220,6 +220,10 @@ interface EventTileEncryptionSnapshot {
 
 /** Additional presentational data currently derived alongside the VM snapshot. */
 interface EventTilePresentationSnapshot {
+    /** Optional event ID attached to the rendered tile root. */
+    eventId?: string;
+    /** Optional aria-live setting for the rendered tile root. */
+    ariaLive?: "off";
     /** CSS class name for the tile root. */
     rootClassName: string;
     /** CSS class name for the tile content wrapper. */
@@ -692,10 +696,20 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const partial: Partial<EventTileViewSnapshot> = { shieldColour, shieldReason };
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
         const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
+        const encryptionSnapshot = EventTileViewModel.deriveEncryptionSnapshot(this.props, context);
 
         this.mergeSnapshot({
             ...partial,
-            ...EventTileViewModel.deriveEncryptionSnapshot(this.props, context),
+            ...encryptionSnapshot,
+            encryptionIndicatorTitle: EventTileViewModel.getEncryptionIndicatorTitle(
+                this.props,
+                {
+                    ...baseSnapshot,
+                    ...partial,
+                    ...encryptionSnapshot,
+                } as EventTileViewSnapshot,
+                encryptionSnapshot.isEncryptionFailure,
+            ),
         });
     }
 
@@ -854,6 +868,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ...senderSnapshot,
             ...encryptionSnapshot,
             hasFooter,
+            eventId: EventTileViewModel.getEventId(props),
+            ariaLive: EventTileViewModel.getAriaLive(props),
             rootClassName: EventTileViewModel.getRootClassName(props, {
                 ...baseSnapshot,
                 ...receiptSnapshot,
@@ -947,6 +963,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             threadInfoMode: ThreadInfoMode.None,
             tileClickMode: ClickMode.None,
             openedFromSearch: false,
+            eventId: undefined,
+            ariaLive: "off",
             rootClassName: "mx_EventTile",
             contentClassName: "mx_EventTile_line",
             isNotification: false,
@@ -1311,6 +1329,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const eventId = props.mxEvent.getId();
         if (!props.permalinkCreator || !eventId) return "#";
         return props.permalinkCreator.forEvent(eventId);
+    }
+
+    private static getEventId(props: EventTileViewModelProps): string | undefined {
+        return props.mxEvent.getId() ?? undefined;
+    }
+
+    private static getAriaLive(props: EventTileViewModelProps): "off" | undefined {
+        return props.eventSendStatus === null ? undefined : "off";
     }
 
     private static getScrollToken(props: EventTileViewModelProps): string | undefined {

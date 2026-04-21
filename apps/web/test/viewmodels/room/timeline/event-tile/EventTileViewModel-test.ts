@@ -679,6 +679,8 @@ describe("EventTileViewModel", () => {
         it("derives root and content class names in the snapshot", () => {
             const vm = createViewModel();
 
+            expect(vm.getSnapshot().eventId).toBe(mxEvent.getId());
+            expect(vm.getSnapshot().ariaLive).toBe("off");
             expect(vm.getSnapshot().rootClassName).toContain("mx_EventTile");
             expect(vm.getSnapshot().contentClassName).toBe("mx_EventTile_line");
         });
