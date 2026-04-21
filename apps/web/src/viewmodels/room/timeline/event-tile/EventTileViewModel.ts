@@ -431,7 +431,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private static readonly roomThreadListenerRegistry = new WeakMap<
         Room,
         {
-            listeners: Set<(thread: Thread) => void>;
+            listenersByEventId: Map<string, Set<(thread: Thread) => void>>;
             handler: (thread: Thread) => void;
         }
     >();
@@ -441,6 +441,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private currentCli: MatrixClient | null = null;
     private currentEvent: MatrixEvent | null = null;
     private currentRoom: Room | null = null;
+    private currentRoomThreadEventId: string | null = null;
     private isListeningForUserTrust = false;
     private isListeningForReactions = false;
 
@@ -618,10 +619,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         const nextRoom = EventTileViewModel.getRoom(nextProps);
-        if (this.currentRoom !== nextRoom) {
+        const nextRoomThreadEventId = EventTileViewModel.getRoomThreadListenerEventId(nextProps);
+        if (this.currentRoom !== nextRoom || this.currentRoomThreadEventId !== nextRoomThreadEventId) {
             // Room-scoped listeners follow the room that owns the tile's event.
             this.unbindRoomListeners();
-            this.bindRoomListeners(nextRoom);
+            this.bindRoomListeners(nextRoom, nextRoomThreadEventId);
         }
     }
 
@@ -696,11 +698,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.isListeningForReactions = false;
     }
 
-    private bindRoomListeners(room: Room | null): void {
+    private bindRoomListeners(room: Room | null, eventId: string | null): void {
         this.currentRoom = room;
+        this.currentRoomThreadEventId = eventId;
         // Pick up the thread object later if this event becomes recognized as a thread root after initial render.
-        if (room) {
-            this.trackRoomThread(room, this.onNewThread);
+        if (room && eventId) {
+            this.trackRoomThread(room, eventId, this.onNewThread);
         }
     }
 
@@ -708,13 +711,19 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         if (!this.currentRoom) return;
 
         const entry = EventTileViewModel.roomThreadListenerRegistry.get(this.currentRoom);
-        entry?.listeners.delete(this.onNewThread);
-        if (entry && entry.listeners.size === 0) {
+        const eventId = this.currentRoomThreadEventId;
+        const listeners = eventId ? entry?.listenersByEventId.get(eventId) : undefined;
+        listeners?.delete(this.onNewThread);
+        if (listeners && listeners.size === 0 && eventId) {
+            entry?.listenersByEventId.delete(eventId);
+        }
+        if (entry && entry.listenersByEventId.size === 0) {
             this.currentRoom.off(ThreadEvent.New, entry.handler);
             EventTileViewModel.roomThreadListenerRegistry.delete(this.currentRoom);
         }
 
         this.currentRoom = null;
+        this.currentRoomThreadEventId = null;
     }
 
     private unbindAllListeners(): void {
@@ -723,23 +732,32 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.unbindCliListeners();
     }
 
-    private trackRoomThread(room: Room, callback: (thread: Thread) => void): void {
+    private trackRoomThread(room: Room, eventId: string, callback: (thread: Thread) => void): void {
         let entry = EventTileViewModel.roomThreadListenerRegistry.get(room);
 
         if (!entry) {
-            const listeners = new Set<(thread: Thread) => void>();
+            const listenersByEventId = new Map<string, Set<(thread: Thread) => void>>();
             const handler = (thread: Thread): void => {
+                const listeners = listenersByEventId.get(thread.id);
+                if (!listeners) return;
+
                 for (const listener of listeners) {
                     listener(thread);
                 }
             };
 
-            entry = { listeners, handler };
+            entry = { listenersByEventId, handler };
             EventTileViewModel.roomThreadListenerRegistry.set(room, entry);
             room.on(ThreadEvent.New, handler);
         }
 
-        entry.listeners.add(callback);
+        let listeners = entry.listenersByEventId.get(eventId);
+        if (!listeners) {
+            listeners = new Set();
+            entry.listenersByEventId.set(eventId, listeners);
+        }
+
+        listeners.add(callback);
     }
 
     private trackCliTrust(
@@ -783,9 +801,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private updateReceiptSnapshot(partial: Partial<EventTileViewSnapshot> = {}): void {
-        const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
-        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
-        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(this.props, context);
+        const reactions = partial.reactions ?? this.snapshot.current.reactions ?? this.getReactions();
+        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(this.props, reactions);
 
         this.mergeSnapshot({
             ...partial,
@@ -910,10 +927,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     };
 
     private readonly onNewThread = (thread: Thread): void => {
-        if (thread.id === this.props.mxEvent.getId()) {
-            this.updateThread(thread);
-            this.currentRoom?.off(ThreadEvent.New, this.onNewThread);
-        }
+        this.updateThread(thread);
+        this.unbindRoomListeners();
     };
 
     private decryptEventIfNeeded(): void {
@@ -972,7 +987,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     ): EventTileViewSnapshot {
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(previousSnapshot, partial, props);
         const context = EventTileViewModel.createDerivationContext(props, baseSnapshot);
-        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(props, context);
+        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(props, context.reactions);
         const renderingSnapshot = EventTileViewModel.deriveRenderingSnapshot(props, context);
         const threadSnapshot = EventTileViewModel.deriveThreadSnapshot(props, context);
         const senderSnapshot = EventTileViewModel.deriveSenderSnapshot(props, context);
@@ -1138,15 +1153,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static deriveReceiptSnapshot(
         props: EventTileViewModelProps,
-        context: EventTileDerivationContext,
+        reactions: Relations | null,
     ): EventTileReceiptSnapshot {
+        const shouldShowSentReceipt = EventTileViewModel.getShouldShowSentReceipt(props);
+        const shouldShowSendingReceipt = EventTileViewModel.getShouldShowSendingReceipt(props);
+
         return {
-            reactions: context.reactions,
-            shouldShowSentReceipt: EventTileViewModel.getShouldShowSentReceipt(props),
-            shouldShowSendingReceipt: EventTileViewModel.getShouldShowSendingReceipt(props),
+            reactions,
+            shouldShowSentReceipt,
+            shouldShowSendingReceipt,
             showReadReceipts: EventTileViewModel.getShowReadReceipts(props, {
-                shouldShowSentReceipt: EventTileViewModel.getShouldShowSentReceipt(props),
-                shouldShowSendingReceipt: EventTileViewModel.getShouldShowSendingReceipt(props),
+                shouldShowSentReceipt,
+                shouldShowSendingReceipt,
             }),
         };
     }
@@ -1570,6 +1588,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             thread = room?.findThreadForEvent(props.mxEvent) ?? undefined;
         }
         return thread ?? null;
+    }
+
+    private static getRoomThreadListenerEventId(props: EventTileViewModelProps): string | null {
+        if (EventTileViewModel.getThread(props)) {
+            return null;
+        }
+
+        return props.mxEvent.getId() ?? null;
     }
 
     private static getThreadUpdateKey(thread: Thread | null): string {

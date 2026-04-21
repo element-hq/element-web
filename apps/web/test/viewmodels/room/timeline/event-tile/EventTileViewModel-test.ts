@@ -12,6 +12,8 @@ import {
     MatrixEvent,
     PendingEventOrdering,
     Room,
+    RoomEvent,
+    type Thread,
     ThreadEvent,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
@@ -758,6 +760,25 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().showReadReceipts).toBe(true);
         });
 
+        it("does not recompute display info for receipt-only updates", () => {
+            mxEvent = mkMessage({
+                room: room.roomId,
+                user: client.getSafeUserId(),
+                msg: "Hello world!",
+                event: true,
+            });
+
+            createViewModel({
+                mxEvent,
+                lastSuccessful: true,
+            });
+            const initialDisplayInfoCalls = mockGetEventDisplayInfo.mock.calls.length;
+
+            client.emit(RoomEvent.Receipt, mxEvent, room);
+
+            expect(mockGetEventDisplayInfo).toHaveBeenCalledTimes(initialDisplayInfoCalls);
+        });
+
         it("shows the thread panel summary for notifications with a thread", () => {
             const { rootEvent } = mkThread({
                 room,
@@ -831,6 +852,33 @@ describe("EventTileViewModel", () => {
             viewModels.at(-1)?.dispose();
             expect(roomOffSpy).toHaveBeenCalledTimes(1);
             expect(roomOffSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
+        });
+
+        it("only updates the tile waiting on the matching new thread root", () => {
+            const matchingEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Matching root",
+                event: true,
+            });
+            const otherEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Other root",
+                event: true,
+            });
+            const matchingVm = createViewModel({ mxEvent: matchingEvent });
+            const otherVm = createViewModel({ mxEvent: otherEvent });
+            const thread = {
+                id: matchingEvent.getId(),
+                length: 3,
+                replyToEvent: null,
+            } as unknown as Thread;
+
+            room.emit(ThreadEvent.New, thread, false);
+
+            expect(matchingVm.getSnapshot().thread).toBe(thread);
+            expect(otherVm.getSnapshot().thread).toBeNull();
         });
 
         it("shares a single trust listener across many tile view models", () => {

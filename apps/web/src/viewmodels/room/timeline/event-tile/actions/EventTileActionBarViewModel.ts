@@ -107,7 +107,7 @@ export class EventTileActionBarViewModel
     private static readonly roomStateListenerRegistry = new WeakMap<
         RoomState,
         {
-            listeners: Set<(event?: MatrixEvent) => void>;
+            listenersByType: Map<string, Set<() => void>>;
             handler: (event?: MatrixEvent) => void;
         }
     >();
@@ -272,7 +272,8 @@ export class EventTileActionBarViewModel
             ? MatrixClientPeg.safeGet().getRoom(roomId)?.getLiveTimeline().getState(EventTimeline.FORWARDS)
             : undefined;
         if (roomState) {
-            this.trackRoomState(roomState, this.onRoomEvent);
+            this.trackRoomStateEvent(roomState, EventType.RoomPinnedEvents, this.refreshSnapshot);
+            this.trackRoomStateEvent(roomState, EventType.RoomJoinRules, this.refreshSnapshot);
         }
 
         MatrixClientPeg.safeGet().decryptEventIfNeeded(mxEvent);
@@ -304,29 +305,47 @@ export class EventTileActionBarViewModel
         this.addListenerCleanup(() => event.off(eventName, callback));
     }
 
-    private trackRoomState(roomState: RoomState, callback: (event?: MatrixEvent) => void): void {
+    private trackRoomStateEvent(roomState: RoomState, eventType: string, callback: () => void): void {
         let entry = EventTileActionBarViewModel.roomStateListenerRegistry.get(roomState);
 
         if (!entry) {
-            const listeners = new Set<(event?: MatrixEvent) => void>();
+            const listenersByType = new Map<string, Set<() => void>>();
             const handler = (event?: MatrixEvent): void => {
+                if (!event) return;
+
+                const listeners = listenersByType.get(event.getType());
+                if (!listeners) return;
+
                 for (const listener of listeners) {
-                    listener(event);
+                    listener();
                 }
             };
 
-            entry = { listeners, handler };
+            entry = { listenersByType, handler };
             EventTileActionBarViewModel.roomStateListenerRegistry.set(roomState, entry);
             roomState.on(RoomStateEvent.Events, handler);
         }
 
-        entry.listeners.add(callback);
+        let listeners = entry.listenersByType.get(eventType);
+        if (!listeners) {
+            listeners = new Set();
+            entry.listenersByType.set(eventType, listeners);
+        }
+
+        listeners.add(callback);
         this.addListenerCleanup(() => {
             const currentEntry = EventTileActionBarViewModel.roomStateListenerRegistry.get(roomState);
             if (!currentEntry) return;
 
-            currentEntry.listeners.delete(callback);
-            if (currentEntry.listeners.size === 0) {
+            const currentListeners = currentEntry.listenersByType.get(eventType);
+            if (!currentListeners) return;
+
+            currentListeners.delete(callback);
+            if (currentListeners.size === 0) {
+                currentEntry.listenersByType.delete(eventType);
+            }
+
+            if (currentEntry.listenersByType.size === 0) {
                 roomState.off(RoomStateEvent.Events, currentEntry.handler);
                 EventTileActionBarViewModel.roomStateListenerRegistry.delete(roomState);
             }
@@ -389,12 +408,6 @@ export class EventTileActionBarViewModel
         this.refreshSnapshot();
         return true;
     }
-
-    private readonly onRoomEvent = (event?: MatrixEvent): void => {
-        if (!event) return;
-        if (event.getType() !== EventType.RoomPinnedEvents && event.getType() !== EventType.RoomJoinRules) return;
-        this.refreshSnapshot();
-    };
 
     /**
      * Runs an action against the failed event variant that is still actionable.

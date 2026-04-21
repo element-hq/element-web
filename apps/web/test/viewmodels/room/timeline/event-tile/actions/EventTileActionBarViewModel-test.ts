@@ -285,6 +285,32 @@ describe("EventTileActionBarViewModel", () => {
         expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Hide);
     });
 
+    it("ignores unrelated room state events", () => {
+        const vm = createVm();
+
+        mocked(PinningUtils.isPinned).mockClear();
+        mocked(PinningUtils.canPin).mockClear();
+        mocked(PinningUtils.canUnpin).mockClear();
+        mocked(canEditContent).mockClear();
+
+        roomState.emit(
+            RoomStateEvent.Events,
+            new MatrixEvent({
+                type: EventType.RoomName,
+                room_id: roomId,
+                sender: userId,
+                content: { name: "Renamed room" },
+            }),
+        );
+
+        expect(PinningUtils.isPinned).not.toHaveBeenCalled();
+        expect(PinningUtils.canPin).not.toHaveBeenCalled();
+        expect(PinningUtils.canUnpin).not.toHaveBeenCalled();
+        expect(canEditContent).not.toHaveBeenCalled();
+
+        vm.dispose();
+    });
+
     it("ignores stale download permission results after setProps changes the event", async () => {
         jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
         const permissionA = createPendingPromise<boolean>();
