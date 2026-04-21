@@ -62,15 +62,16 @@ export function TimelineView<TItem extends TimelineItem>({
     // Remember one-shot timeline signals across renders.
     const latestIsAtLiveEdgeRef = useRef<boolean | null>(null);
     const initialFillCompletedRef = useRef(false);
+    const initialTopMostItemIndexRef = useRef<IndexLocationWithAlign | null>(null);
     const renderedItemsRef = useRef(snapshot.items);
+    const pendingInitialScrollTargetRef = useRef<string | null>(null);
     const vmRef = useRef(vm);
 
     if (vmRef.current !== vm) {
         vmRef.current = vm;
         initialFillCompletedRef.current = false;
+        initialTopMostItemIndexRef.current = null;
     }
-
-    renderedItemsRef.current = snapshot.items;
 
     // Forward Virtuoso boundary and viewport events into the timeline view model.
     const handleStartReached = useCallback(() => {
@@ -100,6 +101,8 @@ export function TimelineView<TItem extends TimelineItem>({
         [snapshot.canPaginateForward, vm],
     );
 
+    renderedItemsRef.current = snapshot.items;
+
     const handleRangeChanged = useCallback(
         (range: ListRange) => {
             const items = renderedItemsRef.current;
@@ -116,12 +119,30 @@ export function TimelineView<TItem extends TimelineItem>({
         [vm],
     );
 
+    if (pendingInitialScrollTargetRef.current !== snapshot.scrollTarget?.targetKey) {
+        pendingInitialScrollTargetRef.current = snapshot.scrollTarget?.targetKey ?? null;
+    }
+
     const handleItemsRendered = useCallback(() => {
         if (!initialFillCompletedRef.current) {
             initialFillCompletedRef.current = true;
             vm.onInitialFillCompleted();
         }
+
+        if (pendingInitialScrollTargetRef.current) {
+            const hasTarget = renderedItemsRef.current.some(
+                (item) => item.key === pendingInitialScrollTargetRef.current,
+            );
+            if (hasTarget) {
+                pendingInitialScrollTargetRef.current = null;
+                vm.onScrollTargetReached();
+            }
+        }
     }, [vm]);
+
+    if (!initialTopMostItemIndexRef.current) {
+        initialTopMostItemIndexRef.current = getInitialTopMostItemIndex(snapshot.items, snapshot.scrollTarget);
+    }
 
     const followOutput = !snapshot.canPaginateForward && isAtBottom ? "auto" : false;
 
@@ -129,7 +150,7 @@ export function TimelineView<TItem extends TimelineItem>({
         <Virtuoso
             className={classNames(styles.timeline, className)}
             data={snapshot.items}
-            initialTopMostItemIndex={getInitialTopMostItemIndex(snapshot.items, snapshot.scrollTarget)}
+            initialTopMostItemIndex={initialTopMostItemIndexRef.current}
             atBottomStateChange={handleBottomStateChange}
             followOutput={followOutput}
             startReached={handleStartReached}
