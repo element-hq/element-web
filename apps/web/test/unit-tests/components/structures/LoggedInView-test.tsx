@@ -65,6 +65,7 @@ describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
+        getClientWellKnown: jest.fn(),
         getAccountData: jest.fn(),
         getRoom: jest.fn(),
         getSyncState: jest.fn().mockReturnValue(null),
