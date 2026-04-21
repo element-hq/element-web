@@ -192,7 +192,7 @@ export type EventTileProps = EventTileCoreProps &
     EventTileEditingProps &
     EventTileEnvironmentProps;
 
-function buildEventTileViewModelProps(
+export function buildEventTileViewModelProps(
     props: EventTileProps,
     readReceipts: EventTileViewModelProps["readReceipts"],
     cli: ReturnType<typeof useMatrixClientContext>,
@@ -590,7 +590,7 @@ function useEventTileVmState(
     };
 }
 
-function useEventTileCommands(
+export function useEventTileCommands(
     props: EventTileProps,
     cli: ReturnType<typeof useMatrixClientContext>,
     vm: EventTileViewModel,
@@ -682,7 +682,7 @@ type UseEventTileNodesArgs = {
     copyLinkToThread: (_anchor: HTMLElement | null) => void | Promise<void>;
 };
 
-function useEventTileNodes({
+export function useEventTileNodes({
     props,
     roomContext,
     snapshot,
@@ -962,7 +962,7 @@ type UseEventTileContextMenuNodeArgs = {
     vm: EventTileViewModel;
 };
 
-function useEventTileContextMenuNode({
+export function useEventTileContextMenuNode({
     props,
     snapshot,
     tileRef,
@@ -987,7 +987,7 @@ function useEventTileContextMenuNode({
     ) : undefined;
 }
 
-function useEventTileViewProps({
+export function useEventTileViewProps({
     props,
     vm,
     snapshot,
