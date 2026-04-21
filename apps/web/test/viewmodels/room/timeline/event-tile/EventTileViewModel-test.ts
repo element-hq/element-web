@@ -57,6 +57,21 @@ jest.mock("../../../../../src/utils/EventRenderingUtils", () => ({
 const mockGetEventDisplayInfo = jest.requireMock("../../../../../src/utils/EventRenderingUtils")
     .getEventDisplayInfo as jest.Mock;
 
+function createTimestampedViewModel(
+    room: Room,
+    createViewModel: (overrides?: Partial<EventTileViewModelProps>) => EventTileViewModel,
+): EventTileViewModel {
+    const timestampedEvent = mkMessage({
+        room: room.roomId,
+        user: "@alice:example.org",
+        msg: "timestamped",
+        event: true,
+        ts: 123,
+    });
+
+    return createViewModel({ mxEvent: timestampedEvent });
+}
+
 describe("EventTileViewModel", () => {
     const ROOM_ID = "!roomId:example.org";
     let mxEvent: MatrixEvent;
@@ -455,20 +470,8 @@ describe("EventTileViewModel", () => {
     });
 
     describe("interaction state", () => {
-        function createTimestampedViewModel(): EventTileViewModel {
-            const timestampedEvent = mkMessage({
-                room: room.roomId,
-                user: "@alice:example.org",
-                msg: "timestamped",
-                event: true,
-                ts: 123,
-            });
-
-            return createViewModel({ mxEvent: timestampedEvent });
-        }
-
         it("shows and hides timestamps when hover changes", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             expect(vm.getSnapshot().showTimestamp).toBe(false);
             expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
@@ -485,7 +488,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("shows timestamps when focus enters the tile", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onFocusEnter(false);
 
@@ -494,7 +497,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("shows the action bar when focus enters via keyboard", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onFocusEnter(true);
 
@@ -505,7 +508,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("shows timestamps when the action bar is focused", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onActionBarFocusChange(true, false);
 
@@ -515,7 +518,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("keeps action bar focus in sync with the context menu state", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onContextMenuOpen();
 
@@ -533,7 +536,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("preserves keyboard-triggered action bar visibility when the context menu closes", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onFocusEnter(true);
             vm.onContextMenuOpen();
@@ -546,7 +549,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("applies focus enter and leave as a single VM transition", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onFocusEnter(true);
 
@@ -562,7 +565,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("resets hover when action bar focus is lost through the VM helper", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.setHover(true);
             vm.onActionBarFocusChange(true, true);
@@ -578,7 +581,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("opens and closes the context menu through VM helpers", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onContextMenuOpen();
 
@@ -594,7 +597,7 @@ describe("EventTileViewModel", () => {
         });
 
         it("stores and clears context menu state through VM command helpers", () => {
-            const vm = createTimestampedViewModel();
+            const vm = createTimestampedViewModel(room, createViewModel);
             const target = document.createElement("div");
 
             vm.openContextMenu({

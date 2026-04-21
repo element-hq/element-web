@@ -181,7 +181,7 @@ describe("EventTile", () => {
 
     afterEach(() => {
         jest.spyOn(PinningUtils, "isPinned").mockReturnValue(false);
-        document.body.removeAttribute("data-whatinput");
+        delete document.body.dataset.whatinput;
     });
 
     describe("EventTile thread summary", () => {

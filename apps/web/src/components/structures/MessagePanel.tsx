@@ -367,11 +367,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     /* get the DOM node representing the given event */
     public getNodeForEventId(eventId: string): HTMLElement | undefined {
-        if (!this.eventTiles) {
-            return undefined;
-        }
-
-        return this.eventTiles[eventId]?.ref?.current ?? undefined;
+        return this.getTileForEventId(eventId)?.ref?.current ?? undefined;
     }
 
     public getTileForEventId(eventId?: string): EventTileHandle | undefined {
@@ -968,7 +964,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return receiptsByEvent;
     }
 
-    private collectEventTile = (eventId: string, node: EventTileHandle): void => {
+    private readonly collectEventTile = (eventId: string, node: EventTileHandle): void => {
         this.eventTiles[eventId] = node;
     };
 

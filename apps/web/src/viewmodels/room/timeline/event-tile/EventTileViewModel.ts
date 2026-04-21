@@ -644,7 +644,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         if (this.currentCli && this.isListeningForUserTrust) {
             const entry = EventTileViewModel.cliTrustListenerRegistry.get(this.currentCli);
             entry?.listeners.delete(this.onUserVerificationChanged);
-            if (entry && entry.listeners.size === 0) {
+            if (entry?.listeners.size === 0) {
                 this.currentCli.off(CryptoEvent.UserTrustStatusChanged, entry.handler);
                 EventTileViewModel.cliTrustListenerRegistry.delete(this.currentCli);
             }
@@ -714,10 +714,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const eventId = this.currentRoomThreadEventId;
         const listeners = eventId ? entry?.listenersByEventId.get(eventId) : undefined;
         listeners?.delete(this.onNewThread);
-        if (listeners && listeners.size === 0 && eventId) {
+        if (eventId && listeners?.size === 0) {
             entry?.listenersByEventId.delete(eventId);
         }
-        if (entry && entry.listenersByEventId.size === 0) {
+        if (entry?.listenersByEventId.size === 0) {
             this.currentRoom.off(ThreadEvent.New, entry.handler);
             EventTileViewModel.roomThreadListenerRegistry.delete(this.currentRoom);
         }
