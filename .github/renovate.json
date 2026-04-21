@@ -11,8 +11,8 @@
         },
         {
             "matchDepTypes": ["pnpm.overrides"],
-            "groupName": "pnpm overrides",
-            "groupSlug": "resolutions"
+            "groupName": null,
+            "additionalBranchPrefix": "overrides-"
         }
     ],
     "customManagers": [
