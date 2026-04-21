@@ -243,8 +243,8 @@ importers:
         specifier: ^8.0.0
         version: 8.58.0(eslint@8.57.1)(typescript@5.9.3)
       app-builder-lib:
-        specifier: 26.8.2
-        version: 26.8.2(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.8.2)(electron-builder-squirrel-windows@26.8.2)
+        specifier: 26.9.0
+        version: 26.9.0(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.9.0)(electron-builder-squirrel-windows@26.9.0)
       chokidar:
         specifier: ^5.0.0
         version: 5.0.0
@@ -255,11 +255,11 @@ importers:
         specifier: 41.2.1
         version: 41.2.1
       electron-builder:
-        specifier: 26.8.2
-        version: 26.8.2(electron-builder-squirrel-windows@26.8.2)
+        specifier: 26.9.0
+        version: 26.9.0(electron-builder-squirrel-windows@26.9.0)
       electron-builder-squirrel-windows:
-        specifier: 26.8.2
-        version: 26.8.2(dmg-builder@26.8.2)
+        specifier: 26.9.0
+        version: 26.9.0(dmg-builder@26.9.0)
       electron-devtools-installer:
         specifier: ^4.0.0
         version: 4.0.0
@@ -445,7 +445,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4ee3e591bf6498eecc1a92aad92b2ff3fc604fb8
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -6213,12 +6213,12 @@ packages:
   app-builder-bin@5.0.0-alpha.12:
     resolution: {integrity: sha512-j87o0j6LqPL3QRr8yid6c+Tt5gC7xNfYo6uQIQkorAC6MpeayVMZrEDzKmJJ/Hlv7EnOQpaRm53k6ktDYZyB6w==}
 
-  app-builder-lib@26.8.2:
-    resolution: {integrity: sha512-z3ptLzJwNl35fyR0wxv4qWOfZuU36VysYHnbs8PDtf8S0QzIl2OWimdDFVmCxYMkIV1k/RT9CeTgcP7oUznFOw==}
+  app-builder-lib@26.9.0:
+    resolution: {integrity: sha512-f/1GhVrDfBH7sSzhAwiXa1rpR/7pB7Av5woUjmt+QYE0QyNvrOAiY05rngtR/PK4/1BzS6/zVoYobIwDAsrtBA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      dmg-builder: 26.8.2
-      electron-builder-squirrel-windows: 26.8.2
+      dmg-builder: 26.9.0
+      electron-builder-squirrel-windows: 26.9.0
 
   applescript@1.0.0:
     resolution: {integrity: sha512-yvtNHdWvtbYEiIazXAdp/NY+BBb65/DAseqlNiJQjOx9DynuzOYDbVLBJvuc0ve0VL9x6B3OHF6eH52y9hCBtQ==}
@@ -6647,12 +6647,12 @@ packages:
     resolution: {integrity: sha512-lHblz4ahamxpTmnsk+MNTRWsjYKv965MwOrSJyeD588rR3Jcu7swE+0wN5F+PbL5cjgu/9ObkhfzEPuofEMwLA==}
     engines: {node: '>=10.0.0'}
 
-  builder-util-runtime@9.5.1:
-    resolution: {integrity: sha512-qt41tMfgHTllhResqM5DcnHyDIWNgzHvuY2jDcYP9iaGpkWxTUzV6GQjDeLnlR1/DtdlcsWQbA7sByMpmJFTLQ==}
+  builder-util-runtime@9.6.0:
+    resolution: {integrity: sha512-k9V5I18PXLepLZ8jVmPzsH+gVCVZ+9aMVLyCZ0ZLOkT2KSyiBblDCCN8WxDbjOpfLGNHZqqJPBmW0HYeqxlgkQ==}
     engines: {node: '>=12.0.0'}
 
-  builder-util@26.8.1:
-    resolution: {integrity: sha512-pm1lTYbGyc90DHgCDO7eo8Rl4EqKLciayNbZqGziqnH9jrlKe8ZANGdityLZU+pJh16dfzjAx2xQq9McuIPEtw==}
+  builder-util@26.9.0:
+    resolution: {integrity: sha512-+eocmbdisnyb40B9nAp/KREfYLXvGagxV50KZv/Zh4aflsr1fdY9Qxs6QG1Jtx1vH5d5NQ3hIcemUi4RSlFK/Q==}
 
   builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
@@ -7583,8 +7583,8 @@ packages:
   dir-compare@4.2.0:
     resolution: {integrity: sha512-2xMCmOoMrdQIPHdsTawECdNPwlVFB9zGcz3kuhmBO6U3oU+UQjsue0i8ayLKpgBcm+hcXPMVSGUN9d+pvJ6+VQ==}
 
-  dmg-builder@26.8.2:
-    resolution: {integrity: sha512-DaWI+p4DOqiFVZFMovdGYammBOyJAiHHFWUTQ0Z7gNc0twfdIN0LvyJ+vFsgZEDR1fjgbpCj690IVtbYIsZObQ==}
+  dmg-builder@26.9.0:
+    resolution: {integrity: sha512-5uSyg0yY+JRMMGwFjIweaukYkCGcZSZwvH5VPlBHiKkTEP1a1/uV+bs4y+VAxPMgzg67YB4CF1vD4U/2d3chfg==}
 
   dmg-license@1.0.11:
     resolution: {integrity: sha512-ZdzmqwKmECOWJpqefloC5OJy1+WZBBse5+MR88z9g9Zn4VY+WYUkAyojmhzJckH5YbbZGcYIuGAkY5/Ys5OM2Q==}
@@ -7720,19 +7720,19 @@ packages:
     engines: {node: '>=0.12.18'}
     hasBin: true
 
-  electron-builder-squirrel-windows@26.8.2:
-    resolution: {integrity: sha512-kXhajX6DzdIQcTlctVTKoG1oO39JhWcTG0lH7ZEJ4FzPaKJy7KFNfNJUd5BoEmLjv5GlrRZpEOYnniD+LcwNJA==}
+  electron-builder-squirrel-windows@26.9.0:
+    resolution: {integrity: sha512-Jzsxa3Kjv94ZRZDK7pc8bzu5iglwGsDOBMWTqLpWx2sCEvb3TLW9PMWqOjpDwizqkMBp8GjP6rceLzQYLFIVow==}
 
-  electron-builder@26.8.2:
-    resolution: {integrity: sha512-ieiiXPdgH3qrG6lcvy2mtnI5iEmAopmLuVRMSJ5j40weU0tgpNx0OAk9J5X5nnO0j9+KIkxHzwFZVUDk1U3aGw==}
+  electron-builder@26.9.0:
+    resolution: {integrity: sha512-7BEeGz8Xlk7Qvitj70nGAQaq7WQIZ2amsDvsyKSZbxgtL2pM9fm/woZrtn0hoID6Fl7wkn456dK3OmtFNzgiOA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
   electron-devtools-installer@4.0.0:
     resolution: {integrity: sha512-9Tntu/jtfSn0n6N/ZI6IdvRqXpDyLQiDuuIbsBI+dL+1Ef7C8J2JwByw58P3TJiNeuqyV3ZkphpNWuZK5iSY2w==}
 
-  electron-publish@26.8.1:
-    resolution: {integrity: sha512-q+jrSTIh/Cv4eGZa7oVR+grEJo/FoLMYBAnSL5GCtqwUpr1T+VgKB/dn1pnzxIxqD8S/jP1yilT9VrwCqINR4w==}
+  electron-publish@26.9.0:
+    resolution: {integrity: sha512-gsy+U7JfDuD1lPOrCXeECDQoUsWjFah3s1Fv3pqKnjdJuKYDDvGdvC74kLHVG6nl5G0uQ7YN0eftCQ4rUmhvVw==}
 
   electron-store@11.0.2:
     resolution: {integrity: sha512-4VkNRdN+BImL2KcCi41WvAYbh6zLX5AUTi4so68yPqiItjbgTjqpEnGAqasgnG+lB6GuAyUltKwVopp6Uv+gwQ==}
@@ -9842,8 +9842,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4ee3e591bf6498eecc1a92aad92b2ff3fc604fb8:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4ee3e591bf6498eecc1a92aad92b2ff3fc604fb8}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875}
     version: 41.3.0
     engines: {node: '>=22.0.0'}
 
@@ -19081,7 +19081,7 @@ snapshots:
 
   app-builder-bin@5.0.0-alpha.12: {}
 
-  app-builder-lib@26.8.2(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.8.2)(electron-builder-squirrel-windows@26.8.2):
+  app-builder-lib@26.9.0(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.9.0)(electron-builder-squirrel-windows@26.9.0):
     dependencies:
       '@develar/schema-utils': 2.6.5
       '@electron/asar': 3.4.1
@@ -19094,17 +19094,17 @@ snapshots:
       '@malept/flatpak-bundler': 0.4.0
       '@types/fs-extra': 9.0.13
       async-exit-hook: 2.0.1
-      builder-util: 26.8.1
-      builder-util-runtime: 9.5.1
+      builder-util: 26.9.0
+      builder-util-runtime: 9.6.0
       chromium-pickle-js: 0.2.0
       ci-info: 4.3.1
       debug: 4.4.3
-      dmg-builder: 26.8.2(electron-builder-squirrel-windows@26.8.2)
+      dmg-builder: 26.9.0(electron-builder-squirrel-windows@26.9.0)
       dotenv: 16.6.1
       dotenv-expand: 11.0.7
       ejs: 3.1.10
-      electron-builder-squirrel-windows: 26.8.2(dmg-builder@26.8.2)
-      electron-publish: 26.8.1
+      electron-builder-squirrel-windows: 26.9.0(dmg-builder@26.9.0)
+      electron-publish: 26.9.0
       fs-extra: 10.1.0
       hosted-git-info: 4.1.0
       isbinaryfile: 5.0.7
@@ -19676,19 +19676,19 @@ snapshots:
   buildcheck@0.0.7:
     optional: true
 
-  builder-util-runtime@9.5.1:
+  builder-util-runtime@9.6.0:
     dependencies:
       debug: 4.4.3
       sax: 1.6.0
     transitivePeerDependencies:
       - supports-color
 
-  builder-util@26.8.1:
+  builder-util@26.9.0:
     dependencies:
       7zip-bin: 5.2.0
       '@types/debug': 4.1.13
       app-builder-bin: 5.0.0-alpha.12
-      builder-util-runtime: 9.5.1
+      builder-util-runtime: 9.6.0
       chalk: 4.1.2
       cross-spawn: 7.0.6
       debug: 4.4.3
@@ -20680,10 +20680,10 @@ snapshots:
       minimatch: 3.1.5
       p-limit: 3.1.0
 
-  dmg-builder@26.8.2(electron-builder-squirrel-windows@26.8.2):
+  dmg-builder@26.9.0(electron-builder-squirrel-windows@26.9.0):
     dependencies:
-      app-builder-lib: 26.8.2(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.8.2)(electron-builder-squirrel-windows@26.8.2)
-      builder-util: 26.8.1
+      app-builder-lib: 26.9.0(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.9.0)(electron-builder-squirrel-windows@26.9.0)
+      builder-util: 26.9.0
       fs-extra: 10.1.0
       iconv-lite: 0.6.3
       js-yaml: 4.1.1
@@ -20850,23 +20850,23 @@ snapshots:
 
   ejs@5.0.1: {}
 
-  electron-builder-squirrel-windows@26.8.2(dmg-builder@26.8.2):
+  electron-builder-squirrel-windows@26.9.0(dmg-builder@26.9.0):
     dependencies:
-      app-builder-lib: 26.8.2(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.8.2)(electron-builder-squirrel-windows@26.8.2)
-      builder-util: 26.8.1
+      app-builder-lib: 26.9.0(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.9.0)(electron-builder-squirrel-windows@26.9.0)
+      builder-util: 26.9.0
       electron-winstaller: 5.4.0
     transitivePeerDependencies:
       - dmg-builder
       - supports-color
 
-  electron-builder@26.8.2(electron-builder-squirrel-windows@26.8.2):
+  electron-builder@26.9.0(electron-builder-squirrel-windows@26.9.0):
     dependencies:
-      app-builder-lib: 26.8.2(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.8.2)(electron-builder-squirrel-windows@26.8.2)
-      builder-util: 26.8.1
-      builder-util-runtime: 9.5.1
+      app-builder-lib: 26.9.0(patch_hash=2dfb3fcdfe573cca6c248cecf63ddea5c8fa0276859695fba6c9664d0ff285d6)(dmg-builder@26.9.0)(electron-builder-squirrel-windows@26.9.0)
+      builder-util: 26.9.0
+      builder-util-runtime: 9.6.0
       chalk: 4.1.2
       ci-info: 4.4.0
-      dmg-builder: 26.8.2(electron-builder-squirrel-windows@26.8.2)
+      dmg-builder: 26.9.0(electron-builder-squirrel-windows@26.9.0)
       fs-extra: 10.1.0
       lazy-val: 1.0.5
       simple-update-notifier: 2.0.0
@@ -20879,11 +20879,11 @@ snapshots:
     dependencies:
       unzip-crx-3: 0.2.0
 
-  electron-publish@26.8.1:
+  electron-publish@26.9.0:
     dependencies:
       '@types/fs-extra': 9.0.13
-      builder-util: 26.8.1
-      builder-util-runtime: 9.5.1
+      builder-util: 26.9.0
+      builder-util-runtime: 9.6.0
       chalk: 4.1.2
       form-data: 4.0.5
       fs-extra: 10.1.0
@@ -23472,7 +23472,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4ee3e591bf6498eecc1a92aad92b2ff3fc604fb8:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.1.0
