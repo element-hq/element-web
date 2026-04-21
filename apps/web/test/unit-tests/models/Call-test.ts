@@ -114,8 +114,6 @@ const cleanUpCallAndWidget = (call: Call, widget: Widget) => {
 };
 
 describe("JitsiCall", () => {
-    mockPlatformPeg({ supportsJitsiScreensharing: () => true });
-
     let client: Mocked<MatrixClient>;
     let room: Room;
     let alice: RoomMember;
@@ -123,6 +121,8 @@ describe("JitsiCall", () => {
     let carol: RoomMember;
 
     beforeEach(() => {
+        mockPlatformPeg({ supportsJitsiScreensharing: () => true });
+
         ({ client, room, alice, bob, carol } = setUpClientRoomAndStores());
         jest.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
     });
