@@ -8,6 +8,11 @@
             "groupSlug": "testcontainers-docker",
             "matchDepTypes": ["testcontainers-docker"],
             "matchPackageNames": ["*"]
+        },
+        {
+            "matchDepTypes": ["resolutions", "overrides"],
+            "groupName": "pnpm resolutions",
+            "groupSlug": "resolutions"
         }
     ],
     "customManagers": [
