@@ -28,7 +28,6 @@
         "@action-validator/cli": "^0.6.0",
         "@action-validator/core": "^0.6.0",
         "@nx-tools/nx-container": "^7.2.1",
-        "@nx/jest": "^22.5.0",
         "@playwright/test": "catalog:",
         "@types/node": "22",
         "cronstrue": "^3.0.0",
