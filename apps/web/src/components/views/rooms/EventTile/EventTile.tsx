@@ -42,7 +42,7 @@ import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrou
 import RoomAvatar from "../../avatars/RoomAvatar";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import { UnreadNotificationBadge } from "../NotificationBadge/UnreadNotificationBadge";
-import { AvatarSize, AvatarSubject, ThreadInfoMode, ThreadPanelMode } from "../../../../models/rooms/EventTileModel";
+import { AvatarSize, AvatarSubject, ThreadInfoMode } from "../../../../models/rooms/EventTileModel";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -206,29 +206,6 @@ type EventTileThreadNodes = {
     replyCount?: number;
     preview?: JSX.Element;
     toolbar?: JSX.Element;
-};
-
-type EventTileViewActions = {
-    openInRoom: (_anchor: HTMLElement | null) => void;
-    copyLinkToThread: (_anchor: HTMLElement | null) => Promise<void>;
-    onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
-    onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
-    onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
-    onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
-};
-
-type UseEventTileViewPropsArgs = {
-    props: EventTileBaseProps;
-    vm: EventTileViewModel;
-    snapshot: EventTileViewSnapshot;
-    roomContext: React.ContextType<typeof RoomContext>;
-    room: Room | null;
-    tileContentId: string;
-    rootRef: RefObject<HTMLElement | null>;
-    contentNodes: EventTileContentNodes;
-    threadNodes: EventTileThreadNodes;
-    contextMenuNode?: JSX.Element;
-    actions: EventTileViewActions;
 };
 
 type UseEventTileNodesArgs = {
@@ -623,39 +600,32 @@ function useEventTileNodes({
                             />
                         ) : undefined
                     }
-                    href={snapshot.threadInfoMode === ThreadInfoMode.SearchLink ? props.highlightLink : undefined}
-                    label={
-                        snapshot.threadInfoMode === ThreadInfoMode.SearchLink ||
-                        snapshot.threadInfoMode === ThreadInfoMode.SearchText
-                            ? _t("timeline|thread_info_basic")
-                            : undefined
-                    }
+                    href={snapshot.threadInfoHref}
+                    label={snapshot.threadInfoLabel}
                 />
             ),
-        [snapshot.threadInfoMode, snapshot.threadUpdateKey, props.mxEvent, snapshot.thread, props.highlightLink],
+        [
+            snapshot.threadInfoMode,
+            snapshot.threadUpdateKey,
+            props.mxEvent,
+            snapshot.thread,
+            snapshot.threadInfoHref,
+            snapshot.threadInfoLabel,
+        ],
     );
-    const replyCount =
-        (snapshot.threadPanelMode === ThreadPanelMode.Summary ||
-            snapshot.threadPanelMode === ThreadPanelMode.SummaryWithToolbar) &&
-        snapshot.thread
-            ? snapshot.thread.length
-            : undefined;
     const preview = useMemo(
         () =>
-            (snapshot.threadPanelMode === ThreadPanelMode.Summary ||
-                snapshot.threadPanelMode === ThreadPanelMode.SummaryWithToolbar) &&
-            snapshot.thread ? (
+            snapshot.shouldRenderThreadPreview && snapshot.thread ? (
                 <ThreadMessagePreview key={snapshot.threadUpdateKey} thread={snapshot.thread} />
             ) : undefined,
-        [snapshot.threadPanelMode, snapshot.thread, snapshot.threadUpdateKey],
+        [snapshot.shouldRenderThreadPreview, snapshot.thread, snapshot.threadUpdateKey],
     );
     const toolbar = useMemo(
         () =>
-            snapshot.threadPanelMode === ThreadPanelMode.Toolbar ||
-            snapshot.threadPanelMode === ThreadPanelMode.SummaryWithToolbar ? (
+            snapshot.shouldRenderThreadToolbar ? (
                 <ThreadToolbarHost onViewInRoomClick={openInRoom} onCopyLinkClick={copyLinkToThread} />
             ) : undefined,
-        [snapshot.threadPanelMode, openInRoom, copyLinkToThread],
+        [snapshot.shouldRenderThreadToolbar, openInRoom, copyLinkToThread],
     );
 
     return useMemo(
@@ -671,12 +641,24 @@ function useEventTileNodes({
             },
             thread: {
                 info,
-                replyCount,
+                replyCount: snapshot.threadReplyCount,
                 preview,
                 toolbar,
             },
         }),
-        [sender, avatar, replyChain, messageBody, actionBar, messageStatus, footer, info, replyCount, preview, toolbar],
+        [
+            sender,
+            avatar,
+            replyChain,
+            messageBody,
+            actionBar,
+            messageStatus,
+            footer,
+            info,
+            snapshot.threadReplyCount,
+            preview,
+            toolbar,
+        ],
     );
 }
 
@@ -703,174 +685,6 @@ function useEventTileContextMenuNode({
             onFinished={closeContextMenu}
         />
     ) : undefined;
-}
-
-function useEventTileViewProps({
-    props,
-    vm,
-    snapshot,
-    roomContext,
-    room,
-    tileContentId,
-    rootRef,
-    contentNodes,
-    threadNodes,
-    contextMenuNode,
-    actions,
-}: UseEventTileViewPropsArgs): EventTileViewProps {
-    const isNotification = snapshot.isNotification;
-    const notificationRoomLabel = room
-        ? _t(
-              "timeline|in_room_name",
-              { room: snapshot.notificationRoomName ?? room.name },
-              { strong: (sub) => <strong>{sub}</strong> },
-          )
-        : undefined;
-    const onMouseEnter = useCallback((): void => vm.setHover(true), [vm]);
-    const onMouseLeave = useCallback((): void => vm.setHover(false), [vm]);
-    const onFocus = useCallback(
-        (event: FocusEvent<HTMLElement>): void => {
-            const target = event.target as HTMLElement;
-            const showActionBarFromFocus =
-                target.matches(":focus-visible") || document.body.dataset.whatinput === "keyboard";
-            vm.onFocusEnter(showActionBarFromFocus);
-        },
-        [vm],
-    );
-    const onBlur = useCallback(
-        (event: FocusEvent<HTMLElement>): void => {
-            if (event.currentTarget.contains(event.relatedTarget)) {
-                return;
-            }
-
-            vm.onFocusLeave();
-        },
-        [vm],
-    );
-    const handlers = useMemo<EventTileViewProps["handlers"]>(
-        () => ({
-            onClick: snapshot.isListLikeTile ? actions.onListTileClick : undefined,
-            onContextMenu: actions.onContextMenu,
-            onMouseEnter,
-            onMouseLeave,
-            onFocus,
-            onBlur,
-        }),
-        [
-            snapshot.isListLikeTile,
-            actions.onListTileClick,
-            actions.onContextMenu,
-            onMouseEnter,
-            onMouseLeave,
-            onFocus,
-            onBlur,
-        ],
-    );
-    const content = useMemo<EventTileViewProps["content"]>(
-        () => ({
-            sender: contentNodes.sender,
-            avatar: contentNodes.avatar,
-            replyChain: contentNodes.replyChain,
-            messageStatus: contentNodes.messageStatus,
-            messageBody: contentNodes.messageBody,
-            actionBar: contentNodes.actionBar,
-            footer: snapshot.hasFooter ? contentNodes.footer : undefined,
-            contextMenu: contextMenuNode,
-        }),
-        [
-            contentNodes.sender,
-            contentNodes.avatar,
-            contentNodes.replyChain,
-            contentNodes.messageStatus,
-            contentNodes.messageBody,
-            contentNodes.actionBar,
-            snapshot.hasFooter,
-            contentNodes.footer,
-            contextMenuNode,
-        ],
-    );
-    const threads = useMemo<EventTileViewProps["threads"]>(
-        () => ({
-            info: threadNodes.info,
-            replyCount: threadNodes.replyCount,
-            preview: threadNodes.preview,
-            toolbar: threadNodes.toolbar,
-        }),
-        [threadNodes.info, threadNodes.replyCount, threadNodes.preview, threadNodes.toolbar],
-    );
-    const timestamp = useMemo<EventTileViewProps["timestamp"]>(
-        () => ({
-            displayMode: snapshot.timestampDisplayMode,
-            formatMode: snapshot.timestampFormatMode,
-            ts: snapshot.timestampTs,
-            receivedTs: snapshot.receivedTs,
-            isTwelveHour: props.isTwelveHour,
-            permalink: snapshot.permalink,
-            onPermalinkClicked: actions.onPermalinkClicked,
-            onContextMenu: actions.onTimestampContextMenu,
-        }),
-        [
-            snapshot.timestampDisplayMode,
-            snapshot.timestampFormatMode,
-            snapshot.timestampTs,
-            snapshot.receivedTs,
-            props.isTwelveHour,
-            snapshot.permalink,
-            actions.onPermalinkClicked,
-            actions.onTimestampContextMenu,
-        ],
-    );
-    const encryption = useMemo<EventTileViewProps["encryption"]>(
-        () => ({
-            padlockMode: snapshot.padlockMode,
-            mode: snapshot.encryptionIndicatorMode,
-            indicatorTitle: snapshot.encryptionIndicatorTitle,
-            sharedKeysUserId: snapshot.sharedKeysUserId,
-            sharedKeysRoomId: snapshot.sharedKeysRoomId,
-        }),
-        [
-            snapshot.padlockMode,
-            snapshot.encryptionIndicatorMode,
-            snapshot.encryptionIndicatorTitle,
-            snapshot.sharedKeysUserId,
-            snapshot.sharedKeysRoomId,
-        ],
-    );
-    const notification = useMemo<EventTileViewProps["notification"]>(
-        () => ({
-            enabled: isNotification,
-            roomLabel: notificationRoomLabel,
-            roomAvatar: room ? (
-                <div className="mx_EventTile_avatar">
-                    <RoomAvatar room={room} size={AvatarSize.Medium} />
-                </div>
-            ) : undefined,
-            unreadBadge: room ? (
-                <UnreadNotificationBadge room={room} threadId={props.mxEvent.getId()} forceDot={true} />
-            ) : undefined,
-        }),
-        [isNotification, notificationRoomLabel, room, props.mxEvent],
-    );
-
-    return {
-        as: props.as,
-        rootRef,
-        contentId: tileContentId,
-        eventId: snapshot.eventId,
-        layout: props.layout,
-        timelineRenderingType: roomContext.timelineRenderingType,
-        rootClassName: snapshot.rootClassName,
-        contentClassName: snapshot.contentClassName,
-        ariaLive: snapshot.ariaLive,
-        scrollTokens: snapshot.scrollToken,
-        isOwnEvent: snapshot.isOwnEvent,
-        content,
-        threads,
-        timestamp,
-        encryption,
-        notification,
-        handlers,
-    };
 }
 
 function buildEventTileActionBarViewModelProps(
@@ -1232,26 +1046,134 @@ function EventTileBody({ ref: forwardedRef, ...props }: Readonly<EventTileBasePr
         replyChainRef,
         vm,
     });
-    const eventTileViewProps = useEventTileViewProps({
-        props,
-        vm,
-        snapshot,
-        roomContext,
-        room,
-        tileContentId,
-        rootRef,
-        contentNodes: nodes.content,
-        threadNodes: nodes.thread,
-        contextMenuNode,
-        actions: {
-            onContextMenu,
+    const notificationRoomLabel = room
+        ? _t(
+              "timeline|in_room_name",
+              { room: snapshot.notificationView.roomName ?? room.name },
+              { strong: (sub) => <strong>{sub}</strong> },
+          )
+        : undefined;
+    const onMouseEnter = useCallback((): void => vm.setHover(true), [vm]);
+    const onMouseLeave = useCallback((): void => vm.setHover(false), [vm]);
+    const onFocus = useCallback(
+        (event: FocusEvent<HTMLElement>): void => {
+            const target = event.target as HTMLElement;
+            const showActionBarFromFocus =
+                target.matches(":focus-visible") || document.body.dataset.whatinput === "keyboard";
+            vm.onFocusEnter(showActionBarFromFocus);
+        },
+        [vm],
+    );
+    const onBlur = useCallback(
+        (event: FocusEvent<HTMLElement>): void => {
+            if (event.currentTarget.contains(event.relatedTarget)) {
+                return;
+            }
+
+            vm.onFocusLeave();
+        },
+        [vm],
+    );
+    const eventTileViewProps = useMemo<EventTileViewProps>(
+        () => ({
+            as: props.as,
+            rootRef,
+            contentId: tileContentId,
+            eventId: snapshot.eventId,
+            layout: props.layout,
+            timelineRenderingType: roomContext.timelineRenderingType,
+            rootClassName: snapshot.rootClassName,
+            contentClassName: snapshot.contentClassName,
+            ariaLive: snapshot.ariaLive,
+            scrollTokens: snapshot.scrollToken,
+            isOwnEvent: snapshot.isOwnEvent,
+            content: {
+                sender: nodes.content.sender,
+                avatar: nodes.content.avatar,
+                replyChain: nodes.content.replyChain,
+                messageStatus: nodes.content.messageStatus,
+                messageBody: nodes.content.messageBody,
+                actionBar: nodes.content.actionBar,
+                footer: snapshot.hasFooter ? nodes.content.footer : undefined,
+                contextMenu: contextMenuNode,
+            },
+            threads: {
+                info: nodes.thread.info,
+                replyCount: nodes.thread.replyCount,
+                preview: nodes.thread.preview,
+                toolbar: nodes.thread.toolbar,
+            },
+            timestamp: {
+                ...snapshot.timestampView,
+                isTwelveHour: props.isTwelveHour,
+                onPermalinkClicked,
+                onContextMenu: onTimestampContextMenu,
+            },
+            encryption: snapshot.encryptionView,
+            notification: {
+                enabled: snapshot.notificationView.enabled,
+                roomLabel: notificationRoomLabel,
+                roomAvatar: room ? (
+                    <div className="mx_EventTile_avatar">
+                        <RoomAvatar room={room} size={AvatarSize.Medium} />
+                    </div>
+                ) : undefined,
+                unreadBadge: room ? (
+                    <UnreadNotificationBadge room={room} threadId={props.mxEvent.getId()} forceDot={true} />
+                ) : undefined,
+            },
+            handlers: {
+                onClick: snapshot.isListLikeTile ? onListTileClick : undefined,
+                onContextMenu,
+                onMouseEnter,
+                onMouseLeave,
+                onFocus,
+                onBlur,
+            },
+        }),
+        [
+            props.as,
+            props.layout,
+            props.isTwelveHour,
+            props.mxEvent,
+            rootRef,
+            tileContentId,
+            snapshot.eventId,
+            snapshot.rootClassName,
+            snapshot.contentClassName,
+            snapshot.ariaLive,
+            snapshot.scrollToken,
+            snapshot.isOwnEvent,
+            snapshot.hasFooter,
+            snapshot.timestampView,
+            snapshot.encryptionView,
+            snapshot.isListLikeTile,
+            snapshot.notificationView,
+            roomContext.timelineRenderingType,
+            nodes.content.sender,
+            nodes.content.avatar,
+            nodes.content.replyChain,
+            nodes.content.messageStatus,
+            nodes.content.messageBody,
+            nodes.content.actionBar,
+            nodes.content.footer,
+            nodes.thread.info,
+            nodes.thread.replyCount,
+            nodes.thread.preview,
+            nodes.thread.toolbar,
+            contextMenuNode,
             onPermalinkClicked,
             onTimestampContextMenu,
-            openInRoom,
-            copyLinkToThread,
+            notificationRoomLabel,
+            room,
             onListTileClick,
-        },
-    });
+            onContextMenu,
+            onMouseEnter,
+            onMouseLeave,
+            onFocus,
+            onBlur,
+        ],
+    );
 
     if (snapshot.shouldRenderMissingRendererFallback) {
         return (

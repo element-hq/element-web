@@ -327,6 +327,8 @@ describe("EventTileViewModel", () => {
             });
 
             expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.SearchLink);
+            expect(vm.getSnapshot().threadInfoHref).toBe("#event");
+            expect(vm.getSnapshot().threadInfoLabel).toBe(_t("timeline|thread_info_basic"));
         });
 
         it("shows search text thread info mode for threaded search results without a highlight link", () => {
@@ -344,6 +346,8 @@ describe("EventTileViewModel", () => {
             });
 
             expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.SearchText);
+            expect(vm.getSnapshot().threadInfoHref).toBeUndefined();
+            expect(vm.getSnapshot().threadInfoLabel).toBe(_t("timeline|thread_info_basic"));
         });
 
         it("shows timestamps when alwaysShowTimestamps is set", () => {
@@ -683,6 +687,9 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().ariaLive).toBe("off");
             expect(vm.getSnapshot().rootClassName).toContain("mx_EventTile");
             expect(vm.getSnapshot().contentClassName).toBe("mx_EventTile_line");
+            expect(vm.getSnapshot().timestampView.permalink).toBe(vm.getSnapshot().permalink);
+            expect(vm.getSnapshot().timestampView.ts).toBe(vm.getSnapshot().timestampTs);
+            expect(vm.getSnapshot().encryptionView.mode).toBe(vm.getSnapshot().encryptionIndicatorMode);
         });
 
         it("marks missing-renderer fallback directly in the snapshot", () => {
@@ -712,6 +719,10 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().isNotification).toBe(true);
             expect(vm.getSnapshot().isListLikeTile).toBe(true);
             expect(vm.getSnapshot().notificationRoomName).toBe(room.name);
+            expect(vm.getSnapshot().notificationView).toEqual({
+                enabled: true,
+                roomName: room.name,
+            });
         });
     });
 
@@ -732,6 +743,9 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.ThreadsList });
 
             expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.Toolbar);
+            expect(vm.getSnapshot().shouldRenderThreadToolbar).toBe(true);
+            expect(vm.getSnapshot().shouldRenderThreadPreview).toBe(false);
+            expect(vm.getSnapshot().threadReplyCount).toBeUndefined();
         });
 
         it("shows read receipts when enabled and no sending state takes priority", () => {
@@ -758,6 +772,9 @@ describe("EventTileViewModel", () => {
             });
 
             expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.Summary);
+            expect(vm.getSnapshot().shouldRenderThreadPreview).toBe(true);
+            expect(vm.getSnapshot().shouldRenderThreadToolbar).toBe(false);
+            expect(vm.getSnapshot().threadReplyCount).toBe(vm.getSnapshot().thread?.length);
         });
 
         it("shows the thread summary and toolbar in the thread list when a thread is present", () => {
@@ -775,6 +792,9 @@ describe("EventTileViewModel", () => {
             });
 
             expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.SummaryWithToolbar);
+            expect(vm.getSnapshot().shouldRenderThreadPreview).toBe(true);
+            expect(vm.getSnapshot().shouldRenderThreadToolbar).toBe(true);
+            expect(vm.getSnapshot().threadReplyCount).toBe(vm.getSnapshot().thread?.length);
         });
 
         it("does not show a footer for redacted events with reactions", () => {

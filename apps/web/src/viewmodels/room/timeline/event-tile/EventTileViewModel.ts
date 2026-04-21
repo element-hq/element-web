@@ -158,6 +158,20 @@ interface EventTileTimestampSnapshot {
     timestampTs: number;
 }
 
+/** Plain timestamp view data consumed by the thin React layer. */
+interface EventTileTimestampViewData {
+    /** Timestamp display mode. */
+    displayMode: TimestampDisplayMode;
+    /** Timestamp formatting mode. */
+    formatMode: TimestampFormatMode;
+    /** Event timestamp in milliseconds. */
+    ts: number;
+    /** Received timestamp for late-event rendering, when available. */
+    receivedTs?: number;
+    /** Event permalink. */
+    permalink: string;
+}
+
 /** Thread-related state derived from the event and current room context. */
 interface EventTileThreadSnapshot {
     /** The thread associated with the event, if any. */
@@ -174,6 +188,16 @@ interface EventTileThreadSnapshot {
     threadPanelMode: ThreadPanelMode;
     /** The thread metadata mode to render inline with the tile. */
     threadInfoMode: ThreadInfoMode;
+    /** Optional href used by the inline thread info affordance. */
+    threadInfoHref?: string;
+    /** Optional label used by the inline thread info affordance. */
+    threadInfoLabel?: string;
+    /** Reply count to surface below the tile when thread summary UI is shown. */
+    threadReplyCount?: number;
+    /** Whether the thread reply preview should be rendered below the tile. */
+    shouldRenderThreadPreview: boolean;
+    /** Whether the thread action toolbar should be rendered below the tile. */
+    shouldRenderThreadToolbar: boolean;
     /** The primary click action exposed by the tile. */
     tileClickMode: ClickMode;
     /** Whether the tile is currently rendered in search results. */
@@ -218,6 +242,28 @@ interface EventTileEncryptionSnapshot {
     encryptionIndicatorTitle?: string;
 }
 
+/** Plain encryption view data consumed by the thin React layer. */
+interface EventTileEncryptionViewData {
+    /** Padlock presentation mode. */
+    padlockMode: PadlockMode;
+    /** Encryption indicator icon mode. */
+    mode: EncryptionIndicatorMode;
+    /** Optional tooltip title for the indicator. */
+    indicatorTitle?: string;
+    /** User ID that shared keys for the event, when available. */
+    sharedKeysUserId?: string;
+    /** Room ID associated with shared keys, when available. */
+    sharedKeysRoomId?: string;
+}
+
+/** Plain notification-list data consumed by the thin React layer. */
+interface EventTileNotificationViewData {
+    /** Whether notification metadata should be rendered. */
+    enabled: boolean;
+    /** Room name to surface in notification views, when available. */
+    roomName?: string;
+}
+
 /** Additional presentational data currently derived alongside the VM snapshot. */
 interface EventTilePresentationSnapshot {
     /** Optional event ID attached to the rendered tile root. */
@@ -238,6 +284,12 @@ interface EventTilePresentationSnapshot {
     receivedTs?: number;
     /** Whether the thin view should render the missing-renderer fallback path. */
     shouldRenderMissingRendererFallback: boolean;
+    /** Grouped timestamp data for the thin view. */
+    timestampView: EventTileTimestampViewData;
+    /** Grouped encryption data for the thin view. */
+    encryptionView: EventTileEncryptionViewData;
+    /** Grouped notification data for the thin view. */
+    notificationView: EventTileNotificationViewData;
 }
 
 /** Shared intermediate values used while deriving a tile snapshot. */
@@ -697,19 +749,26 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
         const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
         const encryptionSnapshot = EventTileViewModel.deriveEncryptionSnapshot(this.props, context);
+        const encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(
+            this.props,
+            {
+                ...baseSnapshot,
+                ...partial,
+                ...encryptionSnapshot,
+            } as EventTileViewSnapshot,
+            encryptionSnapshot.isEncryptionFailure,
+        );
 
         this.mergeSnapshot({
             ...partial,
             ...encryptionSnapshot,
-            encryptionIndicatorTitle: EventTileViewModel.getEncryptionIndicatorTitle(
-                this.props,
-                {
-                    ...baseSnapshot,
-                    ...partial,
-                    ...encryptionSnapshot,
-                } as EventTileViewSnapshot,
-                encryptionSnapshot.isEncryptionFailure,
-            ),
+            encryptionIndicatorTitle,
+            encryptionView: EventTileViewModel.getEncryptionViewData({
+                ...baseSnapshot,
+                ...partial,
+                ...encryptionSnapshot,
+                encryptionIndicatorTitle,
+            } as EventTileViewSnapshot),
         });
     }
 
@@ -887,6 +946,16 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             receivedTs: EventTileViewModel.getReceivedTs(props),
             shouldRenderMissingRendererFallback:
                 renderingSnapshot.renderMode === EventTileRenderMode.MissingRendererFallback,
+            timestampView: EventTileViewModel.getTimestampViewData({
+                ...baseSnapshot,
+                ...timestampSnapshot,
+                receivedTs: EventTileViewModel.getReceivedTs(props),
+            } as EventTileViewSnapshot),
+            encryptionView: EventTileViewModel.getEncryptionViewData({
+                ...baseSnapshot,
+                ...encryptionSnapshot,
+            } as EventTileViewSnapshot),
+            notificationView: EventTileViewModel.getNotificationViewData(props),
         };
 
         snapshot.shouldRenderActionBar = EventTileViewModel.getShouldRenderActionBar(props, snapshot);
@@ -895,6 +964,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             snapshot,
             snapshot.isEncryptionFailure,
         );
+        snapshot.encryptionView = EventTileViewModel.getEncryptionViewData(snapshot);
         snapshot.rootClassName = EventTileViewModel.getRootClassName(props, snapshot);
         return snapshot;
     }
@@ -961,6 +1031,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             sharedKeysRoomId: undefined,
             encryptionIndicatorTitle: undefined,
             threadInfoMode: ThreadInfoMode.None,
+            threadInfoHref: undefined,
+            threadInfoLabel: undefined,
+            threadReplyCount: undefined,
+            shouldRenderThreadPreview: false,
+            shouldRenderThreadToolbar: false,
             tileClickMode: ClickMode.None,
             openedFromSearch: false,
             eventId: undefined,
@@ -972,6 +1047,24 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             notificationRoomName: undefined,
             receivedTs: undefined,
             shouldRenderMissingRendererFallback: false,
+            timestampView: {
+                displayMode: TimestampDisplayMode.Hidden,
+                formatMode: TimestampFormatMode.Absolute,
+                ts: props.mxEvent.getTs(),
+                receivedTs: undefined,
+                permalink: "#",
+            },
+            encryptionView: {
+                padlockMode: PadlockMode.None,
+                mode: EncryptionIndicatorMode.None,
+                indicatorTitle: undefined,
+                sharedKeysUserId: undefined,
+                sharedKeysRoomId: undefined,
+            },
+            notificationView: {
+                enabled: false,
+                roomName: undefined,
+            },
             ...previousSnapshot,
             ...partial,
         };
@@ -1055,6 +1148,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             isThreadRoot: context.isThreadRoot,
             threadPanelMode: EventTileViewModel.getThreadPanelMode(props, context.thread),
             threadInfoMode: EventTileViewModel.getThreadInfoMode(props, context.isThreadRoot, context.thread),
+            threadInfoHref: EventTileViewModel.getThreadInfoHref(props),
+            threadInfoLabel: EventTileViewModel.getThreadInfoLabel(props),
+            threadReplyCount: EventTileViewModel.getThreadReplyCount(props, context.thread),
+            shouldRenderThreadPreview: EventTileViewModel.getShouldRenderThreadPreview(props, context.thread),
+            shouldRenderThreadToolbar: EventTileViewModel.getShouldRenderThreadToolbar(props, context.thread),
             tileClickMode: EventTileViewModel.getTileClickMode(props),
             openedFromSearch: EventTileViewModel.getOpenedFromSearch(props),
         };
@@ -1143,12 +1241,20 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
     ): Pick<EventTileTimestampSnapshot, "showTimestamp" | "timestampDisplayMode"> &
-        Pick<EventTileRenderingSnapshot, "shouldRenderActionBar"> {
+        Pick<EventTileRenderingSnapshot, "shouldRenderActionBar"> &
+        Pick<EventTilePresentationSnapshot, "timestampView"> {
         const showTimestamp = EventTileViewModel.getShowTimestamp(props, snapshot);
+        const timestampDisplayMode = EventTileViewModel.getTimestampDisplayMode(props, showTimestamp);
+        const nextSnapshot: EventTileViewSnapshot = {
+            ...snapshot,
+            showTimestamp,
+            timestampDisplayMode,
+        };
 
         return {
             showTimestamp,
-            timestampDisplayMode: EventTileViewModel.getTimestampDisplayMode(props, showTimestamp),
+            timestampDisplayMode,
+            timestampView: EventTileViewModel.getTimestampViewData(nextSnapshot),
             shouldRenderActionBar: EventTileViewModel.getShouldRenderActionBar(props, snapshot),
         };
     }
@@ -1442,6 +1548,41 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return ThreadInfoMode.None;
     }
 
+    private static getThreadInfoHref(props: EventTileViewModelProps): string | undefined {
+        return props.timelineRenderingType === TimelineRenderingType.Search ? props.highlightLink : undefined;
+    }
+
+    private static getThreadInfoLabel(props: EventTileViewModelProps): string | undefined {
+        return props.timelineRenderingType === TimelineRenderingType.Search
+            ? _t("timeline|thread_info_basic")
+            : undefined;
+    }
+
+    private static getThreadReplyCount(props: EventTileViewModelProps, thread: Thread | null): number | undefined {
+        const threadPanelMode = EventTileViewModel.getThreadPanelMode(props, thread);
+        if (
+            (threadPanelMode === ThreadPanelMode.Summary || threadPanelMode === ThreadPanelMode.SummaryWithToolbar) &&
+            thread
+        ) {
+            return thread.length;
+        }
+
+        return undefined;
+    }
+
+    private static getShouldRenderThreadPreview(props: EventTileViewModelProps, thread: Thread | null): boolean {
+        const threadPanelMode = EventTileViewModel.getThreadPanelMode(props, thread);
+        return (
+            (threadPanelMode === ThreadPanelMode.Summary || threadPanelMode === ThreadPanelMode.SummaryWithToolbar) &&
+            Boolean(thread)
+        );
+    }
+
+    private static getShouldRenderThreadToolbar(props: EventTileViewModelProps, thread: Thread | null): boolean {
+        const threadPanelMode = EventTileViewModel.getThreadPanelMode(props, thread);
+        return threadPanelMode === ThreadPanelMode.Toolbar || threadPanelMode === ThreadPanelMode.SummaryWithToolbar;
+    }
+
     private static getTileClickMode(props: EventTileViewModelProps): ClickMode {
         switch (props.timelineRenderingType) {
             case TimelineRenderingType.Notification:
@@ -1681,6 +1822,33 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         return undefined;
+    }
+
+    private static getTimestampViewData(snapshot: EventTileViewSnapshot): EventTileTimestampViewData {
+        return {
+            displayMode: snapshot.timestampDisplayMode,
+            formatMode: snapshot.timestampFormatMode,
+            ts: snapshot.timestampTs,
+            receivedTs: snapshot.receivedTs,
+            permalink: snapshot.permalink,
+        };
+    }
+
+    private static getEncryptionViewData(snapshot: EventTileViewSnapshot): EventTileEncryptionViewData {
+        return {
+            padlockMode: snapshot.padlockMode,
+            mode: snapshot.encryptionIndicatorMode,
+            indicatorTitle: snapshot.encryptionIndicatorTitle,
+            sharedKeysUserId: snapshot.sharedKeysUserId,
+            sharedKeysRoomId: snapshot.sharedKeysRoomId,
+        };
+    }
+
+    private static getNotificationViewData(props: EventTileViewModelProps): EventTileNotificationViewData {
+        return {
+            enabled: EventTileViewModel.getIsNotification(props),
+            roomName: EventTileViewModel.getNotificationRoomName(props),
+        };
     }
 
     private static getContentClassName(mxEvent: MatrixEvent): string {
