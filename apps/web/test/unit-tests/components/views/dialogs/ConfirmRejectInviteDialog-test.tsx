@@ -17,12 +17,9 @@ describe("ConfirmRejectInviteDialog", () => {
 
     const MY_ROOM_NAME = "foo";
 
-    beforeEach(() => {
-        jest.resetAllMocks();
-    });
-
     afterEach(() => {
         SdkConfig.reset();
+        jest.restoreAllMocks();
     });
 
     it("can close the dialog", async () => {

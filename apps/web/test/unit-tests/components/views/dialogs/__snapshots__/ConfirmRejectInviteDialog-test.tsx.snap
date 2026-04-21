@@ -42,7 +42,7 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
           >
             <input
               class="_input_udcm8_24"
-              id="_r_b_"
+              id="test-id-0"
               role="switch"
               type="checkbox"
             />
@@ -56,13 +56,13 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="_r_b_"
+            for="test-id-0"
           >
             Ignore user
           </label>
           <span
             class="_message_19upo_85 _help-message_19upo_91"
-            id="radix-_r_d_"
+            id="radix-_r_a_"
           >
             You will not see any messages or room invites from this user.
           </span>
@@ -79,7 +79,7 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
           >
             <input
               class="_input_udcm8_24"
-              id="_r_e_"
+              id="test-id-1"
               role="switch"
               type="checkbox"
             />
@@ -93,13 +93,13 @@ exports[`ConfirmRejectInviteDialog can reject with options selected 1`] = `
         >
           <label
             class="_label_19upo_59"
-            for="_r_e_"
+            for="test-id-1"
           >
             Report room
           </label>
           <span
             class="_message_19upo_85 _help-message_19upo_91"
-            id="radix-_r_g_"
+            id="radix-_r_c_"
           >
             Report this room to your account provider.
           </span>
