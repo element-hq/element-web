@@ -1892,8 +1892,6 @@
             "aliases_section": "Adiresy ao amin'ny efitrano",
             "avatar_field_label": "Avatar efitra",
             "canonical_alias_field_label": "Adiresy lehibe",
-            "default_url_previews_off": "Ny fijeriny URL dia esorina hoany mpandray anjara amin'ity efitrano ity.",
-            "default_url_previews_on": "Ny fijerena URL dia alefa amin'ny alàlany default hoany mpandray anjara amin'ity efitrano ity.",
             "description_space": "Ahitsio ny kira mifandraika amin'ny habakabaka.",
             "error_creating_alias_description": "Nisy lesoka tamin'ny famoronana io adiresy io. Mety tsy avelany mpizara izany na nisy tsy fahombiazana vonjimaika.",
             "error_creating_alias_title": "Hadisoana tamin'ny famoronana adiresy",
@@ -1920,12 +1918,7 @@
             "published_aliases_explainer_space": "Ny adiresy navoaka dia azon'ny olona ampiasaina aminy mpizara rehetra mba hiditra amin'ny habakao.",
             "published_aliases_section": "Adiresy navoaka",
             "save": "Alaina ny fanovana",
-            "topic_field_label": "Lohahevitra Efitrano",
-            "url_preview_encryption_warning": "Ao aminy efitrano misy miafina, toa an'ity iray ity, ny fijerena URL dia kilemaina amin'ny alàlany default mba hahazoana antoka fa tsy afaka manangona fampahalalana momba ny rohy hitanao ao amin'ity efitrano ity ny mpampiantrano anao (izay anaovana ny preview).",
-            "url_preview_explainer": "Rehefa misy olona mametraka URL ao amin'ny hafany, dia azo aseho ny fijerena URL mba hanomezana fampahalalana bebe kokoa momba an'io rohy io toy ny lohateny, famaritana, ary sary avy aminy tranokala.",
-            "url_previews_section": "Topi-maso amin'ny Url",
-            "user_url_previews_default_off": "Ianao dia manana<a> sembana</a> Zahao ny URL amin'ny alàlany default.",
-            "user_url_previews_default_on": "Ianao dia manana<a> afaka</a> Zahao ny URL aminy alàlan'ny default."
+            "topic_field_label": "Lohahevitra Efitrano"
         },
         "notifications": {
             "browse_button": "Mikaroka",
@@ -2231,8 +2224,6 @@
             "spell_check_locale_placeholder": "Misafidiana toerana iray"
         },
         "inline_url_previews_default": "Alefaso ny fijerena URL an-tserasera aminy alàlan'ny default",
-        "inline_url_previews_room": "Alefaso amin'ny alàlany ara-pototra hoany mpandray anjara amin'ity efitrano ity ny fijerena URL",
-        "inline_url_previews_room_account": "Alefaso ny fijerena URL ho an'ity efitrano ity (miantraika aminao ihany)",
         "insert_trailing_colon_mentions": "Ampidiro tsangambato aoriana aorian'ny fiteny mpampiasa eo am-piandohany hafatra",
         "jump_to_bottom_on_send": "Mankanesa any amin'ny farany fandaharam-potoana rehefa mandefa hafatra ianao",
         "key_backup": {

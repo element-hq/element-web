@@ -1,0 +1,50 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<RoomListSectionHeaderView /> stories > renders Default story 1`] = `
+<div>
+  <div
+    role="treegrid"
+    style="width: 320px;"
+  >
+    <div
+      aria-expanded="true"
+      aria-level="1"
+      aria-posinset="2"
+      aria-rowindex="4"
+      aria-setsize="5"
+      role="row"
+    >
+      <button
+        aria-expanded="true"
+        aria-label="Toggle Favourites section"
+        class="RoomListSectionHeaderView-module_header"
+        role="gridcell"
+        tabindex="-1"
+        type="button"
+      >
+        <div
+          class="Flex-module_flex RoomListSectionHeaderView-module_container"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            fill="var(--cpd-color-icon-secondary)"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+            />
+          </svg>
+          <span
+            class="RoomListSectionHeaderView-module_title"
+          >
+            Favourites
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;

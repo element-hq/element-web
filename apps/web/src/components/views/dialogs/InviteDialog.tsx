@@ -12,10 +12,9 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
-import { RichList, RichItem, PillInput, Pill } from "@element-hq/web-shared-components";
+import { Pill, PillInput, RichList } from "@element-hq/web-shared-components";
 import { DialPadIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
@@ -25,14 +24,12 @@ import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../.
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
 import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import { type IInviteResult, inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
+import { showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list-v3/skip-list/tag";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { mediaFromMxc } from "../../../customisations/Media";
-import BaseAvatar from "../avatars/BaseAvatar";
 import { SearchResultAvatar } from "../avatars/SearchResultAvatar";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { selectText } from "../../../utils/strings";
@@ -43,7 +40,6 @@ import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import LegacyCallHandler from "../../../LegacyCallHandler";
-import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import CopyableText from "../elements/CopyableText";
 import { type ScreenName } from "../../../PosthogTrackers";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -63,9 +59,8 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
-
-// we have a number of types defined from the Matrix spec which can't reasonably be altered here.
-/* eslint-disable camelcase */
+import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
+import { DMRoomTile } from "./invite/DMRoomTile.tsx";
 
 interface Result {
     userId: string;
@@ -115,62 +110,6 @@ const toMember = (member: RoomMember | Member): Member => {
           })
         : member;
 };
-
-interface IDMRoomTileProps {
-    member: Member;
-    lastActiveTs?: number;
-    onToggle(member: Member): void;
-    isSelected: boolean;
-}
-
-class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
-    private onClick = (e: ButtonEvent): void => {
-        // Stop the browser from highlighting text
-        e.preventDefault();
-        e.stopPropagation();
-
-        this.props.onToggle(this.props.member);
-    };
-
-    public render(): React.ReactNode {
-        const avatarSize = "32px";
-        const avatar = (this.props.member as ThreepidMember).isEmail ? (
-            <EmailPillAvatarIcon width={avatarSize} height={avatarSize} />
-        ) : (
-            <BaseAvatar
-                url={
-                    this.props.member.getMxcAvatarUrl()
-                        ? mediaFromMxc(this.props.member.getMxcAvatarUrl()!).getSquareThumbnailHttp(
-                              parseInt(avatarSize, 10),
-                          )
-                        : null
-                }
-                name={this.props.member.name}
-                idName={this.props.member.userId}
-                size={avatarSize}
-            />
-        );
-
-        const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.props.member.userId, {
-            withDisplayName: true,
-        });
-
-        const caption = (this.props.member as ThreepidMember).isEmail
-            ? _t("invite|email_caption")
-            : userIdentifier || this.props.member.userId;
-
-        return (
-            <RichItem
-                avatar={avatar}
-                title={this.props.member.name}
-                description={caption}
-                timestamp={this.props.lastActiveTs}
-                onClick={this.onClick}
-                selected={this.props.isSelected}
-            />
-        );
-    }
-}
 
 interface BaseProps {
     // Takes a boolean which is true if a user / users were invited /
@@ -409,10 +348,14 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             .map((member) => ({ userId: member.userId, user: toMember(member) }));
     }
 
-    private shouldAbortAfterInviteError(result: IInviteResult, room: Room): boolean {
+    private shouldAbortAfterInviteError(
+        states: MultiInviterCompletionStates,
+        inviter: MultiInviter,
+        room: Room,
+    ): boolean {
         this.setState({ busy: false });
         const userMap = new Map<string, Member>(this.state.targets.map((member) => [member.userId, member]));
-        return !showAnyInviteErrors(result.states, room, result.inviter, userMap);
+        return !showAnyInviteErrors(states, room, inviter, userMap);
     }
 
     private convertFilter(): Member[] {
@@ -483,11 +426,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         try {
-            const result = await inviteMultipleToRoom(cli, this.props.roomId, targetIds, {
+            const inviter = new MultiInviter(cli, this.props.roomId, {
                 // We show our own progress body, so don't pop up a separate dialog.
                 inhibitProgressDialog: true,
             });
-            if (!this.shouldAbortAfterInviteError(result, room)) {
+            const states = await inviter.invite(targetIds);
+            if (!this.shouldAbortAfterInviteError(states, inviter, room)) {
                 // handles setting error message too
                 this.props.onFinished(true);
             }
@@ -1180,8 +1124,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     /**
-     * Render content of the common "users" tab that is shown whether we have a regular invite dialog or a
-     * "CallTransfer" one.
+     * Render content of the "users" that is used for both invites and "start chat".
      */
     private renderMainTab(): JSX.Element {
         let helpText;
@@ -1269,26 +1212,23 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
             buttonText = _t("action|invite");
             goButtonFn = this.inviteUsers;
+        } else {
+            throw new Error("Unknown InviteDialog kind: " + this.props.kind);
         }
-
-        const goButton =
-            this.props.kind == InviteKind.CallTransfer ? null : (
-                <AccessibleButton
-                    kind="primary"
-                    onClick={goButtonFn}
-                    className="mx_InviteDialog_goButton"
-                    disabled={this.state.busy || !this.hasSelection()}
-                >
-                    {buttonText}
-                </AccessibleButton>
-            );
 
         return (
             <React.Fragment>
                 <p className="mx_InviteDialog_helpText">{helpText}</p>
                 <div className="mx_InviteDialog_addressBar">
                     {this.renderEditor()}
-                    {goButton}
+                    <AccessibleButton
+                        kind="primary"
+                        onClick={goButtonFn}
+                        className="mx_InviteDialog_goButton"
+                        disabled={this.state.busy || !this.hasSelection()}
+                    >
+                        {buttonText}
+                    </AccessibleButton>
                 </div>
                 {this.state.busy ? <InviteProgressBody /> : this.renderSuggestions()}
             </React.Fragment>
@@ -1336,7 +1276,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
      * See also: {@link renderRegularDialog}.
      */
     private renderCallTransferDialog(): React.ReactNode {
-        const usersSection = this.renderMainTab();
+        const usersSection = (
+            <React.Fragment>
+                <div className="mx_InviteDialog_addressBar">{this.renderEditor()}</div>
+                {this.state.busy ? <InviteProgressBody /> : this.renderSuggestions()}
+            </React.Fragment>
+        );
 
         const tabs: NonEmptyArray<Tab<TabId>> = [
             new Tab(

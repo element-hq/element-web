@@ -36,7 +36,7 @@ describe("PictureInPictureDragger", () => {
 
     describe("when rendering the dragger with PiP content 1", () => {
         beforeEach(() => {
-            renderResult = render(<PictureInPictureDragger draggable={true}>{mkContent1}</PictureInPictureDragger>);
+            renderResult = render(<PictureInPictureDragger>{mkContent1}</PictureInPictureDragger>);
         });
 
         it("should render the PiP content", () => {
@@ -45,7 +45,7 @@ describe("PictureInPictureDragger", () => {
 
         describe("and rerendering PiP content 1", () => {
             beforeEach(() => {
-                renderResult.rerender(<PictureInPictureDragger draggable={true}>{mkContent1}</PictureInPictureDragger>);
+                renderResult.rerender(<PictureInPictureDragger>{mkContent1}</PictureInPictureDragger>);
             });
 
             it("should not change the PiP content", () => {
@@ -55,7 +55,7 @@ describe("PictureInPictureDragger", () => {
 
         describe("and rendering PiP content 2", () => {
             beforeEach(() => {
-                renderResult.rerender(<PictureInPictureDragger draggable={true}>{mkContent2}</PictureInPictureDragger>);
+                renderResult.rerender(<PictureInPictureDragger>{mkContent2}</PictureInPictureDragger>);
             });
 
             it("should update the PiP content", () => {
@@ -66,9 +66,7 @@ describe("PictureInPictureDragger", () => {
 
     describe("when rendering the dragger with PiP content 1 and 2", () => {
         beforeEach(() => {
-            renderResult = render(
-                <PictureInPictureDragger draggable={true}>{[...mkContent1, ...mkContent2]}</PictureInPictureDragger>,
-            );
+            renderResult = render(<PictureInPictureDragger>{[...mkContent1, ...mkContent2]}</PictureInPictureDragger>);
         });
 
         it("should render both contents", () => {
@@ -83,7 +81,7 @@ describe("PictureInPictureDragger", () => {
         beforeEach(() => {
             clickSpy = jest.fn();
             render(
-                <PictureInPictureDragger draggable={true}>
+                <PictureInPictureDragger>
                     {[
                         ({ onStartMoving }) => (
                             // eslint-disable-next-line jsx-a11y/click-events-have-key-events

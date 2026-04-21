@@ -7,12 +7,14 @@ export default {
     workspaces: {
         "packages/shared-components": {},
         "packages/playwright-common": {
+            entry: ["src/fixtures/index.ts", "src/testcontainers/index.ts"],
             ignoreDependencies: [
                 // Used in playwright-screenshots.sh
                 "wait-on",
             ],
             ignoreBinaries: ["awk"],
         },
+        "packages/module-api": {},
         "apps/web": {
             entry: [
                 "src/serviceworker/index.ts",

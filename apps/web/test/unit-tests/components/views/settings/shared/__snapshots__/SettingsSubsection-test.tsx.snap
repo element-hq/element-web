@@ -8,11 +8,11 @@ exports[`<SettingsSubsection /> renders with plain text description 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_description"
@@ -42,11 +42,11 @@ exports[`<SettingsSubsection /> renders with plain text heading 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -67,11 +67,11 @@ exports[`<SettingsSubsection /> renders with react element description 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_description"
@@ -127,11 +127,11 @@ exports[`<SettingsSubsection /> renders without description 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Test
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content"

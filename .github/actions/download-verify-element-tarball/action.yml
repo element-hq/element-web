@@ -31,7 +31,9 @@ runs:
 
         - name: Move webapp to out-file-path
           shell: bash
-          run: mv ${{ runner.temp }}/download-verify-element-tarball/webapp ${{ inputs.out-file-path }}
+          run: mv ${{ runner.temp }}/download-verify-element-tarball/webapp "$OUT_PATH"
+          env:
+              OUT_PATH: ${{ inputs.out-file-path }}
 
         - name: Clean up temp directory
           shell: bash

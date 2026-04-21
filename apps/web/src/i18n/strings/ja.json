@@ -1739,8 +1739,6 @@
             "aliases_section": "ルームのアドレス",
             "avatar_field_label": "ルームのアバター",
             "canonical_alias_field_label": "メインアドレス",
-            "default_url_previews_off": "このルームの参加者には、既定でURLプレビューが無効です。",
-            "default_url_previews_on": "このルームの参加者には、既定でURLプレビューが有効です。",
             "description_space": "スペースの設定を変更します。",
             "error_creating_alias_description": "アドレスを作成する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
             "error_creating_alias_title": "アドレスを作成する際にエラーが発生しました",
@@ -1767,12 +1765,7 @@
             "published_aliases_explainer_space": "公開アドレスを設定すると、どのサーバーのユーザーでも、あなたのスペースに参加できるようになります。",
             "published_aliases_section": "公開アドレス",
             "save": "変更を保存",
-            "topic_field_label": "ルームのトピック",
-            "url_preview_encryption_warning": "このルームを含めて、暗号化されたルームでは、あなたのホームサーバー（これがプレビューを作成します）によるリンクの情報の収集を防ぐため、URLプレビューは既定で無効になっています。",
-            "url_preview_explainer": "メッセージにURLが含まれる場合、タイトル、説明、ウェブサイトの画像などがURLプレビューとして表示されます。",
-            "url_previews_section": "URLプレビュー",
-            "user_url_previews_default_off": "URLプレビューが既定で<a>無効</a>です。",
-            "user_url_previews_default_on": "URLプレビューが既定で<a>有効</a>です。"
+            "topic_field_label": "ルームのトピック"
         },
         "notifications": {
             "browse_button": "参照",
@@ -2048,8 +2041,6 @@
             "spell_check_locale_placeholder": "ロケールを選択"
         },
         "inline_url_previews_default": "既定でインラインURLプレビューを有効にする",
-        "inline_url_previews_room": "このルームの参加者のために既定でURLプレビューを有効にする",
-        "inline_url_previews_room_account": "このルームのURLプレビューを有効にする（あなたにのみ適用）",
         "insert_trailing_colon_mentions": "ユーザーをメンションする際にコロンを挿入",
         "jump_to_bottom_on_send": "メッセージを送信する際にタイムラインの最下部に移動",
         "key_backup": {

@@ -1874,8 +1874,6 @@
             "aliases_section": "聊天室位址",
             "avatar_field_label": "聊天室大頭照",
             "canonical_alias_field_label": "主要位址",
-            "default_url_previews_off": "此聊天室已預設對參與者停用網址預覽。",
-            "default_url_previews_on": "此聊天室已預設對參與者啟用網址預覽。",
             "description_space": "編輯您的聊天空間的設定。",
             "error_creating_alias_description": "建立該位址時發生錯誤。伺服器可能不允許這麼做，或是有暫時性的問題。",
             "error_creating_alias_title": "建立位址錯誤",
@@ -1902,12 +1900,7 @@
             "published_aliases_explainer_space": "任何伺服器上的人都可以使用已發佈的位址加入您的聊天空間。",
             "published_aliases_section": "已發佈的位址",
             "save": "儲存變更",
-            "topic_field_label": "聊天室主題",
-            "url_preview_encryption_warning": "在加密的聊天室中（這個就是），會預設停用網址預覽以確保您的家伺服器（產生預覽資訊的地方）無法透過這個聊天室收集您看到的連結的相關資訊。",
-            "url_preview_explainer": "當某人在他們的訊息中放置網址時，可以顯示如標題、描述與網頁上的圖片等等來給您更多關於該連結的資訊。",
-            "url_previews_section": "網址預覽",
-            "user_url_previews_default_off": "您已預設<a>停用</a>網址預覽。",
-            "user_url_previews_default_on": "您已預設<a>停用</a>網址預覽。"
+            "topic_field_label": "聊天室主題"
         },
         "notifications": {
             "browse_button": "瀏覽",
@@ -2242,8 +2235,6 @@
             "spell_check_locale_placeholder": "選擇語系"
         },
         "inline_url_previews_default": "預設啟用行內網址預覽",
-        "inline_url_previews_room": "對此聊天室中的參與者預設啟用網址預覽",
-        "inline_url_previews_room_account": "對此聊天室啟用網址預覽（僅影響您）",
         "insert_trailing_colon_mentions": "在使用者於訊息開頭提及之後插入跟隨冒號",
         "jump_to_bottom_on_send": "傳送訊息時，跳到時間軸底部",
         "key_backup": {

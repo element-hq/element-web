@@ -91,6 +91,11 @@ export class RoomListViewModel
     // Don't clear section vm because we want to keep the expand/collapse state even during space changes.
     private readonly roomSectionHeaderViewModels = new Map<string, RoomListSectionHeaderViewModel>();
 
+    /**
+     * Reference to the currently displayed toast, used to automatically close the toast after a timeout.
+     */
+    private toastRef?: number;
+
     public constructor(props: RoomListViewModelProps) {
         const activeSpace = SpaceStore.instance.activeSpaceRoom;
 
@@ -144,6 +149,13 @@ export class RoomListViewModel
             this.onListsLoaded,
         );
 
+        // Subscribe to section creation
+        this.disposables.trackListener(
+            RoomListStoreV3.instance,
+            RoomListStoreV3Event.SectionCreated as any,
+            this.onSectionCreated,
+        );
+
         // Subscribe to active room changes to update selected room
         const dispatcherRef = dispatcher.register(this.onDispatch);
         this.disposables.track(() => {
@@ -181,6 +193,16 @@ export class RoomListViewModel
 
         // Update roomsMap immediately before clearing VMs
         this.updateRoomsMap(this.roomsResult);
+
+        // When a filter is toggled on, expand sections that have results so they're visible
+        if (newFilter) {
+            for (const section of this.roomsResult.sections) {
+                if (section.rooms.length > 0) {
+                    const sectionHeaderVM = this.roomSectionHeaderViewModels.get(section.tag);
+                    if (sectionHeaderVM) sectionHeaderVM.isExpanded = true;
+                }
+            }
+        }
 
         this.updateRoomListData();
     };
@@ -254,10 +276,12 @@ export class RoomListViewModel
     public getSectionHeaderViewModel(tag: string): RoomListSectionHeaderViewModel {
         if (this.roomSectionHeaderViewModels.has(tag)) return this.roomSectionHeaderViewModels.get(tag)!;
 
-        const title = TAG_TO_TITLE_MAP[tag] || tag;
+        const customSections = SettingsStore.getValue("RoomList.CustomSectionData");
+        const title = TAG_TO_TITLE_MAP[tag] || customSections[tag]?.name || tag;
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
             title,
+            spaceId: this.roomsResult.spaceId,
             onToggleExpanded: () => this.updateRoomListData(),
         });
         this.roomSectionHeaderViewModels.set(tag, viewModel);
@@ -366,6 +390,11 @@ export class RoomListViewModel
             this.roomsMap.clear();
 
             this.updateRoomsMap(this.roomsResult);
+
+            // Restore the expanded/collapsed state for the new space
+            for (const viewModel of this.roomSectionHeaderViewModels.values()) {
+                viewModel.setSpace(newSpaceId);
+            }
 
             // Space changed - get the last selected room for the new space to prevent flicker
             const lastSelectedRoom = SpaceStore.instance.getLastSelectedRoomIdForSpace(newSpaceId);
@@ -501,6 +530,12 @@ export class RoomListViewModel
             this.roomsResult,
             (tag) => this.roomSectionHeaderViewModels.get(tag)?.isExpanded ?? true,
         );
+        // If it's a flat list, we need to make sure the single section is expanded and has all rooms, otherwise the room list will be empty
+        if (isFlatList) {
+            const chatSections = this.roomSectionHeaderViewModels.get(CHATS_TAG);
+            if (chatSections) chatSections.isExpanded = true;
+            chatSections?.setRooms(this.roomsResult.sections.flatMap((section) => section.rooms));
+        }
         this.sections = sections;
 
         // Calculate the active room index from the computed sections (which exclude collapsed sections' rooms)
@@ -550,6 +585,24 @@ export class RoomListViewModel
             });
         }
     };
+
+    public onSectionCreated = (): void => {
+        clearTimeout(this.toastRef);
+        this.snapshot.merge({
+            toast: "section_created",
+        });
+        // Automatically close the toast after 15 seconds
+        this.toastRef = setTimeout(() => {
+            this.closeToast();
+        }, 15 * 1000);
+    };
+
+    public closeToast: () => void = () => {
+        clearTimeout(this.toastRef);
+        this.snapshot.merge({
+            toast: undefined,
+        });
+    };
 }
 
 /**
@@ -562,9 +615,11 @@ function computeSections(
     roomsResult: RoomsResult,
     isSectionExpanded: (tag: string) => boolean,
 ): { sections: Section[]; isFlatList: boolean } {
+    const customSections = SettingsStore.getValue("RoomList.CustomSectionData");
+
     const sections = roomsResult.sections
-        // Only include sections that have rooms
-        .filter((section) => section.rooms.length > 0)
+        // Only include sections that have rooms or are custom sections (which may be empty but should still be shown)
+        .filter((section) => section.rooms.length > 0 || customSections[section.tag])
         // Remove roomIds for sections that are currently collapsed according to their section header view model
         .map((section) => ({
             ...section,

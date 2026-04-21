@@ -24,6 +24,7 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 describe("<RoomSettingsDialog />", () => {
     const userId = "@alice:server.org";
@@ -43,6 +44,8 @@ describe("<RoomSettingsDialog />", () => {
     const room2 = new Room("!room2:server.org", mockClient, userId);
     room2.name = "Another Room";
 
+    let sdkContext: SdkContextClass;
+
     jest.spyOn(SettingsStore, "getValue");
 
     beforeEach(() => {
@@ -54,6 +57,9 @@ describe("<RoomSettingsDialog />", () => {
             return null;
         });
 
+        sdkContext = new SdkContextClass();
+        sdkContext.client = mockClient;
+
         jest.spyOn(SettingsStore, "getValue").mockReset().mockReturnValue(false);
 
         const dmRoomMap = {
@@ -63,7 +69,7 @@ describe("<RoomSettingsDialog />", () => {
     });
 
     const getComponent = (onFinished = jest.fn(), propRoomId = roomId) =>
-        render(<RoomSettingsDialog roomId={propRoomId} onFinished={onFinished} />, {
+        render(<RoomSettingsDialog roomId={propRoomId} onFinished={onFinished} sdkContext={sdkContext} />, {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
@@ -79,7 +85,7 @@ describe("<RoomSettingsDialog />", () => {
 
         expect(getByText(`Room Settings - ${room.name}`)).toBeInTheDocument();
 
-        rerender(<RoomSettingsDialog roomId={room2.roomId} onFinished={jest.fn()} />);
+        rerender(<RoomSettingsDialog roomId={room2.roomId} onFinished={jest.fn()} sdkContext={sdkContext} />);
 
         expect(getByText(`Room Settings - ${room2.name}`)).toBeInTheDocument();
     });
