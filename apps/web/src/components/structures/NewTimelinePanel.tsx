@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo, type JSX, type ReactNode } from "react";
-import { TimelineView, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "@element-hq/web-shared-components";
+import { TimelineView, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
@@ -38,14 +38,16 @@ interface NewTimelinePanelProps {
 export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelProps): JSX.Element {
     const client: MatrixClient = useMatrixClientContext();
 
-    const vm = useMemo(
+    // useCreateAutoDisposedViewModel handles StrictMode's double-invoke correctly
+    // (useState initializer runs only once) and disposes the VM on unmount.
+    // The VM itself persists scroll position to localStorage on each scroll stop.
+    const vm = useCreateAutoDisposedViewModel(
         () =>
             new RoomTimelineViewModel({
                 client,
                 room,
                 initialEventId: highlightedEventId,
             }),
-        [client, room, highlightedEventId],
     );
 
     const renderItem = useMemo(

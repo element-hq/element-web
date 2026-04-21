@@ -1843,6 +1843,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             if (room) {
                 return (
                     <NewTimelinePanel
+                        key={room.roomId}
                         room={room}
                         highlightedEventId={this.props.highlightedEventId}
                     />
