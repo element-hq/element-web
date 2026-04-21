@@ -49,12 +49,7 @@ import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import type { MessageBodyProps, MessageBodyRenderTileProps } from "./MessageBody";
-import type {
-    EventTileContextMenuState,
-    EventTileOps,
-    GetRelationsForEvent,
-    ReadReceiptProps,
-} from "./types";
+import type { EventTileContextMenuState, EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
 import { ThreadInfo } from "./ThreadInfo";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import ContextMenu, { aboveLeftOf, aboveRightOf } from "../../../structures/ContextMenu";

@@ -10,7 +10,7 @@ import { EventStatus } from "matrix-js-sdk/src/matrix";
 import { render, screen } from "jest-matrix-react";
 
 import { MessageStatus } from "../../../../../../src/components/views/rooms/EventTile/MessageStatus";
-import type { ReadReceiptProps } from "../../../../../../src/models/rooms/EventTileTypes";
+import type { ReadReceiptProps } from "../../../../../../src/components/views/rooms/EventTile/types";
 
 jest.mock("../../../../../../src/components/views/rooms/ReadReceiptGroup", () => ({
     ReadReceiptGroup: ({
