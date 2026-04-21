@@ -69,7 +69,13 @@ export const test = base.extend<Fixtures>({
         const args = ["--profile-dir", tmpDir, ...extraArgs];
 
         if (process.env.GITHUB_ACTIONS) {
+            args.push("--disable-gpu");
+
             if (process.platform === "linux") {
+                if (process.getuid() === 0) {
+                    args.push("--no-sandbox");
+                }
+
                 // GitHub Actions hosted runner lacks dbus and a compatible keyring, so we need to force plaintext storage
                 args.push("--storage-mode", "force-plaintext");
             } else if (process.platform === "darwin") {
