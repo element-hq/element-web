@@ -194,8 +194,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.1
       uuid:
-        specifier: ^13.0.0
-        version: 13.0.0
+        specifier: ^14.0.0
+        version: 14.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.18.10
@@ -442,7 +442,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -9831,8 +9831,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28}
     version: 41.3.0
     engines: {node: '>=22.0.0'}
 
@@ -12762,6 +12762,10 @@ packages:
 
   uuid@13.0.0:
     resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
+    hasBin: true
+
+  uuid@14.0.0:
+    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
     hasBin: true
 
   uuid@8.3.2:
@@ -23425,7 +23429,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.1.0
@@ -26933,6 +26937,8 @@ snapshots:
   uuid@11.1.0: {}
 
   uuid@13.0.0: {}
+
+  uuid@14.0.0: {}
 
   uuid@8.3.2: {}
 
