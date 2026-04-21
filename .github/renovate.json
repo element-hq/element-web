@@ -4,17 +4,20 @@
     "postUpdateOptions": ["pnpmDedupe"],
     "packageRules": [
         {
+            "description": "Group all testcontainers docker digests",
             "groupName": "testcontainers docker digests",
             "groupSlug": "testcontainers-docker",
             "matchDepTypes": ["testcontainers-docker"],
             "matchPackageNames": ["*"]
         },
         {
+            "description": "Group updates to overrides separately from other groups",
             "matchDepTypes": ["pnpm.overrides"],
-            "groupName": null,
+            "groupName": "{{depName}} overrides"
             "additionalBranchPrefix": "overrides-"
         },
         {
+            "description": "Disable any major updates to overrides as this almost always is wrong",
             "matchDepTypes": ["pnpm.overrides"],
             "matchUpdateTypes": ["major"],
             "enabled": false
@@ -22,15 +25,16 @@
     ],
     "customManagers": [
         {
+            "description": "Update testcontainers docker digests",
             "customType": "regex",
             "datasourceTemplate": "docker",
             "versioningTemplate": "loose",
-            "description": "Update testcontainers docker digests",
             "managerFilePatterns": ["**/testcontainers/*.ts"],
             "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""],
             "depTypeTemplate": "testcontainers-docker"
         },
         {
+            "description": "Update element-desktop hakDependencies",
             "customType": "jsonata",
             "managerFilePatterns": ["/(^|/)package\\.json$/"],
             "fileFormat": "json",
