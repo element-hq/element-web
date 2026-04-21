@@ -33,6 +33,10 @@ describe("ImageBodyViewModel", () => {
         await Promise.resolve();
     };
 
+    const downloadImageForTest = async (vm: ImageBodyViewModel): Promise<void> => {
+        await (vm as any).downloadImage();
+    };
+
     const createEvent = ({
         body = "demo image",
         content = {},
@@ -152,10 +156,27 @@ describe("ImageBodyViewModel", () => {
     });
 
     it("renders the ready snapshot with thumbnail data once visible", async () => {
-        const vm = createVm();
+        const vm = createVm({
+            mxEvent: createEvent({
+                content: {
+                    file: { url: "mxc://server/encrypted-image" },
+                    info: {
+                        mimetype: "image/jpeg",
+                        w: 320,
+                        h: 240,
+                        size: 48_000,
+                    },
+                },
+            }),
+            mediaEventHelper: createMediaEventHelper({
+                encrypted: true,
+                sourceUrl: "https://server/full.png",
+                thumbnailUrl: "https://server/thumb.png",
+            }),
+        });
 
         vm.setMediaVisible(true);
-        await flushPromises();
+        await downloadImageForTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             state: ImageBodyViewState.READY,
@@ -175,10 +196,28 @@ describe("ImageBodyViewModel", () => {
     });
 
     it("falls back from the thumbnail url to the full image after an image error", async () => {
-        const vm = createVm({ mediaVisible: true });
+        const vm = createVm({
+            mxEvent: createEvent({
+                content: {
+                    file: { url: "mxc://server/encrypted-image" },
+                    info: {
+                        mimetype: "image/jpeg",
+                        w: 320,
+                        h: 240,
+                        size: 48_000,
+                    },
+                },
+            }),
+            mediaEventHelper: createMediaEventHelper({
+                encrypted: true,
+                sourceUrl: "https://server/full.png",
+                thumbnailUrl: "https://server/thumb.png",
+            }),
+            mediaVisible: true,
+        });
 
         vm.loadInitialMediaIfVisible();
-        await flushPromises();
+        await downloadImageForTest(vm);
         expect(vm.getSnapshot().thumbnailSrc).toBe("https://server/thumb.png");
 
         vm.onImageError();
@@ -194,21 +233,28 @@ describe("ImageBodyViewModel", () => {
         const vm = createVm({
             mxEvent: createEvent({
                 content: {
+                    file: { url: "mxc://server/encrypted-image" },
                     info: {
                         "w": 320,
                         "h": 240,
                         "size": 48_000,
                         "mimetype": "image/gif",
-                        "thumbnail_info": { mimetype: "image/png" },
+                        "thumbnail_info": { mimetype: "image/jpeg" },
                         "org.matrix.msc4230.is_animated": true,
                     },
                 },
+            }),
+            mediaEventHelper: createMediaEventHelper({
+                encrypted: true,
+                sourceUrl: "https://server/full.gif",
+                thumbnailUrl: "https://server/thumb.jpg",
+                sourceBlob: new Blob(["gif"], { type: "image/gif" }),
             }),
             mediaVisible: true,
         });
 
         vm.loadInitialMediaIfVisible();
-        await flushPromises();
+        await downloadImageForTest(vm);
 
         expect(vm.getSnapshot()).toMatchObject({
             state: ImageBodyViewState.READY,
