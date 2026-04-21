@@ -47,11 +47,9 @@
             "dependsOn": ["^build", "^build:playwright"]
         },
         "test:unit": {
-            "executor": "@nx/jest:jest",
-            "options": {
-                "jestConfig": "{projectRoot}/jest.config.ts",
-                "cwd": "apps/web"
-            },
+            // We avoid the jest executor because it doesn't seem to give any benefit, and it mangles the summary of failing tests.
+            "command": "jest",
+            "options": { "cwd": "apps/web" },
             "dependsOn": ["^build"]
         },
         "test:playwright": {
