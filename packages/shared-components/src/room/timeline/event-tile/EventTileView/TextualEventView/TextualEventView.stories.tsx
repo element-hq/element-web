@@ -11,7 +11,7 @@ import { TextualEventView as TextualEventComponent } from "./TextualEventView";
 import { MockViewModel } from "../../../../../core/viewmodel/MockViewModel";
 
 const meta = {
-    title: "Room/Timeline/EventTile/EventTileView/TextualEventView",
+    title: "TimelineEvent/TextualEventView",
     component: TextualEventComponent,
     tags: ["autodocs"],
     args: {

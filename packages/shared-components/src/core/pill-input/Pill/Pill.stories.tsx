@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Pill } from "./Pill";
 
 const meta = {
-    title: "Core/PillInput/Pill",
+    title: "Core/Pill",
     component: Pill,
     tags: ["autodocs"],
     args: {

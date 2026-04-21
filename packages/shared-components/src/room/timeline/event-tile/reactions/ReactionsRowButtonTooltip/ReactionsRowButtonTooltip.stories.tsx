@@ -27,7 +27,7 @@ const ReactionsRowButtonTooltipViewWrapper = withViewDocs(
 );
 
 const meta = {
-    title: "Room/Timeline/EventTile/Reactions/ReactionsRowButtonTooltip",
+    title: "TimelineReaction/ReactionsRowButtonTooltip",
     component: ReactionsRowButtonTooltipViewWrapper,
     tags: ["autodocs"],
     argTypes: {

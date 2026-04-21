@@ -9,7 +9,7 @@ import { MediaBody } from "./MediaBody";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-    title: "Room/Timeline/EventTile/Body/MediaBody",
+    title: "TimelineBody/MediaBody",
     component: MediaBody,
     tags: ["autodocs"],
     args: {

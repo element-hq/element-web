@@ -27,7 +27,7 @@ const RedactedBodyViewWrapperImpl = ({
 const RedactedBodyViewWrapper = withViewDocs(RedactedBodyViewWrapperImpl, RedactedBodyView);
 
 const meta = {
-    title: "Room/Timeline/EventTile/Body/RedactedBodyView",
+    title: "TimelineBody/RedactedBodyView",
     component: RedactedBodyViewWrapper,
     tags: ["autodocs"],
     args: {

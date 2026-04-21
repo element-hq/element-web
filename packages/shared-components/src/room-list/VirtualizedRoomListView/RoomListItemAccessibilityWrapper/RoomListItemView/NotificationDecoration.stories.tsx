@@ -23,7 +23,7 @@ const defaultProps: NotificationDecorationProps = {
 };
 
 const meta = {
-    title: "RoomList/VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView/NotificationDecoration",
+    title: "RoomList/NotificationDecoration",
     component: NotificationDecoration,
     tags: ["autodocs"],
     decorators: [

@@ -32,7 +32,7 @@ const ReadMarkerWrapper = ({
 };
 
 const meta = {
-    title: "Room/Timeline/ReadMarker",
+    title: "TimelineMeta/ReadMarker",
     component: ReadMarkerWrapper,
     tags: ["autodocs"],
     args: {

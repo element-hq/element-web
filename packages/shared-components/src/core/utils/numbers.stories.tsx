@@ -16,7 +16,7 @@ import percentageWithinDoc from "../../../typedoc/functions/percentageWithin.md?
 import sumDoc from "../../../typedoc/functions/sum.md?raw";
 
 const meta = {
-    title: "Core/Utils/Numbers",
+    title: "Core/Numbers",
     parameters: {
         docs: {
             page: () => (

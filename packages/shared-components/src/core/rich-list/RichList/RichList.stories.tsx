@@ -14,7 +14,7 @@ import { RichItem } from "../RichItem";
 const avatar = <div style={{ width: 32, height: 32, backgroundColor: "#ccc", borderRadius: "50%" }} />;
 
 const meta = {
-    title: "Core/RichList/RichList",
+    title: "Core/RichList",
     component: RichList,
     tags: ["autodocs"],
     decorators: [
