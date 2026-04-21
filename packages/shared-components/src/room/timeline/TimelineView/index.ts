@@ -14,7 +14,6 @@ export type {
     TimelineViewModel,
     TimelineViewProps,
     NavigationAnchor,
-    VisibleRange,
+    AnchorAlign,
     PaginationState,
-    FocusState,
 } from "./types";

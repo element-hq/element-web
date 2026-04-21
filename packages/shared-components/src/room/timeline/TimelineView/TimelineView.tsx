@@ -5,11 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useMemo, type JSX } from "react";
-import { Virtuoso, type ListRange } from "react-virtuoso";
+import React, { useCallback, useEffect, useMemo, useRef, type JSX, type ReactNode } from "react";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import type { TimelineItem, TimelineViewProps, VisibleRange } from "./types";
+import type { TimelineItem, TimelineViewProps } from "./types";
 
 /**
  * Shared virtualized timeline container.
@@ -23,70 +23,69 @@ import type { TimelineItem, TimelineViewProps, VisibleRange } from "./types";
 /** Pre-render this many pixels above and below the visible viewport. */
 const OVERSCAN_PX = 600;
 
-const log = (...args: unknown[]): void => console.log("[TimelineView]", ...args);
+/**
+ * On initial mount Virtuoso only reads `initialTopMostItemIndex` once.
+ * `'LAST'` tells it to land on the final item and align it to the end of
+ * the viewport, giving a correct bottom-of-room starting position.
+ */
+const INITIAL_BOTTOM = { index: "LAST" as const, align: "end" as const };
 
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
+    const virtuosoRef = useRef<VirtuosoHandle>(null);
 
     const increaseViewportBy = useMemo(() => ({ top: OVERSCAN_PX, bottom: OVERSCAN_PX }), []);
 
     const itemContent = useCallback(
-        (index: number, item: TimelineItem): JSX.Element => {
-            return <React.Fragment key={item.key}>{renderItem(item)}</React.Fragment>;
+        (_index: number, item: TimelineItem): ReactNode => {
+            // `display: flow-root` establishes a new block formatting context so that any
+            // margins on the rendered content cannot collapse out through the item wrapper.
+            // Without this, Virtuoso's `getBoundingClientRect()` measurement under-reports
+            // item height by the child's margin-top/margin-bottom, which accumulates over
+            // many items and causes scroll anchor drift during prepend/backfill.
+            return <div style={{ display: "flow-root" }}>{renderItem(item)}</div>;
         },
         [renderItem],
     );
 
-    const handleRangeChanged = useCallback(
-        (range: ListRange) => {
-            const visibleRange: VisibleRange = {
-                startIndex: range.startIndex,
-                endIndex: range.endIndex,
-            };
-            vm.onVisibleRangeChanged(visibleRange);
-        },
-        [vm],
-    );
-
-    const handleAtBottomStateChange = useCallback(
-        (atBottom: boolean) => {
-            vm.onStuckAtBottomChanged(atBottom);
-        },
-        [vm],
-    );
-
-    const handleStartReached = useCallback(() => {
-        vm.onStartReached();
-    }, [vm]);
-
-    const handleEndReached = useCallback(() => {
-        vm.onEndReached();
-    }, [vm]);
-
-    // Handle pending anchor scrolls
+    // Scroll to the pending anchor when it is set and the target item is in the data
+    // array. Handles both permalink navigation and scroll-position restore. We depend
+    // on `snapshot.items` so we retry after each pagination batch in case the target
+    // wasn't in the initial load window.
     useEffect(() => {
-        if (snapshot.pendingAnchor) {
-            // The anchor will be handled by Virtuoso's initialTopMostItemIndex
-            // or scrollToIndex on the next render cycle. For now, acknowledge it.
-            vm.onAnchorReached();
-        }
-    }, [snapshot.pendingAnchor, vm]);
+        const anchor = snapshot.pendingAnchor;
+        if (!anchor) return;
 
-    const firstItemIndex = vm.getFirstItemIndex();
+        const arrayIndex = snapshot.items.findIndex((item) => item.key === anchor.targetKey);
+        if (arrayIndex === -1) return; // not loaded yet — wait for next items update
 
-    log("render, items:", snapshot.items.length, "firstItemIndex:", firstItemIndex, "backPag:", snapshot.backwardPagination, "fwdPag:", snapshot.forwardPagination);
+        virtuosoRef.current?.scrollToIndex({
+            index: snapshot.firstItemIndex + arrayIndex,
+            align: anchor.align,
+            behavior: "auto",
+        });
+        vm.onAnchorReached();
+    }, [snapshot.pendingAnchor, snapshot.items, snapshot.firstItemIndex, vm]);
+
+    // Don't mount Virtuoso until items are ready — ensures `initialTopMostItemIndex`
+    // is passed with the correct value on Virtuoso's first mount.
+    if (snapshot.items.length === 0) {
+        return <div style={{ height: "100%", width: "100%" }} />;
+    }
 
     return (
         <Virtuoso
+            ref={virtuosoRef}
+            initialTopMostItemIndex={INITIAL_BOTTOM}
             data={snapshot.items}
-            firstItemIndex={firstItemIndex}
+            firstItemIndex={snapshot.firstItemIndex}
             increaseViewportBy={increaseViewportBy}
             itemContent={itemContent}
-            rangeChanged={handleRangeChanged}
-            atBottomStateChange={handleAtBottomStateChange}
-            startReached={handleStartReached}
-            endReached={handleEndReached}
+            atBottomStateChange={vm.onStuckAtBottomChanged}
+            startReached={vm.onStartReached}
+            endReached={vm.onEndReached}
             followOutput={snapshot.stuckAtBottom ? "smooth" : false}
+            alignToBottom
             style={{ height: "100%", width: "100%" }}
         />
     );
