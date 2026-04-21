@@ -18,39 +18,25 @@ import {
 
 import { FormattingButtons } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
 import * as LinkModal from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
+import Modal from "../../../../../../../src/Modal";
 import { setLanguage } from "../../../../../../../src/languageHandler";
 
-const mockWysiwyg = {
-    bold: jest.fn(),
-    italic: jest.fn(),
-    underline: jest.fn(),
-    strikeThrough: jest.fn(),
-    inlineCode: jest.fn(),
-    codeBlock: jest.fn(),
-    link: jest.fn(),
-    orderedList: jest.fn(),
-    unorderedList: jest.fn(),
-    quote: jest.fn(),
-    indent: jest.fn(),
-    unIndent: jest.fn(),
-} as unknown as FormattingFunctions;
+// For these, we just expect the corresponding function to be called as soon as the button is clicked
+const simpleCases: Record<Exclude<ActionTypes, "undo" | "redo" | "clear" | "indent" | "unindent" | "link">, string> = {
+    bold: "Bold",
+    italic: "Italic",
+    underline: "Underline",
+    strikeThrough: "Strikethrough",
+    inlineCode: "Code",
+    codeBlock: "Code block",
+    orderedList: "Numbered list",
+    unorderedList: "Bulleted list",
+    quote: "Quote",
+};
 
-const openLinkModalSpy = jest.spyOn(LinkModal, "openLinkModal");
-
-const testCases: Record<
-    Exclude<ActionTypes, "undo" | "redo" | "clear" | "indent" | "unindent">,
-    { label: string; mockFormatFn: jest.Func | jest.SpyInstance }
-> = {
-    bold: { label: "Bold", mockFormatFn: mockWysiwyg.bold },
-    italic: { label: "Italic", mockFormatFn: mockWysiwyg.italic },
-    underline: { label: "Underline", mockFormatFn: mockWysiwyg.underline },
-    strikeThrough: { label: "Strikethrough", mockFormatFn: mockWysiwyg.strikeThrough },
-    inlineCode: { label: "Code", mockFormatFn: mockWysiwyg.inlineCode },
-    codeBlock: { label: "Code block", mockFormatFn: mockWysiwyg.inlineCode },
-    link: { label: "Link", mockFormatFn: openLinkModalSpy },
-    orderedList: { label: "Numbered list", mockFormatFn: mockWysiwyg.orderedList },
-    unorderedList: { label: "Bulleted list", mockFormatFn: mockWysiwyg.unorderedList },
-    quote: { label: "Quote", mockFormatFn: mockWysiwyg.quote },
+const testCases = {
+    ...simpleCases,
+    link: "Link",
 };
 
 const createActionStates = (state: ActionState): AllActionStates => {
@@ -59,7 +45,7 @@ const createActionStates = (state: ActionState): AllActionStates => {
 
 const defaultActionStates = createActionStates("enabled");
 
-const renderComponent = (props = {}) => {
+const renderComponent = (mockWysiwyg: FormattingFunctions, props = {}) => {
     return render(<FormattingButtons composer={mockWysiwyg} actionStates={defaultActionStates} {...props} />);
 };
 
@@ -70,109 +56,123 @@ const classes = {
 };
 
 describe("FormattingButtons", () => {
+    let mockWysiwyg: FormattingFunctions;
+
     beforeEach(() => {
-        openLinkModalSpy.mockReturnValue(undefined);
+        cleanup();
+        mockWysiwyg = {} as unknown as FormattingFunctions;
     });
 
     afterEach(() => {
         jest.resetAllMocks();
+        Modal.forceCloseAllModals();
     });
 
     it("renders in german", async () => {
         await setLanguage("de");
-        const { asFragment } = renderComponent();
+        const { asFragment } = renderComponent(mockWysiwyg);
         expect(asFragment()).toMatchSnapshot();
 
         await setLanguage("en");
     });
 
     it("Each button should not have active class when enabled", () => {
-        renderComponent();
+        renderComponent(mockWysiwyg);
 
-        Object.values(testCases).forEach(({ label }) => {
+        Object.values(testCases).forEach((label) => {
             expect(screen.getByLabelText(label)).not.toHaveClass(classes.active);
         });
     });
 
     it("Each button should have active class when reversed", () => {
         const reversedActionStates = createActionStates("reversed");
-        renderComponent({ actionStates: reversedActionStates });
+        renderComponent(mockWysiwyg, { actionStates: reversedActionStates });
 
-        Object.values(testCases).forEach((testCase) => {
-            const { label } = testCase;
+        Object.values(testCases).forEach((label) => {
             expect(screen.getByLabelText(label)).toHaveClass(classes.active);
         });
     });
 
     it("Each button should have disabled class when disabled", () => {
         const disabledActionStates = createActionStates("disabled");
-        renderComponent({ actionStates: disabledActionStates });
+        renderComponent(mockWysiwyg, { actionStates: disabledActionStates });
 
-        Object.values(testCases).forEach((testCase) => {
-            const { label } = testCase;
+        Object.values(testCases).forEach((label) => {
             expect(screen.getByLabelText(label)).toHaveClass(classes.disabled);
         });
     });
 
-    it("Should call wysiwyg function on button click", async () => {
-        renderComponent();
+    it.each(Object.keys(simpleCases))("Should call wysiwyg function on button click (%s)", async (key) => {
+        const user = userEvent.setup();
 
-        for (const testCase of Object.values(testCases)) {
-            const { label, mockFormatFn } = testCase;
+        renderComponent(mockWysiwyg);
 
-            screen.getByLabelText(label).click();
-            expect(mockFormatFn).toHaveBeenCalledTimes(1);
-        }
+        const mock = (mockWysiwyg[key as keyof FormattingFunctions] = jest.fn());
+        await user.click(screen.getByLabelText(simpleCases[key as keyof typeof simpleCases]));
+        expect(mock).toHaveBeenCalledTimes(1);
     });
 
-    it("Each button should display the tooltip on mouse over when not disabled", async () => {
-        renderComponent();
+    it("should open link modal after clicking link button", async () => {
+        const openLinkModalSpy = jest.spyOn(LinkModal, "openLinkModal");
 
-        for (const testCase of Object.values(testCases)) {
-            const { label } = testCase;
+        const user = userEvent.setup();
 
-            await userEvent.hover(screen.getByLabelText(label));
-            await waitFor(() => expect(screen.getByText(label)).toBeInTheDocument());
-        }
+        renderComponent(mockWysiwyg);
+
+        await user.click(screen.getByLabelText(testCases.link));
+        expect(openLinkModalSpy).toHaveBeenCalledTimes(1);
     });
 
-    it("Each button should not display the tooltip on mouse over when disabled", async () => {
-        const disabledActionStates = createActionStates("disabled");
-        renderComponent({ actionStates: disabledActionStates });
+    it.each(Object.keys(testCases))(
+        "%s button should display the tooltip on mouse over when not disabled",
+        async (key) => {
+            const user = userEvent.setup();
 
-        for (const testCase of Object.values(testCases)) {
-            const { label } = testCase;
+            renderComponent(mockWysiwyg);
 
-            await userEvent.hover(screen.getByLabelText(label));
-            expect(screen.queryByText(label)).not.toBeInTheDocument();
-        }
+            await user.hover(screen.getByLabelText(testCases[key as keyof typeof testCases]));
+            await waitFor(() => expect(screen.getByText(testCases[key as keyof typeof testCases])).toBeInTheDocument());
+        },
+    );
+
+    it.each(Object.keys(testCases))(
+        "%s button should not display the tooltip on mouse over when disabled",
+        async (key) => {
+            const user = userEvent.setup();
+
+            const disabledActionStates = createActionStates("disabled");
+            renderComponent(mockWysiwyg, { actionStates: disabledActionStates });
+
+            await user.hover(screen.getByLabelText(testCases[key as keyof typeof testCases]));
+            expect(screen.queryByText(testCases[key as keyof typeof testCases])).not.toBeInTheDocument();
+        },
+    );
+
+    it.each(Object.keys(testCases))("%s button should have hover style when hovered and enabled", async (key) => {
+        const user = userEvent.setup();
+
+        renderComponent(mockWysiwyg);
+
+        await user.hover(screen.getByLabelText(testCases[key as keyof typeof testCases]));
+        expect(screen.getByLabelText(testCases[key as keyof typeof testCases])).toHaveClass(
+            "mx_FormattingButtons_Button_hover",
+        );
     });
 
-    it("Each button should have hover style when hovered and enabled", async () => {
-        renderComponent();
+    it.each(Object.keys(testCases))("%s button should not have hover style when hovered and reversed", async (key) => {
+        const user = userEvent.setup();
 
-        for (const testCase of Object.values(testCases)) {
-            const { label } = testCase;
-
-            await userEvent.hover(screen.getByLabelText(label));
-            expect(screen.getByLabelText(label)).toHaveClass("mx_FormattingButtons_Button_hover");
-        }
-    });
-
-    it("Each button should not have hover style when hovered and reversed", async () => {
         const reversedActionStates = createActionStates("reversed");
-        renderComponent({ actionStates: reversedActionStates });
+        renderComponent(mockWysiwyg, { actionStates: reversedActionStates });
 
-        for (const testCase of Object.values(testCases)) {
-            const { label } = testCase;
-
-            await userEvent.hover(screen.getByLabelText(label));
-            expect(screen.getByLabelText(label)).not.toHaveClass("mx_FormattingButtons_Button_hover");
-        }
+        await user.hover(screen.getByLabelText(testCases[key as keyof typeof testCases]));
+        expect(screen.getByLabelText(testCases[key as keyof typeof testCases])).not.toHaveClass(
+            "mx_FormattingButtons_Button_hover",
+        );
     });
 
     it("Does not show indent or unindent button when outside a list", () => {
-        renderComponent();
+        renderComponent(mockWysiwyg);
 
         expect(screen.queryByLabelText("Indent increase")).not.toBeInTheDocument();
         expect(screen.queryByLabelText("Indent decrease")).not.toBeInTheDocument();
@@ -180,7 +180,7 @@ describe("FormattingButtons", () => {
 
     it("Shows indent and unindent buttons when either a single list type is 'reversed'", () => {
         const orderedListActive = { ...defaultActionStates, orderedList: "reversed" };
-        renderComponent({ actionStates: orderedListActive });
+        renderComponent(mockWysiwyg, { actionStates: orderedListActive });
 
         expect(screen.getByLabelText("Indent increase")).toBeInTheDocument();
         expect(screen.getByLabelText("Indent decrease")).toBeInTheDocument();
@@ -189,19 +189,17 @@ describe("FormattingButtons", () => {
 
         const unorderedListActive = { ...defaultActionStates, unorderedList: "reversed" };
 
-        renderComponent({ actionStates: unorderedListActive });
+        renderComponent(mockWysiwyg, { actionStates: unorderedListActive });
 
         expect(screen.getByLabelText("Indent increase")).toBeInTheDocument();
         expect(screen.getByLabelText("Indent decrease")).toBeInTheDocument();
     });
 
-    it("Every button should when disabled the component is disabled", () => {
-        renderComponent({ disabled: true });
+    it.each(Object.keys(testCases))("%s button should be disabled when the component is disabled", (key) => {
+        renderComponent(mockWysiwyg, { disabled: true });
 
-        Object.values(testCases).forEach((testCase) => {
-            const { label } = testCase;
-            expect(screen.getByLabelText(label)).toHaveClass(classes.disabled);
-            expect(screen.getByLabelText(label)).toBeDisabled();
-        });
+        const label = testCases[key as keyof typeof testCases];
+        expect(screen.getByLabelText(label)).toHaveClass(classes.disabled);
+        expect(screen.getByLabelText(label)).toBeDisabled();
     });
 });
