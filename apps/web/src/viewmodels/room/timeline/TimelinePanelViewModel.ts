@@ -56,6 +56,9 @@ export class TimelinePanelViewModel
 {
     private readonly timelineWindow: TimelineWindow;
     private readonly presenter: TimelinePanelPresenter;
+    private readonly accumulatedEventsById = new Map<string, MatrixEvent>();
+    private accumulatedEventIds: string[] = [];
+    private hasReachedStartOfTimeline = false;
     private initialFillCompleted = false;
     private started = false;
     private lifecycleTracked = false;
@@ -155,7 +158,8 @@ export class TimelinePanelViewModel
 
             const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
             const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
-            const items = this.buildItems(canPaginateBackward);
+            this.hasReachedStartOfTimeline ||= !canPaginateBackward;
+            const items = this.buildItems();
 
             this.mergeSnapshot({
                 items,
@@ -202,8 +206,89 @@ export class TimelinePanelViewModel
         this.isAtLiveEdge = isAtLiveEdge;
     };
 
-    private buildItems(canPaginateBackward: boolean): TimelineModelItem[] {
-        return this.presenter.buildItems(this.timelineWindow.getEvents(), canPaginateBackward);
+    private buildItems(direction?: Direction): TimelineModelItem[] {
+        this.mergeWindowEvents(direction);
+        return this.presenter.buildItems(this.getAccumulatedEvents(), !this.hasReachedStartOfTimeline);
+    }
+
+    private getAccumulatedEvents(): MatrixEvent[] {
+        return this.accumulatedEventIds
+            .map((eventId) => this.accumulatedEventsById.get(eventId))
+            .filter((event): event is MatrixEvent => event !== undefined);
+    }
+
+    private mergeWindowEvents(direction?: Direction): void {
+        const windowEvents = this.timelineWindow.getEvents();
+        if (windowEvents.length === 0) {
+            return;
+        }
+
+        if (this.accumulatedEventIds.length === 0) {
+            for (const event of windowEvents) {
+                const eventId = event.getId();
+                if (!eventId || this.accumulatedEventsById.has(eventId)) {
+                    continue;
+                }
+
+                this.accumulatedEventsById.set(eventId, event);
+                this.accumulatedEventIds.push(eventId);
+            }
+            return;
+        }
+
+        if (direction === Direction.Backward) {
+            this.prependWindowEvents(windowEvents);
+            return;
+        }
+
+        if (direction === Direction.Forward) {
+            this.appendWindowEvents(windowEvents);
+        }
+    }
+
+    private prependWindowEvents(windowEvents: MatrixEvent[]): void {
+        const prependedEventIds: string[] = [];
+
+        for (const event of windowEvents) {
+            const eventId = event.getId();
+            if (!eventId) {
+                continue;
+            }
+
+            if (this.accumulatedEventsById.has(eventId)) {
+                break;
+            }
+
+            this.accumulatedEventsById.set(eventId, event);
+            prependedEventIds.push(eventId);
+        }
+
+        if (prependedEventIds.length > 0) {
+            this.accumulatedEventIds = [...prependedEventIds, ...this.accumulatedEventIds];
+        }
+    }
+
+    private appendWindowEvents(windowEvents: MatrixEvent[]): void {
+        const appendedEventIds: string[] = [];
+
+        for (let index = windowEvents.length - 1; index >= 0; index -= 1) {
+            const event = windowEvents[index];
+            const eventId = event.getId();
+            if (!eventId) {
+                continue;
+            }
+
+            if (this.accumulatedEventsById.has(eventId)) {
+                break;
+            }
+
+            this.accumulatedEventsById.set(eventId, event);
+            appendedEventIds.unshift(eventId);
+        }
+
+        if (appendedEventIds.length > 0) {
+            this.accumulatedEventIds = [...this.accumulatedEventIds, ...appendedEventIds];
+        }
     }
 
     private mergeSnapshot(update: Partial<TimelineViewSnapshot<TimelineModelItem>>): void {
@@ -246,7 +331,8 @@ export class TimelinePanelViewModel
 
                 const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
                 const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
-                const items = this.buildItems(canPaginateBackward);
+                this.hasReachedStartOfTimeline ||= !canPaginateBackward;
+                const items = this.buildItems(dir);
 
                 this.mergeSnapshot({
                     items,

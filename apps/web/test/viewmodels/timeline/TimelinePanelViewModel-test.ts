@@ -46,6 +46,24 @@ describe("TimelinePanelViewModel", () => {
         ts: new Date("2026-04-08T08:00:00.000Z").getTime(),
         event: true,
     });
+    const eventB = mkEvent({
+        id: "$eventB",
+        type: EventType.RoomMessage,
+        room: room.roomId,
+        user: "@alice:example.org",
+        content: { body: "B", msgtype: "m.text" },
+        ts: new Date("2026-04-08T08:01:00.000Z").getTime(),
+        event: true,
+    });
+    const eventC = mkEvent({
+        id: "$eventC",
+        type: EventType.RoomMessage,
+        room: room.roomId,
+        user: "@alice:example.org",
+        content: { body: "C", msgtype: "m.text" },
+        ts: new Date("2026-04-08T08:02:00.000Z").getTime(),
+        event: true,
+    });
 
     let presenterInstance: {
         buildItems: jest.Mock;
@@ -134,6 +152,22 @@ describe("TimelinePanelViewModel", () => {
         ]);
         expect(vm.getSnapshot().canPaginateBackward).toBe(true);
         expect(vm.getSnapshot().canPaginateForward).toBe(false);
+    });
+
+    it("keeps previously loaded items when backward pagination drops trailing window items", async () => {
+        timelineWindowInstance.getEvents.mockReturnValueOnce([eventB, eventC]).mockReturnValueOnce([eventA, eventB]);
+        timelineWindowInstance.canPaginate
+            .mockImplementationOnce((direction: Direction) => direction === Direction.Backward)
+            .mockImplementation((direction: Direction) => direction === Direction.Backward);
+
+        const vm = createStartedViewModel();
+        await flushPromises();
+
+        vm.onRequestMoreItems("backward");
+        await flushPromises();
+
+        expect(presenterInstance.buildItems).toHaveBeenNthCalledWith(1, [eventB, eventC], true);
+        expect(presenterInstance.buildItems).toHaveBeenNthCalledWith(2, [eventA, eventB, eventC], true);
     });
 
     it("ignores a second pagination request while the same direction is already loading", async () => {

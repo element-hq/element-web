@@ -6,13 +6,32 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useRef, useState, type JSX } from "react";
-import { Virtuoso, type ListRange } from "react-virtuoso";
+import { Virtuoso, type IndexLocationWithAlign, type ListRange } from "react-virtuoso";
 import classNames from "classnames";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
-import { getContiguousWindowShift, INITIAL_FIRST_ITEM_INDEX } from "./utils";
 import styles from "./TimelineView.module.css";
-import type { TimelineItem, TimelineViewProps } from "./types";
+import type { NavigationAnchor, TimelineItem, TimelineViewProps } from "./types";
+
+export function getInitialTopMostItemIndex<TItem extends TimelineItem>(
+    items: TItem[],
+    scrollTarget: NavigationAnchor | null,
+): IndexLocationWithAlign {
+    const targetKey = scrollTarget?.targetKey;
+    if (!targetKey) {
+        return { index: "LAST", align: "end" };
+    }
+
+    const targetIndex = items.findIndex((item) => item.key === targetKey);
+    if (targetIndex === -1) {
+        return { index: "LAST", align: "end" };
+    }
+
+    const align =
+        scrollTarget?.position === "top" ? "start" : scrollTarget?.position === "center" ? "center" : "end";
+
+    return { index: targetIndex, align };
+}
 
 /**
  * Renders a virtualized room timeline backed by a {@link TimelineViewModel}.
@@ -26,6 +45,8 @@ import type { TimelineItem, TimelineViewProps } from "./types";
  * and update the timeline state through the view-model callbacks declared by
  * {@link TimelineViewActions}. The rendered list is powered by `react-virtuoso`
  * to keep large timelines responsive while only mounting the visible window.
+ * The supplied items array is expected to be monotonic: new entries may be
+ * added at either end, but existing entries must not be removed or reordered.
  *
  * @typeParam TItem - Concrete timeline item shape rendered by the timeline.
  */
@@ -42,46 +63,15 @@ export function TimelineView<TItem extends TimelineItem>({
     // Remember one-shot timeline signals across renders.
     const latestIsAtLiveEdgeRef = useRef<boolean | null>(null);
     const initialFillCompletedRef = useRef(false);
-    const latestVisibleRangeRef = useRef<ListRange | null>(null);
     const renderedItemsRef = useRef(snapshot.items);
-    const renderedFirstItemIndexRef = useRef(INITIAL_FIRST_ITEM_INDEX);
+    const vmRef = useRef(vm);
 
-    // Keep Virtuoso's absolute index stable while the loaded window slides.
-    const firstItemIndexRenderStateRef = useRef<{
-        vm: typeof vm;
-        items: TItem[];
-        firstItemIndex: number;
-    }>({
-        vm,
-        items: snapshot.items,
-        firstItemIndex: INITIAL_FIRST_ITEM_INDEX,
-    });
-
-    if (firstItemIndexRenderStateRef.current.vm !== vm) {
-        firstItemIndexRenderStateRef.current = {
-            vm,
-            items: snapshot.items,
-            firstItemIndex: INITIAL_FIRST_ITEM_INDEX,
-        };
+    if (vmRef.current !== vm) {
+        vmRef.current = vm;
         initialFillCompletedRef.current = false;
-        latestVisibleRangeRef.current = null;
-    } else if (firstItemIndexRenderStateRef.current.items !== snapshot.items) {
-        const windowShift = getContiguousWindowShift(firstItemIndexRenderStateRef.current.items, snapshot.items);
-        const previousFirstItemIndex = firstItemIndexRenderStateRef.current.firstItemIndex;
-        firstItemIndexRenderStateRef.current = {
-            vm,
-            items: snapshot.items,
-            firstItemIndex: previousFirstItemIndex - windowShift,
-        };
     }
 
-    // Derive the current Virtuoso position inputs from the latest snapshot.
-    const firstItemIndex = firstItemIndexRenderStateRef.current.firstItemIndex;
-    const hasActiveScrollTarget = snapshot.scrollTarget !== null;
-    const followOutput = !hasActiveScrollTarget && !snapshot.canPaginateForward && isAtBottom ? "auto" : false;
-
     renderedItemsRef.current = snapshot.items;
-    renderedFirstItemIndexRef.current = firstItemIndex;
 
     // Forward Virtuoso boundary and viewport events into the timeline view model.
     const handleStartReached = useCallback(() => {
@@ -91,14 +81,10 @@ export function TimelineView<TItem extends TimelineItem>({
     }, [snapshot.backwardPagination, snapshot.canPaginateBackward, vm]);
 
     const handleEndReached = useCallback(() => {
-        if (hasActiveScrollTarget) {
-            return;
-        }
-
         if (snapshot.canPaginateForward && snapshot.forwardPagination !== "loading") {
             vm.onRequestMoreItems("forward");
         }
-    }, [hasActiveScrollTarget, snapshot.canPaginateForward, snapshot.forwardPagination, vm]);
+    }, [snapshot.canPaginateForward, snapshot.forwardPagination, vm]);
 
     const handleBottomStateChange = useCallback(
         (nextIsAtBottom: boolean) => {
@@ -117,17 +103,11 @@ export function TimelineView<TItem extends TimelineItem>({
 
     const handleRangeChanged = useCallback(
         (range: ListRange) => {
-            latestVisibleRangeRef.current = range;
-
             const items = renderedItemsRef.current;
-            const currentFirstItemIndex = renderedFirstItemIndexRef.current;
 
             if (items.length > 0) {
-                const startIndex = Math.max(0, Math.min(items.length - 1, range.startIndex - currentFirstItemIndex));
-                const endIndex = Math.max(
-                    startIndex,
-                    Math.min(items.length - 1, range.endIndex - currentFirstItemIndex),
-                );
+                const startIndex = Math.max(0, Math.min(items.length - 1, range.startIndex));
+                const endIndex = Math.max(startIndex, Math.min(items.length - 1, range.endIndex));
                 vm.onVisibleRangeChanged({
                     startKey: items[startIndex]!.key,
                     endKey: items[endIndex]!.key,
@@ -144,12 +124,13 @@ export function TimelineView<TItem extends TimelineItem>({
         }
     }, [vm]);
 
+    const followOutput = !snapshot.canPaginateForward && isAtBottom ? "auto" : false;
+
     return (
         <Virtuoso
             className={classNames(styles.timeline, className)}
             data={snapshot.items}
-            firstItemIndex={firstItemIndex}
-            initialTopMostItemIndex={{ index: "LAST", align: "end" }}
+            initialTopMostItemIndex={getInitialTopMostItemIndex(snapshot.items, snapshot.scrollTarget)}
             atBottomStateChange={handleBottomStateChange}
             followOutput={followOutput}
             startReached={handleStartReached}

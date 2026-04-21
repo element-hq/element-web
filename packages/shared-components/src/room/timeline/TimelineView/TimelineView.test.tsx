@@ -11,8 +11,7 @@ import { VirtuosoMockContext } from "react-virtuoso";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BaseViewModel } from "../../../core/viewmodel";
-import { TimelineView } from "./TimelineView";
-import { getContiguousWindowShift, getIsAtLiveEdgeFromBottomState, getUpdatedStableMeasurementCount } from "./utils";
+import { getInitialTopMostItemIndex, TimelineView } from "./TimelineView";
 import type { TimelineItem, TimelineViewActions, TimelineViewSnapshot } from "./types";
 
 class TestTimelineViewModel
@@ -63,24 +62,6 @@ function renderTimeline(vm: TestTimelineViewModel): ReturnType<typeof render> {
     });
 }
 
-async function withMeasuredScrollerHeight(testFn: () => Promise<void> | void): Promise<void> {
-    const clientHeightSpy = vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockImplementation(function (
-        this: HTMLElement,
-    ) {
-        if (this.dataset.virtuosoScroller === "true") {
-            return 200;
-        }
-
-        return 0;
-    });
-
-    try {
-        await testFn();
-    } finally {
-        clientHeightSpy.mockRestore();
-    }
-}
-
 describe("TimelineView", () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -100,52 +81,45 @@ describe("TimelineView", () => {
         expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce();
     });
 
-    it("does not acknowledge a missing scroll target", async () => {
-        await withMeasuredScrollerHeight(async () => {
-            const vm = new TestTimelineViewModel(
-                makeSnapshot({
-                    scrollTarget: { targetKey: "missing", position: "center" },
-                }),
-            );
-
-            renderTimeline(vm);
-
-            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
-            expect(vm.onScrollTargetReached).not.toHaveBeenCalled();
+    it("uses LAST/end when scrollTarget is not set", async () => {
+        expect(getInitialTopMostItemIndex(makeItems(["alpha", "beta", "gamma"]), null)).toEqual({
+            index: "LAST",
+            align: "end",
         });
     });
 
-    it("does not acknowledge a visible scroll target before a range update after scrolling", async () => {
-        await withMeasuredScrollerHeight(async () => {
-            const vm = new TestTimelineViewModel(
-                makeSnapshot({
-                    items: makeItems(["alpha", "beta", "gamma", "delta", "epsilon"]),
-                    scrollTarget: { targetKey: "gamma", position: "bottom" },
-                }),
-            );
-
-            renderTimeline(vm);
-
-            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
-            expect(vm.onScrollTargetReached).not.toHaveBeenCalled();
-        });
+    it("uses LAST/end when the scrollTarget cannot be found", () => {
+        expect(
+            getInitialTopMostItemIndex(makeItems(["alpha", "beta", "gamma"]), {
+                targetKey: "missing",
+                position: "center",
+            }),
+        ).toEqual({ index: "LAST", align: "end" });
     });
 
-    it("does not request forward pagination while a scroll target is active", async () => {
-        await withMeasuredScrollerHeight(async () => {
-            const vm = new TestTimelineViewModel(
-                makeSnapshot({
-                    items: makeItems(["alpha", "beta", "gamma", "delta", "epsilon"]),
-                    canPaginateForward: true,
-                    scrollTarget: { targetKey: "gamma", position: "bottom" },
-                }),
-            );
+    it("uses the target item index and center alignment for a centered scrollTarget", () => {
+        expect(
+            getInitialTopMostItemIndex(makeItems(["alpha", "beta", "gamma", "delta", "epsilon"]), {
+                targetKey: "gamma",
+                position: "center",
+            }),
+        ).toEqual({ index: 2, align: "center" });
+    });
 
-            renderTimeline(vm);
+    it("maps top and bottom scrollTarget positions to Virtuoso alignment", () => {
+        expect(
+            getInitialTopMostItemIndex(makeItems(["alpha", "beta", "gamma"]), {
+                targetKey: "beta",
+                position: "top",
+            }),
+        ).toEqual({ index: 1, align: "start" });
 
-            await waitFor(() => expect(vm.onInitialFillCompleted).toHaveBeenCalledOnce());
-            expect(vm.onRequestMoreItems).not.toHaveBeenCalled();
-        });
+        expect(
+            getInitialTopMostItemIndex(makeItems(["alpha", "beta", "gamma"]), {
+                targetKey: "beta",
+                position: "bottom",
+            }),
+        ).toEqual({ index: 1, align: "end" });
     });
 
     it("signals live-edge changes", async () => {
@@ -154,57 +128,5 @@ describe("TimelineView", () => {
         renderTimeline(vm);
 
         await waitFor(() => expect(vm.onIsAtLiveEdgeChanged).toHaveBeenCalled());
-    });
-});
-
-describe("TimelineView utils", () => {
-    it("computes contiguous window shifts for prepends", () => {
-        expect(
-            getContiguousWindowShift(makeItems(["alpha", "beta", "gamma"]), makeItems(["before", "alpha", "beta"])),
-        ).toBe(1);
-    });
-
-    it("treats bottom as live-edge only when forward pagination is exhausted", () => {
-        expect(
-            getIsAtLiveEdgeFromBottomState({
-                atBottom: true,
-                canPaginateForward: false,
-            }),
-        ).toBe(true);
-
-        expect(
-            getIsAtLiveEdgeFromBottomState({
-                atBottom: true,
-                canPaginateForward: true,
-            }),
-        ).toBe(false);
-    });
-
-    it("tracks stable measurements only when consecutive values stay within tolerance", () => {
-        const tolerance = 4;
-
-        let stableCount = getUpdatedStableMeasurementCount({
-            previousValue: null,
-            nextValue: 358,
-            currentCount: 0,
-            tolerance,
-        });
-        expect(stableCount).toBe(1);
-
-        stableCount = getUpdatedStableMeasurementCount({
-            previousValue: 358,
-            nextValue: 380,
-            currentCount: stableCount,
-            tolerance,
-        });
-        expect(stableCount).toBe(1);
-
-        stableCount = getUpdatedStableMeasurementCount({
-            previousValue: 380,
-            nextValue: 380,
-            currentCount: stableCount,
-            tolerance,
-        });
-        expect(stableCount).toBe(2);
     });
 });

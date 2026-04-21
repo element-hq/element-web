@@ -45,7 +45,6 @@ const MESSAGE_FRAGMENTS = [
     "Closing note with enough text to avoid every item looking identical in the default Storybook example.",
 ];
 const PAGE_SIZE = 10;
-const MODEL_WINDOW_LIMIT = 50;
 const EARLIEST_ITEM_NUMBER = 1;
 const LATEST_ITEM_NUMBER = 100;
 const AUTO_APPEND_STORY_LATEST_ITEM_NUMBER = 120;
@@ -87,14 +86,6 @@ function haveSameItemKeys(left: MockTimelineItem[], right: MockTimelineItem[]): 
     }
 
     return true;
-}
-
-function applyWindowLimit(items: MockTimelineItem[], direction: "backward" | "forward"): MockTimelineItem[] {
-    if (items.length <= MODEL_WINDOW_LIMIT) {
-        return items;
-    }
-
-    return direction === "backward" ? items.slice(0, MODEL_WINDOW_LIMIT) : items.slice(-MODEL_WINDOW_LIMIT);
 }
 
 function createSnapshot(
@@ -152,7 +143,7 @@ class StoryTimelineViewModel
         }
 
         const currentSnapshot = this.getSnapshot();
-        const nextItems = items.slice(-MODEL_WINDOW_LIMIT);
+        const nextItems = items;
         if (haveSameItemKeys(currentSnapshot.items, nextItems)) {
             this.itemsVersion = version;
             return;
@@ -213,19 +204,18 @@ class StoryTimelineViewModel
                 direction === "backward"
                     ? [...createMockItems(latestPrependCount, latestPrependStart), ...latestItems]
                     : [...latestItems, ...createMockItems(appendCount, appendStart)];
-            const windowedItems = applyWindowLimit(nextItems, direction);
-            const nextFirstItemNumber = windowedItems[0] ? getItemNumber(windowedItems[0]) : EARLIEST_ITEM_NUMBER;
-            const nextLastItem = windowedItems.at(-1);
+            const nextFirstItemNumber = nextItems[0] ? getItemNumber(nextItems[0]) : EARLIEST_ITEM_NUMBER;
+            const nextLastItem = nextItems.at(-1);
             const nextLastItemNumber = nextLastItem ? getItemNumber(nextLastItem) : LATEST_ITEM_NUMBER;
 
             this.snapshot.merge({
-                items: windowedItems,
+                items: nextItems,
                 backwardPagination: "idle",
                 forwardPagination: "idle",
                 canPaginateBackward: nextFirstItemNumber > EARLIEST_ITEM_NUMBER,
                 canPaginateForward: nextLastItemNumber < LATEST_ITEM_NUMBER,
             });
-            this.callbacks.onItemsChanged(windowedItems);
+            this.callbacks.onItemsChanged(nextItems);
             this.pendingPaginationTimer = null;
         }, 100);
     }
@@ -409,7 +399,7 @@ const TimelineViewStoryRenderer = ({ ...args }: TimelineViewStoryRendererProps):
                 return;
             }
 
-            const nextItems = applyWindowLimit([...renderedItems, ...createMockItems(1, nextItemNumber)], "forward");
+            const nextItems = [...renderedItems, ...createMockItems(1, nextItemNumber)];
             const nextItemsVersion = itemsVersionRef.current + 1;
             itemsVersionRef.current = nextItemsVersion;
             setRenderedItems(nextItems);
