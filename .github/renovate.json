@@ -11,11 +11,9 @@
             "matchPackageNames": ["*"]
         },
         {
-            "description": "Group updates to overrides separately from other groups",
+            "description": "Separate updates to overrides from other groups",
             "matchDepTypes": ["pnpm.overrides"],
-            "groupName": "{{depName}} overrides",
-            "groupSlug": null,
-            "additionalBranchPrefix": "overrides-"
+            "groupSlug": null
         },
         {
             "description": "Disable any major updates to overrides as this almost always is wrong",
