@@ -13,7 +13,7 @@
         {
             "description": "Group updates to overrides separately from other groups",
             "matchDepTypes": ["pnpm.overrides"],
-            "groupName": "{{depName}} overrides"
+            "groupName": "{{depName}} overrides",
             "additionalBranchPrefix": "overrides-"
         },
         {
