@@ -574,8 +574,8 @@ importers:
         specifier: 2.6.0
         version: 2.6.0
       '@element-hq/element-call-embedded':
-        specifier: 0.18.0
-        version: 0.18.0
+        specifier: 0.19.1
+        version: 0.19.1
       '@element-hq/element-web-playwright-common':
         specifier: workspace:*
         version: link:../../packages/playwright-common
@@ -2472,8 +2472,8 @@ packages:
     engines: {node: '>=14.14'}
     hasBin: true
 
-  '@element-hq/element-call-embedded@0.18.0':
-    resolution: {integrity: sha512-Fg2VlORZWkQ9t9OJTcWFXCwVzlHVLtkaiCF0qFTCOZSYYHlA3kXDRM8TagjLkIoOVR6y+9xZldbwejgKYUS9xw==}
+  '@element-hq/element-call-embedded@0.19.1':
+    resolution: {integrity: sha512-RDZY3P3LTx10ACaGhzkwh2+boNB3x54zHF/7v/cCyoQlAVfEYMhgMEb4CRTwJFwwYFe1r++6Higa0A0G5XxZ8Q==}
 
   '@emnapi/core@1.10.0':
     resolution: {integrity: sha512-yq6OkJ4p82CAfPl0u9mQebQHKPJkY7WrIuk205cTYnYe+k2Z8YBh11FrbRG/H6ihirqcacOgl2BIO8oyMQLeXw==}
@@ -14934,7 +14934,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@element-hq/element-call-embedded@0.18.0': {}
+  '@element-hq/element-call-embedded@0.19.1': {}
 
   '@emnapi/core@1.10.0':
     dependencies:
