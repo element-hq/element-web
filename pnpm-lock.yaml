@@ -414,8 +414,8 @@ importers:
         specifier: ^2.0.0
         version: 2.6.0
       html-react-parser:
-        specifier: ^5.2.2
-        version: 5.2.17(@types/react@19.2.10)(react@19.2.5)
+        specifier: ^6.0.0
+        version: 6.0.1(@types/react@19.2.10)(react@19.2.5)
       is-ip:
         specifier: ^5.0.0
         version: 5.0.1
@@ -1017,8 +1017,8 @@ importers:
         specifier: ^0.18.6
         version: 0.18.6
       html-react-parser:
-        specifier: ^5.2.2
-        version: 5.2.17(@types/react@19.2.10)(react@19.2.5)
+        specifier: ^6.0.0
+        version: 6.0.1(@types/react@19.2.10)(react@19.2.5)
       linkify-html:
         specifier: 4.3.2
         version: 4.3.2(patch_hash=1761c1eabe25d9fae83f74f27a20b3d24515840a4a8747bb04828df46bcfdea2)(linkifyjs@4.3.2)
@@ -8738,8 +8738,8 @@ packages:
   hpack.js@2.1.6:
     resolution: {integrity: sha512-zJxVehUdMGIKsRaNt7apO2Gqp0BdqW5yaiGHXXmbpvxgBYVZnAql+BJb4RO5ad2MgpbZKn5G6nMnegrH1FcNYQ==}
 
-  html-dom-parser@5.1.8:
-    resolution: {integrity: sha512-MCIUng//mF2qTtGHXJWr6OLfHWmg3Pm8ezpfiltF83tizPWY17JxT4dRLE8lykJ5bChJELoY3onQKPbufJHxYA==}
+  html-dom-parser@7.0.1:
+    resolution: {integrity: sha512-loRBDTCY/05/jAC63J1X9ID+xjRucmpLkIcQO0IRbOubBo5ucnpUpyXXob9UMXOskMZlu7KPsDP/2KOMelzJNA==}
 
   html-encoding-sniffer@4.0.0:
     resolution: {integrity: sha512-Y22oTqIU4uuPgEemfz7NDJz6OeKf12Lsu+QC+s3BVpda64lTiMYCyGwg5ki4vFxkMwQdeZDl2adZoqUgdFuTgQ==}
@@ -8759,8 +8759,8 @@ packages:
     engines: {node: '>=12'}
     hasBin: true
 
-  html-react-parser@5.2.17:
-    resolution: {integrity: sha512-m+K/7Moq1jodAB4VL0RXSOmtwLUYoAsikZhwd+hGQe5Vtw2dbWfpFd60poxojMU0Tsh9w59mN1QLEcoHz0Dx9w==}
+  html-react-parser@6.0.1:
+    resolution: {integrity: sha512-tIie2HSIk2Ct1tdupjd/DhBjskxN/NL5J4ncbUnk2smBr5UIfpPpitUo0imGfBM0BlOL7ac8RcqEwne1jXTcsQ==}
     peerDependencies:
       '@types/react': ^19.2.10
       react: 0.14 || 15 || 16 || 17 || 18 || 19
@@ -8789,6 +8789,10 @@ packages:
 
   htmlparser2@10.1.0:
     resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
+
+  htmlparser2@12.0.0:
+    resolution: {integrity: sha512-Tz7u1i95/g2x2jz81+x0FBVhBhY5aRTvD3tXXdFaljuNdzDLJ8UGNRrTcj2cgQvAg3iW/h77Fz15nLW0L0CrZw==}
+    engines: {node: '>=20.19.0'}
 
   htmlparser2@6.1.0:
     resolution: {integrity: sha512-gyyPk6rgonLFEDGoeRgQNaEUvdJ4ktTmmUh/h2t7s+M8oPpIPxgNACWa+6ESR57kXstwqPiCut0V8NRpcwgU7A==}
@@ -22185,10 +22189,10 @@ snapshots:
       readable-stream: 2.3.8
       wbuf: 1.7.3
 
-  html-dom-parser@5.1.8:
+  html-dom-parser@7.0.1:
     dependencies:
-      domhandler: 5.0.3
-      htmlparser2: 10.1.0
+      domhandler: 6.0.1
+      htmlparser2: 12.0.0
 
   html-encoding-sniffer@4.0.0:
     dependencies:
@@ -22210,10 +22214,10 @@ snapshots:
       relateurl: 0.2.7
       terser: 5.46.1
 
-  html-react-parser@5.2.17(@types/react@19.2.10)(react@19.2.5):
+  html-react-parser@6.0.1(@types/react@19.2.10)(react@19.2.5):
     dependencies:
-      domhandler: 5.0.3
-      html-dom-parser: 5.1.8
+      domhandler: 6.0.1
+      html-dom-parser: 7.0.1
       react: 19.2.5
       react-property: 2.0.2
       style-to-js: 1.1.21
@@ -22240,6 +22244,13 @@ snapshots:
       domhandler: 5.0.3
       domutils: 3.2.2
       entities: 7.0.1
+
+  htmlparser2@12.0.0:
+    dependencies:
+      domelementtype: 3.0.0
+      domhandler: 6.0.1
+      domutils: 4.0.2
+      entities: 8.0.0
 
   htmlparser2@6.1.0:
     dependencies:
