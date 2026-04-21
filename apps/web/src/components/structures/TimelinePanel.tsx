@@ -1794,6 +1794,30 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const room = this.props.timelineSet.room;
+        const useNewTimeline = SettingsStore.getValue("feature_new_timeline") && !!room;
+
+        if (useNewTimeline) {
+            return (
+                <TimelinePanelView
+                    room={room}
+                    anchoredEventId={this.props.eventId}
+                    highlightedEventId={this.props.highlightedEventId}
+                    showReactions={this.props.showReactions}
+                    showUrlPreview={this.props.showUrlPreview}
+                    isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                    alwaysShowTimestamps={
+                        this.props.alwaysShowTimestamps ??
+                        this.context?.alwaysShowTimestamps ??
+                        this.state.alwaysShowTimestamps
+                    }
+                    layout={this.props.layout}
+                    getRelationsForEvent={this.getRelationsForEvent}
+                    permalinkCreator={this.props.permalinkCreator}
+                />
+            );
+        }
+
         // just show a spinner while the timeline loads.
         //
         // put it in a div of the right class (mx_RoomView_messagePanel) so
@@ -1836,31 +1860,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const forwardPaginating =
             this.state.forwardPaginating || ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState!);
         const events = this.state.events;
-
-        // New MVVM timeline behind Labs flag
-        if (SettingsStore.getValue("feature_new_timeline")) {
-            const room = this.props.timelineSet.room;
-            if (room) {
-                return (
-                    <TimelinePanelView
-                        room={room}
-                        anchoredEventId={this.props.eventId}
-                        highlightedEventId={this.props.highlightedEventId}
-                        showReactions={this.props.showReactions}
-                        showUrlPreview={this.props.showUrlPreview}
-                        isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
-                        alwaysShowTimestamps={
-                            this.props.alwaysShowTimestamps ??
-                            this.context?.alwaysShowTimestamps ??
-                            this.state.alwaysShowTimestamps
-                        }
-                        layout={this.props.layout}
-                        getRelationsForEvent={this.getRelationsForEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                    />
-                );
-            }
-        }
 
         return (
             <MessagePanel

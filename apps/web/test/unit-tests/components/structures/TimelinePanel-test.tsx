@@ -53,6 +53,11 @@ import MatrixClientBackedController from "../../../../src/settings/controllers/M
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import type Timer from "../../../../src/utils/Timer";
 
+jest.mock("../../../../src/components/views/rooms/timeline/Timeline", () => ({
+    __esModule: true,
+    TimelinePanelView: () => <div data-testid="timeline-panel-view" />,
+}));
+
 // ScrollPanel calls this, but jsdom doesn't mock it for us
 HTMLDivElement.prototype.scrollBy = () => {};
 
@@ -435,6 +440,34 @@ describe("TimelinePanel", () => {
         props.eventId = events[1].getId();
         rerender(<TimelinePanel {...props} />);
         expect(props.onEventScrolledIntoView).toHaveBeenCalledWith(events[1].getId());
+    });
+
+    it("keeps the new timeline mounted while the legacy load path is pending", async () => {
+        await SettingsStore.setValue("feature_new_timeline", null, SettingLevel.DEVICE, true);
+
+        const [client, room, events] = setupTestData();
+        const [, baseTimelineSet] = mkTimeline(room, events);
+        const timelineSet = {
+            ...baseTimelineSet,
+            getTimelineForEvent: () => undefined,
+        } as EventTimelineSet;
+        const loadSpy = jest.spyOn(TimelineWindow.prototype, "load").mockReturnValue(new Promise(() => {}) as any);
+
+        try {
+            render(
+                <TimelinePanel
+                    timelineSet={timelineSet}
+                    manageReadReceipts={true}
+                    sendReadReceiptOnLoad={true}
+                />,
+                clientAndSDKContextRenderOptions(client, sdkContext),
+            );
+
+            expect(screen.getByTestId("timeline-panel-view")).toBeInTheDocument();
+        } finally {
+            loadSpy.mockRestore();
+            await SettingsStore.setValue("feature_new_timeline", null, SettingLevel.DEVICE, false);
+        }
     });
 
     it("paginates", async () => {
