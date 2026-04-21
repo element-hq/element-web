@@ -425,6 +425,32 @@ export interface RoomViewProps {
 // @alpha @deprecated (undocumented)
 export type RuntimeModuleConstructor = new (api: ModuleApi) => RuntimeModule;
 
+// @public
+export enum SettingLevel {
+    // (undocumented)
+    ACCOUNT = "account",
+    // (undocumented)
+    CONFIG = "config",
+    // (undocumented)
+    DEFAULT = "default",
+    // (undocumented)
+    DEVICE = "device",
+    // (undocumented)
+    PLATFORM = "platform",
+    // (undocumented)
+    ROOM = "room",
+    // (undocumented)
+    ROOM_ACCOUNT = "room-account",
+    // (undocumented)
+    ROOM_DEVICE = "room-device"
+}
+
+// @alpha
+export interface SettingsStoreApi {
+    // @public
+    overrideSettingsSupportedLevels(settingName: string, levels: SettingLevel[]): void;
+}
+
 // @alpha
 export interface SpacePanelItemProps {
     className?: string;
@@ -438,6 +464,8 @@ export interface SpacePanelItemProps {
 // @public
 export interface StoresApi {
     roomListStore: RoomListStoreApi;
+    // Warning: (ae-incompatible-release-tags) The symbol "settingsStore" is marked as @public, but its signature references "SettingsStoreApi" which is marked as @alpha
+    settingsStore: SettingsStoreApi;
 }
 
 // @public
