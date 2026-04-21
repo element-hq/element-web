@@ -5,4 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { DateSeparatorView, type DateSeparatorViewModel, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
+export { DateSeparatorView, type DateSeparatorViewModel, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "./DateSeparatorView";
