@@ -509,9 +509,6 @@ importers:
       ua-parser-js:
         specifier: 1.0.40
         version: 1.0.40
-      uuid:
-        specifier: ^13.0.0
-        version: 13.0.0
       what-input:
         specifier: ^5.2.10
         version: 5.2.12
