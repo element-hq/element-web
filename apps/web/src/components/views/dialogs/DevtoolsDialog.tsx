@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useState } from "react";
 import { Form } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t, _td } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -22,7 +23,6 @@ import WidgetExplorer from "./devtools/WidgetExplorer";
 import { UserList } from "./devtools/Users";
 import { AccountDataExplorer, RoomAccountDataExplorer } from "./devtools/AccountData";
 import SettingsFlag from "../elements/SettingsFlag";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import ServerInfo from "./devtools/ServerInfo";
 import CopyableText from "../elements/CopyableText";
 import RoomNotifications from "./devtools/RoomNotifications";

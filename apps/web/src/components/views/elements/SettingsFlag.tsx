@@ -11,10 +11,10 @@ import React, { type ChangeEvent } from "react";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { SettingsToggleInput } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
-import { type SettingLevel } from "../../../settings/SettingLevel";
 import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
 
 interface IProps {

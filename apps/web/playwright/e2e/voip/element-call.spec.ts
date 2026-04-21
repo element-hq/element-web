@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { type Page } from "@playwright/test";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";
 import { Bot } from "../../pages/bot";

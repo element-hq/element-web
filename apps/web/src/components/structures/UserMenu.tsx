@@ -19,6 +19,7 @@ import {
     ThemeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { IconButton } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -40,7 +41,6 @@ import { getHomePageUrl } from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from "../views/avatars/BaseAvatar";
-import { SettingLevel } from "../../settings/SettingLevel";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,

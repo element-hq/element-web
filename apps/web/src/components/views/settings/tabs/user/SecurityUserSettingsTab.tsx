@@ -13,12 +13,12 @@ import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Form } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { type ActionPayload } from "../../../../../dispatcher/payloads";

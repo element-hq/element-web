@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useState } from "react";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../settings/SettingsStore";
-import { type SettingLevel } from "../settings/SettingLevel";
 import { type FeatureSettingKey, type SettingKey, type Settings } from "../settings/Settings.tsx";
 
 // Hook to fetch the value of a setting and dynamically update when it changes

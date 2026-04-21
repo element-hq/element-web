@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import parse from "html-react-parser";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { bodyToHtml, bodyToNode, formatEmojis, topicToHtml } from "../../src/HtmlUtils";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils";
-import { SettingLevel } from "../../src/settings/SettingLevel";
 import SdkConfig from "../../src/SdkConfig";
 
 describe("topicToHtml", () => {

@@ -10,13 +10,13 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ChangeEvent, type ReactNode } from "react";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { Form } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { LayoutSwitcher } from "../../LayoutSwitcher";
 import FontScalingPanel from "../../FontScalingPanel";

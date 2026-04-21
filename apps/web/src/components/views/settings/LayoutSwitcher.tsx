@@ -8,11 +8,11 @@
 
 import React, { type JSX, useEffect, useState } from "react";
 import { Field, HelpMessage, InlineField, Label, RadioControl, Root, ToggleControl } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { Layout } from "../../../settings/enums/Layout";
 import EventTilePreview from "../elements/EventTilePreview";

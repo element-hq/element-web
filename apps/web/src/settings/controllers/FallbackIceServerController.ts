@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ClientEvent, type IClientWellKnown, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
-import { type SettingLevel } from "../SettingLevel";
 import SettingsStore from "../SettingsStore.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 

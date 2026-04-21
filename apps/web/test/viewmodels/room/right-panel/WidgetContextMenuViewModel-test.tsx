@@ -8,6 +8,7 @@
 import React from "react";
 import { MatrixWidgetType } from "matrix-widget-api";
 import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import {
     WidgetContextMenuViewModel,
@@ -20,7 +21,6 @@ import { WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutSt
 import * as livestream from "../../../../src/Livestream";
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import * as widgetStore from "../../../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
 import { type WidgetMessaging } from "../../../../src/stores/widgets/WidgetMessaging";

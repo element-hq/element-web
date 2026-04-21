@@ -7,9 +7,9 @@
 
 import { type Visibility } from "matrix-js-sdk/src/matrix";
 import { type Page } from "@playwright/test";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { expect, test } from "../../../element-web-test";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { getFilterCollapseButton, getFilterExpandButton, getPrimaryFilters, getRoomOptionsMenu } from "./utils";
 
 test.describe("Room list filters and sort", () => {

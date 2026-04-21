@@ -10,11 +10,11 @@ import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import QuickThemeSwitcher from "../../../../../src/components/views/spaces/QuickThemeSwitcher";
 import { getOrderedThemes } from "../../../../../src/theme";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { mockPlatformPeg } from "../../../../test-utils/platform";

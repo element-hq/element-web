@@ -7,9 +7,9 @@
  */
 
 import { type Widget, WidgetKind } from "matrix-widget-api";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../settings/SettingsStore";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { type SdkContextClass } from "../../contexts/SDKContext";
 
 export enum OIDCState {

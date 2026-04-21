@@ -6,8 +6,8 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
-import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectionDialog";

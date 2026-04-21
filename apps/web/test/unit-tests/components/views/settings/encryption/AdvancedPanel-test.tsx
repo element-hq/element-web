@@ -9,11 +9,11 @@ import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { AdvancedPanel } from "../../../../../../src/components/views/settings/encryption/AdvancedPanel";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 
 describe("<AdvancedPanel />", () => {
     let matrixClient: MatrixClient;

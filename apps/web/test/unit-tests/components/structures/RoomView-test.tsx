@@ -26,6 +26,7 @@ import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-s
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor, findByRole } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import {
     createTestClient,
@@ -47,7 +48,6 @@ import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView } from "../../../../src/components/structures/RoomView";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { NotificationState } from "../../../../src/stores/notifications/NotificationState";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";

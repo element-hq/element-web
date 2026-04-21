@@ -20,6 +20,7 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import sanitizeHtml from "sanitize-html";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SpotlightDialog from "../../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
 import { Filter } from "../../../../../src/components/views/dialogs/spotlight/Filter";
@@ -29,7 +30,6 @@ import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { Action } from "../../../../../src/dispatcher/actions";

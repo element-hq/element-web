@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, lazy } from "react";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -16,7 +17,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { formatBytes, formatCountLong } from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import SeshatResetDialog from "../dialogs/SeshatResetDialog";
 import InlineSpinner from "../elements/InlineSpinner";
 import ExternalLink from "../elements/ExternalLink";

@@ -24,6 +24,7 @@ import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
 import userEvent from "@testing-library/user-event";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import LoggedInView from "../../../../src/components/structures/LoggedInView";
 import { SDKContext } from "../../../../src/contexts/SDKContext";
@@ -33,7 +34,6 @@ import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } f
 import { TestSdkContext } from "../../TestSdkContext";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Action } from "../../../../src/dispatcher/actions";
 import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";

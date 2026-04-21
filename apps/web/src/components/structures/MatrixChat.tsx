@@ -29,6 +29,7 @@ import "what-input";
 import sanitizeHtml from "sanitize-html";
 import { I18nContext, LinkedTextContext, LinkedText } from "@element-hq/web-shared-components";
 import { LockSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
@@ -66,7 +67,6 @@ import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
-import { SettingLevel } from "../../settings/SettingLevel";
 import ThreepidInviteStore, {
     type IThreepidInvite,
     type IThreepidInviteWireFormat,

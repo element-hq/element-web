@@ -6,10 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
 import MediaPreviewConfigController from "../../../../src/settings/controllers/MediaPreviewConfigController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../../test-utils";
 import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MediaPreviewValue } from "../../../../src/@types/media_preview";
 

@@ -16,9 +16,9 @@ import {
 } from "@element-hq/web-shared-components";
 import { debounce } from "lodash";
 import whatInput from "what-input";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../settings/SettingsStore";
-import { SettingLevel } from "../../settings/SettingLevel";
 
 function getInitialState(): ResizerViewSnapshot {
     if (SettingsStore.getValue("RoomList.isPanelCollapsed")) {

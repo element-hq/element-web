@@ -10,6 +10,7 @@ import React from "react";
 import { render } from "jest-matrix-react";
 import { EventType, type MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import RoomAvatar from "../../../../../src/components/views/avatars/RoomAvatar";
 import { filterConsole, stubClient } from "../../../../test-utils";
@@ -19,7 +20,6 @@ import * as AvatarModule from "../../../../../src/Avatar";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 describe("RoomAvatar", () => {
     let client: MatrixClient;

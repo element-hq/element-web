@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { type Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../settings/SettingsStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff, filterBoolean } from "../utils/arrays";
-import { SettingLevel } from "../settings/SettingLevel";
 import { Action } from "../dispatcher/actions";
 import { type SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
 import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";

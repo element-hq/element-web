@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import PosthogTrackers from "../../../../src/PosthogTrackers";
 import AnalyticsController from "../../../../src/settings/controllers/AnalyticsController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 describe("AnalyticsController", () => {
     afterEach(() => {

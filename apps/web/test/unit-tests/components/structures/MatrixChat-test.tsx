@@ -25,6 +25,7 @@ import {
     UserVerificationStatus,
     type CryptoApi,
 } from "matrix-js-sdk/src/crypto-api";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import MatrixChat from "../../../../src/components/structures/MatrixChat";
 import * as StorageAccess from "../../../../src/utils/StorageAccess";
@@ -55,7 +56,6 @@ import EventIndexPeg from "../../../../src/indexing/EventIndexPeg";
 import * as Lifecycle from "../../../../src/Lifecycle";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../../src/BasePlatform";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { ReleaseAnnouncementStore } from "../../../../src/stores/ReleaseAnnouncementStore";

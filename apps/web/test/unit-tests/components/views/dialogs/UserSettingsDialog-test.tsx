@@ -10,6 +10,7 @@ import React, { type ReactElement } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
 import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../src/SdkConfig";
@@ -25,7 +26,6 @@ import {
     useMockMediaDevices,
 } from "../../../../test-utils";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 

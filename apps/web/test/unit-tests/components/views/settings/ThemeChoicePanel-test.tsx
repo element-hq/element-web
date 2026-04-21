@@ -11,11 +11,11 @@ import { act, render, screen, waitFor } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import fetchMock from "@fetch-mock/jest";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { ThemeChoicePanel } from "../../../../../src/components/views/settings/ThemeChoicePanel";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import ThemeWatcher from "../../../../../src/settings/watchers/ThemeWatcher";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 jest.mock("../../../../../src/settings/watchers/ThemeWatcher");
 

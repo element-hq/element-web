@@ -11,6 +11,7 @@ import React, { type ReactNode } from "react";
 import { STABLE_MSC4133_EXTENDED_PROFILES, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 // Import these directly from shared-components to avoid circular deps
 import { _t, _td } from "@element-hq/web-shared-components";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
@@ -22,7 +23,6 @@ import ThemeController from "./controllers/ThemeController";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import FontSizeController from "./controllers/FontSizeController";
 import SystemFontController from "./controllers/SystemFontController";
-import { SettingLevel } from "./SettingLevel";
 import type SettingController from "./controllers/SettingController";
 import { IS_MAC } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";

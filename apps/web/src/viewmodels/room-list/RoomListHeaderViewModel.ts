@@ -12,6 +12,7 @@ import {
     type RoomListHeaderViewModel as RoomListHeaderViewModelInterface,
     type SortOption,
 } from "@element-hq/web-shared-components";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import PosthogTrackers from "../../PosthogTrackers";
@@ -29,7 +30,6 @@ import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { createRoom, hasCreateRoomRights } from "./utils";
 
 export interface Props {

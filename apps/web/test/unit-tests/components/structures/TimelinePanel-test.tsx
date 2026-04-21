@@ -31,6 +31,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
 import { type Mocked, mocked } from "jest-mock";
 import { forEachRight } from "lodash";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import TimelinePanel from "../../../../src/components/structures/TimelinePanel";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -48,7 +49,6 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import ScrollPanel from "../../../../src/components/structures/ScrollPanel";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import type Timer from "../../../../src/utils/Timer";

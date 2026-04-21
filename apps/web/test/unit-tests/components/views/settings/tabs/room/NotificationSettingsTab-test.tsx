@@ -10,6 +10,7 @@ import React from "react";
 import { render, type RenderResult, screen, within } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import NotificationSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/NotificationSettingsTab";
 import { mkStubRoom, stubClient } from "../../../../../../test-utils";
@@ -17,7 +18,6 @@ import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { EchoChamber } from "../../../../../../../src/stores/local-echo/EchoChamber";
 import { type RoomEchoChamber } from "../../../../../../../src/stores/local-echo/RoomEchoChamber";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 
 describe("NotificationSettingsTab", () => {
     const roomId = "!room:example.com";

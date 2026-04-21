@@ -10,6 +10,7 @@ import React from "react";
 import { type MatrixClient, type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import { act, render, screen, fireEvent, type RenderResult } from "jest-matrix-react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";
@@ -19,7 +20,6 @@ import { stubClient, mkSpace } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 

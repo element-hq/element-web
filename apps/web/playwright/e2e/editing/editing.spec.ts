@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Locator, type Page } from "@playwright/test";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function sendEvent(app: ElementAppPage, roomId: string): Promise<ISendEventResponse> {

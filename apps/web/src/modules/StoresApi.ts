@@ -7,12 +7,14 @@ Please see LICENSE files in the repository root for full details.
 import {
     type StoresApi as IStoresApi,
     type RoomListStoreApi as IRoomListStore,
+    type SettingsStoreApi as ISettingsStoreApi,
     type Room,
     Watchable,
 } from "@element-hq/element-web-module-api";
 
 import type { RoomListStoreV3Class, RoomListStoreV3Event } from "../stores/room-list-v3/RoomListStoreV3";
 import { Room as ModuleRoom } from "./models/Room";
+import { ModuleSettingsStore } from "./stores/SettingsStore";
 
 interface RlsEvents {
     LISTS_LOADED_EVENT: RoomListStoreV3Event.ListsLoaded;
@@ -96,11 +98,19 @@ class RoomsWatchable extends Watchable<Room[]> {
 
 export class StoresApi implements IStoresApi {
     private roomListStoreApi?: IRoomListStore;
+    private settingsStoresApi?: ISettingsStoreApi;
 
     public get roomListStore(): IRoomListStore {
         if (!this.roomListStoreApi) {
             this.roomListStoreApi = new RoomListStoreApi();
         }
         return this.roomListStoreApi;
+    }
+
+    public get settingsStore(): ISettingsStoreApi {
+        if (!this.settingsStoresApi) {
+            this.settingsStoresApi = new ModuleSettingsStore();
+        }
+        return this.settingsStoresApi;
     }
 }

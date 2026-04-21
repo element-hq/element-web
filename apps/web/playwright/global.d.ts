@@ -6,8 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type SettingLevel } from "@element-hq/element-web-module-api";
+
 import type * as Matrix from "matrix-js-sdk/src/matrix";
-import { type SettingLevel } from "../src/settings/SettingLevel";
 
 declare global {
     interface Window {

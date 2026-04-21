@@ -33,11 +33,11 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
-import { SettingLevel } from "../settings/SettingLevel";
 import {
     type ICrawlerCheckpoint,
     type IEventAndProfile,

@@ -9,13 +9,13 @@ import React, { type JSX, lazy, type MouseEventHandler } from "react";
 import { Button, HelpMessage, InlineField, InlineSpinner, Label, Root, ToggleControl } from "@vector-im/compound-web";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../languageHandler";
 import { SettingsSection } from "../shared/SettingsSection";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import Modal from "../../../../Modal";
-import { SettingLevel } from "../../../../settings/SettingLevel";
 import { useSettingValueAt } from "../../../../hooks/useSettings";
 import SettingsStore from "../../../../settings/SettingsStore";
 

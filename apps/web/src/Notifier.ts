@@ -26,6 +26,7 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
 import { type SessionMembershipData, type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -38,7 +39,6 @@ import { _t } from "./languageHandler";
 import Modal from "./Modal";
 import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
-import { SettingLevel } from "./settings/SettingLevel";
 import { isPushNotifyDisabled } from "./settings/controllers/NotificationControllers";
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";

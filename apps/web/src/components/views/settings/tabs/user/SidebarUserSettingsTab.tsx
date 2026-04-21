@@ -13,10 +13,10 @@ import {
     UserProfileSolidIcon,
     FavouriteSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import StyledCheckbox from "../../../elements/StyledCheckbox";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { MetaSpace } from "../../../../../stores/spaces";

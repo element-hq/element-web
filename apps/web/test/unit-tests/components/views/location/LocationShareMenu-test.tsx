@@ -12,6 +12,7 @@ import { RoomMember, RelationType, type MatrixClient, M_ASSET, LocationAssetType
 import { logger } from "matrix-js-sdk/src/logger";
 import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import LocationShareMenu from "../../../../../src/components/views/location/LocationShareMenu";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
@@ -28,7 +29,6 @@ import {
 import Modal from "../../../../../src/Modal";
 import { DEFAULT_DURATION_MS } from "../../../../../src/components/views/location/LiveDurationDropdown";
 import { OwnBeaconStore } from "../../../../../src/stores/OwnBeaconStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import QuestionDialog from "../../../../../src/components/views/dialogs/QuestionDialog";
 
 jest.useFakeTimers();

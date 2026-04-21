@@ -6,7 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { SettingLevel } from "../settings/SettingLevel";
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import { useSettingValue, useSettingValueAt } from "./useSettings";
 
 /**

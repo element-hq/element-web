@@ -10,12 +10,12 @@ import { without } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type Protocols } from "../../../utils/DirectoryUtils";
 import {

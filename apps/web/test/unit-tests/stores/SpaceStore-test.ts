@@ -20,6 +20,7 @@ import {
     type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import {
@@ -34,7 +35,6 @@ import { mkEvent, stubClient } from "../../test-utils";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Action } from "../../../src/dispatcher/actions";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import RoomListStore from "../../../src/stores/room-list/RoomListStore";

@@ -10,12 +10,12 @@ import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../languageHandler";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { type IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
 import SettingsStore from "../../../settings/SettingsStore";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import Heading from "../typography/Heading";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 import { UIFeature } from "../../../settings/UIFeature";

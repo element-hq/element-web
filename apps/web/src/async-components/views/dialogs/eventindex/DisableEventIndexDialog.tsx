@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
@@ -16,7 +17,6 @@ import { _t } from "../../../../languageHandler";
 import SettingsStore from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import { Action } from "../../../../dispatcher/actions";
-import { SettingLevel } from "../../../../settings/SettingLevel";
 
 interface IProps {
     onFinished: (success?: boolean) => void;

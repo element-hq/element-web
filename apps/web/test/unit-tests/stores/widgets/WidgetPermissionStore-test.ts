@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { Widget, WidgetKind } from "matrix-widget-api";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import { OIDCState, WidgetPermissionStore } from "../../../../src/stores/widgets/WidgetPermissionStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { TestSdkContext } from "../../TestSdkContext";
-import { type SettingLevel } from "../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { stubClient } from "../../../test-utils";
 import { ElementWidgetDriver } from "../../../../src/stores/widgets/ElementWidgetDriver";

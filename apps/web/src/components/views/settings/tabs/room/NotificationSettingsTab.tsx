@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../../languageHandler";
 import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { type RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
 import { EchoChamber } from "../../../../../stores/local-echo/EchoChamber";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";

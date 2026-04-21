@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import ServerSupportUnstableFeatureController from "../../../../src/settings/controllers/ServerSupportUnstableFeatureController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { type FeatureSettingKey, LabGroup, SETTINGS } from "../../../../src/settings/Settings";
 import { stubClient } from "../../../test-utils";
 import { WatchManager } from "../../../../src/settings/WatchManager";

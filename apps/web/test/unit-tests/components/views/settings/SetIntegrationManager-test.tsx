@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen, waitFor, within } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -20,7 +21,6 @@ import {
     flushPromises,
 } from "../../../../test-utils";
 import SetIntegrationManager from "../../../../../src/components/views/settings/SetIntegrationManager";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 describe("SetIntegrationManager", () => {
     const userId = "@alice:server.org";

@@ -41,6 +41,7 @@ import {
     CloseIcon,
     LinkIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import {
@@ -65,7 +66,6 @@ import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { PosthogAnalytics } from "../../../../PosthogAnalytics";
 import { getCachedRoomIdForAlias } from "../../../../RoomAliasCache";
 import { showStartChatInviteDialog } from "../../../../RoomInvite";
-import { SettingLevel } from "../../../../settings/SettingLevel";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 import { type RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";

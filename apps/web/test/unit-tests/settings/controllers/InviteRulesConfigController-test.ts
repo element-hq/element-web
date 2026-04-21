@@ -6,10 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
 import InviteRulesConfigController from "../../../../src/settings/controllers/InviteRulesConfigController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../../test-utils";
 import { INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "../../../../src/@types/invite-rules";
 

@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback } from "react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import BaseDialog from "./BaseDialog";
 
 export interface UnknownProfile {

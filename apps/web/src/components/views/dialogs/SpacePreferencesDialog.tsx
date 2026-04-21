@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ChangeEvent } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { VisibilityOnIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "../dialogs/BaseDialog";
@@ -16,7 +17,6 @@ import TabbedView, { Tab } from "../../structures/TabbedView";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import { useSettingValue } from "../../../hooks/useSettings";
 import SettingsStore from "../../../settings/SettingsStore";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import { SpacePreferenceTab } from "../../../dispatcher/payloads/OpenSpacePreferencesPayload";
 import { type NonEmptyArray } from "../../../@types/common";
 import SettingsTab from "../settings/tabs/SettingsTab";

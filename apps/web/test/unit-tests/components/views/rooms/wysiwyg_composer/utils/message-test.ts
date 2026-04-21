@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventStatus, type IEventRelation, MsgType } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { type IRoomState } from "../../../../../../../src/components/structures/RoomView";
 import {
@@ -16,7 +17,6 @@ import {
 import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "../../../../../../test-utils";
 import defaultDispatcher from "../../../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 import EditorStateTransfer from "../../../../../../../src/utils/EditorStateTransfer";
 import * as ConfirmRedactDialog from "../../../../../../../src/components/views/dialogs/ConfirmRedactDialog";
 import * as SlashCommands from "../../../../../../../src/slash-commands/SlashCommands";

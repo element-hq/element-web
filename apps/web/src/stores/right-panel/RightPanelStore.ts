@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { pendingVerificationRequestForUser } from "../../verification";
 import SettingsStore from "../../settings/SettingsStore";
 import { RightPanelPhases } from "./RightPanelStorePhases";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import {

@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactElement, useMemo } from "react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../languageHandler";
 import { Action } from "../../../dispatcher/actions";
 import { findNonHighContrastTheme, getOrderedThemes } from "../../../theme";
 import Dropdown from "../elements/Dropdown";
 import SettingsStore from "../../../settings/SettingsStore";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import dis from "../../../dispatcher/dispatcher";
 import { type RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
 import PosthogTrackers from "../../../PosthogTrackers";

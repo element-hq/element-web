@@ -19,12 +19,12 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { Form, InlineSpinner, SettingsToggleInput } from "@vector-im/compound-web";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import AccessibleButton from "../../../elements/AccessibleButton";

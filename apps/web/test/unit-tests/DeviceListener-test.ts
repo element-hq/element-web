@@ -24,6 +24,7 @@ import {
     type SecretStorageStatus,
 } from "matrix-js-sdk/src/crypto-api";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { DeviceListener, BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -33,7 +34,6 @@ import * as BulkUnverifiedSessionsToast from "../../src/toasts/BulkUnverifiedSes
 import { isSecretStorageBeingAccessed } from "../../src/SecurityManager";
 import { Action } from "../../src/dispatcher/actions";
 import SettingsStore from "../../src/settings/SettingsStore";
-import { SettingLevel } from "../../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";

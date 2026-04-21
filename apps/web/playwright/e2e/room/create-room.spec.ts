@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { UIFeature } from "../../../src/settings/UIFeature";
 import { test, expect } from "../../element-web-test";
 

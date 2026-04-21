@@ -6,8 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import IncompatibleController from "../../../../src/settings/controllers/IncompatibleController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { type FeatureSettingKey } from "../../../../src/settings/Settings.tsx";
 

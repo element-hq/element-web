@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { type ReactNode } from "react";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
 import RoomDeviceSettingsHandler from "./handlers/RoomDeviceSettingsHandler";
@@ -31,7 +32,6 @@ import {
 } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import { type CallbackFn as WatchCallbackFn } from "./WatchManager";
-import { SettingLevel } from "./SettingLevel";
 import type SettingsHandler from "./handlers/SettingsHandler";
 import { type SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
 import { Action } from "../dispatcher/actions";
@@ -134,6 +134,11 @@ export default class SettingsStore {
     private static watchers = new Map<string, WatchCallbackFn>();
     private static monitors = new Map<string, Map<string | null, string>>(); // { settingName => { roomId => callbackRef } }
 
+    /**
+     * Overrides that may be placed upon the `SETTINGS` defined at build time.
+     */
+    private static overrides = new Map<SettingKey, Partial<ISetting>>();
+
     // Counter used for generation of watcher IDs
     private static watcherCount = 1;
 
@@ -149,6 +154,22 @@ export default class SettingsStore {
      */
     public static getFeatureSettingNames(): SettingKey[] {
         return (Object.keys(SETTINGS) as SettingKey[]).filter((n) => SettingsStore.isFeature(n));
+    }
+
+    public static setSettingOverride<K extends SettingKey>(key: K, partial: Partial<Settings[K]>): Settings[K] {
+        this.overrides.set(key, partial);
+    }
+
+    public static getSettingWithOverrides<K extends SettingKey>(key: K): Settings[K] {
+        const initial = SETTINGS[key];
+        if (!initial) {
+            throw new Error(`Setting '${key}' does not appear to be a setting.`);
+        }
+        const overrides = this.overrides.get(key);
+        return {
+            ...initial,
+            ...overrides,
+        };
     }
 
     /**
@@ -168,7 +189,7 @@ export default class SettingsStore {
      * @returns {string} A reference to the watcher that was employed.
      */
     public static watchSetting(settingName: SettingKey, roomId: string | null, callbackFn: CallbackFn): string {
-        const setting = SETTINGS[settingName];
+        const setting = this.getSettingWithOverrides(settingName);
         if (!setting) throw new Error(`${settingName} is not a setting`);
 
         const finalSettingName: string = setting.invertedSettingName ?? settingName;
@@ -269,9 +290,10 @@ export default class SettingsStore {
      * @return {String} The display name for the setting, or null if not found.
      */
     public static getDisplayName(settingName: SettingKey, atLevel = SettingLevel.DEFAULT): string | null {
-        if (!SETTINGS[settingName] || !SETTINGS[settingName].displayName) return null;
+        const setting = this.getSettingWithOverrides(settingName);
+        if (!setting || !setting.displayName) return null;
 
-        const displayName = SETTINGS[settingName].displayName;
+        const displayName = setting.displayName;
 
         if (typeof displayName === "string") {
             return _t(displayName);
@@ -292,7 +314,8 @@ export default class SettingsStore {
      * @return {String} The description for the setting, or null if not found.
      */
     public static getDescription(settingName: SettingKey): string | ReactNode {
-        const description = SETTINGS[settingName]?.description;
+        const setting = this.getSettingWithOverrides(settingName);
+        const description = setting?.description;
         if (!description) return null;
         if (typeof description !== "string") return description();
         return _t(description);
@@ -304,8 +327,9 @@ export default class SettingsStore {
      * @return {boolean} True if the setting is a feature.
      */
     public static isFeature(settingName: SettingKey): boolean {
-        if (!SETTINGS[settingName]) return false;
-        return !!SETTINGS[settingName].isFeature;
+        const setting = this.getSettingWithOverrides(settingName);
+        if (!setting) return false;
+        return !!setting.isFeature;
     }
 
     /**
@@ -314,8 +338,9 @@ export default class SettingsStore {
      * @return {boolean} True if the setting should have a warning sign.
      */
     public static shouldHaveWarning(settingName: SettingKey): boolean {
-        if (!SETTINGS[settingName]) return false;
-        return SETTINGS[settingName].shouldWarn ?? false;
+        const setting = this.getSettingWithOverrides(settingName);
+        if (!setting) return false;
+        return setting.shouldWarn ?? false;
     }
 
     public static getBetaInfo(settingName: SettingKey): ISetting["betaInfo"] {
@@ -324,10 +349,11 @@ export default class SettingsStore {
             SettingsStore.isFeature(settingName) &&
             SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, null, true, true) !== false
         ) {
-            const betaInfo = SETTINGS[settingName]!.betaInfo;
+            const setting = this.getSettingWithOverrides(settingName);
+            const betaInfo = setting!.betaInfo;
             if (betaInfo) {
                 betaInfo.requiresRefresh =
-                    betaInfo.requiresRefresh ?? SETTINGS[settingName]!.controller instanceof ReloadOnChangeController;
+                    betaInfo.requiresRefresh ?? setting!.controller instanceof ReloadOnChangeController;
             }
             return betaInfo;
         }
@@ -335,7 +361,8 @@ export default class SettingsStore {
 
     public static getLabGroup(settingName: SettingKey): LabGroup | undefined {
         if (SettingsStore.isFeature(settingName)) {
-            return (<IFeature>SETTINGS[settingName]).labsGroup;
+            const setting = this.getSettingWithOverrides(settingName);
+            return (<IFeature>setting).labsGroup;
         }
     }
 
@@ -347,7 +374,8 @@ export default class SettingsStore {
      * @return {string} The reason the setting is disabled.
      */
     public static disabledMessage(settingName: SettingKey): string | undefined {
-        const disabled = SETTINGS[settingName].controller?.settingDisabled;
+        const setting = this.getSettingWithOverrides(settingName);
+        const disabled = setting.controller?.settingDisabled;
         return typeof disabled === "string" ? disabled : undefined;
     }
 
@@ -374,12 +402,8 @@ export default class SettingsStore {
         roomId: string | null = null,
         excludeDefault = false,
     ): Settings[S]["default"] | undefined {
-        // Verify that the setting is actually a setting
-        if (!SETTINGS[settingName]) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
+        const setting = this.getSettingWithOverrides(settingName);
 
-        const setting = SETTINGS[settingName];
         const levelOrder = getLevelOrder(setting);
 
         return SettingsStore.getValueAt(levelOrder[0], settingName, roomId, false, excludeDefault);
@@ -403,12 +427,7 @@ export default class SettingsStore {
         explicit = false,
         excludeDefault = false,
     ): Settings[S]["default"] {
-        // Verify that the setting is actually a setting
-        const setting = SETTINGS[settingName];
-        if (!setting) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
-
+        const setting = this.getSettingWithOverrides(settingName);
         const levelOrder = getLevelOrder(setting);
         if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
 
@@ -449,17 +468,11 @@ export default class SettingsStore {
 
     /**
      * Gets the default value of a setting.
-     * @param {string} settingName The name of the setting to read the value of.
-     * @param {String} roomId The room ID to read the setting value in, may be null.
-     * @return {*} The default value
+     * @param settingName The name of the setting to read the value of.
+     * @return The default value
      */
-    public static getDefaultValue(settingName: SettingKey): any {
-        // Verify that the setting is actually a setting
-        if (!SETTINGS[settingName]) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
-
-        return SETTINGS[settingName].default;
+    public static getDefaultValue<K extends SettingKey>(settingName: K): Settings[K]["default"] {
+        return this.getSettingWithOverrides(settingName).default;
     }
 
     private static getFinalValue(
@@ -500,11 +513,7 @@ export default class SettingsStore {
         level: SettingLevel,
         value: any,
     ): Promise<void> {
-        // Verify that the setting is actually a setting
-        const setting = SETTINGS[settingName];
-        if (!setting) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
+        const setting = this.getSettingWithOverrides(settingName);
 
         const handler = SettingsStore.getHandler(settingName, level);
         if (!handler) {
@@ -553,11 +562,7 @@ export default class SettingsStore {
      * @return {boolean} True if the user may set the setting, false otherwise.
      */
     public static canSetValue(settingName: SettingKey, roomId: string | null, level: SettingLevel): boolean {
-        const setting = SETTINGS[settingName];
-        // Verify that the setting is actually a setting
-        if (!setting) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
+        const setting = this.getSettingWithOverrides(settingName);
 
         if (setting.controller?.settingDisabled) {
             return false;
@@ -589,7 +594,7 @@ export default class SettingsStore {
         roomId: string | null,
         level: SettingLevel,
     ): boolean {
-        const setting = SETTINGS[settingName];
+        const setting = this.getSettingWithOverrides(settingName);
         const levelOrders = getLevelOrder(setting);
         const configIndex = levelOrders.indexOf(SettingLevel.CONFIG);
         const levelIndex = levelOrders.indexOf(level);
@@ -620,11 +625,7 @@ export default class SettingsStore {
      * on your own).
      */
     public static doesSettingSupportLevel(settingName: SettingKey, level: SettingLevel): boolean {
-        const setting = SETTINGS[settingName];
-        if (!setting) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
-
+        const setting = this.getSettingWithOverrides(settingName);
         return level === SettingLevel.DEFAULT || !!setting.supportedLevels?.includes(level);
     }
 
@@ -635,11 +636,7 @@ export default class SettingsStore {
      * @return {SettingLevel}
      */
     public static firstSupportedLevel(settingName: SettingKey): SettingLevel | null {
-        // Verify that the setting is actually a setting
-        const setting = SETTINGS[settingName];
-        if (!setting) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
+        const setting = this.getSettingWithOverrides(settingName);
 
         const levelOrder = getLevelOrder(setting);
         if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
@@ -737,7 +734,7 @@ export default class SettingsStore {
         // problem if there's a type representation issue. Also, this way it is guaranteed
         // to show up in a rageshake if required.
 
-        const def = SETTINGS[realSettingName];
+        const def = this.getSettingWithOverrides(realSettingName);
         logger.log(`--- definition: ${def ? JSON.stringify(def) : "<NOT_FOUND>"}`);
         logger.log(`--- default level order: ${JSON.stringify(LEVEL_ORDER)}`);
         logger.log(`--- registered handlers: ${JSON.stringify(Object.keys(LEVEL_HANDLERS))}`);
@@ -847,9 +844,10 @@ export default class SettingsStore {
      */
     public static exportForRageshake(): string {
         const settingMap: Record<string, unknown> = {};
-        for (const settingKey of (Object.keys(SETTINGS) as SettingKey[]).filter(
-            (s) => SETTINGS[s].shouldExportToRageshake !== false,
-        )) {
+        for (const settingKey of Object.keys(SETTINGS) as SettingKey[]) {
+            if (this.getSettingWithOverrides(settingKey).shouldExportToRageshake === false) {
+                continue;
+            }
             try {
                 settingMap[settingKey] = SettingsStore.getValue(settingKey);
             } catch (e) {
@@ -866,11 +864,16 @@ export default class SettingsStore {
         return handlers[level]!;
     }
 
-    private static getHandlers(settingName: SettingKey): HandlerMap {
-        if (!SETTINGS[settingName]) return {};
+    private static getHandlers<K extends SettingKey>(settingName: K): HandlerMap {
+        let setting: Settings[K];
+        try {
+            setting = this.getSettingWithOverrides(settingName);
+        } catch {
+            return {};
+        }
 
         const handlers: Partial<Record<SettingLevel, SettingsHandler>> = {};
-        for (const level of SETTINGS[settingName].supportedLevels) {
+        for (const level of setting.supportedLevels) {
             if (!LEVEL_HANDLERS[level]) throw new Error("Unexpected level " + level);
             if (SettingsStore.isLevelSupported(level)) handlers[level] = LEVEL_HANDLERS[level];
         }

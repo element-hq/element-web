@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { InviteRulesAccountSetting } from "../../../../../../../src/components/views/settings/tabs/user/InviteRulesAccountSettings";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { type ComputedInviteConfig } from "../../../../../../../src/@types/invite-rules";
-import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 
 function mockSetting(inviteRules: ComputedInviteConfig, blockInvites: boolean) {
     jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
