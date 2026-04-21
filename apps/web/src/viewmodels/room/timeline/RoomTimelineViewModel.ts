@@ -18,7 +18,7 @@ import type {
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 30;
 
-const log = (...args: unknown[]): void => console.log("[TimelineVM]", ...args);
+const log = (...args: unknown[]): void => console.log("%c[Timeline:VM]", "color:#2da7a0;font-weight:bold", ...args);
 
 export interface RoomTimelineViewModelOpts {
     client: MatrixClient;
@@ -38,6 +38,7 @@ export class RoomTimelineViewModel
     implements TimelineViewActions
 {
     private timelineWindow: TimelineWindow;
+    private readonly opts: RoomTimelineViewModelOpts;
     // TODO: Use visibleRange for read receipts
     public visibleRange: VisibleRange = { startIndex: 0, endIndex: 0 };
 
@@ -51,6 +52,7 @@ export class RoomTimelineViewModel
             pendingAnchor: null,
         });
 
+        this.opts = opts;
         this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet());
 
         this.load(opts.initialEventId);
@@ -60,7 +62,7 @@ export class RoomTimelineViewModel
     }
 
     public dispose(): void {
-        this.options.room.off(RoomEvent.Timeline, this.onRoomTimeline);
+        this.opts.room.off(RoomEvent.Timeline, this.onRoomTimeline);
     }
 
     private onRoomTimeline = (): void => {
