@@ -2,7 +2,7 @@
 # Context must be the root of the monorepo
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:27e462f5db2402700867dfa8ec35e3a68b127fdf61b505db0dd6ab98c38284bb AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:d2059a9c157c9f70739736979fa3635008bf3ca74560b30930dc181228bc427f AS builder
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false
