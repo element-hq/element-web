@@ -38,6 +38,7 @@ const RoomListItemWrapperImpl = ({
     onCopyRoomLink,
     onLeaveRoom,
     onSetRoomNotifState,
+    onCreateSection,
     isSelected,
     isFocused,
     onFocus,
@@ -56,6 +57,7 @@ const RoomListItemWrapperImpl = ({
         onCopyRoomLink,
         onLeaveRoom,
         onSetRoomNotifState,
+        onCreateSection,
     });
     return (
         <RoomListItemView

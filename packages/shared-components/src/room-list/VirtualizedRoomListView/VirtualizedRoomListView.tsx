@@ -21,6 +21,7 @@ import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
+import styles from "./VirtualizedRoomListView.module.css";
 
 /**
  * Filter key type - opaque string type for filter identifiers
@@ -350,6 +351,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         rangeChanged,
         onKeyDown,
         increaseViewportBy,
+        className: styles.roomList,
     };
 
     if (isFlatList) {

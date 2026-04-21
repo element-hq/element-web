@@ -55,9 +55,14 @@ const urlParameterConfig = {
         location: "query",
     },
     // Fragment params for OIDC login, added by the Identity Provider
-    oidc: {
+    oidc_fragment: {
         keys: ["code", "state"],
         location: "fragment",
+    },
+    // Query params for OIDC login, added by the Identity Provider, used as fallback when fragment is unsupported
+    oidc_query: {
+        keys: ["code", "state"],
+        location: "query",
     },
     // Fragment params relating to 3pid (email) invites, added in url within the invite email itself
     threepid: {

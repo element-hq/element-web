@@ -321,7 +321,7 @@ describe("<MatrixChat />", () => {
         const code = "test-oidc-auth-code";
         const state = "test-oidc-state";
         const urlParams = {
-            oidc: {
+            oidc_fragment: {
                 code,
                 state: state,
             },
@@ -386,7 +386,7 @@ describe("<MatrixChat />", () => {
 
         it("should fail when query params do not include valid code and state", async () => {
             const urlParams = {
-                oidc: {
+                oidc_query: {
                     code: "",
                     state: "abc",
                 },

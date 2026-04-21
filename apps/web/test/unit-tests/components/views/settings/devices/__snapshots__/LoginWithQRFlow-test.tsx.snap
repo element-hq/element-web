@@ -875,11 +875,11 @@ exports[`<LoginWithQRFlow /> renders check code confirmation 1`] = `
         2-digit code
       </label>
       <div
-        class="_container_43om7_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
+        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
       >
         <input
           autocomplete="one-time-code"
-          class="_control_43om7_25"
+          class="_control_17qhw_25"
           id="mx_LoginWithQR_checkCode"
           inputmode="numeric"
           maxlength="2"
@@ -889,11 +889,11 @@ exports[`<LoginWithQRFlow /> renders check code confirmation 1`] = `
         />
         <div
           aria-hidden="true"
-          class="_digit_43om7_49"
+          class="_digit_17qhw_49"
         />
         <div
           aria-hidden="true"
-          class="_digit_43om7_49"
+          class="_digit_17qhw_49"
         />
       </div>
       <div
@@ -972,7 +972,7 @@ exports[`<LoginWithQRFlow /> renders spinner while loading 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1047,7 +1047,7 @@ exports[`<LoginWithQRFlow /> renders spinner while signing in 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1134,7 +1134,7 @@ exports[`<LoginWithQRFlow /> renders spinner while verifying 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1212,7 +1212,7 @@ exports[`<LoginWithQRFlow /> renders spinner whilst QR generating 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"

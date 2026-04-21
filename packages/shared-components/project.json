@@ -13,6 +13,7 @@
         "start": {
             "command": "vite build --watch",
             "options": { "cwd": "packages/shared-components" },
+            "dependsOn": ["^start"],
             "continuous": true
         },
         "typedoc": {

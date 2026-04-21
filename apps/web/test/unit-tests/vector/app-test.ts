@@ -76,7 +76,7 @@ describe("sso_redirect_options", () => {
         });
 
         it("should redirect for native OIDC", async () => {
-            const authConfig = makeDelegatedAuthConfig(issuer);
+            const authConfig = { ...makeDelegatedAuthConfig(issuer), response_modes_supported: ["query", "fragment"] };
             fetchMock.get("https://synapse/_matrix/client/v1/auth_metadata", authConfig);
             fetchMock.get(`${authConfig.issuer}.well-known/openid-configuration`, authConfig);
             fetchMock.get(authConfig.jwks_uri!, { keys: [] });

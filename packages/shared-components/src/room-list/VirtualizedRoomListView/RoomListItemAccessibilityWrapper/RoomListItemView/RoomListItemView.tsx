@@ -79,6 +79,8 @@ export interface RoomListItemViewSnapshot {
     canMarkAsUnread: boolean;
     /** The room's notification state */
     roomNotifState: RoomNotifState;
+    /** Whether the room can be moved to a section */
+    canMoveToSection: boolean;
 }
 
 /**
@@ -104,6 +106,8 @@ export interface RoomListItemViewActions {
     onLeaveRoom: () => void;
     /** Called when setting the room notification state */
     onSetRoomNotifState: (state: RoomNotifState) => void;
+    /** Called when creating a new section */
+    onCreateSection: () => void;
 }
 
 /**

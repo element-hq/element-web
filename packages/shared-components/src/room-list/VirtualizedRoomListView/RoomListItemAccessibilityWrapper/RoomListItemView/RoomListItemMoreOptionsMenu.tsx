@@ -6,7 +6,7 @@
  */
 
 import React, { useState, type JSX } from "react";
-import { IconButton, Menu, MenuItem, Separator, ToggleMenuItem } from "@vector-im/compound-web";
+import { IconButton, Menu, MenuItem, Separator, SubMenu, ToggleMenuItem } from "@vector-im/compound-web";
 import {
     MarkAsReadIcon,
     MarkAsUnreadIcon,
@@ -16,6 +16,7 @@ import {
     LinkIcon,
     LeaveIcon,
     OverflowHorizontalIcon,
+    ArrowRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../core/i18n/i18n";
@@ -106,6 +107,7 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                 onSelect={vm.onToggleLowPriority}
                 onClick={(evt) => evt.stopPropagation()}
             />
+            <Separator />
             {snapshot.canInvite && (
                 <MenuItem
                     Icon={UserAddIcon}
@@ -123,6 +125,19 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                     onClick={(evt) => evt.stopPropagation()}
                     hideChevron={true}
                 />
+            )}
+            {snapshot.canMoveToSection && (
+                <SubMenu
+                    trigger={
+                        <MenuItem
+                            Icon={ArrowRightIcon}
+                            label={_t("room_list|more_options|move_to_section")}
+                            onSelect={null}
+                        />
+                    }
+                >
+                    <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
+                </SubMenu>
             )}
             <Separator />
             <MenuItem

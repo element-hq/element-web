@@ -39,6 +39,7 @@ const RoomListViewWrapperImpl = ({
     getSectionHeaderViewModel,
     updateVisibleRooms,
     renderAvatar: renderAvatarProp,
+    closeToast,
     ...rest
 }: RoomListViewProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -48,6 +49,7 @@ const RoomListViewWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        closeToast,
     });
     return <RoomListView vm={vm} renderAvatar={renderAvatarProp} />;
 };
@@ -98,6 +100,8 @@ const meta = {
         updateVisibleRooms: fn(),
         renderAvatar,
         isFlatList: true,
+        toast: undefined,
+        closeToast: fn(),
     },
     parameters: {
         design: {
@@ -243,5 +247,11 @@ export const LargeSectionList: Story = {
         sections: mockLargeListSections,
         getRoomItemViewModel: createGetRoomItemViewModel(mockLargeListRoomIds),
         getSectionHeaderViewModel: createGetSectionHeaderViewModel(mockLargeListSections.map((section) => section.id)),
+    },
+};
+
+export const Toast: Story = {
+    args: {
+        toast: "section_created",
     },
 };
