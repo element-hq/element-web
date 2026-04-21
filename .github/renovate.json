@@ -10,8 +10,8 @@
             "matchPackageNames": ["*"]
         },
         {
-            "matchDepTypes": ["resolutions", "overrides"],
-            "groupName": "pnpm resolutions",
+            "matchDepTypes": ["pnpm.overrides"],
+            "groupName": "pnpm overrides",
             "groupSlug": "resolutions"
         }
     ],
