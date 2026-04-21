@@ -249,8 +249,8 @@ importers:
         specifier: ^2.0.0
         version: 2.1.2
       electron:
-        specifier: 41.2.1
-        version: 41.2.1
+        specifier: 41.2.2
+        version: 41.2.2
       electron-builder:
         specifier: 26.9.0
         version: 26.9.0(electron-builder-squirrel-windows@26.9.0)
@@ -442,7 +442,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -7735,8 +7735,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@41.2.1:
-    resolution: {integrity: sha512-teeRThiYGTPKf/2yOW7zZA1bhb91KEQ4yLBPOg7GxpmnkLFLugKgQaAKOrCgdzwsXh/5mFIfmkm+4+wACJKwaA==}
+  electron@41.2.2:
+    resolution: {integrity: sha512-3rzz/hVIpF726W9g7nleQzyF2IOEZbzZnUTUYGhMaEfsoab8fDyOYAWbdBdo4+DczS1Ifz11rdYo8IAAGcRx/g==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -9828,8 +9828,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28}
     version: 41.3.0
     engines: {node: '>=22.0.0'}
 
@@ -20855,7 +20855,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@41.2.1:
+  electron@41.2.2:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 18.19.130
@@ -23411,7 +23411,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d7d771fadb983bf40bed2c97aa31c398d8eec875:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fef093747e1c35a60b0fdc687a7166a7d7eb8a28:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.1.0
