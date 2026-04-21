@@ -14,7 +14,7 @@ import { ClickMode } from "../../../../models/rooms/EventTileModel";
 import type { InteractionName } from "../../../../PosthogTrackers";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
-import type { EventTileContextMenuState } from "../../../../models/rooms/EventTileTypes";
+import type { EventTileContextMenuState } from "./types";
 
 /**
  * Command-side behaviors for {@link EventTile}.

@@ -63,7 +63,7 @@ import type {
     EventTileContextMenuState,
     GetRelationsForEvent,
     ReadReceiptProps,
-} from "../../../../models/rooms/EventTileTypes";
+} from "../../../../components/views/rooms/EventTile/types";
 import { Layout } from "../../../../settings/enums/Layout";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
 import { getLateEventInfo } from "../../../../components/structures/grouper/LateEventGrouper";

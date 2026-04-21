@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { EventType, Relations, RelationType, RoomMember } from "matrix-js-sdk/src/matrix";
-import type { MediaEventHelper } from "../../utils/MediaEventHelper";
+import type { MediaEventHelper } from "../../../../utils/MediaEventHelper";
 
 /** Resolves aggregated relations for an event, such as reactions or edits. */
 export type GetRelationsForEvent = (

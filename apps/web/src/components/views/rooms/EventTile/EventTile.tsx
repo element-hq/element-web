@@ -54,7 +54,7 @@ import type {
     EventTileOps,
     GetRelationsForEvent,
     ReadReceiptProps,
-} from "../../../../models/rooms/EventTileTypes";
+} from "./types";
 import { ThreadInfo } from "./ThreadInfo";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import ContextMenu, { aboveLeftOf, aboveRightOf } from "../../../structures/ContextMenu";
