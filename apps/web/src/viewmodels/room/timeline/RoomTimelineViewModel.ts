@@ -96,15 +96,13 @@ export class RoomTimelineViewModel
             await this.timelineWindow.load(eventId, INITIAL_SIZE);
 
             const items = this.buildItems();
-            const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
-            const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
 
-            log("load() done, items:", items.length, "canBack:", canPaginateBackward, "canFwd:", canPaginateForward);
+            log("load() done, items:", items.length);
 
             this.snapshot.merge({
                 items,
-                backwardPagination: canPaginateBackward ? "idle" : "idle",
-                forwardPagination: canPaginateForward ? "idle" : "idle",
+                backwardPagination: "idle",
+                forwardPagination: "idle",
                 pendingAnchor: eventId
                     ? { targetKey: eventId, position: 0.5, highlight: true }
                     : null,
@@ -120,7 +118,15 @@ export class RoomTimelineViewModel
 
     // ── TimelineViewActions ──────────────────────────────────────────
 
-    public paginate = (direction: "backward" | "forward"): void => {
+    public onStartReached = (): void => {
+        this.paginate("backward");
+    };
+
+    public onEndReached = (): void => {
+        this.paginate("forward");
+    };
+
+    private paginate = (direction: "backward" | "forward"): void => {
         const dir = direction === "backward" ? Direction.Backward : Direction.Forward;
         const stateKey = direction === "backward" ? "backwardPagination" : "forwardPagination";
 
@@ -174,10 +180,14 @@ export class RoomTimelineViewModel
 
     // ── Snapshot construction ────────────────────────────────────────
 
+    private static readonly CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000;
+    private static readonly CONTINUED_TYPES = new Set(["m.room.message", "m.sticker"]);
+
     private buildItems(): TimelineItem[] {
         const events: MatrixEvent[] = this.timelineWindow.getEvents();
         const items: TimelineItem[] = [];
         let lastDate: string | null = null;
+        let prevEvent: MatrixEvent | null = null;
 
         for (const event of events) {
             const eventId = event.getId();
@@ -190,16 +200,37 @@ export class RoomTimelineViewModel
                 items.push({
                     key: `date-${dateKey}`,
                     kind: "date-separator",
+                    label: eventDate.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" }),
                 });
                 lastDate = dateKey;
+                prevEvent = null; // date separator breaks continuation
             }
 
             items.push({
                 key: eventId,
                 kind: "event",
+                continuation: this.shouldFormContinuation(prevEvent, event),
             });
+            prevEvent = event;
         }
 
         return items;
+    }
+
+    private shouldFormContinuation(prev: MatrixEvent | null, cur: MatrixEvent): boolean {
+        if (!prev?.sender || !cur.sender) return false;
+        if (cur.getTs() - prev.getTs() > RoomTimelineViewModel.CONTINUATION_MAX_INTERVAL) return false;
+        if (cur.isRedacted() !== prev.isRedacted()) return false;
+        const curType = cur.getType();
+        const prevType = prev.getType();
+        const ct = RoomTimelineViewModel.CONTINUED_TYPES;
+        if (curType !== prevType && !(ct.has(curType) && ct.has(prevType))) return false;
+        if (
+            cur.sender.userId !== prev.sender.userId ||
+            cur.sender.name !== prev.sender.name ||
+            cur.sender.getMxcAvatarUrl() !== prev.sender.getMxcAvatarUrl()
+        )
+            return false;
+        return true;
     }
 }

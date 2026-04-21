@@ -18,11 +18,40 @@ export type TimelineItemKind =
     | "loading"
     | "gap";
 
-export interface TimelineItem {
-    /** Stable, unique key for React reconciliation and scroll-token anchoring. */
+export interface EventTimelineItem {
     key: string;
-    kind: TimelineItemKind;
+    kind: "event";
+    /** Whether this event continues unbroken from the previous sender (suppresses avatar/name). */
+    continuation: boolean;
 }
+
+export interface DateSeparatorTimelineItem {
+    key: string;
+    kind: "date-separator";
+    label: string;
+}
+
+export interface ReadMarkerTimelineItem {
+    key: string;
+    kind: "read-marker";
+}
+
+export interface LoadingTimelineItem {
+    key: string;
+    kind: "loading";
+}
+
+export interface GapTimelineItem {
+    key: string;
+    kind: "gap";
+}
+
+export type TimelineItem =
+    | EventTimelineItem
+    | DateSeparatorTimelineItem
+    | ReadMarkerTimelineItem
+    | LoadingTimelineItem
+    | GapTimelineItem;
 
 // ─── Navigation anchor ─────────────────────────────────────────────
 
@@ -81,8 +110,11 @@ export interface TimelineViewSnapshot {
 }
 
 export interface TimelineViewActions {
-    /** Request more items at the given end. */
-    paginate(direction: "backward" | "forward"): void;
+    /** Called when Virtuoso fires startReached; VM decides whether to paginate. */
+    onStartReached(): void;
+
+    /** Called when Virtuoso fires endReached; VM decides whether to paginate. */
+    onEndReached(): void;
 
     /** Report the currently visible range after every scroll. */
     onVisibleRangeChanged(range: VisibleRange): void;

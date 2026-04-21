@@ -56,18 +56,12 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     );
 
     const handleStartReached = useCallback(() => {
-        log("startReached fired, backwardPagination:", snapshot.backwardPagination);
-        if (snapshot.backwardPagination === "idle") {
-            vm.paginate("backward");
-        }
-    }, [vm, snapshot.backwardPagination]);
+        vm.onStartReached();
+    }, [vm]);
 
     const handleEndReached = useCallback(() => {
-        log("endReached fired, forwardPagination:", snapshot.forwardPagination);
-        if (snapshot.forwardPagination === "idle") {
-            vm.paginate("forward");
-        }
-    }, [vm, snapshot.forwardPagination]);
+        vm.onEndReached();
+    }, [vm]);
 
     // Handle pending anchor scrolls
     useEffect(() => {
