@@ -42,7 +42,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   >
                     <svg
                       aria-label="Loading…"
-                      class="_icon_11k6c_18"
+                      class="_icon_1855a_18"
                       data-testid="spinner"
                       fill="currentColor"
                       height="1em"

@@ -50,6 +50,7 @@ CHANGELOG.md
 /apps/desktop/dist/
 /apps/desktop/build/
 /apps/desktop/dockerbuild/
+/apps/desktop/deploys/
 /apps/desktop/lib/
 /apps/desktop/webapp
 /apps/desktop/playwright/html-report

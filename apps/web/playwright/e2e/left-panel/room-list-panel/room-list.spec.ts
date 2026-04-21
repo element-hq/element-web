@@ -10,6 +10,7 @@ import { type Page } from "@playwright/test";
 import { expect, test } from "../../../element-web-test";
 import { type Bot } from "../../../pages/bot";
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
+import { getRoomList } from "./utils";
 
 test.describe("Room list", () => {
     test.use({
@@ -19,14 +20,6 @@ test.describe("Room list", () => {
             displayName: "BotBob",
         },
     });
-
-    /**
-     * Get the room list
-     * @param page
-     */
-    function getRoomList(page: Page) {
-        return page.getByTestId("room-list");
-    }
 
     test.beforeEach(async ({ page, app, user }) => {
         // The notification toast is displayed above the search section
