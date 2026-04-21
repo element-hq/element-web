@@ -82,7 +82,7 @@
             "react-beautiful-dnd": "13"
         },
         "overrides": {
-            "pretty-format@30>react-is": "19.2.4",
+            "pretty-format@30>react-is": "19.2.5",
             "@types/react": "catalog:",
             "@types/react-dom": "catalog:",
             "oidc-client-ts": "3.5.0",
