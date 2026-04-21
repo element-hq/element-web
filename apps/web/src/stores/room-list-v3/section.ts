@@ -15,6 +15,20 @@ import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectio
 type Tag = string;
 
 /**
+ * Prefix for custom section tags.
+ */
+export const CUSTOM_SECTION_TAG_PREFIX = "element.io.section.";
+
+/**
+ * Checks if a given tag is a custom section tag.
+ * @param tag - The tag to check.
+ * @returns True if the tag is a custom section tag, false otherwise.
+ */
+export function isCustomSectionTag(tag: string): boolean {
+    return tag.startsWith(CUSTOM_SECTION_TAG_PREFIX);
+}
+
+/**
  * Structure of the custom section stored in the settings. The tag is used as a unique identifier for the section, and the name is given by the user.
  */
 type CustomSection = {
@@ -43,7 +57,7 @@ export async function createSection(): Promise<boolean> {
     const [shouldCreateSection, sectionName] = await modal.finished;
     if (!shouldCreateSection || !sectionName) return false;
 
-    const tag = `element.io.section.${uuidv4()}`;
+    const tag = `${CUSTOM_SECTION_TAG_PREFIX}${uuidv4()}`;
     const newSection: CustomSection = { tag, name: sectionName };
 
     // Save the new section data
