@@ -15,6 +15,7 @@ import {
 import {
     EventStatus,
     EventType,
+    MsgType,
     type MatrixClient,
     type MatrixEvent,
     MatrixEventEvent,
@@ -28,8 +29,18 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { BaseViewModel } from "@element-hq/web-shared-components";
+import classNames from "classnames";
 
 import type LegacyCallEventGrouper from "../../../../components/structures/LegacyCallEventGrouper";
+import {
+    buildContextMenuState,
+    copyLinkToThread,
+    onListTileClick,
+    onPermalinkClicked,
+    openEventInRoom,
+    type EventTileCommandContext,
+    type EventTileCommandDeps,
+} from "../../../../components/views/rooms/EventTile/EventTileCommands";
 import {
     AvatarSubject,
     AvatarSize,
@@ -47,14 +58,21 @@ import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { ElementCallEventType } from "../../../../call-types";
 import { DecryptionFailureTracker } from "../../../../DecryptionFailureTracker";
 import { isMessageEvent } from "../../../../events/EventTileFactory";
+import { _t } from "../../../../languageHandler";
+import type {
+    EventTileContextMenuState,
+    GetRelationsForEvent,
+    ReadReceiptProps,
+} from "../../../../models/rooms/EventTileTypes";
 import { Layout } from "../../../../settings/enums/Layout";
 import { getEventDisplayInfo } from "../../../../utils/EventRenderingUtils";
+import { getLateEventInfo } from "../../../../components/structures/grouper/LateEventGrouper";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
+import { MediaEventHelper as TileMediaEventHelper } from "../../../../utils/MediaEventHelper";
 import { shouldDisplayReply } from "../../../../utils/Reply";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import PinningUtils from "../../../../utils/PinningUtils";
-import type { GetRelationsForEvent, ReadReceiptProps } from "../../../../models/rooms/EventTileTypes";
 
 /** Interaction-only state that changes in response to pointer and focus events. */
 interface EventTileInteractionSnapshot {
@@ -68,6 +86,8 @@ interface EventTileInteractionSnapshot {
     showActionBarFromFocus: boolean;
     /** Whether the tile context menu is currently open. */
     isContextMenuOpen: boolean;
+    /** Full context-menu state for rendering the current menu instance. */
+    contextMenuState?: EventTileContextMenuState;
     /** Whether the reply quote preview is expanded. */
     isQuoteExpanded?: boolean;
 }
@@ -194,6 +214,26 @@ interface EventTileEncryptionSnapshot {
     sharedKeysUserId?: string;
     /** The room ID associated with the shared keys, when available. */
     sharedKeysRoomId?: string;
+    /** Optional tooltip title for the encryption indicator. */
+    encryptionIndicatorTitle?: string;
+}
+
+/** Additional presentational data currently derived alongside the VM snapshot. */
+interface EventTilePresentationSnapshot {
+    /** CSS class name for the tile root. */
+    rootClassName: string;
+    /** CSS class name for the tile content wrapper. */
+    contentClassName: string;
+    /** Whether the tile is rendered in notifications mode. */
+    isNotification: boolean;
+    /** Whether the tile behaves like a clickable list item. */
+    isListLikeTile: boolean;
+    /** Plain room name for notification list rendering. */
+    notificationRoomName?: string;
+    /** Received timestamp used for late-event timestamp rendering. */
+    receivedTs?: number;
+    /** Whether the thin view should render the missing-renderer fallback path. */
+    shouldRenderMissingRendererFallback: boolean;
 }
 
 /** Shared intermediate values used while deriving a tile snapshot. */
@@ -239,7 +279,8 @@ export type EventTileViewSnapshot = EventTileInteractionSnapshot &
     EventTileTimestampSnapshot &
     EventTileThreadSnapshot &
     EventTileSenderSnapshot &
-    EventTileEncryptionSnapshot;
+    EventTileEncryptionSnapshot &
+    EventTilePresentationSnapshot;
 
 /** Core event and service dependencies required by the view model. */
 interface EventTileCoreProps {
@@ -309,8 +350,17 @@ interface EventTileRelationProps {
     lastSuccessful?: boolean;
 }
 
+/** Side-effect dependencies used by command-oriented VM methods. */
+interface EventTileCommandProps {
+    /** Dispatcher, clipboard, analytics, and platform-policy command services. */
+    commandDeps: EventTileCommandDeps;
+}
+
 /** Inputs required to derive the `EventTile` view snapshot. */
-export type EventTileViewModelProps = EventTileCoreProps & EventTileRenderingProps & EventTileRelationProps;
+export type EventTileViewModelProps = EventTileCoreProps &
+    EventTileRenderingProps &
+    EventTileRelationProps &
+    EventTileCommandProps;
 
 /** Derives and maintains render state for a single timeline event tile. */
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
@@ -385,8 +435,61 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.updateInteractionSnapshot({
             isContextMenuOpen: false,
             actionBarFocused: false,
+            contextMenuState: undefined,
             hover: false,
         });
+    }
+
+    /** Opens the event in room through the command boundary. */
+    public openInRoom(): void {
+        openEventInRoom(this.props.commandDeps, this.getCommandContext());
+    }
+
+    /** Handles timestamp permalink clicks through the command boundary. */
+    public onPermalinkClicked(ev: Pick<MouseEvent, "preventDefault">): void {
+        onPermalinkClicked(this.props.commandDeps, this.getCommandContext(), ev);
+    }
+
+    /** Copies the thread permalink through the command boundary when available. */
+    public async copyLinkToThread(): Promise<void> {
+        await copyLinkToThread(this.props.commandDeps, this.getCommandContext());
+    }
+
+    /** Opens the tile context menu when the click target should override the native menu. */
+    public openContextMenu(
+        ev: {
+            clientX: number;
+            clientY: number;
+            target: EventTarget | null;
+            preventDefault(): void;
+            stopPropagation(): void;
+        },
+        permalink?: string,
+    ): void {
+        const contextMenuState = buildContextMenuState(this.props.commandDeps, this.getCommandContext(), ev, permalink);
+        if (!contextMenuState) return;
+
+        this.updateInteractionSnapshot({
+            isContextMenuOpen: true,
+            actionBarFocused: true,
+            contextMenuState,
+            hover: false,
+        });
+    }
+
+    /** Closes the tile context menu and clears the stored menu state. */
+    public closeContextMenu(): void {
+        this.onContextMenuClose();
+    }
+
+    /** Handles list-style tile click behavior through the command boundary. */
+    public onListTileClick(ev: Event, index: number): void {
+        onListTileClick(this.props.commandDeps, this.getCommandContext(), ev, index);
+    }
+
+    /** Toggles the reply quote expansion flag. */
+    public toggleQuoteExpanded(): void {
+        this.setQuoteExpanded(!this.snapshot.current.isQuoteExpanded);
     }
 
     /** Replaces the model props and refreshes affected listeners and derived state. */
@@ -708,6 +811,16 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
     }
 
+    private getCommandContext(): EventTileCommandContext {
+        return {
+            mxEvent: this.props.mxEvent,
+            permalinkCreator: this.props.permalinkCreator,
+            openedFromSearch: this.snapshot.current.openedFromSearch,
+            tileClickMode: this.snapshot.current.tileClickMode,
+            editState: this.props.editState,
+        };
+    }
+
     /**
      * Builds the full tile view state from current props plus any listener-driven partial updates.
      * Merge order matters here: defaults are seeded first, then previous/partial state is preserved,
@@ -741,9 +854,32 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ...senderSnapshot,
             ...encryptionSnapshot,
             hasFooter,
+            rootClassName: EventTileViewModel.getRootClassName(props, {
+                ...baseSnapshot,
+                ...receiptSnapshot,
+                ...renderingSnapshot,
+                ...timestampSnapshot,
+                ...threadSnapshot,
+                ...senderSnapshot,
+                ...encryptionSnapshot,
+                hasFooter,
+            }),
+            contentClassName: EventTileViewModel.getContentClassName(props.mxEvent),
+            isNotification: EventTileViewModel.getIsNotification(props),
+            isListLikeTile: EventTileViewModel.getIsListLikeTile(props),
+            notificationRoomName: EventTileViewModel.getNotificationRoomName(props),
+            receivedTs: EventTileViewModel.getReceivedTs(props),
+            shouldRenderMissingRendererFallback:
+                renderingSnapshot.renderMode === EventTileRenderMode.MissingRendererFallback,
         };
 
         snapshot.shouldRenderActionBar = EventTileViewModel.getShouldRenderActionBar(props, snapshot);
+        snapshot.encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(
+            props,
+            snapshot,
+            snapshot.isEncryptionFailure,
+        );
+        snapshot.rootClassName = EventTileViewModel.getRootClassName(props, snapshot);
         return snapshot;
     }
 
@@ -761,6 +897,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             focusWithin: false,
             showActionBarFromFocus: false,
             isContextMenuOpen: false,
+            contextMenuState: undefined,
             isQuoteExpanded: undefined,
             thread: null,
             threadUpdateKey: "",
@@ -806,9 +943,17 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             encryptionIndicatorMode: EncryptionIndicatorMode.None,
             sharedKeysUserId: undefined,
             sharedKeysRoomId: undefined,
+            encryptionIndicatorTitle: undefined,
             threadInfoMode: ThreadInfoMode.None,
             tileClickMode: ClickMode.None,
             openedFromSearch: false,
+            rootClassName: "mx_EventTile",
+            contentClassName: "mx_EventTile_line",
+            isNotification: false,
+            isListLikeTile: false,
+            notificationRoomName: undefined,
+            receivedTs: undefined,
+            shouldRenderMissingRendererFallback: false,
             ...previousSnapshot,
             ...partial,
         };
@@ -1172,6 +1317,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return props.mxEvent.status ? undefined : (props.mxEvent.getId() ?? undefined);
     }
 
+    private static getReceivedTs(props: EventTileViewModelProps): number | undefined {
+        return getLateEventInfo(props.mxEvent)?.received_ts;
+    }
+
     private static getShowTimestamp(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
         return Boolean(
             props.mxEvent.getTs() &&
@@ -1280,6 +1429,21 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getOpenedFromSearch(props: EventTileViewModelProps): boolean {
         return props.timelineRenderingType === TimelineRenderingType.Search;
+    }
+
+    private static getIsNotification(props: EventTileViewModelProps): boolean {
+        return props.timelineRenderingType === TimelineRenderingType.Notification;
+    }
+
+    private static getIsListLikeTile(props: EventTileViewModelProps): boolean {
+        return (
+            props.timelineRenderingType === TimelineRenderingType.Notification ||
+            props.timelineRenderingType === TimelineRenderingType.ThreadsList
+        );
+    }
+
+    private static getNotificationRoomName(props: EventTileViewModelProps): string | undefined {
+        return EventTileViewModel.getRoom(props)?.name;
     }
 
     private static getShowSender(props: EventTileViewModelProps): boolean {
@@ -1442,6 +1606,99 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         return event.isEncrypted() ? EncryptionIndicatorMode.None : EncryptionIndicatorMode.Warning;
+    }
+
+    private static getEncryptionIndicatorTitle(
+        props: EventTileViewModelProps,
+        snapshot: EventTileViewSnapshot,
+        isEncryptionFailure: boolean,
+    ): string | undefined {
+        const event = props.mxEvent.replacingEvent() ?? props.mxEvent;
+
+        if (isEncryptionFailure) {
+            switch (event.decryptionFailureReason) {
+                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                    return undefined;
+                default:
+                    return _t("timeline|undecryptable_tooltip");
+            }
+        }
+
+        if (snapshot.shieldColour !== EventShieldColour.NONE) {
+            switch (snapshot.shieldReason) {
+                case EventShieldReason.UNVERIFIED_IDENTITY:
+                    return _t("encryption|event_shield_reason_unverified_identity");
+                case EventShieldReason.UNSIGNED_DEVICE:
+                    return _t("encryption|event_shield_reason_unsigned_device");
+                case EventShieldReason.UNKNOWN_DEVICE:
+                    return _t("encryption|event_shield_reason_unknown_device");
+                case EventShieldReason.AUTHENTICITY_NOT_GUARANTEED:
+                    return _t("encryption|event_shield_reason_authenticity_not_guaranteed");
+                case EventShieldReason.MISMATCHED_SENDER_KEY:
+                    return _t("encryption|event_shield_reason_mismatched_sender_key");
+                case EventShieldReason.SENT_IN_CLEAR:
+                    return _t("common|unencrypted");
+                case EventShieldReason.VERIFICATION_VIOLATION:
+                    return _t("timeline|decryption_failure|sender_identity_previously_verified");
+                case EventShieldReason.MISMATCHED_SENDER:
+                    return _t("encryption|event_shield_reason_mismatched_sender");
+                default:
+                    return _t("error|unknown");
+            }
+        }
+
+        if (props.isRoomEncrypted && !event.isEncrypted() && !event.isState() && !event.isRedacted()) {
+            if (event.status === EventStatus.ENCRYPTING) return undefined;
+            if (event.status === EventStatus.NOT_SENT) return undefined;
+            return _t("common|unencrypted");
+        }
+
+        return undefined;
+    }
+
+    private static getContentClassName(mxEvent: MatrixEvent): string {
+        const isProbablyMedia = TileMediaEventHelper.isEligible(mxEvent);
+
+        return classNames("mx_EventTile_line", {
+            mx_EventTile_mediaLine: isProbablyMedia,
+            mx_EventTile_image:
+                mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Image,
+            mx_EventTile_sticker: mxEvent.getType() === EventType.Sticker,
+            mx_EventTile_emote:
+                mxEvent.getType() === EventType.RoomMessage && mxEvent.getContent().msgtype === MsgType.Emote,
+        });
+    }
+
+    private static getRootClassName(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): string {
+        const eventType = props.mxEvent.getType();
+        const msgtype = props.mxEvent.getContent().msgtype;
+        const isNotification = EventTileViewModel.getIsNotification(props);
+
+        return classNames({
+            mx_EventTile_bubbleContainer: snapshot.isBubbleMessage,
+            mx_EventTile_leftAlignedBubble: snapshot.isLeftAlignedBubbleMessage,
+            mx_EventTile: true,
+            mx_EventTile_isEditing: snapshot.isEditing,
+            mx_EventTile_info: snapshot.isInfoMessage,
+            mx_EventTile_12hr: props.isTwelveHour,
+            mx_EventTile_sending: !snapshot.isEditing && snapshot.isSending,
+            mx_EventTile_highlight: snapshot.isHighlighted,
+            mx_EventTile_selected: props.isSelectedEvent || snapshot.isContextMenuOpen,
+            mx_EventTile_continuation:
+                snapshot.isContinuation ||
+                eventType === EventType.CallInvite ||
+                ElementCallEventType.matches(eventType),
+            mx_EventTile_last: props.last,
+            mx_EventTile_lastInSection: props.lastInSection,
+            mx_EventTile_contextual: props.contextual,
+            mx_EventTile_actionBarFocused: snapshot.actionBarFocused,
+            mx_EventTile_bad: snapshot.isEncryptionFailure,
+            mx_EventTile_emote: msgtype === MsgType.Emote,
+            mx_EventTile_noSender: !snapshot.showSender,
+            mx_EventTile_clamp: props.timelineRenderingType === TimelineRenderingType.ThreadsList || isNotification,
+            mx_EventTile_noBubble: snapshot.noBubbleEvent,
+        });
     }
 
     private static getDecryptionFailureIndicatorMode(

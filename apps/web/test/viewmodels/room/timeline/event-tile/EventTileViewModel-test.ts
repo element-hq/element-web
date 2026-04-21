@@ -24,6 +24,7 @@ import {
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
+import { Action } from "../../../../../src/dispatcher/actions";
 import {
     AvatarSubject,
     ClickMode,
@@ -41,6 +42,7 @@ import {
 } from "../../../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { Layout } from "../../../../../src/settings/enums/Layout";
+import { _t } from "../../../../../src/languageHandler";
 import { filterConsole, flushPromises, mkEvent, mkMessage, stubClient } from "../../../../test-utils";
 import { mkThread } from "../../../../test-utils/threads";
 
@@ -57,6 +59,7 @@ describe("EventTileViewModel", () => {
     let mxEvent: MatrixEvent;
     let room: Room;
     let client: ReturnType<typeof MatrixClientPeg.safeGet>;
+    let commandDeps: EventTileViewModelProps["commandDeps"];
 
     const createdViewModels: EventTileViewModel[] = [];
 
@@ -67,6 +70,7 @@ describe("EventTileViewModel", () => {
             timelineRenderingType: TimelineRenderingType.Room,
             isRoomEncrypted: false,
             showHiddenEvents: false,
+            commandDeps,
             ...overrides,
         };
     }
@@ -91,6 +95,12 @@ describe("EventTileViewModel", () => {
 
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
+        commandDeps = {
+            dispatch: jest.fn(),
+            copyPlaintext: jest.fn().mockResolvedValue(true),
+            trackInteraction: jest.fn(),
+            allowOverridingNativeContextMenus: jest.fn().mockReturnValue(true),
+        };
 
         mxEvent = mkMessage({
             room: room.roomId,
@@ -576,6 +586,30 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().hover).toBe(false);
         });
 
+        it("stores and clears context menu state through VM command helpers", () => {
+            const vm = createTimestampedViewModel();
+            const target = document.createElement("div");
+
+            vm.openContextMenu({
+                clientX: 10,
+                clientY: 20,
+                target,
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+            });
+
+            expect(vm.getSnapshot().contextMenuState).toEqual({
+                position: { left: 10, top: 20, bottom: 20 },
+                link: undefined,
+            });
+            expect(vm.getSnapshot().isContextMenuOpen).toBe(true);
+
+            vm.closeContextMenu();
+
+            expect(vm.getSnapshot().contextMenuState).toBeUndefined();
+            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
+        });
+
         it("tracks quote expansion state", () => {
             const vm = createViewModel();
 
@@ -584,6 +618,98 @@ describe("EventTileViewModel", () => {
 
             vm.setQuoteExpanded(false);
             expect(vm.getSnapshot().isQuoteExpanded).toBe(false);
+        });
+
+        it("toggles quote expansion through the dedicated VM helper", () => {
+            const vm = createViewModel();
+
+            vm.toggleQuoteExpanded();
+            expect(vm.getSnapshot().isQuoteExpanded).toBe(true);
+
+            vm.toggleQuoteExpanded();
+            expect(vm.getSnapshot().isQuoteExpanded).toBe(false);
+        });
+    });
+
+    describe("command methods", () => {
+        it("dispatches room navigation from permalink clicks", () => {
+            const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Search });
+            const preventDefault = jest.fn();
+
+            vm.onPermalinkClicked({ preventDefault });
+
+            expect(preventDefault).toHaveBeenCalled();
+            expect(commandDeps.dispatch).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                event_id: mxEvent.getId(),
+                highlighted: true,
+                room_id: mxEvent.getRoomId(),
+                metricsTrigger: "MessageSearch",
+            });
+        });
+
+        it("copies the thread permalink through the VM", async () => {
+            const permalinkCreator = {
+                forEvent: jest.fn().mockReturnValue("https://example.org/#/room/$event"),
+            } as any;
+            const vm = createViewModel({ permalinkCreator });
+
+            await vm.copyLinkToThread();
+
+            expect(permalinkCreator.forEvent).toHaveBeenCalledWith(mxEvent.getId());
+            expect(commandDeps.copyPlaintext).toHaveBeenCalledWith("https://example.org/#/room/$event");
+        });
+
+        it("dispatches thread opening and tracking for thread list clicks", () => {
+            const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.ThreadsList });
+            const event = new Event("click");
+
+            vm.onListTileClick(event, 3);
+
+            expect(commandDeps.dispatch).toHaveBeenCalledWith({
+                action: Action.ShowThread,
+                rootEvent: mxEvent,
+                push: true,
+            });
+            expect(commandDeps.trackInteraction).toHaveBeenCalledWith("WebThreadsPanelThreadItem", event, 3);
+        });
+    });
+
+    describe("presentational snapshot fields", () => {
+        it("derives root and content class names in the snapshot", () => {
+            const vm = createViewModel();
+
+            expect(vm.getSnapshot().rootClassName).toContain("mx_EventTile");
+            expect(vm.getSnapshot().contentClassName).toBe("mx_EventTile_line");
+        });
+
+        it("marks missing-renderer fallback directly in the snapshot", () => {
+            mockGetEventDisplayInfo.mockReturnValue({
+                hasRenderer: false,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+            });
+
+            const vm = createViewModel();
+
+            expect(vm.getSnapshot().shouldRenderMissingRendererFallback).toBe(true);
+        });
+
+        it("derives the encryption indicator title for unencrypted events in encrypted rooms", () => {
+            const vm = createViewModel({ isRoomEncrypted: true });
+
+            expect(vm.getSnapshot().encryptionIndicatorTitle).toBe(_t("common|unencrypted"));
+        });
+
+        it("derives notification list flags and room name", () => {
+            const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Notification });
+
+            expect(vm.getSnapshot().isNotification).toBe(true);
+            expect(vm.getSnapshot().isListLikeTile).toBe(true);
+            expect(vm.getSnapshot().notificationRoomName).toBe(room.name);
         });
     });
 
