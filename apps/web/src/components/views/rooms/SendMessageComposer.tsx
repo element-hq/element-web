@@ -70,6 +70,7 @@ export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent | undefined,
     relation: IEventRelation | undefined,
+    extraEventContent?: Record<string, unknown>,
 ): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -85,6 +86,7 @@ export function createMessageContent(
     const content: RoomMessageEventContent = {
         msgtype: isEmote ? MsgType.Emote : MsgType.Text,
         body: body,
+        ...extraEventContent,
     };
     const formattedBody = htmlSerializeIfNeeded(model, {
         useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
@@ -130,6 +132,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     disabled?: boolean;
     onChange?(model: EditorModel): void;
     toggleStickerPickerOpen: () => void;
+    extraEventContent?: Record<string, unknown>;
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
@@ -160,6 +163,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const parts = this.restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
+        this.state = {
+            extraEventContent: new Map(),
+        };
     }
 
     public componentDidMount(): void {
@@ -411,6 +417,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     model,
                     replyToEvent,
                     this.props.relation,
+                    this.props.extraEventContent,
                 );
             }
             // don't bother sending an empty message
@@ -428,6 +435,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 (actualRoomId: string) => this.props.mxClient.sendMessage(actualRoomId, threadId ?? null, content!),
                 this.props.mxClient,
             );
+            // Clear existing links
+            this.setState({ extraEventContent: new Map() });
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
@@ -638,6 +647,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private focusComposer = (): void => {
         this.editorRef.current?.focus();
     };
+    1;
 
     public render(): React.ReactNode {
         const threadId =

@@ -598,6 +598,9 @@ legend {
         .mx_AccessSecretStorageDialog button,
         .mx_InviteDialog_section button,
         .mx_InviteDialog_editor button,
+        .mx_ModuleOuterDialog button,
+        [data-kind|="primary"],
+        [data-kind|="secondary"],
         [class|="maplibregl"]
     ),
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton),
@@ -620,11 +623,14 @@ legend {
     button:not(
         .mx_Dialog_nonDialogButton,
         [class|="maplibregl"],
+        [data-kind|="primary"],
+        [data-kind|="secondary"],
         .mx_AccessibleButton,
         .mx_UserProfileSettings button,
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
+        .mx_ModuleOuterDialog button,
         .mx_EncryptionUserSettingsTab button
     ):last-child {
     margin-right: 0px;
@@ -634,6 +640,9 @@ legend {
     button:not(
         .mx_Dialog_nonDialogButton,
         [class|="maplibregl"],
+        [data-kind|="primary"],
+        [data-kind|="secondary"],
+        .mx_ModuleOuterDialog button,
         .mx_AccessibleButton,
         .mx_UserProfileSettings button,
         .mx_ThemeChoicePanel_CustomTheme button,
@@ -659,6 +668,7 @@ legend {
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
+        .mx_ModuleOuterDialog button,
         .mx_EncryptionUserSettingsTab button
     ),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
@@ -678,6 +688,7 @@ legend {
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
+        .mx_ModuleOuterDialog button,
         .mx_EncryptionUserSettingsTab button
     ),
 .mx_Dialog_buttons input[type="submit"].danger {
@@ -695,7 +706,9 @@ legend {
 .mx_Dialog
     button:not(
         .mx_Dialog_nonDialogButton,
-        [class|="maplibregl"],
+        [data-kind|="primary"],
+        [data-kind|="secondary"],
+        .mx_ModuleOuterDialog button,
         .mx_AccessibleButton,
         .mx_UserProfileSettings button,
         .mx_ThemeChoicePanel_CustomTheme button,

@@ -49,7 +49,7 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     readonly builtins: BuiltinsApi;
     readonly client: ClientApi;
     // @alpha
-    readonly composor: ComposorApi;
+    readonly composer: ComposerApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
     // @alpha
@@ -101,21 +101,32 @@ export interface ComponentVisibilityCustomisations {
 }
 
 // @alpha
-export interface ComposorApi {
-    addFileUploadOption(option: ComposorApiFileUploadOption): void;
+export interface ComposerApi {
+    addFileUploadOption(option: ComposerApiFileUploadOption): void;
+    // (undocumented)
+    readonly ComposerApiFileUploadLocal: typeof ComposerApiFileUploadLocal;
     disableFileUploadOption(type: string): boolean;
+    insertEventContentIntoComposer<T extends object>(key: string, eventContent: T, previewComponent: ComposerExtraContentPreview<T>): void;
+    insertTextIntoComposer(text: string): void;
 }
 
 // @alpha
-export const ComposorApiFileUploadLocal = "local";
+export const ComposerApiFileUploadLocal = "local";
 
 // @alpha
-export type ComposorApiFileUploadOption = {
+export type ComposerApiFileUploadOption = {
     type: string;
     label: string;
     icon: ComponentType<SVGAttributes<SVGElement>>;
     onSelected: (roomId: string, onFileSelected: (result: FileUploadResult) => void) => Promise<void> | void;
 };
+
+// @alpha
+export type ComposerExtraContentPreview<T = Record<string, unknown>> = (props: {
+    contentKey: string;
+    content: T;
+    onContentChange: (newContent: T | null) => void;
+}) => ReactNode;
 
 // @public
 export interface Config {
@@ -239,8 +250,6 @@ export interface ExtrasApi {
 // @alpha
 export type FileUploadResult = {
     mxc: string;
-} | {
-    link: string;
 } | {
     file: File;
 } | {

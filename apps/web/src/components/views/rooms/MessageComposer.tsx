@@ -38,7 +38,10 @@ import { RecordingState } from "../../../audio/VoiceRecording";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import SendMessageComposer, { type SendMessageComposer as SendMessageComposerClass } from "./SendMessageComposer";
-import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import {
+    IComposerInsertEventContent,
+    type ComposerInsertPayload,
+} from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
 import type EditorModel from "../../../editor/model";
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
@@ -54,6 +57,7 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import type { ComposerExtraContentPreview } from "@element-hq/element-web-module-api";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -101,6 +105,7 @@ interface IState {
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
     initialComposerContent: string;
+    extraEventContent: Map<string, { content: Record<string, unknown>; renderer: ComposerExtraContentPreview }>;
 }
 
 type WysiwygComposerState = {
@@ -152,6 +157,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             isWysiwygLabEnabled: isWysiwygLabEnabled,
             isRichTextEnabled: isRichTextEnabled,
             initialComposerContent: initialComposerContent,
+            extraEventContent: new Map(),
         };
 
         this.instanceId = instanceCount++;
@@ -276,6 +282,22 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 }
                 break;
 
+            case Action.ComposerInsert: {
+                const composerInsertPayload = payload as IComposerInsertEventContent;
+                if (
+                    !composerInsertPayload.eventContent ||
+                    !composerInsertPayload.key ||
+                    !composerInsertPayload.previewRenderable
+                ) {
+                    this.setState((s) => {
+                        s.extraEventContent.set(composerInsertPayload.key, {
+                            content: composerInsertPayload.eventContent,
+                            renderer: composerInsertPayload.previewRenderable,
+                        });
+                    });
+                }
+                break;
+            }
             case Action.SettingUpdated: {
                 const settingUpdatedPayload = payload as SettingUpdatedPayload;
                 switch (settingUpdatedPayload.settingName) {
@@ -524,6 +546,17 @@ export class MessageComposer extends React.Component<IProps, IState> {
         if (this.context.narrow) {
             this.toggleButtonMenu();
         }
+    };
+
+    private readonly onExtraContentChange = (key: string, newContent: Record<string, unknown> | null): void => {
+        this.setState((s) => {
+            if (newContent === null) {
+                s.extraEventContent.delete(key);
+            } else {
+                s.extraEventContent.set(key, { ...s.extraEventContent.get(key)!, content: newContent });
+            }
+            return s;
+        });
     };
 
     public render(): React.ReactNode {

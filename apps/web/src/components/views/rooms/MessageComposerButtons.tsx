@@ -23,7 +23,7 @@ import {
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { ComposorApiFileUploadLocal } from "@element-hq/element-web-module-api";
+import { ComposerApiFileUploadLocal } from "@element-hq/element-web-module-api";
 import { MultiOptionButton } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
@@ -177,8 +177,8 @@ const UploadButton: React.FC = () => {
         overflowMenuCloser?.(); // close overflow menu
     };
 
-    const options = [...ModuleApi.instance.composor.fileUploadOptions.values()].map((uploadOption) => {
-        if (uploadOption.type === ComposorApiFileUploadLocal) {
+    const options = [...ModuleApi.instance.composer.fileUploadOptions.values()].map((uploadOption) => {
+        if (uploadOption.type === ComposerApiFileUploadLocal) {
             return {
                 icon: AttachmentIcon,
                 label: _t("common|attachment"),

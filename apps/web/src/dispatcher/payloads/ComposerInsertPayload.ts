@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";
 import { type TimelineRenderingType } from "../../contexts/RoomContext";
+import { ComposerExtraContentPreview } from "@element-hq/element-web-module-api";
 
 export enum ComposerType {
     Send = "send",
@@ -29,4 +30,13 @@ interface IComposerInsertPlaintextPayload extends IBaseComposerInsertPayload {
     text: string;
 }
 
-export type ComposerInsertPayload = IComposerInsertMentionPayload | IComposerInsertPlaintextPayload;
+export interface IComposerInsertEventContent<T = Record<string, unknown>> extends IBaseComposerInsertPayload {
+    key: string;
+    previewRenderable: ComposerExtraContentPreview<T>;
+    eventContent: T;
+}
+
+export type ComposerInsertPayload =
+    | IComposerInsertMentionPayload
+    | IComposerInsertPlaintextPayload
+    | IComposerInsertEventContent;

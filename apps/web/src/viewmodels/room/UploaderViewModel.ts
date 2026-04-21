@@ -6,7 +6,7 @@
 //  */
 
 // import { BaseViewModel } from "@element-hq/web-shared-components";
-// import { ComposorApi } from "../../modules/ComposorApi";
+// import { ComposerApi } from "../../modules/ComposerApi";
 
 // interface UploaderViewSnapshot {
 //     primaryOption: {
@@ -16,8 +16,8 @@
 // }
 
 // export class UploaderViewModel extends BaseViewModel<UploaderViewSnapshot, never> {
-//     public constructor(moduleComposorApi: ComposorApi) {
-//         moduleComposorApi.
+//     public constructor(moduleComposerApi: ComposerApi) {
+//         moduleComposerApi.
 //         super()
 //     }
 // }

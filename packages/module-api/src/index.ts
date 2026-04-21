@@ -25,7 +25,7 @@ export type * from "./api/client";
 export type * from "./api/widget-lifecycle";
 export type * from "./api/widget";
 export type * from "./api/customisations";
-export type * from "./api/composor";
+export type * from "./api/composer";
 export { UIComponent } from "./api/customisations";
 export * from "./api/watchable";
 export type * from "./utils";

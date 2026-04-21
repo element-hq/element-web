@@ -25,7 +25,7 @@ const OuterDialog = <M, P extends object>({
     const close = useCallback(() => onFinished(false, null), [onFinished]);
     const submit = useCallback((model: M) => onFinished(true, model), [onFinished]);
     return (
-        <BaseDialog onFinished={close} title={title}>
+        <BaseDialog className="mx_ModuleOuterDialog" onFinished={close} title={title}>
             <Dialog {...props} onSubmit={submit} onCancel={close} />
         </BaseDialog>
     );
