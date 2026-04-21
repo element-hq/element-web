@@ -27,8 +27,7 @@ export function getInitialTopMostItemIndex<TItem extends TimelineItem>(
         return { index: "LAST", align: "end" };
     }
 
-    const align =
-        scrollTarget?.position === "top" ? "start" : scrollTarget?.position === "center" ? "center" : "end";
+    const align = scrollTarget?.position === "top" ? "start" : scrollTarget?.position === "center" ? "center" : "end";
 
     return { index: targetIndex, align };
 }
