@@ -14,7 +14,7 @@
             "description": "Group updates to overrides separately from other groups",
             "matchDepTypes": ["pnpm.overrides"],
             "groupName": "{{depName}} overrides",
-            "groupSlug": null 
+            "groupSlug": null,
             "additionalBranchPrefix": "overrides-"
         },
         {
