@@ -103,6 +103,7 @@ jobs:
                           voip|element_call
                           error|invalid_json
                           error|misconfigured
+                          welcome|title_element
                           devtools|settings|elementCallUrl
                           labs|sliding_sync_description
                           settings|voip|noise_suppression_description
