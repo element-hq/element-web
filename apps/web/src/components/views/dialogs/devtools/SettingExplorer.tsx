@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, useContext, useMemo, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t, _td } from "../../../../languageHandler";
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import AccessibleButton from "../../elements/AccessibleButton";
 import SettingsStore, { LEVEL_ORDER } from "../../../../settings/SettingsStore";
-import { type SettingLevel } from "../../../../settings/SettingLevel";
 import { type SettingKey, SETTINGS, type SettingValueType } from "../../../../settings/Settings";
 import Field from "../../elements/Field";
 

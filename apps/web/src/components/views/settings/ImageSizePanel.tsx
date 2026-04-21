@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import { _t } from "../../../languageHandler";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import { ImageSize } from "../../../settings/enums/ImageSize";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { Icon as ImgSizeNormalIcon } from "../../../../res/img/element-icons/settings/img-size-normal.svg";

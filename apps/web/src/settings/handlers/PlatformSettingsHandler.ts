@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import SettingsHandler from "./SettingsHandler";
 import PlatformPeg from "../../PlatformPeg";
 import { SETTINGS } from "../Settings";
-import { SettingLevel } from "../SettingLevel";
 
 /**
  * Gets and sets settings at the "platform" level for the current device.

@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import EventTilePreview from "../elements/EventTilePreview";
 import SettingsStore from "../../../settings/SettingsStore";
 import { type Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import Field from "../elements/Field";

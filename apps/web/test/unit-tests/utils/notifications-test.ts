@@ -15,6 +15,7 @@ import {
     type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { type Mocked, mocked } from "jest-mock";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import {
     localNotificationsAreSilenced,
@@ -32,7 +33,6 @@ import { getMockClientWithEventEmitter, mockClientMethodsServer } from "../../te
 import { mkMessage, stubClient } from "../../test-utils/test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { NotificationLevel } from "../../../src/stores/notifications/NotificationLevel";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../src/settings/controllers/MatrixClientBackedController";
 import SettingsStore from "../../../src/settings/SettingsStore";
 

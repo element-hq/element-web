@@ -23,6 +23,7 @@ import {
 } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";
@@ -31,7 +32,6 @@ import dis from "./dispatcher/dispatcher";
 import WidgetUtils from "./utils/WidgetUtils";
 import SettingsStore from "./settings/SettingsStore";
 import { WidgetType } from "./widgets/WidgetType";
-import { SettingLevel } from "./settings/SettingLevel";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";

@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import PreferencesUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { mockPlatformPeg, stubClient } from "../../../../../../test-utils";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../../../../src/settings/controllers/MatrixClientBackedController";
 import PlatformPeg from "../../../../../../../src/PlatformPeg";
 import { type SettingKey } from "../../../../../../../src/settings/Settings.tsx";

@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, type JSX, useCallback, useState } from "react";
 import { EditInPlace } from "@vector-im/compound-web";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
-import { type SettingLevel } from "../../../settings/SettingLevel";
 import { type StringSettingKey } from "../../../settings/Settings";
 
 interface Props {

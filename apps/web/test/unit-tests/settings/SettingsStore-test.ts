@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { ClientEvent, type MatrixClient, type Room, SyncState } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import type BasePlatform from "../../../src/BasePlatform";
 import SdkConfig from "../../../src/SdkConfig";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
 import { SETTINGS, type SettingKey } from "../../../src/settings/Settings.tsx";

@@ -9,9 +9,9 @@
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { cloneDeep } from "lodash";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../settings/SettingsStore";
-import { SettingLevel } from "../settings/SettingLevel";
 import ToastStore from "./ToastStore";
 
 /**

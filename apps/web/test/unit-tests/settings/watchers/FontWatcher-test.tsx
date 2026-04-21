@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { sleep } from "matrix-js-sdk/src/utils";
 import { waitFor } from "jest-matrix-react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { FontWatcher } from "../../../../src/settings/watchers/FontWatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { untilDispatch } from "../../../test-utils";

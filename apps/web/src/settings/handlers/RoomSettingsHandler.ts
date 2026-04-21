@@ -14,10 +14,10 @@ import {
     RoomStateEvent,
     type StateEvents,
 } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
-import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
 
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";

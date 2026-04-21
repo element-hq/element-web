@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type SyntheticEvent, useContext, useState } from "react";
 import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ContextMenu, { type MenuProps } from "../../structures/ContextMenu";
@@ -19,7 +20,6 @@ import ShareType from "./ShareType";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { EnableLiveShare } from "./EnableLiveShare";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
-import { SettingLevel } from "../../../settings/SettingLevel";
 
 type Props = Omit<ILocationPickerProps, "onChoose" | "shareType"> & {
     onFinished: (ev?: SyntheticEvent) => void;

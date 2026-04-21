@@ -6,9 +6,9 @@
  */
 
 import { type Locator } from "@playwright/test";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { test, expect } from "../../../element-web-test";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 test.describe("Voice & Video room settings tab", () => {
     const roomName = "Test room";

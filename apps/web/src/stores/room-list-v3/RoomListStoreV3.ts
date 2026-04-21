@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
@@ -29,7 +30,6 @@ import { InvitesFilter } from "./skip-list/filters/InvitesFilter";
 import { MentionsFilter } from "./skip-list/filters/MentionsFilter";
 import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
 import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 import { Action } from "../../dispatcher/actions";
 import { UnreadSorter } from "./skip-list/sorters/UnreadSorter";

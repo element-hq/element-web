@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ChangeEvent, type FC, useCallback, useState } from "react";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../../languageHandler";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 
 /**
  * A settings component which allows the user to enable/disable invite blocking.

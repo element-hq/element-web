@@ -12,12 +12,12 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import PlatformPeg from "../PlatformPeg";
 import EventIndex from "../indexing/EventIndex";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
-import { SettingLevel } from "../settings/SettingLevel";
 
 const INDEX_VERSION = 1;
 

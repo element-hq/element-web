@@ -20,10 +20,10 @@ import {
     getLocale,
     setMissingEntryGenerator as setMissingEntryGeneratorSharedComponents,
 } from "@element-hq/web-shared-components";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
-import { SettingLevel } from "./settings/SettingLevel";
 import { retry } from "./utils/promise";
 import SdkConfig from "./SdkConfig";
 import { ModuleRunner } from "./modules/ModuleRunner";

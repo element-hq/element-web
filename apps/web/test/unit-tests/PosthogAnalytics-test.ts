@@ -11,6 +11,7 @@ import { mocked } from "jest-mock";
 import { type PostHog } from "posthog-js";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import {
     Anonymity,
@@ -24,7 +25,6 @@ import SettingsStore from "../../src/settings/SettingsStore";
 import { Layout } from "../../src/settings/enums/Layout";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import { Action } from "../../src/dispatcher/actions";
-import { SettingLevel } from "../../src/settings/SettingLevel";
 
 const getFakePosthog = (): PostHog =>
     ({

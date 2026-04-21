@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, type JSX, type ReactElement, useCallback, useEffect, useState } from "react";
 import { SettingsToggleInput } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
 import Dropdown from "../../../elements/Dropdown";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";

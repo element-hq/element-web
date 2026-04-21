@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useCallback, useId, useState } from "react";
 import { _t } from "@element-hq/web-shared-components";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../../settings/SettingsStore";
-import { type SettingLevel } from "../../../settings/SettingLevel";
 import { SETTINGS, type StringSettingKey } from "../../../settings/Settings";
 import { useSettingValueAt } from "../../../hooks/useSettings.ts";
 import Dropdown, { type DropdownProps } from "./Dropdown.tsx";

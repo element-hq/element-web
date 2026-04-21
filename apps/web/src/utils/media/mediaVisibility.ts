@@ -6,9 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { JoinRule, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { type MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_preview";
-import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 
 /**

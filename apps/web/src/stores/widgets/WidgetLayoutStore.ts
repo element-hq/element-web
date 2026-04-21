@@ -11,13 +11,13 @@ import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
 import { type IWidget } from "matrix-widget-api";
 import { clamp, defaultNumber, sum } from "@element-hq/web-shared-components";
 import { type Container } from "@element-hq/element-web-module-api";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { type IApp } from "../WidgetStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ReadyWatchingStore } from "../ReadyWatchingStore";
-import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { type IStoredLayout, type ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, type IWidgetLayouts } from "./types";

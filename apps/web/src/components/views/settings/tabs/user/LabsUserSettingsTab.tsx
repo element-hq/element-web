@@ -9,10 +9,10 @@ import React, { type JSX } from "react";
 import { sortBy } from "lodash";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { Form } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from "../../../elements/SettingsFlag";

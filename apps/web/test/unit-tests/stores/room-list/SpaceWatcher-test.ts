@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked } from "jest-mock";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { SpaceWatcher } from "../../../../src/stores/room-list/SpaceWatcher";
 import type { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
@@ -15,7 +16,6 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_HOME_BEHAVIOUR } from "../../../../src/stores/spaces";
 import { stubClient, mkSpace, emitPromise, setupAsyncStoreWithClient } from "../../../test-utils";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { SpaceFilterCondition } from "../../../../src/stores/room-list/filters/SpaceFilterCondition";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";

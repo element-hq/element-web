@@ -7,10 +7,10 @@
  */
 
 import { mocked } from "jest-mock";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore, { type CallbackFn } from "../../../src/settings/SettingsStore";
 import { type Feature, ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
-import { type SettingLevel } from "../../../src/settings/SettingLevel";
 import ToastStore from "../../../src/stores/ToastStore";
 
 jest.mock("../../../src/settings/SettingsStore");

@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { orderBy } from "lodash";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../settings/SettingsStore";
-import { SettingLevel } from "../settings/SettingLevel";
 
 interface ILegacyFormat {
     [emoji: string]: [number, number]; // [count, date]

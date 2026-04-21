@@ -6,10 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { AllDevicesIsolationMode, OnlySignedDevicesIsolationMode } from "matrix-js-sdk/src/crypto-api";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { stubClient } from "../../../test-utils";
 import DeviceIsolationModeController from "../../../../src/settings/controllers/DeviceIsolationModeController.ts";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 describe("DeviceIsolationModeController", () => {
     afterEach(() => {

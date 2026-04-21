@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import { _t } from "../languageHandler";
 import Notifier from "../Notifier";
 import GenericToast from "../components/views/toasts/GenericToast";
@@ -13,7 +15,6 @@ import ToastStore from "../stores/ToastStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getLocalNotificationAccountDataEventType } from "../utils/notifications";
 import SettingsStore from "../settings/SettingsStore";
-import { SettingLevel } from "../settings/SettingLevel";
 
 const onAccept = async (): Promise<void> => {
     await SettingsStore.setValue("notificationsEnabled", null, SettingLevel.DEVICE, true);

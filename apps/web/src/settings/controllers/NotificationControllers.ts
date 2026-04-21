@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { PushRuleActionName } from "matrix-js-sdk/src/matrix";
+import { type SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingController from "./SettingController";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { type SettingLevel } from "../SettingLevel";
 
 // .m.rule.master being enabled means all events match that push rule
 // default action on this rule is dont_notify, but it could be something else

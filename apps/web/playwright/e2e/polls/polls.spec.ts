@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import { test, expect } from "../../element-web-test";
 import { Bot } from "../../pages/bot";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import type { Locator, Page } from "@playwright/test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";

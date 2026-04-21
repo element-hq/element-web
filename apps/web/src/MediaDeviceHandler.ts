@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "./settings/SettingsStore";
-import { SettingLevel } from "./settings/SettingLevel";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 

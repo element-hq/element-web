@@ -7,10 +7,10 @@
  */
 
 import { type Locator, type Page } from "@playwright/test";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { test as base, expect } from "../../../element-web-test";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Layout } from "../../../../src/settings/enums/Layout";
 
 export { expect };

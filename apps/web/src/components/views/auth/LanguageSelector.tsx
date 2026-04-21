@@ -6,12 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SdkConfig from "../../../SdkConfig";
 import { getCurrentLanguage } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import PlatformPeg from "../../../PlatformPeg";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import LanguageDropdown from "../elements/LanguageDropdown";
 
 function onChange(newLang: string): void {

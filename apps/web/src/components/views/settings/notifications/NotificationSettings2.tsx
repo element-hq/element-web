@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, useState } from "react";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import NewAndImprovedIcon from "../../../../../res/img/element-icons/new-and-improved.svg";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
@@ -18,7 +19,6 @@ import {
     type NotificationSettings,
 } from "../../../../models/notificationsettings/NotificationSettings";
 import { RoomNotifState } from "../../../../RoomNotifs";
-import { SettingLevel } from "../../../../settings/SettingLevel";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { clearAllNotifications } from "../../../../utils/notifications";
 import AccessibleButton from "../../elements/AccessibleButton";

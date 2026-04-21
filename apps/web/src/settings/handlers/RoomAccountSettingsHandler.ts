@@ -14,10 +14,10 @@ import {
     type Room,
     RoomEvent,
 } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
-import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
 import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 

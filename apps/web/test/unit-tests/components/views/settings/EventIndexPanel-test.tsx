@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen, within } from "jest-matrix-react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import EventIndexPanel from "../../../../../src/components/views/settings/EventIndexPanel";
 import EventIndexPeg from "../../../../../src/indexing/EventIndexPeg";
 import EventIndex from "../../../../../src/indexing/EventIndex";
 import { clearAllModals, flushPromises, getMockClientWithEventEmitter } from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 describe("<EventIndexPanel />", () => {
     getMockClientWithEventEmitter({

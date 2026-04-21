@@ -8,10 +8,10 @@
 import { waitFor } from "jest-matrix-react";
 import { type PanelImperativeHandle } from "@element-hq/web-shared-components";
 import whatInput from "what-input";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { ResizerViewModel } from "../../../src/viewmodels/structures/ResizerViewModel";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 jest.mock("what-input");
 

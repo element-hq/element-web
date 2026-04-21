@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import Draggable, { type ILocationState } from "./Draggable";
-import { SettingLevel } from "../../../settings/SettingLevel";
 
 interface IProps {
     // Current room

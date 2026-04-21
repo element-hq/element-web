@@ -6,11 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import SettingController from "./SettingController";
 import dis from "../../dispatcher/dispatcher";
 import { type UpdateFontSizeDeltaPayload } from "../../dispatcher/payloads/UpdateFontSizeDeltaPayload";
 import { Action } from "../../dispatcher/actions";
-import { SettingLevel } from "../SettingLevel";
 
 export default class FontSizeController extends SettingController {
     public constructor() {

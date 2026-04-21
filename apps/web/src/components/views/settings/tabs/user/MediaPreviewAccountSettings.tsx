@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEventHandler, useCallback } from "react";
 import { Field, HelpMessage, InlineField, Label, RadioInput, Root, SettingsToggleInput } from "@vector-im/compound-web";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { type MediaPreviewConfig, MediaPreviewValue } from "../../../../../@types/media_preview";
 import { _t } from "../../../../../languageHandler";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { SettingLevel } from "../../../../../settings/SettingLevel";
 
 export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roomId }) => {
     const currentMediaPreview = useSettingValue("mediaPreviewConfig", roomId);

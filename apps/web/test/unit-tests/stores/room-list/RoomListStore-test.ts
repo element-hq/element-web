@@ -17,9 +17,9 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import defaultDispatcher, { type MatrixDispatcher } from "../../../../src/dispatcher/dispatcher";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import SettingsStore, { type CallbackFn } from "../../../../src/settings/SettingsStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../../src/stores/room-list/algorithms/models";
 import { OrderedDefaultTagIDs, RoomUpdateCause } from "../../../../src/stores/room-list/models";

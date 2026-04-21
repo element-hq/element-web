@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type SettingLevel } from "@element-hq/element-web-module-api";
+
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import ThemeWatcher from "../../../../src/settings/watchers/ThemeWatcher";
-import { type SettingLevel } from "../../../../src/settings/SettingLevel";
 import { type SettingKey, type Settings } from "../../../../src/settings/Settings.tsx";
 
 function makeMatchMedia(values: any) {

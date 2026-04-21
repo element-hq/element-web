@@ -21,12 +21,12 @@ import {
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../languageHandler";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import ThemeWatcher from "../../../settings/watchers/ThemeWatcher";
 import SettingsStore from "../../../settings/SettingsStore";
-import { SettingLevel } from "../../../settings/SettingLevel";
 import dis from "../../../dispatcher/dispatcher";
 import { type RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
 import { Action } from "../../../dispatcher/actions";

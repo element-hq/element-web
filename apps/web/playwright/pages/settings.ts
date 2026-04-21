@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Locator, type Page } from "@playwright/test";
 
-import type { SettingLevel } from "../../src/settings/SettingLevel";
+import type { SettingLevel } from "@element-hq/element-web-module-api";
 
 export class Settings {
     public constructor(private readonly page: Page) {}

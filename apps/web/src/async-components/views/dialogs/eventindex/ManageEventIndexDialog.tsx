@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { _t } from "../../../../languageHandler";
 import SdkConfig from "../../../../SdkConfig";
@@ -15,7 +16,6 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import Modal from "../../../../Modal";
 import { formatBytes, formatCountLong } from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
-import { SettingLevel } from "../../../../settings/SettingLevel";
 import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";

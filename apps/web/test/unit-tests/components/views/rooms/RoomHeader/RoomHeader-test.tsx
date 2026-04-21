@@ -37,6 +37,7 @@ import {
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { filterConsole, setupAsyncStoreWithClient, stubClient } from "../../../../../test-utils";
 import RoomHeader from "../../../../../../src/components/views/rooms/RoomHeader/RoomHeader";
@@ -58,7 +59,6 @@ import MatrixClientContext from "../../../../../../src/contexts/MatrixClientCont
 import { _t } from "../../../../../../src/languageHandler";
 import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
-import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
 import { defaultWatchManager } from "../../../../../../src/settings/Settings.tsx";
 

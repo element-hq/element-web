@@ -9,12 +9,12 @@
 import React from "react";
 import { act, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import { LayoutSwitcher } from "../../../../../src/components/views/settings/LayoutSwitcher";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { stubClient } from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 
 describe("<LayoutSwitcher />", () => {

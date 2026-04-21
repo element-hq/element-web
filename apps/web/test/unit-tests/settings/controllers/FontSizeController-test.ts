@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { SettingLevel } from "@element-hq/element-web-module-api";
+
 import { Action } from "../../../../src/dispatcher/actions";
 import dis from "../../../../src/dispatcher/dispatcher";
 import FontSizeController from "../../../../src/settings/controllers/FontSizeController";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 const dispatchSpy = jest.spyOn(dis, "fire");
 

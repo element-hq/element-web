@@ -11,6 +11,7 @@ import { EventType, type MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "m
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { initOnce } from "@vector-im/matrix-wysiwyg";
+import { SettingLevel } from "@element-hq/element-web-module-api";
 
 import {
     clearAllModals,
@@ -28,7 +29,6 @@ import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { E2EStatus } from "../../../../../src/utils/ShieldUtils";
 import { addTextToComposerRTL } from "../../../../test-utils/composer";
