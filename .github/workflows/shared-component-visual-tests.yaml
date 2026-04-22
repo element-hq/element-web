@@ -51,6 +51,10 @@ jobs:
                   git add -N .
                   git diff --exit-code
 
+            - name: Detect stale screenshots
+              run: diff -rq __baselines__ __results__ | grep "^Only in __baselines__"
+              working-directory: packages/shared-components/__vis__/linux
+
             - name: Upload received images & diffs
               if: always()
               uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
