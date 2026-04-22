@@ -7,12 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 import SdkConfig from "./SdkConfig.ts";
 
+const ELEMENT_BRAND = "Element";
+
 /**
  * Returns whether the app is currently branded.
- * This is currently a naive check of whether the `brand` config starts with the substring `Element`,
+ * This is currently a naive check of whether the `brand` config starts with the substring `Element ` or is the literal `Element`,
  * which correctly covers `Element` (release), `Element Nightly` & `Element Pro`.
  */
 export const isElementBranded = (): boolean => {
     const brand = SdkConfig.get("brand");
-    return brand.startsWith("Element");
+    return brand === ELEMENT_BRAND || brand.startsWith(ELEMENT_BRAND + " ");
 };
