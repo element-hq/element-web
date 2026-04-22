@@ -5,7 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-/** Represents a URL preview. */
 export interface UrlPreview {
     /**
      * The URL for the preview.
@@ -14,7 +13,7 @@ export interface UrlPreview {
     /**
      * Should the link have a tooltip. Should be `true` if the platform does not provide a tooltip.
      */
-    showTooltipOnLink?: boolean;
+    showTooltipOnLink: boolean;
     /**
      * The title of the page being previewed.
      */
@@ -22,7 +21,11 @@ export interface UrlPreview {
     /**
      * The site name to be displayed alongside the title.
      */
-    siteName?: string;
+    siteName: string;
+    /**
+     * The HTTP URI of the the sites icon.
+     */
+    siteIcon?: string;
     /**
      * Description of the site. May contain links.
      */
@@ -44,12 +47,26 @@ export interface UrlPreview {
          */
         fileSize?: number;
         /**
-         * The width of the thumbnail. Must not exceed 100px.
+         * The width of the thumbnail.
          */
         width?: number;
         /**
-         * The height of the thumbnail. Must not exceed 100px.
+         * The height of the thumbnail.
          */
         height?: number;
+        /**
+         * Alt text for the image
+         */
+        alt?: string;
+
+        /**
+         * Is the media playable.
+         */
+        playable: boolean;
     };
+
+    /**
+     * Author of the content, if specified.
+     */
+    author?: string;
 }
