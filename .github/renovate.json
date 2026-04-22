@@ -2,6 +2,7 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>matrix-org/renovate-config-element-web"],
     "postUpdateOptions": ["pnpmDedupe"],
+    "stopUpdatingLabel": "X-Blocked",
     "packageRules": [
         {
             "description": "Group all testcontainers docker digests",
