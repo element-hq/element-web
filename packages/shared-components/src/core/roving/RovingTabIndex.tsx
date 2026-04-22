@@ -273,9 +273,17 @@ const findSiblingElementInRange = (
     endIndex: number,
     step: 1 | -1,
 ): HTMLElement | undefined => {
-    for (let i = startIndex; i !== endIndex; i += step) {
-        if (nodes[i]?.offsetParent !== null) {
-            return nodes[i];
+    if (step === 1) {
+        for (let i = startIndex; i < endIndex; i += step) {
+            if (nodes[i]?.offsetParent !== null) {
+                return nodes[i];
+            }
+        }
+    } else {
+        for (let i = startIndex; i > endIndex; i += step) {
+            if (nodes[i]?.offsetParent !== null) {
+                return nodes[i];
+            }
         }
     }
 };
@@ -351,6 +359,11 @@ interface NavigationResult {
     focusNode?: HTMLElement;
 }
 
+interface StandardNavigationConfig {
+    enabled: boolean;
+    getFocusNode(state: IState): HTMLElement | undefined;
+}
+
 const getAdjacentFocusNode = (
     nodes: HTMLElement[],
     activeNode: HTMLElement | undefined,
@@ -385,6 +398,47 @@ const getInputNavigationResult = (
     };
 };
 
+const buildStandardNavigationConfig = (
+    state: IState,
+    handleHomeEnd: boolean,
+    handleUpDown: boolean,
+    handleLeftRight: boolean,
+    handleLoop: boolean,
+): Record<RovingAction, StandardNavigationConfig> => ({
+    [RovingAction.Home]: {
+        enabled: handleHomeEnd,
+        getFocusNode: (currentState) => findNextSiblingElement(currentState.nodes, 0),
+    },
+    [RovingAction.End]: {
+        enabled: handleHomeEnd,
+        getFocusNode: (currentState) => findPreviousSiblingElement(currentState.nodes, currentState.nodes.length - 1),
+    },
+    [RovingAction.ArrowDown]: {
+        enabled: handleUpDown,
+        getFocusNode: (currentState) =>
+            getAdjacentFocusNode(currentState.nodes, currentState.activeNode, false, handleLoop),
+    },
+    [RovingAction.ArrowRight]: {
+        enabled: handleLeftRight,
+        getFocusNode: (currentState) =>
+            getAdjacentFocusNode(currentState.nodes, currentState.activeNode, false, handleLoop),
+    },
+    [RovingAction.ArrowUp]: {
+        enabled: handleUpDown,
+        getFocusNode: (currentState) =>
+            getAdjacentFocusNode(currentState.nodes, currentState.activeNode, true, handleLoop),
+    },
+    [RovingAction.ArrowLeft]: {
+        enabled: handleLeftRight,
+        getFocusNode: (currentState) =>
+            getAdjacentFocusNode(currentState.nodes, currentState.activeNode, true, handleLoop),
+    },
+    [RovingAction.Tab]: {
+        enabled: false,
+        getFocusNode: () => undefined,
+    },
+});
+
 const getStandardNavigationResult = (
     action: RovingAction | undefined,
     state: IState,
@@ -393,46 +447,22 @@ const getStandardNavigationResult = (
     handleLeftRight: boolean,
     handleLoop: boolean,
 ): NavigationResult => {
-    if (action === RovingAction.Home) {
-        return handleHomeEnd
-            ? { handled: true, focusNode: findNextSiblingElement(state.nodes, 0) }
-            : { handled: false };
+    if (!action) {
+        return { handled: false };
     }
 
-    if (action === RovingAction.End) {
-        return handleHomeEnd
-            ? {
-                  handled: true,
-                  focusNode: findPreviousSiblingElement(state.nodes, state.nodes.length - 1),
-              }
-            : { handled: false };
+    const config = buildStandardNavigationConfig(state, handleHomeEnd, handleUpDown, handleLeftRight, handleLoop)[
+        action
+    ];
+
+    if (!config?.enabled) {
+        return { handled: false };
     }
 
-    if (action === RovingAction.ArrowDown) {
-        return handleUpDown
-            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, false, handleLoop) }
-            : { handled: false };
-    }
-
-    if (action === RovingAction.ArrowRight) {
-        return handleLeftRight
-            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, false, handleLoop) }
-            : { handled: false };
-    }
-
-    if (action === RovingAction.ArrowUp) {
-        return handleUpDown
-            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, true, handleLoop) }
-            : { handled: false };
-    }
-
-    if (action === RovingAction.ArrowLeft) {
-        return handleLeftRight
-            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, true, handleLoop) }
-            : { handled: false };
-    }
-
-    return { handled: false };
+    return {
+        handled: true,
+        focusNode: config.getFocusNode(state),
+    };
 };
 
 /**
