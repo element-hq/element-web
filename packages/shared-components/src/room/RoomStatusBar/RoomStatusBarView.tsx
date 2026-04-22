@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useId, type JSX } from "react";
-import { RestartIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { RestartIcon, DeleteIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Button, InlineSpinner, Text } from "@vector-im/compound-web";
 
 import styles from "./RoomStatusBarView.module.css";
@@ -33,6 +33,8 @@ export interface RoomStatusBarViewActions {
      * Called when the user clicks on the 'Review Terms and Conditions' button.
      */
     onTermsAndConditionsClicked?: () => void;
+
+    onDismissClick?: () => void;
 }
 
 export const RoomStatusBarState = {
@@ -60,6 +62,10 @@ export const RoomStatusBarState = {
      * There was an error creating a room. The user may retry creation.
      */
     LocalRoomFailed: "LocalRoomFailed",
+    /**
+     * The homeserver rejected this message for some reason.
+     */
+    MessageRejected: "MessageRejected",
 } as const;
 
 export interface RoomStatusBarNotVisible {
@@ -85,6 +91,12 @@ export interface RoomStatusBarUnsentMessagesState {
     state: "UnsentMessages";
     isResending: boolean;
 }
+
+export interface RoomStatusBarMessageRejectedState {
+    state: "MessageRejected";
+    errorMessage: string;
+}
+
 export interface RoomStatusBarLocalRoomError {
     state: "LocalRoomFailed";
 }
@@ -95,7 +107,8 @@ export type RoomStatusBarViewSnapshot =
     | RoomStatusBarResourceLimitedState
     | RoomStatusBarUnsentMessagesState
     | RoomStatusBarLocalRoomError
-    | RoomStatusBarNotVisible;
+    | RoomStatusBarNotVisible
+    | RoomStatusBarMessageRejectedState;
 
 /**
  * The view model for RoomStatusBarView.
@@ -126,6 +139,14 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
         (ev) => {
             ev.preventDefault();
             vm.onDeleteAllClick?.();
+        },
+        [vm],
+    );
+
+    const dismissClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+        (ev) => {
+            ev.preventDefault();
+            vm.onDismissClick?.();
         },
         [vm],
     );
@@ -299,6 +320,36 @@ export function RoomStatusBarView({ vm }: Readonly<RoomStatusBarViewProps>): JSX
                             {_t("room|status_bar|some_messages_not_sent")}
                         </Text>
                         <Text className={styles.description}>{_t("room|status_bar|select_messages_to_retry")}</Text>
+                    </div>
+                </Banner>
+            );
+        case RoomStatusBarState.MessageRejected:
+            return (
+                <Banner
+                    role="status"
+                    type="critical"
+                    actions={
+                        <>
+                            {vm.onDismissClick && (
+                                <Button
+                                    size="sm"
+                                    kind="primary"
+                                    Icon={CloseIcon}
+                                    onClick={dismissClick}
+                                    className={styles.primaryAction}
+                                >
+                                    Dismiss
+                                </Button>
+                            )}
+                        </>
+                    }
+                    aria-labelledby={bannerTitleId}
+                >
+                    <div className={styles.container}>
+                        <Text className={styles.title} id={bannerTitleId} weight="medium">
+                            Message Rejected
+                        </Text>
+                        <Text className={styles.description}>{snapshot.errorMessage}</Text>
                     </div>
                 </Banner>
             );
