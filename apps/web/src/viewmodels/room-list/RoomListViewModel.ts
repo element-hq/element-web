@@ -13,6 +13,7 @@ import {
     type RoomListViewState,
     type RoomListSection,
     _t,
+    type ToastType,
 } from "@element-hq/web-shared-components";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -154,6 +155,13 @@ export class RoomListViewModel
             RoomListStoreV3.instance,
             RoomListStoreV3Event.SectionCreated as any,
             this.onSectionCreated as (...args: unknown[]) => void,
+        );
+
+        // Subscribe to room tagging
+        this.disposables.trackListener(
+            RoomListStoreV3.instance,
+            RoomListStoreV3Event.RoomTagged as any,
+            this.onRoomTagged,
         );
 
         // Subscribe to active room changes to update selected room
@@ -595,15 +603,11 @@ export class RoomListViewModel
 
     public onSectionCreated = (tag: string): void => {
         this.updateRoomListData(false, null, tag);
+        this.showToast("section_created");
+    };
 
-        clearTimeout(this.toastRef);
-        this.snapshot.merge({
-            toast: "section_created",
-        });
-        // Automatically close the toast after 15 seconds
-        this.toastRef = setTimeout(() => {
-            this.closeToast();
-        }, 15 * 1000);
+    public onRoomTagged = (): void => {
+        this.showToast("chat_moved");
     };
 
     public closeToast: () => void = () => {
@@ -612,6 +616,15 @@ export class RoomListViewModel
             toast: undefined,
         });
     };
+
+    private showToast(toast: ToastType): void {
+        clearTimeout(this.toastRef);
+        this.snapshot.merge({ toast });
+        // Automatically close the toast after 15 seconds
+        this.toastRef = setTimeout(() => {
+            this.closeToast();
+        }, 15 * 1000);
+    }
 }
 
 /**

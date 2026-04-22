@@ -175,4 +175,93 @@ test.describe("Room list custom sections", () => {
             await expect(getSectionHeader(page, "Low Priority")).toBeVisible();
         });
     });
+
+    test.describe("Adding a room to a custom section", () => {
+        /**
+         * Asserts a room is nested under a specific section using the treegrid aria-level hierarchy.
+         * Section header rows sit at aria-level=1; room rows nested within a section sit at aria-level=2.
+         * Verifies that the closest preceding aria-level=1 row is the expected section header.
+         */
+        async function assertRoomInSection(page: Page, sectionName: string, roomName: string): Promise<void> {
+            const roomList = getRoomList(page);
+            const roomRow = roomList.getByRole("row", { name: `Open room ${roomName}` });
+            // Room row must be at aria-level=2 (i.e. inside a section)
+            await expect(roomRow).toHaveAttribute("aria-level", "2");
+            // The closest preceding aria-level=1 row must be the expected section header.
+            // XPath preceding:: axis returns nodes before the context in document order; [1] picks the nearest one.
+            const closestSectionHeader = roomRow.locator(`xpath=preceding::*[@role="row" and @aria-level="1"][1]`);
+            await expect(closestSectionHeader).toContainText(sectionName);
+        }
+
+        test("should add a room to a custom section via the More Options menu", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+
+            const roomList = getRoomList(page);
+
+            // Room starts in Chats section (aria-level=2)
+            const roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await expect(roomItem).toBeVisible();
+
+            // Open More Options and move to the Work section
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Move to" }).hover();
+            await page.getByRole("menuitem", { name: "Work" }).click();
+
+            // Room should now be nested under the Work section header (aria-level=1 → aria-level=2)
+            await assertRoomInSection(page, "Work", "my room");
+        });
+
+        test(
+            "should show 'Chat moved' toast when adding a room to a custom section",
+            { tag: "@screenshot" },
+            async ({ page, app }) => {
+                await app.client.createRoom({ name: "my room" });
+                await createCustomSection(page, "Work");
+
+                const roomList = getRoomList(page);
+                const roomItem = roomList.getByRole("row", { name: "Open room my room" });
+
+                await roomItem.hover();
+                await roomItem.getByRole("button", { name: "More Options" }).click();
+                await page.getByRole("menuitem", { name: "Move to" }).hover();
+                await page.getByRole("menuitem", { name: "Work" }).click();
+
+                // The "Chat moved" toast should appear
+                await expect(page.getByText("Chat moved")).toBeVisible();
+
+                // Remove focus outline from the room item before taking the screenshot
+                await page.getByRole("button", { name: "User menu" }).focus();
+
+                await expect(roomList).toMatchScreenshot("room-list-sections-chat-moved-toast.png");
+            },
+        );
+
+        test("should remove a room from a custom section when toggling the same section", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+
+            const roomList = getRoomList(page);
+
+            // Move to Work section and verify placement via aria-level
+            let roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Move to" }).hover();
+            await page.getByRole("menuitem", { name: "Work" }).click();
+
+            await assertRoomInSection(page, "Work", "my room");
+
+            // Toggle off by selecting the same section again
+            roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Move to" }).hover();
+            await page.getByRole("menuitem", { name: "Work" }).click();
+
+            // Room is back in the Chats section
+            await assertRoomInSection(page, "Chats", "my room");
+        });
+    });
 });

@@ -99,6 +99,7 @@
             "voice_call": "Open room %(roomName)s with a voice call."
         },
         "appearance": "Appearance",
+        "chat_moved": "Chat moved",
         "collapse_filters": "Collapse filter list",
         "empty": {
             "no_chats": "No chats yet",

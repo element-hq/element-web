@@ -12,7 +12,7 @@ import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check"
 import styles from "./RoomListToast.module.css";
 import { useI18n } from "../../../core/i18n/i18nContext";
 
-export type ToastType = "section_created";
+export type ToastType = "section_created" | "chat_moved";
 
 interface RoomListToastProps {
     /** The type of toast to display */
@@ -36,6 +36,9 @@ export function RoomListToast({ type, onClose }: Readonly<RoomListToastProps>): 
     switch (type) {
         case "section_created":
             content = { text: _t("room_list|section_created"), icon: CheckIcon };
+            break;
+        case "chat_moved":
+            content = { text: _t("room_list|chat_moved"), icon: CheckIcon };
             break;
     }
 
