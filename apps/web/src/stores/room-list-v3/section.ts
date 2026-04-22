@@ -5,8 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { v4 as uuidv4 } from "uuid";
-
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
@@ -49,15 +47,15 @@ export type OrderedCustomSections = Tag[];
  * Creates a new custom section by showing a dialog to the user to enter the section name.
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
- * @return A promise that resolves to true if the section was created, or false if the user cancelled the creation or if there was an error.
+ * @return A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
-export async function createSection(): Promise<boolean> {
+export async function createSection(): Promise<string | undefined> {
     const modal = Modal.createDialog(CreateSectionDialog);
 
     const [shouldCreateSection, sectionName] = await modal.finished;
-    if (!shouldCreateSection || !sectionName) return false;
+    if (!shouldCreateSection || !sectionName) return undefined;
 
-    const tag = `${CUSTOM_SECTION_TAG_PREFIX}${uuidv4()}`;
+    const tag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
     const newSection: CustomSection = { tag, name: sectionName };
 
     // Save the new section data
@@ -69,5 +67,5 @@ export async function createSection(): Promise<boolean> {
     const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || [];
     orderedSections.push(tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
-    return true;
+    return tag;
 }
