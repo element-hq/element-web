@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Container, type WidgetApi as WidgetApiInterface } from "@element-hq/element-web-module-api";
-import { getHttpUriForMxc } from "matrix-js-sdk/src/matrix";
+import { getHttpUriForMxc } from "matrix-js-sdk";
 
 import type { IWidget } from "matrix-widget-api";
 import WidgetStore, { isAppWidget } from "../stores/WidgetStore";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactElement } from "react";
-import { JoinRule } from "matrix-js-sdk/src/matrix";
+import { JoinRule } from "matrix-js-sdk";
 import {
     GroupIcon,
     LockSolidIcon,

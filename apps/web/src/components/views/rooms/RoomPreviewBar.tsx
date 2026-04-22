@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ChangeEvent, type ReactNode } from "react";
-import { type Room, type RoomMember, EventType, RoomType, JoinRule, type MatrixError } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
+import { type Room, type RoomMember, EventType, RoomType, JoinRule, type MatrixError } from "matrix-js-sdk";
+import { KnownMembership, type RoomJoinRulesEventContent } from "matrix-js-sdk/lib/types.js";
 import classNames from "classnames";
 import {
     type RoomPreviewOpts,

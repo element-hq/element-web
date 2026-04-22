@@ -5,11 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { mocked } from "jest-mock";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient } from "matrix-js-sdk";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
 import {
     CHATS_TAG,

@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { NotificationCountType, type Room, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
+import { NotificationCountType, type Room, type Thread, ReceiptType } from "matrix-js-sdk";
 import React, { type JSX, useContext } from "react";
-import { type ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
+import { type ReadReceipt } from "matrix-js-sdk/lib/models/read-receipt.js";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { useNotificationState } from "../../../../hooks/useRoomNotificationState";

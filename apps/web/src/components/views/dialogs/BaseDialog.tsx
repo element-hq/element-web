@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import FocusLock from "react-focus-lock";
 import classNames from "classnames";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import { I18nContext } from "@element-hq/web-shared-components";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

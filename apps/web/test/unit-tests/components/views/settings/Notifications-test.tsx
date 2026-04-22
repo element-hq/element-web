@@ -22,8 +22,8 @@ import {
     PushRuleKind,
     type IThreepid,
     ThreepidMedium,
-} from "matrix-js-sdk/src/matrix";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+} from "matrix-js-sdk";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import {
     act,
     fireEvent,
@@ -36,7 +36,7 @@ import {
 } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor.js";
 
 import Notifications from "../../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -49,7 +49,7 @@ import {
 } from "../../../../test-utils";
 
 // don't pollute test output with error logs from mock rejections
-jest.mock("matrix-js-sdk/src/logger");
+jest.mock("matrix-js-sdk/lib/logger.js");
 
 // Avoid indirectly importing any eagerly created stores that would require extra setup
 jest.mock("../../../../../src/Notifier");

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback, useContext, useState } from "react";
-import { type Room, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, EventType } from "matrix-js-sdk";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 import { LinkedText } from "@element-hq/web-shared-components";

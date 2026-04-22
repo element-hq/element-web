@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { fireEvent, getByLabelText, render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { ReceiptType, type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { ReceiptType, type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 import { ChevronFace } from "../../../../../src/components/structures/ContextMenu";
 import {

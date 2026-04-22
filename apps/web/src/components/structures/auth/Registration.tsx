@@ -19,10 +19,10 @@ import {
     type SSOFlow,
     SSOAction,
     type RegisterResponse,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import React, { type JSX, Fragment, type ReactNode } from "react";
 import classNames from "classnames";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { Button } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback } from "react";
-import { JoinRule, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixEvent } from "matrix-js-sdk";
 
 import { useSettingValue } from "./useSettings";
 import { useRoomState } from "./useRoomState";

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { type IPusher, PUSHER_ENABLED, type LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
+import { type IPusher, PUSHER_ENABLED, type LocalNotificationSettings } from "matrix-js-sdk";
 
 import { formatDate } from "../../../../DateUtils";
 import { _t } from "../../../../languageHandler";

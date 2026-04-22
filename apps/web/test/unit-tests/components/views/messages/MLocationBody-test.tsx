@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
-import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk/src/matrix";
+import { LocationAssetType, ClientEvent, RoomMember, SyncState } from "matrix-js-sdk";
 import * as maplibregl from "maplibre-gl";
-import { logger } from "matrix-js-sdk/src/logger";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 import MLocationBody from "../../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";

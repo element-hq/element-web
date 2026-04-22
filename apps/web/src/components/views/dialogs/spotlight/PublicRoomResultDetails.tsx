@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type IPublicRoomsChunkRoom } from "matrix-js-sdk/src/matrix";
+import { type IPublicRoomsChunkRoom } from "matrix-js-sdk";
 
 import { linkifyAndSanitizeHtml } from "../../../../HtmlUtils";
 import { _t } from "../../../../languageHandler";

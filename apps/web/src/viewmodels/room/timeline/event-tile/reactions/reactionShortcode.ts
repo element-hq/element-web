@@ -5,6 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue.js";
 
 export const REACTION_SHORTCODE_KEY = new UnstableValue("shortcode", "com.beeper.reaction.shortcode");

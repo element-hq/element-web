@@ -19,15 +19,15 @@ import {
     PendingEventOrdering,
     Room,
     TweakName,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import {
     type CryptoApi,
     DecryptionFailureCode,
     type EventEncryptionInfo,
     EventShieldColour,
     EventShieldReason,
-} from "matrix-js-sdk/src/crypto-api";
-import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { mkEncryptedMatrixEvent } from "matrix-js-sdk/lib/testing.js";
 import { getByTestId } from "@testing-library/dom";
 
 import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";

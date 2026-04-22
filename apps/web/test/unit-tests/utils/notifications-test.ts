@@ -13,7 +13,7 @@ import {
     type MatrixClient,
     ReceiptType,
     type AccountDataEvents,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { type Mocked, mocked } from "jest-mock";
 
 import {

@@ -30,8 +30,8 @@ Please see LICENSE files in the repository root for full details.
 //    purge on startup to prevent logs from accumulating.
 
 // the frequency with which we flush to indexeddb
-import { logger } from "matrix-js-sdk/src/logger";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 
 import { getCircularReplacer } from "../utils/JSON";
 

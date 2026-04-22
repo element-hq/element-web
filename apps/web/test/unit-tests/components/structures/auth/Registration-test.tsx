@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { createClient, type MatrixClient, MatrixError, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { createClient, type MatrixClient, MatrixError, type OidcClientConfig } from "matrix-js-sdk";
 import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "@fetch-mock/jest";
 
@@ -28,8 +28,8 @@ jest.mock("../../../../../src/utils/oidc/authorize", () => ({
     startOidcLogin: jest.fn(),
 }));
 
-jest.mock("matrix-js-sdk/src/matrix", () => ({
-    ...jest.requireActual("matrix-js-sdk/src/matrix"),
+jest.mock("matrix-js-sdk", () => ({
+    ...jest.requireActual("matrix-js-sdk"),
     createClient: jest.fn(),
 }));
 

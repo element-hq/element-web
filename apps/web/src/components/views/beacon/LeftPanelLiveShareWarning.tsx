@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React, { useEffect } from "react";
-import { type Beacon, type BeaconIdentifier } from "matrix-js-sdk/src/matrix";
+import { type Beacon, type BeaconIdentifier } from "matrix-js-sdk";
 
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { _t } from "../../../languageHandler";

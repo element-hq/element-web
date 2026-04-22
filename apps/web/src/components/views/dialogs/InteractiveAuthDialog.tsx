@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type AuthType } from "matrix-js-sdk/src/interactive-auth";
+import { type MatrixClient } from "matrix-js-sdk";
+import { type AuthType } from "matrix-js-sdk/lib/interactive-auth.js";
 import { LinkedText } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";

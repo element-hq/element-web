@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventTimeline, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, type MatrixClient } from "matrix-js-sdk";
 
 import Modal from "../../Modal";
 import RoomUpgradeWarningDialog from "../../components/views/dialogs/RoomUpgradeWarningDialog";

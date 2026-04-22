@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useState } from "react";
-import { type Poll, PollEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Poll, PollEvent, type MatrixClient } from "matrix-js-sdk";
 
 import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
 

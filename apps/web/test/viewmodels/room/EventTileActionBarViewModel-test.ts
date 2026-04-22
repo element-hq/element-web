@@ -18,7 +18,7 @@ import {
     MsgType,
     RelationType,
     RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { ActionBarAction } from "@element-hq/web-shared-components";
 
 import {

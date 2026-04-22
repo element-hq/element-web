@@ -7,10 +7,10 @@
 
 import { waitFor } from "@testing-library/dom";
 import { mocked } from "jest-mock";
-import { RoomStateEvent, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { RoomStateEvent, type MatrixClient, type MatrixEvent, type Room } from "matrix-js-sdk";
 import { EncryptionEventState } from "@element-hq/web-shared-components";
 
-import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
+import type { RoomEncryptionEventContent } from "matrix-js-sdk/lib/types.js";
 import { EncryptionEventViewModel } from "../../../src/viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
 import { LocalRoom } from "../../../src/models/LocalRoom";
 import DMRoomMap from "../../../src/utils/DMRoomMap";

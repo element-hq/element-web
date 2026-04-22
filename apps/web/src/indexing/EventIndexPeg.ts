@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
  * platform supports event indexing.
  */
 
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import PlatformPeg from "../PlatformPeg";
 import EventIndex from "../indexing/EventIndex";

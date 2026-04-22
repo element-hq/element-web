@@ -16,7 +16,7 @@ import {
     type IRoomTimelineData,
     type RoomState,
     RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import dis from "../dispatcher/dispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";

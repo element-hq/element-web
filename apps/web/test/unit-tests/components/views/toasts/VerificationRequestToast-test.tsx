@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ComponentProps } from "react";
 import { mocked, type Mocked } from "jest-mock";
 import { render, type RenderResult } from "jest-matrix-react";
-import { TypedEventEmitter, type IMyDevice, type MatrixClient, Device } from "matrix-js-sdk/src/matrix";
-import { type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
+import { TypedEventEmitter, type IMyDevice, type MatrixClient, Device } from "matrix-js-sdk";
+import { type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import VerificationRequestToast from "../../../../../src/components/views/toasts/VerificationRequestToast";
 import {

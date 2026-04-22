@@ -12,8 +12,8 @@ import {
     type IThreadBundledRelationship,
     type MatrixEvent,
     THREAD_RELATION_TYPE,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { SearchIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ScrollPanel from "./ScrollPanel";

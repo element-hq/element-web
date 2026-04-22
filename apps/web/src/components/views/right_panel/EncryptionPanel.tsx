@@ -7,9 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { VerificationPhase, type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
-import { type RoomMember, type User } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import {
+    VerificationPhase,
+    type VerificationRequest,
+    VerificationRequestEvent,
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { type RoomMember, type User } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 // ErrorDialog needs path to the image, not the image node
 // eslint-disable-next-line no-restricted-imports
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/icons/error-solid.svg";

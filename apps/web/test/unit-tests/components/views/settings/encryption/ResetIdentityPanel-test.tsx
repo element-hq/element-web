@@ -6,8 +6,8 @@
  */
 
 import React from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { type MatrixClient } from "matrix-js-sdk";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 

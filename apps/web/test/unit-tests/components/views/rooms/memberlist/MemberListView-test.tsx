@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { act } from "react";
 import { waitFor, fireEvent } from "jest-matrix-react";
-import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember, MatrixEvent } from "matrix-js-sdk";
 
 import { filterConsole } from "../../../../../test-utils";
 import { type Rendered, renderMemberList } from "./common";

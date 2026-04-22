@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type JSX, type JSXElementConstructor } from "react";
 
-export type { NonEmptyArray, XOR, Writeable } from "matrix-js-sdk/src/matrix";
+export type { NonEmptyArray, XOR, Writeable } from "matrix-js-sdk";
 
 export type ComponentClass = keyof JSX.IntrinsicElements | JSXElementConstructor<any>;
 

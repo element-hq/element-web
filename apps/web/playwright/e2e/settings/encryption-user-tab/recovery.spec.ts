@@ -7,7 +7,7 @@
 
 import { test, expect } from ".";
 import { checkDeviceIsConnectedKeyBackup, createBot, verifySession } from "../../crypto/utils";
-import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import type { GeneratedSecretStorageKey } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 test.describe("Recovery section in Encryption tab", () => {
     test.use({

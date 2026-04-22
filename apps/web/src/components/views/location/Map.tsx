@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import * as maplibregl from "maplibre-gl";
-import { ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { ClientEvent, type IClientWellKnown } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";

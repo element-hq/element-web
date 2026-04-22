@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { type MatrixCall } from "matrix-js-sdk/src/matrix";
-import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
-import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
+import { type MatrixCall } from "matrix-js-sdk";
+import { type CallFeed } from "matrix-js-sdk/lib/webrtc/callFeed.js";
+import { SDPStreamMetadataPurpose } from "matrix-js-sdk/lib/webrtc/callEventTypes.js";
 
 import LegacyCallView from "../../../../../src/components/views/voip/LegacyCallView";
 import { stubClient } from "../../../../test-utils";

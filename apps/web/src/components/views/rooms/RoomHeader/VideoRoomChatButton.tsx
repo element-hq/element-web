@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useContext } from "react";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat-solid";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";

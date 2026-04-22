@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode, useContext } from "react";
-import { type Beacon, BeaconEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { type Beacon, BeaconEvent, LocationAssetType } from "matrix-js-sdk";
 
 import type * as maplibregl from "maplibre-gl";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

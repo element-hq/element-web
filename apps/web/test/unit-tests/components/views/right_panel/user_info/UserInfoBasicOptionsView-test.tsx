@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { type Room, RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomMember, type User } from "matrix-js-sdk";
 import { fireEvent, render, screen } from "jest-matrix-react";
 
 import { mkStubRoom, stubClient } from "../../../../../test-utils";

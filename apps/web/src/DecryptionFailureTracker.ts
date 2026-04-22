@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import ScalableBloomFilter from "bloom-filters/dist/bloom/scalable-bloom-filter";
-import { HttpApiEvent, type MatrixClient, MatrixEventEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { HttpApiEvent, type MatrixClient, MatrixEventEvent, type MatrixEvent } from "matrix-js-sdk";
 import { type Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
-import { DecryptionFailureCode, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { DecryptionFailureCode, CryptoEvent } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "./utils/crypto";

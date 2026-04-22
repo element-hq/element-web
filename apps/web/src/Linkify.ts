@@ -16,7 +16,7 @@ import {
     generateLinkedTextOptions,
     type LinkEventListener,
 } from "@element-hq/web-shared-components";
-import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
+import { getHttpUriForMxc, User } from "matrix-js-sdk";
 
 import { ELEMENT_URL_PATTERN } from "./linkify-matrix";
 import { mediaFromMxc } from "./customisations/Media";

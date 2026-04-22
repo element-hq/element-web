@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type FormEvent, useCallback, useContext, useRef, useState } from "react";
-import { type Room, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, EventType } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import { type ICompletion } from "../../../autocomplete/Autocompleter";

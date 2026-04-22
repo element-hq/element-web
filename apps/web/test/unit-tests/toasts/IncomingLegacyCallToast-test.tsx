@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import { render } from "jest-matrix-react";
-import { LOCAL_NOTIFICATION_SETTINGS_PREFIX, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { LOCAL_NOTIFICATION_SETTINGS_PREFIX, MatrixEvent, Room } from "matrix-js-sdk";
+import { MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
 import React from "react";
 
 import LegacyCallHandler from "../../../src/LegacyCallHandler";

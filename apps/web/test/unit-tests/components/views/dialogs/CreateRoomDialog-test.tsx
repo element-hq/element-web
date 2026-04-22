@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, fireEvent, render, screen, within } from "jest-matrix-react";
-import { type Room, JoinRule, MatrixError, Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import { type Room, JoinRule, MatrixError, Preset, Visibility } from "matrix-js-sdk";
 
 import CreateRoomDialog from "../../../../../src/components/views/dialogs/CreateRoomDialog";
 import { flushPromises, getMockClientWithEventEmitter, mkSpace, mockClientMethodsUser } from "../../../../test-utils";

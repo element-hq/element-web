@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Watchable, type AccountDataApi as IAccountDataApi } from "@element-hq/element-web-module-api";
-import { ClientEvent, type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixEvent, type MatrixClient } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 

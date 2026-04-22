@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render } from "jest-matrix-react";
 import React from "react";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { mkRoom, mkRoomMember, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
 import RoomFacePile from "../../../../../src/components/views/elements/RoomFacePile";

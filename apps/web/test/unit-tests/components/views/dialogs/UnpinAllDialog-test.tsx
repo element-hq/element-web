@@ -9,7 +9,7 @@
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType } from "matrix-js-sdk";
 
 import { UnpinAllDialog } from "../../../../../src/components/views/dialogs/UnpinAllDialog";
 import { createTestClient } from "../../../../test-utils";

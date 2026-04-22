@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render } from "jest-matrix-react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk";
 
 import { PollListItem } from "../../../../../../src/components/views/polls/pollHistory/PollListItem";
 import { makePollStartEvent, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../../../../test-utils";

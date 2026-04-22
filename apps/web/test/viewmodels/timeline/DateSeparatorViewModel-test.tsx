@@ -7,7 +7,7 @@
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { ConnectionError, Direction } from "matrix-js-sdk/src/matrix";
+import { ConnectionError, Direction } from "matrix-js-sdk";
 
 import dispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";

@@ -6,9 +6,9 @@
  */
 
 import { type MouseEvent, type RefObject } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { MsgType, type MatrixEvent } from "matrix-js-sdk";
+import { type MediaEventContent } from "matrix-js-sdk/lib/types.js";
 import {
     BaseViewModel,
     FileBodyViewState,

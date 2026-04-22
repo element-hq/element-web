@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import { LockSolidIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Button, Form } from "@vector-im/compound-web";
 

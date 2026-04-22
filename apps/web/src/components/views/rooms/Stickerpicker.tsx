@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type Room, ClientEvent } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type IWidget } from "matrix-widget-api";
 
 import { _t, _td } from "../../../languageHandler";

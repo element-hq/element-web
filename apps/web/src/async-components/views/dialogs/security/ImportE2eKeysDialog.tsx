@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixClient } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import * as MegolmExportEncryption from "../../../../utils/MegolmExportEncryption";
 import { _t } from "../../../../languageHandler";

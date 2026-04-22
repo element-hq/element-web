@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { type Room, type RoomState, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomState, RoomStateEvent } from "matrix-js-sdk";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 

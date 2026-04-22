@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useEffect, useMemo, useState } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 import classNames from "classnames";
 import { Button, Link, Separator, Text } from "@vector-im/compound-web";
 import {

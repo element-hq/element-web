@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen, type RenderResult } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { Room, type MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient, PendingEventOrdering } from "matrix-js-sdk";
 
 import { RoomResultContextMenus } from "../../../../../../src/components/views/dialogs/spotlight/RoomResultContextMenus";
 import { filterConsole, stubClient } from "../../../../../test-utils";

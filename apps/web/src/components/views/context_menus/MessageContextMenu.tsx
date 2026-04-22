@@ -19,7 +19,7 @@ import {
     type Relations,
     Thread,
     M_POLL_START,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import {
     CheckIcon,
     ChevronUpIcon,

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
 
 import { RoomListSectionHeaderViewModel } from "../../../src/viewmodels/room-list/RoomListSectionHeaderViewModel";
 import { RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";

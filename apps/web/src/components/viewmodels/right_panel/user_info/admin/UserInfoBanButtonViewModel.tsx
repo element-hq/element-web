@@ -5,8 +5,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "@sentry/browser";
-import { type Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../../languageHandler";

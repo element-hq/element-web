@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { at, uniq } from "lodash";
-import { removeHiddenChars } from "matrix-js-sdk/src/utils";
+import { removeHiddenChars } from "matrix-js-sdk/lib/utils.js";
 
 import { type TimelineRenderingType } from "../contexts/RoomContext";
 import { type Leaves } from "../@types/common";

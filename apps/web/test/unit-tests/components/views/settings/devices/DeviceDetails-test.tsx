@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentProps } from "react";
 import { fireEvent, render } from "jest-matrix-react";
-import { PUSHER_ENABLED } from "matrix-js-sdk/src/matrix";
+import { PUSHER_ENABLED } from "matrix-js-sdk";
 
 import DeviceDetails from "../../../../../../src/components/views/settings/devices/DeviceDetails";
 import { mkPusher } from "../../../../../test-utils/test-utils";

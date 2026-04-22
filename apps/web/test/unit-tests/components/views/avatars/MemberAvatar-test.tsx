@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { getByTestId, render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { type MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk";
 import React, { type ComponentProps } from "react";
 
 import MemberAvatar from "../../../../../src/components/views/avatars/MemberAvatar";

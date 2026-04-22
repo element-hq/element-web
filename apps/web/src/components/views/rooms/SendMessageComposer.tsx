@@ -15,11 +15,11 @@ import {
     MsgType,
     RelationType,
     THREAD_RELATION_TYPE,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { type DebouncedFunc, throttle } from "lodash";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type RoomMessageEventContent } from "matrix-js-sdk/lib/types.js";
 
 import dis from "../../../dispatcher/dispatcher";
 import EditorModel from "../../../editor/model";

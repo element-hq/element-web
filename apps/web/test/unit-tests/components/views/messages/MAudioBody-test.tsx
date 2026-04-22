@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent } from "matrix-js-sdk";
 import { render, screen, act } from "jest-matrix-react";
 
 import { MockedPlayback } from "../../../audio/MockedPlayback";

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
+import { DecryptionFailureCode } from "matrix-js-sdk/lib/crypto-api/index.js";
 import {
     BaseViewModel,
     DecryptionFailureReason,

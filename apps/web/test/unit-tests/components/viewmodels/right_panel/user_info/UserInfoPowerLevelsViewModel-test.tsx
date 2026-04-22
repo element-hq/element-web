@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { renderHook } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock";
-import { RoomMember, MatrixEvent, type Room, EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { RoomMember, MatrixEvent, type Room, EventType, type MatrixClient } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { useUserInfoPowerlevelViewModel } from "../../../../../../src/components/viewmodels/right_panel/UserInfoPowerlevelViewModel";

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, KNOWN_SAFE_ROOM_VERSION, type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { EventType, KNOWN_SAFE_ROOM_VERSION, type MatrixClient, MatrixEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { LOCAL_ROOM_ID_PREFIX, LocalRoom } from "../../../src/models/LocalRoom";
 import { determineCreateRoomEncryptionOption, type Member } from "../../../src/utils/direct-messages";

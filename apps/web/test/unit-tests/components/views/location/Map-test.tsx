@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { act, fireEvent, getByTestId, render } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { ClientEvent } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { mocked } from "jest-mock";
 
 import Map from "../../../../../src/components/views/location/Map";

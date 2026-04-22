@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
-import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixEvent, type Room } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t } from "../../../languageHandler";
 import { Pill, PillType } from "../elements/Pill";

@@ -14,7 +14,7 @@ import {
     IndexedDBCryptoStore,
     IndexedDBStore,
     LocalStorageCryptoStore,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import indexeddbWorkerFactory from "../workers/indexeddbWorkerFactory";
 

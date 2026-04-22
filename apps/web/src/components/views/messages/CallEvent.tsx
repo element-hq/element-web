@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type Ref, useCallback, useContext, useMemo, type JSX } from "react";
 import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, RoomMember } from "matrix-js-sdk";
 import { ConnectionState, type ElementCall } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
 import { useCall, useConnectionState, useParticipatingMembers } from "../../../hooks/useCall";

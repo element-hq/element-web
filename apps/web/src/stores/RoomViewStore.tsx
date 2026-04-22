@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import * as utils from "matrix-js-sdk/src/utils";
-import { MatrixError, JoinRule, type Room, type MatrixEvent, type IJoinRoomOpts } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
+import * as utils from "matrix-js-sdk/lib/utils.js";
+import { MatrixError, JoinRule, type Room, type MatrixEvent, type IJoinRoomOpts } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
 import EventEmitter from "events";

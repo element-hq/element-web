@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type MatrixClient, Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { createTestClient, makeMembershipEvent, mkThirdPartyInviteEvent } from "../../../test-utils";

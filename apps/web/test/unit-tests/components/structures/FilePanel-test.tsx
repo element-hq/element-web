@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventTimelineSet, PendingEventOrdering, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { EventTimelineSet, PendingEventOrdering, Room, RoomEvent } from "matrix-js-sdk";
 import { screen, render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
@@ -15,8 +15,8 @@ import FilePanel from "../../../../src/components/structures/FilePanel";
 import { mkEvent, stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
-jest.mock("matrix-js-sdk/src/matrix", () => ({
-    ...jest.requireActual("matrix-js-sdk/src/matrix"),
+jest.mock("matrix-js-sdk", () => ({
+    ...jest.requireActual("matrix-js-sdk"),
     TimelineWindow: jest.fn().mockReturnValue({
         load: jest.fn().mockResolvedValue(null),
         getEvents: jest.fn().mockReturnValue([]),

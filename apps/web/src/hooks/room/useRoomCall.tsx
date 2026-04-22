@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { type Room } from "matrix-js-sdk";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call.js";
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { logger as rootLogger } from "matrix-js-sdk/lib/logger.js";
 
 import type React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";

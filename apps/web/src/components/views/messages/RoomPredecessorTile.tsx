@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixEvent, type Room, type RoomState } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { type MatrixEvent, type Room, type RoomState } from "matrix-js-sdk";
 import { ChatSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { EventTileBubble } from "@element-hq/web-shared-components";
 

@@ -15,7 +15,7 @@ import {
     WidgetApi,
     type WidgetApiAction,
 } from "matrix-widget-api";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import type {
     JitsiMeetExternalAPIConstructor,

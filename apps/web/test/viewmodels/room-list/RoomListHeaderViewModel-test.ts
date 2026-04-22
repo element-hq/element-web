@@ -6,7 +6,7 @@
  */
 
 import { mocked } from "jest-mock";
-import { JoinRule, type MatrixClient, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixClient, type Room, RoomEvent, RoomType } from "matrix-js-sdk";
 
 import { RoomListHeaderViewModel } from "../../../src/viewmodels/room-list/RoomListHeaderViewModel";
 import { MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../../../src/stores/spaces";

@@ -18,7 +18,7 @@ Please see LICENSE files in the repository root for full details.
  * from the rageshake.)
  */
 
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import * as rageshake from "../rageshake/rageshake";
 import SdkConfig from "../SdkConfig";

@@ -10,8 +10,8 @@
  */
 
 import React, { type JSX, useContext, useState } from "react";
-import { type Device, type RoomMember } from "matrix-js-sdk/src/matrix";
-import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { type Device, type RoomMember } from "matrix-js-sdk";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
@@ -155,7 +155,7 @@ const UserView: React.FC<UserProps> = ({ member, onBack }) => {
         _t("common|loading"),
     );
     // The user's devices, as a Map from device ID to device information (see
-    // the `Device` type in `matrix-js-sdk/src/models/device.ts`).
+    // the `Device` type in `matrix-js-sdk/lib/models/device.ts`).
     const devices = useAsyncMemo(
         async () => {
             const devices = await crypto?.getUserDeviceInfo([member.userId]);

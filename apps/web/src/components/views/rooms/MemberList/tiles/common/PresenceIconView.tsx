@@ -10,7 +10,7 @@ import OnlineOrUnavailableIcon from "@vector-im/compound-design-tokens/assets/we
 import OfflineIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-outline-8x8";
 import DNDIcon from "@vector-im/compound-design-tokens/assets/web/icons/presence-strikethrough-8x8";
 import classNames from "classnames";
-import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue.js";
 
 interface Props {
     className?: string;

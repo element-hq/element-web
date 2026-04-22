@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState, useEffect } from "react";
-import { type MatrixClient, type Beacon, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Beacon, type Room } from "matrix-js-sdk";
 
 import type * as maplibregl from "maplibre-gl";
 import { Icon as LiveLocationIcon } from "../../../../res/img/location/live-location.svg";

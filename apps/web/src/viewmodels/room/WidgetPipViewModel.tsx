@@ -10,7 +10,7 @@ import {
     type WidgetPipViewSnapshot,
     type WidgetPipViewModel as WidgetPipViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent } from "matrix-js-sdk";
 import React from "react";
 
 import type { RefObject, FC } from "react";

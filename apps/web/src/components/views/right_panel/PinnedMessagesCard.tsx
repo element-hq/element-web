@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, type JSX, useContext } from "react";
-import { type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixEvent } from "matrix-js-sdk";
 import { Button, Separator } from "@vector-im/compound-web";
 import classNames from "classnames";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";

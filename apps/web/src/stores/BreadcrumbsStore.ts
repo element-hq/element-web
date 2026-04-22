@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { type Room, RoomEvent, ClientEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { isNullOrUndefined } from "matrix-js-sdk/lib/utils.js";
 
 import SettingsStore from "../settings/SettingsStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";

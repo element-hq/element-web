@@ -11,7 +11,7 @@ import LockSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/lo
 import { debounce } from "lodash";
 import classNames from "classnames";
 import React, { type ChangeEvent, type FormEvent, type ReactNode } from "react";
-import { type SecretStorage } from "matrix-js-sdk/src/matrix";
+import { type SecretStorage } from "matrix-js-sdk";
 import { Flex } from "@element-hq/web-shared-components";
 import { ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

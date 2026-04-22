@@ -13,7 +13,7 @@ import {
     type Room,
     type MatrixEvent,
     EventStatus,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { RoomStatusBarState } from "@element-hq/web-shared-components";
 import { type MockedObject } from "jest-mock";
 

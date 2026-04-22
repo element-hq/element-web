@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode, type Ref, useContext } from "react";
-import { type RoomMember, type ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type ResizeMethod } from "matrix-js-sdk";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";

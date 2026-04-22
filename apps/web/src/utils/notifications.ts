@@ -16,7 +16,7 @@ import {
     type IMarkedUnreadEvent,
     type EmptyObject,
     EventType,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { type IndicatorIcon } from "@vector-im/compound-web";
 
 import SettingsStore from "../settings/SettingsStore";
@@ -37,7 +37,7 @@ export const MARKED_UNREAD_TYPE_UNSTABLE = "com.famedly.marked_unread";
  */
 export const MARKED_UNREAD_TYPE_STABLE = EventType.MarkedUnread;
 
-declare module "matrix-js-sdk/src/types" {
+declare module "matrix-js-sdk/lib/types.js" {
     interface RoomAccountDataEvents {
         [MARKED_UNREAD_TYPE_UNSTABLE]: { [eventId: string]: boolean };
     }

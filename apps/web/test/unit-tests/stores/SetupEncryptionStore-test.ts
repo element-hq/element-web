@@ -7,9 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, type Mocked } from "jest-mock";
-import { type MatrixClient, Device } from "matrix-js-sdk/src/matrix";
-import { type SecretStorageKeyDescriptionAesV1, type ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
-import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient, Device } from "matrix-js-sdk";
+import {
+    type SecretStorageKeyDescriptionAesV1,
+    type ServerSideSecretStorage,
+} from "matrix-js-sdk/lib/secret-storage.js";
+import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { accessSecretStorage } from "../../../src/SecurityManager";
 import { SetupEncryptionStore } from "../../../src/stores/SetupEncryptionStore";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, type RenderResult, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import ExportDialog from "../../../../../src/components/views/dialogs/ExportDialog";
 import { ExportType, ExportFormat } from "../../../../../src/utils/exportUtils/exportUtils";

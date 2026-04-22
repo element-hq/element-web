@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, type ReactNode, useContext, useMemo, useRef, useState } from "react";
-import { type IContent, type MatrixEvent, type TimelineEvents } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixEvent, type TimelineEvents } from "matrix-js-sdk";
 
 import { _t, _td } from "../../../../languageHandler";
 import Field from "../../elements/Field";

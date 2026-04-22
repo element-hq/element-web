@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { JSHandle } from "@playwright/test";
-import type { MatrixEvent, ISendEventResponse, ReceiptType } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, ISendEventResponse, ReceiptType, RelationType } from "matrix-js-sdk";
 import { expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { type Bot } from "../../pages/bot";
@@ -47,7 +47,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                     getId: () => eventResponse.event_id,
                     threadRootId,
                     getTs: () => 1,
-                    isRelation: (relType) => {
+                    isRelation: (relType: RelationType) => {
                         return !relType || relType === "m.thread";
                     },
                 } as any as MatrixEvent;

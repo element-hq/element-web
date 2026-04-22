@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { env } from "process";
 import "@testing-library/jest-dom";
 import "blob-polyfill";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import { mocked } from "jest-mock";
 
 import { PredictableRandom } from "./test-utils/predictableRandom";
@@ -23,7 +23,7 @@ declare global {
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 // Fake random strings to give a predictable snapshot for IDs
-jest.mock("matrix-js-sdk/src/randomstring");
+jest.mock("matrix-js-sdk/lib/randomstring.js");
 beforeEach(() => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const mockRandom = new PredictableRandom();

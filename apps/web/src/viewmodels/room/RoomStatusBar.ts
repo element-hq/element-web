@@ -19,7 +19,7 @@ import {
     type MatrixError,
     RoomEvent,
     EventStatus,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Resend from "../../Resend";

@@ -7,10 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, ClientStoppedError } from "matrix-js-sdk/src/matrix";
-import { logger as baseLogger, LogSpan } from "matrix-js-sdk/src/logger";
+import { type MatrixClient, ClientStoppedError } from "matrix-js-sdk";
+import { logger as baseLogger, LogSpan } from "matrix-js-sdk/lib/logger.js";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import dis from "../dispatcher/dispatcher";

@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ComponentProps } from "react";
 import { screen, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient } from "matrix-js-sdk";
 import { MatrixWidgetType } from "matrix-widget-api";
 import {
     type ApprovalOpts,

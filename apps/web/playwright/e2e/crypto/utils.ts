@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, type JSHandle, type Page } from "@playwright/test";
-import { type ICreateRoomOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type ICreateRoomOpts, type MatrixClient } from "matrix-js-sdk";
 
 import type {
     CryptoEvent,
@@ -17,7 +17,7 @@ import type {
     VerificationRequest,
     Verifier,
     VerifierEvent,
-} from "matrix-js-sdk/src/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 import { type Client } from "../../pages/client";
 import { type ElementAppPage } from "../../pages/ElementAppPage";

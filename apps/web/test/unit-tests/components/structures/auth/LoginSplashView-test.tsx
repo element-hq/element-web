@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { act, render, type RenderResult } from "jest-matrix-react";
 import React, { type ComponentProps } from "react";
 import EventEmitter from "events";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api/index.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 import { LoginSplashView } from "../../../../../src/components/structures/auth/LoginSplashView";
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient } from "matrix-js-sdk";
 
 describe("<LoginSplashView />", () => {
     let matrixClient: MatrixClient;

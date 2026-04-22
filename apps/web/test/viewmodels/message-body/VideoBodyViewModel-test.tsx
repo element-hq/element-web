@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { EventType, MatrixEvent } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { VideoBodyViewState } from "@element-hq/web-shared-components";
 import { decode } from "blurhash";
 import { type Media } from "@element-hq/element-web-module-api";

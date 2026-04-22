@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked, type Mocked } from "jest-mock";
 import { render, screen, act } from "jest-matrix-react";
-import { PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
-import type { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, RoomMember } from "matrix-js-sdk";
 import { stubClient, wrapInMatrixClientContext, mkRoomMember } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MsgType } from "matrix-js-sdk/src/matrix";
-import { type EncryptedFile, type RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { MsgType } from "matrix-js-sdk";
+import { type EncryptedFile, type RoomMessageEventContent } from "matrix-js-sdk/lib/types.js";
 
 /**
  * @param {string} mxc MXC URL of the file

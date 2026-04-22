@@ -14,7 +14,7 @@ import {
     type MatrixClient,
     TypedEventEmitter,
     MatrixHttpApi,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import fetchMock from "@fetch-mock/jest";
 
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";

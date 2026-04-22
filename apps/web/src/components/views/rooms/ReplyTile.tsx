@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 import classNames from "classnames";
-import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixEvent, MatrixEventEvent, EventType, MsgType } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

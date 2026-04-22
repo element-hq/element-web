@@ -16,7 +16,7 @@ import {
     PushRuleKind,
     Room,
     RuleId,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import React from "react";
 
 import NotificationSettings2 from "../../../../../../src/components/views/settings/notifications/NotificationSettings2";

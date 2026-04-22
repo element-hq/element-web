@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "@fetch-mock/jest";
-import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
-import * as randomStringUtils from "matrix-js-sdk/src/randomstring";
-import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
+import { completeAuthorizationCodeGrant } from "matrix-js-sdk/lib/oidc/authorize.js";
+import * as randomStringUtils from "matrix-js-sdk/lib/randomstring.js";
+import { type BearerTokenResponse } from "matrix-js-sdk/lib/oidc/validate.js";
 import { mocked } from "jest-mock";
 import { Crypto } from "@peculiar/webcrypto";
 import { getRandomValues } from "node:crypto";
@@ -19,10 +19,10 @@ import { makeDelegatedAuthConfig } from "../../../test-utils/oidc";
 import { OidcClientError } from "../../../../src/utils/oidc/error";
 import { mockPlatformPeg } from "../../../test-utils";
 
-jest.unmock("matrix-js-sdk/src/randomstring");
+jest.unmock("matrix-js-sdk/lib/randomstring.js");
 
-jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
-    ...jest.requireActual("matrix-js-sdk/src/oidc/authorize"),
+jest.mock("matrix-js-sdk/lib/oidc/authorize.js", () => ({
+    ...jest.requireActual("matrix-js-sdk/lib/oidc/authorize.js"),
     completeAuthorizationCodeGrant: jest.fn(),
 }));
 

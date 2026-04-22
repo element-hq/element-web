@@ -17,9 +17,13 @@ import {
     MatrixEvent,
     SyncState,
     type AccountDataEvents,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { waitFor } from "jest-matrix-react";
-import { CallMembership, type SessionMembershipData, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import {
+    CallMembership,
+    type SessionMembershipData,
+    type MatrixRTCSession,
+} from "matrix-js-sdk/lib/matrixrtc/index.js";
 import { randomUUID } from "node:crypto";
 
 import type BasePlatform from "../../src/BasePlatform";

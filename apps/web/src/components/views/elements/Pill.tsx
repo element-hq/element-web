@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement, useContext } from "react";
 import classNames from "classnames";
-import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember } from "matrix-js-sdk";
 import { Tooltip } from "@vector-im/compound-web";
 import { LinkIcon, UserSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

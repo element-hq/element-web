@@ -10,11 +10,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-// To ensure we load the browser-matrix version first
-import "matrix-js-sdk/src/browser-index";
 import React, { type ReactElement, StrictMode } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { AutoDiscovery, type ClientConfig } from "matrix-js-sdk";
 import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import PlatformPeg from "../PlatformPeg";

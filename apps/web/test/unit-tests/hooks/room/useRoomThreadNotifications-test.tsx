@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { renderHook } from "jest-matrix-react";
-import { type MatrixClient, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, NotificationCountType, Room } from "matrix-js-sdk";
 
 import { useRoomThreadNotifications } from "../../../../src/hooks/room/useRoomThreadNotifications";
 import { stubClient } from "../../../test-utils";

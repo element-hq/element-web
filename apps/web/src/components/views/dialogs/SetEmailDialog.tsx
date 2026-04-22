@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { MatrixError } from "matrix-js-sdk";
 
 import * as Email from "../../../email";
 import AddThreepid from "../../../AddThreepid";

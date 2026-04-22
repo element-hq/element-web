@@ -19,8 +19,8 @@ import {
     EventType,
     ProfileKeyTimezone,
     ProfileKeyMSC4175Timezone,
-} from "matrix-js-sdk/src/matrix";
-import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+} from "matrix-js-sdk";
+import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
 import classNames from "classnames";
 import { GroupView, SeparatorView, Panel, LeftResizablePanelView } from "@element-hq/web-shared-components";
 

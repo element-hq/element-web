@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent } from "react";
 import { act, render, screen } from "jest-matrix-react";
-import { type MatrixClient, type UploadResponse } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type UploadResponse } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { TooltipProvider } from "@vector-im/compound-web";

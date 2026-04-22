@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk";
 
 import emailPillAvatar from "../../../../res/img/icon-email-pill-avatar.svg";
 import { mediaFromMxc } from "../../../customisations/Media";

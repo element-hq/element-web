@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import {
     type MatrixClient,
     type RoomMember,
@@ -15,7 +15,7 @@ import {
     type MatrixEvent,
     EventTimeline,
     EventType,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

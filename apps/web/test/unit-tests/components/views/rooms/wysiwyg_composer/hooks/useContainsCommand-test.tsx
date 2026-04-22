@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { renderHook, waitFor } from "jest-matrix-react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk";
 
 import { useContainsCommand } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useContainsCommand";
 import { stubClient } from "../../../../../../test-utils";

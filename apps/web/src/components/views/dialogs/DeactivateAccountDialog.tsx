@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type AuthType, type IAuthData } from "matrix-js-sdk/src/interactive-auth";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type AuthType, type IAuthData } from "matrix-js-sdk/lib/interactive-auth.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";

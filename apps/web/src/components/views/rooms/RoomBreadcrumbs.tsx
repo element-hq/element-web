@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject, type Room } from "matrix-js-sdk";
 import { CSSTransition } from "react-transition-group";
 
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixEvent, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, HTTPError, MatrixError } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import ConfirmRedactDialog from "./ConfirmRedactDialog";

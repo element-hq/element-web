@@ -7,14 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import {
-    EventType,
-    type MatrixClient,
-    type MatrixEvent,
-    MatrixEventEvent,
-    RelationType,
-    Room,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, type MatrixEvent, MatrixEventEvent, RelationType, Room } from "matrix-js-sdk";
 
 import { RelationsHelper, RelationsHelperEvent } from "../../../src/events/RelationsHelper";
 import { mkEvent, stubClient } from "../../test-utils";

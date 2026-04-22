@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { act } from "react";
 import { render } from "jest-matrix-react";
-import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { type Mocked } from "jest-mock";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import { getMockClientWithEventEmitter } from "../../../../../test-utils";
 import { ResetIdentityDialog } from "../../../../../../src/components/views/dialogs/ResetIdentityDialog";

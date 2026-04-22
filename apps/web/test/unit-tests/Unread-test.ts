@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixEvent, EventType, MsgType, Room, ReceiptType } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixEvent, EventType, MsgType, Room, ReceiptType } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { haveRendererForEvent } from "../../src/events/EventTileFactory";
 import { makeBeaconEvent, mkEvent, stubClient } from "../test-utils";

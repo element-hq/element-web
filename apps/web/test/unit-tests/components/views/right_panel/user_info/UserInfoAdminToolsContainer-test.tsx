@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen, fireEvent } from "jest-matrix-react";
-import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 
 import { UserInfoAdminToolsContainer } from "../../../../../../src/components/views/right_panel/user_info/UserInfoAdminToolsContainer";

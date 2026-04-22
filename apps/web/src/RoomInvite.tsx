@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps } from "react";
-import { EventType, type MatrixEvent, type Room, type User } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent, type Room, type User } from "matrix-js-sdk";
 
 import type MultiInviter from "./utils/MultiInviter";
 import { type CompletionStates } from "./utils/MultiInviter";

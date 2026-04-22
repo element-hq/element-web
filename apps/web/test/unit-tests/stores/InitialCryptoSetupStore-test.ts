@@ -6,9 +6,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import { waitFor } from "jest-matrix-react";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 import { createCrossSigning } from "../../../src/CreateCrossSigning";
 import { InitialCryptoSetupStore } from "../../../src/stores/InitialCryptoSetupStore";

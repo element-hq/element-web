@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
-import { type IJoinRoomOpts } from "matrix-js-sdk/src/matrix";
+import { type IJoinRoomOpts } from "matrix-js-sdk";
 
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";

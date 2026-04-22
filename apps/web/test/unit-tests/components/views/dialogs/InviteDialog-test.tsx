@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen, findByText } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import { mocked, type Mocked } from "jest-mock";
 
 import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";

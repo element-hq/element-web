@@ -16,7 +16,7 @@ import {
     PendingEventOrdering,
     RelationType,
     Room,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { MessagePreviewStore } from "../../../../src/stores/message-preview";
 import { mkEvent, mkMessage, mkReaction, setupAsyncStoreWithClient, stubClient } from "../../../test-utils";

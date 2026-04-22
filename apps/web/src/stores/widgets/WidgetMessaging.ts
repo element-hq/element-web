@@ -15,8 +15,8 @@ import {
     RoomStateEvent,
     type ReceivedToDeviceMessage,
     TypedEventEmitter,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import {
     ClientWidgetApi,
     type IModalWidgetOpenRequest,
@@ -35,7 +35,7 @@ import {
     WidgetApiFromWidgetAction,
     WidgetKind,
 } from "matrix-widget-api";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t, getUserLanguage } from "../../languageHandler";
 import { ElementWidgetDriver } from "./ElementWidgetDriver";

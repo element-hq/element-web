@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk";
 import { type MockedObject } from "jest-mock";
 import { createRef } from "react";
 

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback, useId, useState } from "react";
-import { EventTimeline, EventType, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, EventType, type MatrixEvent, type Room } from "matrix-js-sdk";
 import { IconButton, Menu, MenuItem, Separator, Tooltip } from "@vector-im/compound-web";
 import ViewIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
 import UnpinIcon from "@vector-im/compound-design-tokens/assets/web/icons/unpin";

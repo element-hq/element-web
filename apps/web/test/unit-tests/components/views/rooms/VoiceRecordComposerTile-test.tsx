@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type RefObject } from "react";
 import { render } from "jest-matrix-react";
-import { type MatrixClient, MsgType, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MsgType, type Room } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 
 import VoiceRecordComposerTile from "../../../../../src/components/views/rooms/VoiceRecordComposerTile";

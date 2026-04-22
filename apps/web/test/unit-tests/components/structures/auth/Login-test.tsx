@@ -9,10 +9,10 @@ import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "@fetch-mock/jest";
-import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
-import * as Matrix from "matrix-js-sdk/src/matrix";
-import { OidcError } from "matrix-js-sdk/src/oidc/error";
+import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, type OidcClientConfig } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import * as Matrix from "matrix-js-sdk";
+import { OidcError } from "matrix-js-sdk/lib/oidc/error.js";
 
 import SdkConfig from "../../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";

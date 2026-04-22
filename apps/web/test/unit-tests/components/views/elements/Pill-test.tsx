@@ -10,7 +10,7 @@ import React from "react";
 import { render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked, type Mocked } from "jest-mock";
-import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk";
 
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Pill, type PillProps, PillType } from "../../../../../src/components/views/elements/Pill";

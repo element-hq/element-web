@@ -16,7 +16,7 @@ import {
     type LocationAssetType,
     M_BEACON,
     M_BEACON_INFO,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { getMockGeolocationPositionError } from "./location";
 import { makeRoomWithStateEvents } from "./room";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { renderHook } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock";
-import { type Room, type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient, RoomMember } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { useRedactMessagesButtonViewModel } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoRedactButtonViewModel";

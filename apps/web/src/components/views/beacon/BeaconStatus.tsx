@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type HTMLProps } from "react";
 import classNames from "classnames";
-import { type Beacon } from "matrix-js-sdk/src/matrix";
+import { type Beacon } from "matrix-js-sdk";
 
 import StyledLiveBeaconIcon from "./StyledLiveBeaconIcon";
 import { _t } from "../../../languageHandler";

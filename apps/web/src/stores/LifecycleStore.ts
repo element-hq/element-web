@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SyncState } from "matrix-js-sdk/src/matrix";
-import { MINIMUM_MATRIX_VERSION, SUPPORTED_MATRIX_VERSIONS } from "matrix-js-sdk/src/version-support";
-import { logger } from "matrix-js-sdk/src/logger";
+import { SyncState } from "matrix-js-sdk";
+import { MINIMUM_MATRIX_VERSION, SUPPORTED_MATRIX_VERSIONS } from "matrix-js-sdk/lib/version-support.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { Action } from "../dispatcher/actions";
 import dis from "../dispatcher/dispatcher";

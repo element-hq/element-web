@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type FormEvent } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import FocusLock from "react-focus-lock";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

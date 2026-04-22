@@ -7,7 +7,7 @@
 
 import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 

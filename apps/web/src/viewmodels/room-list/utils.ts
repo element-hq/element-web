@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type Room, KnownMembership, EventTimeline, EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Room, KnownMembership, EventTimeline, EventType, type MatrixClient } from "matrix-js-sdk";
 
 import { isKnockDenied } from "../../utils/membership";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";

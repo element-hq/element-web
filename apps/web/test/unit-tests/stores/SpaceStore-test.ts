@@ -18,8 +18,8 @@ import {
     RoomEvent,
     JoinRule,
     type RoomState,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import {

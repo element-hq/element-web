@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type KeyboardEvent, type RefObject, type SyntheticEvent, useCallback, useRef, useState } from "react";
 import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation } from "matrix-js-sdk";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";

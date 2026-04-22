@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classnames from "classnames";
 import { type ComponentProps } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { type ActionPayload } from "../dispatcher/payloads";

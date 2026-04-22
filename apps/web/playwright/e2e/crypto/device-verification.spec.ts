@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import jsQR from "jsqr";
 
 import type { JSHandle, Locator, Page } from "@playwright/test";
-import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import type { VerificationRequest } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { test, expect } from "../../element-web-test";
 import {
     awaitVerifier,

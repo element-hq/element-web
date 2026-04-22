@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk";
 
 import { TextualEventViewModel } from "../../../src/viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { stubClient } from "../../test-utils";

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type FC, type HTMLAttributes, useContext } from "react";
-import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type Room, type RoomMember } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { sortBy } from "lodash";
 
 import { _t } from "../../../languageHandler";

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { ContentHelpers } from "matrix-js-sdk/src/matrix";
+import { ContentHelpers } from "matrix-js-sdk";
 
 import { Command } from "./command";
 import { successSync } from "./utils";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentType, type Ref } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import { type RenderOptions } from "jest-matrix-react";
 
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type FC, type HTMLAttributes, type ReactNode } from "react";
-import { type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk";
 import { AvatarStack, Tooltip } from "@vector-im/compound-web";
 import classNames from "classnames";
 import { OverflowHorizontalIcon } from "@vector-im/compound-design-tokens/assets/web/icons";

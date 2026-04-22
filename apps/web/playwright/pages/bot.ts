@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { type JSHandle, type Page, type TestInfo } from "@playwright/test";
 import { uniqueId } from "lodash";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 
-import type { Logger } from "matrix-js-sdk/src/logger";
-import type { SecretStorageKeyDescription } from "matrix-js-sdk/src/secret-storage";
+import type { Logger } from "matrix-js-sdk/lib/logger.js";
+import type { SecretStorageKeyDescription } from "matrix-js-sdk/lib/secret-storage.js";
 import type { Credentials, HomeserverInstance } from "../plugins/homeserver";
-import type { CryptoCallbacks, GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import type { CryptoCallbacks, GeneratedSecretStorageKey } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { bootstrapCrossSigningForClient, Client } from "./client";
 
 export interface CredentialsOptionalAccessToken extends Omit<Credentials, "accessToken"> {

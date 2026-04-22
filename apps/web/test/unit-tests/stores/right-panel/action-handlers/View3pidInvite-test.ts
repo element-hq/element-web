@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MockedObject } from "jest-mock";
-import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent } from "matrix-js-sdk";
 
 import { Action } from "../../../../../src/dispatcher/actions";
 import { onView3pidInvite } from "../../../../../src/stores/right-panel/action-handlers";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type Room, type IEventRelation } from "matrix-js-sdk";
 import { CloseIcon, ShareIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ContentMessages from "../../ContentMessages";

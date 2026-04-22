@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-// Note: we don't import the base64 utils from `matrix-js-sdk/src/matrix` because this file
+// Note: we don't import the base64 utils from `matrix-js-sdk` because this file
 // is used by Element Web's service worker, and importing `matrix` brings in ~1mb of stuff
 // we don't need. Instead, we ignore the import restriction and only bring in what we actually
 // need.
@@ -17,8 +17,8 @@ Please see LICENSE files in the repository root for full details.
 // be okay with our frequent tests, locked versioning, etc though. We'll pick up problems well
 // before release.
 // eslint-disable-next-line no-restricted-imports
-import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/base64";
-import { logger } from "matrix-js-sdk/src/logger";
+import { encodeUnpaddedBase64 } from "matrix-js-sdk/lib/base64";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 /**
  * Encrypted format of a pickle key, as stored in IndexedDB.

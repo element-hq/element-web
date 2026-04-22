@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 
 import type { IWidget } from "matrix-widget-api";
-import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, Room } from "matrix-js-sdk";
 import { WidgetApi } from "../../../src/modules/WidgetApi";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";

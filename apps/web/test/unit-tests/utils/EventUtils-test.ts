@@ -18,7 +18,7 @@ import {
     RelationType,
     Room,
     Thread,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import {

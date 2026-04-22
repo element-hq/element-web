@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode, useEffect } from "react";
 import { uniqBy } from "lodash";
-import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixEvent, type RoomMember } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";

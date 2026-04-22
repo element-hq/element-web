@@ -8,15 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, getByRole, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
-import {
-    type MatrixClient,
-    EventType,
-    MatrixEvent,
-    Room,
-    RoomMember,
-    type ISendEventResponse,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type MatrixClient, EventType, MatrixEvent, Room, RoomMember, type ISendEventResponse } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 

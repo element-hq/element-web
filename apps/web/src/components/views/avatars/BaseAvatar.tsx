@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type AriaRole, type JSX, type Ref, useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { ClientEvent, type SyncState } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type SyncState } from "matrix-js-sdk";
 import { Avatar } from "@vector-im/compound-web";
 
 import SettingsStore from "../../../settings/SettingsStore";

@@ -8,11 +8,11 @@
 import React from "react";
 import { screen, render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient } from "matrix-js-sdk";
+import { type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api/index.js";
 // Needed to be able to mock decodeRecoveryKey
 // eslint-disable-next-line no-restricted-imports
-import * as recoveryKeyModule from "matrix-js-sdk/src/crypto-api/recovery-key";
+import * as recoveryKeyModule from "matrix-js-sdk/lib/crypto-api/recovery-key";
 
 import RestoreKeyBackupDialog from "../../../../../../src/components/views/dialogs/security/RestoreKeyBackupDialog.tsx";
 import { stubClient } from "../../../../../test-utils";

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type User, type MatrixClient, type RoomMember } from "matrix-js-sdk/src/matrix";
-import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type User, type MatrixClient, type RoomMember } from "matrix-js-sdk";
+import { type VerificationRequest } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import dis from "./dispatcher/dispatcher";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";

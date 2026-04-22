@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventEmitter } from "events";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import { FILTER_CHANGED, type IFilterCondition } from "./IFilterCondition";
 import { type IDestroyable } from "../../../utils/IDestroyable";

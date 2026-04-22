@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
  * Tries to use new async clipboard API if available
  * @param text the plaintext to put in the user's clipboard
  */
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 export async function copyPlaintext(text: string): Promise<boolean> {
     try {

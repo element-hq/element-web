@@ -5,7 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type SyntheticEvent, useState } from "react";
-import { EventType, type Room, type ContentHelpers } from "matrix-js-sdk/src/matrix";
+import { EventType, type Room, type ContentHelpers } from "matrix-js-sdk";
 
 import { useRoomState } from "../../../hooks/useRoomState";
 import defaultDispatcher from "../../../dispatcher/dispatcher";

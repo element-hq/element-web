@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, PendingEventOrdering, Room } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 
 import Modal, { type ComponentType, type IHandle } from "../../../src/Modal";

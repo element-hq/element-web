@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, type RenderResult } from "jest-matrix-react";
-import { RoomMember, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { RoomMember, LocationAssetType } from "matrix-js-sdk";
 
 import LocationViewDialog from "../../../../../src/components/views/location/LocationViewDialog";
 import { TILE_SERVER_WK_KEY } from "../../../../../src/utils/WellKnownUtils";

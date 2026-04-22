@@ -15,8 +15,8 @@ import {
     MatrixClient,
     MatrixError,
     type OidcClientConfig,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t, _td, UserFriendlyError } from "../languageHandler";
 import SdkConfig from "../SdkConfig";

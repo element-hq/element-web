@@ -8,12 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useMemo, useState } from "react";
-import {
-    type AccountDataEvents,
-    type IContent,
-    type MatrixEvent,
-    type RoomAccountDataEvents,
-} from "matrix-js-sdk/src/matrix";
+import { type AccountDataEvents, type IContent, type MatrixEvent, type RoomAccountDataEvents } from "matrix-js-sdk";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";

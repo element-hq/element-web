@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type Visibility } from "matrix-js-sdk/src/matrix";
+import { type Visibility } from "matrix-js-sdk";
 import { type Page } from "@playwright/test";
 
 import { expect, test } from "../../../element-web-test";

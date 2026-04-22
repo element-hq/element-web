@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createContext, type ReactNode, useState } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 import classNames from "classnames";
 
 import { _t } from "../../../../languageHandler";

@@ -153,11 +153,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
         development["devtool"] = "source-map";
     }
 
-    // Resolve the directories for the js-sdk for later use. We resolve these early, so we
-    // don't have to call them over and over. We also resolve to the package.json instead of the src
-    // directory, so we don't have to rely on an index.js or similar file existing.
-    const jsSdkSrcDir = path.join(getPackageRoot("matrix-js-sdk"), "src");
-
     return {
         ...development,
 
@@ -241,7 +236,7 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                 "react": getPackageRoot("react"),
                 "react-dom": getPackageRoot("react-dom"),
 
-                // Same goes for js/react-sdk - we don't need two copies.
+                // Same goes for js-sdk/module-api - we don't need two copies.
                 "matrix-js-sdk": getPackageRoot("matrix-js-sdk"),
                 "@matrix-org/react-sdk-module-api": getPackageRoot("@matrix-org/react-sdk-module-api"),
                 // and matrix-widget-api
@@ -304,12 +299,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     include: (f: string) => {
                         // our own source needs babel-ing
                         if (f.startsWith(path.resolve(__dirname, "src"))) return true;
-
-                        // we use the original source files of js-sdk, so we need to
-                        // run them through babel. Because the path tested is the resolved, absolute
-                        // path, these could be anywhere thanks to linking. We must also not
-                        // include node modules inside these modules, so we add 'src'.
-                        if (f.startsWith(jsSdkSrcDir)) return true;
 
                         // Some of the syntax in this package is not understood by
                         // either webpack or our babel setup.

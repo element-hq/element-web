@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, lazy } from "react";
-import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";

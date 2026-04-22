@@ -6,8 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type Room, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
+import { type Room, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk";
+import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/lib/utils.js";
 import { type IWidget } from "matrix-widget-api";
 import { clamp, defaultNumber, sum } from "@element-hq/web-shared-components";
 import { type Container } from "@element-hq/element-web-module-api";

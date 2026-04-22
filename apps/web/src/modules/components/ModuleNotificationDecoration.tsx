@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 import React, { useMemo } from "react";
 
-import type { Room } from "matrix-js-sdk/src/matrix";
+import type { Room } from "matrix-js-sdk";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { useCall } from "../../hooks/useCall";
 import { NotificationDecoration } from "../../components/views/rooms/NotificationDecoration";

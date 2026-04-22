@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useState } from "react";
-import { RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { type UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk";
+import { type UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import dis from "../../../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";

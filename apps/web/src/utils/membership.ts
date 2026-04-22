@@ -13,8 +13,8 @@ import {
     RoomStateEvent,
     type MatrixEvent,
     type MatrixClient,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types.js";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";

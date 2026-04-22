@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render } from "jest-matrix-react";
 import React from "react";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room } from "matrix-js-sdk";
 
 import RoomInfoLine from "../../../../../src/components/views/rooms/RoomInfoLine.tsx";
 import { stubClient } from "../../../../test-utils";

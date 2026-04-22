@@ -19,9 +19,9 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import { type IWidget, MatrixCapabilities, type ClientWidgetApi } from "matrix-widget-api";
-import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type Room, RoomEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import {
     OverflowHorizontalIcon,

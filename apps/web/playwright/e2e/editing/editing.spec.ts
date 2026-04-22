@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Locator, type Page } from "@playwright/test";
 
-import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk/src/matrix";
+import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk";
 import { expect, test } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { SettingLevel } from "../../../src/settings/SettingLevel";

@@ -14,7 +14,7 @@ import {
     type RoomListSection,
     _t,
 } from "@element-hq/web-shared-components";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
 
 import { Action } from "../../dispatcher/actions";
 import dispatcher from "../../dispatcher/dispatcher";

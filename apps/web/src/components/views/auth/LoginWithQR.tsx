@@ -16,9 +16,9 @@ import {
     RendezvousError,
     type RendezvousFailureReason,
     RendezvousIntent,
-} from "matrix-js-sdk/src/rendezvous";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk/lib/rendezvous/index.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";

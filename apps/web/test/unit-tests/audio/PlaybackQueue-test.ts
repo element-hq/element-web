@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Mocked } from "jest-mock";
-import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room } from "matrix-js-sdk";
 
 import { PlaybackQueue } from "../../../src/audio/PlaybackQueue";
 import { type Playback, PlaybackState } from "../../../src/audio/Playback";

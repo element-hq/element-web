@@ -10,7 +10,7 @@ import React from "react";
 import { mocked } from "jest-mock";
 import { render, fireEvent, waitFor } from "jest-matrix-react";
 import fetchMock from "@fetch-mock/jest";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk";
 
 import ImageView from "../../../../../src/components/views/elements/ImageView";
 import { FileDownloader } from "../../../../../src/utils/FileDownloader";

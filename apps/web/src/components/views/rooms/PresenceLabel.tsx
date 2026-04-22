@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue.js";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

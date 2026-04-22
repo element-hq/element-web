@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation } from "matrix-js-sdk";
 import React, { type JSX, type RefObject, type ReactNode } from "react";
 
 import { useComposerFunctions } from "../hooks/useComposerFunctions";

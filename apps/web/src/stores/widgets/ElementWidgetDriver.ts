@@ -41,8 +41,8 @@ import {
     type Room,
     type SendDelayedEventRequestOpts,
     type MatrixClient,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import {
     type ApprovalOpts,
     type CapabilitiesOpts,

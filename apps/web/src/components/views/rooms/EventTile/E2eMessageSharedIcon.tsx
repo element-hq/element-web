@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { EventTimeline } from "matrix-js-sdk/src/matrix";
+import { EventTimeline } from "matrix-js-sdk";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext.tsx";
 import { _t } from "../../../../languageHandler.tsx";

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { MsgType } from "matrix-js-sdk";
 import {
     DecryptionFailureBodyView,
     FileBodyView,

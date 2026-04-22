@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import "./@types/commonmark"; // import better types than @types/commonmark
 import * as commonmark from "commonmark";
 import { escape } from "lodash";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { findLinksInString } from "@element-hq/web-shared-components";
 
 const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "s", "u", "br", "br/"];

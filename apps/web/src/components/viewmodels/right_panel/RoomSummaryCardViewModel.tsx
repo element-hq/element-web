@@ -5,14 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useRef, useState } from "react";
-import {
-    EventType,
-    type HistoryVisibility,
-    type JoinRule,
-    type Room,
-    RoomEvent,
-    RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
+import { EventType, type HistoryVisibility, type JoinRule, type Room, RoomEvent, RoomStateEvent } from "matrix-js-sdk";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";

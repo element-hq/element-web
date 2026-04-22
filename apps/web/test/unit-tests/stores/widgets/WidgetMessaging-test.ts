@@ -18,7 +18,7 @@ import {
     RoomStateEvent,
     type RoomState,
     type Room,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import {
     ClientWidgetApi,
     type IModalWidgetOpenRequest,

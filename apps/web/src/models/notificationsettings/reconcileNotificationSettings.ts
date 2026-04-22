@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IPushRules, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
-import { deepCompare } from "matrix-js-sdk/src/utils";
+import { type IPushRules, PushRuleKind, RuleId } from "matrix-js-sdk";
+import { deepCompare } from "matrix-js-sdk/lib/utils.js";
 
 import { NotificationUtils } from "../../notifications";
 import { StandardActions } from "../../notifications/StandardActions";

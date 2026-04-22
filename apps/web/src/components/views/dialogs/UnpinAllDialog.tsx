@@ -8,8 +8,8 @@
 
 import React, { type JSX } from "react";
 import { Button, Text } from "@vector-im/compound-web";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixClient } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import BaseDialog from "../dialogs/BaseDialog";
 import { _t } from "../../../languageHandler";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 
 import UploadConfirmDialog from "../../../../../src/components/views/dialogs/UploadConfirmDialog.tsx";
 

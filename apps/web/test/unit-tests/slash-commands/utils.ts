@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 
 import { type Command } from "../../../src/slash-commands/command";

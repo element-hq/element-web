@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
 import { type Mocked, mocked } from "jest-mock";
 import { prettyDOM, render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";

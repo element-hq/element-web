@@ -9,7 +9,7 @@
 import React, { type ComponentProps } from "react";
 import { getByText, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk/src/matrix";
+import { NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk";
 
 import { ThreadsActivityCentre } from "../../../../../src/components/views/spaces/threads-activity-centre";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { cleanup, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import React from "react";
-import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
+import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/lib/rendezvous/index.js";
 
 import LoginWithQRFlow from "../../../../../../src/components/views/auth/LoginWithQRFlow";
 import { LoginWithQRFailureReason, type FailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";

@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useRef, useState } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import {
     type IRequestMsisdnTokenResponse,
     type IRequestTokenResponse,
     MatrixError,
     ThreepidMedium,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import AddThreepid, { type Binding, type ThirdPartyIdentifier } from "../../../AddThreepid";
 import { _t, UserFriendlyError } from "../../../languageHandler";

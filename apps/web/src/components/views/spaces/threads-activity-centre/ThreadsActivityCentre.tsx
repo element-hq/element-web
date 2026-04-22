@@ -8,7 +8,7 @@
 
 import React, { type JSX, useState } from "react";
 import { Menu, MenuItem } from "@vector-im/compound-web";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import { ThreadsActivityCentreButton } from "./ThreadsActivityCentreButton";
 import { _t } from "../../../../languageHandler";

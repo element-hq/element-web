@@ -18,7 +18,7 @@ import {
     MsgType,
     RelationType,
     type Room,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import {
     Widget,
     WidgetKind,

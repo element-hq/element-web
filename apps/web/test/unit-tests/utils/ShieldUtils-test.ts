@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
-import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
+import { UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { shieldStatusForRoom } from "../../../src/utils/ShieldUtils";
 import DMRoomMap from "../../../src/utils/DMRoomMap";

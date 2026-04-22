@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { memo, type RefObject, type ReactNode, useEffect, useMemo, useRef } from "react";
-import { type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation } from "matrix-js-sdk";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 import { useWysiwyg, type FormattingFunctions } from "@vector-im/matrix-wysiwyg";
 import classNames from "classnames";

@@ -14,7 +14,7 @@ import sanitizeHtml, { type IOptions } from "sanitize-html";
 import classNames from "classnames";
 import katex from "katex";
 import { decode } from "html-entities";
-import { type IContent } from "matrix-js-sdk/src/matrix";
+import { type IContent } from "matrix-js-sdk";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 import { PERMITTED_URL_SCHEMES, LINKIFIED_DATA_ATTRIBUTE } from "@element-hq/web-shared-components";

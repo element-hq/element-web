@@ -10,7 +10,7 @@ import {
     type IMatrixProfile,
     type IEventWithRoomId as IMatrixEvent,
     type IResultRoomEvents,
-} from "matrix-js-sdk/src/@types/search";
+} from "matrix-js-sdk/lib/@types/search";
 
 import BaseEventIndexManager, {
     type ICrawlerCheckpoint,

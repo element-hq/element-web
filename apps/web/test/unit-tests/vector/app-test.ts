@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "@fetch-mock/jest";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk";
 import { Crypto } from "@peculiar/webcrypto";
 
 import { loadApp } from "../../../src/vector/app.tsx";

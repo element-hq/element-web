@@ -13,8 +13,8 @@ import {
     type ISendEventResponse,
     type MatrixClient,
     THREAD_RELATION_TYPE,
-} from "matrix-js-sdk/src/matrix";
-import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { type RoomMessageEventContent } from "matrix-js-sdk/lib/types.js";
 
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import SettingsStore from "../../../../../settings/SettingsStore";

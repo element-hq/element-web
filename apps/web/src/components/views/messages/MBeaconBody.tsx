@@ -17,8 +17,8 @@ import {
     type IRedactOpts,
     type ContentHelpers,
     M_BEACON,
-} from "matrix-js-sdk/src/matrix";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+} from "matrix-js-sdk";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import classNames from "classnames";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

@@ -18,8 +18,8 @@ import {
     type Room,
     RoomEvent,
     type TimelineWindow,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";

@@ -8,14 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, cleanup } from "jest-matrix-react";
-import {
-    HistoryVisibility,
-    MatrixError,
-    type MatrixClient,
-    Preset,
-    RoomType,
-    Visibility,
-} from "matrix-js-sdk/src/matrix";
+import { HistoryVisibility, MatrixError, type MatrixClient, Preset, RoomType, Visibility } from "matrix-js-sdk";
 import userEvent from "@testing-library/user-event";
 import { type MockedObject } from "jest-mock";
 

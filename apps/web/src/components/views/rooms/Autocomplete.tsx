@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, type RefObject } from "react";
 import classNames from "classnames";
 import { flatMap } from "lodash";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import Autocompleter, {
     type ICompletion,

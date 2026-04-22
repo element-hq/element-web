@@ -16,7 +16,7 @@ import {
     GroupCallIntent,
     M_POLL_END,
     M_POLL_START,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import {
     EncryptionEventView,
     TextualEventView,

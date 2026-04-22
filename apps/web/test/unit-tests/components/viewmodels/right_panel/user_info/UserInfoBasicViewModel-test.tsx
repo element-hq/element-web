@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import React from "react";
-import { EventType, type MatrixClient, MatrixEvent, type Room, RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, MatrixEvent, type Room, RoomMember, type User } from "matrix-js-sdk";
 import { renderHook, waitFor } from "jest-matrix-react";
 
 import { createTestClient, mkRoom, withClientContextRenderOptions } from "../../../../../test-utils";

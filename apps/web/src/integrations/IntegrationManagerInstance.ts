@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ComponentProps } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
-import type { Room } from "matrix-js-sdk/src/matrix";
+import type { Room } from "matrix-js-sdk";
 import ScalarAuthClient from "../ScalarAuthClient";
 import { dialogTermsInteractionCallback, TermsNotSignedError } from "../Terms";
 import Modal from "../Modal";

@@ -17,16 +17,16 @@ import {
     type MatrixClient,
     type IMyDevice,
     type RoomMember,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { Widget } from "matrix-widget-api";
 import {
     type CallMembership,
     MatrixRTCSessionManagerEvents,
     MatrixRTCSession,
     MatrixRTCSessionEvent,
-} from "matrix-js-sdk/src/matrixrtc";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
+} from "matrix-js-sdk/lib/matrixrtc/index.js";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call.js";
 
 import type { Mocked } from "jest-mock";
 import type { ClientWidgetApi } from "matrix-widget-api";

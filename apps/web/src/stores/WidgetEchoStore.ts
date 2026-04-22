@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { type IWidget } from "matrix-widget-api";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk";
 
 import { type WidgetType } from "../widgets/WidgetType";
 

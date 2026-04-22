@@ -14,7 +14,7 @@ import {
     M_LOCATION,
     M_TIMESTAMP,
     ContentHelpers,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { isSelfLocation } from "../../../../src/utils/location";
 

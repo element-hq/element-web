@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk";
 
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import {

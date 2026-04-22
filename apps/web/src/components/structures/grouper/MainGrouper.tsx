@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { EventType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent } from "matrix-js-sdk";
 import { DateSeparatorView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type MessagePanel from "../MessagePanel";

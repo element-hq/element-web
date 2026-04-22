@@ -11,7 +11,7 @@ import React from "react";
 import { fireEvent, render, screen, act } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { MatrixError } from "matrix-js-sdk";
 
 import InteractiveAuthDialog from "../../../../../src/components/views/dialogs/InteractiveAuthDialog";
 import { clearAllModals, flushPromises, getMockClientWithEventEmitter, unmockClientPeg } from "../../../../test-utils";

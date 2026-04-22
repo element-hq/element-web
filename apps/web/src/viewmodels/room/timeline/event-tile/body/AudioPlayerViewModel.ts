@@ -6,7 +6,7 @@
  */
 
 import { type ChangeEvent, type KeyboardEvent } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import {
     percentageOf,
     BaseViewModel,

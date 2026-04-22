@@ -13,7 +13,7 @@ import {
     RelationType,
     type Room,
     type Thread,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { mkMessage, type MessageEventProps } from "./test-utils";
 

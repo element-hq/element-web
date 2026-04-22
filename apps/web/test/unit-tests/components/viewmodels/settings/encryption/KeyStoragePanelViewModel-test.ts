@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import { renderHook, waitFor } from "jest-matrix-react";
 import { act } from "react";
 import { mocked } from "jest-mock";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api/index.js";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import type { BackupTrustInfo, KeyBackupCheck, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import type { MatrixClient } from "matrix-js-sdk";
+import type { BackupTrustInfo, KeyBackupCheck, KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { useKeyStoragePanelViewModel } from "../../../../../../src/components/viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 

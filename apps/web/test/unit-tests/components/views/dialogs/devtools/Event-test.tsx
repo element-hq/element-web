@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { Room, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import { Room, PendingEventOrdering } from "matrix-js-sdk";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";

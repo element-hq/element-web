@@ -15,7 +15,7 @@ import React, {
     type SyntheticEvent,
     type ChangeEventHandler,
 } from "react";
-import { type Room, RoomType, JoinRule, Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomType, JoinRule, Preset, Visibility } from "matrix-js-sdk";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";

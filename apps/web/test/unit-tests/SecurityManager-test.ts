@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { act } from "react";
 import { Crypto } from "@peculiar/webcrypto";
-import { type CryptoApi, deriveRecoveryKeyFromPassphrase } from "matrix-js-sdk/src/crypto-api";
-import { SecretStorage } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi, deriveRecoveryKeyFromPassphrase } from "matrix-js-sdk/lib/crypto-api/index.js";
+import { SecretStorage } from "matrix-js-sdk";
 
 import { accessSecretStorage, crossSigningCallbacks } from "../../src/SecurityManager";
 import { filterConsole, stubClient } from "../test-utils";

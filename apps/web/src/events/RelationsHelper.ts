@@ -14,7 +14,7 @@ import {
     TypedEventEmitter,
     type Relations,
     RelationsEvent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { type IDestroyable } from "../utils/IDestroyable";
 

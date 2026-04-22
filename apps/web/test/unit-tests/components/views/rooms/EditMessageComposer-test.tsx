@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { type ReplacementEvent, type RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { Room } from "matrix-js-sdk";
+import { type ReplacementEvent, type RoomMessageEventContent } from "matrix-js-sdk/lib/types.js";
 
 import EditMessageComposerWithMatrixClient, {
     createEditContent,

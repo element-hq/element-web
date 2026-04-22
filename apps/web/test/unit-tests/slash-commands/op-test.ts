@@ -7,7 +7,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { KnownMembership, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, RoomMember } from "matrix-js-sdk";
 
 import { setUpCommandTest } from "./utils";
 import { warnSelfDemote } from "../../../src/components/views/right_panel/UserInfo";

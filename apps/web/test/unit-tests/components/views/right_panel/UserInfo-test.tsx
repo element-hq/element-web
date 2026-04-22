@@ -18,7 +18,7 @@ import {
     Device,
     ProfileKeyTimezone,
     ProfileKeyMSC4175Timezone,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { EventEmitter } from "events";
 import {
     UserVerificationStatus,
@@ -26,7 +26,7 @@ import {
     VerificationPhase as Phase,
     VerificationRequestEvent,
     type CryptoApi,
-} from "matrix-js-sdk/src/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import UserInfo, { disambiguateDevices } from "../../../../../src/components/views/right_panel/UserInfo";
 import { getPowerLevels } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";

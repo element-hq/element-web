@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved, within } from "jest-matrix-react";
-import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk";
 import fetchMock from "@fetch-mock/jest";
 import encrypt from "matrix-encrypt-attachment";
 import { mocked } from "jest-mock";

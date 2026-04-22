@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { RoomMember } from "matrix-js-sdk";
 import { getByTestId, render } from "jest-matrix-react";
 
 import Marker from "../../../../../src/components/views/location/Marker";

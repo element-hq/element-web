@@ -10,15 +10,15 @@ import React from "react";
 import { mocked } from "jest-mock";
 import { render, type RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { type MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, createClient } from "matrix-js-sdk";
 
 import ForgotPassword from "../../../../../src/components/structures/auth/ForgotPassword";
 import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
 import { clearAllModals, filterConsole, stubClient, waitEnoughCyclesForModal } from "../../../../test-utils";
 import AutoDiscoveryUtils from "../../../../../src/utils/AutoDiscoveryUtils";
 
-jest.mock("matrix-js-sdk/src/matrix", () => ({
-    ...jest.requireActual("matrix-js-sdk/src/matrix"),
+jest.mock("matrix-js-sdk", () => ({
+    ...jest.requireActual("matrix-js-sdk"),
     createClient: jest.fn(),
 }));
 

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixEvent, type MatrixClient, type TimelineEvents } from "matrix-js-sdk/src/matrix";
-import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
+import { type MatrixEvent, type MatrixClient, type TimelineEvents } from "matrix-js-sdk";
+import { PollEndEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollEndEvent.js";
 
 import { _t } from "../../../languageHandler";
 import QuestionDialog from "./QuestionDialog";

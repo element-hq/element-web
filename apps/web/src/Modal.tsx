@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import classNames from "classnames";
-import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
+import { TypedEventEmitter } from "matrix-js-sdk";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
 import { I18nContext } from "@element-hq/web-shared-components";
 

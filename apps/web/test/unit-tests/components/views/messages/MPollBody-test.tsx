@@ -18,7 +18,7 @@ import {
     type PollStartEventContent,
     type PollAnswer,
     M_TEXT,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import MPollBody, {
     allVotes,

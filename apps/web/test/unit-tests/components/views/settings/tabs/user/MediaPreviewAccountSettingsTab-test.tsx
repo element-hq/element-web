@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { render } from "jest-matrix-react";
 import React from "react";
 import userEvent from "@testing-library/user-event";
-import { type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEvent } from "matrix-js-sdk";
 
 import { MediaPreviewAccountSettings } from "../../../../../../../src/components/views/settings/tabs/user/MediaPreviewAccountSettings";
 import {

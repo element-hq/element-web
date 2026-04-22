@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk";
 import classNames from "classnames";
 import { CollapseIcon, ExpandIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

@@ -7,14 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Mocked, mocked } from "jest-mock";
-import {
-    MatrixEvent,
-    type Room,
-    type MatrixClient,
-    Device,
-    ClientStoppedError,
-    ClientEvent,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type Room, type MatrixClient, Device, ClientStoppedError, ClientEvent } from "matrix-js-sdk";
 import {
     CryptoEvent,
     type CrossSigningStatus,
@@ -22,7 +15,7 @@ import {
     DeviceVerificationStatus,
     type KeyBackupInfo,
     type SecretStorageStatus,
-} from "matrix-js-sdk/src/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
 import { DeviceListener, BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener";

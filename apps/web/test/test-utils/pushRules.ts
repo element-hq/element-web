@@ -12,7 +12,7 @@ import {
     type IPushRules,
     type PushRuleKind,
     type RuleId,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 /**
  * Default set of push rules for a new account

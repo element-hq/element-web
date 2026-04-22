@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type IContent, type IMentions, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type IContent, type IMentions, type IEventRelation } from "matrix-js-sdk";
 
 import type EditorModel from "../editor/model";
 import { Type } from "../editor/parts";

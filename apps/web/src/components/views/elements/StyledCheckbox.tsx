@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useId, type ReactNode, type Ref } from "react";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import { CheckboxInput, Form, HelpMessage, InlineField, Label } from "@vector-im/compound-web";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {

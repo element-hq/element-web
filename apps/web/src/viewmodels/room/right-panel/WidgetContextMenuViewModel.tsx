@@ -7,7 +7,7 @@
 
 import React, { useContext, useMemo, useEffect, type ReactElement, type ReactNode } from "react";
 import { logger } from "@sentry/browser";
-import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient } from "matrix-js-sdk";
 import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import {
     BaseViewModel,

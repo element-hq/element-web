@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventTimeline, type MatrixError, type Room, type RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { EventTimeline, type MatrixError, type Room, type RoomMember, RoomStateEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import React, { useCallback, useState, type FC } from "react";
 import { CloseIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

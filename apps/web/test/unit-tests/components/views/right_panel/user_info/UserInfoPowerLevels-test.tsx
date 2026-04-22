@@ -8,7 +8,7 @@ import React from "react";
 import userEvent from "@testing-library/user-event";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock";
-import { MatrixEvent, type MatrixClient, RoomMember, type Room, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type MatrixClient, RoomMember, type Room, EventType } from "matrix-js-sdk";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";

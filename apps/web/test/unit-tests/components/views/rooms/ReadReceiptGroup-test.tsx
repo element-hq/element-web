@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentProps } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { RoomMember } from "matrix-js-sdk";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 

@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { getBrowserSupport, checkBrowserSupport, LOCAL_STORAGE_KEY } from "../../src/SupportedBrowser";
 import ToastStore from "../../src/stores/ToastStore";
 import GenericToast from "../../src/components/views/toasts/GenericToast";
 
-jest.mock("matrix-js-sdk/src/logger");
+jest.mock("matrix-js-sdk/lib/logger.js");
 
 describe("SupportedBrowser", () => {
     beforeEach(() => {

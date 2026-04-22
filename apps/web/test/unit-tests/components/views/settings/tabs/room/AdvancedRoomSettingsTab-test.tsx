@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, type RenderResult, screen } from "jest-matrix-react";
-import { type MatrixClient, type Room, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, EventType, MatrixEvent } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 
 import AdvancedRoomSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/AdvancedRoomSettingsTab";

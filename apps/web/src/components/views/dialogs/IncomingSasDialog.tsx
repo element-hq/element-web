@@ -6,8 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { type GeneratedSas, type ShowSasCallbacks, type Verifier, VerifierEvent } from "matrix-js-sdk/src/crypto-api";
-import { logger } from "matrix-js-sdk/src/logger";
+import {
+    type GeneratedSas,
+    type ShowSasCallbacks,
+    type Verifier,
+    VerifierEvent,
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";

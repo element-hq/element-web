@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type * as Matrix from "matrix-js-sdk/src/matrix";
+import type * as Matrix from "matrix-js-sdk";
 import { type SettingLevel } from "../src/settings/SettingLevel";
 
 declare global {
@@ -25,7 +25,7 @@ declare global {
 }
 
 // Workaround for lack of strict mode not resolving complex types correctly
-declare module "matrix-js-sdk/src/http-api/index.ts" {
+declare module "matrix-js-sdk/lib/http-api/index.ts" {
     interface UploadResponse {
         json(): Promise<object>;
     }

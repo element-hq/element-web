@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import React from "react";
 
 import AddExistingToSpaceDialog from "../../../../../src/components/views/dialogs/AddExistingToSpaceDialog";
