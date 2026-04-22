@@ -167,6 +167,8 @@ interface IInviteDialogState {
     /**
      * If we tried to invite some users whose identity we don't know, we will show a warning.
      * This is the list of users. (If it is `null`, we are not showing that warning.)
+     *
+     * Will never be the empty list.
      */
     unknownIdentityUsers: Member[] | null;
 
