@@ -84,9 +84,6 @@ export interface TimelineViewSnapshot {
      */
     firstItemIndex: number;
 
-    /** Whether the viewport is pinned to the live (bottom) end. */
-    stuckAtBottom: boolean;
-
     /** Pagination state at each end of the loaded window. */
     backwardPagination: PaginationState;
     forwardPagination: PaginationState;
@@ -107,9 +104,6 @@ export interface TimelineViewActions {
 
     /** Report that the container has scrolled to the pending anchor. */
     onAnchorReached(): void;
-
-    /** Report that the user has scrolled to or away from the bottom. */
-    onStuckAtBottomChanged(stuckAtBottom: boolean): void;
 }
 
 export type TimelineViewModel = ViewModel<TimelineViewSnapshot, TimelineViewActions>;

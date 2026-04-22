@@ -6,12 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo, type JSX, type ReactNode } from "react";
-import { TimelineView, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { TimelineView, useCreateAutoDisposedViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "@element-hq/web-shared-components";
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { LegacyEventTileAdapter } from "../views/rooms/LegacyEventTileAdapter";
+import Spinner from "../views/elements/Spinner";
 
 /** Minimal static VM for DateSeparatorView — no jump-to menu, label only. */
 class StaticDateSeparatorViewModel implements DateSeparatorViewSnapshot, DateSeparatorViewActions {
@@ -61,7 +62,11 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                     case "read-marker":
                         return <hr key={item.key} className="mx_RoomView_myReadMarker" />;
                     case "loading":
-                        return <div key={item.key}>Loading...</div>;
+                        return (
+                            <div key={item.key} className="mx_RoomView_messagePanelSpinner">
+                                <Spinner />
+                            </div>
+                        );
                     case "gap":
                         return <div key={item.key}>Gap</div>;
                     case "event":
@@ -77,7 +82,10 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
     );
 
     return (
-        <div className="mx_RoomView_messagePanel mx_RoomView_messageListWrapper" style={{ height: "100%" }}>
+        <div
+            className="mx_NewTimelinePanel mx_RoomView_messagePanel mx_RoomView_messageListWrapper"
+            style={{ height: "100%" }}
+        >
             <TimelineView vm={vm} renderItem={renderItem} />
         </div>
     );
