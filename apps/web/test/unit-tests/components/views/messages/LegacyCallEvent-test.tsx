@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { CallErrorCode, CallState } from "matrix-js-sdk/lib/webrtc/call";
+import { CallErrorCode, CallState } from "matrix-js-sdk/lib/webrtc/call.js";
 import { type MatrixEvent } from "matrix-js-sdk";
 
 import LegacyCallEvent from "../../../../../src/components/views/messages/LegacyCallEvent";

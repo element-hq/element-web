@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked } from "jest-mock";
 import { EventType, KNOWN_SAFE_ROOM_VERSION, type MatrixClient } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { canEncryptToAllUsers } from "../../../../src/createRoom";
 import { type LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";

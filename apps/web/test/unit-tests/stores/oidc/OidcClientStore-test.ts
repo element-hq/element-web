@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import fetchMock from "@fetch-mock/jest";
 import { mocked } from "jest-mock";
 import { OidcClient } from "oidc-client-ts";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { discoverAndValidateOIDCIssuerWellKnown } from "matrix-js-sdk";
-import { OidcError } from "matrix-js-sdk/lib/oidc/error";
+import { OidcError } from "matrix-js-sdk/lib/oidc/error.js";
 
 import { OidcClientStore } from "../../../../src/stores/oidc/OidcClientStore";
 import { flushPromises, getMockClientWithEventEmitter, mockPlatformPeg } from "../../../test-utils";

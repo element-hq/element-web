@@ -6,7 +6,7 @@
  */
 
 import { JoinRule, type MatrixClient, type Room } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { mocked } from "jest-mock";
 
 import { createTestClient, mkRoom } from "../../../test-utils";

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { safeSet } from "matrix-js-sdk/lib/utils";
+import { safeSet } from "matrix-js-sdk/lib/utils.js";
 import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { type AnyLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/types";
 import {

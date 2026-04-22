@@ -26,8 +26,8 @@ import {
     type EventEncryptionInfo,
     EventShieldColour,
     EventShieldReason,
-} from "matrix-js-sdk/lib/crypto-api";
-import { mkEncryptedMatrixEvent } from "matrix-js-sdk/lib/testing";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { mkEncryptedMatrixEvent } from "matrix-js-sdk/lib/testing.js";
 import { getByTestId } from "@testing-library/dom";
 
 import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";

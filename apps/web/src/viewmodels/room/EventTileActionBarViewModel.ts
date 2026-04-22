@@ -16,7 +16,7 @@ import {
     RoomStateEvent,
     type MatrixEvent,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import {
     ActionBarAction,
     BaseViewModel,

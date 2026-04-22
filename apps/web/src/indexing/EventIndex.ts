@@ -30,9 +30,9 @@ import {
     type TimelineIndex,
     type TimelineWindow,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { sleep } from "matrix-js-sdk/lib/utils";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";

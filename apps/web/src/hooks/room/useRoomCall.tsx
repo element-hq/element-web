@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk";
-import { CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call.js";
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import { logger as rootLogger } from "matrix-js-sdk/lib/logger";
+import { logger as rootLogger } from "matrix-js-sdk/lib/logger.js";
 
 import type React from "react";
 import { useFeatureEnabled, useSettingValue } from "../useSettings";

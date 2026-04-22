@@ -14,7 +14,7 @@ import {
     type MatrixEvent,
     type MatrixClient,
 } from "matrix-js-sdk";
-import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types";
+import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types.js";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";

@@ -18,7 +18,7 @@ import {
     type LocalNotificationSettings,
     type EmptyObject,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import Spinner from "../elements/Spinner";

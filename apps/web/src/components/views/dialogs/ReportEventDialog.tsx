@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ChangeEvent } from "react";
 import { type MatrixEvent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
 import { ensureDMExists } from "../../../createRoom";
@@ -24,7 +24,7 @@ import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import LabelledCheckbox from "../elements/LabelledCheckbox";
 
-declare module "matrix-js-sdk/lib/types" {
+declare module "matrix-js-sdk/lib/types.js" {
     interface TimelineEvents {
         [ABUSE_EVENT_TYPE]: AbuseEventContent;
     }

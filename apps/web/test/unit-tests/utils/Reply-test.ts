@@ -12,7 +12,7 @@ import { getParentEventId, shouldDisplayReply, stripHTMLReply, stripPlainReply }
 import { mkEvent, stubClient } from "../../test-utils";
 
 // don't litter test console with logs
-jest.mock("matrix-js-sdk/lib/logger");
+jest.mock("matrix-js-sdk/lib/logger.js");
 
 describe("Reply", () => {
     describe("getParentEventId", () => {

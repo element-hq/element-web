@@ -18,7 +18,7 @@ import {
     type ContentHelpers,
     M_BEACON,
 } from "matrix-js-sdk";
-import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import classNames from "classnames";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

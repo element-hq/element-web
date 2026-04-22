@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode, useEffect, useState } from "react";
 import { JoinRule, RestrictedAllowType, type Room, EventType, Visibility } from "matrix-js-sdk";
-import { type RoomJoinRulesEventContent } from "matrix-js-sdk/lib/types";
+import { type RoomJoinRulesEventContent } from "matrix-js-sdk/lib/types.js";
 
 import StyledRadioGroup, { type IDefinition } from "../elements/StyledRadioGroup";
 import { _t } from "../../../languageHandler";

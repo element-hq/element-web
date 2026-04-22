@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "matrix-js-sdk/lib/oidc/authorize";
+import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "matrix-js-sdk/lib/oidc/authorize.js";
 import { type OidcClientConfig } from "matrix-js-sdk";
-import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import { type IdTokenClaims } from "oidc-client-ts";
 
 import { OidcClientError } from "./error";

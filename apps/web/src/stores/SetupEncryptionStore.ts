@@ -13,8 +13,8 @@ import {
     type VerificationRequest,
     VerificationRequestEvent,
     CryptoEvent,
-} from "matrix-js-sdk/lib/crypto-api";
-import { logger } from "matrix-js-sdk/lib/logger";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type Device, type SecretStorage } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";

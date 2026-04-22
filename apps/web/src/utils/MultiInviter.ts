@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MatrixError, type MatrixClient, EventType, type EmptyObject, type InviteOpts } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { AddressType, getAddressType } from "../UserAddress";
 import { _t } from "../languageHandler";

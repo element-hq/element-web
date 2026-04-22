@@ -14,7 +14,7 @@ import {
     type RoomState,
     RoomStateEvent,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { mocked } from "jest-mock";
 
 import { isKnockDenied, waitForMember } from "../../../src/utils/membership";

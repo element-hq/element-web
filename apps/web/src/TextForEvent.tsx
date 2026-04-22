@@ -19,10 +19,10 @@ import {
     M_POLL_END,
     ContentHelpers,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { removeDirectionOverrideChars } from "matrix-js-sdk/lib/utils";
-import { type PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { removeDirectionOverrideChars } from "matrix-js-sdk/lib/utils.js";
+import { type PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent.js";
 
 import { _t } from "./languageHandler";
 import * as Roles from "./Roles";

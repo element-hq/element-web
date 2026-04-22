@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { logger } from "matrix-js-sdk/lib/logger";
-import { MapWithDefault } from "matrix-js-sdk/lib/utils";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { MapWithDefault } from "matrix-js-sdk/lib/utils.js";
 import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
 import {

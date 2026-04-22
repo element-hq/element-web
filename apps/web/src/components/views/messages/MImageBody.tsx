@@ -11,9 +11,9 @@ import React, { type JSX, type ComponentProps, createRef, type ReactNode } from 
 import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { ClientEvent } from "matrix-js-sdk";
-import { type ImageContent } from "matrix-js-sdk/lib/types";
+import { type ImageContent } from "matrix-js-sdk/lib/types.js";
 import { Tooltip } from "@vector-im/compound-web";
 import { ImageErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

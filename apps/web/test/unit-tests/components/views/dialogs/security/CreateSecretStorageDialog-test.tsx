@@ -11,7 +11,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { mocked, type MockedObject } from "jest-mock";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 import { filterConsole, stubClient } from "../../../../../test-utils";
 import CreateSecretStorageDialog from "../../../../../../src/async-components/views/dialogs/security/CreateSecretStorageDialog";

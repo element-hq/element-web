@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type EmptyObject } from "matrix-js-sdk";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 

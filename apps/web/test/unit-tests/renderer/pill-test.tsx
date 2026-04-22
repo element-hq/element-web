@@ -19,7 +19,7 @@ import {
 } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 import parse from "html-react-parser";
-import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor.js";
 
 import { keywordPillRenderer, mentionPillRenderer, combineRenderers } from "../../../src/renderer";
 import { stubClient, withClientContextRenderOptions } from "../../test-utils";

@@ -14,7 +14,7 @@ import {
     RelationType,
     type UploadResponse,
 } from "matrix-js-sdk";
-import { type ImageInfo } from "matrix-js-sdk/lib/types";
+import { type ImageInfo } from "matrix-js-sdk/lib/types.js";
 import encrypt, { type IEncryptedFile } from "matrix-encrypt-attachment";
 
 import ContentMessages, { UploadCanceledError, uploadFile } from "../../src/ContentMessages";

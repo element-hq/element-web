@@ -283,8 +283,8 @@ Response:
 */
 
 import { type IContent, type MatrixEvent, type IEvent, type StateEvents } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import dis from "./dispatcher/dispatcher";

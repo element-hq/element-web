@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { SERVICE_TYPES, createClient, type MatrixClient, MatrixError } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";

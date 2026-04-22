@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { type MethodLikeKeys, mocked, type MockedObject, type PropertyLikeKeys } from "jest-mock";
-import { Feature, ServerSupport } from "matrix-js-sdk/lib/feature";
+import { Feature, ServerSupport } from "matrix-js-sdk/lib/feature.js";
 import { type MatrixClient, type Room, User } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";

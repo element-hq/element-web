@@ -10,7 +10,7 @@ import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Room } from "matrix-js-sdk";
-import { type ReplacementEvent, type RoomMessageEventContent } from "matrix-js-sdk/lib/types";
+import { type ReplacementEvent, type RoomMessageEventContent } from "matrix-js-sdk/lib/types.js";
 
 import EditMessageComposerWithMatrixClient, {
     createEditContent,

@@ -15,7 +15,7 @@ import {
     RoomEvent,
     type EmptyObject,
 } from "matrix-js-sdk";
-import { isNullOrUndefined } from "matrix-js-sdk/lib/utils";
+import { isNullOrUndefined } from "matrix-js-sdk/lib/utils.js";
 
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";

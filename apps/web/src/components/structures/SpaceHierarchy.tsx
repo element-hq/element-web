@@ -35,11 +35,11 @@ import {
     type HierarchyRoom,
     JoinRule,
 } from "matrix-js-sdk";
-import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy";
+import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy.js";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/lib/types.js";
 import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { LinkedText } from "@element-hq/web-shared-components";
 

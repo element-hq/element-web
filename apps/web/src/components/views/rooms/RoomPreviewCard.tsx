@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type FC, useContext, useState } from "react";
 import { type Room, JoinRule } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { InfoSolidIcon, VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

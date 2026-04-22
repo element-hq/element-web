@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { act } from "react";
 import { render } from "jest-matrix-react";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { type Mocked } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk";
 

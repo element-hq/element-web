@@ -37,7 +37,7 @@ export const MARKED_UNREAD_TYPE_UNSTABLE = "com.famedly.marked_unread";
  */
 export const MARKED_UNREAD_TYPE_STABLE = EventType.MarkedUnread;
 
-declare module "matrix-js-sdk/lib/types" {
+declare module "matrix-js-sdk/lib/types.js" {
     interface RoomAccountDataEvents {
         [MARKED_UNREAD_TYPE_UNSTABLE]: { [eventId: string]: boolean };
     }

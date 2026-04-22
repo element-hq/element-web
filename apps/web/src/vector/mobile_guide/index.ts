@@ -9,7 +9,7 @@ import "./index.css";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";
 
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { getVectorConfig } from "../getconfig";
 import { MobileAppVariant, mobileApps, updateMobilePage } from "./mobile-apps.ts";

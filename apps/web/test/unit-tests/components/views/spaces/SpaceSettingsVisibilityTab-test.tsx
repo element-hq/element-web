@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
 import {
     EventType,

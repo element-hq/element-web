@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-js-sdk";
-import { type VerificationRequest } from "matrix-js-sdk/lib/crypto-api";
+import { type VerificationRequest } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { type RightPanelPhases } from "./RightPanelStorePhases";
 

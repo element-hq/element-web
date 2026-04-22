@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ReactNode } from "react";
-import { OidcError } from "matrix-js-sdk/lib/oidc/error";
+import { OidcError } from "matrix-js-sdk/lib/oidc/error.js";
 
 import { _t } from "../../languageHandler";
 

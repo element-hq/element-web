@@ -17,7 +17,7 @@ import {
     Filter,
     type IFilterDefinition,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 const getOldestEventTimestamp = (timelineSet?: EventTimelineSet): number | undefined => {
     if (!timelineSet) {

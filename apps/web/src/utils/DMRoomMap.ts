@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { uniq } from "lodash";
 import { type Room, type MatrixEvent, EventType, ClientEvent, type MatrixClient } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { filterValidMDirect } from "./dm/filterValidMDirect";
 

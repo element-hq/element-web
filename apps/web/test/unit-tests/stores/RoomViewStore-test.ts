@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked } from "jest-mock";
 import { KnownMembership, MatrixError, Room } from "matrix-js-sdk";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import {
     RoomViewLifecycle,
     type ViewRoomOpts,

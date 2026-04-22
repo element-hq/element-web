@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { renderHook } from "jest-matrix-react";
 import { EventStatus, NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import type { MatrixClient } from "matrix-js-sdk";
 import { useUnreadNotifications } from "../../../src/hooks/useUnreadNotifications";

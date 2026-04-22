@@ -10,7 +10,7 @@ import React, { type ComponentProps } from "react";
 import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "matrix-js-sdk";
 import { mocked, type MockedObject } from "jest-mock";
 import { render, waitFor } from "jest-matrix-react";
-import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor.js";
 
 import {
     getMockClientWithEventEmitter,

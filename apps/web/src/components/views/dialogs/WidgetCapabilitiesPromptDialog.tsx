@@ -14,7 +14,7 @@ import {
     WidgetEventCapability,
     type WidgetKind,
 } from "matrix-widget-api";
-import { lexicographicCompare } from "matrix-js-sdk/lib/utils";
+import { lexicographicCompare } from "matrix-js-sdk/lib/utils.js";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import BaseDialog from "./BaseDialog";

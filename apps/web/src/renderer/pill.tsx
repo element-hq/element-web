@@ -11,7 +11,7 @@ import { RuleId } from "matrix-js-sdk";
 import { type Element } from "html-react-parser";
 import { textContent } from "domutils";
 import reactStringReplace from "react-string-replace";
-import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor.js";
 
 import { Pill, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "../utils/permalinks/Permalinks";

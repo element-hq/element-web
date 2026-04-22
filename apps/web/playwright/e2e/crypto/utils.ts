@@ -17,7 +17,7 @@ import type {
     VerificationRequest,
     Verifier,
     VerifierEvent,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 import { type Client } from "../../pages/client";
 import { type ElementAppPage } from "../../pages/ElementAppPage";

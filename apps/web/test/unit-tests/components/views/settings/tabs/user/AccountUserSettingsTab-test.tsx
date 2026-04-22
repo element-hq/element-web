@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { fireEvent, render, screen, within } from "jest-matrix-react";
 import React from "react";
 import { type MatrixClient, ThreepidMedium } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import userEvent from "@testing-library/user-event";
 import { type MockedObject } from "jest-mock";
 

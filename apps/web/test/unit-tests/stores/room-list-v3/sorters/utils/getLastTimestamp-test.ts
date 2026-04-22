@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Room, type RoomState } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { mkEvent, mkMessage, mkRoom, stubClient } from "../../../../../test-utils";
 import { getLastTimestamp } from "../../../../../../src/stores/room-list-v3/skip-list/sorters/utils/getLastTimestamp";

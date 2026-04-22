@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, MatrixError } from "matrix-js-sdk";
-import { type AuthDict, type IAuthData } from "matrix-js-sdk/lib/interactive-auth";
+import { type AuthDict, type IAuthData } from "matrix-js-sdk/lib/interactive-auth.js";
 
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";

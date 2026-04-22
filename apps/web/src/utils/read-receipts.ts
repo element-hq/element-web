@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent, type MatrixClient } from "matrix-js-sdk";
-import { isSupportedReceiptType } from "matrix-js-sdk/lib/utils";
+import { isSupportedReceiptType } from "matrix-js-sdk/lib/utils.js";
 
 /**
  * Determines if a read receipt update event includes the client's own user.

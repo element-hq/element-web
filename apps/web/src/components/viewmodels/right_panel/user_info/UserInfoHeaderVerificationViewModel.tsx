@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient, type RoomMember, type User } from "matrix-js-sdk";
 import { useContext } from "react";
-import { type UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
+import { type UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { type IDevice } from "../../../views/right_panel/UserInfo";

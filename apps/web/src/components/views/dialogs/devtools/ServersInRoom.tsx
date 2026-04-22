@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useContext, useMemo } from "react";
 import { EventType } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import { _t } from "../../../../languageHandler";

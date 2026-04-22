@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { cleanup, renderHook } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock";
 import { type Room, type MatrixClient, RoomMember } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { type RoomAdminToolsProps } from "../../../../../../../src/components/viewmodels/right_panel/user_info/admin/UserInfoAdminToolsContainerViewModel";

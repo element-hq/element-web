@@ -10,8 +10,8 @@ import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { type HierarchyRoom, JoinRule, MatrixError, type MatrixClient, Room } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy.js";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../../test-utils";

@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import FileSaver from "file-saver";
 import React, { type ChangeEvent } from "react";
 import { type MatrixClient } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t, _td } from "../../../../languageHandler";
 import * as MegolmExportEncryption from "../../../../utils/MegolmExportEncryption";

@@ -11,7 +11,7 @@ import { act, render, screen } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import {
     EncryptionUserSettingsTab,

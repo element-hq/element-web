@@ -18,7 +18,7 @@ import {
     M_POLL_RESPONSE,
     M_TEXT,
 } from "matrix-js-sdk";
-import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 
 import { flushPromises } from "./utilities";
 

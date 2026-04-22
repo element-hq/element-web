@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { logger } from "matrix-js-sdk/lib/logger";
-import { type StartDehydrationOpts } from "matrix-js-sdk/lib/crypto-api";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { type StartDehydrationOpts } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import type { MatrixClient } from "matrix-js-sdk";
 

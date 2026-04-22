@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { type MatrixClient } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { useEffect, useState } from "react";
 
 import { createCrossSigning } from "../CreateCrossSigning";

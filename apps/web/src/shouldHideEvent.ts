@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import { type MatrixEvent, EventType, RelationType, M_POLL_END } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import SettingsStore from "./settings/SettingsStore";
 import { type IRoomState } from "./components/structures/RoomView";

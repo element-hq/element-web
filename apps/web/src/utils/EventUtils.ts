@@ -20,7 +20,7 @@ import {
     M_LOCATION,
     M_BEACON_INFO,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import shouldHideEvent from "../shouldHideEvent";
 import { type GetRelationsForEvent } from "../components/views/rooms/EventTile";

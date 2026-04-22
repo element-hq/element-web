@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient } from "matrix-js-sdk";
-import { type EncryptedFile } from "matrix-js-sdk/lib/types";
+import { type EncryptedFile } from "matrix-js-sdk/lib/types.js";
 import { type SimpleObservable } from "matrix-widget-api";
 
 import { uploadFile } from "../ContentMessages";

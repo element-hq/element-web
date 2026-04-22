@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/lib/sliding-sync";
+import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/lib/sliding-sync.js";
 import { mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
 import fetchMock from "@fetch-mock/jest";

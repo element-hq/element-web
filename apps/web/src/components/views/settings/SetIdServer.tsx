@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type IThreepid } from "matrix-js-sdk";
 import { EditInPlace, ErrorMessage } from "@vector-im/compound-web";
 

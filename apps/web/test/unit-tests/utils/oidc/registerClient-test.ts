@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "@fetch-mock/jest";
-import { OidcError } from "matrix-js-sdk/lib/oidc/error";
+import { OidcError } from "matrix-js-sdk/lib/oidc/error.js";
 import { type OidcClientConfig } from "matrix-js-sdk";
 
 import { getOidcClientId } from "../../../../src/utils/oidc/registerClient";

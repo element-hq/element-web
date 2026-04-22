@@ -6,7 +6,7 @@
  */
 
 import { EventType, MatrixEvent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { VideoBodyViewState } from "@element-hq/web-shared-components";
 import { decode } from "blurhash";
 import { type Media } from "@element-hq/element-web-module-api";

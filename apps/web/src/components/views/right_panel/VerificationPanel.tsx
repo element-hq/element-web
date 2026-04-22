@@ -14,10 +14,10 @@ import {
     type VerificationRequest,
     VerificationRequestEvent,
     VerifierEvent,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 import { type Device, type RoomMember, type User } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { VerificationMethod } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { VerificationMethod } from "matrix-js-sdk/lib/types.js";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";

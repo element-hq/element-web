@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { parseErrorResponse } from "matrix-js-sdk";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { type MatrixEvent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { _t } from "../languageHandler";

@@ -18,9 +18,9 @@ import {
     RoomStateEvent,
     type IContent,
 } from "matrix-js-sdk";
-import { CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call.js";
 import { mocked, type Mocked } from "jest-mock";
-import { type MatrixRTCSession } from "matrix-js-sdk/lib/matrixrtc";
+import { type MatrixRTCSession } from "matrix-js-sdk/lib/matrixrtc/index.js";
 
 import { mkEvent, mkRoomMember, setupAsyncStoreWithClient, stubClient } from "./test-utils";
 import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";

@@ -20,7 +20,7 @@ import {
     RoomStateEvent,
     type IRoomTimelineData,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import QueryMatcher from "./QueryMatcher";

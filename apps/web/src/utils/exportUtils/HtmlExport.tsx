@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 import { createRoot } from "react-dom/client";
 import { type Room, MatrixEvent, EventType, MsgType } from "matrix-js-sdk";
 import { renderToStaticMarkup } from "react-dom/server";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import escapeHtml from "escape-html";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { DateSeparatorView, I18nContext } from "@element-hq/web-shared-components";

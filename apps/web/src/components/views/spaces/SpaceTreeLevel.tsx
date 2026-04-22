@@ -18,7 +18,7 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import { type Room, RoomEvent } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { type DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import {
     ChevronDownIcon,

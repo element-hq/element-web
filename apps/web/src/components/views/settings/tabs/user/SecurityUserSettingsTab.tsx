@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk";
-import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Form } from "@vector-im/compound-web";
 

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import { type InternationalisedPolicy, type Terms, type MatrixClient } from "matrix-js-sdk";
-import { AuthType, type AuthDict, type IInputs, type IStageStatus } from "matrix-js-sdk/lib/interactive-auth";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { AuthType, type AuthDict, type IInputs, type IStageStatus } from "matrix-js-sdk/lib/interactive-auth.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import React, { type JSX, type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
 import { Button } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Relations } from "matrix-js-sdk";
-import { type RelationsContainer } from "matrix-js-sdk/lib/models/relations-container";
+import { type RelationsContainer } from "matrix-js-sdk/lib/models/relations-container.js";
 
 import { type PublicInterface } from "../@types/common";
 

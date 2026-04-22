@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type Ref, type FunctionComponent } from "react";
 import { type FormattingFunctions, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import Autocomplete from "../../Autocomplete";
 import { type ICompletion } from "../../../../../autocomplete/Autocompleter";

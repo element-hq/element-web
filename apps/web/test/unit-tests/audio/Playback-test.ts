@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { createAudioContext, decodeOgg } from "../../../src/audio/compat";
 import { Playback, PlaybackState } from "../../../src/audio/Playback";

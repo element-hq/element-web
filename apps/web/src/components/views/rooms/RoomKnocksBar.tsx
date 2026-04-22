@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventTimeline, JoinRule, type MatrixError, type Room, RoomStateEvent } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import React, { type ReactElement, type ReactNode, useCallback, useState, type FC } from "react";
 import { CloseIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

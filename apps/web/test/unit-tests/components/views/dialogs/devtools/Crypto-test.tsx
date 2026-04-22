@@ -8,7 +8,7 @@
 import React from "react";
 import { type MatrixClient } from "matrix-js-sdk";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api";
+import { type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { Crypto } from "../../../../../../src/components/views/dialogs/devtools/Crypto";

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
 
 import { type ActionPayload } from "../payloads";
 import { type Action } from "../actions";

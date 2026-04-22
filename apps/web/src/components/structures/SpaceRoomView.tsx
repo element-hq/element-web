@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, RoomType, JoinRule, Preset, type Room, RoomEvent } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import React, { type JSX, useCallback, useContext, useRef, useState } from "react";
 import {
     GroupIcon,

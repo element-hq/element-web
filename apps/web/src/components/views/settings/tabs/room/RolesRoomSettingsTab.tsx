@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { EventType, type RoomMember, type RoomState, RoomStateEvent, type Room } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { throttle, get, set } from "lodash";
-import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/lib/types";
+import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/lib/types.js";
 
 import { _t, _td } from "../../../../../languageHandler";
 import AccessibleButton from "../../../elements/AccessibleButton";

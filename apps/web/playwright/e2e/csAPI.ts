@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type APIRequestContext } from "@playwright/test";
-import { type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api";
+import { type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { ClientServerApi } from "@element-hq/element-web-playwright-common/lib/utils/api.js";
 
 import { type HomeserverInstance } from "../plugins/homeserver";

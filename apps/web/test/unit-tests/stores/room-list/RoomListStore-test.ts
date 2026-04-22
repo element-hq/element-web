@@ -15,7 +15,7 @@ import {
     PushRuleActionName,
     Room,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { mocked } from "jest-mock";
 
 import defaultDispatcher, { type MatrixDispatcher } from "../../../../src/dispatcher/dispatcher";

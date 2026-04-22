@@ -18,8 +18,8 @@ import {
     type MRoomTopicEventContent,
     type User,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { KnownMembership, type RoomMemberEventContent } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { KnownMembership, type RoomMemberEventContent } from "matrix-js-sdk/lib/types.js";
 import { LinkedText } from "@element-hq/web-shared-components";
 
 import dis from "../dispatcher/dispatcher";

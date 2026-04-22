@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type JSX, type ReactNode, type SyntheticEvent } from "react";
 import { EventType, type Room, RoomMember } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { uniqBy } from "lodash";
 import { Pill, PillInput, RichList } from "@element-hq/web-shared-components";
 import { DialPadIcon, UserProfileSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";

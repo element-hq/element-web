@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import classNames from "classnames";
-import { type PollAnswerSubevent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
+import { type PollAnswerSubevent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent.js";
 import { CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

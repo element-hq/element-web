@@ -11,7 +11,7 @@ import { render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked, type Mocked } from "jest-mock";
 import { type IMyDevice, type MatrixClient } from "matrix-js-sdk";
-import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import dis from "../../../src/dispatcher/dispatcher";
 import { showToast } from "../../../src/toasts/UnverifiedSessionToast";

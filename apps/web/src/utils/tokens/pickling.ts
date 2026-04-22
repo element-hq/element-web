@@ -18,7 +18,7 @@ Please see LICENSE files in the repository root for full details.
 // before release.
 // eslint-disable-next-line no-restricted-imports
 import { encodeUnpaddedBase64 } from "matrix-js-sdk/lib/base64";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 /**
  * Encrypted format of a pickle key, as stored in IndexedDB.

@@ -20,7 +20,7 @@ import {
 } from "@vector-im/compound-web";
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
 import classNames from "classnames";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t } from "../../../languageHandler";
 import { SettingsSubsection } from "./shared/SettingsSubsection";

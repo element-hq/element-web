@@ -21,10 +21,10 @@ import {
     EventTimeline,
     type MatrixClient,
 } from "matrix-js-sdk";
-import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
-import { PollResponseEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollResponseEvent";
-import { PollEndEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollEndEvent";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent.js";
+import { PollResponseEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollResponseEvent.js";
+import { PollEndEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollEndEvent.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import userEvent from "@testing-library/user-event";
 
 import { stubClient, mkEvent, mkMessage, flushPromises } from "../../../../test-utils";

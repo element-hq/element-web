@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { type Room, RoomType, type HierarchyRoom } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy";
-import { normalize } from "matrix-js-sdk/lib/utils";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy.js";
+import { normalize } from "matrix-js-sdk/lib/utils.js";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 

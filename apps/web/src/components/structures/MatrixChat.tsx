@@ -20,9 +20,9 @@ import {
     type SyncStateData,
     type TimelineEvents,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { throttle } from "lodash";
-import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api";
+import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { TooltipProvider } from "@vector-im/compound-web";
 // what-input helps improve keyboard accessibility
 import "what-input";

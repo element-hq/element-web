@@ -19,7 +19,7 @@ import {
     PendingEventOrdering,
     ReceiptType,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import type { MatrixClient } from "matrix-js-sdk";
 import { mkThread } from "../../../../../test-utils/threads";

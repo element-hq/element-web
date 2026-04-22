@@ -37,15 +37,15 @@ import {
     type Thread,
     ThreadEvent,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { CallErrorCode } from "matrix-js-sdk/lib/webrtc/call";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { CallErrorCode } from "matrix-js-sdk/lib/webrtc/call.js";
 import {
     CryptoEvent,
     DecryptionFailureCode,
     EventShieldColour,
     EventShieldReason,
     type UserVerificationStatus,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 import { Tooltip } from "@vector-im/compound-web";
 import { uniqueId, uniqBy } from "lodash";
 import { CircleIcon, CheckCircleIcon, ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";

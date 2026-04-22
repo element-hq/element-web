@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MockedObject } from "jest-mock";
 import { type EventTimeline, EventType, type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import { MainSplitContentType } from "../../src/components/structures/RoomView";
 import { type RoomContextType, TimelineRenderingType } from "../../src/contexts/RoomContext";

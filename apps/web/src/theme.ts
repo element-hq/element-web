@@ -21,7 +21,7 @@ import "@fontsource/fira-code/latin-400.css";
 import "@fontsource/fira-code/latin-ext-700.css";
 import "@fontsource/fira-code/latin-700.css";
 
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t } from "./languageHandler";
 import SettingsStore from "./settings/SettingsStore";

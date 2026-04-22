@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { sortBy } from "lodash";
-import { averageBetweenStrings, DEFAULT_ALPHABET } from "matrix-js-sdk/lib/utils";
+import { averageBetweenStrings, DEFAULT_ALPHABET } from "matrix-js-sdk/lib/utils.js";
 
 import { midPointsBetweenStrings, reorderLexicographically } from "../../../src/utils/stringOrderField";
 

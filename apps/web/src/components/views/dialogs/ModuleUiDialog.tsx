@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type RefObject } from "react";
 import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
 import { type ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
 

@@ -15,7 +15,7 @@ import {
     type EventTimelineSet,
     type Thread,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import BaseCard from "./BaseCard";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";

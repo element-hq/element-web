@@ -10,7 +10,7 @@ import Recorder from "opus-recorder/dist/recorder.min.js";
 import encoderPath from "opus-recorder/dist/encoderWorker.min.js";
 import { SimpleObservable } from "matrix-widget-api";
 import EventEmitter from "events";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { clamp } from "@element-hq/web-shared-components";
 
 import MediaDeviceHandler from "../MediaDeviceHandler";

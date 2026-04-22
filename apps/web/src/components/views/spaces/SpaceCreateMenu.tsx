@@ -26,7 +26,7 @@ import {
     type MatrixClient,
     type ICreateRoomOpts,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { LockSolidIcon, PublicIcon, ChevronLeftIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

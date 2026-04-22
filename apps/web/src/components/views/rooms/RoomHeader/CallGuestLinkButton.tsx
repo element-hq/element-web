@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import ExternalLinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
 import React, { useCallback } from "react";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { EventType, JoinRule, type Room } from "matrix-js-sdk";
 
 import Modal from "../../../../Modal";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 import classNames from "classnames";
 import { EventType, JoinRule, type MatrixEvent, type Room, RoomEvent, type User, UserEvent } from "matrix-js-sdk";
-import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue";
+import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue.js";
 import { Tooltip } from "@vector-im/compound-web";
 import { PublicIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

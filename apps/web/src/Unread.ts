@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { M_BEACON, type Room, Thread, type MatrixEvent, EventType, type MatrixClient } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import shouldHideEvent from "./shouldHideEvent";
 import { haveRendererForEvent } from "./events/EventTileFactory";

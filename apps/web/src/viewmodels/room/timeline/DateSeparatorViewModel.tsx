@@ -13,7 +13,7 @@ import {
 } from "@element-hq/web-shared-components";
 import React from "react";
 import { Direction, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

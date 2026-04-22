@@ -47,9 +47,9 @@ import {
     SlidingSync,
     SlidingSyncEvent,
     SlidingSyncState,
-} from "matrix-js-sdk/lib/sliding-sync";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { sleep } from "matrix-js-sdk/lib/utils";
+} from "matrix-js-sdk/lib/sliding-sync.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 // how long to long poll for
 const SLIDING_SYNC_TIMEOUT_MS = 20 * 1000;

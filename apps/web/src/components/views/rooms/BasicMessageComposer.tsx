@@ -10,7 +10,7 @@ import classNames from "classnames";
 import React, { type JSX, createRef, type ClipboardEvent, type SyntheticEvent } from "react";
 import { type Room, type MatrixEvent } from "matrix-js-sdk";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 import { isLinkable } from "@element-hq/web-shared-components";
 

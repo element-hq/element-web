@@ -15,14 +15,14 @@ import {
     RuleId,
     TweakName,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
 import EventEmitter from "events";
 import { mocked } from "jest-mock";
-import { CallEventHandlerEvent } from "matrix-js-sdk/lib/webrtc/callEventHandler";
+import { CallEventHandlerEvent } from "matrix-js-sdk/lib/webrtc/callEventHandler.js";
 import fetchMock from "@fetch-mock/jest";
 import { waitFor } from "jest-matrix-react";
-import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor.js";
 
 import LegacyCallHandler, {
     AudioID,

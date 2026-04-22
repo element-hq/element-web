@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, type MatrixEvent, type Room } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { type Playback, PlaybackState } from "./Playback";
 import { UPDATE_EVENT } from "../stores/AsyncStore";

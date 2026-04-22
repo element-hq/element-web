@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type RefObject, type ReactNode, useRef, useEffect } from "react";
-import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { useCreateAutoDisposedViewModel, WidgetPipView } from "@element-hq/web-shared-components";
 
 import LegacyCallView from "../views/voip/LegacyCallView";

@@ -17,7 +17,7 @@ import {
     type OidcClientConfig,
     type ISSOFlow,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { type IMatrixClientCreds } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";

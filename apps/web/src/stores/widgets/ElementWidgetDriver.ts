@@ -42,7 +42,7 @@ import {
     type SendDelayedEventRequestOpts,
     type MatrixClient,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import {
     type ApprovalOpts,
     type CapabilitiesOpts,

@@ -17,9 +17,13 @@ import {
     waitForElementToBeRemoved,
     within,
 } from "jest-matrix-react";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { type CryptoApi, DeviceVerificationStatus, type VerificationRequest } from "matrix-js-sdk/lib/crypto-api";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import {
+    type CryptoApi,
+    DeviceVerificationStatus,
+    type VerificationRequest,
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import {
     ClientEvent,
     Device,

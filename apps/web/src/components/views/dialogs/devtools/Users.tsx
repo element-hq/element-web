@@ -11,7 +11,7 @@
 
 import React, { type JSX, useContext, useState } from "react";
 import { type Device, type RoomMember } from "matrix-js-sdk";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import ImportE2eKeysDialog from "../../../../../../src/async-components/views/dialogs/security/ImportE2eKeysDialog";
 import * as MegolmExportEncryption from "../../../../../../src/utils/MegolmExportEncryption";

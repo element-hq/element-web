@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type Room } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { asyncAction } from "./actionCreators";
 import Modal from "../Modal";

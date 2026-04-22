@@ -22,7 +22,7 @@ import {
     type ISendEventResponse,
 } from "matrix-js-sdk";
 import { Widget } from "matrix-widget-api";
-import { type IRTCNotificationContent } from "matrix-js-sdk/lib/matrixrtc";
+import { type IRTCNotificationContent } from "matrix-js-sdk/lib/matrixrtc/index.js";
 import { randomUUID } from "node:crypto";
 
 import {

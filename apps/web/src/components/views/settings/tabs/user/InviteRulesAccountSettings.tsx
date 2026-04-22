@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ChangeEvent, type FC, useCallback, useState } from "react";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t } from "../../../../../languageHandler";
 import { useSettingValue } from "../../../../../hooks/useSettings";

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { clamp } from "@element-hq/web-shared-components";
 
 import { UPDATE_EVENT } from "../stores/AsyncStore";

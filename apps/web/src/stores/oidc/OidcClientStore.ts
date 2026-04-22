@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, discoverAndValidateOIDCIssuerWellKnown } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { OidcClient } from "oidc-client-ts";
 
 import {

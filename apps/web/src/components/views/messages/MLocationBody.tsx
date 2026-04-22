@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { type MatrixEvent, ClientEvent, type ClientEventHandlerMap } from "matrix-js-sdk";
-import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";

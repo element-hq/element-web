@@ -16,7 +16,7 @@ import {
     RelationType,
     EventType,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { type JSX } from "react";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";

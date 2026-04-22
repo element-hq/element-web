@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked } from "jest-mock";
 import { type UploadOpts, type MatrixClient } from "matrix-js-sdk";
-import { type EncryptedFile } from "matrix-js-sdk/lib/types";
+import { type EncryptedFile } from "matrix-js-sdk/lib/types.js";
 
 import { createVoiceMessageRecording, VoiceMessageRecording } from "../../../src/audio/VoiceMessageRecording";
 import { RecordingState, type VoiceRecording } from "../../../src/audio/VoiceRecording";

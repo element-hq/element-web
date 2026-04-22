@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import { EventType, type MatrixEvent, type Room, RoomStateEvent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { Button, Text } from "@vector-im/compound-web";
 import { Flex } from "@element-hq/web-shared-components";
 

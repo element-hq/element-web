@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useEffect, useState } from "react";
 import { SERVICE_TYPES, ThreepidMedium } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { Alert } from "@vector-im/compound-web";
 
 import { getThreepidsWithBindStatus } from "../../../../boundThreepids";

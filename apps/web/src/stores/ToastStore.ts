@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type JSX } from "react";
 
 import type React from "react";

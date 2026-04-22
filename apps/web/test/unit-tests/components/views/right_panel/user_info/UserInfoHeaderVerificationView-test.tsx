@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked, type Mocked } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk";
-import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { UserVerificationStatus, type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { Device, RoomMember } from "matrix-js-sdk";
 import { render, waitFor, screen } from "jest-matrix-react";
 import React from "react";

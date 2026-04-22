@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement, type ComponentProps, type ReactNode } from "react";
 import { EventType, type MatrixEvent, MatrixEventEvent, type RoomMember } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { throttle } from "lodash";
 
 import { _t } from "../../../languageHandler";

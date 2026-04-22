@@ -12,7 +12,7 @@ import {
     type ReplacementEvent,
     type RoomMessageEventContent,
     type RoomMessageTextEventContent,
-} from "matrix-js-sdk/lib/types";
+} from "matrix-js-sdk/lib/types.js";
 
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";

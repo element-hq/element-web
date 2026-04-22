@@ -7,7 +7,7 @@
  */
 
 import { TypedEventEmitter } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { cloneDeep } from "lodash";
 
 import SettingsStore from "../settings/SettingsStore";

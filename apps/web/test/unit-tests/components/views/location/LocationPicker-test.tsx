@@ -11,7 +11,7 @@ import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
 import { RoomMember, type MatrixClient } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import LocationPicker from "../../../../../src/components/views/location/LocationPicker";
 import { LocationShareType } from "../../../../../src/components/views/location/shareLocation";

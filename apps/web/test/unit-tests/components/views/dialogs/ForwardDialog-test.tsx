@@ -10,7 +10,7 @@ import React from "react";
 import { MatrixEvent, EventType, LocationAssetType, M_ASSET, M_LOCATION, M_TIMESTAMP, M_TEXT } from "matrix-js-sdk";
 import { act, fireEvent, getByTestId, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import ForwardDialog from "../../../../../src/components/views/dialogs/ForwardDialog";

@@ -27,7 +27,7 @@ import {
     ThreadEvent,
     ThreadFilterType,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import React from "react";
 import { type Mocked, mocked } from "jest-mock";
 import { forEachRight } from "lodash";

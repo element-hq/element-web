@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MediaEventContent } from "matrix-js-sdk/lib/types";
+import { type MediaEventContent } from "matrix-js-sdk/lib/types.js";
 
 import { downloadLabelForFile } from "../../../src/utils/FileUtils.ts";
 

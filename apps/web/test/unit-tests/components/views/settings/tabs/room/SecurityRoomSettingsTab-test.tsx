@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen, waitFor, within } from "jest-matrix-react";
 import { EventType, GuestAccess, HistoryVisibility, JoinRule, MatrixEvent, Room } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { mocked } from "jest-mock";
-import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/lib/types";
+import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/lib/types.js";
 
 import SecurityRoomSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/SecurityRoomSettingsTab";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent, EventType, MsgType } from "matrix-js-sdk";
-import { type FileContent, type ImageContent, type MediaEventContent } from "matrix-js-sdk/lib/types";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { type FileContent, type ImageContent, type MediaEventContent } from "matrix-js-sdk/lib/types.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { LazyValue } from "./LazyValue";
 import { type Media, mediaFromContent } from "../customisations/Media";

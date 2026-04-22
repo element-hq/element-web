@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent, type PollStartEventContent } from "matrix-js-sdk";
-import { InvalidEventError } from "matrix-js-sdk/lib/extensible_events_v1/InvalidEventError";
-import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
+import { InvalidEventError } from "matrix-js-sdk/lib/extensible_events_v1/InvalidEventError.js";
+import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent.js";
 
 import { type Preview } from "./Preview";
 import { type TagID } from "../../room-list-v3/skip-list/tag";

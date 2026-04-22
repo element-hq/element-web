@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useState } from "react";
 import { type Room } from "matrix-js-sdk";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import { LinkIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

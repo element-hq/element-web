@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import * as maplibregl from "maplibre-gl";
 import { type MatrixClient } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t } from "../../languageHandler";
 import { findMapStyleUrl } from "./findMapStyleUrl";

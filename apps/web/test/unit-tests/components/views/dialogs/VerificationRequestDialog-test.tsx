@@ -16,8 +16,8 @@ import {
     type ShowQrCodeCallbacks,
     VerificationRequestEvent,
     type VerificationRequestEventHandlerMap,
-} from "matrix-js-sdk/lib/crypto-api";
-import { VerificationMethod } from "matrix-js-sdk/lib/types";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { VerificationMethod } from "matrix-js-sdk/lib/types.js";
 
 import { stubClient } from "../../../../test-utils";
 import VerificationRequestDialog from "../../../../../src/components/views/dialogs/VerificationRequestDialog";

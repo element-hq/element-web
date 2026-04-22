@@ -17,7 +17,7 @@ import {
     type Thread,
     type RoomMember,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { Widget } from "matrix-widget-api";
 
 import {

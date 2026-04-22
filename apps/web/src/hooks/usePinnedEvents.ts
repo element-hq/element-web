@@ -17,7 +17,7 @@ import {
     EventTimeline,
     type MatrixClient,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 import { ReadPinsEventId } from "../components/views/right_panel/types";

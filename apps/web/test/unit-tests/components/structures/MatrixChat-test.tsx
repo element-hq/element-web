@@ -12,19 +12,19 @@ import { fireEvent, render, type RenderResult, screen, waitFor, within, act } fr
 import fetchMock from "@fetch-mock/jest";
 import { type Mocked, mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk";
-import { type MediaHandler } from "matrix-js-sdk/lib/webrtc/mediaHandler";
+import { type MediaHandler } from "matrix-js-sdk/lib/webrtc/mediaHandler.js";
 import * as MatrixJs from "matrix-js-sdk";
-import { completeAuthorizationCodeGrant } from "matrix-js-sdk/lib/oidc/authorize";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { OidcError } from "matrix-js-sdk/lib/oidc/error";
-import { type BearerTokenResponse } from "matrix-js-sdk/lib/oidc/validate";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { completeAuthorizationCodeGrant } from "matrix-js-sdk/lib/oidc/authorize.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { OidcError } from "matrix-js-sdk/lib/oidc/error.js";
+import { type BearerTokenResponse } from "matrix-js-sdk/lib/oidc/validate.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import {
     CryptoEvent,
     type DeviceVerificationStatus,
     UserVerificationStatus,
     type CryptoApi,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import MatrixChat from "../../../../src/components/structures/MatrixChat";
 import * as StorageAccess from "../../../../src/utils/StorageAccess";
@@ -71,7 +71,7 @@ import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
 
-jest.mock("matrix-js-sdk/lib/oidc/authorize", () => ({
+jest.mock("matrix-js-sdk/lib/oidc/authorize.js", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
 }));
 

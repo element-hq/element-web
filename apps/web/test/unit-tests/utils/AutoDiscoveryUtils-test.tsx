@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { AutoDiscovery, AutoDiscoveryAction, type ClientConfig } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import fetchMock from "@fetch-mock/jest";
 
 import AutoDiscoveryUtils from "../../../src/utils/AutoDiscoveryUtils";

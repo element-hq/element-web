@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type MatrixEvent, EventType } from "matrix-js-sdk";
-import { CallState } from "matrix-js-sdk/lib/webrtc/call";
+import { CallState } from "matrix-js-sdk/lib/webrtc/call.js";
 
 import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

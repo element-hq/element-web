@@ -17,7 +17,7 @@ import {
     type Room,
     RoomMember,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import sanitizeHtml from "sanitize-html";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 

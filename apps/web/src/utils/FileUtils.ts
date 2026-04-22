@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { filesize, type FilesizeOptions, type FilesizeReturn } from "filesize";
-import { type MediaEventContent } from "matrix-js-sdk/lib/types";
+import { type MediaEventContent } from "matrix-js-sdk/lib/types.js";
 
 import { _t } from "../languageHandler";
 

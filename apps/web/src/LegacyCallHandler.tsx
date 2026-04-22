@@ -20,9 +20,9 @@ import {
     CallType,
     FALLBACK_ICE_SERVER,
     type MatrixCall,
-} from "matrix-js-sdk/lib/webrtc/call";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { CallEventHandlerEvent } from "matrix-js-sdk/lib/webrtc/callEventHandler";
+} from "matrix-js-sdk/lib/webrtc/call.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { CallEventHandlerEvent } from "matrix-js-sdk/lib/webrtc/callEventHandler.js";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";

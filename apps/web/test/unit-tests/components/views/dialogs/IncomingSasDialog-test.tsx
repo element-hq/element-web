@@ -15,7 +15,7 @@ import {
     type Verifier,
     VerifierEvent,
     type VerifierEventHandlerMap,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 import { TypedEventEmitter } from "matrix-js-sdk";
 
 import IncomingSasDialog from "../../../../../src/components/views/dialogs/IncomingSasDialog";

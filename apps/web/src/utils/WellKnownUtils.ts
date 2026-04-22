@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IClientWellKnown, type MatrixClient } from "matrix-js-sdk";
-import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue";
+import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue.js";
 
 const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";

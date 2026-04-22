@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient, type Room, type MatrixEvent, type OidcRegistrationClientMetadata } from "matrix-js-sdk";
 import React from "react";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { uniqueId } from "lodash";
 
 import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";

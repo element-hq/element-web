@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IPushRules, PushRuleKind, RuleId } from "matrix-js-sdk";
-import { deepCompare } from "matrix-js-sdk/lib/utils";
+import { deepCompare } from "matrix-js-sdk/lib/utils.js";
 
 import { NotificationUtils } from "../../notifications";
 import { StandardActions } from "../../notifications/StandardActions";

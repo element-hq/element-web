@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IContent } from "matrix-js-sdk";
-import { type AccountDataEvents } from "matrix-js-sdk/lib/types";
+import { type AccountDataEvents } from "matrix-js-sdk/lib/types.js";
 
 import {
     MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
@@ -16,7 +16,7 @@ import {
 import { type SettingLevel } from "../SettingLevel.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
-declare module "matrix-js-sdk/lib/types" {
+declare module "matrix-js-sdk/lib/types.js" {
     interface RoomAccountDataEvents {
         [MEDIA_PREVIEW_ACCOUNT_DATA_TYPE]: MediaPreviewConfig;
     }

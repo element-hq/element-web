@@ -15,7 +15,7 @@ import {
     DeviceVerificationStatus,
     type KeyBackupInfo,
     type SecretStorageStatus,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
 import { DeviceListener, BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../src/device-listener";

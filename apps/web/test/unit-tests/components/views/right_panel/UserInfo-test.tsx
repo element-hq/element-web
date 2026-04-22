@@ -26,7 +26,7 @@ import {
     VerificationPhase as Phase,
     VerificationRequestEvent,
     type CryptoApi,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import UserInfo, { disambiguateDevices } from "../../../../../src/components/views/right_panel/UserInfo";
 import { getPowerLevels } from "../../../../../src/components/viewmodels/right_panel/user_info/UserInfoBasicViewModel";

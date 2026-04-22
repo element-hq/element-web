@@ -16,7 +16,7 @@ import {
     Room,
     type RoomMember,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { render } from "jest-matrix-react";
 import { type ReactElement } from "react";
 import { type Mocked, mocked } from "jest-mock";

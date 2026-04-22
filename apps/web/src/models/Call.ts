@@ -15,16 +15,16 @@ import {
     type Room,
     type RoomMember,
 } from "matrix-js-sdk";
-import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types";
-import { logger as rootLogger } from "matrix-js-sdk/lib/logger";
-import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
-import { CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types.js";
+import { logger as rootLogger } from "matrix-js-sdk/lib/logger.js";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring.js";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call.js";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
 import {
     type MatrixRTCSession,
     MatrixRTCSessionEvent,
     MatrixRTCSessionManagerEvents,
-} from "matrix-js-sdk/lib/matrixrtc";
+} from "matrix-js-sdk/lib/matrixrtc/index.js";
 
 import type EventEmitter from "events";
 import type { IApp } from "../stores/WidgetStore";

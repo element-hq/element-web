@@ -10,8 +10,8 @@ import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk";
-import { type SecretStorageKeyDescriptionAesV1 } from "matrix-js-sdk/lib/secret-storage";
-import { DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/lib/crypto-api";
+import { type SecretStorageKeyDescriptionAesV1 } from "matrix-js-sdk/lib/secret-storage.js";
+import { DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { RecoveryPanelOutOfSync } from "../../../../../../src/components/views/settings/encryption/RecoveryPanelOutOfSync";
 import { AccessCancelledError, accessSecretStorage } from "../../../../../../src/SecurityManager";

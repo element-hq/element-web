@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Crypto } from "@peculiar/webcrypto";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import * as MatrixJs from "matrix-js-sdk";
 import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk";
-import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/lib/utils/encryptAESSecretStorageItem";
+import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/lib/utils/encryptAESSecretStorageItem.js";
 import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "@fetch-mock/jest";
 

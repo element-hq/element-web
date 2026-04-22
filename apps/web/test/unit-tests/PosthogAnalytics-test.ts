@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { type PostHog } from "posthog-js";
 import { type MatrixClient } from "matrix-js-sdk";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import {
     Anonymity,

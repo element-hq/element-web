@@ -16,7 +16,7 @@ import {
     LINKIFIED_DATA_ATTRIBUTE,
     useViewModel,
 } from "@element-hq/web-shared-components";
-import { logger as rootLogger } from "matrix-js-sdk/lib/logger";
+import { logger as rootLogger } from "matrix-js-sdk/lib/logger.js";
 
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { formatDate } from "../../../DateUtils";

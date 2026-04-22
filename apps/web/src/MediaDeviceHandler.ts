@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";

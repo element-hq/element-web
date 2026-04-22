@@ -23,9 +23,9 @@ import {
     EventType,
     TypedEventEmitter,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
-import { type SessionMembershipData, type IRTCNotificationContent } from "matrix-js-sdk/lib/matrixrtc";
+import { type SessionMembershipData, type IRTCNotificationContent } from "matrix-js-sdk/lib/matrixrtc/index.js";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PosthogAnalytics } from "./PosthogAnalytics";

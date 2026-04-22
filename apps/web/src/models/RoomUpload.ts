@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IEventRelation, type UploadProgress } from "matrix-js-sdk";
-import { type EncryptedFile } from "matrix-js-sdk/lib/types";
+import { type EncryptedFile } from "matrix-js-sdk/lib/types.js";
 
 export class RoomUpload {
     public readonly abortController = new AbortController();

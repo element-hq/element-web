@@ -15,7 +15,7 @@ import {
     VoiceCallSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { UnreadCounter, Unread } from "@vector-im/compound-web";
-import { CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call.js";
 import { Flex } from "@element-hq/web-shared-components";
 
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";

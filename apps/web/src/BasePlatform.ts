@@ -18,7 +18,7 @@ import {
     type OidcRegistrationClientMetadata,
     MatrixEventEvent,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import dis from "./dispatcher/dispatcher";
 import type BaseEventIndexManager from "./indexing/BaseEventIndexManager";

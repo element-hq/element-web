@@ -16,7 +16,7 @@ import {
     type User,
     type MatrixEvent,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { useTypedEventEmitter } from "../../../../hooks/useEventEmitter";

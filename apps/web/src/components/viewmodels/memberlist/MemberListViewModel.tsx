@@ -18,7 +18,7 @@ import {
     type User,
     UserEvent,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { throttle } from "lodash";
 

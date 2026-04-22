@@ -10,7 +10,7 @@ import React from "react";
 import { screen, fireEvent, render, waitFor, act } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { type IMegolmSessionData } from "matrix-js-sdk";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import * as MegolmExportEncryption from "../../../../../../src/utils/MegolmExportEncryption";
 import ExportE2eKeysDialog from "../../../../../../src/async-components/views/dialogs/security/ExportE2eKeysDialog";

@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useState } from "react";
-import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api/index.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { DeviceListener, BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../device-listener";

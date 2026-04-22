@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { CallType, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { CallType, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
 import {
     EventType,
     JoinRule,
@@ -19,8 +19,8 @@ import {
     RoomMember,
     type MatrixClient,
 } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api/index.js";
 import {
     act,
     createEvent,

@@ -20,7 +20,7 @@ import {
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";

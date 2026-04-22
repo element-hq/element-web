@@ -14,7 +14,7 @@ import {
     type Policy,
     type InternationalisedPolicy,
 } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import Modal from "./Modal";
 import TermsDialog from "./components/views/dialogs/TermsDialog";

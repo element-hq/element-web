@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ConditionKind, EventType, MatrixEvent, PushRuleActionName, Room, ClientEvent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { NaturalAlgorithm } from "../../../../../../src/stores/room-list/algorithms/list-ordering/NaturalAlgorithm";
 import { SortAlgorithm } from "../../../../../../src/stores/room-list/algorithms/models";

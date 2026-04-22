@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room, RoomStateEvent, type MatrixEvent, ClientEvent, type EmptyObject } from "matrix-js-sdk";
 import { type IWidget } from "matrix-widget-api";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";

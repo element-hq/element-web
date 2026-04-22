@@ -27,7 +27,7 @@ import type {
     AccountDataEvents,
     EmptyObject,
 } from "matrix-js-sdk";
-import type { RoomMessageEventContent } from "matrix-js-sdk/lib/types";
+import type { RoomMessageEventContent } from "matrix-js-sdk/lib/types.js";
 import { type CredentialsOptionalAccessToken } from "./bot";
 
 export class Client {

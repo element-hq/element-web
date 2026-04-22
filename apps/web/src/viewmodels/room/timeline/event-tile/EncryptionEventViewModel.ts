@@ -14,7 +14,7 @@ import {
     type EncryptionEventViewModel as EncryptionEventViewModelInterface,
 } from "@element-hq/web-shared-components";
 
-import type { RoomEncryptionEventContent } from "matrix-js-sdk/lib/types";
+import type { RoomEncryptionEventContent } from "matrix-js-sdk/lib/types.js";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../utils/crypto";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";

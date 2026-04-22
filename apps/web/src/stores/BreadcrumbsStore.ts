@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room, RoomEvent, ClientEvent } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { isNullOrUndefined } from "matrix-js-sdk/lib/utils";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { isNullOrUndefined } from "matrix-js-sdk/lib/utils.js";
 
 import SettingsStore from "../settings/SettingsStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";

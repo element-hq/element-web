@@ -10,7 +10,7 @@ import React from "react";
 import { mocked, type Mocked } from "jest-mock";
 import { render, screen, act } from "jest-matrix-react";
 import { PendingEventOrdering, Room, RoomStateEvent, RoomType } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 
 import type { MatrixClient, RoomMember } from "matrix-js-sdk";
 import { stubClient, wrapInMatrixClientContext, mkRoomMember } from "../../../../test-utils";

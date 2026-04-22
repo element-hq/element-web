@@ -22,7 +22,7 @@ import {
 } from "matrix-js-sdk";
 import fetchMock from "@fetch-mock/jest";
 import escapeHtml from "escape-html";
-import { type RelationsContainer } from "matrix-js-sdk/lib/models/relations-container";
+import { type RelationsContainer } from "matrix-js-sdk/lib/models/relations-container.js";
 import { mocked } from "jest-mock";
 
 import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";

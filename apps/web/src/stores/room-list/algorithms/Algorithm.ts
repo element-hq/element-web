@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { isNullOrUndefined } from "matrix-js-sdk/lib/utils";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { isNullOrUndefined } from "matrix-js-sdk/lib/utils.js";
 import { EventEmitter } from "events";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { arrayDiff, arrayHasDiff } from "../../../utils/arrays";

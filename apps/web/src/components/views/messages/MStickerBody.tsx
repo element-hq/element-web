@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ComponentProps, type ReactNode } from "react";
 import { type Tooltip } from "@vector-im/compound-web";
-import { type MediaEventContent } from "matrix-js-sdk/lib/types";
+import { type MediaEventContent } from "matrix-js-sdk/lib/types.js";
 
 import { MImageBodyInner } from "./MImageBody";
 import { BLURHASH_FIELD } from "../../../utils/image-media";

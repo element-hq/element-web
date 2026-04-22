@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { act, fireEvent, screen, waitFor } from "jest-matrix-react";
 import { RoomMember, User, RoomEvent } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { mocked } from "jest-mock";
 
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";

@@ -14,13 +14,13 @@ import {
     MSC4108FailureReason,
     MSC4108SignInWithQR,
     RendezvousError,
-} from "matrix-js-sdk/lib/rendezvous";
+} from "matrix-js-sdk/lib/rendezvous/index.js";
 import { HTTPError, type MatrixClient } from "matrix-js-sdk";
 
 import LoginWithQR from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
 
-jest.mock("matrix-js-sdk/lib/rendezvous");
+jest.mock("matrix-js-sdk/lib/rendezvous/index.js");
 jest.mock("matrix-js-sdk/lib/rendezvous/transports");
 jest.mock("matrix-js-sdk/lib/rendezvous/channels");
 

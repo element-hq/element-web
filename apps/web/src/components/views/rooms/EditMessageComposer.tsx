@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, type KeyboardEvent } from "react";
 import classNames from "classnames";
 import { EventStatus, type MatrixEvent, type Room, MsgType } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 import {
     type ReplacementEvent,
     type RoomMessageEventContent,
     type RoomMessageTextEventContent,
-} from "matrix-js-sdk/lib/types";
+} from "matrix-js-sdk/lib/types.js";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

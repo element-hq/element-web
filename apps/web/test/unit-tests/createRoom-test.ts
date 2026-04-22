@@ -17,7 +17,7 @@ import {
     JoinRule,
     RoomVersionStability,
 } from "matrix-js-sdk";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { act } from "jest-matrix-react";
 
 import {

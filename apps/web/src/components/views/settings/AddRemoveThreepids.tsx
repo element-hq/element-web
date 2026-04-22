@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useRef, useState } from "react";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import {
     type IRequestMsisdnTokenResponse,
     type IRequestTokenResponse,

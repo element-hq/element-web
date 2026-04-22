@@ -15,8 +15,8 @@ import React, {
     type SyntheticEvent,
 } from "react";
 import { type MatrixEvent, EventType } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { type RoomCanonicalAliasEventContent } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { type RoomCanonicalAliasEventContent } from "matrix-js-sdk/lib/types.js";
 
 import EditableItemList from "../elements/EditableItemList";
 import { _t } from "../../../languageHandler";

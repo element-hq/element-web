@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 import { render } from "jest-matrix-react";
 import { LOCAL_NOTIFICATION_SETTINGS_PREFIX, MatrixEvent, Room } from "matrix-js-sdk";
-import { MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
 import React from "react";
 
 import LegacyCallHandler from "../../../src/LegacyCallHandler";

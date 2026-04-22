@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback } from "react";
 import { type Room } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

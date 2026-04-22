@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient, RoomMember } from "matrix-js-sdk";
 import { mocked, type Mocked } from "jest-mock";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 import { renderHook } from "jest-matrix-react";
 
 import { withClientContextRenderOptions } from "../../../../../test-utils";

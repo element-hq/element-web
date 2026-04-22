@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type RefObject, type ReactNode, StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { isNullOrUndefined } from "matrix-js-sdk/lib/utils";
+import { isNullOrUndefined } from "matrix-js-sdk/lib/utils.js";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 import dis from "../../../dispatcher/dispatcher";

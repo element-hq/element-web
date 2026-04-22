@@ -32,7 +32,7 @@ import {
     EventStatus,
 } from "matrix-js-sdk";
 import { debounce } from "lodash";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { type Layout } from "../../settings/enums/Layout";

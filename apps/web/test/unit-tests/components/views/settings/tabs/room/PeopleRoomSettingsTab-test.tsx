@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { act, fireEvent, render, screen } from "jest-matrix-react";
 import { EventTimeline, EventType, MatrixError, MatrixEvent, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import React from "react";
 
 import ErrorDialog from "../../../../../../../src/components/views/dialogs/ErrorDialog";

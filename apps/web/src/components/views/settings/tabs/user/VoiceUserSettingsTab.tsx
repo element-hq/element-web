@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEventHandler, type JSX, type ReactNode } from "react";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/lib/webrtc/call";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/lib/webrtc/call.js";
 import { type EmptyObject } from "matrix-js-sdk";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 

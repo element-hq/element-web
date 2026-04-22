@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { type CallFeed } from "matrix-js-sdk/lib/webrtc/callFeed";
-import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { type CallFeed } from "matrix-js-sdk/lib/webrtc/callFeed.js";
+import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call.js";
 import { type MatrixClient, Room } from "matrix-js-sdk";
 
 import * as AvatarModule from "../../../../../src/Avatar";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type MatrixEvent, type Room, EventType } from "matrix-js-sdk";
-import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api";
+import { type CryptoApi } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { useRoomState } from "./useRoomState.ts";
 import { useAsyncMemo } from "./useAsyncMemo.ts";

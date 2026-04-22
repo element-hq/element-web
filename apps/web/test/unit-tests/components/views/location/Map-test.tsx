@@ -10,7 +10,7 @@ import React from "react";
 import { act, fireEvent, getByTestId, render } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
 import { ClientEvent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { mocked } from "jest-mock";
 
 import Map from "../../../../../src/components/views/location/Map";

@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AllDevicesIsolationMode, OnlySignedDevicesIsolationMode } from "matrix-js-sdk/lib/crypto-api";
+import { AllDevicesIsolationMode, OnlySignedDevicesIsolationMode } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { stubClient } from "../../../test-utils";
 import DeviceIsolationModeController from "../../../../src/settings/controllers/DeviceIsolationModeController.ts";

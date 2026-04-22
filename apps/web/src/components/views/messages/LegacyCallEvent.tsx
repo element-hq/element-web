@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk";
-import { CallErrorCode, CallState } from "matrix-js-sdk/lib/webrtc/call";
+import { CallErrorCode, CallState } from "matrix-js-sdk/lib/webrtc/call.js";
 import classNames from "classnames";
 import { Clock } from "@element-hq/web-shared-components";
 import {

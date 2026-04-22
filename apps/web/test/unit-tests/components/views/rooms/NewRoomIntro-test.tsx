@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { EventTimeline, type MatrixClient, Room } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
 import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import { LocalRoom } from "../../../../../src/models/LocalRoom";

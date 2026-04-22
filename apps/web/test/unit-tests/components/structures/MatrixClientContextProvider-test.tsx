@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { act, render } from "jest-matrix-react";
 import React, { useContext } from "react";
 import { type MatrixClient } from "matrix-js-sdk";
-import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import { LocalDeviceVerificationStateContext } from "../../../../src/contexts/LocalDeviceVerificationStateContext";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";

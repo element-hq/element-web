@@ -10,7 +10,7 @@ import React, { type ReactNode, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import * as maplibregl from "maplibre-gl";
 import { ClientEvent, type IClientWellKnown } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";

@@ -7,8 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { VerificationPhase, VerificationRequestEvent, type VerificationRequest } from "matrix-js-sdk/lib/crypto-api";
-import { VerificationMethod } from "matrix-js-sdk/lib/types";
+import {
+    VerificationPhase,
+    VerificationRequestEvent,
+    type VerificationRequest,
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { VerificationMethod } from "matrix-js-sdk/lib/types.js";
 import { type User } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

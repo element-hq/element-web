@@ -10,8 +10,8 @@ import React from "react";
 import { fireEvent, render, screen, findByText } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { RoomType, type MatrixClient, MatrixError, Room } from "matrix-js-sdk";
-import { KnownMembership } from "matrix-js-sdk/lib/types";
-import { sleep } from "matrix-js-sdk/lib/utils";
+import { KnownMembership } from "matrix-js-sdk/lib/types.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 import { mocked, type Mocked } from "jest-mock";
 
 import InviteDialog from "../../../../../src/components/views/dialogs/InviteDialog";

@@ -11,7 +11,7 @@ import {
     type UrlPreviewGroupViewActions,
     type UrlPreview,
 } from "@element-hq/web-shared-components";
-import { logger as rootLogger } from "matrix-js-sdk/lib/logger";
+import { logger as rootLogger } from "matrix-js-sdk/lib/logger.js";
 import { type IPreviewUrlResponse, type MatrixClient, MatrixError, type MatrixEvent } from "matrix-js-sdk";
 import { decode } from "html-entities";
 import { type UrlPreviewVisibilityChanged } from "@matrix-org/analytics-events/types/typescript/UrlPreviewVisibilityChanged";

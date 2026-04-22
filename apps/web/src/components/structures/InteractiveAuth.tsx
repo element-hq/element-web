@@ -14,9 +14,9 @@ import {
     type IInputs,
     InteractiveAuth,
     type IStageStatus,
-} from "matrix-js-sdk/lib/interactive-auth";
+} from "matrix-js-sdk/lib/interactive-auth.js";
 import { type MatrixClient } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import getEntryComponentForLoginType, {
     type ContinueKind,

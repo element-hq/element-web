@@ -19,7 +19,7 @@ import {
     type Verifier,
     VerifierEvent,
     type VerifierEventHandlerMap,
-} from "matrix-js-sdk/lib/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
 
 import VerificationPanel from "../../../../../src/components/views/right_panel/VerificationPanel";
 import { flushPromises, stubClient } from "../../../../test-utils";

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { type CallFeed, CallFeedEvent } from "matrix-js-sdk/lib/webrtc/callFeed";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { type CallFeed, CallFeedEvent } from "matrix-js-sdk/lib/webrtc/callFeed.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 
 import MediaDeviceHandler, { MediaDeviceHandlerEvent } from "../../../MediaDeviceHandler";
 

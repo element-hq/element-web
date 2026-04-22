@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useMemo, type ComponentProps } from "react";
 import { type Room, RoomType, KnownMembership, EventType, RoomEvent } from "matrix-js-sdk";
-import { type RoomAvatarEventContent } from "matrix-js-sdk/lib/types";
+import { type RoomAvatarEventContent } from "matrix-js-sdk/lib/types.js";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";

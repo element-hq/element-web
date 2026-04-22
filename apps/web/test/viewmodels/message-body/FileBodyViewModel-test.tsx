@@ -6,7 +6,7 @@
  */
 
 import { EventType, MatrixEvent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { createRef, type RefObject } from "react";
 import { FileBodyViewInfoIcon, FileBodyViewState } from "@element-hq/web-shared-components";
 

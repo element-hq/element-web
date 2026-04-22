@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked, type Mocked, type MockedObject } from "jest-mock";
 import { HttpApiEvent, type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk";
-import { decryptExistingEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/lib/testing";
+import { decryptExistingEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/lib/testing.js";
 import {
     type CryptoApi,
     DecryptionFailureCode,
     UserVerificationStatus,
     CryptoEvent,
-} from "matrix-js-sdk/lib/crypto-api";
-import { sleep } from "matrix-js-sdk/lib/utils";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { sleep } from "matrix-js-sdk/lib/utils.js";
 
 import { DecryptionFailureTracker, type ErrorProperties } from "../../src/DecryptionFailureTracker";
 import { stubClient } from "../test-utils";

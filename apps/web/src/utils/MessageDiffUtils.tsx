@@ -11,7 +11,7 @@ import classNames from "classnames";
 import DiffMatchPatch from "diff-match-patch";
 import { DiffDOM, type IDiff } from "diff-dom";
 import { type IContent } from "matrix-js-sdk";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { unescape } from "lodash";
 
 import { bodyToHtml, checkBlockNode, type EventRenderOpts } from "../HtmlUtils";

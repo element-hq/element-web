@@ -11,8 +11,8 @@ import {
     canAcceptVerificationRequest,
     type VerificationRequest,
     VerificationRequestEvent,
-} from "matrix-js-sdk/lib/crypto-api";
-import { logger } from "matrix-js-sdk/lib/logger";
+} from "matrix-js-sdk/lib/crypto-api/index.js";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { type Device } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";

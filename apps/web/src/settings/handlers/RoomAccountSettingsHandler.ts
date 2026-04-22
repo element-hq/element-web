@@ -18,7 +18,7 @@ import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
 
-declare module "matrix-js-sdk/lib/types" {
+declare module "matrix-js-sdk/lib/types.js" {
     interface RoomAccountDataEvents {
         [ALLOWED_WIDGETS_EVENT_TYPE]: { [eventId: string]: boolean };
         [DEFAULT_SETTINGS_EVENT_TYPE]: Record<string, any>;

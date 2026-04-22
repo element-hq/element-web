@@ -10,8 +10,8 @@ import React, { type JSX, useCallback, useEffect, useRef, useState } from "react
 import { type Room, type MatrixEvent, type RoomMember, RoomEvent, EventType, MatrixEventEvent } from "matrix-js-sdk";
 import { Button, ToggleInput, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
-import { logger } from "matrix-js-sdk/lib/logger";
-import { type IRTCNotificationContent } from "matrix-js-sdk/lib/matrixrtc";
+import { logger } from "matrix-js-sdk/lib/logger.js";
+import { type IRTCNotificationContent } from "matrix-js-sdk/lib/matrixrtc/index.js";
 import { CheckIcon, VoiceCallIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { AvatarWithDetails } from "@element-hq/web-shared-components";
 

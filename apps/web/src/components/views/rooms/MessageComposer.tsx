@@ -17,7 +17,7 @@ import {
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk";
 import { Tooltip } from "@vector-im/compound-web";
-import { logger } from "matrix-js-sdk/lib/logger";
+import { logger } from "matrix-js-sdk/lib/logger.js";
 import { LockOffIcon, SendSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
