@@ -59,9 +59,9 @@ exports[`<UserInfoHeaderVerificationView /> renders verify button 1`] = `
       class="mx_UserInfo_container_verifyButton"
     >
       <button
-        class="_button_13vu4_8 mx_UserInfo_verify_button"
+        class="_button_1nw83_8 mx_UserInfo_verify_button"
         data-kind="tertiary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >

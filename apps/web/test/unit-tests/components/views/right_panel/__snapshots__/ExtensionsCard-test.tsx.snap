@@ -50,9 +50,9 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
       tabindex="-1"
     >
       <button
-        class="_button_13vu4_8 _has-icon_13vu4_60"
+        class="_button_1nw83_8 _has-icon_1nw83_60"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -151,9 +151,9 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
       tabindex="-1"
     >
       <button
-        class="_button_13vu4_8 _has-icon_13vu4_60"
+        class="_button_1nw83_8 _has-icon_1nw83_60"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
