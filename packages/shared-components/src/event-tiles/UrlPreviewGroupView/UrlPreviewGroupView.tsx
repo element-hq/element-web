@@ -52,7 +52,7 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
     let toggleButton: JSX.Element | undefined;
     if (overPreviewLimit) {
         toggleButton = (
-            <Button className={styles.toggleButton} kind="tertiary" size="sm" onClick={vm.onTogglePreviewLimit}>
+            <Button className={styles.toggleButton} kind="tertiary" size="md" onClick={vm.onTogglePreviewLimit}>
                 {previewsLimited
                     ? _t("timeline|url_preview|show_n_more", { count: totalPreviewCount - previews.length })
                     : _t("action|collapse")}
