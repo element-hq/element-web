@@ -49,7 +49,7 @@ export function ActionBarButton({
                 data-presentation={presentation}
                 ref={buttonRef}
                 kind="tertiary"
-                size="sm"
+                size="md"
                 iconOnly={iconOnly}
                 aria-label={label}
                 aria-pressed={ariaPressed}
