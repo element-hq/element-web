@@ -78,7 +78,7 @@ exports[`AvatarWithDetails > renders a banner with an avatar iamge 1`] = `
     >
       <img
         alt="Example"
-        src="https://picsum.photos/32/32"
+        src="/static/element.png"
       />
     </div>
     <div

@@ -59,7 +59,7 @@ export const WithAction: Story = {
 
 export const WithAvatarImage: Story = {
     args: {
-        avatar: <img alt="Example" src={avatarImage} height="32px" width="32px" />,
+        avatar: <img alt="Example" src={avatarImage} />,
     },
 };
 
