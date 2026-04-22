@@ -579,8 +579,8 @@ export async function deleteCachedSecrets(page: Page) {
     await page.evaluate(async () => {
         const removeCachedSecrets = new Promise((resolve) => {
             const request = window.indexedDB.open("matrix-js-sdk::matrix-sdk-crypto");
-            request.onsuccess = (event: Event & { target: { result: IDBDatabase } }) => {
-                const db = event.target.result;
+            request.onsuccess = function (this: IDBRequest) {
+                const db = this.result as IDBDatabase;
                 const request = db.transaction("core", "readwrite").objectStore("core").delete("private_identity");
                 request.onsuccess = () => {
                     db.close();
