@@ -53,10 +53,7 @@ const UnknownIdentityUsersWarningDialog: React.FC<Props> = (props) => {
         case InviteKind.Invite:
             title = _t("invite|confirm_unknown_users|invite_title");
             headerText = _t("invite|confirm_unknown_users|invite_subtitle");
-            buttons = inviteButtons({
-                onInvite: props.onContinue,
-                onRemove: props.onRemove,
-            });
+            buttons = <InviteButtons onInvite={props.onContinue} onRemove={props.onRemove} />;
             break;
 
         case InviteKind.Dm:
@@ -70,10 +67,7 @@ const UnknownIdentityUsersWarningDialog: React.FC<Props> = (props) => {
                     ? _t("invite|confirm_unknown_users|start_chat_subtitle_one_user")
                     : _t("invite|confirm_unknown_users|start_chat_subtitle_multiple_users");
 
-            buttons = dmButtons({
-                onCancel: props.onCancel,
-                onContinue: props.onContinue,
-            });
+            buttons = <DmButtons onCancel={props.onCancel} onContinue={props.onContinue} />;
             break;
     }
 
@@ -98,7 +92,7 @@ const UnknownIdentityUsersWarningDialog: React.FC<Props> = (props) => {
     );
 };
 
-function dmButtons(props: { onContinue: () => void; onCancel: () => void }): JSX.Element {
+const DmButtons: React.FC<{ onContinue: () => void; onCancel: () => void }> = (props) => {
     return (
         <>
             <Button size="lg" kind="secondary" onClick={props.onCancel}>
@@ -109,9 +103,9 @@ function dmButtons(props: { onContinue: () => void; onCancel: () => void }): JSX
             </Button>
         </>
     );
-}
+};
 
-function inviteButtons(props: { onInvite: () => void; onRemove: () => void }): JSX.Element {
+const InviteButtons: React.FC<{ onInvite: () => void; onRemove: () => void }> = (props) => {
     return (
         <>
             <Button size="lg" kind="secondary" onClick={props.onRemove} Icon={CloseIcon}>
@@ -122,6 +116,6 @@ function inviteButtons(props: { onInvite: () => void; onRemove: () => void }): J
             </Button>
         </>
     );
-}
+};
 
 export default UnknownIdentityUsersWarningDialog;
