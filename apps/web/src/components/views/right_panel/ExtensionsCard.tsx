@@ -191,7 +191,7 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
     return (
         <BaseCard header={_t("right_panel|extensions_button")} className="mx_ExtensionsCard" onClose={onClose}>
             {shouldShowComponent(UIComponent.AddIntegrations) && (
-                <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
+                <Button size="md" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
                     {_t("right_panel|add_integrations")}
                 </Button>
             )}
