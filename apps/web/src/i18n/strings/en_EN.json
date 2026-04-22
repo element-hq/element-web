@@ -42,7 +42,7 @@
         "copy_link": "Copy link",
         "create": "Create",
         "create_a_room": "Create a room",
-        "create_account": "Create Account",
+        "create_account": "Create account",
         "decline": "Decline",
         "decline_and_block": "Decline and block",
         "decline_invite": "Decline invite",
@@ -1816,7 +1816,6 @@
         "restricted": "Restricted"
     },
     "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "presence": {
         "away": "Away",
         "busy": "Busy",
@@ -3981,7 +3980,11 @@
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Welcome to Element",
+    "welcome": {
+        "tagline_element": "Supercharged for speed and simplicity.",
+        "title_element": "Be in your element",
+        "title_generic": "Welcome to %(brand)s"
+    },
     "widget": {
         "added_by": "Widget added by",
         "capabilities_dialog": {
