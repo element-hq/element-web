@@ -49,28 +49,32 @@ const UnknownIdentityUsersWarningDialog: React.FC<Props> = (props) => {
     let headerText: string;
     let buttons: JSX.Element;
 
-    if (props.kind == InviteKind.Invite) {
-        title = _t("invite|confirm_unknown_users|invite_title");
-        headerText = _t("invite|confirm_unknown_users|invite_subtitle");
-        buttons = inviteButtons({
-            onInvite: props.onContinue,
-            onRemove: props.onRemove,
-        });
-    } else {
-        title =
-            props.users.length == 1
-                ? _t("invite|confirm_unknown_users|start_chat_title_one_user")
-                : _t("invite|confirm_unknown_users|start_chat_title_multiple_users");
+    switch (props.kind) {
+        case InviteKind.Invite:
+            title = _t("invite|confirm_unknown_users|invite_title");
+            headerText = _t("invite|confirm_unknown_users|invite_subtitle");
+            buttons = inviteButtons({
+                onInvite: props.onContinue,
+                onRemove: props.onRemove,
+            });
+            break;
 
-        headerText =
-            props.users.length == 1
-                ? _t("invite|confirm_unknown_users|start_chat_subtitle_one_user")
-                : _t("invite|confirm_unknown_users|start_chat_subtitle_multiple_users");
+        case InviteKind.Dm:
+            title =
+                props.users.length == 1
+                    ? _t("invite|confirm_unknown_users|start_chat_title_one_user")
+                    : _t("invite|confirm_unknown_users|start_chat_title_multiple_users");
 
-        buttons = dmButtons({
-            onCancel: props.onCancel,
-            onContinue: props.onContinue,
-        });
+            headerText =
+                props.users.length == 1
+                    ? _t("invite|confirm_unknown_users|start_chat_subtitle_one_user")
+                    : _t("invite|confirm_unknown_users|start_chat_subtitle_multiple_users");
+
+            buttons = dmButtons({
+                onCancel: props.onCancel,
+                onContinue: props.onContinue,
+            });
+            break;
     }
 
     return (
