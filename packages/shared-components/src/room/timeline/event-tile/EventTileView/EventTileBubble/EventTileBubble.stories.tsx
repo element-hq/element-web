@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EventTileBubble } from "./EventTileBubble";
 
 const meta = {
-    title: "TimelineEvent/EventTileBubble",
+    title: "Timeline Event/EventTileBubble",
     component: EventTileBubble,
     tags: ["autodocs"],
     args: {
