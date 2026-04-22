@@ -45,12 +45,6 @@ jobs:
               working-directory: packages/shared-components
               run: "pnpm test:storybook --run"
 
-            # Workaround for vis silently adding new baselines if they didn't exist
-            # Can be removed once https://github.com/repobuddy/visual-testing/issues/516 is released
-            - run: |
-                  git add -N .
-                  git diff --exit-code
-
             - name: Detect stale screenshots
               run: diff -rq __baselines__ __results__ | grep "^Only in __baselines__"
               working-directory: packages/shared-components/__vis__/linux
