@@ -1297,6 +1297,21 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         );
     }
 
+    /** Callback function, which handles the user clicking "Remove" on the {@link UnknwownIdentityUsersWarningDialog}. */
+    private onRemoveUnknownIdentityUsersClicked = (): void => {
+        // Remove the unknown identity users, then return to the previous screen
+        const newTargets: Member[] = [];
+        for (const target of this.state.targets) {
+            if (!this.state.unknownIdentityUsers?.find((m) => m.userId == target.userId)) {
+                newTargets.push(target);
+            }
+        }
+        this.setState({
+            targets: newTargets,
+            unknownIdentityUsers: null,
+        });
+    };
+
     /**
      * Render the complete dialog, given this is not a call transfer dialog.
      *
@@ -1317,19 +1332,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                             logErrorAndShowErrorDialog("Error processing invites", e),
                         );
                     }}
-                    onRemove={() => {
-                        // Remove the unknown identity users, then return to the previous screen
-                        const newTargets: Member[] = [];
-                        for (const target of this.state.targets) {
-                            if (!this.state.unknownIdentityUsers?.find((m) => m.userId == target.userId)) {
-                                newTargets.push(target);
-                            }
-                        }
-                        this.setState({
-                            targets: newTargets,
-                            unknownIdentityUsers: null,
-                        });
-                    }}
+                    onRemove={this.onRemoveUnknownIdentityUsersClicked}
                     screenName={this.screenName}
                     kind={this.props.kind}
                     users={this.state.unknownIdentityUsers}
