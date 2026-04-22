@@ -33,7 +33,7 @@ const MessageTimestampWrapperImpl = ({
 const MessageTimestampWrapper = withViewDocs(MessageTimestampWrapperImpl, MessageTimestampView);
 
 const meta = {
-    title: "TimelineMeta/MessageTimestampView",
+    title: "Timeline Meta/MessageTimestampView",
     component: MessageTimestampWrapper,
     tags: ["autodocs"],
     args: {
