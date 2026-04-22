@@ -1,7 +1,7 @@
 # Docker image to facilitate building Element Desktop's native bits using a glibc version (2.31)
 # with broader compatibility, down to Debian bullseye & Ubuntu focal.
 
-FROM rust:bullseye@sha256:bc19574c121fe10c1bc68fc2b1ea9b420d87d047a0c50fb1622b282199700cee
+FROM rust:bullseye@sha256:949b0903defbfc4e374dc85f947b153859e9ee0104e425cd9a74d94474a9a335
 
 ENV DEBIAN_FRONTEND=noninteractive
 
