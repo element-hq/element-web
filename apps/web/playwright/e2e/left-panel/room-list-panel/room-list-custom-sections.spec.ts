@@ -40,6 +40,22 @@ test.describe("Room list custom sections", () => {
         await expect(dialog).not.toBeVisible();
     }
 
+    /**
+     * Asserts a room is nested under a specific section using the treegrid aria-level hierarchy.
+     * Section header rows sit at aria-level=1; room rows nested within a section sit at aria-level=2.
+     * Verifies that the closest preceding aria-level=1 row is the expected section header.
+     */
+    async function assertRoomInSection(page: Page, sectionName: string, roomName: string): Promise<void> {
+        const roomList = getRoomList(page);
+        const roomRow = roomList.getByRole("row", { name: `Open room ${roomName}` });
+        // Room row must be at aria-level=2 (i.e. inside a section)
+        await expect(roomRow).toHaveAttribute("aria-level", "2");
+        // The closest preceding aria-level=1 row must be the expected section header.
+        // XPath preceding:: axis returns nodes before the context in document order; [1] picks the nearest one.
+        const closestSectionHeader = roomRow.locator(`xpath=preceding::*[@role="row" and @aria-level="1"][1]`);
+        await expect(closestSectionHeader).toContainText(sectionName);
+    }
+
     test.beforeEach(async ({ page, app, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
@@ -97,6 +113,9 @@ test.describe("Room list custom sections", () => {
 
             // The custom section should be created
             await expect(getSectionHeader(page, "Projects")).toBeVisible();
+
+            // Room should be moved to the new section
+            await assertRoomInSection(page, "Projects", "my room");
         });
 
         test("should cancel section creation when dialog is dismissed", async ({ page, app }) => {
@@ -177,22 +196,6 @@ test.describe("Room list custom sections", () => {
     });
 
     test.describe("Adding a room to a custom section", () => {
-        /**
-         * Asserts a room is nested under a specific section using the treegrid aria-level hierarchy.
-         * Section header rows sit at aria-level=1; room rows nested within a section sit at aria-level=2.
-         * Verifies that the closest preceding aria-level=1 row is the expected section header.
-         */
-        async function assertRoomInSection(page: Page, sectionName: string, roomName: string): Promise<void> {
-            const roomList = getRoomList(page);
-            const roomRow = roomList.getByRole("row", { name: `Open room ${roomName}` });
-            // Room row must be at aria-level=2 (i.e. inside a section)
-            await expect(roomRow).toHaveAttribute("aria-level", "2");
-            // The closest preceding aria-level=1 row must be the expected section header.
-            // XPath preceding:: axis returns nodes before the context in document order; [1] picks the nearest one.
-            const closestSectionHeader = roomRow.locator(`xpath=preceding::*[@role="row" and @aria-level="1"][1]`);
-            await expect(closestSectionHeader).toContainText(sectionName);
-        }
-
         test("should add a room to a custom section via the More Options menu", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });
             await createCustomSection(page, "Work");
