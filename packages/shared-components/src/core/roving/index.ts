@@ -8,13 +8,11 @@
 export {
     checkInputableElement,
     findSiblingElement,
-    reducer,
     RovingAction,
+    RovingTabIndexActionType,
     RovingTabIndexContext,
     RovingTabIndexProvider,
-    Type,
     useRovingTabIndex,
 } from "./RovingTabIndex";
-export type { IAction, IContext, IState, RovingTabIndexProviderProps } from "./RovingTabIndex";
+export type { IAction, IState, RovingTabIndexProviderProps } from "./RovingTabIndex";
 export { RovingTabIndexWrapper } from "./RovingTabIndexWrapper";
-export type { FocusHandler } from "./types";

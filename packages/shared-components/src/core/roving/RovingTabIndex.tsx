@@ -20,8 +20,6 @@ import React, {
     type RefObject,
 } from "react";
 
-import { type FocusHandler } from "./types";
-
 // Check for form elements which utilize the arrow keys for native functions
 // like many of the text input varieties.
 //
@@ -38,12 +36,12 @@ export interface IState {
     nodes: HTMLElement[];
 }
 
-export interface IContext {
+interface ContextValue {
     state: IState;
     dispatch: Dispatch<IAction>;
 }
 
-export const RovingTabIndexContext = createContext<IContext>({
+export const RovingTabIndexContext = createContext<ContextValue>({
     state: {
         nodes: [], // list of nodes in DOM order
     },
@@ -51,7 +49,7 @@ export const RovingTabIndexContext = createContext<IContext>({
 });
 RovingTabIndexContext.displayName = "RovingTabIndexContext";
 
-export enum Type {
+export enum RovingTabIndexActionType {
     Register = "REGISTER",
     Unregister = "UNREGISTER",
     SetFocus = "SET_FOCUS",
@@ -59,14 +57,14 @@ export enum Type {
 }
 
 export interface IAction {
-    type: Exclude<Type, Type.Update>;
+    type: Exclude<RovingTabIndexActionType, RovingTabIndexActionType.Update>;
     payload: {
         node: HTMLElement;
     };
 }
 
 interface UpdateAction {
-    type: Type.Update;
+    type: RovingTabIndexActionType.Update;
     payload?: undefined;
 }
 
@@ -118,7 +116,7 @@ const nodeSorter = (a: HTMLElement, b: HTMLElement): number => {
 
 export const reducer: Reducer<IState, Action> = (state: IState, action: Action) => {
     switch (action.type) {
-        case Type.Register: {
+        case RovingTabIndexActionType.Register: {
             if (!state.activeNode) {
                 // Our list of nodes was empty, set activeNode to this first item
                 state.activeNode = action.payload.node;
@@ -133,7 +131,7 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
             return { ...state };
         }
 
-        case Type.Unregister: {
+        case RovingTabIndexActionType.Unregister: {
             const oldIndex = state.nodes.findIndex((r) => r === action.payload.node);
 
             if (oldIndex === -1) {
@@ -158,13 +156,13 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
             return { ...state };
         }
 
-        case Type.SetFocus: {
+        case RovingTabIndexActionType.SetFocus: {
             if (state.activeNode === action.payload.node) return state;
             state.activeNode = action.payload.node;
             return { ...state };
         }
 
-        case Type.Update: {
+        case RovingTabIndexActionType.Update: {
             state.nodes.sort(nodeSorter);
             return { ...state };
         }
@@ -237,7 +235,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
         nodes: [],
     });
 
-    const context = useMemo<IContext>(() => ({ state, dispatch }), [state]);
+    const context = useMemo<ContextValue>(() => ({ state, dispatch }), [state]);
 
     const onKeyDownHandler = useCallback(
         (ev: KeyboardEvent) => {
@@ -322,7 +320,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
                 focusNode.focus();
                 // programmatic focus doesn't fire the onFocus handler, so we must do the do ourselves
                 dispatch({
-                    type: Type.SetFocus,
+                    type: RovingTabIndexActionType.SetFocus,
                     payload: {
                         node: focusNode,
                     },
@@ -347,7 +345,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
 
     const onDragEndHandler = useCallback(() => {
         dispatch({
-            type: Type.Update,
+            type: RovingTabIndexActionType.Update,
         });
     }, []);
 
@@ -374,7 +372,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
  */
 export const useRovingTabIndex = <T extends HTMLElement>(
     inputRef?: RefObject<T | null>,
-): [FocusHandler, boolean, RefCallback<T>, RefObject<T | null>] => {
+): [() => void, boolean, RefCallback<T>, RefObject<T | null>] => {
     const context = useContext(RovingTabIndexContext);
 
     let nodeRef = useRef<T | null>(null);
@@ -388,12 +386,12 @@ export const useRovingTabIndex = <T extends HTMLElement>(
         if (node) {
             nodeRef.current = node;
             context.dispatch({
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: { node },
             });
         } else {
             context.dispatch({
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: { node: nodeRef.current! },
             });
             nodeRef.current = null;
@@ -406,7 +404,7 @@ export const useRovingTabIndex = <T extends HTMLElement>(
             return;
         }
         context.dispatch({
-            type: Type.SetFocus,
+            type: RovingTabIndexActionType.SetFocus,
             payload: { node: nodeRef.current },
         });
     }, []); // eslint-disable-line react-hooks/exhaustive-deps

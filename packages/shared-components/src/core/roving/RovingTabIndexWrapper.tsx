@@ -9,14 +9,13 @@ import { type ReactElement, type RefCallback, type RefObject } from "react";
 
 import type React from "react";
 import { useRovingTabIndex } from "./RovingTabIndex";
-import { type FocusHandler } from "./types";
 
 interface IProps {
     inputRef?: RefObject<HTMLElement | null>;
     children(
         this: void,
         renderProps: {
-            onFocus: FocusHandler;
+            onFocus: () => void;
             isActive: boolean;
             ref: RefCallback<HTMLElement>;
         },

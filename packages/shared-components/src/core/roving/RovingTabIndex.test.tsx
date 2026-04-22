@@ -10,8 +10,15 @@ import userEvent from "@testing-library/user-event";
 import { act, fireEvent, render } from "@test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-import { reducer, RovingAction, RovingTabIndexProvider, RovingTabIndexWrapper, Type, useRovingTabIndex } from ".";
+import {
+    RovingAction,
+    RovingTabIndexActionType,
+    RovingTabIndexProvider,
+    RovingTabIndexWrapper,
+    useRovingTabIndex,
+} from ".";
 import type { IState } from ".";
+import { reducer } from "./RovingTabIndex";
 
 const Button = (props: HTMLAttributes<HTMLButtonElement>): React.JSX.Element => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLButtonElement>();
@@ -175,7 +182,7 @@ describe("RovingTabIndex", () => {
                         nodes: [node1, node2],
                     },
                     {
-                        type: Type.SetFocus,
+                        type: RovingTabIndexActionType.SetFocus,
                         payload: {
                             node: node2,
                         },
@@ -198,7 +205,7 @@ describe("RovingTabIndex", () => {
             };
 
             state = reducer(state, {
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: {
                     node: unregisterButton2,
                 },
@@ -208,7 +215,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: {
                     node: unregisterButton3,
                 },
@@ -218,7 +225,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: {
                     node: unregisterButton4,
                 },
@@ -228,7 +235,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: {
                     node: unregisterButton1,
                 },
@@ -258,7 +265,7 @@ describe("RovingTabIndex", () => {
             };
 
             state = reducer(state, {
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: {
                     node: ref1.current!,
                 },
@@ -269,7 +276,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: {
                     node: ref2.current!,
                 },
@@ -280,7 +287,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: {
                     node: ref3.current!,
                 },
@@ -291,7 +298,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: {
                     node: ref4.current!,
                 },
@@ -302,7 +309,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.SetFocus,
+                type: RovingTabIndexActionType.SetFocus,
                 payload: {
                     node: ref2.current!,
                 },
@@ -313,7 +320,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: {
                     node: ref2.current!,
                 },
@@ -324,7 +331,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: {
                     node: ref2.current!,
                 },
@@ -335,13 +342,13 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: {
                     node: ref1.current!,
                 },
             });
             state = reducer(state, {
-                type: Type.Unregister,
+                type: RovingTabIndexActionType.Unregister,
                 payload: {
                     node: ref4.current!,
                 },
@@ -352,14 +359,14 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: {
                     node: ref1.current!,
                 },
             });
 
             state = reducer(state, {
-                type: Type.Register,
+                type: RovingTabIndexActionType.Register,
                 payload: {
                     node: ref4.current!,
                 },

@@ -10,14 +10,12 @@ import React from "react";
 import {
     checkInputableElement,
     findSiblingElement,
-    reducer,
     RovingAction,
+    RovingTabIndexActionType,
     RovingTabIndexContext,
     RovingTabIndexProvider as SharedRovingTabIndexProvider,
-    Type,
     useRovingTabIndex,
     type IAction,
-    type IContext,
     type IState,
     type RovingTabIndexProviderProps,
 } from "@element-hq/web-shared-components";
@@ -25,8 +23,14 @@ import {
 import { getKeyBindingsManager } from "../KeyBindingsManager";
 import { KeyBindingAction } from "./KeyboardShortcuts";
 
-export { checkInputableElement, findSiblingElement, reducer, RovingTabIndexContext, Type, useRovingTabIndex };
-export type { IAction, IContext, IState };
+export {
+    checkInputableElement,
+    findSiblingElement,
+    RovingTabIndexActionType,
+    RovingTabIndexContext,
+    useRovingTabIndex,
+};
+export type { IAction, IState };
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique
