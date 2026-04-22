@@ -10,6 +10,7 @@ export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./core/AvatarWithDetails";
+export * from "./core/roving";
 export * from "./room/composer/Banner";
 export * from "./crypto/SasEmoji";
 export * from "./event-tiles/UrlPreviewGroupView";
