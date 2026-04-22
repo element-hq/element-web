@@ -54,7 +54,7 @@ export default defineConfig({
             bundleTypes: true,
             include: ["src/**/*.{ts,tsx}"],
             exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
-            copyDtsFiles: true,
+            copyDtsFiles: false,
         }),
     ],
 });
