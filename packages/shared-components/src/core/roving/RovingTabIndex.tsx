@@ -48,7 +48,10 @@ export interface IState {
     nodes: HTMLElement[];
 }
 
-interface ContextValue {
+/**
+ * The value exposed by {@link RovingTabIndexContext}.
+ */
+export interface IContext {
     state: IState;
     dispatch: Dispatch<IAction>;
 }
@@ -57,7 +60,7 @@ interface ContextValue {
  * React context used by roving tabindex participants to register themselves and
  * update the active item.
  */
-export const RovingTabIndexContext = createContext<ContextValue>({
+export const RovingTabIndexContext = createContext<IContext>({
     state: {
         nodes: [], // list of nodes in DOM order
     },
@@ -336,7 +339,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
         nodes: [],
     });
 
-    const context = useMemo<ContextValue>(() => ({ state, dispatch }), [state]);
+    const context = useMemo<IContext>(() => ({ state, dispatch }), [state]);
 
     const onKeyDownHandler = useCallback(
         (ev: KeyboardEvent) => {

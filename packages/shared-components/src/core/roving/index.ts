@@ -14,5 +14,5 @@ export {
     RovingTabIndexProvider,
     useRovingTabIndex,
 } from "./RovingTabIndex";
-export type { IAction, IState, RovingTabIndexProviderProps } from "./RovingTabIndex";
+export type { IAction, IContext, IState, RovingTabIndexProviderProps } from "./RovingTabIndex";
 export { RovingTabIndexWrapper } from "./RovingTabIndexWrapper";
