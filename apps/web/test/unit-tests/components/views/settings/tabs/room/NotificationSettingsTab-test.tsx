@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, type RenderResult, screen, within } from "jest-matrix-react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import userEvent from "@testing-library/user-event";
 
 import NotificationSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/NotificationSettingsTab";

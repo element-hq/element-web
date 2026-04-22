@@ -14,7 +14,7 @@ import {
     RoomStateEvent,
     ContentHelpers,
     type MRoomTopicEventContent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 

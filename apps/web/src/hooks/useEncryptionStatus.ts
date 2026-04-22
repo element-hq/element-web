@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, RoomStateEvent } from "matrix-js-sdk";
 import { useEffect, useMemo, useState } from "react";
 import { throttle } from "lodash";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
 
 import { type E2EStatus, shieldStatusForRoom } from "../utils/ShieldUtils";
 import { useTypedEventEmitter } from "./useEventEmitter";

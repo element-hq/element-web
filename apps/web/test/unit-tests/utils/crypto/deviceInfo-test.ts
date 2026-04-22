@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Mocked, mocked } from "jest-mock";
-import { type Device, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Device, type MatrixClient } from "matrix-js-sdk";
 
 import { getDeviceCryptoInfo, getUserDeviceIds } from "../../../../src/utils/crypto/deviceInfo";
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto } from "../../../test-utils";

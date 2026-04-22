@@ -18,7 +18,7 @@ import {
     WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
-import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventType, MsgType } from "matrix-js-sdk";
 import React from "react";
 
 import { _t, _td, type TranslatedString } from "../languageHandler";

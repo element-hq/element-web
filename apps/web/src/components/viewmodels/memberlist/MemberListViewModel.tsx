@@ -17,8 +17,8 @@ import {
     type RoomMember as SdkRoomMember,
     type User,
     UserEvent,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { throttle } from "lodash";
 

@@ -8,10 +8,10 @@
 import { mocked } from "jest-mock";
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
 
 import {
     EncryptionUserSettingsTab,

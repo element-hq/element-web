@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ReactElement, type RefAttributes, type HTMLAttributes } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import CommandProvider from "./CommandProvider";
 import RoomProvider from "./RoomProvider";

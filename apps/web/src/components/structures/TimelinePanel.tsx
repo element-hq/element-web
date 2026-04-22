@@ -30,9 +30,9 @@ import {
     ThreadEvent,
     ReceiptType,
     EventStatus,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { debounce } from "lodash";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { type Layout } from "../../settings/enums/Layout";

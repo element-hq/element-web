@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentProps } from "react";
 import { render, type RenderResult } from "jest-matrix-react";
-import { type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
+import { type MatrixEvent, RoomMember } from "matrix-js-sdk";
+import { KnownMembership, type Membership } from "matrix-js-sdk/lib/types";
 
 import {
     getMockClientWithEventEmitter,

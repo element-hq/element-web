@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode } from "react";
-import { type Room, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient, type MatrixEvent } from "matrix-js-sdk";
 
 import { _t } from "../../../../../languageHandler";
 import BridgeTile from "../../BridgeTile";

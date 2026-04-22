@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useContext } from "react";
-import { RoomMember, User, type Room, KnownMembership } from "matrix-js-sdk/src/matrix";
+import { RoomMember, User, type Room, KnownMembership } from "matrix-js-sdk";
 
 import Modal from "../../../../Modal";
 import ErrorDialog from "../../../views/dialogs/ErrorDialog";

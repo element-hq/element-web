@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { ThreepidMedium } from "matrix-js-sdk";
 import { Alert } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";

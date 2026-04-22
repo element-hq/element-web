@@ -36,7 +36,7 @@ Please see LICENSE files in the repository root for full details.
  *                      list ops)
  */
 
-import { type MatrixClient, ClientEvent, EventType, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, ClientEvent, EventType, type Room } from "matrix-js-sdk";
 import {
     type MSC3575Filter,
     type MSC3575List,
@@ -47,9 +47,9 @@ import {
     SlidingSync,
     SlidingSyncEvent,
     SlidingSyncState,
-} from "matrix-js-sdk/src/sliding-sync";
-import { logger } from "matrix-js-sdk/src/logger";
-import { sleep } from "matrix-js-sdk/src/utils";
+} from "matrix-js-sdk/lib/sliding-sync";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { sleep } from "matrix-js-sdk/lib/utils";
 
 // how long to long poll for
 const SLIDING_SYNC_TIMEOUT_MS = 20 * 1000;

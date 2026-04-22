@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { type Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { isNullOrUndefined } from "matrix-js-sdk/lib/utils";
 import { EventEmitter } from "events";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { arrayDiff, arrayHasDiff } from "../../../utils/arrays";

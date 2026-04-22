@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixError, ConnectionError } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { _t, _td, lookupString, type Tags, type TranslatedString } from "../languageHandler";
 import SdkConfig from "../SdkConfig";

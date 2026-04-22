@@ -6,7 +6,7 @@
  */
 
 import { type Page } from "@playwright/test";
-import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/lib/crypto-api";
 
 import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { test as base, expect } from "../../../element-web-test";

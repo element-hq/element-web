@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type PropsWithChildren } from "react";
-import { type User } from "matrix-js-sdk/src/matrix";
+import { type User } from "matrix-js-sdk";
 import { Tooltip } from "@vector-im/compound-web";
 
 import ReadReceiptMarker, { type IReadReceiptPosition } from "./ReadReceiptMarker";

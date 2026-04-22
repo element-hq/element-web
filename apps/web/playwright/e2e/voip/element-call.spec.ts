@@ -9,7 +9,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { type Page } from "@playwright/test";
 
-import type { EventType, Preset } from "matrix-js-sdk/src/matrix";
+import type { EventType, Preset } from "matrix-js-sdk";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { test, expect } from "../../element-web-test";
 import type { Credentials } from "../../plugins/homeserver";

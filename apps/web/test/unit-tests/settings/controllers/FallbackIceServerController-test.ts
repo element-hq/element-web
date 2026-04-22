@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import fetchMock from "@fetch-mock/jest";
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk";
 
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import FallbackIceServerController from "../../../../src/settings/controllers/FallbackIceServerController.ts";

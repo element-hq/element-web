@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventEmitter } from "events";
-import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 import { render, within } from "jest-matrix-react";
 
 import MessagePanel, { shouldFormContinuation } from "../../../../src/components/structures/MessagePanel";

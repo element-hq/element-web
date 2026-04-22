@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useMemo, useState } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import { type RoomNotifState } from "../RoomNotifs";
 import { EchoChamber } from "../stores/local-echo/EchoChamber";

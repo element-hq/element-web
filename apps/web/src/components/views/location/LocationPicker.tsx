@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type SyntheticEvent } from "react";
 import maplibregl, { type MapMouseEvent } from "maplibre-gl";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type RoomMember, ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type RoomMember, ClientEvent, type IClientWellKnown } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { type HierarchyRoom, JoinRule, MatrixError, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
+import { type HierarchyRoom, JoinRule, MatrixError, type MatrixClient, Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../../test-utils";

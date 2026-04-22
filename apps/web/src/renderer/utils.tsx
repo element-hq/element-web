@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type JSX } from "react";
 import { type DOMNode, type Element, type HTMLReactParserOptions, type Text } from "html-react-parser";
-import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room } from "matrix-js-sdk";
 
 /**
  * The type of a parent node of an element, normally exported by domhandler but that is not a direct dependency of ours

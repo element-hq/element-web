@@ -24,9 +24,9 @@ import {
     Direction,
     RoomStateEvent,
     type RoomState,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type RoomEncryptionEventContent } from "matrix-js-sdk/lib/types";
 
 import Modal, { type IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";

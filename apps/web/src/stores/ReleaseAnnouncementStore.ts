@@ -6,8 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { TypedEventEmitter } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 import { cloneDeep } from "lodash";
 
 import SettingsStore from "../settings/SettingsStore";

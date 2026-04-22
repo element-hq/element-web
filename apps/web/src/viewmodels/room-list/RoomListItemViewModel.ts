@@ -11,10 +11,10 @@ import {
     type RoomListItemViewSnapshot,
     type RoomListItemViewActions,
 } from "@element-hq/web-shared-components";
-import { RoomEvent } from "matrix-js-sdk/src/matrix";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { RoomEvent } from "matrix-js-sdk";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call";
 
-import type { Room, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import type { Room, MatrixClient, RoomMember } from "matrix-js-sdk";
 import type { RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";

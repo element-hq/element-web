@@ -5,7 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import { type RoomMember, User, ClientEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, User, ClientEvent, type MatrixEvent } from "matrix-js-sdk";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";

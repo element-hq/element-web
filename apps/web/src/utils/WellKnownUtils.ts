@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IClientWellKnown, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import { type IClientWellKnown, type MatrixClient } from "matrix-js-sdk";
+import { UnstableValue } from "matrix-js-sdk/lib/NamespacedValue";
 
 const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";

@@ -17,7 +17,7 @@ import {
     EventType,
     SearchResult,
     type ISearchResults,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { RoomSearchView } from "../../../../src/components/structures/RoomSearchView";
 import { clientAndSDKContextRenderOptions, stubClient } from "../../../test-utils";

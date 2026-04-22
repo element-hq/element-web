@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render } from "jest-matrix-react";
 
-import type { IContent } from "matrix-js-sdk/src/matrix";
+import type { IContent } from "matrix-js-sdk";
 import type React from "react";
 import { editBodyDiffToHtml } from "../../../src/utils/MessageDiffUtils";
 

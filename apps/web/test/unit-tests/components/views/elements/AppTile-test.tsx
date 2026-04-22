@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient } from "matrix-js-sdk";
 import { type IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { act, render, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";

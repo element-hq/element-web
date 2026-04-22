@@ -17,8 +17,8 @@ import {
     type MatrixEvent,
     PendingEventOrdering,
     type MatrixClient,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import { mkEvent, mkRoom, mkRoomMember, muteRoom, stubClient, upsertRoomStateEvents } from "../test-utils";
 import {

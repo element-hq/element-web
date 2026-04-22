@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { lazy } from "react";
-import { type SecretStorage } from "matrix-js-sdk/src/matrix";
-import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey, type CryptoCallbacks } from "matrix-js-sdk/src/crypto-api";
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { type SecretStorage } from "matrix-js-sdk";
+import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey, type CryptoCallbacks } from "matrix-js-sdk/lib/crypto-api";
+import { logger as rootLogger } from "matrix-js-sdk/lib/logger";
 
 import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";

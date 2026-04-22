@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { JoinRule, type MatrixClient, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixClient, type Room, RoomEvent, RoomType } from "matrix-js-sdk";
 import {
     BaseViewModel,
     type RoomListHeaderViewSnapshot,

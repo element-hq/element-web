@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type RoomMember, type User, type Room } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type User, type Room } from "matrix-js-sdk";
 import { MenuItem } from "@vector-im/compound-web";
 import { DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

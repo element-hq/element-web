@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type AriaRole } from "react";
 import classNames from "classnames";
 import { Resizable, type Size } from "re-resizable";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 import { type IWidget } from "matrix-widget-api";
 import { clamp, percentageOf, percentageWithin } from "@element-hq/web-shared-components";
 

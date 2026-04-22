@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import "fake-indexeddb/auto";
 
 import { IDBFactory } from "fake-indexeddb";
-import { IndexedDBCryptoStore } from "matrix-js-sdk/src/matrix";
+import { IndexedDBCryptoStore } from "matrix-js-sdk";
 
 import * as StorageManager from "../../../src/utils/StorageManager";
 

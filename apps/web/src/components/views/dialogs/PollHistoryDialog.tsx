@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
 
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { PollHistory } from "../polls/pollHistory/PollHistory";

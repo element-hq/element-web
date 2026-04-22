@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { type LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/src/logger";
+import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api";
+import { type LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/lib/logger";
 import {
     type MatrixEvent,
     type MatrixClient,
@@ -16,7 +16,7 @@ import {
     type SyncState,
     RoomStateEvent,
     ClientEvent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { type DeviceListener, type DeviceState } from ".";
 import {

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 import { DeleteIcon, StopSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

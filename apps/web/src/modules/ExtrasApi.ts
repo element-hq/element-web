@@ -12,7 +12,7 @@ import {
     type ExtrasApi,
     type RoomHeaderButtonsCallback,
 } from "@element-hq/element-web-module-api";
-import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
+import { TypedEventEmitter } from "matrix-js-sdk";
 
 import { useTypedEventEmitter } from "../hooks/useEventEmitter";
 

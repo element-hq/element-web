@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/lib/utils";
 import {
     EventType,
     type MatrixClient,
@@ -15,8 +15,8 @@ import {
     RoomState,
     RoomStateEvent,
     type RoomMember,
-} from "matrix-js-sdk/src/matrix";
-import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+} from "matrix-js-sdk";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
 import { act, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 

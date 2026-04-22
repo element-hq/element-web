@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 
 import { LegacyCallAnswerEventPreview } from "../../../../../src/stores/message-preview/previews/LegacyCallAnswerEventPreview";

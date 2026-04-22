@@ -21,9 +21,9 @@ import {
     RoomMember,
     RoomStateEvent,
     SearchResult,
-} from "matrix-js-sdk/src/matrix";
-import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { type CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 import { act, cleanup, fireEvent, render, type RenderResult, screen, waitFor, findByRole } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 

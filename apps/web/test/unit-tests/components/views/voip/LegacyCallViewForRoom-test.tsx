@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
+import { MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { CallEventHandlerEvent } from "matrix-js-sdk/lib/webrtc/callEventHandler";
 
 import LegacyCallView from "../../../../../src/components/views/voip/LegacyCallView";
 import LegacyCallViewForRoom from "../../../../../src/components/views/voip/LegacyCallViewForRoom";

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type BaseSyntheticEvent, type ComponentProps, type ReactNode } from "react";
-import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixClient, MatrixError } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 import { Button } from "@vector-im/compound-web";
 
 import * as Email from "../../../email";

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import React, { type JSX, useEffect } from "react";
-import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MsgType } from "matrix-js-sdk";
 import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
 import { DisambiguatedProfileViewModel } from "../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";

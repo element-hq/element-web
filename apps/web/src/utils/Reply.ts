@@ -8,7 +8,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type IContent, type IEventRelation, type MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
+import { type IContent, type IEventRelation, type MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk";
 import sanitizeHtml from "sanitize-html";
 import { PERMITTED_URL_SCHEMES } from "@element-hq/web-shared-components";
 

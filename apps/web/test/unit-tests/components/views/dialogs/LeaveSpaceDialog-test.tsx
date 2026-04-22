@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type RoomMember } from "matrix-js-sdk";
 
 import LeaveSpaceDialog from "../../../../../src/components/views/dialogs/LeaveSpaceDialog";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";

@@ -38,12 +38,12 @@ import {
     type ISearchResults,
     THREAD_RELATION_TYPE,
     type MatrixClient,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type CallState, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import { debounce, throttle } from "lodash";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
 import {

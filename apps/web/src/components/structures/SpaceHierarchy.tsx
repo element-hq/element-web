@@ -34,12 +34,12 @@ import {
     HistoryVisibility,
     type HierarchyRoom,
     JoinRule,
-} from "matrix-js-sdk/src/matrix";
-import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
+} from "matrix-js-sdk";
+import { RoomHierarchy } from "matrix-js-sdk/lib/room-hierarchy";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
-import { logger } from "matrix-js-sdk/src/logger";
-import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/lib/types";
 import { ChevronDownIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { LinkedText } from "@element-hq/web-shared-components";
 

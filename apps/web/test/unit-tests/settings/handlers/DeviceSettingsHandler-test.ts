@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DeviceSettingsHandler from "../../../../src/settings/handlers/DeviceSettingsHandler";

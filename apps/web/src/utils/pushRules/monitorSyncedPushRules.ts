@@ -14,8 +14,8 @@ import {
     type IAnnotatedPushRule,
     type IPushRule,
     type PushRuleKind,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { VectorPushRulesDefinitions, type VectorPushRuleDefinition } from "../../notifications";
 import { updateExistingPushRulesWithActions } from "./updatePushRuleActions";

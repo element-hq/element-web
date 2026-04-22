@@ -12,16 +12,8 @@ import { render, type RenderResult, waitFor } from "jest-matrix-react";
 // Import VirtuosoMockContext from shared-components to ensure context compatibility
 // with the ListView component which also imports from shared-components
 import { VirtuosoMockContext } from "@element-hq/web-shared-components";
-import {
-    Room,
-    type MatrixClient,
-    type RoomState,
-    RoomMember,
-    User,
-    EventType,
-    RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { Room, type MatrixClient, type RoomState, RoomMember, User, EventType, RoomStateEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../../../test-utils";

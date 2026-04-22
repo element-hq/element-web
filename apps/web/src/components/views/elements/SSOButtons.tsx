@@ -16,7 +16,7 @@ import {
     type SSOAction,
     type IIdentityProvider,
     DELEGATED_OIDC_COMPATIBILITY,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 import { Button, Tooltip } from "@vector-im/compound-web";
 import { MacIcon } from "@vector-im/compound-design-tokens/assets/web/icons";

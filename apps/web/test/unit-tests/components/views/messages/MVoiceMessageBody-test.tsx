@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Room } from "matrix-js-sdk";
 import { act, render, screen } from "jest-matrix-react";
 import React from "react";
 

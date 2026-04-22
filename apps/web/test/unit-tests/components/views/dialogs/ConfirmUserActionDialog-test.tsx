@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import ConfirmUserActionDialog from "../../../../../src/components/views/dialogs/ConfirmUserActionDialog";
 import { mkRoomMember } from "../../../../test-utils";

@@ -8,8 +8,8 @@
 
 import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { type MatrixClient, RoomMember as SdkRoomMember, type Device, Room } from "matrix-js-sdk/src/matrix";
-import { type UserVerificationStatus, type DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient, RoomMember as SdkRoomMember, type Device, Room } from "matrix-js-sdk";
+import { type UserVerificationStatus, type DeviceVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 

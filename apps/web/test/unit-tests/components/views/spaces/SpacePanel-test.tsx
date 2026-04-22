@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen, fireEvent, act, cleanup } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";

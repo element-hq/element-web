@@ -19,9 +19,9 @@ import {
     UNSTABLE_MSC3852_LAST_SEEN_UA,
     type MatrixError,
     type LocalNotificationSettings,
-} from "matrix-js-sdk/src/matrix";
-import { type VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { type VerificationRequest, CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { _t } from "../../../../languageHandler";
 import { getDeviceClientInformation, pruneClientInformation } from "../../../../utils/device/clientInformation";

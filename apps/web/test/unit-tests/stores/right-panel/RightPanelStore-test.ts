@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, type MockedObject } from "jest-mock";
-import { type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, RoomMember } from "matrix-js-sdk";
 
 import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

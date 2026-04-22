@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 
 import * as languageHandler from "../languageHandler";

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps } from "react";
-import { type Device } from "matrix-js-sdk/src/matrix";
-import { type GeneratedSas } from "matrix-js-sdk/src/crypto-api";
+import { type Device } from "matrix-js-sdk";
+import { type GeneratedSas } from "matrix-js-sdk/lib/crypto-api";
 import { SasEmoji } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";

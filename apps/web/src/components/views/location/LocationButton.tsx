@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode, type SyntheticEvent, useContext } from "react";
 import classNames from "classnames";
-import { type RoomMember, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type IEventRelation } from "matrix-js-sdk";
 import { LocationPinIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

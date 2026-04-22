@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Wysiwyg, type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 import { useCallback } from "react";
-import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation, type MatrixClient } from "matrix-js-sdk";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";

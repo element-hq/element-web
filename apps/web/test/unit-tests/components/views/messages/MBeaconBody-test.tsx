@@ -18,7 +18,7 @@ import {
     Relations,
     M_BEACON,
     type Room,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import MBeaconBody from "../../../../../src/components/views/messages/MBeaconBody";
 import {

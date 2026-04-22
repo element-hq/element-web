@@ -11,7 +11,7 @@ import React, { type JSX } from "react";
 import { cleanup, queryByRole, render, screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import LegacyRoomList from "../../../../../src/components/views/rooms/LegacyRoomList";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";

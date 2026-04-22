@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IContent, type MatrixClient, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixClient, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk";
 import parse from "html-react-parser";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
 import {
     BaseViewModel,
     type EventContentBodyViewSnapshot,

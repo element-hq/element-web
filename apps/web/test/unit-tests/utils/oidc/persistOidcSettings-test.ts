@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IdTokenClaims } from "oidc-client-ts";
-import { decodeIdToken } from "matrix-js-sdk/src/matrix";
+import { decodeIdToken } from "matrix-js-sdk";
 import { mocked } from "jest-mock";
 
 import {
@@ -18,7 +18,7 @@ import {
     persistOidcAuthenticatedSettings,
 } from "../../../../src/utils/oidc/persistOidcSettings";
 
-jest.mock("matrix-js-sdk/src/matrix");
+jest.mock("matrix-js-sdk");
 
 describe("persist OIDC settings", () => {
     jest.spyOn(Storage.prototype, "getItem");

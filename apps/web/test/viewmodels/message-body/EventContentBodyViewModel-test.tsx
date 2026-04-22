@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { MsgType, PushRuleKind, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { MsgType, PushRuleKind, type MatrixEvent, type Room } from "matrix-js-sdk";
 import { type JSX } from "react";
 
 import {

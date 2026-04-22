@@ -11,8 +11,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
-import { type MatrixClient, type RoomMember, type Room, type User, type Device } from "matrix-js-sdk/src/matrix";
-import { type UserVerificationStatus, type VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient, type RoomMember, type Room, type User, type Device } from "matrix-js-sdk";
+import { type UserVerificationStatus, type VerificationRequest, CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
 
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";

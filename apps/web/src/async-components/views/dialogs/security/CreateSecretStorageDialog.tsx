@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, createRef } from "react";
 import FileSaver from "file-saver";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type AuthDict } from "matrix-js-sdk/src/matrix";
-import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type AuthDict } from "matrix-js-sdk";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/lib/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 

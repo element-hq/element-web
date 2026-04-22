@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixEvent, type PollStartEventContent } from "matrix-js-sdk/src/matrix";
-import { InvalidEventError } from "matrix-js-sdk/src/extensible_events_v1/InvalidEventError";
-import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { type MatrixEvent, type PollStartEventContent } from "matrix-js-sdk";
+import { InvalidEventError } from "matrix-js-sdk/lib/extensible_events_v1/InvalidEventError";
+import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
 
 import { type Preview } from "./Preview";
 import { type TagID } from "../../room-list-v3/skip-list/tag";

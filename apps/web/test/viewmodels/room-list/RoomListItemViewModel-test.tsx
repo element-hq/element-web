@@ -13,8 +13,8 @@ import {
     RoomEvent,
     PendingEventOrdering,
     type RoomMember,
-} from "matrix-js-sdk/src/matrix";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
+} from "matrix-js-sdk";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call";
 
 import { createTestClient, flushPromises } from "../../test-utils";
 import { RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";

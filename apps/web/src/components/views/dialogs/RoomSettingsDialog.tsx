@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RoomEvent, type Room, RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { RoomEvent, type Room, RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk";
 import {
     AdminIcon,
     GroupIcon,

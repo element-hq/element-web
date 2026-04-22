@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState } from "react";
-import { type MatrixClient, type MatrixEvent, type Poll, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, type Poll, type Room } from "matrix-js-sdk";
 
 import { _t } from "../../../../languageHandler";
 import { PollHistoryList } from "./PollHistoryList";

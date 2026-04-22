@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ComponentProps, useMemo, useState } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 import { InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ConfirmUserActionDialog from "./ConfirmUserActionDialog";

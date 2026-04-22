@@ -16,8 +16,8 @@ import {
     Room,
     RoomMember,
     RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 import React from "react";
 
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";

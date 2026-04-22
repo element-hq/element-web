@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef } from "react";
-import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import classNames from "classnames";
-import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
-import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
+import { type CallFeed } from "matrix-js-sdk/lib/webrtc/callFeed";
+import { SDPStreamMetadataPurpose } from "matrix-js-sdk/lib/webrtc/callEventTypes";
 
 import dis from "../../../dispatcher/dispatcher";
 import LegacyCallHandler from "../../../LegacyCallHandler";

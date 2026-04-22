@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk";
 
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
 import ManageRestrictedJoinRuleDialog from "../../../../../src/components/views/dialogs/ManageRestrictedJoinRuleDialog";

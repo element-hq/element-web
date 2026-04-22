@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { SERVICE_TYPES } from "matrix-js-sdk/src/matrix";
+import { SERVICE_TYPES } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";

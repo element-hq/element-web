@@ -14,15 +14,15 @@ import {
     MSC4108FailureReason,
     MSC4108SignInWithQR,
     RendezvousError,
-} from "matrix-js-sdk/src/rendezvous";
-import { HTTPError, type MatrixClient } from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk/lib/rendezvous";
+import { HTTPError, type MatrixClient } from "matrix-js-sdk";
 
 import LoginWithQR from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
 
-jest.mock("matrix-js-sdk/src/rendezvous");
-jest.mock("matrix-js-sdk/src/rendezvous/transports");
-jest.mock("matrix-js-sdk/src/rendezvous/channels");
+jest.mock("matrix-js-sdk/lib/rendezvous");
+jest.mock("matrix-js-sdk/lib/rendezvous/transports");
+jest.mock("matrix-js-sdk/lib/rendezvous/channels");
 
 const mockedFlow = jest.fn();
 

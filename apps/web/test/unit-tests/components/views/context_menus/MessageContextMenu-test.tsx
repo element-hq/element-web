@@ -21,8 +21,8 @@ import {
     Thread,
     M_POLL_KIND_DISCLOSED,
     EventTimeline,
-} from "matrix-js-sdk/src/matrix";
-import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+} from "matrix-js-sdk";
+import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 

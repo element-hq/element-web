@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentClass, createContext, useContext } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 
 // This context is available to components under LoggedInView,
 // the context must not be used by components outside a MatrixClientContext tree.

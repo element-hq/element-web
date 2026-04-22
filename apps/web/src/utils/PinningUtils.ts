@@ -14,7 +14,7 @@ import {
     EventTimeline,
     type Room,
     type EmptyObject,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { isContentActionable } from "./EventUtils";
 import { ReadPinsEventId } from "../components/views/right_panel/types";

@@ -9,4 +9,4 @@ Please see LICENSE files in the repository root for full details.
 
 // Import the js-sdk so the proper `request` object can be set. This does some
 // magic with the browser injection to make all subsequent imports work fine.
-import "matrix-js-sdk/src/browser-index";
+import "matrix-js-sdk/lib/browser-index";

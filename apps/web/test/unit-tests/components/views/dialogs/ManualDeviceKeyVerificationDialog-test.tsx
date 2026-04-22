@@ -8,8 +8,8 @@
 
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient } from "matrix-js-sdk";
+import { DeviceVerificationStatus } from "matrix-js-sdk/lib/crypto-api";
 
 import { clearAllModals, stubClient } from "../../../../test-utils";
 import { ManualDeviceKeyVerificationDialog } from "../../../../../src/components/views/dialogs/ManualDeviceKeyVerificationDialog";

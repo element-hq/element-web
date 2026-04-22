@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { EventType, type MatrixClient, type MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, type MatrixEvent, RelationType } from "matrix-js-sdk";
 import {
     BaseViewModel,
     type ReactionsRowButtonViewSnapshot,

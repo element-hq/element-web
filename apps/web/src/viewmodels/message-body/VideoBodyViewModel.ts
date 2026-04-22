@@ -7,9 +7,9 @@
 
 import { decode } from "blurhash";
 import { type RefObject } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { type MediaEventContent, type VideoInfo } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type MatrixEvent } from "matrix-js-sdk";
+import { type MediaEventContent, type VideoInfo } from "matrix-js-sdk/lib/types";
 import {
     BaseViewModel,
     VideoBodyViewState,

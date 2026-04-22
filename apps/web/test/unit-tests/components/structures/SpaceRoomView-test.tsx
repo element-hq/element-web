@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked, type MockedObject } from "jest-mock";
-import { type MatrixClient, MatrixEvent, Preset, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEvent, Preset, Room } from "matrix-js-sdk";
 import { render, cleanup, screen, fireEvent, waitFor, act } from "jest-matrix-react";
 
 import { stubClient, mockPlatformPeg, unmockPlatformPeg, withClientContextRenderOptions } from "../../../test-utils";

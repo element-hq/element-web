@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type Room } from "matrix-js-sdk";
 
 import { createTestClient, mkStubRoom, REPEATABLE_DATE } from "../../../test-utils";
 import { ExportType, type IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";

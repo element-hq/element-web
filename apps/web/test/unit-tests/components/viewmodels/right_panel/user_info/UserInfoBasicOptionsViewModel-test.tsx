@@ -13,7 +13,7 @@ import {
     type Room,
     RoomMember,
     type User,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { renderHook, waitFor } from "jest-matrix-react";
 
 import { Action } from "../../../../../../src/dispatcher/actions";

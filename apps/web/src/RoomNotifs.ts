@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
 import {
     NotificationCountType,
     ConditionKind,
@@ -14,9 +14,9 @@ import {
     PushRuleKind,
     TweakName,
     EventStatus,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
-import type { IPushRule, Room, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import type { IPushRule, Room, MatrixClient, MatrixEvent } from "matrix-js-sdk";
 import { NotificationLevel } from "./stores/notifications/NotificationLevel";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
 import { EffectiveMembership, getEffectiveMembership, isKnockDenied } from "./utils/membership";

@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent } from "react";
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { decodeRecoveryKey, type KeyBackupInfo, type KeyBackupRestoreResult } from "matrix-js-sdk/src/crypto-api";
-import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient, MatrixError } from "matrix-js-sdk";
+import { decodeRecoveryKey, type KeyBackupInfo, type KeyBackupRestoreResult } from "matrix-js-sdk/lib/crypto-api";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t } from "../../../../languageHandler";

@@ -21,7 +21,7 @@ import React, {
 } from "react";
 import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 import {
     FavouriteSolidIcon,
     HomeSolidIcon,

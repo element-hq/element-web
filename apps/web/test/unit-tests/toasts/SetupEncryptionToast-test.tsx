@@ -10,9 +10,9 @@ import React from "react";
 import { act, render, screen } from "jest-matrix-react";
 import { mocked, type Mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type CryptoApi, DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/src/crypto-api";
-import { type SecretStorageKeyDescriptionAesV1 } from "matrix-js-sdk/src/secret-storage";
+import { type MatrixClient } from "matrix-js-sdk";
+import { type CryptoApi, DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/lib/crypto-api";
+import { type SecretStorageKeyDescriptionAesV1 } from "matrix-js-sdk/lib/secret-storage";
 
 import * as SecurityManager from "../../../src/SecurityManager";
 import ToastContainer from "../../../src/components/structures/ToastContainer";

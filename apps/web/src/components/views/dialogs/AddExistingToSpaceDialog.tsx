@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactElement, type ReactNode, useContext, useId, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
-import { type Room, EventType } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { sleep } from "matrix-js-sdk/src/utils";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type Room, EventType } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { sleep } from "matrix-js-sdk/lib/utils";
+import { logger } from "matrix-js-sdk/lib/logger";
 import { CheckIcon, ErrorIcon, RestartIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../../languageHandler";

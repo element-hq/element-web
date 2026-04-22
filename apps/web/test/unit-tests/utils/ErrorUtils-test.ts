@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type ReactElement } from "react";
 import { render } from "jest-matrix-react";
-import { MatrixError, ConnectionError } from "matrix-js-sdk/src/matrix";
+import { MatrixError, ConnectionError } from "matrix-js-sdk";
 
 import {
     adminContactStrings,

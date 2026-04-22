@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ContextType } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventTimeline } from "matrix-js-sdk/src/matrix";
+import { EventTimeline } from "matrix-js-sdk";
 import { VisibilityOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { EventTileBubble } from "@element-hq/web-shared-components";
 

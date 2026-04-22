@@ -17,9 +17,9 @@ import {
     waitForElementToBeRemoved,
     within,
 } from "jest-matrix-react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type CryptoApi, DeviceVerificationStatus, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type CryptoApi, DeviceVerificationStatus, type VerificationRequest } from "matrix-js-sdk/lib/crypto-api";
+import { sleep } from "matrix-js-sdk/lib/utils";
 import {
     ClientEvent,
     Device,
@@ -32,7 +32,7 @@ import {
     GET_LOGIN_TOKEN_CAPABILITY,
     MatrixError,
     type MatrixClient,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "@fetch-mock/jest";
 

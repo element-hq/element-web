@@ -14,7 +14,7 @@ import {
     type MatrixEvent,
     Room,
     RoomMemberEvent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { UserProfilesStore } from "../../../src/stores/UserProfilesStore";
 import { filterConsole, mkRoomMember, mkRoomMemberJoinEvent, stubClient } from "../../test-utils";

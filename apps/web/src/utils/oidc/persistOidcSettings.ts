@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type IdTokenClaims } from "oidc-client-ts";
-import { decodeIdToken } from "matrix-js-sdk/src/matrix";
+import { decodeIdToken } from "matrix-js-sdk";
 
 const clientIdStorageKey = "mx_oidc_client_id";
 const tokenIssuerStorageKey = "mx_oidc_token_issuer";

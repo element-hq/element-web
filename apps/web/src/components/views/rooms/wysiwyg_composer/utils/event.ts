@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type MatrixClient, type MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk";
 
 import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { type IRoomState } from "../../../../structures/RoomView";

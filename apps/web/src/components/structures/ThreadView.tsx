@@ -15,8 +15,8 @@ import {
     RoomEvent,
     type IEventRelation,
     type MatrixEvent,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 import classNames from "classnames";
 
 import BaseCard from "../views/right_panel/BaseCard";

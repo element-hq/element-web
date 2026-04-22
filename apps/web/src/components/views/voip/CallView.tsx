@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type FC, useContext, useEffect, type AriaRole, useCallback } from "react";
 
-import type { Room } from "matrix-js-sdk/src/matrix";
+import type { Room } from "matrix-js-sdk";
 import { type Call, CallEvent } from "../../../models/Call";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";

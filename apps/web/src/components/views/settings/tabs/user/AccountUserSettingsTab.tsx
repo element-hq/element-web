@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useCallback, useContext, useEffect } from "react";
-import { HTTPError } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { HTTPError } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { UserFriendlyError, _t } from "../../../../../languageHandler";
 import UserProfileSettings from "../../UserProfileSettings";

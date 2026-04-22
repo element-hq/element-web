@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type EventEmitter } from "events";
-import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { PermalinkParts } from "../../../../src/utils/permalinks/PermalinkConstructor";

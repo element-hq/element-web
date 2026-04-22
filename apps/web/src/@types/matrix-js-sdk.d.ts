@@ -10,15 +10,15 @@ import type { IWidget } from "matrix-widget-api";
 import type { BLURHASH_FIELD } from "../utils/image-media";
 import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-types";
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
-import type { EncryptedFile } from "matrix-js-sdk/src/types";
-import type { EmptyObject } from "matrix-js-sdk/src/matrix";
+import type { EncryptedFile } from "matrix-js-sdk/lib/types";
+import type { EmptyObject } from "matrix-js-sdk";
 import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 import { type MediaPreviewConfig } from "./media_preview.ts";
 import { type INVITE_RULES_ACCOUNT_DATA_TYPE, type InviteConfigAccountData } from "./invite-rules.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
-declare module "matrix-js-sdk/src/types" {
+declare module "matrix-js-sdk/lib/types" {
     export interface FileInfo {
         /**
          * @see https://github.com/matrix-org/matrix-spec-proposals/pull/2448

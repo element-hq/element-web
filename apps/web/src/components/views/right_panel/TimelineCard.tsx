@@ -14,8 +14,8 @@ import {
     type Room,
     type EventTimelineSet,
     type Thread,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import BaseCard from "./BaseCard";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";

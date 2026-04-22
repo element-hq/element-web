@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { act, renderHook, waitFor } from "jest-matrix-react";
-import { JoinRule, MatrixEvent, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, MatrixEvent, type MatrixClient, type Room } from "matrix-js-sdk";
 
 import { useMediaVisible } from "../../../src/hooks/useMediaVisible";
 import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../test-utils";

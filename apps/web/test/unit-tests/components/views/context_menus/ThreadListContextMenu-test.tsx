@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { getByTestId, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { type MatrixClient, PendingEventOrdering, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, PendingEventOrdering, type MatrixEvent, Room } from "matrix-js-sdk";
 import React from "react";
 
 import ThreadListContextMenu, {

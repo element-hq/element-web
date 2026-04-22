@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixClient } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";

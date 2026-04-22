@@ -15,10 +15,10 @@ import {
     EventType,
     MatrixEvent,
     RoomEvent,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient } from "matrix-js-sdk";
 import { mkEvent, muteRoom, stubClient } from "../../../test-utils";
 import { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
 import { NotificationStateEvents } from "../../../../src/stores/notifications/NotificationState";

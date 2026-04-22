@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, type JSX, useCallback, useState } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
 import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";

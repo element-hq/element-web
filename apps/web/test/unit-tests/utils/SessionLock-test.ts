@@ -253,7 +253,7 @@ describe("SessionLock", () => {
 
         // import the dependencies of getSessionLock into the new context
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        window2._logger = require("matrix-js-sdk/src/logger");
+        window2._logger = require("matrix-js-sdk/lib/logger");
         window2.SESSION_LOCK_CONSTANTS = SESSION_LOCK_CONSTANTS;
 
         // now, define getSessionLock as a global

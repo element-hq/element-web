@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType } from "matrix-js-sdk";
 import React, { useContext, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { TakePhotoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

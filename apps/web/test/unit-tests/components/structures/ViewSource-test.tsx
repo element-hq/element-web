@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { render } from "jest-matrix-react";
-import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Room } from "matrix-js-sdk";
 import React from "react";
 
 import ViewSource from "../../../../src/components/structures/ViewSource";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { IWidget } from "matrix-widget-api/src/interfaces/IWidget";
-import type { MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import type { MatrixEvent, RoomStateEvent } from "matrix-js-sdk";
 import { test, expect } from "../../element-web-test";
 import { type Client } from "../../pages/client";
 

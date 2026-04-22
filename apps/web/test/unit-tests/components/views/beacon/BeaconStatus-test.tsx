@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { Beacon } from "matrix-js-sdk/src/matrix";
+import { Beacon } from "matrix-js-sdk";
 
 import BeaconStatus from "../../../../../src/components/views/beacon/BeaconStatus";
 import { BeaconDisplayStatus } from "../../../../../src/components/views/beacon/displayStatus";

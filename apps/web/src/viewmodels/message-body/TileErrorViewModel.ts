@@ -6,7 +6,7 @@
  */
 
 import { type MouseEventHandler } from "react";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk";
 import {
     BaseViewModel,
     type TileErrorViewLayout,

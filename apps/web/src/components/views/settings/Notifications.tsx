@@ -17,8 +17,8 @@ import {
     ThreepidMedium,
     type LocalNotificationSettings,
     type EmptyObject,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import Spinner from "../elements/Spinner";

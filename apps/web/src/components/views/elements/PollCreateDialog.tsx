@@ -16,8 +16,8 @@ import {
     M_POLL_START,
     type IPartialEvent,
     type TimelineEvents,
-} from "matrix-js-sdk/src/matrix";
-import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+} from "matrix-js-sdk";
+import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ScrollableBaseModal, { type IScrollableBaseState } from "../dialogs/ScrollableBaseModal";

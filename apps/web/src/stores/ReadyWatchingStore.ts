@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, SyncState } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, SyncState } from "matrix-js-sdk";
 import { EventEmitter } from "events";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";

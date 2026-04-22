@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { useState, useCallback, useMemo, useEffect } from "react";
 
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
+import type { RoomMember } from "matrix-js-sdk";
 import { type Call, ConnectionState, CallEvent } from "../models/Call";
 import { useTypedEventEmitterState, useEventEmitter } from "./useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";

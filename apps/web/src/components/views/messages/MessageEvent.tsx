@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import mime from "mime";
 import React, { createRef } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 import {
     EventType,
     MsgType,
@@ -17,7 +17,7 @@ import {
     M_LOCATION,
     M_POLL_START,
     type IContent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";

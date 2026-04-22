@@ -13,8 +13,8 @@ import {
 } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { type AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
-import * as Matrix from "matrix-js-sdk/src/matrix";
-import { type IRegisterRequestParams } from "matrix-js-sdk/src/matrix";
+import * as Matrix from "matrix-js-sdk";
+import { type IRegisterRequestParams } from "matrix-js-sdk";
 import { type ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
 
 import type React from "react";

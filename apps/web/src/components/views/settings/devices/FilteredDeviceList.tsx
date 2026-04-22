@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type Ref } from "react";
-import { type IPusher, PUSHER_DEVICE_ID, type LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
+import { type IPusher, PUSHER_DEVICE_ID, type LocalNotificationSettings } from "matrix-js-sdk";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";

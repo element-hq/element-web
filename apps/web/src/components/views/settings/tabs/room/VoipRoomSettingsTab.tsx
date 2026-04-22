@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEventHandler, useCallback, useMemo, useState } from "react";
-import { JoinRule, EventType, type RoomState, type Room } from "matrix-js-sdk/src/matrix";
-import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
+import { JoinRule, EventType, type RoomState, type Room } from "matrix-js-sdk";
+import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/lib/types";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import { _t } from "../../../../../languageHandler";

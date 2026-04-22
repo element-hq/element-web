@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useRef, useState } from "react";
-import { type Room, JoinRule } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type Room, JoinRule } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";

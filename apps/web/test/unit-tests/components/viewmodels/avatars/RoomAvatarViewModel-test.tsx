@@ -6,15 +6,7 @@
  */
 
 import { renderHook, waitFor } from "jest-matrix-react";
-import {
-    JoinRule,
-    type MatrixClient,
-    MatrixEvent,
-    type Room,
-    RoomEvent,
-    RoomMember,
-    User,
-} from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixClient, MatrixEvent, type Room, RoomEvent, RoomMember, User } from "matrix-js-sdk";
 import { act } from "react";
 
 import {

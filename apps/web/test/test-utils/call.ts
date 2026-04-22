@@ -17,10 +17,10 @@ import {
     KnownMembership,
     RoomStateEvent,
     type IContent,
-} from "matrix-js-sdk/src/matrix";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
+} from "matrix-js-sdk";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call";
 import { mocked, type Mocked } from "jest-mock";
-import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixRTCSession } from "matrix-js-sdk/lib/matrixrtc";
 
 import { mkEvent, mkRoomMember, setupAsyncStoreWithClient, stubClient } from "./test-utils";
 import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";

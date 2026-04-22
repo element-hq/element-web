@@ -13,9 +13,9 @@ import {
     THREAD_RELATION_TYPE,
     ContentHelpers,
     LocationAssetType,
-} from "matrix-js-sdk/src/matrix";
-import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { type RoomMessageEventContent } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";

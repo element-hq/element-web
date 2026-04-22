@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ComponentProps, lazy, Suspense } from "react";
-import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import { type ISendEventResponse } from "matrix-js-sdk";
 
 // we need to import the types for TS, but do not import the sendMessage
 // function to avoid importing from "@vector-im/matrix-wysiwyg"

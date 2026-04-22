@@ -6,7 +6,7 @@
  */
 
 import { mocked } from "jest-mock";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk";
 
 import Modal from "../../../src/Modal";
 import SdkConfig from "../../../src/SdkConfig";

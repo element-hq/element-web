@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient } from "matrix-js-sdk";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto-api";
 
 import { messageForSyncError } from "../../../utils/ErrorUtils";
 import Spinner from "../../views/elements/Spinner";

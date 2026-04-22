@@ -7,7 +7,7 @@
  */
 
 import React, { type HTMLProps, type JSX, useContext, useState } from "react";
-import { type IContent, M_POLL_START, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type IContent, M_POLL_START, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

@@ -7,7 +7,7 @@
 
 import React from "react";
 import { MatrixWidgetType } from "matrix-widget-api";
-import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room } from "matrix-js-sdk";
 
 import {
     WidgetContextMenuViewModel,

@@ -13,7 +13,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { uniq, sortBy, uniqBy, type ListIteratee } from "lodash";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 import { EMOJI, type Emoji, getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
 import { _t } from "../languageHandler";

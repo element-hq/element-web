@@ -19,11 +19,11 @@ import {
     ProfileKeyMSC4175Timezone,
     SyncState,
     MatrixError,
-} from "matrix-js-sdk/src/matrix";
-import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { MediaHandler } from "matrix-js-sdk/lib/webrtc/mediaHandler";
+import { logger } from "matrix-js-sdk/lib/logger";
 import userEvent from "@testing-library/user-event";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
 
 import LoggedInView from "../../../../src/components/structures/LoggedInView";
 import { SDKContext } from "../../../../src/contexts/SDKContext";

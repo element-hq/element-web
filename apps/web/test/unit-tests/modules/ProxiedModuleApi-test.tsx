@@ -12,7 +12,7 @@ import { type AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types
 import { DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 import { type Mocked } from "jest-mock";
 
 import { ProxiedModuleApi } from "../../../src/modules/ProxiedModuleApi";

@@ -29,10 +29,10 @@ import {
     SyncState,
     type TimelineIndex,
     type TimelineWindow,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { sleep } from "matrix-js-sdk/src/utils";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { sleep } from "matrix-js-sdk/lib/utils";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";

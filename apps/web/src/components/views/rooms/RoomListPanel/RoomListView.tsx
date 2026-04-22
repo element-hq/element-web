@@ -11,7 +11,7 @@ import {
     useCreateAutoDisposedViewModel,
     type Room as SharedRoom,
 } from "@element-hq/web-shared-components";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { RoomAvatarView } from "../../avatars/RoomAvatarView";

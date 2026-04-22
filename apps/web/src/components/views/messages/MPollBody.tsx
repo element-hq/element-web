@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 import {
     type MatrixEvent,
     type MatrixClient,
@@ -18,10 +18,10 @@ import {
     M_POLL_RESPONSE,
     M_POLL_START,
     type TimelineEvents,
-} from "matrix-js-sdk/src/matrix";
-import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
-import { type PollStartEvent, type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
+} from "matrix-js-sdk";
+import { RelatedRelations } from "matrix-js-sdk/lib/models/related-relations";
+import { type PollStartEvent, type PollAnswerSubevent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
+import { PollResponseEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollResponseEvent";
 import PollsIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls";
 import PollsEndIcon from "@vector-im/compound-design-tokens/assets/web/icons/polls-end";
 

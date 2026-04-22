@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { render } from "jest-matrix-react";
 import React from "react";
 import { mocked } from "jest-mock";
-import { type RoomMember, type RoomState } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type RoomState } from "matrix-js-sdk";
 
 import { E2eMessageSharedIcon } from "../../../../../../src/components/views/rooms/EventTile/E2eMessageSharedIcon.tsx";
 import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../../test-utils";

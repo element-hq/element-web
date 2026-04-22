@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, type CSSProperties, type ReactNode } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
 import Timer from "../../utils/Timer";

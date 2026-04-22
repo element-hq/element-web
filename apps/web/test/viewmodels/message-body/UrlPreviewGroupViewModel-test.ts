@@ -8,7 +8,7 @@
 import { expect } from "@jest/globals";
 
 import type { MockedObject } from "jest-mock";
-import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, IPreviewUrlResponse } from "matrix-js-sdk";
 import { UrlPreviewGroupViewModel } from "../../../src/viewmodels/message-body/UrlPreviewGroupViewModel";
 import type { UrlPreview } from "@element-hq/web-shared-components";
 import { getMockClientWithEventEmitter, mkEvent } from "../../test-utils";

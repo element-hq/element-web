@@ -16,7 +16,7 @@ import {
     MatrixError,
     HTTPError,
     type IThreepid,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";

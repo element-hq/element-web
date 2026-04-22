@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixError, RuleId, TweakName, SyncState, TypedEventEmitter } from "matrix-js-sdk/src/matrix";
+import { MatrixError, RuleId, TweakName, SyncState, TypedEventEmitter } from "matrix-js-sdk";
 import {
     type CallError,
     CallErrorCode,
@@ -20,9 +20,9 @@ import {
     CallType,
     FALLBACK_ICE_SERVER,
     type MatrixCall,
-} from "matrix-js-sdk/src/webrtc/call";
-import { logger } from "matrix-js-sdk/src/logger";
-import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
+} from "matrix-js-sdk/lib/webrtc/call";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { CallEventHandlerEvent } from "matrix-js-sdk/lib/webrtc/callEventHandler";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";

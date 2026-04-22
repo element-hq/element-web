@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked, type MockedObject } from "jest-mock";
-import { PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 import { Widget } from "matrix-widget-api";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient } from "matrix-js-sdk";
 import {
     stubClient,
     setupAsyncStoreWithClient,

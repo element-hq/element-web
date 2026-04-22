@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import { render, fireEvent } from "jest-matrix-react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk";
 
 import FileDropTarget from "../../../../src/components/structures/FileDropTarget.tsx";
 import { stubClient } from "../../../test-utils";

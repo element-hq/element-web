@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { CallEvent, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
+import { CallEvent, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
+import { type CallFeed } from "matrix-js-sdk/lib/webrtc/callFeed";
 
 import AudioFeed from "./AudioFeed";
 

@@ -8,16 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, type RenderResult } from "jest-matrix-react";
-import {
-    Room,
-    MatrixEvent,
-    M_POLL_KIND_DISCLOSED,
-    M_POLL_KIND_UNDISCLOSED,
-    M_POLL_START,
-    M_TEXT,
-} from "matrix-js-sdk/src/matrix";
-import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { type ReplacementEvent } from "matrix-js-sdk/src/types";
+import { Room, MatrixEvent, M_POLL_KIND_DISCLOSED, M_POLL_KIND_UNDISCLOSED, M_POLL_START, M_TEXT } from "matrix-js-sdk";
+import { PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
+import { type ReplacementEvent } from "matrix-js-sdk/lib/types";
 
 import { getMockClientWithEventEmitter } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";

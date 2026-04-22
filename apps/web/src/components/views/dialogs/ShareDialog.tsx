@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useMemo, useRef, useState } from "react";
-import { Room, RoomMember, MatrixEvent, User } from "matrix-js-sdk/src/matrix";
+import { Room, RoomMember, MatrixEvent, User } from "matrix-js-sdk";
 import { Checkbox, Button } from "@vector-im/compound-web";
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";

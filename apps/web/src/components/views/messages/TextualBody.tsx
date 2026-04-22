@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, useCallback, useEffect } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { MsgType } from "matrix-js-sdk";
 import {
     UrlPreviewGroupView,
     type UrlPreview,
@@ -16,7 +16,7 @@ import {
     LINKIFIED_DATA_ATTRIBUTE,
     useViewModel,
 } from "@element-hq/web-shared-components";
-import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import { logger as rootLogger } from "matrix-js-sdk/lib/logger";
 
 import { EventContentBodyViewModel } from "../../../viewmodels/message-body/EventContentBodyViewModel";
 import { formatDate } from "../../../DateUtils";

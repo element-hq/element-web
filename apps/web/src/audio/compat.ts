@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import decoderWasmPath from "opus-recorder/dist/decoderWorker.min.wasm";
 import wavEncoderPath from "opus-recorder/dist/waveWorker.min.js";
 import decoderPath from "opus-recorder/dist/decoderWorker.min.js";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { SAMPLE_RATE } from "./VoiceRecording";
 

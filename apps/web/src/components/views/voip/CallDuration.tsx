@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type FC, useState, useEffect, memo } from "react";
-import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixRTCSession } from "matrix-js-sdk/lib/matrixrtc";
 
 import { formatPreciseDuration } from "../../../DateUtils";
 

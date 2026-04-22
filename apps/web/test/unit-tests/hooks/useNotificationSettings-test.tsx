@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { waitFor, renderHook } from "jest-matrix-react";
-import { type IPushRules, type MatrixClient, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
+import { type IPushRules, type MatrixClient, PushRuleKind, RuleId } from "matrix-js-sdk";
 
 import { useNotificationSettings } from "../../../src/hooks/useNotificationSettings";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";

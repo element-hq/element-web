@@ -13,8 +13,8 @@ import {
     type RoomMember,
     type RoomState,
     RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 import { mocked } from "jest-mock";
 
 import { isKnockDenied, waitForMember } from "../../../src/utils/membership";

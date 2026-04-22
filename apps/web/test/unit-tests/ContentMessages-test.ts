@@ -13,8 +13,8 @@ import {
     MatrixError,
     RelationType,
     type UploadResponse,
-} from "matrix-js-sdk/src/matrix";
-import { type ImageInfo } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { type ImageInfo } from "matrix-js-sdk/lib/types";
 import encrypt, { type IEncryptedFile } from "matrix-encrypt-attachment";
 
 import ContentMessages, { UploadCanceledError, uploadFile } from "../../src/ContentMessages";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type SyntheticEvent, useContext, useState } from "react";
-import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type Room, type IEventRelation } from "matrix-js-sdk";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ContextMenu, { type MenuProps } from "../../structures/ContextMenu";

@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, useState, type Ref, type FC, type JSX } from "react";
 import classNames from "classnames";
-import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import {
     ChevronDownIcon,
     ChevronUpIcon,

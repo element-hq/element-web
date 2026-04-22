@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEventEvent, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { MatrixEventEvent, RoomEvent, ClientEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
-import type { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import type { Room, MatrixEvent } from "matrix-js-sdk";
 import type { IDestroyable } from "../../utils/IDestroyable";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";

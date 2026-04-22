@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { type RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type User } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";

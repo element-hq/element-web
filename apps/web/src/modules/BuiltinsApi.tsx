@@ -9,7 +9,7 @@ import React from "react";
 import { type RoomViewProps, type BuiltinsApi } from "@element-hq/element-web-module-api";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import type { Room } from "matrix-js-sdk/src/matrix";
+import type { Room } from "matrix-js-sdk";
 import type { ModuleNotificationDecorationProps } from "./components/ModuleNotificationDecoration";
 
 interface RoomViewPropsWithRoomId extends RoomViewProps {

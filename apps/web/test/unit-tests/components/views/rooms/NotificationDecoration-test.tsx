@@ -7,7 +7,7 @@
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call";
 
 import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { NotificationDecoration } from "../../../../../src/components/views/rooms/NotificationDecoration";

@@ -18,7 +18,7 @@ import {
     type MatrixClient,
     PendingEventOrdering,
     THREAD_RELATION_TYPE,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import React, { useState } from "react";
 
 import ThreadView from "../../../../src/components/structures/ThreadView";

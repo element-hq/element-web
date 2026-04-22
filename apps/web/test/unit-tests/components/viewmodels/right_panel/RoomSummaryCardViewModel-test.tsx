@@ -6,7 +6,7 @@
  */
 
 import { act, renderHook, waitFor } from "jest-matrix-react";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
 
 import { useRoomSummaryCardViewModel } from "../../../../../src/components/viewmodels/right_panel/RoomSummaryCardViewModel";
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";

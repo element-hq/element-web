@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // Inspiration largely taken from Mjolnir itself
 
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType } from "matrix-js-sdk";
 
 import { ListRule, RECOMMENDATION_BAN, recommendationToStable } from "./ListRule";
 import { MatrixClientPeg } from "../MatrixClientPeg";

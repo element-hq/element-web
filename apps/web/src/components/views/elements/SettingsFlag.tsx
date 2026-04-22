@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent } from "react";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
 import { SettingsToggleInput } from "@vector-im/compound-web";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";

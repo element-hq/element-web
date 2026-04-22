@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 import { type SyntheticEvent, useState, type SetStateAction } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { isNotNull } from "../../../../../Typeguards";
 

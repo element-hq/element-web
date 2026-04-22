@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEventHandler, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { type IContent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixEvent } from "matrix-js-sdk";
 import classNames from "classnames";
 import { Form, SettingsToggleInput } from "@vector-im/compound-web";
 

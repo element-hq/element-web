@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { type IProps as IContextMenuProps, MenuItem } from "../../structures/ContextMenu";

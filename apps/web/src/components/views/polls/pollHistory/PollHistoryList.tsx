@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { type MatrixEvent, type Poll } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Poll } from "matrix-js-sdk";
 
 import { _t } from "../../../../languageHandler";
 import { FilterTabGroup } from "../../elements/FilterTabGroup";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { shuffle } from "lodash";
 
-import type { Room } from "matrix-js-sdk/src/matrix";
+import type { Room } from "matrix-js-sdk";
 import type { Sorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
 import type { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { mkMessage, stubClient } from "../../../../test-utils";

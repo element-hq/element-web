@@ -7,7 +7,7 @@
 
 import React, { type ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 import { Pill } from "@element-hq/web-shared-components";
-import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, type IContent, RoomStickyEventsEvent } from "matrix-js-sdk";
 import { Alert, Form, SettingsToggleInput } from "@vector-im/compound-web";
 
 import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool.tsx";

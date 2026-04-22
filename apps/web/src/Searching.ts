@@ -17,7 +17,7 @@ import {
     EventType,
     type MatrixClient,
     type SearchResult,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { type ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Mocked } from "jest-mock";
-import { type IIdentityServerProvider, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type IIdentityServerProvider, type MatrixClient } from "matrix-js-sdk";
 
 import { DirectoryMember, ThreepidMember } from "../../../src/utils/direct-messages";
 import { lookupThreePids, resolveThreePids } from "../../../src/utils/threepids";

@@ -5,8 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type CallMembership, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type CallMembership, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/lib/matrixrtc";
+import { type MatrixClient, type Room } from "matrix-js-sdk";
 import { type MockedObject } from "jest-mock";
 
 import { ElementCall } from "../../../src/models/Call";

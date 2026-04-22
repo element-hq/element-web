@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useEffect } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type IContent } from "matrix-js-sdk/src/matrix";
-import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type IContent } from "matrix-js-sdk";
+import { type MediaEventContent } from "matrix-js-sdk/lib/types";
 import { AudioPlayerView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { type Playback } from "../../../audio/Playback";

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { zxcvbn, zxcvbnOptions, type ZxcvbnResult, type TranslationKeys } from "@zxcvbn-ts/core";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";

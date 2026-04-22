@@ -7,7 +7,7 @@
 
 import { mocked } from "jest-mock";
 
-import type { MatrixClient, Room, RoomState } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, Room, RoomState } from "matrix-js-sdk";
 import { createTestClient, mkStubRoom } from "../../test-utils";
 import { shouldShowComponent } from "../../../src/customisations/helpers/UIComponents";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";

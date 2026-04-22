@@ -38,7 +38,7 @@ import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/publi
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
-import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type Room } from "matrix-js-sdk";
 import { Box, Flex, HistoryVisibilityBadge, LinkedText } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard.tsx";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";

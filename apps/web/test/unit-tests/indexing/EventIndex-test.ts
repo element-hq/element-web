@@ -23,7 +23,7 @@ import {
     type Room,
     ClientEvent,
     SyncState,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import EventIndex from "../../../src/indexing/EventIndex.ts";
 import { emitPromise, getMockClientWithEventEmitter, mockClientMethodsRooms, mockPlatformPeg } from "../../test-utils";

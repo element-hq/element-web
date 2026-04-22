@@ -11,8 +11,8 @@ import React from "react";
 import { KeyIcon, ErrorSolidIcon, SettingsSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { type ComponentType } from "react";
 import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
-import { logger } from "matrix-js-sdk/src/logger";
-import { DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/src/crypto-api";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/lib/crypto-api";
 
 import Modal from "../Modal";
 import { _t } from "../languageHandler";

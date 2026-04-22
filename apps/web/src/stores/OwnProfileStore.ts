@@ -6,14 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    type MatrixEvent,
-    RoomStateEvent,
-    MatrixError,
-    type User,
-    UserEvent,
-    EventType,
-} from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, RoomStateEvent, MatrixError, type User, UserEvent, EventType } from "matrix-js-sdk";
 import { throttle } from "lodash";
 
 import { type ActionPayload } from "../dispatcher/payloads";

@@ -10,15 +10,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ReactNode } from "react";
-import {
-    createClient,
-    type MatrixClient,
-    SSOAction,
-    type OidcTokenRefresher,
-    decodeBase64,
-} from "matrix-js-sdk/src/matrix";
-import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
+import { createClient, type MatrixClient, SSOAction, type OidcTokenRefresher, decodeBase64 } from "matrix-js-sdk";
+import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";

@@ -12,7 +12,7 @@ import {
     type MatrixClient,
     type LegacyLocationEventContent,
     type MLocationEventContent,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import {

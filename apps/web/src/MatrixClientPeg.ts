@@ -20,10 +20,10 @@ import {
     type RoomNameState,
     RoomNameType,
     type TokenRefreshFunction,
-} from "matrix-js-sdk/src/matrix";
-import { VerificationMethod } from "matrix-js-sdk/src/types";
-import * as utils from "matrix-js-sdk/src/utils";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { VerificationMethod } from "matrix-js-sdk/lib/types";
+import * as utils from "matrix-js-sdk/lib/utils";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import createMatrixClient from "./utils/createMatrixClient";
 import SettingsStore from "./settings/SettingsStore";

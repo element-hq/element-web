@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactElement } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import { mocked, type MockedObject } from "jest-mock";
-import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk";
 
 import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../src/SdkConfig";

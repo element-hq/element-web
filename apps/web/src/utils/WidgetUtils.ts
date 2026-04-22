@@ -11,11 +11,11 @@ import { useCallback, useEffect, useState } from "react";
 import { base32 } from "rfc4648";
 import { capitalize } from "lodash";
 import { type IWidget, type IWidgetData } from "matrix-widget-api";
-import { type Room, ClientEvent, type MatrixClient, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
-import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { LOWERCASE, secureRandomString, secureRandomStringFrom } from "matrix-js-sdk/src/randomstring";
+import { type Room, ClientEvent, type MatrixClient, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { LOWERCASE, secureRandomString, secureRandomStringFrom } from "matrix-js-sdk/lib/randomstring";
 
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";

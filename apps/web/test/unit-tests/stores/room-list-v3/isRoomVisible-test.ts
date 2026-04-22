@@ -6,7 +6,7 @@
  */
 
 import { mocked } from "jest-mock";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import { RoomListCustomisations } from "../../../../src/customisations/RoomList";
 import { isRoomVisible } from "../../../../src/stores/room-list-v3/isRoomVisible";

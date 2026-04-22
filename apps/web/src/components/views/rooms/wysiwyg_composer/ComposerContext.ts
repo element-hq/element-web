@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { createContext, useContext } from "react";
-import { type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation } from "matrix-js-sdk";
 
 import { type SubSelection } from "./types";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";

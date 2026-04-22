@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { lazy } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type MatrixClient } from "matrix-js-sdk";
 
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";

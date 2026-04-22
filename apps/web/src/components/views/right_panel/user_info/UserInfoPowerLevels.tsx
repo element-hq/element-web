@@ -5,7 +5,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type RoomMember, type Room } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type Room } from "matrix-js-sdk";
 
 import { textualPowerLevel } from "../../../../Roles";
 import PowerSelector from "../../elements/PowerSelector";

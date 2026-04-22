@@ -7,13 +7,7 @@
  */
 
 import React from "react";
-import {
-    type MatrixClient,
-    MatrixEventEvent,
-    NotificationCountType,
-    PendingEventOrdering,
-    Room,
-} from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEventEvent, NotificationCountType, PendingEventOrdering, Room } from "matrix-js-sdk";
 import { renderHook, act } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";

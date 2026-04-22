@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef, type ReactNode } from "react";
-import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
+import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/lib/rendezvous";
 import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";

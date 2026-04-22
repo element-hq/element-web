@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ChangeEvent, type SyntheticEvent } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type EmptyObject } from "matrix-js-sdk";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";

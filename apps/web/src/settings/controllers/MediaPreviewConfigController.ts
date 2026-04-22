@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IContent } from "matrix-js-sdk/src/matrix";
-import { type AccountDataEvents } from "matrix-js-sdk/src/types";
+import { type IContent } from "matrix-js-sdk";
+import { type AccountDataEvents } from "matrix-js-sdk/lib/types";
 
 import {
     MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
@@ -16,7 +16,7 @@ import {
 import { type SettingLevel } from "../SettingLevel.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
-declare module "matrix-js-sdk/src/types" {
+declare module "matrix-js-sdk/lib/types" {
     interface RoomAccountDataEvents {
         [MEDIA_PREVIEW_ACCOUNT_DATA_TYPE]: MediaPreviewConfig;
     }

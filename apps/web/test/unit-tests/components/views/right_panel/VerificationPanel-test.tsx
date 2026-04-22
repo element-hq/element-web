@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { act, render, waitFor } from "jest-matrix-react";
 import React, { type ComponentProps } from "react";
-import { User, TypedEventEmitter, Device, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { User, TypedEventEmitter, Device, type MatrixClient } from "matrix-js-sdk";
 import { mocked, type Mocked } from "jest-mock";
 import {
     type EmojiMapping,
@@ -19,7 +19,7 @@ import {
     type Verifier,
     VerifierEvent,
     type VerifierEventHandlerMap,
-} from "matrix-js-sdk/src/crypto-api";
+} from "matrix-js-sdk/lib/crypto-api";
 
 import VerificationPanel from "../../../../../src/components/views/right_panel/VerificationPanel";
 import { flushPromises, stubClient } from "../../../../test-utils";

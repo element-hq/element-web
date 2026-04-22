@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps } from "react";
-import { type SecretStorage, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type SecretStorage, type MatrixClient } from "matrix-js-sdk";
 import { act, fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 

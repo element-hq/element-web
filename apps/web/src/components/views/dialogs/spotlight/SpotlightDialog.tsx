@@ -16,9 +16,9 @@ import {
     type Room,
     RoomMember,
     RoomType,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { normalize } from "matrix-js-sdk/src/utils";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { normalize } from "matrix-js-sdk/lib/utils";
 import React, {
     type ChangeEvent,
     type JSX,

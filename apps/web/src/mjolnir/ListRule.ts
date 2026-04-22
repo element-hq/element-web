@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // We are using experimental APIs here, so we need to disable the linter
 // eslint-disable-next-line no-restricted-imports
-import { PolicyRecommendation } from "matrix-js-sdk/src/models/invites-ignorer";
+import { PolicyRecommendation } from "matrix-js-sdk/lib/models/invites-ignorer";
 
 import { MatrixGlob } from "../utils/MatrixGlob";
 

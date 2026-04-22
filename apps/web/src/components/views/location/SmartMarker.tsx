@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode, useCallback, useEffect, useState } from "react";
-import { type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk";
 
 import type * as maplibregl from "maplibre-gl";
 import { parseGeoUri } from "../../../utils/location";

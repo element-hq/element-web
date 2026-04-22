@@ -19,8 +19,8 @@ import {
     M_POLL_START,
     M_LOCATION,
     M_BEACON_INFO,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import shouldHideEvent from "../shouldHideEvent";
 import { type GetRelationsForEvent } from "../components/views/rooms/EventTile";

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { clamp } from "lodash";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type MatrixEvent } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { type SerializedPart } from "./editor/parts";
 import type EditorModel from "./editor/model";

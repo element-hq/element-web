@@ -15,8 +15,8 @@ import {
     RoomStateEvent,
     type Room,
     EventType,
-} from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+} from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 import { Form, InlineSpinner, SettingsToggleInput } from "@vector-im/compound-web";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

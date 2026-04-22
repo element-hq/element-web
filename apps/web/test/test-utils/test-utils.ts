@@ -33,16 +33,16 @@ import {
     type ICreateRoomOpts,
     RoomState,
     HistoryVisibility,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { normalize } from "matrix-js-sdk/src/utils";
-import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
-import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
-import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
-import { type MapperOpts } from "matrix-js-sdk/src/event-mapper";
-import { type MatrixRTCSessionManager, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { normalize } from "matrix-js-sdk/lib/utils";
+import { ReEmitter } from "matrix-js-sdk/lib/ReEmitter";
+import { type MediaHandler } from "matrix-js-sdk/lib/webrtc/mediaHandler";
+import { Feature, ServerSupport } from "matrix-js-sdk/lib/feature";
+import { type MapperOpts } from "matrix-js-sdk/lib/event-mapper";
+import { type MatrixRTCSessionManager, type MatrixRTCSession } from "matrix-js-sdk/lib/matrixrtc";
 
-import type { Membership } from "matrix-js-sdk/src/types";
+import type { Membership } from "matrix-js-sdk/lib/types";
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import { type ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
 import { EnhancedMap } from "../../src/utils/maps";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type RefObject } from "react";
-import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation, type MatrixClient } from "matrix-js-sdk";
 import { type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 
 import { type TimelineRenderingType } from "../../../../../contexts/RoomContext";

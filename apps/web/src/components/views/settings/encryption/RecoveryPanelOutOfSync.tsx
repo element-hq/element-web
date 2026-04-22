@@ -8,8 +8,8 @@
 import React, { type JSX } from "react";
 import { Button } from "@vector-im/compound-web";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
-import { logger } from "matrix-js-sdk/src/logger";
-import { DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/src/crypto-api";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { DecryptionKeyDoesNotMatchError } from "matrix-js-sdk/lib/crypto-api";
 
 import { SettingsSection } from "../shared/SettingsSection";
 import { _t } from "../../../../languageHandler";

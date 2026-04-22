@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef, type KeyboardEventHandler } from "react";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { MatrixError } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import withValidation, { type IFieldState, type IValidationResult } from "./Validation";

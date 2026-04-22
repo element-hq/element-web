@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type CallType } from "matrix-js-sdk/src/webrtc/call";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type CallType } from "matrix-js-sdk/lib/webrtc/call";
+import { type Room } from "matrix-js-sdk";
 
 import LegacyCallHandler from "../../LegacyCallHandler";
 import { getPlatformCallTypeProps, PlatformCallType } from "../../hooks/room/useRoomCall";

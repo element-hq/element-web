@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ChangeEvent, type FormEvent, type ReactNode } from "react";
-import { type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

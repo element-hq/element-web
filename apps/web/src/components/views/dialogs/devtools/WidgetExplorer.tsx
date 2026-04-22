@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useState } from "react";
-import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk";
 
 import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { _t } from "../../../../languageHandler";

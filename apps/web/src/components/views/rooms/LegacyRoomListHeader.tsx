@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, EventType, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, EventType, type Room, RoomEvent, RoomType } from "matrix-js-sdk";
 import React, { type JSX, useContext, useEffect, useState } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 import {

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { FILTER_CHANGED } from "../../../../../src/stores/room-list/filters/IFilterCondition";

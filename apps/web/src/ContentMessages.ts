@@ -18,7 +18,7 @@ import {
     type UploadOpts,
     type UploadProgress,
     THREAD_RELATION_TYPE,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import {
     type ImageInfo,
     type AudioInfo,
@@ -26,11 +26,11 @@ import {
     type EncryptedFile,
     type MediaEventContent,
     type MediaEventInfo,
-} from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk/lib/types";
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
-import { logger } from "matrix-js-sdk/src/logger";
-import { removeElement } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { removeElement } from "matrix-js-sdk/lib/utils";
 
 import dis from "./dispatcher/dispatcher";
 import { _t } from "./languageHandler";

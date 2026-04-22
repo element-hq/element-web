@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
-import { logger } from "matrix-js-sdk/src/logger";
-import { type QueryDict } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type QueryDict } from "matrix-js-sdk/lib/utils";
 
 import { parseQsFromFragment, searchParamsToQueryDict } from "./url_utils";
 

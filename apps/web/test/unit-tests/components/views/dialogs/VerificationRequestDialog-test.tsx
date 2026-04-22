@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
-import { TypedEventEmitter, User } from "matrix-js-sdk/src/matrix";
+import { TypedEventEmitter, User } from "matrix-js-sdk";
 import {
     type ShowSasCallbacks,
     VerificationPhase,
@@ -16,8 +16,8 @@ import {
     type ShowQrCodeCallbacks,
     VerificationRequestEvent,
     type VerificationRequestEventHandlerMap,
-} from "matrix-js-sdk/src/crypto-api";
-import { VerificationMethod } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk/lib/crypto-api";
+import { VerificationMethod } from "matrix-js-sdk/lib/types";
 
 import { stubClient } from "../../../../test-utils";
 import VerificationRequestDialog from "../../../../../src/components/views/dialogs/VerificationRequestDialog";

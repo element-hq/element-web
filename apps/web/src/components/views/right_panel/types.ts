@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 export const ReadPinsEventId = "im.vector.room.read_pins";
 
-declare module "matrix-js-sdk/src/types" {
+declare module "matrix-js-sdk/lib/types" {
     interface RoomAccountDataEvents {
         [ReadPinsEventId]: { event_ids: string[] };
     }

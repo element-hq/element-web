@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/lib/randomstring";
 import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
 import {
     EventType,
@@ -18,7 +18,7 @@ import {
     HistoryVisibility,
     JoinRule,
     Visibility,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import _SpaceSettingsVisibilityTab from "../../../../../src/components/views/spaces/SpaceSettingsVisibilityTab";
 import {

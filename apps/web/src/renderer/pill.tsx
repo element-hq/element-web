@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RuleId } from "matrix-js-sdk/src/matrix";
+import { RuleId } from "matrix-js-sdk";
 import { type Element } from "html-react-parser";
 import { textContent } from "domutils";
 import reactStringReplace from "react-string-replace";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
+import { PushProcessor } from "matrix-js-sdk/lib/pushprocessor";
 
 import { Pill, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "../utils/permalinks/Permalinks";

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked, type MockedObject } from "jest-mock";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type CryptoApi, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient } from "matrix-js-sdk";
+import { type CryptoApi, type KeyBackupInfo } from "matrix-js-sdk/lib/crypto-api";
 import { fireEvent, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 
 import { filterConsole, getMockClientWithEventEmitter, mockClientMethodsCrypto } from "../../../../test-utils";

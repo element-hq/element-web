@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallType, type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import {
     EndCallIcon,
     VideoCallSolidIcon,

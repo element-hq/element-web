@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room as IRoom, Watchable } from "@element-hq/element-web-module-api";
-import { RoomEvent, type Room as SdkRoom } from "matrix-js-sdk/src/matrix";
+import { RoomEvent, type Room as SdkRoom } from "matrix-js-sdk";
 
 export class Room implements IRoom {
     public name: Watchable<string>;

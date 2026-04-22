@@ -612,9 +612,6 @@ importers:
       '@types/commonmark':
         specifier: ^0.27.4
         version: 0.27.10
-      '@types/content-type':
-        specifier: ^1.1.9
-        version: 1.1.9
       '@types/counterpart':
         specifier: ^0.18.1
         version: 0.18.4
@@ -678,9 +675,6 @@ importers:
       '@types/sanitize-html':
         specifier: 2.16.1
         version: 2.16.1
-      '@types/sdp-transform':
-        specifier: ^2.4.10
-        version: 2.15.0
       '@types/semver':
         specifier: ^7.5.8
         version: 7.7.1
@@ -5157,9 +5151,6 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
-  '@types/content-type@1.1.9':
-    resolution: {integrity: sha512-Hq9IMnfekuOCsEmYl4QX2HBrT+XsfXiupfrLLY8Dcf3Puf4BkBOxSbWYTITSOQAhJoYPBez+b4MJRpIYL65z8A==}
-
   '@types/counterpart@0.18.4':
     resolution: {integrity: sha512-aqBg5oAGo/qh/+wxUfuMadDu2WO0MEWOblyzwaM1Ske2xilUxBfgPqapAFVAfrVTDMVwa0UMarzGot8m64IAzA==}
 
@@ -5486,9 +5477,6 @@ packages:
 
   '@types/sanitize-html@2.16.1':
     resolution: {integrity: sha512-n9wjs8bCOTyN/ynwD8s/nTcTreIHB1vf31vhLMGqUPNHaweKC4/fAl4Dj+hUlCTKYgm4P3k83fmiFfzkZ6sgMA==}
-
-  '@types/sdp-transform@2.15.0':
-    resolution: {integrity: sha512-ikIFF0EaYt/2XetIYYVeMj6SB52oVXFasJUXDzWHgzNJS5ep2Pbsu7f8f3Za+dEie8HQtt3Zr9mHYBpWT0XgxQ==}
 
   '@types/seedrandom@3.0.8':
     resolution: {integrity: sha512-TY1eezMU2zH2ozQoAFAQFOPpvP15g+ZgSfTZt31AUUH/Rxtnz3H+A/Sv1Snw2/amp//omibc+AEkTaA8KUeOLQ==}
@@ -17815,8 +17803,6 @@ snapshots:
     dependencies:
       '@types/node': 18.19.130
 
-  '@types/content-type@1.1.9': {}
-
   '@types/counterpart@0.18.4': {}
 
   '@types/css-tree@2.3.11': {}
@@ -18199,8 +18185,6 @@ snapshots:
   '@types/sanitize-html@2.16.1':
     dependencies:
       htmlparser2: 10.1.0
-
-  '@types/sdp-transform@2.15.0': {}
 
   '@types/seedrandom@3.0.8': {}
 

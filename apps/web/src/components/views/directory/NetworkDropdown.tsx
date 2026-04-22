@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { without } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { MatrixError } from "matrix-js-sdk";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";

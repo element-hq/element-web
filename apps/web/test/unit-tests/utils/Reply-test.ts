@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk";
 
 import { getParentEventId, shouldDisplayReply, stripHTMLReply, stripPlainReply } from "../../../src/utils/Reply";
 import { mkEvent, stubClient } from "../../test-utils";
 
 // don't litter test console with logs
-jest.mock("matrix-js-sdk/src/logger");
+jest.mock("matrix-js-sdk/lib/logger");
 
 describe("Reply", () => {
     describe("getParentEventId", () => {

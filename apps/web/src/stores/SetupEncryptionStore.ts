@@ -13,9 +13,9 @@ import {
     type VerificationRequest,
     VerificationRequestEvent,
     CryptoEvent,
-} from "matrix-js-sdk/src/crypto-api";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type Device, type SecretStorage } from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk/lib/crypto-api";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type Device, type SecretStorage } from "matrix-js-sdk";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";

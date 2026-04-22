@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, useContext, useMemo } from "react";
-import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 import { ErrorSolidIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { EventTileBubble, LinkedText } from "@element-hq/web-shared-components";
 

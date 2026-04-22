@@ -15,7 +15,7 @@ import {
     M_POLL_END,
     M_POLL_START,
     M_BEACON_INFO,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";

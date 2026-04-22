@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classnames from "classnames";
-import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/lib/webrtc/call";
 import React from "react";
-import { type CallFeed, CallFeedEvent } from "matrix-js-sdk/src/webrtc/callFeed";
-import { logger } from "matrix-js-sdk/src/logger";
-import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
+import { type CallFeed, CallFeedEvent } from "matrix-js-sdk/lib/webrtc/callFeed";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { SDPStreamMetadataPurpose } from "matrix-js-sdk/lib/webrtc/callEventTypes";
 import { MicOffSolidIcon, MicOnSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import SettingsStore from "../../../settings/SettingsStore";

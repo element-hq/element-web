@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, type IContent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { EventType, type IContent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import SdkConfig from "../../../src/SdkConfig";
 import SettingsStore from "../../../src/settings/SettingsStore";

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixEvent } from "matrix-js-sdk";
 import { Toast } from "@vector-im/compound-web";
 import React, { type JSX, useState } from "react";
 import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";

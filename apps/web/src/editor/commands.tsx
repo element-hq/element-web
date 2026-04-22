@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { type MatrixClient } from "matrix-js-sdk";
+import { type RoomMessageEventContent } from "matrix-js-sdk/lib/types";
 
 import type EditorModel from "./model";
 import { Type } from "./parts";

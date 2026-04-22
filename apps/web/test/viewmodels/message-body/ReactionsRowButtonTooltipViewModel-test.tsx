@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type MatrixClient, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk";
 
 import {
     ReactionsRowButtonTooltipViewModel,

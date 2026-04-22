@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX } from "react";
 import classNames from "classnames";
-import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ComponentProps } from "react";
 import { render, fireEvent, type RenderResult, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { Room, type RoomMember, MatrixError, type IContent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { Room, type RoomMember, MatrixError, type IContent } from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
 import { withClientContextRenderOptions, stubClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";

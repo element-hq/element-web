@@ -11,7 +11,7 @@ import {
     type IEventWithRoomId as IMatrixEvent,
     type IResultRoomEvents,
     type Direction,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */

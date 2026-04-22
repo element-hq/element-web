@@ -18,11 +18,11 @@ import {
     M_POLL_START,
     M_POLL_END,
     ContentHelpers,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
-import { removeDirectionOverrideChars } from "matrix-js-sdk/src/utils";
-import { type PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
+import { logger } from "matrix-js-sdk/lib/logger";
+import { removeDirectionOverrideChars } from "matrix-js-sdk/lib/utils";
+import { type PollStartEvent } from "matrix-js-sdk/lib/extensible_events_v1/PollStartEvent";
 
 import { _t } from "./languageHandler";
 import * as Roles from "./Roles";

@@ -18,10 +18,10 @@ import {
     EventStatus,
     PendingEventOrdering,
     ReceiptType,
-} from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+} from "matrix-js-sdk";
+import { KnownMembership } from "matrix-js-sdk/lib/types";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { MatrixClient } from "matrix-js-sdk";
 import { mkThread } from "../../../../../test-utils/threads";
 import { UnreadNotificationBadge } from "../../../../../../src/components/views/rooms/NotificationBadge/UnreadNotificationBadge";
 import { mkEvent, mkMessage, muteRoom, stubClient } from "../../../../../test-utils/test-utils";

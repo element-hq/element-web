@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type Room } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { type RoomUpdateCause } from "../../models";
 import { type TagID } from "../../../room-list-v3/skip-list/tag";

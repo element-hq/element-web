@@ -12,8 +12,8 @@ import {
     type DateSeparatorViewModel as DateSeparatorViewModelInterface,
 } from "@element-hq/web-shared-components";
 import React from "react";
-import { Direction, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { Direction, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk";
+import { logger } from "matrix-js-sdk/lib/logger";
 
 import { formatFullDateNoDay, formatFullDateNoTime, getDaysArray } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

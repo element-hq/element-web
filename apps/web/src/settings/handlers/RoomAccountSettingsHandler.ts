@@ -7,13 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    type RoomAccountDataEvents,
-    type MatrixClient,
-    type MatrixEvent,
-    type Room,
-    RoomEvent,
-} from "matrix-js-sdk/src/matrix";
+import { type RoomAccountDataEvents, type MatrixClient, type MatrixEvent, type Room, RoomEvent } from "matrix-js-sdk";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
@@ -24,7 +18,7 @@ import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
 
-declare module "matrix-js-sdk/src/types" {
+declare module "matrix-js-sdk/lib/types" {
     interface RoomAccountDataEvents {
         [ALLOWED_WIDGETS_EVENT_TYPE]: { [eventId: string]: boolean };
         [DEFAULT_SETTINGS_EVENT_TYPE]: Record<string, any>;

@@ -20,9 +20,9 @@ import {
     RoomEvent,
     type IRoomTimelineData,
     type ISendEventResponse,
-} from "matrix-js-sdk/src/matrix";
+} from "matrix-js-sdk";
 import { Widget } from "matrix-widget-api";
-import { type IRTCNotificationContent } from "matrix-js-sdk/src/matrixrtc";
+import { type IRTCNotificationContent } from "matrix-js-sdk/lib/matrixrtc";
 import { randomUUID } from "node:crypto";
 
 import {

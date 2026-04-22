@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk";
 
 import { _t } from "../languageHandler";
 import AutocompleteProvider from "./AutocompleteProvider";
