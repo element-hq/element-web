@@ -113,7 +113,7 @@ test.use({
 
 test.describe("Opendesk", () => {
     test("should render top-bar", { tag: ["@screenshot"] }, async ({ page }) => {
-        await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
+        await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
         await expect(page.getByLabel("Show portal")).toHaveAttribute("href", "https://example.com/portal");
 
         const nav = page.locator("nav");

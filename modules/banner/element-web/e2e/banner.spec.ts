@@ -120,7 +120,7 @@ test.describe("Banner", () => {
             });
 
             test("should render", { tag: ["@screenshot"] }, async ({ page, axe, navigationJsonResolver }) => {
-                await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
+                await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
                 await expect(page.getByLabel("Show portal")).toHaveAttribute("href", "https://example.com/portal");
 
                 const nav = page.locator("nav");
@@ -207,7 +207,7 @@ test.describe("Banner", () => {
         });
 
         test("should render error", { tag: ["@screenshot"] }, async ({ page, axe }) => {
-            await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
             await expect(page.getByLabel("Show portal")).toHaveAttribute("href", "https://example.com/portal");
 
             const trigger = page.getByLabel("Show menu");
