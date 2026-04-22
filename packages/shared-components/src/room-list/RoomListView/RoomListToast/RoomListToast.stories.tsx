@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RoomListToast } from "./RoomListToast";
 
 const meta = {
-    title: "Room List/RoomListView/RoomListToast",
+    title: "RoomList/RoomListToast",
     component: RoomListToast,
     tags: ["autodocs"],
     args: {
