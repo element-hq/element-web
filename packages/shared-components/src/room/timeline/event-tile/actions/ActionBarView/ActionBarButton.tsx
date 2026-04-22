@@ -41,12 +41,13 @@ export function ActionBarButton({
     const [onFocus, isActive, rovingRef] = useRovingTabIndex<HTMLButtonElement>();
     const localRef = useRef<HTMLButtonElement | null>(null);
     const ref = useMergeRefs([buttonRef, localRef, disabled ? null : rovingRef]);
+    const tabIndex = disabled || !isActive ? -1 : 0;
 
     useLayoutEffect(() => {
         if (!localRef.current) return;
 
-        localRef.current.tabIndex = disabled ? -1 : isActive ? 0 : -1;
-    }, [disabled, isActive]);
+        localRef.current.tabIndex = tabIndex;
+    }, [tabIndex]);
 
     const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement>): void => {
         event.preventDefault();

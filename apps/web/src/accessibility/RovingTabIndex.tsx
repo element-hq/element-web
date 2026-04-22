@@ -8,23 +8,19 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import {
-    checkInputableElement,
-    findSiblingElement,
     RovingAction,
-    RovingStateActionType,
-    RovingTabIndexContext,
     RovingTabIndexProvider as SharedRovingTabIndexProvider,
-    useRovingTabIndex,
-    type IAction,
-    type IState,
     type RovingTabIndexProviderProps,
 } from "@element-hq/web-shared-components";
 
 import { getKeyBindingsManager } from "../KeyBindingsManager";
 import { KeyBindingAction } from "./KeyboardShortcuts";
 
-export { checkInputableElement, findSiblingElement, RovingStateActionType, RovingTabIndexContext, useRovingTabIndex };
-export type { IAction, IState };
+export { findNextSiblingElement, RovingTabIndexContext } from "@element-hq/web-shared-components";
+export { checkInputableElement } from "@element-hq/web-shared-components";
+export { RovingStateActionType } from "@element-hq/web-shared-components";
+export { useRovingTabIndex } from "@element-hq/web-shared-components";
+export type { IAction, IState } from "@element-hq/web-shared-components";
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique

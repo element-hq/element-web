@@ -100,7 +100,7 @@ export interface IAction {
 
 interface UpdateAction {
     type: RovingStateActionType.Update;
-    payload?: undefined;
+    payload?: never;
 }
 
 type Action = IAction | UpdateAction;
@@ -201,6 +201,23 @@ const nodeSorter = (a: HTMLElement, b: HTMLElement): number => {
     }
 };
 
+const getReplacementActiveNode = (nodes: HTMLElement[], removedIndex: number): HTMLElement | undefined => {
+    if (removedIndex >= nodes.length) {
+        return findPreviousSiblingElement(nodes, nodes.length - 1);
+    }
+
+    return findNextSiblingElement(nodes, removedIndex) || findPreviousSiblingElement(nodes, removedIndex);
+};
+
+const handleRemovedActiveNode = (state: IState, removedIndex: number): void => {
+    state.activeNode = getReplacementActiveNode(state.nodes, removedIndex);
+
+    if (document.activeElement === document.body) {
+        // if the focus got reverted to the body then the user was likely focused on the unmounted element
+        setTimeout(() => state.activeNode?.focus(), 0);
+    }
+};
+
 /**
  * Reducer that tracks registered nodes and the currently active roving tab
  * stop.
@@ -208,10 +225,8 @@ const nodeSorter = (a: HTMLElement, b: HTMLElement): number => {
 export const reducer: Reducer<IState, Action> = (state: IState, action: Action) => {
     switch (action.type) {
         case RovingStateActionType.Register: {
-            if (!state.activeNode) {
-                // Our list of nodes was empty, set activeNode to this first item
-                state.activeNode = action.payload.node;
-            }
+            // Our list of nodes was empty, set activeNode to this first item
+            state.activeNode ??= action.payload.node;
 
             if (state.nodes.includes(action.payload.node)) return state;
 
@@ -223,25 +238,14 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
         }
 
         case RovingStateActionType.Unregister: {
-            const oldIndex = state.nodes.findIndex((r) => r === action.payload.node);
+            const oldIndex = state.nodes.indexOf(action.payload.node);
 
             if (oldIndex === -1) {
                 return state; // already removed, this should not happen
             }
 
             if (state.nodes.splice(oldIndex, 1)[0] === state.activeNode) {
-                // we just removed the active node, need to replace it
-                // pick the node closest to the index the old node was in
-                if (oldIndex >= state.nodes.length) {
-                    state.activeNode = findSiblingElement(state.nodes, state.nodes.length - 1, true);
-                } else {
-                    state.activeNode =
-                        findSiblingElement(state.nodes, oldIndex) || findSiblingElement(state.nodes, oldIndex, true);
-                }
-                if (document.activeElement === document.body) {
-                    // if the focus got reverted to the body then the user was likely focused on the unmounted element
-                    setTimeout(() => state.activeNode?.focus(), 0);
-                }
+                handleRemovedActiveNode(state, oldIndex);
             }
 
             return { ...state };
@@ -263,40 +267,62 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
     }
 };
 
+const findSiblingElementInRange = (
+    nodes: HTMLElement[],
+    startIndex: number,
+    endIndex: number,
+    step: 1 | -1,
+): HTMLElement | undefined => {
+    for (let i = startIndex; i !== endIndex; i += step) {
+        if (nodes[i]?.offsetParent !== null) {
+            return nodes[i];
+        }
+    }
+};
+
 /**
  * Finds the next visible sibling element starting from a given index.
  *
  * @param nodes - Registered roving nodes in DOM order.
  * @param startIndex - The index to begin searching from.
- * @param backwards - Whether to search backwards.
  * @param loop - Whether to wrap around when no visible sibling is found.
  * @returns The next visible sibling element, if one exists.
  */
-export const findSiblingElement = (
+export const findNextSiblingElement = (
     nodes: HTMLElement[],
     startIndex: number,
-    backwards = false,
     loop = false,
 ): HTMLElement | undefined => {
-    if (backwards) {
-        for (let i = startIndex; i < nodes.length && i >= 0; i--) {
-            if (nodes[i]?.offsetParent !== null) {
-                return nodes[i];
-            }
-        }
-        if (loop) {
-            return findSiblingElement(nodes.slice(startIndex + 1), nodes.length - 1, true, false);
-        }
-    } else {
-        for (let i = startIndex; i < nodes.length && i >= 0; i++) {
-            if (nodes[i]?.offsetParent !== null) {
-                return nodes[i];
-            }
-        }
-        if (loop) {
-            return findSiblingElement(nodes.slice(0, startIndex), 0, false, false);
-        }
+    const sibling = findSiblingElementInRange(nodes, startIndex, nodes.length, 1);
+
+    if (sibling || !loop) {
+        return sibling;
     }
+
+    return findSiblingElementInRange(nodes.slice(0, startIndex), 0, startIndex, 1);
+};
+
+/**
+ * Finds the previous visible sibling element starting from a given index.
+ *
+ * @param nodes - Registered roving nodes in DOM order.
+ * @param startIndex - The index to begin searching from.
+ * @param loop - Whether to wrap around when no visible sibling is found.
+ * @returns The previous visible sibling element, if one exists.
+ */
+export const findPreviousSiblingElement = (
+    nodes: HTMLElement[],
+    startIndex: number,
+    loop = false,
+): HTMLElement | undefined => {
+    const sibling = findSiblingElementInRange(nodes, startIndex, -1, -1);
+
+    if (sibling || !loop) {
+        return sibling;
+    }
+
+    const loopNodes = nodes.slice(startIndex + 1);
+    return findSiblingElementInRange(loopNodes, loopNodes.length - 1, -1, -1);
 };
 
 const getDefaultAction = (ev: KeyboardEvent): RovingAction | undefined => {
@@ -318,6 +344,95 @@ const getDefaultAction = (ev: KeyboardEvent): RovingAction | undefined => {
         default:
             return undefined;
     }
+};
+
+interface NavigationResult {
+    handled: boolean;
+    focusNode?: HTMLElement;
+}
+
+const getAdjacentFocusNode = (
+    nodes: HTMLElement[],
+    activeNode: HTMLElement | undefined,
+    backwards: boolean,
+    loop = false,
+): HTMLElement | undefined => {
+    if (nodes.length === 0 || !activeNode) {
+        return undefined;
+    }
+
+    const currentIndex = nodes.indexOf(activeNode);
+    const nextIndex = currentIndex + (backwards ? -1 : 1);
+
+    return backwards
+        ? findPreviousSiblingElement(nodes, nextIndex, loop)
+        : findNextSiblingElement(nodes, nextIndex, loop);
+};
+
+const getInputNavigationResult = (
+    action: RovingAction | undefined,
+    nodes: HTMLElement[],
+    activeNode: HTMLElement | undefined,
+    shiftKey: boolean,
+): NavigationResult => {
+    if (action !== RovingAction.Tab) {
+        return { handled: false };
+    }
+
+    return {
+        handled: true,
+        focusNode: getAdjacentFocusNode(nodes, activeNode, shiftKey),
+    };
+};
+
+const getStandardNavigationResult = (
+    action: RovingAction | undefined,
+    state: IState,
+    handleHomeEnd: boolean,
+    handleUpDown: boolean,
+    handleLeftRight: boolean,
+    handleLoop: boolean,
+): NavigationResult => {
+    if (action === RovingAction.Home) {
+        return handleHomeEnd
+            ? { handled: true, focusNode: findNextSiblingElement(state.nodes, 0) }
+            : { handled: false };
+    }
+
+    if (action === RovingAction.End) {
+        return handleHomeEnd
+            ? {
+                  handled: true,
+                  focusNode: findPreviousSiblingElement(state.nodes, state.nodes.length - 1),
+              }
+            : { handled: false };
+    }
+
+    if (action === RovingAction.ArrowDown) {
+        return handleUpDown
+            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, false, handleLoop) }
+            : { handled: false };
+    }
+
+    if (action === RovingAction.ArrowRight) {
+        return handleLeftRight
+            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, false, handleLoop) }
+            : { handled: false };
+    }
+
+    if (action === RovingAction.ArrowUp) {
+        return handleUpDown
+            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, true, handleLoop) }
+            : { handled: false };
+    }
+
+    if (action === RovingAction.ArrowLeft) {
+        return handleLeftRight
+            ? { handled: true, focusNode: getAdjacentFocusNode(state.nodes, state.activeNode, true, handleLoop) }
+            : { handled: false };
+    }
+
+    return { handled: false };
 };
 
 /**
@@ -350,70 +465,20 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
                 }
             }
 
-            let handled = false;
             const action = getAction(ev);
-            let focusNode: HTMLElement | undefined;
             // Don't interfere with input default keydown behaviour
             // but allow people to move focus from it with Tab.
-            if (!handleInputFields && checkInputableElement(ev.target as HTMLElement)) {
-                switch (action) {
-                    case RovingAction.Tab:
-                        handled = true;
-                        if (context.state.nodes.length > 0) {
-                            const idx = context.state.nodes.indexOf(context.state.activeNode!);
-                            focusNode = findSiblingElement(
-                                context.state.nodes,
-                                idx + (ev.shiftKey ? -1 : 1),
-                                ev.shiftKey,
-                            );
-                        }
-                        break;
-                }
-            } else {
-                switch (action) {
-                    case RovingAction.Home:
-                        if (handleHomeEnd) {
-                            handled = true;
-                            focusNode = findSiblingElement(context.state.nodes, 0);
-                        }
-                        break;
-
-                    case RovingAction.End:
-                        if (handleHomeEnd) {
-                            handled = true;
-                            focusNode = findSiblingElement(context.state.nodes, context.state.nodes.length - 1, true);
-                        }
-                        break;
-
-                    case RovingAction.ArrowDown:
-                    case RovingAction.ArrowRight:
-                        if (
-                            (action === RovingAction.ArrowDown && handleUpDown) ||
-                            (action === RovingAction.ArrowRight && handleLeftRight)
-                        ) {
-                            handled = true;
-                            if (context.state.nodes.length > 0) {
-                                const idx = context.state.nodes.indexOf(context.state.activeNode!);
-                                focusNode = findSiblingElement(context.state.nodes, idx + 1, false, handleLoop);
-                            }
-                        }
-                        break;
-
-                    case RovingAction.ArrowUp:
-                    case RovingAction.ArrowLeft:
-                        if (
-                            (action === RovingAction.ArrowUp && handleUpDown) ||
-                            (action === RovingAction.ArrowLeft && handleLeftRight)
-                        ) {
-                            handled = true;
-                            if (context.state.nodes.length > 0) {
-                                const idx = context.state.nodes.indexOf(context.state.activeNode!);
-                                focusNode = findSiblingElement(context.state.nodes, idx - 1, true, handleLoop);
-                            }
-                        }
-                        break;
-                }
-            }
+            const isInputTarget = !handleInputFields && checkInputableElement(ev.target as HTMLElement);
+            const { handled, focusNode } = isInputTarget
+                ? getInputNavigationResult(action, context.state.nodes, context.state.activeNode, ev.shiftKey)
+                : getStandardNavigationResult(
+                      action,
+                      context.state,
+                      handleHomeEnd ?? false,
+                      handleUpDown ?? false,
+                      handleLeftRight ?? false,
+                      handleLoop ?? false,
+                  );
 
             if (handled) {
                 ev.preventDefault();

@@ -44,7 +44,7 @@ import {
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import {
-    findSiblingElement,
+    findNextSiblingElement,
     RovingStateActionType,
     RovingTabIndexContext,
     RovingTabIndexProvider,
@@ -1181,7 +1181,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     }
 
                     const idx = nodes.indexOf(rovingContext.state.activeNode);
-                    node = findSiblingElement(nodes, idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1));
+                    node = findNextSiblingElement(
+                        nodes,
+                        idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1),
+                    );
                 }
                 break;
 
@@ -1201,7 +1204,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
                     const nodes = rovingContext.state.nodes.filter(nodeIsForRecentlyViewed);
                     const idx = nodes.indexOf(rovingContext.state.activeNode);
-                    node = findSiblingElement(
+                    node = findNextSiblingElement(
                         nodes,
                         idx + (accessibilityAction === KeyBindingAction.ArrowLeft ? -1 : 1),
                     );
