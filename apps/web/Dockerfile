@@ -1,8 +1,8 @@
-# syntax=docker.io/docker/dockerfile:1.22-labs@sha256:4c116b618ed48404d579b5467127b20986f2a6b29e4b9be2fee841f632db6a86
+# syntax=docker.io/docker/dockerfile:1.23-labs@sha256:7eca9451d94f9b8ad22e44988b92d595d3e4d65163794237949a8c3413fbed5d
 # Context must be the root of the monorepo
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:27e462f5db2402700867dfa8ec35e3a68b127fdf61b505db0dd6ab98c38284bb AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:d2059a9c157c9f70739736979fa3635008bf3ca74560b30930dc181228bc427f AS builder
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false

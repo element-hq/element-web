@@ -5,8 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { v4 as uuidv4 } from "uuid";
-
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
@@ -43,7 +41,7 @@ export async function createSection(): Promise<boolean> {
     const [shouldCreateSection, sectionName] = await modal.finished;
     if (!shouldCreateSection || !sectionName) return false;
 
-    const tag = `element.io.section.${uuidv4()}`;
+    const tag = `element.io.section.${window.crypto.randomUUID()}`;
     const newSection: CustomSection = { tag, name: sectionName };
 
     // Save the new section data
