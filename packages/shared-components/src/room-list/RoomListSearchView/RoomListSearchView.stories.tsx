@@ -35,7 +35,7 @@ const RoomListSearchViewWrapperImpl = ({
 const RoomListSearchViewWrapper = withViewDocs(RoomListSearchViewWrapperImpl, RoomListSearchView);
 
 const meta = {
-    title: "RoomList/RoomListSearchView",
+    title: "Room List/RoomListSearchView",
     component: RoomListSearchViewWrapper,
     tags: ["autodocs"],
     args: {

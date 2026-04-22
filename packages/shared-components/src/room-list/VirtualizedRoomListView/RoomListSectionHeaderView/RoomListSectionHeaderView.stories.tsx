@@ -48,7 +48,7 @@ const RoomListSectionHeaderViewWrapperImpl = ({
 const RoomListSectionHeaderViewWrapper = withViewDocs(RoomListSectionHeaderViewWrapperImpl, RoomListSectionHeaderView);
 
 const meta = {
-    title: "RoomList/RoomListSectionHeaderView",
+    title: "Room List/RoomListSectionHeaderView",
     component: RoomListSectionHeaderViewWrapper,
     tags: ["autodocs"],
     args: {

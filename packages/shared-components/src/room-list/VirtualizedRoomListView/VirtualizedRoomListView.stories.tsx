@@ -65,7 +65,7 @@ const defaultRoomListState: RoomListViewState = {
 };
 
 const meta = {
-    title: "RoomList/VirtualizedRoomListView",
+    title: "Room List/VirtualizedRoomListView",
     component: RoomListWrapper,
     tags: ["autodocs"],
     args: {

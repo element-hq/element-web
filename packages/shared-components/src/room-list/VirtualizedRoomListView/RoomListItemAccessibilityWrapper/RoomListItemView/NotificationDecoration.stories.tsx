@@ -23,7 +23,7 @@ const defaultProps: NotificationDecorationProps = {
 };
 
 const meta = {
-    title: "RoomList/NotificationDecoration",
+    title: "Room List/NotificationDecoration",
     component: NotificationDecoration,
     tags: ["autodocs"],
     decorators: [

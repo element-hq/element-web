@@ -56,7 +56,7 @@ const RoomListViewWrapperImpl = ({
 const RoomListViewWrapper = withViewDocs(RoomListViewWrapperImpl, RoomListView);
 
 const meta = {
-    title: "RoomList/RoomListView",
+    title: "Room List/RoomListView",
     component: RoomListViewWrapper,
     tags: ["autodocs"],
     decorators: [

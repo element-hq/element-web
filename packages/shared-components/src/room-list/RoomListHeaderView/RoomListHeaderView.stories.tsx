@@ -50,7 +50,7 @@ const RoomListHeaderViewWrapperImpl = ({
 const RoomListHeaderViewWrapper = withViewDocs(RoomListHeaderViewWrapperImpl, RoomListHeaderView);
 
 const meta = {
-    title: "RoomList/RoomListHeaderView",
+    title: "Room List/RoomListHeaderView",
     component: RoomListHeaderViewWrapper,
     tags: ["autodocs"],
     args: {
