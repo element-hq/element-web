@@ -11,7 +11,7 @@ import {
     checkInputableElement,
     findSiblingElement,
     RovingAction,
-    RovingTabIndexActionType,
+    RovingStateActionType,
     RovingTabIndexContext,
     RovingTabIndexProvider as SharedRovingTabIndexProvider,
     useRovingTabIndex,
@@ -23,13 +23,7 @@ import {
 import { getKeyBindingsManager } from "../KeyBindingsManager";
 import { KeyBindingAction } from "./KeyboardShortcuts";
 
-export {
-    checkInputableElement,
-    findSiblingElement,
-    RovingTabIndexActionType,
-    RovingTabIndexContext,
-    useRovingTabIndex,
-};
+export { checkInputableElement, findSiblingElement, RovingStateActionType, RovingTabIndexContext, useRovingTabIndex };
 export type { IAction, IState };
 
 /**

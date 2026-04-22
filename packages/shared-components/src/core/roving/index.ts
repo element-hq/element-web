@@ -9,7 +9,7 @@ export {
     checkInputableElement,
     findSiblingElement,
     RovingAction,
-    RovingTabIndexActionType,
+    RovingStateActionType,
     RovingTabIndexContext,
     RovingTabIndexProvider,
     useRovingTabIndex,

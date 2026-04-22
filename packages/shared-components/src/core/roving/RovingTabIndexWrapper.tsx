@@ -22,7 +22,10 @@ interface IProps {
     ): ReactElement;
 }
 
-// Wrapper to allow use of useRovingTabIndex outside of React Functional Components.
+/**
+ * Render-prop wrapper around {@link useRovingTabIndex} for class components and
+ * other places where hooks cannot be called directly.
+ */
 export const RovingTabIndexWrapper: React.FC<IProps> = ({ children, inputRef }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
     return children({ onFocus, isActive, ref });

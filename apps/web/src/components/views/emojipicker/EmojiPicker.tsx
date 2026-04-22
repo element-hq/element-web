@@ -25,7 +25,7 @@ import {
     type IAction as RovingAction,
     type IState as RovingState,
     RovingTabIndexProvider,
-    RovingTabIndexActionType,
+    RovingStateActionType,
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
 import { type ButtonEvent } from "../elements/AccessibleButton";
@@ -187,7 +187,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 focusNode?.focus();
             }
             dispatch({
-                type: RovingTabIndexActionType.SetFocus,
+                type: RovingStateActionType.SetFocus,
                 payload: { node: focusNode },
             });
 
@@ -212,7 +212,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 // Reset to first emoji when showing highlight for the first time (or after it was hidden)
                 if (state.nodes.length > 0) {
                     dispatch({
-                        type: RovingTabIndexActionType.SetFocus,
+                        type: RovingStateActionType.SetFocus,
                         payload: { node: state.nodes[0] },
                     });
                 }

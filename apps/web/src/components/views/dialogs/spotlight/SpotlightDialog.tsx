@@ -45,7 +45,7 @@ import {
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
 import {
     findSiblingElement,
-    RovingTabIndexActionType,
+    RovingStateActionType,
     RovingTabIndexContext,
     RovingTabIndexProvider,
 } from "../../../../accessibility/RovingTabIndex";
@@ -537,7 +537,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             const node = rovingContext.state.nodes[0];
             if (node) {
                 rovingContext.dispatch({
-                    type: RovingTabIndexActionType.SetFocus,
+                    type: RovingStateActionType.SetFocus,
                     payload: { node },
                 });
                 node?.scrollIntoView?.({
@@ -1211,7 +1211,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
         if (node) {
             rovingContext.dispatch({
-                type: RovingTabIndexActionType.SetFocus,
+                type: RovingStateActionType.SetFocus,
                 payload: { node },
             });
             node?.scrollIntoView({

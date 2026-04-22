@@ -12,7 +12,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
     RovingAction,
-    RovingTabIndexActionType,
+    RovingStateActionType,
     RovingTabIndexProvider,
     RovingTabIndexWrapper,
     useRovingTabIndex,
@@ -182,7 +182,7 @@ describe("RovingTabIndex", () => {
                         nodes: [node1, node2],
                     },
                     {
-                        type: RovingTabIndexActionType.SetFocus,
+                        type: RovingStateActionType.SetFocus,
                         payload: {
                             node: node2,
                         },
@@ -205,7 +205,7 @@ describe("RovingTabIndex", () => {
             };
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: {
                     node: unregisterButton2,
                 },
@@ -215,7 +215,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: {
                     node: unregisterButton3,
                 },
@@ -225,7 +225,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: {
                     node: unregisterButton4,
                 },
@@ -235,7 +235,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: {
                     node: unregisterButton1,
                 },
@@ -265,7 +265,7 @@ describe("RovingTabIndex", () => {
             };
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: {
                     node: ref1.current!,
                 },
@@ -276,7 +276,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: {
                     node: ref2.current!,
                 },
@@ -287,7 +287,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: {
                     node: ref3.current!,
                 },
@@ -298,7 +298,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: {
                     node: ref4.current!,
                 },
@@ -309,7 +309,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.SetFocus,
+                type: RovingStateActionType.SetFocus,
                 payload: {
                     node: ref2.current!,
                 },
@@ -320,7 +320,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: {
                     node: ref2.current!,
                 },
@@ -331,7 +331,7 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: {
                     node: ref2.current!,
                 },
@@ -342,13 +342,13 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: {
                     node: ref1.current!,
                 },
             });
             state = reducer(state, {
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: {
                     node: ref4.current!,
                 },
@@ -359,14 +359,14 @@ describe("RovingTabIndex", () => {
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: {
                     node: ref1.current!,
                 },
             });
 
             state = reducer(state, {
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: {
                     node: ref4.current!,
                 },

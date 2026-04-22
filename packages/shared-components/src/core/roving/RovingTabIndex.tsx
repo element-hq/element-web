@@ -20,19 +20,31 @@ import React, {
     type RefObject,
 } from "react";
 
-// Check for form elements which utilize the arrow keys for native functions
-// like many of the text input varieties.
-//
-// i.e. it's ok to press the down arrow on a radio button to move to the next
-// radio. But it's not ok to press the down arrow on a <input type="text"> to
-// move away because the down arrow should move the cursor to the end of the
-// input.
+/**
+ * Returns whether an element should keep native arrow-key behaviour instead of
+ * being intercepted by roving focus navigation.
+ *
+ * This excludes radio buttons and checkboxes, which commonly participate in
+ * directional navigation patterns.
+ *
+ * @param el - The element being evaluated for native input behaviour.
+ * @returns `true` when the element should keep its own arrow-key handling.
+ */
 export function checkInputableElement(el: HTMLElement): boolean {
     return el.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select, [contenteditable=true]');
 }
 
+/**
+ * The current state of a roving tabindex group.
+ */
 export interface IState {
+    /**
+     * The element that currently owns the active tab stop.
+     */
     activeNode?: HTMLElement;
+    /**
+     * Registered elements in DOM order.
+     */
     nodes: HTMLElement[];
 }
 
@@ -41,6 +53,10 @@ interface ContextValue {
     dispatch: Dispatch<IAction>;
 }
 
+/**
+ * React context used by roving tabindex participants to register themselves and
+ * update the active item.
+ */
 export const RovingTabIndexContext = createContext<ContextValue>({
     state: {
         nodes: [], // list of nodes in DOM order
@@ -49,27 +65,46 @@ export const RovingTabIndexContext = createContext<ContextValue>({
 });
 RovingTabIndexContext.displayName = "RovingTabIndexContext";
 
-export enum RovingTabIndexActionType {
+/**
+ * Internal reducer action kinds used by the roving tabindex state machine.
+ */
+export enum RovingStateActionType {
     Register = "REGISTER",
     Unregister = "UNREGISTER",
     SetFocus = "SET_FOCUS",
     Update = "UPDATE",
 }
 
+/**
+ * An action dispatched to the roving tabindex reducer for node registration and
+ * focus updates.
+ */
 export interface IAction {
-    type: Exclude<RovingTabIndexActionType, RovingTabIndexActionType.Update>;
+    /**
+     * The reducer action kind.
+     */
+    type: Exclude<RovingStateActionType, RovingStateActionType.Update>;
+    /**
+     * Action payload carrying the target node.
+     */
     payload: {
+        /**
+         * The DOM node affected by the action.
+         */
         node: HTMLElement;
     };
 }
 
 interface UpdateAction {
-    type: RovingTabIndexActionType.Update;
+    type: RovingStateActionType.Update;
     payload?: undefined;
 }
 
 type Action = IAction | UpdateAction;
 
+/**
+ * Normalized navigation intents understood by the shared roving provider.
+ */
 export enum RovingAction {
     Home = "HOME",
     End = "END",
@@ -80,21 +115,70 @@ export enum RovingAction {
     Tab = "TAB",
 }
 
+/**
+ * Props for {@link RovingTabIndexProvider}.
+ */
 export interface RovingTabIndexProviderProps {
+    /**
+     * Whether directional navigation should wrap from the last item to the first
+     * and vice versa.
+     */
     handleLoop?: boolean;
+    /**
+     * Whether `Home` and `End` should move focus to the first and last item.
+     */
     handleHomeEnd?: boolean;
+    /**
+     * Whether vertical arrow keys should move focus within the group.
+     */
     handleUpDown?: boolean;
+    /**
+     * Whether horizontal arrow keys should move focus within the group.
+     */
     handleLeftRight?: boolean;
+    /**
+     * Whether text inputs and similar controls should participate in roving
+     * keyboard handling instead of keeping their native arrow-key behaviour.
+     */
     handleInputFields?: boolean;
+    /**
+     * Whether newly focused items should be scrolled into view.
+     *
+     * Pass `true` to use the browser default, or a scroll options object to
+     * control alignment and behaviour.
+     */
     scrollIntoView?: boolean | ScrollIntoViewOptions;
+    /**
+     * Render prop receiving keyboard and drag-end handlers for the roving
+     * container.
+     */
     children(
         this: void,
         renderProps: {
+            /**
+             * Handles keyboard navigation for the roving container.
+             */
             onKeyDownHandler(this: void, ev: KeyboardEvent): void;
+            /**
+             * Re-sorts registered elements after DOM reordering, such as drag and
+             * drop.
+             */
             onDragEndHandler(this: void): void;
         },
     ): ReactNode;
+    /**
+     * Optional callback invoked before the provider performs its own keyboard
+     * handling.
+     *
+     * Call `preventDefault()` on the event to suppress the built-in behaviour.
+     */
     onKeyDown?(this: void, ev: KeyboardEvent, state: IState, dispatch: Dispatch<IAction>): void;
+    /**
+     * Optional action resolver used to map keyboard events to
+     * {@link RovingAction} values.
+     *
+     * When omitted, a default mapping based on `KeyboardEvent.key` is used.
+     */
     getAction?(this: void, ev: KeyboardEvent): RovingAction | undefined;
 }
 
@@ -114,9 +198,13 @@ const nodeSorter = (a: HTMLElement, b: HTMLElement): number => {
     }
 };
 
+/**
+ * Reducer that tracks registered nodes and the currently active roving tab
+ * stop.
+ */
 export const reducer: Reducer<IState, Action> = (state: IState, action: Action) => {
     switch (action.type) {
-        case RovingTabIndexActionType.Register: {
+        case RovingStateActionType.Register: {
             if (!state.activeNode) {
                 // Our list of nodes was empty, set activeNode to this first item
                 state.activeNode = action.payload.node;
@@ -131,7 +219,7 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
             return { ...state };
         }
 
-        case RovingTabIndexActionType.Unregister: {
+        case RovingStateActionType.Unregister: {
             const oldIndex = state.nodes.findIndex((r) => r === action.payload.node);
 
             if (oldIndex === -1) {
@@ -156,13 +244,13 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
             return { ...state };
         }
 
-        case RovingTabIndexActionType.SetFocus: {
+        case RovingStateActionType.SetFocus: {
             if (state.activeNode === action.payload.node) return state;
             state.activeNode = action.payload.node;
             return { ...state };
         }
 
-        case RovingTabIndexActionType.Update: {
+        case RovingStateActionType.Update: {
             state.nodes.sort(nodeSorter);
             return { ...state };
         }
@@ -172,6 +260,15 @@ export const reducer: Reducer<IState, Action> = (state: IState, action: Action) 
     }
 };
 
+/**
+ * Finds the next visible sibling element starting from a given index.
+ *
+ * @param nodes - Registered roving nodes in DOM order.
+ * @param startIndex - The index to begin searching from.
+ * @param backwards - Whether to search backwards.
+ * @param loop - Whether to wrap around when no visible sibling is found.
+ * @returns The next visible sibling element, if one exists.
+ */
 export const findSiblingElement = (
     nodes: HTMLElement[],
     startIndex: number,
@@ -220,6 +317,10 @@ const getDefaultAction = (ev: KeyboardEvent): RovingAction | undefined => {
     }
 };
 
+/**
+ * Provides shared roving tabindex state and keyboard handling for a group of
+ * focusable descendants.
+ */
 export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
     children,
     handleHomeEnd,
@@ -320,7 +421,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
                 focusNode.focus();
                 // programmatic focus doesn't fire the onFocus handler, so we must do the do ourselves
                 dispatch({
-                    type: RovingTabIndexActionType.SetFocus,
+                    type: RovingStateActionType.SetFocus,
                     payload: {
                         node: focusNode,
                     },
@@ -345,7 +446,7 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
 
     const onDragEndHandler = useCallback(() => {
         dispatch({
-            type: RovingTabIndexActionType.Update,
+            type: RovingStateActionType.Update,
         });
     }, []);
 
@@ -357,18 +458,15 @@ export const RovingTabIndexProvider: React.FC<RovingTabIndexProviderProps> = ({
 };
 
 /**
- * Hook to register a roving tab index.
+ * Registers a focusable element with the nearest
+ * {@link RovingTabIndexContext}.
  *
- * inputRef is an optional argument; when passed this ref points to the DOM element
- * to which the callback ref is attached.
- *
- * Returns:
- * onFocus should be called when the index gained focus in any manner.
- * isActive should be used to set tabIndex in a manner such as `tabIndex={isActive ? 0 : -1}`.
- * ref is a callback ref that should be passed to a DOM node which will be used for DOM compareDocumentPosition.
- * nodeRef is a ref that points to the DOM element to which the ref mentioned above is attached.
- *
- * nodeRef = inputRef when inputRef argument is provided.
+ * @param inputRef - Optional ref to reuse for the registered DOM node.
+ * @returns A tuple containing:
+ * `onFocus` to mark the item active,
+ * `isActive` to drive `tabIndex`,
+ * `ref` to register the DOM node,
+ * and `nodeRef` pointing at the registered node.
  */
 export const useRovingTabIndex = <T extends HTMLElement>(
     inputRef?: RefObject<T | null>,
@@ -386,12 +484,12 @@ export const useRovingTabIndex = <T extends HTMLElement>(
         if (node) {
             nodeRef.current = node;
             context.dispatch({
-                type: RovingTabIndexActionType.Register,
+                type: RovingStateActionType.Register,
                 payload: { node },
             });
         } else {
             context.dispatch({
-                type: RovingTabIndexActionType.Unregister,
+                type: RovingStateActionType.Unregister,
                 payload: { node: nodeRef.current! },
             });
             nodeRef.current = null;
@@ -404,7 +502,7 @@ export const useRovingTabIndex = <T extends HTMLElement>(
             return;
         }
         context.dispatch({
-            type: RovingTabIndexActionType.SetFocus,
+            type: RovingStateActionType.SetFocus,
             payload: { node: nodeRef.current },
         });
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
