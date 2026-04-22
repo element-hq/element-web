@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render, waitFor, screen, act, cleanup } from "jest-matrix-react";
 import {
+    ClientEvent,
     ReceiptType,
     EventTimelineSet,
     EventType,
@@ -19,6 +20,7 @@ import {
     RoomEvent,
     RoomMember,
     RoomState,
+    SyncState,
     TimelineWindow,
     EventTimeline,
     FeatureSupport,
@@ -481,6 +483,32 @@ describe("TimelinePanel", () => {
 
             await waitFor(() => expectEvents(container, [events[1]]));
         });
+    });
+
+    it("does not re-render MessagePanel for duplicate sync state events", async () => {
+        const [client, room, events] = setupTestData();
+        let timelinePanel: TimelinePanel | null = null;
+
+        render(
+            <TimelinePanel
+                {...getProps(room, events)}
+                ref={(ref) => {
+                    timelinePanel = ref;
+                }}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        await flushPromises();
+        await waitFor(() => expect(timelinePanel).toBeTruthy());
+
+        const setStateSpy = jest.spyOn(timelinePanel!, "setState");
+
+        await act(async () => {
+            client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+            await flushPromises();
+        });
+
+        expect(setStateSpy).not.toHaveBeenCalled();
     });
 
     describe("onRoomTimeline", () => {

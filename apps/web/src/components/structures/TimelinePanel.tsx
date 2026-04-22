@@ -897,8 +897,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.forceUpdate();
     };
 
+    // The SDK intentionally emits duplicate Sync events such as SYNCING -> SYNCING
+    // on each successful /sync so consumers can react to every sync loop. TimelinePanel
+    // only uses this state to drive loading UI, so duplicate values do not change what
+    // we render and would otherwise cause unnecessary MessagePanel re-renders.
     private onSync = (clientSyncState: SyncState, prevState: SyncState | null, data?: object): void => {
         if (this.unmounted) return;
+        if (clientSyncState === this.state.clientSyncState) return;
         this.setState({ clientSyncState });
     };
 
