@@ -24,7 +24,7 @@
     "devDependencies": {
         "@element-hq/element-web-module-api": "workspace:*",
         "@types/lodash-es": "^4.17.12",
-        "typescript": "^5.8.2",
+        "typescript": "^6.0.0",
         "wait-on": "^9.0.4"
     },
     "dependencies": {
