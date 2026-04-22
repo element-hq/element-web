@@ -231,6 +231,9 @@ test.describe("Room list custom sections", () => {
                 // The "Chat moved" toast should appear
                 await expect(page.getByText("Chat moved")).toBeVisible();
 
+                // Remove focus outline from the room item before taking the screenshot
+                await page.getByRole("button", { name: "User menu" }).focus();
+
                 await expect(roomList).toMatchScreenshot("room-list-sections-chat-moved-toast.png");
             },
         );
