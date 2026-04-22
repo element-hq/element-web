@@ -108,7 +108,7 @@
         "eslint-plugin-unicorn": "^56.0.0",
         "prettier": "^3.6.2",
         "storybook": "^10.0.7",
-        "storybook-addon-vis": "^3.1.2",
+        "storybook-addon-vis": "^4.0.0",
         "typedoc": "^0.28.16",
         "typedoc-plugin-markdown": "^4.9.0",
         "typedoc-plugin-missing-exports": "^4.1.2",
