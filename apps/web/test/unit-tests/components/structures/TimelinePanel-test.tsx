@@ -485,7 +485,7 @@ describe("TimelinePanel", () => {
         });
     });
 
-    it("does not re-render MessagePanel for duplicate sync state events", async () => {
+    it("only re-renders when sync changes forward pagination state", async () => {
         const [client, room, events] = setupTestData();
         let timelinePanel: TimelinePanel | null = null;
 
@@ -501,14 +501,21 @@ describe("TimelinePanel", () => {
         await flushPromises();
         await waitFor(() => expect(timelinePanel).toBeTruthy());
 
-        const setStateSpy = jest.spyOn(timelinePanel!, "setState");
+        const forceUpdateSpy = jest.spyOn(timelinePanel!, "forceUpdate");
 
         await act(async () => {
             client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
             await flushPromises();
         });
 
-        expect(setStateSpy).not.toHaveBeenCalled();
+        expect(forceUpdateSpy).not.toHaveBeenCalled();
+
+        await act(async () => {
+            client.emit(ClientEvent.Sync, SyncState.Prepared, SyncState.Syncing);
+            await flushPromises();
+        });
+
+        expect(forceUpdateSpy).toHaveBeenCalledTimes(1);
     });
 
     describe("onRoomTimeline", () => {
