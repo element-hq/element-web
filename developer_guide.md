@@ -96,7 +96,8 @@ sudo sysctl -p
 
 ---
 
-When you make changes to `matrix-js-sdk` they should be automatically picked up by webpack and built.
+When you make changes to `matrix-js-sdk` you will need to rebuild it before they will be picked up by webpack.
+You can do this using `pnpm build` or by running `pnpm start` in `matrix-js-sdk`.
 
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
