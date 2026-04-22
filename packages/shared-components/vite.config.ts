@@ -9,7 +9,7 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, esmExternalRequirePlugin } from "vite";
-import dts from "vite-plugin-dts";
+import dts from "unplugin-dts/vite";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -51,7 +51,7 @@ export default defineConfig({
     },
     plugins: [
         dts({
-            rollupTypes: true,
+            bundleTypes: true,
             include: ["src/**/*.{ts,tsx}"],
             exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
             copyDtsFiles: true,

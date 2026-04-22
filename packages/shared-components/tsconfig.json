@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "rootDir": "./src",
         "allowImportingTsExtensions": true,
         "experimentalDecorators": false,
         "emitDecoratorMetadata": false,

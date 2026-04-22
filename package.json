@@ -68,7 +68,8 @@
             "postcss-mixins": "patches/postcss-mixins.patch",
             "app-builder-lib": "patches/app-builder-lib.patch",
             "knip": "patches/knip.patch",
-            "plist": "patches/plist.patch"
+            "plist": "patches/plist.patch",
+            "unplugin-dts": "patches/unplugin-dts.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
