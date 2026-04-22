@@ -680,6 +680,12 @@
         "unfederated_label_default_on": "如果此房间将用于与拥有自己主服务器的外部团队协作，你可以禁用此功能。此设置以后无法更改。",
         "unsupported_version": "服务器不支持指定的房间版本。"
     },
+    "create_section_dialog": {
+        "create_section": "创建区域",
+        "description": "区域仅对你可见",
+        "label": "区域名称",
+        "title": "创建区域"
+    },
     "create_space": {
         "add_details_prompt": "添加一些信息以便人们识别。",
         "add_details_prompt_2": "你可以随时更改。",
@@ -3077,7 +3083,7 @@
         "category_messages": "消息",
         "category_other": "其它",
         "command_error": "指令出错",
-        "converttodm": "转换房间到私聊",
+        "converttodm": "转换房间为私聊",
         "converttoroom": "转换私聊到房间",
         "could_not_find_room": "无法找到房间",
         "deop": "通过指定的 ID 降权用户",
