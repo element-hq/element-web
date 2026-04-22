@@ -46,7 +46,10 @@ jobs:
               run: "pnpm test:storybook --run"
 
             - name: Detect stale screenshots
-              run: diff -rq __baselines__ __results__ | grep "^Only in __baselines__"
+              run: |
+                  if diff -rq __baselines__ __results__ | grep "^Only in __baselines__"; then
+                      exit 1
+                  fi
               working-directory: packages/shared-components/__vis__/linux
 
             - name: Upload received images & diffs
