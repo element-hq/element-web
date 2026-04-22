@@ -33,8 +33,6 @@ const config: Config = {
         "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
         "^react$": "<rootDir>/../../node_modules/react",
         "^react-dom$": "<rootDir>/../../node_modules/react-dom",
-        "^matrix-js-sdk$": "<rootDir>/../../node_modules/matrix-js-sdk/src",
-        "^matrix-react-sdk$": "<rootDir>/src",
         "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
         "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
         "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
