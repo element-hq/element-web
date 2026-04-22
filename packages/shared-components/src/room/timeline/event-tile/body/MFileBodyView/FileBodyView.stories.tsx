@@ -42,7 +42,7 @@ const FileBodyViewWrapperImpl = ({
 const FileBodyViewWrapper = withViewDocs(FileBodyViewWrapperImpl, FileBodyView);
 
 const meta = {
-    title: "TimelineBody/FileBodyView",
+    title: "Timeline Body/FileBodyView",
     component: FileBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {
