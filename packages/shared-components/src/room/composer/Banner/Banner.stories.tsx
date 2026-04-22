@@ -11,6 +11,7 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import { Button } from "@vector-im/compound-web";
 
 import { Banner } from "./Banner";
+import avatarImage from "../../../../static/element.png";
 
 const meta = {
     title: "room/Banner",
@@ -58,7 +59,7 @@ export const WithAction: Story = {
 
 export const WithAvatarImage: Story = {
     args: {
-        avatar: <img alt="Example" src="https://picsum.photos/32/32" />,
+        avatar: <img alt="Example" src={avatarImage} height="32px" width="32px" />,
     },
 };
 
