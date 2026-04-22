@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type JSX } from "react";
-import { type DOMNode, Element, type HTMLReactParserOptions, type Text } from "html-react-parser";
+import { type DOMNode, type Element, type HTMLReactParserOptions, type Text } from "html-react-parser";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 
 /**
@@ -89,7 +89,7 @@ export const combineRenderers =
                     if (result) return result;
                 }
             }
-            if (node instanceof Element) {
+            if (node.type === "tag") {
                 const tagName = node.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
                 for (const replacer of renderers) {
                     const result = replacer[tagName]?.(node, parametersWithReplace, index);

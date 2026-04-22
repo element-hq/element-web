@@ -47,7 +47,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
         const bobRooms = cli.getRooms();
         if (!bobRooms.length) {
             await new Promise<void>((resolve) => {
-                const onMembership = (_event) => {
+                const onMembership = () => {
                     cli.off(window.matrixcs.RoomMemberEvent.Membership, onMembership);
                     resolve();
                 };
