@@ -30,7 +30,7 @@ const DisambiguatedProfileViewWrapperImpl = ({
 const DisambiguatedProfileViewWrapper = withViewDocs(DisambiguatedProfileViewWrapperImpl, DisambiguatedProfileView);
 
 const meta = {
-    title: "Timeline Event/DisambiguatedProfile",
+    title: "Timeline/Timeline Event/DisambiguatedProfile",
     component: DisambiguatedProfileViewWrapper,
     tags: ["autodocs"],
     argTypes: {

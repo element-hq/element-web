@@ -62,7 +62,7 @@ const ImageBodyViewWrapperImpl = ({
 const ImageBodyViewWrapper = withViewDocs(ImageBodyViewWrapperImpl, ImageBodyView);
 
 const meta = {
-    title: "Timeline Body/ImageBodyView",
+    title: "Timeline/Timeline Body/ImageBodyView",
     component: ImageBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {

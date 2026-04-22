@@ -58,7 +58,7 @@ const ReactionsRowButtonViewWrapperImpl = ({
 const ReactionsRowButtonViewWrapper = withViewDocs(ReactionsRowButtonViewWrapperImpl, ReactionsRowButtonView);
 
 const meta = {
-    title: "Timeline Reaction/ReactionsRowButton",
+    title: "Timeline/Timeline Reaction/ReactionsRowButton",
     component: ReactionsRowButtonViewWrapper,
     tags: ["autodocs"],
     args: {

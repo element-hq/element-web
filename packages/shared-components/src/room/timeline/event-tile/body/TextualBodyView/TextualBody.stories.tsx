@@ -76,7 +76,7 @@ const TEXTUAL_BODY_VIEW_BODY_WRAPPER_KIND_OPTIONS = [
 ];
 
 const meta = {
-    title: "Timeline Body/TextualBody",
+    title: "Timeline/Timeline Body/TextualBody",
     component: TextualBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {

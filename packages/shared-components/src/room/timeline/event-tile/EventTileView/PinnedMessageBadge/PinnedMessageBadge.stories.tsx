@@ -9,7 +9,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PinnedMessageBadge } from "./PinnedMessageBadge";
 
 const meta = {
-    title: "Timeline Event/PinnedMessageBadge",
+    title: "Timeline/Timeline Event/PinnedMessageBadge",
     component: PinnedMessageBadge,
     args: {
         "aria-describedby": "event-tile-description",

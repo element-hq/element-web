@@ -12,7 +12,7 @@ import TimelineSeparator from "./TimelineSeparator";
 import styles from "./TimelineSeparator.module.css";
 
 const meta = {
-    title: "Timeline Meta/TimelineSeparator",
+    title: "Timeline/Timeline Meta/TimelineSeparator",
     component: TimelineSeparator,
     tags: ["autodocs"],
     args: {
