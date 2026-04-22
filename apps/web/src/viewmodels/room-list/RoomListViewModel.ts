@@ -601,8 +601,8 @@ export class RoomListViewModel
         }
     };
 
-public onSectionCreated = (tag: string): void => {
-    this.updateRoomListData(false, null, tag);
+    public onSectionCreated = (tag: string): void => {
+        this.updateRoomListData(false, null, tag);
         this.showToast("section_created");
     };
 
