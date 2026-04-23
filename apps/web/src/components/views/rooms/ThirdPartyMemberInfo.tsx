@@ -117,7 +117,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
                     <Text as="span" role="heading" size="lg" weight="semibold">
                         {_t("user_info|admin_tools_section")}
                     </Text>
-                    <Button size="sm" kind="destructive" className="mx_MemberInfo_field" onClick={this.onKickClick}>
+                    <Button size="md" kind="destructive" className="mx_MemberInfo_field" onClick={this.onKickClick}>
                         {_t("user_info|revoke_invite")}
                     </Button>
                 </Flex>

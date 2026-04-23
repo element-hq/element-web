@@ -30,7 +30,7 @@ const screenshotOptions = (page?: Page) => ({
 
 test("Shows the welcome page by default", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
 });
 

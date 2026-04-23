@@ -26,7 +26,7 @@ jobs:
                   persist-credentials: false
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3
+              uses: sigstore/cosign-installer@cad07c2e89fa2edd6e2d7bab4c1aa38e53f76003 # v4.1.1
               if: github.event_name != 'pull_request'
 
             - name: Set up QEMU

@@ -549,7 +549,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
     public render(): ReactNode {
         const registerButton = (
-            <Button className="mx_Login_submit" size="sm" type="submit" disabled={!this.props.canSubmit}>
+            <Button className="mx_Login_submit" size="md" type="submit" disabled={!this.props.canSubmit}>
                 {_t("action|register")}
             </Button>
         );

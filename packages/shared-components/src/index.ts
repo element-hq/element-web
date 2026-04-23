@@ -11,10 +11,14 @@ export * from "./audio/Clock";
 export * from "./audio/PlayPauseButton";
 export * from "./audio/SeekBar";
 export * from "./core/AvatarWithDetails";
+export * from "./core/roving";
 export * from "./room/composer/Banner";
 export * from "./crypto/SasEmoji";
+<<<<<<< hs/new-quick-settings-menu
 export * from "./event-tiles/UrlPreviewGroupView";
 export * from "./menus/UserMenu";
+=======
+>>>>>>> develop
 export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
 export * from "./room/timeline/event-tile/body/RedactedBodyView";
@@ -44,6 +48,7 @@ export * from "./room/timeline/event-tile/reactions/ReactionsRow";
 export * from "./room/timeline/event-tile/reactions/ReactionsRowButton";
 export * from "./room/timeline/event-tile/reactions/ReactionsRowButtonTooltip";
 export * from "./room/timeline/event-tile/timestamp/MessageTimestampView";
+export * from "./room/timeline/event-tile/UrlPreviewGroupView";
 export * from "./core/rich-list/RichItem";
 export * from "./core/rich-list/RichList";
 export * from "./room-list/RoomListHeaderView";
