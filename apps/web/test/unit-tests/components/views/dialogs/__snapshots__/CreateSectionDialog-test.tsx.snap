@@ -52,6 +52,7 @@ exports[`CreateSectionDialog renders the dialog 1`] = `
             name="sectionName"
             required=""
             title=""
+            value=""
           />
         </div>
       </form>
