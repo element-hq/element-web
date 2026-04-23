@@ -2250,8 +2250,6 @@
             "aliases_section": "Adrese soba",
             "avatar_field_label": "Avatar sobe",
             "canonical_alias_field_label": "Glavna adresa",
-            "default_url_previews_off": "Pregledi URL-ova zadano su onemogućeni za sudionike u ovoj sobi.",
-            "default_url_previews_on": "Pregledi URL-ova zadano su omogućeni za sudionike u ovoj sobi.",
             "description_space": "Uredite postavke koje se odnose na vaš prostor.",
             "error_creating_alias_description": "Došlo je do pogreške prilikom izrade te adrese. Poslužitelj to možda ne dopušta ili je došlo do privremenog kvara.",
             "error_creating_alias_title": "Pogreška prilikom izrade adrese",
@@ -2282,12 +2280,7 @@
             "published_aliases_explainer_space": "Objavljene adrese može upotrebljavati svatko na svakom poslužitelju kako bi se pridružio vašem prostoru.",
             "published_aliases_section": "Objavljene adrese",
             "save": "Spremi promjene",
-            "topic_field_label": "Tema sobe",
-            "url_preview_encryption_warning": "U šifriranim sobama, poput ove, pregledi URL-ova zadano su onemogućeni kako bi se osiguralo da vaš matični poslužitelj (na kojem se generiraju pregledi) ne može prikupljati informacije o poveznicama koje vidite u ovoj sobi.",
-            "url_preview_explainer": "Kada netko u svoju poruku unese URL, može se prikazati pregled URL-a kako bi se dobile dodatne informacije o toj poveznici, kao što su naslov, opis i slika s mrežnog mjesta.",
-            "url_previews_section": "Pregledi URL-ova",
-            "user_url_previews_default_off": "Zadano <a>onemogućili</a> preglede URL-ova.",
-            "user_url_previews_default_on": "Zadano ste <a>omogućili</a> preglede URL-ova."
+            "topic_field_label": "Tema sobe"
         },
         "notifications": {
             "browse_button": "Pregledaj",
@@ -2713,8 +2706,6 @@
             "username": "Korisničko ime"
         },
         "inline_url_previews_default": "Zadano omogući umetnute pretpreglede URL-ova",
-        "inline_url_previews_room": "Omogući preglede URL-ova prema zadanim postavkama za sudionike u ovoj sobi",
-        "inline_url_previews_room_account": "Omogući preglede URL-ova za ovu sobu (utječe samo na vas)",
         "insert_trailing_colon_mentions": "Umetni dvotočku nakon što spominjanja korisnika na početku poruke",
         "invite_controls": {
             "default_label": "Dopustite korisnicima da vas pozovu u sobe"

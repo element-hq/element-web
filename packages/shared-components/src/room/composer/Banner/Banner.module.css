@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2025 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.banner {
+    container-type: inline-size;
+    container-name: banner;
+    display: flex;
+    justify-content: start;
+    gap: var(--cpd-space-3x);
+    padding: var(--cpd-space-4x);
+
+    border-top: 1px solid var(--cpd-color-gray-400);
+}
+
+.banner[data-type="success"] {
+    background: var(--cpd-color-gradient-subtle-linear);
+    border-color: var(--cpd-color-green-900);
+}
+
+.banner[data-type="critical"] {
+    background: var(--cpd-color-gradient-critical-linear);
+    border-color: var(--cpd-color-border-critical-subtle);
+}
+
+.banner[data-type="info"] {
+    background: var(--cpd-color-gradient-info-linear);
+    border-color: var(--cpd-color-blue-900);
+}
+
+.banner[data-type="info"] :is(svg) {
+    color: var(--cpd-color-blue-900);
+}
+
+.banner[data-type="success"] :is(.content, svg) {
+    color: var(--cpd-color-green-900);
+}
+
+.banner[data-type="critical"] :is(.content, svg) {
+    color: var(--cpd-color-red-900);
+}
+
+.banner p {
+    margin: 0;
+}
+
+.icon {
+    display: flex;
+    align-items: flex-start;
+}
+
+.icon img {
+    height: 24px;
+    aspect-ratio: auto;
+    border-radius: 50%;
+}
+
+.actions {
+    margin-left: auto;
+
+    flex: 0;
+    display: flex;
+    flex-direction: row;
+    gap: var(--cpd-space-4x);
+    align-self: center;
+
+    white-space: nowrap;
+}

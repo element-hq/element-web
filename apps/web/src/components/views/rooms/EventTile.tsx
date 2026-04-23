@@ -56,6 +56,8 @@ import {
     PinnedMessageBadge,
     ReactionsRowButtonView,
     ReactionsRowView,
+    TileErrorView,
+    type TileErrorViewLayout,
     useViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -89,7 +91,6 @@ import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from "../../../utils/Reply";
 import PosthogTrackers from "../../../PosthogTrackers";
-import TileErrorBoundary from "../messages/TileErrorBoundary";
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
@@ -114,9 +115,11 @@ import {
     MAX_ITEMS_WHEN_LIMITED,
     ReactionsRowViewModel,
 } from "../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import { TileErrorViewModel } from "../../../viewmodels/message-body/TileErrorViewModel";
 import { EventTileActionBarViewModel } from "../../../viewmodels/room/EventTileActionBarViewModel";
 import { ThreadListActionBarViewModel } from "../../../viewmodels/room/ThreadListActionBarViewModel";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useSettingValue } from "../../../hooks/useSettings";
 import { DecryptionFailureBodyFactory, RedactedBodyFactory } from "../messages/MBodyFactory";
 
 export type GetRelationsForEvent = (
@@ -1571,12 +1574,77 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 }
 
+/**
+ * Props for the event-tile fallback rendered after the tile error boundary catches a render failure.
+ */
+interface EventTileErrorFallbackProps {
+    error: Error;
+    layout: Layout;
+    mxEvent: MatrixEvent;
+}
+
+function EventTileErrorFallback({ error, layout, mxEvent }: Readonly<EventTileErrorFallbackProps>): JSX.Element {
+    const developerMode = useSettingValue("developerMode");
+    const vm = useCreateAutoDisposedViewModel(
+        () => new TileErrorViewModel({ error, layout: layout as TileErrorViewLayout, mxEvent, developerMode }),
+    );
+
+    useEffect(() => {
+        vm.setError(error);
+    }, [error, vm]);
+
+    useEffect(() => {
+        vm.setLayout(layout as TileErrorViewLayout);
+    }, [layout, vm]);
+
+    useEffect(() => {
+        vm.setDeveloperMode(developerMode);
+    }, [developerMode, vm]);
+
+    return <TileErrorView vm={vm} className="mx_EventTile mx_EventTile_info mx_EventTile_content" />;
+}
+
+interface EventTileErrorBoundaryProps {
+    children: ReactNode;
+    layout: Layout;
+    mxEvent: MatrixEvent;
+}
+
+interface EventTileErrorBoundaryState {
+    error?: Error;
+}
+
+class EventTileErrorBoundary extends React.Component<EventTileErrorBoundaryProps, EventTileErrorBoundaryState> {
+    public constructor(props: EventTileErrorBoundaryProps) {
+        super(props);
+        this.state = {};
+    }
+
+    public static getDerivedStateFromError(error: Error): Partial<EventTileErrorBoundaryState> {
+        return { error };
+    }
+
+    public render(): ReactNode {
+        if (this.state.error) {
+            return (
+                <EventTileErrorFallback
+                    error={this.state.error}
+                    layout={this.props.layout}
+                    mxEvent={this.props.mxEvent}
+                />
+            );
+        }
+
+        return this.props.children;
+    }
+}
+
 // Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
 const SafeEventTile = (props: EventTileProps): JSX.Element => {
     return (
-        <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
+        <EventTileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
             <UnwrappedEventTile {...props} />
-        </TileErrorBoundary>
+        </EventTileErrorBoundary>
     );
 };
 export default SafeEventTile;

@@ -11,6 +11,8 @@ import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/comp
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
+import SectionIcon from "@vector-im/compound-design-tokens/assets/web/icons/section";
+import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
 
 import { type RoomListHeaderViewModel } from "../RoomListHeaderView";
 import { useI18n } from "../../../core/i18n/i18nContext";
@@ -35,7 +37,7 @@ interface ComposeMenuViewProps {
 export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
     const { translate: _t } = useI18n();
     const [open, setOpen] = useState(false);
-    const { canCreateRoom, canCreateVideoRoom } = useViewModel(vm);
+    const { canCreateRoom, canCreateVideoRoom, canCreateSection, useComposeIcon } = useViewModel(vm);
 
     return (
         <Menu
@@ -47,7 +49,11 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
             trigger={
                 // 28px button with a 20px icon
                 <IconButton size="28px" style={{ padding: "4px" }} tooltip={_t("action|new_conversation")}>
-                    <ComposeIcon aria-hidden />
+                    {useComposeIcon ? (
+                        <ComposeIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                    ) : (
+                        <PlusIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                    )}
                 </IconButton>
             }
         >
@@ -62,6 +68,9 @@ export function ComposeMenuView({ vm }: ComposeMenuViewProps): JSX.Element {
                     onSelect={vm.createVideoRoom}
                     hideChevron
                 />
+            )}
+            {canCreateSection && (
+                <MenuItem Icon={SectionIcon} label={_t("action|new_section")} onSelect={vm.createSection} hideChevron />
             )}
         </Menu>
     );

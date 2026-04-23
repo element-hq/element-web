@@ -3,7 +3,7 @@
 exports[`EncryptionEventView > renders Default story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="supported"
@@ -18,12 +18,12 @@ exports[`EncryptionEventView > renders Default story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.
     </div>
@@ -34,7 +34,7 @@ exports[`EncryptionEventView > renders Default story 1`] = `
 exports[`EncryptionEventView > renders DisableAttempt story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="supported"
@@ -49,12 +49,12 @@ exports[`EncryptionEventView > renders DisableAttempt story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Ignored attempt to disable encryption
     </div>
@@ -65,7 +65,7 @@ exports[`EncryptionEventView > renders DisableAttempt story 1`] = `
 exports[`EncryptionEventView > renders EnabledDirectMessage story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="supported"
@@ -80,12 +80,12 @@ exports[`EncryptionEventView > renders EnabledDirectMessage story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Messages here are end-to-end encrypted. Verify Alice in their profile - tap on their profile picture.
     </div>
@@ -96,7 +96,7 @@ exports[`EncryptionEventView > renders EnabledDirectMessage story 1`] = `
 exports[`EncryptionEventView > renders EnabledLocalRoom story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="supported"
@@ -111,12 +111,12 @@ exports[`EncryptionEventView > renders EnabledLocalRoom story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Messages in this chat will be end-to-end encrypted.
     </div>
@@ -127,7 +127,7 @@ exports[`EncryptionEventView > renders EnabledLocalRoom story 1`] = `
 exports[`EncryptionEventView > renders ParametersChanged story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="supported"
@@ -142,12 +142,12 @@ exports[`EncryptionEventView > renders ParametersChanged story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Some encryption parameters have been changed.
     </div>
@@ -158,7 +158,7 @@ exports[`EncryptionEventView > renders ParametersChanged story 1`] = `
 exports[`EncryptionEventView > renders StateEncryptionEnabled story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="supported"
@@ -173,12 +173,12 @@ exports[`EncryptionEventView > renders StateEncryptionEnabled story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Experimental state encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Messages and state events in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.
     </div>
@@ -189,7 +189,7 @@ exports[`EncryptionEventView > renders StateEncryptionEnabled story 1`] = `
 exports[`EncryptionEventView > renders Unsupported story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="unsupported"
@@ -204,12 +204,12 @@ exports[`EncryptionEventView > renders Unsupported story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption not enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       The encryption used by this room isn't supported.
     </div>
@@ -220,7 +220,7 @@ exports[`EncryptionEventView > renders Unsupported story 1`] = `
 exports[`EncryptionEventView > renders WithTimestamp story 1`] = `
 <div>
   <div
-    class="container content"
+    class="EventTileBubble-module_container EncryptionEventView-module_content"
   >
     <svg
       data-state="supported"
@@ -235,12 +235,12 @@ exports[`EncryptionEventView > renders WithTimestamp story 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their profile picture.
     </div>

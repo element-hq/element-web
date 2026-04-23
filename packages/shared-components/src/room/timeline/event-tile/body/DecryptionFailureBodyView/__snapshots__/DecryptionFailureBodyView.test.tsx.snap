@@ -3,7 +3,7 @@
 exports[`DecryptionFailureBodyView > Should display "The sender has blocked you from receiving this message and device verification is false" 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     The sender has blocked you from receiving this message because your device is unverified
   </div>
@@ -13,7 +13,7 @@ exports[`DecryptionFailureBodyView > Should display "The sender has blocked you 
 exports[`DecryptionFailureBodyView > Should display "The sender has blocked you from receiving this message and device verification is true" 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     The sender has blocked you from receiving this message because your device is unverified
   </div>
@@ -23,7 +23,7 @@ exports[`DecryptionFailureBodyView > Should display "The sender has blocked you 
 exports[`DecryptionFailureBodyView > Should display "Unable to decrypt message and device verification is false" 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     Unable to decrypt message
   </div>
@@ -33,7 +33,7 @@ exports[`DecryptionFailureBodyView > Should display "Unable to decrypt message a
 exports[`DecryptionFailureBodyView > Should display "Unable to decrypt message and device verification is true" 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     Unable to decrypt message
   </div>
@@ -43,7 +43,7 @@ exports[`DecryptionFailureBodyView > Should display "Unable to decrypt message a
 exports[`DecryptionFailureBodyView > should handle historical messages with no key backup and device verification is false 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     Historical messages are not available on this device
   </div>
@@ -53,7 +53,7 @@ exports[`DecryptionFailureBodyView > should handle historical messages with no k
 exports[`DecryptionFailureBodyView > should handle historical messages with no key backup and device verification is true 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     Historical messages are not available on this device
   </div>
@@ -63,11 +63,11 @@ exports[`DecryptionFailureBodyView > should handle historical messages with no k
 exports[`DecryptionFailureBodyView > should handle messages from unverified devices and device verification is false 1`] = `
 <div>
   <div
-    class="content error"
+    class="DecryptionFailureBodyView-module_content DecryptionFailureBodyView-module_error"
   >
     <span>
       <svg
-        class="icon"
+        class="DecryptionFailureBodyView-module_icon"
         fill="currentColor"
         height="16px"
         viewBox="0 0 24 24"
@@ -87,11 +87,11 @@ exports[`DecryptionFailureBodyView > should handle messages from unverified devi
 exports[`DecryptionFailureBodyView > should handle messages from unverified devices and device verification is true 1`] = `
 <div>
   <div
-    class="content error"
+    class="DecryptionFailureBodyView-module_content DecryptionFailureBodyView-module_error"
   >
     <span>
       <svg
-        class="icon"
+        class="DecryptionFailureBodyView-module_icon"
         fill="currentColor"
         height="16px"
         viewBox="0 0 24 24"
@@ -111,11 +111,11 @@ exports[`DecryptionFailureBodyView > should handle messages from unverified devi
 exports[`DecryptionFailureBodyView > should handle messages from users who change identities after verification and device verification is false 1`] = `
 <div>
   <div
-    class="content error"
+    class="DecryptionFailureBodyView-module_content DecryptionFailureBodyView-module_error"
   >
     <span>
       <svg
-        class="icon"
+        class="DecryptionFailureBodyView-module_icon"
         fill="currentColor"
         height="16px"
         viewBox="0 0 24 24"
@@ -135,11 +135,11 @@ exports[`DecryptionFailureBodyView > should handle messages from users who chang
 exports[`DecryptionFailureBodyView > should handle messages from users who change identities after verification and device verification is true 1`] = `
 <div>
   <div
-    class="content error"
+    class="DecryptionFailureBodyView-module_content DecryptionFailureBodyView-module_error"
   >
     <span>
       <svg
-        class="icon"
+        class="DecryptionFailureBodyView-module_icon"
         fill="currentColor"
         height="16px"
         viewBox="0 0 24 24"
@@ -159,7 +159,7 @@ exports[`DecryptionFailureBodyView > should handle messages from users who chang
 exports[`DecryptionFailureBodyView > should handle undecryptable pre-join messages and device verification is false 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     You don't have access to this message
   </div>
@@ -169,7 +169,7 @@ exports[`DecryptionFailureBodyView > should handle undecryptable pre-join messag
 exports[`DecryptionFailureBodyView > should handle undecryptable pre-join messages and device verification is true 1`] = `
 <div>
   <div
-    class="content"
+    class="DecryptionFailureBodyView-module_content"
   >
     You don't have access to this message
   </div>

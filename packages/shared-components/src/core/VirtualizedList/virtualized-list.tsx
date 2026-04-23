@@ -128,7 +128,7 @@ export interface UseVirtualizedListResult<Item, Context> extends Omit<
     VirtuosoProps<Item, VirtualizedListContext<Context>>,
     "data" | "itemContent" | "context" | "onKeyDown" | "onFocus" | "onBlur" | "rangeChanged" | "scrollerRef" | "ref"
 > {
-    ref: React.RefObject<VirtuosoHandle | null>;
+    ref: React.RefCallback<VirtuosoHandle>;
     scrollerRef: (element: HTMLElement | Window | null) => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
     onFocus: (e: React.FocusEvent) => void;
@@ -155,6 +155,7 @@ export interface UseVirtualizedListResult<Item, Context> extends Omit<
  */
 export function useVirtualizedList<Item, Context>(
     props: VirtualizedListProps<Item, Context>,
+    handleRef?: React.RefCallback<VirtuosoHandle>,
 ): UseVirtualizedListResult<Item, Context> {
     // Extract our custom props to avoid conflicts with Virtuoso props
     const {
@@ -380,9 +381,17 @@ export function useVirtualizedList<Item, Context>(
         [rangeChanged, mapRangeIndex],
     );
 
+    const setRef = useCallback(
+        (handle: VirtuosoHandle | null) => {
+            virtuosoHandleRef.current = handle;
+            handleRef?.(handle);
+        },
+        [handleRef],
+    );
+
     return {
         ...virtuosoProps,
-        ref: virtuosoHandleRef,
+        ref: setRef,
         scrollerRef,
         onKeyDown: keyDownCallback,
         onFocus,

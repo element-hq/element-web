@@ -147,11 +147,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "showCodeLineNumbers",
     ];
 
-    private static IMAGES_AND_VIDEOS_SETTINGS: BooleanSettingKey[] = [
-        "urlPreviewsEnabled",
-        "autoplayGifs",
-        "autoplayVideo",
-    ];
+    private static IMAGES_AND_VIDEOS_SETTINGS: BooleanSettingKey[] = ["autoplayGifs", "autoplayVideo"];
 
     private static TIMELINE_SETTINGS: BooleanSettingKey[] = [
         "showTypingNotifications",
@@ -348,6 +344,19 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                     <SettingsSubsection heading={_t("settings|preferences|code_blocks_heading")} formWrap>
                         {this.renderGroup(PreferencesUserSettingsTab.CODE_BLOCKS_SETTINGS)}
+                    </SettingsSubsection>
+
+                    <SettingsSubsection
+                        heading={_t("settings|preferences|link_previews_heading")}
+                        description={_t("settings|preferences|link_previews_description")}
+                        formWrap
+                    >
+                        <SettingsFlag name="urlPreviewsEnabled" level={SettingLevel.DEVICE} />
+                        <SettingsFlag
+                            name="urlPreviewsEnabled_e2ee"
+                            level={SettingLevel.DEVICE}
+                            requires={["urlPreviewsEnabled"]}
+                        />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|media_heading")} formWrap>

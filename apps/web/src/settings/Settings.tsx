@@ -51,6 +51,8 @@ import MediaPreviewConfigController from "./controllers/MediaPreviewConfigContro
 import InviteRulesConfigController from "./controllers/InviteRulesConfigController.ts";
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
+import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
+import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -327,6 +329,10 @@ export interface Settings {
     }>;
     "breadcrumbs": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
+    /**
+     * This is the 2019-era low bandwidth that deals with disabling features of the
+     * client. It does NOT make any API or spec changes.
+     */
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
@@ -368,6 +374,8 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
+    "RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1136,22 +1144,22 @@ export const SETTINGS: Settings = {
         controller: new UIFeatureController(UIFeature.AdvancedEncryption),
     },
     "urlPreviewsEnabled": {
-        supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: {
-            "default": _td("settings|inline_url_previews_default"),
-            "room-account": _td("settings|inline_url_previews_room_account"),
-            "room": _td("settings|inline_url_previews_room"),
-        },
+        // Enabled by default and client configurable as this setting only allows unencrypted
+        // messages to be previewed.
+        supportedLevels: [SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_default"),
         default: true,
         controller: new UIFeatureController(UIFeature.URLPreviews),
     },
     "urlPreviewsEnabled_e2ee": {
-        supportedLevels: [SettingLevel.ROOM_DEVICE],
-        displayName: {
-            "room-device": _td("settings|inline_url_previews_room_account"),
-        },
+        // Can only be enabled per-device to ensure neither the homeserver nor client config
+        // can impact the user's choices.
+        supportedLevels: [SettingLevel.DEVICE],
+        supportedLevelsAreOrdered: true,
+        displayName: _td("settings|inline_url_previews_encrypted"),
         default: false,
-        controller: new UIFeatureController(UIFeature.URLPreviews),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews, "urlPreviewsEnabled"]),
     },
     "notificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -1365,6 +1373,22 @@ export const SETTINGS: Settings = {
     "releaseAnnouncementData": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the custom section data for the room list
+     */
+    "RoomList.CustomSectionData": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the ordering of the custom sections for the room list
+     */
+    "RoomList.OrderedCustomSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: [],
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

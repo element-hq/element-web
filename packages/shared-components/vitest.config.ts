@@ -142,15 +142,19 @@ export default defineConfig({
                 },
                 css: {
                     modules: {
-                        // Stabilise snapshots by stripping the hash component of the CSS module class name
-                        generateScopedName: (name) => name,
+                        // Stabilise snapshots while keeping names distinct across CSS modules.
+                        generateScopedName: "[name]_[local]",
                     },
                 },
             },
         ],
     },
     optimizeDeps: {
-        include: ["vite-plugin-node-polyfills/shims/buffer", "vite-plugin-node-polyfills/shims/process"],
+        include: [
+            "vite-plugin-node-polyfills/shims/buffer",
+            "vite-plugin-node-polyfills/shims/process",
+            "@vector-im/compound-design-tokens/assets/web/icons",
+        ],
     },
     resolve: {
         alias: {

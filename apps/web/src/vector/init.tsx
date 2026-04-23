@@ -13,7 +13,6 @@ import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 
-import type { QueryDict } from "matrix-js-sdk/src/utils";
 import * as languageHandler from "../languageHandler";
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
@@ -26,6 +25,7 @@ import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 import { ModuleApi } from "../modules/Api.ts";
+import { type URLParams } from "./url_utils.ts";
 
 export const rageshakePromise = initRageshake();
 
@@ -86,7 +86,7 @@ export async function loadTheme(): Promise<void> {
     return setTheme();
 }
 
-export async function loadApp(fragParams: QueryDict): Promise<void> {
+export async function loadApp(urlParams: URLParams): Promise<void> {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "element-web-app" */
@@ -96,7 +96,7 @@ export async function loadApp(fragParams: QueryDict): Promise<void> {
     function setWindowMatrixChat(matrixChat: MatrixChat): void {
         window.matrixChat = matrixChat;
     }
-    const app = await module.loadApp(fragParams, setWindowMatrixChat);
+    const app = await module.loadApp(urlParams, setWindowMatrixChat);
     const root = createRoot(document.getElementById("matrixchat")!);
     root.render(app);
 }

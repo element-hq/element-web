@@ -4,7 +4,7 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator in 
 <div>
   <div
     aria-label="Label Separator"
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -23,7 +23,7 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Custom Label"
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -32,7 +32,7 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
     />
     <h2
       aria-hidden="true"
-      class="timelineSeparator"
+      class="TimelineSeparator-module_timelineSeparator"
     >
       Thursday
     </h2>
@@ -47,7 +47,7 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Date Event Separator"
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -66,7 +66,7 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Late Event Separator"
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
@@ -85,7 +85,7 @@ exports[`TimelineSeparator > Snapshot tests > renders the timeline separator wit
 <div>
   <div
     aria-label="Separator without children"
-    class="flex timelineSeparator"
+    class="Flex-module_flex TimelineSeparator-module_timelineSeparator"
     role="separator"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
