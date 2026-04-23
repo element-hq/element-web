@@ -142,6 +142,7 @@ import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
 import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
+import QrLogin from "./auth/QrLogin.tsx";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -2224,7 +2225,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             }
         } else if (this.state.view === Views.WELCOME) {
-            view = <Welcome />;
+            view = <Welcome {...this.getServerProperties()} />;
         } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
             const email = ThreepidInviteStore.instance.pickBestInvite()?.toEmail;
             view = (
@@ -2264,6 +2265,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
                     defaultUsername={this.props.urlParams?.defaults?.defaultUsername}
+                    {...this.getServerProperties()}
+                />
+            );
+        } else if (this.state.view === Views.QR_LOGIN && SettingsStore.getValue("feature_login_with_qr")) {
+            view = (
+                <QrLogin
+                    isSyncing={this.state.pendingInitialSync}
+                    onLoggedIn={this.onUserCompletedLoginFlow}
+                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
+                    fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
                 />
             );

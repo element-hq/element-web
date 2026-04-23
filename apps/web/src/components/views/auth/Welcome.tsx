@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import classNames from "classnames";
-import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { Glass } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
@@ -18,8 +17,13 @@ import LanguageSelector from "./LanguageSelector";
 import EmbeddedPage from "../../structures/EmbeddedPage";
 import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
 import DefaultWelcome from "./DefaultWelcome.tsx";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig.ts";
 
-export default class Welcome extends React.PureComponent<EmptyObject> {
+interface Props {
+    serverConfig: ValidatedServerConfig;
+}
+
+export default class Welcome extends React.PureComponent<Props> {
     public render(): React.ReactNode {
         const pagesConfig = SdkConfig.getObject("embedded_pages");
         const pageUrl = pagesConfig?.get("welcome_url");
@@ -36,7 +40,7 @@ export default class Welcome extends React.PureComponent<EmptyObject> {
         if (pageUrl) {
             body = <EmbeddedPage className="mx_WelcomePage" url={pageUrl} replaceMap={replaceMap} />;
         } else {
-            body = <DefaultWelcome />;
+            body = <DefaultWelcome serverConfig={this.props.serverConfig} />;
         }
 
         return (

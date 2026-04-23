@@ -1567,6 +1567,7 @@
         "leave_beta_reload": "Leaving the beta will reload %(brand)s.",
         "location_share_live": "Live Location Sharing",
         "location_share_live_description": "Temporary implementation. Locations persist in room history.",
+        "login_with_qr": "Log in with QR code",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
         "new_room_list": "Enable new room list",

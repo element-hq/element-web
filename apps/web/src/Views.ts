@@ -100,6 +100,9 @@ enum Views {
     // we are showing the login view
     LOGIN,
 
+    // we are showing the login with QR code view
+    QR_LOGIN,
+
     // we are showing the registration view
     REGISTER,
 

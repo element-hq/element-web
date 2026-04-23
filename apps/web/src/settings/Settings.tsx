@@ -229,6 +229,7 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
+    "feature_login_with_qr": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -712,6 +713,14 @@ export const SETTINGS: Settings = {
         isFeature: true,
         default: false,
         controller: new ReloadOnChangeController(),
+    },
+    "feature_login_with_qr": {
+        supportedLevels: [SettingLevel.CONFIG],
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|login_with_qr"),
+        description: _td("labs|under_active_development"),
+        isFeature: true,
+        default: false,
     },
     /**
      * With the transition to Compound we are moving to a base font size
