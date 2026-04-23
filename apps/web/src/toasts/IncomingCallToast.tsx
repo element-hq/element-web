@@ -81,7 +81,7 @@ interface JoinCallButtonWithCallProps {
     isRinging: boolean;
 }
 
-function JoinCallButtonWithCall({ onClick, disabledTooltip, isRinging }: JoinCallButtonWithCallProps): JSX.Element {
+function JoinCallButtonWithCall({ onClick, disabledTooltip }: JoinCallButtonWithCallProps): JSX.Element {
     const button = (
         <Button
             className="mx_IncomingCallToast_actionButton"
@@ -216,7 +216,7 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
 
     // Dismiss if another device from this user joins.
     const onParticipantChange = useCallback(
-        (participants: Map<RoomMember, Set<string>>, prevParticipants: Map<RoomMember, Set<string>>) => {
+        (participants: Map<RoomMember, Set<string>>) => {
             if (Array.from(participants.keys()).some((p) => p.userId == room?.client.getUserId())) {
                 dismissToast();
             }
