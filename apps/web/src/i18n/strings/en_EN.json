@@ -476,6 +476,7 @@
         "description": "Description",
         "deselect_all": "Deselect all",
         "device": "Device",
+        "disabled_by_homeserver": "Disabled by homeserver",
         "edited": "edited",
         "email_address": "Email address",
         "emoji": "Emoji",
