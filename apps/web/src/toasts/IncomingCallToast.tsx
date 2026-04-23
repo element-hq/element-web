@@ -89,7 +89,7 @@ function JoinCallButtonWithCall({ onClick, disabledTooltip, isRinging }: JoinCal
             disabled={disabledTooltip != undefined}
             kind="primary"
             Icon={CheckIcon}
-            size="sm"
+            size="md"
         >
             {_t("action|join")}
         </Button>
@@ -130,7 +130,7 @@ function DeclineCallButtonWithNotificationEvent({
             kind="secondary"
             disabled={declining}
             Icon={CloseIcon}
-            size="sm"
+            size="md"
         >
             {_t("action|ignore")}
         </Button>

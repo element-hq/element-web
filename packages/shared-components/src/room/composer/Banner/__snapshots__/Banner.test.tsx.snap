@@ -46,18 +46,18 @@ exports[`AvatarWithDetails > renders a banner with an action 1`] = `
       class="Banner-module_actions"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="primary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
         Withdraw verification
       </button>
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -92,9 +92,9 @@ exports[`AvatarWithDetails > renders a banner with an avatar iamge 1`] = `
       class="Banner-module_actions"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -138,9 +138,9 @@ exports[`AvatarWithDetails > renders a critical banner 1`] = `
       class="Banner-module_actions"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -188,9 +188,9 @@ exports[`AvatarWithDetails > renders a default banner 1`] = `
       class="Banner-module_actions"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -239,9 +239,9 @@ exports[`AvatarWithDetails > renders a info banner 1`] = `
       class="Banner-module_actions"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -285,9 +285,9 @@ exports[`AvatarWithDetails > renders a success banner 1`] = `
       class="Banner-module_actions"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
