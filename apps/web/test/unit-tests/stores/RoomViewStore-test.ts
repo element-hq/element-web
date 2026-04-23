@@ -213,7 +213,7 @@ describe("RoomViewStore", function () {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         dis.dispatch({ action: Action.JoinRoom });
         await untilDispatch(Action.JoinRoomReady, dis);
-        expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { viaServers: [] });
+        expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { acceptSharedHistory: true, viaServers: [] });
         expect(roomViewStore.isJoining()).toBe(true);
     });
 
@@ -229,14 +229,14 @@ describe("RoomViewStore", function () {
             }),
         );
         await untilDispatch(Action.JoinRoomReady, dis);
-        expect(mockClient.joinRoom).toHaveBeenCalledWith(alias, { viaServers: ["server1"] });
+        expect(mockClient.joinRoom).toHaveBeenCalledWith(alias, { acceptSharedHistory: true, viaServers: ["server1"] });
         expect(roomViewStore.isJoining()).toBe(true);
     });
 
     it("can auto-join a room", async () => {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId, auto_join: true });
         await untilDispatch(Action.JoinRoomReady, dis);
-        expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { viaServers: [] });
+        expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { acceptSharedHistory: true, viaServers: [] });
         expect(roomViewStore.isJoining()).toBe(true);
     });
 
@@ -282,7 +282,7 @@ describe("RoomViewStore", function () {
         await untilDispatch(Action.JoinRoomReady, dis);
 
         expect(roomViewStore.isJoining()).toBeTruthy();
-        expect(mockClient.joinRoom).toHaveBeenCalledWith(alias, { viaServers: [] });
+        expect(mockClient.joinRoom).toHaveBeenCalledWith(alias, { acceptSharedHistory: true, viaServers: [] });
     });
 
     it("emits ViewRoomError if the alias lookup fails", async () => {
