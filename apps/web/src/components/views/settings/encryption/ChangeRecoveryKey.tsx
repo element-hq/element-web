@@ -47,7 +47,8 @@ type State =
     | "save_key_setup_flow"
     | "save_key_change_flow"
     | "confirm_key_setup_flow"
-    | "confirm_key_change_flow";
+    | "confirm_key_change_flow"
+    | "custom_recovery_flow";
 
 interface ChangeRecoveryKeyProps {
     /**
@@ -96,6 +97,7 @@ export function ChangeRecoveryKey({
             content = (
                 <InformationPanel
                     onContinueClick={() => setState("save_key_setup_flow")}
+                    onCustomClick={() => setState("custom_recovery_flow")}
                     onCancelClick={onCancelClickWrapper}
                 />
             );
@@ -172,6 +174,69 @@ export function ChangeRecoveryKey({
                     }
                 />
             );
+            break;
+        case "custom_recovery_flow":
+            // Show a custom passphrase box ask the user to enter it.
+            // TODO: AJB: copied and pasted from confirm_key_setup_flow
+            // TODO: AJB: no strength indicator as shown in designs: https://www.figma.com/design/qTWRfItpO3RdCjnTKPu4mL/Settings?node-id=4042-60586&t=qPSzLrnaXepwOY84-0
+            content = (
+                <KeyForm
+                    // encodedPrivateKey is always defined, the optional typing is incorrect
+                    recoveryKey={null}
+                    onCancelClick={onCancelClickWrapper}
+                    onSubmit={async (filledKey) => {
+                        const crypto = matrixClient.getCrypto();
+                        if (!crypto) return onFinish();
+
+                        // Since we set recoveryKey to null, we should always receive a filledKey.
+                        // If not, bail out
+                        if (filledKey === undefined) {
+                            logger.error("Unexpectedly received an undefined filledKey in custom_recover_flow");
+                            return onFinish();
+                        }
+
+                        try {
+                            const deviceListener = DeviceListener.sharedInstance();
+
+                            // we need to call keyStorageOutOfSyncNeedsBackupReset here because
+                            // deviceListener.whilePaused() sets its client to undefined, so
+                            // keyStorageOutOfSyncNeedsBackupReset won't be able to check
+                            // the backup state.
+                            const needsBackupReset = await deviceListener.keyStorageOutOfSyncNeedsBackupReset(true);
+                            logger.debug(
+                                `ChangeRecoveryKey: user entered recovery passphrase; now doing change. needsBackupReset: ${needsBackupReset}`,
+                            );
+                            await deviceListener.whilePaused(async () => {
+                                // We need to enable the cache to avoid to prompt the user to enter the new key
+                                // when we will try to access the secret storage during the bootstrap
+                                await withSecretStorageKeyCache(async () => {
+                                    // TODO: AJB: generate key
+                                    const generatedKey = crypto.createRecoveryKeyFromPassphrase(filledKey);
+
+                                    await crypto.bootstrapSecretStorage({
+                                        setupNewSecretStorage: true,
+                                        createSecretStorageKey: async () => generatedKey,
+                                    });
+                                    // Reset the key backup if needed
+                                    if (needsBackupReset) {
+                                        await resetKeyBackupAndWait(crypto);
+                                    }
+                                    await initialiseDehydrationIfEnabled(matrixClient, { createNewKey: true });
+                                });
+                            });
+
+                            // Record the fact that the user explicitly enabled recovery.
+                            await matrixClient.setAccountData(RECOVERY_ACCOUNT_DATA_KEY, { enabled: true });
+
+                            onFinish();
+                        } catch (e) {
+                            logErrorAndShowErrorDialog("Failed to set up secret storage", e);
+                        }
+                    }}
+                    submitButtonLabel="Continue"
+                />
+            );
+            break;
     }
 
     const pages = [
@@ -246,14 +311,31 @@ function getLabels(state: State): Labels {
                 title: _t("settings|encryption|recovery|change_recovery_confirm_title"),
                 description: _t("settings|encryption|recovery|change_recovery_confirm_description"),
             };
+        case "custom_recovery_flow":
+            // TODO: AJB: hard-coded strings
+            return {
+                title: "Enter a custom recovery key",
+                description:
+                    "Use a custom recovery key if you do not have a safe place to save it, and you have to memorize it.",
+            };
     }
 }
 
 interface InformationPanelProps {
     /**
-     * Called when the continue button is clicked.
+     * Called when the "Generate recovery key" button is clicked.
+     *
+     * TODO: AJB: rename this
      */
     onContinueClick: MouseEventHandler<HTMLButtonElement>;
+
+    /**
+     * Called when the "Generate recovery key" button is clicked.
+     *
+     * TODO: AJB: rename this
+     */
+    onCustomClick: MouseEventHandler<HTMLButtonElement>;
+
     /**
      * Called when the cancel button is clicked.
      */
@@ -263,14 +345,18 @@ interface InformationPanelProps {
 /**
  * The panel to display information about the recovery key.
  */
-function InformationPanel({ onContinueClick, onCancelClick }: InformationPanelProps): JSX.Element {
+function InformationPanel({ onContinueClick, onCustomClick, onCancelClick }: InformationPanelProps): JSX.Element {
+    // TODO: AJB: hard-coded strings
     return (
         <>
             <Text as="span" weight="medium" className="mx_InformationPanel_description">
                 {_t("settings|encryption|recovery|set_up_recovery_secondary_description")}
             </Text>
             <EncryptionCardButtons>
-                <Button onClick={onContinueClick}>{_t("action|continue")}</Button>
+                <Button onClick={onContinueClick}>Generate recovery key</Button>
+                <Button kind="secondary" onClick={onCustomClick}>
+                    Custom recovery key
+                </Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>
@@ -333,12 +419,14 @@ interface KeyFormProps {
     onCancelClick: MouseEventHandler;
     /**
      * Called when the form is submitted.
+     * TODO: AJB: I made this take the entered key, which may not be a good choice
      */
-    onSubmit: () => Promise<void>;
+    onSubmit: (filledKey?: string) => Promise<void>;
     /**
      * The recovery key to confirm.
+     * TODO: AJB: I made this nullable, which may not be a good choice
      */
-    recoveryKey: string;
+    recoveryKey: string | null;
     /**
      * The label for the submit button.
      */
@@ -366,7 +454,8 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
                     return;
                 }
                 setIsKeyChangeInProgress(true);
-                onSubmit().finally(() => {
+                const filledKey = new FormData(evt.currentTarget).get("recoveryKey") as string | "";
+                onSubmit(filledKey).finally(() => {
                     setIsKeyChangeInProgress(false);
                 });
             }}
@@ -375,8 +464,14 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
                 evt.stopPropagation();
 
                 // We don't have any file in the form, we can cast it as string safely
-                const filledKey = new FormData(evt.currentTarget).get("recoveryKey") as string | "";
-                setIsKeyValid(filledKey.trim() === recoveryKey);
+                const filledKeyRaw = new FormData(evt.currentTarget).get("recoveryKey") as string | "";
+                const filledKey = filledKeyRaw.trim();
+
+                // TODO: AJB: validate a good passphrase here
+                const isValidPassphrase = recoveryKey === null && filledKey.length > 0;
+                const isCorrectRecoveryKey = filledKey === recoveryKey;
+
+                setIsKeyValid(isValidPassphrase || isCorrectRecoveryKey);
             }}
         >
             <Field name="recoveryKey" serverInvalid={isKeyInvalidAndFilled}>
