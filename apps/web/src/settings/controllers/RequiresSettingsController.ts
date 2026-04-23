@@ -36,6 +36,10 @@ export default class RequiresSettingsController extends MatrixClientBackedContro
         }
     }
 
+    /**
+     * Checks if the `isCapabilityDisabled` function blocks the setting.
+     * @returns `true` or a string if the feature is disabled by the feature, otherwise false.
+     */
     private get isBlockedByCapabilites(): boolean | string {
         if (!this.isCapabilityDisabled) {
             return false;
@@ -44,7 +48,7 @@ export default class RequiresSettingsController extends MatrixClientBackedContro
         // at least one call to get capaibilies.
         const cachedCaps = this.client?.getCachedCapabilities();
         if (!cachedCaps) {
-            // return forced value if caps aren't available yet.
+            // If we do not have any capabilites yet, then assume the setting IS blocked.
             return true;
         }
         return this.isCapabilityDisabled(cachedCaps);
