@@ -61,11 +61,11 @@ describe("ElementWidgetDriver", () => {
             "!1:example.org",
         );
 
-    jest.spyOn(Modal, "createDialog").mockImplementation(() => {
-        throw new Error("Should not have to create a dialog");
-    });
-
     beforeEach(() => {
+        jest.spyOn(Modal, "createDialog").mockImplementation(() => {
+            throw new Error("Should not have to create a dialog");
+        });
+
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
         client.getUserId.mockReturnValue("@alice:example.org");
@@ -500,6 +500,8 @@ describe("ElementWidgetDriver", () => {
             stubClient();
             driver = mkDefaultDriver();
             jest.spyOn(dis, "dispatch").mockReset();
+
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!this-room-id");
         });
 
         it("sends chat effects", async () => {
