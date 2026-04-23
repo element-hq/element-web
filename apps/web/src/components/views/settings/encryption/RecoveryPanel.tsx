@@ -31,12 +31,17 @@ interface RecoveryPanelProps {
      *                      "Set up recovery" rather than "Change recovery key").
      */
     onChangeRecoveryKeyClick: (setupNewKey: boolean) => void;
+
+    /**
+     * Callback for when the user wants to change their recovery key by entering a new custom one.
+     */
+    onCustomRecoveryKeyClick: () => void;
 }
 
 /**
  * This component allows the user to set up or change their recovery key.
  */
-export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps): JSX.Element {
+export function RecoveryPanel({ onChangeRecoveryKeyClick, onCustomRecoveryKeyClick }: RecoveryPanelProps): JSX.Element {
     const matrixClient = useMatrixClientContext();
     const state = useAsyncMemo<State>(
         async () => {
@@ -64,9 +69,14 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
             break;
         case "good":
             content = (
-                <Button size="sm" kind="secondary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(false)}>
-                    {_t("settings|encryption|recovery|change_recovery_key")}
-                </Button>
+                <>
+                    <Button size="sm" kind="secondary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(false)}>
+                        Generate new recovery key
+                    </Button>
+                    <Button size="sm" kind="secondary" Icon={KeyIcon} onClick={() => onCustomRecoveryKeyClick()}>
+                        Enter new custom recovery key
+                    </Button>
+                </>
             );
     }
 
