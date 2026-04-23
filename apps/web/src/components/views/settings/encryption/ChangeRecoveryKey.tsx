@@ -56,6 +56,15 @@ interface ChangeRecoveryKeyProps {
      * If false,the component will display the flow to set up a new recovery key.
      */
     userHasRecoveryKey: boolean;
+
+    /**
+     * If true, the user wants to enter a custom recovery key instead of having
+     * one generated. TODO: AJB: the state of this is probably mixed up with
+     * userHasRecoveryKey, so it would probably be better to make an enum or
+     * something.
+     */
+    changeToCustom?: boolean;
+
     /**
      * Called when the recovery key is successfully changed.
      */
@@ -71,14 +80,19 @@ interface ChangeRecoveryKeyProps {
  */
 export function ChangeRecoveryKey({
     userHasRecoveryKey,
+    changeToCustom,
     onFinish,
     onCancelClick,
 }: ChangeRecoveryKeyProps): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
-    // If the user is setting up recovery for the first time, we first show them a panel explaining what
-    // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
-    const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_change_flow" : "inform_user");
+    // If the user is changing to a custom recovery key, show them the panel
+    // allowing them to enter it. Otherwise, if the user is setting up recovery
+    // for the first time, we first show them a panel explaining what "recovery"
+    // is about. Otherwise, we jump straight to showing the user the new key.
+    const [state, setState] = useState<State>(
+        changeToCustom ? "custom_recovery_flow" : userHasRecoveryKey ? "save_key_change_flow" : "inform_user",
+    );
 
     const onCancelClickWrapper = useCallback(() => {
         logger.debug("ChangeRecoveryKey: user cancelled");
