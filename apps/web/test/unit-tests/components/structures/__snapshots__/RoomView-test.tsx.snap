@@ -247,9 +247,9 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           class="_actions_n7ud0_61"
         >
           <button
-            class="_button_13vu4_8 _primaryAction_1xryk_20 _has-icon_13vu4_60"
+            class="_button_1nw83_8 _primaryAction_1xryk_20 _has-icon_1nw83_60"
             data-kind="primary"
-            data-size="sm"
+            data-size="md"
             role="button"
             tabindex="0"
           >
@@ -1062,7 +1062,7 @@ exports[`RoomView invites renders an invite room 1`] = `
           Decline
         </div>
         <button
-          class="_button_13vu4_8 _destructive_13vu4_110"
+          class="_button_1nw83_8 _destructive_1nw83_110"
           data-kind="tertiary"
           data-size="lg"
           role="button"

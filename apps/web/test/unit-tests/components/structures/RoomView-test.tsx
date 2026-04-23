@@ -71,7 +71,7 @@ import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.ts
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { ModuleApi } from "../../../../src/modules/Api";
-import { ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
+import { type ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
