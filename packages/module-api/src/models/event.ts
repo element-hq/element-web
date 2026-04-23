@@ -53,4 +53,8 @@ export interface MatrixEvent {
      * Timestamp (in milliseconds since the unix epoch) on originating homeserver when this event was sent.
      */
     originServerTs: number;
+    /**
+     * Whether this event is encrypted or not.
+     */
+    isEncrypted: boolean;
 }

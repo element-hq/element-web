@@ -33,4 +33,8 @@ export interface Room {
      * @returns The state event, or null if not found.
      */
     getStateEvent: (eventType: string, stateKey?: string) => Watchable<MatrixEvent | null>;
+    /**
+     * Whether this room is encrypted or not.
+     */
+    isEncrypted: () => boolean;
 }
