@@ -3868,10 +3868,6 @@
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
     },
-    "user_menu": {
-        "link_new_device": "Link new device",
-        "settings": "All settings"
-    },
     "voip": {
         "already_in_call": "Already in call",
         "already_in_call_person": "You're already in a call with this person.",
