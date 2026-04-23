@@ -60,7 +60,6 @@ import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
-import { defaultWatchManager } from "../../../../../../src/settings/Settings.tsx";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
