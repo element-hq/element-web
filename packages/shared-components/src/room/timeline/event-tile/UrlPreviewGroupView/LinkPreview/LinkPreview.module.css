@@ -97,7 +97,6 @@ button.preview {
         display: inline-block;
         line-clamp: 2;
         -webkit-line-clamp: 2;
-        margin: var(--cpd-space-1x) 0;
         color: var(--cpd-color-text-primary);
         text-decoration-line: none;
     }
