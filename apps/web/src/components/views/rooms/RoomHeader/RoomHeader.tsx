@@ -446,7 +446,6 @@ export default function RoomHeader({
     const roomName = useRoomName(room);
     const joinRule = useRoomState(room, (state) => state.getJoinRule());
     const historyVisibility = useRoomState(room, (state) => state.getHistoryVisibility());
-    const historySharingEnabled = useFeatureEnabled("feature_share_history_on_invite");
     const dmMember = useDmMember(room);
     const isDirectMessage = !!dmMember;
     const isRoomEncrypted = useIsEncrypted(client, room);
@@ -532,7 +531,7 @@ export default function RoomHeader({
                                     </Tooltip>
                                 )}
 
-                                {isRoomEncrypted && historySharingEnabled && historyVisibilityIcon(historyVisibility)}
+                                {isRoomEncrypted && historyVisibilityIcon(historyVisibility)}
                             </Text>
                         </Box>
                     </button>

@@ -256,12 +256,7 @@ describe("MultiInviter", () => {
             );
         });
 
-        it("should set shareEncryptedHistory if that setting is enabled", async () => {
-            mocked(SettingsStore.getValue).mockImplementation((settingName, roomId, value) => {
-                return settingName === "feature_share_history_on_invite"; // this is enabled, everything else is disabled.
-            });
-            await inviter.invite([MXID1]);
-
+        it("should set shareEncryptedHistory", async () => {
             expect(client.invite).toHaveBeenCalledTimes(1);
             expect(client.invite).toHaveBeenNthCalledWith(1, ROOMID, MXID1, { shareEncryptedHistory: true });
         });

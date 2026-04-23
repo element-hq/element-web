@@ -723,25 +723,9 @@ describe("RoomHeader", () => {
             ],
             { addToState: true },
         );
-        let featureEnabled = true;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(
-            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
-        );
 
         render(<RoomHeader room={room} />, getWrapper());
         await waitFor(() => getByLabelText(document.body, "New members see history"));
-
-        // Disable the labs flag and check the icon disappears
-        featureEnabled = false;
-        act(() =>
-            defaultWatchManager.notifyUpdate(
-                "feature_share_history_on_invite",
-                null,
-                SettingLevel.DEVICE,
-                featureEnabled,
-            ),
-        );
-        expect(queryByLabelText(document.body, "New members see history")).not.toBeInTheDocument();
     });
 
     it("shows a user icon if the room is encrypted and has world readable history", async () => {
@@ -757,10 +741,6 @@ describe("RoomHeader", () => {
                 }),
             ],
             { addToState: true },
-        );
-        const featureEnabled = true;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(
-            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
         );
 
         render(<RoomHeader room={room} />, getWrapper());

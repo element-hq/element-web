@@ -13,7 +13,6 @@ import { createRoom, sendMessageInCurrentRoom } from "./utils";
 
 test.use({
     displayName: "Alice",
-    labsFlags: ["feature_share_history_on_invite"],
 });
 
 /** Tests for MSC4268: encrypted history sharing */
