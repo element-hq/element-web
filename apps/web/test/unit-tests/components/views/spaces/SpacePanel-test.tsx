@@ -107,27 +107,30 @@ jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
 }));
 
 describe("<SpacePanel />", () => {
-    const mockClient = {
-        getUserId: jest.fn().mockReturnValue("@test:test"),
-        getSafeUserId: jest.fn().mockReturnValue("@test:test"),
-        mxcUrlToHttp: jest.fn(),
-        getRoom: jest.fn(),
-        isGuest: jest.fn(),
-        getAccountData: jest.fn(),
-        on: jest.fn(),
-        off: jest.fn(),
-        removeListener: jest.fn(),
-        isVersionSupported: jest.fn().mockResolvedValue(true),
-        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
-    } as unknown as MatrixClient;
-    const SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SdkContextClass.instance);
+    let mockClient: MatrixClient;
 
-    beforeAll(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
-    });
+    let SpacePanel: React.ComponentType = () => null;
 
     beforeEach(() => {
+        mockClient = {
+            getUserId: jest.fn().mockReturnValue("@test:test"),
+            getSafeUserId: jest.fn().mockReturnValue("@test:test"),
+            mxcUrlToHttp: jest.fn(),
+            getRoom: jest.fn(),
+            isGuest: jest.fn(),
+            getAccountData: jest.fn(),
+            on: jest.fn(),
+            off: jest.fn(),
+            removeListener: jest.fn(),
+            isVersionSupported: jest.fn().mockResolvedValue(true),
+            doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+        } as unknown as MatrixClient;
+
+        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(mockClient);
+
+        SpacePanel = wrapInSdkContext(wrapInMatrixClientContext(UnwrappedSpacePanel), SdkContextClass.instance);
+
         SpaceStore.instance.enabledMetaSpaces.push(
             MetaSpace.Home,
             MetaSpace.Favourites,
