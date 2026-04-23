@@ -1021,11 +1021,10 @@ describe("RoomListStoreV3", () => {
                 await store.start();
 
                 const sectionCreatedListener = jest.fn();
-                const listsUpdateListener = jest.fn();
                 store.on(SECTION_CREATED_EVENT, sectionCreatedListener);
-                store.on(LISTS_UPDATE_EVENT, listsUpdateListener);
 
-                await store.createSection();
+                const tag = await store.createSection();
+                expect(tag).toBe("element.io.section.test-tag");
 
                 expect(sectionCreatedListener).toHaveBeenCalledWith("element.io.section.test-tag");
             });
