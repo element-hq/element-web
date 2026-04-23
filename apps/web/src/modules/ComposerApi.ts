@@ -20,4 +20,18 @@ export class ComposerApi implements ModuleComposerApi {
             text: plaintext,
         } satisfies ComposerInsertPayload);
     }
+
+    public insertEventContentIntoComposer<T extends object>(
+        key: string,
+        eventContent: T,
+        previewRenderable: ComposerExtraContentPreview<T>,
+    ): void {
+        defaultDispatcher.dispatch({
+            action: Action.ComposerInsert,
+            key,
+            eventContent,
+            previewRenderable,
+            timelineRenderingType: TimelineRenderingType.Room,
+        } satisfies IComposerInsertEventContent<T>);
+    }
 }

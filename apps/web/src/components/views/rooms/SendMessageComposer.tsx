@@ -321,7 +321,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
     }
 
-    public async sendMessage(): Promise<void> {
+    public async sendMessage(extraContent: Record<string, unknown> = {}): Promise<void> {
         const model = this.model;
 
         if (model.isEmpty) {
@@ -415,6 +415,11 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
             // don't bother sending an empty message
             if (!content.body.trim()) return;
+
+            content = {
+                ...content,
+                ...extraContent,
+            };
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 decorateStartSendingTime(content);

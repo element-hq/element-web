@@ -196,6 +196,11 @@ export enum Action {
     ComposerInsert = "composer_insert",
 
     /**
+     * Inserts content into the active composer. Should be used with ComposerInsertPayload.
+     */
+    ComposerInsertExtraContent = "composer_insert_extra_content",
+
+    /**
      * Switches space. Should be used with SwitchSpacePayload.
      */
     SwitchSpace = "switch_space",

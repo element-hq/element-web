@@ -102,7 +102,15 @@ export interface ComponentVisibilityCustomisations {
 // @alpha
 export interface ComposerApi {
     insertPlaintextIntoComposer(plaintext: string): void;
+    insertEventContentIntoComposer<T extends object>(key: string, eventContent: T, previewComponent: ComposerExtraContentPreview<T>): void;
 }
+
+// @alpha
+export type ComposerExtraContentPreview<T = Record<string, unknown>> = (props: {
+    contentKey: string;
+    content: T;
+    onContentChange: (newContent: T | null) => void;
+}) => ReactNode;
 
 // @public
 export interface Config {

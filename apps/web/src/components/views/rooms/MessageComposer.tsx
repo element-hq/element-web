@@ -38,7 +38,7 @@ import { RecordingState } from "../../../audio/VoiceRecording";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import SendMessageComposer, { type SendMessageComposer as SendMessageComposerClass } from "./SendMessageComposer";
-import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import type { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
 import type EditorModel from "../../../editor/model";
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
@@ -54,6 +54,8 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
+import type { ComposerExtraContentPreview } from "@element-hq/element-web-module-api";
+import { IComposerInsertEventContent } from "../../../dispatcher/payloads/ComposerInsertExtraContentPayload";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -101,6 +103,10 @@ interface IState {
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
     initialComposerContent: string;
+    /**
+     * Extra content to be inserted into the final Matrix event.
+     */
+    extraEventContent: Map<string, { content: Record<string, unknown>; renderer: ComposerExtraContentPreview }>;
 }
 
 type WysiwygComposerState = {
@@ -152,6 +158,17 @@ export class MessageComposer extends React.Component<IProps, IState> {
             isWysiwygLabEnabled: isWysiwygLabEnabled,
             isRichTextEnabled: isRichTextEnabled,
             initialComposerContent: initialComposerContent,
+            extraEventContent: new Map([
+                [
+                    "test-key",
+                    {
+                        content: {
+                            "uk.half-shot.test": "Helloo!",
+                        },
+                        renderer: (props) => <b>Hi</b>,
+                    },
+                ],
+            ]),
         };
 
         this.instanceId = instanceCount++;
@@ -276,6 +293,19 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 }
                 break;
 
+            case Action.ComposerInsertExtraContent: {
+                const composerInsertPayload = payload as IComposerInsertEventContent;
+                if (!this.context.canSendMessages) {
+                    break;
+                }
+                this.setState((s) => {
+                    s.extraEventContent.set(composerInsertPayload.key, {
+                        content: composerInsertPayload.eventContent,
+                        renderer: composerInsertPayload.previewRenderable,
+                    });
+                });
+                break;
+            }
             case Action.SettingUpdated: {
                 const settingUpdatedPayload = payload as SettingUpdatedPayload;
                 switch (settingUpdatedPayload.settingName) {
@@ -398,7 +428,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
             return;
         }
 
-        this.messageComposerInput.current?.sendMessage();
+        const extraContent = [...this.state.extraEventContent.values()].reduce((a, b) => ({ ...a, ...b }));
+
+        this.setState({
+            extraEventContent: new Map(),
+        });
+
+        this.messageComposerInput.current?.sendMessage(extraContent);
 
         if (this.state.isWysiwygLabEnabled) {
             const { relation, replyToEvent } = this.props;
@@ -524,6 +560,17 @@ export class MessageComposer extends React.Component<IProps, IState> {
         if (this.context.narrow) {
             this.toggleButtonMenu();
         }
+    };
+
+    private readonly onExtraContentChange = (key: string, newContent: Record<string, unknown> | null): void => {
+        this.setState((s) => {
+            if (newContent === null) {
+                s.extraEventContent.delete(key);
+            } else {
+                s.extraEventContent.set(key, { ...s.extraEventContent.get(key)!, content: newContent });
+            }
+            return s;
+        });
     };
 
     public render(): React.ReactNode {
@@ -680,6 +727,16 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         replyToEvent={this.props.replyToEvent}
                         permalinkCreator={this.props.permalinkCreator}
                     />
+                    {[...this.state.extraEventContent.entries()].map(
+                        ([key, { content, renderer: ExtraContentRenderer }]) => (
+                            <ExtraContentRenderer
+                                content={content}
+                                contentKey={key}
+                                key={key}
+                                onContentChange={(c) => this.onExtraContentChange(key, c)}
+                            />
+                        ),
+                    )}
                     <div className="mx_MessageComposer_row">
                         {leftIcon}
                         {composer}
