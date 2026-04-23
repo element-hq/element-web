@@ -13,6 +13,7 @@ import {
     type RoomListViewState,
     type RoomListSection,
     _t,
+    type ToastType,
 } from "@element-hq/web-shared-components";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
@@ -153,7 +154,14 @@ export class RoomListViewModel
         this.disposables.trackListener(
             RoomListStoreV3.instance,
             RoomListStoreV3Event.SectionCreated as any,
-            this.onSectionCreated,
+            this.onSectionCreated as (...args: unknown[]) => void,
+        );
+
+        // Subscribe to room tagging
+        this.disposables.trackListener(
+            RoomListStoreV3.instance,
+            RoomListStoreV3Event.RoomTagged as any,
+            this.onRoomTagged,
         );
 
         // Subscribe to active room changes to update selected room
@@ -500,6 +508,7 @@ export class RoomListViewModel
     private async updateRoomListData(
         isRoomChange: boolean = false,
         roomIdOverride: string | null = null,
+        scrollToSectionTag: string | undefined = undefined,
     ): Promise<void> {
         // Determine the room ID to use for calculations
         // Use override if provided (e.g., during space changes), otherwise fall back to RoomViewStore
@@ -544,17 +553,23 @@ export class RoomListViewModel
         // Update filter keys - only update if they have actually changed to prevent unnecessary re-renders of the room list
         const previousFilterKeys = this.snapshot.current.roomListState.filterKeys;
         const newFilterKeys = this.roomsResult.filterKeys?.map((k) => String(k));
+        const viewSections = toRoomListSection(this.sections);
+
+        const resolvedScrollToSectionTag =
+            scrollToSectionTag && viewSections.some((s) => s.id === scrollToSectionTag)
+                ? scrollToSectionTag
+                : undefined;
+
         const roomListState: RoomListViewState = {
             activeRoomIndex,
             spaceId: this.roomsResult.spaceId,
             filterKeys: keepIfSame(previousFilterKeys, newFilterKeys),
+            scrollToSectionTag: resolvedScrollToSectionTag,
         };
 
         const activeFilterId = this.activeFilter !== undefined ? filterKeyToIdMap.get(this.activeFilter) : undefined;
         const isRoomListEmpty = this.roomsResult.sections.every((section) => section.rooms.length === 0);
         const isLoadingRooms = RoomListStoreV3.instance.isLoadingRooms;
-
-        const viewSections = toRoomListSection(this.sections);
         const previousSections = this.snapshot.current.sections;
 
         // Single atomic snapshot update
@@ -586,15 +601,13 @@ export class RoomListViewModel
         }
     };
 
-    public onSectionCreated = (): void => {
-        clearTimeout(this.toastRef);
-        this.snapshot.merge({
-            toast: "section_created",
-        });
-        // Automatically close the toast after 15 seconds
-        this.toastRef = setTimeout(() => {
-            this.closeToast();
-        }, 15 * 1000);
+    public onSectionCreated = (tag: string): void => {
+        this.updateRoomListData(false, null, tag);
+        this.showToast("section_created");
+    };
+
+    public onRoomTagged = (): void => {
+        this.showToast("chat_moved");
     };
 
     public closeToast: () => void = () => {
@@ -603,6 +616,15 @@ export class RoomListViewModel
             toast: undefined,
         });
     };
+
+    private showToast(toast: ToastType): void {
+        clearTimeout(this.toastRef);
+        this.snapshot.merge({ toast });
+        // Automatically close the toast after 15 seconds
+        this.toastRef = setTimeout(() => {
+            this.closeToast();
+        }, 15 * 1000);
+    }
 }
 
 /**

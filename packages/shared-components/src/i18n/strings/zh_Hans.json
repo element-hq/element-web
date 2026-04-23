@@ -5,6 +5,7 @@
     "action": {
         "back": "返回",
         "click": "点击",
+        "close": "关闭",
         "collapse": "折叠",
         "delete": "删除",
         "dismiss": "忽略",
@@ -14,8 +15,11 @@
         "go": "转到",
         "hide": "隐藏",
         "invite": "邀请",
+        "new_conversation": "新对话",
         "new_room": "新房间",
+        "new_section": "新区域",
         "new_video_room": "新视频房间",
+        "open_menu": "打开菜单",
         "pause": "暂停",
         "pin": "置顶",
         "play": "播放",
@@ -32,12 +36,14 @@
     "common": {
         "attachment": "附件",
         "encryption_enabled": "加密已启用",
+        "loading": "正在载入…",
         "options": "选项",
         "preferences": "偏好",
         "state_encryption_enabled": "实验性的状态加密已启用"
     },
     "left_panel": {
-        "open_dial_pad": "打开拨号键盘"
+        "open_dial_pad": "打开拨号键盘",
+        "separator_label": "点击或拖动以展开"
     },
     "notifications": {
         "all_messages": "所有消息",
@@ -110,7 +116,8 @@
             "leave_room": "离开房间",
             "low_priority": "低优先级",
             "mark_read": "设为已读",
-            "mark_unread": "设为未读"
+            "mark_unread": "设为未读",
+            "move_to_section": "移动到"
         },
         "notification_options": "通知选项",
         "open_space_menu": "打开空间菜单",
@@ -119,6 +126,11 @@
             "more_options": "更多选项"
         },
         "room_options": "房间选项",
+        "section_created": "区域已创建",
+        "section_header": {
+            "toggle": "切换区域 %(section)s",
+            "toggle_unread": "切换到区域 %(section)s 中的未读房间"
+        },
         "show_message_previews": "显示消息预览",
         "sort": "排序",
         "sort_type": {

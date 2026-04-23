@@ -141,7 +141,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -150,7 +150,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
         Continue
       </button>
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"
@@ -300,7 +300,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       >
         <button
           aria-disabled="true"
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="primary"
           data-size="lg"
           role="button"
@@ -309,7 +309,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           Finish set up
         </button>
         <button
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -482,7 +482,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
       >
         <button
           aria-disabled="true"
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="primary"
           data-size="lg"
           role="button"
@@ -491,7 +491,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           Finish set up
         </button>
         <button
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -601,7 +601,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -610,7 +610,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
         Continue
       </button>
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"
@@ -764,7 +764,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
       class="mx_EncryptionCard_buttons"
     >
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -773,7 +773,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
         Continue
       </button>
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"

@@ -34,7 +34,7 @@ export function BugReportDialogButton({
         return null;
     }
     return (
-        <Button kind="secondary" size="sm" onClick={onClick}>
+        <Button kind="secondary" size="md" onClick={onClick}>
             {bugReportUrl === BugReportEndpointURLLocal
                 ? _t("bug_reporting|download_logs")
                 : _t("bug_reporting|submit_debug_logs")}

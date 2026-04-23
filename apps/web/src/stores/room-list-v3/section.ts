@@ -5,14 +5,26 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { v4 as uuidv4 } from "uuid";
-
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectionDialog";
 
 type Tag = string;
+
+/**
+ * Prefix for custom section tags.
+ */
+export const CUSTOM_SECTION_TAG_PREFIX = "element.io.section.";
+
+/**
+ * Checks if a given tag is a custom section tag.
+ * @param tag - The tag to check.
+ * @returns True if the tag is a custom section tag, false otherwise.
+ */
+export function isCustomSectionTag(tag: string): boolean {
+    return tag.startsWith(CUSTOM_SECTION_TAG_PREFIX);
+}
 
 /**
  * Structure of the custom section stored in the settings. The tag is used as a unique identifier for the section, and the name is given by the user.
@@ -35,15 +47,15 @@ export type OrderedCustomSections = Tag[];
  * Creates a new custom section by showing a dialog to the user to enter the section name.
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
- * @return A promise that resolves to true if the section was created, or false if the user cancelled the creation or if there was an error.
+ * @return A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
-export async function createSection(): Promise<boolean> {
+export async function createSection(): Promise<string | undefined> {
     const modal = Modal.createDialog(CreateSectionDialog);
 
     const [shouldCreateSection, sectionName] = await modal.finished;
-    if (!shouldCreateSection || !sectionName) return false;
+    if (!shouldCreateSection || !sectionName) return undefined;
 
-    const tag = `element.io.section.${uuidv4()}`;
+    const tag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
     const newSection: CustomSection = { tag, name: sectionName };
 
     // Save the new section data
@@ -55,5 +67,5 @@ export async function createSection(): Promise<boolean> {
     const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || [];
     orderedSections.push(tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
-    return true;
+    return tag;
 }
