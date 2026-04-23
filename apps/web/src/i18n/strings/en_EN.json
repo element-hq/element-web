@@ -2602,7 +2602,7 @@
                 "key_storage_warning": "Your key storage is out of sync. Click one of the buttons below to fix the problem.",
                 "save_key_description": "Do not share this with anyone!",
                 "save_key_title": "Recovery key",
-                "set_up_recovery": "Get recovery key",
+                "set_up_recovery": "Set up recovery",
                 "set_up_recovery_confirm_button": "Finish set up",
                 "set_up_recovery_confirm_description": "Enter the recovery key shown on the previous screen to finish setting up recovery.",
                 "set_up_recovery_confirm_title": "Enter your recovery key to confirm",
