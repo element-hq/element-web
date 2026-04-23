@@ -7,17 +7,17 @@ Please see LICENSE files in the repository root for full details.
 
 import { type ComposerApi as ModuleComposerApi } from "@element-hq/element-web-module-api";
 
-import defaultDispatcher from "../dispatcher/dispatcher";
+import type { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import type { ComposerInsertPayload } from "../dispatcher/payloads/ComposerInsertPayload";
-import { TimelineRenderingType } from "../contexts/RoomContext";
 
 export class ComposerApi implements ModuleComposerApi {
+    public constructor(private readonly dispatcher: MatrixDispatcher) {}
+
     public insertTextIntoComposer(text: string): void {
-        defaultDispatcher.dispatch({
+        this.dispatcher.dispatch({
             action: Action.ComposerInsert,
             text,
-            timelineRenderingType: TimelineRenderingType.Room,
         } satisfies ComposerInsertPayload);
     }
 }

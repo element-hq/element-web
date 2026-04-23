@@ -15,18 +15,32 @@ export enum ComposerType {
     Edit = "edit",
 }
 
-interface IBaseComposerInsertPayload extends ActionPayload {
+/**
+ * Explicit composer insert to target
+ */
+interface IBaseComposerInsertPayloadExplicit extends ActionPayload {
     action: Action.ComposerInsert;
     timelineRenderingType: TimelineRenderingType;
-    composerType?: ComposerType; // falsy if should be re-dispatched to the correct composer
+    composerType: ComposerType;
 }
 
-interface IComposerInsertMentionPayload extends IBaseComposerInsertPayload {
+/**
+ * Explicit composer insert to current target.
+ */
+interface IBaseComposerInsertPayloadImplicit extends ActionPayload {
+    action: Action.ComposerInsert;
+    composerType?: undefined; // undefined if this should be re-dispatched to the correct composer
+    timelineRenderingType?: TimelineRenderingType; // undefined if this should just use the current in-focus type.
+}
+
+type IBaseComposerInsertPayload = IBaseComposerInsertPayloadExplicit | IBaseComposerInsertPayloadImplicit;
+
+type IComposerInsertMentionPayload = IBaseComposerInsertPayload & {
     userId: string;
-}
+};
 
-interface IComposerInsertPlaintextPayload extends IBaseComposerInsertPayload {
+type IComposerInsertPlaintextPayload = IBaseComposerInsertPayload & {
     text: string;
-}
+};
 
 export type ComposerInsertPayload = IComposerInsertMentionPayload | IComposerInsertPlaintextPayload;

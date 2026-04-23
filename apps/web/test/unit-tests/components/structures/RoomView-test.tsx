@@ -71,6 +71,7 @@ import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.ts
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { ModuleApi } from "../../../../src/modules/Api";
+import { ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -1073,6 +1074,54 @@ describe("RoomView", () => {
 
         // It should now force a reload
         expect(onRoomViewUpdateMock).toHaveBeenCalledWith(true);
+    });
+
+    describe("handles Action.ComposerInsert", () => {
+        it("redispatches an empty composerType, timelineRenderingType with the current state", async () => {
+            jest.spyOn(defaultDispatcher, "dispatch");
+            await mountRoomView();
+            const promise = untilDispatch((payload) => {
+                try {
+                    expect(payload).toEqual({
+                        action: Action.ComposerInsert,
+                        text: "Hello world",
+                        timelineRenderingType: TimelineRenderingType.Room,
+                        composerType: ComposerType.Send,
+                    });
+                } catch {
+                    return false;
+                }
+                return true;
+            }, defaultDispatcher);
+            defaultDispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+            } satisfies ComposerInsertPayload);
+            await promise;
+        });
+        it("redispatches an empty composerType with the current state", async () => {
+            jest.spyOn(defaultDispatcher, "dispatch");
+            await mountRoomView();
+            const promise = untilDispatch((payload) => {
+                try {
+                    expect(payload).toEqual({
+                        action: Action.ComposerInsert,
+                        text: "Hello world",
+                        timelineRenderingType: TimelineRenderingType.Room,
+                        composerType: ComposerType.Send,
+                    });
+                } catch {
+                    return false;
+                }
+                return true;
+            }, defaultDispatcher);
+            defaultDispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+                timelineRenderingType: TimelineRenderingType.Room,
+            } satisfies ComposerInsertPayload);
+            await promise;
+        });
     });
 
     describe("when there is a RoomView", () => {
