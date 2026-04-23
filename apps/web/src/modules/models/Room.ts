@@ -30,6 +30,10 @@ export class Room implements IRoom {
     public getStateEvent(eventType: string, stateKey: string = ""): WatchableStateEvent {
         return new WatchableStateEvent(eventType, stateKey, this.sdkRoom);
     }
+
+    public isEncrypted(): boolean {
+        return this.sdkRoom.hasEncryptionStateEvent();
+    }
 }
 
 /**
@@ -91,6 +95,7 @@ class WatchableStateEvent extends Watchable<ModuleMatrixEvent | null> {
             stateKey: sdkEvent.getStateKey(),
             type: sdkEvent.getType(),
             unsigned: sdkEvent.getUnsigned(),
+            isEncrypted: sdkEvent.isEncrypted(),
         };
     }
 }

@@ -72,6 +72,7 @@ export class CustomComponentsApi implements ICustomComponentsApi {
             type: mxEvent.getType(),
             unsigned: mxEvent.getUnsigned(),
             wireContent: mxEvent.getWireContent(),
+            isEncrypted: mxEvent.isEncrypted(),
         };
     }
 
