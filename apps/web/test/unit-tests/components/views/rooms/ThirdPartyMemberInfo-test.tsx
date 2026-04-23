@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { EventType, type IEvent, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, type IEvent, type MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import ThirdPartyMemberInfo from "../../../../../src/components/views/rooms/ThirdPartyMemberInfo";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
@@ -16,10 +16,7 @@ import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../.
 describe("<ThirdPartyMemberInfo />", () => {
     const userId = "@alice:server.org";
     const roomId = "!room:server.org";
-    const mockClient = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        getRoom: jest.fn(),
-    });
+    let mockClient: MatrixClient;
 
     // make invite event with defaults
     const makeInviteEvent = (props: Partial<IEvent> = {}): MatrixEvent =>
@@ -38,13 +35,20 @@ describe("<ThirdPartyMemberInfo />", () => {
     const defaultEvent = makeInviteEvent();
 
     const getComponent = (event: MatrixEvent = defaultEvent) => render(<ThirdPartyMemberInfo event={event} />);
-    const room = new Room(roomId, mockClient, userId);
+    let room: Room;
     const aliceMember = new RoomMember(roomId, userId);
     aliceMember.name = "Alice DisplayName";
 
     beforeEach(() => {
+        mockClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(userId),
+            getRoom: jest.fn(),
+        });
+
+        room = new Room(roomId, mockClient, userId);
+
         jest.spyOn(room, "getMember").mockImplementation((id) => (id === userId ? aliceMember : null));
-        mockClient.getRoom.mockClear().mockReturnValue(room);
+        jest.mocked(mockClient.getRoom).mockClear().mockReturnValue(room);
     });
 
     it("should render invite", () => {
