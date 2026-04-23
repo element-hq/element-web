@@ -34,10 +34,9 @@ import { getRoomContext } from "../../../test-utils/room";
 import { mkMessage, stubClient } from "../../../test-utils/test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { untilDispatch } from "../../../test-utils/utilities.ts";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext.ts";
-import { ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
+import { type ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -229,8 +228,8 @@ describe("ThreadView", () => {
                     return false;
                 }
                 return true;
-            }, defaultDispatcher);
-            defaultDispatcher.dispatch({
+            }, dispatcher);
+            dispatcher.dispatch({
                 action: Action.ComposerInsert,
                 text: "Hello world",
                 timelineRenderingType: TimelineRenderingType.Thread,
@@ -253,10 +252,10 @@ describe("ThreadView", () => {
                     }
                     return true;
                 },
-                defaultDispatcher,
+                dispatcher,
                 500,
             );
-            defaultDispatcher.dispatch({
+            dispatcher.dispatch({
                 action: Action.ComposerInsert,
                 text: "Hello world",
                 composerType: ComposerType.Send,
@@ -282,10 +281,10 @@ describe("ThreadView", () => {
                     }
                     return true;
                 },
-                defaultDispatcher,
+                dispatcher,
                 500,
             );
-            defaultDispatcher.dispatch({
+            dispatcher.dispatch({
                 action: Action.ComposerInsert,
                 text: "Hello world",
                 composerType: ComposerType.Send,
