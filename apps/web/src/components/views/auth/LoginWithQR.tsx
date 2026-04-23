@@ -69,6 +69,7 @@ export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
  */
 export default class LoginWithQR extends React.Component<Props, IState> {
     private finished = false;
+    private abortController?: AbortController;
 
     public constructor(props: Props) {
         super(props);
@@ -79,33 +80,27 @@ export default class LoginWithQR extends React.Component<Props, IState> {
     }
 
     public componentDidMount(): void {
-        this.updateMode(this.props.mode).then(() => {});
+        void this.updateMode(this.props.mode);
     }
 
     public componentDidUpdate(prevProps: Readonly<Props>): void {
         if (prevProps.mode !== this.props.mode) {
-            this.updateMode(this.props.mode).then(() => {});
+            void this.updateMode(this.props.mode);
         }
     }
 
     private async updateMode(mode: Mode): Promise<void> {
-        this.setState({ phase: Phase.Loading });
-        if (this.state.rendezvous) {
-            const rendezvous = this.state.rendezvous;
-            rendezvous.onFailure = undefined;
-            this.setState({ rendezvous: undefined });
-        }
+        this.abortController?.abort();
+        this.abortController = new AbortController();
+        this.setState({ phase: Phase.Loading, rendezvous: undefined });
         if (mode === Mode.Show) {
-            await this.generateAndShowCode();
+            await this.generateAndShowCode(this.abortController);
         }
     }
 
     public componentWillUnmount(): void {
-        if (this.state.rendezvous && !this.finished) {
-            // eslint-disable-next-line react/no-direct-mutation-state
-            this.state.rendezvous.onFailure = undefined;
-            // calling cancel will call close() as well to clean up the resources
-            this.state.rendezvous.cancel(MSC4108FailureReason.UserCancelled);
+        if (!this.finished) {
+            this.abortController?.abort();
         }
     }
 
@@ -114,19 +109,21 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         this.props.onFinished(success, credentials);
     }
 
-    private generateAndShowCode = async (): Promise<void> => {
+    private generateAndShowCode = async (abortController: AbortController): Promise<void> => {
         let rendezvous: MSC4108SignInWithQR;
         try {
             rendezvous =
                 this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
-                    ? await signInByGeneratingQR(this.props.client, this.onFailure)
-                    : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure);
+                    ? await signInByGeneratingQR(this.props.client, this.onFailure, abortController)
+                    : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure, abortController);
+            if (abortController.signal.aborted) return;
             this.setState({
                 phase: Phase.ShowingQR,
                 rendezvous,
                 failureReason: undefined,
             });
         } catch (e) {
+            if (abortController.signal.aborted) return;
             logger.error("Error whilst generating QR code", e);
             this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.HomeserverLacksSupport });
             return;
@@ -151,8 +148,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
 
             // we ask the user to confirm that the channel is secure
         } catch (e: RendezvousError | unknown) {
+            if (abortController.signal.aborted) return;
             logger.error("Error whilst approving login", e);
-            await rendezvous?.cancel(
+            await rendezvous.cancel(
                 e instanceof RendezvousError ? (e.code as MSC4108FailureReason) : ClientRendezvousFailureReason.Unknown,
             );
         }
@@ -277,6 +275,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
     };
 
     public reset(): void {
+        this.abortController?.abort();
         this.setState({
             rendezvous: undefined,
             verificationUri: undefined,
