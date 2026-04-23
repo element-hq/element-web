@@ -71,6 +71,7 @@ import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.ts
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { ModuleApi } from "../../../../src/modules/Api";
+import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController.ts";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -92,6 +93,7 @@ describe("RoomView", () => {
     beforeEach(() => {
         mockPlatformPeg({ reload: () => {} });
         cli = mocked(stubClient());
+        MatrixClientBackedController.matrixClient = cli;
 
         const roomName = (expect.getState().currentTestName ?? "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
 

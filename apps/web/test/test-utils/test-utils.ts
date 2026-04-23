@@ -76,7 +76,6 @@ export function stubClient(): MatrixClient {
     peg.get = () => client;
     peg.safeGet = () => client;
     MatrixClientBackedSettingsHandler.matrixClient = client;
-    MatrixClientBackedController.matrixClient = client;
     return client;
 }
 
