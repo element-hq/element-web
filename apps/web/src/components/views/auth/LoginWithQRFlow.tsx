@@ -69,7 +69,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
     public render(): React.ReactNode {
         let main: JSX.Element | undefined;
         let buttons: JSX.Element | undefined;
-        let backButton = true;
+        let backButton = this.props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
         let className = "";
 
         switch (this.props.phase) {
