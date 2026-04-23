@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type ReactNode } from "react";
-import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
+import React, { createRef, type JSX, type ReactNode } from "react";
+import { ClientRendezvousFailureReason, MSC4108FailureReason, RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
@@ -27,6 +27,7 @@ import { ErrorMessage } from "../../structures/ErrorMessage";
 interface Props {
     phase: Phase;
     code?: Uint8Array;
+    intent: RendezvousIntent;
     onClick(type: Click, checkCodeEntered?: string): Promise<void>;
     failureReason?: FailureReason;
     userCode?: string;
@@ -230,6 +231,33 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 if (this.props.code) {
                     const data = this.props.code;
 
+                    let steps: string[];
+                    if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
+                        steps = [
+                            _t("auth|qr_code_login|open_element_mobile_device", {
+                                brand: SdkConfig.get().brand,
+                            }),
+                            _t("auth|qr_code_login|tap_avatar_link_new_device", {
+                                linkNewDevice: <strong>{_t("user_menu|link_new_device")}</strong>,
+                            }),
+                            _t("auth|qr_code_login|select_ready_to_scan", {
+                                readyToScan: <strong>{_t("auth|qr_code_login|ready_to_scan")}</strong>,
+                            }),
+                            _t("auth|qr_code_login|follow_remaining_instructions"),
+                        ];
+                    } else {
+                        steps = [
+                            _t("auth|qr_code_login|open_element_other_device", {
+                                brand: SdkConfig.get().brand,
+                            }),
+                            _t("auth|qr_code_login|select_qr_code", {
+                                scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
+                            }),
+                            _t("auth|qr_code_login|point_the_camera"),
+                            _t("auth|qr_code_login|follow_remaining_instructions"),
+                        ];
+                    }
+
                     main = (
                         <>
                             <Heading as="h1" size="sm" weight="semibold">
@@ -239,18 +267,9 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                                 <QRCode data={[{ data, mode: "byte" }]} className="mx_QRCode" />
                             </div>
                             <ol>
-                                <li>
-                                    {_t("auth|qr_code_login|open_element_other_device", {
-                                        brand: SdkConfig.get().brand,
-                                    })}
-                                </li>
-                                <li>
-                                    {_t("auth|qr_code_login|select_qr_code", {
-                                        scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
-                                    })}
-                                </li>
-                                <li>{_t("auth|qr_code_login|point_the_camera")}</li>
-                                <li>{_t("auth|qr_code_login|follow_remaining_instructions")}</li>
+                                {steps.map((step) => (
+                                    <li key={step}>{step}</li>
+                                ))}
                             </ol>
                         </>
                     );

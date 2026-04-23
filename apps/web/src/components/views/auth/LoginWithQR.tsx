@@ -320,6 +320,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 failureReason={this.state.failureReason}
                 userCode={this.state.userCode}
                 checkCode={this.state.checkCode}
+                intent={this.props.intent}
             />
         );
     }

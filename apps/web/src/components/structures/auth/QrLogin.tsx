@@ -60,11 +60,10 @@ const QrLogin: FC<Props> = ({ serverConfig, onLoggedIn }) => {
         );
     }
 
-    // TODO className
     return (
         <AuthPage>
             <AuthHeader />
-            <AuthBody className="mx_AuthBody_forgot-password">{body}</AuthBody>
+            <AuthBody>{body}</AuthBody>
         </AuthPage>
     );
 };
