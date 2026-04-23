@@ -10,6 +10,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { initOnce } from "@vector-im/matrix-wysiwyg";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
@@ -25,6 +26,7 @@ import { setSelection } from "../../../../../../src/components/views/rooms/wysiw
 import { createMocks } from "./utils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
 import { E2EStatus } from "../../../../../../src/utils/ShieldUtils.ts";
+import { type RoomContextType } from "../../../../../../src/contexts/RoomContext.ts";
 
 jest.mock("../../../../../../src/components/views/rooms/EmojiButton", () => ({
     EmojiButton: ({ addEmoji }: { addEmoji: (emoji: string) => void }) => {
@@ -43,7 +45,12 @@ describe("SendWysiwygComposer", () => {
         jest.resetAllMocks();
     });
 
-    const { defaultRoomContext, mockClient } = createMocks();
+    let defaultRoomContext: RoomContextType;
+    let mockClient: MatrixClient;
+
+    beforeEach(() => {
+        ({ defaultRoomContext, mockClient } = createMocks());
+    });
 
     const registerId = defaultDispatcher.register((payload) => {
         switch (payload.action) {
