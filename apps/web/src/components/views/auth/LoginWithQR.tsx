@@ -268,9 +268,20 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         }
     };
 
-    private onFailure = (reason: RendezvousFailureReason): void => {
+    private onFailure = async (reason: RendezvousFailureReason): Promise<void> => {
         if (this.state.phase === Phase.Error) return; // Already in failed state
-        logger.info(`Rendezvous failed: ${reason}`);
+        logger.warn(`Rendezvous failed: ${reason}`);
+
+        // Generate a new rendezvous channel & qr code if we hit expiry whilst still showing the QR code
+        if (reason === ClientRendezvousFailureReason.Expired && this.state.phase === Phase.ShowingQR) {
+            try {
+                await this.updateMode(Mode.Show);
+                return;
+            } catch (e) {
+                logger.warn("Failed to re-roll qr code on expiry", e);
+            }
+        }
+
         this.setState({ phase: Phase.Error, failureReason: reason });
     };
 
