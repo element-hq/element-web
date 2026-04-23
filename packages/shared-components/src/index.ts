@@ -14,11 +14,7 @@ export * from "./core/AvatarWithDetails";
 export * from "./core/roving";
 export * from "./room/composer/Banner";
 export * from "./crypto/SasEmoji";
-<<<<<<< hs/new-quick-settings-menu
-export * from "./event-tiles/UrlPreviewGroupView";
 export * from "./menus/UserMenu";
-=======
->>>>>>> develop
 export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
 export * from "./room/timeline/event-tile/body/RedactedBodyView";
