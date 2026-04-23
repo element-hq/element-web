@@ -9,7 +9,7 @@ import React, { type JSX } from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { Room } from "../RoomListItemView";
+import type { Room } from "./RoomListItemAccessibilityWrapper/RoomListItemView";
 import { VirtualizedRoomListView, type RoomListViewState } from "./VirtualizedRoomListView";
 import type { RoomListViewSnapshot, RoomListViewActions } from "../RoomListView";
 import { useMockedViewModel } from "../../core/viewmodel";
@@ -34,6 +34,7 @@ const RoomListWrapperImpl = ({
     getRoomItemViewModel,
     getSectionHeaderViewModel,
     updateVisibleRooms,
+    closeToast,
     renderAvatar: renderAvatarProp,
     ...rest
 }: RoomListStoryProps): JSX.Element => {
@@ -44,6 +45,7 @@ const RoomListWrapperImpl = ({
         getRoomItemViewModel,
         getSectionHeaderViewModel,
         updateVisibleRooms,
+        closeToast,
     });
 
     return (
@@ -82,6 +84,7 @@ const meta = {
         updateVisibleRooms: fn(),
         renderAvatar,
         isFlatList: true,
+        closeToast: fn(),
     },
     parameters: {
         design: {

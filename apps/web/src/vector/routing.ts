@@ -11,15 +11,20 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { type QueryDict } from "matrix-js-sdk/src/utils";
 
-import { parseQsFromFragment } from "./url_utils";
+import { parseQsFromFragment, searchParamsToQueryDict } from "./url_utils";
 
 let lastLocationHashSet: string | null = null;
 
-export function getScreenFromLocation(location: Location): { screen: string; params: QueryDict } {
+export interface IScreen {
+    screen: string;
+    params: QueryDict;
+}
+
+export function getScreenFromLocation(location: Location): IScreen {
     const fragparts = parseQsFromFragment(location);
     return {
         screen: fragparts.location.substring(1),
-        params: fragparts.params,
+        params: fragparts.params ? searchParamsToQueryDict(fragparts.params) : {},
     };
 }
 

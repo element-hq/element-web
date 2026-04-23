@@ -1841,8 +1841,6 @@
             "aliases_section": "Istabas adreses",
             "avatar_field_label": "Istabas avatars",
             "canonical_alias_field_label": "Galvenā adrese",
-            "default_url_previews_off": "ULR priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir atspējoti.",
-            "default_url_previews_on": "URL priekšskatījumi šīs istabas dalībniekiem pēc noklusējuma ir iespējoti.",
             "description_space": "Rediģējiet ar jūsu telpu saistītos iestatījumus.",
             "error_creating_alias_description": "Veidojot šo adresi, radās kļūda. Iespējams, serveris to neatļauj vai arī ir radusies īslaicīga kļūme.",
             "error_creating_alias_title": "Veidojot adresi, radās kļūda",
@@ -1869,12 +1867,7 @@
             "published_aliases_explainer_space": "Publicētās adreses var izmantot ikviens jebkurā serverī, lai pievienotos jūsu telpai.",
             "published_aliases_section": "Publiskotās adreses",
             "save": "Saglabāt izmaiņas",
-            "topic_field_label": "Istabas temats",
-            "url_preview_encryption_warning": "Šifrētās istabās, tādās kā šī, URL priekšskatījumi pēc noklusējumi ir atspējoti, lai nodrošinātu, ka mājasserveris (kurā priekšskatījumi tiek izveidoti) nevar iegūt informāciju par šajā istabā redzamajām saitēm.",
-            "url_preview_explainer": "Kad kāds savā ziņā ievieto URL, var tikt parādīts priekšskatījums, lai sniegtu vairāk informācijas par saiti, kā piemēram, virsraksts, apraksts un attēls no tīmekļvietnes.",
-            "url_previews_section": "URL priekšskatījumi",
-            "user_url_previews_default_off": "Tu pēc noklusējuma esi <a>atspējojis</a> URL priekšskatījumus.",
-            "user_url_previews_default_on": "Tu pēc noklusējuma esi <a>iespējojis</a> URL priekšskatījumus."
+            "topic_field_label": "Istabas temats"
         },
         "notifications": {
             "browse_button": "Pārlūkot",
@@ -2164,8 +2157,6 @@
             "spell_check_locale_placeholder": "Izvēlieties lokalizāciju"
         },
         "inline_url_previews_default": "Iespējot URL priekšskatījumus pēc noklusējuma",
-        "inline_url_previews_room": "Iespējot URL priekšskatījumus pēc noklusējuma visiem šīs istabas dalībniekiem",
-        "inline_url_previews_room_account": "Iespējot URL priekšskatījumus šajā istabā (ietekmē tikai Tevi)",
         "insert_trailing_colon_mentions": "Jāievieto beigu kols pēc lietotāja pieminēšanas ziņas sākumā",
         "jump_to_bottom_on_send": "Nosūtot ziņu, pāriet uz laika skalas beigām",
         "key_backup": {

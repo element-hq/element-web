@@ -43,6 +43,7 @@ import { useKeyStoragePanelViewModel } from "../../../../viewmodels/settings/enc
 export type State =
     | "main"
     | "change_recovery_key"
+    | "change_to_custom_recovery_key"
     | "set_recovery_key"
     | "reset_identity_compromised"
     | "reset_identity_forgot"
@@ -114,6 +115,7 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
                                         onChangeRecoveryKeyClick={(setupNewKey) =>
                                             setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
                                         }
+                                        onCustomRecoveryKeyClick={() => setState("change_to_custom_recovery_key")}
                                     />
                                     <Separator kind="section" />
                                 </>
@@ -126,9 +128,11 @@ export function EncryptionUserSettingsTab({ initialState = "main" }: Readonly<Pr
             break;
         case "change_recovery_key":
         case "set_recovery_key":
+        case "change_to_custom_recovery_key":
             content = (
                 <ChangeRecoveryKey
                     userHasRecoveryKey={state === "change_recovery_key"}
+                    changeToCustom={state === "change_to_custom_recovery_key"}
                     onCancelClick={() => setState("main")}
                     onFinish={() => setState("main")}
                 />

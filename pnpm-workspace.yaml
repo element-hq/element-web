@@ -6,21 +6,18 @@ packages:
 cleanupUnusedCatalogs: true
 catalog:
     # typescript
-    typescript: 5.9.3
+    typescript: 6.0.3
     # react
     react: ^19.0.0
     react-dom: ^19.0.0
     "@types/react": ^19.2.10
     "@types/react-dom": ^19.2.3
     # playwright
-    "@element-hq/element-web-playwright-common": 2.4.0
     "@playwright/test": 1.59.1
     "playwright-core": 1.59.1
-    # Module API
-    "@element-hq/element-web-module-api": 1.12.0
     # Compound
-    "@vector-im/compound-design-tokens": 8.0.0
-    "@vector-im/compound-web": 8.4.0
+    "@vector-im/compound-design-tokens": 10.1.0
+    "@vector-im/compound-web": 9.2.0
     # i18n
     matrix-web-i18n: 3.6.0
     # fonts
@@ -30,4 +27,8 @@ packageExtensions:
         dependencies:
             # Fix missing type dependency
             "@types/picomatch": 4.0.2
+    "@joshwooding/vite-plugin-react-docgen-typescript":
+        peerDependencies:
+            # Silence warning
+            vite: "^8.0.0"
 ignorePatchFailures: false

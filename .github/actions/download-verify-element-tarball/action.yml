@@ -11,7 +11,7 @@ runs:
     using: composite
     steps:
         - name: Download release tarball
-          uses: robinraju/release-downloader@daf26c55d821e836577a15f77d86ddc078948b05 # v1
+          uses: robinraju/release-downloader@28fc21f50d76778e7023361aa1f863e717d3d56f # v1
           with:
               tag: ${{ inputs.tag }}
               fileName: element-*.tar.gz*
@@ -31,7 +31,9 @@ runs:
 
         - name: Move webapp to out-file-path
           shell: bash
-          run: mv ${{ runner.temp }}/download-verify-element-tarball/webapp ${{ inputs.out-file-path }}
+          run: mv ${{ runner.temp }}/download-verify-element-tarball/webapp "$OUT_PATH"
+          env:
+              OUT_PATH: ${{ inputs.out-file-path }}
 
         - name: Clean up temp directory
           shell: bash

@@ -2,22 +2,45 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["github>matrix-org/renovate-config-element-web"],
     "postUpdateOptions": ["pnpmDedupe"],
+    "stopUpdatingLabel": "X-Blocked",
     "packageRules": [
         {
+            "description": "Group all testcontainers docker digests",
             "groupName": "testcontainers docker digests",
-            "groupSlug": "{{manager}}-docker-digests",
-            "matchManagers": ["custom.regex"],
+            "groupSlug": "testcontainers-docker",
+            "matchDepTypes": ["testcontainers-docker"],
             "matchPackageNames": ["*"]
+        },
+        {
+            "description": "Separate updates to overrides from other groups",
+            "matchDepTypes": ["pnpm.overrides"],
+            "groupSlug": null
+        },
+        {
+            "description": "Disable any major updates to overrides as this almost always is wrong",
+            "matchDepTypes": ["pnpm.overrides"],
+            "matchUpdateTypes": ["major"],
+            "enabled": false
         }
     ],
     "customManagers": [
         {
+            "description": "Update testcontainers docker digests",
             "customType": "regex",
             "datasourceTemplate": "docker",
             "versioningTemplate": "loose",
-            "description": "Update testcontainers docker digests",
             "managerFilePatterns": ["**/testcontainers/*.ts"],
-            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""]
+            "matchStrings": ["\\s+\"(?<depName>[^@]+):(?<currentValue>[^@]+)@(?<currentDigest>sha256:[a-f0-9]+)\""],
+            "depTypeTemplate": "testcontainers-docker"
+        },
+        {
+            "description": "Update element-desktop hakDependencies",
+            "customType": "jsonata",
+            "managerFilePatterns": ["/(^|/)package\\.json$/"],
+            "fileFormat": "json",
+            "matchStrings": ["hakDependencies.$each(function($v, $k) { { 'packageName': $k, 'currentValue': $v } })"],
+            "datasourceTemplate": "npm",
+            "depTypeTemplate": "hak"
         }
     ]
 }

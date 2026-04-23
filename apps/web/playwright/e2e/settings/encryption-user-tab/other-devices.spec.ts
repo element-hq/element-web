@@ -33,7 +33,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
 
         // Create the room and invite bob
         await createRoom(alicePage, "TestRoom", true);
-        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
+        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
         // Bob accepts the invite
         await bobPage.getByRole("option", { name: "TestRoom" }).click();
@@ -72,7 +72,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
 
         // Create the room and invite bob
         await createRoom(alicePage, "TestRoom", true);
-        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
+        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
         // Bob accepts the invite
         await bobPage.getByRole("option", { name: "TestRoom" }).click();
@@ -115,7 +115,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
 
         // Create the room and invite bob
         await createRoom(alicePage, "TestRoom", true);
-        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
+        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
         // Bob accepts the invite and dismisses the warnings.
         await bobPage.getByRole("option", { name: "TestRoom" }).click();
@@ -149,7 +149,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
 
         // Alice creates the room and invite Bob.
         await createRoom(alicePage, "TestRoom", true);
-        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
+        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
         // Bob accepts the invite.
         await bobPage.getByRole("option", { name: "TestRoom" }).click();
@@ -214,7 +214,7 @@ test.describe("Other people's devices section in Encryption tab", () => {
 
         // Alice creates the room and invite Bob.
         await createRoom(alicePage, "TestRoom", true);
-        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
+        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
         // Bob accepts the invite.
         await bobPage.getByRole("option", { name: "TestRoom" }).click();

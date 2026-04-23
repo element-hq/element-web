@@ -12,7 +12,7 @@ import React, { type JSX, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { LockSolidIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { Button } from "@vector-im/compound-web";
+import { Button, Form } from "@vector-im/compound-web";
 
 import { _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -380,7 +380,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
             <>
                 <LockSolidIcon className="mx_AuthBody_lockIcon" />
                 <h1>{_t("auth|reset_password_title")}</h1>
-                <form onSubmit={this.onSubmitForm}>
+                <Form.Root onSubmit={this.onSubmitForm}>
                     <fieldset disabled={this.state.phase === Phase.ResettingPassword}>
                         <div className="mx_AuthBody_fieldRow">
                             <PassphraseField
@@ -413,6 +413,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                             <StyledCheckbox
                                 onChange={() => this.setState({ logoutDevices: !this.state.logoutDevices })}
                                 checked={this.state.logoutDevices}
+                                formWrap={false}
                             >
                                 {_t("auth|reset_password|sign_out_other_devices")}
                             </StyledCheckbox>
@@ -422,7 +423,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
                             {submitButtonChild}
                         </Button>
                     </fieldset>
-                </form>
+                </Form.Root>
             </>
         );
     }

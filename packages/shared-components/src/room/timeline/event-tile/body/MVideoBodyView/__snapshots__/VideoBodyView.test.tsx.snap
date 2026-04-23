@@ -3,7 +3,7 @@
 exports[`VideoBodyView > matches snapshot for error story 1`] = `
 <div>
   <span
-    class="root error"
+    class="VideoBodyView-module_root VideoBodyView-module_error"
   >
     <svg
       fill="currentColor"
@@ -27,18 +27,18 @@ exports[`VideoBodyView > matches snapshot for error story 1`] = `
 exports[`VideoBodyView > matches snapshot for hidden story 1`] = `
 <div>
   <span
-    class="root"
+    class="VideoBodyView-module_root"
   >
     <div
-      class="container"
+      class="VideoBodyView-module_container"
       style="width: min(100%, 320px); max-width: 320px; max-height: 180px; aspect-ratio: 16 / 9;"
     >
       <button
-        class="hiddenButton"
+        class="VideoBodyView-module_hiddenButton"
         type="button"
       >
         <div
-          class="hiddenButtonContent"
+          class="VideoBodyView-module_hiddenButtonContent"
         >
           <svg
             fill="currentColor"
@@ -64,16 +64,16 @@ exports[`VideoBodyView > matches snapshot for hidden story 1`] = `
 exports[`VideoBodyView > matches snapshot for ready story 1`] = `
 <div>
   <span
-    class="root"
+    class="VideoBodyView-module_root"
   >
     <div
-      class="container"
+      class="VideoBodyView-module_container"
       data-video-body-mask-target=""
       style="width: min(100%, 320px); max-width: 320px; max-height: 180px; aspect-ratio: 16 / 9;"
     >
       <video
         aria-label="Product demo video"
-        class="video"
+        class="VideoBodyView-module_video"
         controls=""
         controlslist="nodownload"
         crossorigin="anonymous"

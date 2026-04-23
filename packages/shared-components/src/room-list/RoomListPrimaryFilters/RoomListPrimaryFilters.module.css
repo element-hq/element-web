@@ -20,6 +20,7 @@
      */
     height: 100%;
     flex: 1;
+    user-select: none; /* currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 /* IconButton styles for chevron */

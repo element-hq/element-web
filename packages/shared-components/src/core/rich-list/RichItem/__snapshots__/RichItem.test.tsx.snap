@@ -8,12 +8,12 @@ exports[`RichItem > renders the item in default state 1`] = `
   >
     <li
       aria-label="Rich Item Title"
-      class="richItem"
+      class="RichItem-module_richItem"
       role="option"
       tabindex="-1"
     >
       <div
-        class="flex avatar"
+        class="Flex-module_flex RichItem-module_avatar"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <div
@@ -21,17 +21,17 @@ exports[`RichItem > renders the item in default state 1`] = `
         />
       </div>
       <span
-        class="title"
+        class="RichItem-module_title"
       >
         Rich Item Title
       </span>
       <span
-        class="description"
+        class="RichItem-module_description"
       >
         This is a description of the rich item.
       </span>
       <span
-        class="timestamp"
+        class="RichItem-module_timestamp"
         role="timer"
       >
         145 days ago
@@ -50,13 +50,13 @@ exports[`RichItem > renders the item in selected state 1`] = `
     <li
       aria-label="Rich Item Title"
       aria-selected="true"
-      class="richItem"
+      class="RichItem-module_richItem"
       role="option"
       tabindex="-1"
     >
       <div
         aria-hidden="true"
-        class="flex checkmark"
+        class="Flex-module_flex RichItem-module_checkmark"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <svg
@@ -73,17 +73,17 @@ exports[`RichItem > renders the item in selected state 1`] = `
         </svg>
       </div>
       <span
-        class="title"
+        class="RichItem-module_title"
       >
         Rich Item Title
       </span>
       <span
-        class="description"
+        class="RichItem-module_description"
       >
         This is a description of the rich item.
       </span>
       <span
-        class="timestamp"
+        class="RichItem-module_timestamp"
         role="timer"
       >
         145 days ago
@@ -101,12 +101,12 @@ exports[`RichItem > renders the item without timestamp 1`] = `
   >
     <li
       aria-label="Rich Item Title"
-      class="richItem"
+      class="RichItem-module_richItem"
       role="option"
       tabindex="-1"
     >
       <div
-        class="flex avatar"
+        class="Flex-module_flex RichItem-module_avatar"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
       >
         <div
@@ -114,12 +114,12 @@ exports[`RichItem > renders the item without timestamp 1`] = `
         />
       </div>
       <span
-        class="title"
+        class="RichItem-module_title"
       >
         Rich Item Title
       </span>
       <span
-        class="description"
+        class="RichItem-module_description"
       >
         This is a description of the rich item.
       </span>

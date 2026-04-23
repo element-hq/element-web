@@ -44,15 +44,23 @@
                 "parallel": false,
                 "cwd": "apps/web"
             },
-            "dependsOn": ["^build"]
+            "dependsOn": ["^build", "^build:playwright"]
         },
         "test:unit": {
-            "executor": "@nx/jest:jest",
-            "options": {
-                "jestConfig": "{projectRoot}/jest.config.ts",
-                "cwd": "apps/web"
-            },
+            // We avoid the jest executor because it doesn't seem to give any benefit, and it mangles the summary of failing tests.
+            "command": "jest",
+            "options": { "cwd": "apps/web" },
             "dependsOn": ["^build"]
+        },
+        "test:playwright": {
+            "command": "playwright test",
+            "options": { "cwd": "apps/web" },
+            "dependsOn": ["^build:playwright"]
+        },
+        "test:playwright:screenshots": {
+            "command": "playwright-screenshots playwright test --update-snapshots --project=Chrome --grep @screenshot",
+            "options": { "cwd": "apps/web" },
+            "dependsOn": ["^build:playwright"]
         }
     }
 }

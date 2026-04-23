@@ -2227,8 +2227,6 @@
             "aliases_section": "Adresy místnosti",
             "avatar_field_label": "Avatar místnosti",
             "canonical_alias_field_label": "Hlavní adresa",
-            "default_url_previews_off": "Ve výchozím nastavení jsou náhledy URL adres zakázané pro členy této místnosti.",
-            "default_url_previews_on": "Ve výchozím nastavení jsou náhledy URL adres povolené pro členy této místnosti.",
             "description_space": "Upravte nastavení týkající se vašeho prostoru.",
             "error_creating_alias_description": "Při vytváření adresy došlo k chybě. Mohl to zakázat server, nebo mohlo dojít k dočasnému selhání.",
             "error_creating_alias_title": "Chyba při tvorbě adresy",
@@ -2259,12 +2257,7 @@
             "published_aliases_explainer_space": "Zveřejněné adresy může použít kdokoli na jakémkoli serveru, aby se připojil k vašemu prostoru.",
             "published_aliases_section": "Publikovaná adresa",
             "save": "Uložit změny",
-            "topic_field_label": "Téma místnosti",
-            "url_preview_encryption_warning": "V šifrovaných místnostech, jako je tato, jsou URL náhledy ve výchozím nastavení vypnuté, aby bylo možné zajistit, že váš domovský server neshromažďuje informace o odkazech, které v této místnosti vidíte.",
-            "url_preview_explainer": "Když někdo ve zprávě pošle URL adresu, může být zobrazen její náhled obsahující informace jako titulek, popis a obrázek z cílové stránky.",
-            "url_previews_section": "Náhledy webových adres",
-            "user_url_previews_default_off": "<a>Vypnuli</a> jste automatické náhledy webových adres.",
-            "user_url_previews_default_on": "<a>Zapnuli</a> jste automatické náhledy webových adres."
+            "topic_field_label": "Téma místnosti"
         },
         "notifications": {
             "browse_button": "Procházet",
@@ -2687,8 +2680,6 @@
             "username": "Uživatelské jméno"
         },
         "inline_url_previews_default": "Nastavit povolení náhledů URL adres jako výchozí",
-        "inline_url_previews_room": "Povolit náhledy URL adres pro členy této místnosti jako výchozí",
-        "inline_url_previews_room_account": "Povolit náhledy URL adres pro tuto místnost (ovlivňuje pouze vás)",
         "insert_trailing_colon_mentions": "Vložit dvojtečku za zmínku o uživateli na začátku zprávy",
         "invite_controls": {
             "default_label": "Povolit uživatelům pozvat vás do místností"

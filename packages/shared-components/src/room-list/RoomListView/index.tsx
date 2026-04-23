@@ -16,3 +16,5 @@ export type {
 export { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 export { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 export type { RoomListEmptyStateViewProps } from "./RoomListEmptyStateView";
+export * from "../VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+export * from "./RoomListToast";
