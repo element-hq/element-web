@@ -114,8 +114,8 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         try {
             rendezvous =
                 this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
-                    ? await signInByGeneratingQR(this.props.client, this.onFailure, abortController)
-                    : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure, abortController);
+                    ? await signInByGeneratingQR(this.props.client, this.onFailure, abortController.signal)
+                    : await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure, abortController.signal);
             if (abortController.signal.aborted) return;
             this.setState({
                 phase: Phase.ShowingQR,
