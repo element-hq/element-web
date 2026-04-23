@@ -47,6 +47,10 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly builtins: BuiltinsApi;
     readonly client: ClientApi;
+    // Warning: (ae-forgotten-export) The symbol "ComposerApi" needs to be exported by the entry point index.d.ts
+    //
+    // @alpha
+    readonly composer: ComposerApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
     // @alpha
