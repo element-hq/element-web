@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventType, type MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    type MatrixClient,
+    type MatrixEvent,
+    Room,
+    RoomMember,
+    THREAD_RELATION_TYPE,
+} from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { initOnce } from "@vector-im/matrix-wysiwyg";
@@ -56,10 +63,12 @@ const expectVoiceMessageRecordingTriggered = (): void => {
 beforeAll(initOnce, 10000);
 
 describe("MessageComposer", () => {
-    stubClient();
-    const cli = createTestClient();
+    let cli: MatrixClient;
 
     beforeEach(() => {
+        stubClient();
+        cli = createTestClient();
+
         mockPlatformPeg();
     });
 
@@ -121,7 +130,11 @@ describe("MessageComposer", () => {
     }, 10000);
 
     describe("for a Room", () => {
-        const room = mkStubRoom("!roomId:server", "Room 1", cli);
+        let room: Room;
+
+        beforeEach(() => {
+            room = mkStubRoom("!roomId:server", "Room 1", cli);
+        });
 
         it("Renders a SendMessageComposer and MessageComposerButtons by default", () => {
             wrapAndRender({ room });
@@ -424,7 +437,11 @@ describe("MessageComposer", () => {
     });
 
     describe("for a LocalRoom", () => {
-        const localRoom = new LocalRoom("!room:example.com", cli, cli.getUserId()!);
+        let localRoom: LocalRoom;
+
+        beforeEach(() => {
+            localRoom = new LocalRoom("!room:example.com", cli, cli.getUserId()!);
+        });
 
         it("should not show the stickers button", async () => {
             wrapAndRender({ room: localRoom });
