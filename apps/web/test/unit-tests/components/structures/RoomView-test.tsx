@@ -1078,7 +1078,6 @@ describe("RoomView", () => {
 
     describe("handles Action.ComposerInsert", () => {
         it("redispatches an empty composerType, timelineRenderingType with the current state", async () => {
-            jest.spyOn(defaultDispatcher, "dispatch");
             await mountRoomView();
             const promise = untilDispatch((payload) => {
                 try {
@@ -1100,7 +1099,6 @@ describe("RoomView", () => {
             await promise;
         });
         it("redispatches an empty composerType with the current state", async () => {
-            jest.spyOn(defaultDispatcher, "dispatch");
             await mountRoomView();
             const promise = untilDispatch((payload) => {
                 try {
@@ -1121,6 +1119,34 @@ describe("RoomView", () => {
                 timelineRenderingType: TimelineRenderingType.Room,
             } satisfies ComposerInsertPayload);
             await promise;
+        });
+        it("ignores payloads with a timelineRenderingType != TimelineRenderingType.Thread", async () => {
+            await mountRoomView();
+            const promise = untilDispatch(
+                (payload) => {
+                    try {
+                        expect(payload).toStrictEqual({
+                            action: Action.ComposerInsert,
+                            text: "Hello world",
+                            timelineRenderingType: TimelineRenderingType.Thread,
+                            composerType: ComposerType.Send,
+                        });
+                    } catch {
+                        return false;
+                    }
+                    return true;
+                },
+                defaultDispatcher,
+                500,
+            );
+            defaultDispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+                composerType: ComposerType.Send,
+                timelineRenderingType: TimelineRenderingType.Room,
+                viaTest: true,
+            } satisfies ComposerInsertPayload);
+            await expect(promise).rejects.toThrow();
         });
     });
 
