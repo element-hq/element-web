@@ -267,8 +267,8 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                                 <QRCode data={[{ data, mode: "byte" }]} className="mx_QRCode" />
                             </div>
                             <ol>
-                                {steps.map((step) => (
-                                    <li key={step}>{step}</li>
+                                {steps.map((step, i) => (
+                                    <li key={this.props.intent + i}>{step}</li>
                                 ))}
                             </ol>
                         </>
