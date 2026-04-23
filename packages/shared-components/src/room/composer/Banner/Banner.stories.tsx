@@ -50,7 +50,7 @@ export const WithAction: Story = {
             </p>
         ),
         actions: (
-            <Button kind="primary" size="sm">
+            <Button kind="primary" size="md">
                 Withdraw verification
             </Button>
         ),

@@ -441,7 +441,7 @@ class LoginComponent extends React.PureComponent<IProps, IState> {
             <Button
                 className="mx_Login_fullWidthButton"
                 kind="primary"
-                size="sm"
+                size="md"
                 onClick={async () => {
                     await startOidcLogin(
                         this.props.serverConfig.delegatedAuthentication!,

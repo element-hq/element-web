@@ -83,7 +83,7 @@ export function TileErrorView({ vm, className }: Readonly<TileErrorViewProps>): 
                     {eventType && ` (${eventType})`}
                 </span>
                 {bugReportCtaLabel && (
-                    <Button kind="secondary" size="sm" onClick={vm.onBugReportClick}>
+                    <Button kind="secondary" size="md" onClick={vm.onBugReportClick}>
                         {bugReportCtaLabel}
                     </Button>
                 )}

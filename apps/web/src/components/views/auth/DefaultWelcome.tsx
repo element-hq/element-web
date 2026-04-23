@@ -32,14 +32,14 @@ const DefaultWelcome: React.FC = () => {
             {isElement && <Text size="md">{_t("welcome|tagline_element")}</Text>}
 
             <div className="mx_DefaultWelcome_buttons">
-                <Button as="a" href="#/login" kind="primary" size="sm">
+                <Button as="a" href="#/login" kind="primary" size="md">
                     {_t("action|sign_in")}
                 </Button>
-                <Button as="a" href="#/register" kind="secondary" size="sm">
+                <Button as="a" href="#/register" kind="secondary" size="md">
                     {_t("action|create_account")}
                 </Button>
                 {showGuestFunctions && (
-                    <Button as="a" href="#/directory" kind="tertiary" size="sm">
+                    <Button as="a" href="#/directory" kind="tertiary" size="md">
                         {_t("action|explore_rooms")}
                     </Button>
                 )}
