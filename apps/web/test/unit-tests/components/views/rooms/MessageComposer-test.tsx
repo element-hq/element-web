@@ -11,7 +11,7 @@ import {
     EventType,
     type MatrixClient,
     type MatrixEvent,
-    Room,
+    type Room,
     RoomMember,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
