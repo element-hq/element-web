@@ -147,7 +147,16 @@ import QrLogin from "./auth/QrLogin.tsx";
 // legacy export
 export { default as Views } from "../../Views";
 
-const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
+const AUTH_SCREENS = [
+    "register",
+    "mobile_register",
+    "login",
+    "qr_login",
+    "forgot_password",
+    "start_sso",
+    "start_cas",
+    "welcome",
+];
 
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
@@ -736,6 +745,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.screenAfterLogin = payload.screenAfterLogin;
                 }
                 this.viewLogin();
+                break;
+            case "start_qr_login":
+                this.setStateForNewView({
+                    view: Views.QR_LOGIN,
+                });
+                this.notifyNewScreen("qr_login");
                 break;
             case "start_password_recovery":
                 this.setStateForNewView({
@@ -1858,6 +1873,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params: params,
             });
             PerformanceMonitor.instance.start(PerformanceEntryNames.LOGIN);
+        } else if (screen === "qr_login") {
+            dis.dispatch({
+                action: "start_qr_login",
+                params: params,
+            });
+            PerformanceMonitor.instance.start(PerformanceEntryNames.LOGIN);
         } else if (screen === "forgot_password") {
             dis.dispatch({
                 action: "start_password_recovery",
@@ -2156,7 +2177,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (
             initialScreenAfterLogin &&
             // XXX: workaround for https://github.com/vector-im/element-web/issues/11643 causing a login-loop
-            !["welcome", "login", "register", "start_sso", "start_cas"].includes(initialScreenAfterLogin.screen)
+            !["welcome", "login", "qr_login", "register", "start_sso", "start_cas"].includes(
+                initialScreenAfterLogin.screen,
+            )
         ) {
             fragmentAfterLogin = `/${initialScreenAfterLogin.screen}`;
         }
