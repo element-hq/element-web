@@ -48,7 +48,6 @@ import { type ValidatedServerConfig } from "../../src/utils/ValidatedServerConfi
 import { EnhancedMap } from "../../src/utils/maps";
 import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
-import MatrixClientBackedController from "../../src/settings/controllers/MatrixClientBackedController";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
