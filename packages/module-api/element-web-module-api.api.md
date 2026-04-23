@@ -47,8 +47,6 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly builtins: BuiltinsApi;
     readonly client: ClientApi;
-    // Warning: (ae-forgotten-export) The symbol "ComposerApi" needs to be exported by the entry point index.d.ts
-    //
     // @alpha
     readonly composer: ComposerApi;
     readonly config: ConfigApi;
@@ -99,6 +97,11 @@ export interface ClientApi {
 // @alpha @deprecated (undocumented)
 export interface ComponentVisibilityCustomisations {
     shouldShowComponent?(component: "UIComponent.sendInvites" | "UIComponent.roomCreation" | "UIComponent.spaceCreation" | "UIComponent.exploreRooms" | "UIComponent.addIntegrations" | "UIComponent.filterContainer" | "UIComponent.roomOptionsMenu"): boolean;
+}
+
+// @alpha
+export interface ComposerApi {
+    insertTextIntoComposer(text: string): void;
 }
 
 // @public
