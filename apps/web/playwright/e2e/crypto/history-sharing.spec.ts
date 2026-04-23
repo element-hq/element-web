@@ -49,7 +49,7 @@ test.describe("History sharing", function () {
             await sendMessageInCurrentRoom(alicePage, "A message from Alice");
 
             // Send the invite to Bob
-            await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
+            await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
 
             // Bob accepts the invite
             await bobPage.getByRole("option", { name: "TestRoom" }).click();
@@ -105,7 +105,7 @@ test.describe("History sharing", function () {
 
         // Alice invites Bob, and Bob accepts
         const roomId = await aliceElementApp.getCurrentRoomIdFromUrl();
-        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId);
+        await aliceElementApp.inviteUserToCurrentRoom(bobCredentials.userId, { confirmUnknownUser: true });
         await bobPage.getByRole("option", { name: "TestRoom" }).click();
         await bobPage.getByRole("button", { name: "Accept" }).click();
 
@@ -143,7 +143,7 @@ test.describe("History sharing", function () {
         await sendMessageInCurrentRoom(bobPage, "Message3: 'shared' visibility, but Bob thinks it is still 'joined'");
 
         // Alice now invites Charlie
-        await aliceElementApp.inviteUserToCurrentRoom(charlieCredentials.userId);
+        await aliceElementApp.inviteUserToCurrentRoom(charlieCredentials.userId, { confirmUnknownUser: true });
         await charliePage.getByRole("option", { name: "TestRoom" }).click();
         await charliePage.getByRole("button", { name: "Accept" }).click();
 

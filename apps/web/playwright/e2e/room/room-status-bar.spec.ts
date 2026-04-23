@@ -163,6 +163,10 @@ test.describe("Room Status Bar", () => {
                 ).toBeVisible();
                 await other.getByRole("option", { name: "Alice" }).click();
                 await other.getByRole("button", { name: "Go" }).click();
+
+                await expect(page.getByRole("heading", { name: "Start a chat with this new contact?" })).toBeVisible();
+                await page.getByRole("button", { name: "Continue" }).click();
+
                 // Send a message to invite the bots
                 const composer = app.getComposerField();
                 await composer.fill("Hello");

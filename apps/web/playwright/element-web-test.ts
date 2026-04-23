@@ -107,7 +107,7 @@ export const test = base.extend<TestFixtures>({
     },
 });
 
-interface ExtendedToMatchScreenshotOptions extends ToMatchScreenshotOptions {
+export interface ExtendedToMatchScreenshotOptions extends ToMatchScreenshotOptions {
     includeDialogBackground?: boolean;
     showTooltips?: boolean;
     timeout?: number;

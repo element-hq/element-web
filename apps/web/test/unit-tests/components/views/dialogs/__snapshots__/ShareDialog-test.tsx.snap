@@ -182,7 +182,7 @@ exports[`ShareDialog should not render the socials if disabled 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -292,7 +292,7 @@ exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -489,7 +489,7 @@ exports[`ShareDialog should render a share dialog for a room 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -685,7 +685,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -854,7 +854,7 @@ exports[`ShareDialog should render a share dialog for an URL 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"

@@ -267,7 +267,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           id="_r_1_"
         >
           <input
-            class="_control_sqdq4_10 _control_1s836_13"
+            class="_control_d83jn_10 _control_1s836_13"
             id="radix-_r_0_"
             name="recoveryKey"
             required=""
@@ -431,7 +431,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
           <input
             aria-describedby="radix-_r_8_"
             aria-invalid="true"
-            class="_control_sqdq4_10 _control_1s836_13"
+            class="_control_d83jn_10 _control_1s836_13"
             data-invalid="true"
             id="radix-_r_0_"
             name="recoveryKey"
