@@ -458,7 +458,7 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
           >
             <input
               aria-label="Select all"
-              aria-labelledby="test-id-20"
+              aria-labelledby="test-id-10"
               class="_input_153f2_18"
               data-testid="device-select-all-checkbox"
               id="device-select-all-checkbox"
