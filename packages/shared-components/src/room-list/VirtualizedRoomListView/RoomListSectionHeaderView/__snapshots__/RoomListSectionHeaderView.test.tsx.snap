@@ -24,24 +24,62 @@ exports[`<RoomListSectionHeaderView /> stories > renders Default story 1`] = `
       >
         <div
           class="Flex-module_flex RoomListSectionHeaderView-module_container"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
-          <svg
-            fill="var(--cpd-color-icon-secondary)"
-            height="24px"
-            viewBox="0 0 24 24"
-            width="24px"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="Flex-module_flex"
+            style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
           >
-            <path
-              d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-            />
-          </svg>
-          <span
-            class="RoomListSectionHeaderView-module_title"
+            <svg
+              fill="var(--cpd-color-icon-secondary)"
+              height="24px"
+              viewBox="0 0 24 24"
+              width="24px"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+              />
+            </svg>
+            <span
+              class="RoomListSectionHeaderView-module_title"
+            >
+              Favourites
+            </span>
+          </div>
+          <button
+            aria-disabled="false"
+            aria-expanded="false"
+            aria-haspopup="menu"
+            aria-label="More options"
+            aria-labelledby="_r_2_"
+            class="_icon-button_1215g_8 RoomListSectionHeaderView-module_menu"
+            color="var(--cpd-color-icon-primary)"
+            data-kind="primary"
+            data-state="closed"
+            id="radix-_r_0_"
+            role="button"
+            style="--cpd-icon-button-size: 24px; padding: 2px;"
+            tabindex="0"
+            type="button"
           >
-            Favourites
-          </span>
+            <div
+              class="_indicator-icon_147l5_17"
+              style="--cpd-icon-button-size: 100%;"
+            >
+              <svg
+                fill="var(--cpd-color-icon-primary)"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 20q-.825 0-1.412-.587A1.93 1.93 0 0 1 10 18q0-.824.588-1.413A1.93 1.93 0 0 1 12 16q.825 0 1.412.587Q14 17.176 14 18t-.588 1.413A1.93 1.93 0 0 1 12 20m0-6q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m0-6q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 6q0-.824.588-1.412A1.93 1.93 0 0 1 12 4q.825 0 1.412.588Q14 5.175 14 6q0 .824-.588 1.412A1.93 1.93 0 0 1 12 8"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </button>
     </div>
