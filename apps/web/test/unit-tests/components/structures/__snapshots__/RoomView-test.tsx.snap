@@ -693,6 +693,24 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             >
               @user:example.com
             </span>
+            <svg
+              aria-label="New members see history"
+              aria-labelledby="test-id-46"
+              class="mx_RoomHeader_icon"
+              color="var(--cpd-color-icon-info-primary)"
+              fill="currentColor"
+              height="16px"
+              viewBox="0 0 24 24"
+              width="16px"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+              />
+              <path
+                d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+              />
+            </svg>
           </div>
         </div>
       </button>
@@ -2838,6 +2856,24 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 >
                   !roomviewshouldnotdisplaythetimelinewhentheroomencryptionisloading:example.org
                 </span>
+                <svg
+                  aria-label="New members see history"
+                  aria-labelledby="test-id-61"
+                  class="mx_RoomHeader_icon"
+                  color="var(--cpd-color-icon-info-primary)"
+                  fill="currentColor"
+                  height="16px"
+                  viewBox="0 0 24 24"
+                  width="16px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18.93 8A8 8 0 1 1 4 12a1 1 0 1 0-2 0c0 5.523 4.477 10 10 10s10-4.477 10-10a10 10 0 0 0-.832-4A10 10 0 0 0 12 2a9.99 9.99 0 0 0-8 3.999V4a1 1 0 0 0-2 0v4a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2H5.755A7.99 7.99 0 0 1 12 4a8 8 0 0 1 6.93 4"
+                  />
+                  <path
+                    d="M13 8a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l2.83 2.83a1 1 0 0 0 1.414-1.414L13 11.586z"
+                  />
+                </svg>
               </div>
             </div>
           </button>
@@ -3023,7 +3059,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   tabindex="0"
                 >
                   <div
-                    aria-labelledby="test-id-72"
+                    aria-labelledby="test-id-74"
                     class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                     data-testid="e2e-icon"
                     style="width: 12px; height: 12px;"
