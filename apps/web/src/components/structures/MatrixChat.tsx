@@ -142,7 +142,7 @@ import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
 import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
-import QrLogin from "./auth/QrLogin.tsx";
+import QrLoginDialog from "../views/dialogs/QrLoginDialog.tsx";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -746,12 +746,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 this.viewLogin();
                 break;
-            case "start_qr_login":
-                this.setStateForNewView({
-                    view: Views.QR_LOGIN,
-                });
-                this.notifyNewScreen("qr_login");
-                break;
             case "start_password_recovery":
                 this.setStateForNewView({
                     view: Views.FORGOT_PASSWORD,
@@ -828,6 +822,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewSomethingBehindModal();
                 break;
             case Action.ViewRoomDirectory: {
+                // TODO ignore events if logged in
                 Modal.createDialog(
                     RovingSpotlightDialog,
                     {
@@ -835,6 +830,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         initialFilter: Filter.PublicRooms,
                     },
                     "mx_SpotlightDialog_wrapper",
+                    false,
+                    true,
+                );
+
+                // View the welcome or home page if we need something to look at
+                this.viewSomethingBehindModal();
+                break;
+            }
+            case Action.ViewQrLogin: {
+                Modal.createDialog(
+                    QrLoginDialog,
+                    {
+                        serverConfig: this.getServerProperties().serverConfig,
+                        onLoggedIn: this.onQrLoginFinished,
+                    },
+                    undefined,
                     false,
                     true,
                 );
@@ -1874,11 +1885,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
             PerformanceMonitor.instance.start(PerformanceEntryNames.LOGIN);
         } else if (screen === "qr_login") {
-            dis.dispatch({
-                action: "start_qr_login",
-                params: params,
-            });
-            PerformanceMonitor.instance.start(PerformanceEntryNames.LOGIN);
+            dis.fire(Action.ViewQrLogin);
         } else if (screen === "forgot_password") {
             dis.dispatch({
                 action: "start_password_recovery",
@@ -2157,6 +2164,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };
 
+    private onQrLoginFinished = async (credentials?: IMatrixClientCreds, alreadySignedIn?: boolean): Promise<void> => {
+        if (credentials) {
+            this.onUserCompletedLoginFlow(credentials, alreadySignedIn);
+        }
+    };
+
     /** Called when {@link Views.E2E_SETUP} or {@link Views.COMPLETE_SECURITY} have completed. */
     private onCompleteSecurityE2eSetupFinished = async (): Promise<void> => {
         const forceVerify = await this.shouldForceVerification();
@@ -2288,16 +2301,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
                     defaultUsername={this.props.urlParams?.defaults?.defaultUsername}
-                    {...this.getServerProperties()}
-                />
-            );
-        } else if (this.state.view === Views.QR_LOGIN && SettingsStore.getValue("feature_login_with_qr")) {
-            view = (
-                <QrLogin
-                    isSyncing={this.state.pendingInitialSync}
-                    onLoggedIn={this.onUserCompletedLoginFlow}
-                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
-                    fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
                 />
             );

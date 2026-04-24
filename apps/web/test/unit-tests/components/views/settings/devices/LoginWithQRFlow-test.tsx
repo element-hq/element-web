@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { cleanup, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import React from "react";
-import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
+import { ClientRendezvousFailureReason, MSC4108FailureReason, RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 
 import LoginWithQRFlow from "../../../../../../src/components/views/auth/LoginWithQRFlow";
-import { LoginWithQRFailureReason, type FailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
+import { type FailureReason, LoginWithQRFailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
 
 describe("<LoginWithQRFlow />", () => {
@@ -26,6 +26,7 @@ describe("<LoginWithQRFlow />", () => {
         onClick?: () => Promise<void>;
         failureReason?: FailureReason;
         code?: Uint8Array;
+        intent: RendezvousIntent;
     }) => <LoginWithQRFlow {...defaultProps} {...props} />;
 
     beforeEach(() => {});
@@ -36,12 +37,16 @@ describe("<LoginWithQRFlow />", () => {
     });
 
     it("renders spinner while loading", async () => {
-        const { container } = render(getComponent({ phase: Phase.Loading }));
+        const { container } = render(
+            getComponent({ phase: Phase.Loading, intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE }),
+        );
         expect(container).toMatchSnapshot();
     });
 
     it("renders spinner whilst QR generating", async () => {
-        const { container } = render(getComponent({ phase: Phase.ShowingQR }));
+        const { container } = render(
+            getComponent({ phase: Phase.ShowingQR, intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE }),
+        );
         expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
         expect(container).toMatchSnapshot();
         fireEvent.click(screen.getByTestId("cancel-button"));
@@ -50,7 +55,11 @@ describe("<LoginWithQRFlow />", () => {
 
     it("renders QR code", async () => {
         const { container } = render(
-            getComponent({ phase: Phase.ShowingQR, code: new TextEncoder().encode("mock-code") }),
+            getComponent({
+                phase: Phase.ShowingQR,
+                code: new TextEncoder().encode("mock-code"),
+                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+            }),
         );
         // QR code is rendered async so we wait for it:
         await waitFor(() => screen.getAllByAltText("QR Code").length === 1);
@@ -58,7 +67,12 @@ describe("<LoginWithQRFlow />", () => {
     });
 
     it("renders spinner while signing in", async () => {
-        const { container } = render(getComponent({ phase: Phase.WaitingForDevice }));
+        const { container } = render(
+            getComponent({
+                phase: Phase.WaitingForDevice,
+                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+            }),
+        );
         expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
         expect(container).toMatchSnapshot();
         fireEvent.click(screen.getByTestId("cancel-button"));
@@ -66,12 +80,19 @@ describe("<LoginWithQRFlow />", () => {
     });
 
     it("renders spinner while verifying", async () => {
-        const { container } = render(getComponent({ phase: Phase.Verifying }));
+        const { container } = render(
+            getComponent({ phase: Phase.Verifying, intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE }),
+        );
         expect(container).toMatchSnapshot();
     });
 
     it("renders check code confirmation", async () => {
-        const { container } = render(getComponent({ phase: Phase.OutOfBandConfirmation }));
+        const { container } = render(
+            getComponent({
+                phase: Phase.OutOfBandConfirmation,
+                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+            }),
+        );
         expect(container).toMatchSnapshot();
     });
 
@@ -86,6 +107,7 @@ describe("<LoginWithQRFlow />", () => {
                     getComponent({
                         phase: Phase.Error,
                         failureReason,
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                     }),
                 );
                 expect(screen.getAllByTestId("cancellation-message")).toHaveLength(1);

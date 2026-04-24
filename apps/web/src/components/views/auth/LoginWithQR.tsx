@@ -30,12 +30,13 @@ type BaseProps = {
     client: MatrixClient;
     onFinished(success: boolean, credentials?: IMatrixClientCreds): void;
     mode: Mode;
+    onPhaseChange?(phase: Phase): void;
 };
 
 type Props = XOR<
     {
         intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE;
-        clientId: string;
+        clientId?: string; // TODO comment
     },
     {
         intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
@@ -78,14 +79,25 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         this.state = {
             phase: Phase.Loading,
         };
+        this.props.onPhaseChange?.(this.state.phase);
+    }
+
+    private readyToLoad(props: Props): boolean {
+        return props.intent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE || !!props.clientId;
     }
 
     public componentDidMount(): void {
-        void this.updateMode(this.props.mode);
+        if (this.readyToLoad(this.props)) {
+            void this.updateMode(this.props.mode);
+        }
     }
 
-    public componentDidUpdate(prevProps: Readonly<Props>): void {
-        if (prevProps.mode !== this.props.mode) {
+    public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<IState>): void {
+        if (prevState.phase !== this.state.phase) {
+            this.props.onPhaseChange?.(this.state.phase);
+        }
+
+        if (prevProps.mode !== this.props.mode || this.readyToLoad(prevProps) !== this.readyToLoad(this.props)) {
             void this.updateMode(this.props.mode);
         }
     }
@@ -201,13 +213,13 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 const deviceId = this.props.client.getDeviceId()!;
                 const { userCode } = await this.state.rendezvous.deviceAuthorizationGrant({
                     metadata,
-                    clientId: this.props.clientId,
+                    clientId: this.props.clientId!,
                     deviceId,
                 });
                 this.setState({ phase: Phase.WaitingForDevice, userCode });
 
                 const tokenResponse = await this.state.rendezvous.completeLoginOnNewDevice({
-                    clientId: this.props.clientId,
+                    clientId: this.props.clientId!,
                 });
 
                 if (tokenResponse) {
@@ -230,7 +242,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         accessToken: tokenResponse.access_token,
                         refreshToken: tokenResponse.refresh_token,
                         homeserverUrl,
-                        clientId: this.props.clientId,
+                        clientId: this.props.clientId!,
                         idToken: tokenResponse.id_token ?? "", // I'm not sure the idToken is actually required
                         issuer: metadata!.issuer,
                         identityServerUrl: undefined, // PROTOTYPE: we should have stored this from before

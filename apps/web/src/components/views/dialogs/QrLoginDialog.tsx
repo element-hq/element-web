@@ -4,34 +4,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type FC, type JSX, useCallback, useMemo } from "react";
+import React, { type FC, useCallback, useMemo, useState } from "react";
 import { RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 import { createClient } from "matrix-js-sdk/src/matrix";
 
-import AuthPage from "../../views/auth/AuthPage";
-import AuthHeader from "../../views/auth/AuthHeader";
-import AuthBody from "../../views/auth/AuthBody";
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import type { IMatrixClientCreds } from "../../../MatrixClientPeg.ts";
 import LoginWithQR from "../../views/auth/LoginWithQR.tsx";
-import { Mode } from "../../views/auth/LoginWithQR-types.ts";
+import { Mode, Phase } from "../../views/auth/LoginWithQR-types.ts";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo.ts";
 import { getOidcClientId } from "../../../utils/oidc/registerClient.ts";
 import SdkConfig from "../../../SdkConfig.ts";
-import Spinner from "../../views/elements/Spinner.tsx";
+import BaseDialog from "./BaseDialog.tsx";
+import { _t } from "../../../languageHandler.tsx";
 
 interface Props {
     serverConfig: ValidatedServerConfig;
-    isSyncing?: boolean;
-    fragmentAfterLogin: string;
-    defaultDeviceDisplayName?: string; // TODO is this useful?
-    onLoggedIn(this: void, credentials: IMatrixClientCreds, alreadySignedIn: boolean): void;
+    onLoggedIn(this: void, credentials: IMatrixClientCreds, alreadySignedIn?: boolean): void;
 }
 
-const QrLogin: FC<Props> = ({ serverConfig, onLoggedIn }) => {
+const QrLoginDialog: FC<Props> = ({ serverConfig, onLoggedIn }) => {
     const tempClient = useMemo(() => createClient({ baseUrl: serverConfig.hsUrl }), [serverConfig]);
     const onFinished = useCallback(
-        (success: boolean, credentials?: IMatrixClientCreds) => {
+        (success?: boolean, credentials?: IMatrixClientCreds) => {
             if (success) {
                 onLoggedIn(credentials!, true);
             } else {
@@ -45,27 +40,27 @@ const QrLogin: FC<Props> = ({ serverConfig, onLoggedIn }) => {
         [serverConfig],
     );
 
-    let body: JSX.Element;
-    if (clientId === undefined) {
-        body = <Spinner />;
-    } else {
-        body = (
+    const [phase, setPhase] = useState<Phase>();
+
+    const hasCancel = phase === Phase.ShowingQR;
+
+    return (
+        <BaseDialog
+            onFinished={onFinished}
+            hasCancel={hasCancel}
+            aria-label={_t("auth|sign_in_with_qr")}
+            fixedWidth={false}
+        >
             <LoginWithQR
                 intent={RendezvousIntent.LOGIN_ON_NEW_DEVICE}
+                clientId={clientId}
                 client={tempClient}
                 onFinished={onFinished}
                 mode={Mode.Show}
-                clientId={clientId}
+                onPhaseChange={setPhase}
             />
-        );
-    }
-
-    return (
-        <AuthPage>
-            <AuthHeader />
-            <AuthBody>{body}</AuthBody>
-        </AuthPage>
+        </BaseDialog>
     );
 };
 
-export default QrLogin;
+export default QrLoginDialog;
