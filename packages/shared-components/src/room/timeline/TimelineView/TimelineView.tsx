@@ -79,7 +79,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // Guards onScroll from treating our own scrollToIndex calls as user navigation.
     // Set to true before any programmatic scroll; cleared one animation frame later
     // so that scroll events emitted by that scroll are ignored.
-    const isProgrammaticScrollRef = useRef(false);
+    const isAnchorScrollInProgressRef = useRef(false);
 
     const itemContent = useCallback(
         (_index: number, item: TimelineItem): ReactNode => {
@@ -111,7 +111,11 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // defaultCalculateViewLocation returns null. So `done` always fires, and inside it
     // we call the imperative scrollToIndex which bypasses that check entirely and has
     // its own internal retry loop (watchChangesFor 150ms on listRefresh) that converges
-    // to the correct centred position as real item sizes arrive.
+    // to the correct position as real item sizes arrive.
+    //
+    // This single branch handles all initial-scroll cases (permalink, restore-position,
+    // and live-end). The VM sets pendingAnchor in load() for all three;
+    // anchor.align drives the final scroll position.
     //
     // Virtuoso's scrollIntoView index is zero-based (0..data.length-1), matching the
     // internal size/offset trees. firstItemIndex is display-only (transposeItems).
@@ -126,19 +130,19 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
 
             // eslint-disable-next-line no-console
             console.debug(
-                `[TimelineView][scrollIntoViewOnChange] firstItemIndex=${snap.firstItemIndex} arrayIndex=${arrayIndex} totalCount=${_params.totalCount} count=${snap.items.length} key=${anchor.targetKey} forwardPagination=${snap.forwardPagination} backwardPagination=${snap.backwardPagination} atLiveEnd=${snap.atLiveEnd}`,
+                `[TimelineView][scrollIntoViewOnChange] firstItemIndex=${snap.firstItemIndex} arrayIndex=${arrayIndex} totalCount=${_params.totalCount} count=${snap.items.length} key=${anchor.targetKey} align=${anchor.align} forwardPagination=${snap.forwardPagination} backwardPagination=${snap.backwardPagination} atLiveEnd=${snap.atLiveEnd}`,
             );
 
             return {
                 index: arrayIndex,
-                align: "center",
+                align: anchor.align,
                 behavior: "auto",
                 done: () => {
                     // eslint-disable-next-line no-console
-                    console.debug(`[TimelineView][scrollIntoViewOnChange done] arrayIndex=${arrayIndex} key=${anchor.targetKey}`);
-                    isProgrammaticScrollRef.current = true;
-                    virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: "center", behavior: "auto" });
-                    requestAnimationFrame(() => { isProgrammaticScrollRef.current = false; });
+                    console.debug(`[TimelineView][scrollIntoViewOnChange done] arrayIndex=${arrayIndex} key=${anchor.targetKey} align=${anchor.align}`);
+                    isAnchorScrollInProgressRef.current = true;
+                    virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });
+                    requestAnimationFrame(() => { isAnchorScrollInProgressRef.current = false; });
                 },
             };
         },
@@ -147,23 +151,34 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     );
 
     // Clear the pending anchor when the user scrolls. We use Virtuoso's onScroll
-    // which fires for all scroll events, combined with isProgrammaticScrollRef to
+    // which fires for all scroll events, combined with isAnchorScrollInProgressRef to
     // ignore scrolls we initiated ourselves via scrollToIndex.
     const onScroll = useCallback(() => {
-        if (!isProgrammaticScrollRef.current && snapshotRef.current.pendingAnchor !== null) {
+        if (!isAnchorScrollInProgressRef.current && snapshotRef.current.pendingAnchor !== null) {
             // eslint-disable-next-line no-console
             console.debug(`[TimelineView] user scroll — clearing pendingAnchor`);
             vm.onAnchorReached();
         }
     }, [vm]);
 
-    // Auto-scroll to bottom for new messages, but only when the user is already
-    // at the bottom and there is no pending anchor scroll in progress.
-    const followOutput = useCallback(
-        (isAtBottom: boolean) => {
-            return isAtBottom && snapshot.pendingAnchor === null ? "auto" : false;
+    // Track the visible range so the VM can persist the scroll position.
+    const onRangeChanged = useCallback(
+        (range: { startIndex: number; endIndex: number }) => {
+            vm.onVisibleRangeChanged(range.startIndex, range.endIndex);
         },
-        [snapshot.pendingAnchor],
+        [vm],
+    );
+
+    // Auto-scroll to bottom for new messages only when:
+    // - the user is already at the bottom of the rendered list, AND
+    // - the timeline window has reached the live end, AND
+    // - no anchor scroll is in progress (pendingAnchor is null).
+    // The pendingAnchor guard prevents auto-scroll from firing while the view
+    // is still navigating to a permalink or restore position, even when the
+    // window happens to have reached the live end.
+    const followOutput = useCallback(
+        (isAtBottom: boolean) => isAtBottom && snapshot.atLiveEnd && snapshot.pendingAnchor === null,
+        [snapshot.atLiveEnd, snapshot.pendingAnchor],
     );
 
     // Don't mount Virtuoso until items are ready
@@ -180,10 +195,12 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 itemContent={itemContent}
                 computeItemKey={computeItemKey}
                 startReached={vm.onStartReached}
+                atBottomStateChange={vm.onAtBottomStateChange}
                 endReached={vm.onEndReached}
                 followOutput={followOutput}
                 scrollIntoViewOnChange={scrollIntoViewOnChange}
                 onScroll={onScroll}
+                rangeChanged={onRangeChanged}
                 logLevel={LogLevel.DEBUG}
                 alignToBottom
                 style={{ height: "100%", width: "100%" }}
