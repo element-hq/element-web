@@ -107,10 +107,14 @@ test.describe("Custom Component API", () => {
             await app.timeline.scrollToBottom();
             const imgTile = page.locator(".mx_MImageBody").first();
             await expect(imgTile).toBeVisible();
+            const image = imgTile.getByRole("img", { name: "bad.png" });
+            await expect(image).toBeVisible();
             await imgTile.hover();
             await expect(page.getByRole("button", { name: "Download" })).not.toBeVisible();
-            await imgTile.click();
-            await expect(page.getByLabel("Image view").getByLabel("Download")).not.toBeVisible();
+            await image.click();
+            const imageView = page.getByLabel("Image view");
+            await expect(imageView).toBeVisible();
+            await expect(imageView.getByLabel("Download")).not.toBeVisible();
         });
         test("should allow downloading media when the allowDownloading hint is set to true", async ({
             page,
@@ -129,10 +133,14 @@ test.describe("Custom Component API", () => {
             await app.timeline.scrollToBottom();
             const imgTile = page.locator(".mx_MImageBody").first();
             await expect(imgTile).toBeVisible();
+            const image = imgTile.getByRole("img", { name: "good.png" });
+            await expect(image).toBeVisible();
             await imgTile.hover();
             await expect(page.getByRole("button", { name: "Download" })).toBeVisible();
-            await imgTile.click();
-            await expect(page.getByLabel("Image view").getByLabel("Download")).toBeVisible();
+            await image.click();
+            const imageView = page.getByLabel("Image view");
+            await expect(imageView).toBeVisible();
+            await expect(imageView.getByLabel("Download")).toBeVisible();
         });
         test(
             "should render the next registered component if the filter function throws",
