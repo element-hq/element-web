@@ -17,9 +17,9 @@
         "types": ["vite/client", "storybook-addon-vis/matcher"],
         "strict": true,
         "paths": {
-            "@test-utils": ["./src/test/utils/index"],
-        },
+            "@test-utils": ["./src/test/utils/index"]
+        }
     },
     "include": ["./src/**/*.ts", "./src/**/*.tsx", ".storybook/*.ts", ".storybook/*.tsx"],
-    "references": [{ "path": "./tsconfig.node.json" }],
+    "references": [{ "path": "./tsconfig.node.json" }]
 }
