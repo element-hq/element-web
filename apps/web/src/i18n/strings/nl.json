@@ -1324,7 +1324,6 @@
         "restricted": "Beperkte toegang"
     },
     "powered_by_matrix": "Mogelijk gemaakt door Matrix",
-    "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
     "presence": {
         "away": "Afwezig",
         "busy": "Bezet",
@@ -2966,7 +2965,6 @@
         "you_are_presenting": "Je bent aan het presenteren"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
-    "welcome_to_element": "Welkom bij Element",
     "widget": {
         "added_by": "Widget toegevoegd door",
         "capabilities_dialog": {
