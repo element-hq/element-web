@@ -72,6 +72,7 @@ import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNaviga
 import { ModuleApi } from "../../modules/Api.ts";
 import { SDKContext } from "../../contexts/SDKContext.ts";
 import { ResizerViewModel } from "../../viewmodels/structures/ResizerViewModel.ts";
+import { TopBar } from "./TopBar";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -828,7 +829,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                     aria-hidden={this.props.hideToSRUsers}
                 >
                     <ToastContainer />
-                    <div className={bodyClasses}>{content}</div>
+                    <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0, overflow: "hidden" }}>
+                        <TopBar />
+                        <div className={bodyClasses} style={{ flex: 1, height: "auto" }}>
+                            {content}
+                        </div>
+                    </div>
                 </div>
                 <PipContainer />
                 <NonUrgentToastContainer />

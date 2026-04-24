@@ -18,7 +18,7 @@ import {
     NotificationsSolidIcon,
     ThemeIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { IconButton } from "@vector-im/compound-web";
+import { IconButton, Tooltip } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -58,6 +58,11 @@ import { useTypedEventEmitterState } from "../../hooks/useEventEmitter.ts";
 
 interface IProps {
     isPanelCollapsed: boolean;
+    /**
+     * When true, hides the display name label and shows a tooltip on the avatar instead.
+     * The context menu will always open below the button in this mode.
+     */
+    hideLabel?: boolean;
     children?: ReactNode;
 }
 
@@ -368,9 +373,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
-        const position = this.props.isPanelCollapsed
-            ? toRightOf(this.state.contextMenuPosition)
-            : below(this.state.contextMenuPosition);
+        const position =
+            this.props.isPanelCollapsed && !this.props.hideLabel
+                ? toRightOf(this.state.contextMenuPosition)
+                : below(this.state.contextMenuPosition);
 
         const userIdentifierString = UserIdentifierCustomisations.getDisplayUserIdentifier(
             MatrixClientPeg.safeGet().getSafeUserId(),
@@ -407,33 +413,42 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
         let name: JSX.Element | undefined;
-        if (!this.props.isPanelCollapsed) {
+        if (!this.props.isPanelCollapsed && !this.props.hideLabel) {
             name = <div className="mx_UserMenu_name">{displayName}</div>;
         }
 
+        const avatarButton = (
+            <ContextMenuButton
+                className="mx_UserMenu_contextMenuButton"
+                onClick={this.onOpenMenuClick}
+                ref={this.buttonRef}
+                label={_t("a11y|user_menu")}
+                isExpanded={!!this.state.contextMenuPosition}
+                onContextMenu={this.onContextMenu}
+            >
+                <div className="mx_UserMenu_userAvatar">
+                    <BaseAvatar
+                        idName={userId}
+                        name={displayName}
+                        url={avatarUrl}
+                        size={avatarSize + "px"}
+                        className="mx_UserMenu_userAvatar_BaseAvatar"
+                    />
+                </div>
+                {name}
+                {this.renderContextMenu()}
+            </ContextMenuButton>
+        );
+
         return (
             <div className="mx_UserMenu">
-                <ContextMenuButton
-                    className="mx_UserMenu_contextMenuButton"
-                    onClick={this.onOpenMenuClick}
-                    ref={this.buttonRef}
-                    label={_t("a11y|user_menu")}
-                    isExpanded={!!this.state.contextMenuPosition}
-                    onContextMenu={this.onContextMenu}
-                >
-                    <div className="mx_UserMenu_userAvatar">
-                        <BaseAvatar
-                            idName={userId}
-                            name={displayName}
-                            url={avatarUrl}
-                            size={avatarSize + "px"}
-                            className="mx_UserMenu_userAvatar_BaseAvatar"
-                        />
-                    </div>
-                    {name}
-                    {this.renderContextMenu()}
-                </ContextMenuButton>
-
+                {this.props.hideLabel ? (
+                    <Tooltip label={displayName} placement="bottom">
+                        {avatarButton}
+                    </Tooltip>
+                ) : (
+                    avatarButton
+                )}
                 {this.props.children}
             </div>
         );
