@@ -15,7 +15,7 @@ import { _t } from "../../../languageHandler";
 
 interface CreateSectionDialogProps {
     /**
-     * Whether this dialog is being used to edit an existing section or create a new one
+     * The name of the section being edited if defined. Otherwise, create a new section.
      */
     sectionToEdit?: string;
 
