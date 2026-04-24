@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
@@ -78,7 +80,10 @@ export async function createSection(): Promise<string | undefined> {
 export async function editSection(tag: string): Promise<void> {
     const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
     const section = sectionData[tag];
-    if (!section) return;
+    if (!section) {
+        logger.info("Unknown section tag, cannot edit section", tag);
+        return;
+    }
 
     const modal = Modal.createDialog(CreateSectionDialog, { sectionToEdit: section.name });
 
@@ -97,7 +102,10 @@ export async function editSection(tag: string): Promise<void> {
  */
 export async function deleteSection(tag: string): Promise<void> {
     const sectionData = SettingsStore.getValue("RoomList.CustomSectionData");
-    if (!sectionData[tag]) return;
+    if (!sectionData[tag]) {
+        logger.info("Unknown section tag, cannot delete section", tag);
+        return;
+    }
 
     const modal = Modal.createDialog(RemoveSectionDialog);
     const [shouldRemoveSection] = await modal.finished;
