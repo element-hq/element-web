@@ -52,3 +52,13 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[k
 export type Assignable<Object, Item> = {
     [Key in keyof Object]: Object[Key] extends Item ? Key : never;
 }[keyof Object];
+
+/**
+ * Like `Partial` but for applied to all nested objects.
+ * Based on https://dev.to/perennialautodidact/adventures-in-typescript-deeppartial-2f2a
+ */
+export type DeepPartial<T> = T extends object
+    ? {
+          [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;

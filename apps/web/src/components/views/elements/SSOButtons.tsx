@@ -135,7 +135,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     }
 
     return (
-        <Button {...commonProps} size="sm">
+        <Button {...commonProps} size="md">
             {icon}
             {label}
         </Button>

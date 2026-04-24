@@ -56,7 +56,7 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
                         onClick={onSecondaryClick}
                         kind={destructive === "secondary" ? "destructive" : "secondary"}
                         Icon={SecondaryIcon}
-                        size="sm"
+                        size="md"
                     >
                         {secondaryLabel}
                     </Button>
@@ -65,7 +65,7 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
                     onClick={onPrimaryClick}
                     kind={destructive === "primary" ? "destructive" : "primary"}
                     Icon={PrimaryIcon}
-                    size="sm"
+                    size="md"
                 >
                     {primaryLabel}
                 </Button>

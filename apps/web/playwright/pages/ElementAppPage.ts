@@ -233,15 +233,30 @@ export class ElementAppPage {
      * Open the room info panel, and use it to send an invite to the given user.
      *
      * @param userId - The user to invite to the room.
+     * @param options - Options object
      */
-    public async inviteUserToCurrentRoom(userId: string): Promise<void> {
+    public async inviteUserToCurrentRoom(
+        userId: string,
+        options?: {
+            /** If true, expect and acknowledge "Confirm inviting new users" page */
+            confirmUnknownUser?: boolean;
+        },
+    ): Promise<void> {
         const rightPanel = await this.openRoomInfoPanel();
         await rightPanel.getByRole("menuitem", { name: "Invite" }).click();
 
-        const input = this.page.getByRole("dialog").getByTestId("invite-dialog-input");
+        const dialogLocator = this.page.getByRole("dialog");
+        const input = dialogLocator.getByTestId("invite-dialog-input");
         await input.fill(userId);
         await input.press("Enter");
-        await this.page.getByRole("dialog").getByRole("button", { name: "Invite" }).click();
+        await dialogLocator.getByRole("button", { name: "Invite" }).click();
+
+        if (options?.confirmUnknownUser) {
+            await expect(
+                dialogLocator.getByRole("heading", { name: "Invite new contacts to this room?" }),
+            ).toBeVisible();
+            await dialogLocator.getByRole("button", { name: "Invite" }).click();
+        }
     }
 
     /**
