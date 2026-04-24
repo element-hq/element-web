@@ -1861,7 +1861,7 @@
         "confirmation": "Are you sure you want to remove this section? ",
         "description": "The chats in this section will still be available in your chats list.",
         "remove_section": "Remove section",
-        "title_edition": "Remove section?"
+        "title": "Remove section?"
     },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",

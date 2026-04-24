@@ -25,7 +25,7 @@ export function RemoveSectionDialog({ onFinished }: RemoveSectionDialogProps): J
         <BaseDialog
             className="mx_RemoveSectionDialog"
             onFinished={() => onFinished(false)}
-            title={_t("remove_section_dialog|title_edition")}
+            title={_t("remove_section_dialog|title")}
             hasCancel={true}
         >
             <Text as="span">{_t("remove_section_dialog|confirmation")}</Text>
