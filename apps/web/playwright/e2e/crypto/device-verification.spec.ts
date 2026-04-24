@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import jsQR from "jsqr";
+import { assertNoToasts, getToast, rejectToast } from "@element-hq/element-web-playwright-common/src/utils/toasts";
 
 import type { JSHandle, Locator, Page } from "@playwright/test";
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
@@ -81,11 +82,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     );
 
     // Regression test for https://github.com/element-hq/element-web/issues/29110
-    test("No toast after verification, even if the secrets take a while to arrive", async ({
-        page,
-        credentials,
-        toasts,
-    }) => {
+    test("No toast after verification, even if the secrets take a while to arrive", async ({ page, credentials }) => {
         // Before we log in, the bot creates an encrypted room, so that we can test the toast behaviour that only happens
         // when we are in an encrypted room.
         await aliceBotClient.createRoom({
@@ -124,8 +121,8 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await infoDialog.getByRole("button", { name: "Got it" }).click();
 
         // There should be no toast (other than the notifications one)
-        await toasts.rejectToast("Notifications");
-        await toasts.assertNoToasts();
+        await rejectToast(page, "Notifications");
+        await assertNoToasts(page);
 
         // There may still be a `/sendToDevice/m.secret.request` in flight, which will later throw an error and cause
         // a *subsequent* test to fail. Tell playwright to ignore any errors resulting from in-flight routes.
@@ -272,7 +269,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     }
 
-    test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts, app }) => {
+    test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, app }) => {
         /* Log in but don't verify the device */
         await logIntoElement(page, credentials);
         const authPage = page.locator(".mx_AuthPage");
@@ -302,7 +299,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         );
 
         /* Check the toast for the incoming request */
-        const toast = await toasts.getToast("Verification requested");
+        const toast = await getToast(page, "Verification requested");
         // it should contain the device ID of the requesting device
         await expect(toast.getByText(`${aliceBotClient.credentials.deviceId} from `)).toBeVisible();
         // Accept
