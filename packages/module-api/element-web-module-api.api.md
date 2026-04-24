@@ -101,7 +101,7 @@ export interface ComponentVisibilityCustomisations {
 
 // @alpha
 export interface ComposerApi {
-    insertTextIntoComposer(text: string): void;
+    insertPlaintextIntoComposer(plaintext: string): void;
 }
 
 // @public

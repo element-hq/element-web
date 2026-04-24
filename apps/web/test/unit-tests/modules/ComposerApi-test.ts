@@ -15,7 +15,7 @@ describe("ComposerApi", () => {
             dispatch: jest.fn(),
         } as unknown as MatrixDispatcher;
         const api = new ComposerApi(dispatcher);
-        api.insertTextIntoComposer("Hello world");
+        api.insertPlaintextIntoComposer("Hello world");
         expect(dispatcher.dispatch).toHaveBeenCalledWith({
             action: Action.ComposerInsert,
             text: "Hello world",

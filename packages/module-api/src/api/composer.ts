@@ -6,15 +6,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 /**
- * API to alter the message composer.
+ * API to interact with the message composer.
  * @alpha Likely to change
  */
 export interface ComposerApi {
     /**
      * Insert plaintext into the current composer.
-     * @param text - The plain text to insert
+     * @param plaintext - The plain text to insert
      * @returns Returns immediately, does not await action.
      * @alpha Likely to change
      */
-    insertTextIntoComposer(text: string): void;
+    insertPlaintextIntoComposer(plaintext: string): void;
 }

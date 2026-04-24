@@ -14,10 +14,10 @@ import type { ComposerInsertPayload } from "../dispatcher/payloads/ComposerInser
 export class ComposerApi implements ModuleComposerApi {
     public constructor(private readonly dispatcher: MatrixDispatcher) {}
 
-    public insertTextIntoComposer(text: string): void {
+    public insertPlaintextIntoComposer(plaintext: string): void {
         this.dispatcher.dispatch({
             action: Action.ComposerInsert,
-            text,
+            text: plaintext,
         } satisfies ComposerInsertPayload);
     }
 }
