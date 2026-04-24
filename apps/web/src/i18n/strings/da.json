@@ -3486,7 +3486,6 @@
         "you_are_presenting": "Du præsenterer"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Velkommen til Element",
     "widget": {
         "added_by": "Widget tilføjet af",
         "capabilities_dialog": {

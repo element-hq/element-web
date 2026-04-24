@@ -1564,9 +1564,6 @@
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
         "report_to_moderators": "Prijavi moderatorima",
         "report_to_moderators_description": "U sobama koje podržavaju moderiranje gumb „Prijavi” omogućit će vam da moderatorima sobe prijavite svako neprimjereno ponašanje.",
-        "share_history_on_invite": "Podijeli šifriranu povijest s novim članovima",
-        "share_history_on_invite_description": "Prilikom pozivanja korisnika u šifriranu sobu čija je vidljivost povijesti postavljena na podijeljenu, podijelite šifriranu povijest s tim korisnikom i prihvatite šifriranu povijest kada budete pozvani u takvu sobu.",
-        "share_history_on_invite_warning": "Ova je značajka u EKSPERIMENTALNOJ FAZI i nisu implementirane sve sigurnosne mjere. Ne omogućavajte je na produkcijskim računima.",
         "sliding_sync": "Način rada Sliding Sync",
         "sliding_sync_description": "Značajka je u razvoju, ne može se onemogućiti. Trenutačno nije kompatibilna s Element Callom.",
         "sliding_sync_disabled_notice": "Odjavite se i ponovno prijavite da biste onemogućili",
@@ -1816,7 +1813,6 @@
         "restricted": "Ograničeno"
     },
     "powered_by_matrix": "Pokreće Matrix",
-    "powered_by_matrix_with_logo": "Decentralizirani, šifrirani razgovori i suradnja koje pokreće $matrixLogo",
     "presence": {
         "away": "Odsutan/na",
         "busy": "Zauzeto",
@@ -4037,7 +4033,6 @@
         "you_are_presenting": "Dijelite zaslon"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Dobro došli u Element",
     "widget": {
         "added_by": "Widget je dodao/la",
         "capabilities_dialog": {
