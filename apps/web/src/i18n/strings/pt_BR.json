@@ -1542,9 +1542,6 @@
         "render_reaction_images_description": "Às vezes chamados de “emojis personalizados”.",
         "report_to_moderators": "Reportar aos moderadores",
         "report_to_moderators_description": "Em salas que aceitam moderação, o botão \"Denunciar\" permitirá que você denuncie abusos aos moderadores da sala.",
-        "share_history_on_invite": "Compartilhe o histórico criptografado com novos membros",
-        "share_history_on_invite_description": "Quando você convidar alguém para uma sala criptografada com o histórico visível para todos, compartilhe o histórico criptografado com essa pessoa e aceite o histórico criptografado quando for convidado para uma sala assim.",
-        "share_history_on_invite_warning": "Este recurso é EXPERIMENTAL e nem todas as precauções de segurança estão implementadas. Não o habilite em contas de produção.",
         "sliding_sync": "Modo Sliding Sync",
         "sliding_sync_description": "Em desenvolvimento ativo, não pode ser desativado.",
         "sliding_sync_disabled_notice": "Saia e entre novamente para desativar",
@@ -1778,7 +1775,6 @@
         "restricted": "Restrito"
     },
     "powered_by_matrix": "Desenvolvido por Matrix",
-    "powered_by_matrix_with_logo": "Chat descentralizado e encriptado & colaboração, powered by $matrixLogo",
     "presence": {
         "away": "Ausente",
         "busy": "Ocupado",
@@ -3918,7 +3914,6 @@
         "you_are_presenting": "Você está apresentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
-    "welcome_to_element": "Boas-vindas a Element",
     "widget": {
         "added_by": "Widget adicionado por",
         "capabilities_dialog": {
