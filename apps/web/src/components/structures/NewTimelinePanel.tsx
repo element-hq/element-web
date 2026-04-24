@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo, type JSX, type ReactNode } from "react";
-import { TimelineView, useCreateAutoDisposedViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "@element-hq/web-shared-components";
+import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "@element-hq/web-shared-components";
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
@@ -51,6 +51,9 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
             }),
     );
 
+    const snapshot = useViewModel(vm);
+    const { highlightedEventId: highlightedId } = snapshot;
+
     const renderItem = useMemo(
         () =>
             (item: TimelineItem): ReactNode => {
@@ -73,12 +76,19 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                         // For now, all events go through the legacy adapter.
                         // As tiles are migrated to MVVM, this switch will
                         // send migrated types to their shared views instead.
-                        return <LegacyEventTileAdapter key={item.key} mxEvent={findEventById(room, item.key)!} continuation={item.continuation} />;
+                        return (
+                            <LegacyEventTileAdapter
+                                key={item.key}
+                                mxEvent={findEventById(room, item.key)!}
+                                continuation={item.continuation}
+                                isSelectedEvent={highlightedId !== null && item.key === highlightedId}
+                            />
+                        );
                     default:
                         return null;
                 }
             },
-        [room],
+        [room, highlightedId],
     );
 
     return (
