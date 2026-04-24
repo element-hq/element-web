@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { Avatar, Search, Root } from "@vector-im/compound-web";
+import { Avatar } from "@vector-im/compound-web";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
@@ -112,30 +112,43 @@ function TopBar({
                 display: "flex",
                 alignItems: "center",
                 gap: "var(--cpd-space-4x)",
-                maxHeight: "52px",
                 height: "52px",
                 padding: "0 var(--cpd-space-4x)",
                 boxSizing: "border-box",
                 backgroundColor: "var(--cpd-color-bg-canvas-default)",
                 borderBottom: "1px solid var(--cpd-color-border-disabled)",
                 width: "100%",
+                overflow: "hidden",
             }}
         >
-            {/* Left: Element logo + branded pill */}
+            {/* Left: Element logo */}
             <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-3x)", flexShrink: 0 }}>
                 <ElementLogo />
             </div>
 
             {/* Centre: Search */}
-            <div style={{ flex: 1, minWidth: 0, maxWidth: "480px", margin: "0 auto" }}>
-                <Root>
-                    <Search name="topbar-search" placeholder={searchPlaceholder} style={{ width: "100%" }} />
-                </Root>
+            <div style={{ flex: 1, minWidth: 0, maxWidth: "480px", margin: "0 auto", display: "flex", alignItems: "center" }}>
+                <input
+                    type="search"
+                    placeholder={searchPlaceholder}
+                    style={{
+                        width: "100%",
+                        height: "36px",
+                        padding: "0 var(--cpd-space-3x)",
+                        boxSizing: "border-box",
+                        border: "1px solid var(--cpd-color-border-interactive-secondary)",
+                        borderRadius: "var(--cpd-radius-pill-effect)",
+                        background: "var(--cpd-color-bg-subtle-secondary)",
+                        color: "var(--cpd-color-text-primary)",
+                        font: "var(--cpd-font-body-md-regular)",
+                        outline: "none",
+                    }}
+                />
             </div>
 
-            {/* Right: Avatar button */}
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-3x)", flexShrink: 0, marginLeft: "auto" }}>
-                    <BrandedPill />
+            {/* Right: Branded pill + Avatar */}
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-3x)", flexShrink: 0, marginLeft: "auto" }}>
+                <BrandedPill />
                 <Avatar
                     id={userId}
                     name={userName}
