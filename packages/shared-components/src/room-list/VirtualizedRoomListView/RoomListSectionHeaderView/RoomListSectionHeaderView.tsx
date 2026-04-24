@@ -9,7 +9,7 @@ import React, { memo, type JSX, type FocusEvent, type MouseEventHandler, useStat
 import ChevronRightIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-right";
 import classNames from "classnames";
 import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
-import { OverflowVerticalIcon, EditIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { OverflowHorizontalIcon, EditIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
@@ -129,7 +129,12 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
             >
                 <Flex className={styles.container} align="center" justify="space-between" gap="var(--cpd-space-2x)">
                     <Flex align="center" gap="var(--cpd-space-0-5x)">
-                        <ChevronRightIcon width="24px" height="24px" fill="var(--cpd-color-icon-secondary)" />
+                        <ChevronRightIcon
+                            className={styles.chevron}
+                            width="24px"
+                            height="24px"
+                            fill="var(--cpd-color-icon-secondary)"
+                        />
                         <span className={styles.title}>{title}</span>
                     </Flex>
                     {displaySectionMenu && <MenuComponent vm={vm} />}
@@ -167,7 +172,7 @@ function MenuComponent({ vm }: MenuComponentProps): JSX.Element {
                     style={{ padding: "2px" }}
                     color="var(--cpd-color-icon-primary)"
                 >
-                    <OverflowVerticalIcon fill="var(--cpd-color-icon-primary)" />
+                    <OverflowHorizontalIcon fill="var(--cpd-color-icon-primary)" />
                 </IconButton>
             }
         >

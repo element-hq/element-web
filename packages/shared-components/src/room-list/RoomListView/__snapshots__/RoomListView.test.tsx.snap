@@ -8383,6 +8383,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                     >
                       <svg
+                        class="RoomListSectionHeaderView-module_chevron"
                         fill="var(--cpd-color-icon-secondary)"
                         height="24px"
                         viewBox="0 0 24 24"
@@ -11540,6 +11541,7 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                     >
                       <svg
+                        class="RoomListSectionHeaderView-module_chevron"
                         fill="var(--cpd-color-icon-secondary)"
                         height="24px"
                         viewBox="0 0 24 24"
@@ -13710,6 +13712,7 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                     >
                       <svg
+                        class="RoomListSectionHeaderView-module_chevron"
                         fill="var(--cpd-color-icon-secondary)"
                         height="24px"
                         viewBox="0 0 24 24"
@@ -14042,6 +14045,7 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
                       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-0-5x); --mx-flex-wrap: nowrap;"
                     >
                       <svg
+                        class="RoomListSectionHeaderView-module_chevron"
                         fill="var(--cpd-color-icon-secondary)"
                         height="24px"
                         viewBox="0 0 24 24"

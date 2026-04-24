@@ -36,18 +36,18 @@
         }
     }
 
-    svg {
+    .chevron {
         transition: transform 0.05s linear;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        svg {
+        .chevron {
             transition: none;
         }
     }
 
     &[aria-expanded="true"] {
-        svg {
+        .chevron {
             transform: rotate(90deg);
         }
     }
