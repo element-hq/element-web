@@ -25,7 +25,7 @@ RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.s
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:b5831ee7f7aa827cbae87df4a30a642f62c747d8525f5674365389f3adab278d
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:360465db60105a4cbf5215cd9e5a2ba40ef956978dd94f99707e9674050e38ea
 
 # Need root user to install packages & manipulate the usr directory
 USER root

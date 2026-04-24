@@ -57,6 +57,9 @@ test.describe("Create Room", () => {
 
         await page.getByRole("button", { name: "Go" }).click();
 
+        await expect(page.getByRole("heading", { name: "Start a chat with this new contact?" })).toBeVisible();
+        await page.getByRole("button", { name: "Continue" }).click();
+
         await expect(page.getByText("Encryption enabled")).toBeVisible();
         await expect(page.getByText("Send your first message to")).toBeVisible();
 
