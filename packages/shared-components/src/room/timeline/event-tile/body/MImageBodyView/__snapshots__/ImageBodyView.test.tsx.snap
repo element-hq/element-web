@@ -7,7 +7,7 @@ exports[`ImageBodyView > matches snapshot for animated-preview story 1`] = `
   >
     <a
       class="ImageBodyView-module_link"
-      href="http://localhost:63315/static/image-body/install-spinner.gif"
+      href="/static/image-body/install-spinner.gif"
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
@@ -19,7 +19,7 @@ exports[`ImageBodyView > matches snapshot for animated-preview story 1`] = `
           <img
             alt="Element logo"
             class="ImageBodyView-module_image"
-            src="http://localhost:63315/static/image-body/install-spinner.png"
+            src="/static/image-body/install-spinner.png"
           />
           <p
             class="ImageBodyView-module_gifLabel"
@@ -43,7 +43,7 @@ exports[`ImageBodyView > matches snapshot for default story 1`] = `
   >
     <a
       class="ImageBodyView-module_link"
-      href="http://localhost:63315/static/image-body/install-spinner.png"
+      href="/static/image-body/install-spinner.png"
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
@@ -55,7 +55,7 @@ exports[`ImageBodyView > matches snapshot for default story 1`] = `
           <img
             alt="Element logo"
             class="ImageBodyView-module_image"
-            src="http://localhost:63315/static/image-body/install-spinner.png"
+            src="/static/image-body/install-spinner.png"
           />
         </div>
       </div>
@@ -147,7 +147,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-blurhash story 1`] = 
   >
     <a
       class="ImageBodyView-module_link"
-      href="http://localhost:63315/static/image-body/install-spinner.png"
+      href="/static/image-body/install-spinner.png"
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
@@ -173,7 +173,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-blurhash story 1`] = 
           <img
             alt="Element logo"
             class="ImageBodyView-module_image"
-            src="http://localhost:63315/static/image-body/install-spinner.png"
+            src="/static/image-body/install-spinner.png"
           />
         </div>
       </div>
@@ -192,7 +192,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-spinner story 1`] = `
   >
     <a
       class="ImageBodyView-module_link"
-      href="http://localhost:63315/static/image-body/install-spinner.png"
+      href="/static/image-body/install-spinner.png"
     >
       <div
         class="ImageBodyView-module_thumbnailContainer"
@@ -225,7 +225,7 @@ exports[`ImageBodyView > matches snapshot for loading-with-spinner story 1`] = `
           <img
             alt="Element logo"
             class="ImageBodyView-module_image"
-            src="http://localhost:63315/static/image-body/install-spinner.png"
+            src="/static/image-body/install-spinner.png"
           />
         </div>
       </div>
