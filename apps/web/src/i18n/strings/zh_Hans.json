@@ -1567,9 +1567,6 @@
         "report_to_moderators": "向协管员举报",
         "report_to_moderators_description": "在支持审核的房间中，“举报”按钮可以让你向房间协管员举报滥用行为。",
         "room_list_sections": "房间列表区域",
-        "share_history_on_invite": "与新成员分享加密历史",
-        "share_history_on_invite_description": "当邀请用户进入历史可见性设为“共享”的加密房间时与该用户共享加密的历史消息，同时你被邀请加入此类房间时接收加密的历史消息。",
-        "share_history_on_invite_warning": "此功能目前处于实验阶段，并且尚未实践所有安全预防措施。请勿为生产账户启用。",
         "sliding_sync": "滑动同步模式",
         "sliding_sync_description": "正在处于开发中，并且一旦启用就无法禁用。当前与 Element Call 不兼容。",
         "sliding_sync_disabled_notice": "重新登录以禁用",
@@ -1814,7 +1811,6 @@
         "restricted": "已受限"
     },
     "powered_by_matrix": "由 Matrix 提供底层支持",
-    "powered_by_matrix_with_logo": "由 $matrixLogo 驱动的去中心化、加密聊天与协作",
     "presence": {
         "away": "离开",
         "busy": "忙碌",
@@ -2541,7 +2537,7 @@
                 "breadcrumb_first_description": "你的账户的详细信息、联系人、偏好设置与聊天列表将被保留",
                 "breadcrumb_page": "重置加密",
                 "breadcrumb_second_description": "你将丢失所有仅存储在服务器上的消息历史",
-                "breadcrumb_third_description": "你将需要再次验证你的所有设备与联系人",
+                "breadcrumb_third_description": "你将需要再次验证所有现有设备与联系人",
                 "breadcrumb_title": "你确定要重置数字身份？",
                 "breadcrumb_title_cant_confirm": "你需要重置数字身份",
                 "breadcrumb_title_forgot": "忘记恢复密钥？你需要重置数字身份。",
@@ -3978,7 +3974,6 @@
         "you_are_presenting": "你正在演示"
     },
     "web_default_device_name": "%(appName)s：%(browserName)s 运行于 %(osName)s",
-    "welcome_to_element": "欢迎使用 Element",
     "widget": {
         "added_by": "小部件添加者：",
         "capabilities_dialog": {
