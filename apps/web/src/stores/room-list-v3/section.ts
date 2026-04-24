@@ -96,7 +96,7 @@ export async function editSection(tag: string): Promise<void> {
  * @param tag - The tag of the section to delete.
  */
 export async function deleteSection(tag: string): Promise<void> {
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData");
     if (!sectionData[tag]) return;
 
     const modal = Modal.createDialog(RemoveSectionDialog);
@@ -104,7 +104,7 @@ export async function deleteSection(tag: string): Promise<void> {
     if (!shouldRemoveSection) return;
 
     // Remove the section from the ordered list of sections
-    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || [];
+    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
     const newOrderedSections = orderedSections.filter((sectionTag) => sectionTag !== tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, newOrderedSections);
 
