@@ -463,7 +463,7 @@ describe("MessagePanel", function () {
         const events = mkCreationEvents();
         const createEvent = events.find((event) => event.getType() === "m.room.create")!;
         const encryptionEvent = events.find((event) => event.getType() === "m.room.encryption")!;
-        client.getRoom.mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
+        jest.mocked(client.getRoom).mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
         TestUtilsMatrix.upsertRoomStateEvents(room, events);
 
         const { container } = render(
@@ -513,7 +513,7 @@ describe("MessagePanel", function () {
     it("should hide read-marker at the end of creation event summary", function () {
         const events = mkCreationEvents();
         const createEvent = events.find((event) => event.getType() === "m.room.create");
-        client.getRoom.mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
+        jest.mocked(client.getRoom).mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
         TestUtilsMatrix.upsertRoomStateEvents(room, events);
 
         const { container } = render(
@@ -785,7 +785,7 @@ describe("MessagePanel", function () {
     });
 
     it("should set lastSuccessful=true on non-last event if last event is not eligible for special receipt", () => {
-        client.getRoom.mockImplementation((id) => (id === room.roomId ? room : null));
+        jest.mocked(client.getRoom).mockImplementation((id) => (id === room.roomId ? room : null));
         const events = [
             TestUtilsMatrix.mkMessage({
                 event: true,
@@ -815,7 +815,7 @@ describe("MessagePanel", function () {
     });
 
     it("should set lastSuccessful=false on non-last event if last event has a receipt from someone else", () => {
-        client.getRoom.mockImplementation((id) => (id === room.roomId ? room : null));
+        jest.mocked(client.getRoom).mockImplementation((id) => (id === room.roomId ? room : null));
         const events = [
             TestUtilsMatrix.mkMessage({
                 event: true,
