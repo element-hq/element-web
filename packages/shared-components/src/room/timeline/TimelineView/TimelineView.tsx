@@ -5,11 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useMemo, useRef, type JSX, type ReactNode, type PropsWithChildren } from "react";
-import { LogLevel, Virtuoso, type VirtuosoHandle } from "react-virtuoso";
+import React, { useCallback, useEffect, useRef, type JSX, type ReactNode, type PropsWithChildren } from "react";
+import { LogLevel, Virtuoso, type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
 import type { TimelineItem, TimelineViewProps } from "./types";
+
 
 /**
  * Shared virtualized timeline container.
@@ -23,7 +24,7 @@ import type { TimelineItem, TimelineViewProps } from "./types";
 /** Set to true locally to log per-tile height changes to the console.
  * Each line shows the item key, previous height, and new height so you can
  * identify which tile types are changing size after initial mount. */
-const DEBUG_SIZES = true;
+const DEBUG_SIZES = false;
 
 /** @internal */
 function HeightDebugWrapper({ itemKey, label, children }: PropsWithChildren<{ itemKey: string; label: string }>): ReactNode {
@@ -39,6 +40,9 @@ function HeightDebugWrapper({ itemKey, label, children }: PropsWithChildren<{ it
             if (prevHeight === null) {
                 prevHeight = h;
                 mountCount += 1;
+                console.debug(
+                    `react-virtuoso: [tile mount] ${label} key=${itemKey} ${h}px at ${performance.now().toFixed(1)}ms`,
+                );
                 return;
             }
             if (h !== prevHeight) {
@@ -59,120 +63,127 @@ function HeightDebugWrapper({ itemKey, label, children }: PropsWithChildren<{ it
  * A large value keeps items mounted long enough for async content (avatars,
  * reactions, E2E shields) to settle before the user scrolls to them,
  * preventing the height-change → Virtuoso compensation → flicker cycle. */
-const OVERSCAN_PX = 2000;
-
-
-/**
- * On initial mount Virtuoso only reads `initialTopMostItemIndex` once.
- * `'LAST'` tells it to land on the final item and align it to the end of
- * the viewport, giving a correct bottom-of-room starting position.
- */
-const INITIAL_BOTTOM = { index: "LAST" as const, align: "end" as const };
+// const OVERSCAN_PX = 2000;
 
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
+    // eslint-disable-next-line no-console
+    console.debug(`[TimelineView] render — items=${snapshot.items.length} atLiveEnd=${snapshot.atLiveEnd}`);
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
-    // Imperative scroll-freeze machinery — uses refs + direct DOM mutation so
-    // that freeze/unfreeze never triggers a React re-render.  Only in-viewport
-    // tiles are frozen; above-viewport tiles are released immediately as the
-    // visible range changes, keeping Virtuoso's height cache accurate for them
-    // and eliminating the scrollTop jump that would otherwise occur on
-    // scroll-stop when those above-fold locks are released en masse.
-    const containerRef = useRef<HTMLDivElement>(null);
+    // Always-current snapshot reference for callbacks that fire outside React's
+    // rendering cycle (e.g. Virtuoso's scrollIntoViewOnChange).
+    const snapshotRef = useRef(snapshot);
+    snapshotRef.current = snapshot;
 
-    // const increaseViewportBy = useMemo(() => ({ top: OVERSCAN_PX, bottom: OVERSCAN_PX }), []);
-    const overscan = useMemo(() => ({ main: OVERSCAN_PX, reverse: OVERSCAN_PX }), []);
+    // Guards onScroll from treating our own scrollToIndex calls as user navigation.
+    // Set to true before any programmatic scroll; cleared one animation frame later
+    // so that scroll events emitted by that scroll are ignored.
+    const isProgrammaticScrollRef = useRef(false);
 
     const itemContent = useCallback(
         (_index: number, item: TimelineItem): ReactNode => {
+            if (!DEBUG_SIZES) return renderItem(item);
             const label =
                 item.kind === "event" ? `event(continuation=${item.continuation})` : item.kind;
-            if (DEBUG_SIZES) {
-                return <HeightDebugWrapper itemKey={item.key} label={label}>{renderItem(item)}</HeightDebugWrapper>;
-            }
-            return <div style={{ display: "flow-root" }}>{renderItem(item)}</div>;
+            return (
+                <HeightDebugWrapper itemKey={item.key} label={label}>
+                    {renderItem(item)}
+                </HeightDebugWrapper>
+            );
         },
         [renderItem],
     );
 
-    /**
-     * Derive a stable React key for each data row.
-     *
-     * Without this prop Virtuoso uses the item's array index as the key.
-     * Because we decrement `firstItemIndex` on back-pagination, the virtual
-     * indices of the trailing items stay constant but React sees their array
-     * positions shift — which, with index-based keys, would invalidate both
-     * React's reconciliation and Virtuoso's internal height cache. The
-     * result is a measure-then-adjust flash where prepended items are laid
-     * out, measured, and the scroll anchor is corrected a frame or two
-     * later, visually shifting content.
-     *
-     * Keying by the item's stable id (event id / date separator key) lets
-     * Virtuoso preserve measured heights across prepends so the scroll
-     * compensation is applied atomically.
-     */
     const computeItemKey = useCallback((_index: number, item: TimelineItem): string => item.key, []);
 
-    // The backward (Header) spinner is intentionally omitted.
+    // scrollIntoViewOnChange fires on every data change (after a listRefresh cycle,
+    // meaning at least one ResizeObserver batch has run). It gives us the right
+    // timing to scroll, and we use its `done` callback to do the actual centering
+    // imperatively via scrollToIndex.
     //
-    // Virtuoso's Header slot lives inside the scroll container and contributes
-    // to scrollHeight. Every show/hide cycle changes scrollHeight, which forces
-    // Virtuoso to issue a corrective scrollTop adjustment that the user sees as
-    // a jump. Removing the Header spinner eliminates that scrollHeight change.
+    // Why scrollToIndex in `done` rather than returning a location directly?
+    // Virtuoso's built-in scrollIntoView path goes through defaultCalculateViewLocation
+    // which returns null (no scroll) if the item appears "already in view". On a cold
+    // page refresh all item sizes are 0, so itemBottom=0 ≤ viewportBottom for every
+    // item — every item is "in view" — so the scroll silently no-ops. Crucially,
+    // `done` fires in both cases: after a real scroll completes, AND immediately when
+    // defaultCalculateViewLocation returns null. So `done` always fires, and inside it
+    // we call the imperative scrollToIndex which bypasses that check entirely and has
+    // its own internal retry loop (watchChangesFor 150ms on listRefresh) that converges
+    // to the correct centred position as real item sizes arrive.
     //
-    // The Footer (forward) spinner is kept: forward pagination appends at the
-    // bottom where alignToBottom means a scrollHeight increase there does not
-    // move the visible area.
-    // const components = useMemo(() => {
-    //     return {
-    //         Footer:
-    //             snapshot.forwardPagination === "loading"
-    //                 ? (): ReactNode => <>{renderItem({ key: "loading-forward", kind: "loading" })}</>
-    //                 : undefined,
-    //     };
-    // }, [snapshot.forwardPagination, renderItem]);
+    // Virtuoso's scrollIntoView index is zero-based (0..data.length-1), matching the
+    // internal size/offset trees. firstItemIndex is display-only (transposeItems).
+    const scrollIntoViewOnChange = useCallback(
+        (_params: { context: unknown; totalCount: number; scrollingInProgress: boolean }): ScrollIntoViewLocation | false => {
+            const snap = snapshotRef.current;
+            const anchor = snap.pendingAnchor;
+            if (!anchor) return false;
 
-    // Scroll to the pending anchor when it is set and the target item is in the data
-    // array. Handles both permalink navigation and scroll-position restore. We depend
-    // on `snapshot.items` so we retry after each pagination batch in case the target
-    // wasn't in the initial load window.
-    useEffect(() => {
-        const anchor = snapshot.pendingAnchor;
-        if (!anchor) return;
+            const arrayIndex = snap.items.findIndex((item) => item.key === anchor.targetKey);
+            if (arrayIndex === -1) return false;
 
-        const arrayIndex = snapshot.items.findIndex((item) => item.key === anchor.targetKey);
-        if (arrayIndex === -1) return; // not loaded yet — wait for next items update
+            // eslint-disable-next-line no-console
+            console.debug(
+                `[TimelineView][scrollIntoViewOnChange] firstItemIndex=${snap.firstItemIndex} arrayIndex=${arrayIndex} totalCount=${_params.totalCount} count=${snap.items.length} key=${anchor.targetKey} forwardPagination=${snap.forwardPagination} backwardPagination=${snap.backwardPagination} atLiveEnd=${snap.atLiveEnd}`,
+            );
 
-        virtuosoRef.current?.scrollToIndex({
-            index: snapshot.firstItemIndex + arrayIndex,
-            align: anchor.align,
-            behavior: "auto",
-        });
-        vm.onAnchorReached();
-    }, [snapshot.pendingAnchor, snapshot.items, snapshot.firstItemIndex, vm]);
+            return {
+                index: arrayIndex,
+                align: "center",
+                behavior: "auto",
+                done: () => {
+                    // eslint-disable-next-line no-console
+                    console.debug(`[TimelineView][scrollIntoViewOnChange done] arrayIndex=${arrayIndex} key=${anchor.targetKey}`);
+                    isProgrammaticScrollRef.current = true;
+                    virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: "center", behavior: "auto" });
+                    requestAnimationFrame(() => { isProgrammaticScrollRef.current = false; });
+                },
+            };
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
 
-    // Don't mount Virtuoso until items are ready — ensures `initialTopMostItemIndex`
-    // is passed with the correct value on Virtuoso's first mount.
+    // Clear the pending anchor when the user scrolls. We use Virtuoso's onScroll
+    // which fires for all scroll events, combined with isProgrammaticScrollRef to
+    // ignore scrolls we initiated ourselves via scrollToIndex.
+    const onScroll = useCallback(() => {
+        if (!isProgrammaticScrollRef.current && snapshotRef.current.pendingAnchor !== null) {
+            // eslint-disable-next-line no-console
+            console.debug(`[TimelineView] user scroll — clearing pendingAnchor`);
+            vm.onAnchorReached();
+        }
+    }, [vm]);
+
+    // Auto-scroll to bottom for new messages, but only when the user is already
+    // at the bottom and there is no pending anchor scroll in progress.
+    const followOutput = useCallback(
+        (isAtBottom: boolean) => {
+            return isAtBottom && snapshot.pendingAnchor === null ? "auto" : false;
+        },
+        [snapshot.pendingAnchor],
+    );
+
+    // Don't mount Virtuoso until items are ready
     if (snapshot.items.length === 0) {
         return <div style={{ height: "100%", width: "100%" }} />;
     }
 
     return (
-        <div ref={containerRef} style={{ height: "100%", width: "100%" }}>
+        <div style={{ height: "100%", width: "100%" }}>
             <Virtuoso
                 ref={virtuosoRef}
-                initialTopMostItemIndex={INITIAL_BOTTOM}
                 data={snapshot.items}
                 firstItemIndex={snapshot.firstItemIndex}
-                // increaseViewportBy={increaseViewportBy}
-                overscan={overscan}
                 itemContent={itemContent}
                 computeItemKey={computeItemKey}
-                // components={components}
                 startReached={vm.onStartReached}
                 endReached={vm.onEndReached}
-                followOutput={true}
+                followOutput={followOutput}
+                scrollIntoViewOnChange={scrollIntoViewOnChange}
+                onScroll={onScroll}
                 logLevel={LogLevel.DEBUG}
                 alignToBottom
                 style={{ height: "100%", width: "100%" }}

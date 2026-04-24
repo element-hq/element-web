@@ -70,6 +70,18 @@ export class RoomTimelineViewModel
     private continuationCache = new Map<string, boolean>();
 
     /**
+     * True from the moment a permalink `load(eventId)` completes until the
+     * first `onEndReached` is processed.  Prevents that first (Virtuoso-
+     * triggered-on-tiny-list) `onEndReached` from setting `atLiveEnd=true`
+     * and jumping the view to the bottom.
+     *
+     * Unlike `pendingAnchor`, this flag lives on the instance (not in the
+     * snapshot) so it is NOT affected by `onAnchorReached()` clearing the
+     * snapshot anchor before `onEndReached` fires.
+     */
+    private permalinkMode = false;
+
+    /**
      * In-flight backward pagination chain, or null when idle.
      *
      * A single `Promise<void>` is created for the first `onStartReached` call.
@@ -91,7 +103,9 @@ export class RoomTimelineViewModel
             firstItemIndex: INITIAL_FIRST_ITEM_INDEX,
             backwardPagination: "idle",
             forwardPagination: "idle",
+            atLiveEnd: false,
             pendingAnchor: null,
+            highlightedEventId: opts.initialEventId ?? null,
         });
 
         this.opts = opts;
@@ -100,29 +114,56 @@ export class RoomTimelineViewModel
         this.load(opts.initialEventId);
 
         // Listen for new events so live messages appear.
-        opts.room.on(RoomEvent.Timeline, this.onRoomTimeline);
-    }
-
-    public dispose(): void {
-        this.opts.room.off(RoomEvent.Timeline, this.onRoomTimeline);
+        this.disposables.trackListener(opts.room, RoomEvent.Timeline, this.onRoomTimeline as (...args: unknown[]) => void);
     }
 
     private onRoomTimeline = (
-        _event: MatrixEvent,
+        event: MatrixEvent,
         _room: Room | undefined,
         toStartOfTimeline: boolean | undefined,
         removed: boolean,
         data: IRoomTimelineData,
     ): void => {
+        // Only handle events in our timeline set (the unfiltered room timeline).
+        const ourTimelineSet = this.opts.room.getUnfilteredTimelineSet();
+        if (data.timeline.getTimelineSet() !== ourTimelineSet) {
+            // logger.debug(
+            //     `[TimelineVM][onRoomTimeline] ignoring event ${event.getId()} — wrong timeline set`,
+            // );
+            return;
+        }
+
         // Ignore backfilled events (we load our own backwards pagination) and
         // redactions; only respond to genuinely new live events at the end of
         // the timeline. Without this filter the handler would re-build items
         // for every reaction/decryption/redaction ripple that passes through.
         if (toStartOfTimeline || removed || data.liveEvent !== true) return;
+        if (this.isDisposed) return;
 
-        logger.debug("[TimelineVM] onRoomTimeline live event — forwarding 1 event");
-        this.timelineWindow.paginate(Direction.Forward, 1).then(() => {
-            this.snapshot.merge({ items: this.buildItems() });
+        logger.debug("[TimelineVM][onRoomTimeline] live event — forwarding 1 event");
+        this.timelineWindow.paginate(Direction.Forward, 1, false).then((extended) => {
+            if (this.isDisposed) return;
+            logger.debug(
+                `[TimelineVM][onRoomTimeline] paginate done — extended=${extended}, ` +
+                `items before=${this.snapshot.current.items.length}`,
+            );
+            const items = this.buildItems();
+            logger.debug(`[TimelineVM][onRoomTimeline] buildItems → ${items.length} items`);
+            // Only promote atLiveEnd to true if we were already tracking the live end.
+            // If the user loaded a permalink (atLiveEnd starts false), live events
+            // arriving in the background will eventually paginate the window to the
+            // live edge, but we must NOT flip followOutput on — that would auto-scroll
+            // Virtuoso to the bottom. atLiveEnd is set to true properly once the user
+            // manually scrolls to the bottom and triggerForwardPaginate completes.
+            const wasAtLiveEnd = this.snapshot.current.atLiveEnd;
+            const nowAtLiveEnd = wasAtLiveEnd && !this.timelineWindow.canPaginate(Direction.Forward);
+            logger.debug(
+                `[TimelineVM][onRoomTimeline] atLiveEnd: wasAtLiveEnd=${wasAtLiveEnd} nowAtLiveEnd=${nowAtLiveEnd}`,
+            );
+            this.snapshot.merge({
+                items,
+                atLiveEnd: nowAtLiveEnd,
+            });
         });
     };
 
@@ -135,12 +176,33 @@ export class RoomTimelineViewModel
 
         try {
             await this.timelineWindow.load(eventId, INITIAL_SIZE);
+            if (this.isDisposed) return;
+            const windowEvents = this.timelineWindow.getEvents();
+            logger.debug(
+                `[TimelineVM] load() window — ${windowEvents.length} events in window, ` +
+                `canPaginate(Backward)=${this.timelineWindow.canPaginate(Direction.Backward)}, ` +
+                `canPaginate(Forward)=${this.timelineWindow.canPaginate(Direction.Forward)}`,
+            );
+            if (windowEvents.length > 0) {
+                logger.debug(
+                    `[TimelineVM] load() window first=${windowEvents[0].getId()} (${windowEvents[0].getType()}), ` +
+                    `last=${windowEvents[windowEvents.length - 1].getId()} (${windowEvents[windowEvents.length - 1].getType()})`,
+                );
+            }
             const items = this.buildItems();
-            logger.debug(`[TimelineVM] load() done — ${items.length} items built`);
+            logger.debug(
+                `[TimelineVM] load() done — ${windowEvents.length} events → ${items.length} items after filtering, ` +
+                `highlightedEventId=${eventId ?? "none"}`,
+            );
+            if (eventId) {
+                this.permalinkMode = true;
+                logger.debug(`[TimelineVM] load() — permalinkMode=true`);
+            }
             this.snapshot.merge({
                 items,
                 backwardPagination: "idle",
                 forwardPagination: "idle",
+                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
                 // Only permalink loads request an explicit scroll target. Bottom-of-room
                 // loads rely on Virtuoso's `alignToBottom` behaviour; any residual
                 // "landed above the bottom" caused by items resizing after mount is
@@ -150,6 +212,7 @@ export class RoomTimelineViewModel
                 pendingAnchor: eventId
                     ? { targetKey: eventId, align: "center", highlight: true }
                     : null,
+                highlightedEventId: eventId ?? null,
             });
         } catch (e) {
             logger.error(`[TimelineVM] load() error`, e);
@@ -243,10 +306,17 @@ export class RoomTimelineViewModel
 
                 const hasMore = await this.timelineWindow.paginate(Direction.Backward, PAGINATE_SIZE);
 
+                // Re-read the current snapshot after the async gap — forward pagination
+                // may have updated items while we were waiting.  Using a stale prevItems
+                // would cause mergePrepended to discard any events that were appended
+                // by concurrent forward pagination.
+                const currentItems = this.snapshot.current.items;
+                const currentFirstItemIndex = this.snapshot.current.firstItemIndex;
+
                 const rebuilt = this.buildItems();
-                const items = this.mergePrepended(prevItems, rebuilt);
-                const prepended = items.length - prevItems.length;
-                const newFirstItemIndex = preLoadFirstItemIndex - prepended;
+                const items = this.mergePrepended(currentItems, rebuilt);
+                const prepended = items.length - currentItems.length;
+                const newFirstItemIndex = currentFirstItemIndex - prepended;
 
                 logger.debug(
                     `[TimelineVM] paginate(backward) batch done — ` +
@@ -292,8 +362,39 @@ export class RoomTimelineViewModel
             return;
         }
 
-        if (!this.timelineWindow.canPaginate(Direction.Forward)) {
+        // Consume the permalink flag before any async work so it is cleared
+        // exactly once, regardless of the canPaginate result.
+        const wasInPermalinkMode = this.permalinkMode;
+        if (wasInPermalinkMode) {
+            this.permalinkMode = false;
+            logger.debug(`[TimelineVM] paginate(forward) — consuming permalinkMode`);
+        }
+
+        const canFwd = this.timelineWindow.canPaginate(Direction.Forward);
+        logger.debug(
+            `[TimelineVM] paginate(forward) check — canPaginate=${canFwd}, ` +
+            `atLiveEnd=${this.snapshot.current.atLiveEnd}, items=${this.snapshot.current.items.length}, ` +
+            `wasInPermalinkMode=${wasInPermalinkMode}`,
+        );
+
+        // After the initial permalink window load, suppress further forward pagination
+        // until the anchor has been resolved. Without this, a second onEndReached that
+        // fires because the initial window is too short to fill the viewport would
+        // paginate all the way to the live end, jumping the user away from the target.
+        if (!wasInPermalinkMode && this.snapshot.current.pendingAnchor !== null) {
+            logger.debug(`[TimelineVM] paginate(forward) skipped — pendingAnchor still set`);
+            return;
+        }
+
+        if (!canFwd) {
             logger.debug(`[TimelineVM] paginate(forward) skipped — canPaginate=false`);
+            // Only set atLiveEnd=true when this is a genuine user-scroll-to-bottom,
+            // not the automatic onEndReached that fires because the initial permalink
+            // window is too small to fill the viewport.
+            if (!wasInPermalinkMode && !this.snapshot.current.atLiveEnd) {
+                logger.debug(`[TimelineVM] paginate(forward) — not in permalink mode, setting atLiveEnd=true`);
+                this.snapshot.merge({ atLiveEnd: true });
+            }
             return;
         }
 
@@ -302,10 +403,17 @@ export class RoomTimelineViewModel
         this.timelineWindow
             .paginate(Direction.Forward, PAGINATE_SIZE)
             .then((hasMore) => {
+                const nowAtLiveEnd =
+                    !wasInPermalinkMode && !this.timelineWindow.canPaginate(Direction.Forward);
                 logger.debug(
-                    `[TimelineVM] paginate(forward) done — items=${this.snapshot.current.items.length}, hasMore=${hasMore}`,
+                    `[TimelineVM] paginate(forward) done — items=${this.snapshot.current.items.length}, ` +
+                    `hasMore=${hasMore}, wasInPermalinkMode=${wasInPermalinkMode}, nowAtLiveEnd=${nowAtLiveEnd}`,
                 );
-                this.snapshot.merge({ items: this.buildItems(), forwardPagination: "idle" });
+                this.snapshot.merge({
+                    items: this.buildItems(),
+                    forwardPagination: "idle",
+                    atLiveEnd: nowAtLiveEnd,
+                });
             })
             .catch((e) => {
                 logger.error(`[TimelineVM] paginate(forward) error`, e);
@@ -366,14 +474,23 @@ export class RoomTimelineViewModel
         const items: TimelineItem[] = [];
         let lastDate: string | null = null;
         let prevEvent: MatrixEvent | null = null;
+        let filteredCount = 0;
 
         const showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
 
         for (const event of events) {
             const eventId = event.getId();
             if (!eventId) continue;
-            if (!haveRendererForEvent(event, this.opts.client, showHiddenEvents)) continue;
-            if (shouldHideEvent(event)) continue;
+            if (!haveRendererForEvent(event, this.opts.client, showHiddenEvents)) {
+                logger.debug(`[TimelineVM] buildItems filtering event ${eventId} (${event.getType()}) — no renderer`);
+                filteredCount++;
+                continue;
+            }
+            if (shouldHideEvent(event)) {
+                logger.debug(`[TimelineVM] buildItems filtering event ${eventId} (${event.getType()}) — shouldHideEvent`);
+                filteredCount++;
+                continue;
+            }
 
             // Insert date separator when the day changes
             const eventDate = new Date(event.getTs());
@@ -399,6 +516,10 @@ export class RoomTimelineViewModel
                 continuation: this.getCachedContinuation(eventId, prevEvent, event),
             });
             prevEvent = event;
+        }
+
+        if (filteredCount > 0) {
+            logger.debug(`[TimelineVM] buildItems — ${filteredCount} events filtered out of ${events.length} total`);
         }
 
         return items;

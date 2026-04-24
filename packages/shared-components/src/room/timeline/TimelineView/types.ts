@@ -89,10 +89,25 @@ export interface TimelineViewSnapshot {
     forwardPagination: PaginationState;
 
     /**
+     * True when the timeline window has reached the live end — i.e. there are
+     * no more forward events to paginate to. Used to gate `followOutput` so
+     * that Virtuoso only auto-scrolls to the bottom when we are actually
+     * viewing the live end of the room.
+     */
+    atLiveEnd: boolean;
+
+    /**
      * If set, the container should scroll to this anchor on the
      * next render. The container clears it after executing the scroll.
      */
     pendingAnchor: NavigationAnchor | null;
+
+    /**
+     * The event ID that should be visually highlighted (e.g. permalink target).
+     * Unlike `pendingAnchor`, this is not cleared after scrolling — it persists
+     * so the event tile stays highlighted.
+     */
+    highlightedEventId: string | null;
 }
 
 export interface TimelineViewActions {
