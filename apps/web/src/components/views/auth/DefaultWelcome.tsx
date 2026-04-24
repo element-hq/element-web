@@ -33,12 +33,13 @@ const DefaultWelcome: React.FC<Props> = ({ serverConfig }) => {
     const isElement = isElementBranded();
 
     const isQrLoginEnabled = useFeatureEnabled("feature_login_with_qr");
-    const showQrButton = useAsyncMemo(() => {
+    const showQrButton = useAsyncMemo(async () => {
+        if (!isQrLoginEnabled) return false;
         const tempClient = createClient({
             baseUrl: serverConfig.hsUrl,
         });
         return isSignInWithQRAvailable(tempClient);
-    }, [serverConfig]);
+    }, [serverConfig, isQrLoginEnabled]);
 
     const loading = isQrLoginEnabled && showQrButton === undefined;
 
