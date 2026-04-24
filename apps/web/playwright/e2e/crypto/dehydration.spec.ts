@@ -166,13 +166,9 @@ async function getDehydratedDeviceIds(client: Client): Promise<string[]> {
     return await client.evaluate(async (client) => {
         const userId = client.getUserId();
         const devices = await client.getCrypto().getUserDeviceInfo([userId]);
-        return Array.from(
-            devices
-                .get(userId)
-                .values()
-                .filter((d) => d.dehydrated)
-                .map((d) => d.deviceId),
-        );
+        return Array.from(devices.get(userId).values())
+            .filter((d) => d.dehydrated)
+            .map((d) => d.deviceId);
     });
 }
 

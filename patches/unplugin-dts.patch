@@ -1,0 +1,13 @@
+diff --git a/dist/shared/unplugin-dts.Dv6DEU-x.mjs b/dist/shared/unplugin-dts.Dv6DEU-x.mjs
+index ad5f1183abb26a97ed92068f623ef1eb61fc54ca..5e3e5d0d25fe067ecfd5f3f8ecbd4808139758b9 100644
+--- a/dist/shared/unplugin-dts.Dv6DEU-x.mjs
++++ b/dist/shared/unplugin-dts.Dv6DEU-x.mjs
+@@ -920,7 +920,7 @@ class Runtime {
+     const maybeEmitted = (sourceFile) => {
+       return !(compilerOptions.noEmitForJsFiles && jsRE.test(sourceFile.fileName)) && !sourceFile.isDeclarationFile && !program.isSourceFileFromExternalLibrary(sourceFile);
+     };
+-    let publicRoot = compilerOptions.rootDir ? ensureAbsolute(resolveConfigDir(compilerOptions.rootDir, root), root) : compilerOptions.composite && compilerOptions.configFilePath ? dirname(compilerOptions.configFilePath) : queryPublicPath(
++    let publicRoot = compilerOptions.rootDir ? ensureAbsolute(resolveConfigDir(compilerOptions.rootDir, root), root) : compilerOptions.composite && compilerOptions.configFilePath ? dirname(compilerOptions.configFilePath) : compare(ts.version, '6.0.0', '>=') ? (configPath ? dirname(configPath) : root) : queryPublicPath(
+       program.getSourceFiles().filter(maybeEmitted).map((sourceFile) => sourceFile.fileName)
+     );
+     publicRoot = normalizePath(publicRoot);

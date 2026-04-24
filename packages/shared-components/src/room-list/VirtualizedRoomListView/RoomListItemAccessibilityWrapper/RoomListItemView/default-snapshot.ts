@@ -37,4 +37,21 @@ export const defaultSnapshot: RoomListItemViewSnapshot = {
     canMarkAsUnread: true,
     roomNotifState: RoomNotifState.AllMessages,
     canMoveToSection: true,
+    sections: [
+        {
+            tag: "m.favourite",
+            name: "Favourites",
+            isSelected: false,
+        },
+        {
+            tag: "element.io.section.work",
+            name: "Work",
+            isSelected: true,
+        },
+        {
+            tag: "m.lowpriority",
+            name: "Low Priority",
+            isSelected: false,
+        },
+    ],
 };

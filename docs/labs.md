@@ -119,14 +119,6 @@ Do not send or receive messages to/from devices that are not properly verified. 
 receive your messages at all on those devices, and if they send messages, you will not be able to read them, but you
 will be aware that a message exists.
 
-## Share encrypted history with new members (`feature_share_history_on_invite`) [In Development]
-
-When inviting users to an encrypted room with shared history (i.e. a room with the "Who can read history?" setting set
-to "Members only (since the point in time of selecting this option)"), send the keys for previous messages to the
-invitee so they can read them.
-
-Both the inviter and the invitee must set this labs flag, before the invitation is sent.
-
 ## Encrypted state events (MSC4362) (`feature_msc4362_encrypted_state_events`)
 
 Encrypt most of the state events in the room, including the room name and topic.

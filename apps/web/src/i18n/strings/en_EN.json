@@ -42,7 +42,7 @@
         "copy_link": "Copy link",
         "create": "Create",
         "create_a_room": "Create a room",
-        "create_account": "Create Account",
+        "create_account": "Create account",
         "decline": "Decline",
         "decline_and_block": "Decline and block",
         "decline_invite": "Decline invite",
@@ -1368,6 +1368,14 @@
         "impossible_dialog_title": "Integrations not allowed"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "You currently don't have any chats with these contacts. Confirm inviting them to this room before continuing.",
+            "invite_title": "Invite new contacts to this room?",
+            "start_chat_subtitle_multiple_users": "You currently don't have any chats with these people. Confirm inviting them before continuing.",
+            "start_chat_subtitle_one_user": "You currently don't have any chats with this person. Confirm inviting them before continuing.",
+            "start_chat_title_multiple_users": "Start a chat with these new contacts?",
+            "start_chat_title_one_user": "Start a chat with this new contact?"
+        },
         "email_caption": "Invite by email",
         "email_limit_one": "Invites by email can only be sent one at a time",
         "email_use_default_is": "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
@@ -1574,9 +1582,6 @@
         "report_to_moderators": "Report to moderators",
         "report_to_moderators_description": "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
         "room_list_sections": "Room list sections",
-        "share_history_on_invite": "Share encrypted history with new members",
-        "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
-        "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Sign in again to disable",
@@ -1821,7 +1826,6 @@
         "restricted": "Restricted"
     },
     "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "presence": {
         "away": "Away",
         "busy": "Busy",
@@ -3994,7 +3998,11 @@
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Welcome to Element",
+    "welcome": {
+        "tagline_element": "Supercharged for speed and simplicity.",
+        "title_element": "Be in your element",
+        "title_generic": "Welcome to %(brand)s"
+    },
     "widget": {
         "added_by": "Widget added by",
         "capabilities_dialog": {

@@ -17,14 +17,14 @@ import { PassThrough } from "node:stream";
  * A PassThrough stream that captures all data written to it.
  */
 class CapturedPassThrough extends PassThrough {
-    private _chunks = [];
+    private _chunks: any[] = [];
 
     public constructor() {
         super();
         super.on("data", this.onData);
     }
 
-    private onData = (chunk): void => {
+    private onData = (chunk: any): void => {
         this._chunks.push(chunk);
     };
 
@@ -69,7 +69,13 @@ export const test = base.extend<Fixtures>({
         const args = ["--profile-dir", tmpDir, ...extraArgs];
 
         if (process.env.GITHUB_ACTIONS) {
+            args.push("--disable-gpu");
+
             if (process.platform === "linux") {
+                if (process.getuid() === 0) {
+                    args.push("--no-sandbox");
+                }
+
                 // GitHub Actions hosted runner lacks dbus and a compatible keyring, so we need to force plaintext storage
                 args.push("--storage-mode", "force-plaintext");
             } else if (process.platform === "darwin") {

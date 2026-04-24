@@ -1555,9 +1555,6 @@
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
         "room_list_sections": "Szobalista szakaszok",
-        "share_history_on_invite": "Titkosított előzmények megosztása az új tagokkal",
-        "share_history_on_invite_description": "Ha egy felhasználót olyan titkosított szobába hív meg, amelynél az előzmények láthatósága „megosztott” beállításra van állítva, akkor a titkosított előzményeket megosztja azzal a felhasználóval, valamint elfogadja a titkosított előzményeket, ha ilyen szobába hívják meg.",
-        "share_history_on_invite_warning": "Ez a funkció KÍSÉRLETI JELLEGŰ, és nem minden biztonsági óvintézkedés van megvalósítva. Ne engedélyezze éles fiókokban.",
         "sliding_sync": "Csúszóablakos szinkronizálási mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
         "sliding_sync_disabled_notice": "Jelentkezzen be újra a letiltáshoz",
@@ -1799,7 +1796,6 @@
         "restricted": "Korlátozott"
     },
     "powered_by_matrix": "A gépházban: Matrix",
-    "powered_by_matrix_with_logo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
     "presence": {
         "away": "Távol",
         "busy": "Foglalt",
@@ -3944,7 +3940,6 @@
         "you_are_presenting": "Ön tartja a bemutatót"
     },
     "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
-    "welcome_to_element": "Üdvözli az Element",
     "widget": {
         "added_by": "A kisalkalmazást hozzáadta",
         "capabilities_dialog": {
