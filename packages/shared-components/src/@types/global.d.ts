@@ -19,3 +19,15 @@ declare module "*.png" {
     const content: string;
     export default content;
 }
+
+// For importing animated GIFs for use in testing
+declare module "*.gif" {
+    const content: string;
+    export default content;
+}
+
+// For importing videos for use in testing
+declare module "*.webm" {
+    const content: string;
+    export default content;
+}
