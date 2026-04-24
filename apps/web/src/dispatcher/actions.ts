@@ -403,4 +403,16 @@ export enum Action {
      * or keyboard event).
      */
     UserActivity = "user_activity",
+
+    /**
+     * Fired to request collapsing or expanding all room list sections.
+     * Payload: {@link RoomListCollapseAllSectionsPayload}
+     */
+    RoomListCollapseAllSections = "room_list_collapse_all_sections",
+
+    /**
+     * Fired to report the collapse state of a given room list section.
+     * Payload: {@link RoomListSectionsCollapseStateChangedPayload}
+     */
+    RoomListSectionsCollapseStateChanged = "room_list_sections_collapse_state_changed",
 }
