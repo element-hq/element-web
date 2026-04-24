@@ -227,57 +227,55 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                     </>
                 );
                 break;
-            case Phase.ShowingQR:
-                if (this.props.code) {
-                    const data = this.props.code;
-
-                    let steps: string[];
-                    if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
-                        steps = [
-                            _t("auth|qr_code_login|open_element_mobile_device", {
-                                brand: SdkConfig.get().brand,
-                            }),
-                            _t("auth|qr_code_login|tap_avatar_link_new_device", {
-                                linkNewDevice: <strong>{_t("user_menu|link_new_device")}</strong>,
-                            }),
-                            _t("auth|qr_code_login|select_ready_to_scan", {
-                                readyToScan: <strong>{_t("auth|qr_code_login|ready_to_scan")}</strong>,
-                            }),
-                            _t("auth|qr_code_login|follow_remaining_instructions"),
-                        ];
-                    } else {
-                        steps = [
-                            _t("auth|qr_code_login|open_element_other_device", {
-                                brand: SdkConfig.get().brand,
-                            }),
-                            _t("auth|qr_code_login|select_qr_code", {
-                                scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
-                            }),
-                            _t("auth|qr_code_login|point_the_camera"),
-                            _t("auth|qr_code_login|follow_remaining_instructions"),
-                        ];
-                    }
-
-                    main = (
-                        <>
-                            <Heading as="h1" size="sm" weight="semibold">
-                                {_t("auth|qr_code_login|scan_code_instruction")}
-                            </Heading>
-                            <div className="mx_LoginWithQR_qrWrapper">
-                                <QRCode data={[{ data, mode: "byte" }]} className="mx_QRCode" />
-                            </div>
-                            <ol>
-                                {steps.map((step, i) => (
-                                    <li key={this.props.intent + i}>{step}</li>
-                                ))}
-                            </ol>
-                        </>
-                    );
+            case Phase.ShowingQR: {
+                let steps: string[];
+                if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
+                    steps = [
+                        _t("auth|qr_code_login|open_element_mobile_device", {
+                            brand: SdkConfig.get().brand,
+                        }),
+                        _t("auth|qr_code_login|tap_avatar_link_new_device", {
+                            linkNewDevice: <strong>{_t("user_menu|link_new_device")}</strong>,
+                        }),
+                        _t("auth|qr_code_login|select_ready_to_scan", {
+                            readyToScan: <strong>{_t("auth|qr_code_login|ready_to_scan")}</strong>,
+                        }),
+                        _t("auth|qr_code_login|follow_remaining_instructions"),
+                    ];
                 } else {
-                    main = this.simpleSpinner();
-                    buttons = this.cancelButton();
+                    steps = [
+                        _t("auth|qr_code_login|open_element_other_device", {
+                            brand: SdkConfig.get().brand,
+                        }),
+                        _t("auth|qr_code_login|select_qr_code", {
+                            scanQRCode: <strong>{_t("auth|qr_code_login|scan_qr_code")}</strong>,
+                        }),
+                        _t("auth|qr_code_login|point_the_camera"),
+                        _t("auth|qr_code_login|follow_remaining_instructions"),
+                    ];
                 }
+
+                main = (
+                    <>
+                        <Heading as="h1" size="sm" weight="semibold">
+                            {_t("auth|qr_code_login|scan_code_instruction")}
+                        </Heading>
+                        <div className="mx_LoginWithQR_qrWrapper">
+                            {this.props.code ? (
+                                <QRCode data={[{ data: this.props.code, mode: "byte" }]} />
+                            ) : (
+                                <Spinner />
+                            )}
+                        </div>
+                        <ol>
+                            {steps.map((step, i) => (
+                                <li key={this.props.intent + i}>{step}</li>
+                            ))}
+                        </ol>
+                    </>
+                );
                 break;
+            }
             case Phase.Loading:
                 main = this.simpleSpinner();
                 break;

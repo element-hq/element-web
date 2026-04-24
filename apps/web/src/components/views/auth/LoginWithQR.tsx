@@ -19,6 +19,7 @@ import {
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
 import { AutoDiscovery, type MatrixClient, type XOR } from "matrix-js-sdk/src/matrix";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
@@ -89,10 +90,14 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         }
     }
 
-    private async updateMode(mode: Mode): Promise<void> {
+    private async updateMode(mode: Mode, showLoading = true): Promise<void> {
         this.abortController?.abort();
         this.abortController = new AbortController();
-        this.setState({ phase: Phase.Loading, rendezvous: undefined });
+        this.setState({ rendezvous: undefined });
+        if (showLoading) {
+            this.setState({ phase: Phase.Loading });
+        }
+
         if (mode === Mode.Show) {
             await this.generateAndShowCode(this.abortController);
         }
@@ -275,7 +280,10 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         // Generate a new rendezvous channel & qr code if we hit expiry whilst still showing the QR code
         if (reason === ClientRendezvousFailureReason.Expired && this.state.phase === Phase.ShowingQR) {
             try {
-                await this.updateMode(Mode.Show);
+                this.reset();
+                // Add a sleep to make the UX looks less flickery and more intentional
+                await sleep(1000);
+                await this.updateMode(Mode.Show, false);
                 return;
             } catch (e) {
                 logger.warn("Failed to re-roll qr code on expiry", e);
