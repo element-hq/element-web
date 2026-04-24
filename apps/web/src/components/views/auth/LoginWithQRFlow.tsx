@@ -262,7 +262,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         </Heading>
                         <div className="mx_LoginWithQR_qrWrapper">
                             {this.props.code ? (
-                                <QRCode data={[{ data: this.props.code, mode: "byte" }]} />
+                                <QRCode data={[{ data: this.props.code, mode: "byte" }]} width={200} />
                             ) : (
                                 <Spinner />
                             )}
