@@ -49,8 +49,8 @@ export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSection
                 <Form.Root
                     className="mx_CreateSectionDialog_form"
                     onSubmit={(e) => {
-                        onFinished(true, value);
                         e.preventDefault();
+                        if (!isInvalid) onFinished(true, value);
                     }}
                 >
                     <Form.Field name="sectionName">
