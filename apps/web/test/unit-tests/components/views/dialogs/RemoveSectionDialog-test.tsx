@@ -18,23 +18,30 @@ describe("RemoveSectionDialog", () => {
         jest.resetAllMocks();
     });
 
-    function renderComponent(): void {
-        render(<RemoveSectionDialog onFinished={onFinished} />);
-    }
-
-    it("renders the dialog", () => {
-        const { container } = render(<RemoveSectionDialog onFinished={onFinished} />);
+    it("renders the dialog when section is not empty", () => {
+        const { container } = render(<RemoveSectionDialog onFinished={onFinished} isEmpty={false} />);
         expect(container).toMatchSnapshot();
+        expect(
+            screen.getByText("The chats in this section will still be available in your chats list."),
+        ).toBeInTheDocument();
+    });
+
+    it("renders the dialog when section is empty", () => {
+        const { container } = render(<RemoveSectionDialog onFinished={onFinished} isEmpty={true} />);
+        expect(container).toMatchSnapshot();
+        expect(
+            screen.queryByText("The chats in this section will still be available in your chats list."),
+        ).not.toBeInTheDocument();
     });
 
     it("calls onFinished with true when remove section is clicked", async () => {
-        renderComponent();
+        render(<RemoveSectionDialog onFinished={onFinished} isEmpty={false} />);
         await userEvent.click(screen.getByRole("button", { name: "Remove section" }));
         expect(onFinished).toHaveBeenCalledWith(true);
     });
 
     it("calls onFinished with false when the dialog is cancelled", async () => {
-        renderComponent();
+        render(<RemoveSectionDialog onFinished={onFinished} isEmpty={false} />);
         await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
         expect(onFinished).toHaveBeenCalledWith(false);
     });

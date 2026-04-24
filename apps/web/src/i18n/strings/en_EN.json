@@ -1858,7 +1858,7 @@
         "reason_label": "Reason (optional)"
     },
     "remove_section_dialog": {
-        "confirmation": "Are you sure you want to remove this section? ",
+        "confirmation": "Are you sure you want to remove this section?",
         "description": "The chats in this section will still be available in your chats list.",
         "remove_section": "Remove section",
         "title": "Remove section?"

@@ -1072,8 +1072,8 @@ describe("RoomListStoreV3", () => {
                 const listsUpdateListener = jest.fn();
                 store.on(LISTS_UPDATE_EVENT, listsUpdateListener);
 
-                await store.removeSection("element.io.section.test-tag");
-                expect(sectionModule.deleteSection).toHaveBeenCalledWith("element.io.section.test-tag");
+                await store.removeSection("element.io.section.test-tag", false);
+                expect(sectionModule.deleteSection).toHaveBeenCalledWith("element.io.section.test-tag", false);
                 expect(listsUpdateListener).toHaveBeenCalled();
             });
         });

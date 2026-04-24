@@ -510,9 +510,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Remove a section
      * Emits {@link LISTS_UPDATE_EVENT} if the section was successfully removed.
      * @param tag The tag of the section to remove
+     * @param isEmpty Whether the section is empty
      */
-    public async removeSection(tag: string): Promise<void> {
-        await deleteSection(tag);
+    public async removeSection(tag: string, isEmpty: boolean): Promise<void> {
+        await deleteSection(tag, isEmpty);
         this.scheduleEmit();
     }
 

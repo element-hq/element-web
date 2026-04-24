@@ -15,12 +15,14 @@ import DialogButtons from "../elements/DialogButtons";
 
 interface RemoveSectionDialogProps {
     onFinished: (shouldRemoveSection: boolean) => void;
+    /** Whether the section is empty */
+    isEmpty: boolean;
 }
 
 /**
  * Dialog shown to the user to remove section in the room list.
  */
-export function RemoveSectionDialog({ onFinished }: RemoveSectionDialogProps): JSX.Element {
+export function RemoveSectionDialog({ onFinished, isEmpty }: RemoveSectionDialogProps): JSX.Element {
     return (
         <BaseDialog
             className="mx_RemoveSectionDialog"
@@ -29,7 +31,12 @@ export function RemoveSectionDialog({ onFinished }: RemoveSectionDialogProps): J
             hasCancel={true}
         >
             <Text as="span">{_t("remove_section_dialog|confirmation")}</Text>
-            <Text as="span">{_t("remove_section_dialog|description")}</Text>
+            {!isEmpty && (
+                <>
+                    <br />
+                    <Text as="span">{_t("remove_section_dialog|description")}</Text>
+                </>
+            )}
             <DialogButtons
                 primaryButton={_t("remove_section_dialog|remove_section")}
                 hasCancel={true}

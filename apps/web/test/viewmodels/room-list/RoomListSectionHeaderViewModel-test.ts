@@ -172,7 +172,16 @@ describe("RoomListSectionHeaderViewModel", () => {
     });
 
     describe("removeSection", () => {
-        it("should delegate to RoomListStoreV3.instance.removeSection", async () => {
+        beforeEach(() => {
+            const mockState = {
+                on: jest.fn(),
+                off: jest.fn(),
+                hasAnyNotificationOrActivity: false,
+            } as unknown as RoomNotificationState;
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(mockState);
+        });
+
+        it("should delegate to RoomListStoreV3.instance.removeSection with isEmpty=true when no rooms", async () => {
             const removeSectionSpy = jest.spyOn(RoomListStoreV3.instance, "removeSection").mockResolvedValue(undefined);
             const tag = "element.io.section.custom";
             const vm = new RoomListSectionHeaderViewModel({
@@ -183,7 +192,22 @@ describe("RoomListSectionHeaderViewModel", () => {
             });
 
             await vm.removeSection();
-            expect(removeSectionSpy).toHaveBeenCalledWith(tag);
+            expect(removeSectionSpy).toHaveBeenCalledWith(tag, true);
+        });
+
+        it("should delegate to RoomListStoreV3.instance.removeSection with isEmpty=false when rooms exist", async () => {
+            const removeSectionSpy = jest.spyOn(RoomListStoreV3.instance, "removeSection").mockResolvedValue(undefined);
+            const tag = "element.io.section.custom";
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            vm.setRooms([mkRoom(matrixClient, "!room:server")]);
+
+            await vm.removeSection();
+            expect(removeSectionSpy).toHaveBeenCalledWith(tag, false);
         });
     });
 

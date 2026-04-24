@@ -152,6 +152,8 @@ export class RoomListSectionHeaderViewModel
     };
 
     public removeSection = async (): Promise<void> => {
-        await RoomListStoreV3.instance.removeSection(this.props.tag);
+        // There is one notification state per room in the section
+        const isEmpty = this.roomNotificationStates.size === 0;
+        await RoomListStoreV3.instance.removeSection(this.props.tag, isEmpty);
     };
 }

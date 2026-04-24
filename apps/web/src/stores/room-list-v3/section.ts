@@ -99,15 +99,16 @@ export async function editSection(tag: string): Promise<void> {
 /**
  * Deletes a custom section by showing a confirmation dialog to the user. If the user confirms, it removes the section data from the settings and updates the ordered list of sections.
  * @param tag - The tag of the section to delete.
+ * @param isEmpty - Whether the section is empty (has no rooms). If the section is not empty, the confirmation dialog will show a warning message.
  */
-export async function deleteSection(tag: string): Promise<void> {
+export async function deleteSection(tag: string, isEmpty: boolean): Promise<void> {
     const sectionData = SettingsStore.getValue("RoomList.CustomSectionData");
     if (!sectionData[tag]) {
         logger.info("Unknown section tag, cannot delete section", tag);
         return;
     }
 
-    const modal = Modal.createDialog(RemoveSectionDialog);
+    const modal = Modal.createDialog(RemoveSectionDialog, { isEmpty });
     const [shouldRemoveSection] = await modal.finished;
     if (!shouldRemoveSection) return;
 

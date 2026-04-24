@@ -159,18 +159,21 @@ describe("section", () => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({});
             const createDialogSpy = jest.spyOn(Modal, "createDialog");
 
-            await deleteSection(tag);
+            await deleteSection(tag, false);
             expect(createDialogSpy).not.toHaveBeenCalled();
         });
 
-        it("opens the RemoveSectionDialog", async () => {
+        it.each([
+            [true, "empty"],
+            [false, "non-empty"],
+        ])("opens the RemoveSectionDialog with isEmpty=%s for %s section", async (isEmpty) => {
             const createDialogSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({
                 finished: Promise.resolve([false]),
                 close: jest.fn(),
             } as any);
 
-            await deleteSection(tag);
-            expect(createDialogSpy).toHaveBeenCalledWith(RemoveSectionDialog);
+            await deleteSection(tag, isEmpty);
+            expect(createDialogSpy).toHaveBeenCalledWith(RemoveSectionDialog, { isEmpty });
         });
 
         it("does not save when user cancels", async () => {
@@ -180,7 +183,7 @@ describe("section", () => {
             } as any);
             const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            await deleteSection(tag);
+            await deleteSection(tag, false);
             expect(setValueSpy).not.toHaveBeenCalled();
         });
 
@@ -191,7 +194,7 @@ describe("section", () => {
             } as any);
             const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            await deleteSection(tag);
+            await deleteSection(tag, false);
 
             const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
             expect(orderedCall![3]).toEqual([otherTag]);
