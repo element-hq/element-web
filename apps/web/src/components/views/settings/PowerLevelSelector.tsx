@@ -129,7 +129,7 @@ export function PowerLevelSelector({
             })}
 
             <Button
-                size="sm"
+                size="md"
                 kind="primary"
                 // mx_Dialog_nonDialogButton is necessary to avoid the Dialog CSS to override the button style
                 className="mx_Dialog_nonDialogButton mx_PowerLevelSelector_Button"

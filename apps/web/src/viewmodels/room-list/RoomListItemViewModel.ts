@@ -400,8 +400,12 @@ export class RoomListItemViewModel
         echoChamber.notificationVolume = elementNotifState;
     };
 
-    public onCreateSection = (): void => {
-        RoomListStoreV3.instance.createSection();
+    public onCreateSection = async (): Promise<void> => {
+        const newTag = await RoomListStoreV3.instance.createSection();
+        // Add the room to the section
+        if (newTag) {
+            tagRoom(this.props.room, newTag);
+        }
     };
 
     public onToggleSection = (tag: string): void => {

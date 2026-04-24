@@ -15,6 +15,7 @@ import {
     type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { waitFor } from "jest-matrix-react";
 
 import { createTestClient, flushPromises } from "../../test-utils";
 import { RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";
@@ -591,11 +592,17 @@ describe("RoomListItemViewModel", () => {
             });
         });
 
-        it("should call createSection on RoomListStoreV3 when onCreateSection is called", () => {
-            const createSectionSpy = jest.spyOn(RoomListStoreV3.instance, "createSection").mockResolvedValue();
+        it("should call createSection on RoomListStoreV3 when onCreateSection is called", async () => {
+            const createSectionSpy = jest
+                .spyOn(RoomListStoreV3.instance, "createSection")
+                .mockResolvedValue("element.io.section.work");
+            const tagRoomSpy = jest.spyOn(tagRoomModule, "tagRoom").mockImplementation(() => {});
+
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
             viewModel.onCreateSection();
             expect(createSectionSpy).toHaveBeenCalled();
+
+            await waitFor(() => expect(tagRoomSpy).toHaveBeenCalledWith(room, "element.io.section.work"));
         });
 
         it("should call tagRoom when onToggleSection is called", () => {

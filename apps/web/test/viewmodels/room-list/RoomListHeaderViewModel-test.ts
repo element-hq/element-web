@@ -315,7 +315,9 @@ describe("RoomListHeaderViewModel", () => {
         });
 
         it("should call createSection on RoomListStoreV3 when createSection is called", () => {
-            const createSectionSpy = jest.spyOn(RoomListStoreV3.instance, "createSection").mockResolvedValue();
+            const createSectionSpy = jest
+                .spyOn(RoomListStoreV3.instance, "createSection")
+                .mockResolvedValue("element.io.section.work");
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
             vm.createSection();
             expect(createSectionSpy).toHaveBeenCalled();

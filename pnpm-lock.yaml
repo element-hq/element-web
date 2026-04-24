@@ -16,8 +16,8 @@ catalogs:
       specifier: 10.1.0
       version: 10.1.0
     '@vector-im/compound-web':
-      specifier: 9.2.0
-      version: 9.2.0
+      specifier: 9.2.1
+      version: 9.2.1
     matrix-web-i18n:
       specifier: 3.6.0
       version: 3.6.0
@@ -349,7 +349,7 @@ importers:
         version: 10.1.0(@types/react@19.2.14)(react@19.2.5)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 9.2.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.14)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        version: 9.2.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.14)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@vector-im/matrix-wysiwyg':
         specifier: 2.40.0
         version: 2.40.0(patch_hash=7bdf6150f2905bc2f055a6bcaa7b9d78fa7ffde82e800bcc454ac7b0096bd65e)(react@19.2.5)
@@ -985,6 +985,9 @@ importers:
       testcontainers:
         specifier: ^11.0.0
         version: 11.14.0
+      wait-on:
+        specifier: ^9.0.4
+        version: 9.0.5
       yaml:
         specifier: ^2.7.0
         version: 2.8.3
@@ -998,9 +1001,6 @@ importers:
       typescript:
         specifier: ^6.0.0
         version: 6.0.3
-      wait-on:
-        specifier: ^9.0.4
-        version: 9.0.5
 
   packages/shared-components:
     dependencies:
@@ -1124,7 +1124,7 @@ importers:
         version: 8.58.2(eslint@8.57.1)(typescript@6.0.3)
       '@vector-im/compound-web':
         specifier: 'catalog:'
-        version: 9.2.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.14)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        version: 9.2.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.14)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@vitest/browser-playwright':
         specifier: ^4.0.17
         version: 4.1.5(playwright@1.59.1)(vite@8.0.9(@types/node@18.19.130)(esbuild@0.27.4)(jiti@2.6.1)(sugarss@5.0.1(postcss@8.5.10))(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3))(vitest@4.1.5)
@@ -5808,8 +5808,8 @@ packages:
       react:
         optional: true
 
-  '@vector-im/compound-web@9.2.0':
-    resolution: {integrity: sha512-jHbABGEQ2yqNtm5xRIkklQs198VEfSk9AJQolI+e4WSJ0xg8Ozyv9t9KIuKQAmjdSV9aow5G6hDE861XB6DQgw==}
+  '@vector-im/compound-web@9.2.1':
+    resolution: {integrity: sha512-n4OJYGI+V+7gT5/gZUeFJRPqAnirvhXKvAYaHq42Ruq5hdVlQsmV6/VMhTqrPntP8/y9ZcT0DneTCUMyI6htBg==}
     peerDependencies:
       '@fontsource/inconsolata': ^5
       '@fontsource/inter': ^5
@@ -18530,7 +18530,7 @@ snapshots:
       '@types/react': 19.2.14
       react: 19.2.5
 
-  '@vector-im/compound-web@9.2.0(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.14)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@vector-im/compound-web@9.2.1(@fontsource/inconsolata@5.2.8)(@fontsource/inter@5.2.8)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(@vector-im/compound-design-tokens@10.1.0(@types/react@19.2.14)(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
       '@floating-ui/react': 0.27.17(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@fontsource/inconsolata': 5.2.8

@@ -112,7 +112,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -132,7 +132,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                      Use another device
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -141,7 +141,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"
@@ -305,7 +305,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -314,7 +314,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                     Use recovery key
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -323,7 +323,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"

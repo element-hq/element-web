@@ -49,18 +49,18 @@ const DefaultWelcome: React.FC<Props> = ({ serverConfig }) => {
         body = (
             <div className="mx_DefaultWelcome_buttons">
                 {showQrButton && (
-                    <Button as="a" href="#/qr_login" kind="primary" size="sm" Icon={QrCodeIcon}>
+                    <Button as="a" href="#/qr_login" kind="primary" size="md" Icon={QrCodeIcon}>
                         {_t("auth|sign_in_with_qr")}
                     </Button>
                 )}
-                <Button as="a" href="#/login" kind="primary" size="sm">
+                <Button as="a" href="#/login" kind="primary" size="md">
                     {showQrButton ? _t("auth|sign_in_manually") : _t("action|sign_in")}
                 </Button>
-                <Button as="a" href="#/register" kind="secondary" size="sm">
+                <Button as="a" href="#/register" kind="secondary" size="md">
                     {_t("action|create_account")}
                 </Button>
                 {showGuestFunctions && (
-                    <Button as="a" href="#/directory" kind="tertiary" size="sm">
+                    <Button as="a" href="#/directory" kind="tertiary" size="md">
                         {_t("action|explore_rooms")}
                     </Button>
                 )}
