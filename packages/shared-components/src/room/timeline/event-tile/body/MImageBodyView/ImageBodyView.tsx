@@ -249,9 +249,9 @@ export function ImageBodyView({
     const [focus, setFocus] = useState(false);
     const hoverOrFocus = hover || focus;
 
-    const rootClassName = classNames(className, styles.root);
-    const resolvedContainerClassName = classNames(containerClassName, styles.thumbnailContainer);
-    const resolvedImageClassName = classNames(imageClassName, styles.image);
+    const rootClassName = className ?? styles.root;
+    const resolvedContainerClassName = containerClassName ?? styles.thumbnailContainer;
+    const resolvedImageClassName = imageClassName ?? styles.image;
 
     if (state === ImageBodyViewState.ERROR) {
         return (

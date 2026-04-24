@@ -112,6 +112,37 @@ describe("ImageBodyView", () => {
         expect(onLinkClick).toHaveBeenCalledTimes(1);
     });
 
+    it("preserves supplied legacy class names without appending module classes", () => {
+        const vm = new TestImageBodyViewModel({
+            state: ImageBodyViewState.READY,
+            alt: "Legacy class image",
+            src: "https://example.org/full.png",
+            thumbnailSrc: "https://example.org/thumb.png",
+            maxWidth: 320,
+            maxHeight: 240,
+            aspectRatio: "4 / 3",
+        });
+
+        const { container } = render(
+            <ImageBodyView
+                vm={vm}
+                className="mx_MImageBody"
+                containerClassName="mx_MImageBody_thumbnail_container"
+                imageClassName="mx_MImageBody_thumbnail"
+            />,
+        );
+
+        expect(container.querySelector(".mx_MImageBody")).toHaveAttribute("class", "mx_MImageBody");
+        expect(container.querySelector(".mx_MImageBody_thumbnail_container")).toHaveAttribute(
+            "class",
+            "mx_MImageBody_thumbnail_container",
+        );
+        expect(screen.getByRole("img", { name: "Legacy class image" })).toHaveAttribute(
+            "class",
+            "mx_MImageBody_thumbnail",
+        );
+    });
+
     it("swaps to the full source on hover for animated previews", async () => {
         const user = userEvent.setup();
         const vm = new TestImageBodyViewModel({
