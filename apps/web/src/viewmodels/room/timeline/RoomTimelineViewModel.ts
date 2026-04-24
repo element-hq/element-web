@@ -19,6 +19,7 @@ import type {
     TimelineViewSnapshot,
     TimelineViewActions,
     TimelineItem,
+    NavigationAnchor,
 } from "@element-hq/web-shared-components";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import shouldHideEvent from "../../../shouldHideEvent";
@@ -28,13 +29,25 @@ import { logger } from "matrix-js-sdk/src/logger";
 const PAGINATE_SIZE = 100;
 const INITIAL_SIZE = 100;
 
+/**
+ * Discriminated union describing the initial scroll target for {@link RoomTimelineViewModel.load}.
+ *
+ * - `live`      — scroll to the live end of the room.
+ * - `permalink` — centre on `eventId` and highlight it.
+ * - `restore`   — scroll to the saved `eventId` without highlighting.
+ */
+type LoadTarget =
+    | { kind: "live" }
+    | { kind: "permalink"; eventId: string }
+    | { kind: "restore"; eventId: string };
+
 /** Starting value for `firstItemIndex`, high enough that prepends never go negative. */
 const INITIAL_FIRST_ITEM_INDEX = 100_000;
 
 export interface RoomTimelineViewModelOpts {
     client: MatrixClient;
     room: Room;
-    /** Optional anchor for initial load (permalink, search result). */
+    /** Optional anchor for initial load (permalink, search result). Shown highlighted and centred. */
     initialEventId?: string;
 }
 
@@ -70,16 +83,11 @@ export class RoomTimelineViewModel
     private continuationCache = new Map<string, boolean>();
 
     /**
-     * True from the moment a permalink `load(eventId)` completes until the
-     * first `onEndReached` is processed.  Prevents that first (Virtuoso-
-     * triggered-on-tiny-list) `onEndReached` from setting `atLiveEnd=true`
-     * and jumping the view to the bottom.
-     *
-     * Unlike `pendingAnchor`, this flag lives on the instance (not in the
-     * snapshot) so it is NOT affected by `onAnchorReached()` clearing the
-     * snapshot anchor before `onEndReached` fires.
+     * Set on `permalink` and `restore` loads; cleared on the first `onEndReached`.
+     * Allows that first call to bypass the `pendingAnchor` guard so the initial
+     * window fills while the anchor scroll is still pending.
      */
-    private permalinkMode = false;
+    private anchoredLoad = false;
 
     /**
      * In-flight backward pagination chain, or null when idle.
@@ -97,6 +105,41 @@ export class RoomTimelineViewModel
      */
     private backwardPaginateChain: Promise<void> | null = null;
 
+    /** Mirror of {@link backwardPaginateChain} for the forward direction. */
+    private forwardPaginateChain: Promise<void> | null = null;
+
+    /** True when Virtuoso reports the list is scrolled to the bottom. */
+    private isAtBottom = false;
+
+    /**
+     * The event ID of the bottommost visible item as last reported by
+     * {@link onVisibleRangeChanged}. Persisted to localStorage on dispose
+     * so the view can be restored to this position next visit.
+     */
+    private lastBottomEventId: string | null = null;
+
+    private static readonly SCROLL_STATE_KEY_PREFIX = "timeline_scroll_";
+
+    private static readScrollTarget(roomId: string): string | null {
+        try {
+            return localStorage.getItem(`${RoomTimelineViewModel.SCROLL_STATE_KEY_PREFIX}${roomId}`);
+        } catch {
+            return null;
+        }
+    }
+
+    private static saveScrollTarget(roomId: string, eventId: string | null): void {
+        try {
+            if (eventId) {
+                localStorage.setItem(`${RoomTimelineViewModel.SCROLL_STATE_KEY_PREFIX}${roomId}`, eventId);
+            } else {
+                localStorage.removeItem(`${RoomTimelineViewModel.SCROLL_STATE_KEY_PREFIX}${roomId}`);
+            }
+        } catch {
+            // Ignore storage errors (private browsing, quota exceeded, etc.)
+        }
+    }
+
     public constructor(opts: RoomTimelineViewModelOpts) {
         super(opts, {
             items: [],
@@ -111,7 +154,16 @@ export class RoomTimelineViewModel
         this.opts = opts;
         this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet());
 
-        this.load(opts.initialEventId);
+        // Determine how to load the timeline.
+        let loadTarget: LoadTarget;
+        if (opts.initialEventId) {
+            loadTarget = { kind: "permalink", eventId: opts.initialEventId };
+        } else {
+            const savedEventId = RoomTimelineViewModel.readScrollTarget(opts.room.roomId);
+            loadTarget = savedEventId ? { kind: "restore", eventId: savedEventId } : { kind: "live" };
+        }
+
+        this.load(loadTarget);
 
         // Listen for new events so live messages appear.
         this.disposables.trackListener(opts.room, RoomEvent.Timeline, this.onRoomTimeline as (...args: unknown[]) => void);
@@ -149,33 +201,24 @@ export class RoomTimelineViewModel
             );
             const items = this.buildItems();
             logger.debug(`[TimelineVM][onRoomTimeline] buildItems → ${items.length} items`);
-            // Only promote atLiveEnd to true if we were already tracking the live end.
-            // If the user loaded a permalink (atLiveEnd starts false), live events
-            // arriving in the background will eventually paginate the window to the
-            // live edge, but we must NOT flip followOutput on — that would auto-scroll
-            // Virtuoso to the bottom. atLiveEnd is set to true properly once the user
-            // manually scrolls to the bottom and triggerForwardPaginate completes.
-            const wasAtLiveEnd = this.snapshot.current.atLiveEnd;
-            const nowAtLiveEnd = wasAtLiveEnd && !this.timelineWindow.canPaginate(Direction.Forward);
-            logger.debug(
-                `[TimelineVM][onRoomTimeline] atLiveEnd: wasAtLiveEnd=${wasAtLiveEnd} nowAtLiveEnd=${nowAtLiveEnd}`,
-            );
             this.snapshot.merge({
                 items,
-                atLiveEnd: nowAtLiveEnd,
+                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
             });
         });
     };
 
-    private async load(eventId?: string): Promise<void> {
-        logger.debug(`[TimelineVM] load() start — eventId=${eventId ?? "none"}`);
+    private async load(target: LoadTarget): Promise<void> {
+        logger.debug(`[TimelineVM] load() start — kind=${target.kind}${target.kind !== "live" ? ` eventId=${target.eventId}` : ""}`);
         this.snapshot.merge({
             backwardPagination: "loading",
             forwardPagination: "loading",
         });
 
+        const sdkLoadTarget = target.kind !== "live" ? target.eventId : undefined;
+
         try {
-            await this.timelineWindow.load(eventId, INITIAL_SIZE);
+            await this.timelineWindow.load(sdkLoadTarget, INITIAL_SIZE);
             if (this.isDisposed) return;
             const windowEvents = this.timelineWindow.getEvents();
             logger.debug(
@@ -191,28 +234,45 @@ export class RoomTimelineViewModel
             }
             const items = this.buildItems();
             logger.debug(
-                `[TimelineVM] load() done — ${windowEvents.length} events → ${items.length} items after filtering, ` +
-                `highlightedEventId=${eventId ?? "none"}`,
+                `[TimelineVM] load() done — ${windowEvents.length} events → ${items.length} items after filtering`,
             );
-            if (eventId) {
-                this.permalinkMode = true;
-                logger.debug(`[TimelineVM] load() — permalinkMode=true`);
+
+            if (target.kind === "permalink" || target.kind === "restore") {
+                // Both cases start with a small centred window. Allow the first automatic
+                // onEndReached to forward-paginate (filling the window) but prevent that
+                // chain from setting atLiveEnd=true and jumping the view to the bottom.
+                this.anchoredLoad = true;
+                logger.debug(`[TimelineVM] load() — anchoredLoad=true (kind=${target.kind})`);
             }
+
+            let pendingAnchor: NavigationAnchor | null = null;
+
+            if (target.kind === "permalink") {
+                pendingAnchor = { targetKey: target.eventId, align: "center", highlight: true };
+            } else if (target.kind === "restore") {
+                if (items.some((i) => i.key === target.eventId)) {
+                    pendingAnchor = { targetKey: target.eventId, align: "end" };
+                } else {
+                    // Saved event was redacted / fell outside the window — fall through to live-end.
+                    logger.debug(`[TimelineVM] load() — restore target ${target.eventId} not in items, falling back to live end`);
+                }
+            }
+
+            if (!pendingAnchor && items.length > 0 && !this.timelineWindow.canPaginate(Direction.Forward)) {
+                // Live-end load (or stale restore fallback): anchor to the last rendered
+                // item so scrollIntoViewOnChange fires post-ResizeObserver and the view
+                // reliably lands at the very bottom.
+                pendingAnchor = { targetKey: items[items.length - 1].key, align: "end" };
+                logger.debug(`[TimelineVM] load() — live-end anchor key=${pendingAnchor.targetKey}`);
+            }
+
             this.snapshot.merge({
                 items,
                 backwardPagination: "idle",
                 forwardPagination: "idle",
                 atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
-                // Only permalink loads request an explicit scroll target. Bottom-of-room
-                // loads rely on Virtuoso's `alignToBottom` behaviour; any residual
-                // "landed above the bottom" caused by items resizing after mount is
-                // addressed at the item layer by reserving heights (e.g. encrypted
-                // tile placeholders, media sizes) and by suppressing media during
-                // scroll.
-                pendingAnchor: eventId
-                    ? { targetKey: eventId, align: "center", highlight: true }
-                    : null,
-                highlightedEventId: eventId ?? null,
+                pendingAnchor,
+                highlightedEventId: target.kind === "permalink" ? target.eventId : null,
             });
         } catch (e) {
             logger.error(`[TimelineVM] load() error`, e);
@@ -238,18 +298,65 @@ export class RoomTimelineViewModel
     };
 
     public onAnchorReached = (): void => {
+        logger.debug(`[TimelineVM] onAnchorReached — clearing pendingAnchor, anchoredLoad=${this.anchoredLoad}`);
         this.snapshot.merge({ pendingAnchor: null });
     };
+
+    public onAtBottomStateChange = (atBottom: boolean): void => {
+        this.isAtBottom = atBottom;
+    };
+
+    /**
+     * Called by the View on every Virtuoso `rangeChanged` event.
+     * Walks backwards from `endIndex` to find the bottommost rendered event,
+     * then stores its ID for scroll-position persistence on dispose.
+     */
+    public onVisibleRangeChanged = (startIndex: number, endIndex: number): void => {
+        // Don't update while an anchor scroll is in progress — the range reflects the
+        // view mid-scroll, not the user's actual reading position. Once the anchor is
+        // reached and pendingAnchor is cleared, normal tracking resumes.
+        if (this.snapshot.current.pendingAnchor !== null) return;
+
+        const items = this.snapshot.current.items;
+        for (let i = endIndex; i >= startIndex; i--) {
+            const index = i - this.snapshot.current.firstItemIndex;
+            const item = items[index];
+            if (item?.kind === "event") {
+                this.lastBottomEventId = item.key;
+                return;
+            }
+        }
+    };
+
+    /**
+     * Save the current scroll position to localStorage before tearing down.
+     * Clears the saved position only when the user is visually at the bottom
+     * of the list (so the next visit starts fresh at the live end).
+     * Preserves any existing saved position when no visible range was recorded.
+     */
+    public override dispose(): void {
+        if (!this.lastBottomEventId) {
+            logger.debug(`[TimelineVM] dispose() — no visible range recorded, preserving saved position`);
+            super.dispose();
+            return;
+        }
+
+        if (this.isAtBottom) {
+            logger.debug(`[TimelineVM] dispose() — clearing saved scroll position (at visual bottom)`);
+            RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, null);
+        } else {
+            logger.debug(`[TimelineVM] dispose() — saving scroll position eventId=${this.lastBottomEventId}`);
+            RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, this.lastBottomEventId);
+        }
+        super.dispose();
+    }
 
     // ── Pagination ───────────────────────────────────────────────────
 
     /**
-     * Entry point for backward pagination. Coalesces concurrent calls: if a
-     * chain is already in flight (e.g. Virtuoso fires `onStartReached` twice
-     * during a single scroll gesture) the extra calls are silently dropped —
-     * the existing chain will re-check whether we are still at the start after
-     * it settles, and Virtuoso will re-fire `onStartReached` naturally if more
-     * items are needed.
+     * Entry point for backward pagination. Coalesces concurrent calls behind a
+     * single in-flight chain; Virtuoso will re-fire `onStartReached` naturally
+     * if more items are needed after the chain settles.
      */
     private triggerBackwardPaginate(): void {
         if (this.backwardPaginateChain) {
@@ -262,163 +369,150 @@ export class RoomTimelineViewModel
             return;
         }
 
-        this.backwardPaginateChain = this.runBackwardPaginateChain().finally(() => {
+        this.backwardPaginateChain = this.runPaginateChain(Direction.Backward).finally(() => {
             this.backwardPaginateChain = null;
         });
     }
 
     /**
-     * Runs a backward pagination chain to completion.
+     * Entry point for forward pagination. Coalesces concurrent `onEndReached`
+     * calls behind a single in-flight chain.
      *
-     * Loops internally when all fetched events are filtered (state events,
-     * hidden events, etc.) and there is still more history to fetch — this
-     * avoids leaving the user stranded at an invisible boundary. The loop
-     * holds `backwardPagination="loading"` for its entire duration so the
-     * view transitions through exactly one loading→idle cycle per chain,
-     * regardless of how many empty SDK batches are needed.
-     *
-     * After each batch the snapshot items and `firstItemIndex` are updated
-     * immediately (via {@link mergePrepended}), so the user sees content as
-     * soon as it lands even in the middle of a long filtered-event stretch.
-     */
-    private async runBackwardPaginateChain(): Promise<void> {
-        const MAX_EMPTY_RETRIES = 10;
-
-        this.snapshot.merge({ backwardPagination: "loading" });
-
-        try {
-            let emptyBatches = 0;
-
-            while (emptyBatches <= MAX_EMPTY_RETRIES) {
-                if (!this.timelineWindow.canPaginate(Direction.Backward)) {
-                    logger.debug(`[TimelineVM] paginate(backward) chain end — canPaginate=false`);
-                    break;
-                }
-
-                const prevItems = this.snapshot.current.items;
-                const preLoadFirstItemIndex = this.snapshot.current.firstItemIndex;
-
-                logger.debug(
-                    `[TimelineVM] paginate(backward) batch — ` +
-                        `emptyBatches=${emptyBatches}, items=${prevItems.length}, ` +
-                        `firstItemIndex=${preLoadFirstItemIndex}`,
-                );
-
-                const hasMore = await this.timelineWindow.paginate(Direction.Backward, PAGINATE_SIZE);
-
-                // Re-read the current snapshot after the async gap — forward pagination
-                // may have updated items while we were waiting.  Using a stale prevItems
-                // would cause mergePrepended to discard any events that were appended
-                // by concurrent forward pagination.
-                const currentItems = this.snapshot.current.items;
-                const currentFirstItemIndex = this.snapshot.current.firstItemIndex;
-
-                const rebuilt = this.buildItems();
-                const items = this.mergePrepended(currentItems, rebuilt);
-                const prepended = items.length - currentItems.length;
-                const newFirstItemIndex = currentFirstItemIndex - prepended;
-
-                logger.debug(
-                    `[TimelineVM] paginate(backward) batch done — ` +
-                        `prepended=${prepended}, hasMore=${hasMore}, emptyBatches=${emptyBatches}, ` +
-                        `firstItemIndex: ${preLoadFirstItemIndex} → ${newFirstItemIndex}`,
-                );
-
-                // Merge items and firstItemIndex immediately so the user sees
-                // content as soon as it lands. Pagination state stays "loading"
-                // — the view renders one continuous loading period for the whole
-                // chain rather than flickering per-batch.
-                this.snapshot.merge({ items, firstItemIndex: newFirstItemIndex });
-
-                if (prepended > 0) {
-                    break;
-                }
-
-                if (!hasMore) {
-                    // Reached the beginning of history.
-                    break;
-                }
-
-                // All fetched events were filtered — keep going.
-                emptyBatches++;
-            }
-
-            this.snapshot.merge({ backwardPagination: "idle" });
-        } catch (e) {
-            logger.error(`[TimelineVM] paginate(backward) error`, e);
-            this.snapshot.merge({ backwardPagination: "error" });
-        }
-    }
-
-    /**
-     * Forward pagination — simpler than backward: no retry loop (forward
-     * events are live and rarely all-filtered), no coalescing needed (forward
-     * is rate-limited naturally by the live event stream), no firstItemIndex
-     * bookkeeping (appends don't disturb the scroll anchor).
+     * Handles two cross-cutting concerns before delegating to the shared chain:
+     * - `anchoredLoad`: consumed exactly once on the first `onEndReached` after
+     *   a non-live initial load, so it is cleared here (instance state) rather
+     *   than inside the async chain.
+     * - `pendingAnchor` guard: while an anchor is pending we suppress any
+     *   `onEndReached` that was NOT the initial load's own first call, which
+     *   would otherwise paginate all the way to the live end and jump the view.
      */
     private triggerForwardPaginate(): void {
-        if (this.snapshot.current.forwardPagination === "loading") {
-            logger.debug(`[TimelineVM] paginate(forward) skipped — already loading`);
+        if (this.forwardPaginateChain) {
+            logger.debug(`[TimelineVM] paginate(forward) coalesced — chain in flight`);
             return;
         }
 
-        // Consume the permalink flag before any async work so it is cleared
-        // exactly once, regardless of the canPaginate result.
-        const wasInPermalinkMode = this.permalinkMode;
-        if (wasInPermalinkMode) {
-            this.permalinkMode = false;
-            logger.debug(`[TimelineVM] paginate(forward) — consuming permalinkMode`);
+        // Consume the anchored-load flag — always safe to clear, harmless if already false.
+        const wasAnchoredLoad = this.anchoredLoad;
+        this.anchoredLoad = false;
+        if (wasAnchoredLoad) {
+            logger.debug(`[TimelineVM] paginate(forward) — consuming anchoredLoad`);
         }
 
-        const canFwd = this.timelineWindow.canPaginate(Direction.Forward);
         logger.debug(
-            `[TimelineVM] paginate(forward) check — canPaginate=${canFwd}, ` +
+            `[TimelineVM] paginate(forward) check — canPaginate=${this.timelineWindow.canPaginate(Direction.Forward)}, ` +
             `atLiveEnd=${this.snapshot.current.atLiveEnd}, items=${this.snapshot.current.items.length}, ` +
-            `wasInPermalinkMode=${wasInPermalinkMode}`,
+            `wasAnchoredLoad=${wasAnchoredLoad}`,
         );
 
-        // After the initial permalink window load, suppress further forward pagination
-        // until the anchor has been resolved. Without this, a second onEndReached that
-        // fires because the initial window is too short to fill the viewport would
-        // paginate all the way to the live end, jumping the user away from the target.
-        if (!wasInPermalinkMode && this.snapshot.current.pendingAnchor !== null) {
+        // Suppress further forward pagination while an anchor is pending — except
+        // for the initial anchored load's own first onEndReached (wasAnchoredLoad).
+        if (!wasAnchoredLoad && this.snapshot.current.pendingAnchor !== null) {
             logger.debug(`[TimelineVM] paginate(forward) skipped — pendingAnchor still set`);
             return;
         }
 
-        if (!canFwd) {
+        if (!this.timelineWindow.canPaginate(Direction.Forward)) {
             logger.debug(`[TimelineVM] paginate(forward) skipped — canPaginate=false`);
-            // Only set atLiveEnd=true when this is a genuine user-scroll-to-bottom,
-            // not the automatic onEndReached that fires because the initial permalink
-            // window is too small to fill the viewport.
-            if (!wasInPermalinkMode && !this.snapshot.current.atLiveEnd) {
-                logger.debug(`[TimelineVM] paginate(forward) — not in permalink mode, setting atLiveEnd=true`);
+            if (!this.snapshot.current.atLiveEnd) {
+                logger.debug(`[TimelineVM] paginate(forward) — setting atLiveEnd=true`);
                 this.snapshot.merge({ atLiveEnd: true });
             }
             return;
         }
 
-        this.snapshot.merge({ forwardPagination: "loading" });
+        this.forwardPaginateChain = this.runPaginateChain(Direction.Forward, wasAnchoredLoad).finally(() => {
+            this.forwardPaginateChain = null;
+        });
+    }
 
-        this.timelineWindow
-            .paginate(Direction.Forward, PAGINATE_SIZE)
-            .then((hasMore) => {
-                const nowAtLiveEnd =
-                    !wasInPermalinkMode && !this.timelineWindow.canPaginate(Direction.Forward);
+    /**
+     * Shared pagination chain for both directions.
+     *
+     * Loops internally when all fetched events are filtered (state events,
+     * hidden events, etc.) so the user is never left stranded at an invisible
+     * boundary. The loop holds the relevant loading state for its entire
+     * duration, giving a single loading→idle transition per logical pagination
+     * regardless of how many empty SDK batches are needed.
+     *
+     * Differences between directions handled inline:
+     * - **Backward**: uses {@link mergePrepended} and decrements `firstItemIndex`.
+     * - **Forward**: rebuilds from the full window; updates `atLiveEnd` on completion.
+     */
+    private async runPaginateChain(direction: Direction, wasAnchoredLoad = false): Promise<void> {
+        // Not strictly necessary — the loop already terminates when canPaginate() returns
+        // false or hasMore is false. However, leaving it unbounded without user action feels a bit weird.
+        // This is a bit more defensive in that after 10 we give up and require the user to scroll again to trigger another chain.
+        const MAX_EMPTY_RETRIES = 10;
+        const isBackward = direction === Direction.Backward;
+        const dirLabel = isBackward ? "backward" : "forward";
+        const loadingKey = isBackward ? "backwardPagination" : "forwardPagination";
+
+        this.snapshot.merge({ [loadingKey]: "loading" });
+
+        try {
+            let emptyBatches = 0;
+
+            while (emptyBatches <= MAX_EMPTY_RETRIES) {
+                if (!this.timelineWindow.canPaginate(direction)) {
+                    logger.debug(`[TimelineVM] paginate(${dirLabel}) chain end — canPaginate=false`);
+                    break;
+                }
+
+                // Re-read snapshot after each async gap: the other direction may
+                // have updated items or firstItemIndex while we were awaiting.
+                const currentItems = this.snapshot.current.items;
+                const currentFirstItemIndex = this.snapshot.current.firstItemIndex;
+
                 logger.debug(
-                    `[TimelineVM] paginate(forward) done — items=${this.snapshot.current.items.length}, ` +
-                    `hasMore=${hasMore}, wasInPermalinkMode=${wasInPermalinkMode}, nowAtLiveEnd=${nowAtLiveEnd}`,
+                    `[TimelineVM] paginate(${dirLabel}) batch — ` +
+                    `emptyBatches=${emptyBatches}, items=${currentItems.length}, ` +
+                    `firstItemIndex=${currentFirstItemIndex}`,
                 );
-                this.snapshot.merge({
-                    items: this.buildItems(),
-                    forwardPagination: "idle",
-                    atLiveEnd: nowAtLiveEnd,
-                });
-            })
-            .catch((e) => {
-                logger.error(`[TimelineVM] paginate(forward) error`, e);
-                this.snapshot.merge({ forwardPagination: "error" });
-            });
+
+                const hasMore = await this.timelineWindow.paginate(direction, PAGINATE_SIZE);
+                if (this.isDisposed) return;
+
+                const rebuilt = this.buildItems();
+                let added: number;
+
+                if (isBackward) {
+                    // Re-read again — forward pagination may have appended during the await.
+                    const postItems = this.snapshot.current.items;
+                    const postFirstItemIndex = this.snapshot.current.firstItemIndex;
+                    const items = this.mergePrepended(postItems, rebuilt);
+                    const prepended = items.length - postItems.length;
+                    added = prepended;
+                    logger.debug(
+                        `[TimelineVM] paginate(backward) batch done — ` +
+                        `prepended=${prepended}, hasMore=${hasMore}, emptyBatches=${emptyBatches}, ` +
+                        `firstItemIndex: ${postFirstItemIndex} → ${postFirstItemIndex - prepended}`,
+                    );
+                    this.snapshot.merge({ items, firstItemIndex: postFirstItemIndex - prepended });
+                } else {
+                    added = rebuilt.length - currentItems.length;
+                    logger.debug(
+                        `[TimelineVM] paginate(forward) batch done — ` +
+                        `appended=${added}, hasMore=${hasMore}, emptyBatches=${emptyBatches}`,
+                    );
+                    this.snapshot.merge({ items: rebuilt });
+                }
+
+                if (added > 0 || !hasMore) break;
+
+                // All fetched events were filtered — keep going.
+                emptyBatches++;
+            }
+
+            const completionUpdate: Partial<TimelineViewSnapshot> = { [loadingKey]: "idle" };
+            if (!isBackward) {
+                completionUpdate.atLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
+            }
+            this.snapshot.merge(completionUpdate);
+        } catch (e) {
+            logger.error(`[TimelineVM] paginate(${dirLabel}) error`, e);
+            this.snapshot.merge({ [loadingKey]: "error" });
+        }
     }
 
     /**

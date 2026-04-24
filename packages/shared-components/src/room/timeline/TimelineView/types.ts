@@ -119,6 +119,16 @@ export interface TimelineViewActions {
 
     /** Report that the container has scrolled to the pending anchor. */
     onAnchorReached(): void;
+
+    /**
+     * Called by Virtuoso's rangeChanged on every visible-range update.
+     * The VM uses this to track the bottommost visible event for scroll-position persistence.
+     * Indices are 0-based into the items array.
+     */
+    onVisibleRangeChanged(startIndex: number, endIndex: number): void;
+
+    /** Called by Virtuoso's atBottomStateChange; VM uses this to decide whether to clear the saved scroll position on dispose. */
+    onAtBottomStateChange(atBottom: boolean): void;
 }
 
 export type TimelineViewModel = ViewModel<TimelineViewSnapshot, TimelineViewActions>;
