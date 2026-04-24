@@ -155,6 +155,35 @@ describe("ImageBodyViewModel", () => {
         expect(listener).not.toHaveBeenCalled();
     });
 
+    it("waits for initial media loading before exposing unencrypted media urls", () => {
+        const vm = createVm({
+            mediaVisible: true,
+            mxEvent: createEvent({
+                content: {
+                    info: {
+                        mimetype: "image/jpeg",
+                    },
+                },
+            }),
+        });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            state: ImageBodyViewState.READY,
+        });
+        expect(vm.getSnapshot().src).toBeUndefined();
+        expect(vm.getSnapshot().thumbnailSrc).toBeUndefined();
+        expect(mockedMediaFromContent).not.toHaveBeenCalled();
+
+        vm.loadInitialMediaIfVisible();
+
+        expect(vm.getSnapshot()).toMatchObject({
+            state: ImageBodyViewState.READY,
+            src: "https://server/full.png",
+            thumbnailSrc: "https://server/thumb.png",
+            linkUrl: "https://server/full.png",
+        });
+    });
+
     it("renders the ready snapshot with thumbnail data once visible", async () => {
         const vm = createVm({
             mxEvent: createEvent({

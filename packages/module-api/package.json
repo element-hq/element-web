@@ -40,9 +40,9 @@
         "matrix-widget-api": "^1.17.0",
         "rollup-plugin-external-globals": "^0.13.0",
         "semver": "^7.6.3",
-        "typescript": "^5.7.3",
-        "vite": "^7.3.2",
-        "vite-plugin-dts": "^4.5.0",
+        "typescript": "^6.0.0",
+        "unplugin-dts": "1.0.0-beta.6",
+        "vite": "^8.0.0",
         "vitest": "^4.0.0",
         "vitest-sonar-reporter": "^3.0.0"
     },
@@ -50,8 +50,8 @@
         "@matrix-org/react-sdk-module-api": "*",
         "@types/react": "*",
         "@types/react-dom": "*",
-        "matrix-widget-api": "*",
         "matrix-web-i18n": "*",
+        "matrix-widget-api": "*",
         "react": "^19"
     },
     "peerDependenciesMeta": {
@@ -64,6 +64,5 @@
         "matrix-web-i18n": {
             "optional": true
         }
-    },
-    "dependencies": {}
+    }
 }

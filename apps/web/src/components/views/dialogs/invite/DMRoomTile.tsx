@@ -19,8 +19,8 @@ import { Icon as EmailPillAvatarIcon } from "../../../../../res/img/icon-email-p
 interface IDMRoomTileProps {
     member: Member;
     lastActiveTs?: number;
-    onToggle(member: Member): void;
-    isSelected: boolean;
+    onToggle?(member: Member): void;
+    isSelected?: boolean;
 }
 
 /** A tile representing a single user in the "suggestions"/"recents" section of the invite dialog. */
@@ -30,7 +30,7 @@ export class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         e.preventDefault();
         e.stopPropagation();
 
-        this.props.onToggle(this.props.member);
+        this.props.onToggle?.(this.props.member);
     };
 
     public render(): React.ReactNode {

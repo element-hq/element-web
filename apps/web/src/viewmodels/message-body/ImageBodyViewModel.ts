@@ -223,11 +223,7 @@ export class ImageBodyViewModel
             );
         }
 
-        if (props.mediaEventHelper?.media.isEncrypted) {
-            return state.contentUrl;
-        }
-
-        return mediaFromContent(props.mxEvent.getContent<ImageContent>()).srcHttp;
+        return state.contentUrl;
     }
 
     public loadInitialMediaIfVisible(): void {
@@ -355,7 +351,7 @@ export class ImageBodyViewModel
                 return;
             }
         } else {
-            contentUrl = ImageBodyViewModel.getContentUrl(this.props, this.state);
+            contentUrl = mediaFromContent(this.props.mxEvent.getContent<ImageContent>()).srcHttp;
             thumbUrl = this.getThumbUrl();
         }
 

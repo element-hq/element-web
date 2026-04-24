@@ -61,6 +61,9 @@ import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 import InviteProgressBody from "./InviteProgressBody.tsx";
 import MultiInviter, { type CompletionStates as MultiInviterCompletionStates } from "../../../utils/MultiInviter.ts";
 import { DMRoomTile } from "./invite/DMRoomTile.tsx";
+import { logErrorAndShowErrorDialog } from "../../../utils/ErrorUtils.tsx";
+import UnknownIdentityUsersWarningDialog from "./invite/UnknownIdentityUsersWarningDialog.tsx";
+import { AddressType, getAddressType } from "../../../UserAddress.ts";
 
 interface Result {
     userId: string;
@@ -162,6 +165,14 @@ interface IInviteDialogState {
     currentTabId: TabId;
 
     /**
+     * If we tried to invite some users whose identity we don't know, we will show a warning.
+     * This is the list of users. (If it is `null`, we are not showing that warning.)
+     *
+     * Will never be the empty list.
+     */
+    unknownIdentityUsers: Member[] | null;
+
+    /**
      * True if we are sending the invites.
      *
      * We will grey out the action button, hide the suggestions, and display a spinner.
@@ -230,7 +241,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             dialPadValue: "",
             currentTabId: TabId.UserDirectory,
 
-            // These two flags are used for the 'Go' button to communicate what is going on.
+            unknownIdentityUsers: null,
+
             busy: false,
         };
     }
@@ -443,6 +455,21 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             });
         }
     };
+
+    /**
+     * Start the process of actually sending invites or creating a DM.
+     *
+     * Called once we have shown the user all the necessary warnings.
+     */
+    private async startDmOrSendInvites(): Promise<void> {
+        if (this.props.kind === InviteKind.Dm) {
+            await this.startDm();
+        } else if (this.props.kind === InviteKind.Invite) {
+            await this.inviteUsers();
+        } else {
+            throw new Error("Unknown InviteKind: " + this.props.kind);
+        }
+    }
 
     private transferCall = async (): Promise<void> => {
         if (this.props.kind !== InviteKind.CallTransfer) return;
@@ -1124,13 +1151,48 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     }
 
     /**
+     * Handle the user pressing the Go/Invite button in the "Start Chat" or "Invite users" view.
+     *
+     * We check if any of the users lack a known cryptographic identity, and show a warning if so.
+     */
+    private async onGoButtonPressed(): Promise<void> {
+        this.setBusy(true);
+
+        const targets = this.convertFilter();
+        const unknownIdentityUsers: Member[] = [];
+        const cli = MatrixClientPeg.safeGet();
+        const crypto = cli.getCrypto();
+        if (crypto) {
+            for (const t of targets) {
+                const addressType = getAddressType(t.userId);
+                if (
+                    addressType !== AddressType.MatrixUserId ||
+                    !(await crypto.getUserVerificationStatus(t.userId)).known
+                ) {
+                    unknownIdentityUsers.push(t);
+                }
+            }
+        }
+
+        // If we have some users with unknown identities, show the warning page.
+        if (unknownIdentityUsers.length > 0) {
+            logger.debug(
+                "InviteDialog: Warning about users with unknown identities:",
+                unknownIdentityUsers.map((u) => u.userId),
+            );
+            this.setState({ unknownIdentityUsers: unknownIdentityUsers, busy: false });
+        } else {
+            // Otherwise, transition directly to sending the relevant invites.
+            await this.startDmOrSendInvites();
+        }
+    }
+
+    /**
      * Render content of the "users" that is used for both invites and "start chat".
      */
     private renderMainTab(): JSX.Element {
         let helpText;
         let buttonText;
-        let goButtonFn: (() => Promise<void>) | null = null;
-
         const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
 
         const cli = MatrixClientPeg.safeGet();
@@ -1167,7 +1229,6 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             }
 
             buttonText = _t("action|go");
-            goButtonFn = this.startDm;
         } else if (this.props.kind === InviteKind.Invite) {
             const roomId = this.props.roomId;
             const room = MatrixClientPeg.get()?.getRoom(roomId);
@@ -1211,10 +1272,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             );
 
             buttonText = _t("action|invite");
-            goButtonFn = this.inviteUsers;
         } else {
             throw new Error("Unknown InviteDialog kind: " + this.props.kind);
         }
+
+        const onGoButtonPressed = (): void => {
+            this.onGoButtonPressed().catch((e) => logErrorAndShowErrorDialog("Error processing invites", e));
+        };
 
         return (
             <React.Fragment>
@@ -1223,7 +1287,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     {this.renderEditor()}
                     <AccessibleButton
                         kind="primary"
-                        onClick={goButtonFn}
+                        onClick={onGoButtonPressed}
                         className="mx_InviteDialog_goButton"
                         disabled={this.state.busy || !this.hasSelection()}
                     >
@@ -1235,12 +1299,49 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         );
     }
 
+    /** Callback function, which handles the user clicking "Remove" on the {@link UnknwownIdentityUsersWarningDialog}. */
+    private onRemoveUnknownIdentityUsersClicked = (): void => {
+        // Remove the unknown identity users, then return to the previous screen
+        const newTargets: Member[] = [];
+        for (const target of this.state.targets) {
+            if (!this.state.unknownIdentityUsers?.find((m) => m.userId == target.userId)) {
+                newTargets.push(target);
+            }
+        }
+        this.setState({
+            targets: newTargets,
+            unknownIdentityUsers: null,
+        });
+    };
+
     /**
      * Render the complete dialog, given this is not a call transfer dialog.
      *
      * See also: {@link renderCallTransferDialog}.
      */
     private renderRegularDialog(): React.ReactNode {
+        if (this.props.kind !== InviteKind.Dm && this.props.kind !== InviteKind.Invite) {
+            throw new Error("Unsupported InviteDialog kind: " + this.props.kind);
+        }
+
+        if (this.state.unknownIdentityUsers !== null) {
+            return (
+                <UnknownIdentityUsersWarningDialog
+                    onCancel={this.props.onFinished}
+                    onContinue={() => {
+                        this.setState({ unknownIdentityUsers: null });
+                        this.startDmOrSendInvites().catch((e) =>
+                            logErrorAndShowErrorDialog("Error processing invites", e),
+                        );
+                    }}
+                    onRemove={this.onRemoveUnknownIdentityUsersClicked}
+                    screenName={this.screenName}
+                    kind={this.props.kind}
+                    users={this.state.unknownIdentityUsers}
+                />
+            );
+        }
+
         let title;
         if (this.props.kind === InviteKind.Dm) {
             title = _t("space|add_existing_room_space|dm_heading");
