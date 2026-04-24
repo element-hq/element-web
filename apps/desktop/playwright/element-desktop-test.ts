@@ -17,14 +17,14 @@ import { PassThrough } from "node:stream";
  * A PassThrough stream that captures all data written to it.
  */
 class CapturedPassThrough extends PassThrough {
-    private _chunks = [];
+    private _chunks: any[] = [];
 
     public constructor() {
         super();
         super.on("data", this.onData);
     }
 
-    private onData = (chunk): void => {
+    private onData = (chunk: any): void => {
         this._chunks.push(chunk);
     };
 

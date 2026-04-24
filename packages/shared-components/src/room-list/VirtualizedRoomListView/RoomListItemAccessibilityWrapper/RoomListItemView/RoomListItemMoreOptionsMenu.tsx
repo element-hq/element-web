@@ -17,6 +17,7 @@ import {
     LeaveIcon,
     OverflowHorizontalIcon,
     ArrowRightIcon,
+    CheckIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../core/i18n/i18n";
@@ -136,6 +137,21 @@ export function MoreOptionContent({ vm }: MoreOptionContentProps): JSX.Element {
                         />
                     }
                 >
+                    {snapshot.sections.map((section) => (
+                        <MenuItem
+                            key={section.tag}
+                            label={section.name}
+                            onSelect={() => vm.onToggleSection(section.tag)}
+                            onClick={(evt) => evt.stopPropagation()}
+                            hideChevron={true}
+                            aria-checked={section.isSelected}
+                        >
+                            {section.isSelected && (
+                                <CheckIcon color="var(--cpd-color-icon-tertiary)" width="24px" height="24px" />
+                            )}
+                        </MenuItem>
+                    ))}
+                    <Separator />
                     <MenuItem label={_t("action|new_section")} onSelect={vm.onCreateSection} hideChevron={true} />
                 </SubMenu>
             )}

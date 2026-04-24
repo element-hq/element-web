@@ -2757,9 +2757,9 @@ exports[`<RoomListView /> > renders Empty story 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
         >
           <button
-            class="_button_13vu4_8 _has-icon_13vu4_60"
+            class="_button_1nw83_8 _has-icon_1nw83_60"
             data-kind="secondary"
-            data-size="sm"
+            data-size="md"
             role="button"
             tabindex="0"
           >
@@ -2778,9 +2778,9 @@ exports[`<RoomListView /> > renders Empty story 1`] = `
             Start chat
           </button>
           <button
-            class="_button_13vu4_8 _has-icon_13vu4_60"
+            class="_button_1nw83_8 _has-icon_1nw83_60"
             data-kind="secondary"
-            data-size="sm"
+            data-size="md"
             role="button"
             tabindex="0"
           >
@@ -2923,7 +2923,7 @@ exports[`<RoomListView /> > renders EmptyInvitesFilter story 1`] = `
           You don't have any unread invites
         </span>
         <button
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -2991,7 +2991,7 @@ exports[`<RoomListView /> > renders EmptyLowPriorityFilter story 1`] = `
           You don't have any low priority rooms
         </span>
         <button
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -3059,7 +3059,7 @@ exports[`<RoomListView /> > renders EmptyMentionsFilter story 1`] = `
           You don't have any unread mentions
         </span>
         <button
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -3255,7 +3255,7 @@ exports[`<RoomListView /> > renders EmptyUnreadFilter story 1`] = `
           Congrats! You don’t have any unread messages
         </span>
         <button
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -3350,9 +3350,9 @@ exports[`<RoomListView /> > renders EmptyWithoutCreatePermission story 1`] = `
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
         >
           <button
-            class="_button_13vu4_8 _has-icon_13vu4_60"
+            class="_button_1nw83_8 _has-icon_1nw83_60"
             data-kind="secondary"
-            data-size="sm"
+            data-size="md"
             role="button"
             tabindex="0"
           >

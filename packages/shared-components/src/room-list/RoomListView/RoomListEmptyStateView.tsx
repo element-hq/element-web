@@ -49,11 +49,11 @@ export const RoomListEmptyStateView: React.FC<RoomListEmptyStateViewProps> = ({ 
                     direction="column"
                     gap="var(--cpd-space-4x)"
                 >
-                    <Button size="sm" kind="secondary" Icon={ChatIcon} onClick={vm.createChatRoom}>
+                    <Button size="md" kind="secondary" Icon={ChatIcon} onClick={vm.createChatRoom}>
                         {_t("action|start_chat")}
                     </Button>
                     {snapshot.canCreateRoom && (
-                        <Button size="sm" kind="secondary" Icon={RoomIcon} onClick={vm.createRoom}>
+                        <Button size="md" kind="secondary" Icon={RoomIcon} onClick={vm.createRoom}>
                             {_t("action|new_room")}
                         </Button>
                     )}

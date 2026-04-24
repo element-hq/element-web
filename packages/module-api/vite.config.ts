@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
-import dts from "vite-plugin-dts";
+import dts from "unplugin-dts/vite";
 import externalGlobals from "rollup-plugin-external-globals";
 
 import packageJson from "./package.json" with { type: "json" };

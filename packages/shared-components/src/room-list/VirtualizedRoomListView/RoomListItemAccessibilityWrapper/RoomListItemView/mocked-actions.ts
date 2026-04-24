@@ -20,4 +20,5 @@ export const mockedActions: RoomListItemViewActions = {
     onLeaveRoom: fn(),
     onSetRoomNotifState: fn(),
     onCreateSection: fn(),
+    onToggleSection: fn(),
 };

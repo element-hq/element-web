@@ -38,3 +38,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SectionCreated: Story = {};
+
+export const ChatMoved: Story = {
+    args: {
+        type: "chat_moved",
+    },
+};
