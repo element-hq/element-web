@@ -287,8 +287,8 @@ export class TextualBodyViewModel
                     return;
                 }
 
-                const width = window.screen.width > 1024 ? 1024 : window.screen.width;
-                const height = window.screen.height > 800 ? 800 : window.screen.height;
+                const width = Math.min(window.screen.width, 1024);
+                const height = Math.min(window.screen.height, 800);
                 const left = (window.screen.width - width) / 2;
                 const top = (window.screen.height - height) / 2;
                 const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
