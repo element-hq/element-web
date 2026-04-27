@@ -35,7 +35,7 @@ export function GlobalSearchField({
     }
 
     return (
-        <Form.Root onSubmit={(e) => e.preventDefault()} style={{ position: "relative", width: "100%", maxWidth: "480px" }}>
+        <Form.Root onSubmit={(e) => e.preventDefault()} style={{ position: "relative", width: "100%", maxWidth: "480px", margin: "0 auto" }}>
             <Search
                 name="globalSearch"
                 placeholder={placeholder}

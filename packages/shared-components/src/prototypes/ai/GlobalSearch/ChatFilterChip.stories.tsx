@@ -75,6 +75,7 @@ export function ChatFilterBar({ active = "All", filters = ALL_FILTERS, onChange 
             style={{
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "var(--cpd-space-2x)",
                 padding: "var(--cpd-space-2x) var(--cpd-space-4x)",
                 overflowX: "auto",

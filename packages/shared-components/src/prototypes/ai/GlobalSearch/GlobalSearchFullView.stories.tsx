@@ -73,26 +73,33 @@ export function GlobalSearchFullView({
                 style={{
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "center",
                     padding: "var(--cpd-space-3x) var(--cpd-space-4x)",
                     borderBottom: "1px solid var(--cpd-color-border-disabled)",
                     gap: "var(--cpd-space-3x)",
                 }}
             >
-                <GlobalSearchField
-                    value={query}
-                    onChange={onQueryChange}
-                    onClear={() => onQueryChange?.("")}
-                />
+                <div style={{ width: "100%", maxWidth: "720px" }}>
+                    <GlobalSearchField
+                        value={query}
+                        onChange={onQueryChange}
+                        onClear={() => onQueryChange?.("")}
+                    />
+                </div>
             </div>
 
             {/* Filter tab bar */}
             <div
                 style={{
+                    display: "flex",
+                    justifyContent: "center",
                     padding: "var(--cpd-space-2x) var(--cpd-space-4x)",
                     borderBottom: "1px solid var(--cpd-color-border-disabled)",
                 }}
             >
-                <ChatFilterBar active={activeFilter} onChange={onFilterChange} />
+                <div style={{ width: "100%", maxWidth: "720px" }}>
+                    <ChatFilterBar active={activeFilter} onChange={onFilterChange} />
+                </div>
             </div>
 
             {/* Scrollable results */}
@@ -105,9 +112,11 @@ export function GlobalSearchFullView({
                     padding: "var(--cpd-space-3x)",
                     display: "flex",
                     flexDirection: "column",
+                    alignItems: "center",
                     gap: "var(--cpd-space-3x)",
                 }}
             >
+                <div style={{ width: "100%", maxWidth: "720px", display: "flex", flexDirection: "column", gap: "var(--cpd-space-3x)" }}>
                 {/* People section */}
                 {showPeople && (
                     <section aria-label="People" style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-3x)" }}>
@@ -176,6 +185,7 @@ export function GlobalSearchFullView({
                         ))}
                     </section>
                 )}
+                </div>
             </div>
         </div>
     );
