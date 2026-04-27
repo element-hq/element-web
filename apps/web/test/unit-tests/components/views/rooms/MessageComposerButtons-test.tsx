@@ -15,6 +15,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MessageComposerButtons from "../../../../../src/components/views/rooms/MessageComposerButtons";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
+import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 describe("MessageComposerButtons", () => {
     // @ts-ignore - we're deliberately not implementing the whole interface here, but
@@ -54,7 +55,9 @@ describe("MessageComposerButtons", () => {
 
         return render(
             <MatrixClientContext.Provider value={mockClient}>
-                <ScopedRoomContextProvider {...defaultRoomContext}>{component}</ScopedRoomContextProvider>
+                <ScopedRoomContextProvider {...defaultRoomContext}>
+                    <RoomUploadContextProvider>{component}</RoomUploadContext>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
     }

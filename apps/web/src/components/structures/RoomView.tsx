@@ -343,7 +343,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
             <ErrorBoundary>
                 <RoomHeader room={room} />
                 <RoomUploadContextProvider timelineRenderingType={TimelineRenderingType.Room}>
-                    <main className="AccessibleButton" ref={props.roomView} aria-label={_t("room|room_content")}>
+                    <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
                         <FileDropTarget parent={props.roomView.current} />
                         <div className="mx_RoomView_timeline">
                             <ScrollPanel className="mx_RoomView_messagePanel">

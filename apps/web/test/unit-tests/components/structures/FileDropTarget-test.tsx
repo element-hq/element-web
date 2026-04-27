@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked } from "jest-mock";
 import { render, fireEvent } from "jest-matrix-react";
 import { useMockedViewModel } from "@element-hq/web-shared-components";
 
