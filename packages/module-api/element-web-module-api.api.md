@@ -47,6 +47,8 @@ export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiEx
     // @alpha
     readonly builtins: BuiltinsApi;
     readonly client: ClientApi;
+    // @alpha
+    readonly composer: ComposerApi;
     readonly config: ConfigApi;
     createRoot(element: Element): Root;
     // @alpha
@@ -95,6 +97,11 @@ export interface ClientApi {
 // @alpha @deprecated (undocumented)
 export interface ComponentVisibilityCustomisations {
     shouldShowComponent?(component: "UIComponent.sendInvites" | "UIComponent.roomCreation" | "UIComponent.spaceCreation" | "UIComponent.exploreRooms" | "UIComponent.addIntegrations" | "UIComponent.filterContainer" | "UIComponent.roomOptionsMenu"): boolean;
+}
+
+// @alpha
+export interface ComposerApi {
+    insertPlaintextIntoComposer(plaintext: string): void;
 }
 
 // @public
