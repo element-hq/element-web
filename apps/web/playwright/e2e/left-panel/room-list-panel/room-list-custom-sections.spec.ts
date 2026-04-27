@@ -59,6 +59,7 @@ test.describe("Room list custom sections", () => {
     test.beforeEach(async ({ page, app, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
+        await app.closeVerifyToast();
 
         // Focus the user menu to avoid hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();

@@ -32,7 +32,7 @@ function LinkTitle({
             as="a"
             type="body"
             weight="semibold"
-            size="lg"
+            size="md"
             className={styles.title}
             href={link}
             target="_blank"
