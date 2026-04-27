@@ -80,7 +80,7 @@ const config: StorybookConfig = {
                                 // the app requests.
                                 const langFile = req.url.split("/").pop();
                                 res.setHeader("Content-Type", "application/json");
-                                fs.createReadStream(`src/i18n/strings/${langFile}`).pipe(res);
+                                fs.createReadStream(join(__dirname, "..", "src", "i18n", "strings", langFile!)).pipe(res);
                             } else {
                                 next();
                             }
