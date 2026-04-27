@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
@@ -17,7 +18,7 @@ Please see LICENSE files in the repository root for full details.
 
     &.mx_ToastContainer_stacked::before {
         content: "";
-        margin: 0 6px;
+        margin: 0 var(--cpd-space-1-5x);
         grid-row: 2 / -1;
         grid-column: 1;
         background-color: $system;
@@ -63,7 +64,7 @@ Please see LICENSE files in the repository root for full details.
         .mx_Toast_title {
             display: flex;
             align-items: center;
-            column-gap: 8px;
+            column-gap: var(--cpd-space-2x);
             width: 100%;
             box-sizing: border-box;
 
@@ -95,7 +96,7 @@ Please see LICENSE files in the repository root for full details.
             max-width: 272px;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin: 4px 0 11px 0;
+            margin: var(--cpd-space-1x) 0 11px 0;
             color: $secondary-content;
             font: var(--cpd-font-body-sm-regular);
 
