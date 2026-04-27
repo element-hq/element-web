@@ -9,16 +9,16 @@
     color: var(--cpd-color-text-primary);
     svg {
         /* Ensure button icons are primary too */
-        color: var(--cpd-color-text-primary) !important;
+        color: var(--cpd-color-text-primary);
     }
 }
 
 .secondaryAction svg {
-    color: var(--cpd-color-text-secondary) !important;
+    color: var(--cpd-color-text-secondary);
 }
 
 .primaryAction svg {
-    color: var(--cpd-color-text-on-solid-primary) !important;
+    color: var(--cpd-color-text-on-solid-primary);
 }
 
 .title {

@@ -6,15 +6,15 @@
  */
 
 .picker_menu {
-    max-inline-size: none !important;
-    padding: 0 !important;
-    gap: 0 !important;
+    max-inline-size: none;
+    padding: 0;
+    gap: 0;
 }
 
 .picker_menu_item {
-    padding: var(--cpd-space-3x) var(--cpd-space-5x) !important;
+    padding: var(--cpd-space-3x) var(--cpd-space-5x);
 }
 
 .picker_separator {
-    margin-inline: 0 !important;
+    margin-inline: 0;
 }
