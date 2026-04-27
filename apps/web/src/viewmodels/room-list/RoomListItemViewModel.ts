@@ -427,8 +427,11 @@ export class RoomListItemViewModel
 
         return (
             RoomListStoreV3.instance.orderedSectionTags
-                // Exclude the Chats section because the user toggle the other sections to move rooms in and out of the Chats section.
-                .filter((tag) => tag !== CHATS_TAG)
+                // Exclude the Chats because the user toggle the other sections to move rooms in and out of the Chats section.
+                // Also exclude the default sections because they are available as toggles in the main context menu, and we don't want them to be duplicated in the "Move to section" submenu.
+                .filter(
+                    (tag) => tag !== CHATS_TAG && tag !== DefaultTagID.Favourite && tag !== DefaultTagID.LowPriority,
+                )
                 .map((tag) => ({
                     tag,
                     name: RoomListItemViewModel.getSectionName(tag, customSectionData),
