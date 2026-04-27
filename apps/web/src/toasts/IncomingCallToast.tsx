@@ -6,7 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type ReactNode, useCallback, useEffect, useRef, useState, useId } from "react";
+import React, {
+    type JSX,
+    type ReactNode,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+    useId,
+    ComponentType,
+    SVGAttributes,
+} from "react";
 import {
     type Room,
     type MatrixEvent,
@@ -304,14 +314,20 @@ export function IncomingCallToast({ notificationEvent, toastKey }: Props): JSX.E
                 : _t("voip|call_members|exhaustive", { count: members.length }, { avatars });
     }
 
-    const Icon = isVoice ? VoiceCallSolidIcon : VideoCallSolidIcon;
-    const iconLabel = isVoice ? _t("voip|voice_call") : _t("voip|video_call");
-    const title =
-        otherUserId === undefined
-            ? _t("voip|group_call_started")
-            : isVoice
-              ? _t("voip|voice_call_incoming")
-              : _t("voip|video_call_incoming");
+    let title: string;
+    let Icon: ComponentType<SVGAttributes<SVGElement>>;
+    let iconLabel: string;
+    // Special title for group calls
+    if (otherUserId === undefined) title = _t("voip|group_call_started");
+    if (isVoice) {
+        title ??= _t("voip|voice_call_incoming");
+        Icon = VoiceCallSolidIcon;
+        iconLabel = _t("voip|voice_call");
+    } else {
+        title ??= _t("voip|video_call_incoming");
+        Icon = VideoCallSolidIcon;
+        iconLabel = _t("voip|video_call");
+    }
 
     return (
         <div className="mx_IncomingCallToast_content">
