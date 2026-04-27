@@ -263,7 +263,6 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                             // PROTOTYPE: this is a fudge to bypass the complete security step
                             window.location.reload();
                         } else {
-                            logger.warn("Crypto not initialised");
                             logger.warn(
                                 "Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login",
                             );
