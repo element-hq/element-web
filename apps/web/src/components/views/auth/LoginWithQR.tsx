@@ -19,6 +19,7 @@ import {
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
@@ -78,12 +79,14 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     }
 
-    private async updateMode(mode: Mode): Promise<void> {
-        this.setState({ phase: Phase.Loading });
+    private async updateMode(mode: Mode, showLoading = true): Promise<void> {
         if (this.state.rendezvous) {
             const rendezvous = this.state.rendezvous;
             rendezvous.onFailure = undefined;
             this.setState({ rendezvous: undefined });
+        }
+        if (showLoading) {
+            this.setState({ phase: Phase.Loading });
         }
         if (mode === Mode.Show) {
             await this.generateAndShowCode();
@@ -187,9 +190,23 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     };
 
-    private onFailure = (reason: RendezvousFailureReason): void => {
+    private onFailure = async (reason: RendezvousFailureReason): Promise<void> => {
         if (this.state.phase === Phase.Error) return; // Already in failed state
         logger.info(`Rendezvous failed: ${reason}`);
+
+        // Generate a new rendezvous channel & qr code if we hit expiry whilst still showing the QR code
+        if (reason === ClientRendezvousFailureReason.Expired && this.state.phase === Phase.ShowingQR) {
+            try {
+                this.reset();
+                // Add a sleep to make the UX looks less flickery and more intentional
+                await sleep(1000);
+                await this.updateMode(Mode.Show, false);
+                return;
+            } catch (e) {
+                logger.warn("Failed to re-roll qr code on expiry", e);
+            }
+        }
+
         this.setState({ phase: Phase.Error, failureReason: reason });
     };
 
