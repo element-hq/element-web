@@ -9,6 +9,10 @@ import {
     TimelineWindow,
     Direction,
     RoomEvent,
+    EventType,
+    MatrixEventEvent,
+    NotificationCountType,
+    ReceiptType,
     type IRoomTimelineData,
     type MatrixClient,
     type MatrixEvent,
@@ -25,6 +29,10 @@ import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import shouldHideEvent from "../../../shouldHideEvent";
 import SettingsStore from "../../../settings/SettingsStore";
 import { logger } from "matrix-js-sdk/src/logger";
+import { clearRoomNotification } from "../../../utils/notifications";
+
+/** How long after the last scroll event to wait before sending a read receipt (ms). */
+const READ_RECEIPT_DEBOUNCE_MS = 500;
 
 const PAGINATE_SIZE = 100;
 const INITIAL_SIZE = 100;
@@ -108,6 +116,12 @@ export class RoomTimelineViewModel
     /** Mirror of {@link backwardPaginateChain} for the forward direction. */
     private forwardPaginateChain: Promise<void> | null = null;
 
+    /** The event ID for which we last sent a read receipt, to avoid redundant sends. */
+    private lastSentReceiptEventId: string | null = null;
+
+    /** Debounce timer for auto read receipt sends triggered by scroll. */
+    private readReceiptDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
     /** True when Virtuoso reports the list is scrolled to the bottom. */
     private isAtBottom = false;
 
@@ -117,6 +131,31 @@ export class RoomTimelineViewModel
      * so the view can be restored to this position next visit.
      */
     private lastBottomEventId: string | null = null;
+
+    /**
+     * The 0-based index (into the items array) of the topmost currently-visible item.
+     * Updated on every `onVisibleRangeChanged` call; used to derive `canJumpToReadMarker`.
+     */
+    private visibleStartArrayIndex = 0;
+
+    /**
+     * The 0-based index (into the items array) of the bottommost currently-visible item.
+     * Updated on every `onVisibleRangeChanged` call; used to derive `canJumpToReadMarker`.
+     */
+    private visibleEndArrayIndex = 0;
+
+    /**
+     * The Matrix event ID of the room's "fully read" marker. null when none is set.
+     * Tracked via `RoomEvent.AccountData` / `EventType.FullyRead`.
+     */
+    private readMarkerEventId: string | null = null;
+
+    /**
+     * Count of new live messages that arrived since the user last reached the
+     * visual bottom of the live timeline. Reset on `onAtBottomStateChange(true)`
+     * when `atLiveEnd` is also true.
+     */
+    private unreadMessageCount = 0;
 
     private static readonly SCROLL_STATE_KEY_PREFIX = "timeline_scroll_";
 
@@ -149,10 +188,18 @@ export class RoomTimelineViewModel
             atLiveEnd: false,
             pendingAnchor: null,
             highlightedEventId: opts.initialEventId ?? null,
+            isAtBottom: false,
+            canJumpToReadMarker: false,
+            numUnreadMessages: 0,
+            hasHighlights: false,
         });
 
         this.opts = opts;
         this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet());
+
+        // Initialise the read marker from room account data.
+        this.readMarkerEventId =
+            (opts.room.getAccountData(EventType.FullyRead)?.getContent()?.event_id as string | undefined) ?? null;
 
         // Determine how to load the timeline.
         let loadTarget: LoadTarget;
@@ -167,6 +214,12 @@ export class RoomTimelineViewModel
 
         // Listen for new events so live messages appear.
         this.disposables.trackListener(opts.room, RoomEvent.Timeline, this.onRoomTimeline as (...args: unknown[]) => void);
+        // Track changes to the room's fully-read marker.
+        this.disposables.trackListener(opts.room, RoomEvent.AccountData, this.onRoomAccountData as (...args: unknown[]) => void);
+        // Rebuild items when any event in the window is decrypted (or fails to decrypt).
+        // This handles both live events and historical encrypted events (e.g. on a fresh session
+        // with no key backup) so they appear as "Unable to decrypt" tiles rather than being invisible.
+        this.disposables.trackListener(opts.client, MatrixEventEvent.Decrypted, this.onEventDecrypted as (...args: unknown[]) => void);
     }
 
     private onRoomTimeline = (
@@ -192,20 +245,63 @@ export class RoomTimelineViewModel
         if (toStartOfTimeline || removed || data.liveEvent !== true) return;
         if (this.isDisposed) return;
 
-        logger.debug("[TimelineVM][onRoomTimeline] live event — forwarding 1 event");
+        const incomingEventId = event.getId();
+        const windowSizeBefore = this.timelineWindow.getEvents().length;
+        logger.debug(
+            `[TimelineVM][onRoomTimeline] live event — eventId=${incomingEventId} type=${event.getType()} ` +
+            `windowSize=${windowSizeBefore} snapshotItems=${this.snapshot.current.items.length} ` +
+            `isAtBottom=${this.isAtBottom} pendingAnchor=${this.snapshot.current.pendingAnchor?.targetKey ?? null}`,
+        );
         this.timelineWindow.paginate(Direction.Forward, 1, false).then((extended) => {
             if (this.isDisposed) return;
+            const windowSizeAfter = this.timelineWindow.getEvents().length;
             logger.debug(
                 `[TimelineVM][onRoomTimeline] paginate done — extended=${extended}, ` +
-                `items before=${this.snapshot.current.items.length}`,
+                `windowSize: ${windowSizeBefore} → ${windowSizeAfter}, snapshotItems=${this.snapshot.current.items.length}`,
             );
             const items = this.buildItems();
-            logger.debug(`[TimelineVM][onRoomTimeline] buildItems → ${items.length} items`);
+            const eventInItems = items.some((i) => i.key === incomingEventId);
+            const tail = items.slice(-3).map((i) => `${i.kind}:${i.key}`).join(", ");
+            logger.debug(
+                `[TimelineVM][onRoomTimeline] buildItems → ${items.length} items, ` +
+                `eventInItems=${eventInItems}, tail=[${tail}]`,
+            );
+
+            const atLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
+            // Accumulate unread count only for messages from other users.
+            if (!this.isAtBottom && event.getSender() !== this.opts.client.getSafeUserId()) {
+                this.unreadMessageCount++;
+            }
             this.snapshot.merge({
                 items,
-                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+                atLiveEnd,
+                numUnreadMessages: this.isAtBottom ? 0 : this.unreadMessageCount,
+                hasHighlights: this.opts.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0,
+                canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
             });
         });
+    };
+
+    private onEventDecrypted = (event: MatrixEvent): void => {
+        if (this.isDisposed) return;
+        // Only rebuild if the decrypted event is actually in our timeline window.
+        if (!this.timelineWindow.getEvents().includes(event)) return;
+        logger.debug(`[TimelineVM][onEventDecrypted] event ${event.getId()} decrypted — rebuilding items`);
+        const items = this.buildItems();
+        this.snapshot.merge({
+            items,
+            atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+            canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+        });
+    };
+
+    private onRoomAccountData = (ev: MatrixEvent): void => {
+        if (ev.getType() !== EventType.FullyRead) return;
+        const newMarker = (ev.getContent()?.event_id as string | undefined) ?? null;
+        if (newMarker === this.readMarkerEventId) return;
+        this.readMarkerEventId = newMarker;
+        const items = this.snapshot.current.items;
+        this.snapshot.merge({ canJumpToReadMarker: this.computeCanJumpToReadMarker(items) });
     };
 
     private async load(target: LoadTarget): Promise<void> {
@@ -253,8 +349,11 @@ export class RoomTimelineViewModel
                 if (items.some((i) => i.key === target.eventId)) {
                     pendingAnchor = { targetKey: target.eventId, align: "end" };
                 } else {
-                    // Saved event was redacted / fell outside the window — fall through to live-end.
-                    logger.debug(`[TimelineVM] load() — restore target ${target.eventId} not in items, falling back to live end`);
+                    // Saved event was filtered/redacted and can't be displayed.
+                    // Clear the stale position so next visit doesn't loop back here.
+                    logger.debug(`[TimelineVM] load() — restore target ${target.eventId} not in items, clearing saved position and falling back to live end`);
+                    RoomTimelineViewModel.saveScrollTarget(this.opts.room.roomId, null);
+                    // No anchor needed — fall through to live-end logic below.
                 }
             }
 
@@ -273,7 +372,16 @@ export class RoomTimelineViewModel
                 atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
                 pendingAnchor,
                 highlightedEventId: target.kind === "permalink" ? target.eventId : null,
+                canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
             });
+
+            // If all events in the initial window were filtered (items empty) but more
+            // content exists ahead, Virtuoso won't fire onEndReached on an empty list.
+            // Proactively forward-paginate to find visible events.
+            if (items.length === 0 && this.timelineWindow.canPaginate(Direction.Forward)) {
+                logger.debug(`[TimelineVM] load() — items empty with more content ahead, auto-triggering forward paginate`);
+                this.triggerForwardPaginate();
+            }
         } catch (e) {
             logger.error(`[TimelineVM] load() error`, e);
             this.snapshot.merge({
@@ -298,12 +406,23 @@ export class RoomTimelineViewModel
     };
 
     public onAnchorReached = (): void => {
-        logger.debug(`[TimelineVM] onAnchorReached — clearing pendingAnchor, anchoredLoad=${this.anchoredLoad}`);
+        const anchor = this.snapshot.current.pendingAnchor;
+        logger.debug(
+            `[TimelineVM] onAnchorReached — anchor=${anchor ? `key=${anchor.targetKey} align=${anchor.align}` : "null"}, ` +
+            `anchoredLoad=${this.anchoredLoad}`,
+        );
         this.snapshot.merge({ pendingAnchor: null });
     };
 
     public onAtBottomStateChange = (atBottom: boolean): void => {
         this.isAtBottom = atBottom;
+        if (atBottom && this.snapshot.current.atLiveEnd) {
+            this.unreadMessageCount = 0;
+        }
+        this.snapshot.merge({
+            isAtBottom: atBottom,
+            numUnreadMessages: atBottom && this.snapshot.current.atLiveEnd ? 0 : this.unreadMessageCount,
+        });
     };
 
     /**
@@ -318,15 +437,196 @@ export class RoomTimelineViewModel
         if (this.snapshot.current.pendingAnchor !== null) return;
 
         const items = this.snapshot.current.items;
+        const firstItemIndex = this.snapshot.current.firstItemIndex;
+        const startArrayIndex = startIndex - firstItemIndex;
+
+        // Update visible range so we can derive canJumpToReadMarker.
+        const prevStartArrayIndex = this.visibleStartArrayIndex;
+        const prevEndArrayIndex = this.visibleEndArrayIndex;
+        this.visibleStartArrayIndex = Math.max(0, startArrayIndex);
+        this.visibleEndArrayIndex = Math.max(0, endIndex - firstItemIndex);
+
         for (let i = endIndex; i >= startIndex; i--) {
-            const index = i - this.snapshot.current.firstItemIndex;
+            const index = i - firstItemIndex;
             const item = items[index];
             if (item?.kind === "event") {
                 this.lastBottomEventId = item.key;
-                return;
+                break;
+            }
+        }
+
+        // Recompute canJumpToReadMarker when the visible range moves.
+        if (this.visibleStartArrayIndex !== prevStartArrayIndex || this.visibleEndArrayIndex !== prevEndArrayIndex) {
+            const canJumpToReadMarker = this.computeCanJumpToReadMarker(items);
+            if (canJumpToReadMarker !== this.snapshot.current.canJumpToReadMarker) {
+                this.snapshot.merge({ canJumpToReadMarker });
+            }
+        }
+
+        // Debounce sending a read receipt for the last visible event.
+        if (this.readReceiptDebounceTimer !== null) clearTimeout(this.readReceiptDebounceTimer);
+        this.readReceiptDebounceTimer = setTimeout(() => {
+            this.readReceiptDebounceTimer = null;
+            this.sendAutoReadReceipt();
+        }, READ_RECEIPT_DEBOUNCE_MS);
+    };
+
+    /**
+     * Sends a read receipt for the last visible event, debounced from `onVisibleRangeChanged`.
+     * Only advances the receipt — never rewinds it. Respects the `sendReadReceipts` setting.
+     */
+    private sendAutoReadReceipt(): void {
+        if (this.isDisposed) return;
+        const eventId = this.lastBottomEventId;
+        if (!eventId || eventId === this.lastSentReceiptEventId) return;
+
+        const event = this.timelineWindow.getEvents().find((e) => e.getId() === eventId);
+        if (!event) return;
+
+        // Don't rewind — only advance if this event is newer than the last receipted one.
+        if (this.lastSentReceiptEventId) {
+            const lastSentEvent = this.timelineWindow.getEvents().find((e) => e.getId() === this.lastSentReceiptEventId);
+            if (lastSentEvent && lastSentEvent.getTs() >= event.getTs()) return;
+        }
+
+        this.lastSentReceiptEventId = eventId;
+        const receiptType = SettingsStore.getValue("sendReadReceipts", this.opts.room.roomId)
+            ? ReceiptType.Read
+            : ReceiptType.ReadPrivate;
+
+        logger.debug(`[TimelineVM] sendAutoReadReceipt — sending receipt for ${eventId} (${receiptType})`);
+        this.opts.client.sendReadReceipt(event, receiptType).catch((err) => {
+            this.lastSentReceiptEventId = null; // allow retry
+            logger.warn(`[TimelineVM] sendAutoReadReceipt — sendReadReceipt failed`, err);
+        });
+        this.opts.client.setRoomReadMarkers(this.opts.room.roomId, eventId).catch((err) => {
+            logger.warn(`[TimelineVM] sendAutoReadReceipt — setRoomReadMarkers failed`, err);
+        });
+    }
+
+    // ── Overlay button actions ───────────────────────────────────────
+
+    public onJumpToReadMarker = (): void => {
+        const items = this.snapshot.current.items;
+        const rmIdx = items.findIndex((item) => item.kind === "read-marker");
+        logger.debug(
+            `[TimelineVM] onJumpToReadMarker — readMarkerEventId=${this.readMarkerEventId}, ` +
+            `rmIdx=${rmIdx}, items=${items.length}, ` +
+            `visibleStartArrayIndex=${this.visibleStartArrayIndex}, ` +
+            `canPaginate(Backward)=${this.timelineWindow.canPaginate(Direction.Backward)}, ` +
+            `canJumpToReadMarker=${this.snapshot.current.canJumpToReadMarker}`,
+        );
+        if (rmIdx !== -1) {
+            const readMarkerKey = items[rmIdx].key;
+            logger.debug(`[TimelineVM] onJumpToReadMarker — marker in window at index ${rmIdx}, setting pendingAnchor key=${readMarkerKey}`);
+            // Spread items into a new array to force a Virtuoso listRefresh.
+            // scrollIntoViewOnChange only fires when `data` gets a new reference;
+            // changing pendingAnchor alone (no data change) silently no-ops — same
+            // root cause as the onJumpToLive fix.
+            this.snapshot.merge({
+                items: [...items],
+                pendingAnchor: { targetKey: readMarkerKey, align: "center" },
+            });
+        } else if (this.timelineWindow.canPaginate(Direction.Backward)) {
+            // Marker is not in the current window — reload at the marker event.
+            if (this.readMarkerEventId) {
+                logger.debug(`[TimelineVM] onJumpToReadMarker — marker not in window, reloading at ${this.readMarkerEventId}`);
+                this.load({ kind: "permalink", eventId: this.readMarkerEventId });
+            } else {
+                logger.warn(`[TimelineVM] onJumpToReadMarker — canPaginate(Backward)=true but readMarkerEventId is null, doing nothing`);
+            }
+        } else {
+            logger.warn(
+                `[TimelineVM] onJumpToReadMarker — no action taken: marker not in window (rmIdx=${rmIdx}) ` +
+                `and canPaginate(Backward)=false`,
+            );
+        }
+    };
+
+    public onMarkAllAsRead = (): void => {
+        // Use the same logic as the room list "Mark as read" — receipts the last live event
+        // in the room and clears the manually-marked-unread state. This ensures the grey dot
+        // in the room list is cleared, regardless of the user's scroll position.
+        clearRoomNotification(this.opts.room, this.opts.client).catch((err) => {
+            logger.warn(`[TimelineVM] onMarkAllAsRead — clearRoomNotification failed`, err);
+        });
+        // Immediately clear the read marker bar locally.
+        this.readMarkerEventId = null;
+        const newItems = this.buildItems(); // removes the read-marker item
+        this.snapshot.merge({ items: newItems, canJumpToReadMarker: false });
+    };
+
+    public onJumpToLive = (): void => {
+        logger.debug(`[TimelineVM] onJumpToLive — atLiveEnd=${this.snapshot.current.atLiveEnd}`);
+        this.unreadMessageCount = 0;
+        if (!this.snapshot.current.atLiveEnd) {
+            // Need to reload the timeline window at the live end.
+            this.load({ kind: "live" });
+        } else {
+            // Already have the latest events — just scroll to the last item.
+            // IMPORTANT: we spread items into a new array even though the content is
+            // unchanged. Virtuoso fires scrollIntoViewOnChange only on a "listRefresh",
+            // which requires a new `data` array reference. Without this, setting
+            // pendingAnchor alone produces no data change and scrollIntoViewOnChange
+            // never fires, so the scroll silently no-ops.
+            const items = this.snapshot.current.items;
+            if (items.length > 0) {
+                const targetKey = items[items.length - 1].key;
+                logger.debug(`[TimelineVM] onJumpToLive — setting pendingAnchor targetKey=${targetKey}, forcing listRefresh`);
+                this.snapshot.merge({
+                    items: [...items],
+                    pendingAnchor: { targetKey, align: "end" },
+                    numUnreadMessages: 0,
+                    hasHighlights: false,
+                });
+            } else {
+                this.snapshot.merge({ numUnreadMessages: 0, hasHighlights: false });
             }
         }
     };
+
+    /**
+     * Derive whether the "Jump to unread" bar should be shown and in which direction.
+     * - `"above"` — marker is above the visible start (or above the loaded window).
+     * - `"below"` — marker is below the visible end (within the loaded window).
+     * - `false`   — marker is visible, not set, or unreachable.
+     */
+    private computeCanJumpToReadMarker(items: TimelineItem[]): "above" | "below" | false {
+        if (!this.readMarkerEventId) return false;
+        const rmIdx = items.findIndex((item) => item.kind === "read-marker");
+        if (rmIdx === -1) {
+            // Marker may be above the loaded window.
+            const canPaginate = this.timelineWindow.canPaginate(Direction.Backward);
+            logger.debug(
+                `[TimelineVM] computeCanJumpToReadMarker — marker not in items, ` +
+                `canPaginate(Backward)=${canPaginate} → ${canPaginate ? "above" : false}`,
+            );
+            return canPaginate ? "above" : false;
+        }
+        if (rmIdx < this.visibleStartArrayIndex) {
+            logger.debug(
+                `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} < visibleStartArrayIndex=${this.visibleStartArrayIndex} → "above"`,
+            );
+            return "above";
+        }
+        // If the read marker is the last item, the timeline is fully read — nothing to jump to.
+        if (rmIdx === items.length - 1) {
+            logger.debug(
+                `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} is last item → false`,
+            );
+            return false;
+        }
+        if (rmIdx > this.visibleEndArrayIndex) {
+            logger.debug(
+                `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} > visibleEndArrayIndex=${this.visibleEndArrayIndex} → "below"`,
+            );
+            return "below";
+        }
+        logger.debug(
+            `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} in viewport [${this.visibleStartArrayIndex}–${this.visibleEndArrayIndex}] → false`,
+        );
+        return false;
+    }
 
     /**
      * Save the current scroll position to localStorage before tearing down.
@@ -335,6 +635,11 @@ export class RoomTimelineViewModel
      * Preserves any existing saved position when no visible range was recorded.
      */
     public override dispose(): void {
+        if (this.readReceiptDebounceTimer !== null) {
+            clearTimeout(this.readReceiptDebounceTimer);
+            this.readReceiptDebounceTimer = null;
+        }
+
         if (!this.lastBottomEventId) {
             logger.debug(`[TimelineVM] dispose() — no visible range recorded, preserving saved position`);
             super.dispose();
@@ -488,14 +793,14 @@ export class RoomTimelineViewModel
                         `prepended=${prepended}, hasMore=${hasMore}, emptyBatches=${emptyBatches}, ` +
                         `firstItemIndex: ${postFirstItemIndex} → ${postFirstItemIndex - prepended}`,
                     );
-                    this.snapshot.merge({ items, firstItemIndex: postFirstItemIndex - prepended });
+                    this.snapshot.merge({ items, firstItemIndex: postFirstItemIndex - prepended, canJumpToReadMarker: this.computeCanJumpToReadMarker(items) });
                 } else {
                     added = rebuilt.length - currentItems.length;
                     logger.debug(
                         `[TimelineVM] paginate(forward) batch done — ` +
                         `appended=${added}, hasMore=${hasMore}, emptyBatches=${emptyBatches}`,
                     );
-                    this.snapshot.merge({ items: rebuilt });
+                    this.snapshot.merge({ items: rebuilt, canJumpToReadMarker: this.computeCanJumpToReadMarker(rebuilt) });
                 }
 
                 if (added > 0 || !hasMore) break;
@@ -543,19 +848,26 @@ export class RoomTimelineViewModel
         if (firstSharedIdx < 0) {
             // Nothing shared — treat as a fresh list.
             return next;
-        }
-        const prefix = next.slice(0, firstSharedIdx);
-        // De-dup: if prefix ends with a date separator whose key matches the
-        // first item of prev (also a date separator), prev already owns it.
-        if (
-            prefix.length > 0 &&
-            prefix[prefix.length - 1].kind === "date-separator" &&
-            prev[0].kind === "date-separator" &&
-            prefix[prefix.length - 1].key === prev[0].key
-        ) {
-            prefix.pop();
-        }
-        return [...prefix, ...prev];
+        }        // Drop middle insertions: only take the new prefix (items before the first
+        // key already present in prev) and stitch it onto the existing list.
+        // This prevents newly-renderable events (e.g. late-decrypted) from causing
+        // a mid-list insertion that shifts Virtuoso's scroll anchor.
+        // Commented out to allow middle insertions for now.
+        // const prefix = next.slice(0, firstSharedIdx);
+        // // De-dup: if prefix ends with a date separator whose key matches the
+        // // first item of prev (also a date separator), prev already owns it.
+        // if (
+        //     prefix.length > 0 &&
+        //     prefix[prefix.length - 1].kind === "date-separator" &&
+        //     prev[0].kind === "date-separator" &&
+        //     prefix[prefix.length - 1].key === prev[0].key
+        // ) {
+        //     prefix.pop();
+        // }
+        // return [...prefix, ...prev];
+
+        // Middle-insertion dropping disabled — use the full rebuilt list.
+        return next;
     }
 
     // ── Snapshot construction ────────────────────────────────────────
@@ -609,7 +921,20 @@ export class RoomTimelineViewModel
                 kind: "event",
                 continuation: this.getCachedContinuation(eventId, prevEvent, event),
             });
+
+            // Insert the read-marker item directly after the event it belongs to.
+            if (this.readMarkerEventId && eventId === this.readMarkerEventId) {
+                items.push({ key: "read-marker", kind: "read-marker" });
+            }
+
             prevEvent = event;
+        }
+
+        // Strip a trailing read-marker — when it is the last item the timeline is
+        // fully read, so there is nothing "below" to indicate.
+        if (items.length > 0 && items[items.length - 1].kind === "read-marker") {
+            items.pop();
+            logger.debug(`[TimelineVM] buildItems — stripped trailing read-marker`);
         }
 
         if (filteredCount > 0) {
@@ -636,19 +961,44 @@ export class RoomTimelineViewModel
     }
 
     private shouldFormContinuation(prev: MatrixEvent | null, cur: MatrixEvent): boolean {
-        if (!prev?.sender || !cur.sender) return false;
-        if (cur.getTs() - prev.getTs() > RoomTimelineViewModel.CONTINUATION_MAX_INTERVAL) return false;
-        if (cur.isRedacted() !== prev.isRedacted()) return false;
+        if (!prev?.sender || !cur.sender) {
+            logger.debug(
+                `[TimelineVM][continuation] NO — null sender: prev=${prev?.getId()} prevSender=${!!prev?.sender} cur=${cur.getId()} curSender=${!!cur.sender}`,
+            );
+            return false;
+        }
+        if (cur.getTs() - prev.getTs() > RoomTimelineViewModel.CONTINUATION_MAX_INTERVAL) {
+            logger.debug(
+                `[TimelineVM][continuation] NO — time gap: ${prev.getId()} → ${cur.getId()}`,
+            );
+            return false;
+        }
+        if (cur.isRedacted() !== prev.isRedacted()) {
+            logger.debug(
+                `[TimelineVM][continuation] NO — redaction mismatch: ${prev.getId()} → ${cur.getId()}`,
+            );
+            return false;
+        }
         const curType = cur.getType();
         const prevType = prev.getType();
         const ct = RoomTimelineViewModel.CONTINUED_TYPES;
-        if (curType !== prevType && !(ct.has(curType) && ct.has(prevType))) return false;
+        if (curType !== prevType && !(ct.has(curType) && ct.has(prevType))) {
+            logger.debug(
+                `[TimelineVM][continuation] NO — type mismatch: ${prevType} → ${curType}: ${prev.getId()} → ${cur.getId()}`,
+            );
+            return false;
+        }
         if (
             cur.sender.userId !== prev.sender.userId ||
             cur.sender.name !== prev.sender.name ||
             cur.sender.getMxcAvatarUrl() !== prev.sender.getMxcAvatarUrl()
-        )
+        ) {
+            logger.debug(
+                `[TimelineVM][continuation] NO — sender mismatch: userId=${cur.sender.userId !== prev.sender.userId} name=${cur.sender.name !== prev.sender.name} avatar=${cur.sender.getMxcAvatarUrl() !== prev.sender.getMxcAvatarUrl()}: ${prev.getId()} → ${cur.getId()}`,
+            );
             return false;
+        }
+        logger.debug(`[TimelineVM][continuation] YES: ${prev.getId()} → ${cur.getId()}`);
         return true;
     }
 }

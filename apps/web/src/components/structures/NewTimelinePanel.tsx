@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo, type JSX, type ReactNode } from "react";
-import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions } from "@element-hq/web-shared-components";
+import { TimelineView, useCreateAutoDisposedViewModel, useViewModel, type TimelineItem, DateSeparatorView, type DateSeparatorViewSnapshot, type DateSeparatorViewActions, ReadMarker } from "@element-hq/web-shared-components";
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { RoomTimelineViewModel } from "../../viewmodels/room/timeline/RoomTimelineViewModel";
@@ -63,7 +63,7 @@ export function NewTimelinePanel({ room, highlightedEventId }: NewTimelinePanelP
                         return <DateSeparatorView key={item.key} vm={separatorVm} />;
                     }
                     case "read-marker":
-                        return <hr key={item.key} className="mx_RoomView_myReadMarker" />;
+                        return <ReadMarker key={item.key} eventId={item.key} kind="current" />;
                     case "loading":
                         return (
                             <div key={item.key} className="mx_RoomView_messagePanelSpinner">
