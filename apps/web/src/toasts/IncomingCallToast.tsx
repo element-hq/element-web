@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React, {
     type JSX,
     type ReactNode,
+    type ComponentType,
+    type SVGAttributes,
     useCallback,
     useEffect,
     useRef,
     useState,
     useId,
-    ComponentType,
-    SVGAttributes,
 } from "react";
 import {
     type Room,
