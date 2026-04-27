@@ -5,20 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+/* Note. Use !important to override Banner defaults. */
 .container {
     color: var(--cpd-color-text-primary);
     svg {
-        /* Ensure button icons are primary too */
-        color: var(--cpd-color-text-primary);
+        color: var(--cpd-color-text-primary) !important;
     }
 }
 
 .secondaryAction svg {
-    color: var(--cpd-color-text-secondary);
+    color: var(--cpd-color-text-secondary) !important;
 }
 
 .primaryAction svg {
-    color: var(--cpd-color-text-on-solid-primary);
+    color: var(--cpd-color-text-on-solid-primary) !important;
 }
 
 .title {
