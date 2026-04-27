@@ -13,7 +13,6 @@ import { createRoom, sendMessageInCurrentRoom } from "./utils";
 
 test.use({
     displayName: "Alice",
-    labsFlags: ["feature_share_history_on_invite"],
 });
 
 /** Tests for MSC4268: encrypted history sharing */
@@ -29,12 +28,16 @@ test.describe("History sharing", function () {
             // we then invite Bob, and ensure Bob can see the content.
 
             await aliceElementApp.client.bootstrapCrossSigning(aliceCredentials);
+            await aliceElementApp.closeKeyStorageToast();
 
             // Register a second user, and open it in a second instance of the app
             const bobCredentials = await homeserver.registerUser(`user_${testInfo.testId}_bob`, "password", "Bob");
             const bobPage = await createNewInstance(browser, bobCredentials, {}, labsFlags);
             const bobElementApp = new ElementAppPage(bobPage);
             await bobElementApp.client.bootstrapCrossSigning(bobCredentials);
+            await bobElementApp.closeKeyStorageToast();
+
+            await aliceElementApp.closeNotificationToast();
 
             // Create the room and send a message
             await createRoom(alicePage, "TestRoom", true);
@@ -85,6 +88,7 @@ test.describe("History sharing", function () {
         //   5. Charlie can't see the message.
 
         await aliceElementApp.client.bootstrapCrossSigning(aliceCredentials);
+        await aliceElementApp.closeKeyStorageToast();
         await createRoom(alicePage, "TestRoom", true);
 
         // Register a second user, and open it in a second instance of the app
@@ -92,6 +96,7 @@ test.describe("History sharing", function () {
         const bobPage = await createNewInstance(browser, bobCredentials, {}, labsFlags);
         const bobElementApp = new ElementAppPage(bobPage);
         await bobElementApp.client.bootstrapCrossSigning(bobCredentials);
+        await bobElementApp.closeKeyStorageToast();
 
         // ... and a third
         const charlieCredentials = await homeserver.registerUser(
@@ -102,6 +107,7 @@ test.describe("History sharing", function () {
         const charliePage = await createNewInstance(browser, charlieCredentials, {}, labsFlags);
         const charlieElementApp = new ElementAppPage(charliePage);
         await charlieElementApp.client.bootstrapCrossSigning(charlieCredentials);
+        await charlieElementApp.closeKeyStorageToast();
 
         // Alice invites Bob, and Bob accepts
         const roomId = await aliceElementApp.getCurrentRoomIdFromUrl();

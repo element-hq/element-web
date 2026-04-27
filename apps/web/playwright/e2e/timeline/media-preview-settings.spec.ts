@@ -36,6 +36,8 @@ test.describe("Media preview settings", () => {
     });
 
     test("should be able to hide avatars of inviters", { tag: "@screenshot" }, async ({ page, app, room, user }) => {
+        await app.closeVerifyToast();
+
         let settings = await app.settings.openUserSettings("Preferences");
         await settings.getByLabel("Hide avatars of room and inviter").click();
         await app.closeDialog();

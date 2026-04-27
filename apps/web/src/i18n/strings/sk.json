@@ -1565,9 +1565,6 @@
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
         "report_to_moderators_description": "V miestnostiach, ktoré podporujú moderovanie, môžete pomocou tlačidla \"Nahlásiť\" nahlásiť porušovanie pravidiel moderátorom miestnosti.",
-        "share_history_on_invite": "Zdieľajte zašifrovanú históriu s novými členmi",
-        "share_history_on_invite_description": "Pri pozývaní používateľa do zašifrovanej miestnosti s históriou nastavenou na „zdieľanú“ zdieľať s týmto používateľom aj zašifrovanú históriu a pri pozvaní do takejto miestnosti prijať zašifrovanú históriu.",
-        "share_history_on_invite_warning": "Táto funkcia je EXPERIMENTÁLNA a nie sú implementované všetky bezpečnostné opatrenia. Nepovoľujte ju v produkčných účtoch.",
         "sliding_sync": "Režim kĺzavej synchronizácie",
         "sliding_sync_description": "V štádiu aktívneho vývoja, nie je možné to vypnúť.",
         "sliding_sync_disabled_notice": "Odhláste sa a znova sa prihláste, aby sa to vyplo",
@@ -1817,7 +1814,6 @@
         "restricted": "Obmedzené"
     },
     "powered_by_matrix": "používa protokol Matrix",
-    "powered_by_matrix_with_logo": "Decentralizované, šifrované konverzácie a spolupráca na platforme $matrixLogo",
     "presence": {
         "away": "Preč",
         "busy": "Obsadený/zaneprázdnený",
@@ -4024,7 +4020,6 @@
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Víta vás Element",
     "widget": {
         "added_by": "Widget pridaný používateľom",
         "capabilities_dialog": {

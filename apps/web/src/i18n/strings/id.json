@@ -1550,9 +1550,6 @@
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
         "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
-        "share_history_on_invite": "Bagikan riwayat terenkripsi dengan anggota baru",
-        "share_history_on_invite_description": "Saat mengundang pengguna ke ruangan terenkripsi yang memiliki keterlihatan riwayat yang diatur ke \"terbagi\", bagikan riwayat terenkripsi dengan pengguna tersebut, dan terima riwayat terenkripsi saat Anda diundang ke ruangan tersebut.",
-        "share_history_on_invite_warning": "Fitur ini bersifat EKSPERIMENTAL dan tidak semua tindakan pencegahan keamanan diterapkan. Jangan aktifkan pada akun produksi.",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
@@ -1794,7 +1791,6 @@
         "restricted": "Dibatasi"
     },
     "powered_by_matrix": "Diberdayakan oleh Matrix",
-    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "presence": {
         "away": "Idle",
         "busy": "Sibuk",
@@ -3937,7 +3933,6 @@
         "you_are_presenting": "Anda sedang mempresentasi"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element",
     "widget": {
         "added_by": "Widget ditambahkan oleh",
         "capabilities_dialog": {
