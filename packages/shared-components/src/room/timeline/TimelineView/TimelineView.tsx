@@ -10,6 +10,7 @@ import { LogLevel, Virtuoso, type ScrollIntoViewLocation, type VirtuosoHandle } 
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
 import type { TimelineItem, TimelineViewProps } from "./types";
+import { TimelineOverlayButtons } from "./TimelineOverlayButtons";
 
 
 /**
@@ -141,8 +142,11 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                     // eslint-disable-next-line no-console
                     console.debug(`[TimelineView][scrollIntoViewOnChange done] arrayIndex=${arrayIndex} key=${anchor.targetKey} align=${anchor.align}`);
                     isAnchorScrollInProgressRef.current = true;
-                    virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });
-                    requestAnimationFrame(() => { isAnchorScrollInProgressRef.current = false; });
+                    virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });                    // Clear the anchor now that we've issued the imperative scroll. This
+                    // prevents Virtuoso's internal scroll-compensation events (size changes,
+                    // upward compensation) from being misidentified as user scrolls by
+                    // onScroll after isAnchorScrollInProgressRef is cleared by the rAF below.
+                    vm.onAnchorReached();                    requestAnimationFrame(() => { isAnchorScrollInProgressRef.current = false; });
                 },
             };
         },
@@ -187,7 +191,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     }
 
     return (
-        <div style={{ height: "100%", width: "100%" }}>
+        <div style={{ height: "100%", width: "100%", position: "relative" }}>
             <Virtuoso
                 ref={virtuosoRef}
                 data={snapshot.items}
@@ -205,6 +209,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 alignToBottom
                 style={{ height: "100%", width: "100%" }}
             />
+            <TimelineOverlayButtons snapshot={snapshot} vm={vm} />
         </div>
     );
 }

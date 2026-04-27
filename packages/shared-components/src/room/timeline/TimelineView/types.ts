@@ -108,6 +108,32 @@ export interface TimelineViewSnapshot {
      * so the event tile stays highlighted.
      */
     highlightedEventId: string | null;
+
+    /** True when Virtuoso reports the list is scrolled to the bottom (within the default 4px threshold). */
+    isAtBottom: boolean;
+
+    /**
+     * Whether a read-marker is visible above (`"above"`) or below (`"below"`) the
+     * current viewport, or not reachable/applicable (`false`).
+     * - `"above"` — marker is above the viewport (or above the loaded window).
+     * - `"below"` — marker is below the viewport but within the loaded window.
+     * Controls visibility and direction of the "Jump to unread" / "Mark as read" bar.
+     */
+    canJumpToReadMarker: "above" | "below" | false;
+
+    /**
+     * Number of new messages that have arrived since the user last scrolled
+     * to the live bottom. Reset to zero when the user reaches the live bottom.
+     * Used as the badge count on the "Jump to bottom" button.
+     */
+    numUnreadMessages: number;
+
+    /**
+     * True when at least one of the new-since-leaving-bottom messages is a
+     * highlight (mention / keyword). Drives the highlight style on the
+     * "Jump to bottom" button.
+     */
+    hasHighlights: boolean;
 }
 
 export interface TimelineViewActions {
@@ -129,6 +155,19 @@ export interface TimelineViewActions {
 
     /** Called by Virtuoso's atBottomStateChange; VM uses this to decide whether to clear the saved scroll position on dispose. */
     onAtBottomStateChange(atBottom: boolean): void;
+
+    /** Scroll to the read-marker item (jump to unread messages). */
+    onJumpToReadMarker(): void;
+
+    /** Mark all currently-visible messages as read, clearing the read marker. */
+    onMarkAllAsRead(): void;
+
+    /**
+     * Navigate to the live end of the timeline.
+     * If forward pagination is possible, reloads the timeline at the live end;
+     * otherwise scrolls to the last loaded item.
+     */
+    onJumpToLive(): void;
 }
 
 export type TimelineViewModel = ViewModel<TimelineViewSnapshot, TimelineViewActions>;

@@ -1348,6 +1348,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     public canJumpToReadMarker = (): boolean => {
+        // The new MVVM timeline manages its own read-marker UI via TimelineOverlayButtons.
+        if (SettingsStore.getValue("feature_new_timeline")) return false;
+
         // 1. Do not show jump bar if neither the RM nor the RR are set.
         // 3. We want to show the bar if the read-marker is off the top of the screen.
         // 4. Also, if pos === null, the event might not be paginated - show the unread bar
