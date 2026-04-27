@@ -257,7 +257,7 @@ export class TextualBodyViewModel
         }
     };
 
-    public onBodyActionClick = (event: MouseEvent<HTMLElement>): void => {
+    public onBodyActionClick = (event: MouseEvent<HTMLButtonElement>): void => {
         event.preventDefault();
 
         const starterLink = TextualBodyViewModel.getStarterLink(this.props.mxEvent);

@@ -96,15 +96,15 @@ export interface TextualBodyViewActions {
     /**
      * Activation handler used when `bodyWrapper` is `ACTION`.
      */
-    onBodyActionClick?: MouseEventHandler<HTMLElement>;
+    onBodyActionClick?: MouseEventHandler<HTMLButtonElement>;
     /**
      * Click handler for the edited marker.
      */
-    onEditedMarkerClick?: MouseEventHandler<HTMLElement>;
+    onEditedMarkerClick?: MouseEventHandler<HTMLButtonElement>;
     /**
      * Click handler for the emote sender.
      */
-    onEmoteSenderClick?: MouseEventHandler<HTMLElement>;
+    onEmoteSenderClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export type TextualBodyViewModel = ViewModel<TextualBodyViewSnapshot, TextualBodyViewActions>;
@@ -185,7 +185,7 @@ export function TextualBodyView({
     });
 
     let renderedBody: ReactNode = attachBodyRef(body, bodyRef);
-    const onEditedMarkerClick: MouseEventHandler<HTMLElement> | undefined = vm.onEditedMarkerClick
+    const onEditedMarkerClick: MouseEventHandler<HTMLButtonElement> | undefined = vm.onEditedMarkerClick
         ? (event): void => {
               event.preventDefault();
               event.stopPropagation();
@@ -196,17 +196,15 @@ export function TextualBodyView({
     const markers: ReactNode[] = [];
     if (showEditedMarker) {
         const editedMarkerButton = (
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- Preserve the legacy edited-marker rendering path to avoid screenshot drift from native button layout.
-            <span
-                role="button"
-                tabIndex={0}
+            <button
+                type="button"
                 className={classNames(styles.annotation, styles.editedMarker)}
                 onClick={onEditedMarkerClick}
                 aria-label={editedMarkerAriaLabel}
                 data-textual-body-edited-marker=""
             >
                 <span>{editedMarkerText}</span>
-            </span>
+            </button>
         );
 
         markers.push(
@@ -275,10 +273,9 @@ export function TextualBodyView({
         return (
             <div id={id} className={rootClasses} onClickCapture={vm.onRootClick} dir="auto">
                 *&nbsp;
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events -- Preserve legacy inline emote sender rendering, which avoids the RTL screenshot drift caused by a native button here. */}
-                <span role="button" tabIndex={0} className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
+                <button type="button" className={styles.emoteSender} onClick={vm.onEmoteSenderClick}>
                     {emoteSenderName}
-                </span>
+                </button>
                 &nbsp;
                 {renderedBody}
                 {urlPreviews}
