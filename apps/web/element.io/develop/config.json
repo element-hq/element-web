@@ -49,8 +49,7 @@
         "threadsActivityCentre": true,
         "feature_video_rooms": true,
         "feature_group_calls": true,
-        "feature_element_call_video_rooms": true,
-        "feature_login_with_qr": true
+        "feature_element_call_video_rooms": true
     },
     "setting_defaults": {
         "RustCrypto.staged_rollout_percent": 100,

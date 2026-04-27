@@ -147,16 +147,7 @@ import QrLoginDialog from "../views/dialogs/QrLoginDialog.tsx";
 // legacy export
 export { default as Views } from "../../Views";
 
-const AUTH_SCREENS = [
-    "register",
-    "mobile_register",
-    "login",
-    "qr_login",
-    "forgot_password",
-    "start_sso",
-    "start_cas",
-    "welcome",
-];
+const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password", "start_sso", "start_cas", "welcome"];
 
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
@@ -822,7 +813,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewSomethingBehindModal();
                 break;
             case Action.ViewRoomDirectory: {
-                // TODO ignore events if logged in
                 Modal.createDialog(
                     RovingSpotlightDialog,
                     {
@@ -839,6 +829,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case Action.ViewQrLogin: {
+                // TODO ignore events if logged in
                 Modal.createDialog(
                     QrLoginDialog,
                     {
@@ -2190,9 +2181,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (
             initialScreenAfterLogin &&
             // XXX: workaround for https://github.com/vector-im/element-web/issues/11643 causing a login-loop
-            !["welcome", "login", "qr_login", "register", "start_sso", "start_cas"].includes(
-                initialScreenAfterLogin.screen,
-            )
+            !["welcome", "login", "register", "start_sso", "start_cas"].includes(initialScreenAfterLogin.screen)
         ) {
             fragmentAfterLogin = `/${initialScreenAfterLogin.screen}`;
         }
