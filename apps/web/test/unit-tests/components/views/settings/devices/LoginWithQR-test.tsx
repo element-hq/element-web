@@ -108,6 +108,7 @@ describe("<LoginWithQR />", () => {
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.ShowingQR,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
 
@@ -133,9 +134,11 @@ describe("<LoginWithQR />", () => {
         });
 
         test("reciprocates login", async () => {
+            const ref = createRef<LoginWithQR>();
             jest.spyOn(global.window, "open");
 
-            render(getComponent({ client }));
+            render(getComponent({ client, ref }));
+            jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockResolvedValue({});
             jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({});
             jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
                 verificationUri: "mock-verification-uri",
@@ -145,6 +148,7 @@ describe("<LoginWithQR />", () => {
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.OutOfBandConfirmation,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
 
@@ -155,9 +159,13 @@ describe("<LoginWithQR />", () => {
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.WaitingForDevice,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
             expect(global.window.open).toHaveBeenCalledWith("mock-verification-uri", "_blank");
+
+            const rendezvous = ref.current!.state.rendezvous!;
+            expect(rendezvous.shareSecrets).toHaveBeenCalled();
         });
 
         test("handles errors during protocol negotiation", async () => {
@@ -190,6 +198,7 @@ describe("<LoginWithQR />", () => {
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.OutOfBandConfirmation,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
 
@@ -219,6 +228,7 @@ describe("<LoginWithQR />", () => {
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.OutOfBandConfirmation,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
 
