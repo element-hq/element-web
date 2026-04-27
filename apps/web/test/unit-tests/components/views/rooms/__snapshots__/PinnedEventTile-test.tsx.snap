@@ -64,7 +64,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
         </button>
       </div>
       <div
-        class="mx_MTextBody mx_EventTile_content _root_1gk8c_8 _text_1gk8c_13"
+        class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
         id="_r_0_"
       >
         <div
@@ -143,7 +143,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
         </button>
       </div>
       <div
-        class="mx_MTextBody mx_EventTile_content _root_1gk8c_8 _text_1gk8c_13"
+        class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
         id="_r_9_"
       >
         <div
