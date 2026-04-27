@@ -562,6 +562,7 @@
         "someone": "某人",
         "space": "空间",
         "spaces": "空间",
+        "state_encryption_enabled": "实验性的状态加密已启用",
         "sticker": "贴纸",
         "stickerpack": "贴纸包",
         "success": "成功",
@@ -2873,8 +2874,8 @@
             "message_search_indexing": "当前正在索引：%(currentRoom)s",
             "message_search_indexing_idle": "尚未为任何房间索引消息。",
             "message_search_intro": "%(brand)s 正在安全地在本地缓存加密消息以使其出现在搜索结果中：",
-            "message_search_pending_rooms": "等待索引的房间：%(pendingRooms)s",
-            "message_search_room_progress": "%(doneRooms)s 个房间中的 %(totalRooms)s 个",
+            "message_search_pending_rooms": "等待索引的房间：%(pendingRooms)s 个",
+            "message_search_room_progress": "%(totalRooms)s 个房间中的 %(doneRooms)s 个",
             "message_search_section": "消息搜索",
             "message_search_sleep_time": "消息下载速度",
             "message_search_space_used": "已使用空间：",
@@ -3974,6 +3975,11 @@
         "you_are_presenting": "你正在演示"
     },
     "web_default_device_name": "%(appName)s：%(browserName)s 运行于 %(osName)s",
+    "welcome": {
+        "tagline_element": "更快速、更简洁。",
+        "title_element": "融入 Element",
+        "title_generic": "欢迎使用 %(brand)s"
+    },
     "widget": {
         "added_by": "小部件添加者：",
         "capabilities_dialog": {
