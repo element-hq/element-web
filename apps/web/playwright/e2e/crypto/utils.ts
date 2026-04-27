@@ -259,8 +259,8 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
         await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Remove this device" }).click();
     }
 
-    // Wait for the login page to load
-    await page.getByRole("heading", { name: "Sign in" }).click();
+    // Wait for the welcome page to load
+    await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
 }
 
 /**
