@@ -45,6 +45,7 @@
     appearance: none;
     background: none;
     border: none;
+    height: max-content;
     padding: 0;
     cursor: pointer;
     font-family: inherit;
