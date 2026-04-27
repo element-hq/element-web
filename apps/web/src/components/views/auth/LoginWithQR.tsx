@@ -33,7 +33,6 @@ interface IProps {
 interface IState {
     phase: Phase;
     rendezvous?: MSC4108SignInWithQR;
-    mediaPermissionError?: boolean;
     verificationUri?: string;
     userCode?: string;
     checkCode?: string;
@@ -217,7 +216,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             failureReason: undefined,
             userCode: undefined,
             checkCode: undefined,
-            mediaPermissionError: false,
         });
     }
 
