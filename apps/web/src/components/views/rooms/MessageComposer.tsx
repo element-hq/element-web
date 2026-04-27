@@ -54,8 +54,8 @@ import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/M
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";
-import type { ComposerExtraContentPreview } from "@element-hq/element-web-module-api";
-import { IComposerInsertEventContent } from "../../../dispatcher/payloads/ComposerInsertExtraContentPayload";
+import type { ComposerEventExtraContent, ComposerExtraContentPreview } from "@element-hq/element-web-module-api";
+import type { ComposerInsertEventContentPayload } from "../../../dispatcher/payloads/ComposerInsertExtraContentPayload";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const WYSIWYG_EDITOR_STATE_STORAGE_PREFIX = "mx_wysiwyg_state_";
@@ -106,7 +106,7 @@ interface IState {
     /**
      * Extra content to be inserted into the final Matrix event.
      */
-    extraEventContent: Map<string, { content: Record<string, unknown>; renderer: ComposerExtraContentPreview }>;
+    extraEventContent: Map<string, { content: ComposerEventExtraContent; renderer: ComposerExtraContentPreview }>;
 }
 
 type WysiwygComposerState = {
@@ -294,10 +294,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 break;
 
             case Action.ComposerInsertExtraContent: {
-                const composerInsertPayload = payload as IComposerInsertEventContent;
-                if (!this.context.canSendMessages) {
-                    break;
-                }
+                const composerInsertPayload = payload as ComposerInsertEventContentPayload;
                 this.setState((s) => {
                     s.extraEventContent.set(composerInsertPayload.key, {
                         content: composerInsertPayload.eventContent,
@@ -562,7 +559,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
-    private readonly onExtraContentChange = (key: string, newContent: Record<string, unknown> | null): void => {
+    private readonly onExtraContentChange = (key: string, newContent: ComposerEventExtraContent): void => {
         this.setState((s) => {
             if (newContent === null) {
                 s.extraEventContent.delete(key);

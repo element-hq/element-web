@@ -5,15 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import type { ComposerExtraContentPreview } from "@element-hq/element-web-module-api";
+import type { ComposerExtraContentPreview, ComposerEventExtraContent } from "@element-hq/element-web-module-api";
 import type { Action } from "../actions";
-import type { TimelineRenderingType } from "../../contexts/RoomContext";
-import type { ComposerType } from "./ComposerInsertPayload";
 
-export interface IComposerInsertEventContent<T = Record<string, unknown>> {
-    action: Action.ComposerInsert;
-    timelineRenderingType: TimelineRenderingType;
-    composerType: ComposerType;
+export interface ComposerInsertEventContentPayload<T = ComposerEventExtraContent> {
+    action: Action.ComposerInsertExtraContent;
     /**
      * A unique key for the extra content.
      */

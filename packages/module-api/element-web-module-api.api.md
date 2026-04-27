@@ -101,12 +101,17 @@ export interface ComponentVisibilityCustomisations {
 
 // @alpha
 export interface ComposerApi {
+    insertEventContentIntoComposer<T extends ComposerEventExtraContent>(key: string, eventContent: T, previewComponent: ComposerExtraContentPreview<T>): void;
     insertPlaintextIntoComposer(plaintext: string): void;
-    insertEventContentIntoComposer<T extends object>(key: string, eventContent: T, previewComponent: ComposerExtraContentPreview<T>): void;
 }
 
 // @alpha
-export type ComposerExtraContentPreview<T = Record<string, unknown>> = (props: {
+export type ComposerEventExtraContent = {
+    [key: string]: ComposerEventExtraContent;
+} | string | number | boolean | null;
+
+// @alpha
+export type ComposerExtraContentPreview<T = ComposerEventExtraContent> = (props: {
     contentKey: string;
     content: T;
     onContentChange: (newContent: T | null) => void;
