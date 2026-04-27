@@ -63,7 +63,7 @@ import { goto, join } from "./join";
 import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import upgraderoom from "./upgraderoom/upgraderoom";
 import { emoticon } from "./emoticon";
-import { userStatusTextWithinMaxLength } from "../hooks/useUserStatus";
+import { statusCommand } from "./status";
 
 export { CommandCategories, Command };
 
@@ -821,39 +821,7 @@ export const Commands = [
         },
         renderingTypes: [TimelineRenderingType.Room],
     }),
-    new Command({
-        command: "status",
-        args: "<emoji> <text>",
-        description: _td("slash_command|status|description"),
-        isEnabled: () => SettingsStore.getValue("feature_user_status"),
-        runFn: function (cli, _roomId, _threadId, args) {
-            if (!args) {
-                return reject(new UserFriendlyError("slash_command|status|no_args"));
-            }
-            const [emojiText, text] = splitAtFirstSpace(args);
-            if (!emojiText) {
-                return reject(new UserFriendlyError("slash_command|status|no_emoji"));
-            }
-            if (!text) {
-                return reject(new UserFriendlyError("slash_command|status|no_text"));
-            }
-            const [emoji, additionalSegment] = [...new Intl.Segmenter().segment(emojiText)];
-            if (additionalSegment) {
-                return reject(new UserFriendlyError("slash_command|status|too_long_emoji"));
-            }
-            if (!userStatusTextWithinMaxLength(text)) {
-                return reject(new UserFriendlyError("slash_command|status|too_long_text"));
-            }
-            return success(
-                cli.setExtendedProfileProperty("org.matrix.msc4426.status", {
-                    emoji: emoji.segment,
-                    text,
-                }),
-            );
-        },
-        category: CommandCategories.actions,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
+    statusCommand,
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
