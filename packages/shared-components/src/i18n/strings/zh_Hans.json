@@ -81,6 +81,7 @@
     },
     "room_list": {
         "appearance": "外观",
+        "chat_moved": "聊天已移动",
         "collapse_filters": "折叠过滤器列表",
         "empty": {
             "no_chats": "暂无聊天",
@@ -205,6 +206,7 @@
         "message_timestamp_sent_at": "发送于 %(dateTime)s",
         "url_preview": {
             "close": "关闭预览",
+            "open_link": "打开链接",
             "show_n_more": {
                 "one": "显示剩余 %(count)s 个预览",
                 "other": "显示剩余 %(count)s 个预览"
