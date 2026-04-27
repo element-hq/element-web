@@ -228,7 +228,7 @@ export interface I18nApi {
     humanizeTime(this: void, timeMillis: number): string;
     get language(): string;
     register(this: void, translations: Partial<Translations>): void;
-    translate(this: void, key: keyof Translations, variables?: Variables): string;
+    translate(this: void, key: keyof Translations, variables?: StringVariables): string;
     translate(this: void, key: keyof Translations, variables: Variables | undefined, tags: Tags): ReactNode;
 }
 
@@ -399,6 +399,14 @@ export interface ProfileApiExtension {
 }
 
 // @public
+export interface RichVariables {
+    // (undocumented)
+    [key: string]: SubstitutionValue;
+    // (undocumented)
+    count?: number;
+}
+
+// @public
 export interface Room {
     getLastActiveTimestamp: () => number;
     id: string;
@@ -448,6 +456,14 @@ export interface StoresApi {
 }
 
 // @public
+export interface StringVariables {
+    // (undocumented)
+    [key: string]: number | string | null | undefined;
+    // (undocumented)
+    count?: number;
+}
+
+// @public
 export type SubstitutionValue = number | string | ReactNode | ((sub: string) => ReactNode);
 
 // @public
@@ -481,10 +497,7 @@ export interface UserIdentifierCustomisations {
 export function useWatchable<T>(watchable: Watchable<T>): T;
 
 // @public
-export type Variables = {
-    count?: number;
-    [key: string]: SubstitutionValue;
-};
+export type Variables = StringVariables | RichVariables;
 
 // @public
 export class Watchable<T> {
