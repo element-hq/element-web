@@ -12,6 +12,7 @@ export type {
     RoomListItemViewModel,
     RoomListItemViewActions,
     RoomListItemViewProps,
+    Section,
 } from "./RoomListItemView";
 export { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 export type { RoomListItemNotificationMenuProps } from "./RoomListItemNotificationMenu";

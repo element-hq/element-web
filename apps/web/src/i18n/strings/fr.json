@@ -681,6 +681,12 @@
         "unfederated_label_default_on": "Vous devriez le déactiver si le salon est utilisé pour collaborer avec des équipes externes qui ont leur propre serveur d’accueil. Ceci ne peut pas être changé plus tard.",
         "unsupported_version": "Le serveur ne prend pas en charge la version de salon spécifiée."
     },
+    "create_section_dialog": {
+        "create_section": "Créer une section",
+        "description": "Ces sections sont réservées à vous.",
+        "label": "Nom de la section",
+        "title": "Créer une section"
+    },
     "create_space": {
         "add_details_prompt": "Ajoutez des informations pour aider les personnes à l’identifier.",
         "add_details_prompt_2": "Vous pouvez les changer à n’importe quel moment.",
@@ -1563,9 +1569,6 @@
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
         "room_list_sections": "Sections de la liste de salons",
-        "share_history_on_invite": "Partagez l'historique chiffré avec les nouveaux membres",
-        "share_history_on_invite_description": "Lorsque vous invitez un utilisateur dans un salon chiffré dont la visibilité de l'historique est définie sur « partagée », partagez l'historique chiffré avec cet utilisateur et acceptez l'historique chiffré lorsque vous êtes invité dans une telle salon.",
-        "share_history_on_invite_warning": "Cette fonctionnalité est EXPÉRIMENTALE et toutes les précautions de sécurité ne sont pas mises en œuvre. Ne l'activez pas sur les comptes en production.",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Connectez-vous à nouveau pour désactiver",
@@ -1810,7 +1813,6 @@
         "restricted": "Restreint"
     },
     "powered_by_matrix": "Propulsé par Matrix",
-    "powered_by_matrix_with_logo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo",
     "presence": {
         "away": "Absent",
         "busy": "Occupé",
@@ -3974,7 +3976,6 @@
         "you_are_presenting": "Vous êtes à l’écran"
     },
     "web_default_device_name": "%(appName)s : %(browserName)s pour %(osName)s",
-    "welcome_to_element": "Bienvenue sur Element",
     "widget": {
         "added_by": "Widget ajouté par",
         "capabilities_dialog": {

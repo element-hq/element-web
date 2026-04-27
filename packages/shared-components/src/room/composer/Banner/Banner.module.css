@@ -48,12 +48,13 @@
 }
 
 .icon {
-    width: 24px;
     display: flex;
     align-items: flex-start;
 }
 
 .icon img {
+    height: 24px;
+    aspect-ratio: auto;
     border-radius: 50%;
 }
 

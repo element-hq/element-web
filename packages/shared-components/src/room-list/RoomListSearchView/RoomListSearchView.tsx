@@ -84,7 +84,7 @@ export function RoomListSearchView({ vm }: Readonly<RoomListSearchViewProps>): J
                 id="room-list-search-button"
                 className={styles.search}
                 kind="secondary"
-                size="sm"
+                size="md"
                 Icon={SearchIcon}
                 onClick={vm.onSearchClick}
             >
@@ -96,7 +96,7 @@ export function RoomListSearchView({ vm }: Readonly<RoomListSearchViewProps>): J
             {displayDialButton && (
                 <Button
                     kind="secondary"
-                    size="sm"
+                    size="md"
                     Icon={DialPadIcon}
                     iconOnly={true}
                     aria-label={_t("left_panel|open_dial_pad")}
@@ -106,7 +106,7 @@ export function RoomListSearchView({ vm }: Readonly<RoomListSearchViewProps>): J
             {displayExploreButton && (
                 <Button
                     kind="secondary"
-                    size="sm"
+                    size="md"
                     Icon={ExploreIcon}
                     iconOnly={true}
                     aria-label={_t("action|explore_rooms")}

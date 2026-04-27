@@ -62,6 +62,8 @@ export enum RoomListStoreV3Event {
     ListsLoaded = "lists_loaded",
     /** Fired when a new section is created in the room list. */
     SectionCreated = "section_created",
+    /** Fired when a room's tags change. */
+    RoomTagged = "room_tagged",
 }
 
 // The result object for returning rooms from the store
@@ -93,6 +95,7 @@ export const CHATS_TAG = "chats";
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;
 export const SECTION_CREATED_EVENT = RoomListStoreV3Event.SectionCreated;
+export const ROOM_TAGGED_EVENT = RoomListStoreV3Event.RoomTagged;
 
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
@@ -243,6 +246,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.tags": {
                 const room = payload.room;
                 this.addRoomAndEmit(room);
+                this.emit(ROOM_TAGGED_EVENT);
                 break;
             }
 
@@ -485,13 +489,20 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     /**
      * Create a new section.
-     * Emits {@link SECTION_CREATED_EVENT} and  {@link LISTS_UPDATE_EVENT} if the section was successfully created.
+     * Emits {@link SECTION_CREATED_EVENT} if the section was successfully created.
      */
-    public async createSection(): Promise<void> {
-        const sectionIsCreated = await createSection();
-        if (!sectionIsCreated) return;
-        this.emit(SECTION_CREATED_EVENT);
-        this.scheduleEmit();
+    public async createSection(): Promise<string | undefined> {
+        const tag = await createSection();
+        if (!tag) return;
+        this.emit(SECTION_CREATED_EVENT, tag);
+        return tag;
+    }
+
+    /**
+     * Returns the ordered section tags.
+     */
+    public get orderedSectionTags(): string[] {
+        return this.sortedTags;
     }
 
     /**

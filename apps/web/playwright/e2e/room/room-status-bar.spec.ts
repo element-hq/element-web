@@ -19,6 +19,7 @@ test.describe("Room Status Bar", () => {
             const roomId = await app.client.createRoom({
                 name: "A room",
             });
+            await app.closeVerifyToast();
             await app.closeNotificationToast();
             await app.viewRoomById(roomId);
             await use({ roomId });
@@ -139,6 +140,7 @@ test.describe("Room Status Bar", () => {
             "should show an error when creating a local room fails",
             { tag: "@screenshot" },
             async ({ page, app, user, bot }) => {
+                await app.closeVerifyToast();
                 await page
                     .getByRole("navigation", { name: "Room list" })
                     .getByRole("button", { name: "New conversation" })
@@ -163,6 +165,10 @@ test.describe("Room Status Bar", () => {
                 ).toBeVisible();
                 await other.getByRole("option", { name: "Alice" }).click();
                 await other.getByRole("button", { name: "Go" }).click();
+
+                await expect(page.getByRole("heading", { name: "Start a chat with this new contact?" })).toBeVisible();
+                await page.getByRole("button", { name: "Continue" }).click();
+
                 // Send a message to invite the bots
                 const composer = app.getComposerField();
                 await composer.fill("Hello");
