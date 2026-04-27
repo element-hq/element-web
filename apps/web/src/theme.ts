@@ -209,7 +209,7 @@ function generateCustomCompoundCSS(theme: CompoundTheme): string {
         else logger.warn(`'${token}' is not a valid Compound token`);
     // Insert the design token overrides into the 'custom' cascade layer as
     // documented at https://compound.element.io/?path=/docs/develop-theming--docs
-    return `@layer compound.custom { :root, [class*="cpd-theme-"] { ${properties.join(" ")} } }`;
+    return `@layer compound-tokens.custom { :root, [class*="cpd-theme-"] { ${properties.join(" ")} } }`;
 }
 
 /**
