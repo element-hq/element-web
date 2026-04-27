@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -7,16 +8,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useState } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../languageHandler";
 import UploadBigSvg from "../../../res/img/upload-big.svg";
-import { useRoomState } from "../../hooks/useRoomState.ts";
+import { useRoomUploadViewModel } from "../../viewmodels/room/RoomUploadViewModel";
 
 interface IProps {
-    room: Room;
     parent: HTMLElement | null;
-    onFileDrop(this: void, dataTransfer: DataTransfer): void;
 }
 
 interface IState {
@@ -24,15 +23,16 @@ interface IState {
     counter: number;
 }
 
-const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop, room }) => {
+const FileDropTarget: React.FC<IProps> = ({ parent }) => {
     const [state, setState] = useState<IState>({
         dragging: false,
         counter: 0,
     });
-    const hasPermission = useRoomState(room, (state) => state.maySendMessage(room.client.getUserId()!));
+    const vm = useRoomUploadViewModel();
+    const { mayUpload } = useViewModel(vm);
 
     useEffect(() => {
-        if (!hasPermission || !parent || parent.ondrop) return;
+        if (!mayUpload || !parent || parent.ondrop) return;
 
         const onDragEnter = (ev: DragEvent): void => {
             ev.stopPropagation();
@@ -83,7 +83,8 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop, room }) => {
             ev.stopPropagation();
             ev.preventDefault();
             if (!ev.dataTransfer) return;
-            onFileDrop(ev.dataTransfer);
+            console.log("onDrop", ev);
+            vm.initiateViaDataTransfer(ev.dataTransfer);
 
             setState((state) => ({
                 dragging: false,
@@ -106,9 +107,9 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop, room }) => {
             parent?.removeEventListener("dragenter", onDragEnter);
             parent?.removeEventListener("dragleave", onDragLeave);
         };
-    }, [parent, onFileDrop, hasPermission]);
+    }, [parent, mayUpload, vm]);
 
-    if (hasPermission && state.dragging) {
+    if (mayUpload && state.dragging) {
         return (
             <div className="mx_FileDropTarget">
                 <img src={UploadBigSvg} className="mx_FileDropTarget_image" alt="" />

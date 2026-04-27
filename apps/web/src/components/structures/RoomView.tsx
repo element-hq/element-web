@@ -142,6 +142,7 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
+import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -301,7 +302,6 @@ interface LocalRoomViewProps {
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement | null>;
-    onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
     mainSplitContentType: MainSplitContentType;
     e2eStatus?: E2EStatus;
 }
@@ -342,17 +342,19 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 <RoomHeader room={room} />
-                <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
-                    <FileDropTarget parent={props.roomView.current} onFileDrop={props.onFileDrop} room={room} />
-                    <div className="mx_RoomView_timeline">
-                        <ScrollPanel className="mx_RoomView_messagePanel">
-                            {encryptionTile}
-                            <NewRoomIntro />
-                        </ScrollPanel>
-                    </div>
-                    {statusBar}
-                    {composer}
-                </main>
+                <RoomUploadContextProvider timelineRenderingType={TimelineRenderingType.Room}>
+                    <main className="AccessibleButton" ref={props.roomView} aria-label={_t("room|room_content")}>
+                        <FileDropTarget parent={props.roomView.current} />
+                        <div className="mx_RoomView_timeline">
+                            <ScrollPanel className="mx_RoomView_messagePanel">
+                                {encryptionTile}
+                                <NewRoomIntro />
+                            </ScrollPanel>
+                        </div>
+                        {statusBar}
+                        {composer}
+                    </main>
+                </RoomUploadContextProvider>
             </ErrorBoundary>
         </div>
     );
@@ -2120,19 +2122,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     }
 
-    private onFileDrop = async (dataTransfer: DataTransfer): Promise<void> => {
-        const roomId = this.getRoomId();
-        if (!roomId || !this.context.client) return;
-        await ContentMessages.sharedInstance().sendContentListToRoom(
-            Array.from(dataTransfer.files),
-            roomId,
-            undefined,
-            this.state.replyToEvent,
-            this.context.client,
-            TimelineRenderingType.Room,
-        );
-    };
-
     private onMeasurement = (narrow: boolean): void => {
         this.setState({ narrow });
     };
@@ -2168,7 +2157,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     resizeNotifier={this.context.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
-                    onFileDrop={this.onFileDrop}
                     mainSplitContentType={this.state.mainSplitContentType}
                 />
             </ScopedRoomContextProvider>
@@ -2670,16 +2658,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case MainSplitContentType.Timeline:
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
-                    <>
+                    <RoomUploadContextProvider
+                        replyToEvent={this.state.replyToEvent}
+                        timelineRenderingType={TimelineRenderingType.Room}
+                    >
                         <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}
                         <main className={timelineClasses} data-testid="timeline">
-                            <FileDropTarget
-                                parent={this.roomView.current}
-                                onFileDrop={this.onFileDrop}
-                                room={this.state.room}
-                            />
+                            <FileDropTarget parent={this.roomView.current} />
                             {topUnreadMessagesBar}
                             {jumpToBottom}
                             {messagePanel}
@@ -2688,7 +2675,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         {statusBarArea}
                         {previewBar}
                         {messageComposer}
-                    </>
+                    </RoomUploadContextProvider>
                 );
                 break;
             case MainSplitContentType.MaximisedWidget:
