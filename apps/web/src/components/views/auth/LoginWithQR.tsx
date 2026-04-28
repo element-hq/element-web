@@ -103,11 +103,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     }
 
     private generateAndShowCode = async (abortController: AbortController): Promise<void> => {
-        if (this.ourIntent !== RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
-            this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
-            throw new Error("New device flows around OIDC are not yet implemented");
-        }
-
         let rendezvous: MSC4108SignInWithQR;
         try {
             rendezvous = await linkNewDeviceByGeneratingQR(this.props.client, this.onFailure, abortController.signal);
