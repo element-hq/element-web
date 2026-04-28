@@ -18,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
@@ -31,7 +32,6 @@ interface IProps {
 interface IState {
     phase: Phase;
     rendezvous?: MSC4108SignInWithQR;
-    mediaPermissionError?: boolean;
     verificationUri?: string;
     userCode?: string;
     checkCode?: string;
@@ -72,7 +72,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         void this.updateMode(this.props.mode);
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
         if (prevProps.mode !== this.props.mode) {
             void this.updateMode(this.props.mode);
         }
@@ -188,6 +188,20 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     private onFailure = async (reason: RendezvousFailureReason): Promise<void> => {
         if (this.state.phase === Phase.Error) return; // Already in failed state
         logger.info(`Rendezvous failed: ${reason}`);
+
+        // Generate a new rendezvous channel & qr code if we hit expiry whilst still showing the QR code
+        if (reason === ClientRendezvousFailureReason.Expired && this.state.phase === Phase.ShowingQR) {
+            try {
+                this.reset();
+                // Add a sleep to make the UX looks less flickery and more intentional
+                await sleep(1000);
+                await this.updateMode(Mode.Show, false);
+                return;
+            } catch (e) {
+                logger.warn("Failed to re-roll qr code on expiry", e);
+            }
+        }
+
         this.setState({ phase: Phase.Error, failureReason: reason });
     };
 
@@ -199,7 +213,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             failureReason: undefined,
             userCode: undefined,
             checkCode: undefined,
-            mediaPermissionError: false,
         });
     }
 
