@@ -126,7 +126,6 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
                     {displayIdentifier}
                 </span>
             )}
-            {/* mx_DisambiguatedProfile_mxid is required for PCSS selectors like .mx_MemberTileView .mx_DisambiguatedProfile_mxid */}
             {userStatus && (
                 <Tooltip description={userStatus.text}>
                     <Text as="span" size="md" className={styles.userStatus}>
