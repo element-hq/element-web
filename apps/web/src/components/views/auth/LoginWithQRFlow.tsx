@@ -228,7 +228,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                 );
                 break;
             case Phase.ShowingQR: {
-                let steps: string[];
+                let steps: ReactNode[];
                 if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
                     steps = [
                         _t("auth|qr_code_login|open_element_mobile_device", {
