@@ -1532,6 +1532,7 @@
         "bridge_state_manager": "This bridge is managed by <user />.",
         "bridge_state_workspace": "Workspace: <networkLink/>",
         "click_for_info": "Click for more info",
+        "config_only": "Can only be enabled via config.json.",
         "currently_experimental": "Currently experimental.",
         "custom_themes": "Support adding custom themes",
         "dynamic_room_predecessors": "Dynamic room predecessors",

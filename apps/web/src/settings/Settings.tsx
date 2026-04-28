@@ -694,7 +694,7 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.CONFIG],
         labsGroup: LabGroup.Ui,
         displayName: _td("labs|login_with_qr"),
-        description: _td("labs|under_active_development"),
+        description: _td("labs|config_only"),
         isFeature: true,
         default: false,
     },
