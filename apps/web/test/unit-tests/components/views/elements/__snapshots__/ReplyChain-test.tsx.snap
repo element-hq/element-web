@@ -44,7 +44,7 @@ exports[`ReplyChain should call setQuoteExpanded if chain is longer than 2 lines
               </div>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
             >
               <div
                 class="mx_EventTile_body translate"
