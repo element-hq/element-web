@@ -25,7 +25,6 @@ import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
-import MImageBody from "./MImageBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
@@ -68,7 +67,7 @@ const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Text, TextualBodyFactory],
     [MsgType.Notice, TextualBodyFactory],
     [MsgType.Emote, TextualBodyFactory],
-    [MsgType.Image, MImageBody],
+    [MsgType.Image, ImageBodyFactory],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyFactory],
