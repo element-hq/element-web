@@ -39,7 +39,8 @@ export interface RoomUploadViewSnapshot {
 }
 
 export interface RoomUploadViewActions {
-    initiateViaDataTransfer(dataTransfer: DataTransfer): void;
+    initiateViaInputFiles(files: FileList | null): Promise<void>;
+    initiateViaDataTransfer(dataTransfer: DataTransfer): Promise<void>;
     openUploadDialog(): void;
 }
 
@@ -54,7 +55,7 @@ export class RoomUploadViewModel
         private readonly dispatcher: MatrixDispatcher,
         private replyToEvent: MatrixEvent | undefined,
         private threadRelation: IEventRelation | undefined,
-        private readonly openFilePicker: () => void,
+        public readonly openUploadDialog: () => void,
     ) {
         super(
             {},
@@ -87,8 +88,7 @@ export class RoomUploadViewModel
             return;
         }
         const { roomId } = this.room;
-        logger.info("New fileset for", roomId);
-        if (!roomId || !this.client) return;
+        logger.info("initiateViaInputFiles for", roomId);
         if (!files?.length) return;
 
         try {
@@ -105,32 +105,27 @@ export class RoomUploadViewModel
         }
     };
 
-    public initiateViaDataTransfer = (dataTransfer: DataTransfer): void => {
+    public initiateViaDataTransfer = async (dataTransfer: DataTransfer): Promise<void> => {
         if (!this.checkCanUpload()) {
             return;
         }
         const { roomId } = this.room;
-        logger.info("New data transfer for", roomId);
-        if (!roomId || !this.client) return;
-        void (async () => {
-            try {
-                await ContentMessages.sharedInstance().sendContentListToRoom(
-                    Array.from(dataTransfer.files),
-                    roomId,
-                    this.threadRelation,
-                    this.replyToEvent,
-                    this.client,
-                    this.timelineRenderingType,
-                );
-            } catch (ex) {
-                logger.warn("Failed to handle drag and drop data transfer", ex);
-            }
-        })();
-    };
+        logger.info("initiateViaDataTransfer for", roomId);
+        if (!dataTransfer.files?.length) return;
 
-    public openUploadDialog(): void {
-        this.openFilePicker();
-    }
+        try {
+            await ContentMessages.sharedInstance().sendContentListToRoom(
+                Array.from(dataTransfer.files),
+                roomId,
+                this.threadRelation,
+                this.replyToEvent,
+                this.client,
+                this.timelineRenderingType,
+            );
+        } catch (ex) {
+            logger.warn("Failed to handle drag and drop data transfer", ex);
+        }
+    };
 
     private checkCanUpload(): boolean {
         if (this.client.isGuest()) {

@@ -83,8 +83,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent }) => {
             ev.stopPropagation();
             ev.preventDefault();
             if (!ev.dataTransfer) return;
-            console.log("onDrop", ev);
-            vm.initiateViaDataTransfer(ev.dataTransfer);
+            void vm.initiateViaDataTransfer(ev.dataTransfer);
 
             setState((state) => ({
                 dragging: false,
