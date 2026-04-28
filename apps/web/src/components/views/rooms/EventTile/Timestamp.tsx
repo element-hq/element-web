@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useRef, type JSX } from "react";
+import React, { useLayoutEffect, type JSX } from "react";
 import { MessageTimestampView } from "@element-hq/web-shared-components";
 
 import type {
@@ -18,21 +18,49 @@ type TimestampProps = MessageTimestampViewModelProps & {
     vm: MessageTimestampViewModel;
 };
 
-export function Timestamp({ vm, ...props }: Readonly<TimestampProps>): JSX.Element {
-    const renderedPropsRef = useRef(props);
-
-    if (renderedPropsRef.current !== props) {
-        renderedPropsRef.current = props;
+export function Timestamp({
+    vm,
+    href,
+    inhibitTooltip,
+    onClick,
+    onContextMenu,
+    receivedTs,
+    showFullDate,
+    showRelative,
+    showSeconds,
+    showTwelveHour,
+    ts,
+}: Readonly<TimestampProps>): JSX.Element {
+    useLayoutEffect(() => {
         vm.setProps({
-            ...props,
-            onClick: props.onClick,
-            onContextMenu: props.onContextMenu,
+            href,
+            inhibitTooltip,
+            onClick,
+            onContextMenu,
+            receivedTs,
+            showFullDate,
+            showRelative,
+            showSeconds,
+            showTwelveHour,
+            ts,
         });
-    }
+    }, [
+        href,
+        inhibitTooltip,
+        onClick,
+        onContextMenu,
+        receivedTs,
+        showFullDate,
+        showRelative,
+        showSeconds,
+        showTwelveHour,
+        ts,
+        vm,
+    ]);
 
     return (
         <>
-            {props.receivedTs ? (
+            {receivedTs ? (
                 <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
             ) : undefined}
             <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />

@@ -483,7 +483,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private currentRoomThreadEventId: string | null = null;
     private isListeningForUserTrust = false;
     private isListeningForReactions = false;
-    private readonly eventTileActionBarViewModel: EventTileActionBarViewModel;
+    private reactions: Relations | null;
+    private eventTileActionBarViewModel?: EventTileActionBarViewModel;
     private readonly eventTileReactionsRowViewModel: ReactionsRowViewModel;
     private readonly eventTileDisambiguatedProfileViewModel: DisambiguatedProfileViewModel;
     private readonly eventTileTimestampViewModel: MessageTimestampViewModel;
@@ -491,19 +492,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     /** Creates a view model for a single event tile. */
     public constructor(props: EventTileViewModelProps) {
-        super(props, EventTileViewModel.deriveSnapshot(props));
+        const reactions = EventTileViewModel.getReactions(props);
 
-        this.eventTileActionBarViewModel = this.disposables.track(
-            new EventTileActionBarViewModel(
-                EventTileViewModel.buildActionBarViewModelProps(
-                    props,
-                    this.snapshot.current.interaction.isQuoteExpanded,
-                    this.onToggleThreadExpanded,
-                ),
-            ),
-        );
+        super(props, EventTileViewModel.deriveSnapshot(props, undefined, {}, reactions));
+
+        this.reactions = reactions;
+
         this.eventTileReactionsRowViewModel = this.disposables.track(
-            new ReactionsRowViewModel(EventTileViewModel.buildReactionsRowViewModelProps(props)),
+            new ReactionsRowViewModel(EventTileViewModel.buildReactionsRowViewModelProps(props, this.reactions)),
         );
         this.eventTileDisambiguatedProfileViewModel = this.disposables.track(
             new DisambiguatedProfileViewModel(EventTileViewModel.buildDisambiguatedProfileViewModelProps(props)),
@@ -525,10 +521,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.decryptEventIfNeeded();
     }
 
-    public get actionBarViewModel(): EventTileActionBarViewModel {
-        return this.eventTileActionBarViewModel;
-    }
-
     public get reactionsRowViewModel(): ReactionsRowViewModel {
         return this.eventTileReactionsRowViewModel;
     }
@@ -546,7 +538,23 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     public getReactions(): Relations | null {
-        return EventTileViewModel.getReactions(this.props);
+        return this.reactions;
+    }
+
+    public getActionBarViewModel(): EventTileActionBarViewModel {
+        if (!this.eventTileActionBarViewModel) {
+            this.eventTileActionBarViewModel = this.disposables.track(
+                new EventTileActionBarViewModel(
+                    EventTileViewModel.buildActionBarViewModelProps(
+                        this.props,
+                        this.snapshot.current.interaction.isQuoteExpanded,
+                        this.onToggleThreadExpanded,
+                    ),
+                ),
+            );
+        }
+
+        return this.eventTileActionBarViewModel;
     }
 
     /** Releases all Matrix listeners owned by this view model. */
@@ -563,7 +571,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     /** Updates whether the quoted reply preview is expanded. */
     public setQuoteExpanded(isQuoteExpanded: boolean): void {
         this.updateInteractionSnapshot({ isQuoteExpanded });
-        this.eventTileActionBarViewModel.recomputeSnapshot(
+        this.eventTileActionBarViewModel?.recomputeSnapshot(
             EventTileViewModel.buildActionBarViewModelProps(
                 this.props,
                 this.snapshot.current.interaction.isQuoteExpanded,
@@ -662,6 +670,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     public recomputeSnapshot(props: EventTileViewModelProps): void {
         const previousProps = this.props;
         this.props = props;
+        if (EventTileViewModel.shouldRefreshReactions(previousProps, props)) {
+            this.refreshReactions(props);
+        }
         this.recomputeChildSnapshots(previousProps, props);
         this.updateSnapshot(
             {
@@ -696,7 +707,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     /** Recomputes the full derived snapshot from the current props and live event state. */
     public refreshDerivedState(): void {
+        this.refreshReactions();
         this.updateSnapshot();
+        this.updateReactionsRowViewModel();
     }
 
     /** Re-runs event verification and updates the encryption shield state when the async check completes. */
@@ -886,7 +899,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private updateSnapshot(partial?: EventTileViewSnapshotUpdate, syncReceiptListener = true): void {
-        const nextSnapshot = EventTileViewModel.deriveSnapshot(this.props, this.snapshot.current, partial);
+        const nextSnapshot = EventTileViewModel.deriveSnapshot(
+            this.props,
+            this.snapshot.current,
+            partial,
+            this.reactions,
+        );
 
         this.snapshot.merge(nextSnapshot);
         this.updateTimestampViewModel(nextSnapshot);
@@ -906,7 +924,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private updateReceiptSnapshot(partial: EventTileViewSnapshotUpdate = {}): void {
-        const reactions = this.getReactions();
         const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(this.props);
 
         this.mergeSnapshot({
@@ -920,7 +937,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 hasFooter: EventTileViewModel.getHasFooter(
                     this.props.isRedacted,
                     this.snapshot.current.rendering.isPinned,
-                    reactions,
+                    this.reactions,
                 ),
             },
         });
@@ -930,7 +947,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private updateThreadSnapshot(thread: Thread | null): void {
         const partial: EventTileViewSnapshotUpdate = { thread: { thread } };
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
-        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
+        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot, this.reactions);
 
         this.mergeSnapshot({
             ...partial,
@@ -945,7 +962,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private updateVerificationSnapshot(shieldColour: EventShieldColour, shieldReason: EventShieldReason | null): void {
         const partial: EventTileViewSnapshotUpdate = { encryption: { shieldColour, shieldReason } };
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
-        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
+        const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot, this.reactions);
         const encryptionSnapshot = EventTileViewModel.deriveEncryptionSnapshot(this.props, context);
         const nextEncryptionSnapshot: EventTileEncryptionSnapshot = {
             ...baseSnapshot.encryption,
@@ -1036,6 +1053,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             return;
         }
 
+        this.refreshReactions();
         this.updateReceiptSnapshot();
     };
 
@@ -1126,7 +1144,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         };
     }
 
-    private static buildReactionsRowViewModelProps(props: EventTileViewModelProps): {
+    private static buildReactionsRowViewModelProps(
+        props: EventTileViewModelProps,
+        reactions: Relations | null,
+    ): {
         isActionable: boolean;
         reactionGroupCount: number;
         canReact: boolean;
@@ -1134,7 +1155,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     } {
         return {
             isActionable: isContentActionable(props.mxEvent),
-            reactionGroupCount: EventTileViewModel.getReactionGroupCount(EventTileViewModel.getReactions(props)),
+            reactionGroupCount: EventTileViewModel.getReactionGroupCount(reactions),
             canReact: Boolean(props.canReact),
             addReactionButtonActive: false,
         };
@@ -1179,7 +1200,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private recomputeChildSnapshots(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
-        this.eventTileActionBarViewModel.recomputeSnapshot(
+        this.eventTileActionBarViewModel?.recomputeSnapshot(
             EventTileViewModel.buildActionBarViewModelProps(
                 nextProps,
                 this.snapshot.current.interaction.isQuoteExpanded,
@@ -1196,7 +1217,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private syncChildListeners(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
-        this.eventTileActionBarViewModel.syncListeners(
+        this.eventTileActionBarViewModel?.syncListeners(
             EventTileViewModel.buildActionBarViewModelProps(
                 previousProps,
                 this.snapshot.current.interaction.isQuoteExpanded,
@@ -1211,11 +1232,19 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private updateReactionsRowViewModel(props: EventTileViewModelProps = this.props): void {
-        const reactionsRowProps = EventTileViewModel.buildReactionsRowViewModelProps(props);
+        const reactionsRowProps = EventTileViewModel.buildReactionsRowViewModelProps(props, this.reactions);
 
         this.eventTileReactionsRowViewModel.setActionable(reactionsRowProps.isActionable);
         this.eventTileReactionsRowViewModel.setCanReact(reactionsRowProps.canReact);
         this.eventTileReactionsRowViewModel.setReactionGroupCount(reactionsRowProps.reactionGroupCount);
+    }
+
+    private refreshReactions(props: EventTileViewModelProps = this.props): boolean {
+        const reactions = EventTileViewModel.getReactions(props);
+        if (this.reactions === reactions) return false;
+
+        this.reactions = reactions;
+        return true;
     }
 
     private updateTimestampViewModel(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
@@ -1290,9 +1319,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         props: EventTileViewModelProps,
         previousSnapshot?: EventTileViewSnapshot,
         partial: EventTileViewSnapshotUpdate = {},
+        reactions: Relations | null = EventTileViewModel.getReactions(props),
     ): EventTileViewSnapshot {
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(previousSnapshot, partial, props);
-        const context = EventTileViewModel.createDerivationContext(props, baseSnapshot);
+        const context = EventTileViewModel.createDerivationContext(props, baseSnapshot, reactions);
         const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(props);
         const renderingSnapshot = EventTileViewModel.deriveRenderingSnapshot(props, context);
         const threadSnapshot = EventTileViewModel.deriveThreadSnapshot(props, context);
@@ -1644,6 +1674,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private static createDerivationContext(
         props: EventTileViewModelProps,
         baseSnapshot: EventTileViewSnapshot,
+        reactions: Relations | null,
     ): EventTileDerivationContext {
         const displayInfo = EventTileViewModel.getDisplayInfo(props);
         const thread = baseSnapshot.thread.thread ?? EventTileViewModel.getThread(props);
@@ -1658,7 +1689,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             displayInfo,
             shieldColour: baseSnapshot.encryption.shieldColour,
             shieldReason: baseSnapshot.encryption.shieldReason,
-            reactions: EventTileViewModel.getReactions(props),
+            reactions,
             thread,
             threadNotification: baseSnapshot.thread.threadNotification,
             hasThread: Boolean(thread),
@@ -1730,6 +1761,17 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         return props.getRelationsForEvent(eventId, "m.annotation", "m.reaction") ?? null;
+    }
+
+    private static shouldRefreshReactions(
+        previousProps: EventTileViewModelProps,
+        nextProps: EventTileViewModelProps,
+    ): boolean {
+        return (
+            previousProps.mxEvent !== nextProps.mxEvent ||
+            previousProps.showReactions !== nextProps.showReactions ||
+            previousProps.getRelationsForEvent !== nextProps.getRelationsForEvent
+        );
     }
 
     private static isEligibleForSpecialReceipt(props: EventTileViewModelProps): boolean {

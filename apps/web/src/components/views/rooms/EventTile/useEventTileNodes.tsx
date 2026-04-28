@@ -178,27 +178,27 @@ export function useEventTileNodes({
         ],
     );
     const reactions = vm.getReactions();
+    const actionBarViewModel = snapshot.rendering.shouldRenderActionBar ? vm.getActionBarViewModel() : undefined;
     const actionBar = useMemo(
         () =>
-            snapshot.rendering.shouldRenderActionBar ? (
+            actionBarViewModel ? (
                 <ActionBar
                     mxEvent={props.mxEvent}
                     permalinkCreator={props.permalinkCreator}
                     getRelationsForEvent={props.getRelationsForEvent}
                     reactions={reactions}
-                    vm={vm.actionBarViewModel}
+                    vm={actionBarViewModel}
                     tileRef={tileRef}
                     replyChainRef={replyChainRef}
                     onFocusChange={onActionBarFocusChange}
                 />
             ) : undefined,
         [
-            snapshot.rendering.shouldRenderActionBar,
+            actionBarViewModel,
             props.mxEvent,
             props.permalinkCreator,
             props.getRelationsForEvent,
             reactions,
-            vm.actionBarViewModel,
             tileRef,
             replyChainRef,
             onActionBarFocusChange,
