@@ -49,6 +49,7 @@ jest.mock("../../../../../src/settings/SettingsStore", () => ({
     shouldHaveWarning: jest.fn(),
     disabledMessage: jest.fn(),
     settingIsOveriddenAtConfigLevel: jest.fn(),
+    doesSettingSupportLevel: jest.fn(),
 }));
 
 describe("<UserSettingsDialog />", () => {
