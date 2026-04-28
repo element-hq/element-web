@@ -20,16 +20,24 @@ import {
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import {
+    DecryptionFailureBodyFactory,
     FileBodyFactory,
     ImageBodyFactory,
+    RedactedBodyFactory,
     VideoBodyFactory,
     renderMBody,
 } from "../../../../../src/components/views/messages/MBodyFactory";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
+import { useMediaVisible } from "../../../../../src/hooks/useMediaVisible";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
+}));
+
+jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
+    __esModule: true,
+    useMediaVisible: jest.fn(),
 }));
 
 describe("MBodyFactory", () => {
@@ -60,7 +68,7 @@ describe("MBodyFactory", () => {
         onMessageAllowed: jest.fn(),
         permalinkCreator: new RoomPermalinkCreator(new Room("!room:server", cli, cli.getUserId()!)),
     };
-    const mkEvent = (msgtype?: string): MatrixEvent =>
+    const mkEvent = (msgtype?: string, content: Record<string, unknown> = {}): MatrixEvent =>
         new MatrixEvent({
             room_id: "!room:server",
             sender: userId,
@@ -69,12 +77,25 @@ describe("MBodyFactory", () => {
                 body: "alt",
                 ...(msgtype ? { msgtype } : {}),
                 url: "mxc://server/file",
+                ...content,
             },
         });
 
     beforeEach(() => {
         jest.spyOn(SettingsStore, "getValue").mockRestore();
+        jest.mocked(useMediaVisible).mockReturnValue([true, jest.fn()]);
     });
+
+    const encryptedImageHelper = (): MediaEventHelper =>
+        ({
+            media: { isEncrypted: true },
+            sourceUrl: { value: Promise.resolve("blob:source") },
+            thumbnailUrl: { value: Promise.resolve("blob:thumbnail") },
+            sourceBlob: {
+                value: Promise.resolve(new Blob(["image"], { type: "image/jpeg" })),
+                cachedValue: new Blob(["image"], { type: "image/jpeg" }),
+            },
+        }) as unknown as MediaEventHelper;
 
     describe("renderMBody", () => {
         it("renders download button for m.file in file rendering type", () => {
@@ -161,4 +182,160 @@ describe("MBodyFactory", () => {
             expect(container).toMatchSnapshot();
         },
     );
+
+    describe("ImageBodyFactory", () => {
+        const imageContent = {
+            info: {
+                mimetype: "image/jpeg",
+                w: 320,
+                h: 240,
+                size: 48_000,
+            },
+        };
+
+        it("renders the shared image view in room timelines", () => {
+            const mediaEvent = mkEvent("m.image", imageContent);
+
+            const { container } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <ImageBodyFactory
+                        {...props}
+                        mxEvent={mediaEvent}
+                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                    />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_MImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).toBeNull();
+        });
+
+        it("renders the file fallback child in notification timelines", () => {
+            const mediaEvent = mkEvent("m.image", imageContent);
+
+            const { container, getByRole } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Notification } as any)}>
+                    <ImageBodyFactory
+                        {...props}
+                        mxEvent={mediaEvent}
+                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                    />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_MImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
+            expect(getByRole("link", { name: /Download/ })).toBeInTheDocument();
+        });
+
+        it("renders only a file body for encrypted unsafe images without thumbnails", () => {
+            const mediaEvent = mkEvent("m.image", {
+                file: { url: "mxc://server/encrypted-file" },
+                url: undefined,
+                info: {
+                    mimetype: "text/html",
+                },
+            });
+
+            const { container, getByRole } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <ImageBodyFactory
+                        {...props}
+                        mxEvent={mediaEvent}
+                        mediaEventHelper={{ media: { isEncrypted: true } } as MediaEventHelper}
+                    />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_MImageBody")).toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
+            expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
+        });
+
+        it("keeps the image body for encrypted unsafe images when a thumbnail is available", () => {
+            const mediaEvent = mkEvent("m.image", {
+                file: { url: "mxc://server/encrypted-file" },
+                url: undefined,
+                info: {
+                    mimetype: "text/html",
+                    thumbnail_info: { mimetype: "image/jpeg" },
+                },
+            });
+
+            const { container } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <ImageBodyFactory {...props} mxEvent={mediaEvent} mediaEventHelper={encryptedImageHelper()} />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_MImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).toBeNull();
+        });
+    });
+
+    describe("VideoBodyFactory", () => {
+        const videoContent = {
+            info: {
+                mimetype: "video/mp4",
+                w: 320,
+                h: 240,
+                size: 48_000,
+            },
+        };
+
+        it("renders without a file fallback in room timelines", () => {
+            const mediaEvent = mkEvent("m.video", videoContent);
+
+            const { container } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Room } as any)}>
+                    <VideoBodyFactory
+                        mxEvent={mediaEvent}
+                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                        forExport={false}
+                    />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).toBeNull();
+        });
+
+        it("renders the file fallback child outside room timelines", () => {
+            const mediaEvent = mkEvent("m.video", videoContent);
+
+            const { container, getByRole } = render(
+                <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.Notification } as any)}>
+                    <VideoBodyFactory
+                        mxEvent={mediaEvent}
+                        mediaEventHelper={new MediaEventHelper(mediaEvent)}
+                        forExport={false}
+                    />
+                </ScopedRoomContextProvider>,
+            );
+
+            expect(container.querySelector(".mx_MVideoBody")).not.toBeNull();
+            expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
+            expect(getByRole("link", { name: /Download/ })).toBeInTheDocument();
+        });
+    });
+
+    it("renders the redacted body wrapper", () => {
+        const mediaEvent = mkEvent("m.text");
+
+        const { container } = render(<RedactedBodyFactory mxEvent={mediaEvent} />);
+
+        expect(container.querySelector(".mx_RedactedBody")).not.toBeNull();
+    });
+
+    it("renders the decryption failure body wrapper", () => {
+        const mediaEvent = mkEvent("m.text");
+        Object.defineProperty(mediaEvent, "decryptionFailureReason", {
+            configurable: true,
+            value: "MEGOLM_UNKNOWN_INBOUND_SESSION_ID",
+        });
+
+        const { container } = render(<DecryptionFailureBodyFactory mxEvent={mediaEvent} />);
+
+        expect(container.querySelector(".mx_DecryptionFailureBody")).not.toBeNull();
+    });
 });
