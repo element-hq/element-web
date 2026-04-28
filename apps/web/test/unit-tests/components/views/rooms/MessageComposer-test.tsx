@@ -36,7 +36,7 @@ import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
-import { RoomUploadContext } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import { RoomUploadContext, RoomUploadViewModel } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -470,7 +470,7 @@ function wrapAndRender(
     const getRawComponent = (props = {}, context = roomContext, client = mockClient) => (
         <MatrixClientContext.Provider value={client}>
             <ScopedRoomContextProvider {...context}>
-                <RoomUploadContext.Provider value={{}}>
+                <RoomUploadContext.Provider value={{} as RoomUploadViewModel}>
                     <MessageComposer {...defaultProps} {...props} />
                 </RoomUploadContext.Provider>
             </ScopedRoomContextProvider>
