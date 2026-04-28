@@ -219,6 +219,7 @@ export function RoomUploadContextProvider({
                 <input
                     ref={uploadInput}
                     type="file"
+                    data-testid="room-upload-context-input"
                     style={{ display: "none" }}
                     multiple
                     onClick={chromeFileInputFix}
