@@ -1,5 +1,5 @@
 {
-    "default_server_name": "matrix.org",
+    "default_server_name": "element.io",
     "default_server_config": {
         "m.homeserver": {
             "base_url": "https://element.ems.host",
