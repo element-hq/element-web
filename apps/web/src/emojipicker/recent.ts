@@ -29,7 +29,7 @@ const STORAGE_LIMIT = 100;
 function migrate(): void {
     const data: ILegacyFormat = JSON.parse(window.localStorage.mx_reaction_count || "{}");
     const sorted = Object.entries(data).sort(([, [count1, date1]], [, [count2, date2]]) => date2 - date1);
-    const newFormat = sorted.map<RecentEmojiData[number]>([emoji, [count, date]]) => [emoji, count]);
+    const newFormat = sorted.map<RecentEmojiData[number]>(([emoji, [count, date]]) => [emoji, count]);
     SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, newFormat.slice(0, STORAGE_LIMIT));
 }
 
