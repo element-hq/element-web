@@ -80,10 +80,7 @@ import {
 } from "./actions/EventTileActionBarViewModel";
 import { DisambiguatedProfileViewModel } from "./DisambiguatedProfileViewModel";
 import { ReactionsRowViewModel } from "./reactions/ReactionsRowViewModel";
-import {
-    MessageTimestampViewModel,
-    type MessageTimestampViewModelProps,
-} from "./timestamp/MessageTimestampViewModel";
+import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
 import { ThreadListActionBarViewModel } from "../../ThreadListActionBarViewModel";
 
 /** Interaction-only state that changes in response to pointer and focus events. */
@@ -1184,10 +1181,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             showTwelveHour: props.isTwelveHour,
             ts: timestampView.ts,
             receivedTs: timestampView.receivedTs,
-            href:
-                timestampView.displayMode === TimestampDisplayMode.Linked
-                    ? timestampView.permalink
-                    : undefined,
+            href: timestampView.displayMode === TimestampDisplayMode.Linked ? timestampView.permalink : undefined,
         };
     }
 

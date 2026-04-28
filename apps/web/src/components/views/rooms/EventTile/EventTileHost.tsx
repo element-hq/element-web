@@ -376,13 +376,11 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         setSuppressReadReceiptAnimation(false);
     }, []);
 
-    const {
-        room,
-        onPermalinkClicked,
-        onContextMenu,
-        onTimestampContextMenu,
-        onListTileClick,
-    } = useEventTileCommands(props, cli, vm);
+    const { room, onPermalinkClicked, onContextMenu, onTimestampContextMenu, onListTileClick } = useEventTileCommands(
+        props,
+        cli,
+        vm,
+    );
     const onActionBarFocusChange = useCallback(
         (focused: boolean): void => {
             vm.onActionBarFocusChange(focused, rootRef.current?.matches(":hover") ?? false);

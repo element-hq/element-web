@@ -60,9 +60,7 @@ export function Timestamp({
 
     return (
         <>
-            {receivedTs ? (
-                <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
-            ) : undefined}
+            {receivedTs ? <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" /> : undefined}
             <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
         </>
     );

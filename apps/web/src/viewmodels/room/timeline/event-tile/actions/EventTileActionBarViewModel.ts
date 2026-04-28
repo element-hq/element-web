@@ -381,9 +381,7 @@ export class EventTileActionBarViewModel
         this.isDownloadLoading = false;
     }
 
-    private withCurrentMenuHandlers(
-        newProps: EventTileActionBarViewModelProps,
-    ): EventTileActionBarViewModelProps {
+    private withCurrentMenuHandlers(newProps: EventTileActionBarViewModelProps): EventTileActionBarViewModelProps {
         return {
             ...newProps,
             onOptionsClick: newProps.onOptionsClick ?? this.props.onOptionsClick,

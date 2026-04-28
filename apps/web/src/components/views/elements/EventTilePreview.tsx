@@ -52,6 +52,7 @@ interface IState {
 }
 
 const AVATAR_SIZE = 32;
+const PREVIEW_EVENT_TS = 1_700_000_000_000;
 
 export default class EventTilePreview extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
@@ -82,6 +83,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             unsigned: {
                 age: 97,
             },
+            origin_server_ts: PREVIEW_EVENT_TS,
             event_id: "$9999999999999999999999999999999999999999999",
             room_id: "!999999999999999999:example.org",
         };
