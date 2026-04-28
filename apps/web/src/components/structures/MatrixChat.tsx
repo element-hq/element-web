@@ -829,20 +829,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case Action.ViewQrLogin: {
-                // TODO ignore events if logged in
-                Modal.createDialog(
-                    QrLoginDialog,
-                    {
-                        serverConfig: this.getServerProperties().serverConfig,
-                        onLoggedIn: this.onQrLoginFinished,
-                    },
-                    undefined,
-                    false,
-                    true,
-                );
+                if (this.isLoggedInViewPageDisplayed()) {
+                    logger.warn("Ignoring payload due to unexpected call outside auth flows", payload);
+                } else {
+                    Modal.createDialog(
+                        QrLoginDialog,
+                        {
+                            serverConfig: this.getServerProperties().serverConfig,
+                        },
+                        undefined,
+                        false,
+                        true,
+                    );
 
-                // View the welcome or home page if we need something to look at
-                this.viewSomethingBehindModal();
+                    // View the welcome or home page if we need something to look at
+                    this.viewSomethingBehindModal();
+                }
                 break;
             }
             case "view_welcome_page":
@@ -2142,24 +2144,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Note: SSO users (and any others using token login) currently do not pass through
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
-    private onUserCompletedLoginFlow = async (
-        credentials: IMatrixClientCreds,
-        alreadySignedIn = false,
-    ): Promise<void> => {
+    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds): Promise<void> => {
         // Create and start the client
-        if (!alreadySignedIn) {
-            await Lifecycle.setLoggedIn(credentials);
-        }
+        await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
 
         PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
-    };
-
-    private onQrLoginFinished = async (credentials?: IMatrixClientCreds, alreadySignedIn?: boolean): Promise<void> => {
-        if (credentials) {
-            this.onUserCompletedLoginFlow(credentials, alreadySignedIn);
-        }
     };
 
     /** Called when {@link Views.E2E_SETUP} or {@link Views.COMPLETE_SECURITY} have completed. */

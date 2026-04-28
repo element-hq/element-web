@@ -119,7 +119,7 @@ describe("<LoginWithQR />", () => {
             // back
             const onClick = mockedFlow.mock.calls[0][0].onClick;
             await onClick(Click.Back);
-            expect(onFinished).toHaveBeenCalledWith(false, undefined);
+            expect(onFinished).toHaveBeenCalledWith(false);
             expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
         });
 
@@ -133,6 +133,7 @@ describe("<LoginWithQR />", () => {
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.ShowingQR,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
 
@@ -170,6 +171,7 @@ describe("<LoginWithQR />", () => {
                 expect(mockedFlow).toHaveBeenLastCalledWith({
                     phase: Phase.OutOfBandConfirmation,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
 
@@ -181,6 +183,7 @@ describe("<LoginWithQR />", () => {
                     phase: Phase.OutOfBandConfirmation,
                     failureReason: LoginWithQRFailureReason.CheckCodeMismatch,
                     onClick: expect.any(Function),
+                    intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                 }),
             );
         });

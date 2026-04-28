@@ -29,7 +29,6 @@ import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientP
 
 type BaseProps = {
     client: MatrixClient;
-    onFinished(success: boolean, credentials?: IMatrixClientCreds): void;
     mode: Mode;
     onPhaseChange?(phase: Phase): void;
 };
@@ -38,9 +37,12 @@ type Props = XOR<
     {
         intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE;
         clientId?: string; // A spinner will be shown while undefined
+        onFinished(success: false): void;
+        onFinished(success: true, credentials: IMatrixClientCreds): void;
     },
     {
         intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
+        onFinished(success: boolean): void;
     }
 > &
     BaseProps;
@@ -124,7 +126,11 @@ export default class LoginWithQR extends React.Component<Props, IState> {
 
     private onFinished(success: boolean, credentials?: IMatrixClientCreds): void {
         this.finished = true;
-        this.props.onFinished(success, credentials);
+        if (success) {
+            this.props.onFinished(success, credentials!);
+        } else {
+            this.props.onFinished(success);
+        }
     }
 
     private generateAndShowCode = async (abortController: AbortController): Promise<void> => {
@@ -227,9 +233,8 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 if (tokenResponse) {
                     // the 2024 version of the spec only gives the server name, but the 2025 version will give the base URL
                     // so, we do a discovery for now.
-                    const homeserverUrl = (await AutoDiscovery.findClientConfig(this.state.homeserverName))?.[
-                        "m.homeserver"
-                    ]?.base_url;
+                    const clientConfig = await AutoDiscovery.findClientConfig(this.state.homeserverName);
+                    const homeserverUrl = clientConfig?.["m.homeserver"]?.base_url;
 
                     if (!homeserverUrl) {
                         this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
@@ -237,7 +242,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         throw new Error("Failed to discover homeserver URL");
                     }
 
-                    // TODO: this is not the right way to do this
+                    const identityServerUrl = clientConfig["m.identity_server"]?.base_url ?? undefined; // TODO fall back to config?
 
                     // store and use the new credentials
                     const credentials = await configureFromCompletedOAuthLogin({
@@ -245,14 +250,14 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         refreshToken: tokenResponse.refresh_token,
                         homeserverUrl,
                         clientId: this.props.clientId!,
-                        idToken: tokenResponse.id_token ?? "", // I'm not sure the idToken is actually required
+                        idToken: tokenResponse.id_token ?? "", // TODO fix this - I'm not sure the idToken is actually required
                         issuer: metadata!.issuer,
-                        identityServerUrl: undefined, // PROTOTYPE: we should have stored this from before
+                        identityServerUrl,
                     });
 
                     const { secrets } = await this.state.rendezvous.shareSecrets();
 
-                    await restoreSessionFromStorage();
+                    await restoreSessionFromStorage(); // TODO fix this
 
                     if (secrets) {
                         const crypto = MatrixClientPeg.safeGet().getCrypto();
@@ -263,7 +268,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                             await crypto.crossSignDevice(deviceId);
 
                             // PROTOTYPE: this is a fudge to bypass the complete security step
-                            window.location.reload();
+                            window.location.reload(); // TODO fix this
                         } else {
                             logger.warn(
                                 "Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login",
