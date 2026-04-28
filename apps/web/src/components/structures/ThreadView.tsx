@@ -167,12 +167,14 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
         switch (payload.action) {
             case Action.ComposerInsert: {
-                if (payload.composerType) break;
-                if (payload.timelineRenderingType !== TimelineRenderingType.Thread) break;
+                const insertPayload = payload as ComposerInsertPayload;
+                if (insertPayload.composerType) break;
+                if (insertPayload.timelineRenderingType !== TimelineRenderingType.Thread) break;
 
                 // re-dispatch to the correct composer
                 dis.dispatch<ComposerInsertPayload>({
-                    ...(payload as ComposerInsertPayload),
+                    ...insertPayload,
+                    timelineRenderingType: TimelineRenderingType.Thread,
                     composerType: this.state.editState ? ComposerType.Edit : ComposerType.Send,
                 });
                 break;

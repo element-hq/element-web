@@ -5,10 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { SettingLevel } from "../../settings/SettingLevel";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectionDialog";
+import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectionDialog";
 
 type Tag = string;
 
@@ -68,4 +71,53 @@ export async function createSection(): Promise<string | undefined> {
     orderedSections.push(tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
     return tag;
+}
+
+/**
+ * Edits an existing custom section by showing a dialog to the user to enter the new section name. If the user confirms, it updates the section data in the settings.
+ * @param tag - The tag of the section to edit.
+ */
+export async function editSection(tag: string): Promise<void> {
+    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+    const section = sectionData[tag];
+    if (!section) {
+        logger.info("Unknown section tag, cannot edit section", tag);
+        return;
+    }
+
+    const modal = Modal.createDialog(CreateSectionDialog, { sectionToEdit: section.name });
+
+    const [shouldEditSection, newName] = await modal.finished;
+    const isSameName = newName === section.name;
+    if (!shouldEditSection || !newName || isSameName) return;
+
+    // Save the new name
+    sectionData[tag].name = newName;
+    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
+}
+
+/**
+ * Deletes a custom section by showing a confirmation dialog to the user. If the user confirms, it removes the section data from the settings and updates the ordered list of sections.
+ * @param tag - The tag of the section to delete.
+ * @param isEmpty - Whether the section is empty (has no rooms). If the section is not empty, the confirmation dialog will show a warning message.
+ */
+export async function deleteSection(tag: string, isEmpty: boolean): Promise<void> {
+    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData");
+    if (!sectionData[tag]) {
+        logger.info("Unknown section tag, cannot delete section", tag);
+        return;
+    }
+
+    const modal = Modal.createDialog(RemoveSectionDialog, { isEmpty });
+    const [shouldRemoveSection] = await modal.finished;
+    if (!shouldRemoveSection) return;
+
+    // Remove the section from the ordered list of sections
+    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
+    const newOrderedSections = orderedSections.filter((sectionTag) => sectionTag !== tag);
+    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, newOrderedSections);
+
+    // Remove the section data
+    delete sectionData[tag];
+    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 }

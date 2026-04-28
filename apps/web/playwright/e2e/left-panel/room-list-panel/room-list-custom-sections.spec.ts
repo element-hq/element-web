@@ -59,6 +59,7 @@ test.describe("Room list custom sections", () => {
     test.beforeEach(async ({ page, app, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
+        await app.closeVerifyToast();
 
         // Focus the user menu to avoid hover decoration
         await page.getByRole("button", { name: "User menu" }).focus();
@@ -192,6 +193,68 @@ test.describe("Room list custom sections", () => {
             await expect(getSectionHeader(page, "Work")).toHaveAttribute("aria-expanded", "true");
             await expect(getSectionHeader(page, "Chats")).toBeVisible();
             await expect(getSectionHeader(page, "Low Priority")).toBeVisible();
+        });
+    });
+
+    test.describe("Section editing", () => {
+        test("should edit a custom section name via the section header menu", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+
+            // Open the section header menu
+            const sectionHeader = getSectionHeader(page, "Work");
+            await sectionHeader.hover();
+            await sectionHeader.getByRole("button", { name: "More options" }).click();
+
+            // Click "Edit section"
+            await page.getByRole("menuitem", { name: "Edit section" }).click();
+
+            // The edit dialog should appear pre-filled with the current name
+            const dialog = page.getByRole("dialog", { name: "Edit a section" });
+            await expect(dialog).toBeVisible();
+            await expect(dialog.getByRole("textbox", { name: "Section name" })).toHaveValue("Work");
+
+            // Change the name and confirm
+            await dialog.getByRole("textbox", { name: "Section name" }).fill("Personal");
+            await dialog.getByRole("button", { name: "Edit section" }).click();
+
+            // Dialog should close
+            await expect(dialog).not.toBeVisible();
+
+            // Section should have the new name
+            await expect(getSectionHeader(page, "Personal")).toBeVisible();
+            await expect(getSectionHeader(page, "Work")).not.toBeVisible();
+        });
+    });
+
+    test.describe("Section removal", () => {
+        test("should move rooms back to Chats when their section is removed", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+            await createCustomSection(page, "Personal");
+
+            const roomList = getRoomList(page);
+
+            // Move room to Work section
+            const roomItem = roomList.getByRole("row", { name: "Open room my room" });
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Move to" }).hover();
+            await page.getByRole("menuitem", { name: "Work" }).click();
+            await assertRoomInSection(page, "Work", "my room");
+
+            // Remove the Work section
+            const sectionHeader = getSectionHeader(page, "Work");
+            await sectionHeader.hover();
+            await sectionHeader.getByRole("button", { name: "More options" }).click();
+            await page.getByRole("menuitem", { name: "Remove section" }).click();
+            const dialog = page.getByRole("dialog", { name: "Remove section?" });
+            await dialog.getByRole("button", { name: "Remove section" }).click();
+
+            // Section should be gone
+            await expect(getSectionHeader(page, "Work")).not.toBeVisible();
+            // Room should now be in the Chats section
+            await assertRoomInSection(page, "Chats", "my room");
         });
     });
 

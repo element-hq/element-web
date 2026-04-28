@@ -40,6 +40,7 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
       </span>
       <button
         class="TextualBody-module_annotation TextualBody-module_editedMarker"
+        data-textual-body-edited-marker=""
         type="button"
       >
         <span>

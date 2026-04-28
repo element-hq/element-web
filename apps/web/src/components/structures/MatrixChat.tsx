@@ -423,7 +423,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.onShowPostLoginScreen();
         }
 
-        const promisesList: Promise<any>[] = [this.firstSyncPromise.promise];
+        const promisesList: Promise<unknown>[] = [this.firstSyncPromise.promise];
         let crossSigningIsSetUp = false;
         if (cryptoEnabled) {
             // check if the user has previously published public cross-signing keys,
@@ -1119,17 +1119,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private viewWelcome(): void {
+    private viewWelcome(otherState?: Partial<IState>): void {
         if (shouldUseLoginForWelcome(SdkConfig.get())) {
-            return this.viewLogin();
+            return this.viewLogin(otherState);
         }
         this.setStateForNewView({
             view: Views.WELCOME,
+            ...otherState,
         });
         this.notifyNewScreen("welcome");
     }
 
-    private viewLogin(otherState?: any): void {
+    private viewLogin(otherState?: Partial<IState>): void {
         this.setStateForNewView({
             view: Views.LOGIN,
             ...otherState,
@@ -1573,7 +1574,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Called when the session is logged out
      */
     private onLoggedOut(): void {
-        this.viewLogin({
+        this.viewWelcome({
             ready: false,
             collapseLhs: false,
             currentRoomId: null,

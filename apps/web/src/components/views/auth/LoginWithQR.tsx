@@ -302,7 +302,6 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 logger.warn("Failed to re-roll qr code on expiry", e);
             }
         }
-
         this.setState({ phase: Phase.Error, failureReason: reason });
     };
 

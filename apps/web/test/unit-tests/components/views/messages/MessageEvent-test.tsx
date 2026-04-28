@@ -38,6 +38,11 @@ jest.mock("../../../../../src/components/views/messages/MBodyFactory", () => ({
     renderMBody: () => <div data-testid="file-body" />,
 }));
 
+jest.mock("../../../../../src/components/views/messages/TextualBodyFactory", () => ({
+    __esModule: true,
+    TextualBodyFactory: () => <div data-testid="textual-body" />,
+}));
+
 jest.mock("../../../../../src/components/views/messages/MImageReplyBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-reply-body" />,
@@ -51,11 +56,6 @@ jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
 jest.mock("../../../../../src/components/views/messages/MStickerBody", () => ({
     __esModule: true,
     default: () => <div data-testid="sticker-body" />,
-}));
-
-jest.mock("../../../../../src/components/views/messages/TextualBody.tsx", () => ({
-    __esModule: true,
-    default: () => <div data-testid="textual-body" />,
 }));
 
 describe("MessageEvent", () => {

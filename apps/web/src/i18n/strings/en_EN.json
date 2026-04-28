@@ -594,7 +594,6 @@
         "video": "Video",
         "video_room": "Video room",
         "view_message": "View message",
-        "voice": "Voice",
         "warning": "Warning"
     },
     "composer": {
@@ -690,8 +689,10 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
+        "edit_section": "Edit section",
         "label": "Section name",
-        "title": "Create a section"
+        "title": "Create a section",
+        "title_edition": "Edit a section"
     },
     "create_space": {
         "add_details_prompt": "Add some details to help people recognise it.",
@@ -1859,6 +1860,12 @@
         "error": "You cannot delete this message. (%(code)s)",
         "ongoing": "Removing…",
         "reason_label": "Reason (optional)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "Are you sure you want to remove this section?",
+        "description": "The chats in this section will still be available in your chats list.",
+        "remove_section": "Remove section",
+        "title": "Remove section?"
     },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
@@ -3903,6 +3910,16 @@
         "call_held": "%(peerName)s held the call",
         "call_held_resume": "You held the call <a>Resume</a>",
         "call_held_switch": "You held the call <a>Switch</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> on the call",
+                "other": "<avatars/> on the call"
+            },
+            "overflow": {
+                "one": "<avatars/> +%(overflowCount)s on the call",
+                "other": "<avatars/> +%(overflowCount)s on the call"
+            }
+        },
         "call_toast_unknown_room": "Unknown room",
         "camera_disabled": "Your camera is turned off",
         "camera_enabled": "Your camera is still enabled",
@@ -3912,7 +3929,6 @@
         "connection_lost": "Connectivity to the server has been lost",
         "connection_lost_description": "You cannot place calls without a connection to the server.",
         "consulting": "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
-        "decline_call": "Decline",
         "default_device": "Default Device",
         "dial": "Dial",
         "dialpad": "Dialpad",
@@ -3926,10 +3942,12 @@
         "enable_microphone": "Unmute microphone",
         "expand": "Return to call",
         "get_call_link": "Share call link",
+        "group_call_started": "Group call started",
         "hangup": "Hangup",
         "hide_sidebar_button": "Hide sidebar",
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
+        "join_with_video": "Join with video",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",
@@ -3963,7 +3981,6 @@
         "show_sidebar_button": "Show sidebar",
         "silence": "Silence call",
         "silenced": "Notifications silenced",
-        "skip_lobby_toggle_option": "Join immediately",
         "start_screenshare": "Start sharing your screen",
         "stop_screenshare": "Stop sharing your screen",
         "too_many_calls": "Too Many Calls",
@@ -3985,7 +4002,6 @@
         "user_is_presenting": "%(sharerName)s is presenting",
         "video_call": "Video call",
         "video_call_incoming": "Incoming video call",
-        "video_call_started": "Video call started",
         "video_call_using": "Video call using:",
         "voice_call": "Voice call",
         "voice_call_incoming": "Incoming voice call",

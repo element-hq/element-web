@@ -24,7 +24,7 @@ import {
     type MatrixClient,
     type Relations,
     type MatrixError,
-    type SyncState,
+    SyncState,
     TimelineWindow,
     Thread,
     ThreadEvent,
@@ -192,9 +192,6 @@ interface IState {
     backPaginating: boolean;
     forwardPaginating: boolean;
 
-    // cache of matrixClient.getSyncState() (but from the 'sync' event)
-    clientSyncState: SyncState | null;
-
     // should the event tiles have twelve hour times
     isTwelveHour: boolean;
 
@@ -251,11 +248,16 @@ class TimelinePanel extends React.Component<IProps, IState> {
     // A map of <callId, LegacyCallEventGrouper>
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
     private initialReadMarkerId: string | null = null;
+    private syncImpliesForwardPaginating: boolean;
 
     public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
         debuglog("mounting");
+
+        this.syncImpliesForwardPaginating = TimelinePanel.isSyncForwardPaginating(
+            MatrixClientPeg.safeGet().getSyncState(),
+        );
 
         // XXX: we could track RM per TimelineSet rather than per Room.
         // but for now we just do it per room for simplicity.
@@ -278,7 +280,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
             readMarkerEventId: this.initialReadMarkerId,
             backPaginating: false,
             forwardPaginating: false,
-            clientSyncState: MatrixClientPeg.safeGet().getSyncState(),
             isTwelveHour: SettingsStore.getValue("showTwelveHourTimestamps"),
             alwaysShowTimestamps: SettingsStore.getValue("alwaysShowTimestamps"),
             readMarkerInViewThresholdMs: SettingsStore.getValue("readMarkerInViewThresholdMs"),
@@ -899,8 +900,16 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private onSync = (clientSyncState: SyncState, prevState: SyncState | null, data?: object): void => {
         if (this.unmounted) return;
-        this.setState({ clientSyncState });
+        const nextSyncImpliesForwardPaginating = TimelinePanel.isSyncForwardPaginating(clientSyncState);
+        if (nextSyncImpliesForwardPaginating === this.syncImpliesForwardPaginating) return;
+
+        this.syncImpliesForwardPaginating = nextSyncImpliesForwardPaginating;
+        this.forceUpdate();
     };
+
+    private static isSyncForwardPaginating(syncState: SyncState | null): boolean {
+        return syncState === SyncState.Prepared || syncState === SyncState.Catchup;
+    }
 
     private readMarkerTimeout(readMarkerPosition: number | null): number {
         return readMarkerPosition === 0
@@ -1832,8 +1841,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         // If the state is PREPARED or CATCHUP, we're still waiting for the js-sdk to sync with
         // the HS and fetch the latest events, so we are effectively forward paginating.
-        const forwardPaginating =
-            this.state.forwardPaginating || ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState!);
+        const forwardPaginating = this.state.forwardPaginating || this.syncImpliesForwardPaginating;
         const events = this.state.events;
         return (
             <MessagePanel
