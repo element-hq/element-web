@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { IEventRelation, type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation, type MatrixClient, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import type { MockedObject } from "jest-mock";
 import { RoomUploadViewModel } from "../../../src/viewmodels/room/RoomUploadViewModel";
