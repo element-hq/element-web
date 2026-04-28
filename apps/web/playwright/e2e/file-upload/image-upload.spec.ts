@@ -33,4 +33,11 @@ test.describe("Image Upload", () => {
         await expect(page.getByRole("button", { name: "Close dialog" })).toBeEnabled();
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("image-upload-preview.png");
     });
+
+    test("should allow upload via drag and drop", { tag: "@screenshot" }, async ({ page, app }) => {
+        await app.composerDragAndUploadFiles("room", getSampleFilePath("riot.png"), "image/png");
+        await app.timeline.scrollToBottom();
+        const imgTile = page.locator(".mx_MImageBody").first();
+        await expect(imgTile).toBeVisible();
+    });
 });
