@@ -603,13 +603,7 @@ describe("ImageBodyViewModel", () => {
         await promise;
 
         expect(mockedBlobIsAnimated).toHaveBeenCalled();
-        expect(mockedCreateThumbnail).toHaveBeenCalledWith(
-            createdImage,
-            320,
-            240,
-            "image/gif",
-            false,
-        );
+        expect(mockedCreateThumbnail).toHaveBeenCalledWith(createdImage, 320, 240, "image/gif", false);
         expect(vm.getSnapshot()).toMatchObject({
             state: ImageBodyViewState.READY,
             thumbnailSrc: "blob",
