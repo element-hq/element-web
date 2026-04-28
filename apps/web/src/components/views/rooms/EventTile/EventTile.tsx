@@ -9,9 +9,9 @@ import React, { type JSX } from "react";
 
 import { Layout } from "../../../../settings/enums/Layout";
 import { EventTileErrorBoundary } from "./EventTileErrorBoundary";
-import { EventTileHost, type EventTileHostProps, type EventTileHandle } from "./EventTileHost";
+import { EventTileHost, type EventTileHostProps } from "./EventTileHost";
 
-export type { EventTileHandle };
+export type { EventTileHandle } from "./EventTileHost";
 
 /** Props for {@link EventTile}. */
 export interface EventTileProps extends EventTileHostProps {

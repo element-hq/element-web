@@ -200,6 +200,10 @@ function buildEventTileViewModelProps(
     };
 }
 
+function renderStrongSubstitution(sub: React.ReactNode): JSX.Element {
+    return <strong>{sub}</strong>;
+}
+
 export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTileHostProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
     const { isCard } = useContext(CardContext);
@@ -409,7 +413,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         ? _t(
               "timeline|in_room_name",
               { room: snapshot.presentation.notificationView.roomName ?? room.name },
-              { strong: (sub) => <strong>{sub}</strong> },
+              { strong: renderStrongSubstitution },
           )
         : undefined;
     const onMouseEnter = useCallback((): void => vm.setHover(true), [vm]);

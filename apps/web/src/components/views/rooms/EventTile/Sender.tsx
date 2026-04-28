@@ -63,9 +63,9 @@ function EventTileSenderProfile({
         });
     }, [member, onClick, sender, viewModel, withTooltip]);
 
-    return mxEvent.getContent().msgtype !== MsgType.Emote ? (
-        <DisambiguatedProfileView vm={viewModel} className="mx_DisambiguatedProfile" />
-    ) : (
-        <></>
-    );
+    if (mxEvent.getContent().msgtype === MsgType.Emote) {
+        return <></>;
+    }
+
+    return <DisambiguatedProfileView vm={viewModel} className="mx_DisambiguatedProfile" />;
 }

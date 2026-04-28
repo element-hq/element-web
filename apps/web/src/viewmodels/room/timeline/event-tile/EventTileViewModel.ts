@@ -539,19 +539,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     public getActionBarViewModel(): EventTileActionBarViewModel {
-        if (!this.eventTileActionBarViewModel) {
-            this.eventTileActionBarViewModel = this.disposables.track(
-                new EventTileActionBarViewModel(
-                    EventTileViewModel.buildActionBarViewModelProps(
-                        this.props,
-                        this.snapshot.current.interaction.isQuoteExpanded,
-                        this.onToggleThreadExpanded,
-                    ),
+        return (this.eventTileActionBarViewModel ??= this.disposables.track(
+            new EventTileActionBarViewModel(
+                EventTileViewModel.buildActionBarViewModelProps(
+                    this.props,
+                    this.snapshot.current.interaction.isQuoteExpanded,
+                    this.onToggleThreadExpanded,
                 ),
-            );
-        }
-
-        return this.eventTileActionBarViewModel;
+            ),
+        ));
     }
 
     /** Releases all Matrix listeners owned by this view model. */
