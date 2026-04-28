@@ -33,13 +33,25 @@ export type SubstitutionValue = number | string | ReactNode | ((sub: string) => 
  * Variables to interpolate into a translation.
  * @public
  */
-export type Variables = {
-    /**
-     * The number of items to count for pluralised translations
-     */
+export type Variables = StringVariables | RichVariables;
+
+/**
+ * Variables that are guaranteed to only contain primitive (string-safe) values
+ * @public
+ */
+export interface StringVariables {
+    count?: number;
+    [key: string]: number | string | null | undefined;
+}
+
+/**
+ * Variables that may contain ReactNodes or functions, requiring a ReactNode return
+ * @public
+ */
+export interface RichVariables {
     count?: number;
     [key: string]: SubstitutionValue;
-};
+}
 
 /**
  * Tags to interpolate into a translation, where the value is a ReactNode or a function that returns a ReactNode.
@@ -68,7 +80,7 @@ export interface I18nApi {
      * @param key - The key to translate
      * @param variables - Optional variables to interpolate into the translation
      */
-    translate(this: void, key: keyof Translations, variables?: Variables): string;
+    translate(this: void, key: keyof Translations, variables?: StringVariables): string;
     /**
      * Perform a translation, with optional variables
      * @param key - The key to translate

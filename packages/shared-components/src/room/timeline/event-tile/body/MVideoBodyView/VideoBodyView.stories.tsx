@@ -44,7 +44,7 @@ const VideoBodyViewWrapperImpl = ({
 const VideoBodyViewWrapper = withViewDocs(VideoBodyViewWrapperImpl, VideoBodyView);
 
 const meta = {
-    title: "MessageBody/VideoBodyView",
+    title: "Timeline/Timeline Body/VideoBodyView",
     component: VideoBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {

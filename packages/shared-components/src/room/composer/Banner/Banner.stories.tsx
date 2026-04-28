@@ -14,7 +14,7 @@ import { Banner } from "./Banner";
 import avatarImage from "../../../../static/element.png";
 
 const meta = {
-    title: "room/Banner",
+    title: "Room/Banner",
     component: Banner,
     tags: ["autodocs"],
     args: {

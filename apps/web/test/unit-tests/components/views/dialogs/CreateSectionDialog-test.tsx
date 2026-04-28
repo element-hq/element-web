@@ -56,4 +56,38 @@ describe("CreateSectionDialog", () => {
         await userEvent.keyboard("{Enter}");
         expect(onFinished).toHaveBeenCalledWith(true, "My section");
     });
+
+    describe("editing mode", () => {
+        function renderEditComponent(): void {
+            render(<CreateSectionDialog onFinished={onFinished} sectionToEdit="Existing Section" />);
+        }
+
+        it("pre-fills the input with the existing section name", () => {
+            renderEditComponent();
+            const input = screen.getByRole("textbox");
+            expect(input).toHaveValue("Existing Section");
+        });
+
+        it("shows the edit section button instead of create section", () => {
+            renderEditComponent();
+            expect(screen.getByRole("button", { name: "Edit section" })).toBeInTheDocument();
+            expect(screen.queryByRole("button", { name: "Create section" })).not.toBeInTheDocument();
+        });
+
+        it("calls onFinished with the updated name when edit section is clicked", async () => {
+            renderEditComponent();
+            const input = screen.getByRole("textbox");
+            await userEvent.clear(input);
+            await userEvent.type(input, "Updated Section");
+            await userEvent.click(screen.getByRole("button", { name: "Edit section" }));
+            expect(onFinished).toHaveBeenCalledWith(true, "Updated Section");
+        });
+
+        it("has the edit section button disabled when the input is empty", async () => {
+            renderEditComponent();
+            const input = screen.getByRole("textbox");
+            await userEvent.clear(input);
+            expect(screen.getByRole("button", { name: "Edit section" })).toBeDisabled();
+        });
+    });
 });

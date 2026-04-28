@@ -108,7 +108,8 @@
             "follow-redirects@1.15.11": "1.16.0",
             "@actions/github@6.0.1": "8.0.1",
             "dompurify@>=3.0.0 <=3.3.3": "3.4.0",
-            "protobufjs@>=7.0.0 <7.5.5": "7.5.5"
+            "protobufjs@>=7.0.0 <7.5.5": "7.5.5",
+            "@xmldom/xmldom@0.8.12": "0.8.13"
         }
     },
     "engines": {
