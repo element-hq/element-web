@@ -1046,6 +1046,38 @@ describe("RoomListStoreV3", () => {
             });
         });
 
+        describe("editSection", () => {
+            it("delegates to the section module", async () => {
+                enableSections();
+                getClientAndRooms();
+                const editSectionSpy = jest.spyOn(sectionModule, "editSection").mockResolvedValue(undefined);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                await store.editSection("element.io.section.test-tag");
+                expect(editSectionSpy).toHaveBeenCalledWith("element.io.section.test-tag");
+            });
+        });
+
+        describe("removeSection", () => {
+            it("delegates to the section module and emits LISTS_UPDATE_EVENT", async () => {
+                enableSections();
+                getClientAndRooms();
+                jest.spyOn(sectionModule, "deleteSection").mockResolvedValue(undefined);
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const listsUpdateListener = jest.fn();
+                store.on(LISTS_UPDATE_EVENT, listsUpdateListener);
+
+                await store.removeSection("element.io.section.test-tag", false);
+                expect(sectionModule.deleteSection).toHaveBeenCalledWith("element.io.section.test-tag", false);
+                expect(listsUpdateListener).toHaveBeenCalled();
+            });
+        });
+
         it("updates sections when RoomList.OrderedCustomSections setting changes", async () => {
             enableSections();
             const { rooms } = getClientAndRooms();
