@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { type FC, useCallback, useMemo, useState } from "react";
 import { RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 import { createClient } from "matrix-js-sdk/src/matrix";
-import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import type { IMatrixClientCreds } from "../../../MatrixClientPeg.ts";
@@ -25,11 +24,7 @@ interface Props {
 }
 
 const QrLoginDialog: FC<Props> = ({ serverConfig, onLoggedIn }) => {
-    const tempClient = useMemo(() => {
-        // Pick our device ID
-        const deviceId = secureRandomString(10);
-        return createClient({ baseUrl: serverConfig.hsUrl, deviceId });
-    }, [serverConfig]);
+    const tempClient = useMemo(() => createClient({ baseUrl: serverConfig.hsUrl }), [serverConfig]);
     const onFinished = useCallback(
         (success?: boolean, credentials?: IMatrixClientCreds) => {
             if (success) {

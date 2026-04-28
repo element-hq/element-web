@@ -20,6 +20,7 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { AutoDiscovery, type MatrixClient, type XOR } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
@@ -36,7 +37,7 @@ type BaseProps = {
 type Props = XOR<
     {
         intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE;
-        clientId?: string; // TODO comment
+        clientId?: string; // A spinner will be shown while undefined
     },
     {
         intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
@@ -210,7 +211,8 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 // we can't do this as the temporary client doesn't know the server name.
 
                 const metadata = await this.props.client.getAuthMetadata();
-                const deviceId = this.props.client.getDeviceId()!;
+                // Generate our new device ID
+                const deviceId = secureRandomString(10);
                 const { userCode } = await this.state.rendezvous.deviceAuthorizationGrant({
                     metadata,
                     clientId: this.props.clientId!,
