@@ -1,0 +1,7 @@
+{
+    "appId": "im.riot.app",
+    "name": "element-desktop",
+    "productName": "Element",
+    "description": "Element: the future of secure communication",
+    "protocols": ["io.element.desktop", "element"]
+}

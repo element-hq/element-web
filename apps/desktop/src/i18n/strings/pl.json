@@ -1,0 +1,93 @@
+{
+    "action": {
+        "cancel": "Anuluj",
+        "close": "Zamknij",
+        "close_brand": "Zamknij %(brand)s",
+        "copy": "Kopiuj",
+        "cut": "Wytnij",
+        "delete": "Usuń",
+        "edit": "Edytuj",
+        "minimise": "Minimalizuj",
+        "paste": "Wklej",
+        "paste_match_style": "Wklej i dopasuj styl",
+        "quit": "Zamknij",
+        "redo": "Ponów",
+        "select_all": "Zaznacz wszystko",
+        "show_hide": "Pokaż/Ukryj",
+        "undo": "Cofnij",
+        "zoom_in": "Powiększ",
+        "zoom_out": "Pomniejsz"
+    },
+    "common": {
+        "about": "Informacje",
+        "brand_help": "Pomoc %(brand)s",
+        "help": "Pomoc",
+        "no": "Nie",
+        "preferences": "Preferencje",
+        "yes": "Tak"
+    },
+    "confirm_quit": "Czy na pewno chcesz zamknąć?",
+    "edit_menu": {
+        "speech": "Mowa",
+        "speech_start_speaking": "Zacznij mówić",
+        "speech_stop_speaking": "Przestań mówić"
+    },
+    "eol": {
+        "no_more_updates": "Korzystasz z nieobsługiwanej wersji systemu macOS. Zaktualizuj system, aby uzyskać aktualizacje %(brand)s.",
+        "title": "System nie jest obsługiwany",
+        "warning": "Korzystasz z nieobsługiwanej wersji systemu macOS. Zaktualizuj system, aby dalej korzystać z %(brand)s."
+    },
+    "file_menu": {
+        "label": "Plik"
+    },
+    "icon_overlay": {
+        "description_error": "Błąd",
+        "description_notifications": {
+            "one": "Masz %(count)s nieprzeczytane powiadomienie.",
+            "few": "Masz %(count)s nieprzeczytane powiadomienia.",
+            "many": "Masz %(count)s nieprzeczytanych powiadomień."
+        }
+    },
+    "menu": {
+        "hide": "Ukryj",
+        "hide_others": "Ukryj inne",
+        "services": "Usługi",
+        "unhide": "Odkryj"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Dodaj do słownika",
+        "copy_email": "Kopiuj adres e-mail",
+        "copy_image": "Kopiuj obraz",
+        "copy_image_url": "Kopiuj adres obrazu",
+        "copy_link_url": "Kopiuj adres odnośnika",
+        "save_image_as": "Zapisz obraz jako...",
+        "save_image_as_error_description": "Obraz nie został zapisany",
+        "save_image_as_error_title": "Nie udało się zapisać obrazu"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Wyczyścić dane i przeładować?",
+            "backend_changed_detail": "Nie można uzyskać dostępu do sekretnego magazynu, wygląda na to, że uległ zmianie.",
+            "backend_changed_title": "Nie udało się załadować bazy danych",
+            "backend_no_encryption": "Twój system posiada wspierany keyring, ale szyfrowanie nie jest dostępne.",
+            "backend_no_encryption_detail": "Elektron wykrył, że szyfrowanie nie jest dostępne w twoim keyring'u %(backend)s. Upewnij się, że keyring został zainstalowany. Jeśli tak, uruchom ponownie urządzenie i spróbuj ponownie. Opcjonalnie, zezwól %(brand)s, aby korzystał ze słabszego szyfrowania.",
+            "backend_no_encryption_title": "Szyfrowanie nie jest obsługiwane",
+            "unsupported_keyring": "System zawiera niewspierany keyring, nie można otworzyć bazy danych.",
+            "unsupported_keyring_detail": "Wykrywanie breloków firmy Electron nie znalazło obsługiwanego zaplecza. Możesz spróbować ręcznie skonfigurować zaplecze, zaczynając od argumentu %(brand)s wiersza polecenia, operacji jednorazowej. Widzieć%(link)s.",
+            "unsupported_keyring_title": "System niewspierany",
+            "unsupported_keyring_use_basic_text": "Użyj słabszego szyfrowania",
+            "unsupported_keyring_use_plaintext": "Nie używaj szyfrowania"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Rozmiar rzeczywisty",
+        "toggle_developer_tools": "Przełącz narzędzia deweloperskie",
+        "toggle_full_screen": "Przełącz pełny ekran",
+        "view": "Wyświetl"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Wyciągnij wszystko do przodu",
+        "label": "Okno",
+        "zoom": "Powiększenie"
+    }
+}

@@ -23,7 +23,7 @@ import { registerMockModule } from "./MockModule";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
-import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 import * as navigator from "../../../src/utils/permalinks/navigator.ts";
 
 describe("ProxiedApiModule", () => {
@@ -319,18 +319,18 @@ describe("ProxiedApiModule", () => {
         it("should return false if there is no room", () => {
             client.getRoom = jest.fn().mockReturnValue(null);
 
-            expect(api.isAppInContainer(app, Container.Top, roomId)).toBe(false);
+            expect(api.isAppInContainer(app, "top", roomId)).toBe(false);
             expect(WidgetLayoutStore.instance.isInContainer).not.toHaveBeenCalled();
         });
 
         it("should return false if the app is not in the container", () => {
             jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(false);
-            expect(api.isAppInContainer(app, Container.Top, roomId)).toBe(false);
+            expect(api.isAppInContainer(app, "top", roomId)).toBe(false);
         });
 
         it("should return true if the app is in the container", () => {
             jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockReturnValue(true);
-            expect(api.isAppInContainer(app, Container.Top, roomId)).toBe(true);
+            expect(api.isAppInContainer(app, "top", roomId)).toBe(true);
         });
     });
 
@@ -350,7 +350,7 @@ describe("ProxiedApiModule", () => {
 
         it("should not move if there is no room", () => {
             client.getRoom = jest.fn().mockReturnValue(null);
-            api.moveAppToContainer(app, Container.Top, roomId);
+            api.moveAppToContainer(app, "top", roomId);
             expect(WidgetLayoutStore.instance.moveToContainer).not.toHaveBeenCalled();
         });
 
@@ -358,8 +358,8 @@ describe("ProxiedApiModule", () => {
             const room = mkRoom(client, roomId);
             client.getRoom = jest.fn().mockReturnValue(room);
 
-            api.moveAppToContainer(app, Container.Top, roomId);
-            expect(WidgetLayoutStore.instance.moveToContainer).toHaveBeenCalledWith(room, app, Container.Top);
+            api.moveAppToContainer(app, "top", roomId);
+            expect(WidgetLayoutStore.instance.moveToContainer).toHaveBeenCalledWith(room, app, "top");
         });
     });
 

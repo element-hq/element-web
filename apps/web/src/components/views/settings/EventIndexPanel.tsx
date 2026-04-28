@@ -165,7 +165,7 @@ export default class EventIndexPanel extends React.Component<EmptyObject, IState
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
             const nativeLink =
-                "https://github.com/vector-im/element-desktop/blob/develop/" +
+                "https://github.com/element-hq/element-web/blob/develop/apps/desktop/" +
                 "docs/native-node-modules.md#" +
                 "adding-seshat-for-search-in-e2e-encrypted-rooms";
 
@@ -220,7 +220,12 @@ export default class EventIndexPanel extends React.Component<EmptyObject, IState
                                         : _t("error|unknown")}
                                 </code>
                                 <p>
-                                    <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>
+                                    <AccessibleButton
+                                        element="button"
+                                        key="delete"
+                                        kind="danger"
+                                        onClick={this.confirmEventStoreReset}
+                                    >
                                         {_t("action|reset")}
                                     </AccessibleButton>
                                 </p>

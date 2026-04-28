@@ -53,14 +53,13 @@ import dispatcher from "../../../../../../src/dispatcher/dispatcher";
 import { CallStore } from "../../../../../../src/stores/CallStore";
 import { type Call } from "../../../../../../src/models/Call";
 import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
-import { Container, WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { _t } from "../../../../../../src/languageHandler";
 import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { ElementCallMemberEventType } from "../../../../../../src/call-types";
-import { defaultWatchManager } from "../../../../../../src/settings/Settings.tsx";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");
 jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
@@ -504,7 +503,7 @@ describe("RoomHeader", () => {
             const videoButton = screen.getByRole("button", { name: "Video call" });
             expect(videoButton).not.toHaveAttribute("aria-disabled", "true");
             await user.click(videoButton);
-            expect(spy).toHaveBeenCalledWith(room, widget, Container.Top);
+            expect(spy).toHaveBeenCalledWith(room, widget, "top");
         });
 
         it("disables calling if there's a jitsi call", () => {
@@ -723,25 +722,9 @@ describe("RoomHeader", () => {
             ],
             { addToState: true },
         );
-        let featureEnabled = true;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(
-            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
-        );
 
         render(<RoomHeader room={room} />, getWrapper());
         await waitFor(() => getByLabelText(document.body, "New members see history"));
-
-        // Disable the labs flag and check the icon disappears
-        featureEnabled = false;
-        act(() =>
-            defaultWatchManager.notifyUpdate(
-                "feature_share_history_on_invite",
-                null,
-                SettingLevel.DEVICE,
-                featureEnabled,
-            ),
-        );
-        expect(queryByLabelText(document.body, "New members see history")).not.toBeInTheDocument();
     });
 
     it("shows a user icon if the room is encrypted and has world readable history", async () => {
@@ -757,10 +740,6 @@ describe("RoomHeader", () => {
                 }),
             ],
             { addToState: true },
-        );
-        const featureEnabled = true;
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(
-            (flag) => flag === "feature_share_history_on_invite" && featureEnabled,
         );
 
         render(<RoomHeader room={room} />, getWrapper());
@@ -869,7 +848,7 @@ describe("RoomHeader", () => {
         });
     });
 
-    it("renders additionalButtons", async () => {
+    it("renders legacy additionalButtons", async () => {
         const additionalButtons: ViewRoomOpts["buttons"] = [
             {
                 icon: () => <>test-icon</>,
@@ -878,11 +857,11 @@ describe("RoomHeader", () => {
                 onClick: () => {},
             },
         ];
-        render(<RoomHeader room={room} additionalButtons={additionalButtons} />, getWrapper());
+        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
         expect(screen.getByRole("button", { name: "test-label" })).toBeInTheDocument();
     });
 
-    it("calls onClick-callback on additionalButtons", () => {
+    it("calls onClick-callback on legacyAdditionalButtons", () => {
         const callback = jest.fn();
         const additionalButtons: ViewRoomOpts["buttons"] = [
             {
@@ -893,7 +872,7 @@ describe("RoomHeader", () => {
             },
         ];
 
-        render(<RoomHeader room={room} additionalButtons={additionalButtons} />, getWrapper());
+        render(<RoomHeader room={room} legacyAdditionalButtons={additionalButtons} />, getWrapper());
 
         const button = screen.getByRole("button", { name: "test-label" });
         const event = createEvent.click(button);

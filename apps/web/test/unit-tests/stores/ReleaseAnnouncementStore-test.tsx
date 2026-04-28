@@ -26,7 +26,6 @@ describe("ReleaseAnnouncementStore", () => {
     beforeEach(() => {
         // Default settings
         settings = {
-            feature_release_announcement: true,
             releaseAnnouncementData: {},
         };
         const watchCallbacks: Array<CallbackFn> = [];
@@ -59,13 +58,6 @@ describe("ReleaseAnnouncementStore", () => {
     });
 
     /**
-     * Disables the release announcement feature.
-     */
-    function disableReleaseAnnouncement() {
-        settings["feature_release_announcement"] = false;
-    }
-
-    /**
      * Listens to the next release announcement change event.
      */
     function listenReleaseAnnouncementChanged() {
@@ -79,8 +71,7 @@ describe("ReleaseAnnouncementStore", () => {
     });
 
     it("should return null when the release announcement is disabled", async () => {
-        disableReleaseAnnouncement();
-
+        releaseAnnouncementStore.disable();
         expect(releaseAnnouncementStore.getReleaseAnnouncement()).toBeNull();
 
         // Wait for the next release announcement change event

@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "Annuleren",
+        "close": "Sluiten",
+        "close_brand": "Sluit %(brand)s",
+        "copy": "Kopiëren",
+        "cut": "Knippen",
+        "delete": "Verwijderen",
+        "edit": "Bewerken",
+        "minimise": "Minimaliseren",
+        "paste": "Plakken",
+        "paste_match_style": "Plakken zonder stijl",
+        "quit": "Sluiten",
+        "redo": "Opnieuw doen",
+        "select_all": "Alles selecteren",
+        "show_hide": "Tonen/Verbergen",
+        "undo": "Ongedaan maken",
+        "zoom_in": "Inzoomen",
+        "zoom_out": "Uitzoomen"
+    },
+    "common": {
+        "about": "Over",
+        "brand_help": "%(brand)s Hulp",
+        "help": "Hulp",
+        "preferences": "Voorkeuren"
+    },
+    "confirm_quit": "Weet u zeker dat u wilt stoppen?",
+    "edit_menu": {
+        "speech": "Spraak",
+        "speech_start_speaking": "Begin met praten",
+        "speech_stop_speaking": "Stop met praten"
+    },
+    "file_menu": {
+        "label": "Bestand"
+    },
+    "menu": {
+        "hide": "Verbergen",
+        "hide_others": "Anderen verbergen",
+        "services": "Diensten",
+        "unhide": "Weer laten zien"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Aan woordenboek toevoegen",
+        "copy_email": "E-mailadres kopiëren",
+        "copy_image": "Afbeelding kopiëren",
+        "copy_image_url": "Kopieer afbeeldingsadres",
+        "copy_link_url": "Link kopiëren",
+        "save_image_as": "Afbeelding opslaan als...",
+        "save_image_as_error_description": "De afbeelding opslaan is mislukt",
+        "save_image_as_error_title": "Afbeelding opslaan is mislukt"
+    },
+    "view_menu": {
+        "actual_size": "Werkelijke grootte",
+        "toggle_developer_tools": "Developer Tools wisselen",
+        "toggle_full_screen": "Volledig scherm wisselen",
+        "view": "Bekijken"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Alles naar voren brengen",
+        "label": "Venster",
+        "zoom": "Zoom"
+    }
+}

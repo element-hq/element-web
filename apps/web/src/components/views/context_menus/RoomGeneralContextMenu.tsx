@@ -150,7 +150,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
             const isApplied = getTagsForRoom(room).includes(tagId);
             const removeTag = isApplied ? tagId : inverseTag;
             const addTag = isApplied ? null : tagId;
-            dis.dispatch(RoomListActions.tagRoom(cli, room, removeTag, addTag, 0));
+            dis.dispatch(RoomListActions.tagRoom(cli, room, removeTag, addTag));
         } else {
             logger.warn(`Unexpected tag ${tagId} applied to ${room.roomId}`);
         }

@@ -1,7 +1,8 @@
-# syntax=docker.io/docker/dockerfile:1.21-labs@sha256:2e681d22e86e738a057075f930b81b2ab8bc2a34cd16001484a7453cfa7a03fb
+# syntax=docker.io/docker/dockerfile:1.23-labs@sha256:7eca9451d94f9b8ad22e44988b92d595d3e4d65163794237949a8c3413fbed5d
+# Context must be the root of the monorepo
 
 # Builder
-FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:d83f76ec9956d35fe14221022e8b5a87a5de6fcdb4edb1187eddeb7dc80cba71 AS builder
+FROM --platform=$BUILDPLATFORM node:24-bullseye@sha256:d2059a9c157c9f70739736979fa3635008bf3ca74560b30930dc181228bc427f AS builder
 
 # Support custom branch of the js-sdk. This also helps us build images of element-web develop.
 ARG USE_CUSTOM_SDKS=false
@@ -10,17 +11,21 @@ ARG JS_SDK_BRANCH="master"
 
 WORKDIR /src
 
-COPY --exclude=docker . /src
+# Install dependencies
+COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml patches scripts **/package.json /src/
 RUN corepack enable
-RUN /src/scripts/docker-link-repos.sh
+RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
 RUN pnpm install
-RUN /src/scripts/docker-package.sh
+
+# Build
+COPY --link --exclude=.git --exclude=apps/web/docker . /src
+RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
 RUN cp /src/apps/web/config.sample.json /src/apps/web/webapp/config.json
 
 # App
-FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:800307aaf07c143f5d90aa9d4269cc1971dcfe5aee7cabd11579ac4c6bcf198f
+FROM nginxinc/nginx-unprivileged:alpine-slim@sha256:360465db60105a4cbf5215cd9e5a2ba40ef956978dd94f99707e9674050e38ea
 
 # Need root user to install packages & manipulate the usr directory
 USER root

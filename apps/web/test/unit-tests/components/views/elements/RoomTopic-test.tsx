@@ -10,6 +10,7 @@ import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { LinkedTextContext } from "@element-hq/web-shared-components";
 
 import { mkEvent, stubClient } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
@@ -52,7 +53,9 @@ describe("<RoomTopic/>", () => {
      */
     const renderRoom = (topic: string) => {
         const room = createRoom(topic);
-        render(<RoomTopic room={room} />);
+        render(<RoomTopic room={room} />, {
+            wrapper: ({ children }) => <LinkedTextContext.Provider value={{}}>{children}</LinkedTextContext.Provider>,
+        });
     };
 
     /**

@@ -92,7 +92,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             getComponent(room);
 
             await waitFor(() => expect(screen.getByLabelText("Encrypted")).toBeChecked());
-            fireEvent.click(screen.getByLabelText("Public"));
+            fireEvent.click(screen.getByLabelText("Anyone"));
 
             const modal = await screen.findByRole("dialog");
 
@@ -101,7 +101,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             fireEvent.click(screen.getByText("Cancel"));
 
             // join rule not updated
-            expect(screen.getByLabelText("Private (invite only)").hasAttribute("checked")).toBeTruthy();
+            expect(screen.getByLabelText("Invite only").hasAttribute("checked")).toBeTruthy();
         });
 
         it("updates join rule", async () => {
@@ -110,7 +110,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
             getComponent(room);
 
-            fireEvent.click(screen.getByLabelText("Public"));
+            fireEvent.click(screen.getByLabelText("Anyone"));
 
             await flushPromises();
 
@@ -130,7 +130,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
             getComponent(room);
 
-            fireEvent.click(screen.getByLabelText("Private (invite only)"));
+            fireEvent.click(screen.getByLabelText("Invite only"));
 
             await flushPromises();
 
@@ -173,7 +173,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             ]);
 
             getComponent(room);
-            fireEvent.click(screen.getByLabelText("Private (invite only)"));
+            fireEvent.click(screen.getByLabelText("Invite only"));
             await flushPromises();
             // Ensure we don't make any changes
             expect(client.sendStateEvent).not.toHaveBeenCalled();
@@ -185,7 +185,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             setRoomStateEvents(room, JoinRule.Public, undefined, HistoryVisibility.WorldReadable);
 
             getComponent(room);
-            fireEvent.click(screen.getByLabelText("Private (invite only)"));
+            fireEvent.click(screen.getByLabelText("Invite only"));
             await flushPromises();
             expect(client.sendStateEvent).toHaveBeenCalledWith(
                 room.roomId,
@@ -213,7 +213,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
             getComponent(room);
 
-            fireEvent.click(screen.getByLabelText("Public"));
+            fireEvent.click(screen.getByLabelText("Anyone"));
 
             await flushPromises();
 

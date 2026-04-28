@@ -139,7 +139,7 @@ test.describe("Widget PIP", () => {
             );
 
             // checks that pip window is opened
-            await expect(page.locator(".mx_WidgetPip")).toBeVisible();
+            await expect(page.getByTestId("widget-pip-container")).toBeVisible();
 
             // checks that widget is opened in pip
             const iframe = page.frameLocator(`iframe[title="${DEMO_WIDGET_NAME}"]`);
@@ -155,7 +155,7 @@ test.describe("Widget PIP", () => {
             }
 
             // checks that pip window is closed
-            await expect(iframe.locator(".mx_WidgetPip")).not.toBeVisible();
+            await expect(iframe.getByTestId("widget-pip-container")).not.toBeVisible();
         });
     }
 });

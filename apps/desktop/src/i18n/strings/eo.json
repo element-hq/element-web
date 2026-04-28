@@ -1,0 +1,50 @@
+{
+    "action": {
+        "cancel": "Nuligi",
+        "close": "Fermi",
+        "close_brand": "Fermu %(brand)s",
+        "copy": "Kopii",
+        "cut": "Tranĉi",
+        "delete": "Forigi",
+        "edit": "Redakti",
+        "minimise": "Minimumigi",
+        "paste": "Enmeti",
+        "redo": "Refari",
+        "select_all": "Elekti Ĉiujn",
+        "show_hide": "Montri/Kaŝi",
+        "undo": "Malfari"
+    },
+    "common": {
+        "about": "Prio",
+        "help": "Helpo",
+        "preferences": "Agordoj"
+    },
+    "confirm_quit": "Ĉu vi certas, ke vi volas ĉesi?",
+    "edit_menu": {
+        "speech_start_speaking": "Ekparoli",
+        "speech_stop_speaking": "Ĉesi Paroli"
+    },
+    "file_menu": {
+        "label": "Dosiero"
+    },
+    "menu": {
+        "hide": "Kaŝi",
+        "hide_others": "Kaŝi Aliajn",
+        "unhide": "Malkaŝi"
+    },
+    "right_click_menu": {
+        "copy_email": "Kopiu retadreson",
+        "copy_image": "Kopiu bildon",
+        "copy_image_url": "Kopiu adreson de la bildo",
+        "copy_link_url": "Kopiu ligilon de la bildo",
+        "save_image_as_error_description": "La bildo malsukcesis elŝutiĝi",
+        "save_image_as_error_title": "Malsukcesis elŝuti bildon"
+    },
+    "view_menu": {
+        "toggle_developer_tools": "Baskuligi Programistajn Ilojn",
+        "view": "Vidi"
+    },
+    "window_menu": {
+        "label": "Fenestro"
+    }
+}

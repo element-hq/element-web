@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { type Locator, type Page } from "@playwright/test";
-import { readFileSync } from "node:fs";
 
 import { test, expect } from "../../element-web-test";
+import { readSampleFileSync } from "../../sample-files";
 
-const MEDIA_FILE = readFileSync("playwright/sample-files/riot.png");
+const MEDIA_FILE = readSampleFileSync("riot.png", null);
 
 async function waitForMessageSentStatus(msgTile: Locator): Promise<void> {
     await expect(msgTile.getByRole("status")).toHaveAccessibleName("Your message was sent");
@@ -88,6 +88,7 @@ test.describe("Message rendering", () => {
                 room: async ({ user, app }, use) => {
                     const roomId = await app.client.createRoom({ name: "Test room" });
                     await use({ roomId });
+                    await app.closeVerifyToast();
                 },
             });
 
@@ -218,6 +219,7 @@ test.describe("Message url previews", () => {
         room: async ({ user, app }, use) => {
             const roomId = await app.client.createRoom({ name: "Test room" });
             await use({ roomId });
+            await app.closeVerifyToast();
         },
     });
     test("should render a basic preview", { tag: "@screenshot" }, async ({ page, user, app, room, axe }) => {
@@ -252,6 +254,7 @@ test.describe("Message url previews", () => {
                         "og:title": "A simple site",
                         "og:description": "And with a brief description",
                         "og:image": mxc,
+                        "og:image:alt": "The riot logo",
                     },
                 });
             });

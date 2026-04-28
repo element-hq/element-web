@@ -26,7 +26,6 @@
         "cancel": "Hætta við",
         "change": "Breyta",
         "clear": "Hreinsa",
-        "click": "Smelltu",
         "click_to_copy": "Smelltu til að afrita",
         "close": "Loka",
         "collapse": "Fella saman",
@@ -1049,8 +1048,6 @@
         "upload_file": "Senda inn skrá"
     },
     "labs": {
-        "automatic_debug_logs": "Senda atvikaskrár sjálfkrafa við allar villur",
-        "automatic_debug_logs_decryption": "Senda atvikaskrár sjálfkrafa við afkóðunarvillur",
         "beta_description": "Hvað er væntanlegt í %(brand)s? Að taka þátt í tilraunum gefur færi á að sjá nýja hluti fyrr, prófa nýja eiginleika og vera með í að móta þá áður en þeir fara í almenna notkun.",
         "beta_feature": "Þetta er beta-prófunareiginleiki",
         "beta_feedback_leave_button": "Til að hætta í beta-prófunarútgáfunni, skaltu fara í stillingarnar þínar.",
@@ -1277,7 +1274,6 @@
         "restricted": "Takmarkað"
     },
     "powered_by_matrix": "Keyrt með Matrix",
-    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "presence": {
         "away": "Fjarverandi",
         "busy": "Upptekinn",
@@ -1439,9 +1435,6 @@
         "joining": "Geng í hópinn…",
         "jump_read_marker": "Fara í fyrstu ólesnu skilaboðin.",
         "jump_to_bottom_button": "Skruna að nýjustu skilaboðunum",
-        "jump_to_date": "Hoppa á dagsetningu",
-        "jump_to_date_beginning": "Upphaf spjallrásarinnar",
-        "jump_to_date_prompt": "Veldu dagsetningu til að hoppa á",
         "kick_reason": "Ástæða: %(reason)s",
         "kicked_by": "Þú hefur verið fjarlægð/ur af %(memberName)s",
         "kicked_from_room_by": "Þú hefur verið fjarlægð/ur á %(roomName)s af %(memberName)s",
@@ -1549,8 +1542,6 @@
             "aliases_section": "Vistföng spjallrása",
             "avatar_field_label": "Auðkennismynd spjallrásar",
             "canonical_alias_field_label": "Aðalvistfang",
-            "default_url_previews_off": "Forskoðun vefslóða er sjálfgefið óvirk fyrir þátttakendur í þessari spjallrás.",
-            "default_url_previews_on": "Forskoðun vefslóða er sjálfgefið virk fyrir þátttakendur í þessari spjallrás.",
             "description_space": "Breyta stillingum viðkomandi svæðinu þínu.",
             "error_creating_alias_title": "Villa við að búa til vistfang",
             "error_deleting_alias_description_forbidden": "Þú hefur ekki heimild til að eyða vistfanginu.",
@@ -1570,11 +1561,7 @@
             "publish_toggle": "Birta þessa spjallrás opinberlega á skrá %(domain)s yfir spjallrásir?",
             "published_aliases_section": "Birt vistföng",
             "save": "Vista breytingar",
-            "topic_field_label": "Umfjöllunarefni spjallrásar",
-            "url_preview_encryption_warning": "Í dulrituðum spjallrásum, eins og þessari, er sjálfgefið slökkt á forskoðun vefslóða til að tryggja að heimaþjónn þinn (þar sem forskoðunin myndast) geti ekki safnað upplýsingum um tengla sem þú sérð í þessari spjallrás.",
-            "url_previews_section": "Forskoðun vefslóða",
-            "user_url_previews_default_off": "Þú hefur <a>óvirkt</a> forskoðun vefslóða sjálfgefið.",
-            "user_url_previews_default_on": "Þú hefur <a>virkt</a> forskoðun vefslóða sjálfgefið."
+            "topic_field_label": "Umfjöllunarefni spjallrásar"
         },
         "notifications": {
             "browse_button": "Skoða",
@@ -1815,8 +1802,6 @@
             "spell_check_locale_placeholder": "Veldu staðfærslu"
         },
         "inline_url_previews_default": "Sjálfgefið virkja forskoðun innfelldra vefslóða",
-        "inline_url_previews_room": "Virkja forskoðun vefslóða sjálfgefið fyrir þátttakendur í þessari spjallrás",
-        "inline_url_previews_room_account": "Virkja forskoðun vefslóða fyrir þessa spjallrás (einungis fyrir þig)",
         "insert_trailing_colon_mentions": "Setja tvípunkt á eftir þar sem minnst er á notanda í upphafi skilaboða",
         "jump_to_bottom_on_send": "Hoppa neðst á tímalínuna þegar þú sendir skilaboð",
         "key_backup": {
@@ -2309,7 +2294,6 @@
         },
         "creation_summary_dm": "%(creator)s bjó til oþessi beinu skilaboð.",
         "creation_summary_room": "%(creator)s bjó til og stillti spjallrásina.",
-        "download_action_decrypting": "Afkóðun",
         "download_action_downloading": "Sæki",
         "edits": {
             "tooltip_label": "Breytt þann %(date)s. Smelltu hér til að skoða breytingar.",
@@ -2360,8 +2344,7 @@
             "voice_call_unsupported": "%(senderName)s hringdi raddsímtal. (Ekki stutt af þessum vafra)"
         },
         "m.file": {
-            "error_decrypting": "Villa við afkóðun viðhengis",
-            "error_invalid": "Ógild skrá%(extra)s"
+            "error_decrypting": "Villa við afkóðun viðhengis"
         },
         "m.image": {
             "error": "Get ekki birt mynd vegna villu",
@@ -2496,10 +2479,7 @@
             "removed": "%(widgetName)s viðmótshluti var fjarlægður af %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Fella saman tilvitnanir",
             "copy_link_thread": "Afrita tengil á spjallþráð",
-            "expand_reply_chain": "Fletta út tilvitnunum",
-            "label": "Aðgerðir skilaboða",
             "view_in_room": "Skoða á spjallrás"
         },
         "mjolnir": {
@@ -2672,14 +2652,7 @@
             "one_user": "%(displayName)s er að skrifa…",
             "two_users": "%(names)s og %(lastPerson)s eru að skrifa…… …"
         },
-        "undecryptable_tooltip": "Þessi skilaboð er ekki hægt að afkóða",
-        "url_preview": {
-            "close": "Loka forskoðun",
-            "show_n_more": {
-                "one": "Sýna %(count)s forskoðun til viðbótar",
-                "other": "Sýna %(count)s forskoðanir til viðbótar"
-            }
-        }
+        "undecryptable_tooltip": "Þessi skilaboð er ekki hægt að afkóða"
     },
     "truncated_list_n_more": {
         "other": "Og %(count)s til viðbótar..."
@@ -2856,7 +2829,6 @@
         "you_are_presenting": "Þú ert að kynna"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "welcome_to_element": "Velkomin í Element",
     "widget": {
         "added_by": "Viðmótshluta bætt við af",
         "capabilities_dialog": {

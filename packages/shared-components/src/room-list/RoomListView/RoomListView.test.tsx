@@ -20,8 +20,10 @@ const {
     Empty,
     EmptyWithoutCreatePermission,
     WithActiveFilter,
-    SmallList,
-    LargeList,
+    SmallFlatList,
+    LargeFlatList,
+    SmallSectionList,
+    LargeSectionList,
     EmptyFavouriteFilter,
     EmptyPeopleFilter,
     EmptyRoomsFilter,
@@ -29,6 +31,7 @@ const {
     EmptyInvitesFilter,
     EmptyMentionsFilter,
     EmptyLowPriorityFilter,
+    Toast,
 } = composeStories(stories);
 
 const renderWithMockContext = (component: React.ReactElement): ReturnType<typeof render> => {
@@ -67,13 +70,23 @@ describe("<RoomListView />", () => {
         expect(container).toMatchSnapshot();
     });
 
-    it("renders SmallList story", () => {
-        const { container } = renderWithMockContext(<SmallList />);
+    it("renders SmallFlatList story", () => {
+        const { container } = renderWithMockContext(<SmallFlatList />);
         expect(container).toMatchSnapshot();
     });
 
-    it("renders LargeList story", () => {
-        const { container } = renderWithMockContext(<LargeList />);
+    it("renders LargeFlatList story", () => {
+        const { container } = renderWithMockContext(<LargeFlatList />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders SmallSectionList story", () => {
+        const { container } = renderWithMockContext(<SmallSectionList />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders LargeSectionList story", () => {
+        const { container } = renderWithMockContext(<LargeSectionList />);
         expect(container).toMatchSnapshot();
     });
 
@@ -109,6 +122,11 @@ describe("<RoomListView />", () => {
 
     it("renders EmptyLowPriorityFilter story", () => {
         const { container } = renderWithMockContext(<EmptyLowPriorityFilter />);
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders Toast story", () => {
+        const { container } = renderWithMockContext(<Toast />);
         expect(container).toMatchSnapshot();
     });
 
@@ -173,5 +191,14 @@ describe("<RoomListView />", () => {
         await user.click(screen.getByRole("button", { name: "See all activity" }));
 
         expect(EmptyLowPriorityFilter.args.onToggleFilter).toHaveBeenCalled();
+    });
+
+    it("should call closeToast when close button is clicked on toast", async () => {
+        const user = userEvent.setup();
+        renderWithMockContext(<Toast />);
+
+        await user.click(screen.getByRole("button", { name: "Close" }));
+
+        expect(EmptyLowPriorityFilter.args.closeToast).toHaveBeenCalled();
     });
 });

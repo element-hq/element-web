@@ -10,7 +10,7 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
-import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 import { stubClient } from "../../test-utils";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../src/settings/SettingsStore";
@@ -74,14 +74,14 @@ describe("WidgetLayoutStore", () => {
 
     it("all widgets should be in the right container by default", () => {
         store.recalculateRoom(mockRoom);
-        expect(store.getContainerWidgets(mockRoom, Container.Right).length).toStrictEqual(mockApps.length);
+        expect(store.getContainerWidgets(mockRoom, "right").length).toStrictEqual(mockApps.length);
     });
 
     it("add widget to top container", async () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toStrictEqual([mockApps[0]]);
-        expect(store.getContainerHeight(mockRoom, Container.Top)).toBeNull();
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        expect(store.getContainerWidgets(mockRoom, "top")).toStrictEqual([mockApps[0]]);
+        expect(store.getContainerHeight(mockRoom, "top")).toBeNull();
     });
 
     it("ordering of top container widgets should be consistent even if no index specified", async () => {
@@ -97,71 +97,71 @@ describe("WidgetLayoutStore", () => {
         };
 
         store.recalculateRoom(mockRoom);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toStrictEqual([mockApps[0], mockApps[1]]);
+        expect(store.getContainerWidgets(mockRoom, "top")).toStrictEqual([mockApps[0], mockApps[1]]);
     });
 
     it("add three widgets to top container", async () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[2], Container.Top);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Top))).toEqual(
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        store.moveToContainer(mockRoom, mockApps[2], "top");
+        expect(new Set(store.getContainerWidgets(mockRoom, "top"))).toEqual(
             new Set([mockApps[0], mockApps[1], mockApps[2]]),
         );
     });
 
     it("cannot add more than three widgets to top container", async () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[2], Container.Top);
-        expect(store.canAddToContainer(mockRoom, Container.Top)).toEqual(false);
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        store.moveToContainer(mockRoom, mockApps[2], "top");
+        expect(store.canAddToContainer(mockRoom, "top")).toEqual(false);
     });
 
     it("remove pins when maximising (other widget)", async () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[2], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[3], Container.Center);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        store.moveToContainer(mockRoom, mockApps[2], "top");
+        store.moveToContainer(mockRoom, mockApps[3], "center");
+        expect(store.getContainerWidgets(mockRoom, "top")).toEqual([]);
+        expect(new Set(store.getContainerWidgets(mockRoom, "right"))).toEqual(
             new Set([mockApps[0], mockApps[1], mockApps[2]]),
         );
-        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([mockApps[3]]);
+        expect(store.getContainerWidgets(mockRoom, "center")).toEqual([mockApps[3]]);
     });
 
     it("remove pins when maximising (one of the pinned widgets)", async () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[2], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Center);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([mockApps[0]]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        store.moveToContainer(mockRoom, mockApps[2], "top");
+        store.moveToContainer(mockRoom, mockApps[0], "center");
+        expect(store.getContainerWidgets(mockRoom, "top")).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "center")).toEqual([mockApps[0]]);
+        expect(new Set(store.getContainerWidgets(mockRoom, "right"))).toEqual(
             new Set([mockApps[1], mockApps[2], mockApps[3]]),
         );
     });
 
     it("remove maximised when pinning (other widget)", async () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Center);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([mockApps[1]]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+        store.moveToContainer(mockRoom, mockApps[0], "center");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        expect(store.getContainerWidgets(mockRoom, "top")).toEqual([mockApps[1]]);
+        expect(store.getContainerWidgets(mockRoom, "center")).toEqual([]);
+        expect(new Set(store.getContainerWidgets(mockRoom, "right"))).toEqual(
             new Set([mockApps[2], mockApps[3], mockApps[0]]),
         );
     });
 
     it("remove maximised when pinning (same widget)", async () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Center);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([mockApps[0]]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+        store.moveToContainer(mockRoom, mockApps[0], "center");
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        expect(store.getContainerWidgets(mockRoom, "top")).toEqual([mockApps[0]]);
+        expect(store.getContainerWidgets(mockRoom, "center")).toEqual([]);
+        expect(new Set(store.getContainerWidgets(mockRoom, "right"))).toEqual(
             new Set([mockApps[2], mockApps[3], mockApps[1]]),
         );
     });
@@ -171,9 +171,9 @@ describe("WidgetLayoutStore", () => {
         await store.start();
 
         expect(roomUpdateListener).toHaveBeenCalled();
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Right)).toEqual([
+        expect(store.getContainerWidgets(mockRoom, "top")).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "center")).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "right")).toEqual([
             mockApps[0],
             mockApps[1],
             mockApps[2],
@@ -190,58 +190,50 @@ describe("WidgetLayoutStore", () => {
         ));
         store.recalculateRoom(mockRoom);
         expect(roomUpdateListener).toHaveBeenCalled();
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Right)).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "top")).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "center")).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "right")).toEqual([]);
     });
 
     it("should clear the layout if the client is not viable", () => {
         store.recalculateRoom(mockRoom);
         defaultDispatcher.dispatch({ action: Action.ClientNotViable }, true);
 
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Right)).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "top")).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "center")).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, "right")).toEqual([]);
     });
 
     it("should return the expected resizer distributions", () => {
         // this only works for top widgets
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        expect(store.getResizerDistributions(mockRoom, Container.Top)).toEqual(["50.0%"]);
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        expect(store.getResizerDistributions(mockRoom, "top")).toEqual(["50.0%"]);
     });
 
     it("should set and return container height", () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        store.setContainerHeight(mockRoom, Container.Top, 23);
-        expect(store.getContainerHeight(mockRoom, Container.Top)).toBe(23);
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        store.setContainerHeight(mockRoom, "top", 23);
+        expect(store.getContainerHeight(mockRoom, "top")).toBe(23);
     });
 
     it("should move a widget within a container", () => {
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        store.moveToContainer(mockRoom, mockApps[2], Container.Top);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toStrictEqual([
-            mockApps[0],
-            mockApps[1],
-            mockApps[2],
-        ]);
-        store.moveWithinContainer(mockRoom, Container.Top, mockApps[0], 1);
-        expect(store.getContainerWidgets(mockRoom, Container.Top)).toStrictEqual([
-            mockApps[1],
-            mockApps[0],
-            mockApps[2],
-        ]);
+        store.moveToContainer(mockRoom, mockApps[0], "top");
+        store.moveToContainer(mockRoom, mockApps[1], "top");
+        store.moveToContainer(mockRoom, mockApps[2], "top");
+        expect(store.getContainerWidgets(mockRoom, "top")).toStrictEqual([mockApps[0], mockApps[1], mockApps[2]]);
+        store.moveWithinContainer(mockRoom, "top", mockApps[0], 1);
+        expect(store.getContainerWidgets(mockRoom, "top")).toStrictEqual([mockApps[1], mockApps[0], mockApps[2]]);
     });
 
     it("should copy the layout to the room", async () => {
         await store.start();
         store.recalculateRoom(mockRoom);
-        store.moveToContainer(mockRoom, mockApps[0], Container.Top);
+        store.moveToContainer(mockRoom, mockApps[0], "top");
         store.copyLayoutToRoom(mockRoom);
 
         expect(mocked(client.sendStateEvent).mock.calls).toMatchInlineSnapshot(`

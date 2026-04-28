@@ -23,7 +23,7 @@ import {
     mockClientMethodsUser,
     withClientContextRenderOptions,
 } from "../../../../test-utils";
-import MVideoBody from "../../../../../src/components/views/messages/MVideoBody";
+import { VideoBodyFactory } from "../../../../../src/components/views/messages/MBodyFactory";
 import type { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
@@ -33,7 +33,7 @@ jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
 }));
 
-describe("MVideoBody", () => {
+describe("VideoBodyFactory", () => {
     const ourUserId = "@user:server";
     const senderUserId = "@other_use:server";
     const deviceId = "DEADB33F";
@@ -122,23 +122,25 @@ describe("MVideoBody", () => {
             mediaEventHelper: { media: { isEncrypted: false } } as MediaEventHelper,
         };
 
-        const { asFragment } = render(
+        const { container } = render(
             <MatrixClientContext.Provider value={cli}>
-                <MVideoBody {...defaultProps} />
+                <VideoBodyFactory {...defaultProps} />
             </MatrixClientContext.Provider>,
             withClientContextRenderOptions(cli),
         );
-        expect(asFragment()).toMatchSnapshot();
-        // If we get here, we did not crash.
+        expect(container.querySelector("video")).not.toBeNull();
     });
 
     it("should show poster for encrypted media before downloading it", async () => {
         fetchMock.getOnce(thumbUrl, { status: 200 });
-        const { asFragment } = render(
-            <MVideoBody mxEvent={encryptedMediaEvent} mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)} />,
+        render(
+            <VideoBodyFactory
+                mxEvent={encryptedMediaEvent}
+                mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
+            />,
             withClientContextRenderOptions(cli),
         );
-        expect(asFragment()).toMatchSnapshot();
+        expect(await screen.findByLabelText("alt for a test video")).toHaveAttribute("poster");
     });
 
     describe("with video previews/thumbnails disabled", () => {
@@ -161,7 +163,7 @@ describe("MVideoBody", () => {
             fetchMock.getOnce(thumbUrl, { status: 200 });
 
             render(
-                <MVideoBody
+                <VideoBodyFactory
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
@@ -177,7 +179,7 @@ describe("MVideoBody", () => {
             fetchMock.getOnce(thumbUrl, { status: 200 });
 
             render(
-                <MVideoBody
+                <VideoBodyFactory
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
@@ -189,6 +191,7 @@ describe("MVideoBody", () => {
             expect(placeholderButton).toBeInTheDocument();
             fireEvent.click(placeholderButton);
 
+            await screen.findByLabelText("alt for a test video");
             expect(fetchMock).toHaveFetched(thumbUrl);
         });
 
@@ -214,16 +217,16 @@ describe("MVideoBody", () => {
                     },
                 },
             });
-            const { asFragment } = render(
-                <MVideoBody
+            render(
+                <VideoBodyFactory
                     mxEvent={ourEncryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(ourEncryptedMediaEvent)}
                 />,
                 withClientContextRenderOptions(cli),
             );
 
+            expect(await screen.findByLabelText("alt for a test video")).toBeInTheDocument();
             expect(fetchMock).toHaveFetched(thumbUrl);
-            expect(asFragment()).toMatchSnapshot();
         });
     });
 });

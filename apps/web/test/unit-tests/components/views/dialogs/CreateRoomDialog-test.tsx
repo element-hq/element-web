@@ -446,7 +446,7 @@ describe("<CreateRoomDialog />", () => {
             // Set room name and visibility.
             fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Restricted Room" } });
             fireEvent.click(screen.getByLabelText("Room visibility"));
-            fireEvent.click(screen.getByRole("option", { name: "Visible to space members" }));
+            fireEvent.click(screen.getByRole("option", { name: "Standard" }));
 
             fireEvent.click(screen.getByText("Create room"));
             await flushPromises();

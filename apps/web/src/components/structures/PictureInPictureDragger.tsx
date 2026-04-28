@@ -18,10 +18,10 @@ const MOVING_AMT = 0.2;
 const SNAPPING_AMT = 0.1;
 
 const PADDING = {
-    top: 58,
-    bottom: 58,
-    left: 76,
-    right: 8,
+    top: 80,
+    bottom: 87,
+    left: 84,
+    right: 16,
 };
 
 /**
@@ -37,9 +37,7 @@ interface IChildrenOptions {
 }
 
 interface IProps {
-    className?: string;
     children: Array<CreatePipChildren>;
-    draggable: boolean;
     onDoubleClick?: () => void;
     onMove?: () => void;
 }
@@ -53,7 +51,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     private initX = 0;
     private initY = 0;
     private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH;
-    private desiredTranslationY = UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_HEIGHT;
+    private desiredTranslationY = PADDING.top;
     private translationX = this.desiredTranslationX;
     private translationY = this.desiredTranslationY;
     private mouseHeld = false;
@@ -181,9 +179,6 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     };
 
     private onStartMoving = (event: React.MouseEvent | MouseEvent): void => {
-        event.preventDefault();
-        event.stopPropagation();
-
         this.mouseHeld = true;
         this.startingPositionX = event.clientX;
         this.startingPositionY = event.clientY;
@@ -217,9 +212,6 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     private onEndMoving = (event: MouseEvent): void => {
         if (!this.mouseHeld) return;
 
-        event.preventDefault();
-        event.stopPropagation();
-
         this.mouseHeld = false;
         // Delaying this to the next event loop tick is necessary for click
         // event cancellation to work
@@ -250,7 +242,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
 
         return (
             <aside
-                className={this.props.className}
+                className="mx_PictureInPictureDragger"
                 style={style}
                 ref={this.callViewWrapper}
                 onClickCapture={this.onClickCapture}

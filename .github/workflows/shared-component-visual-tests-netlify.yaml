@@ -2,7 +2,9 @@
 # It uploads the received images and diffs to netlify, printing the URLs to the console
 name: Upload Shared Component Visual Test Diffs
 on:
-    workflow_run:
+    # Privilege escalation necessary to deploy to Netlify
+    # 🚨 We must not execute any checked out code here.
+    workflow_run: # zizmor: ignore[dangerous-triggers]
         workflows: ["Shared Component Visual Tests"]
         types:
             - completed
@@ -23,11 +25,8 @@ jobs:
             actions: read
             deployments: write
         steps:
-            - name: Install tree
-              run: "sudo apt-get install -y tree"
-
             - name: Download Diffs
-              uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
+              uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   run-id: ${{ github.event.workflow_run.id }}

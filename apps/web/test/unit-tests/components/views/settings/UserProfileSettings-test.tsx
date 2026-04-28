@@ -221,7 +221,7 @@ describe("ProfileSettings", () => {
     it("signs out directly if no rooms are encrypted", async () => {
         renderProfileSettings(toastRack, client);
 
-        const signOutButton = await screen.findByText("Sign out");
+        const signOutButton = await screen.findByText("Remove this device");
         await userEvent.click(signOutButton);
 
         expect(dis.dispatch).toHaveBeenCalledWith({ action: "logout" });
@@ -238,7 +238,7 @@ describe("ProfileSettings", () => {
 
         renderProfileSettings(toastRack, client);
 
-        const signOutButton = await screen.findByText("Sign out");
+        const signOutButton = await screen.findByText("Remove this device");
         await userEvent.click(signOutButton);
 
         expect(Modal.createDialog).toHaveBeenCalled();

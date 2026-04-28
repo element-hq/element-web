@@ -32,7 +32,6 @@
         "cancel": "Abbrechen",
         "change": "Ändern",
         "clear": "Zurücksetzen",
-        "click": "Klick",
         "click_to_copy": "Klicken um zu kopieren",
         "close": "Schließen",
         "collapse": "Verbergen",
@@ -66,7 +65,6 @@
         "go": "Los",
         "go_back": "Zurück",
         "got_it": "Verstanden",
-        "hide": "Verstecken",
         "hide_advanced": "Erweiterte Einstellungen ausblenden",
         "hold": "Halten",
         "ignore": "Ignorieren",
@@ -1353,9 +1351,6 @@
         "impossible_dialog_title": "Integrationen sind nicht erlaubt"
     },
     "invite": {
-        "ask_anyway_description": "Konnte keine Profile für die folgenden Matrix-IDs finden – möchtest du dennoch eine Direktnachricht beginnen?",
-        "ask_anyway_label": "Dennoch DM beginnen",
-        "ask_anyway_never_warn_label": "Dennoch DM beginnen und mich nicht mehr warnen",
         "email_caption": "Via Email einladen",
         "email_limit_one": "E-Mail-Einladungen können nur nacheinander gesendet werden",
         "email_use_default_is": "Verwende einen Identitäts-Server, um per E-Mail einzuladen. <default>Nutze den Standardidentitäts-Server (%(defaultIdentityServerName)s)</default> oder konfiguriere einen in den <settings>Einstellungen</settings>.",
@@ -1495,8 +1490,6 @@
     },
     "labs": {
         "ask_to_join": "Beitrittsanfragen erlauben",
-        "automatic_debug_logs": "Sende bei Fehlern automatisch Protokolle zur Fehlerkorrektur",
-        "automatic_debug_logs_decryption": "Sende bei Entschlüsselungsfehlern automatisch Protokolle zur Fehlerkorrektur",
         "beta_description": "Was passiert als nächstes in %(brand)s? Das Labor ist deine erste Anlaufstelle, um Funktionen früh zu erhalten, zu testen und mitzugestalten, bevor sie tatsächlich veröffentlicht werden.",
         "beta_feature": "Dies ist eine Betafunktion",
         "beta_feedback_leave_button": "Du kannst die Beta in den Einstellungen deaktivieren.",
@@ -1554,14 +1547,10 @@
         "notification_settings_beta_caption": "Einen einfacheren Weg um die Einstellungen für Benachrichtigungen zu ändern vorstellen. Passe Deine %(brand)s so an wie Du willst.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Chat-Kopfzeile einschalten",
-        "release_announcement": "Release Ankündigung",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "report_to_moderators": "An Moderatoren melden",
         "report_to_moderators_description": "In Chats, die Moderation unterstützen, kannst du mit der Schaltfläche „Melden“ missbräuchliche Verwendung an die Moderatoren melden.",
-        "share_history_on_invite": "Teile den verschlüsselten Nachrichtenverlauf mit neuen Mitgliedern",
-        "share_history_on_invite_description": "Wenn du einen Nutzer in einen Chat einlädst, bei dem die die Sichtbarkeit der Historie auf \"geteilt\" eingestellt ist, wird der verschlüsselte Nachrichtenverlauf mit diesem Nutzer geteilt. Du akzeptierst damit auch, einen solchen verschlüsselten Nachrichtenverlauf zu empfangen, wenn du selbst in einen solchen Chat eingeladen wirst.",
-        "share_history_on_invite_warning": "Diese Funktion ist EXPERIMENTELL und nicht alle Sicherheitsmaßnahmen sind aktiviert. Bitte nicht auf Konten verwenden, die für den Produktions-Betrieb gedacht sind.",
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_description": "In aktiver Entwicklung, kann nicht deaktiviert werden. Derzeit nicht mit Element Call kompatibel.",
         "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",
@@ -1806,7 +1795,6 @@
         "restricted": "Eingeschränkt"
     },
     "powered_by_matrix": "Betrieben mit Matrix",
-    "powered_by_matrix_with_logo": "Dezentraler, verschlüsselter Chat &amp; Zusammenarbeit auf Basis von $matrixLogo",
     "presence": {
         "away": "Abwesend",
         "busy": "Beschäftigt",
@@ -2062,9 +2050,6 @@
         "joining_space": "Betrete Space …",
         "jump_read_marker": "Zur ersten ungelesenen Nachricht springen.",
         "jump_to_bottom_button": "Zur neusten Nachricht springen",
-        "jump_to_date": "Zu Datum springen",
-        "jump_to_date_beginning": "Der Anfang des Chats",
-        "jump_to_date_prompt": "Wähle eine Datum aus",
         "kick_reason": "Grund: %(reason)s",
         "kicked_by": "Du wurdest von %(memberName)s entfernt",
         "kicked_from_room_by": "%(memberName)s hat dich aus %(roomName)s entfernt",
@@ -2090,7 +2075,6 @@
         "not_found_title": "Dieser Chat oder Space existiert nicht.",
         "not_found_title_name": "%(roomName)s existiert nicht.",
         "peek_join_prompt": "Du erkundest den Chat %(roomName)s. Willst du ihm beitreten?",
-        "pinned_message_badge": "Fixierte Nachrichten",
         "pinned_message_banner": {
             "button_close_list": "Liste schließen",
             "button_view_all": "Alle anzeigen",
@@ -2231,8 +2215,6 @@
             "aliases_section": "Chatadressen",
             "avatar_field_label": "Chat Avatar",
             "canonical_alias_field_label": "Primäre Adresse",
-            "default_url_previews_off": "URL-Vorschau ist für Mitglieder des Chats standardmäßig deaktiviert.",
-            "default_url_previews_on": "URL-Vorschau ist für Mitglieder des Chats standardmäßig aktiviert.",
             "description_space": "Einstellungen vom Space bearbeiten.",
             "error_creating_alias_description": "Es gab einen Fehler beim Anlegen der Adresse. Entweder erlaubt es der Server nicht oder es gab ein temporäres Problem.",
             "error_creating_alias_title": "Fehler beim Anlegen der Adresse",
@@ -2263,12 +2245,7 @@
             "published_aliases_explainer_space": "Veröffentlichte Adressen erlauben jedem, den Space zu betreten.",
             "published_aliases_section": "Öffentliche Adresse",
             "save": "Speichern",
-            "topic_field_label": "Chat-Thema",
-            "url_preview_encryption_warning": "In verschlüsselten Chats wie diesem ist die Linkvorschau standardmäßig deaktiviert, damit dein Homeserver (der die Vorschau erzeugt) keine Informationen über Links in diesem Chat erhält.",
-            "url_preview_explainer": "Die URL-Vorschau kann Informationen wie den Titel, die Beschreibung sowie ein Vorschaubild der Website enthalten.",
-            "url_previews_section": "URL-Vorschau",
-            "user_url_previews_default_off": "Du hast die URL-Vorschau <a>standardmäßig deaktiviert</a>.",
-            "user_url_previews_default_on": "Du hast die URL-Vorschau <a>standardmäßig aktiviert</a>."
+            "topic_field_label": "Chat-Thema"
         },
         "notifications": {
             "browse_button": "Durchsuchen",
@@ -2690,8 +2667,6 @@
             "username": "Benutzername"
         },
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
-        "inline_url_previews_room": "URL-Vorschau für Chat Mitglieder",
-        "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Chat",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "invite_controls": {
             "default_label": "Nutzern erlauben, dich in Chats einzuladen"
@@ -3303,7 +3278,6 @@
         },
         "empty_description": "Verwende \"%(replyInThread)s\" beim Hovern über eine Nachricht.",
         "empty_title": "Threads helfen, Unterhaltungen beim Thema zu halten und sie leichter zu verfolgen.",
-        "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten",
         "mark_all_read": "Alle als gelesen markieren",
         "my_threads": "Meine Threads",
         "my_threads_description": "Zeigt alle Threads, an denen du teilgenommen hast",
@@ -3347,7 +3321,6 @@
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Entschlüsseln",
         "download_action_downloading": "Herunterladen",
         "download_failed": "Herunterladen fehlgeschlagen",
         "download_failed_description": "Beim Herunterladen dieser Datei ist ein Fehler aufgetreten",
@@ -3403,8 +3376,7 @@
             "voice_call_unsupported": "%(senderName)s hat einen Sprachanruf getätigt. (Nicht von diesem Browser unterstützt)"
         },
         "m.file": {
-            "error_decrypting": "Fehler beim Entschlüsseln des Anhangs",
-            "error_invalid": "Ungültige Datei"
+            "error_decrypting": "Fehler beim Entschlüsseln des Anhangs"
         },
         "m.image": {
             "error": "Kann Bild aufgrund eines Fehlers nicht anzeigen",
@@ -3546,10 +3518,7 @@
             "removed": "%(senderName)s hat das Widget %(widgetName)s entfernt"
         },
         "mab": {
-            "collapse_reply_chain": "Zitate einklappen",
             "copy_link_thread": "Link zu Thread kopieren",
-            "expand_reply_chain": "Zitate ausklappen",
-            "label": "Nachrichtenaktionen",
             "view_in_room": "Im Chat anzeigen"
         },
         "mjolnir": {
@@ -3745,14 +3714,7 @@
             "one_user": "%(displayName)s tippt …",
             "two_users": "%(names)s und %(lastPerson)s tippen …"
         },
-        "undecryptable_tooltip": "Diese Nachricht konnte nicht enschlüsselt werden",
-        "url_preview": {
-            "close": "Vorschau schließen",
-            "show_n_more": {
-                "one": "%(count)s andere Vorschau zeigen",
-                "other": "%(count)s weitere Vorschauen zeigen"
-            }
-        }
+        "undecryptable_tooltip": "Diese Nachricht konnte nicht enschlüsselt werden"
     },
     "truncated_list_n_more": {
         "other": "Und %(count)s weitere …"
@@ -3984,7 +3946,6 @@
         "you_are_presenting": "Du präsentierst"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
-    "welcome_to_element": "Willkommen bei Element",
     "widget": {
         "added_by": "Widget hinzugefügt von",
         "capabilities_dialog": {

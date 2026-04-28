@@ -45,6 +45,12 @@ export const stateKeyField = (defaultValue?: string): IFieldDef => ({
     default: defaultValue,
 });
 
+export const stickyDurationField = (defaultValue?: number): IFieldDef => ({
+    id: "sticky_duration",
+    label: _td("devtools|sticky_duration"),
+    default: `${defaultValue ?? 360000}`,
+});
+
 const validateEventContent = withValidation<any, Error | undefined>({
     async deriveData({ value }) {
         try {

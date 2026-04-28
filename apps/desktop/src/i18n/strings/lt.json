@@ -1,0 +1,62 @@
+{
+    "action": {
+        "cancel": "Atšaukti",
+        "close": "Uždaryti",
+        "close_brand": "Uždaryti %(brand)s",
+        "copy": "Kopijuoti",
+        "cut": "Iškirpti",
+        "delete": "Ištrinti",
+        "edit": "Koreguoti",
+        "minimise": "Sumažinti",
+        "paste": "Įklijuoti",
+        "paste_match_style": "Įklijuoti ir suderinti stilių",
+        "quit": "Išeiti",
+        "redo": "Sugrąžinti veiksmą",
+        "select_all": "Pasirinkti visus",
+        "show_hide": "Rodyti/Slėpti",
+        "undo": "Atšaukti veiksmą",
+        "zoom_in": "Priartinti",
+        "zoom_out": "Atitolinti"
+    },
+    "common": {
+        "about": "Apie",
+        "help": "Pagalba",
+        "preferences": "Nuostatos"
+    },
+    "confirm_quit": "Ar tikrai norite išeiti?",
+    "edit_menu": {
+        "speech": "Kalba",
+        "speech_start_speaking": "Pradėti kalbėti",
+        "speech_stop_speaking": "Nustoti kalbėti"
+    },
+    "file_menu": {
+        "label": "Failas"
+    },
+    "menu": {
+        "hide": "Slėpti",
+        "hide_others": "Slėpti kitus",
+        "services": "Paslaugos",
+        "unhide": "Nebeslėpti"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Pridėti prie žodyno",
+        "copy_email": "Kopijuoti el. pašto adresą",
+        "copy_image": "Kopijuoti paveikslėlį",
+        "copy_image_url": "Kopijuoti paveikslėlio adresą",
+        "copy_link_url": "Kopijuoti nuorodos adresą",
+        "save_image_as": "Įrašyti paveikslėlį kaip...",
+        "save_image_as_error_description": "Paveikslėlio nepavyko išsaugoti",
+        "save_image_as_error_title": "Nepavyko įrašyti paveikslėlio"
+    },
+    "view_menu": {
+        "actual_size": "Tikrasis dydis",
+        "toggle_developer_tools": "Perjungti kūrėjo įrankius",
+        "toggle_full_screen": "Perjungti viso ekrano režimą",
+        "view": "Žiūrėti"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Viską iškelti į priekį",
+        "label": "Langas",
+        "zoom": "Priartinti"
+    }
+}

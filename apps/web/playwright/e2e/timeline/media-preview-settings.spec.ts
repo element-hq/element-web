@@ -5,12 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as fs from "node:fs";
 import { type EventType, type MsgType, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 
 import { test, expect } from "../../element-web-test";
+import { readSampleFileSync } from "../../sample-files";
 
-const MEDIA_FILE = fs.readFileSync("playwright/sample-files/riot.png");
+const MEDIA_FILE = readSampleFileSync("riot.png", null);
 
 test.describe("Media preview settings", () => {
     test.use({
@@ -36,6 +36,8 @@ test.describe("Media preview settings", () => {
     });
 
     test("should be able to hide avatars of inviters", { tag: "@screenshot" }, async ({ page, app, room, user }) => {
+        await app.closeVerifyToast();
+
         let settings = await app.settings.openUserSettings("Preferences");
         await settings.getByLabel("Hide avatars of room and inviter").click();
         await app.closeDialog();

@@ -3,6 +3,19 @@
     "projectType": "library",
     "root": "packages/playwright-common",
     "targets": {
+        "build:playwright": {
+            "cache": true,
+            "command": "tsc",
+            "inputs": ["src"],
+            "outputs": ["{projectRoot}/lib"],
+            "options": { "cwd": "packages/playwright-common" },
+            "dependsOn": ["^build"]
+        },
+        "lint:types": {
+            "command": "pnpm exec tsc --noEmit",
+            "options": { "cwd": "packages/playwright-common" },
+            "dependsOn": ["^build"]
+        },
         "docker:prebuild": {
             "cache": true,
             "command": "echo PLAYWRIGHT_VERSION=$(pnpm --silent -- playwright --version | awk '{print $2}') > .env.docker:build",
@@ -20,10 +33,10 @@
                 "provenance": "true",
                 "sbom": true,
                 "build-args": ["PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION"],
-                "context": "packages/playwright-common",
+                "context": "{projectRoot}",
                 "metadata": {
                     "images": ["ghcr.io/element-hq/element-web/playwright-server"],
-                    "tags": ["type=raw,enable=true,value=$PLAYWRIGHT_VERSION"]
+                    "tags": ["type=ref,event=branch", "type=raw,enable={{is_default_branch}},value=$PLAYWRIGHT_VERSION"]
                 }
             }
         }

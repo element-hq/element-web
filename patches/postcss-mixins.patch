@@ -1,0 +1,13 @@
+diff --git a/index.d.ts b/index.d.ts
+index 5b070312004db8492f02db50bf99f5057ce793eb..a9f642c723e59cb662810ef9d8e9f14664f58bb7 100644
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -5,7 +5,7 @@ declare interface MixinOutput {
+ }
+ 
+ declare interface Mixin {
+-  (mixinAtRule: AtRule, ...args: string[])
++  (mixinAtRule: AtRule, ...args: string[]): void
+ }
+ 
+ declare type Mixins = Record<string, MixinOutput | Mixin>

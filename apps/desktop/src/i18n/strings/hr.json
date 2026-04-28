@@ -1,0 +1,93 @@
+{
+    "action": {
+        "cancel": "Otkazati",
+        "close": "Zatvori",
+        "close_brand": "Zatvori %(brand)s",
+        "copy": "Kopirati",
+        "cut": "Izrezati",
+        "delete": "Izbriši",
+        "edit": "Uredi",
+        "minimise": "Minimiziraj",
+        "paste": "Zalijepiti",
+        "paste_match_style": "Zalijepi i uskladi stil",
+        "quit": "Prestati",
+        "redo": "Preurediti",
+        "select_all": "Odaberi sve",
+        "show_hide": "Pokaži/sakrij",
+        "undo": "Poništi",
+        "zoom_in": "Povećaj",
+        "zoom_out": "Smanji"
+    },
+    "common": {
+        "about": "Više o",
+        "brand_help": "%(brand)s pomoć",
+        "help": "Pomoć",
+        "no": "Ne",
+        "preferences": "Preference",
+        "yes": "Da"
+    },
+    "confirm_quit": "Jesi li siguran da želiš odustati?",
+    "edit_menu": {
+        "speech": "Govor",
+        "speech_start_speaking": "Počnite govoriti",
+        "speech_stop_speaking": "Prestanite govoriti"
+    },
+    "eol": {
+        "no_more_updates": "Upotrebljavate nepodržanu inačicu macOS-a. Nadogradite kako biste primili ažuriranja za %(brand)s.",
+        "title": "Sustav nije podržan",
+        "warning": "Upotrebljavate nepodržanu inačicu macOS-a. Nadogradite kako biste osigurali da %(brand)s nastavi s radom."
+    },
+    "file_menu": {
+        "label": "Datoteka"
+    },
+    "icon_overlay": {
+        "description_error": "Pogreška",
+        "description_notifications": {
+            "one": "Imate %(count)s nepročitanu obavijest.",
+            "few": "Imate %(count)s nepročitane obavijesti.",
+            "other": "Imate %(count)s nepročitanih obavijesti."
+        }
+    },
+    "menu": {
+        "hide": "Sakrij",
+        "hide_others": "Sakrij ostale",
+        "services": "Usluge",
+        "unhide": "Otkrij"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Dodaj u rječnik",
+        "copy_email": "Kopiraj e-adresu",
+        "copy_image": "Kopiraj sliku",
+        "copy_image_url": "Kopiraj adresu slike",
+        "copy_link_url": "Kopiraj adresu poveznice",
+        "save_image_as": "Spremi sliku kao...",
+        "save_image_as_error_description": "Spremanje slike nije uspjelo",
+        "save_image_as_error_title": "Spremanje slike nije uspjelo"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Želite li izbrisati podatke i ponovno učitati?",
+            "backend_changed_detail": "Nije moguće pristupiti tajnom kodu iz pohrane ključeva sustava, izgleda da je promijenjen.",
+            "backend_changed_title": "Nije uspjelo učitavanje baze podataka",
+            "backend_no_encryption": "Vaš sustav ima podržanu pohranu ključeva, ali šifriranje nije dostupno.",
+            "backend_no_encryption_detail": "Electron je otkrio da šifriranje nije dostupno u vašoj pohrani ključeva %(backend)s. Provjerite imate li instaliranu pohranu ključeva. Ako imate, ponovno pokrenite računalo i pokušajte ponovno. Po želji možete dopustiti da %(brand)s upotrebljava slabiji oblik šifriranja.",
+            "backend_no_encryption_title": "Nema podrške za šifriranje",
+            "unsupported_keyring": "Vaš sustav ima nepodržanu pohranu ključeva, što znači da se baza podataka ne može otvoriti.",
+            "unsupported_keyring_detail": "Electronova detekcija pohrane ključeva nije pronašla podržanu pozadinu. Možete pokušati ručno konfigurirati pozadinu tako da pokrenete %(brand)s s argumentom naredbenog retka, što je potrebno učiniti samo jednom. Pogledajte %(link)s.",
+            "unsupported_keyring_title": "Sustav nije podržan",
+            "unsupported_keyring_use_basic_text": "Upotrijebi slabije šifriranje",
+            "unsupported_keyring_use_plaintext": "Ne upotrebljavaj šifriranje"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Stvarna veličina",
+        "toggle_developer_tools": "Uključi/isključi alate za razvojne inženjere",
+        "toggle_full_screen": "Uključi/isključi prikaz na cijelom zaslonu",
+        "view": "Prikaz"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Stavi sve u prvi plan",
+        "label": "Prozor",
+        "zoom": "Zumiranje"
+    }
+}

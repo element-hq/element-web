@@ -2,12 +2,15 @@
     "compilerOptions": {
         "target": "es2022",
         "jsx": "react",
-        "lib": ["ESNext", "es2022", "dom", "dom.iterable"],
+        "lib": ["es2024", "dom", "dom.iterable"],
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "moduleResolution": "node",
-        "module": "es2022",
-        "allowImportingTsExtensions": true
+        "moduleResolution": "bundler",
+        "module": "ESNext",
+        "allowImportingTsExtensions": true,
+        "strictNullChecks": false,
+        "noImplicitAny": false,
+        "types": ["node"]
     },
     "include": [
         "**/*.ts",

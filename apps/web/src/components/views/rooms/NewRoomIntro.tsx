@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, useContext } from "react";
+import React, { type JSX, useContext, useMemo } from "react";
 import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { ErrorSolidIcon, UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { EventTileBubble } from "@element-hq/web-shared-components";
+import { EventTileBubble, LinkedText } from "@element-hq/web-shared-components";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
@@ -32,7 +32,7 @@ import { LocalRoom } from "../../../models/LocalRoom";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 import { useTopic } from "../../../hooks/room/useTopic";
-import { topicToHtml, Linkify } from "../../../HtmlUtils";
+import { topicToHtml } from "../../../HtmlUtils";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -56,13 +56,22 @@ const NewRoomIntro: React.FC = () => {
     const cli = useContext(MatrixClientContext);
     const { room, roomId } = useScopedRoomContext("room", "roomId");
     const topic = useTopic(room);
+    const isLocalRoom = room instanceof LocalRoom;
 
+    let dmPartner: string | undefined;
+    if (isLocalRoom) {
+        dmPartner = room?.targets[0]?.userId;
+    } else if (roomId) {
+        dmPartner = DMRoomMap.shared().getUserIdForRoomId(roomId);
+    }
+
+    const renderedTopic = useMemo(
+        () => (dmPartner ? undefined : <LinkedText as="span">{topicToHtml(topic?.text, topic?.html)}</LinkedText>),
+        [topic, dmPartner],
+    );
     if (!room || !roomId) {
         throw new Error("Unable to create a NewRoomIntro without room and roomId");
     }
-
-    const isLocalRoom = room instanceof LocalRoom;
-    const dmPartner = isLocalRoom ? room.targets[0]?.userId : DMRoomMap.shared().getUserIdForRoomId(roomId);
 
     let body: JSX.Element;
     if (dmPartner) {
@@ -137,15 +146,11 @@ const NewRoomIntro: React.FC = () => {
                             {sub}
                         </AccessibleButton>
                     ),
-                    topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify>,
+                    topic: renderedTopic,
                 },
             );
         } else if (topic) {
-            topicText = _t(
-                "room|intro|display_topic",
-                {},
-                { topic: () => <Linkify>{topicToHtml(topic?.text, topic?.html)}</Linkify> },
-            );
+            topicText = _t("room|intro|display_topic", {}, { topic: renderedTopic });
         } else if (canAddTopic) {
             topicText = _t(
                 "room|intro|no_topic",

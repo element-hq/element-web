@@ -1,0 +1,71 @@
+{
+    "action": {
+        "cancel": "Peruuta",
+        "close": "Sulje",
+        "close_brand": "Sulje %(brand)s",
+        "copy": "Kopioi",
+        "cut": "Leikkaa",
+        "delete": "Poista",
+        "edit": "Muokkaa",
+        "minimise": "Pienennä",
+        "paste": "Liitä",
+        "paste_match_style": "Liitä ja sovita tyyli",
+        "quit": "Lopeta",
+        "redo": "Tee uudestaan",
+        "select_all": "Valitse kaikki",
+        "show_hide": "Näytä/piilota",
+        "undo": "Peru",
+        "zoom_in": "Suurenna",
+        "zoom_out": "Pienennä"
+    },
+    "common": {
+        "about": "Tietoa",
+        "brand_help": "%(brand)s-tuki",
+        "help": "Ohje",
+        "no": "Ei",
+        "preferences": "Valinnat",
+        "yes": "Kyllä"
+    },
+    "confirm_quit": "Haluatko varmasti poistua?",
+    "edit_menu": {
+        "speech": "Puhe",
+        "speech_start_speaking": "Aloita puhe",
+        "speech_stop_speaking": "Lopeta puhe"
+    },
+    "file_menu": {
+        "label": "Tiedosto"
+    },
+    "menu": {
+        "hide": "Piilota",
+        "hide_others": "Piilota muut",
+        "services": "Palvelut",
+        "unhide": "Palauta näkyviin"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Lisää sanakirjaan",
+        "copy_email": "Kopioi sähköpostiosoite",
+        "copy_image": "Kopioi kuva",
+        "copy_image_url": "Kopioi kuvan osoite",
+        "copy_link_url": "Kopioi linkin osoite",
+        "save_image_as": "Tallenna kuva nimellä...",
+        "save_image_as_error_description": "Kuvan tallennus epäonnistui",
+        "save_image_as_error_title": "Kuvan tallennus epäonnistui"
+    },
+    "store": {
+        "error": {
+            "backend_changed_title": "Tietokannan lataaminen epäonnistui",
+            "unsupported_keyring_title": "Järjestelmä ei ole tuettu"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Alkuperäinen koko",
+        "toggle_developer_tools": "Näytä tai piilota kehittäjätyökalut",
+        "toggle_full_screen": "Vaihda koko näytön tilaa",
+        "view": "Näytä"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Tuo kaikki eteen",
+        "label": "Ikkuna",
+        "zoom": "Suurennus"
+    }
+}

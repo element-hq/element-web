@@ -28,7 +28,6 @@
         "cancel": "取消",
         "change": "變更",
         "clear": "清除",
-        "click": "點擊",
         "click_to_copy": "點擊複製",
         "close": "關閉",
         "collapse": "收折",
@@ -62,7 +61,6 @@
         "go": "前往",
         "go_back": "返回",
         "got_it": "了解",
-        "hide": "隱藏",
         "hide_advanced": "隱藏進階設定",
         "hold": "保留",
         "ignore": "忽略",
@@ -1126,9 +1124,6 @@
         "impossible_dialog_title": "不允許整合"
     },
     "invite": {
-        "ask_anyway_description": "找不到下方列出的 Matrix ID 個人檔案，您是否仍要開始直接訊息？",
-        "ask_anyway_label": "開始直接訊息",
-        "ask_anyway_never_warn_label": "開始直接訊息且不要再次警告",
         "email_caption": "透過電子郵件邀請",
         "email_limit_one": "透過電子郵件傳送的邀請一次只能傳送一個",
         "email_use_default_is": "使用身分伺服器以透過電子郵件邀請。<default>使用預設值 (%(defaultIdentityServerName)s)</default>或在<settings>設定</settings>中管理。",
@@ -1256,8 +1251,6 @@
     },
     "labs": {
         "ask_to_join": "啟用要求加入",
-        "automatic_debug_logs": "自動在發生錯誤時傳送除錯日誌",
-        "automatic_debug_logs_decryption": "自動傳送關於解密錯誤的除錯紀錄檔",
         "beta_description": "%(brand)s 的下一步是什麼？實驗室是提早取得資訊、測試新功能，並在實際釋出前協助塑造它們的最佳方式。",
         "beta_feature": "這是 Beta 測試功能",
         "beta_feedback_leave_button": "請到設定頁面離開 Beta 測試版。",
@@ -1524,7 +1517,6 @@
         "restricted": "已限制"
     },
     "powered_by_matrix": "由Matrix支持",
-    "powered_by_matrix_with_logo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "presence": {
         "away": "離開",
         "busy": "忙碌",
@@ -1739,9 +1731,6 @@
         "joining_space": "正在加入聊天空間…",
         "jump_read_marker": "跳到第一則未讀訊息。",
         "jump_to_bottom_button": "捲動到最新訊息",
-        "jump_to_date": "跳至日期",
-        "jump_to_date_beginning": "聊天室開頭",
-        "jump_to_date_prompt": "挑選要跳至的日期",
         "kick_reason": "理由：%(reason)s",
         "kicked_by": "您已被 %(memberName)s 移除",
         "kicked_from_room_by": "您已被 %(memberName)s 從 %(roomName)s 中移除",
@@ -1884,8 +1873,6 @@
             "aliases_section": "聊天室位址",
             "avatar_field_label": "聊天室大頭照",
             "canonical_alias_field_label": "主要位址",
-            "default_url_previews_off": "此聊天室已預設對參與者停用網址預覽。",
-            "default_url_previews_on": "此聊天室已預設對參與者啟用網址預覽。",
             "description_space": "編輯您的聊天空間的設定。",
             "error_creating_alias_description": "建立該位址時發生錯誤。伺服器可能不允許這麼做，或是有暫時性的問題。",
             "error_creating_alias_title": "建立位址錯誤",
@@ -1912,12 +1899,7 @@
             "published_aliases_explainer_space": "任何伺服器上的人都可以使用已發佈的位址加入您的聊天空間。",
             "published_aliases_section": "已發佈的位址",
             "save": "儲存變更",
-            "topic_field_label": "聊天室主題",
-            "url_preview_encryption_warning": "在加密的聊天室中（這個就是），會預設停用網址預覽以確保您的家伺服器（產生預覽資訊的地方）無法透過這個聊天室收集您看到的連結的相關資訊。",
-            "url_preview_explainer": "當某人在他們的訊息中放置網址時，可以顯示如標題、描述與網頁上的圖片等等來給您更多關於該連結的資訊。",
-            "url_previews_section": "網址預覽",
-            "user_url_previews_default_off": "您已預設<a>停用</a>網址預覽。",
-            "user_url_previews_default_on": "您已預設<a>停用</a>網址預覽。"
+            "topic_field_label": "聊天室主題"
         },
         "notifications": {
             "browse_button": "瀏覽",
@@ -2252,8 +2234,6 @@
             "spell_check_locale_placeholder": "選擇語系"
         },
         "inline_url_previews_default": "預設啟用行內網址預覽",
-        "inline_url_previews_room": "對此聊天室中的參與者預設啟用網址預覽",
-        "inline_url_previews_room_account": "對此聊天室啟用網址預覽（僅影響您）",
         "insert_trailing_colon_mentions": "在使用者於訊息開頭提及之後插入跟隨冒號",
         "jump_to_bottom_on_send": "傳送訊息時，跳到時間軸底部",
         "key_backup": {
@@ -2810,7 +2790,6 @@
             "one": "%(count)s 回覆",
             "other": "%(count)s 回覆"
         },
-        "error_start_thread_existing_relation": "無法從討論串既有的關係建立活動",
         "my_threads": "我的討論串",
         "my_threads_description": "顯示您參與的所有討論串",
         "open_thread": "開啟討論串",
@@ -2843,7 +2822,6 @@
         },
         "creation_summary_dm": "%(creator)s 建立了此私人訊息。",
         "creation_summary_room": "%(creator)s 建立並設定了聊天室。",
-        "download_action_decrypting": "正在解密",
         "download_action_downloading": "正在下載",
         "edits": {
             "tooltip_label": "編輯於 %(date)s。點擊以檢視編輯。",
@@ -2895,8 +2873,7 @@
             "voice_call_unsupported": "%(senderName)s 撥打了語音通話。（不被此瀏覽器支援）"
         },
         "m.file": {
-            "error_decrypting": "解密附件時出錯",
-            "error_invalid": "不存在的文件 %(extra)s"
+            "error_decrypting": "解密附件時出錯"
         },
         "m.image": {
             "error": "因為錯誤而無法顯示圖片",
@@ -3035,10 +3012,7 @@
             "removed": "%(widgetName)s 小工具是由 %(senderName)s 所移除"
         },
         "mab": {
-            "collapse_reply_chain": "收折引號",
             "copy_link_thread": "複製討論串連結",
-            "expand_reply_chain": "展開引號",
-            "label": "訊息動作",
             "view_in_room": "在聊天室中檢視"
         },
         "mjolnir": {
@@ -3231,14 +3205,7 @@
             "one_user": "%(displayName)s 正在打字…",
             "two_users": "%(names)s 與 %(lastPerson)s 正在打字…"
         },
-        "undecryptable_tooltip": "此訊息無法解密",
-        "url_preview": {
-            "close": "關閉預覽",
-            "show_n_more": {
-                "one": "顯示 %(count)s 個其他預覽",
-                "other": "顯示 %(count)s 個其他預覽"
-            }
-        }
+        "undecryptable_tooltip": "此訊息無法解密"
     },
     "truncated_list_n_more": {
         "other": "與更多 %(count)s 個…"
@@ -3437,7 +3404,6 @@
         "you_are_presenting": "您正在投影"
     },
     "web_default_device_name": "%(appName)s：%(osName)s 的 %(browserName)s",
-    "welcome_to_element": "歡迎使用 Element",
     "widget": {
         "added_by": "小工具新增者為",
         "capabilities_dialog": {

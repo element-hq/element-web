@@ -4,30 +4,30 @@ exports[`deleteDevices() opens interactive auth dialog when delete fails with 40
 {
   "m.login.sso": {
     "1": {
-      "body": "Confirm logging out these devices by using Single Sign On to prove your identity.",
+      "body": "Confirm removing these devices by using Single Sign On to prove your identity.",
       "continueKind": "primary",
       "continueText": "Single Sign On",
       "title": "Use Single Sign On to continue",
     },
     "2": {
-      "body": "Click the button below to confirm signing out these devices.",
+      "body": "Click the button below to confirm removing these devices.",
       "continueKind": "danger",
-      "continueText": "Sign out devices",
-      "title": "Confirm signing out these devices",
+      "continueText": "Remove devices",
+      "title": "Confirm removing these devices",
     },
   },
   "org.matrix.login.sso": {
     "1": {
-      "body": "Confirm logging out these devices by using Single Sign On to prove your identity.",
+      "body": "Confirm removing these devices by using Single Sign On to prove your identity.",
       "continueKind": "primary",
       "continueText": "Single Sign On",
       "title": "Use Single Sign On to continue",
     },
     "2": {
-      "body": "Click the button below to confirm signing out these devices.",
+      "body": "Click the button below to confirm removing these devices.",
       "continueKind": "danger",
-      "continueText": "Sign out devices",
-      "title": "Confirm signing out these devices",
+      "continueText": "Remove devices",
+      "title": "Confirm removing these devices",
     },
   },
 }

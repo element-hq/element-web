@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX } from "react";
+import React, { memo, type JSX } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import VideoIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
@@ -33,7 +33,7 @@ interface RoomAvatarViewProps {
  * Component to display the avatar of a room.
  * Currently only 32px size is supported.
  */
-export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
+export const RoomAvatarView = memo(function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
     const vm = useRoomAvatarViewModel(room);
     // No decoration, we just show the avatar
     if (!vm.badgeDecoration) return <RoomAvatar size="32px" room={room} />;
@@ -54,7 +54,7 @@ export function RoomAvatarView({ room }: RoomAvatarViewProps): JSX.Element {
             {label ? <Tooltip label={label}>{icon}</Tooltip> : icon}
         </Flex>
     );
-}
+});
 
 /**
  * Get the decoration for the avatar based on the presence.

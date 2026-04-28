@@ -4,11 +4,12 @@ Copyright 2020-2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
- */
+*/
+
 import type ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
-export type SnowfallOptions = {
+type SnowfallOptions = {
     /**
      * The maximum number of snowflakes to render at a given time
      */
@@ -43,7 +44,7 @@ const KEY_FRAME_INTERVAL = 15; // 15ms, roughly
 export default class Snowfall implements ICanvasEffect {
     private readonly options: SnowfallOptions;
 
-    public constructor(options: { [key: string]: any }) {
+    public constructor(options: Partial<SnowfallOptions>) {
         this.options = { ...DefaultOptions, ...options };
     }
 

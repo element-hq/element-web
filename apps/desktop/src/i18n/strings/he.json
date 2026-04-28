@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "ביטול",
+        "close": "סגור",
+        "close_brand": "סגור%(brand)s",
+        "copy": "העתק",
+        "cut": "גזור",
+        "delete": "מחק",
+        "edit": "ערוך",
+        "minimise": "מזער",
+        "paste": "הדבק",
+        "paste_match_style": "הדבק והתאם סגנון",
+        "quit": "יציאה",
+        "redo": "בצע שוב",
+        "select_all": "בחר הכל",
+        "show_hide": "הצג\\הסתר",
+        "undo": "בטל ביצוע",
+        "zoom_in": "התקרב",
+        "zoom_out": "התרחק"
+    },
+    "common": {
+        "about": "אודות",
+        "brand_help": "%(brand)s עזרה",
+        "help": "עזרה",
+        "preferences": "העדפות"
+    },
+    "confirm_quit": "האם אתה בטוח שברצונך לצאת?",
+    "edit_menu": {
+        "speech": "דיבור",
+        "speech_start_speaking": "התחל לדבר",
+        "speech_stop_speaking": "הפסק לדבר"
+    },
+    "file_menu": {
+        "label": "קובץ"
+    },
+    "menu": {
+        "hide": "הסתר",
+        "hide_others": "הסתר אחרים",
+        "services": "שרותים",
+        "unhide": "בטל הסתרה"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "הוסף למילון",
+        "copy_email": "העתק כתובת אימייל",
+        "copy_image": "העתק תמונה",
+        "copy_image_url": "העתקת כתובת התמונה",
+        "copy_link_url": "העתק קישור",
+        "save_image_as": "שמור תמונה בשם...",
+        "save_image_as_error_description": "שמירת התמונה נכשלה",
+        "save_image_as_error_title": "נכשל בשמירת התמונה"
+    },
+    "view_menu": {
+        "actual_size": "גודל ממשי",
+        "toggle_developer_tools": "הפעל כלי מפתחים",
+        "toggle_full_screen": "הפעל מצב מסך מלא",
+        "view": "צפה"
+    },
+    "window_menu": {
+        "bring_all_to_front": "הבא הכל לחזית",
+        "label": "חלון",
+        "zoom": "גודל תצוגה"
+    }
+}

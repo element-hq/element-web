@@ -3,29 +3,50 @@
         "seek_bar_label": "Panel posunu zvuku"
     },
     "action": {
+        "back": "Zpět",
+        "click": "Klikněte",
+        "close": "Zavřít",
+        "collapse": "Sbalit",
         "delete": "Smazat",
         "dismiss": "Zavřít",
+        "download": "Stáhnout",
         "edit": "Upravit",
         "explore_rooms": "Procházet místnosti",
+        "go": "Přejít",
+        "hide": "Skrýt",
         "invite": "Pozvat",
         "new_conversation": "Nová konverzace",
         "new_room": "Nová místnost",
+        "new_section": "Nová sekce",
         "new_video_room": "Nová video místnost",
         "open_menu": "Otevřít nabídku",
         "pause": "Pozastavit",
+        "pin": "Připnout",
         "play": "Přehrát",
+        "react": "Reagovat",
         "remove": "Odstranit",
+        "reply": "Odpovědět",
+        "reply_in_thread": "Odpovědět ve vlákně",
         "retry": "Zkusit znovu",
         "search": "Hledání",
-        "start_chat": "Zahájit konverzaci"
+        "start_chat": "Zahájit konverzaci",
+        "unpin": "Odepnout",
+        "view_source": "Zobrazit zdroj"
     },
     "common": {
+        "attachment": "Příloha",
         "encryption_enabled": "Šifrování povoleno",
+        "loading": "Načítání…",
+        "options": "Možnosti",
         "preferences": "Předvolby",
         "state_encryption_enabled": "Experimentální šifrování stavu povoleno"
     },
+    "keyboard": {
+        "shift": "Shift"
+    },
     "left_panel": {
-        "open_dial_pad": "Otevřít číselník"
+        "open_dial_pad": "Otevřít číselník",
+        "separator_label": "Kliknutím nebo přetažením rozbalíte"
     },
     "notifications": {
         "all_messages": "Všechny zprávy",
@@ -42,6 +63,10 @@
             "shared": "Noví členové vidí historii",
             "world_readable": "Každý může vidět historii"
         },
+        "jump_to_date": "Přejít na datum",
+        "jump_to_date_beginning": "Začátek místnosti",
+        "jump_to_date_prompt": "Vyberte datum, na které chcete přejít",
+        "pinned_message_badge": "Připnutá zpráva",
         "status_bar": {
             "delete_all": "Smazat vše",
             "exceeded_resource_limit_description": "Chcete-li službu nadále používat, obraťte se na správce služby.",
@@ -71,7 +96,9 @@
                 "few": "",
                 "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami."
             },
-            "unsent_message": "Otevřít místnost %(roomName)s s neodeslanou zprávou."
+            "unsent_message": "Otevřít místnost %(roomName)s s neodeslanou zprávou.",
+            "video_call": "Otevřete místnost %(roomName)s prostřednictvím videohovoru.",
+            "voice_call": "Otevřete místnost %(roomName)s pomocí hlasového hovoru."
         },
         "appearance": "Vzhled",
         "collapse_filters": "Sbalit seznam filtrů",
@@ -109,7 +136,8 @@
             "leave_room": "Opustit místnost",
             "low_priority": "Nízká priorita",
             "mark_read": "Označit jako přečtené",
-            "mark_unread": "Označit jako nepřečtené"
+            "mark_unread": "Označit jako nepřečtené",
+            "move_to_section": "Přejít na"
         },
         "notification_options": "Možnosti oznámení",
         "open_space_menu": "Otevřít nabídku prostoru",
@@ -118,10 +146,15 @@
             "more_options": "Více možností"
         },
         "room_options": "Možnosti místnosti",
+        "section_created": "Sekce vytvořena",
+        "section_header": {
+            "toggle": "Přepnout %(section)s sekci",
+            "toggle_unread": "Přepnout sekci %(section)s s nepřečtenými místnostmi"
+        },
         "show_message_previews": "Zobrazit náhledy zpráv",
         "sort": "Řadit",
         "sort_type": {
-            "activity": "Aktivita",
+            "activity": "Poslední aktivita",
             "atoz": "A-Z",
             "unread_first": "Nepřečtené jako první"
         },
@@ -132,6 +165,9 @@
     },
     "terms": {
         "tac_button": "Přečíst smluvní podmínky"
+    },
+    "threads": {
+        "error_start_thread_existing_relation": "Nelze vytvořit vlákno z události s existujícím vztahem"
     },
     "time": {
         "about_day_ago": "před jedním dnem",
@@ -155,14 +191,19 @@
             "historical_event_no_key_backup": "Historické zprávy nejsou na tomto zařízení k dispozici",
             "historical_event_unverified_device": "Pro přístup k historickým zprávám musíte toto zařízení ověřit",
             "historical_event_user_not_joined": "Nemáte přístup k této zprávě",
-            "sender_identity_previously_verified": "Ověřená identita odesílatele se změnila",
+            "sender_identity_previously_verified": "Ověřená digitální identita odesílatele byla resetována",
             "sender_unsigned_device": "Odesláno z nezabezpečeného zařízení.",
             "unable_to_decrypt": "Nepodařilo se dešifrovat zprávu"
         },
+        "download_action_decrypting": "Dešifrování",
+        "download_action_downloading": "Stahování",
         "m.audio": {
             "audio_player": "Audio přehrávač",
             "error_downloading_audio": "Chyba při stahování audia",
             "unnamed_audio": "Nepojmenovaný audio soubor"
+        },
+        "m.file": {
+            "error_invalid": "Neplatný soubor"
         },
         "m.room.encryption": {
             "disable_attempt": "Ignorovaný pokus o deaktivaci šifrování",
@@ -174,8 +215,24 @@
             "state_enabled": "Zprávy a události v této místnosti jsou koncově šifrovány. Když se lidé připojí, můžete je ověřit v jejich profilu, stačí klepnout na jejich profilový obrázek.",
             "unsupported": "Šifrování používané v této místnosti není podporováno."
         },
+        "mab": {
+            "collapse_reply_chain": "Sbalit citace",
+            "copy_link_thread": "Kopírovat odkaz na vlákno",
+            "expand_reply_chain": "Rozbalit citace",
+            "label": "Akce zprávy",
+            "view_in_room": "Zobrazit v místnosti"
+        },
         "message_timestamp_received_at": "Přijato: %(dateTime)s",
-        "message_timestamp_sent_at": "Odesláno: %(dateTime)s"
+        "message_timestamp_sent_at": "Odesláno: %(dateTime)s",
+        "url_preview": {
+            "close": "Zavřít náhled",
+            "show_n_more": {
+                "one": "Zobrazit %(count)s další náhled",
+                "few": "Zobrazit %(count)s další náhledy",
+                "other": "Zobrazit %(count)s dalších náhledů"
+            },
+            "view_image": "Zobrazit obrázek"
+        }
     },
     "widget": {
         "context_menu": {

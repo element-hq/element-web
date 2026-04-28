@@ -12,17 +12,21 @@ import { mergeWith } from "lodash";
 import { SnakedObject } from "./utils/SnakedObject";
 import { type IConfigOptions } from "./IConfigOptions";
 import { isObject, objectClone } from "./utils/objects";
-import { type DeepReadonly, type Defaultize } from "./@types/common";
+import { type DeepPartial, type DeepReadonly, type Defaultize } from "./@types/common";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
 export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     brand: "Element",
+    branding: {
+        logo_link_url: "https://element.io",
+        auth_header_logo_url: "themes/element/img/logos/element-logo.svg",
+        welcome_background_url: "themes/element/img/backgrounds/lake.jpg",
+    },
     help_url: "https://element.io/help",
     help_encryption_url: "https://element.io/help#encryption",
     help_key_storage_url: "https://element.io/help#encryption5",
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
-    uisi_autorageshake_app: "element-auto-uisi",
     show_labs_settings: false,
     force_verification: false,
 
@@ -71,7 +75,7 @@ export type ConfigOptions = Defaultize<IConfigOptions, typeof DEFAULTS>;
 
 function mergeConfig(
     config: DeepReadonly<IConfigOptions>,
-    changes: DeepReadonly<Partial<IConfigOptions>>,
+    changes: DeepReadonly<DeepPartial<IConfigOptions>>,
 ): DeepReadonly<IConfigOptions> {
     // return { ...config, ...changes };
     return mergeWith(objectClone(config), changes, (objValue, srcValue) => {
@@ -137,7 +141,7 @@ export default class SdkConfig {
         SdkConfig.setInstance(mergeConfig(DEFAULTS, {})); // safe to cast - defaults will be applied
     }
 
-    public static add(cfg: Partial<ConfigOptions>): void {
+    public static add(cfg: DeepPartial<ConfigOptions>): void {
         SdkConfig.put(mergeConfig(SdkConfig.get(), cfg));
     }
 }

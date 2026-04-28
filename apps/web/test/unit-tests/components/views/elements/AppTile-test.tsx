@@ -31,7 +31,7 @@ import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelSto
 import WidgetStore, { type IApp } from "../../../../../src/stores/WidgetStore";
 import ActiveWidgetStore from "../../../../../src/stores/ActiveWidgetStore";
 import AppTile from "../../../../../src/components/views/elements/AppTile";
-import { Container, WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
+import { type Container, WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import AppsDrawer from "../../../../../src/components/views/rooms/AppsDrawer";
 import { ElementWidgetCapabilities } from "../../../../../src/stores/widgets/ElementWidgetCapabilities";
 import { ElementWidget, type WidgetMessaging } from "../../../../../src/stores/widgets/WidgetMessaging";
@@ -303,7 +303,7 @@ describe("AppTile", () => {
                 return {
                     widgets: {
                         1: {
-                            container: Container.Top,
+                            container: "top",
                         },
                     },
                 };
@@ -334,7 +334,7 @@ describe("AppTile", () => {
         mockSettings.mockRestore();
         act(() => {
             // Move widget to center
-            WidgetLayoutStore.instance.moveToContainer(r1, app1, Container.Center);
+            WidgetLayoutStore.instance.moveToContainer(r1, app1, "center");
         });
 
         expect(renderResult.getByText("Example 1")).toBeInTheDocument();
@@ -377,7 +377,7 @@ describe("AppTile", () => {
             );
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             await userEvent.click(renderResult.getByLabelText("Minimise"));
-            expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Right);
+            expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, "right");
         });
 
         it("clicking 'maximise' should send the widget to the center", async () => {
@@ -388,7 +388,7 @@ describe("AppTile", () => {
             );
             await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
             await userEvent.click(renderResult.getByLabelText("Maximise"));
-            expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Center);
+            expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, "center");
         });
 
         it("should render permission request", async () => {
@@ -455,7 +455,7 @@ describe("AppTile", () => {
             beforeEach(() => {
                 jest.spyOn(WidgetLayoutStore.instance, "isInContainer").mockImplementation(
                     (room: Room | null, widget: IWidget, container: Container) => {
-                        return room === r1 && widget === app1 && container === Container.Center;
+                        return room === r1 && widget === app1 && container === "center";
                     },
                 );
             });
@@ -472,7 +472,7 @@ describe("AppTile", () => {
                 );
                 await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
                 await userEvent.click(renderResult.getByLabelText("Un-maximise"));
-                expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Top);
+                expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, "top");
             });
         });
 

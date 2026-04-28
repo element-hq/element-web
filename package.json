@@ -19,44 +19,36 @@
         "lint:workflows": "find .github/workflows -type f \\( -iname '*.yaml' -o -iname '*.yml' \\) -print -exec action-validator {} ';'",
         "lint:knip": "knip",
         "install:git-hooks": "husky",
-        "postinstall": "node scripts/pnpm-link.ts"
-    },
-    "resolutions": {
-        "pretty-format@30>react-is": "19.2.4",
-        "@types/react": "catalog:",
-        "@types/react-dom": "catalog:",
-        "oidc-client-ts": "3.4.1",
-        "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001774",
-        "markdown-it": "14.1.1",
-        "testcontainers": "^11.0.0",
-        "wrap-ansi-cjs": "npm:wrap-ansi@^10.0.0",
-        "wrap-ansi": "npm:wrap-ansi@^10.0.0",
-        "matrix-widget-api": "^1.17.0",
-        "qs": "6.15.0",
-        "serialize-javascript": "7.0.3"
+        "postinstall": "node scripts/pnpm-link.ts && pnpm run -r sane-postinstall",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:preview": "vitepress preview docs"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
         "@action-validator/core": "^0.6.0",
         "@nx-tools/nx-container": "^7.2.1",
-        "@nx/jest": "^22.5.0",
+        "@playwright/test": "catalog:",
         "@types/node": "22",
         "cronstrue": "^3.0.0",
         "eslint-plugin-matrix-org": "^3.0.0",
         "husky": "^9.0.0",
-        "knip": "^5.36.2",
+        "knip": "6.4.1",
         "lint-staged": "^16.0.0",
         "lodash": "^4.17.21",
+        "mermaid": "^11.13.0",
         "minimist": "^1.2.6",
-        "nx": "22.5.3",
-        "prettier": "3.8.1",
+        "nx": "22.6.5",
+        "prettier": "3.8.3",
         "typescript": "catalog:",
+        "vitepress": "^1.6.4",
+        "vitepress-plugin-mermaid": "^2.0.17",
         "yaml": "^2.3.3"
     },
     "pnpm": {
         "onlyBuiltDependencies": [
-            "matrix-js-sdk"
+            "matrix-js-sdk",
+            "electron"
         ],
         "ignoredBuiltDependencies": [
             "@sentry/cli",
@@ -67,12 +59,17 @@
             "react-blurhash": "patches/react-blurhash.patch",
             "linkify-html": "patches/linkify-html.patch",
             "@matrix-org/react-sdk-module-api": "patches/@matrix-org__react-sdk-module-api.patch",
+            "@types/auto-launch": "patches/@types__auto-launch.patch",
             "@types/mdx": "patches/@types__mdx.patch",
             "await-lock": "patches/await-lock.patch",
             "jest-fixed-jsdom": "patches/jest-fixed-jsdom.patch",
             "jsdom": "patches/jsdom.patch",
             "rollup": "patches/rollup.patch",
-            "knip": "patches/knip.patch"
+            "postcss-mixins": "patches/postcss-mixins.patch",
+            "app-builder-lib": "patches/app-builder-lib.patch",
+            "knip": "patches/knip.patch",
+            "plist": "patches/plist.patch",
+            "unplugin-dts": "patches/unplugin-dts.patch"
         },
         "peerDependencyRules": {
             "allowedVersions": {
@@ -84,11 +81,40 @@
         "allowedDeprecatedVersions": {
             "eslint": "8",
             "react-beautiful-dnd": "13"
+        },
+        "overrides": {
+            "pretty-format@30>react-is": "19.2.5",
+            "@types/react": "catalog:",
+            "@types/react-dom": "catalog:",
+            "oidc-client-ts": "3.5.0",
+            "jwt-decode": "4.0.0",
+            "caniuse-lite": "1.0.30001788",
+            "markdown-it": "14.1.1",
+            "testcontainers": "^11.0.0",
+            "matrix-widget-api": "^1.17.0",
+            "qs": "6.15.0",
+            "@types/node": "18.19.130",
+            "config-file-ts": "0.2.8-rc1",
+            "node-abi": "4.28.0",
+            "@types/pg-pool": "2.0.7",
+            "ajv@6.12.6": "6.14.0",
+            "ajv@>=8 <8.18.0": "8.18.0",
+            "axios@>1.0.0 <1.15.0": "1.15.0",
+            "picomatch@>=4.0.0 <4.0.4": "4.0.4",
+            "esbuild@<=0.24.2": "0.27.4",
+            "esbuild@~0.27.0": "0.27.4",
+            "minimatch@>=10.0.0 <10.2.3": ">=10.2.3",
+            "lodash@4.17.23": "4.18.1",
+            "follow-redirects@1.15.11": "1.16.0",
+            "@actions/github@6.0.1": "8.0.1",
+            "dompurify@>=3.0.0 <=3.3.3": "3.4.0",
+            "protobufjs@>=7.0.0 <7.5.5": "7.5.5",
+            "@xmldom/xmldom@0.8.12": "0.8.13"
         }
     },
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
+    "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
     "private": true
 }

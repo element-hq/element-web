@@ -12,7 +12,6 @@ import { type TagID } from "../../room-list-v3/skip-list/tag";
 import { type OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 
 export enum SortAlgorithm {
-    Manual = "MANUAL",
     Alphabetic = "ALPHABETIC",
     Recent = "RECENT",
 }

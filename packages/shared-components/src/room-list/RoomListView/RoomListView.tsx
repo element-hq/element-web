@@ -7,17 +7,31 @@
 
 import React, { type JSX, type ReactNode } from "react";
 
-import { useViewModel, type ViewModel } from "../../viewmodel";
+import { useViewModel, type ViewModel } from "../../core/viewmodel";
 import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters";
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type Room, type RoomItemViewModel } from "../RoomListItemView";
+import {
+    type Room,
+    type RoomListItemViewModel,
+} from "../VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/RoomListSectionHeaderView";
+import { type ToastType, RoomListToast } from "./RoomListToast";
+import styles from "./RoomListView.module.css";
+import { Flex } from "../../core/utils/Flex";
+
+export type RoomListSection = {
+    /** Unique identifier for the section */
+    id: string;
+    /** Array of room IDs that belong to this section */
+    roomIds: string[];
+};
 
 /**
  * Snapshot for the room list view
  */
-export type RoomListSnapshot = {
+export type RoomListViewSnapshot = {
     /** Whether the rooms are currently loading */
     isLoadingRooms: boolean;
     /** Whether the room list is empty */
@@ -28,14 +42,18 @@ export type RoomListSnapshot = {
     activeFilterId?: FilterId;
     /** Room list state */
     roomListState: RoomListViewState;
-    /** Array of room IDs for virtualization */
-    roomIds: string[];
+    /** Array of sections in the room list */
+    sections: RoomListSection[];
     /** Optional description for the empty state */
     emptyStateDescription?: string;
     /** Optional action element for the empty state */
     emptyStateAction?: ReactNode;
     /** Whether the user can create rooms */
     canCreateRoom?: boolean;
+    /** Whether the room list is displayed as a flat list */
+    isFlatList: boolean;
+    /** Optional toast to display */
+    toast?: ToastType;
 };
 
 /**
@@ -48,16 +66,23 @@ export interface RoomListViewActions {
     createChatRoom: () => void;
     /** Called to create a new room */
     createRoom: () => void;
-    /** Get view model for a specific room (virtualization API) */
-    getRoomItemViewModel: (roomId: string) => RoomItemViewModel;
+    /**
+     * Get view model for a specific room (virtualization API)
+     * Allow undefined to be returned if we don't have a view model for the room. In this case the room will not be rendered.
+     */
+    getRoomItemViewModel: (roomId: string) => RoomListItemViewModel | undefined;
     /** Called when the visible range changes (virtualization API) */
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
+    /** Get view model for a specific section header (virtualization API) */
+    getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
+    /** Called to close the toast message */
+    closeToast: () => void;
 }
 
 /**
  * The view model type for the room list view
  */
-export type RoomListViewModel = ViewModel<RoomListSnapshot, RoomListViewActions>;
+export type RoomListViewModel = ViewModel<RoomListViewSnapshot, RoomListViewActions>;
 
 /**
  * Props for RoomListView component
@@ -95,7 +120,10 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
                     onToggleFilter={vm.onToggleFilter}
                 />
             </div>
-            {listBody}
+            <Flex direction="column" className={styles.list}>
+                {listBody}
+                {snapshot.toast && <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />}
+            </Flex>
         </>
     );
 };

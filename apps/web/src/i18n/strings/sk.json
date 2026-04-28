@@ -34,7 +34,6 @@
         "cancel": "Zrušiť",
         "change": "Zmeniť",
         "clear": "Vyčistiť",
-        "click": "Kliknúť",
         "click_to_copy": "Kliknutím skopírujete",
         "close": "Zavrieť",
         "collapse": "Zbaliť",
@@ -68,7 +67,6 @@
         "go": "Spustiť",
         "go_back": "Naspäť",
         "got_it": "Rozumiem",
-        "hide": "Skryť",
         "hide_advanced": "Skryť pokročilé možnosti",
         "hold": "Podržať",
         "ignore": "Ignorovať",
@@ -1365,9 +1363,6 @@
         "impossible_dialog_title": "Integrácie nie sú povolené"
     },
     "invite": {
-        "ask_anyway_description": "Nie je možné nájsť používateľské profily pre Matrix ID zobrazené nižšie - chcete aj tak začať priamu správu?",
-        "ask_anyway_label": "Spustiť priamu správu aj tak",
-        "ask_anyway_never_warn_label": "Spustiť priamu správu aj tak a nikdy ma už nevarovať",
         "email_caption": "Pozvať e-mailom",
         "email_limit_one": "Pozvánky e-mailom sa môžu posielať len po jednej",
         "email_use_default_is": "Na pozvanie e-mailom použite server identity. <default>Použite predvolený (%(defaultIdentityServerName)s)</default> alebo spravujte v <settings>nastaveniach</settings>.",
@@ -1509,8 +1504,6 @@
     },
     "labs": {
         "ask_to_join": "Umožniť požiadať o pripojenie",
-        "automatic_debug_logs": "Automatické odosielanie záznamov ladenia pri akejkoľvek chybe",
-        "automatic_debug_logs_decryption": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
         "beta_description": "Čo vás čaká v aplikácii %(brand)s? Laboratóriá sú najlepším spôsobom, ako získať funkcie v predstihu, otestovať nové funkcie a pomôcť ich vytvoriť ešte pred ich skutočným spustením.",
         "beta_feature": "Toto je funkcia vo verzii beta",
         "beta_feedback_leave_button": "Ak chcete opustiť beta verziu, navštívte svoje nastavenia.",
@@ -1568,14 +1561,10 @@
         "notification_settings_beta_caption": "Predstavujeme jednoduchší spôsob zmeny nastavení oznámení. Prispôsobte si svoju aplikáciu %(brand)s, presne podľa svojich predstáv.",
         "notification_settings_beta_title": "Nastavenia oznámení",
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
-        "release_announcement": "Oznámenie o vydaní",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
         "report_to_moderators_description": "V miestnostiach, ktoré podporujú moderovanie, môžete pomocou tlačidla \"Nahlásiť\" nahlásiť porušovanie pravidiel moderátorom miestnosti.",
-        "share_history_on_invite": "Zdieľajte zašifrovanú históriu s novými členmi",
-        "share_history_on_invite_description": "Pri pozývaní používateľa do zašifrovanej miestnosti s históriou nastavenou na „zdieľanú“ zdieľať s týmto používateľom aj zašifrovanú históriu a pri pozvaní do takejto miestnosti prijať zašifrovanú históriu.",
-        "share_history_on_invite_warning": "Táto funkcia je EXPERIMENTÁLNA a nie sú implementované všetky bezpečnostné opatrenia. Nepovoľujte ju v produkčných účtoch.",
         "sliding_sync": "Režim kĺzavej synchronizácie",
         "sliding_sync_description": "V štádiu aktívneho vývoja, nie je možné to vypnúť.",
         "sliding_sync_disabled_notice": "Odhláste sa a znova sa prihláste, aby sa to vyplo",
@@ -1825,7 +1814,6 @@
         "restricted": "Obmedzené"
     },
     "powered_by_matrix": "používa protokol Matrix",
-    "powered_by_matrix_with_logo": "Decentralizované, šifrované konverzácie a spolupráca na platforme $matrixLogo",
     "presence": {
         "away": "Preč",
         "busy": "Obsadený/zaneprázdnený",
@@ -2088,9 +2076,6 @@
         "joining_space": "Pripájanie sa do priestoru …",
         "jump_read_marker": "Preskočiť na prvú neprečítanú správu.",
         "jump_to_bottom_button": "Prejsť na najnovšie správy",
-        "jump_to_date": "Prejsť na dátum",
-        "jump_to_date_beginning": "Začiatok miestnosti",
-        "jump_to_date_prompt": "Vyberte dátum, na ktorý chcete prejsť",
         "kick_reason": "Dôvod: %(reason)s",
         "kicked_by": "Odstránil vás %(memberName)s",
         "kicked_from_room_by": "Boli ste odstránení z %(roomName)s používateľom %(memberName)s",
@@ -2116,7 +2101,6 @@
         "not_found_title": "Táto miestnosť alebo priestor neexistuje.",
         "not_found_title_name": "%(roomName)s neexistuje.",
         "peek_join_prompt": "Zobrazujete náhľad %(roomName)s. Chcete sa k nej pripojiť?",
-        "pinned_message_badge": "Pripnutá správa",
         "pinned_message_banner": {
             "button_close_list": "Zatvoriť zoznam",
             "button_view_all": "Zobraziť všetko",
@@ -2263,8 +2247,6 @@
             "aliases_section": "Adresy miestnosti",
             "avatar_field_label": "Obrázok miestnosti",
             "canonical_alias_field_label": "Hlavná adresa",
-            "default_url_previews_off": "Náhľady URL adries sú predvolene zakázané pre členov tejto miestnosti.",
-            "default_url_previews_on": "Náhľady URL adries sú predvolene povolené pre členov tejto miestnosti.",
             "description_space": "Upravte nastavenia týkajúce sa vášho priestoru.",
             "error_creating_alias_description": "Pri vytváraní tejto adresy došlo k chybe. Je možné, že ju server nepovoľuje alebo došlo k dočasnému zlyhaniu.",
             "error_creating_alias_title": "Chyba pri vytváraní adresy",
@@ -2295,12 +2277,7 @@
             "published_aliases_explainer_space": "Zverejnené adresy môže použiť ktokoľvek na akomkoľvek serveri, aby sa pripojil k vášmu priestoru.",
             "published_aliases_section": "Zverejnené adresy",
             "save": "Uložiť zmeny",
-            "topic_field_label": "Téma miestnosti",
-            "url_preview_encryption_warning": "Náhľady URL adries sú v šifrovaných miestnostiach ako je táto predvolene zakázané, aby ste si mohli byť istí, že obsah odkazov z vašej konverzácii nebude zaznamenaný na vašom domovskom serveri počas ich generovania.",
-            "url_preview_explainer": "Ak niekto vo svojej správe pošle URL adresu, môže byť zobrazený jej náhľad obsahujúci názov, popis a obrázok z cieľovej web stránky.",
-            "url_previews_section": "Náhľady URL adries",
-            "user_url_previews_default_off": "Predvolene máte <a>zakázané</a> náhľady URL adries.",
-            "user_url_previews_default_on": "Predvolene máte <a>povolené</a> náhľady URL adries."
+            "topic_field_label": "Téma miestnosti"
         },
         "notifications": {
             "browse_button": "Prechádzať",
@@ -2725,8 +2702,6 @@
             "username": "Používateľské meno"
         },
         "inline_url_previews_default": "Predvolene povoliť náhľady URL adries",
-        "inline_url_previews_room": "Predvolene povoliť náhľady URL adries pre členov tejto miestnosti",
-        "inline_url_previews_room_account": "Povoliť náhľady URL adries pre túto miestnosť (ovplyvňuje len vás)",
         "insert_trailing_colon_mentions": "Vložiť na koniec dvojbodku za zmienkou používateľa na začiatku správy",
         "invite_controls": {
             "default_label": "Povoliť používateľom pozývať vás do miestností"
@@ -3342,7 +3317,6 @@
         },
         "empty_description": "Použite „%(replyInThread)s“, keď umiestnite kurzor myši nad správu.",
         "empty_title": "Vlákna pomáhajú udržiavať vaše konverzácie k téme a ľahko sledovateľné.",
-        "error_start_thread_existing_relation": "Nie je možné vytvoriť vlákno z udalosti s existujúcim vzťahom",
         "mark_all_read": "Označiť všetko ako prečítané",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazí všetky vlákna, v ktorých ste sa zúčastnili",
@@ -3386,7 +3360,6 @@
             "unable_to_decrypt": "Správu sa nepodarilo dešifrovať"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifrovanie",
         "download_action_downloading": "Preberanie",
         "download_failed": "Sťahovanie zlyhalo",
         "download_failed_description": "Pri sťahovaní tohto súboru sa vyskytla chyba",
@@ -3442,8 +3415,7 @@
             "voice_call_unsupported": "%(senderName)s uskutočnil telefonát. (Nepodporované týmto prehliadačom)"
         },
         "m.file": {
-            "error_decrypting": "Chyba pri dešifrovaní prílohy",
-            "error_invalid": "Neplatný súbor"
+            "error_decrypting": "Chyba pri dešifrovaní prílohy"
         },
         "m.image": {
             "error": "Nie je možné zobraziť obrázok kvôli chybe",
@@ -3586,10 +3558,7 @@
             "removed": "%(senderName)s odstránil widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Zbaliť citácie",
             "copy_link_thread": "Kopírovať odkaz na vlákno",
-            "expand_reply_chain": "Rozbaliť citácie",
-            "label": "Akcie správy",
             "view_in_room": "Zobraziť v miestnosti"
         },
         "mjolnir": {
@@ -3816,14 +3785,7 @@
             "one_user": "%(displayName)s píše …",
             "two_users": "%(names)s a %(lastPerson)s píšu …"
         },
-        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať",
-        "url_preview": {
-            "close": "Zatvoriť náhľad",
-            "show_n_more": {
-                "one": "Zobraziť %(count)s ďalší náhľad",
-                "other": "Zobraziť %(count)s ďalších náhľadov"
-            }
-        }
+        "undecryptable_tooltip": "Túto správu sa nepodarilo dešifrovať"
     },
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"
@@ -4058,7 +4020,6 @@
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Víta vás Element",
     "widget": {
         "added_by": "Widget pridaný používateľom",
         "capabilities_dialog": {

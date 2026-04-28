@@ -1,27 +1,5 @@
 # Playwright in Element Web
 
-## Contents
-
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Running the Tests](#running-the-tests)
-    - [Element Web E2E Tests](#element-web-e2e-tests)
-    - [Shared Components Tests](#shared-components-tests)
-    - [Projects](#projects)
-- [How the Tests Work](#how-the-tests-work)
-    - [Test Structure](#test-structure)
-    - [Homeserver Setup](#homeserver-setup)
-    - [Fixtures](#fixtures)
-- [Writing Tests](#writing-tests)
-    - [Getting a Homeserver](#getting-a-homeserver)
-    - [Logging In](#logging-in)
-    - [Joining a Room](#joining-a-room)
-    - [Using matrix-js-sdk](#using-matrix-js-sdk)
-    - [Best Practices](#best-practices)
-- [Visual Testing](#visual-testing)
-- [Test Tags](#test-tags)
-- [Supported Container Runtimes](#supported-container-runtimes)
-
 ## Overview
 
 Element Web contains two sets of Playwright tests:

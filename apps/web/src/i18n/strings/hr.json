@@ -34,7 +34,6 @@
         "cancel": "Otkazati",
         "change": "Promijeni",
         "clear": "Očisti",
-        "click": "Klikni",
         "click_to_copy": "Klikni za kopiranje",
         "close": "Zatvori",
         "collapse": "Sažmi",
@@ -68,7 +67,6 @@
         "go": "Idi",
         "go_back": "Idi natrag",
         "got_it": "Shvaćam",
-        "hide": "Sakrij",
         "hide_advanced": "Sakrij napredno",
         "hold": "Čekanje",
         "ignore": "Ignoriraj",
@@ -1364,9 +1362,6 @@
         "impossible_dialog_title": "Integracije nisu dopuštene"
     },
     "invite": {
-        "ask_anyway_description": "Nije moguće pronaći profile za ispod navedene Matrixove ID-ove. Želite li ipak poslati izravnu poruku?",
-        "ask_anyway_label": "Svejedno pokreni izravnu poruku",
-        "ask_anyway_never_warn_label": "Svejedno pokreni izravnu poruku i nemoj me nikad više upozoriti",
         "email_caption": "Pozovi e-poštom",
         "email_limit_one": "Pozivnice koje se šalju e-poštom mogu se slati samo jedna po jedna",
         "email_use_default_is": "Upotrebljavate poslužitelj identiteta za slanje pozivnica e-poštom. <default>Upotrijebite zadani (%(defaultIdentityServerName)s)</default> ili ga promijenite u odjeljku <settings>Postavke</settings>.",
@@ -1508,8 +1503,6 @@
     },
     "labs": {
         "ask_to_join": "Omogući traženje pridruživanja",
-        "automatic_debug_logs": "Automatsko slanje zapisnika o svakoj pogrešci",
-        "automatic_debug_logs_decryption": "Automatsko slanje zapisnika o otklanjanju pogrešaka dešifriranja",
         "beta_description": "Što je sljedeće za %(brand)s? Labs su najbolji način da među prvima isprobate novosti, testirate nove značajke i pomognete ih oblikovati prije nego što službeno postanu dostupne.",
         "beta_feature": "Ovo je beta značajka",
         "beta_feedback_leave_button": "Da biste napustili beta inačicu, idite na postavke.",
@@ -1567,14 +1560,10 @@
         "notification_settings_beta_caption": "Predstavljamo jednostavniji način promjene postavki obavijesti. Prilagodite svoj %(brand)s tako da bude po vašoj mjeri.",
         "notification_settings_beta_title": "Postavke obavijesti",
         "notifications": "Omogući ploču s obavijestima u zaglavlju sobe",
-        "release_announcement": "Najava nove inačice",
         "render_reaction_images": "Prikaži prilagođene slike u reakcijama",
         "render_reaction_images_description": "Ponekad se nazivaju „prilagođeni emotikoni”",
         "report_to_moderators": "Prijavi moderatorima",
         "report_to_moderators_description": "U sobama koje podržavaju moderiranje gumb „Prijavi” omogućit će vam da moderatorima sobe prijavite svako neprimjereno ponašanje.",
-        "share_history_on_invite": "Podijeli šifriranu povijest s novim članovima",
-        "share_history_on_invite_description": "Prilikom pozivanja korisnika u šifriranu sobu čija je vidljivost povijesti postavljena na podijeljenu, podijelite šifriranu povijest s tim korisnikom i prihvatite šifriranu povijest kada budete pozvani u takvu sobu.",
-        "share_history_on_invite_warning": "Ova je značajka u EKSPERIMENTALNOJ FAZI i nisu implementirane sve sigurnosne mjere. Ne omogućavajte je na produkcijskim računima.",
         "sliding_sync": "Način rada Sliding Sync",
         "sliding_sync_description": "Značajka je u razvoju, ne može se onemogućiti. Trenutačno nije kompatibilna s Element Callom.",
         "sliding_sync_disabled_notice": "Odjavite se i ponovno prijavite da biste onemogućili",
@@ -1824,7 +1813,6 @@
         "restricted": "Ograničeno"
     },
     "powered_by_matrix": "Pokreće Matrix",
-    "powered_by_matrix_with_logo": "Decentralizirani, šifrirani razgovori i suradnja koje pokreće $matrixLogo",
     "presence": {
         "away": "Odsutan/na",
         "busy": "Zauzeto",
@@ -2087,9 +2075,6 @@
         "joining_space": "U tijeku je pridruživanje prostoru…",
         "jump_read_marker": "Skoči na prvu nepročitanu poruku.",
         "jump_to_bottom_button": "Pomakni se do najnovijih poruka",
-        "jump_to_date": "Skoči na datum",
-        "jump_to_date_beginning": "Početak sobe",
-        "jump_to_date_prompt": "Odaberite datum na koji ćete skočiti",
         "kick_reason": "Razlog: %(reason)s",
         "kicked_by": "Uklonio/la vas je %(memberName)s",
         "kicked_from_room_by": "%(memberName)s vas je uklonio/la iz sobe %(roomName)s",
@@ -2115,7 +2100,6 @@
         "not_found_title": "Ova soba ili prostor ne postoji.",
         "not_found_title_name": "%(roomName)s ne postoji.",
         "peek_join_prompt": "Pregledavate sobu %(roomName)s. Želite li joj se pridružiti?",
-        "pinned_message_badge": "Prikvačena poruka",
         "pinned_message_banner": {
             "button_close_list": "Zatvori popis",
             "button_view_all": "Prikaži sve",
@@ -2262,8 +2246,6 @@
             "aliases_section": "Adrese soba",
             "avatar_field_label": "Avatar sobe",
             "canonical_alias_field_label": "Glavna adresa",
-            "default_url_previews_off": "Pregledi URL-ova zadano su onemogućeni za sudionike u ovoj sobi.",
-            "default_url_previews_on": "Pregledi URL-ova zadano su omogućeni za sudionike u ovoj sobi.",
             "description_space": "Uredite postavke koje se odnose na vaš prostor.",
             "error_creating_alias_description": "Došlo je do pogreške prilikom izrade te adrese. Poslužitelj to možda ne dopušta ili je došlo do privremenog kvara.",
             "error_creating_alias_title": "Pogreška prilikom izrade adrese",
@@ -2294,12 +2276,7 @@
             "published_aliases_explainer_space": "Objavljene adrese može upotrebljavati svatko na svakom poslužitelju kako bi se pridružio vašem prostoru.",
             "published_aliases_section": "Objavljene adrese",
             "save": "Spremi promjene",
-            "topic_field_label": "Tema sobe",
-            "url_preview_encryption_warning": "U šifriranim sobama, poput ove, pregledi URL-ova zadano su onemogućeni kako bi se osiguralo da vaš matični poslužitelj (na kojem se generiraju pregledi) ne može prikupljati informacije o poveznicama koje vidite u ovoj sobi.",
-            "url_preview_explainer": "Kada netko u svoju poruku unese URL, može se prikazati pregled URL-a kako bi se dobile dodatne informacije o toj poveznici, kao što su naslov, opis i slika s mrežnog mjesta.",
-            "url_previews_section": "Pregledi URL-ova",
-            "user_url_previews_default_off": "Zadano <a>onemogućili</a> preglede URL-ova.",
-            "user_url_previews_default_on": "Zadano ste <a>omogućili</a> preglede URL-ova."
+            "topic_field_label": "Tema sobe"
         },
         "notifications": {
             "browse_button": "Pregledaj",
@@ -2725,8 +2702,6 @@
             "username": "Korisničko ime"
         },
         "inline_url_previews_default": "Zadano omogući umetnute pretpreglede URL-ova",
-        "inline_url_previews_room": "Omogući preglede URL-ova prema zadanim postavkama za sudionike u ovoj sobi",
-        "inline_url_previews_room_account": "Omogući preglede URL-ova za ovu sobu (utječe samo na vas)",
         "insert_trailing_colon_mentions": "Umetni dvotočku nakon što spominjanja korisnika na početku poruke",
         "invite_controls": {
             "default_label": "Dopustite korisnicima da vas pozovu u sobe"
@@ -3347,7 +3322,6 @@
         },
         "empty_description": "Upotrijebite „%(replyInThread)s” prilikom zadržavanja pokazivača iznad poruke.",
         "empty_title": "Niti pomažu da vaši razgovori ostanu usmjereni na temu i da ih je lako pratiti.",
-        "error_start_thread_existing_relation": "Nije moguće stvoriti nit iz događaja s postojećom povezanosti",
         "mark_all_read": "Označi sve kao pročitano",
         "my_threads": "Moje niti",
         "my_threads_description": "Prikazuje sve niti u kojima ste sudjelovali",
@@ -3391,7 +3365,6 @@
             "unable_to_decrypt": "Nije moguće dešifrirati poruku"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
-        "download_action_decrypting": "Dešifriranje",
         "download_action_downloading": "Preuzimanje",
         "download_failed": "Preuzimanje nije uspjelo",
         "download_failed_description": "Došlo je do pogreške prilikom preuzimanja ove datoteke",
@@ -3447,8 +3420,7 @@
             "voice_call_unsupported": "%(senderName)s uputio/la je glasovni poziv. (Ne podržava ovaj preglednik.)"
         },
         "m.file": {
-            "error_decrypting": "Pogreška pri dešifriranju privitka",
-            "error_invalid": "Nevažeća datoteka"
+            "error_decrypting": "Pogreška pri dešifriranju privitka"
         },
         "m.image": {
             "error": "Nije moguće prikazati sliku zbog pogreške",
@@ -3593,10 +3565,7 @@
             "removed": "%(senderName)s uklonio/la je widget %(widgetName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Sažmi navode",
             "copy_link_thread": "Kopiraj poveznicu u nit",
-            "expand_reply_chain": "Proširi navode",
-            "label": "Radnje s porukama",
             "view_in_room": "Pregled u sobi"
         },
         "mjolnir": {
@@ -3826,15 +3795,7 @@
             "one_user": "%(displayName)s tipka…",
             "two_users": "%(names)s i %(lastPerson)s tipkaju…"
         },
-        "undecryptable_tooltip": "Ova se poruka nije mogla dešifrirati",
-        "url_preview": {
-            "close": "Zatvori pretpregled",
-            "show_n_more": {
-                "one": "Prikaži %(count)s drugi pregled",
-                "few": "Prikaži %(count)s druga pregleda",
-                "other": "Prikaži %(count)s drugih pregleda"
-            }
-        }
+        "undecryptable_tooltip": "Ova se poruka nije mogla dešifrirati"
     },
     "truncated_list_n_more": {
         "one": "I još %(count)s...",
@@ -4072,7 +4033,6 @@
         "you_are_presenting": "Dijelite zaslon"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Dobro došli u Element",
     "widget": {
         "added_by": "Widget je dodao/la",
         "capabilities_dialog": {

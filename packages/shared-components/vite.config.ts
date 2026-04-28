@@ -8,8 +8,8 @@
 
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
-import dts from "vite-plugin-dts";
+import { defineConfig, esmExternalRequirePlugin } from "vite";
+import dts from "unplugin-dts/vite";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -22,32 +22,39 @@ export default defineConfig({
             fileName: "element-web-shared-components",
         },
         outDir: "dist",
-        rollupOptions: {
+        rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
             external: [
-                "react",
-                "react-dom",
                 "@vector-im/compound-design-tokens",
                 "@vector-im/compound-web",
                 "react-virtuoso",
+                "react-resizable-panels",
+            ],
+            plugins: [
+                esmExternalRequirePlugin({
+                    external: ["react", "react-dom"],
+                }),
             ],
             output: {
                 // Provide global variables to use in the UMD build
                 // for externalized deps
                 globals: {
                     "react": "react",
-                    "react-dom": "ReactDom",
+                    "@vector-im/compound-design-tokens": "compoundDesignTokens",
+                    "@vector-im/compound-web": "compoundWeb",
+                    "react-virtuoso": "reactVirtuoso",
+                    "react-resizable-panels": "reactResizablePanels",
                 },
             },
         },
     },
     plugins: [
         dts({
-            rollupTypes: true,
+            bundleTypes: true,
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/**/*.test.{ts,tsx}"],
-            copyDtsFiles: true,
+            exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
+            copyDtsFiles: false,
         }),
     ],
 });

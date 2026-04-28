@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { getSampleFilePath } from "../../sample-files";
 
 test.describe("Image Upload", () => {
     test.use({
@@ -28,7 +29,7 @@ test.describe("Image Upload", () => {
     test("should show image preview when uploading an image", { tag: "@screenshot" }, async ({ page, app }) => {
         await page
             .locator(".mx_MessageComposer_actions input[type='file']")
-            .setInputFiles("playwright/sample-files/riot.png");
+            .setInputFiles(getSampleFilePath("riot.png"));
 
         await expect(page.getByRole("button", { name: "Upload" })).toBeEnabled();
         await expect(page.getByRole("button", { name: "Close dialog" })).toBeEnabled();

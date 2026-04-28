@@ -12,12 +12,12 @@ import InlineSpinner from "../elements/InlineSpinner";
 import { _t } from "../../../languageHandler";
 import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import MAudioBody from "./MAudioBody";
-import MFileBody from "./MFileBody";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 import { PlaybackQueue } from "../../../audio/PlaybackQueue";
 import { type Playback } from "../../../audio/Playback";
 import RoomContext from "../../../contexts/RoomContext";
+import { FileBodyFactory, renderMBody } from "./MBodyFactory";
 
 export default class MVoiceMessageBody extends MAudioBody {
     public static contextType = RoomContext;
@@ -54,7 +54,7 @@ export default class MVoiceMessageBody extends MAudioBody {
         return (
             <span className="mx_MVoiceMessageBody">
                 <RecordingPlayback playback={this.state.playback} />
-                {this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />}
+                {this.showFileBody && renderMBody({ ...this.props, showFileInfo: false }, FileBodyFactory)}
             </span>
         );
     }

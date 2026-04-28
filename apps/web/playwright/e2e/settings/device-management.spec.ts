@@ -23,7 +23,7 @@ test.describe("Device manager", () => {
         }
     });
 
-    test("should display sessions", async ({ page, app }) => {
+    test("should display sessions", async ({ page, app, axe }) => {
         await app.settings.openUserSettings("Sessions");
         const tab = page.locator(".mx_SettingsTab");
 
@@ -59,7 +59,7 @@ test.describe("Device manager", () => {
         await filteredDeviceListItems.last().click({ force: true });
 
         // sign out from list selection action buttons
-        await tab.getByRole("button", { name: "Sign out", exact: true }).click();
+        await tab.getByRole("button", { name: "Remove this device", exact: true }).click();
         await page.getByRole("dialog").getByTestId("dialog-primary-button").click();
 
         // list updated after sign out
@@ -85,10 +85,10 @@ test.describe("Device manager", () => {
         // session name updated in details
         await expect(firstSession.locator(".mx_DeviceDetailHeading h4").getByText(sessionName)).toBeVisible();
         // and main list item
-        await expect(firstSession.locator(".mx_DeviceTile h4").getByText(sessionName)).toBeVisible();
+        await expect(firstSession.locator(".mx_DeviceTile h3").getByText(sessionName)).toBeVisible();
 
         // sign out using the device details sign out
-        await firstSession.getByRole("button", { name: "Sign out of this session" }).click();
+        await firstSession.getByRole("button", { name: "Remove this session" }).click();
 
         // confirm the signout
         await page.getByRole("dialog").getByTestId("dialog-primary-button").click();
@@ -96,5 +96,7 @@ test.describe("Device manager", () => {
         // no other sessions or security recommendations sections when only one session
         await expect(tab.getByText("Other sessions")).not.toBeVisible();
         await expect(tab.getByTestId("security-recommendations-section")).not.toBeVisible();
+
+        await expect(axe).toHaveNoViolations();
     });
 });

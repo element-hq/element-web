@@ -4,11 +4,12 @@ Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
- */
+*/
+
 import type ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
-export type SpaceInvadersOptions = {
+type SpaceInvadersOptions = {
     /**
      * The maximum number of invaders to render at a given time
      */
@@ -37,7 +38,7 @@ const GLYPH = "👾";
 export default class SpaceInvaders implements ICanvasEffect {
     private readonly options: SpaceInvadersOptions;
 
-    public constructor(options: { [key: string]: any }) {
+    public constructor(options: Partial<SpaceInvadersOptions>) {
         this.options = { ...DefaultOptions, ...options };
     }
 

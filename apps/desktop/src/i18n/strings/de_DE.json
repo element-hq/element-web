@@ -1,0 +1,92 @@
+{
+    "action": {
+        "cancel": "Abbrechen",
+        "close": "Schließen",
+        "close_brand": "%(brand)s schließen",
+        "copy": "Kopieren",
+        "cut": "Ausschneiden",
+        "delete": "Löschen",
+        "edit": "Bearbeiten",
+        "minimise": "Minimieren",
+        "paste": "Einfügen",
+        "paste_match_style": "Einfügen und Formatierung beibehalten",
+        "quit": "Beenden",
+        "redo": "Wiederherstellen",
+        "select_all": "Alles auswählen",
+        "show_hide": "Anzeigen/Ausblenden",
+        "undo": "Rückgängig",
+        "zoom_in": "Vergrößern",
+        "zoom_out": "Verkleinern"
+    },
+    "common": {
+        "about": "Über",
+        "brand_help": "%(brand)s Hilfe",
+        "help": "Hilfe",
+        "no": "Nein",
+        "preferences": "Präferenzen",
+        "yes": "Ja"
+    },
+    "confirm_quit": "Wirklich beenden?",
+    "edit_menu": {
+        "speech": "Sprache",
+        "speech_start_speaking": "Aufnahme starten",
+        "speech_stop_speaking": "Aufnahme beenden"
+    },
+    "eol": {
+        "no_more_updates": "Du benutzt eine nicht unterstützte Version von macOS. Bitte aktualisiere, um Updates für %(brand)s zu erhalten.",
+        "title": "System nicht unterstützt",
+        "warning": "Du benutzt eine nicht unterstützte Version von macOS. Bitte aktualisiere, damit %(brand)s weiter funktioniert."
+    },
+    "file_menu": {
+        "label": "Datei"
+    },
+    "icon_overlay": {
+        "description_error": "Fehler",
+        "description_notifications": {
+            "one": "Du hast %(count)s ungelesene Benachrichtigung.",
+            "other": "Du hast %(count)s ungelesene Benachrichtigungen."
+        }
+    },
+    "menu": {
+        "hide": "Verstecken",
+        "hide_others": "Andere verstecken",
+        "services": "Dienste",
+        "unhide": "Wieder anzeigen"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Wörterbuch hinzufügen",
+        "copy_email": "Email-Adresse kopieren",
+        "copy_image": "Bild kopieren",
+        "copy_image_url": "Bild-Adresse kopieren",
+        "copy_link_url": "Link-Adresse kopieren",
+        "save_image_as": "Bild speichern unter...",
+        "save_image_as_error_description": "Das Bild konnte nicht gespeichert werden",
+        "save_image_as_error_title": "Bild kann nicht gespeichert werden"
+    },
+    "store": {
+        "error": {
+            "backend_changed": "Daten löschen und neu laden?",
+            "backend_changed_detail": "Zugriff auf Schlüssel im Systemschlüsselbund nicht möglich, er scheint sich geändert zu haben.",
+            "backend_changed_title": "Datenbank konnte nicht geladen werden",
+            "backend_no_encryption": "Ihr System verfügt über einen unterstützten Keyring, aber die Verschlüsselung ist nicht verfügbar.",
+            "backend_no_encryption_detail": "Electron hat festgestellt, dass der Keyring von %(backend)s keine Verschlüsselung bietet. Wenn du den Keyring installiert hast, starte den Rechner bitte neu und versuche es erneut. Optional kann %(brand)s auch eine abgeschwächte Verschlüsselung nutzen.",
+            "backend_no_encryption_title": "Keine Verschlüsselungsunterstützung",
+            "unsupported_keyring": "Der Keyring des Systems wird nicht unterstützt. Daher kann die Datenbank nicht geöffnet werden kann.",
+            "unsupported_keyring_detail": "Die Keyring-Erkennung von Electron hat kein unterstütztes Backend gefunden. Du kannst einmalig versuchen, eine manuelle Konfiguration von %(brand)s über die Kommandozeile vorzunehmen. Infos unter %(link)s.",
+            "unsupported_keyring_title": "System nicht unterstützt",
+            "unsupported_keyring_use_basic_text": "Schwächere Verschlüsselung verwenden",
+            "unsupported_keyring_use_plaintext": "Verwende keine Verschlüsselung"
+        }
+    },
+    "view_menu": {
+        "actual_size": "Tatsächliche Größe",
+        "toggle_developer_tools": "Developer-Tools an/aus",
+        "toggle_full_screen": "Vollbildschirm an/aus",
+        "view": "Ansicht"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Alles in den Vordergrund",
+        "label": "Fenster",
+        "zoom": "Zoomen"
+    }
+}

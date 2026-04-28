@@ -42,9 +42,9 @@ exports[`<EncryptionUserSettingsTab /> should display a verify button when the e
           </div>
         </div>
         <button
-          class="_button_13vu4_8 _has-icon_13vu4_60"
+          class="_button_1nw83_8 _has-icon_1nw83_60"
           data-kind="primary"
-          data-size="sm"
+          data-size="md"
           role="button"
           tabindex="0"
         >
@@ -118,15 +118,15 @@ exports[`<EncryptionUserSettingsTab /> should display the identity needs reset p
                   d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
                 />
               </svg>
-              You have to reset your cryptographic identity in order to ensure access to your message history
+              You have to reset your digital identity in order to ensure access to your chat history
             </span>
           </div>
         </div>
         <div>
           <button
-            class="_button_13vu4_8"
+            class="_button_1nw83_8"
             data-kind="primary"
-            data-size="sm"
+            data-size="md"
             role="button"
             tabindex="0"
           >
@@ -158,12 +158,12 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
           <h2
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
           >
-            Recovery
+            Backup
           </h2>
           <div
             class="mx_SettingsSubheader"
           >
-            Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
+            Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key.
             <span
               class="mx_SettingsSubheader_error"
             >
@@ -186,18 +186,18 @@ exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync p
           class="mx_RecoveryPanelOutOfSync"
         >
           <button
-            class="_button_13vu4_8"
+            class="_button_1nw83_8"
             data-kind="secondary"
-            data-size="sm"
+            data-size="md"
             role="button"
             tabindex="0"
           >
             Forgot recovery key?
           </button>
           <button
-            class="_button_13vu4_8 _has-icon_13vu4_60"
+            class="_button_1nw83_8 _has-icon_1nw83_60"
             data-kind="primary"
-            data-size="sm"
+            data-size="md"
             role="button"
             tabindex="0"
           >
@@ -232,7 +232,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
       class="mx_SettingsTab_sections"
     >
       <nav
-        class="_breadcrumb_1xygz_8"
+        class="_breadcrumb_t96w3_8"
       >
         <button
           aria-label="Back"
@@ -260,13 +260,13 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           </div>
         </button>
         <ol
-          class="_pages_1xygz_17"
+          class="_pages_t96w3_17"
         >
           <li>
             <a
-              class="_link_1v5rz_8"
+              class="_link_k9ljz_8"
               data-kind="primary"
-              data-size="small"
+              data-size="sm"
               rel="noreferrer noopener"
               role="button"
               tabindex="0"
@@ -277,7 +277,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           <li>
             <span
               aria-current="page"
-              class="_last-page_1xygz_30"
+              class="_last-page_t96w3_30"
             >
               Reset encryption
             </span>
@@ -291,8 +291,9 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           class="mx_EncryptionCard_header"
         >
           <div
-            class="_content_1r8kr_8 _destructive_1r8kr_34"
-            data-size="large"
+            class="_big-icon_1ssbv_8"
+            data-kind="critical"
+            data-size="lg"
           >
             <svg
               fill="currentColor"
@@ -309,7 +310,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           <h2
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
           >
-            Are you sure you want to reset your identity?
+            Are you sure you want to reset your digital identity?
           </h2>
         </div>
         <div
@@ -317,7 +318,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <ul
-            class="_visual-list_1mgc1_8"
+            class="_visual-list_6zpfn_8"
           >
             <li
               class="_visual-list-item_1nc1y_8"
@@ -393,7 +394,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
         >
           <button
             aria-disabled="false"
-            class="_button_13vu4_8 _destructive_13vu4_110"
+            class="_button_1nw83_8 _destructive_1nw83_110"
             data-kind="primary"
             data-size="lg"
             role="button"
@@ -402,7 +403,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
             Continue
           </button>
           <button
-            class="_button_13vu4_8"
+            class="_button_1nw83_8"
             data-kind="tertiary"
             data-size="lg"
             role="button"

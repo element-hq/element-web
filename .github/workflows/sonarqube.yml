@@ -1,6 +1,8 @@
 name: SonarQube
 on:
-    workflow_run:
+    # Privilege escalation necessary to call upon SonarCloud
+    # 🚨 We must not execute any checked out code here.
+    workflow_run: # zizmor: ignore[dangerous-triggers]
         workflows: ["Tests"]
         types:
             - completed
@@ -12,7 +14,7 @@ jobs:
     sonarqube:
         name: 🩻 SonarQube
         if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'merge_group'
-        uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop # zizmor: ignore[unpinned-uses]
         permissions:
             actions: read
             statuses: write
@@ -22,3 +24,4 @@ jobs:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
         with:
             sharded: true
+            version-pkg-json-dir: ./apps/web

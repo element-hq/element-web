@@ -8,8 +8,9 @@ Please see LICENSE files in the repository root for full details.
 import {
     BaseViewModel,
     RoomNotifState,
-    type RoomListItemSnapshot,
-    type RoomListItemActions,
+    type RoomListItemViewSnapshot,
+    type RoomListItemViewActions,
+    type Section,
 } from "@element-hq/web-shared-components";
 import { RoomEvent } from "matrix-js-sdk/src/matrix";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
@@ -19,7 +20,6 @@ import type { RoomNotificationState } from "../../stores/notifications/RoomNotif
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { MessagePreviewStore } from "../../stores/message-preview";
-import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import DMRoomMap from "../../utils/DMRoomMap";
 import SettingsStore from "../../settings/SettingsStore";
@@ -32,11 +32,14 @@ import { UIComponent } from "../../settings/UIFeature";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { clearRoomNotification, setMarkedUnreadState } from "../../utils/notifications";
 import { tagRoom } from "../../utils/room/tagRoom";
+import { keepIfSame } from "../../utils/keepIfSame";
 import dispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
+import RoomListStoreV3, { CHATS_TAG } from "../../stores/room-list-v3/RoomListStoreV3";
+import { _t } from "../../languageHandler";
 
 interface RoomItemProps {
     room: Room;
@@ -46,11 +49,11 @@ interface RoomItemProps {
 /**
  * View model for an individual room list item.
  * Manages per-room subscriptions and updates only when this specific room's data changes.
- * Implements RoomListItemActions to provide interaction callbacks.
+ * Implements RoomListItemViewActions to provide interaction callbacks.
  */
 export class RoomListItemViewModel
-    extends BaseViewModel<RoomListItemSnapshot, RoomItemProps>
-    implements RoomListItemActions
+    extends BaseViewModel<RoomListItemViewSnapshot, RoomItemProps>
+    implements RoomListItemViewActions
 {
     private notifState: RoomNotificationState;
     /**
@@ -69,8 +72,12 @@ export class RoomListItemViewModel
         // Subscribe to notification state changes for this room
         this.disposables.trackListener(this.notifState, NotificationStateEvents.Update, this.onNotificationChanged);
 
-        // Subscribe to message preview changes (will filter to this room)
-        this.disposables.trackListener(MessagePreviewStore.instance, UPDATE_EVENT, this.onMessagePreviewChanged);
+        // Subscribe to message preview changes for this specific room
+        this.disposables.trackListener(
+            MessagePreviewStore.instance,
+            MessagePreviewStore.getPreviewChangedEventName(props.room),
+            this.onMessagePreviewChanged,
+        );
 
         // Subscribe to settings changes for message preview toggle
         const settingsWatchRef = SettingsStore.watchSetting(
@@ -83,13 +90,20 @@ export class RoomListItemViewModel
         });
 
         // Subscribe to call state changes
-        this.disposables.trackListener(CallStore.instance, CallStoreEvent.ConnectedCalls, this.onCallStateChanged);
+        this.disposables.trackListener(CallStore.instance, CallStoreEvent.Call, this.onCallStateChanged);
         // If there is an active call for this room, listen to participant changes
         this.listenToCallParticipants();
 
         // Subscribe to room-specific events
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
         this.disposables.trackListener(props.room, RoomEvent.Tags, this.onRoomChanged);
+
+        const orderSectionsRef = SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () =>
+            this.onOrderedCustomSectionsChange(),
+        );
+        this.disposables.track(() => {
+            SettingsStore.unwatchSetting(orderSectionsRef);
+        });
 
         // Load message preview asynchronously (sync data is already complete)
         void this.loadAndSetMessagePreview();
@@ -98,6 +112,7 @@ export class RoomListItemViewModel
     public dispose(): void {
         super.dispose();
         this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
+        this.currentCall?.off(CallEvent.CallTypeChanged, this.onCallTypeChanged);
     }
 
     private onNotificationChanged = (): void => {
@@ -125,15 +140,24 @@ export class RoomListItemViewModel
     };
 
     /**
+     * Handler for call type changes. Only updates the item if the call type is actually present in the snapshot.
+     */
+    private onCallTypeChanged = (): void => {
+        if (this.snapshot.current.notification.callType !== undefined) this.updateItem();
+    };
+
+    /**
      * Listen to participant changes for the current call in this room (if any) to trigger updates when participants join/leave the call.
      */
     private listenToCallParticipants(): void {
         const call = CallStore.instance.getCall(this.props.room.roomId);
 
-        // Remove listener from previous call (if any) and add to new call to track participant changes
+        // Remove listeners from previous call (if any) and add to new call to track changes
         if (call !== this.currentCall) {
             this.currentCall?.off(CallEvent.Participants, this.onCallParticipantsChanged);
+            this.currentCall?.off(CallEvent.CallTypeChanged, this.onCallTypeChanged);
             call?.on(CallEvent.Participants, this.onCallParticipantsChanged);
+            call?.on(CallEvent.CallTypeChanged, this.onCallTypeChanged);
         }
         this.currentCall = call;
     }
@@ -163,8 +187,13 @@ export class RoomListItemViewModel
      */
     private updateItem(): void {
         const newItem = RoomListItemViewModel.generateItemSync(this.props.room, this.props.client, this.notifState);
-        // Preserve message preview - it's managed separately by loadAndSetMessagePreview
-        this.snapshot.set({ ...newItem, messagePreview: this.snapshot.current.messagePreview });
+        this.snapshot.merge({
+            ...newItem,
+            notification: keepIfSame(this.snapshot.current.notification, newItem.notification),
+            sections: keepIfSame(this.snapshot.current.sections, newItem.sections),
+            // Preserve message preview - it's managed separately by loadAndSetMessagePreview
+            messagePreview: this.snapshot.current.messagePreview,
+        });
     }
 
     private getMessagePreviewTag(): string {
@@ -192,9 +221,7 @@ export class RoomListItemViewModel
      */
     private async loadAndSetMessagePreview(): Promise<void> {
         const messagePreview = await this.loadMessagePreview();
-        if (messagePreview !== this.snapshot.current.messagePreview) {
-            this.snapshot.merge({ messagePreview });
-        }
+        this.snapshot.merge({ messagePreview });
     }
 
     /**
@@ -205,7 +232,7 @@ export class RoomListItemViewModel
         room: Room,
         client: MatrixClient,
         notifState: RoomNotificationState,
-    ): RoomListItemSnapshot {
+    ): RoomListItemViewSnapshot {
         // Get room tags for menu state
         const roomTags = room.tags;
         const isDm = Boolean(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
@@ -260,6 +287,11 @@ export class RoomListItemViewModel
         const callType =
             call?.callType === CallType.Voice ? "voice" : call?.callType === CallType.Video ? "video" : undefined;
 
+        const canMoveToSection = SettingsStore.getValue("feature_room_list_sections");
+
+        // Build sections list for the "Move to section" submenu
+        const sections: Section[] = canMoveToSection ? RoomListItemViewModel.buildSections(roomTags) : [];
+
         return {
             id: room.roomId,
             room,
@@ -287,6 +319,8 @@ export class RoomListItemViewModel
             canMarkAsRead,
             canMarkAsUnread,
             roomNotifState,
+            canMoveToSection,
+            sections,
         };
     }
 
@@ -365,4 +399,53 @@ export class RoomListItemViewModel
         const echoChamber = EchoChamber.forRoom(this.props.room);
         echoChamber.notificationVolume = elementNotifState;
     };
+
+    public onCreateSection = async (): Promise<void> => {
+        const newTag = await RoomListStoreV3.instance.createSection();
+        // Add the room to the section
+        if (newTag) {
+            tagRoom(this.props.room, newTag);
+        }
+    };
+
+    public onToggleSection = (tag: string): void => {
+        tagRoom(this.props.room, tag);
+    };
+
+    private onOrderedCustomSectionsChange = (): void => {
+        // Rebuild sections list to reflect new order
+        const sections = RoomListItemViewModel.buildSections(this.props.room.tags);
+        this.snapshot.merge({ sections: keepIfSame(this.snapshot.current.sections, sections) });
+    };
+
+    /**
+     * Build the list of available sections for the "Move to section" submenu.
+     * Order follows the canonical section order from RoomListStoreV3.
+     */
+    private static buildSections(roomTags: Room["tags"]): Section[] {
+        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+
+        return (
+            RoomListStoreV3.instance.orderedSectionTags
+                // Exclude the Chats because the user toggle the other sections to move rooms in and out of the Chats section.
+                // Also exclude the default sections because they are available as toggles in the main context menu, and we don't want them to be duplicated in the "Move to section" submenu.
+                .filter(
+                    (tag) => tag !== CHATS_TAG && tag !== DefaultTagID.Favourite && tag !== DefaultTagID.LowPriority,
+                )
+                .map((tag) => ({
+                    tag,
+                    name: RoomListItemViewModel.getSectionName(tag, customSectionData),
+                    isSelected: Boolean(roomTags[tag]),
+                }))
+        );
+    }
+
+    /**
+     * Get the display name for a section based on its tag.
+     */
+    private static getSectionName(tag: string, customSectionData: Record<string, { name: string }>): string {
+        if (tag === DefaultTagID.Favourite) return _t("room_list|section|favourites");
+        if (tag === DefaultTagID.LowPriority) return _t("room_list|section|low_priority");
+        return customSectionData[tag]?.name || tag;
+    }
 }

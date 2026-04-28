@@ -13,6 +13,23 @@
     "notifications": {
         "all_messages": "Alle beskeder"
     },
+    "room_list": {
+        "collapse_filters": "Sammenfold filtreringslisten",
+        "empty": {
+            "no_people_description": "Du kan fravælge filtre for at se dine andre samtaler",
+            "no_rooms_description": "Du kan fravælge filtre, for at se dine andre samtaler"
+        },
+        "expand_filters": "Udvid filtreringslisten",
+        "filters": {
+            "favourite": "Foretrukne",
+            "invites": "Invitationer",
+            "low_priority": "Lav prioritet",
+            "mentions": "Nævnt",
+            "people": "Brugere",
+            "rooms": "Rum",
+            "unread": "Ulæste"
+        }
+    },
     "time": {
         "about_day_ago": "omkring en dag siden",
         "about_hour_ago": "for omkring en time siden",

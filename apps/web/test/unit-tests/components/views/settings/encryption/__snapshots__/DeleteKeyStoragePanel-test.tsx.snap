@@ -3,7 +3,7 @@
 exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
 <DocumentFragment>
   <nav
-    class="_breadcrumb_1xygz_8"
+    class="_breadcrumb_t96w3_8"
   >
     <button
       aria-label="Back"
@@ -31,13 +31,13 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       </div>
     </button>
     <ol
-      class="_pages_1xygz_17"
+      class="_pages_t96w3_17"
     >
       <li>
         <a
-          class="_link_1v5rz_8"
+          class="_link_k9ljz_8"
           data-kind="primary"
-          data-size="small"
+          data-size="sm"
           rel="noreferrer noopener"
           role="button"
           tabindex="0"
@@ -48,7 +48,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       <li>
         <span
           aria-current="page"
-          class="_last-page_1xygz_30"
+          class="_last-page_t96w3_30"
         >
           Delete key storage
         </span>
@@ -62,8 +62,9 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       class="mx_EncryptionCard_header"
     >
       <div
-        class="_content_1r8kr_8 _destructive_1r8kr_34"
-        data-size="large"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
@@ -89,7 +90,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
     >
       Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
       <ul
-        class="_visual-list_1mgc1_8"
+        class="_visual-list_6zpfn_8"
       >
         <li
           class="_visual-list-item_1nc1y_8"
@@ -125,7 +126,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
               d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
             />
           </svg>
-          You will lose access to your encrypted messages if you are signed out of Element everywhere
+          You will lose access to your encrypted messages if you're not signed in to any devices
         </li>
       </ul>
     </div>
@@ -134,7 +135,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
     >
       <button
         aria-disabled="false"
-        class="_button_13vu4_8 _destructive_13vu4_110"
+        class="_button_1nw83_8 _destructive_1nw83_110"
         data-kind="primary"
         data-size="lg"
         role="button"
@@ -143,7 +144,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
         Delete key storage
       </button>
       <button
-        class="_button_13vu4_8"
+        class="_button_1nw83_8"
         data-kind="tertiary"
         data-size="lg"
         role="button"

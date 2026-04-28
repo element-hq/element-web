@@ -1,15 +1,16 @@
 *                         @element-hq/element-web-reviewers
 /.github/workflows/**     @element-hq/element-web-team
-package.json              @element-hq/element-web-team
+**/package.json           @element-hq/element-web-team
 /pnpm-lock.yaml           @element-hq/element-web-team
 
 /apps/web/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
-/apps/web/test/SecurityManager-test.ts                                           @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/SecurityManager-test.ts                                @element-hq/element-crypto-web-reviewers
 /apps/web/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/async-components/dialogs/security/                     @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
-/apps/web/test/components/views/dialogs/security/                                @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/components/views/dialogs/security/                     @element-hq/element-crypto-web-reviewers
 /apps/web/src/stores/SetupEncryptionStore.ts                                     @element-hq/element-crypto-web-reviewers
-/apps/web/test/stores/SetupEncryptionStore-test.ts                               @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/stores/SetupEncryptionStore-test.ts                    @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx  @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/encryption/                              @element-hq/element-crypto-web-reviewers
 /apps/web/test/unit-tests/components/views/settings/encryption/                  @element-hq/element-crypto-web-reviewers
@@ -26,8 +27,10 @@ package.json              @element-hq/element-web-team
 
 # Ignore translations as those will be updated by GHA for Localazy download
 /apps/web/src/i18n/strings
+/apps/desktop/src/i18n/strings
 /packages/shared-components/src/i18n/strings
 /apps/web/src/i18n/strings/en_EN.json                    @element-hq/element-web-reviewers
+/apps/desktop/src/i18n/strings/en_EN.json                @element-hq/element-web-reviewers
 /packages/shared-components/src/i18n/strings/en_EN.json  @element-hq/element-web-reviewers
 
 # Ignore the synapse & mas plugins as this is updated by GHA for docker image updating

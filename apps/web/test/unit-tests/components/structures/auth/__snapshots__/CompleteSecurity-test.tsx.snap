@@ -53,8 +53,9 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_content_1r8kr_8"
-                    data-size="large"
+                    class="_big-icon_1ssbv_8"
+                    data-kind="primary"
+                    data-size="lg"
                   >
                     <svg
                       fill="currentColor"
@@ -71,7 +72,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   <h2
                     class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
                   >
-                    Confirm your identity
+                    Confirm your digital identity
                   </h2>
                 </div>
                 <div
@@ -111,7 +112,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -131,7 +132,7 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                      Use another device
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -140,13 +141,13 @@ exports[`CompleteSecurity Allows verifying with another device if one is availab
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"
                     tabindex="0"
                   >
-                    Sign out
+                    Remove this device
                   </button>
                 </div>
               </div>
@@ -245,8 +246,9 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   class="mx_EncryptionCard_header"
                 >
                   <div
-                    class="_content_1r8kr_8"
-                    data-size="large"
+                    class="_big-icon_1ssbv_8"
+                    data-kind="primary"
+                    data-size="lg"
                   >
                     <svg
                       fill="currentColor"
@@ -263,7 +265,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   <h2
                     class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
                   >
-                    Confirm your identity
+                    Confirm your digital identity
                   </h2>
                 </div>
                 <div
@@ -303,7 +305,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                   class="mx_EncryptionCard_buttons"
                 >
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="primary"
                     data-size="lg"
                     role="button"
@@ -312,7 +314,7 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                     Use recovery key
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="secondary"
                     data-size="lg"
                     role="button"
@@ -321,13 +323,13 @@ exports[`CompleteSecurity Allows verifying with recovery key if one is available
                     Can't confirm?
                   </button>
                   <button
-                    class="_button_13vu4_8"
+                    class="_button_1nw83_8"
                     data-kind="tertiary"
                     data-size="lg"
                     role="button"
                     tabindex="0"
                   >
-                    Sign out
+                    Remove this device
                   </button>
                 </div>
               </div>

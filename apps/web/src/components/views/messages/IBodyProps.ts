@@ -25,6 +25,8 @@ export interface IBodyProps {
 
     showUrlPreview?: boolean;
     forExport?: boolean;
+    // Whether file-style rendering should show the info row / placeholder.
+    showFileInfo?: boolean;
     maxImageHeight?: number;
     replacingEventId?: string;
     editState?: EditorStateTransfer;

@@ -20,6 +20,7 @@ import Login from "../../../../../src/components/structures/auth/Login";
 import type BasePlatform from "../../../../../src/BasePlatform";
 import * as registerClientUtils from "../../../../../src/utils/oidc/registerClient";
 import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
+import { ModuleApi } from "../../../../../src/modules/Api.ts";
 
 jest.useRealTimers();
 
@@ -98,6 +99,35 @@ describe("Login", function () {
         expect(container.querySelector("form")).toBeTruthy();
 
         expect(container.querySelector(".mx_ServerPicker_change")).toBeTruthy();
+    });
+
+    it("should show register button", async () => {
+        const onRegisterClick = jest.fn();
+        const { getByText } = render(
+            <Login
+                serverConfig={mkServerConfig("https://matrix.org", "https://vector.im")}
+                onLoggedIn={() => {}}
+                onRegisterClick={onRegisterClick}
+                onServerConfigChange={() => {}}
+            />,
+        );
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+
+        fireEvent.click(getByText("Create an account"));
+        expect(onRegisterClick).toHaveBeenCalled();
+    });
+
+    it("should hide register button", async () => {
+        const { queryByText } = render(
+            <Login
+                serverConfig={mkServerConfig("https://matrix.org", "https://vector.im")}
+                onLoggedIn={() => {}}
+                onServerConfigChange={() => {}}
+            />,
+        );
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+
+        expect(queryByText("Create an account")).not.toBeInTheDocument();
     });
 
     it("should show form without change server link when custom URLs disabled", async () => {
@@ -415,6 +445,18 @@ describe("Login", function () {
             // did not continue with matrix login
             expect(mockClient.loginFlows).not.toHaveBeenCalled();
             expect(screen.getByText("Continue")).toBeInTheDocument();
+        });
+    });
+
+    describe("Module API", () => {
+        afterEach(() => {
+            ModuleApi.instance.customComponents.registerLoginComponent(undefined as any);
+        });
+
+        it("should use registered module renderer", async () => {
+            ModuleApi.instance.customComponents.registerLoginComponent(() => <>Test component</>);
+            const { getByText } = getComponent();
+            expect(getByText("Test component")).toBeTruthy();
         });
     });
 });

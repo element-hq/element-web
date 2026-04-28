@@ -60,8 +60,9 @@ export const createSpace = async (
     otherOpts: Partial<Omit<ICreateOpts, "createOpts">> = {},
 ): Promise<string | null> => {
     return createRoom(client, {
+        name,
+        topic,
         createOpts: {
-            name,
             preset: isPublic ? Preset.PublicChat : Preset.PrivateChat,
             visibility:
                 isPublic && (await client.doesServerSupportUnstableFeature("org.matrix.msc3827.stable"))
@@ -73,7 +74,6 @@ export const createSpace = async (
                 invite: isPublic ? 0 : 50,
             },
             room_alias_name: isPublic && alias ? alias.substring(1, alias.indexOf(":")) : undefined,
-            topic,
             ...createOpts,
         },
         avatar,

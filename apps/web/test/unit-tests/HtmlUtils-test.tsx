@@ -101,7 +101,7 @@ describe("bodyToHtml", () => {
         );
 
         expect(html).toMatchInlineSnapshot(
-            `"foo <a href="http://link.example/test/path" class="linkified" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
+            `"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener" data-linkified="true">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
         );
     });
 
@@ -121,6 +121,27 @@ describe("bodyToHtml", () => {
 
         expect(html).toMatchInlineSnapshot(
             `"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener">http://link.example/<span class="mx_EventTile_searchHighlight">test</span>/path</a> bar"`,
+        );
+    });
+
+    it("should ignore data-linkified in incoming links but should be applied to linkified links", () => {
+        getMockClientWithEventEmitter({});
+        const html = bodyToHtml(
+            {
+                body: "foo http://link.example/test/path bar",
+                msgtype: "m.text",
+                formatted_body:
+                    'foo <a data-linkfied="true" href="http://link.example/test/path">http://link.example/test/path</a> bar with https://example.org',
+                format: "org.matrix.custom.html",
+            },
+            [],
+            {
+                linkify: true,
+            },
+        );
+
+        expect(html).toMatchInlineSnapshot(
+            `"foo <a href="http://link.example/test/path" target="_blank" rel="noreferrer noopener">http://link.example/test/path</a> bar with <a href="https://example.org" target="_blank" rel="noreferrer noopener" data-linkified="true">https://example.org</a>"`,
         );
     });
 

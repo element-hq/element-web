@@ -302,7 +302,7 @@ test.describe("Cryptography", function () {
                 const last = page.locator(".mx_EventTile_last");
                 await expect(last).toContainText("test encrypted from user that was previously verified");
                 const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
-                await expect(lastE2eIcon).toHaveAccessibleName("Sender's verified identity was reset");
+                await expect(lastE2eIcon).toHaveAccessibleName("Sender's verified digital identity was reset");
                 await expect(lastE2eIcon).toMatchScreenshot("event-shield-identity-reset.png");
             },
         );

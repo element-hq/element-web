@@ -1,0 +1,63 @@
+{
+    "action": {
+        "cancel": "İptal",
+        "close": "Kapat",
+        "close_brand": "Kapat %(brand)s",
+        "copy": "Kopyala",
+        "cut": "Kes",
+        "delete": "Sil",
+        "edit": "Düzenle",
+        "minimise": "Küçült",
+        "paste": "Yapıştır",
+        "paste_match_style": "Stili Yapıştır ve Eşleştir",
+        "quit": "Çık",
+        "redo": "Yeniden yap",
+        "select_all": "Tümünü seç",
+        "show_hide": "Göster/Gizle",
+        "undo": "Geri al",
+        "zoom_in": "Yakınlaştır",
+        "zoom_out": "Uzaklaştır"
+    },
+    "common": {
+        "about": "Hakkında",
+        "brand_help": "%(brand)s Yardım",
+        "help": "Yardım",
+        "preferences": "Tercihler"
+    },
+    "confirm_quit": "Çıkmak istediğinizden emin misiniz?",
+    "edit_menu": {
+        "speech": "Konuşma",
+        "speech_start_speaking": "Konuşmaya başla",
+        "speech_stop_speaking": "Konuşmayı durdur"
+    },
+    "file_menu": {
+        "label": "Dosya"
+    },
+    "menu": {
+        "hide": "Gizle",
+        "hide_others": "Diğerlerini gizle",
+        "services": "Hizmetler",
+        "unhide": "Göster"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Sözlüğe ekle",
+        "copy_email": "E-posta adresini kopyala",
+        "copy_image": "Resmi kopyala",
+        "copy_image_url": "Görsel adresini kopyala",
+        "copy_link_url": "Bağlantılı adresi kopyala",
+        "save_image_as": "Resmi farklı kaydet...",
+        "save_image_as_error_description": "Görüntü kaydedilemedi",
+        "save_image_as_error_title": "Resim kaydedilemedi"
+    },
+    "view_menu": {
+        "actual_size": "Gerçek boyut",
+        "toggle_developer_tools": "Geliştirici araçları",
+        "toggle_full_screen": "Tam ekran",
+        "view": "Görüntüle"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Hepsini öne getir",
+        "label": "Pencere",
+        "zoom": "Yaklaştır"
+    }
+}

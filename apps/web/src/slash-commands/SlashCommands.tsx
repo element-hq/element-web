@@ -20,12 +20,13 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership, type RoomMemberEventContent } from "matrix-js-sdk/src/types";
+import { LinkedText } from "@element-hq/web-shared-components";
 
 import dis from "../dispatcher/dispatcher";
 import { _t, _td, UserFriendlyError } from "../languageHandler";
 import Modal from "../Modal";
 import MultiInviter from "../utils/MultiInviter";
-import { Linkify, topicToHtml } from "../HtmlUtils";
+import { topicToHtml } from "../HtmlUtils";
 import QuestionDialog from "../components/views/dialogs/QuestionDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { textToHtmlRainbow } from "../utils/colour";
@@ -270,7 +271,7 @@ export const Commands = [
 
             Modal.createDialog(InfoDialog, {
                 title: room.name,
-                description: <Linkify>{body}</Linkify>,
+                description: <LinkedText>{body}</LinkedText>,
                 hasCloseButton: true,
                 className: "markdown-body",
             });

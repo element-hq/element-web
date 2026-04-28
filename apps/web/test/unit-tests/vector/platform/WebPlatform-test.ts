@@ -264,4 +264,22 @@ describe("WebPlatform", () => {
         platform.setErrorStatus(true);
         expect(spy).toHaveBeenCalledWith(expect.anything(), { bgColor: "#f00" });
     });
+
+    describe("getOidcCallbackUrl()", () => {
+        it("should not include the 'updated' query param in the redirect URI", () => {
+            Object.defineProperty(window, "location", {
+                value: {
+                    href: "https://element.example.com/?updated=1.12.12",
+                    origin: "https://element.example.com",
+                    pathname: "/",
+                },
+                writable: true,
+            });
+            const platform = new WebPlatform();
+            const url = platform.getOidcCallbackUrl();
+
+            expect(url.searchParams.has("updated")).toBe(false);
+            expect(url.searchParams.get("no_universal_links")).toEqual("true");
+        });
+    });
 });

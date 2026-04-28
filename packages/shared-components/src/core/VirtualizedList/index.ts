@@ -1,0 +1,17 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+export { FlatVirtualizedList } from "./FlatVirtualizedList";
+export type { FlatVirtualizedListProps } from "./FlatVirtualizedList";
+export { GroupedVirtualizedList } from "./GroupedVirtualizedList";
+export type { GroupedVirtualizedListProps, Group } from "./GroupedVirtualizedList";
+export type { VirtualizedListContext, ScrollIntoViewOnChange } from "./virtualized-list";
+export * from "./accessbility";
+
+// Re-export VirtuosoMockContext for testing purposes
+// Tests should import this from shared-components to ensure context compatibility
+export { VirtuosoMockContext } from "react-virtuoso";

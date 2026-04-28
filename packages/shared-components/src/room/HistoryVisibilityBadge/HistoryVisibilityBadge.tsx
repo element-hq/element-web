@@ -13,7 +13,7 @@ import {
     VisibilityOffIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { _t } from "../../utils/i18n";
+import { _t } from "../../core/i18n/i18n";
 
 interface Props {
     /** The history visibility of the room, according to the room state. */

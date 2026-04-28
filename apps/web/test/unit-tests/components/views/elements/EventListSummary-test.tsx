@@ -154,6 +154,7 @@ describe("EventListSummary", function () {
         const children = container.querySelector(".mx_GenericEventListSummary_unstyledList")!.children;
         expect(children).toHaveLength(1);
         expect(children[0]).toHaveTextContent("Expanded membership");
+        expect(children).toMatchSnapshot();
     });
 
     it("renders expanded events if there are less than props.threshold for join and leave", function () {
@@ -175,6 +176,7 @@ describe("EventListSummary", function () {
         expect(children).toHaveLength(2);
         expect(children[0]).toHaveTextContent("Expanded membership");
         expect(children[1]).toHaveTextContent("Expanded membership");
+        expect(children).toMatchSnapshot();
     });
 
     it("renders collapsed events if events.length = props.threshold", function () {
@@ -194,6 +196,7 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("user_1 joined and left and joined");
+        expect(summary).toMatchSnapshot();
     });
 
     it("truncates long join,leave repetitions", function () {
@@ -224,6 +227,7 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("user_1 joined and left 7 times");
+        expect(summary).toMatchSnapshot();
     });
 
     it("truncates long join,leave repetitions between other events", function () {
@@ -265,7 +269,13 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent("user_1 was unbanned, joined and left 7 times and was invited");
+
+        // And there is no spoiler on the user's name since they were not banned
+        expect(summary).not.toContainHTML("mx_EventTile_spoiler_content");
+        expect(summary).toMatchSnapshot();
     });
 
     it("truncates multiple sequences of repetitions with other events between", function () {
@@ -309,9 +319,15 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent(
-            "user_1 was unbanned, joined and left 2 times, was banned, " + "joined and left 3 times and was invited",
+            "user_1 was unbanned, joined and left 2 times, was banned, joined and left 3 times and was invited",
         );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_1</span>');
+        expect(summary).toMatchSnapshot();
     });
 
     it("handles multiple users following the same sequence of memberships", function () {
@@ -361,9 +377,15 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent(
             "user_1 and one other were unbanned, joined and left 2 times and were banned",
         );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_1</span>');
+        expect(summary).toMatchSnapshot();
     });
 
     it("handles many users following the same sequence of memberships", function () {
@@ -393,9 +415,15 @@ describe("EventListSummary", function () {
 
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
+
+        // The sequence was summarised correctly
         expect(summary).toHaveTextContent(
             "user_0 and 19 others were unbanned, joined and left 2 times and were banned",
         );
+
+        // And the banned user's name is hidden within a spoiler
+        expect(summary).toContainHTML('<span class="mx_EventTile_spoiler_content">user_0</span>');
+        expect(summary).toMatchSnapshot();
     });
 
     it("correctly orders sequences of transitions by the order of their first event", function () {
@@ -441,6 +469,7 @@ describe("EventListSummary", function () {
             "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, " +
                 "joined and left 2 times and was banned",
         );
+        expect(summary).toMatchSnapshot();
     });
 
     it("correctly identifies transitions", function () {
@@ -509,6 +538,7 @@ describe("EventListSummary", function () {
             "user_1 was invited, was banned, joined, rejected their invitation, left, " +
                 "had their invitation withdrawn, was unbanned, was removed, left and was removed",
         );
+        expect(summary).toMatchSnapshot();
     });
 
     it("handles invitation plurals correctly when there are multiple users", function () {
@@ -549,6 +579,7 @@ describe("EventListSummary", function () {
         expect(summary).toHaveTextContent(
             "user_1 and one other rejected their invitations and had their invitations withdrawn",
         );
+        expect(summary).toMatchSnapshot();
     });
 
     it("handles invitation plurals correctly when there are multiple invites", function () {
@@ -575,6 +606,7 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("user_1 rejected their invitation 2 times");
+        expect(summary).toMatchSnapshot();
     });
 
     it('handles a summary length = 2, with no "others"', function () {
@@ -595,6 +627,7 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("user_1 and user_2 joined 2 times");
+        expect(summary).toMatchSnapshot();
     });
 
     it('handles a summary length = 2, with 1 "other"', function () {
@@ -614,6 +647,7 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("user_1, user_2 and one other joined");
+        expect(summary).toMatchSnapshot();
     });
 
     it('handles a summary length = 2, with many "others"', function () {
@@ -629,6 +663,7 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("user_0, user_1 and 18 others joined");
+        expect(summary).toMatchSnapshot();
     });
 
     it("should not blindly group 3pid invites and treat them as distinct users instead", () => {
@@ -679,5 +714,6 @@ describe("EventListSummary", function () {
         const { container } = renderComponent(props);
         const summary = container.querySelector(".mx_GenericEventListSummary_summary");
         expect(summary).toHaveTextContent("n...@d... was invited 2 times, d...@w... was invited");
+        expect(summary).toMatchSnapshot();
     });
 });

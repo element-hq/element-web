@@ -64,9 +64,9 @@ The following lists a few common options.
 ## Enabling by default on develop and nightly
 
 Set the feature to `true` in the
-[develop](https://github.com/element-hq/element-web/blob/develop/element.io/develop/config.json)
+[develop](https://github.com/element-hq/element-web/blob/develop/apps/web/element.io/develop/config.json)
 and
-[nightly](https://github.com/element-hq/element-desktop/blob/develop/element.io/nightly/config.json)
+[nightly](https://github.com/element-hq/element-web/blob/develop/apps/desktop/element.io/nightly/config.json)
 configs:
 
 ```json
@@ -78,9 +78,9 @@ configs:
 ## Enabling by default on staging, app, and release
 
 Set the feature to `true` in the
-[staging / app](https://github.com/element-hq/element-web/blob/develop/element.io/app/config.json)
+[staging / app](https://github.com/element-hq/element-web/blob/develop/apps/web/element.io/app/config.json)
 and
-[release](https://github.com/element-hq/element-desktop/blob/develop/element.io/release/config.json)
+[release](https://github.com/element-hq/element-web/blob/develop/apps/desktop/element.io/release/config.json)
 configs.
 
 **Note:** The above will only enable the feature for https://app.element.io and official Element
@@ -104,10 +104,10 @@ If the feature is meant to be forced on (non-configurable):
 2. Remove all `getValue` lines that test for the feature.
 3. Remove the feature from the [labs documentation](https://github.com/element-hq/element-web/blob/develop/docs/labs.md)
 4. If applicable, remove the feature state from
-   [develop](https://github.com/element-hq/element-web/blob/develop/element.io/develop/config.json),
-   [nightly](https://github.com/element-hq/element-desktop/blob/develop/element.io/nightly/config.json),
-   [staging / app](https://github.com/element-hq/element-web/blob/develop/element.io/app/config.json),
+   [develop](https://github.com/element-hq/element-web/blob/develop/apps/web/element.io/develop/config.json),
+   [nightly](https://github.com/element-hq/element-web/blob/develop/apps/desktop/element.io/nightly/config.json),
+   [staging / app](https://github.com/element-hq/element-web/blob/develop/apps/web/element.io/app/config.json),
    and
-   [release](https://github.com/element-hq/element-desktop/blob/develop/element.io/release/config.json)
+   [release](https://github.com/element-hq/element-web/blob/develop/apps/desktop/element.io/release/config.json)
    configs
 5. Celebrate! 🥳

@@ -7,7 +7,7 @@ import "@fontsource/inter/700.css";
 import "./compound.css";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
-import { setLanguage } from "../src/utils/i18n";
+import { setLanguage } from "../src/core/i18n/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { StoryContext } from "storybook/internal/csf";
 import { I18nApi, I18nContext } from "../src";

@@ -92,7 +92,7 @@ describe("CompleteSecurity", () => {
         await act(async () => panel.getByRole("button", { name: "Can't confirm?" }).click());
 
         // Then the reset identity dialog appears
-        expect(screen.getByRole("heading", { name: "You need to reset your identity" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "You need to reset your digital identity" })).toBeInTheDocument();
         expect(panel.getByRole("button", { name: "Continue" })).toBeInTheDocument();
     });
 
@@ -117,7 +117,7 @@ describe("CompleteSecurity", () => {
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your identity?" }),
+            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
         ).toBeInTheDocument();
     });
 
@@ -142,7 +142,7 @@ describe("CompleteSecurity", () => {
         // Then the reset identity dialog appears, and should have a different
         // title from when there were no verification methods available.
         expect(
-            screen.getByRole("heading", { name: "Are you sure you want to reset your identity?" }),
+            screen.getByRole("heading", { name: "Are you sure you want to reset your digital identity?" }),
         ).toBeInTheDocument();
     });
 });

@@ -16,6 +16,7 @@ import type {
     CustomMessageRenderHints as ModuleCustomCustomMessageRenderHints,
     MatrixEvent as ModuleMatrixEvent,
     CustomRoomPreviewBarRenderFunction,
+    CustomLoginRenderFunction,
 } from "@element-hq/element-web-module-api";
 import type React from "react";
 
@@ -152,5 +153,22 @@ export class CustomComponentsApi implements ICustomComponentsApi {
      */
     public registerRoomPreviewBar(renderer: CustomRoomPreviewBarRenderFunction): void {
         this._roomPreviewBarRenderer = renderer;
+    }
+
+    private _loginRenderer?: CustomLoginRenderFunction;
+
+    /**
+     * Get the custom login component renderer, if any has been registered.
+     */
+    public get loginComponentRenderer(): CustomLoginRenderFunction | undefined {
+        return this._loginRenderer;
+    }
+
+    /**
+     * Register a custom login component renderer.
+     * @param renderer - the function that will render the login component.
+     */
+    public registerLoginComponent(renderer: CustomLoginRenderFunction): void {
+        this._loginRenderer = renderer;
     }
 }

@@ -10,9 +10,9 @@ import { Button } from "@vector-im/compound-web";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
 
-import { Flex } from "../../utils/Flex";
-import { _t } from "../../utils/i18n";
-import { useViewModel } from "../../viewmodel";
+import { Flex } from "../../core/utils/Flex";
+import { _t } from "../../core/i18n/i18n";
+import { useViewModel } from "../../core/viewmodel";
 import type { RoomListViewModel } from "./RoomListView";
 import styles from "./RoomListEmptyStateView.module.css";
 
@@ -49,11 +49,11 @@ export const RoomListEmptyStateView: React.FC<RoomListEmptyStateViewProps> = ({ 
                     direction="column"
                     gap="var(--cpd-space-4x)"
                 >
-                    <Button size="sm" kind="secondary" Icon={ChatIcon} onClick={vm.createChatRoom}>
+                    <Button size="md" kind="secondary" Icon={ChatIcon} onClick={vm.createChatRoom}>
                         {_t("action|start_chat")}
                     </Button>
                     {snapshot.canCreateRoom && (
-                        <Button size="sm" kind="secondary" Icon={RoomIcon} onClick={vm.createRoom}>
+                        <Button size="md" kind="secondary" Icon={RoomIcon} onClick={vm.createRoom}>
                             {_t("action|new_room")}
                         </Button>
                     )}

@@ -10,6 +10,7 @@ import React, { type JSX, useCallback, useContext, useState } from "react";
 import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
+import { LinkedText } from "@element-hq/web-shared-components";
 
 import { useTopic } from "../../../hooks/room/useTopic";
 import { _t } from "../../../languageHandler";
@@ -20,7 +21,7 @@ import InfoDialog from "../dialogs/InfoDialog";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
-import { Linkify, topicToHtml } from "../../../HtmlUtils";
+import { topicToHtml } from "../../../HtmlUtils";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
@@ -74,19 +75,7 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
                 title: room.name,
                 description: (
                     <div>
-                        <Linkify
-                            options={{
-                                attributes: {
-                                    onClick(e: React.MouseEvent<HTMLDivElement>) {
-                                        onClick(e);
-                                        modal.close();
-                                    },
-                                },
-                            }}
-                            as="p"
-                        >
-                            {body}
-                        </Linkify>
+                        <LinkedText onLinkClick={() => modal.close()}>{body}</LinkedText>
                         {canSetTopic && (
                             <AccessibleButton
                                 kind="primary_outline"
@@ -122,7 +111,7 @@ export default function RoomTopic({ room, className, ...props }: IProps): JSX.El
                 onFocus={onHover}
                 aria-label={_t("room|read_topic")}
             >
-                <Linkify>{body}</Linkify>
+                <LinkedText>{body}</LinkedText>
             </div>
         </Tooltip>
     );

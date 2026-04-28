@@ -64,7 +64,7 @@ test.describe("Roles & Permissions room settings tab", () => {
             const settingsGroupAccess = page.getByRole("group", { name: "Access" });
             const settingsGroupHistory = page.getByRole("group", { name: "Who can read history?" });
 
-            await settingsGroupAccess.getByText("Public").click();
+            await settingsGroupAccess.getByText("Anyone", { exact: true }).click();
             await settingsGroupHistory.getByText("Anyone").click();
 
             // Test that we have the warning appear.
@@ -72,7 +72,7 @@ test.describe("Roles & Permissions room settings tab", () => {
             await expect(axe).toHaveNoViolations();
             await expect(settings).toMatchScreenshot("room-security-settings-world-readable.png");
 
-            await settingsGroupAccess.getByText("Private (invite only)").click();
+            await settingsGroupAccess.getByText("Invite only").click();
             // Element should have automatically set the room to "sharing" history visibility
             await expect(settingsGroupHistory.getByText("Members (full history)")).toBeChecked();
         },
@@ -87,7 +87,7 @@ test.describe("Roles & Permissions room settings tab", () => {
             const settingsGroupAccess = page.getByRole("group", { name: "Access" });
             const settingsGroupHistory = page.getByRole("group", { name: "Who can read history?" });
 
-            await settingsGroupAccess.getByText("Public").click();
+            await settingsGroupAccess.getByText("Anyone", { exact: true }).click();
             await settingsGroupHistory.getByText("Anyone").click();
 
             // De-op ourselves
@@ -108,7 +108,7 @@ test.describe("Roles & Permissions room settings tab", () => {
 
             await app.settings.switchTab("Security & Privacy");
 
-            await settingsGroupAccess.getByText("Private (invite only)").click();
+            await settingsGroupAccess.getByText("Invite only").click();
             // Element should have automatically set the room to "sharing" history visibility
             const errorDialog = page.getByRole("heading", { name: "Cannot make room private" });
             await expect(errorDialog).toBeVisible();

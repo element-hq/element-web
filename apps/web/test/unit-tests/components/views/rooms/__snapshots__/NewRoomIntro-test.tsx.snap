@@ -7,17 +7,21 @@ exports[`NewRoomIntro topic should render a link in the topic 1`] = `
   <span>
     Topic: 
     <span
-      dir="auto"
+      class="_container_15awj_8"
     >
-      This is a link: 
-      <a
-        class="linkified"
-        href="https://matrix.org/"
-        rel="noreferrer noopener"
-        target="_blank"
+      <span
+        dir="auto"
       >
-        https://matrix.org/
-      </a>
+        This is a link: 
+        <a
+          data-linkified="true"
+          href="https://matrix.org/"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          https://matrix.org/
+        </a>
+      </span>
     </span>
   </span>
 </p>

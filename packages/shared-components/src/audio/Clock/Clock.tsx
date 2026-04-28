@@ -9,7 +9,7 @@ import React, { type JSX, type HTMLProps, useMemo } from "react";
 import { Temporal } from "temporal-polyfill";
 import classNames from "classnames";
 
-import { formatSeconds } from "../../utils/DateUtils";
+import { formatSeconds } from "../../core/utils/DateUtils";
 
 export interface Props extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "role" | "className"> {
     /**

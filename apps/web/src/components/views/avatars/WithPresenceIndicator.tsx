@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type ReactNode, useEffect, useState } from "react";
-import { ClientEvent, type Room, type RoomMember, RoomStateEvent, UserEvent } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    type Room,
+    type RoomMember,
+    RoomStateEvent,
+    type User,
+    UserEvent,
+} from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { isPresenceEnabled } from "../../../utils/presence";
@@ -65,12 +72,12 @@ export const useDmMember = (room?: Room): RoomMember | null => {
     return dmMember;
 };
 
-function getPresence(member: RoomMember | null): Presence | null {
-    if (!member?.user) return null;
+function getPresenceFromUser(user: User | null | undefined): Presence | null {
+    if (!user) return null;
 
-    const presence = member.user.presence;
-    const isOnline = member.user.currentlyActive || presence === "online";
-    if (BUSY_PRESENCE_NAME.matches(member.user.presence)) {
+    const presence = user.presence;
+    const isOnline = user.currentlyActive || presence === "online";
+    if (BUSY_PRESENCE_NAME.matches(presence)) {
         return Presence.Busy;
     }
     if (isOnline) {
@@ -86,15 +93,25 @@ function getPresence(member: RoomMember | null): Presence | null {
     return null;
 }
 
+function getPresence(room: Room, member: RoomMember | null): Presence | null {
+    // Fall back to client.getUser() when member.user is not yet linked during initial sync
+    const user = member?.user ?? (member ? room.client.getUser(member.userId) : null);
+    return getPresenceFromUser(user);
+}
+
 export const usePresence = (room: Room, member: RoomMember | null): Presence | null => {
-    const [presence, setPresence] = useState<Presence | null>(getPresence(member));
+    const [presence, setPresence] = useState<Presence | null>(getPresence(room, member));
     const updatePresence = (): void => {
-        setPresence(getPresence(member));
+        setPresence(getPresence(room, member));
     };
 
     useEventEmitter(member?.user, UserEvent.Presence, updatePresence);
     useEventEmitter(member?.user, UserEvent.CurrentlyActive, updatePresence);
-    useEffect(updatePresence, [member]);
+    // Also listen at client level to catch presence events when member.user is not yet linked
+    useEventEmitter(room.client, UserEvent.Presence, (_event: unknown, user: User) => {
+        if (user?.userId === member?.userId) updatePresence();
+    });
+    useEffect(updatePresence, [room, member]);
 
     if (getJoinedNonFunctionalMembers(room).length !== 2 || !isPresenceEnabled(room.client)) return null;
     return presence;

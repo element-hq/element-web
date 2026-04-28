@@ -12,7 +12,6 @@ import { cloneDeep } from "lodash";
 
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
-import { Features } from "../settings/Settings";
 import ToastStore from "./ToastStore";
 
 /**
@@ -61,6 +60,12 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
     private index = 0;
 
     /**
+     * Whether the release announcement is enabled. Useful to disable it in e2e tests.
+     * @private
+     */
+    private enabled = true;
+
+    /**
      * The singleton instance of the ReleaseAnnouncementStore.
      */
     public static get instance(): ReleaseAnnouncementStore {
@@ -94,11 +99,17 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
     }
 
     /**
-     * Check if the release announcement is enabled.
-     * @private
+     * Enable the release announcement. This will allow the release announcement to be shown when calling `getReleaseAnnouncement` or `nextReleaseAnnouncement`.
      */
-    private isReleaseAnnouncementEnabled(): boolean {
-        return SettingsStore.getValue(Features.ReleaseAnnouncement);
+    public enable(): void {
+        this.enabled = true;
+    }
+
+    /**
+     * Disable the release announcement. This will prevent the release announcement from being shown when calling `getReleaseAnnouncement` or `nextReleaseAnnouncement`.
+     */
+    public disable(): void {
+        this.enabled = false;
     }
 
     /**
@@ -107,8 +118,7 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      */
     public getReleaseAnnouncement(): Feature | null {
         // Do nothing if the release announcement is disabled
-        const isReleaseAnnouncementEnabled = this.isReleaseAnnouncementEnabled();
-        if (!isReleaseAnnouncementEnabled) return null;
+        if (!this.enabled) return null;
 
         // also don't show release announcements if any toasts are on screen
         if (ToastStore.sharedInstance().getToasts().length > 0) return null;
@@ -133,9 +143,8 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      * @private
      */
     private async markReleaseAnnouncementAsViewed(): Promise<void> {
-        // Do nothing if the release announcement is disabled
-        const isReleaseAnnouncementEnabled = this.isReleaseAnnouncementEnabled();
-        if (!isReleaseAnnouncementEnabled) return;
+        // Do nothing if the release announcement is disabled;
+        if (!this.enabled) return;
 
         const viewedReleaseAnnouncements = this.getViewedReleaseAnnouncements();
 

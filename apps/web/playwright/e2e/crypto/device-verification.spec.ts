@@ -21,7 +21,6 @@ import {
     waitForVerificationRequest,
 } from "./utils";
 import { type Bot } from "../../pages/bot";
-import { Toasts } from "../../pages/toasts.ts";
 import type { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Device verification", { tag: "@no-webkit" }, () => {
@@ -82,7 +81,11 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     );
 
     // Regression test for https://github.com/element-hq/element-web/issues/29110
-    test("No toast after verification, even if the secrets take a while to arrive", async ({ page, credentials }) => {
+    test("No toast after verification, even if the secrets take a while to arrive", async ({
+        page,
+        credentials,
+        toasts,
+    }) => {
         // Before we log in, the bot creates an encrypted room, so that we can test the toast behaviour that only happens
         // when we are in an encrypted room.
         await aliceBotClient.createRoom({
@@ -121,7 +124,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await infoDialog.getByRole("button", { name: "Got it" }).click();
 
         // There should be no toast (other than the notifications one)
-        const toasts = new Toasts(page);
+        await toasts.rejectToast("Verify this device");
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
 
@@ -270,16 +273,26 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     }
 
-    test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {
+    test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts, app }) => {
+        /* Log in but don't verify the device */
         await logIntoElement(page, credentials);
-
-        /* Dismiss "Verify this device" */
         const authPage = page.locator(".mx_AuthPage");
         await authPage.getByRole("button", { name: "Skip verification for now" }).click();
         await authPage.getByRole("button", { name: "I'll verify later" }).click();
 
         await page.waitForSelector(".mx_MatrixChat");
         const elementDeviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId());
+
+        /* Create an encrypted room so the "Verify this device" toast appears */
+        await app.client.createRoom({
+            initial_state: [
+                {
+                    type: "m.room.encryption",
+                    state_key: "",
+                    content: { algorithm: "m.megolm.v1.aes-sha2" },
+                },
+            ],
+        });
 
         /* Now initiate a verification request from the *bot* device. */
         const botVerificationRequest = await aliceBotClient.evaluateHandle(

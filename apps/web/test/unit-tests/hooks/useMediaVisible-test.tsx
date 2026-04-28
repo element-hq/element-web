@@ -35,6 +35,11 @@ describe("useMediaVisible", () => {
             withClientContextRenderOptions(matrixClient),
         );
     }
+
+    function renderWithoutEvent() {
+        return renderHook(() => useMediaVisible(), withClientContextRenderOptions(matrixClient));
+    }
+
     beforeEach(() => {
         matrixClient = createTestClient();
         room = mkStubRoom(ROOM_ID, undefined, matrixClient);
@@ -55,6 +60,14 @@ describe("useMediaVisible", () => {
     it("should display media by default", () => {
         const [visible] = render().result.current;
         expect(visible).toEqual(true);
+    });
+
+    it("should use the global rule when no event is provided", () => {
+        mediaPreviewConfig.media_previews = MediaPreviewValue.Off;
+        expect(renderWithoutEvent().result.current[0]).toEqual(false);
+
+        mediaPreviewConfig.media_previews = MediaPreviewValue.On;
+        expect(renderWithoutEvent().result.current[0]).toEqual(true);
     });
 
     it("should hide media when media previews are Off", () => {

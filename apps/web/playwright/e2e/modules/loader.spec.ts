@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { getSampleFilePath } from "../../sample-files";
 
 test.describe("Module loading", () => {
     test.use({
@@ -20,7 +21,7 @@ test.describe("Module loading", () => {
             },
             page: async ({ page }, use) => {
                 await page.route("/modules/example-module.js", async (route) => {
-                    await route.fulfill({ path: "playwright/sample-files/example-module.js" });
+                    await route.fulfill({ path: getSampleFilePath("example-module.js") });
                 });
                 await use(page);
             },

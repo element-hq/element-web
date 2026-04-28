@@ -152,46 +152,49 @@ const AccessibleButton = function AccessibleButton<T extends ElementType = typeo
         } else {
             newProps.onClick = onClick ?? undefined;
         }
-        // We need to consume enter onKeyDown and space onKeyUp
-        // otherwise we are risking also activating other keyboard focusable elements
-        // that might receive focus as a result of the AccessibleButtonClick action
-        // It's because we are using html buttons at a few places e.g. inside dialogs
-        // And divs which we report as role button to assistive technologies.
-        // Browsers handle space and enter key presses differently and we are only adjusting to the
-        // inconsistencies here
-        newProps.onKeyDown = (e: KeyboardEvent<never>) => {
-            const action = getKeyBindingsManager().getAccessibilityAction(e);
 
-            switch (action) {
-                case KeyBindingAction.Enter:
-                    e.stopPropagation();
-                    e.preventDefault();
-                    return onClick?.(e);
-                case KeyBindingAction.Space:
-                    e.stopPropagation();
-                    e.preventDefault();
-                    break;
-                default:
-                    onKeyDown?.(e);
-            }
-        };
-        newProps.onKeyUp = (e: KeyboardEvent<never>) => {
-            const action = getKeyBindingsManager().getAccessibilityAction(e);
+        if (element !== "button") {
+            // We need to consume enter onKeyDown and space onKeyUp
+            // otherwise we are risking also activating other keyboard focusable elements
+            // that might receive focus as a result of the AccessibleButtonClick action
+            // It's because we are using html buttons at a few places e.g. inside dialogs
+            // And divs which we report as role button to assistive technologies.
+            // Browsers handle space and enter key presses differently and we are only adjusting to the
+            // inconsistencies here
+            newProps.onKeyDown = (e: KeyboardEvent<never>) => {
+                const action = getKeyBindingsManager().getAccessibilityAction(e);
 
-            switch (action) {
-                case KeyBindingAction.Enter:
-                    e.stopPropagation();
-                    e.preventDefault();
-                    break;
-                case KeyBindingAction.Space:
-                    e.stopPropagation();
-                    e.preventDefault();
-                    return onClick?.(e);
-                default:
-                    onKeyUp?.(e);
-                    break;
-            }
-        };
+                switch (action) {
+                    case KeyBindingAction.Enter:
+                        e.stopPropagation();
+                        e.preventDefault();
+                        return onClick?.(e);
+                    case KeyBindingAction.Space:
+                        e.stopPropagation();
+                        e.preventDefault();
+                        break;
+                    default:
+                        onKeyDown?.(e);
+                }
+            };
+            newProps.onKeyUp = (e: KeyboardEvent<never>) => {
+                const action = getKeyBindingsManager().getAccessibilityAction(e);
+
+                switch (action) {
+                    case KeyBindingAction.Enter:
+                        e.stopPropagation();
+                        e.preventDefault();
+                        break;
+                    case KeyBindingAction.Space:
+                        e.stopPropagation();
+                        e.preventDefault();
+                        return onClick?.(e);
+                    default:
+                        onKeyUp?.(e);
+                        break;
+                }
+            };
+        }
     }
 
     // Pass through the ref - used for keyboard shortcut access to some buttons

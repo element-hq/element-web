@@ -20,6 +20,18 @@
                 "lang": "${autodetectLang}"
             },
             {
+                "pattern": "apps/desktop/src/i18n/strings/en_EN.json",
+                "file": "element-desktop.json",
+                "lang": "inherited"
+            },
+            {
+                "group": "existing",
+                "pattern": "apps/desktop/src/i18n/strings/*.json",
+                "file": "element-desktop.json",
+                "excludes": ["apps/desktop/src/i18n/strings/en_EN.json"],
+                "lang": "${autodetectLang}"
+            },
+            {
                 "pattern": "packages/shared-components/src/i18n/strings/en_EN.json",
                 "file": "shared-components.json",
                 "lang": "inherited"
@@ -39,6 +51,10 @@
             {
                 "conditions": "equals: ${file}, element-web.json",
                 "output": "apps/web/src/i18n/strings/${langLsrUnderscore}.json"
+            },
+            {
+                "conditions": "equals: ${file}, element-desktop.json",
+                "output": "apps/desktop/src/i18n/strings/${langLsrUnderscore}.json"
             },
             {
                 "conditions": "equals: ${file}, shared-components.json",

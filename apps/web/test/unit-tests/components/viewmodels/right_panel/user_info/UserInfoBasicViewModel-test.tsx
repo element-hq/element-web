@@ -136,9 +136,9 @@ describe("useUserInfoHeaderViewModel", () => {
                 danger: true,
                 description: (
                     <div>
-                        Deactivating this user will log them out and prevent them from logging back in. Additionally,
-                        they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want
-                        to deactivate this user?
+                        Deactivating this user will remove their devices and prevent them from logging back in.
+                        Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you
+                        sure you want to deactivate this user?
                     </div>
                 ),
                 title: "Deactivate user?",

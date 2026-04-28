@@ -22,7 +22,7 @@ import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import ResizeHandle from "../elements/ResizeHandle";
 import Resizer, { type IConfig } from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
-import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import UIStore from "../../../stores/UIStore";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
@@ -39,9 +39,9 @@ interface IProps {
 
 interface IState {
     apps: {
-        [Container.Top]: IWidget[];
-        [Container.Center]: IWidget[];
-        [Container.Right]?: IWidget[];
+        ["top"]: IWidget[];
+        ["center"]: IWidget[];
+        ["right"]?: IWidget[];
     };
     resizingVertical: boolean; // true when changing the height of the apps drawer
     resizingHorizontal: boolean; // true when changing the distribution of the width between widgets
@@ -119,7 +119,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                 this.resizeContainer?.classList.remove("mx_AppsDrawer--resizing");
                 WidgetLayoutStore.instance.setResizerDistributions(
                     this.props.room,
-                    Container.Top,
+                    "top",
                     this.topApps()
                         .slice(1)
                         .map((_, i) => this.resizer.forHandleAt(i)!.size),
@@ -152,7 +152,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         if (prevProps.userId !== this.props.userId || prevProps.room !== this.props.room) {
             // Room has changed, update apps
             this.updateApps();
-        } else if (this.getAppsHash(this.topApps()) !== this.getAppsHash(prevState.apps[Container.Top])) {
+        } else if (this.getAppsHash(this.topApps()) !== this.getAppsHash(prevState.apps["top"])) {
             this.loadResizerPreferences();
         }
     }
@@ -166,7 +166,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
     };
 
     private loadResizerPreferences = (): void => {
-        const distributions = WidgetLayoutStore.instance.getResizerDistributions(this.props.room, Container.Top);
+        const distributions = WidgetLayoutStore.instance.getResizerDistributions(this.props.room, "top");
         if (this.state.apps && this.topApps().length - 1 === distributions.length) {
             distributions.forEach((size, i) => {
                 const distributor = this.resizer.forHandleAt(i);
@@ -206,11 +206,11 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
     };
 
     private getApps = (): IState["apps"] => ({
-        [Container.Top]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top),
-        [Container.Center]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Center),
+        ["top"]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, "top"),
+        ["center"]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, "center"),
     });
-    private topApps = (): IWidget[] => this.state.apps[Container.Top];
-    private centerApps = (): IWidget[] => this.state.apps[Container.Center];
+    private topApps = (): IWidget[] => this.state.apps["top"];
+    private centerApps = (): IWidget[] => this.state.apps["center"];
 
     private updateApps = (): void => {
         if (this.unmounted) return;
@@ -321,7 +321,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
     resizeNotifier,
     children,
 }) => {
-    let defaultHeight = WidgetLayoutStore.instance.getContainerHeight(room, Container.Top);
+    let defaultHeight = WidgetLayoutStore.instance.getContainerHeight(room, "top");
 
     // Arbitrary defaults to avoid NaN problems. 100 px or 3/4 of the visible window.
     if (!minHeight) minHeight = 100;
@@ -352,7 +352,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
                 let newHeight = defaultHeight! + d.height;
                 newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
 
-                WidgetLayoutStore.instance.setContainerHeight(room, Container.Top, newHeight);
+                WidgetLayoutStore.instance.setContainerHeight(room, "top", newHeight);
 
                 resizeNotifier.stopResizing();
             }}

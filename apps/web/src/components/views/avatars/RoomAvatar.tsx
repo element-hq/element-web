@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useMemo, type ComponentProps } from "react";
-import { type Room, RoomType, KnownMembership, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomType, KnownMembership, EventType, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { type RoomAvatarEventContent } from "matrix-js-sdk/src/types";
 
 import BaseAvatar from "./BaseAvatar";
@@ -21,6 +21,7 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { useRoomIdName } from "../../../hooks/room/useRoomIdName";
 import { MediaPreviewValue } from "../../../@types/media_preview";
+import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick" | "size"> {
     // Room may be left unset here, but if it is,
@@ -37,7 +38,8 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
 }
 
 const RoomAvatar: React.FC<IProps> = ({ room, viewAvatarOnClick, onClick, oobData, size = "36px", ...otherProps }) => {
-    const roomName = room?.name ?? oobData?.name ?? "?";
+    const name = useTypedEventEmitterState(room, RoomEvent.Name, () => room?.name);
+    const roomName = name ?? oobData?.name ?? "?";
     const avatarEvent = useRoomState(room, (state) => state.getStateEvents(EventType.RoomAvatar, ""));
     const roomIdName = useRoomIdName(room, oobData);
 

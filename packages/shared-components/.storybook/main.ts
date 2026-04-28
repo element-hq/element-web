@@ -71,6 +71,9 @@ const config: StorybookConfig = {
                                 // Dynamically generate a languages.json file based on what files are available
                                 res.setHeader("Content-Type", "application/json");
                                 res.end(JSON.stringify(languages));
+                            } else if (req.url === "/usercontent/" || req.url === "/usercontent") {
+                                // Mock usercontent endpoint used by encrypted download iframes.
+                                res.end("This is where /usercontent/ is loaded.");
                             } else if (req.url?.startsWith("/i18n/")) {
                                 // Serve the individual language files, which annoyingly can't be a simple
                                 // static dir because the directory structure in src doesn't match what

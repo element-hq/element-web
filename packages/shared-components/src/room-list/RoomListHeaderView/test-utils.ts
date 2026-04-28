@@ -7,7 +7,7 @@
 
 import { vi } from "vitest";
 
-import { MockViewModel } from "../../viewmodel";
+import { MockViewModel } from "../../core/viewmodel";
 import { type RoomListHeaderViewActions, type RoomListHeaderViewSnapshot } from "./RoomListHeaderView";
 
 /**
@@ -23,6 +23,7 @@ export class MockedViewModel extends MockViewModel<RoomListHeaderViewSnapshot> i
     public sort = vi.fn<() => void>();
     public openSpacePreferences = vi.fn<() => void>();
     public toggleMessagePreview = vi.fn<() => void>();
+    public createSection = vi.fn<() => void>();
 }
 
 export { defaultSnapshot } from "./default-snapshot";

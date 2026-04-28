@@ -25,6 +25,17 @@ Please see LICENSE files in the repository root for full details.
     --collapsedWidth: 68px;
 }
 
+.mx_LeftPanel_panel {
+    .mx_LeftPanel_outerWrapper {
+        height: 100%;
+        max-width: none;
+    }
+
+    .mx_LeftPanel_wrapper--user {
+        width: 100%;
+    }
+}
+
 .mx_LeftPanel_wrapper {
     display: flex;
     flex-direction: row;
@@ -210,4 +221,12 @@ Please see LICENSE files in the repository root for full details.
     --collapsedWidth: 224px;
     /* Important to force the color on ED titlebar until we remove the old room list */
     background-color: var(--cpd-color-bg-canvas-default) !important;
+}
+
+#left-panel .mx_LeftPanel_wrapper--user {
+    /*
+     * Disable background when using the new room list.
+     * This background sometimes shows when the panel is resized and it looks like a thicker border.
+     */
+    background: none;
 }

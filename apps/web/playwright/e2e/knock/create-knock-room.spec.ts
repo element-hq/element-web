@@ -19,6 +19,8 @@ test.describe("Create Knock Room", () => {
     });
 
     test("should create a knock room", async ({ page, app, user }) => {
+        await app.closeVerifyToast();
+
         const dialog = await app.openCreateRoomDialog();
         await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
         await dialog.getByRole("button", { name: "Room visibility" }).click();
@@ -37,6 +39,8 @@ test.describe("Create Knock Room", () => {
     });
 
     test("should create a room and change a join rule to knock", async ({ page, app, user }) => {
+        await app.closeVerifyToast();
+
         const dialog = await app.openCreateRoomDialog();
         await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
         await dialog.getByRole("button", { name: "Create room" }).click();
@@ -48,7 +52,7 @@ test.describe("Create Knock Room", () => {
         await app.settings.openRoomSettings("Security & Privacy");
 
         const settingsGroup = page.getByRole("group", { name: "Access" });
-        await expect(settingsGroup.getByRole("radio", { name: "Private (invite only)" })).toBeChecked();
+        await expect(settingsGroup.getByRole("radio", { name: "Invite only" })).toBeChecked();
         await settingsGroup.getByText("Ask to join").click();
 
         // Room should have a knock join rule
@@ -59,6 +63,8 @@ test.describe("Create Knock Room", () => {
     });
 
     test("should create a public knock room", async ({ page, app, user }) => {
+        await app.closeVerifyToast();
+
         const dialog = await app.openCreateRoomDialog();
         await dialog.getByRole("textbox", { name: "Name" }).fill("Cybersecurity");
         await dialog.getByRole("button", { name: "Room visibility" }).click();

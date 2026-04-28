@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2025 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -6,7 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useState } from "react";
-import { type SpacePanelItemProps, type ExtrasApi } from "@element-hq/element-web-module-api";
+import {
+    type SpacePanelItemProps,
+    type ExtrasApi,
+    type RoomHeaderButtonsCallback,
+} from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "../hooks/useEventEmitter";
@@ -26,6 +31,7 @@ interface EmittedEvents {
 export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> implements ExtrasApi {
     public spacePanelItems = new Map<string, SpacePanelItemProps>();
     public visibleRoomBySpaceKey = new Map<string, () => string[]>();
+    public roomHeaderButtonsCallbacks: RoomHeaderButtonsCallback[] = [];
 
     public setSpacePanelItem(spacekey: string, item: SpacePanelItemProps): void {
         this.spacePanelItems.set(spacekey, item);
@@ -34,6 +40,10 @@ export class ElementWebExtrasApi extends TypedEventEmitter<keyof EmittedEvents, 
 
     public getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void {
         this.visibleRoomBySpaceKey.set(spaceKey, cb);
+    }
+
+    public addRoomHeaderButtonCallback(cb: RoomHeaderButtonsCallback): void {
+        this.roomHeaderButtonsCallbacks.push(cb);
     }
 }
 

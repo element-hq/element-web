@@ -9,7 +9,7 @@ import { type ChangeEvent, type KeyboardEvent as ReactKeyboardEvent } from "reac
 import { waitFor } from "@testing-library/dom";
 
 import { type Playback, PlaybackState } from "../../../src/audio/Playback";
-import { AudioPlayerViewModel } from "../../../src/viewmodels/audio/AudioPlayerViewModel";
+import { AudioPlayerViewModel } from "../../../src/viewmodels/room/timeline/event-tile/body/AudioPlayerViewModel";
 import { MockedPlayback } from "../../unit-tests/audio/MockedPlayback";
 
 describe("AudioPlayerViewModel", () => {

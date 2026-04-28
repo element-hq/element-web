@@ -254,7 +254,7 @@ describe("<CallGuestLinkButton />", () => {
             sendStateSpy.mockClear();
 
             container = getComponent(room).container;
-            fireEvent.click(getByText(container, "Public"));
+            fireEvent.click(getByText(container, "Anyone"));
             expect(sendStateSpy).toHaveBeenLastCalledWith(
                 "!room:server.org",
                 "m.room.join_rules",

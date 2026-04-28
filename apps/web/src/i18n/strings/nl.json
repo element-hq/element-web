@@ -32,7 +32,6 @@
         "cancel": "Annuleer",
         "change": "Wijzig",
         "clear": "Wis",
-        "click": "Klik",
         "click_to_copy": "Klik om te kopiëren",
         "close": "Sluiten",
         "collapse": "Invouwen",
@@ -1101,8 +1100,6 @@
         "upload_file": "Bestand uploaden"
     },
     "labs": {
-        "automatic_debug_logs": "Automatisch foutenlogboek versturen bij een fout",
-        "automatic_debug_logs_decryption": "Automatisch foutopsporingslogboeken versturen bij decoderingsfouten",
         "beta_feature": "Dit is een bètafunctie",
         "beta_feedback_leave_button": "Om de beta te verlaten, ga naar je instellingen.",
         "beta_feedback_title": "%(featureName)s Bèta-feedback",
@@ -1327,7 +1324,6 @@
         "restricted": "Beperkte toegang"
     },
     "powered_by_matrix": "Mogelijk gemaakt door Matrix",
-    "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
     "presence": {
         "away": "Afwezig",
         "busy": "Bezet",
@@ -1498,9 +1494,6 @@
         "joining": "Deelnemen…",
         "jump_read_marker": "Spring naar het eerste ongelezen bericht.",
         "jump_to_bottom_button": "Spring naar meest recente bericht",
-        "jump_to_date": "Spring naar datum",
-        "jump_to_date_beginning": "Het begin van de kamer",
-        "jump_to_date_prompt": "Kies een datum om naar toe te springen",
         "kick_reason": "Reden: %(reason)s",
         "kicked_by": "Je bent verwijderd door %(memberName)s",
         "kicked_from_room_by": "Je bent verwijderd uit %(roomName)s door %(memberName)s",
@@ -1625,8 +1618,6 @@
             "aliases_section": "Kameradressen",
             "avatar_field_label": "Kamerafbeelding",
             "canonical_alias_field_label": "Hoofdadres",
-            "default_url_previews_off": "URL-voorvertoningen zijn voor deelnemers van deze kamer standaard uitgeschakeld.",
-            "default_url_previews_on": "URL-voorvertoningen zijn voor deelnemers van deze kamer standaard ingeschakeld.",
             "description_space": "Bewerk instellingen gerelateerd aan jouw space.",
             "error_creating_alias_description": "Er is een fout opgetreden bij het aanmaken van dit adres. Dit wordt mogelijk niet toegestaan door de server, of er is een tijdelijk probleem opgetreden.",
             "error_creating_alias_title": "Fout bij aanmaken van het adres",
@@ -1653,12 +1644,7 @@
             "published_aliases_explainer_space": "Gepubliceerde adressen kunnen door iedereen op elke server gebruikt worden om jouw Space te betreden.",
             "published_aliases_section": "Gepubliceerde adressen",
             "save": "Wijzigingen opslaan",
-            "topic_field_label": "Kameronderwerp",
-            "url_preview_encryption_warning": "In versleutelde kamers zoals deze zijn URL-voorvertoningen standaard uitgeschakeld, om te voorkomen dat jouw homeserver (waar de voorvertoningen worden gemaakt) informatie kan verzamelen over de koppelingen die je hier ziet.",
-            "url_preview_explainer": "Als iemand een URL in een bericht invoegt, kan er een URL-voorvertoning weergegeven worden met meer informatie over de koppeling, zoals de titel, omschrijving en een afbeelding van de website.",
-            "url_previews_section": "URL-voorvertoningen",
-            "user_url_previews_default_off": "Je hebt URL-voorvertoningen standaard <a>uitgeschakeld</a>.",
-            "user_url_previews_default_on": "Je hebt URL-voorvertoningen standaard <a>ingeschakeld</a>."
+            "topic_field_label": "Kameronderwerp"
         },
         "notifications": {
             "browse_button": "Bladeren",
@@ -1930,8 +1916,6 @@
             "spell_check_locale_placeholder": "Kies een landinstelling"
         },
         "inline_url_previews_default": "Inline URL-voorvertoning standaard inschakelen",
-        "inline_url_previews_room": "URL-voorvertoning voor alle deelnemers aan deze kamer standaard inschakelen",
-        "inline_url_previews_room_account": "URL-voorvertoning in dit kamer inschakelen (geldt alleen voor jou)",
         "insert_trailing_colon_mentions": "Voeg een dubbele punt in nadat de persoon het aan het begin van een bericht heeft vermeld",
         "jump_to_bottom_on_send": "Naar de onderkant van de tijdlijn springen wanneer je een bericht verstuurd",
         "key_backup": {
@@ -2396,7 +2380,6 @@
             "one": "%(count)s reactie",
             "other": "%(count)s reacties"
         },
-        "error_start_thread_existing_relation": "Kan geen discussie maken van een gebeurtenis met een bestaande relatie",
         "my_threads": "Mijn discussies",
         "my_threads_description": "Toon alle threads waarin je hebt bijgedragen",
         "open_thread": "Open discussie",
@@ -2427,7 +2410,6 @@
         },
         "creation_summary_dm": "%(creator)s maakte deze directe chat.",
         "creation_summary_room": "Kamer gestart en ingesteld door %(creator)s.",
-        "download_action_decrypting": "Ontsleutelen",
         "download_action_downloading": "Downloaden",
         "edits": {
             "tooltip_label": "Bewerkt op %(date)s. Klik om de bewerkingen te bekijken.",
@@ -2477,8 +2459,7 @@
             "voice_call_unsupported": "%(senderName)s poogt je te bellen, maar jouw browser ondersteunt dat niet"
         },
         "m.file": {
-            "error_decrypting": "Fout bij het ontsleutelen van de bijlage",
-            "error_invalid": "Ongeldig bestand %(extra)s"
+            "error_decrypting": "Fout bij het ontsleutelen van de bijlage"
         },
         "m.image": {
             "error_decrypting": "Fout bij het ontsleutelen van de afbeelding",
@@ -2611,10 +2592,7 @@
             "removed": "%(widgetName)s-widget verwijderd door %(senderName)s"
         },
         "mab": {
-            "collapse_reply_chain": "Citaten invouwen",
             "copy_link_thread": "Kopieer link naar draad",
-            "expand_reply_chain": "Citaten uitvouwen",
-            "label": "Berichtacties",
             "view_in_room": "In kamer bekijken"
         },
         "mjolnir": {
@@ -2796,13 +2774,6 @@
             },
             "one_user": "%(displayName)s is aan het typen…",
             "two_users": "%(names)s en %(lastPerson)s zijn aan het typen…"
-        },
-        "url_preview": {
-            "close": "Voorbeeld sluiten",
-            "show_n_more": {
-                "one": "%(count)s andere preview weergeven",
-                "other": "%(count)s andere previews weergeven"
-            }
         }
     },
     "truncated_list_n_more": {
@@ -2994,7 +2965,6 @@
         "you_are_presenting": "Je bent aan het presenteren"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
-    "welcome_to_element": "Welkom bij Element",
     "widget": {
         "added_by": "Widget toegevoegd door",
         "capabilities_dialog": {

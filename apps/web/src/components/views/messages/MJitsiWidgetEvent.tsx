@@ -14,7 +14,7 @@ import { EventTileBubble } from "@element-hq/web-shared-components";
 import { _t } from "../../../languageHandler";
 import WidgetStore from "../../../stores/WidgetStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
+import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -32,7 +32,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
         const widget = WidgetStore.instance.getRoom(room.roomId, true).widgets.find((w) => w.id === widgetId);
 
         let joinCopy: string | null = _t("timeline|m.widget|jitsi_join_top_prompt");
-        if (widget && WidgetLayoutStore.instance.isInContainer(room, widget, Container.Right)) {
+        if (widget && WidgetLayoutStore.instance.isInContainer(room, widget, "right")) {
             joinCopy = _t("timeline|m.widget|jitsi_join_right_prompt");
         } else if (!widget) {
             joinCopy = null;

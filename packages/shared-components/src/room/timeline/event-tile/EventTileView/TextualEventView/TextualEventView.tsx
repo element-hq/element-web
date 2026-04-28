@@ -1,0 +1,29 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { type ReactNode, type JSX } from "react";
+
+import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
+
+export type TextualEventViewSnapshot = {
+    content: string | ReactNode;
+};
+
+export interface Props {
+    vm: ViewModel<TextualEventViewSnapshot>;
+}
+
+/**
+ * Renders a plain textual timeline event without message-body decorations.
+ *
+ * This view is used for simple informational timeline entries where the
+ * content is already prepared by the view model.
+ */
+export function TextualEventView({ vm }: Props): JSX.Element {
+    const snapshot = useViewModel(vm);
+    return <div className="mx_TextualEvent">{snapshot.content}</div>;
+}

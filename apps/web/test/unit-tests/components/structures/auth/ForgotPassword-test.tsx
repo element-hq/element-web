@@ -367,16 +367,16 @@ describe("<ForgotPassword>", () => {
                         });
                     });
 
-                    describe("and clicking »Sign out of all devices« and »Reset password«", () => {
+                    describe("and clicking »Remove other devices« and »Reset password«", () => {
                         beforeEach(async () => {
-                            await click(screen.getByText("Sign out of all devices"));
+                            await click(screen.getByText("Remove other devices"));
                             await click(screen.getByText("Reset password"));
                         });
 
-                        it("should show the sign out warning dialog", async () => {
+                        it("should show the removing warning dialog", async () => {
                             await expect(
                                 screen.findByText(
-                                    "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
+                                    "Removing your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
                                 ),
                             ).resolves.toBeInTheDocument();
 

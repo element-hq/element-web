@@ -1,0 +1,60 @@
+{
+    "action": {
+        "cancel": "Cancelar",
+        "close": "Pechar",
+        "copy": "Copiar",
+        "cut": "Cortar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "minimise": "Minimizar",
+        "paste": "Pegar",
+        "paste_match_style": "Pegar e imitar estilo",
+        "quit": "Saír",
+        "redo": "Refacer",
+        "select_all": "Elexir todo",
+        "show_hide": "Mostrar/Agochar",
+        "undo": "Desfacer",
+        "zoom_in": "Aumentar",
+        "zoom_out": "Diminuir"
+    },
+    "common": {
+        "about": "Acerca de",
+        "help": "Axuda",
+        "preferences": "Preferencias"
+    },
+    "confirm_quit": "Tes a certeza de que queres saír?",
+    "edit_menu": {
+        "speech": "Falar",
+        "speech_start_speaking": "Comeza a falar",
+        "speech_stop_speaking": "Deixa de falar"
+    },
+    "file_menu": {
+        "label": "Ficheiro"
+    },
+    "menu": {
+        "hide": "Agochar",
+        "hide_others": "Agochar outras",
+        "services": "Servizos",
+        "unhide": "Desagochar"
+    },
+    "right_click_menu": {
+        "add_to_dictionary": "Engadir ao dicionario",
+        "copy_email": "Copiar enderezo de email",
+        "copy_image": "Copiar imaxe",
+        "copy_link_url": "Copiar enderezo da ligazón",
+        "save_image_as": "Gardar imaxe como...",
+        "save_image_as_error_description": "Non se gardou a imaxe",
+        "save_image_as_error_title": "Fallou o gardado da imaxe"
+    },
+    "view_menu": {
+        "actual_size": "Tamaño real",
+        "toggle_developer_tools": "Activar ferramentas de desenvolvemento",
+        "toggle_full_screen": "Activar pantalla completa",
+        "view": "Vista"
+    },
+    "window_menu": {
+        "bring_all_to_front": "Traer todo á fronte",
+        "label": "Ventá",
+        "zoom": "Aumento"
+    }
+}

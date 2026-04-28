@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 // eslint-disable-next-line no-restricted-imports
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
-import "@types/modernizr";
 
 import type { ModuleLoader } from "@element-hq/element-web-module-api";
 import type { logger } from "matrix-js-sdk/src/logger";
@@ -39,7 +38,6 @@ import { type SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import { type RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 import { type ConsoleLogger, type IndexedDBLogStore } from "../rageshake/rageshake";
 import type ActiveWidgetStore from "../stores/ActiveWidgetStore";
-import type AutoRageshakeStore from "../stores/AutoRageshakeStore";
 import { type IConfigOptions } from "../IConfigOptions";
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { type DeepReadonly } from "./common";
@@ -85,7 +83,6 @@ declare global {
         matrixChat?: MatrixChat;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
-        mxAutoRageshakeStore?: AutoRageshakeStore;
         mxDispatcher: MatrixDispatcher;
         mxMatrixClientPeg: IMatrixClientPeg;
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
@@ -186,14 +183,6 @@ declare global {
     // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-881509595
     interface AudioParamDescriptor {
         readonly port: MessagePort;
-    }
-
-    /**
-     * In future, browsers will support focusVisible option.
-     * See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#focusvisible
-     */
-    interface FocusOptions {
-        focusVisible: boolean;
     }
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278

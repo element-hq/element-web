@@ -1108,7 +1108,6 @@
         "restricted": "מחוץ לתחום"
     },
     "powered_by_matrix": "מופעל על ידי מטריקס",
-    "powered_by_matrix_with_logo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo",
     "presence": {
         "away": "מרוחק",
         "idle": "לא פעיל",
@@ -1230,7 +1229,6 @@
         "join_title_account": "הצטרף לשיחה עם חשבון",
         "jump_read_marker": "קפצו להודעה הראשונה שלא נקראה.",
         "jump_to_bottom_button": "גלול להודעות האחרונות",
-        "jump_to_date": "קיפצו לתאריך",
         "kick_reason": "סיבה: %(reason)s",
         "leave_error_title": "שגיאת נסיון לצאת מהחדר",
         "leave_server_notices_description": "החדר הזה משמש להודעות חשובות מהשרת ולכן אינכם יכולים לעזוב אותו.",
@@ -1326,8 +1324,6 @@
             "aliases_section": "כתובות חדרים",
             "avatar_field_label": "אוואטר של החדר",
             "canonical_alias_field_label": "כתובת ראשית",
-            "default_url_previews_off": "תצוגות מקדימות של כתובות אתרים מושבתות כברירת מחדל עבור משתתפים בחדר זה.",
-            "default_url_previews_on": "תצוגות מקדימות של כתובות אתרים מופעלות כברירת מחדל עבור משתתפים בחדר זה.",
             "description_space": "שינוי הגדרות הנוגעות למרחב העבודה שלכם.",
             "error_creating_alias_description": "אירעה שגיאה ביצירת כתובת זו. ייתכן שהשרת אינו מאפשר זאת או שהתרחש כשל זמני.",
             "error_creating_alias_title": "שגיאה ביצירת כתובת",
@@ -1354,12 +1350,7 @@
             "published_aliases_explainer_space": "כל אחד בכל שרת יכול להשתמש בכתובות שפורסמו כדי להצטרף למרחב העבודה שלכם.",
             "published_aliases_section": "כתובות מפורסמות",
             "save": "שמור שינוייים",
-            "topic_field_label": "נושא החדר",
-            "url_preview_encryption_warning": "בחדרים מוצפנים, כמו זה, תצוגות מקדימות של כתובות אתרים מושבתות כברירת מחדל כדי להבטיח ששרת הבית שלך (במקום בו נוצרות התצוגות המקדימות) אינו יכול לאסוף מידע על קישורים שאתה רואה בחדר זה.",
-            "url_preview_explainer": "כאשר מישהו מכניס כתובת URL להודעה שלו, ניתן להציג תצוגה מקדימה של כתובת אתר כדי לתת מידע נוסף על קישור זה, כמו הכותרת, התיאור והתמונה מהאתר.",
-            "url_previews_section": "תצוגת קישורים",
-            "user_url_previews_default_off": "יש לך <a> השבת </a> תצוגות מקדימות של כתובות אתרים כברירת מחדל.",
-            "user_url_previews_default_on": "כברירת מחדל, <a> הפעלת </a> תצוגה מקדימה של כתובות אתרים."
+            "topic_field_label": "נושא החדר"
         },
         "notifications": {
             "browse_button": "דפדף",
@@ -1588,8 +1579,6 @@
             "remove_msisdn_prompt": "הסר מספרי %(phone)s ?"
         },
         "inline_url_previews_default": "אפשר צפייה של תצוגת קישורים בצאט כברירת מחדל",
-        "inline_url_previews_room": "אפשר לחברים בחדר זה לצפות בתצוגת קישורים",
-        "inline_url_previews_room_account": "הראה תצוגה מקדימה של קישורים בחדר זה (משפיע רק עליכם)",
         "insert_trailing_colon_mentions": "הוסף נקודתיים לאחר אזכור המשתמש בתחילת ההודעה",
         "jump_to_bottom_on_send": "קפוץ לתחתית השיחה בעת שליחת הודעה",
         "key_backup": {
@@ -1922,7 +1911,6 @@
     "threads": {
         "all_threads": "כל הקישורים",
         "all_threads_description": "הצג את כל הקישורים מחדר זה",
-        "error_start_thread_existing_relation": "לא ניתן ליצור שרשור מאירוע עם קשר קיים",
         "my_threads": "הקישורים שלי",
         "my_threads_description": "הצג את כל השרשורים שאתם משתתפים בהם",
         "open_thread": "פתיחת שרשור",
@@ -1946,7 +1934,6 @@
         },
         "creation_summary_dm": "%(creator)s יצר את DM הזה.",
         "creation_summary_room": "%(creator)s יצר/ה והגדיר/ה את החדר.",
-        "download_action_decrypting": "מפענח",
         "download_action_downloading": "מוריד",
         "edits": {
             "tooltip_label": "נערך ב-%(date)s. לחץ לצפייה בעריכות.",
@@ -1972,8 +1959,7 @@
             "voice_call_unsupported": "%(senderName)s התחיל שיחה קולית. (אינו נתמך בדפדפן זה)"
         },
         "m.file": {
-            "error_decrypting": "שגיאה בפענוח קבצים מצורפים",
-            "error_invalid": "קובץ לא תקין %(extra)s"
+            "error_decrypting": "שגיאה בפענוח קבצים מצורפים"
         },
         "m.image": {
             "error_decrypting": "שגיאה בפענוח הודעה",
@@ -2088,8 +2074,7 @@
             "removed": "היישומון %(widgetName)s הוסר על ידי %(senderName)s"
         },
         "mab": {
-            "copy_link_thread": "העתק קישור לשרשור",
-            "label": "פעולות הודעה"
+            "copy_link_thread": "העתק קישור לשרשור"
         },
         "mjolnir": {
             "changed_rule_glob": "%(senderName)s עדכן כלל חסימה אשר תאם ל%(oldGlob)s ל%(newGlob)s עבור %(reason)s",
@@ -2240,9 +2225,6 @@
             },
             "one_user": "%(displayName)s כותב…",
             "two_users": "%(names)s ו%(lastPerson)s כותבים…"
-        },
-        "url_preview": {
-            "close": "סגור תצוגה מקדימה"
         }
     },
     "truncated_list_n_more": {
@@ -2391,7 +2373,6 @@
         "you_are_presenting": "אתה מציג"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s עַל %(osName)s",
-    "welcome_to_element": "ברוכים הבאים ל Element",
     "widget": {
         "added_by": "ישומון נוסף על ידי",
         "capabilities_dialog": {

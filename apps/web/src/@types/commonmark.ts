@@ -12,7 +12,7 @@ declare module "commonmark" {
     export type Attr = [key: string, value: string];
 
     /* eslint-disable @typescript-eslint/naming-convention */
-    export interface HtmlRenderer {
+    interface HtmlRenderer {
         // As far as @types/commonmark is concerned, these are not public, so add them
         // https://github.com/commonmark/commonmark.js/blob/master/lib/render/html.js#L272-L296
         text: (this: commonmark.HtmlRenderer, node: commonmark.Node) => void;

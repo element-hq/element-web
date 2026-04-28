@@ -19,7 +19,6 @@ import SenderProfile from "../messages/SenderProfile";
 import MImageReplyBody from "../messages/MImageReplyBody";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
-import MFileBody from "../messages/MFileBody";
 import MemberAvatar from "../avatars/MemberAvatar";
 import MVoiceMessageBody from "../messages/MVoiceMessageBody";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -27,6 +26,7 @@ import { renderReplyTile } from "../../../events/EventTileFactory";
 import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { type IBodyProps } from "../messages/IBodyProps";
+import { FileBodyFactory, renderMBody } from "../messages/MBodyFactory";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -130,11 +130,13 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             );
         }
 
+        const ReplyTileFileBody: React.ComponentType<IBodyProps> = (props) => renderMBody(props, FileBodyFactory);
+
         const msgtypeOverrides: Record<string, React.ComponentType<IBodyProps>> = {
             [MsgType.Image]: MImageReplyBody,
             // Override audio and video body with file body. We also hide the download/decrypt button using CSS
-            [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : MFileBody,
-            [MsgType.Video]: MFileBody,
+            [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : ReplyTileFileBody,
+            [MsgType.Video]: ReplyTileFileBody,
         };
         const evOverrides: Record<string, React.ComponentType<IBodyProps>> = {
             // Use MImageReplyBody so that the sticker isn't taking up a lot of space

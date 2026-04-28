@@ -8,7 +8,7 @@
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 import { DecryptionFailureReason } from "@element-hq/web-shared-components";
 
-import { DecryptionFailureBodyViewModel } from "../../../src/viewmodels/message-body/DecryptionFailureBodyViewModel";
+import { DecryptionFailureBodyViewModel } from "../../../src/viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
 
 describe("DecryptionFailureBodyViewModel", () => {
     it("should return the snapshot", () => {
@@ -84,5 +84,17 @@ describe("DecryptionFailureBodyViewModel", () => {
 
         vm.setVerificationState(true);
         expect(vm.getSnapshot().isLocalDeviceVerified).toBe(true);
+    });
+
+    it("should update snapshot when decryption failure code changes", () => {
+        const vm = new DecryptionFailureBodyViewModel({
+            decryptionFailureCode: DecryptionFailureCode.UNKNOWN_ERROR,
+        });
+
+        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNABLE_TO_DECRYPT);
+
+        vm.setDecryptionFailureCode(DecryptionFailureCode.UNSIGNED_SENDER_DEVICE);
+
+        expect(vm.getSnapshot().decryptionFailureReason).toBe(DecryptionFailureReason.UNSIGNED_SENDER_DEVICE);
     });
 });

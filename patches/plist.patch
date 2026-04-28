@@ -1,0 +1,22 @@
+diff --git a/lib/parse.js b/lib/parse.js
+index b5e7496a28d0664933a14f4fcd89682c8a349d3f..a5de9d1edb8ce22ed93ab1ed96493d223013c296 100644
+--- a/lib/parse.js
++++ b/lib/parse.js
+@@ -63,7 +63,7 @@ function invariant(test, message) {
+  */
+ 
+ function parse (xml) {
+-  var doc = new DOMParser().parseFromString(xml);
++  var doc = new DOMParser().parseFromString(xml, 'text/xml');
+   invariant(
+     doc.documentElement.nodeName === 'plist',
+     'malformed document. First element should be <plist>'
+@@ -131,7 +131,7 @@ function parsePlistXML (node) {
+     if (counter % 2 === 1) {
+       new_obj[key] = '';
+     }
+-    
++
+     return new_obj;
+ 
+   } else if (node.nodeName === 'array') {

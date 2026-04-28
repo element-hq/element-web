@@ -7,10 +7,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-:root {
-    --AppTile_mini-height: 220px;
-}
-
 .mx_AppsDrawer {
     --minWidth: 240px; /* TODO this should be 300px but that's too large */
 
@@ -168,11 +164,11 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_AppTile_mini {
     width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    height: var(--AppTile_mini-height);
 }
 
 .mx_AppTile .mx_AppTile_persistedWrapper,
@@ -276,8 +272,8 @@ Please see LICENSE files in the repository root for full details.
     &.mx_AppTileBody--large,
     &.mx_AppTileBody--mini {
         width: 100%;
+        height: 100%;
         overflow: hidden;
-        height: var(--AppTileBody-height);
 
         iframe {
             border: none;
@@ -297,10 +293,6 @@ Please see LICENSE files in the repository root for full details.
             margin: 0;
             display: block;
         }
-    }
-
-    &.mx_AppTileBody--mini {
-        --AppTileBody-height: var(--AppTile_mini-height);
     }
 
     &.mx_AppTileBody--loading {

@@ -5,8 +5,6 @@ on:
         branches: [develop, master]
     merge_group:
         types: [checks_requested]
-    repository_dispatch:
-        types: [element-web-notify]
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
     cancel-in-progress: true
@@ -45,13 +43,18 @@ jobs:
                     - name: Rethemendex Check
                       command: "rethemendex"
                       assert-diff: true
+                    - name: Docs
+                      install: layered
+                      command: "docs:build"
         name: ${{ matrix.name }}
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
 
-            - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
-            - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+            - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               if: matrix.install != ''
               with:
                   cache: "pnpm"
@@ -73,6 +76,19 @@ jobs:
               run: git diff --exit-code
               if: matrix.assert-diff
 
+    zizmor:
+        name: Zizmor Github Actions lint
+        runs-on: ubuntu-24.04
+        permissions:
+            security-events: write
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+              with:
+                  persist-credentials: false
+
+            - name: Run zizmor
+              uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
+
     i18n:
         strategy:
             fail-fast: false
@@ -87,15 +103,17 @@ jobs:
                           voip|element_call
                           error|invalid_json
                           error|misconfigured
-                          welcome_to_element
+                          welcome|title_element
                           devtools|settings|elementCallUrl
                           labs|sliding_sync_description
                           settings|voip|noise_suppression_description
                           settings|voip|echo_cancellation_description
+                    - name: Element Desktop
+                      path: "apps/desktop"
                     - name: Shared Components
                       path: "packages/shared-components"
         name: "i18n Check (${{ matrix.name }})"
-        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
+        uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@6eda3835118f3bc3fb658a1a3c20b7da9d16ae42
         permissions:
             pull-requests: read
         with:
@@ -107,7 +125,9 @@ jobs:
     # Dummy job to simplify branch protections
     ci:
         name: Static Analysis
-        needs: [lint, i18n]
+        needs: [lint, i18n, zizmor]
+        if: always()
         runs-on: ubuntu-24.04
         steps:
-            - run: echo "Ok"
+            - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+              run: exit 1

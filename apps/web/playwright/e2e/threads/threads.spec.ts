@@ -441,7 +441,7 @@ test.describe("Threads", () => {
         textbox = locator.getByRole("textbox", { name: "Send an unencrypted message…" });
         await textbox.fill("Hello Mr. User");
         await textbox.press("Enter");
-        await expect(locator.locator(".mx_EventTile_last").getByText("Hello Mr. User")).toBeAttached();
+        await expect(locator.locator(".mx_EventTile_last").getByText("Hello Mr. User")).toBeVisible();
         // Close thread
         await locator.getByTestId("base-card-close-button").click();
 
@@ -454,8 +454,8 @@ test.describe("Threads", () => {
         await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
 
         locator = page.locator(".mx_BaseCard");
-        await expect(locator.locator(".mx_EventTile").first().getByText("Hello Mr. Bot")).toBeAttached();
-        await expect(locator.locator(".mx_EventTile").last().getByText("Hello Mr. User")).toBeAttached();
+        await expect(locator.locator(".mx_EventTile").first().getByText("Hello Mr. Bot")).toBeVisible();
+        await expect(locator.locator(".mx_EventTile").last().getByText("Hello Mr. User")).toBeVisible();
     });
 
     test("navigate through right panel", { tag: "@screenshot" }, async ({ page, app, user }) => {

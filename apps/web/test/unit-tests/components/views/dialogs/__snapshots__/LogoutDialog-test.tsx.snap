@@ -35,10 +35,10 @@ exports[`LogoutDialog Prompts user to go to settings if there is a backup on the
             Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.
           </p>
           <p>
-            When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.
+            When you remove this device you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.
           </p>
           <p>
-            Back up your keys before signing out to avoid losing them.
+            Back up your keys before removing this device to avoid losing them.
           </p>
         </div>
       </div>
@@ -136,10 +136,10 @@ exports[`LogoutDialog Prompts user to go to settings if there is no backup on th
             Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.
           </p>
           <p>
-            When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.
+            When you remove this device you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.
           </p>
           <p>
-            Back up your keys before signing out to avoid losing them.
+            Back up your keys before removing this device to avoid losing them.
           </p>
         </div>
       </div>
@@ -224,14 +224,14 @@ exports[`LogoutDialog shows a regular dialog when crypto is disabled 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Sign out
+        Remove this device
       </h1>
     </div>
     <div
       class="mx_Dialog_content"
       id="mx_Dialog_content"
     >
-      Are you sure you want to sign out?
+      Are you sure you want to remove this device?
     </div>
     <div
       class="mx_Dialog_buttons"
@@ -250,7 +250,7 @@ exports[`LogoutDialog shows a regular dialog when crypto is disabled 1`] = `
           data-testid="dialog-primary-button"
           type="button"
         >
-          Sign out
+          Remove this device
         </button>
       </span>
     </div>

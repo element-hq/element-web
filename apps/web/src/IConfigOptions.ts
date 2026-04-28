@@ -52,8 +52,9 @@ export interface IConfigOptions {
     disable_3pid_login?: boolean;
 
     brand: string;
-    branding?: {
-        welcome_background_url?: string | string[]; // chosen at random if array
+    branding: {
+        welcome_background_url: string | string[]; // chosen at random if array
+        logo_link_url: string;
         auth_header_logo_url?: string;
         auth_footer_links?: { text: string; url: string }[];
     };
@@ -108,7 +109,6 @@ export interface IConfigOptions {
      * Bug report endpoint URL. "local" means the logs should not be uploaded.
      */
     bug_report_endpoint_url?: typeof BugReportEndpointURLLocal | string; // omission disables bug reporting
-    uisi_autorageshake_app?: string; // defaults to "element-auto-uisi"
     sentry?: {
         dsn: string;
         environment?: string; // "production", etc

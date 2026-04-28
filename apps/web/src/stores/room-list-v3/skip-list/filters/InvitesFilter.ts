@@ -6,15 +6,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room, KnownMembership } from "matrix-js-sdk/src/matrix";
 
-import type { Filter } from ".";
-import { FilterKey } from ".";
+import { type Filter, FilterEnum } from ".";
 
 export class InvitesFilter implements Filter {
     public matches(room: Room): boolean {
         return room.getMyMembership() === KnownMembership.Invite;
     }
 
-    public get key(): FilterKey.InvitesFilter {
-        return FilterKey.InvitesFilter;
+    public get key(): FilterEnum.InvitesFilter {
+        return FilterEnum.InvitesFilter;
     }
 }

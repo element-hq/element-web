@@ -196,7 +196,9 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_MessageActionBar {
-            inset-inline-start: calc(100% - var(--MessageActionBar-size-box));
+            inset-inline-start: calc(
+                100% - var(--MessageActionBar-size-button) - 2 * var(--MessageActionBar-size-margin)
+            );
             right: initial; /* Reset the default value */
         }
 

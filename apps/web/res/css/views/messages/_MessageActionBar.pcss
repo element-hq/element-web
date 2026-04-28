@@ -8,21 +8,16 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_MessageActionBar {
     --MessageActionBar-size-button: 28px;
-    --MessageActionBar-size-box: 32px; /* 28px + 2px (margin) * 2 */
-    --MessageActionBar-item-hover-background: var(--cpd-color-bg-subtle-secondary);
-    --MessageActionBar-item-hover-borderRadius: 6px;
-    --MessageActionBar-item-hover-zIndex: 1;
+    --MessageActionBar-size-margin: 3px;
 
     position: absolute;
-    visibility: hidden;
-    cursor: pointer;
-    display: flex;
-    height: var(--MessageActionBar-size-box);
-    line-height: $font-24px;
-    border-radius: 8px;
-    background: $background;
-    border: var(--cpd-border-width-1) solid var(--cpd-color-border-disabled);
-    top: -32px;
+    top: calc(
+        -1 *
+            (
+                var(--MessageActionBar-size-button) + 2 *
+                    (var(--MessageActionBar-size-margin) + var(--cpd-border-width-1))
+            )
+    );
     right: 8px;
     user-select: none;
     /* Ensure the action bar appears above other things like the read marker */
@@ -68,70 +63,5 @@ Please see LICENSE files in the repository root for full details.
             top: 0;
             left: 0;
         }
-    }
-
-    > * {
-        white-space: nowrap;
-        display: inline-block;
-        position: relative;
-        margin: 2px;
-
-        &:hover {
-            background: var(--MessageActionBar-item-hover-background);
-            border-radius: var(--MessageActionBar-item-hover-borderRadius);
-            z-index: var(--MessageActionBar-item-hover-zIndex);
-        }
-    }
-
-    .mx_MessageActionBar_iconButton {
-        --MessageActionBar-icon-size: 18px;
-        width: var(--MessageActionBar-size-button);
-        height: var(--MessageActionBar-size-button);
-        color: var(--cpd-color-icon-secondary);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            height: var(--MessageActionBar-icon-size);
-            width: var(--MessageActionBar-icon-size);
-            flex: 0 0 var(--MessageActionBar-icon-size);
-        }
-
-        &:disabled,
-        &[disabled] {
-            cursor: not-allowed;
-            opacity: 0.75;
-        }
-
-        &:hover {
-            color: var(--cpd-color-icon-primary);
-        }
-
-        &.mx_MessageActionBar_threadButton {
-            --MessageActionBar-icon-size: 20px;
-        }
-
-        &.mx_MessageActionBar_retryButton {
-            --MessageActionBar-icon-size: 16px;
-        }
-
-        &.mx_MessageActionBar_downloadButton {
-            --MessageActionBar-icon-size: 20px;
-
-            &.mx_MessageActionBar_downloadSpinnerButton {
-                svg {
-                    display: none; /* hide the download icon */
-                }
-            }
-        }
-
-        &.mx_MessageActionBar_expandCollapseMessageButton {
-            --MessageActionBar-icon-size: 12px;
-        }
-    }
-
-    .mx_MessageActionBar_optionsButton {
-        --MessageActionBar-icon-size: 22px;
     }
 }
