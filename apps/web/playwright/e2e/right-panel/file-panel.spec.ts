@@ -5,9 +5,6 @@ Copyright 2023 Suguru Hirahara
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-
-import { type Page } from "@playwright/test";
-
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
