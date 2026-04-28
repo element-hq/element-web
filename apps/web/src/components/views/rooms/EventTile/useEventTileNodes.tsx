@@ -84,9 +84,6 @@ type UseEventTileNodesArgs = {
     tileContentId: string;
     vm: EventTileViewModel;
     onActionBarFocusChange: (focused: boolean) => void;
-    toggleThreadExpanded: () => void;
-    openInRoom: (_anchor: HTMLElement | null) => void;
-    copyLinkToThread: (_anchor: HTMLElement | null) => void | Promise<void>;
 };
 
 function getAvatarMember(props: EventTileNodesProps, avatarSubject: AvatarSubject): RoomMember | null {
@@ -111,9 +108,6 @@ export function useEventTileNodes({
     tileContentId,
     vm,
     onActionBarFocusChange,
-    toggleThreadExpanded,
-    openInRoom,
-    copyLinkToThread,
 }: UseEventTileNodesArgs): { content: EventTileContentNodes; thread: EventTileThreadNodes } {
     const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
     const onSenderProfileClick = useCallback((): void => {
@@ -183,6 +177,7 @@ export function useEventTileNodes({
             setQuoteExpanded,
         ],
     );
+    const reactions = vm.getReactions();
     const actionBar = useMemo(
         () =>
             snapshot.rendering.shouldRenderActionBar ? (
@@ -190,12 +185,11 @@ export function useEventTileNodes({
                     mxEvent={props.mxEvent}
                     permalinkCreator={props.permalinkCreator}
                     getRelationsForEvent={props.getRelationsForEvent}
-                    reactions={snapshot.receipt.reactions}
-                    isQuoteExpanded={snapshot.interaction.isQuoteExpanded}
+                    reactions={reactions}
+                    vm={vm.actionBarViewModel}
                     tileRef={tileRef}
                     replyChainRef={replyChainRef}
                     onFocusChange={onActionBarFocusChange}
-                    toggleThreadExpanded={toggleThreadExpanded}
                 />
             ) : undefined,
         [
@@ -203,17 +197,23 @@ export function useEventTileNodes({
             props.mxEvent,
             props.permalinkCreator,
             props.getRelationsForEvent,
-            snapshot.receipt.reactions,
-            snapshot.interaction.isQuoteExpanded,
+            reactions,
+            vm.actionBarViewModel,
             tileRef,
             replyChainRef,
             onActionBarFocusChange,
-            toggleThreadExpanded,
         ],
     );
     const sender = useMemo(
-        () => <Sender mode={snapshot.sender.senderMode} mxEvent={props.mxEvent} onClick={onSenderProfileClick} />,
-        [snapshot.sender.senderMode, props.mxEvent, onSenderProfileClick],
+        () => (
+            <Sender
+                mode={snapshot.sender.senderMode}
+                mxEvent={props.mxEvent}
+                onClick={onSenderProfileClick}
+                profileViewModel={vm.disambiguatedProfileViewModel}
+            />
+        ),
+        [snapshot.sender.senderMode, props.mxEvent, onSenderProfileClick, vm.disambiguatedProfileViewModel],
     );
     const avatar = useMemo(
         () => (
@@ -266,8 +266,9 @@ export function useEventTileNodes({
                     isRedacted={props.isRedacted}
                     isPinned={snapshot.rendering.isPinned}
                     isOwnEvent={snapshot.sender.isOwnEvent}
-                    reactions={snapshot.receipt.reactions}
+                    reactions={reactions}
                     tileContentId={tileContentId}
+                    reactionsRowViewModel={vm.reactionsRowViewModel}
                 />
             </div>
         ),
@@ -277,8 +278,9 @@ export function useEventTileNodes({
             props.isRedacted,
             snapshot.rendering.isPinned,
             snapshot.sender.isOwnEvent,
-            snapshot.receipt.reactions,
+            reactions,
             tileContentId,
+            vm.reactionsRowViewModel,
         ],
     );
     const messageBodyProps = useMemo<MessageBodyProps>(
@@ -342,10 +344,8 @@ export function useEventTileNodes({
     );
     const toolbar = useMemo(
         () =>
-            snapshot.thread.shouldRenderThreadToolbar ? (
-                <ThreadToolbar onViewInRoomClick={openInRoom} onCopyLinkClick={copyLinkToThread} />
-            ) : undefined,
-        [snapshot.thread.shouldRenderThreadToolbar, openInRoom, copyLinkToThread],
+            snapshot.thread.shouldRenderThreadToolbar ? <ThreadToolbar vm={vm.threadToolbarViewModel} /> : undefined,
+        [snapshot.thread.shouldRenderThreadToolbar, vm.threadToolbarViewModel],
     );
 
     return useMemo(

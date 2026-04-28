@@ -22,10 +22,8 @@ import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
 import { isContentActionable } from "../../../../utils/EventUtils";
 import { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
-import {
-    MAX_ITEMS_WHEN_LIMITED,
-    ReactionsRowViewModel,
-} from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import { MAX_ITEMS_WHEN_LIMITED } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
+import type { ReactionsRowViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 
 interface ReactionsRowButtonItemProps {
     mxEvent: MatrixEvent;
@@ -103,9 +101,10 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
 export interface ReactionsRowProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
+    vm: ReactionsRowViewModel;
 }
 
-export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>): JSX.Element | null {
+export function ReactionsRow({ mxEvent, reactions, vm }: Readonly<ReactionsRowProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
     const [menuDisplayed, setMenuDisplayed] = useState(false);
@@ -113,16 +112,6 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     const [, bumpRelationsVersion] = useReducer((version: number) => version + 1, 0);
     const reactionGroups = getReactionGroups(reactions);
     const myReactions = getMyReactions(reactions, userId);
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowViewModel({
-                isActionable: isContentActionable(mxEvent),
-                reactionGroupCount: reactionGroups.length,
-                canReact: roomContext.canReact,
-                addReactionButtonActive: false,
-            }),
-    );
 
     const openReactionMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
         setMenuAnchorRect(event.currentTarget.getBoundingClientRect());
@@ -132,10 +121,6 @@ export function ReactionsRow({ mxEvent, reactions }: Readonly<ReactionsRowProps>
     const closeReactionMenu = useCallback((): void => {
         setMenuDisplayed(false);
     }, []);
-
-    useEffect(() => {
-        vm.setActionable(isContentActionable(mxEvent));
-    }, [mxEvent, vm]);
 
     useEffect(() => {
         vm.setCanReact(roomContext.canReact);

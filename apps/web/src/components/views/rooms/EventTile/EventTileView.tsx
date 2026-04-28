@@ -23,6 +23,7 @@ import {
     TimestampFormatMode,
 } from "../../../../models/rooms/EventTileModel";
 import { Layout } from "../../../../settings/enums/Layout";
+import type { MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 import { EncryptionIndicator } from "./EncryptionIndicator";
 import { Timestamp } from "./Timestamp";
 import { ThreadPanelSummary } from "./ThreadPanelSummary";
@@ -88,6 +89,8 @@ type EventTileTimestampProps = {
     onPermalinkClicked?: MouseEventHandler<HTMLElement>;
     /** Context menu handler for the timestamp. */
     onContextMenu?: MouseEventHandler<HTMLElement>;
+    /** Parent-owned timestamp view model. */
+    vm: MessageTimestampViewModel;
 };
 
 /** Encryption indicator props for the tile. */
@@ -185,6 +188,7 @@ const PlainTimestamp = memo(function PlainTimestamp({ timestamp }: PlainTimestam
             showTwelveHour={timestamp.isTwelveHour}
             ts={timestamp.ts ?? 0}
             receivedTs={timestamp.receivedTs}
+            vm={timestamp.vm}
         />
     );
 });
@@ -206,6 +210,7 @@ const LinkedTimestamp = memo(function LinkedTimestamp({ timestamp }: PlainTimest
             href={timestamp.permalink}
             onClick={timestamp.onPermalinkClicked}
             onContextMenu={timestamp.onContextMenu}
+            vm={timestamp.vm}
         />
     );
 });

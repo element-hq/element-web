@@ -73,6 +73,18 @@ import { shouldDisplayReply } from "../../../../utils/Reply";
 import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import PinningUtils from "../../../../utils/PinningUtils";
+import { isContentActionable } from "../../../../utils/EventUtils";
+import {
+    EventTileActionBarViewModel,
+    type EventTileActionBarViewModelProps,
+} from "./actions/EventTileActionBarViewModel";
+import { DisambiguatedProfileViewModel } from "./DisambiguatedProfileViewModel";
+import { ReactionsRowViewModel } from "./reactions/ReactionsRowViewModel";
+import {
+    MessageTimestampViewModel,
+    type MessageTimestampViewModelProps,
+} from "./timestamp/MessageTimestampViewModel";
+import { ThreadListActionBarViewModel } from "../../ThreadListActionBarViewModel";
 
 /** Interaction-only state that changes in response to pointer and focus events. */
 interface EventTileInteractionSnapshot {
@@ -94,8 +106,6 @@ interface EventTileInteractionSnapshot {
 
 /** Derived receipt and reaction state for the tile footer. */
 interface EventTileReceiptSnapshot {
-    /** The reaction aggregation for the event, if reactions are being tracked. */
-    reactions: Relations | null;
     /** Whether the tile should show the sent receipt state. */
     shouldShowSentReceipt: boolean;
     /** Whether the tile should show the sending receipt state. */
@@ -411,6 +421,14 @@ interface EventTileRenderingProps {
     inhibitInteraction?: boolean;
     /** A link target used to highlight matching content inside the tile. */
     highlightLink?: string;
+    /** Whether the current user can send message-based actions such as reply. */
+    canSendMessages?: boolean;
+    /** Whether the current user can react to this event. */
+    canReact?: boolean;
+    /** Whether this tile is being rendered in search results. */
+    isSearch?: boolean;
+    /** Whether this tile is being rendered inside a card-style surface. */
+    isCard?: boolean;
 }
 
 /** Optional relation and receipt inputs used to enrich tile footer state. */
@@ -465,14 +483,70 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private currentRoomThreadEventId: string | null = null;
     private isListeningForUserTrust = false;
     private isListeningForReactions = false;
+    private readonly eventTileActionBarViewModel: EventTileActionBarViewModel;
+    private readonly eventTileReactionsRowViewModel: ReactionsRowViewModel;
+    private readonly eventTileDisambiguatedProfileViewModel: DisambiguatedProfileViewModel;
+    private readonly eventTileTimestampViewModel: MessageTimestampViewModel;
+    private readonly eventTileThreadToolbarViewModel: ThreadListActionBarViewModel;
 
     /** Creates a view model for a single event tile. */
     public constructor(props: EventTileViewModelProps) {
         super(props, EventTileViewModel.deriveSnapshot(props));
 
+        this.eventTileActionBarViewModel = this.disposables.track(
+            new EventTileActionBarViewModel(
+                EventTileViewModel.buildActionBarViewModelProps(
+                    props,
+                    this.snapshot.current.interaction.isQuoteExpanded,
+                    this.onToggleThreadExpanded,
+                ),
+            ),
+        );
+        this.eventTileReactionsRowViewModel = this.disposables.track(
+            new ReactionsRowViewModel(EventTileViewModel.buildReactionsRowViewModelProps(props)),
+        );
+        this.eventTileDisambiguatedProfileViewModel = this.disposables.track(
+            new DisambiguatedProfileViewModel(EventTileViewModel.buildDisambiguatedProfileViewModelProps(props)),
+        );
+        this.eventTileTimestampViewModel = this.disposables.track(
+            new MessageTimestampViewModel(
+                EventTileViewModel.buildTimestampViewModelProps(this.snapshot.current, props),
+            ),
+        );
+        this.eventTileThreadToolbarViewModel = this.disposables.track(
+            new ThreadListActionBarViewModel({
+                onViewInRoomClick: this.onThreadToolbarViewInRoomClick,
+                onCopyLinkClick: this.onThreadToolbarCopyLinkClick,
+            }),
+        );
+
         this.rebindListeners(null, props);
         this.updateReceiptListener();
         this.decryptEventIfNeeded();
+    }
+
+    public get actionBarViewModel(): EventTileActionBarViewModel {
+        return this.eventTileActionBarViewModel;
+    }
+
+    public get reactionsRowViewModel(): ReactionsRowViewModel {
+        return this.eventTileReactionsRowViewModel;
+    }
+
+    public get disambiguatedProfileViewModel(): DisambiguatedProfileViewModel {
+        return this.eventTileDisambiguatedProfileViewModel;
+    }
+
+    public get timestampViewModel(): MessageTimestampViewModel {
+        return this.eventTileTimestampViewModel;
+    }
+
+    public get threadToolbarViewModel(): ThreadListActionBarViewModel {
+        return this.eventTileThreadToolbarViewModel;
+    }
+
+    public getReactions(): Relations | null {
+        return EventTileViewModel.getReactions(this.props);
     }
 
     /** Releases all Matrix listeners owned by this view model. */
@@ -489,6 +563,13 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     /** Updates whether the quoted reply preview is expanded. */
     public setQuoteExpanded(isQuoteExpanded: boolean): void {
         this.updateInteractionSnapshot({ isQuoteExpanded });
+        this.eventTileActionBarViewModel.recomputeSnapshot(
+            EventTileViewModel.buildActionBarViewModelProps(
+                this.props,
+                this.snapshot.current.interaction.isQuoteExpanded,
+                this.onToggleThreadExpanded,
+            ),
+        );
     }
 
     /** Applies root focus entry state and whether keyboard focus should reveal the action bar. */
@@ -579,10 +660,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     /** Recomputes derived render state from new props without rebinding listeners or starting async work. */
     public recomputeSnapshot(props: EventTileViewModelProps): void {
+        const previousProps = this.props;
         this.props = props;
+        this.recomputeChildSnapshots(previousProps, props);
         this.updateSnapshot(
             {
-                receipt: { reactions: EventTileViewModel.getReactions(props) },
                 thread: { thread: EventTileViewModel.getThread(props) },
             },
             false,
@@ -596,6 +678,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const previousShowReactions = previousProps.showReactions;
 
         this.props = nextProps;
+        this.syncChildListeners(previousProps, nextProps);
         this.rebindListeners(previousProps, nextProps);
         this.updateReceiptListener();
 
@@ -806,6 +889,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const nextSnapshot = EventTileViewModel.deriveSnapshot(this.props, this.snapshot.current, partial);
 
         this.snapshot.merge(nextSnapshot);
+        this.updateTimestampViewModel(nextSnapshot);
 
         if (syncReceiptListener) {
             this.updateReceiptListener(nextSnapshot);
@@ -817,12 +901,13 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const partialSnapshot = EventTileViewModel.getChangedSnapshotGroups(this.snapshot.current, nextSnapshot);
 
         this.snapshot.merge(partialSnapshot);
+        this.updateTimestampViewModel(nextSnapshot);
         this.updateReceiptListener(nextSnapshot);
     }
 
     private updateReceiptSnapshot(partial: EventTileViewSnapshotUpdate = {}): void {
-        const reactions = partial.receipt?.reactions ?? this.snapshot.current.receipt.reactions ?? this.getReactions();
-        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(this.props, reactions);
+        const reactions = this.getReactions();
+        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(this.props);
 
         this.mergeSnapshot({
             ...partial,
@@ -835,10 +920,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 hasFooter: EventTileViewModel.getHasFooter(
                     this.props.isRedacted,
                     this.snapshot.current.rendering.isPinned,
-                    receiptSnapshot.reactions,
+                    reactions,
                 ),
             },
         });
+        this.updateReactionsRowViewModel();
     }
 
     private updateThreadSnapshot(thread: Thread | null): void {
@@ -921,10 +1007,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
     }
 
-    private getReactions(): Relations | null {
-        return EventTileViewModel.getReactions(this.props);
-    }
-
     private readonly onRoomReceipt = (_event: MatrixEvent, room: Room): void => {
         const roomId = this.props.mxEvent.getRoomId();
         const tileRoom = roomId ? this.props.cli.getRoom(roomId) : null;
@@ -954,9 +1036,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             return;
         }
 
-        this.updateReceiptSnapshot({
-            receipt: { reactions: this.getReactions() },
-        });
+        this.updateReceiptSnapshot();
     };
 
     private readonly updateThread = (thread: Thread): void => {
@@ -970,6 +1050,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private readonly onNewThread = (thread: Thread): void => {
         this.updateThread(thread);
         this.unbindRoomListeners();
+    };
+
+    private readonly onToggleThreadExpanded = (): void => {
+        this.toggleQuoteExpanded();
+    };
+
+    private readonly onThreadToolbarViewInRoomClick = (): void => {
+        this.openInRoom();
+    };
+
+    private readonly onThreadToolbarCopyLinkClick = async (): Promise<void> => {
+        await this.copyLinkToThread();
     };
 
     private decryptEventIfNeeded(): void {
@@ -1014,6 +1106,122 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             tileClickMode: this.snapshot.current.thread.tileClickMode,
             editState: this.props.editState,
         };
+    }
+
+    private static buildActionBarViewModelProps(
+        props: EventTileViewModelProps,
+        isQuoteExpanded: boolean | undefined,
+        onToggleThreadExpanded: EventTileActionBarViewModelProps["onToggleThreadExpanded"],
+    ): EventTileActionBarViewModelProps {
+        return {
+            mxEvent: props.mxEvent,
+            timelineRenderingType: props.timelineRenderingType,
+            canSendMessages: Boolean(props.canSendMessages),
+            canReact: Boolean(props.canReact),
+            isSearch: props.isSearch,
+            isCard: props.isCard,
+            isQuoteExpanded,
+            onToggleThreadExpanded,
+            getRelationsForEvent: props.getRelationsForEvent,
+        };
+    }
+
+    private static buildReactionsRowViewModelProps(props: EventTileViewModelProps): {
+        isActionable: boolean;
+        reactionGroupCount: number;
+        canReact: boolean;
+        addReactionButtonActive: boolean;
+    } {
+        return {
+            isActionable: isContentActionable(props.mxEvent),
+            reactionGroupCount: EventTileViewModel.getReactionGroupCount(EventTileViewModel.getReactions(props)),
+            canReact: Boolean(props.canReact),
+            addReactionButtonActive: false,
+        };
+    }
+
+    private static buildDisambiguatedProfileViewModelProps(props: EventTileViewModelProps): {
+        fallbackName: string;
+        colored: boolean;
+        emphasizeDisplayName: boolean;
+    } {
+        return {
+            fallbackName: props.mxEvent.getSender() ?? "",
+            colored: true,
+            emphasizeDisplayName: true,
+        };
+    }
+
+    private static buildTimestampViewModelProps(
+        snapshot: EventTileViewSnapshot,
+        props: EventTileViewModelProps,
+    ): MessageTimestampViewModelProps {
+        const timestampView = snapshot.presentation.timestampView;
+
+        return {
+            showRelative: timestampView.formatMode === TimestampFormatMode.Relative,
+            showTwelveHour: props.isTwelveHour,
+            ts: timestampView.ts,
+            receivedTs: timestampView.receivedTs,
+            href:
+                timestampView.displayMode === TimestampDisplayMode.Linked
+                    ? timestampView.permalink
+                    : undefined,
+        };
+    }
+
+    private static getReactionGroupCount(reactions: Relations | null): number {
+        if (!reactions || typeof reactions.getSortedAnnotationsByKey !== "function") {
+            return 0;
+        }
+
+        return reactions.getSortedAnnotationsByKey()?.filter(([, events]) => events.size > 0).length ?? 0;
+    }
+
+    private recomputeChildSnapshots(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
+        this.eventTileActionBarViewModel.recomputeSnapshot(
+            EventTileViewModel.buildActionBarViewModelProps(
+                nextProps,
+                this.snapshot.current.interaction.isQuoteExpanded,
+                this.onToggleThreadExpanded,
+            ),
+        );
+        this.updateReactionsRowViewModel(nextProps);
+        if (previousProps.mxEvent !== nextProps.mxEvent) {
+            this.eventTileDisambiguatedProfileViewModel.setProps(
+                EventTileViewModel.buildDisambiguatedProfileViewModelProps(nextProps),
+            );
+        }
+        this.updateTimestampViewModel();
+    }
+
+    private syncChildListeners(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
+        this.eventTileActionBarViewModel.syncListeners(
+            EventTileViewModel.buildActionBarViewModelProps(
+                previousProps,
+                this.snapshot.current.interaction.isQuoteExpanded,
+                this.onToggleThreadExpanded,
+            ),
+            EventTileViewModel.buildActionBarViewModelProps(
+                nextProps,
+                this.snapshot.current.interaction.isQuoteExpanded,
+                this.onToggleThreadExpanded,
+            ),
+        );
+    }
+
+    private updateReactionsRowViewModel(props: EventTileViewModelProps = this.props): void {
+        const reactionsRowProps = EventTileViewModel.buildReactionsRowViewModelProps(props);
+
+        this.eventTileReactionsRowViewModel.setActionable(reactionsRowProps.isActionable);
+        this.eventTileReactionsRowViewModel.setCanReact(reactionsRowProps.canReact);
+        this.eventTileReactionsRowViewModel.setReactionGroupCount(reactionsRowProps.reactionGroupCount);
+    }
+
+    private updateTimestampViewModel(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
+        this.eventTileTimestampViewModel.setProps(
+            EventTileViewModel.buildTimestampViewModelProps(snapshot, this.props),
+        );
     }
 
     private static keepSnapshotGroup<T extends object>(current: T | undefined, next: T): T {
@@ -1085,7 +1293,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     ): EventTileViewSnapshot {
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(previousSnapshot, partial, props);
         const context = EventTileViewModel.createDerivationContext(props, baseSnapshot);
-        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(props, context.reactions);
+        const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(props);
         const renderingSnapshot = EventTileViewModel.deriveRenderingSnapshot(props, context);
         const threadSnapshot = EventTileViewModel.deriveThreadSnapshot(props, context);
         const senderSnapshot = EventTileViewModel.deriveSenderSnapshot(props, context);
@@ -1094,7 +1302,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const hasFooter = EventTileViewModel.getHasFooter(
             props.isRedacted,
             renderingSnapshot.isPinned,
-            receiptSnapshot.reactions,
+            context.reactions,
         );
 
         const interaction = EventTileViewModel.keepSnapshotGroup(
@@ -1202,7 +1410,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 isQuoteExpanded: undefined,
             },
             receipt: {
-                reactions: null,
                 shouldShowSentReceipt: false,
                 shouldShowSendingReceipt: false,
                 showReadReceipts: false,
@@ -1301,15 +1508,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         };
     }
 
-    private static deriveReceiptSnapshot(
-        props: EventTileViewModelProps,
-        reactions: Relations | null,
-    ): EventTileReceiptSnapshot {
+    private static deriveReceiptSnapshot(props: EventTileViewModelProps): EventTileReceiptSnapshot {
         const shouldShowSentReceipt = EventTileViewModel.getShouldShowSentReceipt(props);
         const shouldShowSendingReceipt = EventTileViewModel.getShouldShowSendingReceipt(props);
 
         return {
-            reactions,
             shouldShowSentReceipt,
             shouldShowSendingReceipt,
             showReadReceipts: EventTileViewModel.getShowReadReceipts(props, {
@@ -1455,7 +1658,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             displayInfo,
             shieldColour: baseSnapshot.encryption.shieldColour,
             shieldReason: baseSnapshot.encryption.shieldReason,
-            reactions: baseSnapshot.receipt.reactions ?? EventTileViewModel.getReactions(props),
+            reactions: EventTileViewModel.getReactions(props),
             thread,
             threadNotification: baseSnapshot.thread.threadNotification,
             hasThread: Boolean(thread),

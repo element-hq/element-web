@@ -381,6 +381,16 @@ export class EventTileActionBarViewModel
         this.isDownloadLoading = false;
     }
 
+    private withCurrentMenuHandlers(
+        newProps: EventTileActionBarViewModelProps,
+    ): EventTileActionBarViewModelProps {
+        return {
+            ...newProps,
+            onOptionsClick: newProps.onOptionsClick ?? this.props.onOptionsClick,
+            onReactionsClick: newProps.onReactionsClick ?? this.props.onReactionsClick,
+        };
+    }
+
     private isCurrentDownloadPermissionRequest(requestId: number, mxEvent: MatrixEvent): boolean {
         return !this.isDisposed && requestId === this.downloadPermissionRequestId && this.props.mxEvent === mxEvent;
     }
@@ -442,7 +452,7 @@ export class EventTileActionBarViewModel
     /** Recomputes the action snapshot from new props without rebinding listeners or starting async work. */
     public recomputeSnapshot(newProps: EventTileActionBarViewModelProps): void {
         const previousProps = this.props;
-        this.props = newProps;
+        this.props = this.withCurrentMenuHandlers(newProps);
         this.snapshot.merge(
             this.computeSnapshot(
                 EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, newProps)
@@ -457,12 +467,22 @@ export class EventTileActionBarViewModel
         previousProps: EventTileActionBarViewModelProps,
         nextProps: EventTileActionBarViewModelProps,
     ): void {
-        this.props = nextProps;
+        this.props = this.withCurrentMenuHandlers(nextProps);
 
         if (EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, nextProps)) {
             this.resetEventState();
             this.setupListeners();
         }
+    }
+
+    /** Updates React-local menu handlers without changing the derived action set. */
+    public setMenuHandlers(
+        handlers: Pick<EventTileActionBarViewModelProps, "onOptionsClick" | "onReactionsClick">,
+    ): void {
+        this.props = {
+            ...this.props,
+            ...handlers,
+        };
     }
 
     /** Removes listeners and releases resources owned by the view model. */

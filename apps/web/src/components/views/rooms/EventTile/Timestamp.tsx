@@ -6,19 +6,28 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useRef, type JSX } from "react";
-import { MessageTimestampView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { MessageTimestampView } from "@element-hq/web-shared-components";
 
-import type { MessageTimestampViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
-import { MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
+import type {
+    MessageTimestampViewModel,
+    MessageTimestampViewModelProps,
+} from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
-export function Timestamp(props: Readonly<MessageTimestampViewModelProps>): JSX.Element {
-    const viewModel = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
+type TimestampProps = MessageTimestampViewModelProps & {
+    vm: MessageTimestampViewModel;
+};
+
+export function Timestamp({ vm, ...props }: Readonly<TimestampProps>): JSX.Element {
     const renderedPropsRef = useRef(props);
 
     if (renderedPropsRef.current !== props) {
         renderedPropsRef.current = props;
-        viewModel.setProps(props);
+        vm.setProps({
+            ...props,
+            onClick: props.onClick,
+            onContextMenu: props.onContextMenu,
+        });
     }
 
     return (
@@ -26,7 +35,7 @@ export function Timestamp(props: Readonly<MessageTimestampViewModelProps>): JSX.
             {props.receivedTs ? (
                 <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" />
             ) : undefined}
-            <MessageTimestampView vm={viewModel} className="mx_MessageTimestamp" />
+            <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />
         </>
     );
 }

@@ -49,6 +49,7 @@ import { type EventTileCommandDeps } from "./EventTileCommands";
 import { useContextMenuNode } from "./ContextMenu";
 import { useEventTileCommands } from "./useEventTileCommands";
 import { useEventTileNodes } from "./useEventTileNodes";
+import { CardContext } from "../../right_panel/context";
 
 /** Ref handle for direct access to tile actions and the root element. */
 export interface EventTileHandle extends EventTileOps {
@@ -158,8 +159,9 @@ function buildEventTileViewModelProps(
     commandDeps: EventTileViewModelProps["commandDeps"],
     roomContext: Pick<
         React.ContextType<typeof RoomContext>,
-        "timelineRenderingType" | "isRoomEncrypted" | "showHiddenEvents"
+        "timelineRenderingType" | "isRoomEncrypted" | "showHiddenEvents" | "canSendMessages" | "canReact" | "search"
     >,
+    isCard: boolean,
 ): EventTileViewModelProps {
     return {
         mxEvent: props.mxEvent,
@@ -191,11 +193,16 @@ function buildEventTileViewModelProps(
         timelineRenderingType: roomContext.timelineRenderingType,
         isRoomEncrypted: Boolean(roomContext.isRoomEncrypted),
         showHiddenEvents: roomContext.showHiddenEvents,
+        canSendMessages: roomContext.canSendMessages,
+        canReact: roomContext.canReact,
+        isSearch: Boolean(roomContext.search),
+        isCard,
     };
 }
 
 export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTileHostProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
+    const { isCard } = useContext(CardContext);
     const cli = useMatrixClientContext();
     const commandDeps = useMemo<EventTileCommandDeps>(
         () => ({
@@ -215,7 +222,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         () => props.readReceipts?.map(({ userId, ts, roomMember }) => ({ userId, ts, roomMember })),
         [props.readReceipts],
     );
-    const { showHiddenEvents, isRoomEncrypted, timelineRenderingType } = roomContext;
+    const { showHiddenEvents, isRoomEncrypted, timelineRenderingType, canSendMessages, canReact, search } = roomContext;
     const {
         mxEvent,
         eventSendStatus,
@@ -277,7 +284,11 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                     showHiddenEvents,
                     isRoomEncrypted,
                     timelineRenderingType,
+                    canSendMessages,
+                    canReact,
+                    search,
                 },
+                isCard,
             ),
         [
             mxEvent,
@@ -310,6 +321,10 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             showHiddenEvents,
             isRoomEncrypted,
             timelineRenderingType,
+            canSendMessages,
+            canReact,
+            search,
+            isCard,
         ],
     );
     const vm = useCreateAutoDisposedViewModel(() => new EventTileViewModel(viewModelProps));
@@ -364,8 +379,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
     const {
         room,
         onPermalinkClicked,
-        openInRoom,
-        copyLinkToThread,
         onContextMenu,
         onTimestampContextMenu,
         onListTileClick,
@@ -376,9 +389,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         },
         [vm, rootRef],
     );
-    const toggleThreadExpanded = useCallback((): void => {
-        vm.toggleQuoteExpanded();
-    }, [vm]);
     const nodes = useEventTileNodes({
         props,
         roomContext,
@@ -389,9 +399,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         tileContentId,
         vm,
         onActionBarFocusChange,
-        toggleThreadExpanded,
-        openInRoom,
-        copyLinkToThread,
     });
     const contextMenuNode = useContextMenuNode({
         props,
@@ -462,6 +469,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                 isTwelveHour: props.isTwelveHour,
                 onPermalinkClicked,
                 onContextMenu: onTimestampContextMenu,
+                vm: vm.timestampViewModel,
             },
             encryption: snapshot.presentation.encryptionView,
             notification: {
@@ -500,6 +508,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             snapshot.sender.isOwnEvent,
             snapshot.rendering.hasFooter,
             snapshot.presentation.timestampView,
+            vm.timestampViewModel,
             snapshot.presentation.encryptionView,
             snapshot.presentation.isListLikeTile,
             snapshot.presentation.notificationView,

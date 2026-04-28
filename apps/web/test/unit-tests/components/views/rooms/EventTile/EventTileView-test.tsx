@@ -21,6 +21,7 @@ import {
     EventTileView,
     type EventTileViewProps,
 } from "../../../../../../src/components/views/rooms/EventTile/EventTileView";
+import { MessageTimestampViewModel } from "../../../../../../src/viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 
 type EventTileViewOverrides = Omit<
     Partial<EventTileViewProps>,
@@ -102,6 +103,7 @@ describe("EventTileView", () => {
                 displayMode: TimestampDisplayMode.Linked,
                 formatMode: TimestampFormatMode.Absolute,
                 permalink: "#",
+                vm: new MessageTimestampViewModel({ ts: 0 }),
             },
             encryption: {
                 padlockMode: PadlockMode.None,

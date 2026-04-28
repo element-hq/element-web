@@ -5,118 +5,54 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type JSX } from "react";
-import { ActionBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import React, { useCallback, useEffect, useLayoutEffect, useState, type JSX } from "react";
+import { ActionBarView } from "@element-hq/web-shared-components";
 
 import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
-import RoomContext from "../../../../contexts/RoomContext";
-import { EventTileActionBarViewModel } from "../../../../viewmodels/room/timeline/event-tile/actions/EventTileActionBarViewModel";
-import type { EventTileActionBarViewModelProps } from "../../../../viewmodels/room/timeline/event-tile/actions/EventTileActionBarViewModel";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import MessageContextMenu from "../../context_menus/MessageContextMenu";
 import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
-import { CardContext } from "../../right_panel/context";
 import type { EventTileOps, GetRelationsForEvent } from "./types";
+import type { EventTileActionBarViewModel } from "../../../../viewmodels/room/timeline/event-tile/actions/EventTileActionBarViewModel";
 
 type ActionBarProps = {
     mxEvent: MatrixEvent;
     reactions: Relations | null;
     permalinkCreator?: RoomPermalinkCreator;
     getRelationsForEvent?: GetRelationsForEvent;
-    isQuoteExpanded?: boolean;
+    vm: EventTileActionBarViewModel;
     tileRef: React.RefObject<EventTileOps | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     onFocusChange: (focused: boolean) => void;
-    toggleThreadExpanded: () => void;
 };
-
-function buildEventTileActionBarViewModelProps(
-    props: Pick<ActionBarProps, "mxEvent" | "isQuoteExpanded" | "getRelationsForEvent" | "toggleThreadExpanded">,
-    roomContext: Pick<React.ContextType<typeof RoomContext>, "timelineRenderingType" | "canSendMessages" | "canReact">,
-    isSearch: boolean,
-    isCard: boolean,
-    handleOptionsClick: NonNullable<EventTileActionBarViewModelProps["onOptionsClick"]>,
-    handleReactionsClick: NonNullable<EventTileActionBarViewModelProps["onReactionsClick"]>,
-): EventTileActionBarViewModelProps {
-    return {
-        mxEvent: props.mxEvent,
-        timelineRenderingType: roomContext.timelineRenderingType,
-        canSendMessages: roomContext.canSendMessages,
-        canReact: roomContext.canReact,
-        isSearch,
-        isCard,
-        isQuoteExpanded: props.isQuoteExpanded,
-        onToggleThreadExpanded: props.toggleThreadExpanded,
-        onOptionsClick: handleOptionsClick,
-        onReactionsClick: handleReactionsClick,
-        getRelationsForEvent: props.getRelationsForEvent,
-    };
-}
 
 export function ActionBar({
     mxEvent,
     reactions,
     permalinkCreator,
     getRelationsForEvent,
-    isQuoteExpanded,
+    vm,
     tileRef,
     replyChainRef,
     onFocusChange,
-    toggleThreadExpanded,
 }: Readonly<ActionBarProps>): JSX.Element {
-    const roomContext = useContext(RoomContext);
-    const { isCard } = useContext(CardContext);
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
     const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const isSearch = Boolean(roomContext.search);
     const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
         setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
     }, []);
     const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
         setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
     }, []);
-    const actionBarViewModelProps = useMemo(
-        () =>
-            buildEventTileActionBarViewModelProps(
-                { mxEvent, isQuoteExpanded, getRelationsForEvent, toggleThreadExpanded },
-                roomContext,
-                isSearch,
-                isCard,
-                handleOptionsClick,
-                handleReactionsClick,
-            ),
-        [
-            mxEvent,
-            isQuoteExpanded,
-            getRelationsForEvent,
-            toggleThreadExpanded,
-            roomContext,
-            isSearch,
-            isCard,
-            handleOptionsClick,
-            handleReactionsClick,
-        ],
-    );
-    const vm = useCreateAutoDisposedViewModel(() => new EventTileActionBarViewModel(actionBarViewModelProps));
-    const committedViewModelPropsRef = useRef(actionBarViewModelProps);
-    const renderedViewModelPropsRef = useRef(actionBarViewModelProps);
-
-    if (renderedViewModelPropsRef.current !== actionBarViewModelProps) {
-        renderedViewModelPropsRef.current = actionBarViewModelProps;
-        vm.recomputeSnapshot(actionBarViewModelProps);
-    }
 
     useLayoutEffect(() => {
-        const previousProps = committedViewModelPropsRef.current;
-
-        if (previousProps !== actionBarViewModelProps) {
-            vm.syncListeners(previousProps, actionBarViewModelProps);
-            committedViewModelPropsRef.current = actionBarViewModelProps;
-        }
-        renderedViewModelPropsRef.current = actionBarViewModelProps;
-    }, [vm, actionBarViewModelProps]);
+        vm.setMenuHandlers({
+            onOptionsClick: handleOptionsClick,
+            onReactionsClick: handleReactionsClick,
+        });
+    }, [handleOptionsClick, handleReactionsClick, vm]);
     useEffect(() => {
         onFocusChange(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));
     }, [onFocusChange, optionsMenuAnchorRect, reactionsMenuAnchorRect]);
