@@ -245,7 +245,7 @@ export async function logIntoElementAndVerify(page: Page, credentials: Credentia
 }
 
 /**
- * Click the "sign out" option in Element, and wait for the login page to load
+ * Click the "sign out" option in Element, and wait for the welcome page to load
  *
  * @param page - Playwright `Page` object.
  * @param discardKeys - if true, expect a "You'll lose access to your encrypted messages" dialog, and dismiss it.
