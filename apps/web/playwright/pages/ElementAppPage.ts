@@ -7,6 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Locator, type Page, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import { basename } from "node:path";
 
 import { Settings } from "./settings";
 import { Client } from "./client";
@@ -154,6 +156,55 @@ export class ElementAppPage {
         const composer = this.getComposer(isRightPanel);
         await composer.getByRole("button", { name: "More options", exact: true }).click();
         return this.page.getByRole("menu");
+    }
+
+    /**
+     * Sets the files on the composers file input, causing it to open the file
+     * upload dialog.
+     * @param location Should the main room input or the thread view input be used.
+     */
+    public setComposerInputFiles(
+        location: "room" | "thread",
+        ...params: Parameters<Locator["setInputFiles"]>
+    ): ReturnType<Locator["setInputFiles"]> {
+        const input = this.page
+            .locator(location === "room" ? ".mx_RoomView_body" : ".mx_RightPanel")
+            .locator("input[type='file']");
+        return input.setInputFiles(...params);
+    }
+
+    /**
+     * Sets the files on the composers file input, causing it to open the file
+     * upload dialog, and then automaticlly submits the dialog that pops up which
+     * causes the file to be uploaded.
+     * @param location Should the main room input or the thread view input be used.
+     */
+    public async composerUploadFiles(
+        location: "room" | "thread",
+        ...params: Parameters<Locator["setInputFiles"]>
+    ): Promise<void> {
+        await this.setComposerInputFiles(location, ...params);
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+    }
+
+    public async composerDragAndUploadFiles(location: "room" | "thread", path: string, type: string): Promise<void> {
+        const buffer = await readFile(path);
+        const name = basename(path);
+        const dataTransfer = await this.page.evaluateHandle(
+            async ([buffer, name, type]) => {
+                const dt = new DataTransfer();
+                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                    type,
+                });
+                dt.items.add(file);
+                return dt;
+            },
+            [buffer.toString("base64"), name, type],
+        );
+        await this.page.dispatchEvent(location === "room" ? ".mx_RoomView_body" : ".mx_ThreadPanel", "drop", {
+            dataTransfer,
+        });
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
     }
 
     /**
