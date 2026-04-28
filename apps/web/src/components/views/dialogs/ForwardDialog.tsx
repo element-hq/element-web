@@ -50,9 +50,9 @@ import { RoomContextDetails } from "../rooms/RoomContextDetails";
 import { filterBoolean } from "../../../utils/arrays";
 import {
     type IState,
+    RovingStateActionType,
     RovingTabIndexContext,
     RovingTabIndexProvider,
-    Type,
     useRovingTabIndex,
 } from "../../../accessibility/RovingTabIndex";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
@@ -368,7 +368,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                             const node = context.state.nodes[0];
                                             if (node) {
                                                 context.dispatch({
-                                                    type: Type.SetFocus,
+                                                    type: RovingStateActionType.SetFocus,
                                                     payload: { node },
                                                 });
                                                 node?.scrollIntoView?.({

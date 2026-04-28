@@ -1551,9 +1551,6 @@
         "render_reaction_images_description": "Noen ganger omtalt som \"egendefinerte emojier\".",
         "report_to_moderators": "Rapporter til moderatorene",
         "report_to_moderators_description": "I rom som støtter moderering, kan du bruke \"Rapporter\"-knappen for å rapportere misbruk til rommoderatorene.",
-        "share_history_on_invite": "Del kryptert historikk med nye medlemmer",
-        "share_history_on_invite_description": "Når du inviterer en bruker til et kryptert rom som har historikkvisibilitet satt til «delt», deler du kryptert historikk med den brukeren, og aksepterer kryptert historikk når du blir invitert til et slikt rom.",
-        "share_history_on_invite_warning": "Denne funksjonen er EKSPERIMENTELL, og ikke alle sikkerhetstiltak er implementert. Ikke aktiver på produksjonskontoer.",
         "sliding_sync": "Sliding Sync modus",
         "sliding_sync_description": "Under aktiv utvikling, kan ikke deaktiveres.",
         "sliding_sync_disabled_notice": "Logg ut og inn igjen for å deaktivere",
@@ -1798,7 +1795,6 @@
         "restricted": "Begrenset"
     },
     "powered_by_matrix": "Drevet av Matrix",
-    "powered_by_matrix_with_logo": "Desentralisert, kryptert chat og samarbeid drevet av $matrixLogo",
     "presence": {
         "away": "Borte",
         "busy": "Opptatt",
@@ -3944,7 +3940,6 @@
         "you_are_presenting": "Du presenterer"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Velkommen til Element",
     "widget": {
         "added_by": "Modulen ble lagt til av",
         "capabilities_dialog": {

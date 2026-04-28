@@ -491,10 +491,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Create a new section.
      * Emits {@link SECTION_CREATED_EVENT} if the section was successfully created.
      */
-    public async createSection(): Promise<void> {
+    public async createSection(): Promise<string | undefined> {
         const tag = await createSection();
         if (!tag) return;
         this.emit(SECTION_CREATED_EVENT, tag);
+        return tag;
     }
 
     /**

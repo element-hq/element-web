@@ -400,8 +400,12 @@ export class RoomListItemViewModel
         echoChamber.notificationVolume = elementNotifState;
     };
 
-    public onCreateSection = (): void => {
-        RoomListStoreV3.instance.createSection();
+    public onCreateSection = async (): Promise<void> => {
+        const newTag = await RoomListStoreV3.instance.createSection();
+        // Add the room to the section
+        if (newTag) {
+            tagRoom(this.props.room, newTag);
+        }
     };
 
     public onToggleSection = (tag: string): void => {
@@ -423,8 +427,11 @@ export class RoomListItemViewModel
 
         return (
             RoomListStoreV3.instance.orderedSectionTags
-                // Exclude the Chats section because the user toggle the other sections to move rooms in and out of the Chats section.
-                .filter((tag) => tag !== CHATS_TAG)
+                // Exclude the Chats because the user toggle the other sections to move rooms in and out of the Chats section.
+                // Also exclude the default sections because they are available as toggles in the main context menu, and we don't want them to be duplicated in the "Move to section" submenu.
+                .filter(
+                    (tag) => tag !== CHATS_TAG && tag !== DefaultTagID.Favourite && tag !== DefaultTagID.LowPriority,
+                )
                 .map((tag) => ({
                     tag,
                     name: RoomListItemViewModel.getSectionName(tag, customSectionData),

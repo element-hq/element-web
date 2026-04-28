@@ -370,7 +370,7 @@
             "fallback_button": "Zahájit autentizaci",
             "mas_cross_signing_reset_cta": "Přejděte na svůj účet",
             "mas_cross_signing_reset_description": "Chystáte se přejít na svůj účet %(serverName)s, abyste obnovili svou digitální identitu. Jakmile dokončíte obnovení svého účtu, vraťte se sem a klikněte na Zkusit znovu.",
-            "mas_cross_signing_reset_title": "Přejděte na svůj účet a obnovte svou identitu",
+            "mas_cross_signing_reset_title": "Přejděte do svého účtu a resetujte si digitální identitu.",
             "msisdn": "Na číslo %(msisdn)s byla odeslána textová zpráva",
             "msisdn_token_incorrect": "Neplatný token",
             "msisdn_token_prompt": "Prosím zadejte kód z této zprávy:",
@@ -681,6 +681,12 @@
         "unfederated_label_default_on": "Toto můžete deaktivovat, pokud bude místnost použita pro spolupráci s externími týmy, které mají svůj vlastní domovský server. Toto nelze později změnit.",
         "unsupported_version": "Server nepodporuje určenou verzi místnosti."
     },
+    "create_section_dialog": {
+        "create_section": "Vytvořit sekci",
+        "description": "Sekce určeny pouze pro vás",
+        "label": "Název sekce",
+        "title": "Vytvořte sekci"
+    },
     "create_space": {
         "add_details_prompt": "Přidejte nějaké podrobnosti, aby ho lidé lépe rozpoznali.",
         "add_details_prompt_2": "Tyto údaje můžete kdykoli změnit.",
@@ -749,6 +755,7 @@
         "category_other": "Další možnosti",
         "category_room": "Místnost",
         "caution_colon": "Pozor:",
+        "checking_sticky_events_support": "Zjišťování, zda jsou podporovány trvalé události...",
         "client_versions": "Verze klienta",
         "crypto": {
             "4s_public_key_in_account_data": "v datech účtu",
@@ -771,7 +778,7 @@
             "cross_signing_public_keys_on_device_status": "Veřejné klíče pro křížový podpis:",
             "cross_signing_ready": "Křížové podepisování je připraveno k použití.",
             "cross_signing_status": "Stav křížového podepisování:",
-            "cross_signing_untrusted": "Váš účet má v bezpečném úložišti identitu pro křížový podpis, ale v této relaci jí zatím nevěříte.",
+            "cross_signing_untrusted": "Váš účet má v tajném úložišti digitální identitu, ale v této relaci mu zatím nedůvěřujete.",
             "crypto_not_available": "Kryptografický modul není k dispozici",
             "device_id": "ID zařízení",
             "key_backup_active_version": "Verze aktivní zálohy:",
@@ -807,13 +814,18 @@
         "edit_setting": "Upravit nastavení",
         "edit_values": "Upravit hodnoty",
         "empty_string": "<prázdný řetězec>",
+        "error_sticky_duration_must_be_a_number": "stickyDuration musí být číslo",
+        "error_sticky_duration_out_of_range": "Hodnota stickyDuration musí být mezi 0 a 36000 milisekundami (1h)",
         "event_content": "Obsah události",
         "event_id": "ID události: %(eventId)s",
         "event_sent": "Událost odeslána!",
         "event_type": "Typ události",
+        "expired": "Platnost vypršela",
+        "expires_in": "Platnost vyprší za",
         "explore_account_data": "Prozkoumat údaje o účtu",
         "explore_room_account_data": "Prozkoumat údaje o účtu místnosti",
         "explore_room_state": "Prozkoumat stav místnosti",
+        "explore_sticky_state": "Prozkoumat stav",
         "failed_to_find_widget": "Při hledání tohoto widgetu došlo k chybě.",
         "failed_to_load": "Nepodařilo se načíst.",
         "failed_to_save": "Nepodařilo se uložit nastavení.",
@@ -822,11 +834,12 @@
         "invalid_device_key_id": "Neplatné ID klíče zařízení",
         "invalid_json": "Nevypadá to jako platný JSON.",
         "level": "Úroveň",
-        "low_bandwidth_mode": "Režim malé šířky pásma",
-        "low_bandwidth_mode_description": "Vyžaduje kompatibilní domovský server.",
+        "low_bandwidth_mode": "Vypnout funkce náročné na šířku pásma",
+        "low_bandwidth_mode_description": "Zakáže šifrování, informace o přítomnosti, avatary, potvrzení o přečtení a oznámení o psaní",
         "main_timeline": "Hlavní časová osa",
         "manual_device_verification": "Ruční ověření zařízení",
         "no_receipt_found": "Žádné potvrzení o přečtení",
+        "no_sticky_events": "V této místnosti nejsou žádné trvalé události.",
         "notification_state": "Stav oznámení je <strong>%(notificationState)s</strong>",
         "notifications_debug": "Ladění oznámení",
         "number_of_users": "Počet uživatelů",
@@ -853,6 +866,7 @@
         "send_custom_account_data_event": "Odeslat vlastní událost s údaji o účtu",
         "send_custom_room_account_data_event": "Odeslat vlastní událost s údaji o účtu místnosti",
         "send_custom_state_event": "Odeslat vlastní stavovou událost",
+        "send_custom_sticky_event": "Odeslat vlastní trvalou událost",
         "send_custom_timeline_event": "Odeslat vlastní událost na časové ose",
         "server_info": "Informace o serveru",
         "server_versions": "Verze serveru",
@@ -872,6 +886,9 @@
             "other": "<%(count)s mezer>"
         },
         "state_key": "Stavový klíč",
+        "sticky_duration": "Trvání události (ms)",
+        "sticky_events_not_supported": "Váš domovský server zatím nepodporuje trvalé události.",
+        "sticky_key": "Trvalý klíč",
         "thread_root_id": "ID kořenového vlákna: %(threadRootId)s",
         "threads_timeline": "Časová osa vláken",
         "title": "Nástroje pro vývojáře",
@@ -889,10 +906,10 @@
         "user_read_up_to_private_ignore_synthetic": "Uživatel čte až do (m.read.private;ignoreSynthetic): ",
         "user_room_membership": "Členství: %(membership)s",
         "user_verification_status": {
-            "identity_changed": "Stav ověření: <E2EIcon /> Neověřeno a identita změněna",
+            "identity_changed": "Stav ověření: <E2EIcon /> Neověřeno a změněna digitální identita",
             "unverified": "Stav ověření: <E2EIcon /> Neověřeno",
             "verified": "Stav ověření: <E2EIcon /> Ověřeno",
-            "was_verified": "Stav ověření:<E2EIcon /> Bylo ověřeno, ale identita se změnila."
+            "was_verified": "Stav ověření:<E2EIcon /> Bylo ověřeno, ale digitální identita se změnila."
         },
         "users": "Uživatelé",
         "value": "Hodnota",
@@ -958,7 +975,7 @@
         "event_shield_reason_unverified_identity": "Šifrováno neověřeným uživatelem.",
         "export_unsupported": "Váš prohlížeč nepodporuje požadovaná kryptografická rozšíření",
         "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",
-        "identity_needs_reset_description": "Abyste si zajistili přístup k historii zpráv, musíte resetovat svou kryptografickou identitu.",
+        "identity_needs_reset_description": "Abyste si zajistili přístup k historii chatu, musíte si resetovat digitální identitu.",
         "import_invalid_keyfile": "Neplatný soubor s klíčem %(brand)s",
         "import_invalid_passphrase": "Kontrola ověření selhala: špatné heslo?",
         "key_storage_out_of_sync": "Vaše úložiště klíčů není synchronizováno.",
@@ -987,13 +1004,13 @@
             "warning": "Pokud jste způsob obnovy neodstranili vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
         "set_up_recovery": "Zálohujte své chaty",
-        "set_up_recovery_toast_description": "Vygenerujte klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup k zařízením.",
+        "set_up_recovery_toast_description": "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "setup_secure_backup": {
             "explainer": "Před odebráním tohoto zařízení si zálohujte klíče, abyste o ně nepřišli."
         },
         "turn_on_key_storage": "Zapnout úložiště klíčů",
-        "turn_on_key_storage_description": "Bezpečně uložte svou kryptografickou identitu a klíče zpráv na serveru. To vám umožní zobrazit historii zpráv na všech nových zařízeních.",
+        "turn_on_key_storage_description": "Díky tomu budete moci zobrazit historii chatu na jakémkoli novém zařízení a je to nutné pro zálohování chatů a digitální identity.",
         "udd": {
             "interactive_verification_button": "Interaktivní ověření pomocí emoji",
             "other_ask_verify_text": "Požádejte tohoto uživatele, aby ověřil svou relaci, nebo jí níže můžete ověřit manuálně.",
@@ -1017,7 +1034,7 @@
             "complete_description": "Uživatel úspěšně ověřen.",
             "complete_title": "Ověřeno!",
             "confirm_identity_description": "Ověřte toto zařízení a nastavte zabezpečené zasílání zpráv.",
-            "confirm_identity_title": "Potvrďte svou totožnost",
+            "confirm_identity_title": "Potvrďte svou digitální identitu",
             "confirm_the_emojis": "Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými na vašem druhém zařízení.",
             "error_starting_description": "Nepodařilo se zahájit chat s druhým uživatelem.",
             "error_starting_title": "Chyba při zahájení ověření",
@@ -1101,8 +1118,8 @@
             "waiting_other_user": "Čekám až nás %(displayName)s ověří…"
         },
         "verification_requested_toast_title": "Žádost ověření",
-        "verified_identity_changed": "Ověřená identita uživatele %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
-        "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
+        "verified_identity_changed": "Digitální identita uživatele %(displayName)s (<b>%(userId)s</b>) byla resetována. <a>Další informace</a>",
+        "verified_identity_changed_no_displayname": "Digitální identita uživatele <b>%(userId)s</b> byla resetována. <a>Další informace</a>",
         "verify_toast_description": "Od konce dubna 2026 nebudou neověřená zařízení moci odesílat ani přijímat zprávy. <a>Další informace</a>",
         "verify_toast_title": "Ověřit toto zařízení",
         "withdraw_verification_action": "Zrušit ověření"
@@ -1551,9 +1568,7 @@
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",
         "report_to_moderators_description": "V místnostech, které podporují moderování, můžete pomocí tlačítka \"Nahlásit\" nahlásit zneužití moderátorům místnosti.",
-        "share_history_on_invite": "Sdílet šifrovanou historii s novými členy",
-        "share_history_on_invite_description": "Při pozvání uživatele do šifrované místnosti, u které je viditelnost historie nastavena na „sdílená“, sdílet šifrovanou historii s tímto uživatelem a přijmout šifrovanou historii, když jste pozváni do takové místnosti.",
-        "share_history_on_invite_warning": "Tato funkce je EXPERIMENTÁLNÍ a nejsou v ní implementována všechna bezpečnostní opatření. Neaktivujte ji na produkčních účtech.",
+        "room_list_sections": "Sekce seznamu místností",
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
         "sliding_sync_disabled_notice": "Pro deaktivaci se znovu přihlaste",
@@ -1801,7 +1816,6 @@
         "restricted": "Omezené"
     },
     "powered_by_matrix": "Běží na Matrixu",
-    "powered_by_matrix_with_logo": "Decentralizovaný, šifrovaný chat a spolupráce na platformě $matrixLogo",
     "presence": {
         "away": "Pryč",
         "busy": "Zaneprázdněný",
@@ -2154,6 +2168,11 @@
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
         },
+        "section": {
+            "chats": "Chaty",
+            "favourites": "Oblíbené",
+            "low_priority": "Nízká priorita"
+        },
         "show_less": "Zobrazit méně",
         "show_n_more": {
             "other": "Zobrazit %(count)s dalších",
@@ -2351,6 +2370,7 @@
             "join_rule_invite_description": "Připojit se mohou pouze pozvané osoby.",
             "join_rule_knock": "Požádat o vstup",
             "join_rule_knock_description": "Lidé nemohou vstoupit, pokud jim není povolen přístup.",
+            "join_rule_public": "Kdokoli",
             "join_rule_public_description": "Vstoupit může kdokoli.",
             "join_rule_restricted": "Členové prostoru",
             "join_rule_restricted_description": "Kdokoli v autorizovaných prostorách se může připojit bez pozvání. <a> Spravovat prostory</a>",
@@ -2527,10 +2547,10 @@
                 "breadcrumb_page": "Obnovit šifrování",
                 "breadcrumb_second_description": "Ztratíte veškerou historii zpráv, která je uložena pouze na serveru",
                 "breadcrumb_third_description": "Budete muset znovu ověřit všechna svá stávající zařízení a kontakty",
-                "breadcrumb_title": "Opravdu chcete obnovit svou identitu?",
-                "breadcrumb_title_cant_confirm": "Musíte resetovat svou totožnost",
-                "breadcrumb_title_forgot": "Zapomněli jste klíč pro obnovení? Budete muset obnovit svou identitu.",
-                "breadcrumb_title_sync_failed": "Synchronizace úložiště klíčů se nezdařila. Musíte obnovit svou identitu.",
+                "breadcrumb_title": "Opravdu chcete resetovat svou digitální identitu?",
+                "breadcrumb_title_cant_confirm": "Musíte resetovat svou digitální identitu",
+                "breadcrumb_title_forgot": "Zapomněli jste klíč pro obnovení? Budete muset resetovat svou digitální identitu.",
+                "breadcrumb_title_sync_failed": "Synchronizace úložiště klíčů se nezdařilo. Je třeba resetovat vaši digitální identitu.",
                 "breadcrumb_warning": "Udělejte to pouze v případě, že se domníváte, že váš účet byl napaden.",
                 "details_title": "Podrobnosti o šifrování",
                 "do_not_close_warning": "Nezavírejte toto okno, dokud není resetování dokončeno",
@@ -2552,7 +2572,7 @@
                 "confirm": "Smazat úložiště klíčů",
                 "description": "Smazáním úložiště klíčů odstraníte ze serveru vaši kryptografickou identitu a klíče zpráv a vypnete následující funkce zabezpečení:",
                 "list_first": "Na nových zařízeních nebudete mít šifrovanou historii zpráv",
-                "list_second": "Pokud se všude odhlásíte z %(brand)s, ztratíte přístup ke svým zašifrovaným zprávám",
+                "list_second": "Pokud nebudete přihlášeni k žádnému zařízení, ztratíte přístup ke svým šifrovaným zprávám.",
                 "title": "Opravdu chcete vypnout úložiště klíčů a smazat jej?"
             },
             "device_not_verified_button": "Ověřte toto zařízení",
@@ -2561,7 +2581,7 @@
             "dialog_title": "<strong>Nastavení: </strong> Šifrování",
             "key_storage": {
                 "allow_key_storage": "Povolit úložiště klíčů",
-                "description": "Uložte svou kryptografickou identitu a klíče zpráv bezpečně na serveru. To vám umožní zobrazit historii zpráv na všech nových zařízeních. <a>Další informace</a>",
+                "description": "Díky tomu budete moci zobrazit historii chatu na jakémkoli novém zařízení a je to nutné pro zálohování chatů a digitální identity. <a>Další informace</a>",
                 "title": "Úložiště klíčů"
             },
             "recovery": {
@@ -2571,14 +2591,14 @@
                 "change_recovery_key": "Změnit klíč pro obnovení",
                 "change_recovery_key_description": "Zapište si tento nový klíč pro obnovení na bezpečné místo. Poté klikněte na tlačítko Pokračovat a potvrďte změnu.",
                 "change_recovery_key_title": "Změnit klíč pro obnovení?",
-                "description": "Pokud jste ztratili všechna stávající zařízení, obnovte kryptografickou identitu a historii zpráv pomocí klíče pro obnovení.",
+                "description": "Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení.",
                 "enter_key_error": "Zadaný klíč pro obnovení není správný.",
                 "enter_recovery_key": "Zadejte klíč pro obnovení",
                 "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",
                 "key_storage_warning": "Vaše úložiště klíčů není synchronizováno. Klikněte na jedno z níže uvedených tlačítek a problém vyřešte.",
                 "save_key_description": "Nesdílejte ho s nikým!",
                 "save_key_title": "Klíč pro obnovení",
-                "set_up_recovery": "Nastavení obnovy",
+                "set_up_recovery": "Získat klíč pro obnovení",
                 "set_up_recovery_confirm_button": "Dokončete nastavení",
                 "set_up_recovery_confirm_description": "Zadejte obnovovací klíč zobrazený na předchozí obrazovce a dokončete nastavení obnovy.",
                 "set_up_recovery_confirm_title": "Pro potvrzení zadejte klíč pro obnovení",
@@ -2586,7 +2606,7 @@
                 "set_up_recovery_save_key_description": "Tento klíč pro obnovení si zapište na bezpečné místo, jako je správce hesel, šifrovaná poznámka nebo fyzický trezor.",
                 "set_up_recovery_save_key_title": "Uložte si klíč pro obnovení na bezpečném místě",
                 "set_up_recovery_secondary_description": "Po kliknutí na Pokračovat vám vygenerujeme obnovovací klíč.",
-                "title": "Obnovení"
+                "title": "Zálohování"
             },
             "title": "Šifrování"
         },
@@ -2679,7 +2699,8 @@
             "unable_to_load_msisdns": "Nelze načíst telefonní čísla",
             "username": "Uživatelské jméno"
         },
-        "inline_url_previews_default": "Nastavit povolení náhledů URL adres jako výchozí",
+        "inline_url_previews_default": "Povolit náhledy",
+        "inline_url_previews_encrypted": "Povolit náhledy v šifrovaných místnostech",
         "insert_trailing_colon_mentions": "Vložit dvojtečku za zmínku o uživateli na začátku zprávy",
         "invite_controls": {
             "default_label": "Povolit uživatelům pozvat vás do místností"
@@ -2817,6 +2838,8 @@
             "enable_tray_icon": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna",
             "keyboard_heading": "Klávesové zkratky",
             "keyboard_view_shortcuts_button": "Pro zobrazení všech klávesových zkratek, <a>klikněte zde</a>.",
+            "link_previews_description": "Zobrazuje informace o odkazech pod zprávami",
+            "link_previews_heading": "Náhledy odkazů",
             "media_heading": "Obrázky, GIFy a videa",
             "presence_description": "Sdílejte své aktivity a stav s ostatními.",
             "publish_timezone": "Zveřejnit časové pásmo na veřejném profilu",
@@ -3144,7 +3167,7 @@
         "view": "Zobrazí místnost s danou adresou",
         "whois": "Zobrazuje informace o uživateli"
     },
-    "sliding_sync_legacy_no_longer_supported": "Starší klouzavá synchronizace již není podporována: odhlaste se a znovu přihlaste, abyste povolili nový příznak klouzavé synchronizace",
+    "sliding_sync_legacy_no_longer_supported": "Starší klouzavá synchronizace již není podporována: pro aktivaci nové klouzavé synchronizace se prosím znovu přihlaste.",
     "space": {
         "add_existing_room_space": {
             "create": "Chcete místo toho přidat novou místnost?",
@@ -3475,6 +3498,8 @@
             "accepted_invite": "%(targetName)s přijal(a) pozvání",
             "ban": "%(senderName)s vykázal(a) uživatele",
             "ban_reason": "%(senderName)s vykázal(a) uživatele: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s vykázal(a) <user/> :%(reason)s",
+            "ban_spoiler": "%(senderName)s vykázal(a) <user/>",
             "change_avatar": "%(senderName)s změnil(a) svůj profilový obrázek",
             "change_name": "%(oldDisplayName)s si změnil(a) zobrazované jméno na %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s změnil(a) své zobrazované jméno a profilový obrázek",
@@ -3965,7 +3990,6 @@
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Vítá vás Element",
     "widget": {
         "added_by": "Widget přidal",
         "capabilities_dialog": {
@@ -3987,6 +4011,7 @@
             "change_name_this_room": "Změňte název této místnosti",
             "change_topic_active_room": "Změnit téma vaší aktivní místnosti",
             "change_topic_this_room": "Změnit téma této místnosti",
+            "download_file": "Stáhnout soubory z úložiště médií",
             "receive_membership_active_room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do vaší aktivní místnosti",
             "receive_membership_this_room": "Zjistěte, kdy se lidé připojí, odejdou nebo jsou pozváni do této místnosti",
             "remove_ban_invite_leave_active_room": "Odebrat, vykázat nebo pozvat lidi do vaší aktivní místnosti a donutit vás ji opustit",

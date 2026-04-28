@@ -23,14 +23,15 @@ describe("createSection", () => {
     it.each([
         [false, "", undefined],
         [true, "", undefined],
-    ])("returns undefined when shouldCreate=%s and name='%s'", async (shouldCreate, name, expected) => {
+        [true, "My Section", expect.stringMatching(/^element\.io\.section\./)],
+    ])("returns %s when shouldCreate=%s and name='%s'", async (shouldCreate, name, expected) => {
         jest.spyOn(Modal, "createDialog").mockReturnValue({
             finished: Promise.resolve([shouldCreate, name]),
             close: jest.fn(),
         } as any);
 
         const result = await createSection();
-        expect(result).toBe(expected);
+        expect(result).toEqual(expected);
     });
 
     it("returns the new tag when section is created", async () => {
