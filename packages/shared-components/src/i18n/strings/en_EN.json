@@ -147,6 +147,9 @@
         "room_options": "Room Options",
         "section_created": "Section created",
         "section_header": {
+            "edit_section": "Edit section",
+            "more_options": "More options",
+            "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
             "toggle_unread": "Toggle %(section)s section with unread room(s)"
         },
