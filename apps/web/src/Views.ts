@@ -25,15 +25,15 @@ Please see LICENSE files in the repository root for full details.
  *        │                    └───────────────────────────────────────────┐                             │
  *        │                                                                │ No previous session         │
  *        │                                                                ▼                             │
- *        │          (from all other states                        ┌─────────────────┐                   │
- *        │            except LOCK_STOLEN)                         │     WELCOME     │                   │
- *        │                  │                                     │                 │                   │
- *        │                  │ Client logged out                   └─────────────────┘                   │
- *        │                  │                                            │   │                          │
- *        │                  └──────────────────────────┐       "Sign in" │   │ "Create account"         │
- *        │                                             │    ┌────────────┘   └──────────────┐           │
- *        │                                             │    │                               │           │
- *        │                       "Forgot               ▼    ▼       "Create an              ▼           │
+ *        │          (from all other states    Client logged out   ┌─────────────────┐                   │
+ *        │            except LOCK_STOLEN)  ──────────────────────►│     WELCOME     │                   │
+ *        │                                                        │                 │                   │
+ *        │                                                        └─────────────────┘                   │
+ *        │                                                               │   │                          │
+ *        │                                                     "Sign in" │   │ "Create account"         │
+ *        │                                                  ┌────────────┘   └──────────────┐           │
+ *        │                                                  │                               │           │
+ *        │                       "Forgot                    ▼       "Create an              ▼           │
  *        │   ┌─────────────────┐  password"     ┌─────────────────┐   account"     ┌─────────────────┐  │
  *        │   │ FORGOT_PASSWORD │◄───────────────│      LOGIN      │───────────────►│     REGISTER    │  │
  *        │   │                 │───────────────►│                 │◄───────────────│                 │  │
