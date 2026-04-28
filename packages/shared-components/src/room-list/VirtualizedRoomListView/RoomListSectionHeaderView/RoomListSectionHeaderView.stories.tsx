@@ -25,6 +25,8 @@ type RoomListSectionHeaderProps = RoomListSectionHeaderViewSnapshot &
 const RoomListSectionHeaderViewWrapperImpl = ({
     onClick,
     onFocus,
+    editSection,
+    removeSection,
     isFocused,
     sectionIndex,
     sectionCount,
@@ -32,7 +34,7 @@ const RoomListSectionHeaderViewWrapperImpl = ({
     roomCountInSection,
     ...rest
 }: RoomListSectionHeaderProps): JSX.Element => {
-    const vm = useMockedViewModel(rest, { onClick });
+    const vm = useMockedViewModel(rest, { onClick, editSection, removeSection });
     return (
         <RoomListSectionHeaderView
             vm={vm}
@@ -57,8 +59,11 @@ const meta = {
         isExpanded: true,
         isFocused: false,
         isUnread: false,
+        displaySectionMenu: true,
         onClick: fn(),
         onFocus: fn(),
+        editSection: fn(),
+        removeSection: fn(),
         sectionIndex: 1,
         sectionCount: 3,
         roomCountInSection: 5,

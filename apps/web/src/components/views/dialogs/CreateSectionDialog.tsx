@@ -15,6 +15,11 @@ import { _t } from "../../../languageHandler";
 
 interface CreateSectionDialogProps {
     /**
+     * The name of the section being edited if defined. Otherwise, create a new section.
+     */
+    sectionToEdit?: string;
+
+    /**
      * Callback called when the dialog is closed.
      * @param shouldCreateSection Whether a section should be created or not. This will be false if the user cancels the dialog.
      * @param sectionName The name of the section to create.
@@ -25,36 +30,43 @@ interface CreateSectionDialogProps {
 /**
  * Dialog shown to the user to create a new section in the room list.
  */
-export function CreateSectionDialog({ onFinished }: CreateSectionDialogProps): JSX.Element {
-    const [value, setValue] = useState("");
+export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSectionDialogProps): JSX.Element {
+    const isEdition = Boolean(sectionToEdit);
+    const [value, setValue] = useState(sectionToEdit ?? "");
     const isInvalid = Boolean(value.trim().length === 0);
 
     return (
         <BaseDialog
             className="mx_CreateSectionDialog"
             onFinished={() => onFinished(false, value)}
-            title={_t("create_section_dialog|title")}
+            title={isEdition ? _t("create_section_dialog|title_edition") : _t("create_section_dialog|title")}
             hasCancel={true}
         >
             <Flex gap="var(--cpd-space-6x)" direction="column" className="mx_CreateSectionDialog_content">
-                <Text as="span" weight="semibold">
+                <Text as="span" weight="medium">
                     {_t("create_section_dialog|description")}
                 </Text>
                 <Form.Root
                     className="mx_CreateSectionDialog_form"
                     onSubmit={(e) => {
-                        onFinished(true, value);
                         e.preventDefault();
+                        if (!isInvalid) onFinished(true, value);
                     }}
                 >
                     <Form.Field name="sectionName">
                         <Form.Label> {_t("create_section_dialog|label")}</Form.Label>
-                        <Form.TextControl onChange={(evt) => setValue(evt.target.value)} required={true} />
+                        <Form.TextControl
+                            value={value}
+                            onChange={(evt) => setValue(evt.target.value)}
+                            required={true}
+                        />
                     </Form.Field>
                 </Form.Root>
             </Flex>
             <DialogButtons
-                primaryButton={_t("create_section_dialog|create_section")}
+                primaryButton={
+                    isEdition ? _t("create_section_dialog|edit_section") : _t("create_section_dialog|create_section")
+                }
                 primaryDisabled={isInvalid}
                 hasCancel={true}
                 onCancel={() => onFinished(false, "")}
