@@ -207,9 +207,10 @@ function generateCustomCompoundCSS(theme: CompoundTheme): string {
     for (const [token, value] of Object.entries(theme))
         if (COMPOUND_TOKEN.test(token)) properties.push(`${token}: ${value};`);
         else logger.warn(`'${token}' is not a valid Compound token`);
-    // Insert the design token overrides into the 'custom' cascade layer as
-    // documented at https://compound.element.io/?path=/docs/develop-theming--docs
-    return `@layer compound-tokens.custom { :root, [class*="cpd-theme-"] { ${properties.join(" ")} } }`;
+    // Insert the design token overrides into the existing Compound tokens
+    // layer so custom themes win over the imported default tokens by source
+    // order without creating a lower-priority nested layer.
+    return `@layer compound-tokens { :root, [class*="cpd-theme-"] { ${properties.join(" ")} } }`;
 }
 
 /**

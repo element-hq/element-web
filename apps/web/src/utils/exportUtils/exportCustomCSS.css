@@ -150,14 +150,4 @@ img {
 
 .mx_MatrixChat {
     max-width: 100%;
-    font: var(--cpd-font-body-md-regular);
-    letter-spacing: var(--cpd-font-letter-spacing-body-md);
-}
-
-.mx_MatrixChat a {
-    color: #238cf5;
-}
-
-.mx_MatrixChat a:hover {
-    text-decoration: underline;
 }
