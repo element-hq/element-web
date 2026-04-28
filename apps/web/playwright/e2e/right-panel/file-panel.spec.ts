@@ -162,7 +162,7 @@ test.describe("FilePanel", () => {
             await expect(audioBody.getByRole("button", { name: "Play" })).toBeVisible();
         });
 
-        test("should render file size in kibibytes on a file tile", async ({ page }) => {
+        test("should render file size in kibibytes on a file tile", async ({ page, app }) => {
             const size = "1.12 KB"; // actual file size in kibibytes (1024 bytes)
 
             // Upload a file
