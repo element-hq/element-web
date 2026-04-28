@@ -6,10 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Capabilities } from "matrix-js-sdk/src/matrix";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "../SettingsStore";
 import type { BooleanSettingKey } from "../Settings.tsx";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
+const logger = rootLogger.getChild("RequiresSettingsController");
 /**
  * Disables a setting & forces it's value if one or more settings are not enabled
  * and/or a capability on the client check does not pass.
@@ -32,7 +34,9 @@ export default class RequiresSettingsController extends MatrixClientBackedContro
     protected initMatrixClient(): void {
         if (this.client && this.isCapabilityDisabled) {
             // Ensure we fetch capabilies at least once.
-            void this.client.getCapabilities();
+            this.client.getCapabilities().catch((ex) => {
+                logger.warn("Failed to fetch capabilities", ex);
+            });
         }
     }
 
