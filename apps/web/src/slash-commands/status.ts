@@ -32,6 +32,8 @@ export const statusCommand = new Command({
         }
         const [emoji, additionalSegment] = [...new Intl.Segmenter().segment(emojiText)];
         if (additionalSegment) {
+            // This is "too long" in that it's more than one grapheme, so the error we give is
+            // that it's "not an emoji".
             return reject(new UserFriendlyError("slash_command|status|too_long_emoji"));
         }
         if (!userStatusTextWithinMaxLength(text)) {
