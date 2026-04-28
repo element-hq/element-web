@@ -28,7 +28,7 @@ describe("ReleaseAnnouncementStore", () => {
         settings = {
             releaseAnnouncementData: {},
         };
-        const watchCallbacks: Array<CallbackFn> = [];
+        const watchCallbacks: Array<CallbackFn<any>> = [];
 
         mocked(SettingsStore.getValue).mockImplementation((setting: string) => {
             return settings[setting];
