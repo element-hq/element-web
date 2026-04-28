@@ -85,6 +85,7 @@ test.describe("Encryption tab", () => {
 
                 // Fill the recovery key
                 await util.enterRecoveryKey(recoveryKey);
+                await dialog.getByRole("heading", { name: "Key storage" }).scrollIntoViewIfNeeded();
                 await expect(dialog).toMatchScreenshot("default-tab.png", {
                     mask: [dialog.getByTestId("deviceId"), dialog.getByTestId("sessionKey")],
                 });

@@ -34,6 +34,9 @@ import { getRoomContext } from "../../../test-utils/room";
 import { mkMessage, stubClient } from "../../../test-utils/test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
+import { untilDispatch } from "../../../test-utils/utilities.ts";
+import { TimelineRenderingType } from "../../../../src/contexts/RoomContext.ts";
+import { type ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -207,6 +210,89 @@ describe("ThreadView", () => {
             action: Action.ViewRoom,
             room_id: room.roomId,
             metricsTrigger: undefined,
+        });
+    });
+
+    describe("handles Action.ComposerInsert", () => {
+        it("redispatches a payload of timelineRenderingType=Thread", async () => {
+            await getComponent();
+            const promise = untilDispatch((payload) => {
+                try {
+                    expect(payload).toEqual({
+                        action: Action.ComposerInsert,
+                        text: "Hello world",
+                        timelineRenderingType: TimelineRenderingType.Thread,
+                        composerType: ComposerType.Send,
+                    });
+                } catch {
+                    return false;
+                }
+                return true;
+            }, dispatcher);
+            dispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+                timelineRenderingType: TimelineRenderingType.Thread,
+            } satisfies ComposerInsertPayload);
+            await promise;
+        });
+        it("ignores payloads with a composerType", async () => {
+            await getComponent();
+            const promise = untilDispatch(
+                (payload) => {
+                    try {
+                        expect(payload).toStrictEqual({
+                            action: Action.ComposerInsert,
+                            text: "Hello world",
+                            timelineRenderingType: TimelineRenderingType.Thread,
+                            composerType: ComposerType.Send,
+                        });
+                    } catch {
+                        return false;
+                    }
+                    return true;
+                },
+                dispatcher,
+                500,
+            );
+            dispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+                composerType: ComposerType.Send,
+                timelineRenderingType: TimelineRenderingType.Thread,
+                // Ensure we don't accidentally pick up this emit by strictly checking above.
+                viaTest: true,
+            } satisfies ComposerInsertPayload);
+            await expect(promise).rejects.toThrow();
+        });
+        it("ignores payloads with a timelineRenderingType != TimelineRenderingType.Thread", async () => {
+            await getComponent();
+            const promise = untilDispatch(
+                (payload) => {
+                    try {
+                        expect(payload).toStrictEqual({
+                            action: Action.ComposerInsert,
+                            text: "Hello world",
+                            timelineRenderingType: TimelineRenderingType.Thread,
+                            composerType: ComposerType.Send,
+                        });
+                    } catch {
+                        return false;
+                    }
+                    return true;
+                },
+                dispatcher,
+                500,
+            );
+            dispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+                composerType: ComposerType.Send,
+                timelineRenderingType: TimelineRenderingType.Room,
+                // Ensure we don't accidentally pick up this emit by strictly checking above.
+                viaTest: true,
+            } satisfies ComposerInsertPayload);
+            await expect(promise).rejects.toThrow();
         });
     });
 });

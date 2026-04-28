@@ -24,7 +24,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test(
         "should have the button correctly aligned and displayed in the space panel when expanded",
         { tag: "@screenshot" },
-        async ({ util }) => {
+        async ({ util, app }) => {
+            await app.closeVerifyToast();
+
             // Open the space panel
             await util.expandSpacePanel();
             // The buttons in the space panel should be aligned when expanded
@@ -32,7 +34,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         },
     );
 
-    test("should not show indicator when there is no thread", { tag: "@screenshot" }, async ({ room1, util }) => {
+    test("should not show indicator when there is no thread", { tag: "@screenshot" }, async ({ room1, util, app }) => {
+        await app.closeVerifyToast();
+
         // No indicator should be shown
         await util.assertNoTacIndicator();
 
@@ -43,7 +47,14 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await util.assertNoTacIndicator();
     });
 
-    test("should show a notification indicator when there is a message in a thread", async ({ room1, util, msg }) => {
+    test("should show a notification indicator when there is a message in a thread", async ({
+        room1,
+        util,
+        msg,
+        app,
+    }) => {
+        await app.closeVerifyToast();
+
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
@@ -56,7 +67,10 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         util,
         msg,
         user,
+        app,
     }) => {
+        await app.closeVerifyToast();
+
         await util.goTo(room1);
         await util.receiveMessages(room1, [
             "Msg1",
@@ -77,7 +91,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test(
         "should show the rooms with unread threads",
         { tag: "@screenshot" },
-        async ({ room1, room2, util, msg, user }) => {
+        async ({ room1, room2, util, msg, user, app }) => {
+            await app.closeVerifyToast();
+
             await util.goTo(room2);
             await util.populateThreads(room1, room2, msg, user);
             // The indicator should be shown
@@ -95,30 +111,38 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         },
     );
 
-    test("should update with a thread is read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, user }) => {
-        await util.goTo(room2);
-        await util.populateThreads(room1, room2, msg, user);
+    test(
+        "should update with a thread is read",
+        { tag: "@screenshot" },
+        async ({ room1, room2, util, msg, user, app }) => {
+            await app.closeVerifyToast();
 
-        // Click on the first room in TAC
-        await util.openTac();
-        await util.clickRoomInTac(room2.name);
+            await util.goTo(room2);
+            await util.populateThreads(room1, room2, msg, user);
 
-        // Verify that the thread panel is opened after a click on the room in the TAC
-        await util.assertThreadPanelIsOpened();
+            // Click on the first room in TAC
+            await util.openTac();
+            await util.clickRoomInTac(room2.name);
 
-        // Open a thread and mark it as read
-        // The room 2 doesn't have a mention anymore in its unread, so the highest notification level is notification
-        await util.openThread("Msg1");
-        await util.assertNotificationTac();
-        await util.openTac();
-        await util.assertRoomsInTac([
-            { room: room1.name, notificationLevel: "notification" },
-            { room: room2.name, notificationLevel: "notification" },
-        ]);
-        await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-notification-unread.png");
-    });
+            // Verify that the thread panel is opened after a click on the room in the TAC
+            await util.assertThreadPanelIsOpened();
 
-    test("should order by recency after notification level", async ({ room1, room2, util, msg, user }) => {
+            // Open a thread and mark it as read
+            // The room 2 doesn't have a mention anymore in its unread, so the highest notification level is notification
+            await util.openThread("Msg1");
+            await util.assertNotificationTac();
+            await util.openTac();
+            await util.assertRoomsInTac([
+                { room: room1.name, notificationLevel: "notification" },
+                { room: room2.name, notificationLevel: "notification" },
+            ]);
+            await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-notification-unread.png");
+        },
+    );
+
+    test("should order by recency after notification level", async ({ room1, room2, util, msg, user, app }) => {
+        await app.closeVerifyToast();
+
         await util.goTo(room2);
         await util.populateThreads(room1, room2, msg, user, false);
 
@@ -129,7 +153,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         ]);
     });
 
-    test("should block the Spotlight to open when the TAC is opened", async ({ util, page }) => {
+    test("should block the Spotlight to open when the TAC is opened", async ({ util, page, app }) => {
+        await app.closeVerifyToast();
+
         const toggleSpotlight = () => page.keyboard.press(`${CommandOrControl}+k`);
 
         // Sanity check
@@ -144,7 +170,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await expect(page.locator(".mx_SpotlightDialog")).not.toBeVisible();
     });
 
-    test("should have the correct hover state", { tag: "@screenshot" }, async ({ util, page }) => {
+    test("should have the correct hover state", { tag: "@screenshot" }, async ({ util, page, app }) => {
+        await app.closeVerifyToast();
+
         await util.hoverTacButton();
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered.png");
 
@@ -154,7 +182,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered-expanded.png");
     });
 
-    test("should mark all threads as read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, page }) => {
+    test("should mark all threads as read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, page, app }) => {
+        await app.closeVerifyToast();
+
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
         await util.assertNotificationTac();
@@ -167,7 +197,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await util.assertNoTacIndicator();
     });
 
-    test("should focus the thread tab when clicking an item in the TAC", async ({ room1, room2, util, msg }) => {
+    test("should focus the thread tab when clicking an item in the TAC", async ({ room1, room2, util, msg, app }) => {
+        await app.closeVerifyToast();
+
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
         await util.openTac();

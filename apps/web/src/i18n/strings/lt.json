@@ -950,7 +950,6 @@
         "restricted": "Apribotas"
     },
     "powered_by_matrix": "Veikia su Matrix",
-    "powered_by_matrix_with_logo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
     "presence": {
         "busy": "Užsiėmęs",
         "idle": "Neveiklus",
@@ -2278,7 +2277,6 @@
         "voice_call": "Balso skambutis",
         "you_are_presenting": "Jūs pristatote"
     },
-    "welcome_to_element": "Sveiki atvykę į Element",
     "widget": {
         "added_by": "Valdiklį pridėjo",
         "capabilities_dialog": {

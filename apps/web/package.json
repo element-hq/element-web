@@ -125,7 +125,7 @@
         "@babel/preset-react": "^7.12.10",
         "@babel/preset-typescript": "^7.12.7",
         "@casualbot/jest-sonar-reporter": "2.6.0",
-        "@element-hq/element-call-embedded": "0.19.1",
+        "@element-hq/element-call-embedded": "0.19.2",
         "@element-hq/element-web-playwright-common": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
         "@jest/globals": "^30.2.0",

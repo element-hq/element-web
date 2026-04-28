@@ -216,9 +216,9 @@ test.describe("Element Call", () => {
             });
         });
 
-        [true, false].forEach((skipLobbyToggle) => {
+        [true, false].forEach((joinWithVideo) => {
             test(
-                `should be able to join a call via incoming video call toast (skipLobby=${skipLobbyToggle})`,
+                `should be able to join a call via incoming video call toast (joinWithVideo=${joinWithVideo})`,
                 { tag: ["@screenshot"] },
                 async ({ page, user, bot, room, app }) => {
                     await app.viewRoomById(room.roomId);
@@ -230,7 +230,7 @@ test.describe("Element Call", () => {
                     const toast = page.locator(".mx_Toast_toast");
                     const button = toast.getByRole("button", { name: "Join" });
 
-                    if (skipLobbyToggle) {
+                    if (joinWithVideo) {
                         await toast.getByRole("switch").check();
                         await expect(toast).toMatchScreenshot(`incoming-call-group-video-toast-checked.png`);
                     } else {
@@ -246,8 +246,8 @@ test.describe("Element Call", () => {
                     const hash = new URLSearchParams(url.hash.slice(1));
                     assertCommonCallParameters(url.searchParams, hash, user, room);
 
-                    expect(hash.get("intent")).toEqual("join_existing");
-                    expect(hash.get("skipLobby")).toEqual(skipLobbyToggle.toString());
+                    expect(hash.get("intent")).toEqual(joinWithVideo ? "join_existing" : "join_existing_voice");
+                    expect(hash.get("skipLobby")).toEqual("true");
                 },
             );
         });
@@ -275,7 +275,7 @@ test.describe("Element Call", () => {
                 const hash = new URLSearchParams(url.hash.slice(1));
                 assertCommonCallParameters(url.searchParams, hash, user, room);
 
-                expect(hash.get("intent")).toEqual("join_existing");
+                expect(hash.get("intent")).toEqual("join_existing_voice");
                 expect(hash.get("skipLobby")).toEqual("true");
             },
         );
@@ -349,9 +349,9 @@ test.describe("Element Call", () => {
             expect(hash.get("skipLobby")).toEqual(null);
         });
 
-        [true, false].forEach((skipLobbyToggle) => {
+        [true, false].forEach((joinWithVideo) => {
             test(
-                `should be able to join a call via incoming call toast (skipLobby=${skipLobbyToggle})`,
+                `should be able to join a call via incoming call toast (joinWithVideo=${joinWithVideo})`,
                 { tag: ["@screenshot"] },
                 async ({ page, user, bot, room, app }) => {
                     await app.viewRoomById(room.roomId);
@@ -359,14 +359,14 @@ test.describe("Element Call", () => {
                     // Fake a start of a call
                     await sendRTCState(bot, room.roomId, "ring", "video");
                     const toast = page.locator(".mx_Toast_toast");
-                    const button = toast.getByRole("button", { name: "Accept" });
-                    if (skipLobbyToggle) {
+                    const button = toast.getByRole("button", { name: "Join" });
+                    if (joinWithVideo) {
                         await toast.getByRole("switch").check();
                     } else {
                         await toast.getByRole("switch").uncheck();
                     }
                     await expect(toast).toMatchScreenshot(
-                        `incoming-call-dm-video-toast-${skipLobbyToggle ? "checked" : "unchecked"}.png`,
+                        `incoming-call-dm-video-toast-${joinWithVideo ? "checked" : "unchecked"}.png`,
                         {
                             // Hide UserId
                             css: `
@@ -385,8 +385,8 @@ test.describe("Element Call", () => {
                     const hash = new URLSearchParams(url.hash.slice(1));
                     assertCommonCallParameters(url.searchParams, hash, user, room);
 
-                    expect(hash.get("intent")).toEqual("join_existing_dm");
-                    expect(hash.get("skipLobby")).toEqual(skipLobbyToggle.toString());
+                    expect(hash.get("intent")).toEqual(joinWithVideo ? "join_existing_dm" : "join_existing_dm_voice");
+                    expect(hash.get("skipLobby")).toEqual("true");
                 },
             );
         });
@@ -400,7 +400,7 @@ test.describe("Element Call", () => {
                 // Fake a start of a call
                 await sendRTCState(bot, room.roomId, "ring", "audio");
                 const toast = page.locator(".mx_Toast_toast");
-                const button = toast.getByRole("button", { name: "Accept" });
+                const button = toast.getByRole("button", { name: "Join" });
 
                 await expect(toast).toMatchScreenshot(`incoming-call-dm-voice-toast.png`, {
                     // Hide UserId
