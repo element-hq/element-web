@@ -163,9 +163,10 @@ b {
     font-weight: bold;
 }
 
-a:hover,
-a:link,
-a:visited {
+/* Keep the legacy link colour for linkified message/content links without overriding Compound anchors. */
+a[data-linkified]:hover,
+a[data-linkified]:link,
+a[data-linkified]:visited {
     color: $accent-alt;
 }
 
