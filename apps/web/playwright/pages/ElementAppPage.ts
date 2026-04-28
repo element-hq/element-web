@@ -169,6 +169,7 @@ export class ElementAppPage {
     ): ReturnType<Locator["setInputFiles"]> {
         const input = this.page
             .locator(location === "room" ? ".mx_RoomView_body" : ".mx_RightPanel")
+            .getByRole("region", { name: "Message composer" })
             .locator("input[type='file']");
         return input.setInputFiles(...params);
     }
