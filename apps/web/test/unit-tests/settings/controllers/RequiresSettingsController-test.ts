@@ -35,23 +35,27 @@ describe("RequiresSettingsController", () => {
     });
 
     describe("with capabilites", () => {
-        let caps: Capabilities;
         let client: ReturnType<typeof getMockClientWithEventEmitter>;
         beforeEach(() => {
             client = getMockClientWithEventEmitter({
                 ...mockClientMethodsServer(),
-                getCachedCapabilities: jest.fn().mockImplementation(() => caps!),
-                getCapabilities: jest.fn(),
+                getCachedCapabilities: jest.fn().mockImplementation(() => {}),
+                getCapabilities: jest.fn().mockRejectedValue({}),
             });
             MatrixClientBackedController["_matrixClient"] = client;
         });
 
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
         it("will disable setting if capability check is true", async () => {
-            caps = {
+            const caps = {
                 "m.change_password": {
                     enabled: false,
                 },
             };
+            client.getCachedCapabilities.mockImplementation(() => caps);
             const controller = new RequiresSettingsController([], false, (c: Capabilities) => {
                 expect(c).toEqual(caps);
                 return !c["m.change_password"]?.enabled;
@@ -68,11 +72,12 @@ describe("RequiresSettingsController", () => {
         });
 
         it("will not disable setting if capability check is false", async () => {
-            caps = {
+            const caps = {
                 "m.change_password": {
                     enabled: true,
                 },
             };
+            client.getCachedCapabilities.mockImplementation(() => caps);
             const controller = new RequiresSettingsController([], false, (c: Capabilities) => {
                 expect(c).toEqual(caps);
                 return !c["m.change_password"]?.enabled;
@@ -89,11 +94,12 @@ describe("RequiresSettingsController", () => {
         });
 
         it("will check dependency settings before checking capabilites", async () => {
-            caps = {
+            const caps = {
                 "m.change_password": {
                     enabled: false,
                 },
             };
+            client.getCachedCapabilities.mockImplementation(() => caps);
             await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, false);
             const controller = new RequiresSettingsController(["useCompactLayout"], false, (c: Capabilities) => false);
 
@@ -108,11 +114,12 @@ describe("RequiresSettingsController", () => {
         });
 
         it("will disable setting if capability check is true and dependency settings are true", async () => {
-            caps = {
+            const caps = {
                 "m.change_password": {
                     enabled: false,
                 },
             };
+            client.getCachedCapabilities.mockImplementation(() => caps);
             await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
             const controller = new RequiresSettingsController(["useCompactLayout"], false, (c: Capabilities) => {
                 expect(c).toEqual(caps);

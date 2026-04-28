@@ -5,8 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Capabilities } from "matrix-js-sdk/src/matrix";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+
+import type { Capabilities } from "matrix-js-sdk/src/matrix";
 import SettingsStore from "../SettingsStore";
 import type { BooleanSettingKey } from "../Settings.tsx";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
