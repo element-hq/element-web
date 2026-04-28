@@ -444,8 +444,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       matrix-js-sdk:
-        specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fa424c44b4991acacc7524066a54a352e140f7b6
+        specifier: github:matrix-org/matrix-js-sdk#hughns/msc4108-2024-signin-on-new-device
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b577436484b54b73af984479db2073d3ae39d4ee
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -9863,8 +9863,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fa424c44b4991acacc7524066a54a352e140f7b6:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fa424c44b4991acacc7524066a54a352e140f7b6}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b577436484b54b73af984479db2073d3ae39d4ee:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b577436484b54b73af984479db2073d3ae39d4ee}
     version: 41.3.0
     engines: {node: '>=22.0.0'}
 
@@ -23428,7 +23428,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/fa424c44b4991acacc7524066a54a352e140f7b6:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b577436484b54b73af984479db2073d3ae39d4ee:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.1.0
