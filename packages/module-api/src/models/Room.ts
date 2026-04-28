@@ -37,4 +37,10 @@ export interface Room {
      * Whether this room is encrypted or not.
      */
     isEncrypted: () => boolean;
+    /**
+     * Find an event in the room's timeline by its event ID.
+     * @param eventId - The event ID to search for.
+     * @returns The event if found, or null.
+     */
+    findEventById(eventId: string): MatrixEvent | null;
 }
