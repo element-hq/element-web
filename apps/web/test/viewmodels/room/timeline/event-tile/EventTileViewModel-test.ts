@@ -653,6 +653,31 @@ describe("EventTileViewModel", () => {
             expect(nextSnapshot.sender).toBe(initialSnapshot.sender);
             expect(nextSnapshot.encryption).toBe(initialSnapshot.encryption);
         });
+
+        it("preserves presentation references when interaction updates leave timestamp data unchanged", () => {
+            const vm = createViewModel({ alwaysShowTimestamps: true });
+            const initialSnapshot = vm.getSnapshot();
+
+            vm.setHover(true);
+
+            const nextSnapshot = vm.getSnapshot();
+            expect(nextSnapshot.interaction).not.toBe(initialSnapshot.interaction);
+            expect(nextSnapshot.presentation).toBe(initialSnapshot.presentation);
+            expect(nextSnapshot.presentation.timestampView).toBe(initialSnapshot.presentation.timestampView);
+        });
+
+        it("preserves presentation view-data references during no-op full refreshes", () => {
+            const vm = createViewModel();
+            const initialSnapshot = vm.getSnapshot();
+
+            vm.refreshDerivedState();
+
+            const nextSnapshot = vm.getSnapshot();
+            expect(nextSnapshot).toBe(initialSnapshot);
+            expect(nextSnapshot.presentation.timestampView).toBe(initialSnapshot.presentation.timestampView);
+            expect(nextSnapshot.presentation.encryptionView).toBe(initialSnapshot.presentation.encryptionView);
+            expect(nextSnapshot.presentation.notificationView).toBe(initialSnapshot.presentation.notificationView);
+        });
     });
 
     describe("command methods", () => {

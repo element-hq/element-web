@@ -1145,6 +1145,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             encryption,
         };
         const receivedTs = EventTileViewModel.getReceivedTs(props);
+        const timestampView = EventTileViewModel.keepSnapshotGroup(
+            previousSnapshot?.presentation.timestampView,
+            EventTileViewModel.getTimestampViewData(timestamp, receivedTs),
+        );
+        const encryptionView = EventTileViewModel.keepSnapshotGroup(
+            previousSnapshot?.presentation.encryptionView,
+            EventTileViewModel.getEncryptionViewData(encryption),
+        );
+        const notificationView = EventTileViewModel.keepSnapshotGroup(
+            previousSnapshot?.presentation.notificationView,
+            EventTileViewModel.getNotificationViewData(props),
+        );
         const presentation = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.presentation, {
             eventId: EventTileViewModel.getEventId(props),
             ariaLive: EventTileViewModel.getAriaLive(props),
@@ -1155,9 +1167,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             notificationRoomName: EventTileViewModel.getNotificationRoomName(props),
             receivedTs,
             shouldRenderMissingRendererFallback: rendering.renderMode === EventTileRenderMode.MissingRendererFallback,
-            timestampView: EventTileViewModel.getTimestampViewData(timestamp, receivedTs),
-            encryptionView: EventTileViewModel.getEncryptionViewData(encryption),
-            notificationView: EventTileViewModel.getNotificationViewData(props),
+            timestampView,
+            encryptionView,
+            notificationView,
         });
 
         return {
@@ -1469,19 +1481,25 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ...snapshot,
             timestamp: nextTimestamp,
         };
-
-        return {
+        const timestampView = EventTileViewModel.keepSnapshotGroup(
+            snapshot.presentation.timestampView,
+            EventTileViewModel.getTimestampViewData(nextTimestamp, snapshot.presentation.receivedTs),
+        );
+        const update: EventTileViewSnapshotUpdate = {
             timestamp: {
                 showTimestamp,
                 timestampDisplayMode,
-            },
-            presentation: {
-                timestampView: EventTileViewModel.getTimestampViewData(nextTimestamp, snapshot.presentation.receivedTs),
             },
             rendering: {
                 shouldRenderActionBar: EventTileViewModel.getShouldRenderActionBar(props, nextSnapshot),
             },
         };
+
+        if (timestampView !== snapshot.presentation.timestampView) {
+            update.presentation = { timestampView };
+        }
+
+        return update;
     }
 
     private static getDisplayInfo(props: EventTileViewModelProps): ReturnType<typeof getEventDisplayInfo> {
