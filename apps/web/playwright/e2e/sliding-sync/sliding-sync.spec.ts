@@ -72,6 +72,7 @@ test.describe("Sliding Sync", () => {
 
     // Load the user fixture for all tests
     test.beforeEach(async ({ app, user }) => {
+        await app.closeVerifyToast();
         await app.closeNotificationToast();
     });
 

@@ -52,6 +52,7 @@ import InviteRulesConfigController from "./controllers/InviteRulesConfigControll
 import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
+import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -211,7 +212,6 @@ export interface Settings {
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
-    "feature_share_history_on_invite": IFeature;
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
@@ -373,6 +373,8 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
+    "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
+    "RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
 }
 
 export type SettingKey = keyof Settings;
@@ -515,29 +517,6 @@ export const SETTINGS: Settings = {
         controller: new DeviceIsolationModeController(),
         displayName: _td("labs|exclude_insecure_devices"),
         description: _td("labs|exclude_insecure_devices_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
-    "feature_share_history_on_invite": {
-        isFeature: true,
-        labsGroup: LabGroup.Encryption,
-        displayName: _td("labs|share_history_on_invite"),
-        description: () => (
-            <>
-                {_t("labs|share_history_on_invite_description")}
-                <div className="mx_SettingsFlag_microcopy">
-                    {_t(
-                        "settings|warning",
-                        {},
-                        {
-                            w: (sub) => <span className="mx_SettingsTab_microcopy_warning">{sub}</span>,
-                            description: _t("labs|share_history_on_invite_warning"),
-                        },
-                    )}
-                </div>
-            </>
-        ),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -1370,6 +1349,22 @@ export const SETTINGS: Settings = {
     "releaseAnnouncementData": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the custom section data for the room list
+     */
+    "RoomList.CustomSectionData": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: {},
+    },
+    /**
+     * Managed by the {@link RoomListStoreV3}
+     * Store the ordering of the custom sections for the room list
+     */
+    "RoomList.OrderedCustomSections": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: [],
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

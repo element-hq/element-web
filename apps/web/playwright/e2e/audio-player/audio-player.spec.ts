@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Locator, Page } from "@playwright/test";
-import { test, expect } from "../../element-web-test";
+import { test, expect, type ExtendedToMatchScreenshotOptions } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
@@ -94,7 +94,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Assert that rendering of the player settled and the play button is visible before taking a snapshot
         await checkPlayerVisibility(ircTile);
 
-        const screenshotOptions = {
+        const screenshotOptions: ExtendedToMatchScreenshotOptions = {
             css: `
                 /* The timestamp is of inconsistent width depending on the time the test runs at */
                 .mx_MessageTimestamp {
@@ -120,7 +120,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         };
 
         // Take a snapshot of mx_EventTile_last on IRC layout
-        screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        screenshotOptions.clip = (await page.locator(".mx_EventTile_last").boundingBox()) ?? undefined;
         await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-irc-layout.png`, screenshotOptions);
 
@@ -129,7 +129,7 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const groupTile = page.locator(".mx_EventTile_last[data-layout='group']");
         await groupTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(groupTile);
-        screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        screenshotOptions.clip = (await page.locator(".mx_EventTile_last").boundingBox()) ?? undefined;
         await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-group-layout.png`, screenshotOptions);
 
@@ -138,12 +138,13 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const bubbleTile = page.locator(".mx_EventTile_last[data-layout='bubble']");
         await bubbleTile.locator(".mx_MessageTimestamp").click();
         await checkPlayerVisibility(bubbleTile);
-        screenshotOptions.clip = await page.locator(".mx_EventTile_last").boundingBox();
+        screenshotOptions.clip = (await page.locator(".mx_EventTile_last").boundingBox()) ?? undefined;
         await scrollToBottomOfTimeline(page);
         await expect(page).toMatchScreenshot(`${detail.replaceAll(" ", "-")}-bubble-layout.png`, screenshotOptions);
     };
 
     test.beforeEach(async ({ page, app, user }) => {
+        await app.closeVerifyToast();
         await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
 

@@ -27,7 +27,7 @@ jobs:
                   repository: element-hq/element-web
 
             - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
-            - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+            - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
               with:
                   cache: "pnpm"
                   node-version: "lts/*"
@@ -45,11 +45,12 @@ jobs:
               working-directory: packages/shared-components
               run: "pnpm test:storybook --run"
 
-            # Workaround for vis silently adding new baselines if they didn't exist
-            # Can be removed once https://github.com/repobuddy/visual-testing/issues/516 is released
-            - run: |
-                  git add -N .
-                  git diff --exit-code
+            - name: Detect stale screenshots
+              run: |
+                  if diff -rq __baselines__ __results__ | grep "^Only in __baselines__"; then
+                      exit 1
+                  fi
+              working-directory: packages/shared-components/__vis__/linux
 
             - name: Upload received images & diffs
               if: always()

@@ -113,7 +113,7 @@
         "show_advanced": "Näytä lisäasetukset",
         "show_all": "Näytä kaikki",
         "sign_in": "Kirjaudu sisään",
-        "sign_out": "Kirjaudu ulos",
+        "sign_out": "Poista tämä laite",
         "skip": "Ohita",
         "start": "Aloita",
         "start_chat": "Aloita keskustelu",
@@ -213,7 +213,7 @@
         "incorrect_password": "Virheellinen salasana",
         "log_in_new_account": "<a>Kirjaudu</a> uudelle tilillesi.",
         "logout_dialog": {
-            "description": "Haluatko varmasti kirjautua ulos?",
+            "description": "Haluatko varmasti poistaa tämän laitteen?",
             "megolm_export": "Vie avaimet käsin",
             "setup_key_backup_title": "Menetät pääsyn salattuihin viesteihisi",
             "setup_secure_backup_description_1": "Salatut viestit turvataan päästä päähän -salauksella. Vain sinä ja viestien vastaanottaja(t) omaavat avaimet näiden viestien lukemiseen.",
@@ -289,14 +289,14 @@
         "registration_username_validation": "Käytä ainoastaan pieniä kirjaimia, numeroita, yhdysviivoja ja alaviivoja",
         "reset_password": {
             "confirm_new_password": "Vahvista uusi salasana",
-            "devices_logout_success": "Sinut on kirjattu ulos kaikilta laitteilta, etkä enää vastaanota push-ilmoituksia. Ota ilmoitukset uudelleen käyttöön kirjautumalla jokaiselle haluamallesi laitteelle.",
+            "devices_logout_success": "Kaikki laitteesi on poistettu, etkä enää vastaanota push-ilmoituksia. Ota ilmoitukset uudelleen käyttöön kirjautumalla jokaiselle haluamallesi laitteelle.",
             "password_not_entered": "Sinun täytyy syöttää uusi salasana.",
             "passwords_mismatch": "Uusien salasanojen on vastattava toisiaan.",
             "rate_limit_error": "Liikaa yrityksiä lyhyessä ajassa. Odota hetki, ennen kuin yrität uudelleen.",
             "rate_limit_error_with_time": "Liikaa yrityksiä lyhyessä ajassa. Yritä uudelleen, kun %(timeout)s on kulunut.",
             "reset_successful": "Salasanasi on nollattu.",
             "return_to_login": "Palaa kirjautumissivulle",
-            "sign_out_other_devices": "Kirjaudu ulos kaikista laitteista"
+            "sign_out_other_devices": "Poista muut laitteet"
         },
         "reset_password_action": "Nollaa salasana",
         "reset_password_button": "Unohditko salasanan?",
@@ -317,8 +317,8 @@
         "server_picker_title": "Kirjaudu sisään kotipalvelimellesi",
         "server_picker_title_default": "Palvelinasetukset",
         "server_picker_title_registration": "Ylläpidä tiliä osoitteessa",
-        "session_logged_out_description": "Turvallisuussyistä tämä istunto on kirjattu ulos. Ole hyvä ja kirjaudu uudestaan.",
-        "session_logged_out_title": "Uloskirjautunut",
+        "session_logged_out_description": "Turvallisuussyistä tämä laite on poistettu. Ole hyvä ja kirjaudu sisään uudelleen.",
+        "session_logged_out_title": "Istunto poistettu",
         "set_email": {
             "description": "Tämä sallii sinun uudelleenalustaa salasanasi ja vastaanottaa ilmoituksia.",
             "verification_pending_description": "Ole hyvä ja tarkista sähköpostisi ja seuraa sen sisältämää linkkiä. Kun olet valmis, napsauta Jatka.",
@@ -726,7 +726,7 @@
         "failed_to_send": "Tapahtuman lähettäminen epäonnistui!",
         "invalid_json": "Ei vaikuta kelvolliselta JSON:ilta.",
         "level": "Taso",
-        "low_bandwidth_mode_description": "Vaatii yhteensopivan kotipalvelimen.",
+        "low_bandwidth_mode_description": "Poistaa käytöstä salauksen, läsnäolon, avatarit, lukukuittaukset ja kirjoitusilmoitukset",
         "main_timeline": "Pääaikajana",
         "no_receipt_found": "Kuittausta ei löytynyt",
         "number_of_users": "Käyttäjämäärä",
@@ -819,11 +819,11 @@
             "title": "Palautustapa poistettu",
             "warning": "Jos et poistanut palautustapaa, hyökkääjä saattaa yrittää käyttää tiliäsi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi."
         },
-        "set_up_recovery": "Määritä palautus",
-        "set_up_recovery_toast_description": "Luo palautusavain, jota voit käyttää salatun viestihistorian palauttamiseen, jos menetät pääsyn laitteisiisi.",
+        "set_up_recovery": "Varmuuskopioi keskustelusi",
+        "set_up_recovery_toast_description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
         "setup_secure_backup": {
-            "explainer": "Varmuuskopioi avaimesi ennen kuin kirjaudut ulos välttääksesi avainten menetyksen."
+            "explainer": "Varmuuskopioi avaimesi ennen kuin poistat tämän laitteen välttääksesi avainten menetyksen."
         },
         "udd": {
             "interactive_verification_button": "Vahvista vuorovaikutteisesti emojilla",
@@ -890,8 +890,8 @@
             "waiting_other_user": "Odotetaan käyttäjän %(displayName)s varmennusta…"
         },
         "verification_requested_toast_title": "Vahvistus pyydetty",
-        "verify_toast_description": "Muut eivät välttämättä luota siihen",
-        "verify_toast_title": "Vahvista tämä istunto"
+        "verify_toast_description": "Lokakuun 2026 lopusta lähtien vahvistamattomat laitteet eivät voi lähettää ja vastaanottaa viestejä. <a>Lue lisää</a>",
+        "verify_toast_title": "Vahvista tämä laite"
     },
     "error": {
         "admin_contact": "<a>Ota yhteyttä palvelun ylläpitäjään</a> jatkaaksesi palvelun käyttöä.",
@@ -913,15 +913,15 @@
         "non_urgent_echo_failure_toast": "Palvelimesi ei vastaa joihinkin <a>pyyntöihin</a>.",
         "resource_limits": "Tämä kotipalvelin on ylittänyt yhden rajoistaan.",
         "session_restore": {
-            "clear_storage_button": "Tyhjennä varasto ja kirjaudu ulos",
-            "clear_storage_description": "Kirjaudu ulos ja poista salausavaimet?",
-            "description_1": "Törmäsimme ongelmaan yrittäessämme palauttaa edellistä istuntoasi.",
+            "clear_storage_button": "Poista tämä laite",
+            "clear_storage_description": "Poistetaanko tämä laite ja sen salausavaimet?",
+            "description_1": "Istuntosi palauttamisessa tapahtui virhe.",
             "description_2": "Jos olet aikaisemmin käyttänyt uudempaa versiota %(brand)sista, istuntosi voi olla epäyhteensopiva tämän version kanssa. Sulje tämä ikkuna ja yritä uudemman version kanssa.",
-            "description_3": "Selaimen varaston tyhjentäminen saattaa korjata ongelman, mutta kirjaa sinut samalla ulos ja estää sinua lukemasta salattuja keskusteluita.",
+            "description_3": "Selaimen tallennustilan tyhjentäminen saattaa korjata ongelman, mutta se poistaa tämän laitteen ja tekee salatusta keskusteluhistoriasta lukukelvottoman.",
             "title": "Istunnon palautus epäonnistui"
         },
         "something_went_wrong": "Jokin meni vikaan!",
-        "storage_evicted_description_1": "Istunnon dataa, mukaan lukien salausavaimia, puuttuu. Kirjaudu ulos ja sisään, jolloin avaimet palautetaan varmuuskopiosta.",
+        "storage_evicted_description_1": "Jotkin istuntotiedot, mukaan lukien salattujen viestien avaimet, puuttuvat. Poista tämä laite ja kirjaudu sisään uudelleen korjataksesi tämän ja palauttaaksesi avaimet varmuuskopiosta.",
         "storage_evicted_description_2": "Selaimesi luultavasti poisti tämän datan, kun levytila oli vähissä.",
         "storage_evicted_title": "Istunnon dataa puuttuu",
         "sync": "Kotipalvelimeen yhdistäminen ei onnistunut. Yritetään uudelleen…",
@@ -1280,7 +1280,7 @@
         "report_to_moderators_description": "Moderointia tukevissa huoneissa väärinkäytökset voi ilmoittaa Ilmoita-painikkeella huoneen moderaattoreille.",
         "sliding_sync": "Liukuvan synkronoinnin tila",
         "sliding_sync_description": "Työn alla, käytöstä poistaminen ei ole mahdollista.",
-        "sliding_sync_disabled_notice": "Poista käytöstä kirjautumalla ulos ja takaisin sisään",
+        "sliding_sync_disabled_notice": "Kirjaudu uudelleen sisään poistaaksesi käytöstä",
         "sliding_sync_server_no_support": "Palvelimellasi ei ole tukea",
         "under_active_development": "Aktiivisen kehityksen kohteena.",
         "video_rooms": "Videohuoneet",
@@ -1478,7 +1478,6 @@
         "restricted": "Rajoitettu"
     },
     "powered_by_matrix": "Moottorina Matrix",
-    "powered_by_matrix_with_logo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
     "presence": {
         "away": "Poissa",
         "busy": "Varattu",
@@ -2117,17 +2116,17 @@
                 "change_recovery_confirm_title": "Anna uusi palautusavain",
                 "change_recovery_key": "Vaihda palautusavain",
                 "change_recovery_key_title": "Vaihdetaanko palautusavain?",
-                "description": "Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, jos olet kadottanut kaikki olemassa olevat laitteesi.",
+                "description": "Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi.",
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
                 "enter_recovery_key": "Kirjoita palautusavain",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",
                 "save_key_description": "Älä jaa tätä kenenkään kanssa!",
                 "save_key_title": "Palautusavain",
-                "set_up_recovery": "Määritä palautus",
+                "set_up_recovery": "Hanki palautusavain",
                 "set_up_recovery_confirm_title": "Anna palautusavain vahvistaaksesi",
                 "set_up_recovery_save_key_title": "Tallenna palautusavain turvalliseen paikkaan",
                 "set_up_recovery_secondary_description": "Kun napsautat Jatka, sinulle luodaan palautusavain.",
-                "title": "Palautuminen"
+                "title": "Varmuuskopio"
             },
             "title": "Salaus"
         },
@@ -2214,7 +2213,7 @@
             "unable_to_load_msisdns": "Puhelinnumeroita ei voi ladata",
             "username": "Käyttäjätunnus"
         },
-        "inline_url_previews_default": "Ota linkkien esikatselu käyttöön oletusarvoisesti",
+        "inline_url_previews_default": "Ota esikatselu käyttöön",
         "insert_trailing_colon_mentions": "Lisää kaksoispiste käyttäjän maininnan perään viestin alussa",
         "jump_to_bottom_on_send": "Siirry aikajanan pohjalle, kun lähetät viestin",
         "key_backup": {
@@ -2371,28 +2370,28 @@
         "send_read_receipts_unsupported": "Palvelimesi ei tue lukukuittausten lähettämisen poistamista käytöstä.",
         "send_typing_notifications": "Lähetä kirjoitusilmoituksia",
         "sessions": {
-            "best_security_note": "Parhaan turvallisuuden takaamiseksi vahvista istunnot ja kirjaudu ulos istunnoista, joita et tunnista tai et enää käytä.",
+            "best_security_note": "Parhaan turvallisuuden takaamiseksi vahvista istuntosi ja poista istunnot, joita et tunnista tai et enää käytä.",
             "browser": "Selain",
             "confirm_sign_out": {
-                "one": "Vahvista uloskirjautuminen tältä laitteelta",
-                "other": "Vahvista uloskirjautuminen näiltä laitteilta"
+                "one": "Vahvista tämän laitteen poistaminen",
+                "other": "Vahvista näiden laitteiden poistaminen"
             },
             "confirm_sign_out_body": {
-                "one": "Napsauta alla olevaa painiketta vahvistaaksesi tämän laitteen uloskirjauksen.",
-                "other": "Napsauta alla olevaa painiketta vahvistaaksesi näiden laitteiden uloskirjauksen."
+                "one": "Napsauta alla olevaa painiketta vahvistaaksesi tämän laitteen poistamisen.",
+                "other": "Napsauta alla olevaa painiketta vahvistaaksesi näiden laitteiden poistamisen."
             },
             "confirm_sign_out_continue": {
-                "one": "Kirjaa laite ulos",
-                "other": "Kirjaa laitteet ulos"
+                "one": "Poista laite",
+                "other": "Poista laitteet"
             },
             "confirm_sign_out_sso": {
-                "one": "Vahvista tämän laitteen uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
-                "other": "Vahvista näiden laitteiden uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen."
+                "one": "Vahvista tämän laitteen poistaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
+                "other": "Vahvista näiden laitteiden poistaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen."
             },
             "current_session": "Nykyinen istunto",
             "desktop_session": "Työpöytäistunto",
             "details_heading": "Istunnon tiedot",
-            "device_unverified_description": "Vahvista tämä istunto tai kirjaudu ulos siitä tietoturvan ja luotettavuuden parantamiseksi.",
+            "device_unverified_description": "Vahvista tai poista tämä istunto parhaan turvallisuuden ja luotettavuuden takaamiseksi.",
             "device_verified_description": "Tämä istunto on valmis turvallista viestintää varten.",
             "device_verified_description_current": "Nykyinen istuntosi on valmis turvalliseen viestintään.",
             "dialog_title": "<strong>Asetukset:</strong> Istunnot",
@@ -2406,7 +2405,7 @@
             "hide_details": "Piilota yksityiskohdat",
             "inactive_days": "Passiivinen %(inactiveAgeDays)s+ päivää",
             "inactive_sessions": "Passiiviset istunnot",
-            "inactive_sessions_list_description": "Harkitse vanhoista (%(inactiveAgeDays)s tai useamman päivän ikäisistä), käyttämättömistä istunnoista uloskirjautumista.",
+            "inactive_sessions_list_description": "Harkitse vanhojen (%(inactiveAgeDays)s tai useamman päivän ikäisiä), käyttämättömien istuntojen poistamista.",
             "ip": "IP-osoite",
             "last_activity": "Viimeisin toiminta",
             "manage": "Hallitse tätä istuntoa",
@@ -2437,15 +2436,15 @@
             "sign_in_with_qr_button": "Näytä QR-koodi",
             "sign_in_with_qr_description": "Kirjaudu QR-koodin avulla toiseen laitteeseen ja määritä suojattu viestinvälitys.",
             "sign_in_with_qr_unsupported": "Palveluntarjoajasi ei tue tätä",
-            "sign_out": "Kirjaudu ulos tästä istunnosta",
-            "sign_out_all_other_sessions": "Kirjaudu ulos kaikista muista istunnoista (%(otherSessionsCount)s)",
+            "sign_out": "Poista tämä istunto",
+            "sign_out_all_other_sessions": "Poista kaikki muut istunnot (%(otherSessionsCount)s )",
             "sign_out_confirm_description": {
-                "one": "Haluatko varmasti kirjautua ulos %(count)s istunnosta?",
-                "other": "Haluatko varmasti kirjautua ulos %(count)s istunnosta?"
+                "one": "Haluatko varmasti poistaa %(count)s istunnon?",
+                "other": "Haluatko varmasti poistaa %(count)s istuntoa?"
             },
             "sign_out_n_sessions": {
-                "one": "Kirjaudu ulos %(count)s istunnosta",
-                "other": "Kirjaudu ulos %(count)s istunnosta"
+                "one": "Poista %(count)s istunto",
+                "other": "Poista %(count)s istuntoa"
             },
             "title": "Istunnot",
             "unknown_session": "Tuntematon istunnon tyyppi",
@@ -2457,7 +2456,7 @@
             "url": "Verkko-osoite",
             "verified_session": "Vahvistettu istunto",
             "verified_sessions": "Vahvistetut istunnot",
-            "verified_sessions_list_description": "Parhaan turvallisuuden takaamiseksi kirjaudu ulos istunnoista, joita et tunnista tai et enää käytä.",
+            "verified_sessions_list_description": "Parhaan turvallisuuden takaamiseksi poista istunnot, joita et tunnista tai et enää käytä.",
             "verify_session": "Vahvista istunto",
             "web_session": "Web-istunto"
         },
@@ -2916,8 +2915,10 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s hyväksyi kutsun %(displayName)s:tä",
             "accepted_invite": "%(targetName)s hyväksyi kutsun",
-            "ban": "%(senderName)s antoi porttikiellon käyttäjälle %(targetName)s",
-            "ban_reason": "%(senderName)s antoi porttikiellon käyttäjälle %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s antoi porttikiellon",
+            "ban_reason": "%(senderName)s antoi porttikiellon: %(reason)s",
+            "ban_reason_spoiler": "%(senderName)s antoi porttikiellon käyttäjälle <user/>: %(reason)s",
+            "ban_spoiler": "%(senderName)s antoi porttikiellon käyttäjälle <user/>",
             "change_avatar": "%(senderName)s vaihtoi profiilikuvansa",
             "change_name": "%(oldDisplayName)s vaihtoi näyttönimekseen %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s vaihtoi näyttönimensä ja profiilikuvansa",
@@ -3216,7 +3217,7 @@
         "ban_room_confirm_title": "Anna porttikielto huoneeseen %(roomName)s",
         "ban_space_everything": "Anna porttikielto kaikkeen, mihin pystyn",
         "deactivate_confirm_action": "Poista käyttäjä pysyvästi",
-        "deactivate_confirm_description": "Käyttäjän poistaminen kirjaa hänet ulos ja estää häntä kirjautumasta takaisin sisään. Lisäksi hän poistuu kaikista huoneista, joissa hän on. Tätä toimintoa ei voi kumota. Oletko varma, että haluat pysyvästi poistaa tämän käyttäjän?",
+        "deactivate_confirm_description": "Käyttäjän poistaminen poistaa hänen laitteensa ja estää häntä kirjautumasta takaisin sisään. Lisäksi hän poistuu kaikista huoneista, joissa hän on. Tätä toimintoa ei voi kumota. Oletko varma, että haluat pysyvästi poistaa tämän käyttäjän?",
         "deactivate_confirm_title": "Poista käyttäjä pysyvästi?",
         "demote_button": "Alenna",
         "demote_self_confirm_description_space": "Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä tilassa, oikeuksia ei voi enää saada takaisin.",
@@ -3369,7 +3370,6 @@
         "you_are_presenting": "Esität parhaillaan"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
-    "welcome_to_element": "Tervetuloa Element-sovellukseen",
     "widget": {
         "added_by": "Sovelman lisäsi",
         "capabilities_dialog": {

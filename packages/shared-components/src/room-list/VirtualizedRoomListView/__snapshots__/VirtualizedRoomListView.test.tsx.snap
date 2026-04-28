@@ -10,6 +10,7 @@ exports[`<VirtualizedRoomListView /> > renders Default story 1`] = `
     >
       <div
         aria-label="Room list"
+        class="VirtualizedRoomListView-module_roomList"
         data-testid="room-list"
         data-virtuoso-scroller="true"
         role="listbox"

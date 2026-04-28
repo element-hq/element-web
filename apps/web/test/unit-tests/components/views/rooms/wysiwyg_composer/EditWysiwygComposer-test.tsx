@@ -283,8 +283,10 @@ describe("EditWysiwygComposer", () => {
         // It adds the composerType fields where the value refers if the composer is in editing or not
         // The listeners in the RTE ignore the message if the composerType is missing in the payload
         const dispatcherRef = defaultDispatcher.register((payload: ActionPayload) => {
+            const insertPayload = payload as ComposerInsertPayload;
             defaultDispatcher.dispatch<ComposerInsertPayload>({
-                ...(payload as ComposerInsertPayload),
+                ...insertPayload,
+                timelineRenderingType: insertPayload.timelineRenderingType!,
                 composerType: ComposerType.Edit,
             });
         });

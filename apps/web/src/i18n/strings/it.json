@@ -1538,7 +1538,6 @@
         "restricted": "Limitato"
     },
     "powered_by_matrix": "Offerto da Matrix",
-    "powered_by_matrix_with_logo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo",
     "presence": {
         "away": "Assente",
         "busy": "Occupato",
@@ -3419,7 +3418,6 @@
         "you_are_presenting": "Stai presentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
-    "welcome_to_element": "Benvenuti su Element",
     "widget": {
         "added_by": "Widget aggiunto da",
         "capabilities_dialog": {

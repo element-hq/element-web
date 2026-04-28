@@ -11,9 +11,10 @@ import { type Meta, type StoryObj } from "@storybook/react-vite";
 import { Button } from "@vector-im/compound-web";
 
 import { Banner } from "./Banner";
+import avatarImage from "../../../../static/element.png";
 
 const meta = {
-    title: "room/Banner",
+    title: "Room/Banner",
     component: Banner,
     tags: ["autodocs"],
     args: {
@@ -49,7 +50,7 @@ export const WithAction: Story = {
             </p>
         ),
         actions: (
-            <Button kind="primary" size="sm">
+            <Button kind="primary" size="md">
                 Withdraw verification
             </Button>
         ),
@@ -58,7 +59,7 @@ export const WithAction: Story = {
 
 export const WithAvatarImage: Story = {
     args: {
-        avatar: <img alt="Example" src="https://picsum.photos/32/32" />,
+        avatar: <img alt="Example" src={avatarImage} />,
     },
 };
 

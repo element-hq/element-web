@@ -45,6 +45,19 @@ function getA11yLabel(roomName: string, notification: NotificationDecorationData
 }
 
 /**
+ * Describes a section that a room can be assigned to.
+ * Used to render toggle items in the "Move to section" submenu.
+ */
+export interface Section {
+    /** The tag that identifies this section (e.g. `m.favourite`, custom tag) */
+    tag: string;
+    /** The human-readable display name of the section */
+    name: string;
+    /** Whether the room currently belongs to this section */
+    isSelected: boolean;
+}
+
+/**
  * Snapshot for a room list item.
  * Contains all the data needed to render a room in the list.
  */
@@ -79,6 +92,10 @@ export interface RoomListItemViewSnapshot {
     canMarkAsUnread: boolean;
     /** The room's notification state */
     roomNotifState: RoomNotifState;
+    /** Whether the room can be moved to a section */
+    canMoveToSection: boolean;
+    /** Available sections the room can be assigned to */
+    sections: Section[];
 }
 
 /**
@@ -104,6 +121,10 @@ export interface RoomListItemViewActions {
     onLeaveRoom: () => void;
     /** Called when setting the room notification state */
     onSetRoomNotifState: (state: RoomNotifState) => void;
+    /** Called when creating a new section */
+    onCreateSection: () => void;
+    /** Called when toggling a room's membership in a section */
+    onToggleSection: (tag: string) => void;
 }
 
 /**

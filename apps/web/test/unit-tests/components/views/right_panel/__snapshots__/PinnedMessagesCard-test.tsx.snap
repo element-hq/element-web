@@ -141,7 +141,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -198,7 +198,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
               id="_r_r_"
             >
               <div
@@ -222,7 +222,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -279,7 +279,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
               id="_r_13_"
             >
               <div
@@ -296,7 +296,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_PinnedMessagesCard_unpin"
       >
         <button
-          class="_button_13vu4_8"
+          class="_button_1nw83_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -369,7 +369,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -426,7 +426,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
               id="_r_10l_"
             >
               <div
@@ -450,7 +450,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_7h2br_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_7h2br_55"
+              class="_avatar_va14e_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_va14e_55"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -507,7 +507,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               </button>
             </div>
             <div
-              class="mx_MTextBody mx_EventTile_content"
+              class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
               id="_r_10t_"
             >
               <div

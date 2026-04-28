@@ -217,10 +217,16 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
             minimizer: enableMinification
                 ? [
                       new TerserPlugin({
-                          // Already minified and includes an auto-generated license comment
-                          // that the plugin would otherwise pointlessly extract into a separate
-                          // file. We add the actual license using CopyWebpackPlugin below.
-                          exclude: "jitsi_external_api.min.js",
+                          exclude: [
+                              // Already minified and includes an auto-generated license comment
+                              // that the plugin would otherwise pointlessly extract into a separate
+                              // file. We add the actual license using CopyWebpackPlugin below.
+                              "jitsi_external_api.min.js",
+                              // Already minified by Element Call's build process (and Terser has
+                              // issues with some Unicode characters found within)
+                              // https://github.com/terser/terser/issues/1677
+                              "widgets/element-call/",
+                          ],
                       }),
                       new CssMinimizerPlugin(),
                   ]
@@ -711,8 +717,6 @@ export default (env: string, argv: Record<string, any>): webpack.Configuration =
                     "res/jitsi_external_api.min.js",
                     "res/jitsi_external_api.min.js.LICENSE.txt",
                     "res/manifest.json",
-                    "res/welcome.html",
-                    { from: "welcome/**", context: path.resolve(__dirname, "res") },
                     { from: "themes/**", context: path.resolve(__dirname, "res") },
                     { from: "vector-icons/**", context: path.resolve(__dirname, "res") },
                     { from: "decoder-ring/**", context: path.resolve(__dirname, "res") },

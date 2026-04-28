@@ -43,11 +43,18 @@ describe("parseUrlParameters", () => {
         expect(parsed.params.legacy_sso?.loginToken).toEqual("foobar");
     });
 
-    it("should parse oidc parameters from oauth-fragment", () => {
+    it("should parse oidc parameters from fragment", () => {
         const u = new URL("https://app.element.io/#code=foobar&state=barfoo");
         const parsed = parseAppUrl(u);
-        expect(parsed.params.oidc?.code).toEqual("foobar");
-        expect(parsed.params.oidc?.state).toEqual("barfoo");
+        expect(parsed.params.oidc_fragment?.code).toEqual("foobar");
+        expect(parsed.params.oidc_fragment?.state).toEqual("barfoo");
+    });
+
+    it("should parse oidc parameters from query", () => {
+        const u = new URL("https://app.element.io/?code=foobar&state=barfoo");
+        const parsed = parseAppUrl(u);
+        expect(parsed.params.oidc_query?.code).toEqual("foobar");
+        expect(parsed.params.oidc_query?.state).toEqual("barfoo");
     });
 
     it("should parse guest parameters", () => {

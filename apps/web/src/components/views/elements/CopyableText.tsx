@@ -44,6 +44,7 @@ export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className"
 
     return (
         <AccessibleButton
+            element="button"
             title={tooltip ?? _t("action|copy")}
             onClick={onCopyClickInternal}
             className={className}
@@ -62,12 +63,12 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
     });
 
     return (
-        <div className={combinedClassName} {...props}>
+        <span className={combinedClassName} {...props}>
             {children}
             <CopyTextButton getTextToCopy={getTextToCopy} className="mx_CopyableText_copyButton">
                 <CopyIcon />
             </CopyTextButton>
-        </div>
+        </span>
     );
 };
 

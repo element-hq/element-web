@@ -14,12 +14,13 @@ Please see LICENSE files in the repository root for full details.
         color: $links;
     }
 
-    form:not(.mx_EncryptionUserSettingsTab form) {
+    form {
         display: flex;
         flex-direction: column;
-        gap: $spacing-8;
+        gap: var(--cpd-space-3x);
         flex-grow: 1;
     }
+
     // never want full width buttons
     // event when other content is 100% width
     .mx_AccessibleButton {

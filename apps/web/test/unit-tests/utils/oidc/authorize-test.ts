@@ -75,7 +75,7 @@ describe("OIDC authorization", () => {
 
             const authUrl = new URL(window.location.href);
 
-            expect(authUrl.searchParams.get("response_mode")).toEqual("fragment");
+            expect(authUrl.searchParams.get("response_mode")).toEqual("query");
             expect(authUrl.searchParams.get("response_type")).toEqual("code");
             expect(authUrl.searchParams.get("client_id")).toEqual(clientId);
             expect(authUrl.searchParams.get("code_challenge_method")).toEqual("S256");
@@ -89,6 +89,18 @@ describe("OIDC authorization", () => {
             expect(authUrl.searchParams.has("state")).toBeTruthy();
             expect(authUrl.searchParams.has("nonce")).toBeTruthy();
             expect(authUrl.searchParams.has("code_challenge")).toBeTruthy();
+        });
+
+        it("should prefer response_mode fragment if supported", async () => {
+            await startOidcLogin(
+                { ...delegatedAuthConfig, response_modes_supported: ["query", "fragment"] },
+                clientId,
+                homeserverUrl,
+            );
+
+            const authUrl = new URL(window.location.href);
+
+            expect(authUrl.searchParams.get("response_mode")).toEqual("fragment");
         });
     });
 
@@ -131,19 +143,19 @@ describe("OIDC authorization", () => {
         });
 
         it("should throw when query params do not include state and code", async () => {
-            await expect(async () => await completeOidcLogin({})).rejects.toThrow(
+            await expect(async () => await completeOidcLogin({}, "query")).rejects.toThrow(
                 OidcClientError.InvalidQueryParameters,
             );
         });
 
         it("should make request complete authorization code grant", async () => {
-            await completeOidcLogin(params);
+            await completeOidcLogin(params, "fragment");
 
             expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state, "fragment");
         });
 
         it("should return accessToken, configured homeserver and identityServer", async () => {
-            const result = await completeOidcLogin(params);
+            const result = await completeOidcLogin(params, "query");
 
             expect(result).toEqual({
                 accessToken: tokenResponse.access_token,

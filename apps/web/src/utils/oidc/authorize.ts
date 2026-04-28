@@ -23,6 +23,7 @@ import { type URLParams } from "../../vector/url_utils.ts";
  * @param clientId this client's id as registered with configured issuer
  * @param homeserverUrl target homeserver
  * @param identityServerUrl OPTIONAL target identity server
+ * @param isRegistration if true will set the prompt to "create"
  * @returns Promise that resolves after we have navigated to auth endpoint
  */
 export const startOidcLogin = async (
@@ -47,7 +48,7 @@ export const startOidcLogin = async (
         nonce,
         prompt,
         urlState: PlatformPeg.get()?.getOidcClientState(),
-        responseMode: "fragment",
+        responseMode: delegatedAuthConfig.response_modes_supported?.includes("fragment") ? "fragment" : "query",
     });
 
     window.location.href = authorizationUrl;
@@ -57,15 +58,20 @@ export const startOidcLogin = async (
  * Gets `code` and `state` response params
  *
  * @param urlParams - the parameters to read
+ * @param responseMode - the response_mode used in the auth request
  * @returns code and state
  * @throws when code and state are not valid strings
  */
-const getCodeAndStateFromParams = ({
-    code,
-    state,
-}: NonNullable<URLParams["oidc"]>): { code: string; state: string } => {
+const getCodeAndStateFromParams = (
+    { code, state }: NonNullable<URLParams["oidc_fragment"]>,
+    responseMode: "fragment" | "query",
+): { code: string; state: string } => {
     if (!code || typeof code !== "string" || !state || typeof state !== "string") {
-        throw new Error(OidcClientError.InvalidQueryParameters);
+        if (responseMode === "fragment") {
+            throw new Error(OidcClientError.InvalidFragmentParameters);
+        } else {
+            throw new Error(OidcClientError.InvalidQueryParameters);
+        }
     }
     return { code, state };
 };
@@ -91,15 +97,17 @@ type CompleteOidcLoginResponse = {
 /**
  * Attempt to complete authorization code flow to get an access token
  * @param urlParams the parameters extracted from the app-load URI.
+ * @param responseMode - the response_mode used in the auth request
  * @returns Promise that resolves with a CompleteOidcLoginResponse when login was successful
  * @throws When we failed to get a valid access token
  */
 export const completeOidcLogin = async (
-    urlParams: NonNullable<URLParams["oidc"]>,
+    urlParams: NonNullable<URLParams["oidc_fragment"]>,
+    responseMode: "fragment" | "query",
 ): Promise<CompleteOidcLoginResponse> => {
-    const { code, state } = getCodeAndStateFromParams(urlParams);
+    const { code, state } = getCodeAndStateFromParams(urlParams, responseMode);
     const { homeserverUrl, tokenResponse, idTokenClaims, identityServerUrl, oidcClientSettings } =
-        await completeAuthorizationCodeGrant(code, state, "fragment");
+        await completeAuthorizationCodeGrant(code, state, responseMode);
 
     return {
         homeserverUrl,

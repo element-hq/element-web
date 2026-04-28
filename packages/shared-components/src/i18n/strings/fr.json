@@ -5,6 +5,7 @@
     "action": {
         "back": "Retour",
         "click": "Clic",
+        "close": "Fermer",
         "collapse": "Réduire",
         "delete": "Supprimer",
         "dismiss": "Ignorer",
@@ -16,6 +17,7 @@
         "invite": "Inviter",
         "new_conversation": "Nouvelle conversation",
         "new_room": "Nouveau salon",
+        "new_section": "Nouvelle section",
         "new_video_room": "Nouveau salon visio",
         "open_menu": "Ouvrir le menu",
         "pause": "Pause",
@@ -34,6 +36,7 @@
     "common": {
         "attachment": "Pièce jointe",
         "encryption_enabled": "Chiffrement activé",
+        "loading": "Chargement…",
         "options": "Options",
         "preferences": "Préférences",
         "state_encryption_enabled": "Chiffrement expérimental de l'état activé"
@@ -131,7 +134,8 @@
             "leave_room": "Quitter le salon",
             "low_priority": "Priorité basse",
             "mark_read": "Marquer comme lu",
-            "mark_unread": "Marquer comme non lu"
+            "mark_unread": "Marquer comme non lu",
+            "move_to_section": "Déplacer vers"
         },
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",
@@ -140,6 +144,7 @@
             "more_options": "Plus d’options"
         },
         "room_options": "Options du salon",
+        "section_created": "Section créée",
         "section_header": {
             "toggle": "Afficher/masquer la section %(section)s",
             "toggle_unread": "Afficher ou masquer la section « %(section)s s » contenant un ou plusieurs salon non lus"

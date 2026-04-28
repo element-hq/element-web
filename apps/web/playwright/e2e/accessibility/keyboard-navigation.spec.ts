@@ -15,6 +15,8 @@ test.describe("Landmark navigation tests", () => {
     });
 
     test("without any rooms", async ({ page, homeserver, app, user }) => {
+        await app.closeVerifyToast();
+
         // sometimes the space button doesn't appear right away
         await expect(page.locator(".mx_SpaceButton_active")).toBeVisible();
 
@@ -118,6 +120,7 @@ test.describe("Landmark navigation tests", () => {
             },
         );
 
+        await app.closeVerifyToast();
         await app.viewRoomByName("Bob");
         // confirm the room was loaded
         await expect(page.getByText("Bob joined the room")).toBeVisible();
