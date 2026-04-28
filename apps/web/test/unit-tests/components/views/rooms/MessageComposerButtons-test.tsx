@@ -14,7 +14,7 @@ import { createTestClient, getRoomContext, mkStubRoom } from "../../../../test-u
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MessageComposerButtons from "../../../../../src/components/views/rooms/MessageComposerButtons";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
-import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
+import { TimelineRenderingType, type RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
 import { RoomUploadContextProvider } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 describe("MessageComposerButtons", () => {
@@ -56,7 +56,9 @@ describe("MessageComposerButtons", () => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <ScopedRoomContextProvider {...defaultRoomContext}>
-                    <RoomUploadContextProvider>{component}</RoomUploadContext>
+                    <RoomUploadContextProvider timelineRenderingType={TimelineRenderingType.Room}>
+                        {component}
+                    </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
