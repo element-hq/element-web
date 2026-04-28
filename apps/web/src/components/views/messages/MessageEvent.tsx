@@ -25,7 +25,7 @@ import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
-import TextualBody from "./TextualBody";
+import MImageBody from "./MImageBody";
 import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
@@ -41,6 +41,7 @@ import {
     VideoBodyFactory,
     renderMBody,
 } from "./MBodyFactory";
+import { TextualBodyFactory } from "./TextualBodyFactory";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -64,10 +65,10 @@ export interface IOperableEventTile {
 }
 
 const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
-    [MsgType.Text, TextualBody],
-    [MsgType.Notice, TextualBody],
-    [MsgType.Emote, TextualBody],
-    [MsgType.Image, ImageBodyFactory],
+    [MsgType.Text, TextualBodyFactory],
+    [MsgType.Notice, TextualBodyFactory],
+    [MsgType.Emote, TextualBodyFactory],
+    [MsgType.Image, MImageBody],
     [MsgType.File, (props: IBodyProps) => renderMBody(props, FileBodyFactory)!],
     [MsgType.Audio, MVoiceOrAudioBody],
     [MsgType.Video, VideoBodyFactory],
@@ -329,6 +330,6 @@ const CaptionBody: React.FunctionComponent<IBodyProps & { WrappedBodyType: React
 }) => (
     <div className="mx_EventTile_content">
         <WrappedBodyType {...props} />
-        <TextualBody {...{ ...props, ref: undefined }} />
+        <TextualBodyFactory {...{ ...props, ref: undefined }} />
     </div>
 );
