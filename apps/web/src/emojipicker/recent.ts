@@ -73,6 +73,6 @@ export function get(limit = 24): string[] {
     const recents = getRecentEmoji();
 
     // perform a stable sort on `count` to keep the recent (date) order as a secondary sort factor
-    const sorted = orderBy(recents, "1", "desc");
+    const sorted = orderBy(recents, "total", "desc");
     return sorted.slice(0, limit).map(({ emoji }) => emoji);
 }
