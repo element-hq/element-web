@@ -43,7 +43,7 @@ export function CreateSectionDialog({ onFinished, sectionToEdit }: CreateSection
             hasCancel={true}
         >
             <Flex gap="var(--cpd-space-6x)" direction="column" className="mx_CreateSectionDialog_content">
-                <Text as="span" weight="semibold">
+                <Text as="span" weight="medium">
                     {_t("create_section_dialog|description")}
                 </Text>
                 <Form.Root

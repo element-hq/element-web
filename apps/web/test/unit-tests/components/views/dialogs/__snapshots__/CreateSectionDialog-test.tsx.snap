@@ -29,7 +29,7 @@ exports[`CreateSectionDialog renders the dialog 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
     >
       <span
-        class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60"
       >
         Sections are only for you
       </span>
