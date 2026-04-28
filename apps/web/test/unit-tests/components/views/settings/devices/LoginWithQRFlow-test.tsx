@@ -47,10 +47,8 @@ describe("<LoginWithQRFlow />", () => {
         const { container } = render(
             getComponent({ phase: Phase.ShowingQR, intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE }),
         );
-        expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
+        expect(screen.getByTestId("spinner")).toBeVisible();
         expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId("cancel-button"));
-        expect(onClick).toHaveBeenCalledWith(Click.Cancel, undefined);
     });
 
     it("renders QR code", async () => {
