@@ -115,7 +115,7 @@ export function useEventTileNodes({
     openInRoom,
     copyLinkToThread,
 }: UseEventTileNodesArgs): { content: EventTileContentNodes; thread: EventTileThreadNodes } {
-    const avatarMember = getAvatarMember(props, snapshot.avatarSubject);
+    const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
     const onSenderProfileClick = useCallback((): void => {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
@@ -157,7 +157,7 @@ export function useEventTileNodes({
     );
     const replyChain = useMemo(
         () =>
-            snapshot.shouldRenderReplyPreview ? (
+            snapshot.rendering.shouldRenderReplyPreview ? (
                 <ReplyPreview
                     mxEvent={props.mxEvent}
                     forExport={props.forExport}
@@ -165,33 +165,33 @@ export function useEventTileNodes({
                     layout={props.layout}
                     alwaysShowTimestamps={props.alwaysShowTimestamps}
                     getRelationsForEvent={props.getRelationsForEvent}
-                    isQuoteExpanded={snapshot.isQuoteExpanded}
+                    isQuoteExpanded={snapshot.interaction.isQuoteExpanded}
                     replyChainRef={replyChainRef}
                     setQuoteExpanded={setQuoteExpanded}
                 />
             ) : undefined,
         [
-            snapshot.shouldRenderReplyPreview,
+            snapshot.rendering.shouldRenderReplyPreview,
             props.mxEvent,
             props.forExport,
             props.permalinkCreator,
             props.layout,
             props.alwaysShowTimestamps,
             props.getRelationsForEvent,
-            snapshot.isQuoteExpanded,
+            snapshot.interaction.isQuoteExpanded,
             replyChainRef,
             setQuoteExpanded,
         ],
     );
     const actionBar = useMemo(
         () =>
-            snapshot.shouldRenderActionBar ? (
+            snapshot.rendering.shouldRenderActionBar ? (
                 <ActionBar
                     mxEvent={props.mxEvent}
                     permalinkCreator={props.permalinkCreator}
                     getRelationsForEvent={props.getRelationsForEvent}
-                    reactions={snapshot.reactions}
-                    isQuoteExpanded={snapshot.isQuoteExpanded}
+                    reactions={snapshot.receipt.reactions}
+                    isQuoteExpanded={snapshot.interaction.isQuoteExpanded}
                     tileRef={tileRef}
                     replyChainRef={replyChainRef}
                     onFocusChange={onActionBarFocusChange}
@@ -199,12 +199,12 @@ export function useEventTileNodes({
                 />
             ) : undefined,
         [
-            snapshot.shouldRenderActionBar,
+            snapshot.rendering.shouldRenderActionBar,
             props.mxEvent,
             props.permalinkCreator,
             props.getRelationsForEvent,
-            snapshot.reactions,
-            snapshot.isQuoteExpanded,
+            snapshot.receipt.reactions,
+            snapshot.interaction.isQuoteExpanded,
             tileRef,
             replyChainRef,
             onActionBarFocusChange,
@@ -212,27 +212,32 @@ export function useEventTileNodes({
         ],
     );
     const sender = useMemo(
-        () => <Sender mode={snapshot.senderMode} mxEvent={props.mxEvent} onClick={onSenderProfileClick} />,
-        [snapshot.senderMode, props.mxEvent, onSenderProfileClick],
+        () => <Sender mode={snapshot.sender.senderMode} mxEvent={props.mxEvent} onClick={onSenderProfileClick} />,
+        [snapshot.sender.senderMode, props.mxEvent, onSenderProfileClick],
     );
     const avatar = useMemo(
         () => (
             <Avatar
                 member={avatarMember}
-                size={snapshot.avatarSize}
-                viewUserOnClick={snapshot.avatarMemberUserOnClick}
-                forceHistorical={snapshot.avatarForceHistorical}
+                size={snapshot.sender.avatarSize}
+                viewUserOnClick={snapshot.sender.avatarMemberUserOnClick}
+                forceHistorical={snapshot.sender.avatarForceHistorical}
             />
         ),
-        [avatarMember, snapshot.avatarSize, snapshot.avatarMemberUserOnClick, snapshot.avatarForceHistorical],
+        [
+            avatarMember,
+            snapshot.sender.avatarSize,
+            snapshot.sender.avatarMemberUserOnClick,
+            snapshot.sender.avatarForceHistorical,
+        ],
     );
     const messageStatus = useMemo(
         () => (
             <MessageStatus
                 messageState={props.eventSendStatus}
-                shouldShowSentReceipt={snapshot.shouldShowSentReceipt}
-                shouldShowSendingReceipt={snapshot.shouldShowSendingReceipt}
-                showReadReceipts={snapshot.showReadReceipts}
+                shouldShowSentReceipt={snapshot.receipt.shouldShowSentReceipt}
+                shouldShowSendingReceipt={snapshot.receipt.shouldShowSendingReceipt}
+                showReadReceipts={snapshot.receipt.showReadReceipts}
                 readReceipts={props.readReceipts}
                 readReceiptMap={props.readReceiptMap}
                 checkUnmounting={props.checkUnmounting}
@@ -242,9 +247,9 @@ export function useEventTileNodes({
         ),
         [
             props.eventSendStatus,
-            snapshot.shouldShowSentReceipt,
-            snapshot.shouldShowSendingReceipt,
-            snapshot.showReadReceipts,
+            snapshot.receipt.shouldShowSentReceipt,
+            snapshot.receipt.shouldShowSendingReceipt,
+            snapshot.receipt.showReadReceipts,
             props.readReceipts,
             props.readReceiptMap,
             props.checkUnmounting,
@@ -259,9 +264,9 @@ export function useEventTileNodes({
                     layout={props.layout}
                     mxEvent={props.mxEvent}
                     isRedacted={props.isRedacted}
-                    isPinned={snapshot.isPinned}
-                    isOwnEvent={snapshot.isOwnEvent}
-                    reactions={snapshot.reactions}
+                    isPinned={snapshot.rendering.isPinned}
+                    isOwnEvent={snapshot.sender.isOwnEvent}
+                    reactions={snapshot.receipt.reactions}
                     tileContentId={tileContentId}
                 />
             </div>
@@ -270,19 +275,19 @@ export function useEventTileNodes({
             props.layout,
             props.mxEvent,
             props.isRedacted,
-            snapshot.isPinned,
-            snapshot.isOwnEvent,
-            snapshot.reactions,
+            snapshot.rendering.isPinned,
+            snapshot.sender.isOwnEvent,
+            snapshot.receipt.reactions,
             tileContentId,
         ],
     );
     const messageBodyProps = useMemo<MessageBodyProps>(
         () => ({
             mxEvent: props.mxEvent,
-            isDecryptionFailure: snapshot.isEncryptionFailure,
+            isDecryptionFailure: snapshot.encryption.isEncryptionFailure,
             timelineRenderingType: roomContext.timelineRenderingType,
-            tileRenderType: snapshot.tileRenderType,
-            isSeeingThroughMessageHiddenForModeration: snapshot.isSeeingThroughMessageHiddenForModeration,
+            tileRenderType: snapshot.rendering.tileRenderType,
+            isSeeingThroughMessageHiddenForModeration: snapshot.rendering.isSeeingThroughMessageHiddenForModeration,
             renderTileProps,
             tileRef,
             permalinkCreator: props.permalinkCreator,
@@ -290,10 +295,10 @@ export function useEventTileNodes({
         }),
         [
             props.mxEvent,
-            snapshot.isEncryptionFailure,
+            snapshot.encryption.isEncryptionFailure,
             roomContext.timelineRenderingType,
-            snapshot.tileRenderType,
-            snapshot.isSeeingThroughMessageHiddenForModeration,
+            snapshot.rendering.tileRenderType,
+            snapshot.rendering.isSeeingThroughMessageHiddenForModeration,
             renderTileProps,
             tileRef,
             props.permalinkCreator,
@@ -303,44 +308,44 @@ export function useEventTileNodes({
     const messageBody = useMemo(() => <MessageBody {...messageBodyProps} />, [messageBodyProps]);
     const info = useMemo(
         () =>
-            snapshot.threadInfoMode === ThreadInfoMode.None ? undefined : (
+            snapshot.thread.threadInfoMode === ThreadInfoMode.None ? undefined : (
                 <ThreadInfo
                     summary={
-                        snapshot.threadInfoMode === ThreadInfoMode.Summary ? (
+                        snapshot.thread.threadInfoMode === ThreadInfoMode.Summary ? (
                             <ThreadSummary
-                                key={snapshot.threadUpdateKey}
+                                key={snapshot.thread.threadUpdateKey}
                                 mxEvent={props.mxEvent}
-                                thread={snapshot.thread!}
+                                thread={snapshot.thread.thread!}
                                 data-testid="thread-summary"
                             />
                         ) : undefined
                     }
-                    href={snapshot.threadInfoHref}
-                    label={snapshot.threadInfoLabel}
+                    href={snapshot.thread.threadInfoHref}
+                    label={snapshot.thread.threadInfoLabel}
                 />
             ),
         [
-            snapshot.threadInfoMode,
-            snapshot.threadUpdateKey,
+            snapshot.thread.threadInfoMode,
+            snapshot.thread.threadUpdateKey,
             props.mxEvent,
-            snapshot.thread,
-            snapshot.threadInfoHref,
-            snapshot.threadInfoLabel,
+            snapshot.thread.thread,
+            snapshot.thread.threadInfoHref,
+            snapshot.thread.threadInfoLabel,
         ],
     );
     const preview = useMemo(
         () =>
-            snapshot.shouldRenderThreadPreview && snapshot.thread ? (
-                <ThreadMessagePreview key={snapshot.threadUpdateKey} thread={snapshot.thread} />
+            snapshot.thread.shouldRenderThreadPreview && snapshot.thread.thread ? (
+                <ThreadMessagePreview key={snapshot.thread.threadUpdateKey} thread={snapshot.thread.thread} />
             ) : undefined,
-        [snapshot.shouldRenderThreadPreview, snapshot.thread, snapshot.threadUpdateKey],
+        [snapshot.thread.shouldRenderThreadPreview, snapshot.thread.thread, snapshot.thread.threadUpdateKey],
     );
     const toolbar = useMemo(
         () =>
-            snapshot.shouldRenderThreadToolbar ? (
+            snapshot.thread.shouldRenderThreadToolbar ? (
                 <ThreadToolbar onViewInRoomClick={openInRoom} onCopyLinkClick={copyLinkToThread} />
             ) : undefined,
-        [snapshot.shouldRenderThreadToolbar, openInRoom, copyLinkToThread],
+        [snapshot.thread.shouldRenderThreadToolbar, openInRoom, copyLinkToThread],
     );
 
     return useMemo(
@@ -356,7 +361,7 @@ export function useEventTileNodes({
             },
             thread: {
                 info,
-                replyCount: snapshot.threadReplyCount,
+                replyCount: snapshot.thread.threadReplyCount,
                 preview,
                 toolbar,
             },
@@ -370,7 +375,7 @@ export function useEventTileNodes({
             messageStatus,
             footer,
             info,
-            snapshot.threadReplyCount,
+            snapshot.thread.threadReplyCount,
             preview,
             toolbar,
         ],

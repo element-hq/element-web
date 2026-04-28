@@ -24,7 +24,7 @@ type UseContextMenuNodeArgs = {
         permalinkCreator?: RoomPermalinkCreator;
         getRelationsForEvent?: GetRelationsForEvent;
     };
-    snapshot: Pick<EventTileViewSnapshot, "contextMenuState" | "isContextMenuOpen" | "reactions">;
+    snapshot: Pick<EventTileViewSnapshot, "interaction" | "receipt">;
     tileRef: React.RefObject<EventTileOps | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
     vm: EventTileViewModel;
@@ -52,13 +52,13 @@ export function useContextMenuNode({
         vm.closeContextMenu();
     }, [vm]);
 
-    return snapshot.contextMenuState && snapshot.isContextMenuOpen ? (
+    return snapshot.interaction.contextMenuState && snapshot.interaction.isContextMenuOpen ? (
         <ContextMenu
             mxEvent={props.mxEvent}
             permalinkCreator={props.permalinkCreator}
             getRelationsForEvent={props.getRelationsForEvent}
-            reactions={snapshot.reactions}
-            contextMenu={snapshot.contextMenuState}
+            reactions={snapshot.receipt.reactions}
+            contextMenu={snapshot.interaction.contextMenuState}
             tileRef={tileRef}
             replyChainRef={replyChainRef}
             onFinished={closeContextMenu}

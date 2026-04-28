@@ -342,7 +342,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         return () => {
             props.resizeObserver?.unobserve(rootNode);
         };
-    }, [props.resizeObserver, props.as, roomContext.timelineRenderingType, snapshot.hasRenderer]);
+    }, [props.resizeObserver, props.as, roomContext.timelineRenderingType, snapshot.rendering.hasRenderer]);
     useEffect(() => {
         setSuppressReadReceiptAnimation(false);
     }, []);
@@ -389,7 +389,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
     const notificationRoomLabel = room
         ? _t(
               "timeline|in_room_name",
-              { room: snapshot.notificationView.roomName ?? room.name },
+              { room: snapshot.presentation.notificationView.roomName ?? room.name },
               { strong: (sub) => <strong>{sub}</strong> },
           )
         : undefined;
@@ -419,14 +419,14 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             as: props.as,
             rootRef,
             contentId: tileContentId,
-            eventId: snapshot.eventId,
+            eventId: snapshot.presentation.eventId,
             layout: props.layout,
             timelineRenderingType: roomContext.timelineRenderingType,
-            rootClassName: snapshot.rootClassName,
-            contentClassName: snapshot.contentClassName,
-            ariaLive: snapshot.ariaLive,
-            scrollTokens: snapshot.scrollToken,
-            isOwnEvent: snapshot.isOwnEvent,
+            rootClassName: snapshot.presentation.rootClassName,
+            contentClassName: snapshot.presentation.contentClassName,
+            ariaLive: snapshot.presentation.ariaLive,
+            scrollTokens: snapshot.timestamp.scrollToken,
+            isOwnEvent: snapshot.sender.isOwnEvent,
             content: {
                 sender: nodes.content.sender,
                 avatar: nodes.content.avatar,
@@ -434,7 +434,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                 messageStatus: nodes.content.messageStatus,
                 messageBody: nodes.content.messageBody,
                 actionBar: nodes.content.actionBar,
-                footer: snapshot.hasFooter ? nodes.content.footer : undefined,
+                footer: snapshot.rendering.hasFooter ? nodes.content.footer : undefined,
                 contextMenu: contextMenuNode,
             },
             threads: {
@@ -444,14 +444,14 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                 toolbar: nodes.thread.toolbar,
             },
             timestamp: {
-                ...snapshot.timestampView,
+                ...snapshot.presentation.timestampView,
                 isTwelveHour: props.isTwelveHour,
                 onPermalinkClicked,
                 onContextMenu: onTimestampContextMenu,
             },
-            encryption: snapshot.encryptionView,
+            encryption: snapshot.presentation.encryptionView,
             notification: {
-                enabled: snapshot.notificationView.enabled,
+                enabled: snapshot.presentation.notificationView.enabled,
                 roomLabel: notificationRoomLabel,
                 roomAvatar: room ? (
                     <div className="mx_EventTile_avatar">
@@ -463,7 +463,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                 ) : undefined,
             },
             handlers: {
-                onClick: snapshot.isListLikeTile ? onListTileClick : undefined,
+                onClick: snapshot.presentation.isListLikeTile ? onListTileClick : undefined,
                 onContextMenu,
                 onMouseEnter,
                 onMouseLeave,
@@ -478,17 +478,17 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             props.mxEvent,
             rootRef,
             tileContentId,
-            snapshot.eventId,
-            snapshot.rootClassName,
-            snapshot.contentClassName,
-            snapshot.ariaLive,
-            snapshot.scrollToken,
-            snapshot.isOwnEvent,
-            snapshot.hasFooter,
-            snapshot.timestampView,
-            snapshot.encryptionView,
-            snapshot.isListLikeTile,
-            snapshot.notificationView,
+            snapshot.presentation.eventId,
+            snapshot.presentation.rootClassName,
+            snapshot.presentation.contentClassName,
+            snapshot.presentation.ariaLive,
+            snapshot.timestamp.scrollToken,
+            snapshot.sender.isOwnEvent,
+            snapshot.rendering.hasFooter,
+            snapshot.presentation.timestampView,
+            snapshot.presentation.encryptionView,
+            snapshot.presentation.isListLikeTile,
+            snapshot.presentation.notificationView,
             roomContext.timelineRenderingType,
             nodes.content.sender,
             nodes.content.avatar,
@@ -515,7 +515,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         ],
     );
 
-    if (snapshot.shouldRenderMissingRendererFallback) {
+    if (snapshot.presentation.shouldRenderMissingRendererFallback) {
         return (
             <div ref={rootRef as React.Ref<HTMLDivElement>} className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
                 <div className="mx_EventTile_line">{_t("timeline|error_no_renderer")}</div>

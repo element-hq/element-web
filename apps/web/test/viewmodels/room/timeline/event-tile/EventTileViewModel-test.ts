@@ -151,7 +151,7 @@ describe("EventTileViewModel", () => {
         ])("sets tile click mode for %s", (timelineRenderingType, tileClickMode) => {
             const vm = createViewModel({ timelineRenderingType });
 
-            expect(vm.getSnapshot().tileClickMode).toBe(tileClickMode);
+            expect(vm.getSnapshot().thread.tileClickMode).toBe(tileClickMode);
         });
 
         it.each([
@@ -162,25 +162,25 @@ describe("EventTileViewModel", () => {
         ])("sets sender mode for %s", (timelineRenderingType, senderMode) => {
             const vm = createViewModel({ timelineRenderingType });
 
-            expect(vm.getSnapshot().senderMode).toBe(senderMode);
+            expect(vm.getSnapshot().sender.senderMode).toBe(senderMode);
         });
 
         it("hides the sender when hideSender is set", () => {
             const vm = createViewModel({ hideSender: true });
 
-            expect(vm.getSnapshot().senderMode).toBe(SenderMode.Hidden);
+            expect(vm.getSnapshot().sender.senderMode).toBe(SenderMode.Hidden);
         });
 
         it("marks tiles as opened from search in search view", () => {
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Search });
 
-            expect(vm.getSnapshot().openedFromSearch).toBe(true);
+            expect(vm.getSnapshot().thread.openedFromSearch).toBe(true);
         });
 
         it("does not show a reply preview for non-reply events", () => {
             const vm = createViewModel();
 
-            expect(vm.getSnapshot().showReplyPreview).toBe(false);
+            expect(vm.getSnapshot().rendering.showReplyPreview).toBe(false);
         });
 
         it("shows a reply preview for reply events", () => {
@@ -198,8 +198,8 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel({ mxEvent });
 
-            expect(vm.getSnapshot().showReplyPreview).toBe(true);
-            expect(vm.getSnapshot().shouldRenderReplyPreview).toBe(true);
+            expect(vm.getSnapshot().rendering.showReplyPreview).toBe(true);
+            expect(vm.getSnapshot().rendering.shouldRenderReplyPreview).toBe(true);
         });
 
         it("does not render the reply preview when no renderer exists", () => {
@@ -226,8 +226,8 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel({ mxEvent });
 
-            expect(vm.getSnapshot().showReplyPreview).toBe(true);
-            expect(vm.getSnapshot().shouldRenderReplyPreview).toBe(false);
+            expect(vm.getSnapshot().rendering.showReplyPreview).toBe(true);
+            expect(vm.getSnapshot().rendering.shouldRenderReplyPreview).toBe(false);
         });
 
         it("does not recompute display info for hover-only updates", () => {
@@ -255,7 +255,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel({ mxEvent });
 
-            expect(vm.getSnapshot().avatarSubject).toBe(AvatarSubject.Target);
+            expect(vm.getSnapshot().sender.avatarSubject).toBe(AvatarSubject.Target);
         });
 
         it("keeps avatar clicks enabled for info-message avatars in room timelines", () => {
@@ -280,7 +280,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel({ mxEvent });
 
-            expect(vm.getSnapshot().avatarMemberUserOnClick).toBe(true);
+            expect(vm.getSnapshot().sender.avatarMemberUserOnClick).toBe(true);
         });
 
         it("uses the missing renderer fallback mode for non-notification tiles without a renderer", () => {
@@ -295,7 +295,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel();
 
-            expect(vm.getSnapshot().renderMode).toBe(EventTileRenderMode.MissingRendererFallback);
+            expect(vm.getSnapshot().rendering.renderMode).toBe(EventTileRenderMode.MissingRendererFallback);
         });
 
         it("keeps notification tiles in rendered mode even without a renderer", () => {
@@ -310,7 +310,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Notification });
 
-            expect(vm.getSnapshot().renderMode).toBe(EventTileRenderMode.Rendered);
+            expect(vm.getSnapshot().rendering.renderMode).toBe(EventTileRenderMode.Rendered);
         });
     });
 
@@ -326,7 +326,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel({ mxEvent: rootEvent });
 
-            expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.Summary);
+            expect(vm.getSnapshot().thread.threadInfoMode).toBe(ThreadInfoMode.Summary);
         });
 
         it("shows search link thread info mode for threaded search results with a highlight link", () => {
@@ -344,9 +344,9 @@ describe("EventTileViewModel", () => {
                 highlightLink: "#event",
             });
 
-            expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.SearchLink);
-            expect(vm.getSnapshot().threadInfoHref).toBe("#event");
-            expect(vm.getSnapshot().threadInfoLabel).toBe(_t("timeline|thread_info_basic"));
+            expect(vm.getSnapshot().thread.threadInfoMode).toBe(ThreadInfoMode.SearchLink);
+            expect(vm.getSnapshot().thread.threadInfoHref).toBe("#event");
+            expect(vm.getSnapshot().thread.threadInfoLabel).toBe(_t("timeline|thread_info_basic"));
         });
 
         it("shows search text thread info mode for threaded search results without a highlight link", () => {
@@ -363,9 +363,9 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.Search,
             });
 
-            expect(vm.getSnapshot().threadInfoMode).toBe(ThreadInfoMode.SearchText);
-            expect(vm.getSnapshot().threadInfoHref).toBeUndefined();
-            expect(vm.getSnapshot().threadInfoLabel).toBe(_t("timeline|thread_info_basic"));
+            expect(vm.getSnapshot().thread.threadInfoMode).toBe(ThreadInfoMode.SearchText);
+            expect(vm.getSnapshot().thread.threadInfoHref).toBeUndefined();
+            expect(vm.getSnapshot().thread.threadInfoLabel).toBe(_t("timeline|thread_info_basic"));
         });
 
         it("shows timestamps when alwaysShowTimestamps is set", () => {
@@ -378,15 +378,15 @@ describe("EventTileViewModel", () => {
             });
             const vm = createViewModel({ mxEvent: timestampedEvent, alwaysShowTimestamps: true });
 
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
-            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Linked);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(vm.getSnapshot().timestamp.timestampDisplayMode).toBe(TimestampDisplayMode.Linked);
         });
 
         it("suppresses timestamps when hideTimestamp is set", () => {
             const vm = createViewModel({ alwaysShowTimestamps: true, hideTimestamp: true });
 
-            expect(vm.getSnapshot().showTimestamp).toBe(false);
-            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Hidden);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(false);
+            expect(vm.getSnapshot().timestamp.timestampDisplayMode).toBe(TimestampDisplayMode.Hidden);
         });
 
         it("uses the latest reply timestamp for thread list tiles", () => {
@@ -411,7 +411,7 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.ThreadsList,
             });
 
-            expect(vm.getSnapshot().timestampTs).toBe(101);
+            expect(vm.getSnapshot().timestamp.timestampTs).toBe(101);
         });
 
         it("does not show timestamps by default for thread list tiles", () => {
@@ -427,8 +427,8 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.ThreadsList,
             });
 
-            expect(vm.getSnapshot().showTimestamp).toBe(false);
-            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Hidden);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(false);
+            expect(vm.getSnapshot().timestamp.timestampDisplayMode).toBe(TimestampDisplayMode.Hidden);
         });
 
         it("uses plain timestamp mode for thread list tiles when timestamps are shown", () => {
@@ -446,8 +446,8 @@ describe("EventTileViewModel", () => {
 
             vm.setHover(true);
 
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
-            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Plain);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(vm.getSnapshot().timestamp.timestampDisplayMode).toBe(TimestampDisplayMode.Plain);
         });
 
         it("uses plain timestamp mode for file tiles when timestamps are shown", () => {
@@ -464,8 +464,8 @@ describe("EventTileViewModel", () => {
                 alwaysShowTimestamps: true,
             });
 
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
-            expect(vm.getSnapshot().timestampDisplayMode).toBe(TimestampDisplayMode.Plain);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(vm.getSnapshot().timestamp.timestampDisplayMode).toBe(TimestampDisplayMode.Plain);
         });
     });
 
@@ -473,18 +473,18 @@ describe("EventTileViewModel", () => {
         it("shows and hides timestamps when hover changes", () => {
             const vm = createTimestampedViewModel(room, createViewModel);
 
-            expect(vm.getSnapshot().showTimestamp).toBe(false);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(false);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(false);
 
             vm.setHover(true);
-            expect(vm.getSnapshot().hover).toBe(true);
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
+            expect(vm.getSnapshot().interaction.hover).toBe(true);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(true);
 
             vm.setHover(false);
-            expect(vm.getSnapshot().hover).toBe(false);
-            expect(vm.getSnapshot().showTimestamp).toBe(false);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+            expect(vm.getSnapshot().interaction.hover).toBe(false);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(false);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(false);
         });
 
         it("shows timestamps when focus enters the tile", () => {
@@ -492,8 +492,8 @@ describe("EventTileViewModel", () => {
 
             vm.onFocusEnter(false);
 
-            expect(vm.getSnapshot().focusWithin).toBe(true);
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
+            expect(vm.getSnapshot().interaction.focusWithin).toBe(true);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
         });
 
         it("shows the action bar when focus enters via keyboard", () => {
@@ -501,10 +501,10 @@ describe("EventTileViewModel", () => {
 
             vm.onFocusEnter(true);
 
-            expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
-            expect(vm.getSnapshot().focusWithin).toBe(true);
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
+            expect(vm.getSnapshot().interaction.showActionBarFromFocus).toBe(true);
+            expect(vm.getSnapshot().interaction.focusWithin).toBe(true);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(true);
         });
 
         it("shows timestamps when the action bar is focused", () => {
@@ -512,9 +512,9 @@ describe("EventTileViewModel", () => {
 
             vm.onActionBarFocusChange(true, false);
 
-            expect(vm.getSnapshot().actionBarFocused).toBe(true);
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(true);
         });
 
         it("keeps action bar focus in sync with the context menu state", () => {
@@ -522,17 +522,17 @@ describe("EventTileViewModel", () => {
 
             vm.onContextMenuOpen();
 
-            expect(vm.getSnapshot().isContextMenuOpen).toBe(true);
-            expect(vm.getSnapshot().actionBarFocused).toBe(true);
-            expect(vm.getSnapshot().showTimestamp).toBe(true);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+            expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(true);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(false);
 
             vm.onContextMenuClose();
 
-            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
-            expect(vm.getSnapshot().actionBarFocused).toBe(false);
-            expect(vm.getSnapshot().showTimestamp).toBe(false);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+            expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(false);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(false);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(false);
         });
 
         it("preserves keyboard-triggered action bar visibility when the context menu closes", () => {
@@ -542,10 +542,10 @@ describe("EventTileViewModel", () => {
             vm.onContextMenuOpen();
             vm.onContextMenuClose();
 
-            expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
-            expect(vm.getSnapshot().actionBarFocused).toBe(false);
-            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
+            expect(vm.getSnapshot().interaction.showActionBarFromFocus).toBe(true);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(false);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(true);
         });
 
         it("applies focus enter and leave as a single VM transition", () => {
@@ -553,15 +553,15 @@ describe("EventTileViewModel", () => {
 
             vm.onFocusEnter(true);
 
-            expect(vm.getSnapshot().focusWithin).toBe(true);
-            expect(vm.getSnapshot().showActionBarFromFocus).toBe(true);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(true);
+            expect(vm.getSnapshot().interaction.focusWithin).toBe(true);
+            expect(vm.getSnapshot().interaction.showActionBarFromFocus).toBe(true);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(true);
 
             vm.onFocusLeave();
 
-            expect(vm.getSnapshot().focusWithin).toBe(false);
-            expect(vm.getSnapshot().showActionBarFromFocus).toBe(false);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+            expect(vm.getSnapshot().interaction.focusWithin).toBe(false);
+            expect(vm.getSnapshot().interaction.showActionBarFromFocus).toBe(false);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(false);
         });
 
         it("resets hover when action bar focus is lost through the VM helper", () => {
@@ -570,14 +570,14 @@ describe("EventTileViewModel", () => {
             vm.setHover(true);
             vm.onActionBarFocusChange(true, true);
 
-            expect(vm.getSnapshot().actionBarFocused).toBe(true);
-            expect(vm.getSnapshot().hover).toBe(true);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().interaction.hover).toBe(true);
 
             vm.onActionBarFocusChange(false, false);
 
-            expect(vm.getSnapshot().actionBarFocused).toBe(false);
-            expect(vm.getSnapshot().hover).toBe(false);
-            expect(vm.getSnapshot().shouldRenderActionBar).toBe(false);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().interaction.hover).toBe(false);
+            expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(false);
         });
 
         it("opens and closes the context menu through VM helpers", () => {
@@ -585,15 +585,15 @@ describe("EventTileViewModel", () => {
 
             vm.onContextMenuOpen();
 
-            expect(vm.getSnapshot().isContextMenuOpen).toBe(true);
-            expect(vm.getSnapshot().actionBarFocused).toBe(true);
-            expect(vm.getSnapshot().hover).toBe(false);
+            expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(true);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(true);
+            expect(vm.getSnapshot().interaction.hover).toBe(false);
 
             vm.onContextMenuClose();
 
-            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
-            expect(vm.getSnapshot().actionBarFocused).toBe(false);
-            expect(vm.getSnapshot().hover).toBe(false);
+            expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(false);
+            expect(vm.getSnapshot().interaction.actionBarFocused).toBe(false);
+            expect(vm.getSnapshot().interaction.hover).toBe(false);
         });
 
         it("stores and clears context menu state through VM command helpers", () => {
@@ -608,36 +608,50 @@ describe("EventTileViewModel", () => {
                 stopPropagation: jest.fn(),
             });
 
-            expect(vm.getSnapshot().contextMenuState).toEqual({
+            expect(vm.getSnapshot().interaction.contextMenuState).toEqual({
                 position: { left: 10, top: 20, bottom: 20 },
                 link: undefined,
             });
-            expect(vm.getSnapshot().isContextMenuOpen).toBe(true);
+            expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(true);
 
             vm.closeContextMenu();
 
-            expect(vm.getSnapshot().contextMenuState).toBeUndefined();
-            expect(vm.getSnapshot().isContextMenuOpen).toBe(false);
+            expect(vm.getSnapshot().interaction.contextMenuState).toBeUndefined();
+            expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(false);
         });
 
         it("tracks quote expansion state", () => {
             const vm = createViewModel();
 
             vm.setQuoteExpanded(true);
-            expect(vm.getSnapshot().isQuoteExpanded).toBe(true);
+            expect(vm.getSnapshot().interaction.isQuoteExpanded).toBe(true);
 
             vm.setQuoteExpanded(false);
-            expect(vm.getSnapshot().isQuoteExpanded).toBe(false);
+            expect(vm.getSnapshot().interaction.isQuoteExpanded).toBe(false);
         });
 
         it("toggles quote expansion through the dedicated VM helper", () => {
             const vm = createViewModel();
 
             vm.toggleQuoteExpanded();
-            expect(vm.getSnapshot().isQuoteExpanded).toBe(true);
+            expect(vm.getSnapshot().interaction.isQuoteExpanded).toBe(true);
 
             vm.toggleQuoteExpanded();
-            expect(vm.getSnapshot().isQuoteExpanded).toBe(false);
+            expect(vm.getSnapshot().interaction.isQuoteExpanded).toBe(false);
+        });
+
+        it("preserves unrelated grouped snapshot references during interaction updates", () => {
+            const vm = createTimestampedViewModel(room, createViewModel);
+            const initialSnapshot = vm.getSnapshot();
+
+            vm.setHover(true);
+
+            const nextSnapshot = vm.getSnapshot();
+            expect(nextSnapshot.interaction).not.toBe(initialSnapshot.interaction);
+            expect(nextSnapshot.receipt).toBe(initialSnapshot.receipt);
+            expect(nextSnapshot.thread).toBe(initialSnapshot.thread);
+            expect(nextSnapshot.sender).toBe(initialSnapshot.sender);
+            expect(nextSnapshot.encryption).toBe(initialSnapshot.encryption);
         });
     });
 
@@ -689,13 +703,15 @@ describe("EventTileViewModel", () => {
         it("derives root and content class names in the snapshot", () => {
             const vm = createViewModel();
 
-            expect(vm.getSnapshot().eventId).toBe(mxEvent.getId());
-            expect(vm.getSnapshot().ariaLive).toBe("off");
-            expect(vm.getSnapshot().rootClassName).toContain("mx_EventTile");
-            expect(vm.getSnapshot().contentClassName).toBe("mx_EventTile_line");
-            expect(vm.getSnapshot().timestampView.permalink).toBe(vm.getSnapshot().permalink);
-            expect(vm.getSnapshot().timestampView.ts).toBe(vm.getSnapshot().timestampTs);
-            expect(vm.getSnapshot().encryptionView.mode).toBe(vm.getSnapshot().encryptionIndicatorMode);
+            expect(vm.getSnapshot().presentation.eventId).toBe(mxEvent.getId());
+            expect(vm.getSnapshot().presentation.ariaLive).toBe("off");
+            expect(vm.getSnapshot().presentation.rootClassName).toContain("mx_EventTile");
+            expect(vm.getSnapshot().presentation.contentClassName).toBe("mx_EventTile_line");
+            expect(vm.getSnapshot().presentation.timestampView.permalink).toBe(vm.getSnapshot().timestamp.permalink);
+            expect(vm.getSnapshot().presentation.timestampView.ts).toBe(vm.getSnapshot().timestamp.timestampTs);
+            expect(vm.getSnapshot().presentation.encryptionView.mode).toBe(
+                vm.getSnapshot().encryption.encryptionIndicatorMode,
+            );
         });
 
         it("marks missing-renderer fallback directly in the snapshot", () => {
@@ -710,22 +726,22 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel();
 
-            expect(vm.getSnapshot().shouldRenderMissingRendererFallback).toBe(true);
+            expect(vm.getSnapshot().presentation.shouldRenderMissingRendererFallback).toBe(true);
         });
 
         it("derives the encryption indicator title for unencrypted events in encrypted rooms", () => {
             const vm = createViewModel({ isRoomEncrypted: true });
 
-            expect(vm.getSnapshot().encryptionIndicatorTitle).toBe(_t("common|unencrypted"));
+            expect(vm.getSnapshot().encryption.encryptionIndicatorTitle).toBe(_t("common|unencrypted"));
         });
 
         it("derives notification list flags and room name", () => {
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.Notification });
 
-            expect(vm.getSnapshot().isNotification).toBe(true);
-            expect(vm.getSnapshot().isListLikeTile).toBe(true);
-            expect(vm.getSnapshot().notificationRoomName).toBe(room.name);
-            expect(vm.getSnapshot().notificationView).toEqual({
+            expect(vm.getSnapshot().presentation.isNotification).toBe(true);
+            expect(vm.getSnapshot().presentation.isListLikeTile).toBe(true);
+            expect(vm.getSnapshot().presentation.notificationRoomName).toBe(room.name);
+            expect(vm.getSnapshot().presentation.notificationView).toEqual({
                 enabled: true,
                 roomName: room.name,
             });
@@ -736,22 +752,22 @@ describe("EventTileViewModel", () => {
         it("shows the group padlock for non-IRC layouts", () => {
             const vm = createViewModel({ layout: Layout.Group });
 
-            expect(vm.getSnapshot().padlockMode).toBe(PadlockMode.Group);
+            expect(vm.getSnapshot().encryption.padlockMode).toBe(PadlockMode.Group);
         });
 
         it("shows the IRC padlock for IRC layout", () => {
             const vm = createViewModel({ layout: Layout.IRC });
 
-            expect(vm.getSnapshot().padlockMode).toBe(PadlockMode.Irc);
+            expect(vm.getSnapshot().encryption.padlockMode).toBe(PadlockMode.Irc);
         });
 
         it("shows the thread toolbar in the thread list", () => {
             const vm = createViewModel({ timelineRenderingType: TimelineRenderingType.ThreadsList });
 
-            expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.Toolbar);
-            expect(vm.getSnapshot().shouldRenderThreadToolbar).toBe(true);
-            expect(vm.getSnapshot().shouldRenderThreadPreview).toBe(false);
-            expect(vm.getSnapshot().threadReplyCount).toBeUndefined();
+            expect(vm.getSnapshot().thread.threadPanelMode).toBe(ThreadPanelMode.Toolbar);
+            expect(vm.getSnapshot().thread.shouldRenderThreadToolbar).toBe(true);
+            expect(vm.getSnapshot().thread.shouldRenderThreadPreview).toBe(false);
+            expect(vm.getSnapshot().thread.threadReplyCount).toBeUndefined();
         });
 
         it("shows read receipts when enabled and no sending state takes priority", () => {
@@ -760,7 +776,7 @@ describe("EventTileViewModel", () => {
                 readReceipts: [{ userId: "@bob:example.org", ts: 1, roomMember: null }],
             });
 
-            expect(vm.getSnapshot().showReadReceipts).toBe(true);
+            expect(vm.getSnapshot().receipt.showReadReceipts).toBe(true);
         });
 
         it("does not recompute display info for receipt-only updates", () => {
@@ -796,10 +812,10 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.Notification,
             });
 
-            expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.Summary);
-            expect(vm.getSnapshot().shouldRenderThreadPreview).toBe(true);
-            expect(vm.getSnapshot().shouldRenderThreadToolbar).toBe(false);
-            expect(vm.getSnapshot().threadReplyCount).toBe(vm.getSnapshot().thread?.length);
+            expect(vm.getSnapshot().thread.threadPanelMode).toBe(ThreadPanelMode.Summary);
+            expect(vm.getSnapshot().thread.shouldRenderThreadPreview).toBe(true);
+            expect(vm.getSnapshot().thread.shouldRenderThreadToolbar).toBe(false);
+            expect(vm.getSnapshot().thread.threadReplyCount).toBe(vm.getSnapshot().thread.thread?.length);
         });
 
         it("shows the thread summary and toolbar in the thread list when a thread is present", () => {
@@ -816,10 +832,10 @@ describe("EventTileViewModel", () => {
                 timelineRenderingType: TimelineRenderingType.ThreadsList,
             });
 
-            expect(vm.getSnapshot().threadPanelMode).toBe(ThreadPanelMode.SummaryWithToolbar);
-            expect(vm.getSnapshot().shouldRenderThreadPreview).toBe(true);
-            expect(vm.getSnapshot().shouldRenderThreadToolbar).toBe(true);
-            expect(vm.getSnapshot().threadReplyCount).toBe(vm.getSnapshot().thread?.length);
+            expect(vm.getSnapshot().thread.threadPanelMode).toBe(ThreadPanelMode.SummaryWithToolbar);
+            expect(vm.getSnapshot().thread.shouldRenderThreadPreview).toBe(true);
+            expect(vm.getSnapshot().thread.shouldRenderThreadToolbar).toBe(true);
+            expect(vm.getSnapshot().thread.threadReplyCount).toBe(vm.getSnapshot().thread.thread?.length);
         });
 
         it("does not show a footer for redacted events with reactions", () => {
@@ -829,7 +845,7 @@ describe("EventTileViewModel", () => {
                 getRelationsForEvent: jest.fn().mockReturnValue({} as never),
             });
 
-            expect(vm.getSnapshot().hasFooter).toBe(false);
+            expect(vm.getSnapshot().rendering.hasFooter).toBe(false);
         });
 
         it("shares a single room thread listener across many tile view models", () => {
@@ -880,8 +896,8 @@ describe("EventTileViewModel", () => {
 
             room.emit(ThreadEvent.New, thread, false);
 
-            expect(matchingVm.getSnapshot().thread).toBe(thread);
-            expect(otherVm.getSnapshot().thread).toBeNull();
+            expect(matchingVm.getSnapshot().thread.thread).toBe(thread);
+            expect(otherVm.getSnapshot().thread.thread).toBeNull();
         });
 
         it("shares a single trust listener across many tile view models", () => {
@@ -937,7 +953,7 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel();
             await flushPromises();
 
-            expect(vm.getSnapshot()).toMatchObject({
+            expect(vm.getSnapshot().encryption).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
                 shieldReason: EventShieldReason.UNSIGNED_DEVICE,
             });
@@ -958,7 +974,7 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel();
             await flushPromises();
 
-            expect(vm.getSnapshot()).toMatchObject({
+            expect(vm.getSnapshot().encryption).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.None,
             });
         });
@@ -996,7 +1012,7 @@ describe("EventTileViewModel", () => {
                 const vm = createViewModel();
                 await flushPromises();
 
-                expect(vm.getSnapshot()).toMatchObject({
+                expect(vm.getSnapshot().encryption).toMatchObject({
                     encryptionIndicatorMode: EncryptionIndicatorMode.Normal,
                     shieldReason: reasonCode,
                 });
@@ -1020,7 +1036,7 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel();
             await flushPromises();
 
-            expect(vm.getSnapshot()).toMatchObject({
+            expect(vm.getSnapshot().encryption).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.None,
                 sharedKeysUserId: "@bob:example.org",
                 sharedKeysRoomId: room.roomId,
@@ -1049,7 +1065,7 @@ describe("EventTileViewModel", () => {
                 const vm = createViewModel();
                 await flushPromises();
 
-                expect(vm.getSnapshot()).toMatchObject({
+                expect(vm.getSnapshot().encryption).toMatchObject({
                     encryptionIndicatorMode: EncryptionIndicatorMode.DecryptionFailure,
                 });
             });
@@ -1075,7 +1091,7 @@ describe("EventTileViewModel", () => {
                 const vm = createViewModel();
                 await flushPromises();
 
-                expect(vm.getSnapshot().encryptionIndicatorMode).toBe(EncryptionIndicatorMode.None);
+                expect(vm.getSnapshot().encryption.encryptionIndicatorMode).toBe(EncryptionIndicatorMode.None);
             });
         });
 
@@ -1102,7 +1118,7 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel({ isRoomEncrypted: true });
             await flushPromises();
 
-            expect(vm.getSnapshot()).toMatchObject({
+            expect(vm.getSnapshot().encryption).toMatchObject({
                 encryptionIndicatorMode: EncryptionIndicatorMode.Warning,
             });
         });
@@ -1117,7 +1133,7 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel();
 
             expect(client.getPushActionsForEvent).toHaveBeenCalledWith(mxEvent);
-            expect(vm.getSnapshot().isHighlighted).toBeFalsy();
+            expect(vm.getSnapshot().rendering.isHighlighted).toBeFalsy();
         });
 
         it("does not highlight when message's push actions does not have a highlight tweak", () => {
@@ -1125,7 +1141,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel();
 
-            expect(vm.getSnapshot().isHighlighted).toBeFalsy();
+            expect(vm.getSnapshot().rendering.isHighlighted).toBeFalsy();
         });
 
         it("does not highlight when message's push actions have a highlight tweak but message has been redacted", () => {
@@ -1136,7 +1152,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel({ isRedacted: true });
 
-            expect(vm.getSnapshot().isHighlighted).toBeFalsy();
+            expect(vm.getSnapshot().rendering.isHighlighted).toBeFalsy();
         });
 
         it("highlights when message's push actions have a highlight tweak", () => {
@@ -1147,7 +1163,7 @@ describe("EventTileViewModel", () => {
 
             const vm = createViewModel();
 
-            expect(vm.getSnapshot().isHighlighted).toBeTruthy();
+            expect(vm.getSnapshot().rendering.isHighlighted).toBeTruthy();
         });
 
         describe("when a message has been edited", () => {
@@ -1179,7 +1195,7 @@ describe("EventTileViewModel", () => {
 
                 expect(client.getPushActionsForEvent).toHaveBeenCalledWith(mxEvent);
                 expect(client.getPushActionsForEvent).toHaveBeenCalledWith(editingEvent);
-                expect(vm.getSnapshot().isHighlighted).toBeFalsy();
+                expect(vm.getSnapshot().rendering.isHighlighted).toBeFalsy();
             });
 
             it("does not highlight when no version of message's push actions have a highlight tweak", () => {
@@ -1187,7 +1203,7 @@ describe("EventTileViewModel", () => {
 
                 const vm = createViewModel();
 
-                expect(vm.getSnapshot().isHighlighted).toBeFalsy();
+                expect(vm.getSnapshot().rendering.isHighlighted).toBeFalsy();
             });
 
             it("highlights when previous version of message's push actions have a highlight tweak", () => {
@@ -1200,7 +1216,7 @@ describe("EventTileViewModel", () => {
 
                 const vm = createViewModel();
 
-                expect(vm.getSnapshot().isHighlighted).toBeTruthy();
+                expect(vm.getSnapshot().rendering.isHighlighted).toBeTruthy();
             });
 
             it("highlights when new version of message's push actions have a highlight tweak", () => {
@@ -1213,7 +1229,7 @@ describe("EventTileViewModel", () => {
 
                 const vm = createViewModel();
 
-                expect(vm.getSnapshot().isHighlighted).toBeTruthy();
+                expect(vm.getSnapshot().rendering.isHighlighted).toBeTruthy();
             });
         });
     });
@@ -1232,7 +1248,7 @@ describe("EventTileViewModel", () => {
 
         const vm = createViewModel({ mxEvent: ownEvent, eventSendStatus });
 
-        expect(vm.getSnapshot()).toMatchObject({
+        expect(vm.getSnapshot().receipt).toMatchObject({
             shouldShowSentReceipt,
             shouldShowSendingReceipt,
         });

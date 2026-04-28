@@ -329,14 +329,35 @@ interface EventTileSenderPresentationContext {
 }
 
 /** Fully derived view state consumed by the `EventTile` rendering layer. */
-export type EventTileViewSnapshot = EventTileInteractionSnapshot &
-    EventTileReceiptSnapshot &
-    EventTileRenderingSnapshot &
-    EventTileTimestampSnapshot &
-    EventTileThreadSnapshot &
-    EventTileSenderSnapshot &
-    EventTileEncryptionSnapshot &
-    EventTilePresentationSnapshot;
+export interface EventTileViewSnapshot {
+    /** Interaction-only state that changes in response to pointer and focus events. */
+    interaction: EventTileInteractionSnapshot;
+    /** Derived receipt and reaction state for the tile footer. */
+    receipt: EventTileReceiptSnapshot;
+    /** Rendering decisions that shape the tile body and footer layout. */
+    rendering: EventTileRenderingSnapshot;
+    /** Timestamp and permalink data derived for the tile header or footer. */
+    timestamp: EventTileTimestampSnapshot;
+    /** Thread-related state derived from the event and current room context. */
+    thread: EventTileThreadSnapshot;
+    /** Sender and avatar presentation derived for the tile. */
+    sender: EventTileSenderSnapshot;
+    /** Encryption and room-security presentation state for the tile. */
+    encryption: EventTileEncryptionSnapshot;
+    /** Additional presentational data currently derived alongside the VM snapshot. */
+    presentation: EventTilePresentationSnapshot;
+}
+
+type EventTileViewSnapshotUpdate = {
+    interaction?: Partial<EventTileInteractionSnapshot>;
+    receipt?: Partial<EventTileReceiptSnapshot>;
+    rendering?: Partial<EventTileRenderingSnapshot>;
+    timestamp?: Partial<EventTileTimestampSnapshot>;
+    thread?: Partial<EventTileThreadSnapshot>;
+    sender?: Partial<EventTileSenderSnapshot>;
+    encryption?: Partial<EventTileEncryptionSnapshot>;
+    presentation?: Partial<EventTilePresentationSnapshot>;
+};
 
 /** Core event and service dependencies required by the view model. */
 interface EventTileCoreProps {
@@ -490,7 +511,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     public onActionBarFocusChange(focused: boolean, isTileHovered: boolean): void {
         this.updateInteractionSnapshot({
             actionBarFocused: focused,
-            hover: focused ? this.snapshot.current.hover : isTileHovered,
+            hover: focused ? this.snapshot.current.interaction.hover : isTileHovered,
         });
     }
 
@@ -562,7 +583,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     /** Toggles the reply quote expansion flag. */
     public toggleQuoteExpanded(): void {
-        this.setQuoteExpanded(!this.snapshot.current.isQuoteExpanded);
+        this.setQuoteExpanded(!this.snapshot.current.interaction.isQuoteExpanded);
     }
 
     /** Replaces the model props and refreshes affected listeners and derived state. */
@@ -575,8 +596,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.props = props;
         this.rebindListeners(previousProps, props);
         this.updateSnapshot({
-            reactions: EventTileViewModel.getReactions(props),
-            thread: EventTileViewModel.getThread(props),
+            receipt: { reactions: EventTileViewModel.getReactions(props) },
+            thread: { thread: EventTileViewModel.getThread(props) },
         });
 
         if (
@@ -782,7 +803,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         entry.listeners.add(callback);
     }
 
-    private updateSnapshot(partial?: Partial<EventTileViewSnapshot>): void {
+    private updateSnapshot(partial?: EventTileViewSnapshotUpdate): void {
         const nextSnapshot = EventTileViewModel.deriveSnapshot(this.props, this.snapshot.current, partial);
 
         this.snapshot.merge(nextSnapshot);
@@ -790,85 +811,104 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.updateReceiptListener(nextSnapshot);
     }
 
-    private mergeSnapshot(partial: Partial<EventTileViewSnapshot>): void {
-        const nextSnapshot: EventTileViewSnapshot = {
-            ...this.snapshot.current,
-            ...partial,
-        };
+    private mergeSnapshot(partial: EventTileViewSnapshotUpdate): void {
+        const nextSnapshot = EventTileViewModel.mergeSnapshotUpdate(this.snapshot.current, partial);
+        const partialSnapshot = EventTileViewModel.getChangedSnapshotGroups(this.snapshot.current, nextSnapshot);
 
-        this.snapshot.merge(partial);
+        this.snapshot.merge(partialSnapshot);
         this.updateReceiptListener(nextSnapshot);
     }
 
-    private updateReceiptSnapshot(partial: Partial<EventTileViewSnapshot> = {}): void {
-        const reactions = partial.reactions ?? this.snapshot.current.reactions ?? this.getReactions();
+    private updateReceiptSnapshot(partial: EventTileViewSnapshotUpdate = {}): void {
+        const reactions = partial.receipt?.reactions ?? this.snapshot.current.receipt.reactions ?? this.getReactions();
         const receiptSnapshot = EventTileViewModel.deriveReceiptSnapshot(this.props, reactions);
 
         this.mergeSnapshot({
             ...partial,
-            ...receiptSnapshot,
-            hasFooter: EventTileViewModel.getHasFooter(
-                this.props.isRedacted,
-                this.snapshot.current.isPinned,
-                receiptSnapshot.reactions,
-            ),
+            receipt: {
+                ...partial.receipt,
+                ...receiptSnapshot,
+            },
+            rendering: {
+                ...partial.rendering,
+                hasFooter: EventTileViewModel.getHasFooter(
+                    this.props.isRedacted,
+                    this.snapshot.current.rendering.isPinned,
+                    receiptSnapshot.reactions,
+                ),
+            },
         });
     }
 
     private updateThreadSnapshot(thread: Thread | null): void {
-        const partial: Partial<EventTileViewSnapshot> = { thread };
+        const partial: EventTileViewSnapshotUpdate = { thread: { thread } };
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
         const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
 
         this.mergeSnapshot({
             ...partial,
-            ...EventTileViewModel.deriveThreadSnapshot(this.props, context),
-            ...EventTileViewModel.deriveTimestampSnapshot(this.props, baseSnapshot, context),
+            thread: {
+                ...partial.thread,
+                ...EventTileViewModel.deriveThreadSnapshot(this.props, context),
+            },
+            timestamp: EventTileViewModel.deriveTimestampSnapshot(this.props, baseSnapshot, context),
         });
     }
 
     private updateVerificationSnapshot(shieldColour: EventShieldColour, shieldReason: EventShieldReason | null): void {
-        const partial: Partial<EventTileViewSnapshot> = { shieldColour, shieldReason };
+        const partial: EventTileViewSnapshotUpdate = { encryption: { shieldColour, shieldReason } };
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(this.snapshot.current, partial, this.props);
         const context = EventTileViewModel.createDerivationContext(this.props, baseSnapshot);
         const encryptionSnapshot = EventTileViewModel.deriveEncryptionSnapshot(this.props, context);
+        const nextEncryptionSnapshot: EventTileEncryptionSnapshot = {
+            ...baseSnapshot.encryption,
+            ...partial.encryption,
+            ...encryptionSnapshot,
+        };
         const encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(
             this.props,
             {
                 ...baseSnapshot,
-                ...partial,
-                ...encryptionSnapshot,
-            } as EventTileViewSnapshot,
+                encryption: nextEncryptionSnapshot,
+            },
             encryptionSnapshot.isEncryptionFailure,
         );
 
         this.mergeSnapshot({
             ...partial,
-            ...encryptionSnapshot,
-            encryptionIndicatorTitle,
-            encryptionView: EventTileViewModel.getEncryptionViewData({
-                ...baseSnapshot,
-                ...partial,
+            encryption: {
+                ...partial.encryption,
                 ...encryptionSnapshot,
                 encryptionIndicatorTitle,
-            } as EventTileViewSnapshot),
+            },
+            presentation: {
+                encryptionView: EventTileViewModel.getEncryptionViewData({
+                    ...nextEncryptionSnapshot,
+                    encryptionIndicatorTitle,
+                }),
+            },
         });
     }
 
     private updateInteractionSnapshot(partial: Partial<EventTileInteractionSnapshot>): void {
-        const currentSnapshot = this.snapshot.current;
-        const nextSnapshot: EventTileViewSnapshot = {
-            ...currentSnapshot,
-            ...partial,
-        };
+        const nextSnapshot = EventTileViewModel.createBaseSnapshot(
+            this.snapshot.current,
+            { interaction: partial },
+            this.props,
+        );
+        const interactionDependentSnapshot = EventTileViewModel.deriveInteractionDependentSnapshot(
+            this.props,
+            nextSnapshot,
+        );
 
-        Object.assign(nextSnapshot, EventTileViewModel.deriveInteractionDependentSnapshot(this.props, nextSnapshot));
-
-        this.snapshot.merge(nextSnapshot);
+        this.mergeSnapshot({
+            interaction: partial,
+            ...interactionDependentSnapshot,
+        });
     }
 
     private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
-        const shouldListen = snapshot.shouldShowSentReceipt || snapshot.shouldShowSendingReceipt;
+        const shouldListen = snapshot.receipt.shouldShowSentReceipt || snapshot.receipt.shouldShowSendingReceipt;
         if (shouldListen && !this.isListeningForReceipts) {
             // Only subscribe to room receipts while this tile renders sent/sending receipt affordances.
             this.currentCli?.on(RoomEvent.Receipt, this.onRoomReceipt);
@@ -914,7 +954,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         this.updateReceiptSnapshot({
-            reactions: this.getReactions(),
+            receipt: { reactions: this.getReactions() },
         });
     };
 
@@ -969,10 +1009,67 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return {
             mxEvent: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
-            openedFromSearch: this.snapshot.current.openedFromSearch,
-            tileClickMode: this.snapshot.current.tileClickMode,
+            openedFromSearch: this.snapshot.current.thread.openedFromSearch,
+            tileClickMode: this.snapshot.current.thread.tileClickMode,
             editState: this.props.editState,
         };
+    }
+
+    private static keepSnapshotGroup<T extends object>(current: T | undefined, next: T): T {
+        if (!current) return next;
+
+        const currentKeys = Object.keys(current) as Array<keyof T>;
+        const nextKeys = Object.keys(next) as Array<keyof T>;
+        if (currentKeys.length !== nextKeys.length) return next;
+
+        return nextKeys.every((key) => Object.is(current[key], next[key])) ? current : next;
+    }
+
+    private static mergeSnapshotGroup<T extends object>(current: T, partial: Partial<T> | undefined): T | undefined {
+        if (!partial) return undefined;
+
+        return EventTileViewModel.keepSnapshotGroup(current, {
+            ...current,
+            ...partial,
+        });
+    }
+
+    private static mergeSnapshotUpdate(
+        current: EventTileViewSnapshot,
+        partial: EventTileViewSnapshotUpdate,
+    ): EventTileViewSnapshot {
+        return {
+            interaction:
+                EventTileViewModel.mergeSnapshotGroup(current.interaction, partial.interaction) ?? current.interaction,
+            receipt: EventTileViewModel.mergeSnapshotGroup(current.receipt, partial.receipt) ?? current.receipt,
+            rendering: EventTileViewModel.mergeSnapshotGroup(current.rendering, partial.rendering) ?? current.rendering,
+            timestamp: EventTileViewModel.mergeSnapshotGroup(current.timestamp, partial.timestamp) ?? current.timestamp,
+            thread: EventTileViewModel.mergeSnapshotGroup(current.thread, partial.thread) ?? current.thread,
+            sender: EventTileViewModel.mergeSnapshotGroup(current.sender, partial.sender) ?? current.sender,
+            encryption:
+                EventTileViewModel.mergeSnapshotGroup(current.encryption, partial.encryption) ?? current.encryption,
+            presentation:
+                EventTileViewModel.mergeSnapshotGroup(current.presentation, partial.presentation) ??
+                current.presentation,
+        };
+    }
+
+    private static getChangedSnapshotGroups(
+        current: EventTileViewSnapshot,
+        next: EventTileViewSnapshot,
+    ): Partial<EventTileViewSnapshot> {
+        const partial: Partial<EventTileViewSnapshot> = {};
+
+        if (next.interaction !== current.interaction) partial.interaction = next.interaction;
+        if (next.receipt !== current.receipt) partial.receipt = next.receipt;
+        if (next.rendering !== current.rendering) partial.rendering = next.rendering;
+        if (next.timestamp !== current.timestamp) partial.timestamp = next.timestamp;
+        if (next.thread !== current.thread) partial.thread = next.thread;
+        if (next.sender !== current.sender) partial.sender = next.sender;
+        if (next.encryption !== current.encryption) partial.encryption = next.encryption;
+        if (next.presentation !== current.presentation) partial.presentation = next.presentation;
+
+        return partial;
     }
 
     /**
@@ -983,7 +1080,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private static deriveSnapshot(
         props: EventTileViewModelProps,
         previousSnapshot?: EventTileViewSnapshot,
-        partial: Partial<EventTileViewSnapshot> = {},
+        partial: EventTileViewSnapshotUpdate = {},
     ): EventTileViewSnapshot {
         const baseSnapshot = EventTileViewModel.createBaseSnapshot(previousSnapshot, partial, props);
         const context = EventTileViewModel.createDerivationContext(props, baseSnapshot);
@@ -999,155 +1096,195 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             receiptSnapshot.reactions,
         );
 
-        const snapshot: EventTileViewSnapshot = {
-            ...baseSnapshot,
-            ...receiptSnapshot,
-            ...renderingSnapshot,
-            ...timestampSnapshot,
-            ...threadSnapshot,
-            ...senderSnapshot,
+        const interaction = EventTileViewModel.keepSnapshotGroup(
+            previousSnapshot?.interaction,
+            baseSnapshot.interaction,
+        );
+        const receipt = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.receipt, receiptSnapshot);
+        const timestamp = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.timestamp, timestampSnapshot);
+        const thread = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.thread, threadSnapshot);
+        const sender = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.sender, senderSnapshot);
+        const encryptionSnapshotWithTitleBase: EventTileEncryptionSnapshot = {
             ...encryptionSnapshot,
+            encryptionIndicatorTitle: undefined,
+        };
+        const renderingSnapshotWithFooter: EventTileRenderingSnapshot = {
+            ...renderingSnapshot,
             hasFooter,
+        };
+        const preActionBarSnapshot: EventTileViewSnapshot = {
+            interaction,
+            receipt,
+            rendering: renderingSnapshotWithFooter,
+            timestamp,
+            thread,
+            sender,
+            encryption: encryptionSnapshotWithTitleBase,
+            presentation: baseSnapshot.presentation,
+        };
+
+        const rendering = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.rendering, {
+            ...renderingSnapshotWithFooter,
+            shouldRenderActionBar: EventTileViewModel.getShouldRenderActionBar(props, preActionBarSnapshot),
+        });
+        const snapshotWithoutPresentation: EventTileViewSnapshot = {
+            ...preActionBarSnapshot,
+            rendering,
+        };
+        const encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(
+            props,
+            snapshotWithoutPresentation,
+            encryptionSnapshot.isEncryptionFailure,
+        );
+        const encryption = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.encryption, {
+            ...encryptionSnapshot,
+            encryptionIndicatorTitle,
+        });
+        const snapshotForPresentation: EventTileViewSnapshot = {
+            ...snapshotWithoutPresentation,
+            encryption,
+        };
+        const receivedTs = EventTileViewModel.getReceivedTs(props);
+        const presentation = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.presentation, {
             eventId: EventTileViewModel.getEventId(props),
             ariaLive: EventTileViewModel.getAriaLive(props),
-            rootClassName: EventTileViewModel.getRootClassName(props, {
-                ...baseSnapshot,
-                ...receiptSnapshot,
-                ...renderingSnapshot,
-                ...timestampSnapshot,
-                ...threadSnapshot,
-                ...senderSnapshot,
-                ...encryptionSnapshot,
-                hasFooter,
-            }),
+            rootClassName: EventTileViewModel.getRootClassName(props, snapshotForPresentation),
             contentClassName: EventTileViewModel.getContentClassName(props.mxEvent),
             isNotification: EventTileViewModel.getIsNotification(props),
             isListLikeTile: EventTileViewModel.getIsListLikeTile(props),
             notificationRoomName: EventTileViewModel.getNotificationRoomName(props),
-            receivedTs: EventTileViewModel.getReceivedTs(props),
-            shouldRenderMissingRendererFallback:
-                renderingSnapshot.renderMode === EventTileRenderMode.MissingRendererFallback,
-            timestampView: EventTileViewModel.getTimestampViewData({
-                ...baseSnapshot,
-                ...timestampSnapshot,
-                receivedTs: EventTileViewModel.getReceivedTs(props),
-            } as EventTileViewSnapshot),
-            encryptionView: EventTileViewModel.getEncryptionViewData({
-                ...baseSnapshot,
-                ...encryptionSnapshot,
-            } as EventTileViewSnapshot),
+            receivedTs,
+            shouldRenderMissingRendererFallback: rendering.renderMode === EventTileRenderMode.MissingRendererFallback,
+            timestampView: EventTileViewModel.getTimestampViewData(timestamp, receivedTs),
+            encryptionView: EventTileViewModel.getEncryptionViewData(encryption),
             notificationView: EventTileViewModel.getNotificationViewData(props),
-        };
+        });
 
-        snapshot.shouldRenderActionBar = EventTileViewModel.getShouldRenderActionBar(props, snapshot);
-        snapshot.encryptionIndicatorTitle = EventTileViewModel.getEncryptionIndicatorTitle(
-            props,
-            snapshot,
-            snapshot.isEncryptionFailure,
-        );
-        snapshot.encryptionView = EventTileViewModel.getEncryptionViewData(snapshot);
-        snapshot.rootClassName = EventTileViewModel.getRootClassName(props, snapshot);
-        return snapshot;
+        return {
+            ...snapshotForPresentation,
+            presentation,
+        };
     }
 
     private static createBaseSnapshot(
         previousSnapshot: EventTileViewSnapshot | undefined,
-        partial: Partial<EventTileViewSnapshot>,
+        partial: EventTileViewSnapshotUpdate,
         props: EventTileViewModelProps,
     ): EventTileViewSnapshot {
+        return EventTileViewModel.mergeSnapshotUpdate(
+            previousSnapshot ?? EventTileViewModel.createDefaultSnapshot(props),
+            partial,
+        );
+    }
+
+    private static createDefaultSnapshot(props: EventTileViewModelProps): EventTileViewSnapshot {
         return {
-            actionBarFocused: false,
-            shieldColour: EventShieldColour.NONE,
-            shieldReason: null,
-            reactions: null,
-            hover: false,
-            focusWithin: false,
-            showActionBarFromFocus: false,
-            isContextMenuOpen: false,
-            contextMenuState: undefined,
-            isQuoteExpanded: undefined,
-            thread: null,
-            threadUpdateKey: "",
-            threadNotification: undefined,
-            shouldShowSentReceipt: false,
-            shouldShowSendingReceipt: false,
-            isHighlighted: false,
-            showTimestamp: false,
-            isContinuation: false,
-            isSending: false,
-            isEditing: false,
-            showReplyPreview: false,
-            shouldRenderReplyPreview: false,
-            shouldRenderActionBar: false,
-            renderMode: EventTileRenderMode.Rendered,
-            isEncryptionFailure: false,
-            isOwnEvent: false,
-            permalink: "#",
-            scrollToken: undefined,
-            hasThread: false,
-            isThreadRoot: false,
-            hasRenderer: false,
-            isBubbleMessage: false,
-            isInfoMessage: false,
-            isLeftAlignedBubbleMessage: false,
-            noBubbleEvent: false,
-            isSeeingThroughMessageHiddenForModeration: false,
-            showSender: false,
-            avatarSubject: AvatarSubject.None,
-            threadPanelMode: ThreadPanelMode.None,
-            showReadReceipts: false,
-            padlockMode: PadlockMode.None,
-            timestampDisplayMode: TimestampDisplayMode.Hidden,
-            timestampFormatMode: TimestampFormatMode.Absolute,
-            timestampTs: props.mxEvent.getTs(),
-            tileRenderType: props.timelineRenderingType,
-            avatarSize: AvatarSize.None,
-            avatarMemberUserOnClick: false,
-            avatarForceHistorical: false,
-            senderMode: SenderMode.Hidden,
-            isPinned: false,
-            hasFooter: false,
-            encryptionIndicatorMode: EncryptionIndicatorMode.None,
-            sharedKeysUserId: undefined,
-            sharedKeysRoomId: undefined,
-            encryptionIndicatorTitle: undefined,
-            threadInfoMode: ThreadInfoMode.None,
-            threadInfoHref: undefined,
-            threadInfoLabel: undefined,
-            threadReplyCount: undefined,
-            shouldRenderThreadPreview: false,
-            shouldRenderThreadToolbar: false,
-            tileClickMode: ClickMode.None,
-            openedFromSearch: false,
-            eventId: undefined,
-            ariaLive: "off",
-            rootClassName: "mx_EventTile",
-            contentClassName: "mx_EventTile_line",
-            isNotification: false,
-            isListLikeTile: false,
-            notificationRoomName: undefined,
-            receivedTs: undefined,
-            shouldRenderMissingRendererFallback: false,
-            timestampView: {
-                displayMode: TimestampDisplayMode.Hidden,
-                formatMode: TimestampFormatMode.Absolute,
-                ts: props.mxEvent.getTs(),
-                receivedTs: undefined,
-                permalink: "#",
+            interaction: {
+                actionBarFocused: false,
+                hover: false,
+                focusWithin: false,
+                showActionBarFromFocus: false,
+                isContextMenuOpen: false,
+                contextMenuState: undefined,
+                isQuoteExpanded: undefined,
             },
-            encryptionView: {
+            receipt: {
+                reactions: null,
+                shouldShowSentReceipt: false,
+                shouldShowSendingReceipt: false,
+                showReadReceipts: false,
+            },
+            rendering: {
+                isHighlighted: false,
+                isContinuation: false,
+                isSending: false,
+                isEditing: false,
+                showReplyPreview: false,
+                shouldRenderReplyPreview: false,
+                shouldRenderActionBar: false,
+                renderMode: EventTileRenderMode.Rendered,
+                hasRenderer: false,
+                tileRenderType: props.timelineRenderingType,
+                isBubbleMessage: false,
+                isInfoMessage: false,
+                isLeftAlignedBubbleMessage: false,
+                noBubbleEvent: false,
+                isSeeingThroughMessageHiddenForModeration: false,
+                isPinned: false,
+                hasFooter: false,
+            },
+            timestamp: {
+                showTimestamp: false,
+                permalink: "#",
+                scrollToken: undefined,
+                timestampDisplayMode: TimestampDisplayMode.Hidden,
+                timestampFormatMode: TimestampFormatMode.Absolute,
+                timestampTs: props.mxEvent.getTs(),
+            },
+            thread: {
+                thread: null,
+                threadUpdateKey: "",
+                threadNotification: undefined,
+                hasThread: false,
+                isThreadRoot: false,
+                threadPanelMode: ThreadPanelMode.None,
+                threadInfoMode: ThreadInfoMode.None,
+                threadInfoHref: undefined,
+                threadInfoLabel: undefined,
+                threadReplyCount: undefined,
+                shouldRenderThreadPreview: false,
+                shouldRenderThreadToolbar: false,
+                tileClickMode: ClickMode.None,
+                openedFromSearch: false,
+            },
+            sender: {
+                isOwnEvent: false,
+                showSender: false,
+                avatarSubject: AvatarSubject.None,
+                avatarSize: AvatarSize.None,
+                avatarMemberUserOnClick: false,
+                avatarForceHistorical: false,
+                senderMode: SenderMode.Hidden,
+            },
+            encryption: {
+                shieldColour: EventShieldColour.NONE,
+                shieldReason: null,
+                isEncryptionFailure: false,
                 padlockMode: PadlockMode.None,
-                mode: EncryptionIndicatorMode.None,
-                indicatorTitle: undefined,
+                encryptionIndicatorMode: EncryptionIndicatorMode.None,
                 sharedKeysUserId: undefined,
                 sharedKeysRoomId: undefined,
+                encryptionIndicatorTitle: undefined,
             },
-            notificationView: {
-                enabled: false,
-                roomName: undefined,
+            presentation: {
+                eventId: undefined,
+                ariaLive: "off",
+                rootClassName: "mx_EventTile",
+                contentClassName: "mx_EventTile_line",
+                isNotification: false,
+                isListLikeTile: false,
+                notificationRoomName: undefined,
+                receivedTs: undefined,
+                shouldRenderMissingRendererFallback: false,
+                timestampView: {
+                    displayMode: TimestampDisplayMode.Hidden,
+                    formatMode: TimestampFormatMode.Absolute,
+                    ts: props.mxEvent.getTs(),
+                    receivedTs: undefined,
+                    permalink: "#",
+                },
+                encryptionView: {
+                    padlockMode: PadlockMode.None,
+                    mode: EncryptionIndicatorMode.None,
+                    indicatorTitle: undefined,
+                    sharedKeysUserId: undefined,
+                    sharedKeysRoomId: undefined,
+                },
+                notificationView: {
+                    enabled: false,
+                    roomName: undefined,
+                },
             },
-            ...previousSnapshot,
-            ...partial,
         };
     }
 
@@ -1211,11 +1348,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             timestampTs: props.mxEvent.getTs(),
         };
 
-        timestampSnapshot.timestampTs = EventTileViewModel.getTimestampTs(props, {
-            ...baseSnapshot,
-            ...timestampSnapshot,
-            thread: context.thread,
-        });
+        timestampSnapshot.timestampTs = EventTileViewModel.getTimestampTs(props, context.thread);
 
         return timestampSnapshot;
     }
@@ -1297,7 +1430,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         baseSnapshot: EventTileViewSnapshot,
     ): EventTileDerivationContext {
         const displayInfo = EventTileViewModel.getDisplayInfo(props);
-        const thread = baseSnapshot.thread ?? EventTileViewModel.getThread(props);
+        const thread = baseSnapshot.thread.thread ?? EventTileViewModel.getThread(props);
         const showSender = EventTileViewModel.getShowSender(props);
         const senderPresentation = EventTileViewModel.getSenderPresentationContext(
             props,
@@ -1307,11 +1440,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
         return {
             displayInfo,
-            shieldColour: baseSnapshot.shieldColour,
-            shieldReason: baseSnapshot.shieldReason,
-            reactions: baseSnapshot.reactions ?? EventTileViewModel.getReactions(props),
+            shieldColour: baseSnapshot.encryption.shieldColour,
+            shieldReason: baseSnapshot.encryption.shieldReason,
+            reactions: baseSnapshot.receipt.reactions ?? EventTileViewModel.getReactions(props),
             thread,
-            threadNotification: baseSnapshot.threadNotification,
+            threadNotification: baseSnapshot.thread.threadNotification,
             hasThread: Boolean(thread),
             isThreadRoot: thread?.id === props.mxEvent.getId(),
             showSender,
@@ -1324,22 +1457,30 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private static deriveInteractionDependentSnapshot(
         props: EventTileViewModelProps,
         snapshot: EventTileViewSnapshot,
-    ): Pick<EventTileTimestampSnapshot, "showTimestamp" | "timestampDisplayMode"> &
-        Pick<EventTileRenderingSnapshot, "shouldRenderActionBar"> &
-        Pick<EventTilePresentationSnapshot, "timestampView"> {
+    ): EventTileViewSnapshotUpdate {
         const showTimestamp = EventTileViewModel.getShowTimestamp(props, snapshot);
         const timestampDisplayMode = EventTileViewModel.getTimestampDisplayMode(props, showTimestamp);
-        const nextSnapshot: EventTileViewSnapshot = {
-            ...snapshot,
+        const nextTimestamp: EventTileTimestampSnapshot = {
+            ...snapshot.timestamp,
             showTimestamp,
             timestampDisplayMode,
         };
+        const nextSnapshot: EventTileViewSnapshot = {
+            ...snapshot,
+            timestamp: nextTimestamp,
+        };
 
         return {
-            showTimestamp,
-            timestampDisplayMode,
-            timestampView: EventTileViewModel.getTimestampViewData(nextSnapshot),
-            shouldRenderActionBar: EventTileViewModel.getShouldRenderActionBar(props, snapshot),
+            timestamp: {
+                showTimestamp,
+                timestampDisplayMode,
+            },
+            presentation: {
+                timestampView: EventTileViewModel.getTimestampViewData(nextTimestamp, snapshot.presentation.receivedTs),
+            },
+            rendering: {
+                shouldRenderActionBar: EventTileViewModel.getShouldRenderActionBar(props, nextSnapshot),
+            },
         };
     }
 
@@ -1507,11 +1648,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private static getShouldRenderActionBar(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): boolean {
         return (
-            !snapshot.isEditing &&
+            !snapshot.rendering.isEditing &&
             !props.forExport &&
-            (snapshot.hover ||
-                snapshot.showActionBarFromFocus ||
-                (snapshot.actionBarFocused && !snapshot.isContextMenuOpen))
+            (snapshot.interaction.hover ||
+                snapshot.interaction.showActionBarFromFocus ||
+                (snapshot.interaction.actionBarFocused && !snapshot.interaction.isContextMenuOpen))
         );
     }
 
@@ -1543,10 +1684,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             !props.hideTimestamp &&
             (props.alwaysShowTimestamps ||
                 props.last ||
-                snapshot.hover ||
-                snapshot.focusWithin ||
-                snapshot.actionBarFocused ||
-                snapshot.isContextMenuOpen),
+                snapshot.interaction.hover ||
+                snapshot.interaction.focusWithin ||
+                snapshot.interaction.actionBarFocused ||
+                snapshot.interaction.isContextMenuOpen),
         );
     }
 
@@ -1571,12 +1712,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             : TimestampFormatMode.Absolute;
     }
 
-    private static getTimestampTs(props: EventTileViewModelProps, snapshot: EventTileViewSnapshot): number {
+    private static getTimestampTs(props: EventTileViewModelProps, thread: Thread | null): number {
         if (props.timelineRenderingType !== TimelineRenderingType.ThreadsList) {
             return props.mxEvent.getTs();
         }
 
-        return snapshot.thread?.replyToEvent?.getTs() ?? props.mxEvent.getTs();
+        return thread?.replyToEvent?.getTs() ?? props.mxEvent.getTs();
     }
 
     private static getThread(props: EventTileViewModelProps): Thread | null {
@@ -1884,8 +2025,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             }
         }
 
-        if (snapshot.shieldColour !== EventShieldColour.NONE) {
-            switch (snapshot.shieldReason) {
+        if (snapshot.encryption.shieldColour !== EventShieldColour.NONE) {
+            switch (snapshot.encryption.shieldReason) {
                 case EventShieldReason.UNVERIFIED_IDENTITY:
                     return _t("encryption|event_shield_reason_unverified_identity");
                 case EventShieldReason.UNSIGNED_DEVICE:
@@ -1916,23 +2057,26 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return undefined;
     }
 
-    private static getTimestampViewData(snapshot: EventTileViewSnapshot): EventTileTimestampViewData {
+    private static getTimestampViewData(
+        timestamp: EventTileTimestampSnapshot,
+        receivedTs?: number,
+    ): EventTileTimestampViewData {
         return {
-            displayMode: snapshot.timestampDisplayMode,
-            formatMode: snapshot.timestampFormatMode,
-            ts: snapshot.timestampTs,
-            receivedTs: snapshot.receivedTs,
-            permalink: snapshot.permalink,
+            displayMode: timestamp.timestampDisplayMode,
+            formatMode: timestamp.timestampFormatMode,
+            ts: timestamp.timestampTs,
+            receivedTs,
+            permalink: timestamp.permalink,
         };
     }
 
-    private static getEncryptionViewData(snapshot: EventTileViewSnapshot): EventTileEncryptionViewData {
+    private static getEncryptionViewData(encryption: EventTileEncryptionSnapshot): EventTileEncryptionViewData {
         return {
-            padlockMode: snapshot.padlockMode,
-            mode: snapshot.encryptionIndicatorMode,
-            indicatorTitle: snapshot.encryptionIndicatorTitle,
-            sharedKeysUserId: snapshot.sharedKeysUserId,
-            sharedKeysRoomId: snapshot.sharedKeysRoomId,
+            padlockMode: encryption.padlockMode,
+            mode: encryption.encryptionIndicatorMode,
+            indicatorTitle: encryption.encryptionIndicatorTitle,
+            sharedKeysUserId: encryption.sharedKeysUserId,
+            sharedKeysRoomId: encryption.sharedKeysRoomId,
         };
     }
 
@@ -1962,28 +2106,28 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const isNotification = EventTileViewModel.getIsNotification(props);
 
         return classNames({
-            mx_EventTile_bubbleContainer: snapshot.isBubbleMessage,
-            mx_EventTile_leftAlignedBubble: snapshot.isLeftAlignedBubbleMessage,
+            mx_EventTile_bubbleContainer: snapshot.rendering.isBubbleMessage,
+            mx_EventTile_leftAlignedBubble: snapshot.rendering.isLeftAlignedBubbleMessage,
             mx_EventTile: true,
-            mx_EventTile_isEditing: snapshot.isEditing,
-            mx_EventTile_info: snapshot.isInfoMessage,
+            mx_EventTile_isEditing: snapshot.rendering.isEditing,
+            mx_EventTile_info: snapshot.rendering.isInfoMessage,
             mx_EventTile_12hr: props.isTwelveHour,
-            mx_EventTile_sending: !snapshot.isEditing && snapshot.isSending,
-            mx_EventTile_highlight: snapshot.isHighlighted,
-            mx_EventTile_selected: props.isSelectedEvent || snapshot.isContextMenuOpen,
+            mx_EventTile_sending: !snapshot.rendering.isEditing && snapshot.rendering.isSending,
+            mx_EventTile_highlight: snapshot.rendering.isHighlighted,
+            mx_EventTile_selected: props.isSelectedEvent || snapshot.interaction.isContextMenuOpen,
             mx_EventTile_continuation:
-                snapshot.isContinuation ||
+                snapshot.rendering.isContinuation ||
                 eventType === EventType.CallInvite ||
                 ElementCallEventType.matches(eventType),
             mx_EventTile_last: props.last,
             mx_EventTile_lastInSection: props.lastInSection,
             mx_EventTile_contextual: props.contextual,
-            mx_EventTile_actionBarFocused: snapshot.actionBarFocused,
-            mx_EventTile_bad: snapshot.isEncryptionFailure,
+            mx_EventTile_actionBarFocused: snapshot.interaction.actionBarFocused,
+            mx_EventTile_bad: snapshot.encryption.isEncryptionFailure,
             mx_EventTile_emote: msgtype === MsgType.Emote,
-            mx_EventTile_noSender: !snapshot.showSender,
+            mx_EventTile_noSender: !snapshot.sender.showSender,
             mx_EventTile_clamp: props.timelineRenderingType === TimelineRenderingType.ThreadsList || isNotification,
-            mx_EventTile_noBubble: snapshot.noBubbleEvent,
+            mx_EventTile_noBubble: snapshot.rendering.noBubbleEvent,
         });
     }
 
