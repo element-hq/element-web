@@ -27,6 +27,13 @@ export function userStatusTextWithinMaxLength(text: string): boolean {
     return textEncoder.encode(text).length <= MAX_STATUS_TEXT_BYTES;
 }
 
+/**
+ * Hook to get the MSC4426 user status for a given user ID. Returns undefined if the feature is disabled,
+ * the user does not have a status, or if there was an error fetching the status.
+ *
+ * @param userId The ID of the user whose status is being fetched.
+ * @returns The user's status, or undefined if not available.
+ */
 export function useUserStatus(userId: string | undefined): UserStatus | undefined {
     const isEnabled = useFeatureEnabled("feature_user_status");
     const matrixClient = useMatrixClientContext();
