@@ -30,11 +30,29 @@ import { type TimelineRenderingType } from "../../../../../contexts/RoomContext"
 const CAPTION_MESSAGE_TYPES = new Set<MsgType>([MsgType.Image, MsgType.File, MsgType.Audio, MsgType.Video]);
 
 export interface TextualBodyViewModelProps {
+    /**
+     * Optional DOM id forwarded to the root textual body element.
+     */
     id?: string;
+    /**
+     * Matrix event used to derive the body kind, sender label, starter link, edit state, and moderation state.
+     */
     mxEvent: MatrixEvent;
+    /**
+     * Optional URL that wraps the body when the message should behave as a highlighted link target.
+     */
     highlightLink?: string;
+    /**
+     * Event id of the replacement event, when this message has been edited.
+     */
     replacingEventId?: string;
+    /**
+     * Whether the user is viewing a hidden message while moderation is pending.
+     */
     isSeeingThroughMessageHiddenForModeration?: boolean;
+    /**
+     * Timeline context used when dispatching actions from textual body interactions.
+     */
     timelineRenderingType: TimelineRenderingType;
 }
 
