@@ -1,3 +1,40 @@
+Changes in [1.12.16](https://github.com/element-hq/element-web/releases/tag/v1.12.16) (2026-04-28)
+==================================================================================================
+## 🦖 Deprecations
+
+* Disallow links without protocol (e.g. starting with http(s)://) in LinkedText. ([#32972](https://github.com/element-hq/element-web/pull/32972)). Contributed by @Half-Shot.
+
+## ✨ Features
+
+* Room list: add custom section creation ([#33155](https://github.com/element-hq/element-web/pull/33155)). Contributed by @florianduros.
+* Fall back to OIDC response\_mode query if fragment unsupported ([#33169](https://github.com/element-hq/element-web/pull/33169)). Contributed by @t3chguy.
+* Switch OIDC to response\_mode=fragment ([#33100](https://github.com/element-hq/element-web/pull/33100)). Contributed by @t3chguy.
+* Hide spoilers from desktop notifications ([#31699](https://github.com/element-hq/element-web/pull/31699)). Contributed by @JeftavanderHorst.
+* Room list: expand sections when a filter is toggled ([#33077](https://github.com/element-hq/element-web/pull/33077)). Contributed by @florianduros.
+* Show a 'grab' cursor on picture-in-picture view ([#33079](https://github.com/element-hq/element-web/pull/33079)). Contributed by @robintown.
+* Update URL Preview settings ([#32992](https://github.com/element-hq/element-web/pull/32992)). Contributed by @Half-Shot.
+* Add user friendly capability text for `msc4039.download_file` ([#32983](https://github.com/element-hq/element-web/pull/32983)). Contributed by @BillCarsonFr.
+* Accessibility improvements in settings ([#32968](https://github.com/element-hq/element-web/pull/32968)). Contributed by @t3chguy.
+* Move Low Bandwidth feature to devtools. ([#32797](https://github.com/element-hq/element-web/pull/32797)). Contributed by @Half-Shot.
+* Room list: add activity marker to sections ([#33024](https://github.com/element-hq/element-web/pull/33024)). Contributed by @florianduros.
+* Remove global h2 css rule in favour of heading styles/components ([#32969](https://github.com/element-hq/element-web/pull/32969)). Contributed by @t3chguy.
+* Allow Element Call to use MSC4039 ([#32755](https://github.com/element-hq/element-web/pull/32755)). Contributed by @JephDiel.
+* Room list: add default sections ([#32785](https://github.com/element-hq/element-web/pull/32785)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix Module API versioning ([#33261](https://github.com/element-hq/element-web/pull/33261)). Contributed by @RiotRobot.
+* Fix crashes in when opening Bridges in room settings  ([#33137](https://github.com/element-hq/element-web/pull/33137)). Contributed by @defaultdino.
+* fix(call): leave call along with room ([#33162](https://github.com/element-hq/element-web/pull/33162)). Contributed by @defaultdino.
+* Fix React hydration issues ([#32958](https://github.com/element-hq/element-web/pull/32958)). Contributed by @t3chguy.
+* Enusre voice message recording does not fall back to the default input if an input is specifically configured. ([#32887](https://github.com/element-hq/element-web/pull/32887)). Contributed by @jpborie05.
+* Room list: fix expanded/collapse state of sections ([#33074](https://github.com/element-hq/element-web/pull/33074)). Contributed by @florianduros.
+* fix: Left hand sidebar text selectable ([#33029](https://github.com/element-hq/element-web/pull/33029)). Contributed by @marley.
+* Collapsible Left Panel - Ensure that panels have non-fractional widths ([#33052](https://github.com/element-hq/element-web/pull/33052)). Contributed by @MidhunSureshR.
+* Collapsible Left Panel - Clicking on separator should expand to 100% when no width is available in settings ([#33053](https://github.com/element-hq/element-web/pull/33053)). Contributed by @MidhunSureshR.
+* Fix EventListSummary not unbinding event listeners ([#33006](https://github.com/element-hq/element-web/pull/33006)). Contributed by @t3chguy.
+
+
 Changes in [1.12.15](https://github.com/element-hq/element-web/releases/tag/v1.12.15) (2026-04-08)
 ==================================================================================================
 Fixes Desktop release workflow.
