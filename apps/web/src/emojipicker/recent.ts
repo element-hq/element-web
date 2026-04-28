@@ -29,7 +29,7 @@ const STORAGE_LIMIT = 100;
 function migrate(): void {
     const data: ILegacyFormat = JSON.parse(window.localStorage.mx_reaction_count || "{}");
     const sorted = Object.entries(data).sort(([, [count1, date1]], [, [count2, date2]]) => date2 - date1);
-    const newFormat = sorted.map(([emoji, [count, date]]) => [emoji, count]);
+    const newFormat = sorted.map(([emoji, [count, date]]) => [emoji, count] as RecentEmojiData[number]);
     SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, newFormat.slice(0, STORAGE_LIMIT));
 }
 
@@ -41,7 +41,7 @@ export function add(emoji: string): void {
     const recents = getRecentEmoji();
     const i = recents.findIndex(([e]) => e === emoji);
 
-    let newEntry;
+    let newEntry: RecentEmojiData[number];
     if (i >= 0) {
         // first remove the existing tuple so that we can increment it and push it to the front
         [newEntry] = recents.splice(i, 1);
