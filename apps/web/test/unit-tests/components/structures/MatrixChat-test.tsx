@@ -588,8 +588,10 @@ describe("<MatrixChat />", () => {
             });
         });
 
-        const getComponentAndWaitForReady = async (): Promise<RenderResult> => {
-            const renderResult = getComponent();
+        const getComponentAndWaitForReady = async (
+            props: Partial<ComponentProps<typeof MatrixChat>> = {},
+        ): Promise<RenderResult> => {
+            const renderResult = getComponent(props);
 
             // we think we are logged in, but are still waiting for the /sync to complete
             await screen.findByText("Logout");
@@ -1021,6 +1023,22 @@ describe("<MatrixChat />", () => {
                     await dispatchLogoutAndWait();
 
                     expect(PlatformPeg.get()!.destroyPickleKey).toHaveBeenCalledWith(userId, deviceId);
+                });
+
+                it("should go to welcome", async () => {
+                    await getComponentAndWaitForReady();
+                    await dispatchLogoutAndWait();
+
+                    expect(defaultProps.onNewScreen).toHaveBeenLastCalledWith("welcome", false);
+                });
+
+                it("should go to login if welcome disabled", async () => {
+                    await getComponentAndWaitForReady({
+                        config: { ...defaultProps.config, embedded_pages: { login_for_welcome: true } },
+                    });
+                    await dispatchLogoutAndWait();
+
+                    expect(defaultProps.onNewScreen).toHaveBeenLastCalledWith("login", false);
                 });
 
                 describe("without delegated auth", () => {
