@@ -238,11 +238,25 @@ export class EventTileActionBarViewModel
         };
     }
 
-    private computeSnapshot(): ActionBarViewSnapshot {
-        return EventTileActionBarViewModel.buildSnapshot(this.props, {
+    private computeSnapshot(localState: LocalActionBarState = this.getLocalState()): ActionBarViewSnapshot {
+        return EventTileActionBarViewModel.buildSnapshot(this.props, localState);
+    }
+
+    private getLocalState(): LocalActionBarState {
+        return {
             canDownload: this.canDownload,
             isDownloadLoading: this.isDownloadLoading,
-        });
+        };
+    }
+
+    private static eventListenersNeedRebinding(
+        previousProps: EventTileActionBarViewModelProps,
+        nextProps: EventTileActionBarViewModelProps,
+    ): boolean {
+        return (
+            nextProps.mxEvent !== previousProps.mxEvent ||
+            nextProps.mxEvent.getRoomId() !== previousProps.mxEvent.getRoomId()
+        );
     }
 
     private static canShowReplyInThreadAction(props: EventTileActionBarViewModelProps): boolean {
@@ -425,22 +439,30 @@ export class EventTileActionBarViewModel
         }
     }
 
-    /** Updates props, refreshes listeners when the event changes, and rebuilds the snapshot. */
-    public setProps(newProps: Partial<EventTileActionBarViewModelProps>): void {
-        const prevEvent = this.props.mxEvent;
-        const prevRoomId = prevEvent.getRoomId();
+    /** Recomputes the action snapshot from new props without rebinding listeners or starting async work. */
+    public recomputeSnapshot(newProps: EventTileActionBarViewModelProps): void {
+        const previousProps = this.props;
+        this.props = newProps;
+        this.snapshot.merge(
+            this.computeSnapshot(
+                EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, newProps)
+                    ? { canDownload: true, isDownloadLoading: false }
+                    : undefined,
+            ),
+        );
+    }
 
-        this.props = {
-            ...this.props,
-            ...newProps,
-        };
+    /** Applies listener and async side effects after a prop change has committed. */
+    public syncListeners(
+        previousProps: EventTileActionBarViewModelProps,
+        nextProps: EventTileActionBarViewModelProps,
+    ): void {
+        this.props = nextProps;
 
-        if (this.props.mxEvent !== prevEvent || this.props.mxEvent.getRoomId() !== prevRoomId) {
+        if (EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, nextProps)) {
             this.resetEventState();
             this.setupListeners();
         }
-
-        this.refreshSnapshot();
     }
 
     /** Removes listeners and releases resources owned by the view model. */

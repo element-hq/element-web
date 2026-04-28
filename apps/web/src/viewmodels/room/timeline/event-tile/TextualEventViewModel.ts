@@ -26,19 +26,23 @@ export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapsho
         super.dispose();
     }
 
-    public updateProps(props: EventTileTypeProps): void {
-        const previousEvent = this.props.mxEvent;
+    public recomputeSnapshot(props: EventTileTypeProps): void {
         this.props = props;
-
-        if (previousEvent !== props.mxEvent) {
-            this.rebindListener(props.mxEvent);
-        }
-
         this.setTextFromEvent();
+    }
+
+    public syncListeners(previousProps: EventTileTypeProps, nextProps: EventTileTypeProps): void {
+        this.props = nextProps;
+
+        if (previousProps.mxEvent !== nextProps.mxEvent) {
+            this.rebindListener(nextProps.mxEvent);
+        }
     }
 
     private setTextFromEvent = (): void => {
         const content = textForEvent(this.props.mxEvent, MatrixClientPeg.safeGet(), true, this.props.showHiddenEvents);
+        if (content === this.snapshot.current.content) return;
+
         this.snapshot.set({ content });
     };
 

@@ -100,6 +100,16 @@ describe("EventTileViewModel", () => {
         return vm;
     }
 
+    function openContextMenu(vm: EventTileViewModel): void {
+        vm.openContextMenu({
+            clientX: 10,
+            clientY: 20,
+            target: document.createElement("div"),
+            preventDefault: jest.fn(),
+            stopPropagation: jest.fn(),
+        });
+    }
+
     beforeEach(() => {
         jest.clearAllMocks();
 
@@ -520,14 +530,14 @@ describe("EventTileViewModel", () => {
         it("keeps action bar focus in sync with the context menu state", () => {
             const vm = createTimestampedViewModel(room, createViewModel);
 
-            vm.onContextMenuOpen();
+            openContextMenu(vm);
 
             expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(true);
             expect(vm.getSnapshot().interaction.actionBarFocused).toBe(true);
             expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
             expect(vm.getSnapshot().rendering.shouldRenderActionBar).toBe(false);
 
-            vm.onContextMenuClose();
+            vm.closeContextMenu();
 
             expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(false);
             expect(vm.getSnapshot().interaction.actionBarFocused).toBe(false);
@@ -539,8 +549,8 @@ describe("EventTileViewModel", () => {
             const vm = createTimestampedViewModel(room, createViewModel);
 
             vm.onFocusEnter(true);
-            vm.onContextMenuOpen();
-            vm.onContextMenuClose();
+            openContextMenu(vm);
+            vm.closeContextMenu();
 
             expect(vm.getSnapshot().interaction.showActionBarFromFocus).toBe(true);
             expect(vm.getSnapshot().interaction.actionBarFocused).toBe(false);
@@ -583,13 +593,13 @@ describe("EventTileViewModel", () => {
         it("opens and closes the context menu through VM helpers", () => {
             const vm = createTimestampedViewModel(room, createViewModel);
 
-            vm.onContextMenuOpen();
+            openContextMenu(vm);
 
             expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(true);
             expect(vm.getSnapshot().interaction.actionBarFocused).toBe(true);
             expect(vm.getSnapshot().interaction.hover).toBe(false);
 
-            vm.onContextMenuClose();
+            vm.closeContextMenu();
 
             expect(vm.getSnapshot().interaction.isContextMenuOpen).toBe(false);
             expect(vm.getSnapshot().interaction.actionBarFocused).toBe(false);
@@ -677,6 +687,56 @@ describe("EventTileViewModel", () => {
             expect(nextSnapshot.presentation.timestampView).toBe(initialSnapshot.presentation.timestampView);
             expect(nextSnapshot.presentation.encryptionView).toBe(initialSnapshot.presentation.encryptionView);
             expect(nextSnapshot.presentation.notificationView).toBe(initialSnapshot.presentation.notificationView);
+        });
+
+        it("recomputes render state from new props without listener or async side effects", () => {
+            const vm = createViewModel();
+            const nextEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Next event",
+                event: true,
+                ts: 123,
+            });
+            const currentEventOffSpy = jest.spyOn(mxEvent, "off");
+            const nextEventOnSpy = jest.spyOn(nextEvent, "on");
+
+            mocked(client.decryptEventIfNeeded).mockClear();
+
+            vm.recomputeSnapshot(
+                makeProps({
+                    mxEvent: nextEvent,
+                    alwaysShowTimestamps: true,
+                }),
+            );
+
+            expect(vm.getSnapshot().presentation.eventId).toBe(nextEvent.getId());
+            expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
+            expect(currentEventOffSpy).not.toHaveBeenCalled();
+            expect(nextEventOnSpy).not.toHaveBeenCalled();
+            expect(client.decryptEventIfNeeded).not.toHaveBeenCalled();
+        });
+
+        it("syncs listeners and event async work separately after recomputing props", () => {
+            const vm = createViewModel();
+            const previousProps = makeProps();
+            const nextEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Next event",
+                event: true,
+            });
+            const nextProps = makeProps({ mxEvent: nextEvent });
+            const currentEventOffSpy = jest.spyOn(mxEvent, "off");
+            const nextEventOnSpy = jest.spyOn(nextEvent, "on");
+
+            vm.recomputeSnapshot(nextProps);
+            mocked(client.decryptEventIfNeeded).mockClear();
+            vm.syncListeners(previousProps, nextProps);
+
+            expect(currentEventOffSpy).toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
+            expect(nextEventOnSpy).toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
+            expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(nextEvent);
         });
     });
 

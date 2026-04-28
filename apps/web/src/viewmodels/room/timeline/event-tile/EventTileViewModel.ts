@@ -515,17 +515,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         });
     }
 
-    /** Applies the interaction state changes required when opening the context menu. */
-    public onContextMenuOpen(): void {
-        this.updateInteractionSnapshot({
-            isContextMenuOpen: true,
-            actionBarFocused: true,
-            hover: false,
-        });
-    }
-
     /** Applies the interaction state changes required when closing the context menu. */
-    public onContextMenuClose(): void {
+    private onContextMenuClose(): void {
         this.updateInteractionSnapshot({
             isContextMenuOpen: false,
             actionBarFocused: false,
@@ -586,26 +577,34 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.setQuoteExpanded(!this.snapshot.current.interaction.isQuoteExpanded);
     }
 
-    /** Replaces the model props and refreshes affected listeners and derived state. */
-    public updateProps(props: EventTileViewModelProps): void {
-        const previousProps = this.props;
-        const previousEvent = this.props.mxEvent;
-        const previousEventSendStatus = this.props.eventSendStatus;
-        const previousShowReactions = this.props.showReactions;
-
+    /** Recomputes derived render state from new props without rebinding listeners or starting async work. */
+    public recomputeSnapshot(props: EventTileViewModelProps): void {
         this.props = props;
-        this.rebindListeners(previousProps, props);
-        this.updateSnapshot({
-            receipt: { reactions: EventTileViewModel.getReactions(props) },
-            thread: { thread: EventTileViewModel.getThread(props) },
-        });
+        this.updateSnapshot(
+            {
+                receipt: { reactions: EventTileViewModel.getReactions(props) },
+                thread: { thread: EventTileViewModel.getThread(props) },
+            },
+            false,
+        );
+    }
+
+    /** Applies listener and async side effects after a prop change has committed. */
+    public syncListeners(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
+        const previousEvent = previousProps.mxEvent;
+        const previousEventSendStatus = previousProps.eventSendStatus;
+        const previousShowReactions = previousProps.showReactions;
+
+        this.props = nextProps;
+        this.rebindListeners(previousProps, nextProps);
+        this.updateReceiptListener();
 
         if (
-            previousEvent !== props.mxEvent ||
-            previousEventSendStatus !== props.eventSendStatus ||
-            previousShowReactions !== props.showReactions
+            previousEvent !== nextProps.mxEvent ||
+            previousEventSendStatus !== nextProps.eventSendStatus ||
+            previousShowReactions !== nextProps.showReactions
         ) {
-            if (previousEvent !== props.mxEvent) {
+            if (previousEvent !== nextProps.mxEvent) {
                 this.decryptEventIfNeeded();
             }
             this.refreshVerification();
@@ -803,12 +802,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         entry.listeners.add(callback);
     }
 
-    private updateSnapshot(partial?: EventTileViewSnapshotUpdate): void {
+    private updateSnapshot(partial?: EventTileViewSnapshotUpdate, syncReceiptListener = true): void {
         const nextSnapshot = EventTileViewModel.deriveSnapshot(this.props, this.snapshot.current, partial);
 
         this.snapshot.merge(nextSnapshot);
 
-        this.updateReceiptListener(nextSnapshot);
+        if (syncReceiptListener) {
+            this.updateReceiptListener(nextSnapshot);
+        }
     }
 
     private mergeSnapshot(partial: EventTileViewSnapshotUpdate): void {

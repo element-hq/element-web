@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useMemo, useState, type JSX } from "react";
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type JSX } from "react";
 import { ActionBarView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
@@ -100,9 +100,22 @@ export function ActionBar({
         ],
     );
     const vm = useCreateAutoDisposedViewModel(() => new EventTileActionBarViewModel(actionBarViewModelProps));
+    const committedViewModelPropsRef = useRef(actionBarViewModelProps);
+    const renderedViewModelPropsRef = useRef(actionBarViewModelProps);
 
-    useEffect(() => {
-        vm.setProps(actionBarViewModelProps);
+    if (renderedViewModelPropsRef.current !== actionBarViewModelProps) {
+        renderedViewModelPropsRef.current = actionBarViewModelProps;
+        vm.recomputeSnapshot(actionBarViewModelProps);
+    }
+
+    useLayoutEffect(() => {
+        const previousProps = committedViewModelPropsRef.current;
+
+        if (previousProps !== actionBarViewModelProps) {
+            vm.syncListeners(previousProps, actionBarViewModelProps);
+            committedViewModelPropsRef.current = actionBarViewModelProps;
+        }
+        renderedViewModelPropsRef.current = actionBarViewModelProps;
     }, [vm, actionBarViewModelProps]);
     useEffect(() => {
         onFocusChange(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));

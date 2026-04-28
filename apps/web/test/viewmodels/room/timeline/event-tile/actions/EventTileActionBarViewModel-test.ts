@@ -150,15 +150,32 @@ describe("EventTileActionBarViewModel", () => {
             ...overrides,
         });
 
-    const createVm = (props: Partial<EventTileActionBarViewModelProps> = {}): EventTileActionBarViewModel => {
+    const makeProps = (props: Partial<EventTileActionBarViewModelProps> = {}): EventTileActionBarViewModelProps => {
         const mxEvent = props.mxEvent ?? createMessageEvent();
-        return new EventTileActionBarViewModel({
+        return {
             mxEvent,
             timelineRenderingType: TimelineRenderingType.Room,
             canSendMessages: true,
             canReact: true,
             ...props,
-        });
+        };
+    };
+
+    const createVm = (props: Partial<EventTileActionBarViewModelProps> = {}): EventTileActionBarViewModel => {
+        return new EventTileActionBarViewModel(makeProps(props));
+    };
+
+    const syncVmProps = (
+        vm: EventTileActionBarViewModel,
+        previousProps: EventTileActionBarViewModelProps,
+        newProps: Partial<EventTileActionBarViewModelProps>,
+    ): EventTileActionBarViewModelProps => {
+        const nextProps = { ...previousProps, ...newProps };
+
+        vm.recomputeSnapshot(nextProps);
+        vm.syncListeners(previousProps, nextProps);
+
+        return nextProps;
     };
 
     const createPendingPromise = <T>(): {
@@ -340,10 +357,11 @@ describe("EventTileActionBarViewModel", () => {
             return null;
         });
 
-        const vm = createVm({ mxEvent: eventA });
+        const previousProps = makeProps({ mxEvent: eventA });
+        const vm = new EventTileActionBarViewModel(previousProps);
         expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
 
-        vm.setProps({ mxEvent: eventB });
+        syncVmProps(vm, previousProps, { mxEvent: eventB });
         permissionA.resolve(true);
         await Promise.resolve();
 
@@ -488,7 +506,8 @@ describe("EventTileActionBarViewModel", () => {
             content: { msgtype: MsgType.Image, body: "Image B", url: "mxc://example.org/b" },
         });
 
-        const vm = createVm({ mxEvent: eventA });
+        const previousProps = makeProps({ mxEvent: eventA });
+        const vm = new EventTileActionBarViewModel(previousProps);
         (vm as unknown as { downloadedBlob: Blob }).downloadedBlob = new Blob(["a"]);
         mockDownload.mockReturnValueOnce(firstDownload.promise);
 
@@ -496,7 +515,7 @@ describe("EventTileActionBarViewModel", () => {
 
         expect(vm.getSnapshot().isDownloadLoading).toBe(true);
 
-        vm.setProps({ mxEvent: eventB });
+        syncVmProps(vm, previousProps, { mxEvent: eventB });
         (vm as unknown as { downloadedBlob: Blob }).downloadedBlob = new Blob(["b"]);
 
         expect(vm.getSnapshot().isDownloadLoading).toBe(false);
@@ -760,19 +779,19 @@ describe("EventTileActionBarViewModel", () => {
         it("recomputes parity-relevant flags and resets download state when the event changes", () => {
             jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
 
-            const vm = createVm({
-                mxEvent: createMessageEvent({
-                    event_id: "$image",
-                    content: { msgtype: MsgType.Image, body: "Image", url: "mxc://example.org/file" },
-                }),
+            const imageEvent = createMessageEvent({
+                event_id: "$image",
+                content: { msgtype: MsgType.Image, body: "Image", url: "mxc://example.org/file" },
             });
+            const previousProps = makeProps({ mxEvent: imageEvent });
+            const vm = new EventTileActionBarViewModel(previousProps);
             (vm as unknown as { downloadedBlob?: Blob; isDownloadLoading: boolean }).downloadedBlob = new Blob(["x"]);
             (vm as unknown as { downloadedBlob?: Blob; isDownloadLoading: boolean }).isDownloadLoading = true;
 
             mocked(isContentActionable).mockReturnValue(false);
             jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(false);
 
-            vm.setProps({
+            syncVmProps(vm, previousProps, {
                 mxEvent: createMessageEvent({
                     event_id: "$text",
                     content: { msgtype: MsgType.Text, body: "Text" },
