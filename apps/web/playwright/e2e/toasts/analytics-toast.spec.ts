@@ -14,6 +14,7 @@ test.describe("Analytics Toast", () => {
     });
 
     test("should not show an analytics toast if config has nothing about posthog", async ({ user, toasts }) => {
+        await toasts.rejectToast("Verify this device");
         await toasts.rejectToast("Notifications");
         await toasts.assertNoToasts();
     });
@@ -29,6 +30,7 @@ test.describe("Analytics Toast", () => {
         });
 
         test.beforeEach(async ({ user, toasts }) => {
+            await toasts.rejectToast("Verify this device");
             await toasts.rejectToast("Notifications");
         });
 

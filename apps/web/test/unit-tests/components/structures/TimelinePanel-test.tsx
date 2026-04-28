@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render, waitFor, screen, act, cleanup } from "jest-matrix-react";
 import {
+    ClientEvent,
     ReceiptType,
     EventTimelineSet,
     EventType,
@@ -19,6 +20,7 @@ import {
     RoomEvent,
     RoomMember,
     RoomState,
+    SyncState,
     TimelineWindow,
     EventTimeline,
     FeatureSupport,
@@ -481,6 +483,39 @@ describe("TimelinePanel", () => {
 
             await waitFor(() => expectEvents(container, [events[1]]));
         });
+    });
+
+    it("only re-renders when sync changes forward pagination state", async () => {
+        const [client, room, events] = setupTestData();
+        let timelinePanel: TimelinePanel | null = null;
+
+        render(
+            <TimelinePanel
+                {...getProps(room, events)}
+                ref={(ref) => {
+                    timelinePanel = ref;
+                }}
+            />,
+            clientAndSDKContextRenderOptions(client, sdkContext),
+        );
+        await flushPromises();
+        await waitFor(() => expect(timelinePanel).toBeTruthy());
+
+        const forceUpdateSpy = jest.spyOn(timelinePanel!, "forceUpdate");
+
+        await act(async () => {
+            client.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing);
+            await flushPromises();
+        });
+
+        expect(forceUpdateSpy).not.toHaveBeenCalled();
+
+        await act(async () => {
+            client.emit(ClientEvent.Sync, SyncState.Prepared, SyncState.Syncing);
+            await flushPromises();
+        });
+
+        expect(forceUpdateSpy).toHaveBeenCalledTimes(1);
     });
 
     describe("onRoomTimeline", () => {
