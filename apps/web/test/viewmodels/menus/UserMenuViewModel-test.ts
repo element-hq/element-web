@@ -36,6 +36,7 @@ describe("UserMenuViewModel", () => {
         SdkContextClass.instance.onLoggedOut();
         SdkContextClass.instance.client = undefined;
     });
+
     it("should not generate actions until the menu is opened", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
         expect(vm.getSnapshot()).toMatchInlineSnapshot(`
@@ -58,34 +59,40 @@ describe("UserMenuViewModel", () => {
 }
 `);
     });
+
     it("should generate a menu options for a logged in client", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
+
     it("should show a link for account management", async () => {
         const vm = new UserMenuViewModel(dispatcher, client, true, "https://example.org/");
         vm.setOpen(true);
         expect(vm.getSnapshot().manageAccountHref).toEqual("https://example.org/");
     });
+
     it("should generate a menu options for a guest", () => {
         client.isGuest.mockReturnValue(true);
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
         expect(vm.getSnapshot()).toMatchSnapshot();
     });
+
     it("should generate a menu options that include feedback", () => {
         SdkConfig.put({ bug_report_endpoint_url: "https://example.org" });
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
         expect(vm.getSnapshot().actions.openFeedback).toEqual(true);
     });
+
     it("should generate a menu options that includes a home page", () => {
         SdkConfig.put({ embedded_pages: { home_url: "https://example.org" } });
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
         expect(vm.getSnapshot().actions.openHomePage).toEqual(true);
     });
+
     it("can toggle menu", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
@@ -93,6 +100,7 @@ describe("UserMenuViewModel", () => {
         vm.setOpen(false);
         expect(vm.getSnapshot().open).toEqual(false);
     });
+
     it("can toggle expanded state", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setExpanded(true);
@@ -154,6 +162,7 @@ describe("UserMenuViewModel", () => {
         vm.openFeedback();
         expect(Modal.createDialog).toHaveBeenCalledWith(FeedbackDialog);
     });
+
     it("can open the settings menu", async () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
         const dispatcherSpy = jest.fn();
@@ -166,6 +175,7 @@ describe("UserMenuViewModel", () => {
             }),
         );
     });
+
     it("should be able to open the createAccount screen as a guest", async () => {
         client.isGuest.mockReturnValue(true);
         const dispatcherSpy = jest.fn();
@@ -179,6 +189,7 @@ describe("UserMenuViewModel", () => {
             }),
         );
     });
+
     it("should be able to open the onSignIn screen as a guest", async () => {
         client.isGuest.mockReturnValue(true);
         const dispatcherSpy = jest.fn();
