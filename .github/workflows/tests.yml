@@ -173,8 +173,8 @@ jobs:
               if: env.ENABLE_COVERAGE == 'true'
               id: artifact
               run: |
-                  SUFFIX=$(basename "$MATRIX_PATH")
-                  echo "name=coverage-$SUFFIX" >> $GITHUB_OUTPUT
+                  NAME=$(basename "$MATRIX_PATH")
+                  echo "name=$NAME" >> $GITHUB_OUTPUT
               env:
                   MATRIX_PATH: ${{ matrix.path }}
 
