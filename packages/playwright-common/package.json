@@ -31,7 +31,7 @@
         "@testcontainers/postgresql": "^11.0.0",
         "glob": "^13.0.5",
         "lodash-es": "^4.17.23",
-        "mailpit-api": "^1.2.0",
+        "mailpit-api": "^2.0.0",
         "strip-ansi": "^7.1.0",
         "testcontainers": "^11.0.0",
         "wait-on": "^9.0.4",

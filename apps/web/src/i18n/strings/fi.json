@@ -3364,7 +3364,6 @@
         "user_busy_description": "Käyttäjä, jolle soitit, on varattu.",
         "user_is_presenting": "%(sharerName)s esittää",
         "video_call": "Videopuhelu",
-        "video_call_started": "Videopuhelu aloitettu",
         "video_call_using": "Videopuhelu käyttäen:",
         "voice_call": "Äänipuhelu",
         "you_are_presenting": "Esität parhaillaan"

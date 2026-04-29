@@ -3250,7 +3250,6 @@
         "user_busy_description": "La persona a la que has llamado está ocupada.",
         "user_is_presenting": "%(sharerName)s está presentando",
         "video_call": "Llamada de vídeo",
-        "video_call_started": "Videollamada iniciada",
         "voice_call": "Llamada de voz",
         "you_are_presenting": "Estás presentando"
     },

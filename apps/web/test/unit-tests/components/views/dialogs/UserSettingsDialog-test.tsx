@@ -229,7 +229,7 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("watches settings", async () => {
-        const watchSettingCallbacks: Record<string, CallbackFn> = {};
+        const watchSettingCallbacks: Record<string, CallbackFn<any>> = {};
 
         mockSettingsStore.watchSetting.mockImplementation((settingName, roomId, callback) => {
             watchSettingCallbacks[settingName] = callback;
