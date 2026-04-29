@@ -7,10 +7,13 @@
         "lint:types": "tsc --noEmit"
     },
     "dependencies": {
-        "@vitest/coverage-v8": "catalog:",
         "vitest": "catalog:"
     },
     "devDependencies": {
         "typescript": "catalog:"
+    },
+    "peerDependencies": {
+        "@vitest/coverage-v8": "catalog:",
+        "vitest-sonar-reporter": "catalog:"
     }
 }
