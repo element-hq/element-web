@@ -13,7 +13,7 @@ exports[`UserMenu > renders a button 1`] = `
   >
     <span
       aria-label="@person-name:homeserver.com"
-      class="_avatar_7h2br_8"
+      class="_avatar_va14e_8"
       data-color="1"
       data-type="round"
       role="img"
@@ -21,7 +21,7 @@ exports[`UserMenu > renders a button 1`] = `
     >
       <img
         alt=""
-        class="_image_7h2br_43"
+        class="_image_va14e_43"
         data-type="round"
         height="36px"
         loading="lazy"
@@ -52,7 +52,7 @@ exports[`UserMenu > renders a button with a longer name 1`] = `
   >
     <span
       aria-label="@person-name:homeserver.com"
-      class="_avatar_7h2br_8"
+      class="_avatar_va14e_8"
       data-color="1"
       data-type="round"
       role="img"
@@ -60,7 +60,7 @@ exports[`UserMenu > renders a button with a longer name 1`] = `
     >
       <img
         alt=""
-        class="_image_7h2br_43"
+        class="_image_va14e_43"
         data-type="round"
         height="36px"
         loading="lazy"
@@ -96,7 +96,7 @@ exports[`UserMenu > renders a guest menu 1`] = `
     >
       <span
         aria-label="@guest:attendees.example.org"
-        class="_avatar_7h2br_8"
+        class="_avatar_va14e_8"
         data-color="4"
         data-type="round"
         role="img"
@@ -104,7 +104,7 @@ exports[`UserMenu > renders a guest menu 1`] = `
       >
         <img
           alt=""
-          class="_image_7h2br_43"
+          class="_image_va14e_43"
           data-type="round"
           height="36px"
           loading="lazy"
@@ -141,7 +141,7 @@ exports[`UserMenu > renders a menu 1`] = `
     >
       <span
         aria-label="@person-name:homeserver.com"
-        class="_avatar_7h2br_8"
+        class="_avatar_va14e_8"
         data-color="1"
         data-type="round"
         role="img"
@@ -149,7 +149,7 @@ exports[`UserMenu > renders a menu 1`] = `
       >
         <img
           alt=""
-          class="_image_7h2br_43"
+          class="_image_va14e_43"
           data-type="round"
           height="36px"
           loading="lazy"
@@ -181,7 +181,7 @@ exports[`UserMenu > renders condensed view 1`] = `
   >
     <span
       aria-label="@person-name:homeserver.com"
-      class="_avatar_7h2br_8"
+      class="_avatar_va14e_8"
       data-color="1"
       data-type="round"
       role="img"
@@ -189,7 +189,7 @@ exports[`UserMenu > renders condensed view 1`] = `
     >
       <img
         alt=""
-        class="_image_7h2br_43"
+        class="_image_va14e_43"
         data-type="round"
         height="36px"
         loading="lazy"
