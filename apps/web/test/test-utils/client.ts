@@ -132,6 +132,7 @@ export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixC
     getIdentityServerUrl: jest.fn(),
     getHomeserverUrl: jest.fn(),
     getCapabilities: jest.fn().mockResolvedValue({}),
+    getCachedCapabilities: jest.fn().mockResolvedValue({}),
     getClientWellKnown: jest.fn().mockReturnValue({}),
     waitForClientWellKnown: jest.fn().mockResolvedValue({}),
     doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),

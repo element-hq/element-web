@@ -10,6 +10,7 @@ import { DisambiguatedProfileView } from "@element-hq/web-shared-components";
 import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { useRoomMemberProfile } from "../../../../hooks/room/useRoomMemberProfile";
+import { useUserStatus } from "../../../../hooks/useUserStatus";
 import { SenderMode } from "../../../../models/rooms/EventTileModel";
 import type { DisambiguatedProfileViewModel } from "../../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 
@@ -51,6 +52,7 @@ function EventTileSenderProfile({
         userId: sender,
         member: mxEvent.sender,
     });
+    const userStatus = useUserStatus(sender);
 
     useEffect(() => {
         viewModel.setProps({
@@ -60,8 +62,9 @@ function EventTileSenderProfile({
             colored: true,
             emphasizeDisplayName: true,
             withTooltip,
+            userStatus,
         });
-    }, [member, onClick, sender, viewModel, withTooltip]);
+    }, [member, onClick, sender, userStatus, viewModel, withTooltip]);
 
     if (mxEvent.getContent().msgtype === MsgType.Emote) {
         return <></>;
