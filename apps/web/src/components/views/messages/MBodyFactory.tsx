@@ -7,9 +7,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type JSX, type RefObject, useContext, useEffect, useRef } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
+import { type ImageContent } from "matrix-js-sdk/src/types";
 import {
     DecryptionFailureBodyView,
     FileBodyView,
+    ImageBodyView,
     RedactedBodyView,
     VideoBodyView,
     useCreateAutoDisposedViewModel,
@@ -21,8 +23,10 @@ import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDevi
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 import { DecryptionFailureBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/DecryptionFailureBodyViewModel";
 import { FileBodyViewModel } from "../../../viewmodels/message-body/FileBodyViewModel";
+import { ImageBodyViewModel } from "../../../viewmodels/message-body/ImageBodyViewModel";
 import { RedactedBodyViewModel } from "../../../viewmodels/message-body/RedactedBodyViewModel";
 import { VideoBodyViewModel } from "../../../viewmodels/message-body/VideoBodyViewModel";
+import { isMimeTypeAllowed } from "../../../utils/blobs";
 
 type MBodyComponent = React.ComponentType<IBodyProps>;
 
@@ -134,6 +138,122 @@ export function VideoBodyFactory({
     );
 }
 
+export function ImageBodyFactory({
+    mxEvent,
+    mediaEventHelper,
+    forExport,
+    maxImageHeight,
+    permalinkCreator,
+    showFileInfo,
+}: Readonly<
+    Pick<
+        IBodyProps,
+        "mxEvent" | "mediaEventHelper" | "forExport" | "maxImageHeight" | "permalinkCreator" | "showFileInfo"
+    >
+>): JSX.Element {
+    const { timelineRenderingType } = useContext(RoomContext);
+    const [mediaVisible, setMediaVisible] = useMediaVisible(mxEvent);
+    const imageRef = useRef<HTMLImageElement>(null);
+    const content = mxEvent.getContent<ImageContent>();
+    const shouldFallbackToFileBody =
+        mediaEventHelper?.media.isEncrypted === true &&
+        !isMimeTypeAllowed(content.info?.mimetype ?? "") &&
+        !content.info?.thumbnail_info;
+
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new ImageBodyViewModel({
+                mxEvent,
+                mediaEventHelper,
+                forExport,
+                maxImageHeight,
+                mediaVisible,
+                permalinkCreator,
+                timelineRenderingType,
+                imageRef,
+                setMediaVisible,
+            }),
+    );
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.loadInitialMediaIfVisible();
+    }, [shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setEvent(mxEvent, mediaEventHelper);
+    }, [mediaEventHelper, mxEvent, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setForExport(forExport);
+    }, [forExport, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setMaxImageHeight(maxImageHeight);
+    }, [maxImageHeight, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setMediaVisible(mediaVisible);
+    }, [mediaVisible, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setPermalinkCreator(permalinkCreator);
+    }, [permalinkCreator, shouldFallbackToFileBody, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setTimelineRenderingType(timelineRenderingType);
+    }, [shouldFallbackToFileBody, timelineRenderingType, vm]);
+
+    useEffect(() => {
+        if (shouldFallbackToFileBody) return;
+        vm.setSetMediaVisible(setMediaVisible);
+    }, [setMediaVisible, shouldFallbackToFileBody, vm]);
+
+    const showFileBody =
+        !forExport &&
+        timelineRenderingType !== TimelineRenderingType.Room &&
+        timelineRenderingType !== TimelineRenderingType.Pinned &&
+        timelineRenderingType !== TimelineRenderingType.Search &&
+        timelineRenderingType !== TimelineRenderingType.Thread &&
+        timelineRenderingType !== TimelineRenderingType.ThreadsList;
+
+    if (shouldFallbackToFileBody) {
+        return (
+            <FileBodyFactory
+                mxEvent={mxEvent}
+                mediaEventHelper={mediaEventHelper}
+                forExport={forExport}
+                showFileInfo={showFileInfo}
+            />
+        );
+    }
+
+    return (
+        <ImageBodyView
+            vm={vm}
+            className="mx_MImageBody"
+            containerClassName="mx_MImageBody_thumbnail_container"
+            imageClassName="mx_MImageBody_thumbnail"
+            imageRef={imageRef}
+        >
+            {showFileBody ? (
+                <FileBodyFactory
+                    mxEvent={mxEvent}
+                    mediaEventHelper={mediaEventHelper}
+                    forExport={forExport}
+                    showFileInfo={false}
+                />
+            ) : null}
+        </ImageBodyView>
+    );
+}
+
 export function RedactedBodyFactory({ mxEvent, ref }: Pick<IBodyProps, "mxEvent" | "ref">): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new RedactedBodyViewModel({ mxEvent }));
 
@@ -164,6 +284,7 @@ export function DecryptionFailureBodyFactory({ mxEvent, ref }: Pick<IBodyProps, 
 
 // Message body factory registry for bodies that already route through view-model-backed wrappers.
 const MESSAGE_BODY_TYPES = new Map<string, MBodyComponent>([
+    [MsgType.Image, ImageBodyFactory],
     [MsgType.File, FileBodyFactory],
     [MsgType.Video, VideoBodyFactory],
 ]);

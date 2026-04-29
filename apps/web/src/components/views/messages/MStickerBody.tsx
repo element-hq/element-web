@@ -9,13 +9,13 @@ import React, { type JSX, type ComponentProps, type ReactNode } from "react";
 import { type Tooltip } from "@vector-im/compound-web";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
-import { MImageBodyInner } from "./MImageBody";
+import { ImageBodyBaseInner } from "./MImageReplyBody";
 import { BLURHASH_FIELD } from "../../../utils/image-media";
 import IconsShowStickersSvg from "../../../../res/img/icons-show-stickers.svg";
 import { type IBodyProps } from "./IBodyProps";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
-class MStickerBodyInner extends MImageBodyInner {
+class MStickerBodyInner extends ImageBodyBaseInner {
     // Mostly empty to prevent default behaviour of MImageBody
     protected onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();

@@ -19,7 +19,8 @@
     text-decoration: none;
 }
 
-.thumbnailContainer {
+.thumbnailContainer,
+:global(.mx_MImageBody_thumbnail_container) {
     position: relative;
     overflow: hidden;
     contain: paint;
@@ -57,7 +58,8 @@
     max-height: 100%;
 }
 
-.image {
+.image,
+:global(.mx_MImageBody_thumbnail) {
     display: block;
     width: 100%;
     height: 100%;
