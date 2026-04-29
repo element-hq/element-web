@@ -11,6 +11,7 @@ import type { CssNode, Rule, StyleSheet } from "css-tree";
 import customCSS from "!!raw-loader!./exportCustomCSS.css";
 
 const cssSelectorTextClassesRegex = /\.[\w-]+/g;
+const appLayerName = "app-web";
 
 function mutateCssText(css: string): string {
     // replace used fonts so that we don't have to bundle Inter & Fira Code
@@ -92,7 +93,7 @@ const getExportCSS = async (usedClasses: Set<string>): Promise<string> => {
         }
     }
 
-    return css + customCSS;
+    return `${css}@layer ${appLayerName} {${customCSS}}`;
 };
 
 export default getExportCSS;

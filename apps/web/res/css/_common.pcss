@@ -163,10 +163,10 @@ b {
     font-weight: bold;
 }
 
-/* Keep the legacy link colour without overriding component-owned anchors. */
-a:where(:not([data-kind], [class])):hover,
-a:where(:not([data-kind], [class])):link,
-a:where(:not([data-kind], [class])):visited {
+/* Keep the legacy link colour without overriding Compound anchors. */
+a:where(:not([data-kind])):hover,
+a:where(:not([data-kind])):link,
+a:where(:not([data-kind])):visited {
     color: $accent-alt;
 }
 

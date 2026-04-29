@@ -70,5 +70,39 @@ describe("exportCSS", () => {
             expect(css).toContain("BlinkMacSystemFont");
             expect(css).toContain("Menlo, Consolas");
         });
+
+        it("keeps export-only css in the app cascade layer after layered font rules", async () => {
+            document.head.innerHTML = `
+                <link rel="stylesheet" href="/bundle.css" />
+            `;
+
+            fetchMock.get(
+                "end:/bundle.css",
+                `
+                @layer compound-tokens, compound-web, shared-components, app-web;
+                @layer compound-web {
+                    .mx_Typography {
+                        font: var(--cpd-font-heading-lg-regular);
+                    }
+                }
+                @layer app-web {
+                    body {
+                        font: var(--cpd-font-body-md-regular) !important;
+                    }
+                }
+            `,
+            );
+
+            const css = await getExportCSS(new Set(["mx_Typography"]));
+
+            expect(css).toContain("@layer compound-web{.mx_Typography{font:var(--cpd-font-heading-lg-regular)}}");
+            expect(css).toContain("@layer app-web{body{font:var(--cpd-font-body-md-regular)!important}}");
+
+            const exportCssLayerIndex = css.indexOf("@layer app-web {");
+            expect(exportCssLayerIndex).toBeGreaterThan(
+                css.indexOf("@layer app-web{body{font:var(--cpd-font-body-md-regular)!important}}"),
+            );
+            expect(css.slice(exportCssLayerIndex)).toBe("@layer app-web {css-file-stub}");
+        });
     });
 });
