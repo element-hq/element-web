@@ -37,7 +37,6 @@ function LinkTitle({
             href={link}
             target="_blank"
             rel="noreferrer noopener"
-            data-kind="url-preview-title"
         >
             {title}
         </Text>
