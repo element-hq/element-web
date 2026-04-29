@@ -456,6 +456,7 @@ export type EventTileViewModelProps = EventTileCoreProps &
 
 /** Derives and maintains render state for a single timeline event tile. */
 export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, EventTileViewModelProps> {
+    // Multiplex client-level trust updates so timelines do not add one MatrixClient listener per tile.
     private static readonly cliTrustListenerRegistry = new WeakMap<
         MatrixClient,
         {
@@ -464,6 +465,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
     >();
 
+    // Multiplex room-level thread updates so timelines do not add one Room listener per tile/thread.
     private static readonly roomThreadListenerRegistry = new WeakMap<
         Room,
         {
