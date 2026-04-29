@@ -150,14 +150,14 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
                     {userId}
                 </Text>
                 {manageAccountHref && (
-                    <Button as="a" size="sm" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
+                    <Button as="a" size="md" kind="tertiary" href={manageAccountHref} Icon={PopOutIcon}>
                         {_t("menus|user_menu|manage_account")}
                     </Button>
                 )}
                 {actions.createAccount && (
                     <Button
                         className={styles.createAccount}
-                        size="sm"
+                        size="md"
                         as="button"
                         kind="primary"
                         onClick={vm.createAccount}
