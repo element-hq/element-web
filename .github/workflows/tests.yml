@@ -175,5 +175,5 @@ jobs:
               with:
                   name: coverage-${{ matrix.path }}
                   path: |
-                      packages/${{ matrix.path }}/coverage
-                      !packages/${{ matrix.path }}/coverage/lcov-report
+                      ${{ matrix.path }}/coverage
+                      !${{ matrix.path }}/coverage/lcov-report
