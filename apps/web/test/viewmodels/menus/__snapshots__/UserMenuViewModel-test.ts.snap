@@ -23,13 +23,13 @@ exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
 exports[`UserMenuViewModel should generate a menu options for a logged in client 1`] = `
 {
   "actions": {
-    "createAccount": true,
-    "linkNewDevice": false,
+    "createAccount": false,
+    "linkNewDevice": true,
     "openFeedback": false,
     "openHomePage": false,
-    "openSecurity": false,
+    "openSecurity": true,
     "openSettings": true,
-    "signIn": true,
+    "signIn": false,
   },
   "avatarUrl": undefined,
   "displayName": "@alice:domain",
