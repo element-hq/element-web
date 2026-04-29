@@ -14,13 +14,17 @@ import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";
 import { getTagsForRoom } from "./getTagsForRoom";
 import { isCustomSectionTag } from "../../stores/room-list-v3/section";
+import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 
 /**
  * Toggle tag for a given room.
- * A room can only be in one section: either a custom section, Favourite, or LowPriority.
- * Applying any of these will atomically replace the current section tag.
+ *
+ * - For custom section tags: replaces the active space's current custom section tag (if any),
+ *   leaving tags from other spaces intact. A room can be in one custom section per space.
+ * - For Favourite/LowPriority: simple toggle of that specific tag, independent of custom sections.
+ *
  * @param room The room to tag
- * @param tagId The tag to invert
+ * @param tagId The tag to toggle
  */
 export function tagRoom(room: Room, tagId: TagID): void {
     if (tagId !== DefaultTagID.Favourite && tagId !== DefaultTagID.LowPriority && !isCustomSectionTag(tagId)) {
@@ -28,14 +32,25 @@ export function tagRoom(room: Room, tagId: TagID): void {
         return;
     }
 
-    // Find the section tag currently applied (Fav, LowPriority, or custom) — at most one exists
-    const currentSectionTag =
-        getTagsForRoom(room).find(
-            (t) => t === DefaultTagID.Favourite || t === DefaultTagID.LowPriority || isCustomSectionTag(t),
-        ) ?? null;
+    let removeTag: TagID | null;
+    let addTag: TagID | null;
 
-    const isApplied = currentSectionTag === tagId;
-    const removeTag = currentSectionTag;
-    const addTag = isApplied ? null : tagId;
+    if (isCustomSectionTag(tagId)) {
+        // For custom sections: only replace within the active space's custom sections.
+        // Tags from other spaces are left intact.
+        const activeSpaceCustomSectionTags = new Set(
+            RoomListStoreV3.instance.orderedSectionTags.filter((t) => isCustomSectionTag(t)),
+        );
+        const currentSectionTag = getTagsForRoom(room).find((t) => activeSpaceCustomSectionTags.has(t)) ?? null;
+        const isApplied = currentSectionTag === tagId;
+        removeTag = currentSectionTag;
+        addTag = isApplied ? null : tagId;
+    } else {
+        // For Favourite/LowPriority: simple toggle — independent of custom sections.
+        const isApplied = getTagsForRoom(room).includes(tagId);
+        removeTag = isApplied ? tagId : null;
+        addTag = isApplied ? null : tagId;
+    }
+
     dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag));
 }

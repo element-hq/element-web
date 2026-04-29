@@ -78,7 +78,7 @@ describe("RoomListItemViewModel", () => {
 
         jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
             if (setting === "RoomList.showMessagePreview") return false;
-            if (setting === "RoomList.OrderedCustomSections") return [];
+            if (setting === "element.io.prototype.RoomList.OrderedCustomSections") return {};
             return false;
         });
         jest.spyOn(SettingsStore, "watchSetting").mockImplementation(() => "watcher-id");
@@ -653,8 +653,8 @@ describe("RoomListItemViewModel", () => {
         it("should use custom section name from CustomSectionData", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "feature_room_list_sections") return true;
-                if (setting === "RoomList.CustomSectionData")
-                    return { [customTag]: { name: "My Custom Section", tag: customTag } };
+                if (setting === "element.io.prototype.RoomList.CustomSectionData")
+                    return { [customTag]: { name: "My Custom Section", tag: customTag, spaceId: "!space:server" } };
                 return false;
             });
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
@@ -666,7 +666,7 @@ describe("RoomListItemViewModel", () => {
         it("should update sections when OrderedCustomSections setting changes", () => {
             let watchCallback: CallbackFn<"RoomList.OrderedCustomSections"> = () => {};
             jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
-                if (setting === "RoomList.OrderedCustomSections") watchCallback = callback;
+                if (setting === "element.io.prototype.RoomList.OrderedCustomSections") watchCallback = callback;
                 return "watcher-id";
             });
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
@@ -683,7 +683,7 @@ describe("RoomListItemViewModel", () => {
                 CHATS_TAG,
                 DefaultTagID.LowPriority,
             ]);
-            watchCallback("RoomList.OrderedCustomSections", null, null as any, null, null);
+            watchCallback("element.io.prototype.RoomList.OrderedCustomSections", null, null as any, null, null);
 
             expect(viewModel.getSnapshot().sections.map((s) => s.tag)).toEqual([]);
         });

@@ -368,8 +368,8 @@ export interface Settings {
     "inviteRules": IBaseSetting<ComputedInviteConfig>;
     "blockInvites": IBaseSetting<boolean>;
     "Developer.elementCallUrl": IBaseSetting<string>;
-    "RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
-    "RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
+    "element.io.prototype.RoomList.CustomSectionData": IBaseSetting<CustomSectionsData>;
+    "element.io.prototype.RoomList.OrderedCustomSections": IBaseSetting<OrderedCustomSections>;
 }
 
 export type SettingKey = keyof Settings;
@@ -1379,7 +1379,7 @@ export const SETTINGS: Settings = {
      * Managed by the {@link RoomListStoreV3}
      * Store the custom section data for the room list
      */
-    "RoomList.CustomSectionData": {
+    "element.io.prototype.RoomList.CustomSectionData": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: {},
     },
@@ -1387,7 +1387,7 @@ export const SETTINGS: Settings = {
      * Managed by the {@link RoomListStoreV3}
      * Store the ordering of the custom sections for the room list, keyed by space/metaspace ID.
      */
-    "RoomList.OrderedCustomSections": {
+    "element.io.prototype.RoomList.OrderedCustomSections": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: {},
     },

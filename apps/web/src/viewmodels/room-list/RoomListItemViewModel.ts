@@ -38,7 +38,7 @@ import { Action } from "../../dispatcher/actions";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
-import RoomListStoreV3, { CHATS_TAG } from "../../stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3, { CHATS_TAG, LISTS_UPDATE_EVENT } from "../../stores/room-list-v3/RoomListStoreV3";
 import { _t } from "../../languageHandler";
 
 interface RoomItemProps {
@@ -98,12 +98,17 @@ export class RoomListItemViewModel
         this.disposables.trackListener(props.room, RoomEvent.Name, this.onRoomChanged);
         this.disposables.trackListener(props.room, RoomEvent.Tags, this.onRoomChanged);
 
-        const orderSectionsRef = SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () =>
+        const orderSectionsRef = SettingsStore.watchSetting("element.io.prototype.RoomList.OrderedCustomSections", null, () =>
             this.onOrderedCustomSectionsChange(),
         );
         this.disposables.track(() => {
             SettingsStore.unwatchSetting(orderSectionsRef);
         });
+
+        // Rebuild sections when the active space changes (variant-a: sections are scoped per space).
+        // Listen to LISTS_UPDATE_EVENT (not UPDATE_SELECTED_SPACE directly) to guarantee that
+        // RoomListStoreV3 has already called loadCustomSections() and updated orderedSectionTags.
+        this.disposables.trackListener(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, this.onOrderedCustomSectionsChange);
 
         // Load message preview asynchronously (sync data is already complete)
         void this.loadAndSetMessagePreview();
@@ -423,7 +428,7 @@ export class RoomListItemViewModel
      * Order follows the canonical section order from RoomListStoreV3.
      */
     private static buildSections(roomTags: Room["tags"]): Section[] {
-        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+        const customSectionData = SettingsStore.getValue("element.io.prototype.RoomList.CustomSectionData") || {};
 
         return (
             RoomListStoreV3.instance.orderedSectionTags

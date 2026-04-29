@@ -284,7 +284,7 @@ export class RoomListViewModel
     public getSectionHeaderViewModel(tag: string): RoomListSectionHeaderViewModel {
         if (this.roomSectionHeaderViewModels.has(tag)) return this.roomSectionHeaderViewModels.get(tag)!;
 
-        const customSections = SettingsStore.getValue("RoomList.CustomSectionData");
+        const customSections = SettingsStore.getValue("element.io.prototype.RoomList.CustomSectionData");
         const title = TAG_TO_TITLE_MAP[tag] || customSections[tag]?.name || tag;
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
@@ -637,7 +637,7 @@ function computeSections(
     roomsResult: RoomsResult,
     isSectionExpanded: (tag: string) => boolean,
 ): { sections: Section[]; isFlatList: boolean } {
-    const customSections = SettingsStore.getValue("RoomList.CustomSectionData");
+    const customSections = SettingsStore.getValue("element.io.prototype.RoomList.CustomSectionData");
 
     const sections = roomsResult.sections
         // Only include sections that have rooms or are custom sections (which may be empty but should still be shown)

@@ -26,7 +26,7 @@ describe("RoomListSectionHeaderViewModel", () => {
         jest.spyOn(SettingsStore, "watchSetting").mockReturnValue("watcher-id");
         jest.spyOn(SettingsStore, "unwatchSetting").mockReturnValue(undefined);
         jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-            if (setting === "RoomList.OrderedCustomSections") return [];
+            if (setting === "element.io.prototype.RoomList.OrderedCustomSections") return {};
             return null;
         });
     });
@@ -118,7 +118,7 @@ describe("RoomListSectionHeaderViewModel", () => {
 
         beforeEach(() => {
             jest.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, callback) => {
-                if (settingName === "RoomList.CustomSectionData") watchCallback = callback as () => void;
+                if (settingName === "element.io.prototype.RoomList.CustomSectionData") watchCallback = callback as () => void;
                 return "watcher-id";
             });
         });
@@ -133,7 +133,7 @@ describe("RoomListSectionHeaderViewModel", () => {
             });
             expect(vm.getSnapshot().title).toBe("Old Title");
 
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue({ [tag]: { tag, name: "New Title" } });
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({ [tag]: { tag, name: "New Title", spaceId: "!space:server" } });
             watchCallback();
 
             expect(vm.getSnapshot().title).toBe("New Title");

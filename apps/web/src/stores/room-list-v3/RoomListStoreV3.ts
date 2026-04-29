@@ -133,7 +133,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             this.onActiveSpaceChanged();
         });
         SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
-        SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
+        SettingsStore.watchSetting("element.io.prototype.RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
         this.loadCustomSections();
     }
 
@@ -532,7 +532,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     private loadCustomSections(): void {
         const activeSpace = SpaceStore.instance.activeSpace;
-        const orderedCustomSections: Record<string, string[]> = SettingsStore.getValue("RoomList.OrderedCustomSections") || {};
+        const storedSections = SettingsStore.getValue("element.io.prototype.RoomList.OrderedCustomSections");
+        // Guard against legacy flat-array format stored by the base branch
+        const orderedCustomSections: Record<string, string[]> =
+            storedSections && !Array.isArray(storedSections) ? storedSections : {};
         const spaceSections = orderedCustomSections[activeSpace] ?? [];
         this.sortedTags = [DefaultTagID.Favourite, ...spaceSections, CHATS_TAG, DefaultTagID.LowPriority];
     }

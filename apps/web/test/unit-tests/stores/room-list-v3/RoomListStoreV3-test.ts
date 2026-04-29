@@ -832,7 +832,7 @@ describe("RoomListStoreV3", () => {
         function enableSections(): void {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
-                if (setting === "RoomList.OrderedCustomSections") return [];
+                if (setting === "element.io.prototype.RoomList.OrderedCustomSections") return {};
                 return false;
             });
         }
@@ -1084,7 +1084,8 @@ describe("RoomListStoreV3", () => {
 
             let settingsWatcher: (settingName: string) => void = () => {};
             jest.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, callback) => {
-                if (settingName === "RoomList.OrderedCustomSections") settingsWatcher = callback as () => void;
+                if (settingName === "element.io.prototype.RoomList.OrderedCustomSections")
+                    settingsWatcher = callback as () => void;
                 return "watcher-id";
             });
 
@@ -1092,7 +1093,7 @@ describe("RoomListStoreV3", () => {
 
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
-                if (setting === "RoomList.OrderedCustomSections") return [];
+                if (setting === "element.io.prototype.RoomList.OrderedCustomSections") return {};
                 return false;
             });
 
@@ -1106,12 +1107,13 @@ describe("RoomListStoreV3", () => {
             rooms[0].tags = { [customTag]: { order: 0 } };
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
-                if (setting === "RoomList.OrderedCustomSections") return [customTag];
+                if (setting === "element.io.prototype.RoomList.OrderedCustomSections")
+                    return { [MetaSpace.Home]: [customTag] };
                 return false;
             });
 
             // Trigger the settings watcher
-            settingsWatcher("RoomList.OrderedCustomSections");
+            settingsWatcher("element.io.prototype.RoomList.OrderedCustomSections");
 
             // Now there should be 4 sections (Favourite, custom, Chats, LowPriority)
             expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(4);

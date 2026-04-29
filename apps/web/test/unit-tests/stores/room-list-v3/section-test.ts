@@ -10,6 +10,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import { createSection, editSection, deleteSection } from "../../../../src/stores/room-list-v3/section";
 import { CreateSectionDialog } from "../../../../src/components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
+import { MetaSpace } from "../../../../src/stores/spaces";
 
 describe("section", () => {
     afterEach(() => {
@@ -23,8 +24,8 @@ describe("section", () => {
         });
 
         it.each([
-            [false, "", undefined],
-            [true, "", undefined],
+            [false, "", undefined] as const,
+            [true, "", undefined] as const,
             [true, "My Section", expect.stringMatching(/^element\.io\.section\./)],
         ])("returns %s when shouldCreate=%s and name='%s'", async (shouldCreate, name, expected) => {
             jest.spyOn(Modal, "createDialog").mockReturnValue({
@@ -32,7 +33,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            const result = await createSection();
+            const result = await createSection(MetaSpace.Home);
             expect(result).toEqual(expected);
         });
 
@@ -42,7 +43,7 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            const result = await createSection();
+            const result = await createSection(MetaSpace.Home);
             expect(result).toMatch(/^element\.io\.section\./);
         });
 
@@ -52,14 +53,14 @@ describe("section", () => {
                 close: jest.fn(),
             } as any);
 
-            await createSection();
+            await createSection(MetaSpace.Home);
             expect(createDialogSpy).toHaveBeenCalledWith(CreateSectionDialog);
         });
 
         it("saves section data and ordered sections at ACCOUNT level when confirmed", async () => {
             const existingTag = "element.io.section.existing";
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "RoomList.OrderedCustomSections") return [existingTag];
+                if (setting === "element.io.prototype.RoomList.OrderedCustomSections") return { [MetaSpace.Home]: [existingTag] };
                 return null;
             });
             jest.spyOn(Modal, "createDialog").mockReturnValue({
@@ -68,23 +69,29 @@ describe("section", () => {
             } as any);
             const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            await createSection();
+            await createSection(MetaSpace.Home);
 
-            const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
-            const savedSection = Object.values(customDataCall![3] as Record<string, { tag: string; name: string }>)[0];
+            const customDataCall = setValueSpy.mock.calls.find(
+                ([name]) => name === "element.io.prototype.RoomList.CustomSectionData",
+            );
+            const savedSection = Object.values(
+                customDataCall![3] as Record<string, { tag: string; name: string; spaceId: string }>,
+            )[0];
             expect(savedSection.name).toBe("My Section");
             expect(savedSection.tag).toMatch(/^element\.io\.section\./);
 
-            const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
-            const savedOrder = orderedCall![3] as string[];
-            expect(savedOrder[0]).toBe(existingTag);
-            expect(savedOrder[1]).toMatch(/^element\.io\.section\./);
+            const orderedCall = setValueSpy.mock.calls.find(
+                ([name]) => name === "element.io.prototype.RoomList.OrderedCustomSections",
+            );
+            const savedOrder = orderedCall![3] as Record<string, string[]>;
+            expect(savedOrder[MetaSpace.Home][0]).toBe(existingTag);
+            expect(savedOrder[MetaSpace.Home][1]).toMatch(/^element\.io\.section\./);
         });
     });
 
     describe("editSection", () => {
         const tag = "element.io.section.abc";
-        const existingSectionData = { [tag]: { tag, name: "Old Name" } };
+        const existingSectionData = { [tag]: { tag, name: "Old Name", spaceId: MetaSpace.Home } };
 
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(existingSectionData);
@@ -134,10 +141,10 @@ describe("section", () => {
             await editSection(tag);
 
             expect(setValueSpy).toHaveBeenCalledWith(
-                "RoomList.CustomSectionData",
+                "element.io.prototype.RoomList.CustomSectionData",
                 null,
                 expect.anything(),
-                expect.objectContaining({ [tag]: { tag, name: "New Name" } }),
+                expect.objectContaining({ [tag]: { tag, name: "New Name", spaceId: MetaSpace.Home } }),
             );
         });
     });
@@ -147,11 +154,15 @@ describe("section", () => {
         const otherTag = "element.io.section.other";
 
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
-                if (setting === "RoomList.CustomSectionData") return { [tag]: { tag, name: "My Section" } };
-                if (setting === "RoomList.OrderedCustomSections") return [otherTag, tag];
-                return null;
-            });
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (setting): ReturnType<(typeof SettingsStore)["getValue"]> => {
+                    if (setting === "element.io.prototype.RoomList.CustomSectionData")
+                        return { [tag]: { tag, name: "My Section", spaceId: MetaSpace.Home } };
+                    if (setting === "element.io.prototype.RoomList.OrderedCustomSections")
+                        return { [MetaSpace.Home]: [otherTag, tag] };
+                    return null;
+                },
+            );
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
         });
 
@@ -196,10 +207,14 @@ describe("section", () => {
 
             await deleteSection(tag, false);
 
-            const orderedCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.OrderedCustomSections");
-            expect(orderedCall![3]).toEqual([otherTag]);
+            const orderedCall = setValueSpy.mock.calls.find(
+                ([name]) => name === "element.io.prototype.RoomList.OrderedCustomSections",
+            );
+            expect(orderedCall![3]).toEqual({ [MetaSpace.Home]: [otherTag] });
 
-            const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
+            const customDataCall = setValueSpy.mock.calls.find(
+                ([name]) => name === "element.io.prototype.RoomList.CustomSectionData",
+            );
             expect(customDataCall![3]).not.toHaveProperty(tag);
         });
     });

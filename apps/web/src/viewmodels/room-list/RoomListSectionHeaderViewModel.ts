@@ -54,7 +54,7 @@ export class RoomListSectionHeaderViewModel
             isUnread: false,
             displaySectionMenu: !isDefaultSection,
         });
-        const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
+        const sectionWatherRef = SettingsStore.watchSetting("element.io.prototype.RoomList.CustomSectionData", null, () =>
             this.onCustomSectionDataChange(),
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(sectionWatherRef));
@@ -140,7 +140,7 @@ export class RoomListSectionHeaderViewModel
      * Handle changes to custom section data.
      */
     private onCustomSectionDataChange(): void {
-        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+        const customSectionData = SettingsStore.getValue("element.io.prototype.RoomList.CustomSectionData") || {};
         const sectionData = customSectionData[this.props.tag];
         if (sectionData) {
             this.snapshot.merge({ title: sectionData.name });

@@ -65,17 +65,18 @@ export async function createSection(spaceId: SpaceKey): Promise<string | undefin
     const tag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
     const newSection: CustomSection = { tag, name: sectionName, spaceId };
 
-    // Save the new section data
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+    // Save the new section data — shallow-copy to avoid mutating the settings cache reference
+    const sectionData = { ...(SettingsStore.getValue("element.io.prototype.RoomList.CustomSectionData") || {}) };
     sectionData[tag] = newSection;
-    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
+    await SettingsStore.setValue("element.io.prototype.RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 
     // Add the new section to the ordered list of sections for this space
-    const orderedSections: OrderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || {};
-    const spaceSections = orderedSections[spaceId] ?? [];
-    spaceSections.push(tag);
-    orderedSections[spaceId] = spaceSections;
-    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
+    // Shallow-copy and guard against legacy flat-array format from the base branch
+    const storedSections = SettingsStore.getValue("element.io.prototype.RoomList.OrderedCustomSections");
+    const orderedSections: OrderedCustomSections =
+        storedSections && !Array.isArray(storedSections) ? { ...storedSections } : {};
+    orderedSections[spaceId] = [...(orderedSections[spaceId] ?? []), tag];
+    await SettingsStore.setValue("element.io.prototype.RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
     return tag;
 }
 
@@ -84,7 +85,7 @@ export async function createSection(spaceId: SpaceKey): Promise<string | undefin
  * @param tag - The tag of the section to edit.
  */
 export async function editSection(tag: string): Promise<void> {
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+    const sectionData = SettingsStore.getValue("element.io.prototype.RoomList.CustomSectionData") || {};
     const section = sectionData[tag];
     if (!section) {
         logger.info("Unknown section tag, cannot edit section", tag);
@@ -99,7 +100,7 @@ export async function editSection(tag: string): Promise<void> {
 
     // Save the new name
     sectionData[tag].name = newName;
-    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
+    await SettingsStore.setValue("element.io.prototype.RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 }
 
 /**
@@ -108,7 +109,7 @@ export async function editSection(tag: string): Promise<void> {
  * @param isEmpty - Whether the section is empty (has no rooms). If the section is not empty, the confirmation dialog will show a warning message.
  */
 export async function deleteSection(tag: string, isEmpty: boolean): Promise<void> {
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData");
+    const sectionData = SettingsStore.getValue("element.io.prototype.RoomList.CustomSectionData");
     if (!sectionData[tag]) {
         logger.info("Unknown section tag, cannot delete section", tag);
         return;
@@ -120,13 +121,16 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
 
     // Remove the section from the ordered list of sections for its space
     const spaceId = sectionData[tag].spaceId;
-    const orderedSections: OrderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || {};
+    const storedSections = SettingsStore.getValue("element.io.prototype.RoomList.OrderedCustomSections");
+    const orderedSections: OrderedCustomSections =
+        storedSections && !Array.isArray(storedSections) ? { ...storedSections } : {};
     if (orderedSections[spaceId]) {
         orderedSections[spaceId] = orderedSections[spaceId].filter((sectionTag) => sectionTag !== tag);
     }
-    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
+    await SettingsStore.setValue("element.io.prototype.RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
 
-    // Remove the section data
-    delete sectionData[tag];
-    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
+    // Remove the section data — shallow-copy to avoid mutating the settings cache reference
+    const updatedSectionData = { ...sectionData };
+    delete updatedSectionData[tag];
+    await SettingsStore.setValue("element.io.prototype.RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, updatedSectionData);
 }
