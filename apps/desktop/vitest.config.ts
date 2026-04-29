@@ -35,9 +35,8 @@ if (env["GITHUB_ACTIONS"] !== undefined) {
     reporters.push([
         "vitest-sonar-reporter",
         {
-            outputFile: process.env.SHARD
-                ? `coverage/sonar-report-${process.env.SHARD}.xml`
-                : "coverage/sonar-report.xml",
+            outputFile: "coverage/sonar-report.xml",
+            onWritePath: (path): string => `apps/desktop/${path}`,
         },
     ]);
 
@@ -52,6 +51,8 @@ export default defineConfig({
         coverage: {
             provider: "v8",
             include: ["src/**/*"],
+            // The coverage report currently chokes on this file as it doesn't process it as TypeScript
+            exclude: ["src/preload.cts"],
             reporter: "lcov",
         },
         environment: "node",

@@ -143,7 +143,7 @@ export default class ProtocolHandler {
                     if (state) {
                         sessionId = state.split(`:${SEARCH_PARAM}:`)[1];
                     } else {
-                        console.log("Unable to read session ID in deeplink url:", deeplinkUrl);
+                        console.warn("Unable to read session ID in deeplink url:", deeplinkUrl);
                         return undefined;
                     }
                 }
