@@ -3,13 +3,13 @@
 exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
 {
   "actions": {
-    "createAccount": false,
-    "linkNewDevice": true,
+    "createAccount": true,
+    "linkNewDevice": false,
     "openFeedback": false,
     "openHomePage": false,
-    "openSecurity": true,
+    "openSecurity": false,
     "openSettings": true,
-    "signIn": false,
+    "signIn": true,
   },
   "avatarUrl": undefined,
   "displayName": "@alice:domain",
