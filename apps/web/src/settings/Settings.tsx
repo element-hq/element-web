@@ -1126,7 +1126,13 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_default"),
         default: true,
-        controller: new UIFeatureController(UIFeature.URLPreviews),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews], false, (c) => {
+            if (c["io.element.msc4452.preview_url"]?.enabled !== false) {
+                // If the capability is not listed, or explicitly true then do not disable.
+                return false;
+            }
+            return _t("common|disabled_by_homeserver");
+        }),
     },
     "urlPreviewsEnabled_e2ee": {
         // Can only be enabled per-device to ensure neither the homeserver nor client config
