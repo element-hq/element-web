@@ -50,6 +50,8 @@ describe("<EventIndexPanel />", () => {
         });
 
         it("opens event index management dialog", async () => {
+            await import("../../../../../src/async-components/views/dialogs/eventindex/ManageEventIndexDialog");
+
             jest.spyOn(EventIndexPeg, "get").mockReturnValue(new EventIndex());
             getComponent();
 
