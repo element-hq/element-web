@@ -1385,11 +1385,11 @@ export const SETTINGS: Settings = {
     },
     /**
      * Managed by the {@link RoomListStoreV3}
-     * Store the ordering of the custom sections for the room list
+     * Store the ordering of the custom sections for the room list, keyed by space/metaspace ID.
      */
     "RoomList.OrderedCustomSections": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: [],
+        default: {},
     },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,

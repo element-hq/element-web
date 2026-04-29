@@ -12,6 +12,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectionDialog";
+import { type SpaceKey } from "../spaces";
 
 type Tag = string;
 
@@ -35,40 +36,45 @@ export function isCustomSectionTag(tag: string): boolean {
 type CustomSection = {
     tag: Tag;
     name: string;
+    /** The space or metaspace this section belongs to. */
+    spaceId: SpaceKey;
 };
 
 /**
- * The custom sections data is stored as a record in the settings, where the key is the section tag and the value is the section data (name and tag).
+ * The custom sections data is stored as a record in the settings, where the key is the section tag and the value is the section data (name, tag and spaceId).
  */
 export type CustomSectionsData = Record<Tag, CustomSection>;
 /**
- * Ordered list of custom section tags.
+ * Ordered list of custom section tags, keyed by space/metaspace ID.
  */
-export type OrderedCustomSections = Tag[];
+export type OrderedCustomSections = Record<SpaceKey, Tag[]>;
 
 /**
  * Creates a new custom section by showing a dialog to the user to enter the section name.
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
+ * @param spaceId - The space or metaspace this section is being created in.
  * @return A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
-export async function createSection(): Promise<string | undefined> {
+export async function createSection(spaceId: SpaceKey): Promise<string | undefined> {
     const modal = Modal.createDialog(CreateSectionDialog);
 
     const [shouldCreateSection, sectionName] = await modal.finished;
     if (!shouldCreateSection || !sectionName) return undefined;
 
     const tag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
-    const newSection: CustomSection = { tag, name: sectionName };
+    const newSection: CustomSection = { tag, name: sectionName, spaceId };
 
     // Save the new section data
     const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
     sectionData[tag] = newSection;
     await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 
-    // Add the new section to the ordered list of sections
-    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || [];
-    orderedSections.push(tag);
+    // Add the new section to the ordered list of sections for this space
+    const orderedSections: OrderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || {};
+    const spaceSections = orderedSections[spaceId] ?? [];
+    spaceSections.push(tag);
+    orderedSections[spaceId] = spaceSections;
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
     return tag;
 }
@@ -112,10 +118,13 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
     const [shouldRemoveSection] = await modal.finished;
     if (!shouldRemoveSection) return;
 
-    // Remove the section from the ordered list of sections
-    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
-    const newOrderedSections = orderedSections.filter((sectionTag) => sectionTag !== tag);
-    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, newOrderedSections);
+    // Remove the section from the ordered list of sections for its space
+    const spaceId = sectionData[tag].spaceId;
+    const orderedSections: OrderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || {};
+    if (orderedSections[spaceId]) {
+        orderedSections[spaceId] = orderedSections[spaceId].filter((sectionTag) => sectionTag !== tag);
+    }
+    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
 
     // Remove the section data
     delete sectionData[tag];

@@ -442,6 +442,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     private onActiveSpaceChanged(): void {
         if (!this.roomSkipList) return;
+        this.loadCustomSections();
+        this.roomSkipList.useNewFilters(this.getSkipListFilters());
         this.roomSkipList.calculateActiveSpaceForNodes();
         this.scheduleEmit();
     }
@@ -492,7 +494,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Emits {@link SECTION_CREATED_EVENT} if the section was successfully created.
      */
     public async createSection(): Promise<string | undefined> {
-        const tag = await createSection();
+        const tag = await createSection(SpaceStore.instance.activeSpace);
         if (!tag) return;
         this.emit(SECTION_CREATED_EVENT, tag);
         return tag;
@@ -525,11 +527,14 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Load the custom sections from the settings store and update the sorted tags.
+     * Load the custom sections from the settings store and update the sorted tags,
+     * filtering to only those belonging to the currently active space.
      */
     private loadCustomSections(): void {
-        const orderedCustomSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
-        this.sortedTags = [DefaultTagID.Favourite, ...orderedCustomSections, CHATS_TAG, DefaultTagID.LowPriority];
+        const activeSpace = SpaceStore.instance.activeSpace;
+        const orderedCustomSections: Record<string, string[]> = SettingsStore.getValue("RoomList.OrderedCustomSections") || {};
+        const spaceSections = orderedCustomSections[activeSpace] ?? [];
+        this.sortedTags = [DefaultTagID.Favourite, ...spaceSections, CHATS_TAG, DefaultTagID.LowPriority];
     }
 }
 
