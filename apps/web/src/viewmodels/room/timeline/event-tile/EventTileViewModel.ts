@@ -886,9 +886,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private mergeSnapshot(partial: EventTileViewSnapshotUpdate): void {
         const nextSnapshot = EventTileViewModel.mergeSnapshotUpdate(this.snapshot.current, partial);
-        const partialSnapshot = EventTileViewModel.getChangedSnapshotGroups(this.snapshot.current, nextSnapshot);
 
-        this.snapshot.merge(partialSnapshot);
+        this.snapshot.merge(nextSnapshot);
         this.updateTimestampViewModel(nextSnapshot);
         this.updateReceiptListener(nextSnapshot);
     }
@@ -1253,24 +1252,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 EventTileViewModel.mergeSnapshotGroup(current.presentation, partial.presentation) ??
                 current.presentation,
         };
-    }
-
-    private static getChangedSnapshotGroups(
-        current: EventTileViewSnapshot,
-        next: EventTileViewSnapshot,
-    ): Partial<EventTileViewSnapshot> {
-        const partial: Partial<EventTileViewSnapshot> = {};
-
-        if (next.interaction !== current.interaction) partial.interaction = next.interaction;
-        if (next.receipt !== current.receipt) partial.receipt = next.receipt;
-        if (next.rendering !== current.rendering) partial.rendering = next.rendering;
-        if (next.timestamp !== current.timestamp) partial.timestamp = next.timestamp;
-        if (next.thread !== current.thread) partial.thread = next.thread;
-        if (next.sender !== current.sender) partial.sender = next.sender;
-        if (next.encryption !== current.encryption) partial.encryption = next.encryption;
-        if (next.presentation !== current.presentation) partial.presentation = next.presentation;
-
-        return partial;
     }
 
     /**
