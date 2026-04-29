@@ -40,6 +40,8 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
 import RoomListStoreV3, { CHATS_TAG } from "../../stores/room-list-v3/RoomListStoreV3";
 import { _t } from "../../languageHandler";
+import SpaceStore from "../../stores/spaces/SpaceStore";
+import { MetaSpace } from "../../stores/spaces";
 
 interface RoomItemProps {
     room: Room;
@@ -287,7 +289,9 @@ export class RoomListItemViewModel
         const callType =
             call?.callType === CallType.Voice ? "voice" : call?.callType === CallType.Video ? "video" : undefined;
 
-        const canMoveToSection = SettingsStore.getValue("feature_room_list_sections");
+        const canMoveToSection =
+            SettingsStore.getValue("feature_room_list_sections") &&
+            SpaceStore.instance.activeSpace === MetaSpace.Home;
 
         // Build sections list for the "Move to section" submenu
         const sections: Section[] = canMoveToSection ? RoomListItemViewModel.buildSections(roomTags) : [];

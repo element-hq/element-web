@@ -20,7 +20,7 @@ import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import SpaceStore from "../spaces/SpaceStore";
-import { type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { type SpaceKey, MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
@@ -465,7 +465,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * @returns An array of sections
      */
     private getSections(filterKeys?: FilterKey[]): Section[] {
-        return this.sortedTags.map((tag) => {
+        const sections = this.sortedTags.map((tag) => {
             const filters = filterBoolean([this.filterByTag.get(tag)?.key, ...(filterKeys || [])]);
 
             return {
@@ -473,6 +473,14 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 rooms: Array.from(this.roomSkipList?.getRoomsInActiveSpace(filters) || []),
             };
         });
+
+        // When in a real space (not Home), hide sections that have no overlapping rooms
+        const activeSpace = SpaceStore.instance.activeSpace;
+        if (activeSpace !== MetaSpace.Home) {
+            return sections.filter((section) => section.tag === CHATS_TAG || section.rooms.length > 0);
+        }
+
+        return sections;
     }
 
     /**
