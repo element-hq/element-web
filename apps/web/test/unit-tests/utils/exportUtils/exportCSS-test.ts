@@ -28,7 +28,9 @@ describe("exportCSS", () => {
                 <link rel="stylesheet" href="/theme-dark.css" />
             `;
 
-            fetchMock.get("end:/bundle.css", `
+            fetchMock.get(
+                "end:/bundle.css",
+                `
                 @font-face { font-family: Inter; src: url(inter.woff2); }
                 body { margin: 0; }
                 .mx_Used { font-family: Inter; color: #111111; }
@@ -43,7 +45,8 @@ describe("exportCSS", () => {
                 @supports (display: grid) {
                     .mx_UnusedSupported { color: #fedcba; }
                 }
-            `);
+            `,
+            );
             fetchMock.get("end:/theme-light.css", ".mx_Theme { color: #222222; }");
 
             const css = await getExportCSS(new Set(["mx_Used", "mx_Code", "mx_Theme"]));
