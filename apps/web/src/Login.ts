@@ -18,7 +18,6 @@ import {
     type ISSOFlow,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { isSignInWithQRAvailable } from "matrix-js-sdk/src/rendezvous";
 
 import { type IMatrixClientCreds } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
@@ -32,12 +31,7 @@ import { isUserRegistrationSupported } from "./utils/oidc/isUserRegistrationSupp
  * LoginFlow type use the client API /login endpoint
  * OidcNativeFlow is specific to this client
  */
-export type ClientLoginFlow = LoginFlow | OidcNativeFlow | LoginWithQrFlow;
-
-export interface LoginWithQrFlow {
-    type: "loginWithQrFlow";
-    clientId: string;
-}
+export type ClientLoginFlow = LoginFlow | OidcNativeFlow;
 
 interface ILoginOptions {
     defaultDeviceDisplayName?: string;
@@ -122,17 +116,7 @@ export default class Login {
                     SdkConfig.get().oidc_static_clients,
                     isRegistration,
                 );
-                let possibleQrFlow: LoginWithQrFlow | undefined;
-                try {
-                    // TODO: this seems wasteful
-                    const tempClient = this.createTemporaryClient();
-                    // we reuse the clientId from the oidcFlow for QR login
-                    // it might be that we later find that the homeserver is different and we initialise a new client
-                    possibleQrFlow = await tryInitLoginWithQRFlow(tempClient, oidcFlow.clientId);
-                } catch (e) {
-                    logger.warn("Could not fetch server versions for login with QR support, assuming unsupported", e);
-                }
-                return possibleQrFlow ? [possibleQrFlow, oidcFlow] : [oidcFlow];
+                return [oidcFlow];
             } catch (error) {
                 logger.error("Failed to get oidc native flow", error);
             }
@@ -304,20 +288,3 @@ export async function sendLoginRequest(
 
     return creds;
 }
-
-const tryInitLoginWithQRFlow = async (
-    tempClient: MatrixClient,
-    clientId: string,
-): Promise<LoginWithQrFlow | undefined> => {
-    // This could fail because the server doesn't support the API or it requires authentication
-    const canUseServer = await isSignInWithQRAvailable(tempClient);
-
-    if (!canUseServer) return undefined;
-
-    const flow = {
-        type: "loginWithQrFlow",
-        clientId,
-    } satisfies LoginWithQrFlow;
-
-    return flow;
-};
