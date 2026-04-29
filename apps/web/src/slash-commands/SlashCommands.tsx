@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
@@ -62,6 +63,7 @@ import { goto, join } from "./join";
 import { manuallyVerifyDevice } from "../components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import upgraderoom from "./upgraderoom/upgraderoom";
 import { emoticon } from "./emoticon";
+import { statusCommand } from "./status";
 
 export { CommandCategories, Command };
 
@@ -819,6 +821,7 @@ export const Commands = [
         },
         renderingTypes: [TimelineRenderingType.Room],
     }),
+    statusCommand,
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes

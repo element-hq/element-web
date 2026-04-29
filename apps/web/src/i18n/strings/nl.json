@@ -2960,7 +2960,6 @@
         "user_busy_description": "De persoon die je belde is bezet.",
         "user_is_presenting": "%(sharerName)s is aan het presenteren",
         "video_call": "Video-oproep",
-        "video_call_started": "Videogesprek gestart",
         "voice_call": "Spraakoproep",
         "you_are_presenting": "Je bent aan het presenteren"
     },

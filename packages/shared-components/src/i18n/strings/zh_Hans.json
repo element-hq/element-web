@@ -129,6 +129,9 @@
         "room_options": "房间选项",
         "section_created": "区域已创建",
         "section_header": {
+            "edit_section": "编辑区域",
+            "more_options": "更多选项",
+            "remove_section": "移除区域",
             "toggle": "切换区域 %(section)s",
             "toggle_unread": "切换到区域 %(section)s 中的未读房间"
         },

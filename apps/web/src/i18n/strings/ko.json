@@ -583,7 +583,6 @@
         "video": "비디오",
         "video_room": "비디오 room",
         "view_message": "메시지 보기",
-        "voice": "음성",
         "warning": "경고"
     },
     "composer": {
@@ -3785,7 +3784,6 @@
         "connection_lost": "서버와의 연결이 끊어졌습니다.",
         "connection_lost_description": "서버에 연결되지 않으면 전화를 걸 수 없습니다.",
         "consulting": "%(transferTarget)s와 상담 중입니다. <a>%(transferee)s에게 통화 이전</a>",
-        "decline_call": "거부",
         "default_device": "기본 기기",
         "dial": "전화걸기",
         "dialpad": "다이얼패드",
@@ -3835,7 +3833,6 @@
         "show_sidebar_button": "사이드바 표시",
         "silence": "통화 음소거",
         "silenced": "알림 음소거됨",
-        "skip_lobby_toggle_option": "즉시 가입하세요",
         "start_screenshare": "화면 공유를 시작하세요",
         "stop_screenshare": "화면 공유 중지",
         "too_many_calls": "전화가 너무 많아요",
@@ -3857,7 +3854,6 @@
         "user_is_presenting": "%(sharerName)s님이 화면을 공유중입니다.",
         "video_call": "영상 통화",
         "video_call_incoming": "수신 영상 통화",
-        "video_call_started": "영상통화가 시작되었습니다",
         "video_call_using": "사용 중인 영상 통화:",
         "voice_call": "음성 통화",
         "voice_call_incoming": "수신 음성 통화",

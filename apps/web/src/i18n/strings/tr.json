@@ -3736,7 +3736,6 @@
         "user_busy_description": "Aradığınız kullanıcı meşgul.",
         "user_is_presenting": "%(sharerName)s sunum yapıyor",
         "video_call": "Görüntülü arama",
-        "video_call_started": "Görüntülü arama başlatıldı",
         "video_call_using": "Görüntülü arama kullanılıyor:",
         "voice_call": "Sesli arama",
         "you_are_presenting": "Sunum yapıyorsunuz"
