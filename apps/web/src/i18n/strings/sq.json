@@ -3196,7 +3196,6 @@
         "user_busy_description": "Përdoruesi që thirrët është i zënë.",
         "user_is_presenting": "%(sharerName)s përfaqëson",
         "video_call": "Thirrje video",
-        "video_call_started": "Nisi thirrje me video",
         "voice_call": "Thirrje audio",
         "you_are_presenting": "Përfaqësoni"
     },
