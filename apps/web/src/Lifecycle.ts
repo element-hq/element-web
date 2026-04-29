@@ -321,6 +321,7 @@ async function attemptOidcNativeLogin(
     }
 }
 
+// TODO comment
 export async function configureFromCompletedOAuthLogin({
     accessToken,
     refreshToken,
