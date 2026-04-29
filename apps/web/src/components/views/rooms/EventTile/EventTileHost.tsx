@@ -11,7 +11,6 @@ import React, {
     useEffect,
     useImperativeHandle,
     useId,
-    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -332,13 +331,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         ],
     );
     const vm = useCreateAutoDisposedViewModel(() => new EventTileViewModel(viewModelProps));
-    const committedViewModelPropsRef = useRef(viewModelProps);
-    const renderedViewModelPropsRef = useRef(viewModelProps);
-
-    if (renderedViewModelPropsRef.current !== viewModelProps) {
-        renderedViewModelPropsRef.current = viewModelProps;
-        vm.recomputeSnapshot(viewModelProps);
-    }
 
     useEffect(() => {
         vm.refreshVerification();
@@ -354,14 +346,8 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         }),
         [vm],
     );
-    useLayoutEffect(() => {
-        const previousProps = committedViewModelPropsRef.current;
-
-        if (previousProps !== viewModelProps) {
-            vm.syncListeners(previousProps, viewModelProps);
-            committedViewModelPropsRef.current = viewModelProps;
-        }
-        renderedViewModelPropsRef.current = viewModelProps;
+    useEffect(() => {
+        vm.updateProps(viewModelProps);
     }, [viewModelProps, vm]);
 
     const snapshot = useViewModel(vm);

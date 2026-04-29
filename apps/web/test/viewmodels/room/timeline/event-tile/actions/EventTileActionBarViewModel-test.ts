@@ -172,8 +172,7 @@ describe("EventTileActionBarViewModel", () => {
     ): EventTileActionBarViewModelProps => {
         const nextProps = { ...previousProps, ...newProps };
 
-        vm.recomputeSnapshot(nextProps);
-        vm.syncListeners(previousProps, nextProps);
+        vm.updateProps(nextProps);
 
         return nextProps;
     };

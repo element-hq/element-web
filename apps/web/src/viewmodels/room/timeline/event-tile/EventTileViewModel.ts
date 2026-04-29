@@ -564,7 +564,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     /** Updates whether the quoted reply preview is expanded. */
     public setQuoteExpanded(isQuoteExpanded: boolean): void {
         this.updateInteractionSnapshot({ isQuoteExpanded });
-        this.eventTileActionBarViewModel?.recomputeSnapshot(
+        this.eventTileActionBarViewModel?.updateProps(
             EventTileViewModel.buildActionBarViewModelProps(
                 this.props,
                 this.snapshot.current.interaction.isQuoteExpanded,
@@ -659,39 +659,30 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.setQuoteExpanded(!this.snapshot.current.interaction.isQuoteExpanded);
     }
 
-    /** Recomputes derived render state from new props without rebinding listeners or starting async work. */
-    public recomputeSnapshot(props: EventTileViewModelProps): void {
+    /** Replaces the model props and refreshes affected listeners and derived state. */
+    public updateProps(props: EventTileViewModelProps): void {
         const previousProps = this.props;
-        this.props = props;
-        if (EventTileViewModel.shouldRefreshReactions(previousProps, props)) {
-            this.refreshReactions(props);
-        }
-        this.recomputeChildSnapshots(previousProps, props);
-        this.updateSnapshot(
-            {
-                thread: { thread: EventTileViewModel.getThread(props) },
-            },
-            false,
-        );
-    }
-
-    /** Applies listener and async side effects after a prop change has committed. */
-    public syncListeners(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
         const previousEvent = previousProps.mxEvent;
         const previousEventSendStatus = previousProps.eventSendStatus;
         const previousShowReactions = previousProps.showReactions;
 
-        this.props = nextProps;
-        this.syncChildListeners(previousProps, nextProps);
-        this.rebindListeners(previousProps, nextProps);
+        this.props = props;
+        if (EventTileViewModel.shouldRefreshReactions(previousProps, props)) {
+            this.refreshReactions(props);
+        }
+        this.updateChildViewModels(previousProps, props);
+        this.rebindListeners(previousProps, props);
+        this.updateSnapshot({
+            thread: { thread: EventTileViewModel.getThread(props) },
+        });
         this.updateReceiptListener();
 
         if (
-            previousEvent !== nextProps.mxEvent ||
-            previousEventSendStatus !== nextProps.eventSendStatus ||
-            previousShowReactions !== nextProps.showReactions
+            previousEvent !== props.mxEvent ||
+            previousEventSendStatus !== props.eventSendStatus ||
+            previousShowReactions !== props.showReactions
         ) {
-            if (previousEvent !== nextProps.mxEvent) {
+            if (previousEvent !== props.mxEvent) {
                 this.decryptEventIfNeeded();
             }
             this.refreshVerification();
@@ -1189,8 +1180,8 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         return reactions.getSortedAnnotationsByKey()?.filter(([, events]) => events.size > 0).length ?? 0;
     }
 
-    private recomputeChildSnapshots(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
-        this.eventTileActionBarViewModel?.recomputeSnapshot(
+    private updateChildViewModels(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
+        this.eventTileActionBarViewModel?.updateProps(
             EventTileViewModel.buildActionBarViewModelProps(
                 nextProps,
                 this.snapshot.current.interaction.isQuoteExpanded,
@@ -1204,21 +1195,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             );
         }
         this.updateTimestampViewModel();
-    }
-
-    private syncChildListeners(previousProps: EventTileViewModelProps, nextProps: EventTileViewModelProps): void {
-        this.eventTileActionBarViewModel?.syncListeners(
-            EventTileViewModel.buildActionBarViewModelProps(
-                previousProps,
-                this.snapshot.current.interaction.isQuoteExpanded,
-                this.onToggleThreadExpanded,
-            ),
-            EventTileViewModel.buildActionBarViewModelProps(
-                nextProps,
-                this.snapshot.current.interaction.isQuoteExpanded,
-                this.onToggleThreadExpanded,
-            ),
-        );
     }
 
     private updateReactionsRowViewModel(props: EventTileViewModelProps = this.props): void {

@@ -26,17 +26,15 @@ export class TextualEventViewModel extends BaseViewModel<TextualEventViewSnapsho
         super.dispose();
     }
 
-    public recomputeSnapshot(props: EventTileTypeProps): void {
+    public updateProps(props: EventTileTypeProps): void {
+        const previousEvent = this.props.mxEvent;
         this.props = props;
-        this.setTextFromEvent();
-    }
 
-    public syncListeners(previousProps: EventTileTypeProps, nextProps: EventTileTypeProps): void {
-        this.props = nextProps;
-
-        if (previousProps.mxEvent !== nextProps.mxEvent) {
-            this.rebindListener(nextProps.mxEvent);
+        if (previousEvent !== props.mxEvent) {
+            this.rebindListener(props.mxEvent);
         }
+
+        this.setTextFromEvent();
     }
 
     private setTextFromEvent = (): void => {

@@ -689,8 +689,9 @@ describe("EventTileViewModel", () => {
             expect(nextSnapshot.presentation.notificationView).toBe(initialSnapshot.presentation.notificationView);
         });
 
-        it("recomputes render state from new props without listener or async side effects", () => {
+        it("updates props, render state, listeners, and async event work", () => {
             const vm = createViewModel();
+            const previousProps = makeProps();
             const nextEvent = mkMessage({
                 room: room.roomId,
                 user: "@alice:example.org",
@@ -703,37 +704,14 @@ describe("EventTileViewModel", () => {
 
             mocked(client.decryptEventIfNeeded).mockClear();
 
-            vm.recomputeSnapshot(
-                makeProps({
-                    mxEvent: nextEvent,
-                    alwaysShowTimestamps: true,
-                }),
-            );
+            vm.updateProps({
+                ...previousProps,
+                mxEvent: nextEvent,
+                alwaysShowTimestamps: true,
+            });
 
             expect(vm.getSnapshot().presentation.eventId).toBe(nextEvent.getId());
             expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
-            expect(currentEventOffSpy).not.toHaveBeenCalled();
-            expect(nextEventOnSpy).not.toHaveBeenCalled();
-            expect(client.decryptEventIfNeeded).not.toHaveBeenCalled();
-        });
-
-        it("syncs listeners and event async work separately after recomputing props", () => {
-            const vm = createViewModel();
-            const previousProps = makeProps();
-            const nextEvent = mkMessage({
-                room: room.roomId,
-                user: "@alice:example.org",
-                msg: "Next event",
-                event: true,
-            });
-            const nextProps = makeProps({ mxEvent: nextEvent });
-            const currentEventOffSpy = jest.spyOn(mxEvent, "off");
-            const nextEventOnSpy = jest.spyOn(nextEvent, "on");
-
-            vm.recomputeSnapshot(nextProps);
-            mocked(client.decryptEventIfNeeded).mockClear();
-            vm.syncListeners(previousProps, nextProps);
-
             expect(currentEventOffSpy).toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
             expect(nextEventOnSpy).toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
             expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(nextEvent);

@@ -447,30 +447,20 @@ export class EventTileActionBarViewModel
         }
     }
 
-    /** Recomputes the action snapshot from new props without rebinding listeners or starting async work. */
-    public recomputeSnapshot(newProps: EventTileActionBarViewModelProps): void {
+    /** Updates props, refreshes listeners when the event changes, and rebuilds the snapshot. */
+    public updateProps(newProps: Partial<EventTileActionBarViewModelProps>): void {
         const previousProps = this.props;
-        this.props = this.withCurrentMenuHandlers(newProps);
-        this.snapshot.merge(
-            this.computeSnapshot(
-                EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, newProps)
-                    ? { canDownload: true, isDownloadLoading: false }
-                    : undefined,
-            ),
-        );
-    }
+        this.props = this.withCurrentMenuHandlers({
+            ...this.props,
+            ...newProps,
+        });
 
-    /** Applies listener and async side effects after a prop change has committed. */
-    public syncListeners(
-        previousProps: EventTileActionBarViewModelProps,
-        nextProps: EventTileActionBarViewModelProps,
-    ): void {
-        this.props = this.withCurrentMenuHandlers(nextProps);
-
-        if (EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, nextProps)) {
+        if (EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, this.props)) {
             this.resetEventState();
             this.setupListeners();
         }
+
+        this.refreshSnapshot();
     }
 
     /** Updates React-local menu handlers without changing the derived action set. */
