@@ -28,7 +28,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
-import { BaseViewModel } from "@element-hq/web-shared-components";
+import { BaseViewModel, Disposables } from "@element-hq/web-shared-components";
 import classNames from "classnames";
 
 import type LegacyCallEventGrouper from "../../../../components/structures/LegacyCallEventGrouper";
@@ -476,12 +476,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private isListeningForReceipts = false;
     private verifyGeneration = 0;
-    private currentCli: MatrixClient | null = null;
-    private currentEvent: MatrixEvent | null = null;
     private currentRoom: Room | null = null;
     private currentRoomThreadEventId: string | null = null;
-    private isListeningForUserTrust = false;
-    private isListeningForReactions = false;
+    private cliDisposables = new Disposables();
+    private eventDisposables = new Disposables();
+    private roomDisposables = new Disposables();
+    private receiptDisposables = new Disposables();
     private reactions: Relations | null;
     private eventTileActionBarViewModel?: EventTileActionBarViewModel;
     private readonly eventTileReactionsRowViewModel: ReactionsRowViewModel;
@@ -730,74 +730,51 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private bindCliListeners(props: EventTileViewModelProps): void {
-        this.currentCli = props.cli;
         if (props.forExport) return;
 
         // Re-verify the encryption shield when the sender's trust state changes.
-        this.trackCliTrust(props.cli, this.onUserVerificationChanged);
-        if (this.isListeningForReceipts) {
-            // Refresh sent/sending receipt state for tiles that currently display delivery receipts.
-            props.cli.on(RoomEvent.Receipt, this.onRoomReceipt);
-        }
-        this.isListeningForUserTrust = true;
+        this.cliDisposables.track(this.trackCliTrust(props.cli, this.onUserVerificationChanged));
     }
 
     private unbindCliListeners(): void {
-        if (this.currentCli && this.isListeningForUserTrust) {
-            const entry = EventTileViewModel.cliTrustListenerRegistry.get(this.currentCli);
-            entry?.listeners.delete(this.onUserVerificationChanged);
-            if (entry?.listeners.size === 0) {
-                this.currentCli.off(CryptoEvent.UserTrustStatusChanged, entry.handler);
-                EventTileViewModel.cliTrustListenerRegistry.delete(this.currentCli);
-            }
-        }
-        if (this.currentCli && this.isListeningForReceipts) {
-            // Receipt listeners are opt-in and should only stay attached while this tile needs them.
-            this.currentCli.off(RoomEvent.Receipt, this.onRoomReceipt);
-        }
-
-        this.currentCli = null;
-        this.isListeningForReceipts = false;
-        this.isListeningForUserTrust = false;
+        this.cliDisposables.dispose();
+        this.cliDisposables = new Disposables();
+        this.unbindReceiptListener();
     }
 
     private bindEventListeners(props: EventTileViewModelProps): void {
-        this.currentEvent = props.mxEvent;
         // Keep thread summary data current as replies are added or thread metadata changes.
         props.mxEvent.on(ThreadEvent.Update, this.onThreadUpdate);
+        this.eventDisposables.track(() => props.mxEvent.off(ThreadEvent.Update, this.onThreadUpdate));
 
         if (props.forExport) return;
 
         // Recompute rendering and encryption state once an encrypted event finishes decrypting.
         props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
+        this.eventDisposables.track(() => props.mxEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted));
         // Update the tile if this event gets edited and its replacement changes what should be rendered.
         props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
+        this.eventDisposables.track(() => props.mxEvent.off(MatrixEventEvent.Replaced, this.onReplaced));
         DecryptionFailureTracker.instance.addVisibleEvent(props.mxEvent);
+        this.eventDisposables.track(() => {
+            const eventId = props.mxEvent.getId();
+            if (eventId) {
+                DecryptionFailureTracker.instance.visibleEvents.delete(eventId);
+            }
+        });
 
         if (props.showReactions) {
             // Refresh the reaction summary when new reaction relations are attached to the event.
             props.mxEvent.on(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
-            this.isListeningForReactions = true;
+            this.eventDisposables.track(() =>
+                props.mxEvent.off(MatrixEventEvent.RelationsCreated, this.onReactionsCreated),
+            );
         }
     }
 
     private unbindEventListeners(): void {
-        if (!this.currentEvent) return;
-
-        // Remove all listeners tied to the previous event before following a new event instance.
-        this.currentEvent.off(ThreadEvent.Update, this.onThreadUpdate);
-        this.currentEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
-        this.currentEvent.off(MatrixEventEvent.Replaced, this.onReplaced);
-        const eventId = this.currentEvent.getId();
-        if (eventId) {
-            DecryptionFailureTracker.instance.visibleEvents.delete(eventId);
-        }
-        if (this.isListeningForReactions) {
-            this.currentEvent.off(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
-        }
-
-        this.currentEvent = null;
-        this.isListeningForReactions = false;
+        this.eventDisposables.dispose();
+        this.eventDisposables = new Disposables();
     }
 
     private bindRoomListeners(room: Room | null, eventId: string | null): void {
@@ -805,25 +782,13 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.currentRoomThreadEventId = eventId;
         // Pick up the thread object later if this event becomes recognized as a thread root after initial render.
         if (room && eventId) {
-            this.trackRoomThread(room, eventId, this.onNewThread);
+            this.roomDisposables.track(this.trackRoomThread(room, eventId, this.onNewThread));
         }
     }
 
     private unbindRoomListeners(): void {
-        if (!this.currentRoom) return;
-
-        const entry = EventTileViewModel.roomThreadListenerRegistry.get(this.currentRoom);
-        const eventId = this.currentRoomThreadEventId;
-        const listeners = eventId ? entry?.listenersByEventId.get(eventId) : undefined;
-        listeners?.delete(this.onNewThread);
-        if (eventId && listeners?.size === 0) {
-            entry?.listenersByEventId.delete(eventId);
-        }
-        if (entry?.listenersByEventId.size === 0) {
-            this.currentRoom.off(ThreadEvent.New, entry.handler);
-            EventTileViewModel.roomThreadListenerRegistry.delete(this.currentRoom);
-        }
-
+        this.roomDisposables.dispose();
+        this.roomDisposables = new Disposables();
         this.currentRoom = null;
         this.currentRoomThreadEventId = null;
     }
@@ -834,7 +799,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         this.unbindCliListeners();
     }
 
-    private trackRoomThread(room: Room, eventId: string, callback: (thread: Thread) => void): void {
+    private trackRoomThread(room: Room, eventId: string, callback: (thread: Thread) => void): () => void {
         let entry = EventTileViewModel.roomThreadListenerRegistry.get(room);
 
         if (!entry) {
@@ -860,12 +825,23 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         listeners.add(callback);
+
+        return () => {
+            listeners.delete(callback);
+            if (listeners.size === 0) {
+                entry.listenersByEventId.delete(eventId);
+            }
+            if (entry.listenersByEventId.size === 0) {
+                room.off(ThreadEvent.New, entry.handler);
+                EventTileViewModel.roomThreadListenerRegistry.delete(room);
+            }
+        };
     }
 
     private trackCliTrust(
         cli: MatrixClient,
         callback: (userId: string, trustStatus: UserVerificationStatus) => void,
-    ): void {
+    ): () => void {
         let entry = EventTileViewModel.cliTrustListenerRegistry.get(cli);
 
         if (!entry) {
@@ -882,6 +858,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         entry.listeners.add(callback);
+
+        return () => {
+            entry.listeners.delete(callback);
+            if (entry.listeners.size === 0) {
+                cli.off(CryptoEvent.UserTrustStatusChanged, entry.handler);
+                EventTileViewModel.cliTrustListenerRegistry.delete(cli);
+            }
+        };
     }
 
     private updateSnapshot(partial?: EventTileViewSnapshotUpdate, syncReceiptListener = true): void {
@@ -998,16 +982,27 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private updateReceiptListener(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
-        const shouldListen = snapshot.receipt.shouldShowSentReceipt || snapshot.receipt.shouldShowSendingReceipt;
+        const shouldListen =
+            !this.props.forExport &&
+            (snapshot.receipt.shouldShowSentReceipt || snapshot.receipt.shouldShowSendingReceipt);
         if (shouldListen && !this.isListeningForReceipts) {
             // Only subscribe to room receipts while this tile renders sent/sending receipt affordances.
-            this.currentCli?.on(RoomEvent.Receipt, this.onRoomReceipt);
+            const cli = this.props.cli;
+            cli.on(RoomEvent.Receipt, this.onRoomReceipt);
+            this.receiptDisposables.track(() => {
+                cli.off(RoomEvent.Receipt, this.onRoomReceipt);
+            });
             this.isListeningForReceipts = true;
         } else if (!shouldListen && this.isListeningForReceipts) {
             // Drop the receipt listener once receipt state is no longer visible for this tile.
-            this.currentCli?.off(RoomEvent.Receipt, this.onRoomReceipt);
-            this.isListeningForReceipts = false;
+            this.unbindReceiptListener();
         }
+    }
+
+    private unbindReceiptListener(): void {
+        this.receiptDisposables.dispose();
+        this.receiptDisposables = new Disposables();
+        this.isListeningForReceipts = false;
     }
 
     private readonly onRoomReceipt = (_event: MatrixEvent, room: Room): void => {
