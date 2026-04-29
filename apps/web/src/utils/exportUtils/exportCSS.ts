@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { Rule, StyleSheet } from "css-tree";
+import type { CssNode, Rule, StyleSheet } from "css-tree";
 
 import customCSS from "!!raw-loader!./exportCustomCSS.css";
 
@@ -41,6 +41,21 @@ function includeRule(rule: Rule, usedClasses: Set<string>): boolean {
     return true;
 }
 
+function includeNode(node: CssNode, usedClasses: Set<string>): boolean {
+    if (node.type === "Atrule") {
+        if (node.name === "font-face") {
+            return false;
+        }
+
+        if (node.block) {
+            node.block.children = node.block.children.filter((child) => includeNode(child, usedClasses));
+            return !node.block.children.isEmpty;
+        }
+    }
+
+    return node.type !== "Rule" || includeRule(node, usedClasses);
+}
+
 // naively culls unused css rules based on which classes are present in the html,
 // doesn't cull rules which won't apply due to the full selector not matching but gets rid of a LOT of cruft anyway.
 // We cannot use document.styleSheets as it does not handle variables in shorthand properties sanely,
@@ -69,13 +84,7 @@ const getExportCSS = async (usedClasses: Set<string>): Promise<string> => {
         }) as StyleSheet;
 
         for (const rule of ast.children) {
-            if (rule.type === "Atrule") {
-                if (rule.name === "font-face") {
-                    continue;
-                }
-            }
-
-            if (rule.type === "Rule" && !includeRule(rule, usedClasses)) {
+            if (!includeNode(rule, usedClasses)) {
                 continue;
             }
 

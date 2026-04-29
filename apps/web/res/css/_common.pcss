@@ -163,10 +163,10 @@ b {
     font-weight: bold;
 }
 
-/* Keep the legacy link colour for linkified message/content links without overriding Compound anchors. */
-a[data-linkified]:hover,
-a[data-linkified]:link,
-a[data-linkified]:visited {
+/* Keep the legacy link colour without overriding Compound anchors. */
+a:not([data-kind]):hover,
+a:not([data-kind]):link,
+a:not([data-kind]):visited {
     color: $accent-alt;
 }
 
