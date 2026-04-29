@@ -129,9 +129,11 @@ export default class ProtocolHandler {
                 const store = this.readStore();
                 let sessionId = parsedUrl.searchParams.get(SEARCH_PARAM);
                 if (!sessionId) {
-                    // In OIDC, we must shuttle the value in the `state` param rather than `element-desktop-ssoid`
-                    // We encode it as a suffix like `:element-desktop-ssoid:XXYYZZ`
-                    sessionId = parsedUrl.searchParams.get("state")!.split(`:${SEARCH_PARAM}:`)[1];
+                    // In OIDC, state may be in query string or fragment depending on server implementation
+                    const stateFromQuery = parsedUrl.searchParams.get("state");
+                    const stateFromFragment = new URLSearchParams(parsedUrl.hash.slice(1)).get("state");
+                    const state = stateFromQuery ?? stateFromFragment;
+                    sessionId = state?.split(`:${SEARCH_PARAM}:`)[1];
                 }
                 console.log("Forwarding to profile: ", store[sessionId]);
                 return store[sessionId];
