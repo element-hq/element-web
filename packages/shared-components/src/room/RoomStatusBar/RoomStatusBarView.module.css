@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-/* Note. Use !important to override Banner defaults. */
+/* Note. Use of !important to override Banner defaults. */
 .container {
     color: var(--cpd-color-text-primary);
     svg {
