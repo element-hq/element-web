@@ -212,7 +212,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </div>
       </div>
       <div
-        aria-labelledby="_r_1cl_"
+        aria-labelledby="_r_1b1_"
         class="_banner_n7ud0_8"
         data-type="critical"
         role="status"
@@ -237,8 +237,8 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           class="_content_n7ud0_38"
         >
           <p
-            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _title_1h7xo_24"
-            id="_r_1cl_"
+            class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _title_gwk09_24"
+            id="_r_1b1_"
           >
             Could not start a chat with this user
           </p>
@@ -247,7 +247,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           class="_actions_n7ud0_61"
         >
           <button
-            class="_button_1nw83_8 _primaryAction_1h7xo_20 _has-icon_1nw83_60"
+            class="_button_1nw83_8 _primaryAction_gwk09_20 _has-icon_1nw83_60"
             data-kind="primary"
             data-size="md"
             role="button"
@@ -417,7 +417,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             >
               <svg
                 aria-label="Messages in this room are not end-to-end encrypted"
-                aria-labelledby="_r_19j_"
+                aria-labelledby="_r_17v_"
                 class="mx_E2EIcon mx_MessageComposer_e2eIcon"
                 color="var(--cpd-color-icon-info-primary)"
                 fill="currentColor"
@@ -695,7 +695,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
             </span>
             <svg
               aria-label="New members see history"
-              aria-labelledby="_r_1cf_"
+              aria-labelledby="_r_1ar_"
               class="mx_RoomHeader_icon"
               color="var(--cpd-color-icon-info-primary)"
               fill="currentColor"
