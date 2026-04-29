@@ -589,7 +589,6 @@
         "video": "Відео",
         "video_room": "Відеокімната",
         "view_message": "Переглянути повідомлення",
-        "voice": "Голос",
         "warning": "Попередження"
     },
     "composer": {
@@ -3870,7 +3869,6 @@
         "connection_lost": "Втрачено зʼєднання з сервером",
         "connection_lost_description": "Неможливо здійснювати виклики без з'єднання з сервером.",
         "consulting": "Консультація з %(transferTarget)s. <a>Переадресація на %(transferee)s</a>",
-        "decline_call": "Відхилити",
         "default_device": "Уставний пристрій",
         "dial": "Виклик",
         "dialpad": "Номеронабирач",
@@ -3922,7 +3920,6 @@
         "show_sidebar_button": "Показати бічну панель",
         "silence": "Тихий виклик",
         "silenced": "Сповіщення стишено",
-        "skip_lobby_toggle_option": "Приєднатися негайно",
         "start_screenshare": "Почати показ екрана",
         "stop_screenshare": "Вимкнути показ екрана",
         "too_many_calls": "Забагато викликів",
@@ -3944,7 +3941,6 @@
         "user_is_presenting": "%(sharerName)s показує",
         "video_call": "Відеовиклик",
         "video_call_incoming": "Вхідний відеовиклик",
-        "video_call_started": "Відеовиклик розпочато",
         "video_call_using": "Відеодзвінок за допомогою:",
         "voice_call": "Голосовий виклик",
         "voice_call_incoming": "Вхідний голосовий виклик",

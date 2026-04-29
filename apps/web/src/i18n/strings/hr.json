@@ -593,7 +593,6 @@
         "video": "Videozapis",
         "video_room": "Videosoba",
         "view_message": "Prikaži poruku",
-        "voice": "Glas",
         "warning": "Upozorenje"
     },
     "composer": {
@@ -3951,7 +3950,6 @@
         "connection_lost": "Veza s poslužiteljem je prekinuta",
         "connection_lost_description": "Ne možete upućivati ​​pozive ako niste povezani s poslužiteljem.",
         "consulting": "Savjetovanje s %(transferTarget)s. <a>Prijenos na %(transferee)s</a>",
-        "decline_call": "Odbij",
         "default_device": "Zadani uređaj",
         "dial": "Biranje",
         "dialpad": "Brojčanik",
@@ -4003,7 +4001,6 @@
         "show_sidebar_button": "Prikaži bočnu traku",
         "silence": "Utišaj poziv",
         "silenced": "Obavijesti su utišane",
-        "skip_lobby_toggle_option": "Pridruži se odmah",
         "start_screenshare": "Započni dijeljenje zaslona",
         "stop_screenshare": "Zaustavi dijeljenje zaslona",
         "too_many_calls": "Previše poziva",
@@ -4025,7 +4022,6 @@
         "user_is_presenting": "%(sharerName)s dijeli zaslon",
         "video_call": "Videopoziv",
         "video_call_incoming": "Dolazni videopoziv",
-        "video_call_started": "Videopoziv je započeo",
         "video_call_using": "Videopoziv putem:",
         "voice_call": "Glasovni poziv",
         "voice_call_incoming": "Dolazni glasovni poziv",
