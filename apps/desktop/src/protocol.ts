@@ -97,7 +97,8 @@ export default class ProtocolHandler {
             const s = fs.readFileSync(storePath, { encoding: "utf8" });
             const o = JSON.parse(s);
             return typeof o === "object" ? o : {};
-        } catch {
+        } catch (e) {
+            console.warn("Unable to read protocol store, starting with empty store: ", e);
             return {};
         }
     }
@@ -142,11 +143,11 @@ export default class ProtocolHandler {
                     if (state) {
                         sessionId = state.split(`:${SEARCH_PARAM}:`)[1];
                     } else {
-                        console.log("Unable to read session ID in deeplink url: ", deeplinkUrl);
+                        console.log("Unable to read session ID in deeplink url:", deeplinkUrl);
                         return undefined;
                     }
                 }
-                console.log("Forwarding to profile: ", store[sessionId]);
+                console.log("Forwarding to profile:", store[sessionId]);
                 return store[sessionId];
             }
         }

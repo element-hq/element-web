@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "module": "nodenext",
+        "moduleResolution": "NodeNext",
+        "target": "es2022",
+        "sourceMap": false,
+        "typeRoots": [],
+        "noEmit": true,
+        "strict": true
+    },
+    "include": ["./electron-builder.ts", "./vitest.config.ts"]
+}

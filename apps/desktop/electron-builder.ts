@@ -52,6 +52,7 @@ interface Variant extends Metadata {
 }
 
 type Writable<T> = NonNullable<
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     T extends Function ? T : T extends object ? { -readonly [K in keyof T]: Writable<T[K]> } : T
 >;
 
@@ -74,7 +75,7 @@ if (process.env.VARIANT_PATH) {
 }
 
 for (const key in variant) {
-    console.log(`${key}: ${variant[key]}`);
+    console.log(`${key}: ${variant[key as keyof Variant]}`);
 }
 
 interface Configuration extends BaseConfiguration {
@@ -118,6 +119,7 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             to: "node_modules",
         },
         "lib/**",
+        "!lib/**/*.test.ts",
     ],
     extraResources: ["build/icon.*", "webapp.asar"],
     extraMetadata: {
