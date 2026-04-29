@@ -10,9 +10,9 @@ import { fileURLToPath } from "node:url";
 import { defineConfig, mergeConfig } from "vitest/config";
 import dts from "unplugin-dts/vite";
 import externalGlobals from "rollup-plugin-external-globals";
+import baseConfig from "@element-hq/vite-common/vite.common";
 
 import packageJson from "./package.json" with { type: "json" };
-import baseConfig from "../../vite.shared.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

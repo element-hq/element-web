@@ -13,7 +13,7 @@ import { storybookVis } from "storybook-addon-vis/vitest-plugin";
 import { playwright, PlaywrightProviderOptions } from "@vitest/browser-playwright";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
-import baseConfig from "../../vite.shared.js";
+import baseConfig from "@element-hq/vite-common/vite.common";
 
 const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 

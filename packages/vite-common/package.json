@@ -1,0 +1,16 @@
+{
+    "name": "@element-hq/vite-common",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "lint:types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@vitest/coverage-v8": "catalog:",
+        "vitest": "catalog:"
+    },
+    "devDependencies": {
+        "typescript": "catalog:"
+    }
+}

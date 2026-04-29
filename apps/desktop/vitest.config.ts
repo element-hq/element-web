@@ -6,8 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { defineConfig, mergeConfig } from "vitest/config";
-
-import baseConfig from "../../vite.shared.js";
+import baseConfig from "@element-hq/vite-common/vite.common.js";
 
 export default mergeConfig(
     baseConfig,

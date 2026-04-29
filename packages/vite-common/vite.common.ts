@@ -5,12 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defineConfig } from "vitest/config";
-import { type UserConfig } from "vite";
+import { defineConfig, type ViteUserConfig } from "vitest/config";
 import { type Reporter } from "vitest/reporters";
 import { env } from "node:process";
 
-const reporters: NonNullable<UserConfig["test"]>["reporters"] = [["default"]];
+const reporters: NonNullable<ViteUserConfig["test"]>["reporters"] = [["default"]];
 
 const slowTestReporter: Reporter = {
     onTestRunEnd(testModules, unhandledErrors, reason) {
