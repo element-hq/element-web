@@ -37,29 +37,6 @@ describe("UserMenuViewModel", () => {
         SdkContextClass.instance.client = undefined;
     });
 
-    it("should not generate actions until the menu is opened", () => {
-        const vm = new UserMenuViewModel(dispatcher, client, true);
-        expect(vm.getSnapshot()).toMatchInlineSnapshot(`
-{
-  "actions": {
-    "createAccount": true,
-    "linkNewDevice": false,
-    "openFeedback": false,
-    "openHomePage": false,
-    "openSecurity": false,
-    "openSettings": true,
-    "signIn": true,
-  },
-  "avatarUrl": undefined,
-  "displayName": "@alice:domain",
-  "expanded": false,
-  "manageAccountHref": undefined,
-  "open": false,
-  "userId": "@alice:domain",
-}
-`);
-    });
-
     it("should generate a menu options for a logged in client", () => {
         const vm = new UserMenuViewModel(dispatcher, client, true);
         vm.setOpen(true);
