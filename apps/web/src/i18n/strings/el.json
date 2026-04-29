@@ -1435,7 +1435,6 @@
         "restricted": "Περιορισμένο/η"
     },
     "powered_by_matrix": "Με την υποστήριξη του Matrix",
-    "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
     "presence": {
         "away": "Απομακρυσμένος",
         "busy": "Απασχολημένος",
@@ -3165,11 +3164,9 @@
         "user_busy_description": "Ο χρήστης που καλέσατε είναι απασχολημένος.",
         "user_is_presenting": "%(sharerName)s παρουσιάζει",
         "video_call": "Βιντεοκλήση",
-        "video_call_started": "Ξεκίνησε η βιντεοκλήση",
         "voice_call": "Φωνητική κλήση",
         "you_are_presenting": "Παρουσιάζετε"
     },
-    "welcome_to_element": "Καλώς ήλθατε στο Element",
     "widget": {
         "added_by": "Μικροεοεφαρμογή προστέθηκε από",
         "capabilities_dialog": {

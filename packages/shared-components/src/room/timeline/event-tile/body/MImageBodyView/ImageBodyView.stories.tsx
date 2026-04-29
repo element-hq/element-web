@@ -18,10 +18,9 @@ import {
     type ImageBodyViewActions,
     type ImageBodyViewSnapshot,
 } from "./ImageBodyView";
-
-const imageSrc = new URL("../../../../../../static/image-body/install-spinner.png", import.meta.url).href;
-const thumbnailSrc = new URL("../../../../../../static/image-body/install-spinner.png", import.meta.url).href;
-const animatedGifSrc = new URL("../../../../../../static/image-body/install-spinner.gif", import.meta.url).href;
+import imageSrc from "../../../../../../static/image-body/install-spinner.png";
+import thumbnailSrc from "../../../../../../static/image-body/install-spinner.png";
+import animatedGifSrc from "../../../../../../static/image-body/install-spinner.gif";
 const demoBlurhash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
 const imageBodyViewStateOptions = [ImageBodyViewState.ERROR, ImageBodyViewState.HIDDEN, ImageBodyViewState.READY];
 const imageBodyViewPlaceholderOptions = [
@@ -62,7 +61,7 @@ const ImageBodyViewWrapperImpl = ({
 const ImageBodyViewWrapper = withViewDocs(ImageBodyViewWrapperImpl, ImageBodyView);
 
 const meta = {
-    title: "MessageBody/ImageBodyView",
+    title: "Timeline/Timeline Body/ImageBodyView",
     component: ImageBodyViewWrapper,
     tags: ["autodocs"],
     argTypes: {

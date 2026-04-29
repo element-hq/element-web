@@ -79,7 +79,7 @@ export class DateSeparatorViewModel
             "feature_jump_to_date",
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                this.jumpToDateEnabled = newVal;
+                this.jumpToDateEnabled = !!newVal;
                 this.updateSnapshot();
             },
         );
@@ -89,7 +89,7 @@ export class DateSeparatorViewModel
             UIFeature.TimelineEnableRelativeDates,
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                this.relativeDatesEnabled = newVal;
+                this.relativeDatesEnabled = !!newVal;
                 this.updateSnapshot();
             },
         );

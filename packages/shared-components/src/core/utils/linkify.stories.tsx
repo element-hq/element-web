@@ -18,7 +18,7 @@ import generateLinkedTextOptions from "../../../typedoc/functions/generateLinked
 import LinkedTextOptions from "../../../typedoc/interfaces/LinkedTextOptions.md?raw";
 
 const meta = {
-    title: "utils/linkify",
+    title: "Core/Linkify",
     parameters: {
         docs: {
             page: () => (

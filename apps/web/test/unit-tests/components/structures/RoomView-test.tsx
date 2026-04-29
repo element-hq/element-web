@@ -71,6 +71,8 @@ import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog.ts
 import * as pinnedEventHooks from "../../../../src/hooks/usePinnedEvents";
 import { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { ModuleApi } from "../../../../src/modules/Api";
+import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController.ts";
+import { type ComposerInsertPayload, ComposerType } from "../../../../src/dispatcher/payloads/ComposerInsertPayload.ts";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -92,6 +94,7 @@ describe("RoomView", () => {
     beforeEach(() => {
         mockPlatformPeg({ reload: () => {} });
         cli = mocked(stubClient());
+        MatrixClientBackedController.matrixClient = cli;
 
         const roomName = (expect.getState().currentTestName ?? "").replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
 
@@ -1073,6 +1076,80 @@ describe("RoomView", () => {
 
         // It should now force a reload
         expect(onRoomViewUpdateMock).toHaveBeenCalledWith(true);
+    });
+
+    describe("handles Action.ComposerInsert", () => {
+        it("redispatches an empty composerType, timelineRenderingType with the current state", async () => {
+            await mountRoomView();
+            const promise = untilDispatch((payload) => {
+                try {
+                    expect(payload).toEqual({
+                        action: Action.ComposerInsert,
+                        text: "Hello world",
+                        timelineRenderingType: TimelineRenderingType.Room,
+                        composerType: ComposerType.Send,
+                    });
+                } catch {
+                    return false;
+                }
+                return true;
+            }, defaultDispatcher);
+            defaultDispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+            } satisfies ComposerInsertPayload);
+            await promise;
+        });
+        it("redispatches an empty composerType with the current state", async () => {
+            await mountRoomView();
+            const promise = untilDispatch((payload) => {
+                try {
+                    expect(payload).toEqual({
+                        action: Action.ComposerInsert,
+                        text: "Hello world",
+                        timelineRenderingType: TimelineRenderingType.Room,
+                        composerType: ComposerType.Send,
+                    });
+                } catch {
+                    return false;
+                }
+                return true;
+            }, defaultDispatcher);
+            defaultDispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+                timelineRenderingType: TimelineRenderingType.Room,
+            } satisfies ComposerInsertPayload);
+            await promise;
+        });
+        it("ignores payloads with a timelineRenderingType != TimelineRenderingType.Thread", async () => {
+            await mountRoomView();
+            const promise = untilDispatch(
+                (payload) => {
+                    try {
+                        expect(payload).toStrictEqual({
+                            action: Action.ComposerInsert,
+                            text: "Hello world",
+                            timelineRenderingType: TimelineRenderingType.Thread,
+                            composerType: ComposerType.Send,
+                        });
+                    } catch {
+                        return false;
+                    }
+                    return true;
+                },
+                defaultDispatcher,
+                500,
+            );
+            defaultDispatcher.dispatch({
+                action: Action.ComposerInsert,
+                text: "Hello world",
+                composerType: ComposerType.Send,
+                timelineRenderingType: TimelineRenderingType.Room,
+                viaTest: true,
+            } satisfies ComposerInsertPayload);
+            await expect(promise).rejects.toThrow();
+        });
     });
 
     describe("when there is a RoomView", () => {

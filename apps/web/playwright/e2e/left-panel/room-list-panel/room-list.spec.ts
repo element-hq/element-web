@@ -22,7 +22,8 @@ test.describe("Room list", () => {
     });
 
     test.beforeEach(async ({ page, app, user }) => {
-        // The notification toast is displayed above the search section
+        // The toasts are displayed above the search section
+        await app.closeVerifyToast();
         await app.closeNotificationToast();
 
         // focus the user menu to avoid to have hover decoration
@@ -317,6 +318,10 @@ test.describe("Room list", () => {
                 .click();
             await page.getByRole("menuitem", { name: "New video room" }).click();
             await page.getByRole("textbox", { name: "Name" }).fill("video room");
+            // Make it public to avoid any crypto setup toasts
+            await page.getByRole("button", { name: "Room visibility" }).click();
+            await page.getByRole("option", { name: "Public room" }).click();
+            await page.getByRole("textbox", { name: "Room address" }).fill("video-room");
             await page.getByRole("button", { name: "Create video room" }).click();
 
             const roomListView = getRoomList(page);

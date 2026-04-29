@@ -296,7 +296,7 @@ export class UrlPreviewGroupViewModel
             null,
             (_setting, _roomid, _level, compactLayout) => {
                 this.snapshot.merge({
-                    compactLayout,
+                    compactLayout: !!compactLayout,
                 });
             },
         );
@@ -424,7 +424,7 @@ export class UrlPreviewGroupViewModel
      * Trigger a recalculation of the links in an event.
      * @param eventElement
      */
-    public async updateEventElement(eventElement: HTMLDivElement): Promise<void> {
+    public async updateEventElement(eventElement: HTMLDivElement | HTMLSpanElement): Promise<void> {
         const newLinks = UrlPreviewGroupViewModel.findLinks([eventElement]);
         // Only recalculate if the set of links has changed.
         if (newLinks.some((x) => !this.links.includes(x)) || this.links.some((x) => !newLinks.includes(x))) {

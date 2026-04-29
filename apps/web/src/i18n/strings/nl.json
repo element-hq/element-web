@@ -1324,7 +1324,6 @@
         "restricted": "Beperkte toegang"
     },
     "powered_by_matrix": "Mogelijk gemaakt door Matrix",
-    "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
     "presence": {
         "away": "Afwezig",
         "busy": "Bezet",
@@ -2961,12 +2960,10 @@
         "user_busy_description": "De persoon die je belde is bezet.",
         "user_is_presenting": "%(sharerName)s is aan het presenteren",
         "video_call": "Video-oproep",
-        "video_call_started": "Videogesprek gestart",
         "voice_call": "Spraakoproep",
         "you_are_presenting": "Je bent aan het presenteren"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
-    "welcome_to_element": "Welkom bij Element",
     "widget": {
         "added_by": "Widget toegevoegd door",
         "capabilities_dialog": {

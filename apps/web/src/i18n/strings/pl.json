@@ -1526,9 +1526,6 @@
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
         "report_to_moderators": "Zgłoś do moderatorów",
         "report_to_moderators_description": "W pokojach, które wspierają moderacje, przycisk \"Zgłoś\" pozwoli Ci zgłosić nadużycia moderatorom.",
-        "share_history_on_invite": "Udostępnij zaszyfrowaną historię nowym członkom",
-        "share_history_on_invite_description": "Gdy zapraszasz użytkownika do zaszyfrowanego pokoju, w którym widoczność historii jest ustawiona na „udostępniona”, udostępnij historię wiadomości temu użytkownikowi lub zaakceptuj ją, gdy dołączysz do takiego pokoju.",
-        "share_history_on_invite_warning": "Ta funkcja jest EKSPERYMENTALNA i nie wszystkie środki bezpieczeństwa są w niej zaimplementowane. Nie włączaj na kontach produkcyjnych.",
         "sliding_sync": "Tryb synchronizacji przesuwanej",
         "sliding_sync_description": "W trakcie aktywnego rozwoju, nie można wyłączyć.",
         "sliding_sync_disabled_notice": "Zaloguj się ponownie, aby wyłączyć",
@@ -1763,7 +1760,6 @@
         "restricted": "Ograniczony"
     },
     "powered_by_matrix": "Zasilane przez Matrix",
-    "powered_by_matrix_with_logo": "Zdecentralizowany czat szyfrowany i współpraca oparta na $matrixLogo",
     "presence": {
         "away": "Z dala od urządzenia",
         "busy": "Zajęty",
@@ -3833,7 +3829,6 @@
         "connection_lost": "Połączenie z serwerem zostało przerwane",
         "connection_lost_description": "Nie możesz wykonywać rozmów bez połączenia z serwerem.",
         "consulting": "Konsultowanie z %(transferTarget)s. <a>Transfer do %(transferee)s</a>",
-        "decline_call": "Odrzuć",
         "default_device": "Urządzenie domyślne",
         "dial": "Wybierz numer",
         "dialpad": "Klawiatura telefoniczna",
@@ -3885,7 +3880,6 @@
         "show_sidebar_button": "Pokaż pasek boczny",
         "silence": "Wycisz rozmowę",
         "silenced": "Wyciszono powiadomienia",
-        "skip_lobby_toggle_option": "Dołącz teraz",
         "start_screenshare": "Udostępnij ekran",
         "stop_screenshare": "Przestań udostępniać ekran",
         "too_many_calls": "Zbyt wiele połączeń",
@@ -3906,13 +3900,11 @@
         "user_busy_description": "Użytkownik, do którego zadzwoniłeś jest zajęty.",
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Rozmowa wideo",
-        "video_call_started": "Rozpoczęto rozmowę wideo",
         "video_call_using": "Połączenie wideo przy użyciu:",
         "voice_call": "Rozmowa głosowa",
         "you_are_presenting": "Prezentujesz"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Witamy w Element",
     "widget": {
         "added_by": "Widżet dodany przez",
         "capabilities_dialog": {

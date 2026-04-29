@@ -1675,7 +1675,6 @@
         "restricted": "Sınırlı"
     },
     "powered_by_matrix": "Matrix tarafından desteklenmektedir",
-    "powered_by_matrix_with_logo": "Merkezi olmayan, şifreli sohbet ve işbirliği $matrixLogo tarafından desteklenmektedir.",
     "presence": {
         "away": "Uzakta",
         "busy": "Meşgul",
@@ -3737,13 +3736,11 @@
         "user_busy_description": "Aradığınız kullanıcı meşgul.",
         "user_is_presenting": "%(sharerName)s sunum yapıyor",
         "video_call": "Görüntülü arama",
-        "video_call_started": "Görüntülü arama başlatıldı",
         "video_call_using": "Görüntülü arama kullanılıyor:",
         "voice_call": "Sesli arama",
         "you_are_presenting": "Sunum yapıyorsunuz"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s %(osName)s",
-    "welcome_to_element": "Element'e Hoş Geldiniz",
     "widget": {
         "added_by": "Widget ekleyen",
         "capabilities_dialog": {

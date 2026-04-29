@@ -583,7 +583,6 @@
         "video": "비디오",
         "video_room": "비디오 room",
         "view_message": "메시지 보기",
-        "voice": "음성",
         "warning": "경고"
     },
     "composer": {
@@ -1549,9 +1548,6 @@
         "report_to_moderators": "관리자에게 신고하기",
         "report_to_moderators_description": "운영자가 관리하는 방에서는 '신고' 버튼으로 관리자에게 문제를 신고할 수 있습니다.",
         "room_list_sections": "대화방 목록 섹션",
-        "share_history_on_invite": "새 멤버에게 암호화 된 기록을 공유합니다.",
-        "share_history_on_invite_description": "기록 공개 설정이 '공유'로 설정된 암호화된 방으로 사용자를 초대할 때, 해당 사용자와 암호화된 기록을 공유하고, 그러한 방에 초대받았을 때는 암호화된 기록을 수락하세요.",
-        "share_history_on_invite_warning": "이 기능은 실험용 기능으로, 모든 보안 조치가 구현되어 있지는 않습니다. 실제 운영 계정에서는 활성화하지 마십시오.",
         "sliding_sync": "슬라이딩 동기화 모드",
         "sliding_sync_description": "개발 진행 중인 기능이며 비활성화는 불가능합니다. 현재 Element Call 기능은 지원하지 않습니다.",
         "sliding_sync_disabled_notice": "기능을 해제하려면 다시 로그인하세요",
@@ -1782,7 +1778,6 @@
         "restricted": "제한됨"
     },
     "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "분산형, 암호화된 채팅 및 협업 플랫폼 $matrixLogo",
     "presence": {
         "away": "자리 비움",
         "busy": "다른 용무 중",
@@ -3789,7 +3784,6 @@
         "connection_lost": "서버와의 연결이 끊어졌습니다.",
         "connection_lost_description": "서버에 연결되지 않으면 전화를 걸 수 없습니다.",
         "consulting": "%(transferTarget)s와 상담 중입니다. <a>%(transferee)s에게 통화 이전</a>",
-        "decline_call": "거부",
         "default_device": "기본 기기",
         "dial": "전화걸기",
         "dialpad": "다이얼패드",
@@ -3839,7 +3833,6 @@
         "show_sidebar_button": "사이드바 표시",
         "silence": "통화 음소거",
         "silenced": "알림 음소거됨",
-        "skip_lobby_toggle_option": "즉시 가입하세요",
         "start_screenshare": "화면 공유를 시작하세요",
         "stop_screenshare": "화면 공유 중지",
         "too_many_calls": "전화가 너무 많아요",
@@ -3861,14 +3854,12 @@
         "user_is_presenting": "%(sharerName)s님이 화면을 공유중입니다.",
         "video_call": "영상 통화",
         "video_call_incoming": "수신 영상 통화",
-        "video_call_started": "영상통화가 시작되었습니다",
         "video_call_using": "사용 중인 영상 통화:",
         "voice_call": "음성 통화",
         "voice_call_incoming": "수신 음성 통화",
         "you_are_presenting": "화면을 공유 중입니다."
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Element에 오신 것을 환영합니다",
     "widget": {
         "added_by": "위젯을 추가했습니다",
         "capabilities_dialog": {

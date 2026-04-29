@@ -1492,9 +1492,6 @@
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "report_to_moderators": "Rapportera till moderatorer",
         "report_to_moderators_description": "I rum som stöder moderering så låter \"Rapportera\"-knappen dig rapportera trakasseri till rumsmoderatorer.",
-        "share_history_on_invite": "Dela encrypted historik med nya medlemmar",
-        "share_history_on_invite_description": "När du bjuder in en användare till ett krypterat rum där historiksynlighet är inställd på \"delad\" så delar du krypterad historik med den användaren och du accepterar krypterad historik när du blir inbjuden till ett sådant rum.",
-        "share_history_on_invite_warning": "Den här funktionen är EXPERIMENTELL och alla säkerhetsåtgärder är inte implementerade. Aktivera inte på produktionskonton.",
         "sliding_sync": "Sliding sync-läge",
         "sliding_sync_description": "Under aktiv utveckling, kan inte inaktiveras.",
         "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera",
@@ -1728,7 +1725,6 @@
         "restricted": "Begränsad"
     },
     "powered_by_matrix": "Drivs av Matrix",
-    "powered_by_matrix_with_logo": "Decentraliserad krypterad chatt &amp; samarbete som drivs av $matrixLogo",
     "presence": {
         "away": "Borta",
         "busy": "Upptagen",
@@ -3840,13 +3836,11 @@
         "user_busy_description": "Användaren du ringde är upptagen.",
         "user_is_presenting": "%(sharerName)s presenterar",
         "video_call": "Videosamtal",
-        "video_call_started": "Videosamtal startat",
         "video_call_using": "Videosamtal med hjälp av:",
         "voice_call": "Röstsamtal",
         "you_are_presenting": "Du presenterar"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Välkommen till Element",
     "widget": {
         "added_by": "Widget tillagd av",
         "capabilities_dialog": {

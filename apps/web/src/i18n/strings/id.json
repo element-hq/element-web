@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "voice": "Suara",
         "warning": "Peringatan"
     },
     "composer": {
@@ -1550,9 +1549,6 @@
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
         "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
-        "share_history_on_invite": "Bagikan riwayat terenkripsi dengan anggota baru",
-        "share_history_on_invite_description": "Saat mengundang pengguna ke ruangan terenkripsi yang memiliki keterlihatan riwayat yang diatur ke \"terbagi\", bagikan riwayat terenkripsi dengan pengguna tersebut, dan terima riwayat terenkripsi saat Anda diundang ke ruangan tersebut.",
-        "share_history_on_invite_warning": "Fitur ini bersifat EKSPERIMENTAL dan tidak semua tindakan pencegahan keamanan diterapkan. Jangan aktifkan pada akun produksi.",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
@@ -1794,7 +1790,6 @@
         "restricted": "Dibatasi"
     },
     "powered_by_matrix": "Diberdayakan oleh Matrix",
-    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "presence": {
         "away": "Idle",
         "busy": "Sibuk",
@@ -3856,7 +3851,6 @@
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
         "consulting": "Mengkonsultasi dengan %(transferTarget)s. <a>Transfer ke %(transferee)s</a>",
-        "decline_call": "Tolak",
         "default_device": "Perangkat Bawaan",
         "dial": "Panggil",
         "dialpad": "Tombol Penyetel",
@@ -3907,7 +3901,6 @@
         "show_sidebar_button": "Tampilkan sisi bilah",
         "silence": "Diamkan panggilan",
         "silenced": "Notifikasi dibisukan",
-        "skip_lobby_toggle_option": "Segera bergabung",
         "start_screenshare": "Mulai membagikan layar Anda",
         "stop_screenshare": "Berhenti membagikan layar Anda",
         "too_many_calls": "Terlalu Banyak Panggilan",
@@ -3929,7 +3922,6 @@
         "user_is_presenting": "%(sharerName)s sedang mempresentasi",
         "video_call": "Panggilan video",
         "video_call_incoming": "Panggilan video masuk",
-        "video_call_started": "Panggilan video dimulai",
         "video_call_using": "Panggilan video menggunakan:",
         "voice_call": "Panggilan suara",
         "voice_call_incoming": "Panggilan suara masuk",
@@ -3937,7 +3929,6 @@
         "you_are_presenting": "Anda sedang mempresentasi"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element",
     "widget": {
         "added_by": "Widget ditambahkan oleh",
         "capabilities_dialog": {

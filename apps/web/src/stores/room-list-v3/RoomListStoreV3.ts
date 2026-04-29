@@ -40,7 +40,7 @@ import { DefaultTagID } from "./skip-list/tag";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
-import { createSection } from "./section";
+import { createSection, deleteSection, editSection } from "./section";
 
 /**
  * These are the filters passed to the room skip list.
@@ -496,6 +496,25 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         if (!tag) return;
         this.emit(SECTION_CREATED_EVENT, tag);
         return tag;
+    }
+
+    /**
+     * Edit a section's name.
+     * @param tag The tag of the section to edit
+     */
+    public async editSection(tag: string): Promise<void> {
+        await editSection(tag);
+    }
+
+    /**
+     * Remove a section
+     * Emits {@link LISTS_UPDATE_EVENT} if the section was successfully removed.
+     * @param tag The tag of the section to remove
+     * @param isEmpty Whether the section is empty
+     */
+    public async removeSection(tag: string, isEmpty: boolean): Promise<void> {
+        await deleteSection(tag, isEmpty);
+        this.scheduleEmit();
     }
 
     /**

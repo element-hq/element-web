@@ -1517,7 +1517,6 @@
         "restricted": "已限制"
     },
     "powered_by_matrix": "由Matrix支持",
-    "powered_by_matrix_with_logo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
     "presence": {
         "away": "離開",
         "busy": "忙碌",
@@ -3400,12 +3399,10 @@
         "user_busy_description": "您想要通話的使用者目前忙碌中。",
         "user_is_presenting": "%(sharerName)s 正在投影",
         "video_call": "視訊通話",
-        "video_call_started": "視訊通話已開始",
         "voice_call": "語音通話",
         "you_are_presenting": "您正在投影"
     },
     "web_default_device_name": "%(appName)s：%(osName)s 的 %(browserName)s",
-    "welcome_to_element": "歡迎使用 Element",
     "widget": {
         "added_by": "小工具新增者為",
         "capabilities_dialog": {

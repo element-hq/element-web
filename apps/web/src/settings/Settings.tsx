@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024, 2025 New Vector Ltd.
 Copyright 2018-2024 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
@@ -53,6 +54,7 @@ import { type ComputedInviteConfig } from "../@types/invite-rules.ts";
 import BlockInvitesConfigController from "./controllers/BlockInvitesConfigController.ts";
 import RequiresSettingsController from "./controllers/RequiresSettingsController.ts";
 import { type OrderedCustomSections, type CustomSectionsData } from "../stores/room-list-v3/section.ts";
+import { type NotificationSound } from "../Notifier.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -212,7 +214,6 @@ export interface Settings {
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
     "feature_exclude_insecure_devices": IFeature;
-    "feature_share_history_on_invite": IFeature;
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
@@ -229,6 +230,7 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     "feature_msc4362_encrypted_state_events": IFeature;
+    "feature_user_status": IFeature;
     // These are in the feature namespace but aren't actually features
     "feature_hidebold": IBaseSetting<boolean>;
 
@@ -310,15 +312,7 @@ export interface Settings {
     "urlPreviewsEnabled_e2ee": IBaseSetting<boolean>;
     "notificationsEnabled": IBaseSetting<boolean>;
     "deviceNotificationsEnabled": IBaseSetting<boolean>;
-    "notificationSound": IBaseSetting<
-        | {
-              name: string;
-              type: string;
-              size: number;
-              url: string;
-          }
-        | false
-    >;
+    "notificationSound": IBaseSetting<NotificationSound | false>;
     "notificationBodyEnabled": IBaseSetting<boolean>;
     "audioNotificationsEnabled": IBaseSetting<boolean>;
     "enableWidgetScreenshots": IBaseSetting<boolean>;
@@ -518,29 +512,6 @@ export const SETTINGS: Settings = {
         controller: new DeviceIsolationModeController(),
         displayName: _td("labs|exclude_insecure_devices"),
         description: _td("labs|exclude_insecure_devices_description"),
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        default: false,
-    },
-    "feature_share_history_on_invite": {
-        isFeature: true,
-        labsGroup: LabGroup.Encryption,
-        displayName: _td("labs|share_history_on_invite"),
-        description: () => (
-            <>
-                {_t("labs|share_history_on_invite_description")}
-                <div className="mx_SettingsFlag_microcopy">
-                    {_t(
-                        "settings|warning",
-                        {},
-                        {
-                            w: (sub) => <span className="mx_SettingsTab_microcopy_warning">{sub}</span>,
-                            description: _t("labs|share_history_on_invite_warning"),
-                        },
-                    )}
-                </div>
-            </>
-        ),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
@@ -811,6 +782,30 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         shouldWarn: true,
+        default: false,
+    },
+    "feature_user_status": {
+        isFeature: true,
+        labsGroup: LabGroup.Profile,
+        displayName: _td("labs|feature_user_status|display_name"),
+        description: _td("labs|feature_user_status|description"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        controller: new ServerSupportUnstableFeatureController(
+            "feature_user_status",
+            defaultWatchManager,
+            [["org.matrix.msc4429"], ["org.matrix.msc4429.stable"]],
+            undefined,
+            _td("labs|feature_user_status|required_msc_support"),
+            false,
+            // We have to assume it's available during early startup because of a race:
+            // The feature is used to enable extra sync filters during MatrixClient setup
+            // and we can't check for serverside support until the client has finished setting up.
+            // Once the client has setup, (so by the time the user actually opens the labs menu) we can
+            // enforce proper checks.
+            true,
+            true,
+        ),
         default: false,
     },
     "useCompactLayout": {
@@ -1150,7 +1145,13 @@ export const SETTINGS: Settings = {
         supportedLevelsAreOrdered: true,
         displayName: _td("settings|inline_url_previews_default"),
         default: true,
-        controller: new UIFeatureController(UIFeature.URLPreviews),
+        controller: new RequiresSettingsController([UIFeature.URLPreviews], false, (c) => {
+            if (c["io.element.msc4452.preview_url"]?.enabled !== false) {
+                // If the capability is not listed, or explicitly true then do not disable.
+                return false;
+            }
+            return _t("common|disabled_by_homeserver");
+        }),
     },
     "urlPreviewsEnabled_e2ee": {
         // Can only be enabled per-device to ensure neither the homeserver nor client config

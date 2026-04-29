@@ -1281,7 +1281,6 @@
         "restricted": "ຖືກຈຳກັດ"
     },
     "powered_by_matrix": "ສະໜັບສະໜູນໂດຍ Matrix",
-    "powered_by_matrix_with_logo": "ການສົນທະນາແບບເຂົ້າລະຫັດ ແລະກະຈ່າຍການຄຸ້ມຄອງ &amp; ການຮ່ວມມື້ ແລະສະໜັບສະໜູນໂດຍ $matrixLogo",
     "presence": {
         "away": "ຫ່າງອອກໄປ",
         "busy": "ບໍ່ຫວ່າງ",
@@ -2812,7 +2811,6 @@
         "voice_call": "ໂທດ້ວຍສຽງ",
         "you_are_presenting": "ທ່ານກໍາລັງນໍາສະເຫນີ"
     },
-    "welcome_to_element": "ຍິນດີຕ້ອນຮັບ",
     "widget": {
         "added_by": "ເພີ່ມWidgetໂດຍ",
         "capabilities_dialog": {

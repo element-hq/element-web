@@ -1431,7 +1431,6 @@
         "moderator": "モデレーター",
         "restricted": "制限"
     },
-    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
     "presence": {
         "away": "離席中",
         "busy": "取り込み中",
@@ -3137,12 +3136,10 @@
         "user_busy_description": "呼び出したユーザーは通話中です。",
         "user_is_presenting": "%(sharerName)sが画面を共有しています",
         "video_call": "ビデオ通話",
-        "video_call_started": "ビデオ通話を開始しました",
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },
     "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
-    "welcome_to_element": "Elementにようこそ",
     "widget": {
         "added_by": "ウィジェットの追加者",
         "capabilities_dialog": {

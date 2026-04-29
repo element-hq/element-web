@@ -586,7 +586,6 @@
         "video": "Videó",
         "video_room": "Videószoba",
         "view_message": "Üzenet megjelenítése",
-        "voice": "Hang",
         "warning": "Figyelmeztetés"
     },
     "composer": {
@@ -1555,9 +1554,6 @@
         "report_to_moderators": "Jelentés a moderátoroknak",
         "report_to_moderators_description": "A moderálást támogató szobákban a problémás tartalmat a „Jelentés” gombbal lehet a moderátorok felé jelezni.",
         "room_list_sections": "Szobalista szakaszok",
-        "share_history_on_invite": "Titkosított előzmények megosztása az új tagokkal",
-        "share_history_on_invite_description": "Ha egy felhasználót olyan titkosított szobába hív meg, amelynél az előzmények láthatósága „megosztott” beállításra van állítva, akkor a titkosított előzményeket megosztja azzal a felhasználóval, valamint elfogadja a titkosított előzményeket, ha ilyen szobába hívják meg.",
-        "share_history_on_invite_warning": "Ez a funkció KÍSÉRLETI JELLEGŰ, és nem minden biztonsági óvintézkedés van megvalósítva. Ne engedélyezze éles fiókokban.",
         "sliding_sync": "Csúszóablakos szinkronizálási mód",
         "sliding_sync_description": "Aktív fejlesztés alatt, nem kapcsolható ki.",
         "sliding_sync_disabled_notice": "Jelentkezzen be újra a letiltáshoz",
@@ -1799,7 +1795,6 @@
         "restricted": "Korlátozott"
     },
     "powered_by_matrix": "A gépházban: Matrix",
-    "powered_by_matrix_with_logo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo",
     "presence": {
         "away": "Távol",
         "busy": "Foglalt",
@@ -3864,7 +3859,6 @@
         "connection_lost": "Megszakadt a kapcsolat a kiszolgálóval",
         "connection_lost_description": "Nem kezdeményezhet hívást a kiszolgálóval való kapcsolat nélkül.",
         "consulting": "Egyeztetés vele: %(transferTarget)s. <a>Átadás ide: %(transferee)s</a>",
-        "decline_call": "Elutasítás",
         "default_device": "Alapértelmezett eszköz",
         "dial": "Tárcsázás",
         "dialpad": "Tárcsázó",
@@ -3914,7 +3908,6 @@
         "show_sidebar_button": "Oldalsáv megjelenítése",
         "silence": "Hívás némítása",
         "silenced": "Értesítések némítva",
-        "skip_lobby_toggle_option": "Csatlakozás azonnal",
         "start_screenshare": "Képernyőmegosztás bekapcsolása",
         "stop_screenshare": "Képernyőmegosztás kikapcsolása",
         "too_many_calls": "Túl sok hívás",
@@ -3936,7 +3929,6 @@
         "user_is_presenting": "%(sharerName)s tartja a bemutatót",
         "video_call": "Videóhívás",
         "video_call_incoming": "Bejövő videóhívás",
-        "video_call_started": "A videóhívás elindult",
         "video_call_using": "Videóhívás:",
         "voice_call": "Hanghívás",
         "voice_call_incoming": "Bejövő hanghívás",
@@ -3944,7 +3936,6 @@
         "you_are_presenting": "Ön tartja a bemutatót"
     },
     "web_default_device_name": "%(appName)s: (%(browserName)s itt: %(osName)s)",
-    "welcome_to_element": "Üdvözli az Element",
     "widget": {
         "added_by": "A kisalkalmazást hozzáadta",
         "capabilities_dialog": {

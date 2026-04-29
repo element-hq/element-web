@@ -81,6 +81,7 @@
     },
     "room_list": {
         "appearance": "外观",
+        "chat_moved": "聊天已移动",
         "collapse_filters": "折叠过滤器列表",
         "empty": {
             "no_chats": "暂无聊天",
@@ -128,6 +129,9 @@
         "room_options": "房间选项",
         "section_created": "区域已创建",
         "section_header": {
+            "edit_section": "编辑区域",
+            "more_options": "更多选项",
+            "remove_section": "移除区域",
             "toggle": "切换区域 %(section)s",
             "toggle_unread": "切换到区域 %(section)s 中的未读房间"
         },
@@ -205,6 +209,7 @@
         "message_timestamp_sent_at": "发送于 %(dateTime)s",
         "url_preview": {
             "close": "关闭预览",
+            "open_link": "打开链接",
             "show_n_more": {
                 "one": "显示剩余 %(count)s 个预览",
                 "other": "显示剩余 %(count)s 个预览"

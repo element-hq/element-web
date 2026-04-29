@@ -61,6 +61,6 @@ test.describe("Logout tests", () => {
         await page.getByRole("button", { name: "Remove this device", exact: true }).click();
 
         // Should have logged out directly
-        await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+        await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
     });
 });

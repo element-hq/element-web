@@ -1274,7 +1274,6 @@
         "restricted": "Takmarkað"
     },
     "powered_by_matrix": "Keyrt með Matrix",
-    "powered_by_matrix_with_logo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
     "presence": {
         "away": "Fjarverandi",
         "busy": "Upptekinn",
@@ -2825,12 +2824,10 @@
         "user_busy_description": "Notandinn sem þú hringdir í er upptekinn.",
         "user_is_presenting": "%(sharerName)s er að kynna",
         "video_call": "Myndsímtal",
-        "video_call_started": "Myndsímtal er byrjað",
         "voice_call": "Raddsímtal",
         "you_are_presenting": "Þú ert að kynna"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s á %(osName)s",
-    "welcome_to_element": "Velkomin í Element",
     "widget": {
         "added_by": "Viðmótshluta bætt við af",
         "capabilities_dialog": {

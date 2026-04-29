@@ -97,14 +97,11 @@ button.preview {
         display: inline-block;
         line-clamp: 2;
         -webkit-line-clamp: 2;
-        margin: var(--cpd-space-1x) 0;
-        font-weight: var(--cpd-font-weight-semibold);
         color: var(--cpd-color-text-primary);
         text-decoration-line: none;
     }
 
     .description {
-        font-size: var(--cpd-font-size-body-lg);
         margin: 0;
         display: -webkit-box;
         -webkit-box-orient: vertical;

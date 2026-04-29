@@ -591,7 +591,6 @@
         "video": "Fideo",
         "video_room": "Ystafell fideo",
         "view_message": "Gweld neges",
-        "voice": "Llais",
         "warning": "Rhybudd"
     },
     "composer": {
@@ -1563,9 +1562,6 @@
         "render_reaction_images_description": "Weithiau'n cael eu hadnabod fel \"emojis cyfaddas\".",
         "report_to_moderators": "Adrodd i cymedrolwyr",
         "report_to_moderators_description": "Mewn ystafelloedd sy'n cefnogi cymedroli, bydd y botwm “Adrodd” yn gadael i chi adrodd ar gam-drin i gymedrolwyr ystafelloedd.",
-        "share_history_on_invite": "Rhannwch hanes wedi'i amgryptio gydag aelodau newydd",
-        "share_history_on_invite_description": "Wrth wahodd defnyddiwr i ystafell wedi'i hamgryptio sydd â gwelededd hanes wedi'i osod i \"rhannu\", rhannwch hanes wedi'i amgryptio gyda'r defnyddiwr hwnnw, a derbyniwch hanes wedi'i amgryptio pan gewch eich gwahodd i ystafell o'r fath.",
-        "share_history_on_invite_warning": "Mae'r nodwedd hon yn ARBROFOL ac nid yw pob rhagofal diogelwch wedi'i weithredu. Peidiwch â'i galluogi ar gyfrifon cynhyrchu.",
         "sliding_sync": "Modd Cydweddu Llithro",
         "sliding_sync_description": "Wrthi'n datblygu, nid oes modd ei analluogi.",
         "sliding_sync_disabled_notice": "Allgofnodwch a mewngofnodi i analluogi",
@@ -1801,7 +1797,6 @@
         "restricted": "Cyfyngedig"
     },
     "powered_by_matrix": "Wedi'i bweru gan Matrix",
-    "powered_by_matrix_with_logo": "Sgwrs ddatganoledig, wedi'i hamgryptio &amp; cydweithrediad wedi'i bweru gan $matrixLogo",
     "presence": {
         "away": "I ffwrdd",
         "busy": "Prysur",
@@ -3876,7 +3871,6 @@
         "connection_lost": "Mae cysylltedd â'r gweinydd wedi'i golli",
         "connection_lost_description": "Allwch chi ddim osod galwadau heb gysylltiad â'r gweinydd.",
         "consulting": "Ymgynghori â %(transferTarget)s. <a>Trosglwyddo i %(transferee)s</a>",
-        "decline_call": "Gwrthod",
         "default_device": "Dyfais Rhagosodedig",
         "dial": "Deial",
         "dialpad": "Pad Deialu",
@@ -3927,7 +3921,6 @@
         "show_sidebar_button": "Dangos y bar ochr",
         "silence": "Distewi galwad",
         "silenced": "Hysbysiadau wedi'u distewi",
-        "skip_lobby_toggle_option": "Ymunwch ar unwaith",
         "start_screenshare": "Dechreuwch rannu'ch sgrin",
         "stop_screenshare": "Stopiwch rannu'ch sgrin",
         "too_many_calls": "Gormod o Alwadau",
@@ -3949,7 +3942,6 @@
         "user_is_presenting": "Mae %(sharerName)s yn cyflwyno",
         "video_call": "Galwad fideo",
         "video_call_incoming": "Galwad fideo i mewn",
-        "video_call_started": "Galwad fideo wedi dechrau",
         "video_call_using": "Galwad fideo gan ddefnyddio:",
         "voice_call": "Galwad llais",
         "voice_call_incoming": "Galwad llais i mewn",
@@ -3957,7 +3949,6 @@
         "you_are_presenting": "Rydych chi'n cyflwyno"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s ar %(osName)s",
-    "welcome_to_element": "Croeso i Element",
     "widget": {
         "added_by": "Ychwanegwyd teclyn gan",
         "capabilities_dialog": {

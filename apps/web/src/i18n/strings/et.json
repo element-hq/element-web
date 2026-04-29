@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Videotuba",
         "view_message": "Vaata sõnumit",
-        "voice": "Hääl",
         "warning": "Hoiatus"
     },
     "composer": {
@@ -1551,9 +1550,6 @@
         "render_reaction_images_description": "Mõnikord nimetatakse neid ka „kohandatud emotikonideks“.",
         "report_to_moderators": "Teata moderaatoritele",
         "report_to_moderators_description": "Kui jututoas on modereerimine kasutusel, siis nupust „Teata sisust“ avaneva vormi abil saad jututoa reegleid rikkuvast sisust teatada moderaatoritele.",
-        "share_history_on_invite": "Jaga uute liikmetega krüptitud ajalugu",
-        "share_history_on_invite_description": "Kutsudes uut kasutajat krüptitud jututuppa, kus ajaloo nähtavus on märgitud jagatuks, siis sa jagad ajalugu selle kasutajaga ning kutsutuna nõustud selle jagamisega.",
-        "share_history_on_invite_warning": "See funktsionaalsus on KATSELINE ja kõik turvameetmed pole veel kasutusel. Palun ära kasuta tarbeserveris.",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
         "sliding_sync_disabled_notice": "Väljalülitamiseks logi Matrix'i võrgust välja ja seejärel tagasi",
@@ -1798,7 +1794,6 @@
         "restricted": "Piiratud õigustega kasutaja"
     },
     "powered_by_matrix": "Põhineb Matrix'il",
-    "powered_by_matrix_with_logo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo",
     "presence": {
         "away": "Eemal",
         "busy": "Hõivatud",
@@ -3869,7 +3864,6 @@
         "connection_lost": "Ühendus sinu serveriga on katkenud",
         "connection_lost_description": "Kui ühendus sinu serveriga on katkenud, siis sa ei saa helistada.",
         "consulting": "Suhtlen teise osapoolega %(transferTarget)s. <a>Saadan andmeid kasutajale %(transferee)s</a>",
-        "decline_call": "Keeldu",
         "default_device": "Vaikimisi seade",
         "dial": "Helista",
         "dialpad": "Numbriklahvistik",
@@ -3920,7 +3914,6 @@
         "show_sidebar_button": "Näita külgpaani",
         "silence": "Vaigista kõne",
         "silenced": "Teavitused on summutatud",
-        "skip_lobby_toggle_option": "Liitu kohe",
         "start_screenshare": "Alusta oma seadme ekraani jagamist",
         "stop_screenshare": "Lõpeta oma seadme ekraani jagamine",
         "too_many_calls": "Liiga palju kõnesid",
@@ -3942,7 +3935,6 @@
         "user_is_presenting": "%(sharerName)s esitab",
         "video_call": "Videokõne",
         "video_call_incoming": "Saabuv videokõne",
-        "video_call_started": "Videokõne algas",
         "video_call_using": "Videokõne, kus on kasutusel:",
         "voice_call": "Häälkõne",
         "voice_call_incoming": "Saaduv häälkõne",
@@ -3950,7 +3942,6 @@
         "you_are_presenting": "Sina esitad"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
-    "welcome_to_element": "Tere tulemast kasutama suhtlusrakendust Element",
     "widget": {
         "added_by": "Vidina lisaja",
         "capabilities_dialog": {

@@ -627,7 +627,7 @@ describe("RoomListItemViewModel", () => {
             ]);
         });
 
-        it("should include sections from orderedSectionTags excluding CHATS_TAG", () => {
+        it("should include sections from orderedSectionTags excluding CHATS_TAG, favourite, and low priority", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "feature_room_list_sections") return true;
                 return false;
@@ -635,11 +635,11 @@ describe("RoomListItemViewModel", () => {
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
             const sections = viewModel.getSnapshot().sections;
-            expect(sections.map((s) => s.tag)).toEqual([DefaultTagID.Favourite, customTag, DefaultTagID.LowPriority]);
+            expect(sections.map((s) => s.tag)).toEqual([customTag]);
         });
 
         it("should mark the room current section as selected", () => {
-            room.tags = { [DefaultTagID.Favourite]: { order: 0 } };
+            room.tags = { [customTag]: { order: 0 } };
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "feature_room_list_sections") return true;
                 return false;
@@ -647,8 +647,7 @@ describe("RoomListItemViewModel", () => {
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
 
             const sections = viewModel.getSnapshot().sections;
-            expect(sections.find((s) => s.tag === DefaultTagID.Favourite)?.isSelected).toBe(true);
-            expect(sections.find((s) => s.tag === DefaultTagID.LowPriority)?.isSelected).toBe(false);
+            expect(sections.find((s) => s.tag === customTag)?.isSelected).toBe(true);
         });
 
         it("should use custom section name from CustomSectionData", () => {
@@ -665,7 +664,7 @@ describe("RoomListItemViewModel", () => {
         });
 
         it("should update sections when OrderedCustomSections setting changes", () => {
-            let watchCallback: CallbackFn = () => {};
+            let watchCallback: CallbackFn<"RoomList.OrderedCustomSections"> = () => {};
             jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
                 if (setting === "RoomList.OrderedCustomSections") watchCallback = callback;
                 return "watcher-id";
@@ -676,7 +675,7 @@ describe("RoomListItemViewModel", () => {
             });
 
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
-            expect(viewModel.getSnapshot().sections).toHaveLength(3); // Favourite, custom, LowPriority
+            expect(viewModel.getSnapshot().sections).toHaveLength(1);
 
             // Simulate reordering: custom section removed
             jest.spyOn(RoomListStoreV3.instance, "orderedSectionTags", "get").mockReturnValue([
@@ -686,10 +685,7 @@ describe("RoomListItemViewModel", () => {
             ]);
             watchCallback("RoomList.OrderedCustomSections", null, null as any, null, null);
 
-            expect(viewModel.getSnapshot().sections.map((s) => s.tag)).toEqual([
-                DefaultTagID.Favourite,
-                DefaultTagID.LowPriority,
-            ]);
+            expect(viewModel.getSnapshot().sections.map((s) => s.tag)).toEqual([]);
         });
     });
 

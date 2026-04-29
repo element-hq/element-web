@@ -334,7 +334,7 @@ test.describe("Login", () => {
     });
 
     test.describe("logout", () => {
-        test("should go to login page on logout", async ({ page, user }) => {
+        test("should go to welcome page on logout", async ({ page, user }) => {
             await page.getByRole("button", { name: "User menu" }).click();
             await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
 
@@ -342,7 +342,7 @@ test.describe("Login", () => {
             await page.waitForTimeout(2000);
             await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
             await page.getByRole("button", { name: "Remove this device" }).click();
-            await expect(page).toHaveURL(/\/#\/login$/);
+            await expect(page).toHaveURL(/\/#\/welcome$/);
         });
     });
 });

@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Videochat",
         "view_message": "Nachricht anzeigen",
-        "voice": "Sprachanruf",
         "warning": "Warnung"
     },
     "composer": {
@@ -1551,9 +1550,6 @@
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "report_to_moderators": "An Moderatoren melden",
         "report_to_moderators_description": "In Chats, die Moderation unterstützen, kannst du mit der Schaltfläche „Melden“ missbräuchliche Verwendung an die Moderatoren melden.",
-        "share_history_on_invite": "Teile den verschlüsselten Nachrichtenverlauf mit neuen Mitgliedern",
-        "share_history_on_invite_description": "Wenn du einen Nutzer in einen Chat einlädst, bei dem die die Sichtbarkeit der Historie auf \"geteilt\" eingestellt ist, wird der verschlüsselte Nachrichtenverlauf mit diesem Nutzer geteilt. Du akzeptierst damit auch, einen solchen verschlüsselten Nachrichtenverlauf zu empfangen, wenn du selbst in einen solchen Chat eingeladen wirst.",
-        "share_history_on_invite_warning": "Diese Funktion ist EXPERIMENTELL und nicht alle Sicherheitsmaßnahmen sind aktiviert. Bitte nicht auf Konten verwenden, die für den Produktions-Betrieb gedacht sind.",
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_description": "In aktiver Entwicklung, kann nicht deaktiviert werden. Derzeit nicht mit Element Call kompatibel.",
         "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",
@@ -1798,7 +1794,6 @@
         "restricted": "Eingeschränkt"
     },
     "powered_by_matrix": "Betrieben mit Matrix",
-    "powered_by_matrix_with_logo": "Dezentraler, verschlüsselter Chat &amp; Zusammenarbeit auf Basis von $matrixLogo",
     "presence": {
         "away": "Abwesend",
         "busy": "Beschäftigt",
@@ -3869,7 +3864,6 @@
         "connection_lost": "Verbindung zum Server unterbrochen",
         "connection_lost_description": "Du kannst ohne Verbindung zum Server keine Anrufe tätigen.",
         "consulting": "%(transferTarget)s wird angefragt. <a>Übertragung zu %(transferee)s</a>",
-        "decline_call": "Ablehnen",
         "default_device": "Standardgerät",
         "dial": "Wählen",
         "dialpad": "Telefontastatur",
@@ -3920,7 +3914,6 @@
         "show_sidebar_button": "Seitenleiste anzeigen",
         "silence": "Anruf stummschalten",
         "silenced": "Benachrichtigungen stummgeschaltet",
-        "skip_lobby_toggle_option": "Sofort beitreten",
         "start_screenshare": "Bildschirmfreigabe starten",
         "stop_screenshare": "Bildschirmfreigabe beenden",
         "too_many_calls": "Zu viele Anrufe",
@@ -3942,7 +3935,6 @@
         "user_is_presenting": "%(sharerName)s präsentiert",
         "video_call": "Videoanruf",
         "video_call_incoming": "Eingehender Videoanruf",
-        "video_call_started": "Videoanruf hat begonnen",
         "video_call_using": "Videoanruf mit:",
         "voice_call": "Sprachanruf",
         "voice_call_incoming": "Eingehender Anruf",
@@ -3950,7 +3942,6 @@
         "you_are_presenting": "Du präsentierst"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
-    "welcome_to_element": "Willkommen bei Element",
     "widget": {
         "added_by": "Widget hinzugefügt von",
         "capabilities_dialog": {

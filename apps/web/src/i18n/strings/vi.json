@@ -1411,7 +1411,6 @@
         "restricted": "Bị hạn chế"
     },
     "powered_by_matrix": "Chạy trên giao thức Matrix",
-    "powered_by_matrix_with_logo": "Dịch vụ nhắn tin &amp; liên lạc được mã hóa, phi tập trung. Được vận hành trên $matrixLogo",
     "presence": {
         "away": "Vắng mặt",
         "busy": "Bận",
@@ -3138,12 +3137,10 @@
         "user_busy_description": "Người dùng bạn vừa gọi hiện đang bận.",
         "user_is_presenting": "%(sharerName)s đang trình bày",
         "video_call": "Gọi video",
-        "video_call_started": "Cuộc gọi truyền hình đã bắt đầu",
         "voice_call": "Gọi thoại",
         "you_are_presenting": "Bạn đang trình bày"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s trên %(osName)s",
-    "welcome_to_element": "Chào mừng tới Element",
     "widget": {
         "added_by": "widget được thêm bởi",
         "capabilities_dialog": {

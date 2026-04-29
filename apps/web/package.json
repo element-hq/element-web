@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.12.15",
+    "version": "1.12.16",
     "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
@@ -125,7 +125,7 @@
         "@babel/preset-react": "^7.12.10",
         "@babel/preset-typescript": "^7.12.7",
         "@casualbot/jest-sonar-reporter": "2.6.0",
-        "@element-hq/element-call-embedded": "0.19.1",
+        "@element-hq/element-call-embedded": "0.19.2",
         "@element-hq/element-web-playwright-common": "workspace:*",
         "@fetch-mock/jest": "^0.2.20",
         "@jest/globals": "^30.2.0",
@@ -244,6 +244,6 @@
     "engines": {
         "node": ">=22.18"
     },
-    "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
+    "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
     "private": true
 }

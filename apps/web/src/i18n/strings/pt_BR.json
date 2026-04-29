@@ -587,7 +587,6 @@
         "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensagem",
-        "voice": "Voz",
         "warning": "Atenção"
     },
     "composer": {
@@ -1542,9 +1541,6 @@
         "render_reaction_images_description": "Às vezes chamados de “emojis personalizados”.",
         "report_to_moderators": "Reportar aos moderadores",
         "report_to_moderators_description": "Em salas que aceitam moderação, o botão \"Denunciar\" permitirá que você denuncie abusos aos moderadores da sala.",
-        "share_history_on_invite": "Compartilhe o histórico criptografado com novos membros",
-        "share_history_on_invite_description": "Quando você convidar alguém para uma sala criptografada com o histórico visível para todos, compartilhe o histórico criptografado com essa pessoa e aceite o histórico criptografado quando for convidado para uma sala assim.",
-        "share_history_on_invite_warning": "Este recurso é EXPERIMENTAL e nem todas as precauções de segurança estão implementadas. Não o habilite em contas de produção.",
         "sliding_sync": "Modo Sliding Sync",
         "sliding_sync_description": "Em desenvolvimento ativo, não pode ser desativado.",
         "sliding_sync_disabled_notice": "Saia e entre novamente para desativar",
@@ -1778,7 +1774,6 @@
         "restricted": "Restrito"
     },
     "powered_by_matrix": "Desenvolvido por Matrix",
-    "powered_by_matrix_with_logo": "Chat descentralizado e encriptado & colaboração, powered by $matrixLogo",
     "presence": {
         "away": "Ausente",
         "busy": "Ocupado",
@@ -3838,7 +3833,6 @@
         "connection_lost": "A conectividade com o servidor foi perdida",
         "connection_lost_description": "Você não pode fazer chamadas sem uma conexão com o servidor.",
         "consulting": "Consultar com %(transferTarget)s. Tranferir para <a> %(transferee)s</a>",
-        "decline_call": "Recusar",
         "default_device": "Aparelho padrão",
         "dial": "Discar",
         "dialpad": "Teclado de discagem",
@@ -3889,7 +3883,6 @@
         "show_sidebar_button": "Exibir a barra lateral",
         "silence": "Silenciar chamado",
         "silenced": "Notificações silenciadas",
-        "skip_lobby_toggle_option": "Junte-se imediatamente",
         "start_screenshare": "Começar a compartilhar sua tela",
         "stop_screenshare": "Parar de compartilhar sua tela",
         "too_many_calls": "Muitas chamadas",
@@ -3911,14 +3904,12 @@
         "user_is_presenting": "%(sharerName)s está apresentando",
         "video_call": "Chamada de vídeo",
         "video_call_incoming": "Chamada de vídeo recebida",
-        "video_call_started": "Videochamada iniciada",
         "video_call_using": "Chamada de vídeo usando:",
         "voice_call": "Chamada de voz",
         "voice_call_incoming": "Chamada de voz recebida",
         "you_are_presenting": "Você está apresentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
-    "welcome_to_element": "Boas-vindas a Element",
     "widget": {
         "added_by": "Widget adicionado por",
         "capabilities_dialog": {

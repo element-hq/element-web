@@ -1442,7 +1442,6 @@
         "restricted": "E kufizuar"
     },
     "powered_by_matrix": "Bazuar në Matrix",
-    "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
     "presence": {
         "away": "I larguar",
         "busy": "I zënë",
@@ -3197,12 +3196,10 @@
         "user_busy_description": "Përdoruesi që thirrët është i zënë.",
         "user_is_presenting": "%(sharerName)s përfaqëson",
         "video_call": "Thirrje video",
-        "video_call_started": "Nisi thirrje me video",
         "voice_call": "Thirrje audio",
         "you_are_presenting": "Përfaqësoni"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
-    "welcome_to_element": "Mirë se vini te Element",
     "widget": {
         "added_by": "Widget i shtuar nga",
         "capabilities_dialog": {
