@@ -664,7 +664,7 @@ describe("RoomListItemViewModel", () => {
         });
 
         it("should update sections when OrderedCustomSections setting changes", () => {
-            let watchCallback: CallbackFn = () => {};
+            let watchCallback: CallbackFn<"RoomList.OrderedCustomSections"> = () => {};
             jest.spyOn(SettingsStore, "watchSetting").mockImplementation((setting, _room, callback) => {
                 if (setting === "RoomList.OrderedCustomSections") watchCallback = callback;
                 return "watcher-id";

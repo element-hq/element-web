@@ -296,7 +296,7 @@ export class UrlPreviewGroupViewModel
             null,
             (_setting, _roomid, _level, compactLayout) => {
                 this.snapshot.merge({
-                    compactLayout,
+                    compactLayout: !!compactLayout,
                 });
             },
         );

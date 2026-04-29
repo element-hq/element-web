@@ -38,8 +38,8 @@ function LayoutSelector(): JSX.Element {
         <Root
             className="mx_LayoutSwitcher_LayoutSelector"
             onChange={async (evt) => {
-                // We don't have any file in the form, we can cast it as string safely
-                const newLayout = new FormData(evt.currentTarget).get("layout") as string | null;
+                // We don't have any file in the form, we can cast it as Layout safely
+                const newLayout = new FormData(evt.currentTarget).get("layout") as Layout;
                 await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, newLayout);
             }}
         >

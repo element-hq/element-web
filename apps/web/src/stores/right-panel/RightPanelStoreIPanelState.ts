@@ -60,8 +60,8 @@ export type IRightPanelForRoomStored = {
     history: Array<IRightPanelCardStored>;
 };
 
-export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanelForRoomStored | undefined {
-    if (!cacheRoom) return undefined;
+export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanelForRoomStored | null {
+    if (!cacheRoom) return null;
     const storeHistory = [...cacheRoom.history].map((panelState) => convertCardToStore(panelState));
     return { isOpen: cacheRoom.isOpen, history: storeHistory };
 }

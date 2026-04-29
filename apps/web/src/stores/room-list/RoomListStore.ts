@@ -69,7 +69,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
             "feature_dynamic_room_predecessors",
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                this.msc3946ProcessDynamicPredecessor = newVal;
+                this.msc3946ProcessDynamicPredecessor = !!newVal;
                 this.regenerateAllLists({ trigger: true });
             },
         );
