@@ -119,7 +119,6 @@ const config: Omit<Writable<Configuration>, "electronFuses"> & {
             to: "node_modules",
         },
         "lib/**",
-        "!lib/**/*.test.ts",
     ],
     extraResources: ["build/icon.*", "webapp.asar"],
     extraMetadata: {
