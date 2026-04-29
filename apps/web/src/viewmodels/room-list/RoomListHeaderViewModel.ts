@@ -26,7 +26,6 @@ import {
     showSpaceSettings,
 } from "../../utils/space";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import type { RoomListCollapseAllSectionsPayload } from "../../dispatcher/payloads/RoomListCollapseAllSectionsPayload";
 import type { RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
@@ -211,11 +210,11 @@ export class RoomListHeaderViewModel
     };
 
     public collapseOrExpandSections = (): void => {
-        const expand = this.snapshot.current.collapseSections === "expand";
-        defaultDispatcher.dispatch<RoomListCollapseAllSectionsPayload>({
-            action: Action.RoomListCollapseAllSections,
-            expand,
-        });
+        const action =
+            this.snapshot.current.collapseSections === "expand"
+                ? Action.RoomListExpandAllSections
+                : Action.RoomListCollapseAllSections;
+        defaultDispatcher.dispatch({ action });
     };
 
     private readonly onDispatch = (payload: { action: string }): void => {

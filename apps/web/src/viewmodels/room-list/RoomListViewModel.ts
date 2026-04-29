@@ -21,7 +21,6 @@ import { Action } from "../../dispatcher/actions";
 import dispatcher from "../../dispatcher/dispatcher";
 import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { type RoomListCollapseAllSectionsPayload } from "../../dispatcher/payloads/RoomListCollapseAllSectionsPayload";
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
@@ -328,7 +327,9 @@ export class RoomListViewModel
             // This was previously handled by useRoomListNavigation hook
             this.handleViewRoomDelta(payload as ViewRoomDeltaPayload);
         } else if (payload.action === Action.RoomListCollapseAllSections) {
-            this.onCollapseAllSections((payload as RoomListCollapseAllSectionsPayload).expand);
+            this.onCollapseAllSections(false);
+        } else if (payload.action === Action.RoomListExpandAllSections) {
+            this.onCollapseAllSections(true);
         }
     };
 

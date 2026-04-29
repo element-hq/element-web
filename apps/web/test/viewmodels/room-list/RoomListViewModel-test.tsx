@@ -986,14 +986,14 @@ describe("RoomListViewModel", () => {
             });
 
             describe("Collapse/expand all sections", () => {
-                it("should collapse all sections when Action.RoomListCollapseAllSections is dispatched with expand=false", async () => {
+                it("should collapse all sections when Action.RoomListCollapseAllSections is dispatched", async () => {
                     viewModel = new RoomListViewModel({ client: matrixClient });
 
                     const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
                     const chatsHeader = viewModel.getSectionHeaderViewModel(CHATS_TAG);
                     expect(favHeader.isExpanded).toBe(true);
 
-                    dispatcher.dispatch({ action: Action.RoomListCollapseAllSections, expand: false });
+                    dispatcher.dispatch({ action: Action.RoomListCollapseAllSections });
                     await flushPromisesWithFakeTimers();
 
                     expect(favHeader.isExpanded).toBe(false);
@@ -1004,7 +1004,7 @@ describe("RoomListViewModel", () => {
                     expect(snapshot.sections.find((s) => s.id === CHATS_TAG)!.roomIds).toEqual([]);
                 });
 
-                it("should expand all sections when Action.RoomListCollapseAllSections is dispatched with expand=true", async () => {
+                it("should expand all sections when Action.RoomListExpandAllSections is dispatched", async () => {
                     viewModel = new RoomListViewModel({ client: matrixClient });
 
                     // Collapse first
@@ -1012,7 +1012,7 @@ describe("RoomListViewModel", () => {
                     favHeader.onClick();
                     expect(favHeader.isExpanded).toBe(false);
 
-                    dispatcher.dispatch({ action: Action.RoomListCollapseAllSections, expand: true });
+                    dispatcher.dispatch({ action: Action.RoomListExpandAllSections });
                     await flushPromisesWithFakeTimers();
 
                     expect(favHeader.isExpanded).toBe(true);
