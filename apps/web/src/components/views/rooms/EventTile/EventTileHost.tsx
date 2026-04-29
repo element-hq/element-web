@@ -398,7 +398,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
     const notificationRoomLabel = room
         ? _t(
               "timeline|in_room_name",
-              { room: snapshot.presentation.notificationView.roomName ?? room.name },
+              { room: snapshot.presentation.notificationRoomName ?? room.name },
               { strong: renderStrongSubstitution },
           )
         : undefined;
@@ -453,15 +453,25 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                 toolbar: nodes.thread.toolbar,
             },
             timestamp: {
-                ...snapshot.presentation.timestampView,
+                displayMode: snapshot.timestamp.timestampDisplayMode,
+                formatMode: snapshot.timestamp.timestampFormatMode,
+                ts: snapshot.timestamp.timestampTs,
+                receivedTs: snapshot.timestamp.receivedTs,
+                permalink: snapshot.timestamp.permalink,
                 isTwelveHour: props.isTwelveHour,
                 onPermalinkClicked,
                 onContextMenu: onTimestampContextMenu,
                 vm: vm.timestampViewModel,
             },
-            encryption: snapshot.presentation.encryptionView,
+            encryption: {
+                padlockMode: snapshot.encryption.padlockMode,
+                mode: snapshot.encryption.encryptionIndicatorMode,
+                indicatorTitle: snapshot.encryption.encryptionIndicatorTitle,
+                sharedKeysUserId: snapshot.encryption.sharedKeysUserId,
+                sharedKeysRoomId: snapshot.encryption.sharedKeysRoomId,
+            },
             notification: {
-                enabled: snapshot.presentation.notificationView.enabled,
+                enabled: snapshot.presentation.isNotification,
                 roomLabel: notificationRoomLabel,
                 roomAvatar: room ? (
                     <div className="mx_EventTile_avatar">
@@ -495,11 +505,19 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             snapshot.timestamp.scrollToken,
             snapshot.sender.isOwnEvent,
             snapshot.rendering.hasFooter,
-            snapshot.presentation.timestampView,
+            snapshot.timestamp.timestampDisplayMode,
+            snapshot.timestamp.timestampFormatMode,
+            snapshot.timestamp.timestampTs,
+            snapshot.timestamp.receivedTs,
+            snapshot.timestamp.permalink,
             vm.timestampViewModel,
-            snapshot.presentation.encryptionView,
+            snapshot.encryption.padlockMode,
+            snapshot.encryption.encryptionIndicatorMode,
+            snapshot.encryption.encryptionIndicatorTitle,
+            snapshot.encryption.sharedKeysUserId,
+            snapshot.encryption.sharedKeysRoomId,
             snapshot.presentation.isListLikeTile,
-            snapshot.presentation.notificationView,
+            snapshot.presentation.isNotification,
             roomContext.timelineRenderingType,
             nodes.content.sender,
             nodes.content.avatar,

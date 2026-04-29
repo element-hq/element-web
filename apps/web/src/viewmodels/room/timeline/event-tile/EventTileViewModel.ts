@@ -163,20 +163,8 @@ interface EventTileTimestampSnapshot {
     timestampFormatMode: TimestampFormatMode;
     /** The timestamp value, in milliseconds since the Unix epoch. */
     timestampTs: number;
-}
-
-/** Plain timestamp view data consumed by the thin React layer. */
-interface EventTileTimestampViewData {
-    /** Timestamp display mode. */
-    displayMode: TimestampDisplayMode;
-    /** Timestamp formatting mode. */
-    formatMode: TimestampFormatMode;
-    /** Event timestamp in milliseconds. */
-    ts: number;
     /** Received timestamp for late-event rendering, when available. */
     receivedTs?: number;
-    /** Event permalink. */
-    permalink: string;
 }
 
 /** Thread-related state derived from the event and current room context. */
@@ -249,28 +237,6 @@ interface EventTileEncryptionSnapshot {
     encryptionIndicatorTitle?: string;
 }
 
-/** Plain encryption view data consumed by the thin React layer. */
-interface EventTileEncryptionViewData {
-    /** Padlock presentation mode. */
-    padlockMode: PadlockMode;
-    /** Encryption indicator icon mode. */
-    mode: EncryptionIndicatorMode;
-    /** Optional tooltip title for the indicator. */
-    indicatorTitle?: string;
-    /** User ID that shared keys for the event, when available. */
-    sharedKeysUserId?: string;
-    /** Room ID associated with shared keys, when available. */
-    sharedKeysRoomId?: string;
-}
-
-/** Plain notification-list data consumed by the thin React layer. */
-interface EventTileNotificationViewData {
-    /** Whether notification metadata should be rendered. */
-    enabled: boolean;
-    /** Room name to surface in notification views, when available. */
-    roomName?: string;
-}
-
 /** Additional presentational data currently derived alongside the VM snapshot. */
 interface EventTilePresentationSnapshot {
     /** Optional event ID attached to the rendered tile root. */
@@ -287,16 +253,8 @@ interface EventTilePresentationSnapshot {
     isListLikeTile: boolean;
     /** Plain room name for notification list rendering. */
     notificationRoomName?: string;
-    /** Received timestamp used for late-event timestamp rendering. */
-    receivedTs?: number;
     /** Whether the thin view should render the missing-renderer fallback path. */
     shouldRenderMissingRendererFallback: boolean;
-    /** Grouped timestamp data for the thin view. */
-    timestampView: EventTileTimestampViewData;
-    /** Grouped encryption data for the thin view. */
-    encryptionView: EventTileEncryptionViewData;
-    /** Grouped notification data for the thin view. */
-    notificationView: EventTileNotificationViewData;
 }
 
 /** Shared intermediate values used while deriving a tile snapshot. */
@@ -954,12 +912,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 ...encryptionSnapshot,
                 encryptionIndicatorTitle,
             },
-            presentation: {
-                encryptionView: EventTileViewModel.getEncryptionViewData({
-                    ...nextEncryptionSnapshot,
-                    encryptionIndicatorTitle,
-                }),
-            },
         });
     }
 
@@ -1157,14 +1109,15 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         snapshot: EventTileViewSnapshot,
         props: EventTileViewModelProps,
     ): MessageTimestampViewModelProps {
-        const timestampView = snapshot.presentation.timestampView;
-
         return {
-            showRelative: timestampView.formatMode === TimestampFormatMode.Relative,
+            showRelative: snapshot.timestamp.timestampFormatMode === TimestampFormatMode.Relative,
             showTwelveHour: props.isTwelveHour,
-            ts: timestampView.ts,
-            receivedTs: timestampView.receivedTs,
-            href: timestampView.displayMode === TimestampDisplayMode.Linked ? timestampView.permalink : undefined,
+            ts: snapshot.timestamp.timestampTs,
+            receivedTs: snapshot.timestamp.receivedTs,
+            href:
+                snapshot.timestamp.timestampDisplayMode === TimestampDisplayMode.Linked
+                    ? snapshot.timestamp.permalink
+                    : undefined,
         };
     }
 
@@ -1327,19 +1280,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ...snapshotWithoutPresentation,
             encryption,
         };
-        const receivedTs = EventTileViewModel.getReceivedTs(props);
-        const timestampView = EventTileViewModel.keepSnapshotGroup(
-            previousSnapshot?.presentation.timestampView,
-            EventTileViewModel.getTimestampViewData(timestamp, receivedTs),
-        );
-        const encryptionView = EventTileViewModel.keepSnapshotGroup(
-            previousSnapshot?.presentation.encryptionView,
-            EventTileViewModel.getEncryptionViewData(encryption),
-        );
-        const notificationView = EventTileViewModel.keepSnapshotGroup(
-            previousSnapshot?.presentation.notificationView,
-            EventTileViewModel.getNotificationViewData(props),
-        );
         const presentation = EventTileViewModel.keepSnapshotGroup(previousSnapshot?.presentation, {
             eventId: EventTileViewModel.getEventId(props),
             ariaLive: EventTileViewModel.getAriaLive(props),
@@ -1348,11 +1288,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             isNotification: EventTileViewModel.getIsNotification(props),
             isListLikeTile: EventTileViewModel.getIsListLikeTile(props),
             notificationRoomName: EventTileViewModel.getNotificationRoomName(props),
-            receivedTs,
             shouldRenderMissingRendererFallback: rendering.renderMode === EventTileRenderMode.MissingRendererFallback,
-            timestampView,
-            encryptionView,
-            notificationView,
         });
 
         return {
@@ -1414,6 +1350,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 timestampDisplayMode: TimestampDisplayMode.Hidden,
                 timestampFormatMode: TimestampFormatMode.Absolute,
                 timestampTs: props.mxEvent.getTs(),
+                receivedTs: undefined,
             },
             thread: {
                 thread: null,
@@ -1458,26 +1395,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 isNotification: false,
                 isListLikeTile: false,
                 notificationRoomName: undefined,
-                receivedTs: undefined,
                 shouldRenderMissingRendererFallback: false,
-                timestampView: {
-                    displayMode: TimestampDisplayMode.Hidden,
-                    formatMode: TimestampFormatMode.Absolute,
-                    ts: props.mxEvent.getTs(),
-                    receivedTs: undefined,
-                    permalink: "#",
-                },
-                encryptionView: {
-                    padlockMode: PadlockMode.None,
-                    mode: EncryptionIndicatorMode.None,
-                    indicatorTitle: undefined,
-                    sharedKeysUserId: undefined,
-                    sharedKeysRoomId: undefined,
-                },
-                notificationView: {
-                    enabled: false,
-                    roomName: undefined,
-                },
             },
         };
     }
@@ -1536,6 +1454,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             timestampDisplayMode: EventTileViewModel.getTimestampDisplayMode(props, context.showTimestamp),
             timestampFormatMode: EventTileViewModel.getTimestampFormatMode(props),
             timestampTs: props.mxEvent.getTs(),
+            receivedTs: EventTileViewModel.getReceivedTs(props),
         };
 
         timestampSnapshot.timestampTs = EventTileViewModel.getTimestampTs(props, context.thread);
@@ -1660,10 +1579,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ...snapshot,
             timestamp: nextTimestamp,
         };
-        const timestampView = EventTileViewModel.keepSnapshotGroup(
-            snapshot.presentation.timestampView,
-            EventTileViewModel.getTimestampViewData(nextTimestamp, snapshot.presentation.receivedTs),
-        );
         const update: EventTileViewSnapshotUpdate = {
             timestamp: {
                 showTimestamp,
@@ -1673,10 +1588,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 shouldRenderActionBar: EventTileViewModel.getShouldRenderActionBar(props, nextSnapshot),
             },
         };
-
-        if (timestampView !== snapshot.presentation.timestampView) {
-            update.presentation = { timestampView };
-        }
 
         return update;
     }
@@ -2263,36 +2174,6 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         }
 
         return undefined;
-    }
-
-    private static getTimestampViewData(
-        timestamp: EventTileTimestampSnapshot,
-        receivedTs?: number,
-    ): EventTileTimestampViewData {
-        return {
-            displayMode: timestamp.timestampDisplayMode,
-            formatMode: timestamp.timestampFormatMode,
-            ts: timestamp.timestampTs,
-            receivedTs,
-            permalink: timestamp.permalink,
-        };
-    }
-
-    private static getEncryptionViewData(encryption: EventTileEncryptionSnapshot): EventTileEncryptionViewData {
-        return {
-            padlockMode: encryption.padlockMode,
-            mode: encryption.encryptionIndicatorMode,
-            indicatorTitle: encryption.encryptionIndicatorTitle,
-            sharedKeysUserId: encryption.sharedKeysUserId,
-            sharedKeysRoomId: encryption.sharedKeysRoomId,
-        };
-    }
-
-    private static getNotificationViewData(props: EventTileViewModelProps): EventTileNotificationViewData {
-        return {
-            enabled: EventTileViewModel.getIsNotification(props),
-            roomName: EventTileViewModel.getNotificationRoomName(props),
-        };
     }
 
     private static getContentClassName(mxEvent: MatrixEvent): string {

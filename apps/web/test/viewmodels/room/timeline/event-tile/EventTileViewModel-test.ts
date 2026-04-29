@@ -673,10 +673,9 @@ describe("EventTileViewModel", () => {
             const nextSnapshot = vm.getSnapshot();
             expect(nextSnapshot.interaction).not.toBe(initialSnapshot.interaction);
             expect(nextSnapshot.presentation).toBe(initialSnapshot.presentation);
-            expect(nextSnapshot.presentation.timestampView).toBe(initialSnapshot.presentation.timestampView);
         });
 
-        it("preserves presentation view-data references during no-op full refreshes", () => {
+        it("preserves snapshot references during no-op full refreshes", () => {
             const vm = createViewModel();
             const initialSnapshot = vm.getSnapshot();
 
@@ -684,9 +683,6 @@ describe("EventTileViewModel", () => {
 
             const nextSnapshot = vm.getSnapshot();
             expect(nextSnapshot).toBe(initialSnapshot);
-            expect(nextSnapshot.presentation.timestampView).toBe(initialSnapshot.presentation.timestampView);
-            expect(nextSnapshot.presentation.encryptionView).toBe(initialSnapshot.presentation.encryptionView);
-            expect(nextSnapshot.presentation.notificationView).toBe(initialSnapshot.presentation.notificationView);
         });
 
         it("updates props, render state, listeners, and async event work", () => {
@@ -770,11 +766,6 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().presentation.ariaLive).toBe("off");
             expect(vm.getSnapshot().presentation.rootClassName).toContain("mx_EventTile");
             expect(vm.getSnapshot().presentation.contentClassName).toBe("mx_EventTile_line");
-            expect(vm.getSnapshot().presentation.timestampView.permalink).toBe(vm.getSnapshot().timestamp.permalink);
-            expect(vm.getSnapshot().presentation.timestampView.ts).toBe(vm.getSnapshot().timestamp.timestampTs);
-            expect(vm.getSnapshot().presentation.encryptionView.mode).toBe(
-                vm.getSnapshot().encryption.encryptionIndicatorMode,
-            );
         });
 
         it("marks missing-renderer fallback directly in the snapshot", () => {
@@ -804,10 +795,6 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().presentation.isNotification).toBe(true);
             expect(vm.getSnapshot().presentation.isListLikeTile).toBe(true);
             expect(vm.getSnapshot().presentation.notificationRoomName).toBe(room.name);
-            expect(vm.getSnapshot().presentation.notificationView).toEqual({
-                enabled: true,
-                roomName: room.name,
-            });
         });
     });
 
