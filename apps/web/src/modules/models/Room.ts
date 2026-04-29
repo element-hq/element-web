@@ -34,6 +34,12 @@ export class Room implements IRoom {
     public isEncrypted(): boolean {
         return this.sdkRoom.hasEncryptionStateEvent();
     }
+
+    public findEventById(eventId: string): ModuleMatrixEvent | null {
+        const sdkEvent = this.sdkRoom.findEventById(eventId);
+        if (!sdkEvent) return null;
+        return sdkEventToModuleEvent(sdkEvent);
+    }
 }
 
 /**
@@ -56,6 +62,26 @@ class WatchableName extends Watchable<string> {
     }
 }
 
+function sdkEventToModuleEvent(sdkEvent: MatrixEvent | null): ModuleMatrixEvent | null {
+    if (!sdkEvent) return null;
+    const eventId = sdkEvent.getId();
+    const roomId = sdkEvent.getRoomId();
+    const sender = sdkEvent.getSender();
+    if (!eventId || !roomId || !sender) return null;
+    return {
+        content: sdkEvent.getContent(),
+        eventId,
+        originServerTs: sdkEvent.getTs(),
+        roomId,
+        sender,
+        stateKey: sdkEvent.getStateKey(),
+        type: sdkEvent.getType(),
+        unsigned: sdkEvent.getUnsigned(),
+        wireContent: sdkEvent.getWireContent(),
+        isEncrypted: sdkEvent.isEncrypted(),
+    };
+}
+
 class WatchableStateEvent extends Watchable<ModuleMatrixEvent | null> {
     public constructor(
         private eventType: string,
@@ -63,7 +89,7 @@ class WatchableStateEvent extends Watchable<ModuleMatrixEvent | null> {
         private sdkRoom: SdkRoom,
     ) {
         const event = sdkRoom.currentState.getStateEvents(eventType, stateKey);
-        super(WatchableStateEvent.sdkEventToModuleEvent(event));
+        super(sdkEventToModuleEvent(event));
     }
 
     protected onFirstWatch(): void {
@@ -76,26 +102,8 @@ class WatchableStateEvent extends Watchable<ModuleMatrixEvent | null> {
 
     private updateEvent = (event: MatrixEvent): void => {
         if (event.isState() && event.getType() === this.eventType && event.getStateKey() === this.stateKey) {
-            this.value = WatchableStateEvent.sdkEventToModuleEvent(event);
+            this.value = sdkEventToModuleEvent(event);
         }
     };
-
-    public static sdkEventToModuleEvent(sdkEvent: MatrixEvent | null): ModuleMatrixEvent | null {
-        if (!sdkEvent) return null;
-        const eventId = sdkEvent.getId();
-        const roomId = sdkEvent.getRoomId();
-        const sender = sdkEvent.getSender();
-        if (!eventId || !roomId || !sender) return null;
-        return {
-            content: sdkEvent.getContent(),
-            eventId,
-            originServerTs: sdkEvent.getTs(),
-            roomId,
-            sender,
-            stateKey: sdkEvent.getStateKey(),
-            type: sdkEvent.getType(),
-            unsigned: sdkEvent.getUnsigned(),
-            isEncrypted: sdkEvent.isEncrypted(),
-        };
-    }
 }
+
