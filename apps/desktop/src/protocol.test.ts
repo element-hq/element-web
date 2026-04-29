@@ -70,6 +70,15 @@ describe("ProtocolHandler", () => {
             ).toBe(USER_DATA_DIR);
         });
 
+        it("should handle malformed OIDC URIs gracefully", () => {
+            expect(
+                handler.getProfileFromDeeplink([
+                    "Element.app",
+                    `${TEST_PROTOCOL}:/vector/webapp/?no_universal_links=true#code=DEADBEEF:element-desktop-ssoid:${TEST_SESSION_ID}`,
+                ]),
+            ).toBeUndefined();
+        });
+
         it("should handle unrelated URIs gracefully", () => {
             expect(handler.getProfileFromDeeplink(["Element.app", `${TEST_PROTOCOL}:/vector/webapp/`])).toBeUndefined();
             expect(handler.getProfileFromDeeplink(["Element.app", `test.unrelated:/vector/webapp/`])).toBeUndefined();

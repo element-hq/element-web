@@ -142,11 +142,14 @@ export default class ProtocolHandler {
                     const state = searchParams.get("state");
                     if (state) {
                         sessionId = state.split(`:${SEARCH_PARAM}:`)[1];
-                    } else {
-                        console.warn("Unable to read session ID in deeplink url:", deeplinkUrl);
-                        return undefined;
                     }
                 }
+
+                if (!sessionId) {
+                    console.warn("Unable to read session ID in deeplink url:", deeplinkUrl);
+                    return undefined;
+                }
+
                 console.log("Forwarding to profile:", store[sessionId]);
                 return store[sessionId];
             }

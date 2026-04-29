@@ -87,7 +87,7 @@ module.exports = {
             },
         },
         {
-            files: ["electron-builder.ts", "vitest.config.ts"],
+            files: ["src/**/*.test.ts", "electron-builder.ts", "vitest.config.ts"],
             extends: ["plugin:matrix-org/typescript"],
             parserOptions: {
                 project: ["tsconfig.node.json"],
