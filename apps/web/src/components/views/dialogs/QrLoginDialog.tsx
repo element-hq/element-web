@@ -9,7 +9,7 @@ import { RendezvousIntent } from "matrix-js-sdk/src/rendezvous";
 import { createClient } from "matrix-js-sdk/src/matrix";
 
 import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
-import LoginWithQR from "../../views/auth/LoginWithQR.tsx";
+import LoginWithQR, { type QrLoginCredentials } from "../../views/auth/LoginWithQR.tsx";
 import { Mode, Phase } from "../../views/auth/LoginWithQR-types.ts";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo.ts";
 import { getOidcClientId } from "../../../utils/oidc/registerClient.ts";
@@ -20,9 +20,10 @@ import { _t } from "../../../languageHandler.tsx";
 interface Props {
     serverConfig: ValidatedServerConfig;
     onFinished(this: void): void;
+    onLoggedIn(this: void, credentials: QrLoginCredentials): Promise<void>;
 }
 
-const QrLoginDialog: FC<Props> = ({ serverConfig, onFinished }) => {
+const QrLoginDialog: FC<Props> = ({ serverConfig, onLoggedIn, onFinished }) => {
     const tempClient = useMemo(() => createClient({ baseUrl: serverConfig.hsUrl }), [serverConfig]);
     const clientId = useAsyncMemo(
         () => getOidcClientId(serverConfig.delegatedAuthentication!, SdkConfig.get().oidc_static_clients),
@@ -45,6 +46,7 @@ const QrLoginDialog: FC<Props> = ({ serverConfig, onFinished }) => {
                 clientId={clientId}
                 client={tempClient}
                 onFinished={onFinished}
+                onLoggedIn={onLoggedIn}
                 mode={Mode.Show}
                 onPhaseChange={setPhase}
             />

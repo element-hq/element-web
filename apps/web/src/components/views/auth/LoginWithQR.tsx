@@ -24,25 +24,34 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
-import { configureFromCompletedOAuthLogin, restoreSessionFromStorage } from "../../../Lifecycle";
-import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
+
+export type QrLoginCredentials = {
+    accessToken: string;
+    refreshToken?: string;
+    homeserverUrl: string;
+    clientId: string;
+    idToken: string;
+    issuer: string;
+    identityServerUrl?: string;
+    deviceId: string;
+    secrets: Awaited<ReturnType<MSC4108SignInWithQR["shareSecrets"]>>["secrets"];
+};
 
 type BaseProps = {
     client: MatrixClient;
     mode: Mode;
     onPhaseChange?(phase: Phase): void;
+    onFinished(this: void, success?: boolean): void;
 };
 
 type Props = XOR<
     {
         intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE;
         clientId?: string; // A spinner will be shown while undefined
-        onFinished(success: false): void;
-        onFinished(success: true, credentials: IMatrixClientCreds): void;
+        onLoggedIn(credentials: QrLoginCredentials): Promise<void>;
     },
     {
         intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE;
-        onFinished(success: boolean): void;
     }
 > &
     BaseProps;
@@ -124,13 +133,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         }
     }
 
-    private onFinished(success: boolean, credentials?: IMatrixClientCreds): void {
+    private onFinished(success: boolean): void {
         this.finished = true;
-        if (success) {
-            this.props.onFinished(success, credentials!);
-        } else {
-            this.props.onFinished(success);
-        }
+        this.props.onFinished(success);
     }
 
     private generateAndShowCode = async (abortController: AbortController): Promise<void> => {
@@ -244,8 +249,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
 
                     const identityServerUrl = clientConfig["m.identity_server"]?.base_url ?? undefined; // TODO fall back to config?
 
-                    // store and use the new credentials
-                    const credentials = await configureFromCompletedOAuthLogin({
+                    const { secrets } = await this.state.rendezvous.shareSecrets();
+
+                    await this.props.onLoggedIn({
                         accessToken: tokenResponse.access_token,
                         refreshToken: tokenResponse.refresh_token,
                         homeserverUrl,
@@ -253,33 +259,11 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         idToken: tokenResponse.id_token ?? "", // TODO fix this - I'm not sure the idToken is actually required
                         issuer: metadata!.issuer,
                         identityServerUrl,
+                        secrets,
+                        deviceId,
                     });
 
-                    const { secrets } = await this.state.rendezvous.shareSecrets();
-
-                    await restoreSessionFromStorage(); // TODO fix this
-
-                    if (secrets) {
-                        const crypto = MatrixClientPeg.safeGet().getCrypto();
-                        if (crypto?.importSecretsBundle) {
-                            await crypto.importSecretsBundle(secrets);
-                            // it should be sufficient to just upload the device keys with the signature
-                            // but this seems to do the job for now
-                            await crypto.crossSignDevice(deviceId);
-
-                            // PROTOTYPE: this is a fudge to bypass the complete security step
-                            window.location.reload(); // TODO fix this
-                        } else {
-                            logger.warn(
-                                "Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login",
-                            );
-                        }
-                    } else {
-                        logger.warn("No secrets received from QR login");
-                    }
-
-                    // done
-                    this.onFinished(true, credentials);
+                    this.onFinished(true);
                 }
             }
         } catch (e: RendezvousError | unknown) {

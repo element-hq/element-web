@@ -143,6 +143,8 @@ import { ModuleApi } from "../../modules/Api.ts";
 import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
 import QrLoginDialog from "../views/dialogs/QrLoginDialog.tsx";
+import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
+import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -836,6 +838,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         QrLoginDialog,
                         {
                             serverConfig: this.getServerProperties().serverConfig,
+                            onLoggedIn: this.onUserCompletedQrLoginFlow,
                         },
                         undefined,
                         false,
@@ -2151,6 +2154,38 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         PerformanceMonitor.instance.stop(PerformanceEntryNames.LOGIN);
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
+    };
+
+    /**
+     * After successful qr login, load & persist the credentials, as well as the secrets bundle.
+     */
+    private onUserCompletedQrLoginFlow = async ({
+        secrets,
+        deviceId,
+        ...tokenResponse
+    }: QrLoginCredentials): Promise<void> => {
+        // store and use the new credentials
+        const matrixCreds = await configureFromCompletedOAuthLogin(tokenResponse);
+
+        // Create and start the client
+        await Lifecycle.setLoggedIn(matrixCreds);
+
+        if (secrets) {
+            const crypto = MatrixClientPeg.safeGet().getCrypto();
+            if (crypto?.importSecretsBundle) {
+                await crypto.importSecretsBundle(secrets);
+                // it should be sufficient to just upload the device keys with the signature but this seems to do the job for now
+                await crypto.crossSignDevice(deviceId);
+            } else {
+                logger.warn(
+                    "Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login",
+                );
+            }
+        } else {
+            logger.warn("No secrets received from QR login");
+        }
+
+        this.onShowPostLoginScreen();
     };
 
     /** Called when {@link Views.E2E_SETUP} or {@link Views.COMPLETE_SECURITY} have completed. */
