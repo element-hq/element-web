@@ -14,5 +14,6 @@
         "lib": ["es2022", "es2024.promise"],
         "strict": true
     },
-    "include": ["./src/**/*.ts", "./src/**/*.cts"]
+    "include": ["./src/**/*.ts", "./src/**/*.cts"],
+    "exclude": ["./src/**/*.test.ts"]
 }
