@@ -53,7 +53,7 @@ export default defineConfig({
             include: ["src/**/*"],
             // The coverage report currently chokes on this file as it doesn't process it as TypeScript
             exclude: ["src/preload.cts"],
-            reporter: "lcov",
+            reporter: [["lcov", { projectRoot: "../../" }]],
         },
         environment: "node",
         reporters,
