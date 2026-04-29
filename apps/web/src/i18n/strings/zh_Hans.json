@@ -219,7 +219,7 @@
         "incorrect_password": "密码不正确",
         "log_in_new_account": "<a>登录</a>到你的新账户。",
         "logout_dialog": {
-            "description": "你确定要注销吗？",
+            "description": "你确定要移除此设备？",
             "megolm_export": "手动导出密钥",
             "setup_key_backup_title": "你将失去加密消息的访问权",
             "setup_secure_backup_description_1": "加密消息采用端到端加密技术确保安全。只有你与收件人拥有读取这些消息的密钥。",
@@ -588,7 +588,6 @@
         "video": "视频",
         "video_room": "视频房间",
         "view_message": "查看消息",
-        "voice": "语音",
         "warning": "警告"
     },
     "composer": {
@@ -684,8 +683,10 @@
     "create_section_dialog": {
         "create_section": "创建区域",
         "description": "区域仅对你可见",
+        "edit_section": "编辑区域",
         "label": "区域名称",
-        "title": "创建区域"
+        "title": "创建区域",
+        "title_edition": "编辑区域"
     },
     "create_space": {
         "add_details_prompt": "添加一些信息以便人们识别。",
@@ -1116,7 +1117,7 @@
             "waiting_other_device_details": "等待你在另一台设备上验证，%(deviceName)s（%(deviceId)s）…",
             "waiting_other_user": "正在等待 %(displayName)s 验证…"
         },
-        "verification_requested_toast_title": "已请求验证",
+        "verification_requested_toast_title": "请求验证",
         "verified_identity_changed": "%(displayName)s (<b>%(userId)s</b>) 的数字身份已重置。<a>了解更多</a>",
         "verified_identity_changed_no_displayname": "<b>%(userId)s</b>的数字身份已重置。<a>了解更多</a>",
         "verify_toast_description": "可能不受其他用户信任",
@@ -1433,7 +1434,7 @@
     },
     "keyboard": {
         "activate_button": "激活选择的按钮",
-        "alt": "Alt",
+        "alt": "",
         "autocomplete_cancel": "取消自动补全",
         "autocomplete_force": "强制完成",
         "autocomplete_navigate_next": "下一个自动补全建议",
@@ -1457,11 +1458,11 @@
         "composer_toggle_link": "切换链接",
         "composer_toggle_quote": "切换引用",
         "composer_undo": "撤消编辑",
-        "control": "Ctrl",
+        "control": "",
         "dismiss_read_marker_and_jump_bottom": "忽略已读标记并跳转到底部",
-        "end": "结束",
+        "end": "",
         "enter": "",
-        "escape": "Esc",
+        "escape": "",
         "go_home_view": "转到主页视图",
         "home": "",
         "jump_first_message": "跳转到首个消息",
@@ -1493,7 +1494,7 @@
         "scroll_up_timeline": "向上滚动时间线",
         "search": "搜索（要使其生效必须启用相关功能）",
         "send_sticker": "发送贴纸",
-        "shift": "Shift",
+        "shift": "",
         "space": "空格",
         "switch_to_space": "使用数字切换空间",
         "toggle_hidden_events": "切换隐藏事件的可见性",
@@ -1842,6 +1843,12 @@
         "error": "你无法删除此消息。（%(code)s）",
         "ongoing": "正在移除…",
         "reason_label": "理由（可选）"
+    },
+    "remove_section_dialog": {
+        "confirmation": "你确定要移除此区域？",
+        "description": "此区域中的聊天仍将显示在聊天列表。",
+        "remove_section": "移除区域",
+        "title": "移除此区域？"
     },
     "report_content": {
         "description": "举报此消息会将其唯一的“事件 ID”发送给服务器管理员。如果此房间中的消息已加密，则服务器管理员将无法查看消息文本、任何文件或图像。",
@@ -2452,7 +2459,7 @@
         "description_3": "浏览器扩展阻止了该请求。",
         "description_4": "此服务器已离线。",
         "description_5": "服务器已拒绝你的请求。",
-        "description_6": "你所在的区域在连接 Internet 时遇到困难。",
+        "description_6": "你所在的地区在连接 Internet 时遇到困难。",
         "description_7": "尝试联系服务器时发生连接错误。",
         "description_8": "服务器的配置未能说明问题原因（CORS）。",
         "empty_timeline": "你已阅读所有消息",
@@ -2573,7 +2580,7 @@
             "dialog_title": "<strong>设置：</strong>加密",
             "key_storage": {
                 "allow_key_storage": "允许密钥存储",
-                "description": "这将允许你在任意新设备上查看聊天历史，这对备份聊天和数字身份是必需的。<a了解更多</a>",
+                "description": "这将允许你在任意新设备上查看聊天历史，这对备份聊天和数字身份是必需的。<a>了解更多</a>",
                 "title": "密钥存储"
             },
             "recovery": {
@@ -3741,7 +3748,7 @@
                 "other": "%(names)s 与其他 %(count)s 个人正在输入…"
             },
             "one_user": "%(displayName)s 正在输入…",
-            "two_users": "%(names)s 与其他 %(lastPerson)s 个人正在输入…"
+            "two_users": "%(names)s 与 %(lastPerson)s 正在输入…"
         },
         "undecryptable_tooltip": "此消息无法解密"
     },
@@ -3894,7 +3901,6 @@
         "connection_lost": "与服务器的连接已丢失",
         "connection_lost_description": "在未连接到服务器的情况下，你无法拨打电话。",
         "consulting": "正在与 %(transferTarget)s 协商。<a>转接到 %(transferee)s</a>",
-        "decline_call": "拒绝",
         "default_device": "默认设备",
         "dial": "拨号",
         "dialpad": "拨号盘",
@@ -3945,7 +3951,6 @@
         "show_sidebar_button": "显示边栏",
         "silence": "静音通话",
         "silenced": "通知已静音",
-        "skip_lobby_toggle_option": "立即加入",
         "start_screenshare": "开始分享屏幕",
         "stop_screenshare": "停止分享屏幕",
         "too_many_calls": "呼叫频繁",
@@ -3967,7 +3972,6 @@
         "user_is_presenting": "%(sharerName)s 正在分享",
         "video_call": "视频通话",
         "video_call_incoming": "视频通话来电",
-        "video_call_started": "已开始视频通话",
         "video_call_using": "视频通话时使用：",
         "voice_call": "语音通话",
         "voice_call_incoming": "语音通话来电",

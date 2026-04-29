@@ -3164,7 +3164,6 @@
         "user_busy_description": "Ο χρήστης που καλέσατε είναι απασχολημένος.",
         "user_is_presenting": "%(sharerName)s παρουσιάζει",
         "video_call": "Βιντεοκλήση",
-        "video_call_started": "Ξεκίνησε η βιντεοκλήση",
         "voice_call": "Φωνητική κλήση",
         "you_are_presenting": "Παρουσιάζετε"
     },

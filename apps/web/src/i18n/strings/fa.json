@@ -2187,7 +2187,6 @@
         "user_busy": "کاربر مشغول",
         "user_busy_description": "کاربر موردنظر مشغول است.",
         "video_call": "تماس تصویری",
-        "video_call_started": "تماس تصویری شروع شد",
         "voice_call": "تماس صوتی"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s: روی %(osName)s",
