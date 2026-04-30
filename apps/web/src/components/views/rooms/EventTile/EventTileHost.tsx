@@ -47,7 +47,7 @@ import type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./typ
 import { type EventTileCommandDeps } from "./EventTileCommands";
 import { useContextMenuNode } from "./ContextMenu";
 import { useEventTileCommands } from "./useEventTileCommands";
-import { useEventTileNodes } from "./useEventTileNodes";
+import { buildEventTileNodes } from "./EventTileNodes";
 import { CardContext } from "../../right_panel/context";
 import { useRoomMemberProfile } from "../../../../hooks/room/useRoomMemberProfile";
 import { useUserStatus } from "../../../../hooks/useUserStatus";
@@ -394,7 +394,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         },
         [vm, rootRef],
     );
-    const nodes = useEventTileNodes({
+    const nodes = buildEventTileNodes({
         props,
         roomContext,
         snapshot,
@@ -460,7 +460,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                 messageStatus: nodes.content.messageStatus,
                 messageBody: nodes.content.messageBody,
                 actionBar: nodes.content.actionBar,
-                footer: snapshot.rendering.hasFooter ? nodes.content.footer : undefined,
+                footer: nodes.content.footer,
                 contextMenu: contextMenuNode,
             },
             threads: {
@@ -519,7 +519,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             snapshot.presentation.ariaLive,
             snapshot.timestamp.scrollToken,
             snapshot.sender.isOwnEvent,
-            snapshot.rendering.hasFooter,
             snapshot.timestamp.timestampDisplayMode,
             snapshot.timestamp.receivedTs,
             snapshot.timestamp.permalink,
