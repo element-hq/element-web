@@ -95,6 +95,7 @@ function getAvatarMember(props: EventTileNodesProps, avatarSubject: AvatarSubjec
     }
 }
 
+/** Builds the React nodes used by `EventTileView` from the current tile props and view-model snapshot. */
 export function useEventTileNodes({
     props,
     roomContext,

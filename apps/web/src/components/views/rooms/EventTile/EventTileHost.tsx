@@ -209,6 +209,7 @@ function renderStrongSubstitution(sub: React.ReactNode): JSX.Element {
     return <strong>{sub}</strong>;
 }
 
+/** Owns the `EventTileViewModel` lifecycle and connects the derived snapshot to the tile view. */
 export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTileHostProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
     const { isCard } = useContext(CardContext);

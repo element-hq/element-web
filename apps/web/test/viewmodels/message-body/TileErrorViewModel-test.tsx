@@ -83,22 +83,20 @@ describe("TileErrorViewModel", () => {
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setLayout("bubble");
+        vm.setProps({ layout: "bubble" });
 
         expect(vm.getSnapshot().layout).toBe("bubble");
         expect(listener).toHaveBeenCalledTimes(1);
     });
 
-    it("guards setters against unchanged values", () => {
+    it("guards setProps against unchanged values", () => {
         const error = new Error("Boom");
         const mxEvent = createEvent();
         const vm = createVm({ developerMode: true, error, mxEvent });
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setDeveloperMode(true);
-        vm.setError(error);
-        vm.setLayout("group");
+        vm.setProps({ developerMode: true, error, layout: "group" });
 
         expect(listener).not.toHaveBeenCalled();
     });
@@ -109,7 +107,7 @@ describe("TileErrorViewModel", () => {
         const updatedError = new Error("Updated boom");
         const vm = createVm({ error: originalError });
 
-        vm.setError(updatedError);
+        vm.setProps({ error: updatedError });
         vm.onBugReportClick({} as any);
 
         expect(Modal.createDialog).toHaveBeenCalledWith(BugReportDialog, {

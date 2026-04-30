@@ -5,47 +5,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, type ReactNode, type JSX } from "react";
+import React, { type ReactNode, type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import {
-    TileErrorView,
-    type TileErrorViewLayout,
-    useCreateAutoDisposedViewModel,
-} from "@element-hq/web-shared-components";
+import { TileErrorView, type TileErrorViewLayout } from "@element-hq/web-shared-components";
 
 import { useSettingValue } from "../../../../hooks/useSettings";
-import { type Layout } from "../../../../settings/enums/Layout";
-import { TileErrorViewModel } from "../../../../viewmodels/message-body/TileErrorViewModel";
-
-/**
- * Props for the event-tile fallback rendered after the tile error boundary catches a render failure.
- */
-interface EventTileErrorFallbackProps {
-    error: Error;
-    layout: Layout;
-    mxEvent: MatrixEvent;
-}
-
-function EventTileErrorFallback({ error, layout, mxEvent }: Readonly<EventTileErrorFallbackProps>): JSX.Element {
-    const developerMode = useSettingValue("developerMode");
-    const vm = useCreateAutoDisposedViewModel(
-        () => new TileErrorViewModel({ error, layout: layout as TileErrorViewLayout, mxEvent, developerMode }),
-    );
-
-    useEffect(() => {
-        vm.setError(error);
-    }, [error, vm]);
-
-    useEffect(() => {
-        vm.setLayout(layout as TileErrorViewLayout);
-    }, [layout, vm]);
-
-    useEffect(() => {
-        vm.setDeveloperMode(developerMode);
-    }, [developerMode, vm]);
-
-    return <TileErrorView vm={vm} className="mx_EventTile mx_EventTile_info mx_EventTile_content" />;
-}
+import { Layout } from "../../../../settings/enums/Layout";
+import {
+    TileErrorViewModel,
+    type TileErrorViewModelProps,
+} from "../../../../viewmodels/message-body/TileErrorViewModel";
 
 interface EventTileErrorBoundaryProps {
     children: ReactNode;
@@ -57,8 +26,17 @@ interface EventTileErrorBoundaryState {
     error?: Error;
 }
 
-export class EventTileErrorBoundary extends React.Component<EventTileErrorBoundaryProps, EventTileErrorBoundaryState> {
-    public constructor(props: EventTileErrorBoundaryProps) {
+interface EventTileErrorBoundaryInnerProps extends EventTileErrorBoundaryProps {
+    developerMode: boolean;
+}
+
+class EventTileErrorBoundaryInner extends React.Component<
+    EventTileErrorBoundaryInnerProps,
+    EventTileErrorBoundaryState
+> {
+    private fallbackViewModel?: TileErrorViewModel;
+
+    public constructor(props: EventTileErrorBoundaryInnerProps) {
         super(props);
         this.state = {};
     }
@@ -67,17 +45,69 @@ export class EventTileErrorBoundary extends React.Component<EventTileErrorBounda
         return { error };
     }
 
+    public componentDidUpdate(
+        prevProps: EventTileErrorBoundaryInnerProps,
+        prevState: EventTileErrorBoundaryState,
+    ): void {
+        if (!this.state.error) return;
+
+        const shouldUpdateViewModel =
+            prevState.error !== this.state.error ||
+            prevProps.layout !== this.props.layout ||
+            prevProps.mxEvent !== this.props.mxEvent ||
+            prevProps.developerMode !== this.props.developerMode;
+        if (!shouldUpdateViewModel) return;
+
+        this.fallbackViewModel?.setProps(this.buildTileErrorViewModelProps(this.state.error));
+    }
+
+    public componentWillUnmount(): void {
+        this.fallbackViewModel?.dispose();
+    }
+
+    private buildTileErrorViewModelProps(error: Error): TileErrorViewModelProps {
+        return {
+            error,
+            layout: this.getTileErrorLayout(),
+            mxEvent: this.props.mxEvent,
+            developerMode: this.props.developerMode,
+        };
+    }
+
+    private getTileErrorLayout(): TileErrorViewLayout {
+        switch (this.props.layout) {
+            case Layout.Bubble:
+                return "bubble";
+            case Layout.IRC:
+                return "irc";
+            case Layout.Group:
+            default:
+                return "group";
+        }
+    }
+
+    private getFallbackViewModel(error: Error): TileErrorViewModel {
+        this.fallbackViewModel ??= new TileErrorViewModel(this.buildTileErrorViewModelProps(error));
+        return this.fallbackViewModel;
+    }
+
     public render(): ReactNode {
         if (this.state.error) {
             return (
-                <EventTileErrorFallback
-                    error={this.state.error}
-                    layout={this.props.layout}
-                    mxEvent={this.props.mxEvent}
+                <TileErrorView
+                    vm={this.getFallbackViewModel(this.state.error)}
+                    className="mx_EventTile mx_EventTile_info mx_EventTile_content"
                 />
             );
         }
 
         return this.props.children;
     }
+}
+
+/** Wraps an event tile in a React error boundary and renders a tile-shaped fallback if rendering fails. */
+export function EventTileErrorBoundary(props: Readonly<EventTileErrorBoundaryProps>): JSX.Element {
+    const developerMode = useSettingValue("developerMode");
+
+    return <EventTileErrorBoundaryInner {...props} developerMode={developerMode} />;
 }
