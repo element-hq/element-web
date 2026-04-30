@@ -555,9 +555,7 @@ describe("EventTileActionBarViewModel", () => {
         expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
     });
 
-    it("dispatches reply and thread actions and forwards callbacks", async () => {
-        const onOptionsClick = jest.fn();
-        const onReactionsClick = jest.fn();
+    it("dispatches reply and thread actions and opens action menus", async () => {
         const onToggleThreadExpanded = jest.fn();
         const threadReply = createMessageEvent({
             sender: "@bob:example.org",
@@ -578,10 +576,14 @@ describe("EventTileActionBarViewModel", () => {
         const vm = createVm({
             mxEvent: threadReply,
             isCard: true,
-            onOptionsClick,
-            onReactionsClick,
             onToggleThreadExpanded,
         });
+        const optionsRect = new DOMRect(1, 2, 3, 4);
+        const reactionsRect = new DOMRect(5, 6, 7, 8);
+        const optionsAnchor = document.createElement("button");
+        const reactionsAnchor = document.createElement("button");
+        jest.spyOn(optionsAnchor, "getBoundingClientRect").mockReturnValue(optionsRect);
+        jest.spyOn(reactionsAnchor, "getBoundingClientRect").mockReturnValue(reactionsRect);
         mocked(PinningUtils.isPinned).mockReturnValue(false);
 
         vm.onReplyClick(null);
@@ -589,8 +591,21 @@ describe("EventTileActionBarViewModel", () => {
         vm.onEditClick(null);
         await vm.onPinClick(null);
         vm.onHideClick(null);
-        vm.onOptionsClick(null);
-        vm.onReactionsClick(null);
+        vm.onOptionsClick(optionsAnchor);
+
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBe(optionsRect);
+        expect(vm.getSnapshot().reactionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().isMenuOpen).toBe(true);
+
+        vm.onReactionsClick(reactionsAnchor);
+
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().reactionsMenuAnchorRect).toBe(reactionsRect);
+        expect(vm.getSnapshot().isMenuOpen).toBe(true);
+
+        vm.closeReactionsMenu();
+        expect(vm.getSnapshot().isMenuOpen).toBe(false);
+
         vm.onToggleThreadExpanded(null);
 
         expect(defaultDispatcher.dispatch).toHaveBeenNthCalledWith(1, {
@@ -610,9 +625,27 @@ describe("EventTileActionBarViewModel", () => {
         expect(PinningUtils.pinOrUnpinEvent).toHaveBeenCalledWith(client, threadReply);
         expect(PosthogTrackers.trackPinUnpinMessage).toHaveBeenCalledWith(expect.any(String), "Timeline");
         expect(setMediaVisibility).toHaveBeenCalledWith(threadReply, false);
-        expect(onOptionsClick).toHaveBeenCalledWith(null);
-        expect(onReactionsClick).toHaveBeenCalledWith(null);
         expect(onToggleThreadExpanded).toHaveBeenCalledWith(null);
+    });
+
+    it("closes action menus when the event changes", () => {
+        const eventA = createMessageEvent({ event_id: "$eventA" });
+        const eventB = createMessageEvent({ event_id: "$eventB" });
+        const previousProps = makeProps({ mxEvent: eventA });
+        const vm = new EventTileActionBarViewModel(previousProps);
+        const optionsRect = new DOMRect(1, 2, 3, 4);
+        const optionsAnchor = document.createElement("button");
+        jest.spyOn(optionsAnchor, "getBoundingClientRect").mockReturnValue(optionsRect);
+
+        vm.openOptionsMenu(optionsAnchor);
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBe(optionsRect);
+        expect(vm.getSnapshot().isMenuOpen).toBe(true);
+
+        syncVmProps(vm, previousProps, { mxEvent: eventB });
+
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().reactionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().isMenuOpen).toBe(false);
     });
 
     describe("business logic parity", () => {

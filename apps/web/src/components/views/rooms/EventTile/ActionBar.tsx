@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useLayoutEffect, useState, type JSX } from "react";
-import { ActionBarView } from "@element-hq/web-shared-components";
+import React, { useEffect, type JSX } from "react";
+import { ActionBarView, useViewModel } from "@element-hq/web-shared-components";
 
 import type { MatrixEvent, Relations } from "matrix-js-sdk/src/matrix";
 import type ReplyChain from "../../elements/ReplyChain";
@@ -25,9 +25,10 @@ type ActionBarProps = {
     vm: EventTileActionBarViewModel;
     tileRef: React.RefObject<EventTileOps | null>;
     replyChainRef: React.RefObject<ReplyChain | null>;
-    onFocusChange: (focused: boolean) => void;
+    onMenuOpenChange: (open: boolean) => void;
 };
 
+/** Renders the event action bar and its event-tile-specific menus. */
 export function ActionBar({
     mxEvent,
     reactions,
@@ -36,61 +37,38 @@ export function ActionBar({
     vm,
     tileRef,
     replyChainRef,
-    onFocusChange,
+    onMenuOpenChange,
 }: Readonly<ActionBarProps>): JSX.Element {
-    const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
-        setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
-    }, []);
-    const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
-        setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
-    }, []);
+    const snapshot = useViewModel(vm);
 
-    useLayoutEffect(() => {
-        vm.setMenuHandlers({
-            onOptionsClick: handleOptionsClick,
-            onReactionsClick: handleReactionsClick,
-        });
-    }, [handleOptionsClick, handleReactionsClick, vm]);
     useEffect(() => {
-        onFocusChange(Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect));
-    }, [onFocusChange, optionsMenuAnchorRect, reactionsMenuAnchorRect]);
-    useEffect(() => {
-        setOptionsMenuAnchorRect(null);
-        setReactionsMenuAnchorRect(null);
-    }, [mxEvent]);
+        onMenuOpenChange(snapshot.isMenuOpen);
+    }, [onMenuOpenChange, snapshot.isMenuOpen]);
 
-    const closeOptionsMenu = useCallback((): void => {
-        setOptionsMenuAnchorRect(null);
-    }, []);
-    const closeReactionsMenu = useCallback((): void => {
-        setReactionsMenuAnchorRect(null);
-    }, []);
     const collapseReplyChain = replyChainRef.current?.canCollapse() ? replyChainRef.current.collapse : undefined;
 
     return (
         <>
             <ActionBarView vm={vm} className="mx_MessageActionBar" />
-            {optionsMenuAnchorRect ? (
+            {snapshot.optionsMenuAnchorRect ? (
                 <MessageContextMenu
-                    {...aboveLeftOf(optionsMenuAnchorRect)}
+                    {...aboveLeftOf(snapshot.optionsMenuAnchorRect)}
                     mxEvent={mxEvent}
                     permalinkCreator={permalinkCreator}
                     eventTileOps={tileRef.current ?? undefined}
                     collapseReplyChain={collapseReplyChain}
-                    onFinished={closeOptionsMenu}
+                    onFinished={vm.closeOptionsMenu}
                     getRelationsForEvent={getRelationsForEvent}
                 />
             ) : null}
-            {reactionsMenuAnchorRect ? (
+            {snapshot.reactionsMenuAnchorRect ? (
                 <ContextMenu
-                    {...aboveLeftOf(reactionsMenuAnchorRect)}
-                    onFinished={closeReactionsMenu}
+                    {...aboveLeftOf(snapshot.reactionsMenuAnchorRect)}
+                    onFinished={vm.closeReactionsMenu}
                     managed={false}
                     focusLock
                 >
-                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionsMenu} />
+                    <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={vm.closeReactionsMenu} />
                 </ContextMenu>
             ) : null}
         </>

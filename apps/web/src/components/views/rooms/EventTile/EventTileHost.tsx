@@ -388,7 +388,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         cli,
         vm,
     );
-    const onActionBarFocusChange = useCallback(
+    const onActionBarMenuOpenChange = useCallback(
         (focused: boolean): void => {
             vm.onActionBarFocusChange(focused, rootRef.current?.matches(":hover") ?? false);
         },
@@ -403,7 +403,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         suppressReadReceiptAnimation,
         tileContentId,
         vm,
-        onActionBarFocusChange,
+        onActionBarMenuOpenChange,
     });
     const contextMenuNode = useContextMenuNode({
         props,

@@ -80,7 +80,7 @@ type UseEventTileNodesArgs = {
     suppressReadReceiptAnimation: boolean;
     tileContentId: string;
     vm: EventTileViewModel;
-    onActionBarFocusChange: (focused: boolean) => void;
+    onActionBarMenuOpenChange: (open: boolean) => void;
 };
 
 function getAvatarMember(props: EventTileNodesProps, avatarSubject: AvatarSubject): RoomMember | null {
@@ -105,7 +105,7 @@ export function useEventTileNodes({
     suppressReadReceiptAnimation,
     tileContentId,
     vm,
-    onActionBarFocusChange,
+    onActionBarMenuOpenChange,
 }: UseEventTileNodesArgs): { content: EventTileContentNodes; thread: EventTileThreadNodes } {
     const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
     const setQuoteExpanded = useCallback(
@@ -181,7 +181,7 @@ export function useEventTileNodes({
                     vm={actionBarViewModel}
                     tileRef={tileRef}
                     replyChainRef={replyChainRef}
-                    onFocusChange={onActionBarFocusChange}
+                    onMenuOpenChange={onActionBarMenuOpenChange}
                 />
             ) : undefined,
         [
@@ -192,7 +192,7 @@ export function useEventTileNodes({
             reactions,
             tileRef,
             replyChainRef,
-            onActionBarFocusChange,
+            onActionBarMenuOpenChange,
         ],
     );
     const sender = useMemo(

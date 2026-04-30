@@ -62,19 +62,27 @@ export interface EventTileActionBarViewModelProps {
     isCard?: boolean;
     /** Whether the quoted reply chain is currently expanded. */
     isQuoteExpanded?: boolean;
-    /** Called when the overflow options action is activated. */
-    onOptionsClick?: (anchor: HTMLElement | null) => void;
-    /** Called when the reactions action is activated. */
-    onReactionsClick?: (anchor: HTMLElement | null) => void;
     /** Provides relations needed for editing when available. */
     getRelationsForEvent?: GetRelationsForEvent;
     /** Called when the expand or collapse thread action is activated. */
     onToggleThreadExpanded?: (anchor: HTMLElement | null) => void;
 }
 
+/** Event-tile action bar snapshot including locally rendered menu state. */
+export interface EventTileActionBarViewSnapshot extends ActionBarViewSnapshot {
+    /** Anchor rect for the overflow options menu, when open. */
+    optionsMenuAnchorRect?: DOMRect;
+    /** Anchor rect for the reactions menu, when open. */
+    reactionsMenuAnchorRect?: DOMRect;
+    /** Whether an action-bar menu is currently open. */
+    isMenuOpen: boolean;
+}
+
 interface LocalActionBarState {
     canDownload: boolean;
     isDownloadLoading: boolean;
+    optionsMenuAnchorRect?: DOMRect;
+    reactionsMenuAnchorRect?: DOMRect;
 }
 
 interface DerivedEventState {
@@ -101,7 +109,7 @@ interface DerivedMediaState {
 
 /** View model for the timeline event action bar shown on event tiles. */
 export class EventTileActionBarViewModel
-    extends BaseViewModel<ActionBarViewSnapshot, EventTileActionBarViewModelProps>
+    extends BaseViewModel<EventTileActionBarViewSnapshot, EventTileActionBarViewModelProps>
     implements ActionBarViewActions
 {
     private static readonly roomStateListenerRegistry = new WeakMap<
@@ -134,7 +142,7 @@ export class EventTileActionBarViewModel
     private static buildSnapshot(
         props: EventTileActionBarViewModelProps,
         localState: LocalActionBarState,
-    ): ActionBarViewSnapshot {
+    ): EventTileActionBarViewSnapshot {
         const client = MatrixClientPeg.safeGet();
         const eventState = EventTileActionBarViewModel.getDerivedEventState(props, client);
         const mediaState = EventTileActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
@@ -147,6 +155,9 @@ export class EventTileActionBarViewModel
             isPinned: eventState.isPinned,
             isQuoteExpanded: eventState.isQuoteExpanded,
             isThreadReplyAllowed: eventState.isThreadReplyAllowed,
+            optionsMenuAnchorRect: localState.optionsMenuAnchorRect,
+            reactionsMenuAnchorRect: localState.reactionsMenuAnchorRect,
+            isMenuOpen: Boolean(localState.optionsMenuAnchorRect || localState.reactionsMenuAnchorRect),
         };
     }
 
@@ -238,7 +249,7 @@ export class EventTileActionBarViewModel
         };
     }
 
-    private computeSnapshot(localState: LocalActionBarState = this.getLocalState()): ActionBarViewSnapshot {
+    private computeSnapshot(localState: LocalActionBarState = this.getLocalState()): EventTileActionBarViewSnapshot {
         return EventTileActionBarViewModel.buildSnapshot(this.props, localState);
     }
 
@@ -246,6 +257,8 @@ export class EventTileActionBarViewModel
         return {
             canDownload: this.canDownload,
             isDownloadLoading: this.isDownloadLoading,
+            optionsMenuAnchorRect: this.snapshot.current.optionsMenuAnchorRect,
+            reactionsMenuAnchorRect: this.snapshot.current.reactionsMenuAnchorRect,
         };
     }
 
@@ -381,14 +394,6 @@ export class EventTileActionBarViewModel
         this.isDownloadLoading = false;
     }
 
-    private withCurrentMenuHandlers(newProps: EventTileActionBarViewModelProps): EventTileActionBarViewModelProps {
-        return {
-            ...newProps,
-            onOptionsClick: newProps.onOptionsClick ?? this.props.onOptionsClick,
-            onReactionsClick: newProps.onReactionsClick ?? this.props.onReactionsClick,
-        };
-    }
-
     private isCurrentDownloadPermissionRequest(requestId: number, mxEvent: MatrixEvent): boolean {
         return !this.isDisposed && requestId === this.downloadPermissionRequestId && this.props.mxEvent === mxEvent;
     }
@@ -450,12 +455,13 @@ export class EventTileActionBarViewModel
     /** Updates props, refreshes listeners when the event changes, and rebuilds the snapshot. */
     public updateProps(newProps: Partial<EventTileActionBarViewModelProps>): void {
         const previousProps = this.props;
-        this.props = this.withCurrentMenuHandlers({
+        this.props = {
             ...this.props,
             ...newProps,
-        });
+        };
 
         if (EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, this.props)) {
+            this.closeMenus();
             this.resetEventState();
             this.setupListeners();
         }
@@ -463,15 +469,38 @@ export class EventTileActionBarViewModel
         this.refreshSnapshot();
     }
 
-    /** Updates React-local menu handlers without changing the derived action set. */
-    public setMenuHandlers(
-        handlers: Pick<EventTileActionBarViewModelProps, "onOptionsClick" | "onReactionsClick">,
-    ): void {
-        this.props = {
-            ...this.props,
-            ...handlers,
-        };
+    private setMenus(optionsMenuAnchorRect?: DOMRect, reactionsMenuAnchorRect?: DOMRect): void {
+        this.snapshot.merge({
+            optionsMenuAnchorRect,
+            reactionsMenuAnchorRect,
+            isMenuOpen: Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect),
+        });
     }
+
+    /** Opens the overflow options menu at the action anchor. */
+    public openOptionsMenu(anchor: HTMLElement | null): void {
+        this.setMenus(anchor?.getBoundingClientRect(), undefined);
+    }
+
+    /** Opens the reactions menu at the action anchor. */
+    public openReactionsMenu(anchor: HTMLElement | null): void {
+        this.setMenus(undefined, anchor?.getBoundingClientRect());
+    }
+
+    /** Closes the overflow options menu. */
+    public closeOptionsMenu = (): void => {
+        this.closeMenus();
+    };
+
+    /** Closes the reactions menu. */
+    public closeReactionsMenu = (): void => {
+        this.closeMenus();
+    };
+
+    /** Closes all action-bar menus. */
+    public closeMenus = (): void => {
+        this.setMenus(undefined, undefined);
+    };
 
     /** Removes listeners and releases resources owned by the view model. */
     public override dispose(): void {
@@ -561,12 +590,12 @@ export class EventTileActionBarViewModel
 
     /** Forwards the overflow options action using the triggering button as the anchor. */
     public onOptionsClick = (anchor: HTMLElement | null): void => {
-        this.props.onOptionsClick?.(anchor);
+        this.openOptionsMenu(anchor);
     };
 
     /** Forwards the reactions action using the triggering button as the anchor. */
     public onReactionsClick = (anchor: HTMLElement | null): void => {
-        this.props.onReactionsClick?.(anchor);
+        this.openReactionsMenu(anchor);
     };
 
     /** Opens or starts the thread associated with the current event. */
