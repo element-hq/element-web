@@ -44,6 +44,7 @@ import {
     EventTileViewModel,
     type EventTileViewModelProps,
 } from "../../../../../src/viewmodels/room/timeline/event-tile/EventTileViewModel";
+import { MessageStatusMode } from "../../../../../src/viewmodels/room/timeline/event-tile/status/MessageStatusViewModel";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { _t } from "../../../../../src/languageHandler";
@@ -1362,6 +1363,29 @@ describe("EventTileViewModel", () => {
         expect(vm.getSnapshot().receipt).toMatchObject({
             shouldShowSentReceipt,
             shouldShowSendingReceipt,
+        });
+    });
+
+    it("updates the message status view model from receipt state", () => {
+        const ownEvent = mkMessage({
+            room: room.roomId,
+            user: client.getSafeUserId(),
+            msg: "Hello world!",
+            event: true,
+        });
+
+        const vm = createViewModel({ mxEvent: ownEvent, eventSendStatus: EventStatus.SENDING });
+
+        expect(vm.messageStatusViewModel.getSnapshot()).toEqual({
+            mode: MessageStatusMode.SendingReceipt,
+            label: "Sending your message\u2026",
+        });
+
+        vm.updateProps(makeProps({ mxEvent: ownEvent, eventSendStatus: EventStatus.SENT, lastSuccessful: true }));
+
+        expect(vm.messageStatusViewModel.getSnapshot()).toEqual({
+            mode: MessageStatusMode.SentReceipt,
+            label: "Your message was sent",
         });
     });
 });

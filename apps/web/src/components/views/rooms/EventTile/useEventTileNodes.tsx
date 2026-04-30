@@ -221,10 +221,7 @@ export function useEventTileNodes({
     const messageStatus = useMemo(
         () => (
             <MessageStatus
-                messageState={props.eventSendStatus}
-                shouldShowSentReceipt={snapshot.receipt.shouldShowSentReceipt}
-                shouldShowSendingReceipt={snapshot.receipt.shouldShowSendingReceipt}
-                showReadReceipts={snapshot.receipt.showReadReceipts}
+                vm={vm.messageStatusViewModel}
                 readReceipts={props.readReceipts}
                 readReceiptMap={props.readReceiptMap}
                 checkUnmounting={props.checkUnmounting}
@@ -233,10 +230,7 @@ export function useEventTileNodes({
             />
         ),
         [
-            props.eventSendStatus,
-            snapshot.receipt.shouldShowSentReceipt,
-            snapshot.receipt.shouldShowSendingReceipt,
-            snapshot.receipt.showReadReceipts,
+            vm.messageStatusViewModel,
             props.readReceipts,
             props.readReceiptMap,
             props.checkUnmounting,

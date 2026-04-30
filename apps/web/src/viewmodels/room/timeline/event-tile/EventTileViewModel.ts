@@ -87,6 +87,7 @@ import {
     type DisambiguatedProfileViewModelProps,
 } from "./DisambiguatedProfileViewModel";
 import { ReactionsRowViewModel } from "./reactions/ReactionsRowViewModel";
+import { MessageStatusViewModel, type MessageStatusViewModelProps } from "./status/MessageStatusViewModel";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
 import { ThreadListActionBarViewModel } from "../../ThreadListActionBarViewModel";
 
@@ -457,6 +458,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private eventTileActionBarViewModel?: EventTileActionBarViewModel;
     private readonly eventTileReactionsRowViewModel: ReactionsRowViewModel;
     private readonly eventTileDisambiguatedProfileViewModel: DisambiguatedProfileViewModel;
+    private readonly eventTileMessageStatusViewModel: MessageStatusViewModel;
     private readonly eventTileTimestampViewModel: MessageTimestampViewModel;
     private readonly eventTileThreadToolbarViewModel: ThreadListActionBarViewModel;
 
@@ -473,6 +475,9 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         );
         this.eventTileDisambiguatedProfileViewModel = this.disposables.track(
             new DisambiguatedProfileViewModel(this.buildDisambiguatedProfileViewModelProps(props)),
+        );
+        this.eventTileMessageStatusViewModel = this.disposables.track(
+            new MessageStatusViewModel(this.buildMessageStatusViewModelProps(this.snapshot.current, props)),
         );
         this.eventTileTimestampViewModel = this.disposables.track(
             new MessageTimestampViewModel(this.buildTimestampViewModelProps(this.snapshot.current, props)),
@@ -495,6 +500,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     public get disambiguatedProfileViewModel(): DisambiguatedProfileViewModel {
         return this.eventTileDisambiguatedProfileViewModel;
+    }
+
+    public get messageStatusViewModel(): MessageStatusViewModel {
+        return this.eventTileMessageStatusViewModel;
     }
 
     public get timestampViewModel(): MessageTimestampViewModel {
@@ -868,6 +877,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         );
 
         this.snapshot.merge(nextSnapshot);
+        this.updateMessageStatusViewModel(nextSnapshot);
         this.updateTimestampViewModel(nextSnapshot);
 
         if (syncReceiptListener) {
@@ -879,6 +889,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const nextSnapshot = EventTileViewModel.mergeSnapshotUpdate(this.snapshot.current, partial);
 
         this.snapshot.merge(nextSnapshot);
+        this.updateMessageStatusViewModel(nextSnapshot);
         this.updateTimestampViewModel(nextSnapshot);
         this.updateReceiptListener(nextSnapshot);
     }
@@ -1157,6 +1168,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         };
     }
 
+    private buildMessageStatusViewModelProps(
+        snapshot: EventTileViewSnapshot,
+        props: EventTileViewModelProps,
+    ): MessageStatusViewModelProps {
+        return {
+            messageState: props.eventSendStatus,
+            shouldShowSentReceipt: snapshot.receipt.shouldShowSentReceipt,
+            shouldShowSendingReceipt: snapshot.receipt.shouldShowSendingReceipt,
+            showReadReceipts: snapshot.receipt.showReadReceipts,
+        };
+    }
+
     private static getReactionGroupCount(reactions: Relations | null): number {
         if (!reactions || typeof reactions.getSortedAnnotationsByKey !== "function") {
             return 0;
@@ -1205,6 +1228,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private updateTimestampViewModel(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
         this.eventTileTimestampViewModel.setProps(this.buildTimestampViewModelProps(snapshot, this.props));
+    }
+
+    private updateMessageStatusViewModel(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
+        this.eventTileMessageStatusViewModel.setProps(this.buildMessageStatusViewModelProps(snapshot, this.props));
     }
 
     private static keepSnapshotGroup<T extends object>(current: T | undefined, next: T): T {

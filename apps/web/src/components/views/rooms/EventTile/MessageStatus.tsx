@@ -5,24 +5,24 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { memo, useMemo, type JSX, type ReactNode } from "react";
+import React, { memo, type JSX, type ReactNode } from "react";
+import { useViewModel } from "@element-hq/web-shared-components";
 import { CircleIcon, CheckCircleIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { Tooltip } from "@vector-im/compound-web";
-import { EventStatus } from "matrix-js-sdk/src/matrix";
 
-import { _t } from "../../../../languageHandler";
 import { StaticNotificationState } from "../../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../NotificationBadge";
 import { ReadReceiptGroup } from "../ReadReceiptGroup";
 import type { IReadReceiptPosition } from "../ReadReceiptMarker";
 import type { ReadReceiptProps } from "./types";
+import {
+    MessageStatusMode,
+    type MessageStatusViewModel,
+} from "../../../../viewmodels/room/timeline/event-tile/status/MessageStatusViewModel";
 
 type MessageStatusProps = Readonly<{
-    messageState: EventStatus | undefined;
+    vm: MessageStatusViewModel;
     suppressReadReceiptAnimation: boolean;
-    shouldShowSentReceipt: boolean;
-    shouldShowSendingReceipt: boolean;
-    showReadReceipts: boolean;
     readReceipts?: ReadReceiptProps[];
     readReceiptMap?: { [userId: string]: IReadReceiptPosition };
     isTwelveHour?: boolean;
@@ -30,35 +30,17 @@ type MessageStatusProps = Readonly<{
 }>;
 
 function MessageStatusComponent({
-    messageState,
+    vm,
     suppressReadReceiptAnimation,
-    shouldShowSentReceipt,
-    shouldShowSendingReceipt,
-    showReadReceipts,
     readReceipts,
     readReceiptMap,
     isTwelveHour,
     checkUnmounting,
 }: MessageStatusProps): JSX.Element | undefined {
-    const sentReceipt = useMemo(
-        () => getSentReceiptDetails(messageState, shouldShowSentReceipt, shouldShowSendingReceipt),
-        [messageState, shouldShowSentReceipt, shouldShowSendingReceipt],
-    );
+    const snapshot = useViewModel(vm);
+    const sentReceipt = getSentReceiptDetails(snapshot.mode, snapshot.label);
     const sentReceiptIcon = sentReceipt?.icon;
     const sentReceiptLabel = sentReceipt?.label;
-    const receiptGroup = useMemo(
-        () =>
-            showReadReceipts ? (
-                <ReadReceiptGroup
-                    readReceipts={[...(readReceipts ?? [])]}
-                    readReceiptMap={readReceiptMap ?? {}}
-                    checkUnmounting={checkUnmounting}
-                    suppressAnimation={suppressReadReceiptAnimation}
-                    isTwelveHour={isTwelveHour}
-                />
-            ) : undefined,
-        [showReadReceipts, readReceipts, readReceiptMap, checkUnmounting, suppressReadReceiptAnimation, isTwelveHour],
-    );
 
     if (sentReceiptIcon && sentReceiptLabel) {
         return (
@@ -74,42 +56,41 @@ function MessageStatusComponent({
         );
     }
 
-    if (receiptGroup) {
-        return <>{receiptGroup}</>;
+    if (snapshot.mode === MessageStatusMode.ReadReceipts) {
+        return (
+            <ReadReceiptGroup
+                readReceipts={[...(readReceipts ?? [])]}
+                readReceiptMap={readReceiptMap ?? {}}
+                checkUnmounting={checkUnmounting}
+                suppressAnimation={suppressReadReceiptAnimation}
+                isTwelveHour={isTwelveHour}
+            />
+        );
     }
 
     return undefined;
 }
 
+/** Renders the event-tile message status area. */
 export const MessageStatus = memo(MessageStatusComponent);
 
 function getSentReceiptDetails(
-    messageState: EventStatus | undefined,
-    shouldShowSentReceipt: boolean,
-    shouldShowSendingReceipt: boolean,
+    mode: MessageStatusMode,
+    label?: string,
 ): { icon: ReactNode; label: string } | undefined {
-    if (!shouldShowSentReceipt && !shouldShowSendingReceipt) {
+    if (!label) {
         return undefined;
     }
 
-    const isSent = !messageState || messageState === EventStatus.SENT;
-    const isFailed = messageState === EventStatus.NOT_SENT;
-
-    let icon: JSX.Element | undefined;
-    let label: string | undefined;
-    if (messageState === EventStatus.ENCRYPTING) {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_encrypting");
-    } else if (isSent) {
-        icon = <CheckCircleIcon />;
-        label = _t("timeline|send_state_sent");
-    } else if (isFailed) {
-        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
-        label = _t("timeline|send_state_failed");
-    } else {
-        icon = <CircleIcon />;
-        label = _t("timeline|send_state_sending");
+    switch (mode) {
+        case MessageStatusMode.SentReceipt:
+            return { icon: <CheckCircleIcon />, label };
+        case MessageStatusMode.FailedReceipt:
+            return { icon: <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />, label };
+        case MessageStatusMode.EncryptingReceipt:
+        case MessageStatusMode.SendingReceipt:
+            return { icon: <CircleIcon />, label };
+        default:
+            return undefined;
     }
-
-    return icon && label ? { icon, label } : undefined;
 }

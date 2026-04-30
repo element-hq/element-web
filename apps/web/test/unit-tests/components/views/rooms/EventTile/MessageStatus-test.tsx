@@ -6,11 +6,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventStatus } from "matrix-js-sdk/src/matrix";
 import { render, screen } from "jest-matrix-react";
 
 import { MessageStatus } from "../../../../../../src/components/views/rooms/EventTile/MessageStatus";
 import type { ReadReceiptProps } from "../../../../../../src/components/views/rooms/EventTile/types";
+import {
+    MessageStatusMode,
+    MessageStatusViewModel,
+    type MessageStatusViewModelProps,
+} from "../../../../../../src/viewmodels/room/timeline/event-tile/status/MessageStatusViewModel";
 
 jest.mock("../../../../../../src/components/views/rooms/ReadReceiptGroup", () => ({
     ReadReceiptGroup: ({
@@ -29,13 +33,24 @@ jest.mock("../../../../../../src/components/views/rooms/ReadReceiptGroup", () =>
 }));
 
 describe("MessageStatus", () => {
+    const createVm = (props: Partial<MessageStatusViewModelProps>): MessageStatusViewModel =>
+        new MessageStatusViewModel({
+            shouldShowSentReceipt: false,
+            shouldShowSendingReceipt: false,
+            showReadReceipts: false,
+            ...props,
+        });
+
+    const createModeVm = (mode: MessageStatusMode, label?: string): MessageStatusViewModel => {
+        const vm = createVm({});
+        jest.spyOn(vm, "getSnapshot").mockReturnValue({ mode, label });
+        return vm;
+    };
+
     it("renders the sent receipt as a status region", () => {
         render(
             <MessageStatus
-                messageState={EventStatus.SENT}
-                shouldShowSentReceipt={true}
-                shouldShowSendingReceipt={false}
-                showReadReceipts={false}
+                vm={createModeVm(MessageStatusMode.SentReceipt, "Your message was sent")}
                 suppressReadReceiptAnimation={false}
             />,
         );
@@ -44,27 +59,21 @@ describe("MessageStatus", () => {
         expect(screen.getByLabelText("Your message was sent")).toBeInTheDocument();
     });
 
-    it("treats an undefined message state as sent", () => {
+    it("renders the sending state", () => {
         render(
             <MessageStatus
-                messageState={undefined}
-                shouldShowSentReceipt={true}
-                shouldShowSendingReceipt={false}
-                showReadReceipts={false}
+                vm={createModeVm(MessageStatusMode.SendingReceipt, "Sending your message\u2026")}
                 suppressReadReceiptAnimation={false}
             />,
         );
 
-        expect(screen.getByLabelText("Your message was sent")).toBeInTheDocument();
+        expect(screen.getByLabelText("Sending your message\u2026")).toBeInTheDocument();
     });
 
     it("renders the failed send state", () => {
         render(
             <MessageStatus
-                messageState={EventStatus.NOT_SENT}
-                shouldShowSentReceipt={false}
-                shouldShowSendingReceipt={true}
-                showReadReceipts={false}
+                vm={createModeVm(MessageStatusMode.FailedReceipt, "Failed to send")}
                 suppressReadReceiptAnimation={false}
             />,
         );
@@ -75,10 +84,7 @@ describe("MessageStatus", () => {
     it("prefers the special receipt over read receipts", () => {
         render(
             <MessageStatus
-                messageState={EventStatus.SENT}
-                shouldShowSentReceipt={true}
-                shouldShowSendingReceipt={false}
-                showReadReceipts={true}
+                vm={createModeVm(MessageStatusMode.SentReceipt, "Your message was sent")}
                 readReceipts={[{ userId: "@alice:example.org", ts: 1, roomMember: null }]}
                 suppressReadReceiptAnimation={false}
             />,
@@ -91,10 +97,7 @@ describe("MessageStatus", () => {
     it("renders read receipts when no special receipt is shown", () => {
         render(
             <MessageStatus
-                messageState={EventStatus.SENT}
-                shouldShowSentReceipt={false}
-                shouldShowSendingReceipt={false}
-                showReadReceipts={true}
+                vm={createModeVm(MessageStatusMode.ReadReceipts)}
                 readReceipts={[
                     { userId: "@alice:example.org", ts: 1, roomMember: null },
                     { userId: "@bob:example.org", ts: 2, roomMember: null },
@@ -106,5 +109,13 @@ describe("MessageStatus", () => {
 
         expect(screen.getByTestId("read-receipt-group")).toHaveTextContent("receipts:2:suppress:true:twelve:true");
         expect(screen.queryByRole("status")).toBeNull();
+    });
+
+    it("renders nothing for none mode", () => {
+        const { container } = render(
+            <MessageStatus vm={createModeVm(MessageStatusMode.None)} suppressReadReceiptAnimation={false} />,
+        );
+
+        expect(container).toBeEmptyDOMElement();
     });
 });
