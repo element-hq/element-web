@@ -214,7 +214,7 @@ export class RoomListHeaderViewModel
             this.snapshot.current.collapseSections === "expand"
                 ? Action.RoomListExpandAllSections
                 : Action.RoomListCollapseAllSections;
-        defaultDispatcher.dispatch({ action });
+        defaultDispatcher.fire(action);
     };
 
     private readonly onDispatch = (payload: { action: string }): void => {
