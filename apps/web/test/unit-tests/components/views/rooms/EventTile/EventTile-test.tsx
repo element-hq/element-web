@@ -19,6 +19,7 @@ import {
     PendingEventOrdering,
     Room,
     RoomEvent,
+    RoomMember,
     type Thread,
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -358,6 +359,20 @@ describe("EventTile", () => {
             const { container } = getComponent();
 
             expect(container).toHaveTextContent("This event could not be displayed");
+        });
+
+        it("renders the sender display name from the event sender member", async () => {
+            const senderMember = new RoomMember(room.roomId, "@alice:example.org");
+            senderMember.name = "Alice";
+            senderMember.rawDisplayName = "Alice";
+            mxEvent.sender = senderMember;
+
+            const { container } = getComponent({ mxEvent });
+
+            await waitFor(() => {
+                expect(container.querySelector(".mx_DisambiguatedProfile_displayName")).toHaveTextContent("Alice");
+            });
+            expect(container.querySelector(".mx_DisambiguatedProfile")).not.toHaveTextContent("@alice:example.org");
         });
 
         it("renders a reply preview when the VM says the event is a reply", async () => {

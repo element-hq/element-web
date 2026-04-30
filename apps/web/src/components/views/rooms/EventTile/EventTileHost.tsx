@@ -49,6 +49,8 @@ import { useContextMenuNode } from "./ContextMenu";
 import { useEventTileCommands } from "./useEventTileCommands";
 import { useEventTileNodes } from "./useEventTileNodes";
 import { CardContext } from "../../right_panel/context";
+import { useRoomMemberProfile } from "../../../../hooks/room/useRoomMemberProfile";
+import { useUserStatus } from "../../../../hooks/useUserStatus";
 
 /** Ref handle for direct access to tile actions and the root element. */
 export interface EventTileHandle extends EventTileOps {
@@ -154,6 +156,8 @@ export type EventTileHostProps = EventTileCoreProps &
 function buildEventTileViewModelProps(
     props: EventTileHostProps,
     readReceipts: EventTileViewModelProps["readReceipts"],
+    senderMember: EventTileViewModelProps["senderMember"],
+    senderUserStatus: EventTileViewModelProps["senderUserStatus"],
     cli: ReturnType<typeof useMatrixClientContext>,
     commandDeps: EventTileViewModelProps["commandDeps"],
     roomContext: Pick<
@@ -164,6 +168,8 @@ function buildEventTileViewModelProps(
 ): EventTileViewModelProps {
     return {
         mxEvent: props.mxEvent,
+        senderMember,
+        senderUserStatus,
         eventSendStatus: props.eventSendStatus,
         editState: props.editState,
         permalinkCreator: props.permalinkCreator,
@@ -251,6 +257,12 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         showReadReceipts,
         lastSuccessful,
     } = props;
+    const sender = mxEvent.getSender();
+    const senderMember = useRoomMemberProfile({
+        userId: sender,
+        member: mxEvent.sender,
+    });
+    const senderUserStatus = useUserStatus(sender);
     const viewModelProps = useMemo(
         () =>
             buildEventTileViewModelProps(
@@ -281,6 +293,8 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
                     lastSuccessful,
                 },
                 vmReadReceipts,
+                senderMember,
+                senderUserStatus,
                 cli,
                 commandDeps,
                 {
@@ -319,6 +333,8 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             showReadReceipts,
             lastSuccessful,
             vmReadReceipts,
+            senderMember,
+            senderUserStatus,
             cli,
             commandDeps,
             showHiddenEvents,

@@ -22,6 +22,7 @@ import {
     type NotificationCountType,
     type Relations,
     type Room,
+    type RoomMember,
     RoomEvent,
     ThreadEvent,
     type Thread,
@@ -74,11 +75,17 @@ import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import PinningUtils from "../../../../utils/PinningUtils";
 import { isContentActionable } from "../../../../utils/EventUtils";
+import { Action } from "../../../../dispatcher/actions";
+import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
+import type { UserStatus } from "../../../../hooks/useUserStatus";
 import {
     EventTileActionBarViewModel,
     type EventTileActionBarViewModelProps,
 } from "./actions/EventTileActionBarViewModel";
-import { DisambiguatedProfileViewModel } from "./DisambiguatedProfileViewModel";
+import {
+    DisambiguatedProfileViewModel,
+    type DisambiguatedProfileViewModelProps,
+} from "./DisambiguatedProfileViewModel";
 import { ReactionsRowViewModel } from "./reactions/ReactionsRowViewModel";
 import { MessageTimestampViewModel, type MessageTimestampViewModelProps } from "./timestamp/MessageTimestampViewModel";
 import { ThreadListActionBarViewModel } from "../../ThreadListActionBarViewModel";
@@ -205,6 +212,8 @@ interface EventTileSenderSnapshot {
     isOwnEvent: boolean;
     /** Whether sender information should be shown. */
     showSender: boolean;
+    /** Whether the sender profile node should be rendered. */
+    showSenderProfile: boolean;
     /** Which entity the avatar should represent. */
     avatarSubject: AvatarSubject;
     /** The avatar size to render. */
@@ -330,6 +339,10 @@ interface EventTileCoreProps {
     cli: MatrixClient;
     /** The Matrix event represented by this tile. */
     mxEvent: MatrixEvent;
+    /** Sender profile data resolved at the React boundary. */
+    senderMember?: RoomMember | null;
+    /** Sender status resolved at the React boundary. */
+    senderUserStatus?: UserStatus;
     /** The local send status override for the event, when applicable. */
     eventSendStatus?: EventStatus;
     /** The current composer edit state associated with the event. */
@@ -459,7 +472,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             new ReactionsRowViewModel(EventTileViewModel.buildReactionsRowViewModelProps(props, this.reactions)),
         );
         this.eventTileDisambiguatedProfileViewModel = this.disposables.track(
-            new DisambiguatedProfileViewModel(EventTileViewModel.buildDisambiguatedProfileViewModelProps(props)),
+            new DisambiguatedProfileViewModel(this.buildDisambiguatedProfileViewModelProps(props)),
         );
         this.eventTileTimestampViewModel = this.disposables.track(
             new MessageTimestampViewModel(
@@ -509,6 +522,18 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ),
         ));
     }
+
+    private onSenderProfileClick: DisambiguatedProfileViewModelProps["onClick"] = (): void => {
+        const userId = this.props.mxEvent.getSender();
+        if (!userId) return;
+
+        const payload: ComposerInsertPayload = {
+            action: Action.ComposerInsert,
+            userId,
+            timelineRenderingType: this.props.timelineRenderingType,
+        };
+        this.props.commandDeps.dispatch(payload);
+    };
 
     /** Releases all Matrix listeners owned by this view model. */
     public override dispose(): void {
@@ -1093,15 +1118,19 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         };
     }
 
-    private static buildDisambiguatedProfileViewModelProps(props: EventTileViewModelProps): {
-        fallbackName: string;
-        colored: boolean;
-        emphasizeDisplayName: boolean;
-    } {
+    private buildDisambiguatedProfileViewModelProps(
+        props: EventTileViewModelProps,
+    ): DisambiguatedProfileViewModelProps {
+        const senderMode = EventTileViewModel.getSenderProfileMode(props);
+
         return {
             fallbackName: props.mxEvent.getSender() ?? "",
+            onClick: senderMode === SenderMode.ComposerInsert ? this.onSenderProfileClick : undefined,
+            member: props.senderMember,
             colored: true,
             emphasizeDisplayName: true,
+            withTooltip: senderMode === SenderMode.Tooltip,
+            userStatus: props.senderUserStatus,
         };
     }
 
@@ -1138,9 +1167,14 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             ),
         );
         this.updateReactionsRowViewModel(nextProps);
-        if (previousProps.mxEvent !== nextProps.mxEvent) {
+        if (
+            previousProps.mxEvent !== nextProps.mxEvent ||
+            previousProps.senderMember !== nextProps.senderMember ||
+            previousProps.senderUserStatus !== nextProps.senderUserStatus ||
+            previousProps.timelineRenderingType !== nextProps.timelineRenderingType
+        ) {
             this.eventTileDisambiguatedProfileViewModel.setProps(
-                EventTileViewModel.buildDisambiguatedProfileViewModelProps(nextProps),
+                this.buildDisambiguatedProfileViewModelProps(nextProps),
             );
         }
         this.updateTimestampViewModel();
@@ -1371,6 +1405,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             sender: {
                 isOwnEvent: false,
                 showSender: false,
+                showSenderProfile: false,
                 avatarSubject: AvatarSubject.None,
                 avatarSize: AvatarSize.None,
                 avatarMemberUserOnClick: false,
@@ -1488,9 +1523,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         props: EventTileViewModelProps,
         context: EventTileDerivationContext,
     ): EventTileSenderSnapshot {
+        const senderMode = EventTileViewModel.getSenderMode(props, context.showSender, context.senderPresentation);
+
         return {
             isOwnEvent: EventTileViewModel.getIsOwnEvent(props),
             showSender: context.showSender,
+            showSenderProfile: EventTileViewModel.getShouldRenderSenderProfile(props, senderMode),
             avatarSubject: EventTileViewModel.getAvatarSubject(props, context.senderPresentation.avatarSize),
             avatarSize: context.senderPresentation.avatarSize,
             avatarMemberUserOnClick: EventTileViewModel.getAvatarMemberUserOnClick(
@@ -1498,7 +1536,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 context.senderPresentation.avatarSize,
             ),
             avatarForceHistorical: EventTileViewModel.getAvatarForceHistorical(props),
-            senderMode: EventTileViewModel.getSenderMode(props, context.showSender, context.senderPresentation),
+            senderMode,
         };
     }
 
@@ -2069,6 +2107,24 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             return SenderMode.Hidden;
         }
 
+        switch (props.timelineRenderingType) {
+            case TimelineRenderingType.Room:
+            case TimelineRenderingType.Search:
+            case TimelineRenderingType.Pinned:
+            case TimelineRenderingType.Thread:
+                return SenderMode.ComposerInsert;
+            case TimelineRenderingType.ThreadsList:
+                return SenderMode.Tooltip;
+            default:
+                return SenderMode.Default;
+        }
+    }
+
+    private static getShouldRenderSenderProfile(props: EventTileViewModelProps, senderMode: SenderMode): boolean {
+        return senderMode !== SenderMode.Hidden && props.mxEvent.getContent().msgtype !== MsgType.Emote;
+    }
+
+    private static getSenderProfileMode(props: EventTileViewModelProps): SenderMode {
         switch (props.timelineRenderingType) {
             case TimelineRenderingType.Room:
             case TimelineRenderingType.Search:

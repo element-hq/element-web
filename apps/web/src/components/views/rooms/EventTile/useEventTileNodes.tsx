@@ -5,14 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useMemo, type JSX } from "react";
+import React, { useCallback, useMemo, type JSX, type ReactNode } from "react";
+import { DisambiguatedProfileView } from "@element-hq/web-shared-components";
 
 import type { EventStatus, MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import type LegacyCallEventGrouper from "../../../structures/LegacyCallEventGrouper";
 import type RoomContext from "../../../../contexts/RoomContext";
-import { Action } from "../../../../dispatcher/actions";
-import dis from "../../../../dispatcher/dispatcher";
-import type { ComposerInsertPayload } from "../../../../dispatcher/payloads/ComposerInsertPayload";
 import { AvatarSubject, ThreadInfoMode } from "../../../../models/rooms/EventTileModel";
 import type {
     EventTileViewModel,
@@ -29,7 +27,6 @@ import { Footer } from "./Footer";
 import { MessageBody, type MessageBodyProps, type MessageBodyRenderTileProps } from "./MessageBody";
 import { MessageStatus } from "./MessageStatus";
 import { ReplyPreview } from "./ReplyPreview";
-import { Sender } from "./Sender";
 import { ThreadInfo } from "./ThreadInfo";
 import { ThreadToolbar } from "./ThreadToolbar";
 import type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
@@ -58,7 +55,7 @@ type EventTileNodesProps = {
 };
 
 type EventTileContentNodes = {
-    sender: JSX.Element;
+    sender?: ReactNode;
     avatar: JSX.Element;
     replyChain?: JSX.Element;
     messageBody: JSX.Element;
@@ -110,13 +107,6 @@ export function useEventTileNodes({
     onActionBarFocusChange,
 }: UseEventTileNodesArgs): { content: EventTileContentNodes; thread: EventTileThreadNodes } {
     const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
-    const onSenderProfileClick = useCallback((): void => {
-        dis.dispatch<ComposerInsertPayload>({
-            action: Action.ComposerInsert,
-            userId: props.mxEvent.getSender()!,
-            timelineRenderingType: roomContext.timelineRenderingType,
-        });
-    }, [props.mxEvent, roomContext.timelineRenderingType]);
     const setQuoteExpanded = useCallback(
         (expanded: boolean): void => {
             vm.setQuoteExpanded(expanded);
@@ -205,15 +195,11 @@ export function useEventTileNodes({
         ],
     );
     const sender = useMemo(
-        () => (
-            <Sender
-                mode={snapshot.sender.senderMode}
-                mxEvent={props.mxEvent}
-                onClick={onSenderProfileClick}
-                profileViewModel={vm.disambiguatedProfileViewModel}
-            />
-        ),
-        [snapshot.sender.senderMode, props.mxEvent, onSenderProfileClick, vm.disambiguatedProfileViewModel],
+        () =>
+            snapshot.sender.showSenderProfile ? (
+                <DisambiguatedProfileView vm={vm.disambiguatedProfileViewModel} className="mx_DisambiguatedProfile" />
+            ) : undefined,
+        [snapshot.sender.showSenderProfile, vm.disambiguatedProfileViewModel],
     );
     const avatar = useMemo(
         () => (

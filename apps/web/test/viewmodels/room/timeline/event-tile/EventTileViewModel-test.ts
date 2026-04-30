@@ -10,6 +10,7 @@ import {
     EventStatus,
     type IEventDecryptionResult,
     MatrixEvent,
+    MsgType,
     PendingEventOrdering,
     Room,
     RoomEvent,
@@ -179,6 +180,29 @@ describe("EventTileViewModel", () => {
             const vm = createViewModel({ hideSender: true });
 
             expect(vm.getSnapshot().sender.senderMode).toBe(SenderMode.Hidden);
+            expect(vm.getSnapshot().sender.showSenderProfile).toBe(false);
+        });
+
+        it("shows a sender profile when the sender mode is visible", () => {
+            const vm = createViewModel();
+
+            expect(vm.getSnapshot().sender.showSenderProfile).toBe(true);
+        });
+
+        it("does not show a sender profile for emote messages", () => {
+            mxEvent = mkEvent({
+                event: true,
+                type: "m.room.message",
+                user: "@alice:example.org",
+                room: room.roomId,
+                content: {
+                    msgtype: MsgType.Emote,
+                    body: "waves",
+                },
+            });
+            const vm = createViewModel({ mxEvent });
+
+            expect(vm.getSnapshot().sender.showSenderProfile).toBe(false);
         });
 
         it("marks tiles as opened from search in search view", () => {
