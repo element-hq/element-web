@@ -1116,13 +1116,11 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         isActionable: boolean;
         reactionGroupCount: number;
         canReact: boolean;
-        addReactionButtonActive: boolean;
     } {
         return {
             isActionable: isContentActionable(props.mxEvent),
             reactionGroupCount: EventTileViewModel.getReactionGroupCount(reactions),
             canReact: Boolean(props.canReact),
-            addReactionButtonActive: false,
         };
     }
 

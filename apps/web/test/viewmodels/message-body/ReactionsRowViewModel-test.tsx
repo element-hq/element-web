@@ -17,7 +17,6 @@ describe("ReactionsRowViewModel", () => {
             isActionable: true,
             reactionGroupCount: 10,
             canReact: true,
-            addReactionButtonActive: false,
             ...overrides,
         });
 
@@ -29,6 +28,8 @@ describe("ReactionsRowViewModel", () => {
         expect(snapshot.showAllButtonVisible).toBe(true);
         expect(snapshot.showAddReactionButton).toBe(true);
         expect(snapshot.addReactionButtonActive).toBe(false);
+        expect(snapshot.addReactionMenuAnchorRect).toBeUndefined();
+        expect(snapshot.isAddReactionMenuOpen).toBe(false);
     });
 
     it("hides show-all after onShowAllClick", () => {
@@ -58,35 +59,61 @@ describe("ReactionsRowViewModel", () => {
         expect(vm.getSnapshot().showAddReactionButton).toBe(false);
     });
 
-    it("updates add-reaction active state", () => {
+    it("opens and closes the add-reaction menu", () => {
         const vm = createVm();
+        const rect = new DOMRect(1, 2, 3, 4);
+        const anchor = document.createElement("button");
+        jest.spyOn(anchor, "getBoundingClientRect").mockReturnValue(rect);
 
-        vm.setAddReactionButtonActive(true);
+        vm.openAddReactionMenu(anchor);
 
         expect(vm.getSnapshot().addReactionButtonActive).toBe(true);
+        expect(vm.getSnapshot().addReactionMenuAnchorRect).toBe(rect);
+        expect(vm.getSnapshot().isAddReactionMenuOpen).toBe(true);
+
+        vm.closeAddReactionMenu();
+
+        expect(vm.getSnapshot().addReactionButtonActive).toBe(false);
+        expect(vm.getSnapshot().addReactionMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().isAddReactionMenuOpen).toBe(false);
     });
 
-    it("forwards add-reaction handlers", () => {
+    it("opens the add-reaction menu from add-reaction actions", () => {
         const vm = createVm();
-        const onAddReactionClick = jest.fn();
-        const onAddReactionContextMenu = jest.fn();
+        const rect = new DOMRect(1, 2, 3, 4);
+        const anchor = document.createElement("button");
+        const preventDefault = jest.fn();
+        jest.spyOn(anchor, "getBoundingClientRect").mockReturnValue(rect);
 
-        vm.setAddReactionHandlers({
-            onAddReactionClick,
-            onAddReactionContextMenu,
-        });
+        vm.onAddReactionClick({ currentTarget: anchor } as MouseEvent<HTMLButtonElement>);
+        expect(vm.getSnapshot().addReactionMenuAnchorRect).toBe(rect);
 
-        const clickEvent = {
-            currentTarget: document.createElement("button"),
-        } as unknown as MouseEvent<HTMLButtonElement>;
-        vm.onAddReactionClick(clickEvent);
-        vm.onAddReactionContextMenu(clickEvent);
+        vm.closeAddReactionMenu();
+        vm.onAddReactionContextMenu({
+            currentTarget: anchor,
+            preventDefault,
+        } as unknown as MouseEvent<HTMLButtonElement>);
 
-        expect(onAddReactionClick).toHaveBeenCalledWith(clickEvent);
-        expect(onAddReactionContextMenu).toHaveBeenCalledWith(clickEvent);
+        expect(preventDefault).toHaveBeenCalled();
+        expect(vm.getSnapshot().addReactionMenuAnchorRect).toBe(rect);
     });
 
-    it("doesn't emit only setters that always merge when values are unchanged", () => {
+    it("closes the add-reaction menu when reactions become unavailable", () => {
+        const vm = createVm();
+        const rect = new DOMRect(1, 2, 3, 4);
+        const anchor = document.createElement("button");
+        jest.spyOn(anchor, "getBoundingClientRect").mockReturnValue(rect);
+
+        vm.openAddReactionMenu(anchor);
+        vm.setCanReact(false);
+
+        expect(vm.getSnapshot().showAddReactionButton).toBe(false);
+        expect(vm.getSnapshot().addReactionButtonActive).toBe(false);
+        expect(vm.getSnapshot().addReactionMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().isAddReactionMenuOpen).toBe(false);
+    });
+
+    it("does not emit when derived values are unchanged", () => {
         const vm = createVm();
         const previousSnapshot = vm.getSnapshot();
         const listener = jest.fn();
@@ -95,10 +122,8 @@ describe("ReactionsRowViewModel", () => {
         vm.setCanReact(true);
         vm.setReactionGroupCount(10);
         vm.setActionable(true);
-        vm.setAddReactionButtonActive(false);
 
-        // `setReactionGroupCount` is optimized and skips emit for unchanged derived values.
-        // The other setters always merge and therefore emit.
+        // Snapshot merges skip emitting when all derived values are unchanged.
         expect(listener).toHaveBeenCalledTimes(0);
         expect(vm.getSnapshot()).toEqual(previousSnapshot);
     });

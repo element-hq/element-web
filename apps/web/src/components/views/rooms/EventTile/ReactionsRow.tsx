@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useEffect, useMemo, useReducer, useState, type JSX } from "react";
+import React, { useContext, useEffect, useMemo, useReducer, type JSX } from "react";
 import {
     ReactionsRowButtonView,
     ReactionsRowView,
@@ -98,47 +98,24 @@ const getMyReactions = (reactions: Relations | null | undefined, userId?: string
     return [...myReactions.values()];
 };
 
+/** Props for rendering the event-tile reactions row. */
 export interface ReactionsRowProps {
     mxEvent: MatrixEvent;
     reactions?: Relations | null;
     vm: ReactionsRowViewModel;
 }
 
+/** Renders reaction buttons and the add-reaction menu for an event tile. */
 export function ReactionsRow({ mxEvent, reactions, vm }: Readonly<ReactionsRowProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
     const userId = roomContext.room?.client.getUserId() ?? undefined;
-    const [menuDisplayed, setMenuDisplayed] = useState(false);
-    const [menuAnchorRect, setMenuAnchorRect] = useState<DOMRect | null>(null);
     const [, bumpRelationsVersion] = useReducer((version: number) => version + 1, 0);
     const reactionGroups = getReactionGroups(reactions);
     const myReactions = getMyReactions(reactions, userId);
 
-    const openReactionMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>): void => {
-        setMenuAnchorRect(event.currentTarget.getBoundingClientRect());
-        setMenuDisplayed(true);
-    }, []);
-
-    const closeReactionMenu = useCallback((): void => {
-        setMenuDisplayed(false);
-    }, []);
-
     useEffect(() => {
         vm.setCanReact(roomContext.canReact);
-        if (!roomContext.canReact && menuDisplayed) {
-            setMenuDisplayed(false);
-        }
-    }, [roomContext.canReact, menuDisplayed, vm]);
-
-    useEffect(() => {
-        vm.setAddReactionHandlers({
-            onAddReactionClick: openReactionMenu,
-            onAddReactionContextMenu: openReactionMenu,
-        });
-    }, [openReactionMenu, vm]);
-
-    useEffect(() => {
-        vm.setAddReactionButtonActive(menuDisplayed);
-    }, [menuDisplayed, vm]);
+    }, [roomContext.canReact, vm]);
 
     useEffect(() => {
         vm.setReactionGroupCount(reactionGroups.length);
@@ -225,9 +202,14 @@ export function ReactionsRow({ mxEvent, reactions, vm }: Readonly<ReactionsRowPr
     }
 
     const contextMenu =
-        menuDisplayed && menuAnchorRect && reactions && roomContext.canReact ? (
-            <ContextMenu {...aboveLeftOf(menuAnchorRect)} onFinished={closeReactionMenu} managed={false} focusLock>
-                <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeReactionMenu} />
+        snapshot.isAddReactionMenuOpen && snapshot.addReactionMenuAnchorRect && reactions && roomContext.canReact ? (
+            <ContextMenu
+                {...aboveLeftOf(snapshot.addReactionMenuAnchorRect)}
+                onFinished={vm.closeAddReactionMenu}
+                managed={false}
+                focusLock
+            >
+                <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={vm.closeAddReactionMenu} />
             </ContextMenu>
         ) : undefined;
 
