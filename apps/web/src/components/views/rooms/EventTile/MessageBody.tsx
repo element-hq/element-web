@@ -70,4 +70,40 @@ function MessageBodyComponent({
     });
 }
 
-export const MessageBody = memo(MessageBodyComponent);
+function areRenderTilePropsEqual(a: MessageBodyRenderTileProps, b: MessageBodyRenderTileProps): boolean {
+    return (
+        a.mxEvent === b.mxEvent &&
+        a.forExport === b.forExport &&
+        a.showUrlPreview === b.showUrlPreview &&
+        a.highlights === b.highlights &&
+        a.highlightLink === b.highlightLink &&
+        a.getRelationsForEvent === b.getRelationsForEvent &&
+        a.editState === b.editState &&
+        a.replacingEventId === b.replacingEventId &&
+        a.callEventGrouper === b.callEventGrouper &&
+        a.inhibitInteraction === b.inhibitInteraction &&
+        a.maxImageHeight === b.maxImageHeight &&
+        a.overrideBodyTypes === b.overrideBodyTypes &&
+        a.overrideEventTypes === b.overrideEventTypes
+    );
+}
+
+function areMessageBodyPropsEqual(a: MessageBodyProps, b: MessageBodyProps): boolean {
+    return (
+        a.mxEvent === b.mxEvent &&
+        a.isDecryptionFailure === b.isDecryptionFailure &&
+        a.timelineRenderingType === b.timelineRenderingType &&
+        a.tileRenderType === b.tileRenderType &&
+        a.showHiddenEvents === b.showHiddenEvents &&
+        a.isSeeingThroughMessageHiddenForModeration === b.isSeeingThroughMessageHiddenForModeration &&
+        a.permalinkCreator === b.permalinkCreator &&
+        a.tileRef === b.tileRef
+    );
+}
+
+// EventTileNodes rebuilds renderTileProps as a fresh object on parent renders, so compare the fields
+// explicitly to keep MessageBody memoized across hover/focus-only tile updates.
+export const MessageBody = memo(
+    MessageBodyComponent,
+    (a, b) => areMessageBodyPropsEqual(a, b) && areRenderTilePropsEqual(a.renderTileProps, b.renderTileProps),
+);
