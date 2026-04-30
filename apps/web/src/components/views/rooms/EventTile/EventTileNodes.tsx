@@ -20,6 +20,8 @@ import type EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import type ReplyChain from "../../elements/ReplyChain";
 import type { IReadReceiptPosition } from "../ReadReceiptMarker";
+import MessageContextMenu from "../../context_menus/MessageContextMenu";
+import { aboveRightOf } from "../../../structures/ContextMenu";
 import ThreadSummary, { ThreadMessagePreview } from "../ThreadSummary";
 import { ActionBar } from "./ActionBar";
 import { Avatar } from "./Avatar";
@@ -29,7 +31,7 @@ import { MessageStatus } from "./MessageStatus";
 import { ReplyPreview } from "./ReplyPreview";
 import { ThreadInfo } from "./ThreadInfo";
 import { ThreadToolbar } from "./ThreadToolbar";
-import type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
+import type { EventTileContextMenuState, EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
 import type { Layout } from "../../../../settings/enums/Layout";
 
 type EventTileNodesProps = {
@@ -61,6 +63,7 @@ type EventTileContentNodes = {
     actionBar?: JSX.Element;
     messageStatus: JSX.Element;
     footer?: JSX.Element;
+    contextMenu?: JSX.Element;
 };
 
 type EventTileThreadNodes = {
@@ -84,6 +87,17 @@ type BuildEventTileNodesArgs = {
 
 type BuildEventTileNodeContext = BuildEventTileNodesArgs & {
     reactions: Relations | null;
+};
+
+type EventTileContextMenuProps = {
+    contextMenuState: EventTileContextMenuState;
+    mxEvent: MatrixEvent;
+    reactions: Relations | null;
+    permalinkCreator?: RoomPermalinkCreator;
+    getRelationsForEvent?: GetRelationsForEvent;
+    tileRef: React.RefObject<EventTileOps | null>;
+    replyChainRef: React.RefObject<ReplyChain | null>;
+    vm: EventTileViewModel;
 };
 
 function getAvatarMember(props: EventTileNodesProps, avatarSubject: AvatarSubject): RoomMember | null {
@@ -165,6 +179,61 @@ function buildActionBarNode({
             tileRef={tileRef}
             replyChainRef={replyChainRef}
             onMenuOpenChange={onActionBarMenuOpenChange}
+        />
+    );
+}
+
+function EventTileContextMenu({
+    contextMenuState,
+    mxEvent,
+    reactions,
+    permalinkCreator,
+    getRelationsForEvent,
+    tileRef,
+    replyChainRef,
+    vm,
+}: Readonly<EventTileContextMenuProps>): JSX.Element {
+    const collapseReplyChain = replyChainRef.current?.canCollapse() ? replyChainRef.current.collapse : undefined;
+
+    return (
+        <MessageContextMenu
+            {...aboveRightOf(contextMenuState.position)}
+            mxEvent={mxEvent}
+            permalinkCreator={permalinkCreator}
+            eventTileOps={tileRef.current ?? undefined}
+            collapseReplyChain={collapseReplyChain}
+            onFinished={() => vm.closeContextMenu()}
+            rightClick={true}
+            reactions={reactions}
+            link={contextMenuState.link}
+            getRelationsForEvent={getRelationsForEvent}
+        />
+    );
+}
+
+function buildContextMenuNode({
+    props,
+    snapshot,
+    reactions,
+    tileRef,
+    replyChainRef,
+    vm,
+}: BuildEventTileNodeContext): JSX.Element | undefined {
+    const contextMenuState = snapshot.interaction.contextMenuState;
+    if (!contextMenuState || !snapshot.interaction.isContextMenuOpen) {
+        return undefined;
+    }
+
+    return (
+        <EventTileContextMenu
+            mxEvent={props.mxEvent}
+            permalinkCreator={props.permalinkCreator}
+            getRelationsForEvent={props.getRelationsForEvent}
+            reactions={reactions}
+            contextMenuState={contextMenuState}
+            tileRef={tileRef}
+            replyChainRef={replyChainRef}
+            vm={vm}
         />
     );
 }
@@ -279,6 +348,7 @@ export function buildEventTileNodes(args: BuildEventTileNodesArgs): {
             actionBar: buildActionBarNode(context),
             messageStatus,
             footer: buildFooterNode(context),
+            contextMenu: buildContextMenuNode(context),
         },
         thread: {
             info: buildThreadInfoNode(context),

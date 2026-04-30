@@ -45,7 +45,6 @@ import type { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalin
 import { type IReadReceiptPosition } from "../ReadReceiptMarker";
 import type { EventTileOps, GetRelationsForEvent, ReadReceiptProps } from "./types";
 import { type EventTileCommandDeps } from "./EventTileCommands";
-import { useContextMenuNode } from "./ContextMenu";
 import { useEventTileCommands } from "./useEventTileCommands";
 import { buildEventTileNodes } from "./EventTileNodes";
 import { CardContext } from "../../right_panel/context";
@@ -422,13 +421,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         vm,
         onActionBarMenuOpenChange,
     });
-    const contextMenuNode = useContextMenuNode({
-        props,
-        snapshot,
-        tileRef,
-        replyChainRef,
-        vm,
-    });
     const notificationRoomLabel = room
         ? _t(
               "timeline|in_room_name",
@@ -478,7 +470,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             messageBody: nodes.content.messageBody,
             actionBar: nodes.content.actionBar,
             footer: nodes.content.footer,
-            contextMenu: contextMenuNode,
+            contextMenu: nodes.content.contextMenu,
         },
         threads: {
             info: nodes.thread.info,
