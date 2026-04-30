@@ -989,7 +989,7 @@ describe("EventTile", () => {
         expect(offSpy).toHaveBeenCalledWith(ThreadEvent.New, expect.any(Function));
     });
 
-    it("subscribes to room receipts only once when the client context changes", () => {
+    it("does not remount the tile only because the client context changes", () => {
         const ownEvent = mkMessage({
             room: room.roomId,
             user: client.getSafeUserId(),
@@ -1028,7 +1028,7 @@ describe("EventTile", () => {
             />,
         );
 
-        expect(secondClientOnSpy.mock.calls.filter(([eventName]) => eventName === RoomEvent.Receipt)).toHaveLength(1);
+        expect(secondClientOnSpy.mock.calls.filter(([eventName]) => eventName === RoomEvent.Receipt)).toHaveLength(0);
     });
 
     it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {

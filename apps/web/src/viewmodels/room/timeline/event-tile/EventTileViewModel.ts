@@ -449,6 +449,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     private isListeningForReceipts = false;
     private verifyGeneration = 0;
     private receiptDisposer?: () => void;
+    private roomThreadDisposer?: () => void;
     private reactions: Relations | null;
     private eventTileActionBarViewModel?: EventTileActionBarViewModel;
     private readonly eventTileReactionsRowViewModel: ReactionsRowViewModel;
@@ -706,7 +707,12 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         const threadEventId = EventTileViewModel.getRoomThreadListenerEventId(props);
         // Pick up the thread object later if this event becomes recognized as a thread root after initial render.
         if (room && threadEventId) {
-            this.disposables.track(this.trackRoomThread(room, threadEventId, this.onNewThread));
+            const disposeThreadListener = this.trackRoomThread(room, threadEventId, this.onNewThread);
+            this.roomThreadDisposer = (): void => {
+                disposeThreadListener();
+                this.roomThreadDisposer = undefined;
+            };
+            this.disposables.track(() => this.unbindRoomThreadListener());
         }
 
         if (props.forExport) return;
@@ -733,6 +739,10 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
                 this.onReactionsCreatedListener,
             );
         }
+    }
+
+    private unbindRoomThreadListener(): void {
+        this.roomThreadDisposer?.();
     }
 
     private trackRoomThread(room: Room, eventId: string, callback: (thread: Thread) => void): () => void {
@@ -979,6 +989,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
 
     private readonly onNewThread = (thread: Thread): void => {
         this.updateThread(thread);
+        this.unbindRoomThreadListener();
     };
 
     private readonly onToggleThreadExpanded = (): void => {

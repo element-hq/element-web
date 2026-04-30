@@ -23,7 +23,7 @@ export interface EventTileProps extends EventTileHostProps {
 export function EventTile(props: Readonly<EventTileProps>): JSX.Element {
     const { withErrorBoundary = true, layout = Layout.Group, forExport = false, ...rest } = props;
     const tileProps = { ...rest, layout, forExport };
-    const tile = <EventTileHost {...tileProps} />;
+    const tile = <EventTileHost key={tileProps.mxEvent.getTxnId() || tileProps.mxEvent.getId()} {...tileProps} />;
 
     if (!withErrorBoundary) {
         return tile;
