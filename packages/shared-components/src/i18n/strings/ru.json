@@ -5,6 +5,7 @@
     "action": {
         "back": "Назад",
         "click": "Нажмите",
+        "close": "Закрыть",
         "collapse": "Свернуть",
         "delete": "Удалить",
         "dismiss": "Закрыть",
@@ -16,6 +17,7 @@
         "invite": "Пригласить",
         "new_conversation": "Новый диалог",
         "new_room": "Новая комната",
+        "new_section": "Новый раздел",
         "new_video_room": "Новая видеокомната",
         "open_menu": "Открыть меню",
         "pause": "Пауза",
@@ -34,6 +36,7 @@
     "common": {
         "attachment": "Вложение",
         "encryption_enabled": "Шифрование включено",
+        "loading": "Загрузка…",
         "preferences": "Настройки",
         "state_encryption_enabled": "Экспериментальное шифрование включено"
     },

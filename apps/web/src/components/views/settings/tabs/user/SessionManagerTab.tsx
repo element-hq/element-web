@@ -162,14 +162,6 @@ const SessionManagerTab: React.FC<{
     const disableMultipleSignout = !!accountManagement?.endpoint;
     const userId = matrixClient?.getUserId();
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
-    const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
-    const oidcClientConfig = useAsyncMemo(async () => {
-        try {
-            return await matrixClient?.getAuthMetadata();
-        } catch (e) {
-            logger.error("Failed to discover OIDC metadata", e);
-        }
-    }, [matrixClient]);
     const isCrossSigningReady = useAsyncMemo(
         async () => matrixClient.getCrypto()?.isCrossSigningReady() ?? false,
         [matrixClient],
@@ -279,12 +271,7 @@ const SessionManagerTab: React.FC<{
     return (
         <SettingsTab>
             <SettingsSection>
-                <LoginWithQRSection
-                    onShowQr={onShowQrClicked}
-                    versions={clientVersions}
-                    oidcClientConfig={oidcClientConfig}
-                    isCrossSigningReady={isCrossSigningReady}
-                />
+                <LoginWithQRSection onShowQr={onShowQrClicked} isCrossSigningReady={isCrossSigningReady} />
                 <SecurityRecommendations
                     devices={devices}
                     goToFilteredList={onGoToFilteredList}

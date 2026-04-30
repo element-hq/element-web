@@ -5,5 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound);
-@import url("@vector-im/compound-web/dist/style.css");
+/* Shared cascade order: Compound tokens, Compound Web, shared components, then app overrides. */
+@layer compound-tokens, compound-web, shared-components, app-web;
+
+@import url("@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css") layer(compound-tokens);
+@import url("@vector-im/compound-web/dist/style.css") layer(compound-web);

@@ -7,5 +7,5 @@
 
 .title {
     /* For first title, there is already enough space at the top */
-    margin-top: 0 !important;
+    margin-top: 0;
 }

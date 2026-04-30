@@ -25,16 +25,17 @@ $panels: var(--panels, var(--cpd-color-gray-600));
 $panel-actions: var(--panels-actions, var(--cpd-color-gray-300));
 
 /* --timeline-background-color */
-$button-secondary-bg-color: var(--timeline-background-color);
-$lightbox-border-color: var(--timeline-background-color);
-$menu-bg-color: var(--timeline-background-color);
-$message-action-bar-bg-color: var(--timeline-background-color);
-$background: var(--timeline-background-color);
+$custom-theme-background: var(--timeline-background-color, var(--cpd-color-bg-canvas-default));
+$button-secondary-bg-color: $custom-theme-background;
+$lightbox-border-color: $custom-theme-background;
+$menu-bg-color: $custom-theme-background;
+$message-action-bar-bg-color: $custom-theme-background;
+$background: $custom-theme-background;
 $togglesw-ball-color: var(--cpd-color-bg-action-primary-rest);
 $togglesw-off-color: var(--togglesw-off-color);
 $droptarget-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .5 */
 $authpage-modal-bg-color: var(--timeline-background-color-50pct); /* still needs alpha at .59 */
-$roomheader-bg-color: var(--timeline-background-color);
+$roomheader-bg-color: $custom-theme-background;
 
 /* --roomlist-highlights-color */
 $panel-actions: var(--roomlist-highlights-color);

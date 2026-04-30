@@ -86,5 +86,12 @@ module.exports = {
                 "@typescript-eslint/no-non-null-assertion": "off",
             },
         },
+        {
+            files: ["src/**/*.test.ts", "electron-builder.ts", "vitest.config.ts"],
+            extends: ["plugin:matrix-org/typescript"],
+            parserOptions: {
+                project: ["tsconfig.node.json"],
+            },
+        },
     ],
 };

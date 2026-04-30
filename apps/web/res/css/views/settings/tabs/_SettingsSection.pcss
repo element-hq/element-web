@@ -12,7 +12,8 @@ Please see LICENSE files in the repository root for full details.
 
     color: $primary-content;
 
-    a {
+    /* Compound links carry data-kind and provide their own colour. */
+    a:not([data-kind]) {
         color: $links;
     }
 

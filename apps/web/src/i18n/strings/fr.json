@@ -588,7 +588,6 @@
         "video": "Vidéo",
         "video_room": "Salon vidéo",
         "view_message": "Afficher le message",
-        "voice": "Voix",
         "warning": "Attention"
     },
     "composer": {
@@ -1368,6 +1367,14 @@
         "impossible_dialog_title": "Les intégrations ne sont pas autorisées"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "Vous n'avez actuellement aucune discussion avec ces contacts. Veuillez confirmer leur invitation à rejoindre ce salon avant de continuer.",
+            "invite_title": "Inviter de nouveaux contacts dans ce salon ?",
+            "start_chat_subtitle_multiple_users": "Vous n'avez actuellement aucune discussion avec ces personnes. Veuillez confirmer leur invitation avant de continuer.",
+            "start_chat_subtitle_one_user": "Vous n'avez actuellement aucune discussion avec cette personne. Confirmez son invitation avant de continuer.",
+            "start_chat_title_multiple_users": "Démarrer une discussion avec ces nouveaux contacts ?",
+            "start_chat_title_one_user": "Démarrer une discussion avec ce nouveau contact ?"
+        },
         "email_caption": "Inviter par e-mail",
         "email_limit_one": "Les invitations par e-mail ne peuvent être envoyées qu’une par une",
         "email_use_default_is": "Utilisez un serveur d’identité pour inviter avec un e-mail. <default>Utilisez le serveur par défaut (%(defaultIdentityServerName)s)</default> ou gérez-le dans les <settings>Paramètres</settings>.",
@@ -3886,6 +3893,16 @@
         "call_held": "%(peerName)s a mis l’appel en attente",
         "call_held_resume": "Vous avez mis l’appel en attente <a>Reprendre</a>",
         "call_held_switch": "Vous avez mis l’appel en attente <a>Basculer</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> participant à l'appel",
+                "other": "<avatars/> participants à l'appel"
+            },
+            "overflow": {
+                "one": "<avatars/>+ %(overflowCount)s participant à l'appel",
+                "other": "<avatars/>+ %(overflowCount)s participants à l'appel"
+            }
+        },
         "call_toast_unknown_room": "Salon inconnu",
         "camera_disabled": "Votre caméra est éteinte",
         "camera_enabled": "Votre caméra est toujours allumée",
@@ -3895,7 +3912,6 @@
         "connection_lost": "La connexion au serveur a été perdue",
         "connection_lost_description": "Vous ne pouvez pas passer d’appels sans connexion au serveur.",
         "consulting": "Consultation avec %(transferTarget)s. <a>Transfert à %(transferee)s</a>",
-        "decline_call": "Refuser",
         "default_device": "Appareil par défaut",
         "dial": "Composer",
         "dialpad": "Pavé numérique",
@@ -3909,10 +3925,12 @@
         "enable_microphone": "Activer le microphone",
         "expand": "Revenir à l’appel",
         "get_call_link": "Partager le lien de l'appel",
+        "group_call_started": "L'appel de groupe a commencé",
         "hangup": "Raccrocher",
         "hide_sidebar_button": "Masquer la barre latérale",
         "input_devices": "Périphériques d’entrée",
         "jitsi_call": "Conférence Jitsi",
+        "join_with_video": "Rejoigner en vidéo",
         "legacy_call": "Appel vidéo",
         "maximise": "Remplir l’écran",
         "maximise_call": "Plein écran",
@@ -3946,7 +3964,6 @@
         "show_sidebar_button": "Afficher la barre latérale",
         "silence": "Mettre l’appel en sourdine",
         "silenced": "Notifications silencieuses",
-        "skip_lobby_toggle_option": "Rejoignez immédiatement",
         "start_screenshare": "Commencer à partager mon écran",
         "stop_screenshare": "Arrêter de partager mon écran",
         "too_many_calls": "Trop d’appels",
@@ -3968,7 +3985,6 @@
         "user_is_presenting": "%(sharerName)s est à l’écran",
         "video_call": "Appel vidéo",
         "video_call_incoming": "Appel vidéo entrant",
-        "video_call_started": "Appel vidéo commencé",
         "video_call_using": "Appel vidéo utilisant :",
         "voice_call": "Appel audio",
         "voice_call_incoming": "Appel vocal entrant",
@@ -3976,6 +3992,11 @@
         "you_are_presenting": "Vous êtes à l’écran"
     },
     "web_default_device_name": "%(appName)s : %(browserName)s pour %(osName)s",
+    "welcome": {
+        "tagline_element": "Conçu pour la vitesse et la simplicité.",
+        "title_element": "Soyez dans votre Element",
+        "title_generic": "Bienvenue sur %(brand)s"
+    },
     "widget": {
         "added_by": "Widget ajouté par",
         "capabilities_dialog": {

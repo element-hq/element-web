@@ -25,7 +25,14 @@ export interface UrlPreviewGroupViewSnapshot {
 }
 
 export interface UrlPreviewGroupViewProps {
+    /**
+     * The view model for the component.
+     */
     vm: ViewModel<UrlPreviewGroupViewSnapshot> & UrlPreviewGroupViewActions;
+    /**
+     * Extra CSS classes to apply to the component.
+     */
+    className?: string;
 }
 
 export interface UrlPreviewGroupViewActions {
@@ -42,7 +49,7 @@ export type UrlPreviewGroupViewModel = ViewModel<UrlPreviewGroupViewSnapshot, Ur
  * The view lays out one or more link previews, can collapse or expand
  * overflowed previews, and exposes a control to hide the group.
  */
-export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Element | null {
+export function UrlPreviewGroupView({ vm, className }: UrlPreviewGroupViewProps): JSX.Element | null {
     const { translate: _t } = useI18n();
     const { previews, totalPreviewCount, previewsLimited, overPreviewLimit, compactLayout } = useViewModel(vm);
     if (previews.length === 0) {
@@ -61,7 +68,7 @@ export function UrlPreviewGroupView({ vm }: UrlPreviewGroupViewProps): JSX.Eleme
     }
 
     return (
-        <div className={styles.wrapper}>
+        <div className={classNames(className, styles.wrapper)}>
             <div className={classNames(styles.previewGroup, compactLayout && styles.compactLayout)}>
                 {previews.map((preview) => (
                     <LinkPreview key={preview.link} onImageClick={() => vm.onImageClick(preview)} {...preview} />
