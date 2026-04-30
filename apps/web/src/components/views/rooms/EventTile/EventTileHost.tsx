@@ -404,12 +404,18 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         cli,
         vm,
     );
-    const onActionBarMenuOpenChange = useCallback(
-        (focused: boolean): void => {
-            vm.onActionBarFocusChange(focused, rootRef.current?.matches(":hover") ?? false);
-        },
-        [vm],
-    );
+    useEffect(() => {
+        const actionBarViewModel = vm.getActionBarViewModel();
+        const syncActionBarMenuFocus = (): void => {
+            vm.onActionBarFocusChange(
+                actionBarViewModel.getSnapshot().isMenuOpen,
+                rootRef.current?.matches(":hover") ?? false,
+            );
+        };
+
+        syncActionBarMenuFocus();
+        return actionBarViewModel.subscribe(syncActionBarMenuFocus);
+    }, [vm]);
     const nodes = buildEventTileNodes({
         props,
         roomContext,
@@ -419,7 +425,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         suppressReadReceiptAnimation,
         tileContentId,
         vm,
-        onActionBarMenuOpenChange,
     });
     const notificationRoomLabel = room
         ? _t(

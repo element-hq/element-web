@@ -82,7 +82,6 @@ type BuildEventTileNodesArgs = {
     suppressReadReceiptAnimation: boolean;
     tileContentId: string;
     vm: EventTileViewModel;
-    onActionBarMenuOpenChange: (open: boolean) => void;
 };
 
 type BuildEventTileNodeContext = BuildEventTileNodesArgs & {
@@ -163,7 +162,6 @@ function buildActionBarNode({
     tileRef,
     replyChainRef,
     vm,
-    onActionBarMenuOpenChange,
 }: BuildEventTileNodeContext): JSX.Element | undefined {
     if (!snapshot.rendering.shouldRenderActionBar) {
         return undefined;
@@ -178,7 +176,6 @@ function buildActionBarNode({
             vm={vm.getActionBarViewModel()}
             tileRef={tileRef}
             replyChainRef={replyChainRef}
-            onMenuOpenChange={onActionBarMenuOpenChange}
         />
     );
 }
@@ -301,19 +298,16 @@ function buildFooterNode({
     );
 }
 
-/** Builds the React nodes used by `EventTileView` from the current tile props and view-model snapshot. */
-export function buildEventTileNodes(args: BuildEventTileNodesArgs): {
-    content: EventTileContentNodes;
-    thread: EventTileThreadNodes;
-} {
-    const { props, snapshot, suppressReadReceiptAnimation, vm } = args;
-    const reactions = vm.getReactions();
-    const context = { ...args, reactions };
-    const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
-    const sender = snapshot.sender.showSenderProfile ? (
+function buildSenderNode({ snapshot, vm }: BuildEventTileNodeContext): ReactNode | undefined {
+    return snapshot.sender.showSenderProfile ? (
         <DisambiguatedProfileView vm={vm.disambiguatedProfileViewModel} className="mx_DisambiguatedProfile" />
     ) : undefined;
-    const avatar = (
+}
+
+function buildAvatarNode({ props, snapshot }: BuildEventTileNodeContext): JSX.Element {
+    const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
+
+    return (
         <Avatar
             member={avatarMember}
             size={snapshot.sender.avatarSize}
@@ -321,7 +315,10 @@ export function buildEventTileNodes(args: BuildEventTileNodesArgs): {
             forceHistorical={snapshot.sender.avatarForceHistorical}
         />
     );
-    const messageStatus = (
+}
+
+function buildMessageStatusNode({ props, suppressReadReceiptAnimation, vm }: BuildEventTileNodeContext): JSX.Element {
+    return (
         <MessageStatus
             vm={vm.messageStatusViewModel}
             readReceipts={props.readReceipts}
@@ -331,30 +328,43 @@ export function buildEventTileNodes(args: BuildEventTileNodesArgs): {
             suppressReadReceiptAnimation={suppressReadReceiptAnimation}
         />
     );
-    const preview =
-        snapshot.thread.shouldRenderThreadPreview && snapshot.thread.thread ? (
-            <ThreadMessagePreview key={snapshot.thread.threadUpdateKey} thread={snapshot.thread.thread} />
-        ) : undefined;
-    const toolbar = snapshot.thread.shouldRenderThreadToolbar ? (
-        <ThreadToolbar vm={vm.threadToolbarViewModel} />
+}
+
+function buildThreadPreviewNode({ snapshot }: BuildEventTileNodeContext): JSX.Element | undefined {
+    return snapshot.thread.shouldRenderThreadPreview && snapshot.thread.thread ? (
+        <ThreadMessagePreview key={snapshot.thread.threadUpdateKey} thread={snapshot.thread.thread} />
     ) : undefined;
+}
+
+function buildThreadToolbarNode({ snapshot, vm }: BuildEventTileNodeContext): JSX.Element | undefined {
+    return snapshot.thread.shouldRenderThreadToolbar ? <ThreadToolbar vm={vm.threadToolbarViewModel} /> : undefined;
+}
+
+/** Builds the React nodes used by `EventTileView` from the current tile props and view-model snapshot. */
+export function buildEventTileNodes(args: BuildEventTileNodesArgs): {
+    content: EventTileContentNodes;
+    thread: EventTileThreadNodes;
+} {
+    const { snapshot, vm } = args;
+    const reactions = vm.getReactions();
+    const context = { ...args, reactions };
 
     return {
         content: {
-            sender,
-            avatar,
+            sender: buildSenderNode(context),
+            avatar: buildAvatarNode(context),
             replyChain: buildReplyChainNode(context),
             messageBody: buildMessageBodyNode(context),
             actionBar: buildActionBarNode(context),
-            messageStatus,
+            messageStatus: buildMessageStatusNode(context),
             footer: buildFooterNode(context),
             contextMenu: buildContextMenuNode(context),
         },
         thread: {
             info: buildThreadInfoNode(context),
             replyCount: snapshot.thread.threadReplyCount,
-            preview,
-            toolbar,
+            preview: buildThreadPreviewNode(context),
+            toolbar: buildThreadToolbarNode(context),
         },
     };
 }
