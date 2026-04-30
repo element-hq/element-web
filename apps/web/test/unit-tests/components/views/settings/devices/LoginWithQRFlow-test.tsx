@@ -29,88 +29,100 @@ describe("<LoginWithQRFlow />", () => {
         intent: RendezvousIntent;
     }) => <LoginWithQRFlow {...defaultProps} {...props} />;
 
-    beforeEach(() => {});
-
     afterEach(() => {
         onClick.mockReset();
         cleanup();
     });
 
-    it("renders spinner while loading", async () => {
-        const { container } = render(
-            getComponent({ phase: Phase.Loading, intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE }),
-        );
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders spinner whilst QR generating", async () => {
-        const { container } = render(
-            getComponent({ phase: Phase.ShowingQR, intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE }),
-        );
-        expect(screen.getByTestId("spinner")).toBeVisible();
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders QR code", async () => {
-        const { container } = render(
-            getComponent({
-                phase: Phase.ShowingQR,
-                code: new TextEncoder().encode("mock-code"),
-                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
-            }),
-        );
-        // QR code is rendered async so we wait for it:
-        await waitFor(() => screen.getAllByAltText("QR Code").length === 1);
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders spinner while signing in", async () => {
-        const { container } = render(
-            getComponent({
-                phase: Phase.WaitingForDevice,
-                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
-            }),
-        );
-        expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
-        expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId("cancel-button"));
-        expect(onClick).toHaveBeenCalledWith(Click.Cancel, undefined);
-    });
-
-    it("renders spinner while verifying", async () => {
-        const { container } = render(
-            getComponent({ phase: Phase.Verifying, intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE }),
-        );
-        expect(container).toMatchSnapshot();
-    });
-
-    it("renders check code confirmation", async () => {
-        const { container } = render(
-            getComponent({
-                phase: Phase.OutOfBandConfirmation,
-                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
-            }),
-        );
-        expect(container).toMatchSnapshot();
-    });
-
-    describe("errors", () => {
-        for (const failureReason of [
-            ...Object.values(MSC4108FailureReason),
-            ...Object.values(LoginWithQRFailureReason),
-            ...Object.values(ClientRendezvousFailureReason),
-        ]) {
-            it(`renders ${failureReason}`, async () => {
+    describe.each([RendezvousIntent.LOGIN_ON_NEW_DEVICE, RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE])(
+        "%s",
+        () => {
+            it("renders spinner while loading", async () => {
                 const { container } = render(
                     getComponent({
-                        phase: Phase.Error,
-                        failureReason,
+                        phase: Phase.Loading,
                         intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
                     }),
                 );
-                expect(screen.getAllByTestId("cancellation-message")).toHaveLength(1);
                 expect(container).toMatchSnapshot();
             });
-        }
-    });
+
+            it("renders spinner whilst QR generating", async () => {
+                const { container } = render(
+                    getComponent({
+                        phase: Phase.ShowingQR,
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+                expect(screen.getByTestId("spinner")).toBeVisible();
+                expect(container).toMatchSnapshot();
+            });
+
+            it("renders QR code", async () => {
+                const { container } = render(
+                    getComponent({
+                        phase: Phase.ShowingQR,
+                        code: new TextEncoder().encode("mock-code"),
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+                // QR code is rendered async so we wait for it:
+                await waitFor(() => screen.getAllByAltText("QR Code").length === 1);
+                expect(container).toMatchSnapshot();
+            });
+
+            it("renders spinner while signing in", async () => {
+                const { container } = render(
+                    getComponent({
+                        phase: Phase.WaitingForDevice,
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+                expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
+                expect(container).toMatchSnapshot();
+                fireEvent.click(screen.getByTestId("cancel-button"));
+                expect(onClick).toHaveBeenCalledWith(Click.Cancel, undefined);
+            });
+
+            it("renders spinner while verifying", async () => {
+                const { container } = render(
+                    getComponent({
+                        phase: Phase.Verifying,
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+                expect(container).toMatchSnapshot();
+            });
+
+            it("renders check code confirmation", async () => {
+                const { container } = render(
+                    getComponent({
+                        phase: Phase.OutOfBandConfirmation,
+                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                    }),
+                );
+                expect(container).toMatchSnapshot();
+            });
+
+            describe("errors", () => {
+                for (const failureReason of [
+                    ...Object.values(MSC4108FailureReason),
+                    ...Object.values(LoginWithQRFailureReason),
+                    ...Object.values(ClientRendezvousFailureReason),
+                ]) {
+                    it(`renders ${failureReason}`, async () => {
+                        const { container } = render(
+                            getComponent({
+                                phase: Phase.Error,
+                                failureReason,
+                                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                            }),
+                        );
+                        expect(screen.getAllByTestId("cancellation-message")).toHaveLength(1);
+                        expect(container).toMatchSnapshot();
+                    });
+                }
+            });
+        },
+    );
 });
