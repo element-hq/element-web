@@ -81,6 +81,7 @@ import {
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
+import { type QrLoginCredentials } from "./components/views/auth/LoginWithQR.tsx";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -330,15 +331,7 @@ export async function configureFromCompletedOAuthLogin({
     clientId,
     issuer,
     idToken,
-}: {
-    accessToken: string;
-    refreshToken?: string;
-    homeserverUrl: string;
-    identityServerUrl?: string;
-    clientId: string;
-    issuer: string;
-    idToken: string;
-}): Promise<IMatrixClientCreds> {
+}: Omit<QrLoginCredentials, "secrets" | "deviceId">): Promise<IMatrixClientCreds> {
     const {
         user_id: userId,
         device_id: deviceId,

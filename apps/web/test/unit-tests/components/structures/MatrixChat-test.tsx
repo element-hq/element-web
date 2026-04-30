@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import "fake-indexeddb/auto";
-import React, { type ComponentProps } from "react";
+import React, { type ComponentProps, createRef, type RefObject } from "react";
 import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import { type Mocked, mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
@@ -24,6 +24,7 @@ import {
     UserVerificationStatus,
     type CryptoApi,
 } from "matrix-js-sdk/src/crypto-api";
+import fetchMock from "@fetch-mock/jest";
 
 import MatrixChat from "../../../../src/components/structures/MatrixChat";
 import * as StorageAccess from "../../../../src/utils/StorageAccess";
@@ -69,6 +70,9 @@ import { clearStorage } from "../../../../src/Lifecycle";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore.ts";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog.tsx";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext.ts";
+import { makeDelegatedAuthConfig } from "../../../test-utils/oidc.ts";
+import QrLoginDialog from "../../../../src/components/views/dialogs/QrLoginDialog.tsx";
+import type { QrLoginCredentials } from "../../../../src/components/views/auth/LoginWithQR.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -81,6 +85,26 @@ jest.mock("../../../../src/theme");
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
+
+function createMockCrypto(): CryptoApi {
+    return {
+        getVersion: jest.fn().mockReturnValue("Version 0"),
+        getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+        getUserDeviceInfo: jest.fn().mockReturnValue({
+            get: jest
+                .fn()
+                .mockReturnValue(
+                    new Map([["devid", { dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") }]]),
+                ),
+        }),
+        getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(true, true, false)),
+        setDeviceIsolationMode: jest.fn(),
+        isDehydrationSupported: jest.fn().mockReturnValue(false),
+        getDeviceVerificationStatus: jest.fn().mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
+        isCrossSigningReady: jest.fn().mockReturnValue(false),
+        requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn(), on: jest.fn() }),
+    } as any;
+}
 
 describe("<MatrixChat />", () => {
     const userId = "@alice:server.org";
@@ -179,8 +203,11 @@ describe("<MatrixChat />", () => {
         warning: "",
     };
     let defaultProps: ComponentProps<typeof MatrixChat>;
-    const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) => {
-        return render(<MatrixChat {...defaultProps} {...props} />);
+    const getComponent = (
+        props: Partial<ComponentProps<typeof MatrixChat>> = {},
+        ref?: RefObject<MatrixChat | null>,
+    ) => {
+        return render(<MatrixChat {...defaultProps} {...props} ref={ref} />);
     };
 
     // make test results readable
@@ -309,6 +336,118 @@ describe("<MatrixChat />", () => {
         await waitFor(() =>
             expect(mocked(SdkContextClass.instance.resizeNotifier.notifyLeftHandleResized)).toHaveBeenCalled(),
         );
+    });
+
+    describe("qr login", () => {
+        beforeEach(() => {
+            const authConfig = makeDelegatedAuthConfig();
+            defaultProps.config.validated_server_config!.delegatedAuthentication = authConfig;
+            fetchMock.post(authConfig.registration_endpoint!, { client_id: "abc123" });
+            mockPlatformPeg({
+                getOidcClientMetadata: jest.fn().mockReturnValue({
+                    clientName: "App name",
+                    clientUri: "https://company",
+                    redirectUris: ["https://app"],
+                    logoUri: "https://company/logo.png",
+                    applicationType: "web",
+                }),
+            });
+        });
+
+        it("should open QrLoginDialog on ViewQrLogin action", async () => {
+            getComponent();
+            defaultDispatcher.fire(Action.ViewQrLogin);
+            await expect(screen.findByRole("dialog", { name: "Sign in with QR code" })).resolves.toMatchSnapshot();
+        });
+
+        it("should ignore ViewQrLogin action when logged in", async () => {
+            await populateStorageForSession();
+            getComponent();
+            // wait for logged in view to load
+            await screen.findByLabelText("User menu");
+
+            defaultDispatcher.fire(Action.ViewQrLogin);
+            expect(screen.queryByRole("dialog", { name: "Sign in with QR code" })).not.toBeInTheDocument();
+        });
+
+        it("should fire ViewQrLogin action on 'qr_login' route", async () => {
+            const ref = createRef<MatrixChat>();
+            getComponent({}, ref);
+            ref.current!.showScreen("qr_login");
+            await expect(screen.findByRole("dialog", { name: "Sign in with QR code" })).resolves.toMatchSnapshot();
+        });
+
+        it("should handle qr login completed", async () => {
+            const qrCreds: QrLoginCredentials = {
+                accessToken: "at",
+                homeserverUrl: "https://homeserver",
+                clientId: "ci",
+                idToken: "it",
+                issuer: defaultProps.config.validated_server_config!.delegatedAuthentication!.issuer,
+                deviceId: "di",
+                secrets: {
+                    cross_signing: {
+                        master_key: "mk",
+                        self_signing_key: "ssk",
+                        user_signing_key: "usk",
+                    },
+                },
+            };
+
+            mockClient.whoami.mockResolvedValue({ user_id: "@user:homeserver", device_id: qrCreds.deviceId });
+            mockClient.getCrypto.mockReturnValue({
+                ...createMockCrypto(),
+                crossSignDevice: jest.fn().mockResolvedValue(undefined),
+                importSecretsBundle: jest.fn().mockResolvedValue(undefined),
+            });
+            getComponent();
+
+            const createDialogSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({} as any);
+
+            // Assert welcome screen
+            await screen.findByText("Welcome to Test");
+
+            // Open QR dialog so we can grab the onLoggedIn method
+            defaultDispatcher.fire(Action.ViewQrLogin, true);
+            expect(createDialogSpy).toHaveBeenCalledWith(
+                QrLoginDialog,
+                {
+                    onLoggedIn: expect.any(Function),
+                    serverConfig: defaultProps.config.validated_server_config,
+                },
+                undefined,
+                false,
+                true,
+            );
+            const { onLoggedIn } = createDialogSpy.mock.calls[0][1] as {
+                onLoggedIn(creds: QrLoginCredentials): Promise<void>;
+            };
+
+            const setLoggedInSpy = jest.spyOn(Lifecycle, "setLoggedIn");
+            const prom = onLoggedIn(qrCreds);
+
+            await waitFor(() =>
+                expect(setLoggedInSpy).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        accessToken: qrCreds.accessToken,
+                        deviceId: qrCreds.deviceId,
+                        freshLogin: true,
+                        homeserverUrl: qrCreds.homeserverUrl,
+                        userId: "@user:homeserver",
+                    }),
+                ),
+            );
+            await waitFor(() =>
+                expect(mockClient.getCrypto()!.importSecretsBundle).toHaveBeenCalledWith(qrCreds.secrets),
+            );
+
+            await prom;
+
+            // initial sync
+            mockClient.emit(ClientEvent.Sync, SyncState.Prepared, null);
+            // wait for logged in view to load
+            await screen.findByLabelText("User menu");
+        });
     });
 
     describe("when query params have a OIDC params", () => {
@@ -1186,32 +1325,6 @@ describe("<MatrixChat />", () => {
                     await screen.findByRole("heading", { name: "Confirm your digital identity", level: 2 });
                 });
             });
-
-            function createMockCrypto(): CryptoApi {
-                return {
-                    getVersion: jest.fn().mockReturnValue("Version 0"),
-                    getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
-                    getUserDeviceInfo: jest.fn().mockReturnValue({
-                        get: jest
-                            .fn()
-                            .mockReturnValue(
-                                new Map([
-                                    ["devid", { dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") }],
-                                ]),
-                            ),
-                    }),
-                    getUserVerificationStatus: jest
-                        .fn()
-                        .mockResolvedValue(new UserVerificationStatus(true, true, false)),
-                    setDeviceIsolationMode: jest.fn(),
-                    isDehydrationSupported: jest.fn().mockReturnValue(false),
-                    getDeviceVerificationStatus: jest
-                        .fn()
-                        .mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
-                    isCrossSigningReady: jest.fn().mockReturnValue(false),
-                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn(), on: jest.fn() }),
-                } as any;
-            }
         });
 
         describe("showScreen", () => {

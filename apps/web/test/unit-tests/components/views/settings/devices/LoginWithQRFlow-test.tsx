@@ -36,12 +36,12 @@ describe("<LoginWithQRFlow />", () => {
 
     describe.each([RendezvousIntent.LOGIN_ON_NEW_DEVICE, RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE])(
         "%s",
-        () => {
+        (intent) => {
             it("renders spinner while loading", async () => {
                 const { container } = render(
                     getComponent({
                         phase: Phase.Loading,
-                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                        intent,
                     }),
                 );
                 expect(container).toMatchSnapshot();
@@ -51,7 +51,7 @@ describe("<LoginWithQRFlow />", () => {
                 const { container } = render(
                     getComponent({
                         phase: Phase.ShowingQR,
-                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                        intent,
                     }),
                 );
                 expect(screen.getByTestId("spinner")).toBeVisible();
@@ -63,7 +63,7 @@ describe("<LoginWithQRFlow />", () => {
                     getComponent({
                         phase: Phase.ShowingQR,
                         code: new TextEncoder().encode("mock-code"),
-                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                        intent,
                     }),
                 );
                 // QR code is rendered async so we wait for it:
@@ -75,7 +75,7 @@ describe("<LoginWithQRFlow />", () => {
                 const { container } = render(
                     getComponent({
                         phase: Phase.WaitingForDevice,
-                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                        intent,
                     }),
                 );
                 expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
@@ -88,7 +88,7 @@ describe("<LoginWithQRFlow />", () => {
                 const { container } = render(
                     getComponent({
                         phase: Phase.Verifying,
-                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                        intent,
                     }),
                 );
                 expect(container).toMatchSnapshot();
@@ -98,7 +98,7 @@ describe("<LoginWithQRFlow />", () => {
                 const { container } = render(
                     getComponent({
                         phase: Phase.OutOfBandConfirmation,
-                        intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                        intent,
                     }),
                 );
                 expect(container).toMatchSnapshot();
@@ -115,7 +115,7 @@ describe("<LoginWithQRFlow />", () => {
                             getComponent({
                                 phase: Phase.Error,
                                 failureReason,
-                                intent: RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE,
+                                intent,
                             }),
                         );
                         expect(screen.getAllByTestId("cancellation-message")).toHaveLength(1);
