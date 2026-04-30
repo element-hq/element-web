@@ -325,18 +325,16 @@ describe("RoomListHeaderViewModel", () => {
 
         describe("collapseOrExpandSections", () => {
             it("should dispatch RoomListCollapseAllSections when collapseSections is not 'expand'", () => {
-                const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+                const fireSpy = jest.spyOn(defaultDispatcher, "fire");
                 vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
 
                 vm.collapseOrExpandSections();
 
-                expect(dispatchSpy).toHaveBeenCalledWith({
-                    action: Action.RoomListCollapseAllSections,
-                });
+                expect(fireSpy).toHaveBeenCalledWith(Action.RoomListCollapseAllSections);
             });
 
             it("should dispatch RoomListExpandAllSections when collapseSections is 'expand'", () => {
-                const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+                const fireSpy = jest.spyOn(defaultDispatcher, "fire");
                 vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
 
                 // Drive the VM into the "expand" state by simulating all sections collapsed
@@ -348,13 +346,9 @@ describe("RoomListHeaderViewModel", () => {
                     true,
                 );
                 expect(vm.getSnapshot().collapseSections).toBe("expand");
-
-                dispatchSpy.mockClear();
                 vm.collapseOrExpandSections();
 
-                expect(dispatchSpy).toHaveBeenCalledWith({
-                    action: Action.RoomListExpandAllSections,
-                });
+                expect(fireSpy).toHaveBeenCalledWith(Action.RoomListExpandAllSections);
             });
         });
 
