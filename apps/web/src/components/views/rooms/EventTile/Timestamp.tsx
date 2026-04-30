@@ -5,59 +5,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useLayoutEffect, type JSX } from "react";
+import React, { type JSX } from "react";
 import { MessageTimestampView } from "@element-hq/web-shared-components";
 
-import type {
-    MessageTimestampViewModel,
-    MessageTimestampViewModelProps,
-} from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
+import type { MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
 import { Icon as LateIcon } from "../../../../../res/img/sensor.svg";
 
-type TimestampProps = MessageTimestampViewModelProps & {
+/** Props for rendering a parent-owned timestamp view model. */
+type TimestampProps = {
+    /** Received timestamp in milliseconds, when the event arrived later than it was sent. */
+    receivedTs?: number;
+    /** Parent-owned timestamp view model. */
     vm: MessageTimestampViewModel;
 };
 
-export function Timestamp({
-    vm,
-    href,
-    inhibitTooltip,
-    onClick,
-    onContextMenu,
-    receivedTs,
-    showFullDate,
-    showRelative,
-    showSeconds,
-    showTwelveHour,
-    ts,
-}: Readonly<TimestampProps>): JSX.Element {
-    useLayoutEffect(() => {
-        vm.setProps({
-            href,
-            inhibitTooltip,
-            onClick,
-            onContextMenu,
-            receivedTs,
-            showFullDate,
-            showRelative,
-            showSeconds,
-            showTwelveHour,
-            ts,
-        });
-    }, [
-        href,
-        inhibitTooltip,
-        onClick,
-        onContextMenu,
-        receivedTs,
-        showFullDate,
-        showRelative,
-        showSeconds,
-        showTwelveHour,
-        ts,
-        vm,
-    ]);
-
+/** Renders a timestamp view model with the optional late-arrival indicator. */
+export function Timestamp({ vm, receivedTs }: Readonly<TimestampProps>): JSX.Element {
     return (
         <>
             {receivedTs ? <LateIcon className="mx_MessageTimestamp_lateIcon" width="16" height="16" /> : undefined}

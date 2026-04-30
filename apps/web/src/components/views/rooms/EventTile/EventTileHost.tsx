@@ -383,7 +383,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         setSuppressReadReceiptAnimation(false);
     }, []);
 
-    const { room, onPermalinkClicked, onContextMenu, onTimestampContextMenu, onListTileClick } = useEventTileCommands(
+    const { room, onPermalinkClicked, onContextMenu, onPermalinkContextMenu, onListTileClick } = useEventTileCommands(
         props,
         cli,
         vm,
@@ -471,14 +471,13 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             },
             timestamp: {
                 displayMode: snapshot.timestamp.timestampDisplayMode,
-                formatMode: snapshot.timestamp.timestampFormatMode,
-                ts: snapshot.timestamp.timestampTs,
                 receivedTs: snapshot.timestamp.receivedTs,
-                permalink: snapshot.timestamp.permalink,
-                isTwelveHour: props.isTwelveHour,
-                onPermalinkClicked,
-                onContextMenu: onTimestampContextMenu,
                 vm: vm.timestampViewModel,
+            },
+            fileDetailsLink: {
+                href: snapshot.timestamp.permalink,
+                onClick: onPermalinkClicked,
+                onContextMenu: onPermalinkContextMenu,
             },
             encryption: {
                 padlockMode: snapshot.encryption.padlockMode,
@@ -511,7 +510,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         [
             props.as,
             props.layout,
-            props.isTwelveHour,
             props.mxEvent,
             rootRef,
             tileContentId,
@@ -523,8 +521,6 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             snapshot.sender.isOwnEvent,
             snapshot.rendering.hasFooter,
             snapshot.timestamp.timestampDisplayMode,
-            snapshot.timestamp.timestampFormatMode,
-            snapshot.timestamp.timestampTs,
             snapshot.timestamp.receivedTs,
             snapshot.timestamp.permalink,
             vm.timestampViewModel,
@@ -549,7 +545,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             nodes.thread.toolbar,
             contextMenuNode,
             onPermalinkClicked,
-            onTimestampContextMenu,
+            onPermalinkContextMenu,
             notificationRoomLabel,
             room,
             onListTileClick,

@@ -475,9 +475,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             new DisambiguatedProfileViewModel(this.buildDisambiguatedProfileViewModelProps(props)),
         );
         this.eventTileTimestampViewModel = this.disposables.track(
-            new MessageTimestampViewModel(
-                EventTileViewModel.buildTimestampViewModelProps(this.snapshot.current, props),
-            ),
+            new MessageTimestampViewModel(this.buildTimestampViewModelProps(this.snapshot.current, props)),
         );
         this.eventTileThreadToolbarViewModel = this.disposables.track(
             new ThreadListActionBarViewModel({
@@ -533,6 +531,16 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
             timelineRenderingType: this.props.timelineRenderingType,
         };
         this.props.commandDeps.dispatch(payload);
+    };
+
+    private onTimestampPermalinkClick: MessageTimestampViewModelProps["onClick"] = (ev): void => {
+        this.onPermalinkClicked(ev);
+    };
+
+    private onTimestampContextMenu: MessageTimestampViewModelProps["onContextMenu"] = (ev): void => {
+        const eventId = this.props.mxEvent.getId();
+
+        this.openContextMenu(ev, eventId ? this.props.permalinkCreator?.forEvent(eventId) : undefined);
     };
 
     /** Releases all Matrix listeners owned by this view model. */
@@ -1134,19 +1142,20 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
         };
     }
 
-    private static buildTimestampViewModelProps(
+    private buildTimestampViewModelProps(
         snapshot: EventTileViewSnapshot,
         props: EventTileViewModelProps,
     ): MessageTimestampViewModelProps {
+        const isLinked = snapshot.timestamp.timestampDisplayMode === TimestampDisplayMode.Linked;
+
         return {
             showRelative: snapshot.timestamp.timestampFormatMode === TimestampFormatMode.Relative,
             showTwelveHour: props.isTwelveHour,
             ts: snapshot.timestamp.timestampTs,
             receivedTs: snapshot.timestamp.receivedTs,
-            href:
-                snapshot.timestamp.timestampDisplayMode === TimestampDisplayMode.Linked
-                    ? snapshot.timestamp.permalink
-                    : undefined,
+            href: isLinked ? snapshot.timestamp.permalink : undefined,
+            onClick: isLinked ? this.onTimestampPermalinkClick : undefined,
+            onContextMenu: isLinked ? this.onTimestampContextMenu : undefined,
         };
     }
 
@@ -1197,9 +1206,7 @@ export class EventTileViewModel extends BaseViewModel<EventTileViewSnapshot, Eve
     }
 
     private updateTimestampViewModel(snapshot: EventTileViewSnapshot = this.snapshot.current): void {
-        this.eventTileTimestampViewModel.setProps(
-            EventTileViewModel.buildTimestampViewModelProps(snapshot, this.props),
-        );
+        this.eventTileTimestampViewModel.setProps(this.buildTimestampViewModelProps(snapshot, this.props));
     }
 
     private static keepSnapshotGroup<T extends object>(current: T | undefined, next: T): T {

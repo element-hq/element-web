@@ -24,7 +24,7 @@ type UseEventTileCommandsResult = {
     onPermalinkClicked: (ev: MouseEvent<HTMLElement>) => void;
     onListTileClick: (ev: MouseEvent<HTMLElement>) => void;
     onContextMenu: (ev: MouseEvent<HTMLElement>) => void;
-    onTimestampContextMenu: (ev: MouseEvent<HTMLElement>) => void;
+    onPermalinkContextMenu: (ev: MouseEvent<HTMLElement>) => void;
 };
 
 export function useEventTileCommands(
@@ -59,7 +59,7 @@ export function useEventTileCommands(
         },
         [vm],
     );
-    const onTimestampContextMenu = useCallback(
+    const onPermalinkContextMenu = useCallback(
         (ev: MouseEvent<HTMLElement>): void => {
             const eventId = props.mxEvent.getId();
             vm.openContextMenu(ev, eventId ? props.permalinkCreator?.forEvent(eventId) : undefined);
@@ -84,7 +84,7 @@ export function useEventTileCommands(
             openInRoom,
             copyLinkToThread,
             onContextMenu,
-            onTimestampContextMenu,
+            onPermalinkContextMenu,
             onListTileClick,
         }),
         [
@@ -93,7 +93,7 @@ export function useEventTileCommands(
             openInRoom,
             copyLinkToThread,
             onContextMenu,
-            onTimestampContextMenu,
+            onPermalinkContextMenu,
             onListTileClick,
         ],
     );

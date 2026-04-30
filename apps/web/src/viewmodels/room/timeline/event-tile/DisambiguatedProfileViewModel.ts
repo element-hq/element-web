@@ -143,12 +143,12 @@ export class DisambiguatedProfileViewModel
         this.props.member = member;
         this.props.fallbackName = fallbackName;
 
-        this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
+        this.snapshot.merge(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
     public setProps(props: DisambiguatedProfileViewModelProps): void {
         this.props = props;
-        this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
+        this.snapshot.merge(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
     public setUserStatus(userStatus?: UserStatus): void {

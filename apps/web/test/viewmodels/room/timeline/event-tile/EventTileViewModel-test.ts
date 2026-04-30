@@ -416,6 +416,43 @@ describe("EventTileViewModel", () => {
             expect(vm.getSnapshot().timestamp.timestampDisplayMode).toBe(TimestampDisplayMode.Linked);
         });
 
+        it("passes linked timestamp actions to the timestamp view model", () => {
+            const timestampedEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "timestamped",
+                event: true,
+                ts: 123,
+            });
+            const permalinkCreator = {
+                forEvent: jest.fn().mockReturnValue("#event"),
+            } as any;
+            const vm = createViewModel({ mxEvent: timestampedEvent, alwaysShowTimestamps: true, permalinkCreator });
+
+            expect(vm.timestampViewModel.getSnapshot().href).toBe("#event");
+            expect(vm.timestampViewModel.onClick).toEqual(expect.any(Function));
+            expect(vm.timestampViewModel.onContextMenu).toEqual(expect.any(Function));
+        });
+
+        it("does not pass timestamp link actions for plain timestamp modes", () => {
+            const timestampedEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "timestamped",
+                event: true,
+                ts: 123,
+            });
+            const vm = createViewModel({
+                mxEvent: timestampedEvent,
+                timelineRenderingType: TimelineRenderingType.File,
+                alwaysShowTimestamps: true,
+            });
+
+            expect(vm.timestampViewModel.getSnapshot().href).toBeUndefined();
+            expect(vm.timestampViewModel.onClick).toBeUndefined();
+            expect(vm.timestampViewModel.onContextMenu).toBeUndefined();
+        });
+
         it("suppresses timestamps when hideTimestamp is set", () => {
             const vm = createViewModel({ alwaysShowTimestamps: true, hideTimestamp: true });
 

@@ -20,7 +20,6 @@ import {
     PadlockMode,
     type EncryptionIndicatorMode,
     TimestampDisplayMode,
-    TimestampFormatMode,
 } from "../../../../models/rooms/EventTileModel";
 import { Layout } from "../../../../settings/enums/Layout";
 import type { MessageTimestampViewModel } from "../../../../viewmodels/room/timeline/event-tile/timestamp/MessageTimestampViewModel";
@@ -75,22 +74,20 @@ type EventTileThreadsProps = {
 type EventTileTimestampProps = {
     /** Timestamp display mode. */
     displayMode: TimestampDisplayMode;
-    /** Timestamp formatting mode. */
-    formatMode: TimestampFormatMode;
-    /** Whether timestamps should use a twelve-hour clock. */
-    isTwelveHour?: boolean;
-    /** Event timestamp in milliseconds. */
-    ts?: number;
     /** Received timestamp in milliseconds. */
     receivedTs?: number;
-    /** Permalink for the event. */
-    permalink: string;
-    /** Click handler for timestamp permalinks. */
-    onPermalinkClicked?: MouseEventHandler<HTMLElement>;
-    /** Context menu handler for the timestamp. */
-    onContextMenu?: MouseEventHandler<HTMLElement>;
     /** Parent-owned timestamp view model. */
     vm: MessageTimestampViewModel;
+};
+
+/** Link props for file timeline sender details. */
+type EventTileFileDetailsLinkProps = {
+    /** Permalink for the event. */
+    href: string;
+    /** Click handler for event permalinks. */
+    onClick?: MouseEventHandler<HTMLElement>;
+    /** Context menu handler for event permalinks. */
+    onContextMenu?: MouseEventHandler<HTMLElement>;
 };
 
 /** Encryption indicator props for the tile. */
@@ -165,6 +162,8 @@ export interface EventTileViewProps {
     threads: EventTileThreadsProps;
     /** Timestamp props. */
     timestamp: EventTileTimestampProps;
+    /** File timeline sender-details link props. */
+    fileDetailsLink: EventTileFileDetailsLinkProps;
     /** Encryption indicator props. */
     encryption: EventTileEncryptionProps;
     /** Notification-specific room metadata props. */
@@ -182,15 +181,7 @@ type PlainTimestampProps = {
 const PlainTimestamp = memo(function PlainTimestamp({ timestamp }: PlainTimestampProps): JSX.Element | null {
     if (timestamp.displayMode !== TimestampDisplayMode.Plain) return null;
 
-    return (
-        <Timestamp
-            showRelative={timestamp.formatMode === TimestampFormatMode.Relative}
-            showTwelveHour={timestamp.isTwelveHour}
-            ts={timestamp.ts ?? 0}
-            receivedTs={timestamp.receivedTs}
-            vm={timestamp.vm}
-        />
-    );
+    return <Timestamp receivedTs={timestamp.receivedTs} vm={timestamp.vm} />;
 });
 
 const LinkedTimestamp = memo(function LinkedTimestamp({ timestamp }: PlainTimestampProps): JSX.Element | null {
@@ -201,18 +192,7 @@ const LinkedTimestamp = memo(function LinkedTimestamp({ timestamp }: PlainTimest
         return <span className="mx_MessageTimestamp" />;
     }
 
-    return (
-        <Timestamp
-            showRelative={timestamp.formatMode === TimestampFormatMode.Relative}
-            showTwelveHour={timestamp.isTwelveHour}
-            ts={timestamp.ts ?? 0}
-            receivedTs={timestamp.receivedTs}
-            href={timestamp.permalink}
-            onClick={timestamp.onPermalinkClicked}
-            onContextMenu={timestamp.onContextMenu}
-            vm={timestamp.vm}
-        />
-    );
+    return <Timestamp receivedTs={timestamp.receivedTs} vm={timestamp.vm} />;
 });
 
 /** Props for the event content wrapper region. */
@@ -345,24 +325,24 @@ const ListTimelineContent = memo(function ListTimelineContent({
     );
 });
 
-type FileTimelineContentProps = Pick<EventTileViewProps, "content" | "contentClassName" | "timestamp"> & {
+type FileTimelineContentProps = Pick<
+    EventTileViewProps,
+    "content" | "contentClassName" | "fileDetailsLink" | "timestamp"
+> & {
     onContextMenu: MouseEventHandler<HTMLElement>;
 };
 
 const FileTimelineContent = memo(function FileTimelineContent({
     content,
     contentClassName,
+    fileDetailsLink,
     timestamp,
     onContextMenu,
 }: FileTimelineContentProps): JSX.Element {
     return (
         <>
-            <a
-                className="mx_EventTile_senderDetailsLink"
-                href={timestamp.permalink}
-                onClick={timestamp.onPermalinkClicked}
-            >
-                <div className="mx_EventTile_senderDetails" onContextMenu={timestamp.onContextMenu}>
+            <a className="mx_EventTile_senderDetailsLink" href={fileDetailsLink.href} onClick={fileDetailsLink.onClick}>
+                <div className="mx_EventTile_senderDetails" onContextMenu={fileDetailsLink.onContextMenu}>
                     {content.avatar}
                     {content.sender}
                     <PlainTimestamp timestamp={timestamp} />
@@ -444,6 +424,7 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
         content,
         threads,
         timestamp,
+        fileDetailsLink,
         encryption,
         notification,
         handlers,
@@ -522,6 +503,7 @@ function EventTileViewComponent(props: Readonly<EventTileViewProps>): JSX.Elemen
                     <FileTimelineContent
                         content={content}
                         contentClassName={contentClassName}
+                        fileDetailsLink={fileDetailsLink}
                         timestamp={timestamp}
                         onContextMenu={handlers.onContextMenu}
                     />

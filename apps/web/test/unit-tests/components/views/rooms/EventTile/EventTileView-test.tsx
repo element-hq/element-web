@@ -14,7 +14,6 @@ import {
     EncryptionIndicatorMode,
     PadlockMode,
     TimestampDisplayMode,
-    TimestampFormatMode,
 } from "../../../../../../src/models/rooms/EventTileModel";
 import { Layout } from "../../../../../../src/settings/enums/Layout";
 import {
@@ -25,11 +24,12 @@ import { MessageTimestampViewModel } from "../../../../../../src/viewmodels/room
 
 type EventTileViewOverrides = Omit<
     Partial<EventTileViewProps>,
-    "content" | "threads" | "timestamp" | "encryption" | "notification" | "handlers"
+    "content" | "threads" | "timestamp" | "fileDetailsLink" | "encryption" | "notification" | "handlers"
 > & {
     content?: Partial<EventTileViewProps["content"]>;
     threads?: Partial<EventTileViewProps["threads"]>;
     timestamp?: Partial<EventTileViewProps["timestamp"]>;
+    fileDetailsLink?: Partial<EventTileViewProps["fileDetailsLink"]>;
     encryption?: Partial<EventTileViewProps["encryption"]>;
     notification?: Partial<EventTileViewProps["notification"]>;
     handlers?: Partial<EventTileViewProps["handlers"]>;
@@ -54,9 +54,15 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/EncryptionIndi
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/Timestamp", () => ({
-    Timestamp: ({ ts, href }: { ts: number; href?: string }) => (
-        <span data-testid={href ? "linked-timestamp" : "timestamp"}>{href ? `${href}:${ts}` : ts}</span>
-    ),
+    Timestamp: ({ vm }: { vm: { getSnapshot(): { href?: string; ts: string } } }) => {
+        const snapshot = vm.getSnapshot();
+
+        return (
+            <span data-testid={snapshot.href ? "linked-timestamp" : "timestamp"}>
+                {snapshot.href ? `${snapshot.href}:${snapshot.ts}` : snapshot.ts}
+            </span>
+        );
+    },
 }));
 
 jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadInfo", () => ({
@@ -84,6 +90,10 @@ jest.mock("../../../../../../src/components/views/rooms/EventTile/ThreadPanelSum
 }));
 
 describe("EventTileView", () => {
+    function makeTimestampViewModel(ts = 0, href?: string): MessageTimestampViewModel {
+        return new MessageTimestampViewModel({ ts, href });
+    }
+
     function makeProps(overrides: EventTileViewOverrides = {}): EventTileViewProps {
         const baseProps: EventTileViewProps = {
             contentId: "event",
@@ -101,9 +111,10 @@ describe("EventTileView", () => {
             },
             timestamp: {
                 displayMode: TimestampDisplayMode.Linked,
-                formatMode: TimestampFormatMode.Absolute,
-                permalink: "#",
-                vm: new MessageTimestampViewModel({ ts: 0 }),
+                vm: makeTimestampViewModel(0, "#"),
+            },
+            fileDetailsLink: {
+                href: "#",
             },
             encryption: {
                 padlockMode: PadlockMode.None,
@@ -135,6 +146,10 @@ describe("EventTileView", () => {
             timestamp: {
                 ...baseProps.timestamp,
                 ...overrides.timestamp,
+            },
+            fileDetailsLink: {
+                ...baseProps.fileDetailsLink,
+                ...overrides.fileDetailsLink,
             },
             encryption: {
                 ...baseProps.encryption,
@@ -326,13 +341,13 @@ describe("EventTileView", () => {
                     timelineRenderingType: TimelineRenderingType.ThreadsList,
                     timestamp: {
                         displayMode: TimestampDisplayMode.Plain,
-                        ts: 123,
+                        vm: makeTimestampViewModel(123),
                     },
                 })}
             />,
         );
 
-        expect(screen.getByTestId("timestamp")).toHaveTextContent("123");
+        expect(screen.getByTestId("timestamp")).toHaveTextContent("00:00");
     });
 
     it("renders a linked timestamp when enabled", () => {
@@ -341,14 +356,13 @@ describe("EventTileView", () => {
                 {...makeProps({
                     timestamp: {
                         displayMode: TimestampDisplayMode.Linked,
-                        ts: 123,
-                        permalink: "#event",
+                        vm: makeTimestampViewModel(123, "#event"),
                     },
                 })}
             />,
         );
 
-        expect(screen.getByTestId("linked-timestamp")).toHaveTextContent("#event:123");
+        expect(screen.getByTestId("linked-timestamp")).toHaveTextContent("#event:00:00");
     });
 
     it("renders an IRC dummy timestamp placeholder", () => {
