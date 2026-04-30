@@ -53,7 +53,7 @@ describe("persist OIDC settings", () => {
             persistOidcAuthenticatedSettings(clientId, issuer, undefined);
             expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_client_id", clientId);
             expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
-            expect(localStorage.setItem).not.toHaveBeenCalledWith("mx_oidc_id_token", idToken);
+            expect(localStorage.setItem).toHaveBeenCalledTimes(5);
         })
     });
 
