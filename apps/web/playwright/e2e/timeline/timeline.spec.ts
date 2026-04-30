@@ -760,13 +760,7 @@ test.describe("Timeline", () => {
             ).toBeVisible();
 
             // Upload a file from the message composer
-            app.
-            await page
-                .locator(".mx_MessageComposer_actions input[type='file']")
-                .setInputFiles(getSampleFilePath("matrix-org-client-versions.json"));
-
-            // Click "Upload" button
-            await page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+            await app.composerUploadFiles("room", getSampleFilePath("matrix-org-client-versions.json"));
 
             // Wait until the file is sent
             await expect(page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();
