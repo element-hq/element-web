@@ -41,6 +41,11 @@ export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disa
 export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
 
 /**
+ * We remind the user to verify their device 2 days after they dismiss the toast.
+ */
+const DEVICE_VERIFICATION_NAG_INTERVAL = 2 * 24 * 60 * 60 * 1000;
+
+/**
  * Handles all of DeviceListener's work that relates to the current device.
  */
 export class DeviceListenerCurrentDevice {
@@ -124,6 +129,24 @@ export class DeviceListenerCurrentDevice {
      * them again until they refresh or restart the app.
      */
     public dismissEncryptionSetup(): void {
+        // If the user dismissed the "verify this session" toast, then we will
+        // re-show it later if the device still isn't verified.
+        if (this.deviceState === "verify_this_session") {
+            setTimeout(() => {
+                if (this.deviceState === "verify_this_session") {
+                    this.logger.info("Re-showing device verification toast");
+                    this.dismissedThisDeviceToast = false;
+                    if (!isSecretStorageBeingAccessed()) {
+                        showSetupEncryptionToast(this.deviceState);
+                    } else {
+                        // If we're in the middle of a secret storage operation, we're likely
+                        // modifying the state involved here, so don't add new toasts to setup.
+                        this.logger.info("Device is not yet ready, but secret storage is being accessed, so not showing toast.");
+                    }
+                }
+            }, DEVICE_VERIFICATION_NAG_INTERVAL);
+        }
+
         this.dismissedThisDeviceToast = true;
         this.deviceListener.recheck();
     }
