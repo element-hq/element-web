@@ -747,7 +747,7 @@ describe("EventTileViewModel", () => {
             expect(nextSnapshot).toBe(initialSnapshot);
         });
 
-        it("updates props, render state, listeners, and async event work", () => {
+        it("updates props, render state, and async event work without rebinding listeners", () => {
             const vm = createViewModel();
             const previousProps = makeProps();
             const nextEvent = mkMessage({
@@ -770,8 +770,8 @@ describe("EventTileViewModel", () => {
 
             expect(vm.getSnapshot().presentation.eventId).toBe(nextEvent.getId());
             expect(vm.getSnapshot().timestamp.showTimestamp).toBe(true);
-            expect(currentEventOffSpy).toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
-            expect(nextEventOnSpy).toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
+            expect(currentEventOffSpy).not.toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
+            expect(nextEventOnSpy).not.toHaveBeenCalledWith(ThreadEvent.Update, expect.any(Function));
             expect(client.decryptEventIfNeeded).toHaveBeenCalledWith(nextEvent);
         });
     });
