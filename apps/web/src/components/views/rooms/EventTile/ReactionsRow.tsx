@@ -6,13 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useEffect, useMemo, useReducer, type JSX } from "react";
-import {
-    ReactionsRowButtonView,
-    ReactionsRowView,
-    useCreateAutoDisposedViewModel,
-    useViewModel,
-} from "@element-hq/web-shared-components";
-import { uniqBy } from "lodash";
+import { ReactionsRowButtonView, ReactionsRowView, useViewModel } from "@element-hq/web-shared-components";
 import { MatrixEventEvent, RelationsEvent, type MatrixEvent, type Relations } from "matrix-js-sdk/src/matrix";
 
 import RoomContext from "../../../../contexts/RoomContext";
@@ -21,55 +15,7 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
 import { isContentActionable } from "../../../../utils/EventUtils";
-import { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
-import { MAX_ITEMS_WHEN_LIMITED } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 import type { ReactionsRowViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
-
-interface ReactionsRowButtonItemProps {
-    mxEvent: MatrixEvent;
-    content: string;
-    count: number;
-    reactionEvents: MatrixEvent[];
-    myReactionEvent?: MatrixEvent;
-    disabled?: boolean;
-    customReactionImagesEnabled?: boolean;
-}
-
-function ReactionsRowButtonItem(props: Readonly<ReactionsRowButtonItemProps>): JSX.Element {
-    const client = useMatrixClientContext();
-
-    const vm = useCreateAutoDisposedViewModel(
-        () =>
-            new ReactionsRowButtonViewModel({
-                client,
-                mxEvent: props.mxEvent,
-                content: props.content,
-                count: props.count,
-                reactionEvents: props.reactionEvents,
-                myReactionEvent: props.myReactionEvent,
-                disabled: props.disabled,
-                customReactionImagesEnabled: props.customReactionImagesEnabled,
-            }),
-    );
-
-    useEffect(() => {
-        vm.setReactionData(props.content, props.reactionEvents, props.customReactionImagesEnabled);
-    }, [props.content, props.reactionEvents, props.customReactionImagesEnabled, vm]);
-
-    useEffect(() => {
-        vm.setCount(props.count);
-    }, [props.count, vm]);
-
-    useEffect(() => {
-        vm.setMyReactionEvent(props.myReactionEvent);
-    }, [props.myReactionEvent, vm]);
-
-    useEffect(() => {
-        vm.setDisabled(props.disabled);
-    }, [props.disabled, vm]);
-
-    return <ReactionsRowButtonView vm={vm} />;
-}
 
 interface ReactionGroup {
     content: string;
@@ -108,18 +54,21 @@ export interface ReactionsRowProps {
 /** Renders reaction buttons and the add-reaction menu for an event tile. */
 export function ReactionsRow({ mxEvent, reactions, vm }: Readonly<ReactionsRowProps>): JSX.Element | null {
     const roomContext = useContext(RoomContext);
+    const client = useMatrixClientContext();
     const userId = roomContext.room?.client.getUserId() ?? undefined;
-    const [, bumpRelationsVersion] = useReducer((version: number) => version + 1, 0);
-    const reactionGroups = getReactionGroups(reactions);
-    const myReactions = getMyReactions(reactions, userId);
+    const [relationsVersion, bumpRelationsVersion] = useReducer((version: number) => version + 1, 0);
+    const { reactionGroups, myReactions } = useMemo(() => {
+        // Matrix Relations mutates in place, so relationsVersion invalidates these derived lists.
+        void relationsVersion;
+        return {
+            reactionGroups: getReactionGroups(reactions),
+            myReactions: getMyReactions(reactions, userId),
+        };
+    }, [reactions, relationsVersion, userId]);
 
     useEffect(() => {
         vm.setCanReact(roomContext.canReact);
     }, [roomContext.canReact, vm]);
-
-    useEffect(() => {
-        vm.setReactionGroupCount(reactionGroups.length);
-    }, [reactionGroups.length, vm]);
 
     useEffect(() => {
         if (!reactions) return;
@@ -155,49 +104,44 @@ export function ReactionsRow({ mxEvent, reactions, vm }: Readonly<ReactionsRowPr
 
     const snapshot = useViewModel(vm);
     const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
-    const items = useMemo((): JSX.Element[] | undefined => {
-        const mappedItems = reactionGroups.map(({ content, events }) => {
-            const deduplicatedEvents = uniqBy(events, (event: MatrixEvent) => event.getSender());
-            const myReactionEvent = myReactions?.find((reactionEvent) => {
-                if (reactionEvent.isRedacted()) {
-                    return false;
-                }
-                return reactionEvent.getRelation()?.key === content;
-            });
-
-            return (
-                <ReactionsRowButtonItem
-                    key={content}
-                    content={content}
-                    count={deduplicatedEvents.length}
-                    mxEvent={mxEvent}
-                    reactionEvents={deduplicatedEvents}
-                    myReactionEvent={myReactionEvent}
-                    customReactionImagesEnabled={customReactionImagesEnabled}
-                    disabled={
-                        !roomContext.canReact ||
-                        (myReactionEvent && !myReactionEvent.isRedacted() && !roomContext.canSelfRedact)
+    const itemInputs = useMemo(
+        () =>
+            reactionGroups.map(({ content, events }) => {
+                const myReactionEvent = myReactions?.find((reactionEvent) => {
+                    if (reactionEvent.isRedacted()) {
+                        return false;
                     }
-                />
-            );
-        });
+                    return reactionEvent.getRelation()?.key === content;
+                });
 
-        if (!mappedItems.length) {
-            return undefined;
-        }
+                return {
+                    client,
+                    mxEvent,
+                    content,
+                    reactionEvents: events,
+                    myReactionEvent,
+                    canReact: roomContext.canReact,
+                    canSelfRedact: roomContext.canSelfRedact,
+                    customReactionImagesEnabled,
+                };
+            }),
+        [
+            reactionGroups,
+            myReactions,
+            client,
+            mxEvent,
+            roomContext.canReact,
+            roomContext.canSelfRedact,
+            customReactionImagesEnabled,
+        ],
+    );
 
-        return snapshot.showAllButtonVisible ? mappedItems.slice(0, MAX_ITEMS_WHEN_LIMITED) : mappedItems;
-    }, [
-        reactionGroups,
-        myReactions,
-        mxEvent,
-        customReactionImagesEnabled,
-        roomContext.canReact,
-        roomContext.canSelfRedact,
-        snapshot.showAllButtonVisible,
-    ]);
+    useEffect(() => {
+        vm.setItems(itemInputs);
+    }, [itemInputs, vm]);
 
-    if (!snapshot.isVisible || !items?.length) {
+    const buttonViewModels = vm.getButtonViewModels();
+    if (!snapshot.isVisible || !buttonViewModels.length) {
         return null;
     }
 
@@ -216,7 +160,9 @@ export function ReactionsRow({ mxEvent, reactions, vm }: Readonly<ReactionsRowPr
     return (
         <>
             <ReactionsRowView vm={vm} className="mx_ReactionsRow">
-                {items}
+                {buttonViewModels.map((buttonVm) => (
+                    <ReactionsRowButtonView key={buttonVm.getSnapshot().content} vm={buttonVm} />
+                ))}
             </ReactionsRowView>
             {contextMenu}
         </>
