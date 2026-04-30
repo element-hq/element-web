@@ -5,20 +5,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-/* Note. Use of !important to override Banner defaults. */
 .container {
     color: var(--cpd-color-text-primary);
-    svg {
-        color: var(--cpd-color-text-primary) !important;
-    }
 }
 
-.secondaryAction svg {
-    color: var(--cpd-color-text-secondary) !important;
+.container svg {
+    color: var(--cpd-color-text-primary);
 }
 
-.primaryAction svg {
-    color: var(--cpd-color-text-on-solid-primary) !important;
+.secondaryAction.secondaryAction[data-kind="secondary"] > svg {
+    color: var(--cpd-color-text-secondary);
+}
+
+.primaryAction.primaryAction[data-kind="primary"] > svg {
+    color: var(--cpd-color-text-on-solid-primary);
 }
 
 .title {
