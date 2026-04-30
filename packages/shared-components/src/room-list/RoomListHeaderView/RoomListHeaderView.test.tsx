@@ -12,7 +12,7 @@ import React from "react";
 
 import * as stories from "./RoomListHeaderView.stories";
 
-const { Default, NoComposeMenu, NoSpaceMenu } = composeStories(stories);
+const { Default, NoComposeMenu, NoSpaceMenu, CollapseSections } = composeStories(stories);
 
 describe("RoomListHeaderView", () => {
     it("renders the default state", () => {
@@ -28,5 +28,12 @@ describe("RoomListHeaderView", () => {
     it("renders without space menu", () => {
         const { container } = render(<NoSpaceMenu />);
         expect(container).toMatchSnapshot();
+    });
+
+    it("should bind the collapse all sections action", () => {
+        const { getByRole } = render(<CollapseSections />);
+        const collapseButton = getByRole("button", { name: "Collapse all sections" });
+        collapseButton.click();
+        expect(CollapseSections.args?.collapseOrExpandSections).toHaveBeenCalled();
     });
 });

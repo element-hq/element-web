@@ -26,11 +26,21 @@ Please see LICENSE files in the repository root for full details.
 
         &.mx_ThemeChoicePanel_themeSelector_disabled {
             border-color: var(--cpd-color-border-disabled);
+
+            .mx_ThemeChoicePanel_themeSelector_Label {
+                color: var(--cpd-color-text-disabled);
+                cursor: not-allowed;
+            }
         }
 
         .mx_ThemeChoicePanel_themeSelector_Label {
-            color: var(--cpd-color-text-primary);
             font: var(--cpd-font-body-md-semibold);
+        }
+
+        &:not(.mx_ThemeChoicePanel_themeSelector_disabled) {
+            .mx_ThemeChoicePanel_themeSelector_Label {
+                color: var(--cpd-color-text-primary);
+            }
         }
     }
 }

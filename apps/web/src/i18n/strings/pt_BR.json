@@ -587,7 +587,6 @@
         "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensagem",
-        "voice": "Voz",
         "warning": "Atenção"
     },
     "composer": {
@@ -3834,7 +3833,6 @@
         "connection_lost": "A conectividade com o servidor foi perdida",
         "connection_lost_description": "Você não pode fazer chamadas sem uma conexão com o servidor.",
         "consulting": "Consultar com %(transferTarget)s. Tranferir para <a> %(transferee)s</a>",
-        "decline_call": "Recusar",
         "default_device": "Aparelho padrão",
         "dial": "Discar",
         "dialpad": "Teclado de discagem",
@@ -3885,7 +3883,6 @@
         "show_sidebar_button": "Exibir a barra lateral",
         "silence": "Silenciar chamado",
         "silenced": "Notificações silenciadas",
-        "skip_lobby_toggle_option": "Junte-se imediatamente",
         "start_screenshare": "Começar a compartilhar sua tela",
         "stop_screenshare": "Parar de compartilhar sua tela",
         "too_many_calls": "Muitas chamadas",
@@ -3907,7 +3904,6 @@
         "user_is_presenting": "%(sharerName)s está apresentando",
         "video_call": "Chamada de vídeo",
         "video_call_incoming": "Chamada de vídeo recebida",
-        "video_call_started": "Videochamada iniciada",
         "video_call_using": "Chamada de vídeo usando:",
         "voice_call": "Chamada de voz",
         "voice_call_incoming": "Chamada de voz recebida",

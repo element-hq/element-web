@@ -3750,7 +3750,6 @@
         "user_busy_description": "O utilizador para o qual tentou ligar está ocupado.",
         "user_is_presenting": "%(sharerName)s está apresentando",
         "video_call": "Chamada de vídeo",
-        "video_call_started": "Chamada de vídeo iniciada",
         "video_call_using": "Video-chamada usando:",
         "voice_call": "Chamada de voz",
         "you_are_presenting": "Estás a apresentar"

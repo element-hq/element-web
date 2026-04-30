@@ -26,8 +26,8 @@
 
     & button {
         display: flex;
-        margin: 0 !important;
-        padding: 0 !important;
+        margin: 0;
+        padding: 0;
         border: none;
         width: 100%;
         min-block-size: unset;
@@ -57,7 +57,6 @@
 
 .content [data-type="download"] {
     align-items: center;
-    color: var(--cpd-color-text-action-accent);
 
     & iframe {
         margin: 0;

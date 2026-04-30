@@ -54,6 +54,14 @@
                 "cwd": "packages/shared-components"
             },
             "dependsOn": ["typedoc", "^build:playwright"]
+        },
+        "lint:types": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": ["tsc --noEmit", "tsc --noEmit -p tsconfig.node.json"],
+                "cwd": "packages/shared-components"
+            },
+            "dependsOn": ["^build"]
         }
     }
 }
