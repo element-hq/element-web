@@ -22,6 +22,11 @@ catalog:
     matrix-web-i18n: 3.6.0
     # fonts
     "@fontsource/inter": 5.2.8
+    # vite
+    vite: 8.0.10
+    vitest: 4.1.5
+    vitest-sonar-reporter: 3.0.0
+    "@vitest/coverage-v8": 4.1.5
 packageExtensions:
     fdir:
         dependencies:
