@@ -24,6 +24,7 @@ import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-sh
 import type { EventStatus, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import {
     EventTileViewModel,
+    type EventTileViewSnapshot,
     type EventTileViewModelProps,
 } from "../../../../viewmodels/room/timeline/event-tile/EventTileViewModel";
 import RoomContext from "../../../../contexts/RoomContext";
@@ -152,6 +153,21 @@ export type EventTileHostProps = EventTileCoreProps &
     EventTileEditingProps &
     EventTileEnvironmentProps;
 
+type BuildEventTileViewPropsArgs = {
+    as?: string;
+    rootRef: RefObject<HTMLElement | null>;
+    contentId: string;
+    layout?: Layout;
+    timelineRenderingType: EventTileViewProps["timelineRenderingType"];
+    snapshot: EventTileViewSnapshot;
+    nodes: ReturnType<typeof buildEventTileNodes>;
+    vm: EventTileViewModel;
+    notificationRoomLabel?: React.ReactNode;
+    notificationNodes: Pick<EventTileViewProps["notification"], "roomAvatar" | "unreadBadge">;
+    fileDetailsLinkHandlers: Pick<EventTileViewProps["fileDetailsLink"], "onClick" | "onContextMenu">;
+    handlers: EventTileViewProps["handlers"];
+};
+
 function buildEventTileViewModelProps(
     props: EventTileHostProps,
     readReceipts: EventTileViewModelProps["readReceipts"],
@@ -221,6 +237,73 @@ function buildNotificationNodes(
             </div>
         ),
         unreadBadge: <UnreadNotificationBadge room={room} threadId={threadId} forceDot={true} />,
+    };
+}
+
+function buildEventTileViewProps({
+    as,
+    rootRef,
+    contentId,
+    layout,
+    timelineRenderingType,
+    snapshot,
+    nodes,
+    vm,
+    notificationRoomLabel,
+    notificationNodes,
+    fileDetailsLinkHandlers,
+    handlers,
+}: BuildEventTileViewPropsArgs): EventTileViewProps {
+    return {
+        as,
+        rootRef,
+        contentId,
+        eventId: snapshot.presentation.eventId,
+        layout,
+        timelineRenderingType,
+        rootClassName: snapshot.presentation.rootClassName,
+        contentClassName: snapshot.presentation.contentClassName,
+        ariaLive: snapshot.presentation.ariaLive,
+        scrollTokens: snapshot.timestamp.scrollToken,
+        isOwnEvent: snapshot.sender.isOwnEvent,
+        content: {
+            sender: nodes.content.sender,
+            avatar: nodes.content.avatar,
+            replyChain: nodes.content.replyChain,
+            messageStatus: nodes.content.messageStatus,
+            messageBody: nodes.content.messageBody,
+            actionBar: nodes.content.actionBar,
+            footer: nodes.content.footer,
+            contextMenu: nodes.content.contextMenu,
+        },
+        threads: {
+            info: nodes.thread.info,
+            replyCount: nodes.thread.replyCount,
+            preview: nodes.thread.preview,
+            toolbar: nodes.thread.toolbar,
+        },
+        timestamp: {
+            displayMode: snapshot.timestamp.timestampDisplayMode,
+            receivedTs: snapshot.timestamp.receivedTs,
+            vm: vm.timestampViewModel,
+        },
+        fileDetailsLink: {
+            href: snapshot.timestamp.permalink,
+            ...fileDetailsLinkHandlers,
+        },
+        encryption: {
+            padlockMode: snapshot.encryption.padlockMode,
+            mode: snapshot.encryption.encryptionIndicatorMode,
+            indicatorTitle: snapshot.encryption.encryptionIndicatorTitle,
+            sharedKeysUserId: snapshot.encryption.sharedKeysUserId,
+            sharedKeysRoomId: snapshot.encryption.sharedKeysRoomId,
+        },
+        notification: {
+            enabled: snapshot.presentation.isNotification,
+            roomLabel: notificationRoomLabel,
+            ...notificationNodes,
+        },
+        handlers,
     };
 }
 
@@ -455,55 +538,20 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
         },
         [vm],
     );
-    const eventTileViewProps: EventTileViewProps = {
+    const eventTileViewProps = buildEventTileViewProps({
         as,
         rootRef,
         contentId: tileContentId,
-        eventId: snapshot.presentation.eventId,
         layout,
         timelineRenderingType,
-        rootClassName: snapshot.presentation.rootClassName,
-        contentClassName: snapshot.presentation.contentClassName,
-        ariaLive: snapshot.presentation.ariaLive,
-        scrollTokens: snapshot.timestamp.scrollToken,
-        isOwnEvent: snapshot.sender.isOwnEvent,
-        content: {
-            sender: nodes.content.sender,
-            avatar: nodes.content.avatar,
-            replyChain: nodes.content.replyChain,
-            messageStatus: nodes.content.messageStatus,
-            messageBody: nodes.content.messageBody,
-            actionBar: nodes.content.actionBar,
-            footer: nodes.content.footer,
-            contextMenu: nodes.content.contextMenu,
-        },
-        threads: {
-            info: nodes.thread.info,
-            replyCount: nodes.thread.replyCount,
-            preview: nodes.thread.preview,
-            toolbar: nodes.thread.toolbar,
-        },
-        timestamp: {
-            displayMode: snapshot.timestamp.timestampDisplayMode,
-            receivedTs: snapshot.timestamp.receivedTs,
-            vm: vm.timestampViewModel,
-        },
-        fileDetailsLink: {
-            href: snapshot.timestamp.permalink,
+        snapshot,
+        nodes,
+        vm,
+        notificationRoomLabel,
+        notificationNodes,
+        fileDetailsLinkHandlers: {
             onClick: onPermalinkClicked,
             onContextMenu: onPermalinkContextMenu,
-        },
-        encryption: {
-            padlockMode: snapshot.encryption.padlockMode,
-            mode: snapshot.encryption.encryptionIndicatorMode,
-            indicatorTitle: snapshot.encryption.encryptionIndicatorTitle,
-            sharedKeysUserId: snapshot.encryption.sharedKeysUserId,
-            sharedKeysRoomId: snapshot.encryption.sharedKeysRoomId,
-        },
-        notification: {
-            enabled: snapshot.presentation.isNotification,
-            roomLabel: notificationRoomLabel,
-            ...notificationNodes,
         },
         handlers: {
             onClick: snapshot.presentation.isListLikeTile ? onListTileClick : undefined,
@@ -513,7 +561,7 @@ export function EventTileHost({ ref: forwardedRef, ...props }: Readonly<EventTil
             onFocus,
             onBlur,
         },
-    };
+    });
 
     if (snapshot.presentation.shouldRenderMissingRendererFallback) {
         return (

@@ -111,19 +111,23 @@ function getAvatarMember(props: EventTileNodesProps, avatarSubject: AvatarSubjec
     }
 }
 
-function buildRenderTileProps(props: EventTileNodesProps): MessageBodyRenderTileProps {
-    return {
-        mxEvent: props.mxEvent,
-        forExport: props.forExport,
-        showUrlPreview: props.showUrlPreview,
-        highlights: props.highlights,
-        highlightLink: props.highlightLink,
-        getRelationsForEvent: props.getRelationsForEvent,
-        editState: props.editState,
-        replacingEventId: props.replacingEventId,
-        callEventGrouper: props.callEventGrouper,
-        inhibitInteraction: props.inhibitInteraction,
-    };
+function buildSenderNode({ snapshot, vm }: BuildEventTileNodeContext): ReactNode | undefined {
+    return snapshot.sender.showSenderProfile ? (
+        <DisambiguatedProfileView vm={vm.disambiguatedProfileViewModel} className="mx_DisambiguatedProfile" />
+    ) : undefined;
+}
+
+function buildAvatarNode({ props, snapshot }: BuildEventTileNodeContext): JSX.Element {
+    const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
+
+    return (
+        <Avatar
+            member={avatarMember}
+            size={snapshot.sender.avatarSize}
+            viewUserOnClick={snapshot.sender.avatarMemberUserOnClick}
+            forceHistorical={snapshot.sender.avatarForceHistorical}
+        />
+    );
 }
 
 function buildReplyChainNode({
@@ -155,6 +159,37 @@ function buildReplyChainNode({
     );
 }
 
+function buildRenderTileProps(props: EventTileNodesProps): MessageBodyRenderTileProps {
+    return {
+        mxEvent: props.mxEvent,
+        forExport: props.forExport,
+        showUrlPreview: props.showUrlPreview,
+        highlights: props.highlights,
+        highlightLink: props.highlightLink,
+        getRelationsForEvent: props.getRelationsForEvent,
+        editState: props.editState,
+        replacingEventId: props.replacingEventId,
+        callEventGrouper: props.callEventGrouper,
+        inhibitInteraction: props.inhibitInteraction,
+    };
+}
+
+function buildMessageBodyNode({ props, roomContext, snapshot, tileRef }: BuildEventTileNodeContext): JSX.Element {
+    const messageBodyProps: MessageBodyProps = {
+        mxEvent: props.mxEvent,
+        isDecryptionFailure: snapshot.encryption.isEncryptionFailure,
+        timelineRenderingType: roomContext.timelineRenderingType,
+        tileRenderType: snapshot.rendering.tileRenderType,
+        isSeeingThroughMessageHiddenForModeration: snapshot.rendering.isSeeingThroughMessageHiddenForModeration,
+        renderTileProps: buildRenderTileProps(props),
+        tileRef,
+        permalinkCreator: props.permalinkCreator,
+        showHiddenEvents: roomContext.showHiddenEvents,
+    };
+
+    return <MessageBody {...messageBodyProps} />;
+}
+
 function buildActionBarNode({
     props,
     snapshot,
@@ -177,6 +212,46 @@ function buildActionBarNode({
             tileRef={tileRef}
             replyChainRef={replyChainRef}
         />
+    );
+}
+
+function buildMessageStatusNode({ props, suppressReadReceiptAnimation, vm }: BuildEventTileNodeContext): JSX.Element {
+    return (
+        <MessageStatus
+            vm={vm.messageStatusViewModel}
+            readReceipts={props.readReceipts}
+            readReceiptMap={props.readReceiptMap}
+            checkUnmounting={props.checkUnmounting}
+            isTwelveHour={props.isTwelveHour}
+            suppressReadReceiptAnimation={suppressReadReceiptAnimation}
+        />
+    );
+}
+
+function buildFooterNode({
+    props,
+    snapshot,
+    reactions,
+    tileContentId,
+    vm,
+}: BuildEventTileNodeContext): JSX.Element | undefined {
+    if (!snapshot.rendering.hasFooter) {
+        return undefined;
+    }
+
+    return (
+        <div className="mx_EventTile_footer">
+            <Footer
+                layout={props.layout}
+                mxEvent={props.mxEvent}
+                isRedacted={props.isRedacted}
+                isPinned={snapshot.rendering.isPinned}
+                isOwnEvent={snapshot.sender.isOwnEvent}
+                reactions={reactions}
+                tileContentId={tileContentId}
+                reactionsRowViewModel={vm.reactionsRowViewModel}
+            />
+        </div>
     );
 }
 
@@ -235,22 +310,6 @@ function buildContextMenuNode({
     );
 }
 
-function buildMessageBodyNode({ props, roomContext, snapshot, tileRef }: BuildEventTileNodeContext): JSX.Element {
-    const messageBodyProps: MessageBodyProps = {
-        mxEvent: props.mxEvent,
-        isDecryptionFailure: snapshot.encryption.isEncryptionFailure,
-        timelineRenderingType: roomContext.timelineRenderingType,
-        tileRenderType: snapshot.rendering.tileRenderType,
-        isSeeingThroughMessageHiddenForModeration: snapshot.rendering.isSeeingThroughMessageHiddenForModeration,
-        renderTileProps: buildRenderTileProps(props),
-        tileRef,
-        permalinkCreator: props.permalinkCreator,
-        showHiddenEvents: roomContext.showHiddenEvents,
-    };
-
-    return <MessageBody {...messageBodyProps} />;
-}
-
 function buildThreadInfoNode({ props, snapshot }: BuildEventTileNodeContext): JSX.Element | undefined {
     if (snapshot.thread.threadInfoMode === ThreadInfoMode.None) {
         return undefined;
@@ -268,65 +327,6 @@ function buildThreadInfoNode({ props, snapshot }: BuildEventTileNodeContext): JS
 
     return (
         <ThreadInfo summary={summary} href={snapshot.thread.threadInfoHref} label={snapshot.thread.threadInfoLabel} />
-    );
-}
-
-function buildFooterNode({
-    props,
-    snapshot,
-    reactions,
-    tileContentId,
-    vm,
-}: BuildEventTileNodeContext): JSX.Element | undefined {
-    if (!snapshot.rendering.hasFooter) {
-        return undefined;
-    }
-
-    return (
-        <div className="mx_EventTile_footer">
-            <Footer
-                layout={props.layout}
-                mxEvent={props.mxEvent}
-                isRedacted={props.isRedacted}
-                isPinned={snapshot.rendering.isPinned}
-                isOwnEvent={snapshot.sender.isOwnEvent}
-                reactions={reactions}
-                tileContentId={tileContentId}
-                reactionsRowViewModel={vm.reactionsRowViewModel}
-            />
-        </div>
-    );
-}
-
-function buildSenderNode({ snapshot, vm }: BuildEventTileNodeContext): ReactNode | undefined {
-    return snapshot.sender.showSenderProfile ? (
-        <DisambiguatedProfileView vm={vm.disambiguatedProfileViewModel} className="mx_DisambiguatedProfile" />
-    ) : undefined;
-}
-
-function buildAvatarNode({ props, snapshot }: BuildEventTileNodeContext): JSX.Element {
-    const avatarMember = getAvatarMember(props, snapshot.sender.avatarSubject);
-
-    return (
-        <Avatar
-            member={avatarMember}
-            size={snapshot.sender.avatarSize}
-            viewUserOnClick={snapshot.sender.avatarMemberUserOnClick}
-            forceHistorical={snapshot.sender.avatarForceHistorical}
-        />
-    );
-}
-
-function buildMessageStatusNode({ props, suppressReadReceiptAnimation, vm }: BuildEventTileNodeContext): JSX.Element {
-    return (
-        <MessageStatus
-            vm={vm.messageStatusViewModel}
-            readReceipts={props.readReceipts}
-            readReceiptMap={props.readReceiptMap}
-            checkUnmounting={props.checkUnmounting}
-            isTwelveHour={props.isTwelveHour}
-            suppressReadReceiptAnimation={suppressReadReceiptAnimation}
-        />
     );
 }
 

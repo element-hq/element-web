@@ -220,13 +220,14 @@ const EventContentRegion = memo(function EventContentRegion({
     );
 });
 
-const FooterThreadMeta = memo(function FooterThreadMeta({
-    footer,
-    info,
-}: {
+type FooterThreadMetaProps = {
+    /** Footer node rendered under the event body. */
     footer?: ReactNode;
+    /** Thread info node rendered beside the footer in timeline layouts. */
     info?: ReactNode;
-}): JSX.Element | null {
+};
+
+const FooterThreadMeta = memo(function FooterThreadMeta({ footer, info }: FooterThreadMetaProps): JSX.Element | null {
     if (!footer && !info) return null;
 
     return (
@@ -237,10 +238,12 @@ const FooterThreadMeta = memo(function FooterThreadMeta({
     );
 });
 
+type ThreadsPanelRegionProps = EventTileViewProps["threads"];
+
 const ThreadsPanelRegion = memo(function ThreadsPanelRegion({
     replyCount,
     preview,
-}: EventTileViewProps["threads"]): JSX.Element | null {
+}: ThreadsPanelRegionProps): JSX.Element | null {
     if (replyCount === undefined && preview === undefined) {
         return null;
     }
