@@ -14,6 +14,7 @@ import {
     type MatrixEvent,
     type Relations,
 } from "matrix-js-sdk/src/matrix";
+import { uniqBy } from "lodash";
 
 import RoomContext from "../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
@@ -21,11 +22,12 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import ContextMenu, { aboveLeftOf } from "../../../structures/ContextMenu";
 import ReactionPicker from "../../emojipicker/ReactionPicker";
 import { isContentActionable } from "../../../../utils/EventUtils";
-import type { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
-import type {
-    ReactionsRowItemInput,
-    ReactionsRowViewModel,
-    ReactionsRowViewSnapshotWithMenu,
+import { ReactionsRowButtonViewModel } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowButtonViewModel";
+import {
+    MAX_ITEMS_WHEN_LIMITED,
+    type ReactionsRowItemInput,
+    type ReactionsRowViewModel,
+    type ReactionsRowViewSnapshotWithMenu,
 } from "../../../../viewmodels/room/timeline/event-tile/reactions/ReactionsRowViewModel";
 
 interface ReactionGroup {
@@ -65,7 +67,7 @@ type UseReactionRowItemInputsArgs = {
     customReactionImagesEnabled?: boolean;
 };
 
-// Adapts mutable SDK `Relations` into stable item inputs consumed by the row view model.
+// Adapts mutable SDK `Relations` into stable item inputs consumed by the reaction button view models.
 function useReactionRowItemsFromRelations({
     client,
     mxEvent,
@@ -144,6 +146,43 @@ function useUpdateActionableOnDecryption(mxEvent: MatrixEvent, vm: ReactionsRowV
     }, [mxEvent, vm]);
 }
 
+function getReactionButtonDisabled(input: ReactionsRowItemInput, myReactionEvent?: MatrixEvent): boolean {
+    return !input.canReact || Boolean(myReactionEvent && !myReactionEvent.isRedacted() && !input.canSelfRedact);
+}
+
+function createReactionButtonViewModel(input: ReactionsRowItemInput): ReactionsRowButtonViewModel {
+    const reactionEvents = uniqBy(input.reactionEvents, (event: MatrixEvent) => event.getSender());
+    const myReactionEvent = input.myReactionEvent?.isRedacted() ? undefined : input.myReactionEvent;
+
+    return new ReactionsRowButtonViewModel({
+        client: input.client,
+        mxEvent: input.mxEvent,
+        content: input.content,
+        count: reactionEvents.length,
+        reactionEvents,
+        myReactionEvent,
+        disabled: getReactionButtonDisabled(input, myReactionEvent),
+        customReactionImagesEnabled: input.customReactionImagesEnabled,
+    });
+}
+
+function useReactionButtonViewModels(itemInputs: ReactionsRowItemInput[]): ReactionsRowButtonViewModel[] {
+    const buttonViewModels = useMemo(
+        () => itemInputs.map((itemInput) => createReactionButtonViewModel(itemInput)),
+        [itemInputs],
+    );
+
+    useEffect(() => {
+        return () => {
+            for (const buttonViewModel of buttonViewModels) {
+                buttonViewModel.dispose();
+            }
+        };
+    }, [buttonViewModels]);
+
+    return buttonViewModels;
+}
+
 type ReactionsRowNodeProps = {
     snapshot: ReactionsRowViewSnapshotWithMenu;
     buttonViewModels: ReactionsRowButtonViewModel[];
@@ -161,7 +200,11 @@ function ReactionsRowNode({
     canReact,
     vm,
 }: Readonly<ReactionsRowNodeProps>): JSX.Element | null {
-    if (!snapshot.isVisible || !buttonViewModels.length) {
+    const visibleButtonViewModels = snapshot.showAllButtonVisible
+        ? buttonViewModels.slice(0, MAX_ITEMS_WHEN_LIMITED)
+        : buttonViewModels;
+
+    if (!snapshot.isVisible || !visibleButtonViewModels.length) {
         return null;
     }
 
@@ -180,7 +223,7 @@ function ReactionsRowNode({
     return (
         <>
             <ReactionsRowView vm={vm} className="mx_ReactionsRow">
-                {buttonViewModels.map((buttonVm) => (
+                {visibleButtonViewModels.map((buttonVm) => (
                     <ReactionsRowButtonView key={buttonVm.getSnapshot().content} vm={buttonVm} />
                 ))}
             </ReactionsRowView>
@@ -211,19 +254,18 @@ export function ReactionsRow({ mxEvent, reactions, vm }: Readonly<ReactionsRowPr
         canSelfRedact: roomContext.canSelfRedact,
         customReactionImagesEnabled,
     });
+    const buttonViewModels = useReactionButtonViewModels(itemInputs);
 
     useEffect(() => {
         vm.setCanReact(roomContext.canReact);
     }, [roomContext.canReact, vm]);
 
+    useEffect(() => {
+        vm.setReactionGroupCount(itemInputs.length);
+    }, [itemInputs.length, vm]);
+
     useUpdateActionableOnDecryption(mxEvent, vm);
     const snapshot = useViewModel(vm);
-
-    useEffect(() => {
-        vm.setItems(itemInputs);
-    }, [itemInputs, vm]);
-
-    const buttonViewModels = vm.getButtonViewModels();
 
     return (
         <ReactionsRowNode
