@@ -345,18 +345,18 @@ describe("DeviceListener", () => {
                 const instance = await createAndStart();
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
 
-                jest.useFakeTimers({advanceTimers: true});
+                jest.useFakeTimers({ advanceTimers: true });
                 instance.dismissEncryptionSetup();
                 await flushPromises();
                 expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
 
                 // 1.5 days after the toast was dismissed, we don't re-show the
                 // toast yet.
-                jest.advanceTimersByTime(1.5*24*60*60*1000);
+                jest.advanceTimersByTime(1.5 * 24 * 60 * 60 * 1000);
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
 
                 // 2 days after the toast was dismissed, we re-show the toast.
-                jest.advanceTimersByTime(0.5*24*60*60*1000);
+                jest.advanceTimersByTime(0.5 * 24 * 60 * 60 * 1000);
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(2);
                 jest.useRealTimers();
             });
@@ -365,7 +365,7 @@ describe("DeviceListener", () => {
                 const instance = await createAndStart();
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
 
-                jest.useFakeTimers({advanceTimers: true});
+                jest.useFakeTimers({ advanceTimers: true });
                 instance.dismissEncryptionSetup();
                 await flushPromises();
                 expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
@@ -380,7 +380,7 @@ describe("DeviceListener", () => {
                 );
                 await instance.recheck();
                 await flushPromises();
-                jest.advanceTimersByTime(2*24*60*60*1000);
+                jest.advanceTimersByTime(2 * 24 * 60 * 60 * 1000);
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
                 jest.useRealTimers();
             });

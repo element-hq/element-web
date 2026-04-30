@@ -141,7 +141,9 @@ export class DeviceListenerCurrentDevice {
                     } else {
                         // If we're in the middle of a secret storage operation, we're likely
                         // modifying the state involved here, so don't add new toasts to setup.
-                        this.logger.info("Device is not yet ready, but secret storage is being accessed, so not showing toast.");
+                        this.logger.info(
+                            "Device is not yet ready, but secret storage is being accessed, so not showing toast.",
+                        );
                     }
                 }
             }, DEVICE_VERIFICATION_NAG_INTERVAL);
