@@ -271,6 +271,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
       </div>
     </main>
     <input
+      data-testid="room-upload-context-input"
       multiple=""
       style="display: none;"
       type="file"
@@ -649,6 +650,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
       </div>
     </main>
     <input
+      data-testid="room-upload-context-input"
       multiple=""
       style="display: none;"
       type="file"
@@ -1021,6 +1023,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
       </div>
     </main>
     <input
+      data-testid="room-upload-context-input"
       multiple=""
       style="display: none;"
       type="file"
@@ -1326,6 +1329,7 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
           </div>
         </div>
         <input
+          data-testid="room-upload-context-input"
           multiple=""
           style="display: none;"
           type="file"
@@ -1636,6 +1640,7 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
           </div>
         </div>
         <input
+          data-testid="room-upload-context-input"
           multiple=""
           style="display: none;"
           type="file"
@@ -2111,6 +2116,7 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
           </div>
         </div>
         <input
+          data-testid="room-upload-context-input"
           multiple=""
           style="display: none;"
           type="file"
@@ -2586,6 +2592,7 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
           </div>
         </div>
         <input
+          data-testid="room-upload-context-input"
           multiple=""
           style="display: none;"
           type="file"
@@ -2805,6 +2812,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </div>
         </div>
         <input
+          data-testid="room-upload-context-input"
           multiple=""
           style="display: none;"
           type="file"
@@ -3308,6 +3316,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
           </div>
         </div>
         <input
+          data-testid="room-upload-context-input"
           multiple=""
           style="display: none;"
           type="file"
@@ -3864,6 +3873,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               </div>
             </div>
             <input
+              data-testid="room-upload-context-input"
               multiple=""
               style="display: none;"
               type="file"
