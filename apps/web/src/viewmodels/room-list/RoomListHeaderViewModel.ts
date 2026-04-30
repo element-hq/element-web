@@ -277,7 +277,8 @@ function computeHeaderSpaceState(
 
     const isSectionFeatureEnabled = SettingsStore.getValue("feature_room_list_sections");
     const useComposeIcon = !isSectionFeatureEnabled;
-    const canCreateSection = isSectionFeatureEnabled && spaceStore.activeSpace === MetaSpace.Home;
+    // variant-b-spaces: allow section creation from any space, not just Home
+    const canCreateSection = isSectionFeatureEnabled;
 
     return {
         title,
