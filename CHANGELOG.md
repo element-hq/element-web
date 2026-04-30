@@ -1,3 +1,10 @@
+Changes in [1.12.17](https://github.com/element-hq/element-web/releases/tag/v1.12.17) (2026-04-30)
+==================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport] Fix OIDC login callback handling on Element Desktop ([#33337](https://github.com/element-hq/element-web/pull/33337)). Contributed by @t3chguy.
+
+
 Changes in [1.12.16](https://github.com/element-hq/element-web/releases/tag/v1.12.16) (2026-04-28)
 ==================================================================================================
 ## 🦖 Deprecations
