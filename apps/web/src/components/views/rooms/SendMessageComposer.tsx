@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type KeyboardEvent, type SyntheticEvent } from "react";
+import React, { createRef, ReactElement, type KeyboardEvent, type SyntheticEvent } from "react";
 import {
     type MatrixEvent,
     type IEventRelation,
@@ -38,7 +38,7 @@ import { findEditableEvent } from "../../../utils/EventUtils";
 import SendHistoryManager from "../../../SendHistoryManager";
 import { CommandCategories } from "../../../slash-commands/SlashCommands";
 import ContentMessages from "../../../ContentMessages";
-import { withMatrixClientHOC, type MatrixClientProps } from "../../../contexts/MatrixClientContext";
+import { useMatrixClientContext, type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { containsEmoji } from "../../../effects/utils";
 import { CHAT_EFFECTS } from "../../../effects";
@@ -60,6 +60,11 @@ import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 import { attachMentions, attachRelation } from "../../../utils/messages";
+import {
+    RoomUploadContext,
+    RoomUploadViewModel,
+    useRoomUploadViewModel,
+} from "../../../viewmodels/room/RoomUploadViewModel";
 
 // The prefix used when persisting editor drafts to localstorage.
 export const EDITOR_STATE_STORAGE_PREFIX = "mx_cider_state_";
@@ -124,6 +129,7 @@ export function isQuickReaction(model: EditorModel): boolean {
 
 interface ISendMessageComposerProps extends MatrixClientProps {
     room: Room;
+    uploadVm: RoomUploadViewModel;
     placeholder?: string;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
@@ -561,14 +567,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         // We check text/rtf instead of text/plain as when copy+pasting a file from Finder or Gnome Image Viewer
         // it puts the filename in as text/plain which we want to ignore.
         if (data.files.length && !data.types.includes("text/rtf")) {
-            ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(data.files),
-                this.props.room.roomId,
-                this.props.relation,
-                this.context.replyToEvent,
-                this.props.mxClient,
-                this.context.timelineRenderingType,
-            );
+            this.props.uploadVm.initiateViaDataTransfer(data);
             return true; // to skip internal onPaste handler
         }
 
@@ -601,13 +600,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                             const parts = response.url.split("/");
                             const filename = parts[parts.length - 1];
                             const file = new File([imgBlob], filename + "." + ext, { type: safetype });
-                            ContentMessages.sharedInstance().sendContentToRoom(
-                                file,
-                                this.props.room.roomId,
-                                this.props.relation,
-                                this.props.mxClient,
-                                this.context.replyToEvent,
-                            );
+                            this.props.uploadVm.initiateViaInputFiles([file]);
                         },
                         (error) => {
                             console.log(error);
@@ -660,5 +653,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     }
 }
 
-const SendMessageComposerWithMatrixClient = withMatrixClientHOC(SendMessageComposer);
-export default SendMessageComposerWithMatrixClient;
+function SendMessageComposerWrapped(props: Omit<ISendMessageComposerProps, "mxClient" | "uploadVm">): ReactElement {
+    const client = useMatrixClientContext();
+    const uploadVm = useRoomUploadViewModel();
+    return <SendMessageComposer {...props} mxClient={client} uploadVm={uploadVm} />;
+}
+
+export default SendMessageComposerWrapped;

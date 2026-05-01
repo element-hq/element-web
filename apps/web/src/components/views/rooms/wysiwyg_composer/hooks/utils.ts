@@ -18,6 +18,7 @@ import { KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts
 import { getBlobSafeMimeType } from "../../../../../utils/blobs";
 import ContentMessages from "../../../../../ContentMessages";
 import { isNotNull } from "../../../../../Typeguards";
+import { RoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel";
 
 export function focusComposer(
     composerElement: RefObject<HTMLElement | null>,
@@ -123,13 +124,8 @@ export function handleEventWithAutocomplete(
 export function handleClipboardEvent(
     event: ClipboardEvent | InputEvent,
     data: DataTransfer | null,
-    roomContext: Pick<IRoomState, "room" | "timelineRenderingType" | "replyToEvent">,
-    mxClient: MatrixClient,
-    eventRelation?: IEventRelation,
+    vm: RoomUploadViewModel,
 ): boolean {
-    // Logic in this function follows that of `SendMessageComposer.onPaste`
-    const { room, timelineRenderingType, replyToEvent } = roomContext;
-
     function handleError(error: unknown): void {
         if (error instanceof Error) {
             console.log(error.message);
@@ -138,7 +134,7 @@ export function handleClipboardEvent(
         }
     }
 
-    if (event.type !== "paste" || data === null || room === undefined) {
+    if (event.type !== "paste" || data === null) {
         return false;
     }
 
@@ -147,16 +143,7 @@ export function handleClipboardEvent(
     // We check text/rtf instead of text/plain as when copy+pasting a file from Finder or Gnome Image Viewer
     // it puts the filename in as text/plain which we want to ignore.
     if (data.files.length && !data.types.includes("text/rtf")) {
-        ContentMessages.sharedInstance()
-            .sendContentListToRoom(
-                Array.from(data.files),
-                room.roomId,
-                eventRelation,
-                roomContext.replyToEvent,
-                mxClient,
-                timelineRenderingType,
-            )
-            .catch(handleError);
+        vm.initiateViaDataTransfer(data).catch(handleError);
         return true;
     }
 
@@ -188,9 +175,7 @@ export function handleClipboardEvent(
                         const parts = response.url.split("/");
                         const filename = parts[parts.length - 1];
                         const file = new File([imgBlob], filename + "." + ext, { type: safetype });
-                        ContentMessages.sharedInstance()
-                            .sendContentToRoom(file, room.roomId, eventRelation, mxClient, replyToEvent)
-                            .catch(handleError);
+                        return vm.initiateViaInputFiles([file]);
                     })
                     .catch(handleError);
             })

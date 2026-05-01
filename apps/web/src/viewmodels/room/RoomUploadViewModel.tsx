@@ -83,7 +83,7 @@ export class RoomUploadViewModel
         this.threadRelation = threadRelation;
     };
 
-    public initiateViaInputFiles = async (files: FileList | null): Promise<void> => {
+    public initiateViaInputFiles = async (files: FileList | File[] | null): Promise<void> => {
         if (!this.checkCanUpload()) {
             return;
         }
