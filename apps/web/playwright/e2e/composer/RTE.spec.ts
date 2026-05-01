@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { getSampleFilePath } from "../../sample-files";
 
 const CtrlOrMeta = process.platform === "darwin" ? "Meta" : "Control";
 
@@ -193,6 +194,12 @@ test.describe("Composer", () => {
             await page.locator("div[contenteditable=true]").pressSequentially(" message");
             await page.getByRole("button", { name: "Send message" }).click();
             await expect(page.locator(".mx_EventTile_body strong").getByText("bold")).toBeVisible();
+        });
+
+        test("can paste a file", async ({ page, bot, app }) => {
+            const composer = page.locator("div[contenteditable=true]");
+            await app.composerDragAndPasteFile(composer, getSampleFilePath("riot.png"), "image/png");
+            await expect(page.locator(".mx_MImageBody")).toBeVisible();
         });
 
         test.describe("when Control+Enter is required to send", () => {
