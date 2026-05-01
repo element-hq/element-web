@@ -77,7 +77,7 @@ describe("usePublicRoomDirectory", () => {
 
         await waitFor(() => {
             expect(result.current.ready).toBe(true);
-            expect(result.current.publicRooms[0].name).toEqual(query);
+            expect(result.current.publicRooms[0]?.name).toEqual(query);
         });
     });
 
