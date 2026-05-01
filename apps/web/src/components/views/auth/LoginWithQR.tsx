@@ -301,7 +301,6 @@ export default class LoginWithQR extends React.Component<Props, IState> {
             verificationUri: undefined,
             failureReason: undefined,
             userCode: undefined,
-            checkCode: undefined,
         });
     }
 
@@ -338,7 +337,6 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 code={this.state.phase === Phase.ShowingQR ? this.state.rendezvous?.code : undefined}
                 failureReason={this.state.failureReason}
                 userCode={this.state.userCode}
-                checkCode={this.state.checkCode}
                 intent={this.props.intent}
             />
         );

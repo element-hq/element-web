@@ -31,7 +31,6 @@ interface Props {
     onClick(type: Click, checkCodeEntered?: string): Promise<void>;
     failureReason?: FailureReason;
     userCode?: string;
-    checkCode?: string;
 }
 
 /**
