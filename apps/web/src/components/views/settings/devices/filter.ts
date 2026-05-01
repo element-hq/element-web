@@ -17,6 +17,7 @@ export const INACTIVE_DEVICE_AGE_DAYS = INACTIVE_DEVICE_AGE_MS / MS_DAY;
 export type FilterVariation =
     | DeviceSecurityVariation.Verified
     | DeviceSecurityVariation.Inactive
+    | DeviceSecurityVariation.Unverifiable
     | DeviceSecurityVariation.Unverified;
 
 export const isDeviceInactive: DeviceFilterCondition = (device) =>
@@ -24,7 +25,8 @@ export const isDeviceInactive: DeviceFilterCondition = (device) =>
 
 const filters: Record<FilterVariation, DeviceFilterCondition> = {
     [DeviceSecurityVariation.Verified]: (device) => !!device.isVerified,
-    [DeviceSecurityVariation.Unverified]: (device) => !device.isVerified,
+    [DeviceSecurityVariation.Unverified]: (device) => device.isVerified === false,
+    [DeviceSecurityVariation.Unverifiable]: (device) => device.isVerified === null,
     [DeviceSecurityVariation.Inactive]: isDeviceInactive,
 };
 

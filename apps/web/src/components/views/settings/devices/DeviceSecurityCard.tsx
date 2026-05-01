@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import React from "react";
-import { ShieldIcon, ErrorSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ShieldIcon, ErrorSolidIcon, InfoSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as InactiveIcon } from "../../../../../res/img/element-icons/settings/inactive.svg";
 import { DeviceSecurityVariation } from "./types";
@@ -24,7 +24,7 @@ const VariationIcon: Record<DeviceSecurityVariation, React.FC<React.SVGProps<SVG
     [DeviceSecurityVariation.Inactive]: InactiveIcon,
     [DeviceSecurityVariation.Verified]: ShieldIcon,
     [DeviceSecurityVariation.Unverified]: ErrorSolidIcon,
-    [DeviceSecurityVariation.Unverifiable]: ErrorSolidIcon,
+    [DeviceSecurityVariation.Unverifiable]: InfoSolidIcon,
 };
 
 const DeviceSecurityIcon: React.FC<{ variation: DeviceSecurityVariation }> = ({ variation }) => {
