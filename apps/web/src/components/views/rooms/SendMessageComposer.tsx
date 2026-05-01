@@ -133,7 +133,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     toggleStickerPickerOpen: () => void;
 }
 
-export class SendMessageComposer extends React.Component<Props<ISendMessageComposerProps>> {
+export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
