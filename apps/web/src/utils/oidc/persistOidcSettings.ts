@@ -25,10 +25,16 @@ const idTokenClaimsStorageKey = "mx_oidc_id_token_claims";
  * @param idToken
  * @param idTokenClaims
  */
-export const persistOidcAuthenticatedSettings = (clientId: string, issuer: string, idToken: string): void => {
+export const persistOidcAuthenticatedSettings = (
+    clientId: string,
+    issuer: string,
+    idToken: string | undefined,
+): void => {
     localStorage.setItem(clientIdStorageKey, clientId);
     localStorage.setItem(tokenIssuerStorageKey, issuer);
-    localStorage.setItem(idTokenStorageKey, idToken);
+    if (idToken) {
+        localStorage.setItem(idTokenStorageKey, idToken);
+    }
 };
 
 /**
