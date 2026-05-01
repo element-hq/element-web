@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactElement, type KeyboardEvent, type SyntheticEvent } from "react";
+import React, { createRef, type KeyboardEvent, type SyntheticEvent, type RefAttributes, ReactElement } from "react";
 import {
     type MatrixEvent,
     type IEventRelation,
@@ -37,7 +37,6 @@ import { CommandPartCreator, type Part, type PartCreator, type SerializedPart } 
 import { findEditableEvent } from "../../../utils/EventUtils";
 import SendHistoryManager from "../../../SendHistoryManager";
 import { CommandCategories } from "../../../slash-commands/SlashCommands";
-import ContentMessages from "../../../ContentMessages";
 import { useMatrixClientContext, type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { containsEmoji } from "../../../effects/utils";
@@ -134,7 +133,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     toggleStickerPickerOpen: () => void;
 }
 
-export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
+export class SendMessageComposer extends React.Component<Props<ISendMessageComposerProps>> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -649,7 +648,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     }
 }
 
-function SendMessageComposerWrapped(props: Omit<ISendMessageComposerProps, "mxClient" | "uploadVm">): ReactElement {
+function SendMessageComposerWrapped(
+    props: Omit<ISendMessageComposerProps, "mxClient" | "uploadVm"> &
+        RefAttributes<InstanceType<typeof SendMessageComposer>>,
+): ReactElement {
     const client = useMatrixClientContext();
     const uploadVm = useRoomUploadViewModel();
     return <SendMessageComposer {...props} mxClient={client} uploadVm={uploadVm} />;

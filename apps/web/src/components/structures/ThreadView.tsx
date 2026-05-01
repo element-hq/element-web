@@ -416,10 +416,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 liveTimeline={this.state?.thread?.timelineSet?.getLiveTimeline()}
                 narrow={this.state.narrow}
             >
-                <RoomUploadContextProvider
-                    threadRelation={this.threadRelation}
-                    timelineRenderingType={TimelineRenderingType.Thread}
-                >
+                <RoomUploadContextProvider threadRelation={this.threadRelation}>
                     <BaseCard
                         className={classNames("mx_ThreadView mx_ThreadPanel", {
                             mx_ThreadView_narrow: this.state.narrow,

@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type RefObject } from "react";
-import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 
 import { type TimelineRenderingType } from "../../../../../contexts/RoomContext";
@@ -16,9 +15,8 @@ import type Autocomplete from "../../Autocomplete";
 import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts";
 import { getBlobSafeMimeType } from "../../../../../utils/blobs";
-import ContentMessages from "../../../../../ContentMessages";
 import { isNotNull } from "../../../../../Typeguards";
-import { RoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel";
+import type { RoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel";
 
 export function focusComposer(
     composerElement: RefObject<HTMLElement | null>,

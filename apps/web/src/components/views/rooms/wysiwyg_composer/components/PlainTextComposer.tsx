@@ -61,7 +61,7 @@ export function PlainTextComposer({
         handleMention,
         handleAtRoomMention,
         handleEmoji,
-    } = usePlainTextListeners(initialContent, onChange, onSend, eventRelation, isAutoReplaceEmojiEnabled);
+    } = usePlainTextListeners(initialContent, onChange, onSend, isAutoReplaceEmojiEnabled);
     const composerFunctions = useComposerFunctions(editorRef, setContent);
     usePlainTextInitialization(initialContent, editorRef);
     useSetCursorPosition(disabled, editorRef);

@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { type KeyboardEvent, type RefObject, type SyntheticEvent, useCallback, useRef, useState } from "react";
 import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";
@@ -16,8 +15,7 @@ import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
-import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
-import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import { useRoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
@@ -46,7 +44,6 @@ export function usePlainTextListeners(
     initialContent?: string,
     onChange?: (content: string) => void,
     onSend?: () => void,
-    eventRelation?: IEventRelation,
     isAutoReplaceEmojiEnabled?: boolean,
 ): {
     ref: RefObject<HTMLDivElement | null>;
@@ -64,8 +61,7 @@ export function usePlainTextListeners(
     onSelect: (this: void, event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
 } {
-    const roomContext = useScopedRoomContext("room", "timelineRenderingType", "replyToEvent");
-    const mxClient = useMatrixClientContext();
+    const roomUploadVM = useRoomUploadViewModel();
 
     const ref = useRef<HTMLDivElement>(null);
     const autocompleteRef = useRef<Autocomplete>(null);
@@ -123,7 +119,7 @@ export function usePlainTextListeners(
             if (isEventToHandleAsClipboardEvent(nativeEvent)) {
                 const data =
                     nativeEvent instanceof ClipboardEvent ? nativeEvent.clipboardData : nativeEvent.dataTransfer;
-                imagePasteWasHandled = handleClipboardEvent(nativeEvent, data, roomContext, mxClient, eventRelation);
+                imagePasteWasHandled = handleClipboardEvent(nativeEvent, data, roomUploadVM);
             }
 
             // prevent default behaviour and skip call to onInput if the image paste event was handled
@@ -133,7 +129,7 @@ export function usePlainTextListeners(
                 onInput(event);
             }
         },
-        [eventRelation, mxClient, onInput, roomContext],
+        [onInput, roomUploadVM],
     );
 
     const enterShouldSend = !useSettingValue("MessageComposerInput.ctrlEnterToSend");
