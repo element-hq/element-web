@@ -239,7 +239,6 @@ export class ElementAppPage {
                     type,
                 });
                 clipboardData.items.add(file);
-                console.log("Dispatching event...");
                 element.dispatchEvent(
                     new ClipboardEvent("paste", {
                         clipboardData,
