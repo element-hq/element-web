@@ -18,7 +18,7 @@ import {
     type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { CloseIcon, PlusIcon, MinusIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import ScrollableBaseModal, { type IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import QuestionDialog from "../dialogs/QuestionDialog";
@@ -47,6 +47,7 @@ interface IState extends IScrollableBaseState {
     busy: boolean;
     kind: KnownPollKind;
     autoFocusTarget: FocusTarget;
+    maxSelections: number;
 }
 
 const MIN_OPTIONS = 2;
@@ -65,6 +66,7 @@ function creatingInitialState(): IState {
         busy: false,
         kind: M_POLL_KIND_DISCLOSED,
         autoFocusTarget: FocusTarget.Topic,
+        maxSelections: 1,
     };
 }
 
@@ -81,6 +83,7 @@ function editingInitialState(editingMxEvent: MatrixEvent): IState {
         busy: false,
         kind: poll.kind,
         autoFocusTarget: FocusTarget.Topic,
+        maxSelections: poll.maxSelections ?? 1,
     };
 }
 
@@ -115,17 +118,32 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     private onOptionRemove = (i: number): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions.splice(i, 1);
-        this.setState({ options: newOptions }, () => this.checkCanSubmit());
+        const maxOptions = newOptions.filter((op) => op.trim().length > 0).length;
+        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions);
+        this.setState({ options: newOptions, maxSelections: newMaxSelections }, () => this.checkCanSubmit());
     };
 
     private onOptionAdd = (): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions.push("");
-        this.setState({ options: newOptions, autoFocusTarget: FocusTarget.NewOption }, () => {
-            // Scroll the button into view after the state update to ensure we don't experience
-            // a pop-in effect, and to avoid the button getting cut off due to a mid-scroll render.
-            this.addOptionRef.current?.scrollIntoView?.();
-        });
+        const maxOptions = newOptions.filter((op) => op.trim().length > 0).length;
+        const newMaxSelections = Math.min(this.state.maxSelections, maxOptions);
+        this.setState(
+            { options: newOptions, maxSelections: newMaxSelections, autoFocusTarget: FocusTarget.NewOption },
+            () => {
+                // Scroll the button into view after the state update to ensure we don't experience
+                // a pop-in effect, and to avoid the button getting cut off due to a mid-scroll render.
+                this.addOptionRef.current?.scrollIntoView?.();
+            },
+        );
+    };
+
+    private onMaxSelectionsChange = (delta: number): void => {
+        const maxOptions = this.state.options.filter((op) => op.trim().length > 0).length;
+        const newValue = this.state.maxSelections + delta;
+        if (newValue >= 1 && newValue <= maxOptions) {
+            this.setState({ maxSelections: newValue });
+        }
     };
 
     private createEvent(): IPartialEvent<object> {
@@ -133,6 +151,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
             this.state.question.trim(),
             this.state.options.map((a) => a.trim()).filter((a) => !!a),
             this.state.kind.name,
+            this.state.maxSelections,
         ).serialize();
 
         if (!this.props.editingMxEvent) {
@@ -248,6 +267,27 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                 >
                     {_t("poll|options_add_button")}
                 </AccessibleButton>
+                <h2>{_t("poll|max_selections_heading")}</h2>
+                <div className="mx_PollCreateDialog_maxSelections">
+                    <AccessibleButton
+                        onClick={() => this.onMaxSelectionsChange(-1)}
+                        disabled={this.state.busy || this.state.maxSelections <= 1}
+                        className="mx_PollCreateDialog_maxSelectionsButton"
+                    >
+                        <MinusIcon />
+                    </AccessibleButton>
+                    <span className="mx_PollCreateDialog_maxSelectionsValue">{this.state.maxSelections}</span>
+                    <AccessibleButton
+                        onClick={() => this.onMaxSelectionsChange(1)}
+                        disabled={
+                            this.state.busy ||
+                            this.state.maxSelections >= this.state.options.filter((op) => op.trim().length > 0).length
+                        }
+                        className="mx_PollCreateDialog_maxSelectionsButton"
+                    >
+                        <PlusIcon />
+                    </AccessibleButton>
+                </div>
                 {this.state.busy && (
                     <div className="mx_PollCreateDialog_busy">
                         <Spinner />

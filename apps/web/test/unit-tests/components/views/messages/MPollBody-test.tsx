@@ -477,6 +477,80 @@ describe("MPollBody", () => {
         expect(mockClient.sendEvent).not.toHaveBeenCalled();
     });
 
+    it("renders checkboxes when poll allows multiple selections", async () => {
+        const votes: MatrixEvent[] = [];
+        const renderResult = await newMPollBody(votes, [], undefined, true, true, 2);
+        expect(renderResult.container.querySelector('input[type="checkbox"]')).toBeInTheDocument();
+    });
+
+    it("renders radio buttons when poll allows single selection", async () => {
+        const votes: MatrixEvent[] = [];
+        const renderResult = await newMPollBody(votes, [], undefined, true, true, 1);
+        expect(renderResult.container.querySelector('input[type="radio"]')).toBeInTheDocument();
+    });
+
+    it("allows selecting multiple options when maxSelections > 1", async () => {
+        const votes: MatrixEvent[] = [];
+        const renderResult = await newMPollBody(votes, [], undefined, true, true, 2);
+
+        clickOption(renderResult, "pizza");
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(
+            "#myroom:example.com",
+            M_POLL_RESPONSE.name,
+            expect.objectContaining({
+                [M_POLL_RESPONSE.name]: { answers: ["pizza"] },
+            }),
+        );
+
+        clickOption(renderResult, "wings");
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(
+            "#myroom:example.com",
+            M_POLL_RESPONSE.name,
+            expect.objectContaining({
+                [M_POLL_RESPONSE.name]: { answers: ["pizza", "wings"] },
+            }),
+        );
+    });
+
+    it("allows deselecting an option in multi-select poll", async () => {
+        const votes: MatrixEvent[] = [];
+        const renderResult = await newMPollBody(votes, [], undefined, true, true, 2);
+
+        clickOption(renderResult, "pizza");
+        clickOption(renderResult, "pizza");
+
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(
+            "#myroom:example.com",
+            M_POLL_RESPONSE.name,
+            expect.objectContaining({
+                [M_POLL_RESPONSE.name]: { answers: [] },
+            }),
+        );
+    });
+
+    it("prevents selecting more than maxSelections options", async () => {
+        const votes: MatrixEvent[] = [];
+        const renderResult = await newMPollBody(votes, [], undefined, true, true, 2);
+
+        clickOption(renderResult, "pizza");
+        clickOption(renderResult, "wings");
+        clickOption(renderResult, "italian");
+
+        expect(mockClient.sendEvent).toHaveBeenCalledTimes(2);
+    });
+
+    it("highlights multiple selections in multi-select poll", async () => {
+        const votes: MatrixEvent[] = [];
+        const renderResult = await newMPollBody(votes, [], undefined, true, true, 2);
+
+        clickOption(renderResult, "pizza");
+        clickOption(renderResult, "wings");
+
+        expect(renderResult.container.querySelectorAll('input[value="pizza"]')[0]).toBeChecked();
+        expect(renderResult.container.querySelectorAll('input[value="wings"]')[0]).toBeChecked();
+        expect(renderResult.container.querySelectorAll('input[value="italian"]')[0]).not.toBeChecked();
+    });
+
     it("finds the top answer among several votes", async () => {
         // 2 votes for poutine, 1 for pizza.  "me" made an invalid vote.
         const votes = [
@@ -883,12 +957,13 @@ async function newMPollBody(
     answers?: PollAnswer[],
     disclosed = true,
     waitForResponsesLoad = true,
+    maxSelections = 1,
 ): Promise<RenderResult> {
     const mxEvent = new MatrixEvent({
         type: M_POLL_START.name,
         event_id: "$mypoll",
         room_id: "#myroom:example.com",
-        content: newPollStart(answers, undefined, disclosed),
+        content: newPollStart(answers, undefined, disclosed, maxSelections),
     });
     const prom = newMPollBodyFromEvent(mxEvent, relationEvents, endEvents);
     if (waitForResponsesLoad) {
@@ -956,7 +1031,12 @@ function endedVotesCount(renderResult: RenderResult, value: string): string {
     return votesCount(renderResult, value);
 }
 
-function newPollStart(answers?: PollAnswer[], question?: string, disclosed = true): PollStartEventContent {
+function newPollStart(
+    answers?: PollAnswer[],
+    question?: string,
+    disclosed = true,
+    maxSelections = 1,
+): PollStartEventContent {
     if (!answers) {
         answers = [
             { id: "pizza", [M_TEXT.name]: "Pizza" },
@@ -981,6 +1061,7 @@ function newPollStart(answers?: PollAnswer[], question?: string, disclosed = tru
             },
             kind: disclosed ? M_POLL_KIND_DISCLOSED.name : M_POLL_KIND_UNDISCLOSED.name,
             answers: answers,
+            max_selections: maxSelections,
         },
         [M_TEXT.name]: fallback,
     };
