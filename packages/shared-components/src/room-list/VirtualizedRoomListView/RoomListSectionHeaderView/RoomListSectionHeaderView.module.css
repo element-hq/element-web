@@ -13,7 +13,7 @@
 
     width: 100%;
     cursor: pointer;
-    font: var(--cpd-font-body-md-regular);
+    font: var(--cpd-font-body-sm-regular);
     color: var(--cpd-color-text-secondary);
     padding: var(--cpd-space-1x) 0;
     background-color: var(--cpd-color-bg-canvas-default);
@@ -53,7 +53,7 @@
     }
 
     &.unread {
-        font: var(--cpd-font-body-md-semibold);
+        font: var(--cpd-font-body-sm-semibold);
         color: var(--cpd-color-text-primary);
     }
 }
