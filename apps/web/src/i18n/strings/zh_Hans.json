@@ -1368,6 +1368,14 @@
         "impossible_dialog_title": "不允许集成"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "你与这些联系人暂无任何聊天。请确认对方被邀请到此房间后再继续。",
+            "invite_title": "邀请新联系人到此房间？",
+            "start_chat_subtitle_multiple_users": "你与这些人员暂无任何聊天。请确认对方被邀请后再继续。",
+            "start_chat_subtitle_one_user": "你与此人暂无任何聊天。请确认对方被邀请后再继续。",
+            "start_chat_title_multiple_users": "与这些新联系人开始聊天？",
+            "start_chat_title_one_user": "与此新联系人开始聊天？"
+        },
         "email_caption": "通过邮件邀请",
         "email_limit_one": "通过邮件发送邀请一次只能发送一个",
         "email_use_default_is": "使用身份服务器通过邮件地址邀请。<default>使用默认的 (%(defaultIdentityServerName)s)</default> 或在 <settings>设置</settings> 中进行管理。",
@@ -1531,6 +1539,11 @@
         "experimental_section": "早期预览",
         "extended_profiles_msc_support": "需要服务器支持 MSC4133",
         "feature_disable_call_per_sender_encryption": "为 Element Call 禁用“按每个发送者加密”",
+        "feature_user_status": {
+            "description": "启用以查看并设置当前状态。",
+            "display_name": "用户状态",
+            "required_msc_support": "需要 MSC4429（基于旧版同步模式的配置文件更新）"
+        },
         "feature_wysiwyg_composer_description": "在消息编辑器中使用富文本取代 Markdown。",
         "group_calls": "新的群呼体验",
         "group_developer": "开发者",
@@ -3111,7 +3124,7 @@
         "invite_failed": "用户（%(user)s）最终未被邀请加入 %(roomId)s，但邀请程序未显示任何错误。",
         "join": "通过指定的房间地址加入",
         "jumptodate": "在时间线中跳转到指定日期",
-        "jumptodate_invalid_input": "我们无法理解指定的日期 (%(inputDate)s)。尝试使用 YYYY-MM-DD 格式。",
+        "jumptodate_invalid_input": "我们无法理解指定的日期（%(inputDate)s）。尝试使用 YYYY-MM-DD 格式。",
         "lenny": "附加“( ͡° ͜ʖ ͡°)”到纯文本消息",
         "manual_device_verification_confirm_description": "这将允许其它设备以你的身份发送和接收消息。如果有人告诉你在此处粘贴内容，你很可能被诈骗！你确定要验证此设备？",
         "manual_device_verification_confirm_title": "警告：手动设备验证",
@@ -3137,6 +3150,14 @@
         "server_error_detail": "服务器不可用、超载或出现其它问题。",
         "shrug": "附加“ˉ\\_(ツ)_/ˉ”到纯文本消息",
         "spoiler": "作为剧透发送指定消息",
+        "status": {
+            "description": "设置你当前的状态",
+            "no_args": "未提供任何参数。你应该提供 1 个 Emoji 与 1 个可选的文本构成。",
+            "no_emoji": "你未提供 Emoji",
+            "no_text": "你未提供任何状态文本",
+            "too_long_emoji": "第 1 个参数必须为 Emoji",
+            "too_long_text": "你提供的文本过长。"
+        },
         "tableflip": "附加“(╯°□°）╯︵ ┻━┻”到纯文本消息",
         "topic": "获取或设置房间主题",
         "topic_none": "此房间没有主题",
@@ -3455,7 +3476,7 @@
             },
             "changed": "%(senderName)s 更改了此房间的地址。",
             "changed_alternative": "%(senderName)s 更改了此房间的备选地址。",
-            "changed_main_and_alternative": "%(senderName)s 已更改此房间的主要地址与备用地址。",
+            "changed_main_and_alternative": "%(senderName)s 已更改此房间的主要地址与备选地址。",
             "removed": "%(senderName)s 已移除此房间的主地址。",
             "set": "%(senderName)s 已将此房间的主地址设置为 %(address)s。"
         },
@@ -3681,8 +3702,7 @@
                 "other": "已被移除 %(count)s 次"
             },
             "kicked_multiple": {
-                "one": "已被移除",
-                "other": "被移除 %(count)s 次"
+                "other": "已被移除 %(count)s 次"
             },
             "left": {
                 "one": "%(oneUser)s 已离开",
@@ -3693,16 +3713,14 @@
                 "other": "%(severalUsers)s 离开 %(count)s 次"
             },
             "no_change": {
-                "one": "%(oneUser)s 未产生任何更改",
-                "other": "%(oneUser)s未产生任何更改 %(count)s 次"
+                "other": "%(oneUser)s 未产生任何更改 %(count)s 次"
             },
             "no_change_multiple": {
                 "one": "%(severalUsers)s 未产生任何更改",
                 "other": "%(severalUsers)s 未产生任何更改 %(count)s 次"
             },
             "pinned_events": {
-                "one": "%(oneUser)s 更改了此房间的<a>已置顶消息</a>",
-                "other": "%(oneUser)s 已更改房间内的 <a>已置顶消息</a> %(count)s 次"
+                "other": "%(oneUser)s 已更改房间内的<a>已置顶消息</a> %(count)s 次"
             },
             "pinned_events_multiple": {
                 "one": "%(severalUsers)s 已更改房间的 <a>已置顶消息</a>",
@@ -3789,8 +3807,8 @@
     "upload_file": {
         "cancel_all_button": "全部取消",
         "error_file_too_large": "此文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s，但此文件为 %(sizeOfThisFile)s。",
-        "error_files_too_large": "这些文件<b>太大</b>，无法上传。文件大小限制为 %(limit)s。",
-        "error_some_files_too_large": "某些文件<b>过大</b>，无法上传。文件大小限制为 %(limit)s。",
+        "error_files_too_large": "这些文件<b>过大大</b>而无法上传。文件大小限制为 %(limit)s。",
+        "error_some_files_too_large": "某些文件<b>过大</b>而未能上传。文件大小限制为 %(limit)s。",
         "error_title": "上传出错",
         "not_image": "你选择的文件不是有效的图像文件。",
         "title": "上传文件",
@@ -3890,8 +3908,16 @@
         "call_failed_media_permissions": "已授予摄像头使用权",
         "call_failed_microphone": "通话失败，因为无法访问麦克风。请检查麦克风是否已插入并正确设置。",
         "call_held": "%(peerName)s 已挂起通话",
-        "call_held_resume": "你正在通话 <a>恢复</a>",
-        "call_held_switch": "你正在通话 <a>切换</a>",
+        "call_held_resume": "你已挂起通话 <a>恢复</a>",
+        "call_held_switch": "你已挂起通话 <a>切换</a>",
+        "call_members": {
+            "exhaustive": {
+                "other": "<avatars/> 正在通话"
+            },
+            "overflow": {
+                "other": "<avatars/> +%(overflowCount)s 正在通话"
+            }
+        },
         "call_toast_unknown_room": "未知房间",
         "camera_disabled": "摄像头已关闭",
         "camera_enabled": "摄像头仍处于开启状态",
@@ -3899,7 +3925,7 @@
         "close_lobby": "关闭大厅",
         "connecting": "正在连接",
         "connection_lost": "与服务器的连接已丢失",
-        "connection_lost_description": "在未连接到服务器的情况下，你无法拨打电话。",
+        "connection_lost_description": "在未连接到服务器的情况下，你无法进行通话。",
         "consulting": "正在与 %(transferTarget)s 协商。<a>转接到 %(transferee)s</a>",
         "default_device": "默认设备",
         "dial": "拨号",
@@ -3914,10 +3940,12 @@
         "enable_microphone": "取消静音麦克风",
         "expand": "返回到通话",
         "get_call_link": "分享通话链接",
+        "group_call_started": "群组通话已开始",
         "hangup": "挂断",
         "hide_sidebar_button": "隐藏边栏",
         "input_devices": "输入设备",
         "jitsi_call": "Jitsi 会议",
+        "join_with_video": "以视频方式加入",
         "legacy_call": "旧版通话",
         "maximise": "填充屏幕",
         "maximise_call": "最大化",
@@ -3926,7 +3954,7 @@
         },
         "minimise_call": "最小化",
         "misconfigured_server": "由于服务器配置错误，通话失败",
-        "misconfigured_server_description": "请要求主服务器 (<code>%(homeserverDomain)s</code>) 的管理员配置 TURN 服务器，以确保通话可靠运行。",
+        "misconfigured_server_description": "请要求主服务器（<code>%(homeserverDomain)s</code>）的管理员配置 TURN 服务器，以确保通话可靠运行。",
         "misconfigured_server_fallback": "或者，你可以尝试使用位于 <server/> 的公共服务器，但这不完全可靠，并且会与该服务器共享 IP 地址。你也可以在“设置”中管理此设置。",
         "misconfigured_server_fallback_accept": "尝试使用 %(server)s",
         "more_button": "更多",
@@ -4036,7 +4064,7 @@
             "see_videos_sent_this_room": "查看发布到此房间的视频",
             "send_emotes_active_room": "以你的身份在活跃房间发送表情",
             "send_emotes_this_room": "以你的身份在此房间发送表情",
-            "send_event_type_active_room": "以你的身份在活跃房间中发送<b>%(eventType)s</b>事件",
+            "send_event_type_active_room": "以你的身份在活跃房间中发送 <b>%(eventType)s</b> 事件",
             "send_event_type_this_room": "以你的身份在此房间发送 <b>%(eventType)s</b> 事件",
             "send_files_active_room": "以你的身份在活跃房间发送普通文件",
             "send_files_this_room": "以你的身份在此房间发送普通文件",
@@ -4044,7 +4072,7 @@
             "send_images_this_room": "以你的身份在此房间发送图片",
             "send_messages_active_room": "以你的身份在活跃房间发送消息",
             "send_messages_this_room": "以你的身份在此房间中发送信息",
-            "send_msgtype_active_room": "以你的身份在活跃房间中发送<b>%(msgtype)s</b>消息",
+            "send_msgtype_active_room": "以你的身份在活跃房间中发送 <b>%(msgtype)s</b> 消息",
             "send_msgtype_this_room": "以你的身份在此房间发送 <b>%(msgtype)s</b> 消息",
             "send_stickers_active_room": "向你的活跃房间发送贴纸",
             "send_stickers_active_room_as_you": "以你的身份在活跃房间发送贴纸",

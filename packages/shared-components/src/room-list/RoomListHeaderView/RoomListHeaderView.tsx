@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 import { IconButton, H1 } from "@vector-im/compound-web";
 import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
 import PlusIcon from "@vector-im/compound-design-tokens/assets/web/icons/plus";
+import CollapseAllIcon from "@vector-im/compound-design-tokens/assets/web/icons/collapse-all";
 
 import { type ViewModel, useViewModel } from "../../core/viewmodel";
 import { Flex } from "../../core/utils/Flex";
@@ -20,6 +21,11 @@ import styles from "./RoomListHeaderView.module.css";
  * The available sorting options for the room list.
  */
 export type SortOption = "recent" | "alphabetical" | "unread-first";
+
+/**
+ * The available options for collapsing sections in the room list.
+ */
+export type CollapseSectionsOption = "collapse" | "expand";
 
 export interface RoomListHeaderViewSnapshot {
     /**
@@ -68,6 +74,12 @@ export interface RoomListHeaderViewSnapshot {
      * Whether to use the compose icon instead of the create icon.
      */
     useComposeIcon: boolean;
+    /**
+     * If "collapse", an icon to collapse all sections is shown.
+     * If "expand", an icon to expand all sections is shown.
+     * If undefined, no  icon are shown.
+     */
+    collapseSections?: CollapseSectionsOption;
 }
 
 export interface RoomListHeaderViewActions {
@@ -111,6 +123,10 @@ export interface RoomListHeaderViewActions {
      * Create a new section in the room list.
      */
     createSection: () => void;
+    /**
+     * Collapse or expand all sections in the room list depending on the current state.
+     */
+    collapseOrExpandSections: () => void;
 }
 
 /**
@@ -136,7 +152,7 @@ interface RoomListHeaderViewProps {
  */
 export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
-    const { title, displaySpaceMenu, displayComposeMenu, useComposeIcon } = useViewModel(vm);
+    const { title, displaySpaceMenu, displayComposeMenu, useComposeIcon, collapseSections } = useViewModel(vm);
 
     return (
         <Flex
@@ -155,6 +171,20 @@ export function RoomListHeaderView({ vm }: Readonly<RoomListHeaderViewProps>): J
                 </Flex>
                 <Flex align="center" gap="var(--cpd-space-2x)">
                     <OptionMenuView vm={vm} />
+                    {collapseSections && (
+                        <IconButton
+                            size="28px"
+                            style={{ padding: "4px" }}
+                            onClick={() => vm.collapseOrExpandSections()}
+                            tooltip={
+                                collapseSections === "collapse"
+                                    ? _t("room_list|collapse_all_sections")
+                                    : _t("room_list|expand_all_sections")
+                            }
+                        >
+                            <CollapseAllIcon color="var(--cpd-color-icon-secondary)" aria-hidden />
+                        </IconButton>
+                    )}
 
                     {/* If we don't display the compose menu, it means that the user can only send DM */}
                     {displayComposeMenu ? (
