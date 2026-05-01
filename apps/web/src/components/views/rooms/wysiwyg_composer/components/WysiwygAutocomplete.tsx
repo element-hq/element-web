@@ -111,8 +111,6 @@ const WysiwygAutocomplete = ({
     if (!room) return null;
 
     const autoCompleteQuery = buildQuery(suggestion);
-    // debug for https://github.com/vector-im/element-web/issues/26037
-    logger.log(`## 26037 ## Rendering Autocomplete for WysiwygAutocomplete with query: "${autoCompleteQuery}"`);
 
     // TODO - determine if we show all of the /command suggestions, there are some options in the
     // list which don't seem to make sense in this context, specifically /html and /plain
