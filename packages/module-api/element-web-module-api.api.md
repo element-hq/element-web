@@ -11,6 +11,7 @@ import { ModuleApi } from '@matrix-org/react-sdk-module-api';
 import { ReactNode } from 'react';
 import { Root } from 'react-dom/client';
 import { RuntimeModule } from '@matrix-org/react-sdk-module-api';
+import { SVGAttributes } from 'react';
 
 // @public
 export interface AccountAuthApiExtension {
@@ -101,8 +102,22 @@ export interface ComponentVisibilityCustomisations {
 
 // @alpha
 export interface ComposerApi {
+    addFileUploadOption(option: ComposerApiFileUploadOption): void;
+    disableLocalFileUploads(): void;
     insertPlaintextIntoComposer(plaintext: string): void;
+    openFileUploadConfirmation(file: File[]): void;
 }
+
+// @alpha
+export type ComposerApiFileUploadOption = {
+    type: string;
+    label: string;
+    icon?: ComponentType<SVGAttributes<SVGElement>>;
+    onSelected: (roomId: string, relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    }) => Promise<void> | void;
+};
 
 // @public
 export interface Config {

@@ -29,4 +29,11 @@ interface IComposerInsertPlaintextPayload extends IBaseComposerInsertPayload {
     text: string;
 }
 
-export type ComposerInsertPayload = IComposerInsertMentionPayload | IComposerInsertPlaintextPayload;
+interface IComposerInsertFilesPayload extends IBaseComposerInsertPayload {
+    files: File[];
+}
+
+export type ComposerInsertPayload =
+    | IComposerInsertMentionPayload
+    | IComposerInsertPlaintextPayload
+    | IComposerInsertFilesPayload;

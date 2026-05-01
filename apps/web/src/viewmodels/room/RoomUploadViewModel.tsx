@@ -5,8 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { BaseViewModel, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import {
+    _t,
+    BaseViewModel,
+    type UploadButtonViewActions,
+    type UploadButtonViewSnapshot,
+    useCreateAutoDisposedViewModel,
+} from "@element-hq/web-shared-components";
+
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
+import type { ComposerApiFileUploadOption } from "@element-hq/element-web-module-api";
+import { AttachmentIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import React, {
     type ChangeEventHandler,
     createContext,
@@ -31,23 +40,16 @@ import type { TimelineRenderingType } from "../../contexts/RoomContext";
 import { chromeFileInputFix } from "../../utils/BrowserWorkarounds";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import defaultDispatcher from "../../dispatcher/dispatcher";
+import { ModuleApi } from "../../modules/Api";
+import { ModuleComposerApiEvents } from "../../modules/ComposerApi";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
-export interface RoomUploadViewSnapshot {
-    mayUpload: boolean;
-}
-
-export interface RoomUploadViewActions {
-    initiateViaInputFiles(files: FileList | null): Promise<void>;
-    initiateViaDataTransfer(dataTransfer: DataTransfer): Promise<void>;
-    openUploadDialog(): void;
-}
-
 export class RoomUploadViewModel
-    extends BaseViewModel<RoomUploadViewSnapshot, Record<string, never>>
-    implements RoomUploadViewActions
+    extends BaseViewModel<UploadButtonViewSnapshot, Record<string, never>>
+    implements UploadButtonViewActions
 {
+    private readonly extraUploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
@@ -56,22 +58,55 @@ export class RoomUploadViewModel
         private replyToEvent: MatrixEvent | undefined,
         private threadRelation: IEventRelation | undefined,
         public readonly openUploadDialog: () => void,
+        moduleComposerApi = ModuleApi.instance.composer,
     ) {
         super(
             {},
             {
                 mayUpload: room.maySendMessage(),
+                options: [
+                    {
+                        type: "local",
+                        label: _t("common|attachment"),
+                        icon: AttachmentIcon,
+                    },
+                    ...moduleComposerApi.fileUploadOptions.map((option) => ({
+                        type: option.type,
+                        label: option.label,
+                        icon: option.icon,
+                    })),
+                ],
             },
         );
+        this.extraUploadSelectFns.set("local", this.openUploadDialog);
+        for (const option of moduleComposerApi.fileUploadOptions) {
+            this.extraUploadSelectFns.set(option.type, option.onSelected);
+        }
         room.on(RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
+        moduleComposerApi.on(ModuleComposerApiEvents.UploaderOptionsChanged, this.onUploaderOptionsChanged);
         this.disposables.track(() => {
             room.off(RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
+            moduleComposerApi.off(ModuleComposerApiEvents.UploaderOptionsChanged, this.onUploaderOptionsChanged);
         });
     }
 
     private onRoomCurrentStateUpdated = (): void => {
         this.snapshot.merge({
             mayUpload: this.room.maySendMessage(),
+        });
+    };
+
+    private onUploaderOptionsChanged = (option: ComposerApiFileUploadOption): void => {
+        this.extraUploadSelectFns.set(option.type, option.onSelected);
+        this.snapshot.merge({
+            options: [
+                ...this.snapshot.current.options,
+                {
+                    type: option.type,
+                    label: option.label,
+                    icon: option.icon,
+                },
+            ],
         });
     };
 
@@ -125,6 +160,17 @@ export class RoomUploadViewModel
         } catch (ex) {
             logger.warn("Failed to handle drag and drop data transfer", ex);
         }
+    };
+
+    public onUploadOptionSelected = (type: ComposerApiFileUploadOption["type"]): void => {
+        const fn = this.extraUploadSelectFns.get(type);
+        if (!fn) {
+            throw Error("Unexpectedly called onUploadOptionSelected with an unknown type");
+        }
+        fn(this.room.roomId, {
+            inReplyToEventId: this.replyToEvent?.getId(),
+            relType: this.threadRelation?.rel_type,
+        });
     };
 
     private checkCanUpload(): boolean {
@@ -184,6 +230,7 @@ export function RoomUploadContextProvider({
     });
 
     useEffect(() => {
+        console.log("Reply to event!", replyToEvent);
         vm.setReplyToEvent(replyToEvent);
     }, [vm, replyToEvent]);
 
