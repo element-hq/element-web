@@ -10,13 +10,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders authorization_expi
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -52,13 +54,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders check_code_mismatc
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -94,13 +98,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_already_exi
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -136,13 +142,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_not_found 1
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -178,13 +186,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders etag_missing 1`] =
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -220,13 +230,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders expired 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -292,13 +304,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders homeserver_lacks_s
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -342,13 +356,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders insecure_channel_d
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -382,7 +398,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders insecure_channel_d
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Learn more
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -397,13 +423,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders invalid_code 1`] =
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -439,13 +467,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_alrea
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--success"
+        class="_big-icon_1ssbv_8"
+        data-kind="success"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -481,13 +511,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_not_s
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -523,13 +555,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders rate_limited 1`] =
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -565,13 +599,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unexpected_message
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -607,13 +643,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unknown 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -649,13 +687,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unsupported_protoc
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -676,7 +716,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unsupported_protoc
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Learn more
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -691,13 +741,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_cancelled 1`]
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -733,13 +785,15 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_declined 1`] 
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -807,7 +861,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders QR code 1`] = `
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Scan with another device
+        Scan the QR code with another device
       </h1>
       <div
         class="mx_LoginWithQR_qrWrapper"
@@ -903,22 +957,26 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders check code confirmation 1
     <div
       class="mx_LoginWithQR_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
         data-testid="approve-login-button"
         role="button"
         tabindex="0"
       >
         Continue
-      </div>
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      </button>
+      <button
+        class="_button_1nw83_8"
+        data-kind="tertiary"
+        data-size="lg"
         data-testid="decline-login-button"
         role="button"
         tabindex="0"
       >
         Cancel
-      </div>
+      </button>
     </div>
   </div>
 </div>
@@ -1038,6 +1096,54 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while signing in 
     <div
       class="mx_LoginWithQR_main"
     >
+      <h1
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        Your verification code
+      </h1>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      >
+        Your account provider may ask for the following code to verify the sign in.
+      </p>
+      <div
+        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
+      >
+        <input
+          autocomplete="one-time-code"
+          class="_control_17qhw_25"
+          disabled=""
+          inputmode="numeric"
+          maxlength="6"
+          minlength="0"
+          pattern="\\d{6}"
+          type="text"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+      </div>
       <div
         class="mx_LoginWithQR_spinner"
       >
@@ -1065,7 +1171,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while signing in 
             </svg>
           </div>
           <p>
-            Waiting for device to sign in
+            Waiting for your other device
           </p>
         </div>
       </div>
@@ -1073,14 +1179,16 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner while signing in 
     <div
       class="mx_LoginWithQR_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
         data-testid="cancel-button"
         role="button"
         tabindex="0"
       >
         Cancel
-      </div>
+      </button>
     </div>
   </div>
 </div>
@@ -1206,7 +1314,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate renders spinner whilst QR generat
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Scan with another device
+        Scan the QR code with another device
       </h1>
       <div
         class="mx_LoginWithQR_qrWrapper"
@@ -1272,13 +1380,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders authorization_expired 1`
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1299,7 +1409,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders authorization_expired 1`
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1314,13 +1434,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders check_code_mismatch 1`] 
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1341,7 +1463,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders check_code_mismatch 1`] 
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1356,13 +1488,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_already_exists 1`
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1383,7 +1517,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_already_exists 1`
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1398,13 +1542,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_not_found 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1425,7 +1571,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_not_found 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1440,13 +1596,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders etag_missing 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1467,7 +1625,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders etag_missing 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1482,13 +1650,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders expired 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1509,7 +1679,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders expired 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1521,46 +1701,18 @@ exports[`<LoginWithQRFlow /> login.start errors renders homeserver_lacks_support
     data-testid="login-with-qr"
   >
     <div
-      class="mx_LoginWithQR_heading"
+      class="mx_LoginWithQR_main"
     >
       <div
-        aria-label="Back"
-        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
-        data-testid="back-button"
-        role="button"
-        tabindex="0"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
           width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="m13.3 17.3-4.6-4.6a.9.9 0 0 1-.213-.325A1.1 1.1 0 0 1 8.425 12q0-.2.062-.375A.9.9 0 0 1 8.7 11.3l4.6-4.6a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7L10.8 12l3.9 3.9a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
-          />
-        </svg>
-      </div>
-      <div
-        class="mx_LoginWithQR_breadcrumbs"
-      >
-        Sessions
-         / 
-        Link new device
-      </div>
-    </div>
-    <div
-      class="mx_LoginWithQR_main"
-    >
-      <div
-        class="mx_LoginWithQR_icon"
-      >
-        <svg
-          fill="currentColor"
-          height="32px"
-          viewBox="0 0 24 24"
-          width="32px"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1589,7 +1741,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders homeserver_lacks_support
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Close
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1604,13 +1766,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders insecure_channel_detecte
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1644,7 +1808,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders insecure_channel_detecte
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Learn more
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1659,13 +1833,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders invalid_code 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1686,7 +1862,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders invalid_code 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1701,13 +1887,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_already_sig
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--success"
+        class="_big-icon_1ssbv_8"
+        data-kind="success"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1728,7 +1916,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_already_sig
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1743,13 +1941,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_not_signed_
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1770,7 +1970,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_not_signed_
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1785,13 +1995,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders rate_limited 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1812,7 +2024,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders rate_limited 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1827,13 +2049,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders unexpected_message_recei
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1854,7 +2078,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders unexpected_message_recei
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1869,13 +2103,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders unknown 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1896,7 +2132,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders unknown 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Ready to scan
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1911,13 +2157,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders unsupported_protocol 1`]
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1938,7 +2186,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders unsupported_protocol 1`]
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Learn more
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1953,13 +2211,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_cancelled 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -1980,7 +2240,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_cancelled 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Close
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1995,13 +2265,15 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_declined 1`] = `
       class="mx_LoginWithQR_main"
     >
       <div
-        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+        class="_big-icon_1ssbv_8"
+        data-kind="critical"
+        data-size="lg"
       >
         <svg
           fill="currentColor"
-          height="32px"
+          height="1em"
           viewBox="0 0 24 24"
-          width="32px"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -2022,7 +2294,17 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_declined 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Close
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -2039,7 +2321,7 @@ exports[`<LoginWithQRFlow /> login.start renders QR code 1`] = `
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Scan with another device
+        Scan the QR code
       </h1>
       <div
         class="mx_LoginWithQR_qrWrapper"
@@ -2063,6 +2345,15 @@ exports[`<LoginWithQRFlow /> login.start renders QR code 1`] = `
             Tap your avatar and select "
             <strong>
               Link new device
+            </strong>
+            "
+          </span>
+        </li>
+        <li>
+          <span>
+            Choose "
+            <strong>
+              Desktop computer
             </strong>
             "
           </span>
@@ -2097,6 +2388,23 @@ exports[`<LoginWithQRFlow /> login.start renders check code confirmation 1`] = `
     <div
       class="mx_LoginWithQR_main"
     >
+      <div
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M7 23q-.824 0-1.412-.587A1.93 1.93 0 0 1 5 21V3q0-.824.588-1.412A1.93 1.93 0 0 1 7 1h10q.824 0 1.413.587Q19 2.176 19 3v18q0 .824-.587 1.413A1.93 1.93 0 0 1 17 23zm0-5h10V6H7z"
+          />
+        </svg>
+      </div>
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
@@ -2141,22 +2449,26 @@ exports[`<LoginWithQRFlow /> login.start renders check code confirmation 1`] = `
     <div
       class="mx_LoginWithQR_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
         data-testid="approve-login-button"
         role="button"
         tabindex="0"
       >
         Continue
-      </div>
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      </button>
+      <button
+        class="_button_1nw83_8"
+        data-kind="tertiary"
+        data-size="lg"
         data-testid="decline-login-button"
         role="button"
         tabindex="0"
       >
         Cancel
-      </div>
+      </button>
     </div>
   </div>
 </div>
@@ -2217,6 +2529,71 @@ exports[`<LoginWithQRFlow /> login.start renders spinner while signing in 1`] = 
       class="mx_LoginWithQR_main"
     >
       <div
+        class="_big-icon_1ssbv_8"
+        data-kind="primary"
+        data-size="lg"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 22q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 20V10q0-.825.588-1.412A1.93 1.93 0 0 1 6 8h1V6q0-2.075 1.463-3.537Q9.926 1 12 1q2.075 0 3.537 1.463Q17 3.925 17 6v2h1q.824 0 1.413.588Q20 9.175 20 10v10q0 .824-.587 1.413A1.93 1.93 0 0 1 18 22zM9 8h6V6q0-1.25-.875-2.125A2.9 2.9 0 0 0 12 3q-1.25 0-2.125.875A2.9 2.9 0 0 0 9 6z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        Your verification code
+      </h1>
+      <p
+        class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
+      >
+        Your account provider may ask for the following code to verify the sign in.
+      </p>
+      <div
+        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
+      >
+        <input
+          autocomplete="one-time-code"
+          class="_control_17qhw_25"
+          disabled=""
+          inputmode="numeric"
+          maxlength="6"
+          minlength="0"
+          pattern="\\d{6}"
+          type="text"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_17qhw_49"
+        />
+      </div>
+      <div
         class="mx_LoginWithQR_spinner"
       >
         <div>
@@ -2243,7 +2620,7 @@ exports[`<LoginWithQRFlow /> login.start renders spinner while signing in 1`] = 
             </svg>
           </div>
           <p>
-            Waiting for device to sign in
+            Waiting for your other device
           </p>
         </div>
       </div>
@@ -2251,14 +2628,16 @@ exports[`<LoginWithQRFlow /> login.start renders spinner while signing in 1`] = 
     <div
       class="mx_LoginWithQR_buttons"
     >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
         data-testid="cancel-button"
         role="button"
         tabindex="0"
       >
         Cancel
-      </div>
+      </button>
     </div>
   </div>
 </div>
@@ -2324,7 +2703,7 @@ exports[`<LoginWithQRFlow /> login.start renders spinner whilst QR generating 1`
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        Scan with another device
+        Scan the QR code
       </h1>
       <div
         class="mx_LoginWithQR_qrWrapper"
@@ -2361,6 +2740,15 @@ exports[`<LoginWithQRFlow /> login.start renders spinner whilst QR generating 1`
             Tap your avatar and select "
             <strong>
               Link new device
+            </strong>
+            "
+          </span>
+        </li>
+        <li>
+          <span>
+            Choose "
+            <strong>
+              Desktop computer
             </strong>
             "
           </span>

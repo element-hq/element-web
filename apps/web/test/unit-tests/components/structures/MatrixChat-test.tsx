@@ -415,7 +415,7 @@ describe("<MatrixChat />", () => {
                     onLoggedIn: expect.any(Function),
                     serverConfig: defaultProps.config.validated_server_config,
                 },
-                undefined,
+                "mx_LoginWithQR_dialog",
                 false,
                 true,
             );
