@@ -15,7 +15,7 @@ WORKDIR /src
 COPY --parents package.json pnpm-lock.yaml pnpm-workspace.yaml patches scripts **/package.json /src/
 RUN corepack enable
 RUN --mount=type=bind,source=.git,target=/src/.git /src/scripts/docker-link-repos.sh
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Build
 COPY --link --exclude=.git --exclude=apps/web/docker . /src
