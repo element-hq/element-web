@@ -218,6 +218,40 @@ export class ElementAppPage {
     }
 
     /**
+     * Paste a "file" into the specified locator and automatically uploads it.
+     * @param location Should the drop target the main room or the thread.
+     * @param path The path to the sample file so it can be read.
+     * @param type The mimetype of the file.
+     */
+    public async composerDragAndPasteFile(location: "room" | "thread", path: string, type: string): Promise<void> {
+        // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
+        // This read a file, encodes it into base64 and then sends it along to the page to be treated
+        // as a DataTransfer (the mechanism for drag and dropped files).
+        const buffer = await readFile(path);
+        const name = basename(path);
+        const composer = this.getComposerField(location === "thread");
+
+        await composer.evaluate(
+            async (element, [buffer, name, type]) => {
+                const clipboardData = new DataTransfer();
+                const file = new File([Uint8Array.fromBase64(buffer)], name, {
+                    type,
+                });
+                clipboardData.items.add(file);
+                element.dispatchEvent(
+                    new ClipboardEvent("paste", {
+                        clipboardData,
+                        bubbles: true,
+                        cancelable: true,
+                    }),
+                );
+            },
+            [buffer.toString("base64"), name, type],
+        );
+        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+    }
+
+    /**
      * Returns the space panel space button based on a name. The space
      * must be visible in the space panel
      * @param name The space name to find
