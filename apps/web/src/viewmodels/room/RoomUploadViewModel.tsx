@@ -148,16 +148,14 @@ export function useRoomUploadViewModel(): RoomUploadViewModel {
 
 export function RoomUploadContextProvider({
     children,
-    timelineRenderingType,
-    replyToEvent,
     threadRelation,
 }: {
     children: ReactNode;
-    replyToEvent?: MatrixEvent;
     threadRelation?: IEventRelation;
-    timelineRenderingType: TimelineRenderingType;
 }): ReactNode {
-    const context = useScopedRoomContext("room");
+    const { room } = useScopedRoomContext("room");
+    const { timelineRenderingType } = useScopedRoomContext("timelineRenderingType");
+    const { replyToEvent } = useScopedRoomContext("replyToEvent");
     const client = useMatrixClientContext();
     const uploadInput = useRef<HTMLInputElement>(null);
 
@@ -169,11 +167,11 @@ export function RoomUploadContextProvider({
     }, [uploadInput]);
 
     const vm = useCreateAutoDisposedViewModel(() => {
-        if (!context.room) {
+        if (!room) {
             throw Error("RoomUploadContextProvider must have a room");
         }
         return new RoomUploadViewModel(
-            context.room,
+            room,
             client,
             timelineRenderingType,
             defaultDispatcher,

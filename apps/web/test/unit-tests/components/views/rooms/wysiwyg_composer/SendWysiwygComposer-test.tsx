@@ -25,6 +25,7 @@ import { setSelection } from "../../../../../../src/components/views/rooms/wysiw
 import { createMocks } from "./utils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
 import { E2EStatus } from "../../../../../../src/utils/ShieldUtils.ts";
+import { RoomUploadContextProvider } from "../../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 jest.mock("../../../../../../src/components/views/rooms/EmojiButton", () => ({
     EmojiButton: ({ addEmoji }: { addEmoji: (emoji: string) => void }) => {
@@ -77,15 +78,17 @@ describe("SendWysiwygComposer", () => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <ScopedRoomContextProvider {...defaultRoomContext}>
-                    <SendWysiwygComposer
-                        onChange={onChange}
-                        onSend={onSend}
-                        disabled={disabled}
-                        isRichTextEnabled={isRichTextEnabled}
-                        menuPosition={aboveLeftOf({ top: 0, bottom: 0, right: 0 })}
-                        placeholder={placeholder}
-                        e2eStatus={e2eStatus}
-                    />
+                    <RoomUploadContextProvider>
+                        <SendWysiwygComposer
+                            onChange={onChange}
+                            onSend={onSend}
+                            disabled={disabled}
+                            isRichTextEnabled={isRichTextEnabled}
+                            menuPosition={aboveLeftOf({ top: 0, bottom: 0, right: 0 })}
+                            placeholder={placeholder}
+                            e2eStatus={e2eStatus}
+                        />
+                    </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );

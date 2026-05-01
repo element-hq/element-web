@@ -342,7 +342,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         <div className="mx_RoomView mx_RoomView--local">
             <ErrorBoundary>
                 <RoomHeader room={room} />
-                <RoomUploadContextProvider timelineRenderingType={TimelineRenderingType.Room}>
+                <RoomUploadContextProvider>
                     <main className="mx_RoomView_body" ref={props.roomView} aria-label={_t("room|room_content")}>
                         <FileDropTarget parent={props.roomView.current} />
                         <div className="mx_RoomView_timeline">
@@ -2658,10 +2658,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case MainSplitContentType.Timeline:
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
-                    <RoomUploadContextProvider
-                        replyToEvent={this.state.replyToEvent}
-                        timelineRenderingType={TimelineRenderingType.Room}
-                    >
+                    <RoomUploadContextProvider>
                         <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}

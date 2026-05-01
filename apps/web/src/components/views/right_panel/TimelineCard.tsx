@@ -213,10 +213,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     header={_t("right_panel|video_room_chat|title")}
                     ref={this.card}
                 >
-                    <RoomUploadContextProvider
-                        timelineRenderingType={TimelineRenderingType.Room}
-                        replyToEvent={this.state.replyToEvent}
-                    >
+                    <RoomUploadContextProvider>
                         <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <div className="mx_TimelineCard_timeline">
                             {jumpToBottom}

@@ -417,7 +417,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 narrow={this.state.narrow}
             >
                 <RoomUploadContextProvider
-                    replyToEvent={this.context.replyToEvent}
                     threadRelation={this.threadRelation}
                     timelineRenderingType={TimelineRenderingType.Thread}
                 >

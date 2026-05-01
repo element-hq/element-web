@@ -33,6 +33,7 @@ import type AutocompleteProvider from "../../../../../../../src/autocomplete/Aut
 import * as Permalinks from "../../../../../../../src/utils/permalinks/Permalinks";
 import { type PermalinkParts } from "../../../../../../../src/utils/permalinks/PermalinkConstructor";
 import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
+import { RoomUploadContextProvider } from "../../../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 beforeAll(initOnce, 10000);
 
@@ -42,12 +43,14 @@ describe("WysiwygComposer", () => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <ScopedRoomContextProvider {...defaultRoomContext}>
-                    <WysiwygComposer
-                        onChange={onChange}
-                        onSend={onSend}
-                        disabled={disabled}
-                        initialContent={initialContent}
-                    />
+                    <RoomUploadContextProvider>
+                        <WysiwygComposer
+                            onChange={onChange}
+                            onSend={onSend}
+                            disabled={disabled}
+                            initialContent={initialContent}
+                        />
+                    </RoomUploadContextProvider>
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
@@ -561,19 +564,21 @@ describe("WysiwygComposer", () => {
             return render(
                 <MatrixClientContext.Provider value={client}>
                     <ScopedRoomContextProvider {...roomContext}>
-                        <ComposerContext.Provider
-                            value={getDefaultContextValue({ editorStateTransfer: _editorStateTransfer })}
-                        >
-                            <WysiwygComposer
-                                onChange={jest.fn()}
-                                onSend={jest.fn()}
-                                initialContent={
-                                    roomContext.room && _editorStateTransfer
-                                        ? parseEditorStateTransfer(_editorStateTransfer, roomContext.room, client)
-                                        : undefined
-                                }
-                            />
-                        </ComposerContext.Provider>
+                        <RoomUploadContextProvider>
+                            <ComposerContext.Provider
+                                value={getDefaultContextValue({ editorStateTransfer: _editorStateTransfer })}
+                            >
+                                <WysiwygComposer
+                                    onChange={jest.fn()}
+                                    onSend={jest.fn()}
+                                    initialContent={
+                                        roomContext.room && _editorStateTransfer
+                                            ? parseEditorStateTransfer(_editorStateTransfer, roomContext.room, client)
+                                            : undefined
+                                    }
+                                />
+                            </ComposerContext.Provider>
+                        </RoomUploadContextProvider>
                     </ScopedRoomContextProvider>
                 </MatrixClientContext.Provider>,
             );
