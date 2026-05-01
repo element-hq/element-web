@@ -405,6 +405,28 @@ test.describe("Threads", () => {
             await app.composerDragAndUploadFiles("thread", getSampleFilePath("riot.png"), "image/png");
             await expect(page.locator(".mx_ThreadView .mx_EventTile_image")).toHaveCount(1);
         });
+        test("can send files via paste", async ({ page, app, user }) => {
+            // Increase right-panel size, so that files fit
+            await page.evaluate(() => {
+                window.localStorage.setItem("mx_rhs_size", "600");
+            });
+
+            const roomId = await app.client.createRoom({});
+            await page.goto("/#/room/" + roomId);
+
+            // Send message
+            const locator = page.locator(".mx_RoomView_body");
+            await locator.getByRole("textbox", { name: "Send an unencrypted message…" }).fill("Hello Mr. Bot");
+            await locator.getByRole("textbox", { name: "Send an unencrypted message…" }).press("Enter");
+            // Create thread
+            const locator2 = locator.locator(".mx_EventTile[data-scroll-tokens]").filter({ hasText: "Hello Mr. Bot" });
+            await locator2.hover();
+            await locator2.getByRole("button", { name: "Reply in thread" }).click();
+
+            await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
+            await app.composerDragAndPasteFile("thread", getSampleFilePath("riot.png"), "image/png");
+            await expect(page.locator(".mx_ThreadView .mx_EventTile_image")).toHaveCount(1);
+        });
     });
 
     test(

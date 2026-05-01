@@ -254,14 +254,15 @@ export class ElementAppPage {
      * @param path The path to the sample file so it can be read.
      * @param type The mimetype of the file.
      */
-    public async composerDragAndPasteFile(locator: Locator, path: string, type: string): Promise<void> {
+    public async composerDragAndPasteFile(location: "room" | "thread", path: string, type: string): Promise<void> {
         // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
         // This read a file, encodes it into base64 and then sends it along to the page to be treated
         // as a DataTransfer (the mechanism for drag and dropped files).
         const buffer = await readFile(path);
         const name = basename(path);
+        const composer = this.getComposerField(location === "thread");
 
-        await locator.evaluate(
+        await composer.evaluate(
             async (element, [buffer, name, type]) => {
                 const clipboardData = new DataTransfer();
                 const file = new File([Uint8Array.fromBase64(buffer)], name, {

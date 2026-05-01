@@ -197,8 +197,22 @@ test.describe("Composer", () => {
         });
 
         test("can paste a file", async ({ page, bot, app }) => {
+            await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
+            await expect(page.locator(".mx_MImageBody")).toBeVisible();
+        });
+
+        test("can paste a file in a thread", async ({ page, app }) => {
+            // Send a message
             const composer = page.locator("div[contenteditable=true]");
-            await app.composerDragAndPasteFile(composer, getSampleFilePath("riot.png"), "image/png");
+            await composer.pressSequentially("my first message");
+            await page.getByRole("button", { name: "Send message" }).click();
+
+            // Click reply
+            const tile = page.locator(".mx_EventTile_last");
+            await tile.hover();
+            await tile.getByRole("button", { name: "Reply in thread" }).click();
+
+            await app.composerDragAndPasteFile("thread", getSampleFilePath("riot.png"), "image/png");
             await expect(page.locator(".mx_MImageBody")).toBeVisible();
         });
 

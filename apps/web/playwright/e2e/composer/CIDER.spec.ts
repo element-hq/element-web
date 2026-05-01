@@ -207,10 +207,7 @@ test.describe("Composer", () => {
                 invite: [bot.credentials.userId],
             });
             await app.viewRoomByName("Bob");
-
-            const composer = page.locator(".mx_BasicMessageComposer_input");
-            await composer.focus();
-            await app.composerDragAndPasteFile(composer, getSampleFilePath("riot.png"), "image/png");
+            await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
             await expect(page.locator(".mx_MImageBody")).toBeVisible();
         });
     });
