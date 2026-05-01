@@ -199,9 +199,11 @@ export function RoomUploadContextProvider({
     children: ReactNode;
     threadRelation?: IEventRelation;
 }): ReactNode {
-    const { room } = useScopedRoomContext("room");
-    const { timelineRenderingType } = useScopedRoomContext("timelineRenderingType");
-    const { replyToEvent } = useScopedRoomContext("replyToEvent");
+    const { room, timelineRenderingType, replyToEvent } = useScopedRoomContext(
+        "room",
+        "timelineRenderingType",
+        "replyToEvent",
+    );
     const client = useMatrixClientContext();
     const uploadInput = useRef<HTMLInputElement>(null);
 
