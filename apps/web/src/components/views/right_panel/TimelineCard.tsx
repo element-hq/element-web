@@ -25,7 +25,7 @@ import { Layout } from "../../../settings/enums/Layout";
 import TimelinePanel from "../../structures/TimelinePanel";
 import { type E2EStatus } from "../../../utils/ShieldUtils";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
-import RoomContext from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import { type ActionPayload } from "../../../dispatcher/payloads";

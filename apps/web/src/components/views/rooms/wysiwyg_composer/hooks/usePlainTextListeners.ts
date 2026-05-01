@@ -15,7 +15,7 @@ import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
-import { RoomUploadViewModel, useRoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel.tsx";
+import type { RoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
