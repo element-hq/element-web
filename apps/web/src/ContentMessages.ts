@@ -24,9 +24,27 @@ import {
     type AudioInfo,
     type VideoInfo,
     type EncryptedFile,
+    type FileInfo,
     type MediaEventContent,
     type MediaEventInfo,
 } from "matrix-js-sdk/src/types";
+
+export interface GalleryItemContent {
+    itemtype: string;
+    body: string;
+    url?: string;
+    file?: EncryptedFile;
+    info?: ImageInfo | VideoInfo | AudioInfo | FileInfo;
+}
+
+export interface GalleryContent {
+    msgtype: "dm.filament.gallery";
+    body: string;
+    format?: "org.matrix.custom.html";
+    formatted_body?: string;
+    itemtypes: GalleryItemContent[];
+}
+
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -60,6 +78,10 @@ import { blobIsAnimated } from "./utils/Image.ts";
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
+
+const MSG_TYPE_GALLERY = "dm.filament.gallery";
+const GALLERY_MIN_ITEMS = 2;
+const GALLERY_MAX_ITEMS = 10;
 
 export class UploadCanceledError extends Error {}
 export class UploadFailedError extends Error {
@@ -450,6 +472,10 @@ export default class ContentMessages {
             return;
         }
 
+        if (files.length >= GALLERY_MIN_ITEMS && files.length <= GALLERY_MAX_ITEMS) {
+            return this.sendContentListAsGalleryToRoom(files, roomId, relation, replyToEvent, matrixClient, context);
+        }
+
         if (!this.mediaConfig) {
             // hot-path optimization to not flash a spinner if we don't need to
             const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
@@ -533,6 +559,212 @@ export default class ContentMessages {
             action: Action.FocusSendMessageComposer,
             context,
         });
+    }
+
+    public async sendContentListAsGalleryToRoom(
+        files: File[],
+        roomId: string,
+        relation: IEventRelation | undefined,
+        replyToEvent: MatrixEvent | undefined,
+        matrixClient: MatrixClient,
+        context = TimelineRenderingType.Room,
+    ): Promise<void> {
+        if (matrixClient.isGuest()) {
+            dis.dispatch({ action: "require_registration" });
+            return;
+        }
+
+        if (files.length < GALLERY_MIN_ITEMS || files.length > GALLERY_MAX_ITEMS) {
+            logger.warn(
+                `[Gallery] Invalid number of files: ${files.length}. Must be between ${GALLERY_MIN_ITEMS} and ${GALLERY_MAX_ITEMS}`,
+            );
+            return;
+        }
+
+        if (!this.mediaConfig) {
+            const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
+            await Promise.race([this.ensureMediaConfigFetched(matrixClient), modal.finished]);
+            if (!this.mediaConfig) {
+                return;
+            } else {
+                modal.close();
+            }
+        }
+
+        const tooBigFiles: File[] = [];
+        const okFiles: File[] = [];
+
+        for (const file of files) {
+            if (this.isFileSizeAcceptable(file)) {
+                okFiles.push(file);
+            } else {
+                tooBigFiles.push(file);
+            }
+        }
+
+        if (tooBigFiles.length > 0) {
+            const { finished } = Modal.createDialog(UploadFailureDialog, {
+                badFiles: tooBigFiles,
+                totalFiles: files.length,
+                contentMessages: this,
+            });
+            const [shouldContinue] = await finished;
+            if (!shouldContinue) return;
+        }
+
+        let promBefore: Promise<any> = Promise.resolve();
+        const uploadedItems: GalleryItemContent[] = [];
+
+        for (let i = 0; i < okFiles.length; ++i) {
+            const file = okFiles[i];
+            const loopPromiseBefore = promBefore;
+
+            const galleryItem = await doMaybeLocalRoomAction(
+                roomId,
+                (actualRoomId) =>
+                    this.uploadContentAsGalleryItem(
+                        file,
+                        actualRoomId,
+                        relation,
+                        matrixClient,
+                        replyToEvent ?? undefined,
+                        loopPromiseBefore,
+                    ),
+                matrixClient,
+            );
+
+            if (galleryItem) {
+                uploadedItems.push(galleryItem);
+            }
+        }
+
+        if (uploadedItems.length < GALLERY_MIN_ITEMS) {
+            logger.warn(`[Gallery] Not enough items uploaded: ${uploadedItems.length}`);
+            return;
+        }
+
+        const galleryContent: GalleryContent = {
+            msgtype: MSG_TYPE_GALLERY,
+            body: _t("timeline|gallery|caption_default"),
+            itemtypes: uploadedItems,
+        };
+
+        attachMentions(matrixClient.getSafeUserId(), galleryContent, null, replyToEvent);
+        attachRelation(galleryContent, relation);
+        if (replyToEvent) {
+            addReplyToMessageContent(galleryContent, replyToEvent);
+        }
+
+        if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+            decorateStartSendingTime(galleryContent);
+        }
+
+        const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : undefined;
+
+        try {
+            const response = await matrixClient.sendMessage(roomId, threadId ?? null, galleryContent as any);
+
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                sendRoundTripMetric(matrixClient, roomId, response.event_id);
+            }
+
+            dis.dispatch({ action: "message_sent" });
+        } catch (error) {
+            const unwrappedError = error instanceof UploadFailedError && error.cause ? error.cause : error;
+            if (unwrappedError instanceof HTTPError && unwrappedError.httpStatus === 413) {
+                this.mediaConfig = null;
+            }
+            Modal.createDialog(ErrorDialog, {
+                title: _t("upload_failed_title"),
+                description: _t("timeline|gallery|upload_failed"),
+            });
+        }
+
+        if (replyToEvent) {
+            dis.dispatch({
+                action: "reply_to_event",
+                event: null,
+                context,
+            });
+        }
+
+        dis.dispatch({
+            action: Action.FocusSendMessageComposer,
+            context,
+        });
+    }
+
+    private async uploadContentAsGalleryItem(
+        file: File,
+        roomId: string,
+        relation: IEventRelation | undefined,
+        matrixClient: MatrixClient,
+        replyToEvent: MatrixEvent | undefined,
+        promBefore?: Promise<any>,
+    ): Promise<GalleryItemContent | null> {
+        const fileName = file.name || _t("common|attachment");
+        const content: GalleryItemContent = {
+            itemtype: MsgType.File,
+            body: fileName,
+        };
+
+        if (file.type) {
+            content.info = { mimetype: file.type, size: file.size } as ImageInfo;
+        }
+
+        const upload = new RoomUpload(roomId, fileName, relation, file.size);
+        this.inprogress.push(upload);
+        dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
+
+        function onProgress(progress: UploadProgress): void {
+            upload.onProgress(progress);
+            dis.dispatch<UploadProgressPayload>({ action: Action.UploadProgress, upload });
+        }
+
+        try {
+            if (file.type.startsWith("image/")) {
+                content.itemtype = MsgType.Image;
+                try {
+                    const imageInfo = await infoForImageFile(matrixClient, roomId, file);
+                    content.info = imageInfo as ImageInfo;
+                } catch (e) {
+                    logger.error(e);
+                    content.itemtype = MsgType.File;
+                }
+            } else if (file.type.startsWith("audio/")) {
+                content.itemtype = MsgType.Audio;
+                try {
+                    const audioInfo = await infoForAudioFile(file);
+                    content.info = audioInfo as AudioInfo;
+                } catch (e) {
+                    logger.error(e);
+                    content.itemtype = MsgType.File;
+                }
+            } else if (file.type.startsWith("video/")) {
+                content.itemtype = MsgType.Video;
+                try {
+                    const videoInfo = await infoForVideoFile(matrixClient, roomId, file);
+                    content.info = videoInfo as VideoInfo;
+                } catch (e) {
+                    logger.error(e);
+                    content.itemtype = MsgType.File;
+                }
+            }
+
+            if (upload.cancelled) throw new UploadCanceledError();
+            const result = await uploadFile(matrixClient, roomId, file, onProgress, upload.abortController);
+            content.file = result.file;
+            content.url = result.url;
+
+            if (promBefore) await promBefore;
+            if (upload.cancelled) throw new UploadCanceledError();
+
+            removeElement(this.inprogress, (e) => e.promise === upload.promise);
+            return content;
+        } catch (error) {
+            removeElement(this.inprogress, (e) => e.promise === upload.promise);
+            return null;
+        }
     }
 
     public getCurrentUploads(relation?: IEventRelation): RoomUpload[] {
