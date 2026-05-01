@@ -840,7 +840,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                             serverConfig: this.getServerProperties().serverConfig,
                             onLoggedIn: this.onUserCompletedQrLoginFlow,
                         },
-                        undefined,
+                        "mx_LoginWithQR_dialog",
                         false,
                         true,
                     );
