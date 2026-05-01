@@ -970,7 +970,7 @@ export class MasUnlockCrossSigningAuthEntry extends FallbackAuthEntry<{
     };
 
     private onRetryClick = (): void => {
-        this.props.submitAuthDict({});
+        this.props.submitAuthDict({ type: MasUnlockCrossSigningAuthEntry.LOGIN_TYPE });
     };
 
     public render(): React.ReactNode {

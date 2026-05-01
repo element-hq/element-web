@@ -82,6 +82,7 @@
     "room_list": {
         "appearance": "外观",
         "chat_moved": "聊天已移动",
+        "collapse_all_sections": "折叠所有区域",
         "collapse_filters": "折叠过滤器列表",
         "empty": {
             "no_chats": "暂无聊天",
@@ -100,6 +101,7 @@
             "show_activity": "查看所有活动",
             "show_chats": "显示所有聊天"
         },
+        "expand_all_sections": "展开所有区域",
         "expand_filters": "展开过滤器列表",
         "filters": {
             "favourite": "收藏",

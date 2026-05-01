@@ -96,7 +96,7 @@ describe("<MasUnlockCrossSigningAuthEntry/>", () => {
         renderAuth({ submitAuthDict });
 
         fireEvent.click(screen.getByRole("button", { name: "Retry" }));
-        expect(submitAuthDict).toHaveBeenCalledWith({});
+        expect(submitAuthDict).toHaveBeenCalledWith({ type: AuthType.OAuth });
     });
 });
 
