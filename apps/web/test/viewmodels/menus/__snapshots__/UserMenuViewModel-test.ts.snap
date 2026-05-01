@@ -16,6 +16,7 @@ exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
   "expanded": false,
   "manageAccountHref": undefined,
   "open": true,
+  "showAvatar": false,
   "userId": "@alice:domain",
 }
 `;
@@ -36,6 +37,7 @@ exports[`UserMenuViewModel should generate a menu options for a logged in client
   "expanded": false,
   "manageAccountHref": undefined,
   "open": true,
+  "showAvatar": true,
   "userId": "@alice:domain",
 }
 `;
