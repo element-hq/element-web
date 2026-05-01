@@ -36,7 +36,10 @@ import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import type { RoomContextType } from "../../../../../src/contexts/RoomContext.ts";
-import { RoomUploadContext, type RoomUploadViewModel } from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import {
+    RoomUploadContext,
+    type RoomUploadViewModel,
+} from "../../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
