@@ -378,7 +378,7 @@ describe("DeviceListener", () => {
                         crossSigningVerified: true,
                     }),
                 );
-                await instance.recheck();
+                instance.recheck();
                 await flushPromises();
                 jest.advanceTimersByTime(2 * 24 * 60 * 60 * 1000);
                 expect(SetupEncryptionToast.showToast).toHaveBeenCalledTimes(1);
