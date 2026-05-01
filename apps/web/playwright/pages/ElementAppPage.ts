@@ -219,36 +219,6 @@ export class ElementAppPage {
     }
 
     /**
-     * Drags a "file" into the specified composer and automatically uploads it.
-     * @param location Should the drop target the main room or the thread.
-     * @param path The path to the sample file so it can be read.
-     * @param type The mimetype of the file.
-     */
-    public async composerDragAndDropFiles(location: "room" | "thread", path: string, type: string): Promise<void> {
-        // Based on https://github.com/microsoft/playwright/issues/10667#issuecomment-2742123424
-        // This read a file, encodes it into base64 and then sends it along to the page to be treated
-        // as a DataTransfer (the mechanism for drag and dropped files).
-        const buffer = await readFile(path);
-        const name = basename(path);
-
-        const dataTransfer = await this.page.evaluateHandle(
-            async ([buffer, name, type]) => {
-                const dt = new DataTransfer();
-                const file = new File([Uint8Array.fromBase64(buffer)], name, {
-                    type,
-                });
-                dt.items.add(file);
-                return dt;
-            },
-            [buffer.toString("base64"), name, type],
-        );
-        await this.page.dispatchEvent(location === "room" ? ".mx_RoomView_body" : ".mx_ThreadPanel", "drop", {
-            dataTransfer,
-        });
-        await this.page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
-    }
-
-    /**
      * Paste a "file" into the specified locator and automatically uploads it.
      * @param location Should the drop target the main room or the thread.
      * @param path The path to the sample file so it can be read.
