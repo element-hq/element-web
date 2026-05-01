@@ -12,7 +12,19 @@ import { Action } from "../dispatcher/actions";
 import type { ComposerInsertPayload } from "../dispatcher/payloads/ComposerInsertPayload";
 
 export class ComposerApi implements ModuleComposerApi {
+    private allowLocalFileUploads = true;
+
     public constructor(private readonly dispatcher: MatrixDispatcher) {}
+
+    public get localFileUploadsAllowed(): boolean {
+        return this.allowLocalFileUploads;
+    }
+
+    public addFileUploadOption(option): void {}
+
+    public disableLocalFileUploads(): void {
+        this.allowLocalFileUploads = false;
+    }
 
     public insertPlaintextIntoComposer(plaintext: string): void {
         this.dispatcher.dispatch({

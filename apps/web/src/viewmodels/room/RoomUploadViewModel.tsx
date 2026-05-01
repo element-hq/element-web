@@ -31,6 +31,7 @@ import type { TimelineRenderingType } from "../../contexts/RoomContext";
 import { chromeFileInputFix } from "../../utils/BrowserWorkarounds";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import defaultDispatcher from "../../dispatcher/dispatcher";
+import { ModuleApi } from "../../modules/Api";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
@@ -60,7 +61,7 @@ export class RoomUploadViewModel
         super(
             {},
             {
-                mayUpload: room.maySendMessage(),
+                mayUpload: ModuleApi.instance.composer.localFileUploadsAllowed ?? room.maySendMessage(),
             },
         );
         room.on(RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
