@@ -439,7 +439,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 this.editorRef.current?.insertQuotedMessage(payload.event);
             } else if (payload.text) {
                 this.editorRef.current?.insertPlaintext(payload.text);
-            }
+            } // File inserts explcitly unsupported in the edit composer.
         } else if (payload.action === Action.FocusEditMessageComposer) {
             this.editorRef.current.focus();
         }

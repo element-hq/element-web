@@ -238,6 +238,9 @@
             "view_image": "View image"
         }
     },
+    "composer": {
+        "attachment_button_label": "Open attachment menu"
+    },
     "widget": {
         "context_menu": {
             "move_left": "Move left",

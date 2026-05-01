@@ -105,7 +105,7 @@ export interface ComposerApi {
     addFileUploadOption(option: ComposerApiFileUploadOption): void;
     disableLocalFileUploads(): void;
     insertPlaintextIntoComposer(plaintext: string): void;
-    openFileUploadConfirmation(file: File | DataTransfer): void;
+    openFileUploadConfirmation(file: File[]): void;
 }
 
 // @alpha
@@ -113,13 +113,10 @@ export type ComposerApiFileUploadOption = {
     type: string;
     label: string;
     icon?: ComponentType<SVGAttributes<SVGElement>>;
-    onSelected: (roomId: string, relation?: ComposerApiFileUploadRelation) => Promise<void> | void;
-};
-
-// @public (undocumented)
-export type ComposerApiFileUploadRelation = {
-    inReplyToEventId?: string;
-    relType?: "m.thread" | "m";
+    onSelected: (roomId: string, relation?: {
+        inReplyToEventId?: string;
+        relType?: string;
+    }) => Promise<void> | void;
 };
 
 // @public
@@ -240,15 +237,6 @@ export interface ExtrasApi {
     getVisibleRoomBySpaceKey(spaceKey: string, cb: () => string[]): void;
     setSpacePanelItem(spaceKey: string, props: SpacePanelItemProps): void;
 }
-
-// @alpha
-export type FileUploadResult = {
-    mxc: string;
-} | {
-    file: File;
-} | {
-    blob: Blob;
-} | null;
 
 // @public
 export interface I18nApi {

@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -14,38 +15,32 @@ import {
     THREAD_RELATION_TYPE,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
+import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext } from "react";
 import {
-    AttachmentIcon,
     MicOnIcon,
     OverflowHorizontalIcon,
     PollsIcon,
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { ComposerApiFileUploadLocal } from "@element-hq/element-web-module-api";
-import { MultiOptionButton } from "@element-hq/web-shared-components";
+import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
 import { type MenuProps } from "../../structures/ContextMenu";
-import dis from "../../../dispatcher/dispatcher";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { LocationButton } from "../location";
 import Modal from "../../../Modal";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import ContentMessages from "../../../ContentMessages";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { useDispatcher } from "../../../hooks/useDispatcher";
-import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
-import { ModuleApi } from "../../../modules/Api.ts";
+import { useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -69,6 +64,8 @@ export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
+    const roomUploadVM = useRoomUploadViewModel();
+    const { extraUploadOptions } = useViewModel(roomUploadVM);
     const { room, narrow } = useScopedRoomContext("room", "narrow");
 
     const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
@@ -92,7 +89,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            <UploadButton key="uploads" />, // props passed via UploadButtonContext
+            <UploadButton key="upload" options={extraUploadOptions} onSelect={roomUploadVM.onUploadOptionSelected} />,
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -109,7 +106,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
-            <UploadButton key="uploads" />, // props passed via UploadButtonContext
+            <UploadButton key="upload" options={extraUploadOptions} onSelect={roomUploadVM.onUploadOptionSelected} />,
         ];
         moreButtons = [
             showStickersButton(props),
@@ -129,7 +126,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     });
 
     return (
-        <UploadButtonContextProvider roomId={room.roomId} relation={props.relation}>
+        <>
             {mainButtons}
             {moreButtons.length > 0 && (
                 <AccessibleButton
@@ -152,7 +149,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
                     </OverflowMenuContext.Provider>
                 </IconizedContextMenu>
             )}
-        </UploadButtonContextProvider>
+        </>
     );
 };
 
@@ -166,110 +163,6 @@ function emojiButton(props: IProps): ReactElement {
         />
     );
 }
-
-const UploadButton: React.FC = () => {
-    const overflowMenuCloser = useContext(OverflowMenuContext);
-    const onLocalUploadClick = useContext(UploadButtonContext);
-    const { room } = useScopedRoomContext("room");
-
-    const onLocalClick = (): void => {
-        onLocalUploadClick?.();
-        overflowMenuCloser?.(); // close overflow menu
-    };
-
-    const options = [...ModuleApi.instance.composer.fileUploadOptions.values()].map((uploadOption) => {
-        if (uploadOption.type === ComposerApiFileUploadLocal) {
-            return {
-                icon: AttachmentIcon,
-                label: _t("common|attachment"),
-                onSelect: onLocalClick,
-            };
-        } else {
-            return {
-                icon: uploadOption.icon,
-                label: uploadOption.label,
-                onSelect: () => {
-                    uploadOption.onSelected(room!.roomId, (res) => {
-                        console.log("Do something with the result", res);
-                    });
-                },
-            };
-        }
-    });
-
-    return (
-        <MultiOptionButton
-            options={options}
-            multipleOptionsButton={{ label: _t("action|upload_file"), icon: AttachmentIcon }}
-        />
-    );
-};
-
-type UploadButtonFn = () => void;
-export const UploadButtonContext = createContext<UploadButtonFn | null>(null);
-
-interface IUploadButtonProps {
-    roomId: string;
-    relation?: IEventRelation;
-    children: ReactNode;
-}
-
-// We put the file input outside the UploadButton component so that it doesn't get killed when the context menu closes.
-const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, relation, children }) => {
-    const cli = useContext(MatrixClientContext);
-    const roomContext = useScopedRoomContext("timelineRenderingType", "replyToEvent");
-    const uploadInput = useRef<HTMLInputElement>(null);
-
-    const onUploadClick = (): void => {
-        if (cli?.isGuest()) {
-            dis.dispatch({ action: "require_registration" });
-            return;
-        }
-        uploadInput.current?.click();
-    };
-
-    useDispatcher(dis, (payload) => {
-        if (roomContext.timelineRenderingType === payload.context && payload.action === "upload_file") {
-            onUploadClick();
-        }
-    });
-
-    const onUploadFileInputChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
-        if (ev.target.files?.length === 0) return;
-
-        // Take a copy, so we can safely reset the value of the form control
-        ContentMessages.sharedInstance().sendContentListToRoom(
-            Array.from(ev.target.files!),
-            roomId,
-            relation,
-            roomContext.replyToEvent,
-            cli,
-            roomContext.timelineRenderingType,
-        );
-
-        // This is the onChange handler for a file form control, but we're
-        // not keeping any state, so reset the value of the form control
-        // to empty.
-        // NB. we need to set 'value': the 'files' property is immutable.
-        ev.target.value = "";
-    };
-
-    const uploadInputStyle = { display: "none" };
-    return (
-        <UploadButtonContext.Provider value={onUploadClick}>
-            {children}
-
-            <input
-                ref={uploadInput}
-                type="file"
-                style={uploadInputStyle}
-                multiple
-                onClick={chromeFileInputFix}
-                onChange={onUploadFileInputChange}
-            />
-        </UploadButtonContext.Provider>
-    );
-};
 
 function showStickersButton(props: IProps): ReactElement | null {
     return props.showStickersButton ? (

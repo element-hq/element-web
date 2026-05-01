@@ -48,7 +48,7 @@ import { type ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import DocumentPosition from "../../../editor/position";
-import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerInsertPayload, ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
@@ -541,18 +541,22 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     this.editorRef.current?.focus();
                 }
                 break;
-            case Action.ComposerInsert:
-                if (payload.timelineRenderingType !== this.context.timelineRenderingType) break;
-                if (payload.composerType !== ComposerType.Send) break;
+            case Action.ComposerInsert: {
+                const insertPayload = payload as ComposerInsertPayload;
+                if (insertPayload.timelineRenderingType !== this.context.timelineRenderingType) break;
+                if (insertPayload.composerType !== ComposerType.Send) break;
 
-                if (payload.userId) {
-                    this.editorRef.current?.insertMention(payload.userId);
-                } else if (payload.event) {
-                    this.editorRef.current?.insertQuotedMessage(payload.event);
-                } else if (payload.text) {
-                    this.editorRef.current?.insertPlaintext(payload.text);
+                if (insertPayload.userId) {
+                    this.editorRef.current?.insertMention(insertPayload.userId);
+                } else if (insertPayload.event) {
+                    this.editorRef.current?.insertQuotedMessage(insertPayload.event);
+                } else if (insertPayload.text) {
+                    this.editorRef.current?.insertPlaintext(insertPayload.text);
+                } else if (insertPayload.files) {
+                    this.props.uploadVm.initiateViaInputFiles(insertPayload.files);
                 }
                 break;
+            }
         }
     };
 
