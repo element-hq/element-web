@@ -50,7 +50,7 @@ export function UploadButton({
     // Shift click is a shortcut to selecting the first item.
     const onMenuClick: MouseEventHandler<HTMLButtonElement> = useCallback(
         (ev) => {
-            if (!ev.shiftKey) {
+            if (!ev.ctrlKey) {
                 return;
             }
             ev.preventDefault();
@@ -63,8 +63,8 @@ export function UploadButton({
         const { label, icon: Icon } = options[0];
         return (
             <IconButton
-                tooltip={label}
                 {...rootButtonProps}
+                tooltip={label}
                 title={label}
                 onClick={() => vm.onUploadOptionSelected(options[0].type)}
             >
@@ -75,10 +75,10 @@ export function UploadButton({
 
     const trigger = (
         <IconButton
-            tooltip={i18n.translate("common|attachment")}
-            onClick={onMenuClick}
             {...rootButtonProps}
-            title={i18n.translate("common|attachment")}
+            tooltip={i18n.translate("composer|attachment_button_label")}
+            onClick={onMenuClick}
+            title={i18n.translate("composer|attachment_button_label")}
         >
             <AttachmentIcon />
         </IconButton>

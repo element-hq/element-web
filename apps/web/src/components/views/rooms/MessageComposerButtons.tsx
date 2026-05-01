@@ -65,7 +65,6 @@ export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
     const roomUploadVM = useRoomUploadViewModel();
-    const { extraUploadOptions } = useViewModel(roomUploadVM);
     const { room, narrow } = useScopedRoomContext("room", "narrow");
 
     const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
@@ -89,7 +88,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            <UploadButton key="upload" options={extraUploadOptions} onSelect={roomUploadVM.onUploadOptionSelected} />,
+            <UploadButton key="upload" vm={roomUploadVM} />,
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -106,7 +105,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ) : (
                 emojiButton(props)
             ),
-            <UploadButton key="upload" options={extraUploadOptions} onSelect={roomUploadVM.onUploadOptionSelected} />,
+            <UploadButton key="upload" vm={roomUploadVM} />,
         ];
         moreButtons = [
             showStickersButton(props),

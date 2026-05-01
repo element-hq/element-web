@@ -27,18 +27,10 @@ export class ComposerApi
     extends TypedEventEmitter<ModuleComposerApiEvents, ModuleComposerApiEventsMap>
     implements ModuleComposerApi
 {
-    private allowLocalFileUploads = true;
     private readonly configuredFileUploadOptions = new Map<string, ComposerApiFileUploadOption>();
 
     public constructor(private readonly dispatcher: MatrixDispatcher) {
         super();
-    }
-
-    /**
-     * Is the user permitted to upload local files in any way.
-     */
-    public get localFileUploadsAllowed(): boolean {
-        return this.allowLocalFileUploads;
     }
 
     /**
@@ -48,13 +40,12 @@ export class ComposerApi
         return [...this.configuredFileUploadOptions.values()];
     }
 
-    public disableLocalFileUploads(): void {
-        this.allowLocalFileUploads = false;
-    }
-
     public addFileUploadOption(option: ComposerApiFileUploadOption): void {
         if (this.configuredFileUploadOptions.has(option.type)) {
             throw new Error(`Option "${option.type}" already exists `);
+        }
+        if (option.type === "local") {
+            throw new Error(`Option "local" is reserved `);
         }
         this.configuredFileUploadOptions.set(option.type, option);
         this.emit(ModuleComposerApiEvents.UploaderOptionsChanged, option);

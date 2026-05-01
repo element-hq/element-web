@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 import React from "react";
-import { render } from "@test-utils";
+import { render, screen } from "@test-utils";
 import { describe, it, expect } from "vitest";
 import { composeStories } from "@storybook/react-vite";
 import { userEvent } from "vitest/browser";
@@ -19,5 +19,21 @@ describe("UploadButton", () => {
     it("renders a default button", () => {
         const { container } = render(<Default />);
         expect(container).toMatchSnapshot();
+    });
+    it("can open the menu and select an option", async () => {
+        const onUploadOptionSelected = fn();
+        const { container, getByRole } = render(<Default onUploadOptionSelected={onUploadOptionSelected} />);
+        await userEvent.click(getByRole("button", { name: "Open attachment menu" }));
+        expect(container).toMatchSnapshot();
+        await userEvent.click(screen.getByRole("menuitem", { name: "Fun Button" }));
+        expect(onUploadOptionSelected).toHaveBeenCalledWith("fun");
+    });
+    it("can ctrl click to get the first option", async () => {
+        userEvent.setup();
+        const onUploadOptionSelected = fn();
+        const { getByRole } = render(<Default onUploadOptionSelected={onUploadOptionSelected} />);
+        await userEvent.keyboard("[ControlLeft>]");
+        await userEvent.click(getByRole("button", { name: "Open attachment menu" }));
+        expect(onUploadOptionSelected).toHaveBeenCalledWith("local");
     });
 });
