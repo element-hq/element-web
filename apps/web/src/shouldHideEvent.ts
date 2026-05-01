@@ -4,12 +4,20 @@ Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
- */
+*/
 
-import { type MatrixEvent, EventType, RelationType, M_POLL_END } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixEvent,
+    type MatrixClient,
+    EventType,
+    RelationType,
+    JoinRule,
+    M_POLL_END,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "./settings/SettingsStore";
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import { type IRoomState } from "./components/structures/RoomView";
 import { type SettingKey } from "./settings/Settings.tsx";
 
@@ -43,15 +51,25 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
     return diff;
 }
 
+function isPublicRoom(ev: MatrixEvent, client?: MatrixClient): boolean {
+    const mxClient = client ?? MatrixClientPeg.get();
+    const room = mxClient?.getRoom(ev.getRoomId());
+    return room?.getJoinRule() === JoinRule.Public;
+}
+
 /**
  * Determines whether the given event should be hidden from timelines.
  * @param ev The event
  * @param ctx An optional RoomContext to pull cached settings values from to avoid
  *     hitting the settings store
+ * @param client An optional MatrixClient to use instead of MatrixClientPeg
+ * @returns True if the event should be hidden
  */
-export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): boolean {
+export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState, client?: MatrixClient): boolean {
     // Hide all poll end events
     if (M_POLL_END.matches(ev.getType())) return true;
+
+    if (ev.getType() === EventType.RoomTopic && isPublicRoom(ev, client)) return true;
 
     // Accessing the settings store directly can be expensive if done frequently,
     // so we should prefer using cached values if a RoomContext is available
@@ -70,6 +88,8 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
     const eventDiff = memberEventDiff(ev);
 
     if (eventDiff.isMemberEvent) {
+        if (isPublicRoom(ev, client)) return true;
+
         if ((eventDiff.isJoin || eventDiff.isPart) && !isEnabled("showJoinLeaves")) return true;
         if (eventDiff.isAvatarChange && !isEnabled("showAvatarChanges")) return true;
         if (eventDiff.isDisplaynameChange && !isEnabled("showDisplaynameChanges")) return true;
