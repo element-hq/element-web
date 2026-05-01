@@ -36,7 +36,6 @@ export interface UserMenuViewSnapshot {
     avatarUrl?: string;
     /**
      * Should the avatar be visible.
-     * @default true
      */
     showAvatar?: boolean;
     /**
@@ -109,16 +108,7 @@ export type UserMenuViewProps = {
 };
 
 export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element {
-    const {
-        userId,
-        displayName,
-        avatarUrl,
-        expanded,
-        open,
-        manageAccountHref,
-        actions,
-        showAvatar = true,
-    } = useViewModel(vm);
+    const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
         <button className={classNames(styles.triggerButton)} aria-label={_t("menus|user_menu|title")}>

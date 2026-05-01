@@ -41,6 +41,7 @@ export class UserMenuViewModel extends BaseViewModel<UserMenuSnapshot, undefined
             avatarUrl,
             expanded: !isPanelCollapsed,
             manageAccountHref: accountManagementEndpoint,
+            showAvatar: isAuthenticated,
             actions: {
                 createAccount: !isAuthenticated,
                 signIn: !isAuthenticated,
