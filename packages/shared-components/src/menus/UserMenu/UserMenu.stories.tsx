@@ -73,6 +73,7 @@ export const Open: Story = {
         displayName: "Sally Sanderson with a longer name",
         userId: "@person-name:homeserver.com",
         expanded: true,
+        showAvatar: true,
     },
     parameters: {
         a11y: {
