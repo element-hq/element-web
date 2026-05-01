@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import { type IEventRelation } from "matrix-js-sdk/src/matrix";
-import React, { type JSX, type RefObject, type ReactNode } from "react";
+import React, { type JSX, type RefObject, type ReactNode, useContext } from "react";
 
 import { useComposerFunctions } from "../hooks/useComposerFunctions";
 import { useIsFocused } from "../hooks/useIsFocused";
@@ -19,6 +19,7 @@ import { type ComposerFunctions } from "../types";
 import { Editor } from "./Editor";
 import { WysiwygAutocomplete } from "./WysiwygAutocomplete";
 import { useSettingValue } from "../../../../../hooks/useSettings";
+import { RoomUploadContext } from "../../../../../viewmodels/room/RoomUploadViewModel";
 
 interface PlainTextComposerProps {
     disabled?: boolean;
@@ -46,6 +47,7 @@ export function PlainTextComposer({
     eventRelation,
 }: PlainTextComposerProps): JSX.Element {
     const isAutoReplaceEmojiEnabled = useSettingValue("MessageComposerInput.autoReplaceEmoji");
+    const uploadContext = useContext(RoomUploadContext);
     const {
         ref: editorRef,
         autocompleteRef,
@@ -61,7 +63,7 @@ export function PlainTextComposer({
         handleMention,
         handleAtRoomMention,
         handleEmoji,
-    } = usePlainTextListeners(initialContent, onChange, onSend, isAutoReplaceEmojiEnabled);
+    } = usePlainTextListeners(initialContent, onChange, onSend, isAutoReplaceEmojiEnabled, uploadContext || undefined);
     const composerFunctions = useComposerFunctions(editorRef, setContent);
     usePlainTextInitialization(initialContent, editorRef);
     useSetCursorPosition(disabled, editorRef);

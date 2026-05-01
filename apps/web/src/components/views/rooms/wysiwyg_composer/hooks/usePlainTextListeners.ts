@@ -15,7 +15,7 @@ import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
-import { useRoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { RoomUploadViewModel, useRoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
@@ -45,6 +45,7 @@ export function usePlainTextListeners(
     onChange?: (content: string) => void,
     onSend?: () => void,
     isAutoReplaceEmojiEnabled?: boolean,
+    roomUploadVM?: RoomUploadViewModel,
 ): {
     ref: RefObject<HTMLDivElement | null>;
     autocompleteRef: RefObject<Autocomplete | null>;
@@ -61,8 +62,6 @@ export function usePlainTextListeners(
     onSelect: (this: void, event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
 } {
-    const roomUploadVM = useRoomUploadViewModel();
-
     const ref = useRef<HTMLDivElement>(null);
     const autocompleteRef = useRef<Autocomplete>(null);
     const [content, setContent] = useState<string | undefined>(initialContent);
@@ -116,7 +115,7 @@ export function usePlainTextListeners(
             const { nativeEvent } = event;
             let imagePasteWasHandled = false;
 
-            if (isEventToHandleAsClipboardEvent(nativeEvent)) {
+            if (roomUploadVM && isEventToHandleAsClipboardEvent(nativeEvent)) {
                 const data =
                     nativeEvent instanceof ClipboardEvent ? nativeEvent.clipboardData : nativeEvent.dataTransfer;
                 imagePasteWasHandled = handleClipboardEvent(nativeEvent, data, roomUploadVM);

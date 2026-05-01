@@ -6,7 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type KeyboardEvent, type SyntheticEvent, type RefAttributes, ReactElement } from "react";
+import React, {
+    createRef,
+    type KeyboardEvent,
+    type SyntheticEvent,
+    type RefAttributes,
+    type ReactElement,
+} from "react";
 import {
     type MatrixEvent,
     type IEventRelation,
