@@ -1197,6 +1197,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const showTimestamp =
             this.props.mxEvent.getTs() &&
+            // Don't show timestamp for the CallStarted tile because
+            // the tile content already renders a timestamp.
+            this.props.mxEvent.getType() !== EventType.RTCNotification &&
             !this.props.hideTimestamp &&
             (this.props.alwaysShowTimestamps ||
                 this.props.last ||
