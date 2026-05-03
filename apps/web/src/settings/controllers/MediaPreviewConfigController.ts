@@ -38,8 +38,8 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         const validMediaPreviews = Object.values(MediaPreviewValue);
         const validInviteAvatars = [MediaPreviewValue.Off, MediaPreviewValue.On];
         return {
-            invite_avatars: validInviteAvatars.includes(inviteAvatars) ? inviteAvatars : undefined,
-            media_previews: validMediaPreviews.includes(mediaPreviews) ? mediaPreviews : undefined,
+            invite_avatars: validInviteAvatars.includes(inviteAvatars!) ? inviteAvatars : undefined,
+            media_previews: validMediaPreviews.includes(mediaPreviews!) ? mediaPreviews : undefined,
         };
     }
 

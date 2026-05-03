@@ -115,7 +115,7 @@
         "show_advanced": "Tampilkan lanjutan",
         "show_all": "Tampilkan semua",
         "sign_in": "Masuk",
-        "sign_out": "Keluar",
+        "sign_out": "Hapus perangkat ini",
         "skip": "Lewat",
         "start": "Mulai",
         "start_chat": "Mulai obrolan",
@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "voice": "Suara",
         "warning": "Peringatan"
     },
     "composer": {
@@ -1550,9 +1549,6 @@
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
         "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
-        "share_history_on_invite": "Bagikan riwayat terenkripsi dengan anggota baru",
-        "share_history_on_invite_description": "Saat mengundang pengguna ke ruangan terenkripsi yang memiliki keterlihatan riwayat yang diatur ke \"terbagi\", bagikan riwayat terenkripsi dengan pengguna tersebut, dan terima riwayat terenkripsi saat Anda diundang ke ruangan tersebut.",
-        "share_history_on_invite_warning": "Fitur ini bersifat EKSPERIMENTAL dan tidak semua tindakan pencegahan keamanan diterapkan. Jangan aktifkan pada akun produksi.",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
@@ -1794,7 +1790,6 @@
         "restricted": "Dibatasi"
     },
     "powered_by_matrix": "Diberdayakan oleh Matrix",
-    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "presence": {
         "away": "Idle",
         "busy": "Sibuk",
@@ -2208,8 +2203,6 @@
             "aliases_section": "Alamat Ruangan",
             "avatar_field_label": "Avatar ruangan",
             "canonical_alias_field_label": "Alamat utama",
-            "default_url_previews_off": "Tampilan URL dinonaktifkan secara bawaan untuk anggota di ruangan ini.",
-            "default_url_previews_on": "Tampilan URL diaktifkan secara bawaan untuk anggota di ruangan ini.",
             "description_space": "Edit pengaturan yang berkaitan dengan space Anda.",
             "error_creating_alias_description": "Terjadi sebuah kesalahan membuat alamat. Ini mungkin tidak diperbolehkan oleh servernya atau ada kegagalan sementara.",
             "error_creating_alias_title": "Terjadi kesalahan membuat alamat",
@@ -2240,12 +2233,7 @@
             "published_aliases_explainer_space": "Alamat yang dipublikasikan dapat digunakan oleh siapa saja di server apa saja untuk bergabung dengan space Anda.",
             "published_aliases_section": "Alamat yang Dipublikasikan",
             "save": "Simpan Perubahan",
-            "topic_field_label": "Topik Ruangan",
-            "url_preview_encryption_warning": "Di ruangan terenkripsi, seperti ruangan ini, tampilan URL dinonaktifkan secara bawaan untuk memastikan homeserver Anda (di mana tampilannya dibuat) tidak mendapatkan informasi tentang tautan yang Anda lihat di ruangan ini.",
-            "url_preview_explainer": "Ketika seseorang menambahkan URL di pesannya, sebuah tampilan URL dapat ditampilkan untuk memberikan informasi lainnya tentang tautan itu seperti judul, deskripsi, dan sebuah gambar dari website.",
-            "url_previews_section": "Tampilan URL",
-            "user_url_previews_default_off": "Anda telah <a>menonaktifkan</a> tampilan URL secara bawaan.",
-            "user_url_previews_default_on": "Anda telah <a>mengaktifkan</a> tampilan URL secara bawaan."
+            "topic_field_label": "Topik Ruangan"
         },
         "notifications": {
             "browse_button": "Jelajahi",
@@ -2667,8 +2655,6 @@
             "username": "Nama pengguna"
         },
         "inline_url_previews_default": "Aktifkan tampilan URL secara bawaan",
-        "inline_url_previews_room": "Aktifkan tampilan URL secara bawaan untuk anggota di ruangan ini",
-        "inline_url_previews_room_account": "Aktifkan tampilan URL secara bawaan (hanya memengaruhi Anda)",
         "insert_trailing_colon_mentions": "Tambahkan sebuah karakter titik dua sesudah sebutan pengguna dari awal pesan",
         "invite_controls": {
             "default_label": "Izinkan pengguna mengundang Anda ke ruangan"
@@ -3865,7 +3851,6 @@
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
         "consulting": "Mengkonsultasi dengan %(transferTarget)s. <a>Transfer ke %(transferee)s</a>",
-        "decline_call": "Tolak",
         "default_device": "Perangkat Bawaan",
         "dial": "Panggil",
         "dialpad": "Tombol Penyetel",
@@ -3916,7 +3901,6 @@
         "show_sidebar_button": "Tampilkan sisi bilah",
         "silence": "Diamkan panggilan",
         "silenced": "Notifikasi dibisukan",
-        "skip_lobby_toggle_option": "Segera bergabung",
         "start_screenshare": "Mulai membagikan layar Anda",
         "stop_screenshare": "Berhenti membagikan layar Anda",
         "too_many_calls": "Terlalu Banyak Panggilan",
@@ -3938,7 +3922,6 @@
         "user_is_presenting": "%(sharerName)s sedang mempresentasi",
         "video_call": "Panggilan video",
         "video_call_incoming": "Panggilan video masuk",
-        "video_call_started": "Panggilan video dimulai",
         "video_call_using": "Panggilan video menggunakan:",
         "voice_call": "Panggilan suara",
         "voice_call_incoming": "Panggilan suara masuk",
@@ -3946,7 +3929,6 @@
         "you_are_presenting": "Anda sedang mempresentasi"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element",
     "widget": {
         "added_by": "Widget ditambahkan oleh",
         "capabilities_dialog": {

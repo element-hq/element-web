@@ -3,12 +3,12 @@
 exports[`DisambiguatedProfileView > renders the default state 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="DisambiguatedProfile-module_disambiguatedProfile"
     role="button"
     tabindex="0"
   >
     <span
-      class="disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Alice
@@ -20,21 +20,26 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
 exports[`DisambiguatedProfileView > renders the full example 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="DisambiguatedProfile-module_disambiguatedProfile"
     role="button"
     tabindex="0"
     title="Eve (@eve:matrix.org)"
   >
     <span
-      class="mx_Username_color5 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color5 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Eve
     </span>
     <span
-      class="mx_DisambiguatedProfile_mxid disambiguatedProfile_mxid"
+      class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
     >
       @eve:matrix.org
+    </span>
+    <span
+      class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50 DisambiguatedProfile-module_userStatus"
+    >
+      🏝️
     </span>
   </div>
 </div>
@@ -43,18 +48,18 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
 exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="DisambiguatedProfile-module_disambiguatedProfile"
     role="button"
     tabindex="0"
   >
     <span
-      class="mx_Username_color1 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color1 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Alice
     </span>
     <span
-      class="mx_DisambiguatedProfile_mxid disambiguatedProfile_mxid"
+      class="mx_DisambiguatedProfile_mxid DisambiguatedProfile-module_disambiguatedProfile_mxid"
     >
       @alice:example.org
     </span>
@@ -65,12 +70,12 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
 exports[`DisambiguatedProfileView > renders with color class 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="DisambiguatedProfile-module_disambiguatedProfile"
     role="button"
     tabindex="0"
   >
     <span
-      class="mx_Username_color3 disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="mx_Username_color3 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Bob
@@ -82,12 +87,12 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
 exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="DisambiguatedProfile-module_disambiguatedProfile"
     role="button"
     tabindex="0"
   >
     <span
-      class="disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Charlie
@@ -99,13 +104,13 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
 exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
 <div>
   <div
-    class="disambiguatedProfile"
+    class="DisambiguatedProfile-module_disambiguatedProfile"
     role="button"
     tabindex="0"
     title="Diana (@diana:example.org)"
   >
     <span
-      class="disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
+      class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
       dir="auto"
     >
       Diana

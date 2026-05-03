@@ -12,8 +12,14 @@ import { RoomListPrimaryFilters, type FilterId } from "../RoomListPrimaryFilters
 import { RoomListLoadingSkeleton } from "./RoomListLoadingSkeleton";
 import { RoomListEmptyStateView } from "./RoomListEmptyStateView";
 import { VirtualizedRoomListView, type RoomListViewState } from "../VirtualizedRoomListView";
-import { type Room, type RoomListItemViewModel } from "../RoomListItemView";
-import { type RoomListSectionHeaderViewModel } from "../RoomListSectionHeaderView";
+import {
+    type Room,
+    type RoomListItemViewModel,
+} from "../VirtualizedRoomListView/RoomListItemAccessibilityWrapper/RoomListItemView";
+import { type RoomListSectionHeaderViewModel } from "../VirtualizedRoomListView/RoomListSectionHeaderView";
+import { type ToastType, RoomListToast } from "./RoomListToast";
+import styles from "./RoomListView.module.css";
+import { Flex } from "../../core/utils/Flex";
 
 export type RoomListSection = {
     /** Unique identifier for the section */
@@ -46,6 +52,8 @@ export type RoomListViewSnapshot = {
     canCreateRoom?: boolean;
     /** Whether the room list is displayed as a flat list */
     isFlatList: boolean;
+    /** Optional toast to display */
+    toast?: ToastType;
 };
 
 /**
@@ -67,6 +75,8 @@ export interface RoomListViewActions {
     updateVisibleRooms: (startIndex: number, endIndex: number) => void;
     /** Get view model for a specific section header (virtualization API) */
     getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
+    /** Called to close the toast message */
+    closeToast: () => void;
 }
 
 /**
@@ -110,7 +120,10 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ vm, renderAvatar, on
                     onToggleFilter={vm.onToggleFilter}
                 />
             </div>
-            {listBody}
+            <Flex direction="column" className={styles.list}>
+                {listBody}
+                {snapshot.toast && <RoomListToast type={snapshot.toast} onClose={vm.closeToast} />}
+            </Flex>
         </>
     );
 };

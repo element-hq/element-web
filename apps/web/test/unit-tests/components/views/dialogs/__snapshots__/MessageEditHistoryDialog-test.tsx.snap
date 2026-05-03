@@ -89,16 +89,16 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"
                     style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      class="_button_1nw83_8 _toolbar_item_1ksun_14"
                       data-kind="tertiary"
                       data-presentation="label"
-                      data-size="sm"
+                      data-size="md"
                       role="button"
                       tabindex="0"
                     >
@@ -236,16 +236,16 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"
                     style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      class="_button_1nw83_8 _toolbar_item_1ksun_14"
                       data-kind="tertiary"
                       data-presentation="label"
-                      data-size="sm"
+                      data-size="md"
                       role="button"
                       tabindex="0"
                     >
@@ -298,16 +298,16 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"
                     style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      class="_button_1nw83_8 _toolbar_item_1ksun_14"
                       data-kind="tertiary"
                       data-presentation="label"
-                      data-size="sm"
+                      data-size="md"
                       role="button"
                       tabindex="0"
                     >
@@ -342,16 +342,16 @@ exports[`<MessageEditHistory /> should support events with 1`] = `
                   <div
                     aria-label="Message Actions"
                     aria-live="off"
-                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ax4y_8"
+                    class="_flex_4dswl_9 mx_ThreadActionBar mx_HistoryActionBar _toolbar_1ksun_8"
                     role="toolbar"
                     style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
                   >
                     <button
                       aria-label="Remove"
-                      class="_button_13vu4_8 _toolbar_item_1ax4y_14"
+                      class="_button_1nw83_8 _toolbar_item_1ksun_14"
                       data-kind="tertiary"
                       data-presentation="label"
-                      data-size="sm"
+                      data-size="md"
                       role="button"
                       tabindex="0"
                     >

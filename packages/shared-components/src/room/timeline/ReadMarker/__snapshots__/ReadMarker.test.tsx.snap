@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ReadMarker > renders the current read marker 1`] = `
+<div>
+  <ul>
+    <li
+      class="ReadMarker-module_readMarker"
+      data-scroll-tokens="$event"
+    >
+      <hr
+        class="ReadMarker-module_line"
+      />
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`ReadMarker > renders the ghost read marker 1`] = `
+<div>
+  <ul>
+    <li
+      class="ReadMarker-module_readMarker"
+    >
+      <hr
+        class="ReadMarker-module_line"
+        data-eventid="$event"
+      />
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`ReadMarker > renders the hidden current read marker without a line 1`] = `
+<div>
+  <ul>
+    <li
+      class="ReadMarker-module_readMarker"
+      data-scroll-tokens="$event"
+    />
+  </ul>
+</div>
+`;

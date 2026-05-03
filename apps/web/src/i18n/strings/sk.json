@@ -593,7 +593,6 @@
         "video": "Video",
         "video_room": "Video miestnosť",
         "view_message": "Zobraziť správu",
-        "voice": "Hlas",
         "warning": "Upozornenie"
     },
     "composer": {
@@ -1565,9 +1564,6 @@
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
         "report_to_moderators_description": "V miestnostiach, ktoré podporujú moderovanie, môžete pomocou tlačidla \"Nahlásiť\" nahlásiť porušovanie pravidiel moderátorom miestnosti.",
-        "share_history_on_invite": "Zdieľajte zašifrovanú históriu s novými členmi",
-        "share_history_on_invite_description": "Pri pozývaní používateľa do zašifrovanej miestnosti s históriou nastavenou na „zdieľanú“ zdieľať s týmto používateľom aj zašifrovanú históriu a pri pozvaní do takejto miestnosti prijať zašifrovanú históriu.",
-        "share_history_on_invite_warning": "Táto funkcia je EXPERIMENTÁLNA a nie sú implementované všetky bezpečnostné opatrenia. Nepovoľujte ju v produkčných účtoch.",
         "sliding_sync": "Režim kĺzavej synchronizácie",
         "sliding_sync_description": "V štádiu aktívneho vývoja, nie je možné to vypnúť.",
         "sliding_sync_disabled_notice": "Odhláste sa a znova sa prihláste, aby sa to vyplo",
@@ -1817,7 +1813,6 @@
         "restricted": "Obmedzené"
     },
     "powered_by_matrix": "používa protokol Matrix",
-    "powered_by_matrix_with_logo": "Decentralizované, šifrované konverzácie a spolupráca na platforme $matrixLogo",
     "presence": {
         "away": "Preč",
         "busy": "Obsadený/zaneprázdnený",
@@ -2251,8 +2246,6 @@
             "aliases_section": "Adresy miestnosti",
             "avatar_field_label": "Obrázok miestnosti",
             "canonical_alias_field_label": "Hlavná adresa",
-            "default_url_previews_off": "Náhľady URL adries sú predvolene zakázané pre členov tejto miestnosti.",
-            "default_url_previews_on": "Náhľady URL adries sú predvolene povolené pre členov tejto miestnosti.",
             "description_space": "Upravte nastavenia týkajúce sa vášho priestoru.",
             "error_creating_alias_description": "Pri vytváraní tejto adresy došlo k chybe. Je možné, že ju server nepovoľuje alebo došlo k dočasnému zlyhaniu.",
             "error_creating_alias_title": "Chyba pri vytváraní adresy",
@@ -2283,12 +2276,7 @@
             "published_aliases_explainer_space": "Zverejnené adresy môže použiť ktokoľvek na akomkoľvek serveri, aby sa pripojil k vášmu priestoru.",
             "published_aliases_section": "Zverejnené adresy",
             "save": "Uložiť zmeny",
-            "topic_field_label": "Téma miestnosti",
-            "url_preview_encryption_warning": "Náhľady URL adries sú v šifrovaných miestnostiach ako je táto predvolene zakázané, aby ste si mohli byť istí, že obsah odkazov z vašej konverzácii nebude zaznamenaný na vašom domovskom serveri počas ich generovania.",
-            "url_preview_explainer": "Ak niekto vo svojej správe pošle URL adresu, môže byť zobrazený jej náhľad obsahujúci názov, popis a obrázok z cieľovej web stránky.",
-            "url_previews_section": "Náhľady URL adries",
-            "user_url_previews_default_off": "Predvolene máte <a>zakázané</a> náhľady URL adries.",
-            "user_url_previews_default_on": "Predvolene máte <a>povolené</a> náhľady URL adries."
+            "topic_field_label": "Téma miestnosti"
         },
         "notifications": {
             "browse_button": "Prechádzať",
@@ -2713,8 +2701,6 @@
             "username": "Používateľské meno"
         },
         "inline_url_previews_default": "Predvolene povoliť náhľady URL adries",
-        "inline_url_previews_room": "Predvolene povoliť náhľady URL adries pre členov tejto miestnosti",
-        "inline_url_previews_room_account": "Povoliť náhľady URL adries pre túto miestnosť (ovplyvňuje len vás)",
         "insert_trailing_colon_mentions": "Vložiť na koniec dvojbodku za zmienkou používateľa na začiatku správy",
         "invite_controls": {
             "default_label": "Povoliť používateľom pozývať vás do miestností"
@@ -3951,7 +3937,6 @@
         "connection_lost": "Spojenie so serverom bolo prerušené",
         "connection_lost_description": "Bez pripojenia k serveru nie je možné uskutočňovať hovory.",
         "consulting": "Konzultovanie s %(transferTarget)s. <a>Presmerovanie na %(transferee)s</a>",
-        "decline_call": "Zamietnuť",
         "default_device": "Predvolené zariadenie",
         "dial": "Vytočiť číslo",
         "dialpad": "Číselník",
@@ -4003,7 +3988,6 @@
         "show_sidebar_button": "Zobraziť bočný panel",
         "silence": "Stlmiť hovor",
         "silenced": "Oznámenia stlmené",
-        "skip_lobby_toggle_option": "Pripojiť sa okamžite",
         "start_screenshare": "Spustiť zdieľanie vašej obrazovky",
         "stop_screenshare": "Zastaviť zdieľanie vašej obrazovky",
         "too_many_calls": "Príliš veľa hovorov",
@@ -4025,7 +4009,6 @@
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Video hovor",
         "video_call_incoming": "Prichádzajúci videohovor",
-        "video_call_started": "Videohovor bol spustený",
         "video_call_using": "Videohovor pomocou:",
         "voice_call": "Hlasový hovor",
         "voice_call_incoming": "Prichádzajúci hlasový hovor",
@@ -4033,7 +4016,6 @@
         "you_are_presenting": "Prezentujete"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
-    "welcome_to_element": "Víta vás Element",
     "widget": {
         "added_by": "Widget pridaný používateľom",
         "capabilities_dialog": {

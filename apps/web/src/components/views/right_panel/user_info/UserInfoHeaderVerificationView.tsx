@@ -40,7 +40,7 @@ export const UserInfoHeaderVerificationView: React.FC<{
                 <Button
                     className="mx_UserInfo_verify_button"
                     kind="tertiary"
-                    size="sm"
+                    size="md"
                     onClick={() => vm.verifySelectedUser()}
                 >
                     {_t("user_info|verify_button")}

@@ -9,11 +9,11 @@ exports[`<LayoutSwitcher /> should render 1`] = `
     <div
       class="mx_SettingsSubsectionHeading"
     >
-      <h3
+      <h2
         class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Message layout
-      </h3>
+      </h2>
     </div>
     <div
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
@@ -71,12 +71,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_oa3at_8"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_oa3at_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -86,7 +86,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                    class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -102,7 +102,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   id="1"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content"
+                    class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
                   >
                     <div
                       class="mx_EventTile_body translate"
@@ -165,12 +165,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                 tabindex="-1"
               >
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_oa3at_8"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_oa3at_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -180,7 +180,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                    class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -196,7 +196,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   id="2"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content"
+                    class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
                   >
                     <div
                       class="mx_EventTile_body translate"
@@ -262,12 +262,12 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_MessageTimestamp"
                 />
                 <div
-                  class="mx_DisambiguatedProfile _disambiguatedProfile_oa3at_8"
+                  class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
                   role="button"
                   tabindex="0"
                 >
                   <span
-                    class="mx_Username_color2 _disambiguatedProfile_displayName_oa3at_14 mx_DisambiguatedProfile_displayName"
+                    class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
                     dir="auto"
                   >
                     Alice
@@ -277,7 +277,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   class="mx_EventTile_avatar"
                 >
                   <span
-                    class="_avatar_zysgz_8 mx_BaseAvatar _avatar-imageless_zysgz_55"
+                    class="_avatar_va14e_8 mx_BaseAvatar _avatar-imageless_va14e_55"
                     data-color="2"
                     data-testid="avatar-img"
                     data-type="round"
@@ -293,7 +293,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
                   id="3"
                 >
                   <div
-                    class="mx_MTextBody mx_EventTile_content"
+                    class="mx_MTextBody mx_EventTile_content _root_1hgc7_8 _text_1hgc7_13"
                   >
                     <div
                       class="mx_EventTile_body translate"
@@ -354,7 +354,7 @@ exports[`<LayoutSwitcher /> should render 1`] = `
       </form>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"

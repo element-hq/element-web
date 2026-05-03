@@ -48,6 +48,13 @@ describe("persist OIDC settings", () => {
             expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
             expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_id_token", idToken);
         });
+
+        it("should not set idToken in localStorage when idToken is undefined", () => {
+            persistOidcAuthenticatedSettings(clientId, issuer, undefined);
+            expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_client_id", clientId);
+            expect(localStorage.setItem).toHaveBeenCalledWith("mx_oidc_token_issuer", issuer);
+            expect(localStorage.getItem("mx_oidc_id_token")).toBeFalsy();
+        });
     });
 
     describe("getStoredOidcTokenIssuer()", () => {

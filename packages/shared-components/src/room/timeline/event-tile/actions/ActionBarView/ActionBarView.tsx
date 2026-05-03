@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { type JSX, useCallback, useMemo, useRef } from "react";
 import classNames from "classnames";
 import {
     CollapseIcon,
@@ -27,6 +27,7 @@ import {
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 import { InlineSpinner } from "@vector-im/compound-web";
 
+import { RovingTabIndexProvider } from "../../../../../core/roving";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
 import { Flex } from "../../../../../core/utils/Flex";
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
@@ -131,7 +132,6 @@ interface ActionBarViewProps {
  */
 export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): JSX.Element | null {
     const { translate: _t } = useI18n();
-    const [activeIndex, setActiveIndex] = useState(0);
     const {
         actions,
         presentation = "icon",
@@ -364,79 +364,9 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
             disabled: isActionDisabled(action),
         }));
     }, [actions, isActionDisabled]);
-
-    // Handle RovingIndex for toolbar
-    const enabledIndices = toolbarButtons
-        .map((item, index) => (item.disabled ? -1 : index))
-        .filter((index) => index >= 0);
-    const fallbackIndex = enabledIndices[0] ?? 0;
-    const currentIndex =
-        toolbarButtons[activeIndex] && !toolbarButtons[activeIndex].disabled ? activeIndex : fallbackIndex;
-
-    useLayoutEffect(() => {
-        setActiveIndex(currentIndex);
-
-        toolbarButtons.forEach(({ action }, index) => {
-            const button = actionButtonRefs.current[action] ?? null;
-            if (button) {
-                button.tabIndex = index === currentIndex ? 0 : -1;
-            }
-        });
-    }, [currentIndex, toolbarButtons]);
-
-    const focusButtonAtIndex = (index: number): void => {
-        const action = toolbarButtons[index]?.action;
-        const button = action ? (actionButtonRefs.current[action] ?? null) : null;
-        if (!button) {
-            return;
-        }
-
-        setActiveIndex(index);
-        button.focus();
-    };
-
-    const handleToolbarKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-        if (enabledIndices.length === 0) {
-            return;
-        }
-
-        const focusedIndex = toolbarButtons.findIndex(
-            ({ action }) => actionButtonRefs.current[action] === document.activeElement,
-        );
-        const startIndex = focusedIndex >= 0 ? focusedIndex : currentIndex;
-
-        switch (event.key) {
-            case "ArrowRight": {
-                event.preventDefault();
-                const nextIndex = enabledIndices.find((index) => index > startIndex) ?? enabledIndices[0];
-                focusButtonAtIndex(nextIndex);
-                break;
-            }
-            case "ArrowLeft": {
-                event.preventDefault();
-                const previousIndex = [...enabledIndices].reverse().find((index) => index < startIndex);
-                focusButtonAtIndex(previousIndex ?? enabledIndices[enabledIndices.length - 1]);
-                break;
-            }
-            case "Home":
-                event.preventDefault();
-                focusButtonAtIndex(enabledIndices[0]);
-                break;
-            case "End":
-                event.preventDefault();
-                focusButtonAtIndex(enabledIndices[enabledIndices.length - 1]);
-                break;
-        }
-    };
-
-    const handleToolbarFocusCapture = (): void => {
-        const focusedIndex = toolbarButtons.findIndex(
-            ({ action }) => actionButtonRefs.current[action] === document.activeElement,
-        );
-        if (focusedIndex >= 0 && focusedIndex !== activeIndex) {
-            setActiveIndex(focusedIndex);
-        }
-    };
+    const rovingProviderKey = toolbarButtons
+        .map(({ action, disabled }) => `${action}:${disabled ? "1" : "0"}`)
+        .join("|");
 
     if (toolbarButtons.length === 0) {
         return null;
@@ -444,17 +374,20 @@ export function ActionBarView({ vm, className }: Readonly<ActionBarViewProps>): 
 
     // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
     return (
-        <Flex
-            display="inline-flex"
-            direction="row"
-            role="toolbar"
-            aria-label={_t("timeline|mab|label")}
-            aria-live="off"
-            onKeyDown={handleToolbarKeyDown}
-            onFocusCapture={handleToolbarFocusCapture}
-            className={classNames(className, styles.toolbar)}
-        >
-            {toolbarButtons.map((meta) => actionButtons[meta.action])}
-        </Flex>
+        <RovingTabIndexProvider key={rovingProviderKey} handleLeftRight handleHomeEnd handleLoop>
+            {({ onKeyDownHandler }) => (
+                <Flex
+                    display="inline-flex"
+                    direction="row"
+                    role="toolbar"
+                    aria-label={_t("timeline|mab|label")}
+                    aria-live="off"
+                    onKeyDown={onKeyDownHandler}
+                    className={classNames(className, styles.toolbar)}
+                >
+                    {toolbarButtons.map((meta) => actionButtons[meta.action])}
+                </Flex>
+            )}
+        </RovingTabIndexProvider>
     );
 }

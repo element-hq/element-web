@@ -7,48 +7,35 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import {
-    type IServerVersions,
-    type OidcClientConfig,
-    type MatrixClient,
-    DEVICE_CODE_SCOPE,
-} from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import QrCodeIcon from "@vector-im/compound-design-tokens/assets/web/icons/qr-code";
 import { Text } from "@vector-im/compound-web";
+import { isSignInWithQRAvailable } from "matrix-js-sdk/src/rendezvous";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 
 interface IProps {
     onShowQr: () => void;
-    versions?: IServerVersions;
-    oidcClientConfig?: OidcClientConfig;
     isCrossSigningReady?: boolean;
 }
 
-export function shouldShowQr(
-    cli: MatrixClient,
-    isCrossSigningReady: boolean,
-    oidcClientConfig?: OidcClientConfig,
-    versions?: IServerVersions,
-): boolean {
-    const msc4108Supported = !!versions?.unstable_features?.["org.matrix.msc4108"];
+export async function shouldShowQrForLinkNewDevice(cli: MatrixClient, isCrossSigningReady: boolean): Promise<boolean> {
+    const doesServerHaveSupport = await isSignInWithQRAvailable(cli);
 
-    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
-
-    return (
-        !!deviceAuthorizationGrantSupported &&
-        msc4108Supported &&
-        !!cli.getCrypto()?.exportSecretsBundle &&
-        isCrossSigningReady
-    );
+    return doesServerHaveSupport && !!cli.getCrypto()?.exportSecretsBundle && isCrossSigningReady;
 }
 
-const LoginWithQRSection: React.FC<IProps> = ({ onShowQr, versions, oidcClientConfig, isCrossSigningReady }) => {
+const LoginWithQRSection: React.FC<IProps> = ({ onShowQr, isCrossSigningReady }) => {
     const cli = useMatrixClientContext();
-    const offerShowQr = shouldShowQr(cli, !!isCrossSigningReady, oidcClientConfig, versions);
+    const offerShowQr = useAsyncMemo(
+        () => shouldShowQrForLinkNewDevice(cli, !!isCrossSigningReady),
+        [cli, isCrossSigningReady],
+        false,
+    );
 
     return (
         <SettingsSubsection heading={_t("settings|sessions|sign_in_with_qr")}>

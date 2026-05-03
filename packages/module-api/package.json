@@ -1,0 +1,69 @@
+{
+    "name": "@element-hq/element-web-module-api",
+    "type": "module",
+    "version": "1.13.0",
+    "description": "Module API surface for element-web",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/element-hq/element-modules.git",
+        "directory": "packages/element-web-module-api"
+    },
+    "author": "element-hq",
+    "license": "SEE LICENSE IN README.md",
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "types": "./lib/element-web-module-api-alpha.d.ts",
+    "exports": {
+        ".": {
+            "types": "./lib/element-web-module-api-alpha.d.ts",
+            "import": "./lib/element-web-plugin-engine.js",
+            "require": "./lib/element-web-plugin-engine.umd.cjs"
+        }
+    },
+    "files": [
+        "lib"
+    ],
+    "scripts": {
+        "prepack": "nx build",
+        "lint:types": "nx lint:types",
+        "test:unit": "vitest"
+    },
+    "devDependencies": {
+        "@element-hq/vite-common": "workspace:*",
+        "@matrix-org/react-sdk-module-api": "^2.5.0",
+        "@microsoft/api-extractor": "^7.49.1",
+        "@types/node": "^22.10.7",
+        "@types/react": "^19",
+        "@types/react-dom": "^19.0.4",
+        "@types/semver": "^7.5.8",
+        "@vitest/coverage-v8": "catalog:",
+        "matrix-widget-api": "^1.17.0",
+        "rollup-plugin-external-globals": "^0.13.0",
+        "semver": "^7.6.3",
+        "typescript": "^6.0.0",
+        "unplugin-dts": "1.0.0-beta.6",
+        "vite": "catalog:",
+        "vitest": "catalog:",
+        "vitest-sonar-reporter": "catalog:"
+    },
+    "peerDependencies": {
+        "@matrix-org/react-sdk-module-api": "*",
+        "@types/react": "*",
+        "@types/react-dom": "*",
+        "matrix-web-i18n": "*",
+        "matrix-widget-api": "*",
+        "react": "^19"
+    },
+    "peerDependenciesMeta": {
+        "@matrix-org/react-sdk-module-api": {
+            "optional": true
+        },
+        "matrix-widget-api": {
+            "optional": true
+        },
+        "matrix-web-i18n": {
+            "optional": true
+        }
+    }
+}

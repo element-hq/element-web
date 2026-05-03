@@ -3,7 +3,7 @@
 exports[`EventTileBubble > renders the event tile bubble 1`] = `
 <div>
   <div
-    class="container custom-class"
+    class="EventTileBubble-module_container custom-class"
   >
     <svg
       fill="currentColor"
@@ -17,12 +17,12 @@ exports[`EventTileBubble > renders the event tile bubble 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Title goes here
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Subtitle goes here
     </div>
@@ -33,7 +33,7 @@ exports[`EventTileBubble > renders the event tile bubble 1`] = `
 exports[`EventTileBubble > renders the event tile bubble as crypto event bubble 1`] = `
 <div>
   <div
-    class="container"
+    class="EventTileBubble-module_container"
   >
     <svg
       fill="currentColor"
@@ -47,12 +47,12 @@ exports[`EventTileBubble > renders the event tile bubble as crypto event bubble 
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Encryption enabled
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Messages here are end-to-end encrypted. Verify XYZ in their profile - tap on their profile picture.
     </div>
@@ -63,7 +63,7 @@ exports[`EventTileBubble > renders the event tile bubble as crypto event bubble 
 exports[`EventTileBubble > renders the event tile bubble with children 1`] = `
 <div>
   <div
-    class="container"
+    class="EventTileBubble-module_container"
   >
     <svg
       fill="currentColor"
@@ -77,12 +77,12 @@ exports[`EventTileBubble > renders the event tile bubble with children 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Title goes here
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Subtitle goes here
     </div>
@@ -96,7 +96,7 @@ exports[`EventTileBubble > renders the event tile bubble with children 1`] = `
 exports[`EventTileBubble > renders the event tile bubble with icon 1`] = `
 <div>
   <div
-    class="container"
+    class="EventTileBubble-module_container"
   >
     <svg
       fill="currentColor"
@@ -110,12 +110,12 @@ exports[`EventTileBubble > renders the event tile bubble with icon 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="EventTileBubble-module_title"
     >
       Title goes here
     </div>
     <div
-      class="subtitle"
+      class="EventTileBubble-module_subtitle"
     >
       Subtitle goes here
     </div>

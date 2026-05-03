@@ -50,9 +50,9 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
       tabindex="-1"
     >
       <button
-        class="_button_13vu4_8 _has-icon_13vu4_60"
+        class="_button_1nw83_8 _has-icon_1nw83_60"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -151,9 +151,9 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
       tabindex="-1"
     >
       <button
-        class="_button_13vu4_8 _has-icon_13vu4_60"
+        class="_button_1nw83_8 _has-icon_1nw83_60"
         data-kind="secondary"
-        data-size="sm"
+        data-size="md"
         role="button"
         tabindex="0"
       >
@@ -172,7 +172,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         Add extensions
       </button>
       <div
-        class="_separator_cqpyv_8"
+        class="_separator_13qwf_8"
         data-kind="primary"
         data-orientation="horizontal"
         role="separator"
@@ -187,7 +187,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -196,7 +196,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
           >
             <img
               alt=""
-              class="_image_zysgz_43"
+              class="_image_va14e_43"
               data-type="round"
               height="24px"
               loading="lazy"
@@ -240,7 +240,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
         >
           <span
             aria-label="Avatar"
-            class="_avatar_zysgz_8 mx_BaseAvatar mx_WidgetAvatar"
+            class="_avatar_va14e_8 mx_BaseAvatar mx_WidgetAvatar"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -249,7 +249,7 @@ exports[`<ExtensionsCard /> should render widgets 1`] = `
           >
             <img
               alt=""
-              class="_image_zysgz_43"
+              class="_image_va14e_43"
               data-type="round"
               height="24px"
               loading="lazy"

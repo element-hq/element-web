@@ -10,6 +10,7 @@ import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../../../../core/viewmodel";
+import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
 import { type ReactionsRowButtonTooltipViewSnapshot } from "../ReactionsRowButtonTooltip";
 import {
     ReactionsRowButtonView,
@@ -25,7 +26,7 @@ type WrapperProps = Omit<ReactionsRowButtonViewSnapshot, "tooltipVm"> &
         tooltipOpen?: ReactionsRowButtonTooltipViewSnapshot["tooltipOpen"];
     };
 
-const ReactionsRowButtonViewWrapper = ({
+const ReactionsRowButtonViewWrapperImpl = ({
     tooltipFormattedSenders,
     tooltipCaption,
     tooltipOpen,
@@ -54,8 +55,10 @@ const ReactionsRowButtonViewWrapper = ({
     return <ReactionsRowButtonView vm={vm} />;
 };
 
+const ReactionsRowButtonViewWrapper = withViewDocs(ReactionsRowButtonViewWrapperImpl, ReactionsRowButtonView);
+
 const meta = {
-    title: "MessageBody/ReactionsRowButton",
+    title: "Timeline/Timeline Reaction/ReactionsRowButton",
     component: ReactionsRowButtonViewWrapper,
     tags: ["autodocs"],
     args: {

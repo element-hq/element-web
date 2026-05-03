@@ -588,7 +588,6 @@
         "video": "Vidéo",
         "video_room": "Salon vidéo",
         "view_message": "Afficher le message",
-        "voice": "Voix",
         "warning": "Attention"
     },
     "composer": {
@@ -680,6 +679,12 @@
         "unfederated_label_default_off": "Vous devriez l’activer si le salon n’est utilisé que pour collaborer avec des équipes internes sur votre serveur d’accueil. Ceci ne peut pas être changé plus tard.",
         "unfederated_label_default_on": "Vous devriez le déactiver si le salon est utilisé pour collaborer avec des équipes externes qui ont leur propre serveur d’accueil. Ceci ne peut pas être changé plus tard.",
         "unsupported_version": "Le serveur ne prend pas en charge la version de salon spécifiée."
+    },
+    "create_section_dialog": {
+        "create_section": "Créer une section",
+        "description": "Ces sections sont réservées à vous.",
+        "label": "Nom de la section",
+        "title": "Créer une section"
     },
     "create_space": {
         "add_details_prompt": "Ajoutez des informations pour aider les personnes à l’identifier.",
@@ -829,7 +834,7 @@
         "invalid_json": "Ne semble pas être du JSON valide.",
         "level": "Rang",
         "low_bandwidth_mode": "Mode faible bande passante",
-        "low_bandwidth_mode_description": "Nécessite un serveur d’accueil compatible.",
+        "low_bandwidth_mode_description": "Désactive le chiffrement, la présence, les avatars, les accusés de lecture et les notifications de saisie.",
         "main_timeline": "Historique principal",
         "manual_device_verification": "Vérification manuelle de l'appareil",
         "no_receipt_found": "Aucun accusé disponible",
@@ -1114,7 +1119,7 @@
         "verification_requested_toast_title": "Vérification requise",
         "verified_identity_changed": "L'identité numérique de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
         "verified_identity_changed_no_displayname": "L'identité de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus </a>",
-        "verify_toast_description": "À compter de fin avril 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
+        "verify_toast_description": "À compter de fin octobre 2026, les appareils non vérifiés ne pourront plus envoyer ni recevoir de messages.<a>En savoir plus</a>",
         "verify_toast_title": "Vérifiez cet appareil",
         "withdraw_verification_action": "Révoquer la vérification"
     },
@@ -1362,6 +1367,14 @@
         "impossible_dialog_title": "Les intégrations ne sont pas autorisées"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "Vous n'avez actuellement aucune discussion avec ces contacts. Veuillez confirmer leur invitation à rejoindre ce salon avant de continuer.",
+            "invite_title": "Inviter de nouveaux contacts dans ce salon ?",
+            "start_chat_subtitle_multiple_users": "Vous n'avez actuellement aucune discussion avec ces personnes. Veuillez confirmer leur invitation avant de continuer.",
+            "start_chat_subtitle_one_user": "Vous n'avez actuellement aucune discussion avec cette personne. Confirmez son invitation avant de continuer.",
+            "start_chat_title_multiple_users": "Démarrer une discussion avec ces nouveaux contacts ?",
+            "start_chat_title_one_user": "Démarrer une discussion avec ce nouveau contact ?"
+        },
         "email_caption": "Inviter par e-mail",
         "email_limit_one": "Les invitations par e-mail ne peuvent être envoyées qu’une par une",
         "email_use_default_is": "Utilisez un serveur d’identité pour inviter avec un e-mail. <default>Utilisez le serveur par défaut (%(defaultIdentityServerName)s)</default> ou gérez-le dans les <settings>Paramètres</settings>.",
@@ -1563,9 +1576,6 @@
         "report_to_moderators": "Signaler aux modérateurs",
         "report_to_moderators_description": "Dans les salons prenant en charge la modération, le bouton « Signaler » vous permet de signaler des abus aux modérateurs du salon.",
         "room_list_sections": "Sections de la liste de salons",
-        "share_history_on_invite": "Partagez l'historique chiffré avec les nouveaux membres",
-        "share_history_on_invite_description": "Lorsque vous invitez un utilisateur dans un salon chiffré dont la visibilité de l'historique est définie sur « partagée », partagez l'historique chiffré avec cet utilisateur et acceptez l'historique chiffré lorsque vous êtes invité dans une telle salon.",
-        "share_history_on_invite_warning": "Cette fonctionnalité est EXPÉRIMENTALE et toutes les précautions de sécurité ne sont pas mises en œuvre. Ne l'activez pas sur les comptes en production.",
         "sliding_sync": "Mode synchronisation progressive",
         "sliding_sync_description": "En cours de développement, ne peut être désactivé.",
         "sliding_sync_disabled_notice": "Connectez-vous à nouveau pour désactiver",
@@ -1810,7 +1820,6 @@
         "restricted": "Restreint"
     },
     "powered_by_matrix": "Propulsé par Matrix",
-    "powered_by_matrix_with_logo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo",
     "presence": {
         "away": "Absent",
         "busy": "Occupé",
@@ -2237,8 +2246,6 @@
             "aliases_section": "Adresses du salon",
             "avatar_field_label": "Avatar du salon",
             "canonical_alias_field_label": "Adresse principale",
-            "default_url_previews_off": "Les aperçus d'URL sont désactivés par défaut pour les participants de ce salon.",
-            "default_url_previews_on": "Les aperçus d'URL sont activés par défaut pour les participants de ce salon.",
             "description_space": "Modifiez les paramètres de votre espace.",
             "error_creating_alias_description": "Une erreur est survenue lors de la création de l’adresse. Ce n’est peut-être pas autorisé par le serveur ou une erreur temporaire est survenue.",
             "error_creating_alias_title": "Erreur lors de la création de l’adresse",
@@ -2269,12 +2276,7 @@
             "published_aliases_explainer_space": "Les adresses publiées peuvent être utilisées par tout le monde sur tous les serveurs pour rejoindre votre espace.",
             "published_aliases_section": "Adresses publiées",
             "save": "Enregistrer les modifications",
-            "topic_field_label": "Sujet du salon",
-            "url_preview_encryption_warning": "Dans les salons chiffrés, comme celui-ci, l’aperçu des liens est désactivé par défaut pour s’assurer que le serveur d’accueil (où sont générés les aperçus) ne puisse pas collecter d’informations sur les liens qui apparaissent dans ce salon.",
-            "url_preview_explainer": "Quand quelqu’un met un lien dans son message, un aperçu du lien peut être affiché afin de fournir plus d’informations sur ce lien comme le titre, la description et une image du site.",
-            "url_previews_section": "Aperçus des liens",
-            "user_url_previews_default_off": "Vous avez <a>désactivé</a> les aperçus d’URL par défaut.",
-            "user_url_previews_default_on": "Vous avez <a>activé</a> les aperçus d’URL par défaut."
+            "topic_field_label": "Sujet du salon"
         },
         "notifications": {
             "browse_button": "Parcourir",
@@ -2696,9 +2698,8 @@
             "unable_to_load_msisdns": "Impossible de charger les numéros de téléphone",
             "username": "Nom d’utilisateur"
         },
-        "inline_url_previews_default": "Activer l’aperçu des URL par défaut",
-        "inline_url_previews_room": "Activer l’aperçu des URL par défaut pour les participants de ce salon",
-        "inline_url_previews_room_account": "Activer l’aperçu des URL pour ce salon (n’affecte que vous)",
+        "inline_url_previews_default": "Activer les aperçus",
+        "inline_url_previews_encrypted": "Activer les aperçus dans les sallons chiffrés",
         "insert_trailing_colon_mentions": "Insérer deux-points après les mentions de l'utilisateur au début d'un message",
         "invite_controls": {
             "default_label": "Autoriser les utilisateurs à vous inviter dans les salons"
@@ -2836,6 +2837,8 @@
             "enable_tray_icon": "Afficher l’icône dans la barre d’état et minimiser la fenêtre lors de la fermeture",
             "keyboard_heading": "Raccourcis clavier",
             "keyboard_view_shortcuts_button": "Pour voir tous les raccourcis claviers, <a>cliquez ici</a>.",
+            "link_previews_description": "Affiche des informations sur les liens sous les messages",
+            "link_previews_heading": "Aperçus des liens",
             "media_heading": "Images, GIF et vidéos",
             "presence_description": "Partager votre activité et votre statut avec les autres.",
             "publish_timezone": "Publier le fuseau horaire sur le profil public",
@@ -3890,6 +3893,16 @@
         "call_held": "%(peerName)s a mis l’appel en attente",
         "call_held_resume": "Vous avez mis l’appel en attente <a>Reprendre</a>",
         "call_held_switch": "Vous avez mis l’appel en attente <a>Basculer</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> participant à l'appel",
+                "other": "<avatars/> participants à l'appel"
+            },
+            "overflow": {
+                "one": "<avatars/>+ %(overflowCount)s participant à l'appel",
+                "other": "<avatars/>+ %(overflowCount)s participants à l'appel"
+            }
+        },
         "call_toast_unknown_room": "Salon inconnu",
         "camera_disabled": "Votre caméra est éteinte",
         "camera_enabled": "Votre caméra est toujours allumée",
@@ -3899,7 +3912,6 @@
         "connection_lost": "La connexion au serveur a été perdue",
         "connection_lost_description": "Vous ne pouvez pas passer d’appels sans connexion au serveur.",
         "consulting": "Consultation avec %(transferTarget)s. <a>Transfert à %(transferee)s</a>",
-        "decline_call": "Refuser",
         "default_device": "Appareil par défaut",
         "dial": "Composer",
         "dialpad": "Pavé numérique",
@@ -3913,10 +3925,12 @@
         "enable_microphone": "Activer le microphone",
         "expand": "Revenir à l’appel",
         "get_call_link": "Partager le lien de l'appel",
+        "group_call_started": "L'appel de groupe a commencé",
         "hangup": "Raccrocher",
         "hide_sidebar_button": "Masquer la barre latérale",
         "input_devices": "Périphériques d’entrée",
         "jitsi_call": "Conférence Jitsi",
+        "join_with_video": "Rejoigner en vidéo",
         "legacy_call": "Appel vidéo",
         "maximise": "Remplir l’écran",
         "maximise_call": "Plein écran",
@@ -3950,7 +3964,6 @@
         "show_sidebar_button": "Afficher la barre latérale",
         "silence": "Mettre l’appel en sourdine",
         "silenced": "Notifications silencieuses",
-        "skip_lobby_toggle_option": "Rejoignez immédiatement",
         "start_screenshare": "Commencer à partager mon écran",
         "stop_screenshare": "Arrêter de partager mon écran",
         "too_many_calls": "Trop d’appels",
@@ -3972,7 +3985,6 @@
         "user_is_presenting": "%(sharerName)s est à l’écran",
         "video_call": "Appel vidéo",
         "video_call_incoming": "Appel vidéo entrant",
-        "video_call_started": "Appel vidéo commencé",
         "video_call_using": "Appel vidéo utilisant :",
         "voice_call": "Appel audio",
         "voice_call_incoming": "Appel vocal entrant",
@@ -3980,7 +3992,11 @@
         "you_are_presenting": "Vous êtes à l’écran"
     },
     "web_default_device_name": "%(appName)s : %(browserName)s pour %(osName)s",
-    "welcome_to_element": "Bienvenue sur Element",
+    "welcome": {
+        "tagline_element": "Conçu pour la vitesse et la simplicité.",
+        "title_element": "Soyez dans votre Element",
+        "title_generic": "Bienvenue sur %(brand)s"
+    },
     "widget": {
         "added_by": "Widget ajouté par",
         "capabilities_dialog": {
@@ -4002,6 +4018,7 @@
             "change_name_this_room": "Changer le nom de ce salon",
             "change_topic_active_room": "Changer le sujet dans le salon actuel",
             "change_topic_this_room": "Changer le sujet de ce salon",
+            "download_file": "Télécharger des fichiers depuis le dépôt multimédia",
             "receive_membership_active_room": "Afficher quand des personnes rejoignent, partent, ou sont invités dans votre salon actif",
             "receive_membership_this_room": "Voir quand une personne rejoint, quitte ou est invitée sur ce salon",
             "remove_ban_invite_leave_active_room": "Expulser, bannir ou inviter des personnes dans votre salon actif et en partir",

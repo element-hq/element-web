@@ -30,6 +30,8 @@ const RoomListHeaderViewWrapperImpl = ({
     openSpacePreferences,
     sort,
     toggleMessagePreview,
+    createSection,
+    collapseOrExpandSections,
     ...rest
 }: RoomListHeaderProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -42,6 +44,8 @@ const RoomListHeaderViewWrapperImpl = ({
         sort,
         openSpacePreferences,
         toggleMessagePreview,
+        createSection,
+        collapseOrExpandSections,
     });
     return <RoomListHeaderView vm={vm} />;
 };
@@ -62,6 +66,8 @@ const meta = {
         sort: fn(),
         openSpacePreferences: fn(),
         toggleMessagePreview: fn(),
+        createSection: fn(),
+        collapseOrExpandSections: fn(),
     },
     parameters: {
         design: {
@@ -98,5 +104,17 @@ export const LongTitle: Story = {
     ],
     args: {
         title: "Loooooooooooooooooooooooooooooooooooooong title",
+    },
+};
+
+export const PlusIcon: Story = {
+    args: {
+        useComposeIcon: false,
+    },
+};
+
+export const CollapseSections: Story = {
+    args: {
+        collapseSections: "collapse",
     },
 };

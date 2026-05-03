@@ -1,3 +1,76 @@
+Changes in [1.12.17](https://github.com/element-hq/element-web/releases/tag/v1.12.17) (2026-04-30)
+==================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport] Fix OIDC login callback handling on Element Desktop ([#33337](https://github.com/element-hq/element-web/pull/33337)). Contributed by @t3chguy.
+
+
+Changes in [1.12.16](https://github.com/element-hq/element-web/releases/tag/v1.12.16) (2026-04-28)
+==================================================================================================
+## 🦖 Deprecations
+
+* Disallow links without protocol (e.g. starting with http(s)://) in LinkedText. ([#32972](https://github.com/element-hq/element-web/pull/32972)). Contributed by @Half-Shot.
+
+## ✨ Features
+
+* Room list: add custom section creation ([#33155](https://github.com/element-hq/element-web/pull/33155)). Contributed by @florianduros.
+* Fall back to OIDC response\_mode query if fragment unsupported ([#33169](https://github.com/element-hq/element-web/pull/33169)). Contributed by @t3chguy.
+* Switch OIDC to response\_mode=fragment ([#33100](https://github.com/element-hq/element-web/pull/33100)). Contributed by @t3chguy.
+* Hide spoilers from desktop notifications ([#31699](https://github.com/element-hq/element-web/pull/31699)). Contributed by @JeftavanderHorst.
+* Room list: expand sections when a filter is toggled ([#33077](https://github.com/element-hq/element-web/pull/33077)). Contributed by @florianduros.
+* Show a 'grab' cursor on picture-in-picture view ([#33079](https://github.com/element-hq/element-web/pull/33079)). Contributed by @robintown.
+* Update URL Preview settings ([#32992](https://github.com/element-hq/element-web/pull/32992)). Contributed by @Half-Shot.
+* Add user friendly capability text for `msc4039.download_file` ([#32983](https://github.com/element-hq/element-web/pull/32983)). Contributed by @BillCarsonFr.
+* Accessibility improvements in settings ([#32968](https://github.com/element-hq/element-web/pull/32968)). Contributed by @t3chguy.
+* Move Low Bandwidth feature to devtools. ([#32797](https://github.com/element-hq/element-web/pull/32797)). Contributed by @Half-Shot.
+* Room list: add activity marker to sections ([#33024](https://github.com/element-hq/element-web/pull/33024)). Contributed by @florianduros.
+* Remove global h2 css rule in favour of heading styles/components ([#32969](https://github.com/element-hq/element-web/pull/32969)). Contributed by @t3chguy.
+* Allow Element Call to use MSC4039 ([#32755](https://github.com/element-hq/element-web/pull/32755)). Contributed by @JephDiel.
+* Room list: add default sections ([#32785](https://github.com/element-hq/element-web/pull/32785)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Fix Module API versioning ([#33261](https://github.com/element-hq/element-web/pull/33261)). Contributed by @RiotRobot.
+* Fix crashes in when opening Bridges in room settings  ([#33137](https://github.com/element-hq/element-web/pull/33137)). Contributed by @defaultdino.
+* fix(call): leave call along with room ([#33162](https://github.com/element-hq/element-web/pull/33162)). Contributed by @defaultdino.
+* Fix React hydration issues ([#32958](https://github.com/element-hq/element-web/pull/32958)). Contributed by @t3chguy.
+* Enusre voice message recording does not fall back to the default input if an input is specifically configured. ([#32887](https://github.com/element-hq/element-web/pull/32887)). Contributed by @jpborie05.
+* Room list: fix expanded/collapse state of sections ([#33074](https://github.com/element-hq/element-web/pull/33074)). Contributed by @florianduros.
+* fix: Left hand sidebar text selectable ([#33029](https://github.com/element-hq/element-web/pull/33029)). Contributed by @marley.
+* Collapsible Left Panel - Ensure that panels have non-fractional widths ([#33052](https://github.com/element-hq/element-web/pull/33052)). Contributed by @MidhunSureshR.
+* Collapsible Left Panel - Clicking on separator should expand to 100% when no width is available in settings ([#33053](https://github.com/element-hq/element-web/pull/33053)). Contributed by @MidhunSureshR.
+* Fix EventListSummary not unbinding event listeners ([#33006](https://github.com/element-hq/element-web/pull/33006)). Contributed by @t3chguy.
+
+
+Changes in [1.12.15](https://github.com/element-hq/element-web/releases/tag/v1.12.15) (2026-04-08)
+==================================================================================================
+Fixes Desktop release workflow.
+
+This release is identical to v1.12.14 otherwise.
+
+Changes in [1.12.14](https://github.com/element-hq/element-web/releases/tag/v1.12.14) (2026-04-07)
+==================================================================================================
+## ✨ Features
+
+* Add analytics tracking for URL previews ([#32659](https://github.com/element-hq/element-web/pull/32659)). Contributed by @Half-Shot.
+* Collapsible Room List - Clicking on separator should expand to last set width ([#32909](https://github.com/element-hq/element-web/pull/32909)). Contributed by @MidhunSureshR.
+* RoomList: improve performance ([#32919](https://github.com/element-hq/element-web/pull/32919)). Contributed by @florianduros.
+* Implement collapsible panels for the new room list ([#32742](https://github.com/element-hq/element-web/pull/32742)). Contributed by @MidhunSureshR.
+* Hide the names of banned users behind a spoiler tag (attempt 2) ([#32636](https://github.com/element-hq/element-web/pull/32636)). Contributed by @andybalaam.
+
+## 🐛 Bug Fixes
+
+* Use the code signing Subject Name as basis for Tray GUID on Windows ([#32939](https://github.com/element-hq/element-web/pull/32939)). Contributed by @t3chguy.
+* Ensure the incoming verification request appears above the please verify prompt ([#32931](https://github.com/element-hq/element-web/pull/32931)). Contributed by @andybalaam.
+* Collapsible Room List - Prevent any interaction with the separator when the panel is expanded ([#32910](https://github.com/element-hq/element-web/pull/32910)). Contributed by @MidhunSureshR.
+* Fix icon size of badges in right panel ([#32952](https://github.com/element-hq/element-web/pull/32952)). Contributed by @florianduros.
+* Fix room list often showing the wrong icons for calls ([#32881](https://github.com/element-hq/element-web/pull/32881)). Contributed by @robintown.
+* Fix emoticon slash commands including stale buffers ([#32928](https://github.com/element-hq/element-web/pull/32928)). Contributed by @t3chguy.
+* Fix presence indicators not showing without cache   ([#32880](https://github.com/element-hq/element-web/pull/32880)). Contributed by @DLCSharp.
+* Show space name instead of 'Empty room' after creation ([#32886](https://github.com/element-hq/element-web/pull/32886)). Contributed by @gugaribeiro05.
+* Strip ephemeral query params from OIDC redirect URI ([#32875](https://github.com/element-hq/element-web/pull/32875)). Contributed by @azmeuk.
+
+
 Changes in [1.12.13](https://github.com/element-hq/element-web/releases/tag/v1.12.13) (2026-03-24)
 ==================================================================================================
 ## 🦖 Deprecations

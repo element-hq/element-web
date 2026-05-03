@@ -5,7 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type I18nApi as II18nApi, type Variables, type Translations } from "@element-hq/element-web-module-api";
+import {
+    type I18nApi as II18nApi,
+    type Variables,
+    type StringVariables,
+    type Translations,
+    type Tags,
+} from "@element-hq/element-web-module-api";
 
 import { humanizeTime } from "../utils/humanize";
 import { _t, getLocale, registerTranslations } from "./i18n";
@@ -41,9 +47,13 @@ export class I18nApi implements II18nApi {
      * Perform a translation, with optional variables
      * @param key - The key to translate
      * @param variables - Optional variables to interpolate into the translation
+     * @param tags - Optional tags to interpolate into the translation
      */
-    public translate(this: void, key: TranslationKey, variables?: Variables): string {
-        return _t(key, variables);
+    public translate(this: void, key: TranslationKey, variables?: StringVariables): string;
+    public translate(this: void, key: TranslationKey, variables: Variables | undefined, tags: Tags): React.ReactNode;
+    public translate(this: void, key: TranslationKey, variables?: Variables, tags?: Tags): React.ReactNode | string {
+        if (tags) return _t(key, variables, tags);
+        return _t(key, variables as Variables);
     }
 
     public humanizeTime = (timeMillis: number): string => humanizeTime(timeMillis, this);

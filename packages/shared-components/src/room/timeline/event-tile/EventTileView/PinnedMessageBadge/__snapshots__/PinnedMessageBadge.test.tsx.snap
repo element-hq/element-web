@@ -4,7 +4,7 @@ exports[`PinnedMessageBadge > renders the default badge 1`] = `
 <div>
   <div
     aria-describedby="event-tile-description"
-    class="pinnedMessageBadge"
+    class="PinnedMessageBadge-module_pinnedMessageBadge"
     tabindex="0"
   >
     <svg

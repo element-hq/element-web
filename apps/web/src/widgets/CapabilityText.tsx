@@ -57,6 +57,9 @@ export class CapabilityText {
         [MatrixCapabilities.MSC2931Navigate]: {
             [GENERIC_WIDGET_KIND]: _td("widget|capability|switch_room_message_user"),
         },
+        [MatrixCapabilities.MSC4039DownloadFile]: {
+            [GENERIC_WIDGET_KIND]: _td("widget|capability|download_file"),
+        },
     };
 
     private static stateSendRecvCaps: SendRecvStaticCapText = {

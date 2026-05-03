@@ -90,12 +90,24 @@ describe("OIDC authorization", () => {
             expect(authUrl.searchParams.has("nonce")).toBeTruthy();
             expect(authUrl.searchParams.has("code_challenge")).toBeTruthy();
         });
+
+        it("should prefer response_mode fragment if supported", async () => {
+            await startOidcLogin(
+                { ...delegatedAuthConfig, response_modes_supported: ["query", "fragment"] },
+                clientId,
+                homeserverUrl,
+            );
+
+            const authUrl = new URL(window.location.href);
+
+            expect(authUrl.searchParams.get("response_mode")).toEqual("fragment");
+        });
     });
 
     describe("completeOidcLogin()", () => {
         const state = "test-state-444";
         const code = "test-code-777";
-        const queryDict = {
+        const params = {
             code,
             state: state,
         };
@@ -131,19 +143,19 @@ describe("OIDC authorization", () => {
         });
 
         it("should throw when query params do not include state and code", async () => {
-            await expect(async () => await completeOidcLogin({})).rejects.toThrow(
+            await expect(async () => await completeOidcLogin({}, "query")).rejects.toThrow(
                 OidcClientError.InvalidQueryParameters,
             );
         });
 
         it("should make request complete authorization code grant", async () => {
-            await completeOidcLogin(queryDict);
+            await completeOidcLogin(params, "fragment");
 
-            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state);
+            expect(completeAuthorizationCodeGrant).toHaveBeenCalledWith(code, state, "fragment");
         });
 
         it("should return accessToken, configured homeserver and identityServer", async () => {
-            const result = await completeOidcLogin(queryDict);
+            const result = await completeOidcLogin(params, "query");
 
             expect(result).toEqual({
                 accessToken: tokenResponse.access_token,

@@ -1676,7 +1676,6 @@
         "restricted": "Restrito"
     },
     "powered_by_matrix": "Fornecido por Matrix",
-    "powered_by_matrix_with_logo": "Conversa e colaboração descentralizadas e encriptadas com a tecnologia $matrixLogo",
     "presence": {
         "away": "Ausente",
         "busy": "Ocupado",
@@ -2082,8 +2081,6 @@
             "aliases_section": "Endereços de salas",
             "avatar_field_label": "Avatar da sala",
             "canonical_alias_field_label": "Endereço principal",
-            "default_url_previews_off": "As pré-visualizações de URL estão desactivadas por predefinição para os participantes nesta sala.",
-            "default_url_previews_on": "As pré-visualizações de URL estão activadas por predefinição para os participantes nesta sala.",
             "description_space": "Edita as definições relativas ao teu espaço.",
             "error_creating_alias_description": "Ocorreu um erro ao criares esse endereço. Pode não ser permitido pelo servidor ou ocorreu uma falha temporária.",
             "error_creating_alias_title": "Erro ao criar o endereço",
@@ -2112,12 +2109,7 @@
             "published_aliases_explainer_space": "Os endereços publicados podem ser usados por qualquer pessoa em qualquer servidor para se juntar ao teu espaço.",
             "published_aliases_section": "Endereços publicados",
             "save": "Salvar Alterações",
-            "topic_field_label": "Tópico da sala",
-            "url_preview_encryption_warning": "Em salas encriptadas, como esta, as pré-visualizações de URL são desactivadas por predefinição para garantir que o teu servidor doméstico (onde as pré-visualizações são geradas) não pode recolher informações sobre as ligações que vês nesta sala.",
-            "url_preview_explainer": "Quando alguém coloca um URL na sua mensagem, pode ser mostrada uma pré-visualização do URL para dar mais informações sobre essa ligação, como o título, a descrição e uma imagem do sítio Web.",
-            "url_previews_section": "Pré-visualização de links",
-            "user_url_previews_default_off": "Você <a>desabilitou</a> pré-visualizações de links por padrão.",
-            "user_url_previews_default_on": "Você <a>habilitou</a> pré-visualizações de links por padrão."
+            "topic_field_label": "Tópico da sala"
         },
         "notifications": {
             "browse_button": "Navegar",
@@ -2520,8 +2512,6 @@
             "username": "Nome de utilizador"
         },
         "inline_url_previews_default": "Ativar pré-visualizações de URL embutidas por predefinição",
-        "inline_url_previews_room": "Ativar pré-visualizações de URL por defeito para os participantes nesta sala",
-        "inline_url_previews_room_account": "Ativar pré-visualizações URL para esta sala (só te afeta a ti)",
         "insert_trailing_colon_mentions": "Insere dois pontos após as menções do utilizador no início de uma mensagem",
         "jump_to_bottom_on_send": "Salta para o fundo da linha de tempo quando enviar uma mensagem",
         "key_backup": {
@@ -3760,13 +3750,11 @@
         "user_busy_description": "O utilizador para o qual tentou ligar está ocupado.",
         "user_is_presenting": "%(sharerName)s está apresentando",
         "video_call": "Chamada de vídeo",
-        "video_call_started": "Chamada de vídeo iniciada",
         "video_call_using": "Video-chamada usando:",
         "voice_call": "Chamada de voz",
         "you_are_presenting": "Estás a apresentar"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
-    "welcome_to_element": "Bem-vindo ao Element",
     "widget": {
         "added_by": "Widget adicionado por",
         "capabilities_dialog": {

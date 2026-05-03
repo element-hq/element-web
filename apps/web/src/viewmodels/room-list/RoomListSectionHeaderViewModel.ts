@@ -15,10 +15,17 @@ import {
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../stores/notifications/NotificationState";
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
+import SettingsStore from "../../settings/SettingsStore";
+import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
+import RoomListStoreV3, { CHATS_TAG } from "../../stores/room-list-v3/RoomListStoreV3";
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
     title: string;
+    /**
+     * The ID of the current space.
+     */
+    spaceId: string;
     onToggleExpanded: (isExpanded: boolean) => void;
 }
 
@@ -31,12 +38,31 @@ export class RoomListSectionHeaderViewModel
      */
     private roomNotificationStates = new Set<RoomNotificationState>();
 
+    /**
+     * Tracks the expanded/collapsed state per space.
+     * Key is spaceId. Defaults to expanded if not set.
+     */
+    private readonly expandedBySpace = new Map<string, boolean>();
+
     public constructor(props: RoomListSectionHeaderViewModelProps) {
-        super(props, { id: props.tag, title: props.title, isExpanded: true, isUnread: false });
+        const isDefaultSection =
+            props.tag === DefaultTagID.Favourite || props.tag === DefaultTagID.LowPriority || props.tag === CHATS_TAG;
+        super(props, {
+            id: props.tag,
+            title: props.title,
+            isExpanded: true,
+            isUnread: false,
+            displaySectionMenu: !isDefaultSection,
+        });
+        const sectionWatherRef = SettingsStore.watchSetting("RoomList.CustomSectionData", null, () =>
+            this.onCustomSectionDataChange(),
+        );
+        this.disposables.track(() => SettingsStore.unwatchSetting(sectionWatherRef));
     }
 
     public onClick = (): void => {
         const isExpanded = !this.snapshot.current.isExpanded;
+        this.expandedBySpace.set(this.props.spaceId, isExpanded);
         this.snapshot.merge({ isExpanded });
         this.props.onToggleExpanded(isExpanded);
     };
@@ -46,6 +72,25 @@ export class RoomListSectionHeaderViewModel
      */
     public get isExpanded(): boolean {
         return this.snapshot.current.isExpanded;
+    }
+
+    /**
+     * Set whether the section is expanded for the current space.
+     * This will not trigger the onToggleExpanded callback.
+     */
+    public set isExpanded(value: boolean) {
+        this.expandedBySpace.set(this.props.spaceId, value);
+        this.snapshot.merge({ isExpanded: value });
+    }
+
+    /**
+     * Switch to a different space, restoring the expanded state for that space.
+     * Defaults to expanded if no state has been saved for the space.
+     */
+    public setSpace(spaceId: string): void {
+        this.props.spaceId = spaceId;
+        const isExpanded = this.expandedBySpace.get(this.props.spaceId) ?? true;
+        this.snapshot.merge({ isExpanded });
     }
 
     /**
@@ -90,4 +135,25 @@ export class RoomListSectionHeaderViewModel
         this.roomNotificationStates.clear();
         super.dispose();
     }
+
+    /**
+     * Handle changes to custom section data.
+     */
+    private onCustomSectionDataChange(): void {
+        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+        const sectionData = customSectionData[this.props.tag];
+        if (sectionData) {
+            this.snapshot.merge({ title: sectionData.name });
+        }
+    }
+
+    public editSection = async (): Promise<void> => {
+        await RoomListStoreV3.instance.editSection(this.props.tag);
+    };
+
+    public removeSection = async (): Promise<void> => {
+        // There is one notification state per room in the section
+        const isEmpty = this.roomNotificationStates.size === 0;
+        await RoomListStoreV3.instance.removeSection(this.props.tag, isEmpty);
+    };
 }

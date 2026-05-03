@@ -126,7 +126,7 @@ test.describe("Login", () => {
             await page.goto("/");
 
             // Should give us the welcome page initially
-            await expect(page.getByRole("heading", { name: "Welcome to Element!" })).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
 
             // Start the login process
             await expect(axe).toHaveNoViolations();
@@ -334,7 +334,7 @@ test.describe("Login", () => {
     });
 
     test.describe("logout", () => {
-        test("should go to login page on logout", async ({ page, user }) => {
+        test("should go to welcome page on logout", async ({ page, user }) => {
             await page.getByRole("button", { name: "User menu" }).click();
             await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
 
@@ -345,7 +345,7 @@ test.describe("Login", () => {
                 .locator(".mx_UserMenu_contextMenu")
                 .getByRole("menuitem", { name: "Remove this device" })
                 .click();
-            await expect(page).toHaveURL(/\/#\/login$/);
+            await expect(page).toHaveURL(/\/#\/welcome$/);
         });
     });
 });

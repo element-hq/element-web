@@ -115,7 +115,7 @@
         "show_advanced": "Visa avancerat",
         "show_all": "Visa alla",
         "sign_in": "Logga in",
-        "sign_out": "Logga ut",
+        "sign_out": "Ta bort den här enheten",
         "skip": "Hoppa över",
         "start": "Starta",
         "start_chat": "Starta chatt",
@@ -1492,9 +1492,6 @@
         "render_reaction_images_description": "Ibland kallat för ”anpassade emojis”.",
         "report_to_moderators": "Rapportera till moderatorer",
         "report_to_moderators_description": "I rum som stöder moderering så låter \"Rapportera\"-knappen dig rapportera trakasseri till rumsmoderatorer.",
-        "share_history_on_invite": "Dela encrypted historik med nya medlemmar",
-        "share_history_on_invite_description": "När du bjuder in en användare till ett krypterat rum där historiksynlighet är inställd på \"delad\" så delar du krypterad historik med den användaren och du accepterar krypterad historik när du blir inbjuden till ett sådant rum.",
-        "share_history_on_invite_warning": "Den här funktionen är EXPERIMENTELL och alla säkerhetsåtgärder är inte implementerade. Aktivera inte på produktionskonton.",
         "sliding_sync": "Sliding sync-läge",
         "sliding_sync_description": "Under aktiv utveckling, kan inte inaktiveras.",
         "sliding_sync_disabled_notice": "Logga ut och in igen för att inaktivera",
@@ -1728,7 +1725,6 @@
         "restricted": "Begränsad"
     },
     "powered_by_matrix": "Drivs av Matrix",
-    "powered_by_matrix_with_logo": "Decentraliserad krypterad chatt &amp; samarbete som drivs av $matrixLogo",
     "presence": {
         "away": "Borta",
         "busy": "Upptagen",
@@ -2141,8 +2137,6 @@
             "aliases_section": "Rumsadresser",
             "avatar_field_label": "Rumsavatar",
             "canonical_alias_field_label": "Huvudadress",
-            "default_url_previews_off": "URL-förhandsgranskning är inaktiverat som förval för deltagare i detta rum.",
-            "default_url_previews_on": "URL-förhandsgranskning är aktiverat som förval för deltagare i detta rum.",
             "description_space": "Redigera inställningar relaterat till ditt utrymme.",
             "error_creating_alias_description": "Ett fel inträffade vid skapande av adressen. Det kanske inte tillåts av servern, eller så inträffade ett tillfälligt fel.",
             "error_creating_alias_title": "Fel vid skapande av adress",
@@ -2171,12 +2165,7 @@
             "published_aliases_explainer_space": "Publicerade adresser kan användas av vem som helst på vilken server som helst för att gå med i ditt utrymme.",
             "published_aliases_section": "Publicerade adresser",
             "save": "Spara ändringar",
-            "topic_field_label": "Rumsämne",
-            "url_preview_encryption_warning": "I krypterade rum, som detta, är URL-förhandsgranskning inaktiverad som förval för att säkerställa att din hemserver (där förhandsgranskningar genereras) inte kan samla information om länkar du ser i rummet.",
-            "url_preview_explainer": "När någon lägger en URL i sitt meddelande, kan URL-förhandsgranskning ge mer information om länken, såsom titel, beskrivning, och en bild från webbplatsen.",
-            "url_previews_section": "URL-förhandsgranskning",
-            "user_url_previews_default_off": "Du har <a>inaktiverat</a> URL-förhandsgranskning som förval.",
-            "user_url_previews_default_on": "Du har <a>aktiverat</a> URL-förhandsgranskning som förval."
+            "topic_field_label": "Rumsämne"
         },
         "notifications": {
             "browse_button": "Bläddra",
@@ -2589,8 +2578,6 @@
             "username": "Användarnamn"
         },
         "inline_url_previews_default": "Aktivera inbäddad URL-förhandsgranskning som standard",
-        "inline_url_previews_room": "Aktivera URL-förhandsgranskning som standard för deltagare i detta rum",
-        "inline_url_previews_room_account": "Aktivera URL-förhandsgranskning för detta rum (påverkar bara dig)",
         "insert_trailing_colon_mentions": "Infoga kolon efter användaromnämnande på början av ett meddelande",
         "invite_controls": {
             "default_label": "Tillåt användare att bjuda in dig till rum"
@@ -2856,8 +2843,8 @@
             "sign_out": "Logga ut den här sessionen",
             "sign_out_all_other_sessions": "Logga ut ur alla andra sessioner (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Är du säker på att du vill logga ut %(count)s session?",
-                "other": "Är du säker på att du vill logga ut %(count)s sessioner?"
+                "one": "Är du säker på att du vill ta bort %(count)s session?",
+                "other": "Är du säker på att du vill ta bort %(count)s sessioner?"
             },
             "sign_out_n_sessions": {
                 "one": "Logga ut ur %(count)s session",
@@ -3368,8 +3355,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s accepterade inbjudan för %(displayName)s",
             "accepted_invite": "%(targetName)s accepterade inbjudan",
-            "ban": "%(senderName)s bannade %(targetName)s",
-            "ban_reason": "%(senderName)s bannade %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s bannade en användare",
+            "ban_reason": "%(senderName)s bannade en användare: %(reason)s",
             "change_avatar": "%(senderName)s bytte sin profilbild",
             "change_name": "%(oldDisplayName)s bytte sitt visningsnamn till %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s bytte sitt visningsnamn och sin profilbild",
@@ -3849,13 +3836,11 @@
         "user_busy_description": "Användaren du ringde är upptagen.",
         "user_is_presenting": "%(sharerName)s presenterar",
         "video_call": "Videosamtal",
-        "video_call_started": "Videosamtal startat",
         "video_call_using": "Videosamtal med hjälp av:",
         "voice_call": "Röstsamtal",
         "you_are_presenting": "Du presenterar"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Välkommen till Element",
     "widget": {
         "added_by": "Widget tillagd av",
         "capabilities_dialog": {

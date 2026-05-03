@@ -163,9 +163,10 @@ b {
     font-weight: bold;
 }
 
-a:hover,
-a:link,
-a:visited {
+/* Keep the legacy link colour without overriding Compound anchors. */
+a:where(:not([data-kind])):hover,
+a:where(:not([data-kind])):link,
+a:where(:not([data-kind])):visited {
     color: $accent-alt;
 }
 
@@ -598,6 +599,7 @@ legend {
         .mx_AccessSecretStorageDialog button,
         .mx_InviteDialog_section button,
         .mx_InviteDialog_editor button,
+        .mx_UnknownIdentityUsersWarningDialog button,
         [class|="maplibregl"]
     ),
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton),
@@ -625,7 +627,8 @@ legend {
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button
+        .mx_EncryptionUserSettingsTab button,
+        .mx_UnknownIdentityUsersWarningDialog button
     ):last-child {
     margin-right: 0px;
 }
@@ -641,7 +644,8 @@ legend {
         .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button,
         .mx_InviteDialog_section button,
-        .mx_InviteDialog_editor button
+        .mx_InviteDialog_editor button,
+        .mx_UnknownIdentityUsersWarningDialog button
     ):focus,
 .mx_Dialog input[type="submit"]:focus,
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):focus,
@@ -659,7 +663,8 @@ legend {
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button
+        .mx_EncryptionUserSettingsTab button,
+        .mx_UnknownIdentityUsersWarningDialog button
     ),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: var(--cpd-color-text-on-solid-primary);
@@ -678,7 +683,8 @@ legend {
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button
+        .mx_EncryptionUserSettingsTab button,
+        .mx_UnknownIdentityUsersWarningDialog button
     ),
 .mx_Dialog_buttons input[type="submit"].danger {
     background-color: var(--cpd-color-bg-critical-primary);
@@ -701,7 +707,8 @@ legend {
         .mx_ThemeChoicePanel_CustomTheme button,
         .mx_UnpinAllDialog button,
         .mx_ShareDialog button,
-        .mx_EncryptionUserSettingsTab button
+        .mx_EncryptionUserSettingsTab button,
+        .mx_UnknownIdentityUsersWarningDialog button
     ):disabled,
 .mx_Dialog input[type="submit"]:disabled,
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):disabled,
@@ -832,18 +839,6 @@ legend {
         outline-color: -webkit-focus-ring-color;
         outline-style: auto;
     }
-}
-
-@define-mixin ButtonResetDefault {
-    appearance: none;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font-size: inherit;
-    font-family: inherit;
-    line-height: inherit;
-    cursor: pointer;
 }
 
 @define-mixin LegacyCallButton {

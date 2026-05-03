@@ -9,7 +9,7 @@ import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
 
-import { createTestClient, flushPromises, mkStubRoom, stubClient } from "../../test-utils";
+import { createTestClient, flushPromises, flushPromisesWithFakeTimers, mkStubRoom, stubClient } from "../../test-utils";
 import RoomListStoreV3, { CHATS_TAG, RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
@@ -465,6 +465,20 @@ describe("RoomListViewModel", () => {
         });
     });
 
+    describe("notifyCollapseState", () => {
+        it("should dispatch collapseSections=undefined when feature_room_list_sections is disabled", () => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+
+            const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+            RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: Action.RoomListSectionsCollapseStateChanged,
+                collapseSections: undefined,
+            });
+        });
+    });
+
     describe("Keyboard navigation (ViewRoomDelta)", () => {
         beforeEach(() => {
             // stubClient sets up MatrixClientPeg which is needed when ViewRoom action is dispatched
@@ -589,6 +603,14 @@ describe("RoomListViewModel", () => {
     });
 
     describe("Cleanup", () => {
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
         it("should dispose all room item view models on dispose", () => {
             viewModel = new RoomListViewModel({ client: matrixClient });
 
@@ -602,6 +624,57 @@ describe("RoomListViewModel", () => {
 
             expect(disposeSpy1).toHaveBeenCalled();
             expect(disposeSpy2).toHaveBeenCalled();
+        });
+
+        describe("Toast", () => {
+            it("should show toast when SectionCreated event fires", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.SectionCreated);
+                expect(viewModel.getSnapshot().toast).toBe("section_created");
+            });
+
+            it("should show toast when RoomTagged event fires", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.RoomTagged);
+                expect(viewModel.getSnapshot().toast).toBe("chat_moved");
+            });
+
+            it("should clear toast when closeToast is called", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.SectionCreated);
+                expect(viewModel.getSnapshot().toast).toBe("section_created");
+
+                viewModel.closeToast();
+                expect(viewModel.getSnapshot().toast).toBeUndefined();
+            });
+
+            it("should auto-close toast after 15 seconds", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.SectionCreated);
+                expect(viewModel.getSnapshot().toast).toBe("section_created");
+
+                jest.advanceTimersByTime(15 * 1000);
+                expect(viewModel.getSnapshot().toast).toBeUndefined();
+            });
+
+            it("should reset the auto-close timer when a new section is created", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.SectionCreated);
+                jest.advanceTimersByTime(10 * 1000);
+
+                // Second section created — resets the timer
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.SectionCreated);
+                jest.advanceTimersByTime(10 * 1000);
+
+                // Toast should still be visible (only 10s since last emit)
+                expect(viewModel.getSnapshot().toast).toBe("section_created");
+
+                jest.advanceTimersByTime(5 * 1000);
+                expect(viewModel.getSnapshot().toast).toBeUndefined();
+            });
         });
 
         describe("Sections (feature_room_list_sections)", () => {
@@ -806,10 +879,10 @@ describe("RoomListViewModel", () => {
                 expect(favSection!.roomIds).toEqual([]);
             });
 
-            it("should preserve section collapse state across space changes", () => {
+            it("should track section collapse state per space", () => {
                 viewModel = new RoomListViewModel({ client: matrixClient });
 
-                // Collapse favourites
+                // Collapse favourites in the home space
                 const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
                 favHeader.onClick();
 
@@ -828,15 +901,37 @@ describe("RoomListViewModel", () => {
 
                 RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
 
-                const snapshot = viewModel.getSnapshot();
-                // Favourites should still be collapsed even after the space change
-                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                let snapshot = viewModel.getSnapshot();
+                // Favourites should be expanded in the new space (per-space state)
+                let favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection).toBeDefined();
+                expect(favSection!.roomIds).toEqual(["!spacefav:server"]);
+
+                // Other sections should also be expanded
+                let chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
+
+                // Switch back to home space
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1, favRoom2] },
+                        { tag: CHATS_TAG, rooms: [regularRoom1] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                });
+
+                RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                snapshot = viewModel.getSnapshot();
+                // Favourites should still be collapsed in the home space
+                favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
                 expect(favSection).toBeDefined();
                 expect(favSection!.roomIds).toEqual([]);
 
-                // Other sections should remain expanded
-                const chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
-                expect(chatsSection!.roomIds).toEqual(["!spacereg:server"]);
+                // Chats should be expanded
+                chatsSection = snapshot.sections.find((s) => s.id === CHATS_TAG);
+                expect(chatsSection!.roomIds).toEqual(["!reg1:server"]);
             });
 
             it("should apply filters across all sections", () => {
@@ -863,6 +958,123 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.sections[0].roomIds).toEqual(["!fav1:server"]);
             });
 
+            it("should expand collapsed sections that have results when a filter is toggled on", () => {
+                viewModel = new RoomListViewModel({ client: matrixClient });
+
+                // Collapse the favourite section
+                const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                favHeader.onClick();
+                expect(favHeader.isExpanded).toBe(false);
+
+                // Toggle a filter that returns rooms in the favourite section
+                jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                    spaceId: "home",
+                    sections: [
+                        { tag: DefaultTagID.Favourite, rooms: [favRoom1] },
+                        { tag: CHATS_TAG, rooms: [] },
+                        { tag: DefaultTagID.LowPriority, rooms: [] },
+                    ],
+                    filterKeys: [FilterEnum.UnreadFilter],
+                });
+                viewModel.onToggleFilter("unread");
+
+                // The favourite section should be expanded and its rooms visible
+                expect(favHeader.isExpanded).toBe(true);
+                const snapshot = viewModel.getSnapshot();
+                const favSection = snapshot.sections.find((s) => s.id === DefaultTagID.Favourite);
+                expect(favSection!.roomIds).toEqual(["!fav1:server"]);
+            });
+
+            describe("Collapse/expand all sections", () => {
+                it("should collapse all sections when Action.RoomListCollapseAllSections is dispatched", async () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                    const chatsHeader = viewModel.getSectionHeaderViewModel(CHATS_TAG);
+                    expect(favHeader.isExpanded).toBe(true);
+
+                    dispatcher.dispatch({ action: Action.RoomListCollapseAllSections });
+                    await flushPromisesWithFakeTimers();
+
+                    expect(favHeader.isExpanded).toBe(false);
+                    expect(chatsHeader.isExpanded).toBe(false);
+
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([]);
+                    expect(snapshot.sections.find((s) => s.id === CHATS_TAG)!.roomIds).toEqual([]);
+                });
+
+                it("should expand all sections when Action.RoomListExpandAllSections is dispatched", async () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    // Collapse first
+                    const favHeader = viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite);
+                    favHeader.onClick();
+                    expect(favHeader.isExpanded).toBe(false);
+
+                    dispatcher.dispatch({ action: Action.RoomListExpandAllSections });
+                    await flushPromisesWithFakeTimers();
+
+                    expect(favHeader.isExpanded).toBe(true);
+                    const snapshot = viewModel.getSnapshot();
+                    expect(snapshot.sections.find((s) => s.id === DefaultTagID.Favourite)!.roomIds).toEqual([
+                        "!fav1:server",
+                        "!fav2:server",
+                    ]);
+                });
+            });
+
+            describe("notifyCollapseState", () => {
+                it("should dispatch collapseSections=expand when all sections are expanded (default)", () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+                    RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                    expect(dispatchSpy).toHaveBeenCalledWith({
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "expand",
+                    });
+                });
+
+                it("should dispatch collapseSection=collapse when all sections are collapsed", () => {
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    // Collapse all sections
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.Favourite).isExpanded = false;
+                    viewModel.getSectionHeaderViewModel(CHATS_TAG).isExpanded = false;
+                    viewModel.getSectionHeaderViewModel(DefaultTagID.LowPriority).isExpanded = false;
+
+                    const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+                    RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                    expect(dispatchSpy).toHaveBeenCalledWith({
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    });
+                });
+
+                it("should dispatch collapseSection=undefined when it is a flat list", () => {
+                    jest.spyOn(RoomListStoreV3.instance, "getSortedRoomsInActiveSpace").mockReturnValue({
+                        spaceId: "home",
+                        sections: [
+                            { tag: DefaultTagID.Favourite, rooms: [] },
+                            { tag: CHATS_TAG, rooms: [regularRoom1] },
+                            { tag: DefaultTagID.LowPriority, rooms: [] },
+                        ],
+                    });
+                    viewModel = new RoomListViewModel({ client: matrixClient });
+
+                    const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
+                    RoomListStoreV3.instance.emit(RoomListStoreV3Event.ListsUpdate);
+
+                    expect(dispatchSpy).toHaveBeenCalledWith({
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: undefined,
+                    });
+                });
+            });
+
             it("should apply sticky room within the correct section", async () => {
                 stubClient();
                 viewModel = new RoomListViewModel({ client: matrixClient });
@@ -873,7 +1085,7 @@ describe("RoomListViewModel", () => {
                     action: Action.ActiveRoomChanged,
                     newRoomId: "!fav1:server",
                 });
-                await flushPromises();
+                await flushPromisesWithFakeTimers();
 
                 expect(viewModel.getSnapshot().roomListState.activeRoomIndex).toBe(0);
 

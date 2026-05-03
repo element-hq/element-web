@@ -1293,23 +1293,30 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
 
             case Action.ComposerInsert: {
-                if (payload.composerType) break;
+                const composerInsertPayload = payload as ComposerInsertPayload;
+                if (composerInsertPayload.composerType) break;
 
-                let timelineRenderingType: TimelineRenderingType = payload.timelineRenderingType;
+                let timelineRenderingType: TimelineRenderingType | undefined;
                 // ThreadView handles Action.ComposerInsert itself due to it having its own editState
-                if (timelineRenderingType === TimelineRenderingType.Thread) break;
+                if (composerInsertPayload.timelineRenderingType === TimelineRenderingType.Thread) break;
                 if (
                     this.state.timelineRenderingType === TimelineRenderingType.Search &&
-                    payload.timelineRenderingType === TimelineRenderingType.Search
+                    composerInsertPayload.timelineRenderingType === TimelineRenderingType.Search
                 ) {
                     // we don't have the composer rendered in this state, so bring it back first
                     await this.onCancelSearchClick();
                     timelineRenderingType = TimelineRenderingType.Room;
                 }
 
+                // If the dispatchee didn't request a timeline rendering type, use the current one.
+                timelineRenderingType =
+                    timelineRenderingType ??
+                    composerInsertPayload.timelineRenderingType ??
+                    this.state.timelineRenderingType;
+
                 // re-dispatch to the correct composer
                 defaultDispatcher.dispatch<ComposerInsertPayload>({
-                    ...(payload as ComposerInsertPayload),
+                    ...composerInsertPayload,
                     timelineRenderingType,
                     composerType: this.state.editState ? ComposerType.Edit : ComposerType.Send,
                 });
@@ -1380,12 +1387,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) return;
 
         if (ev.getType() === "org.matrix.room.preview_urls") {
-            this.updatePreviewUrlVisibility(room);
+            this.updatePreviewUrlVisibility();
         }
 
         if (ev.getType() === "m.room.encryption") {
             this.updateE2EStatus(room);
-            this.updatePreviewUrlVisibility(room);
+            this.updatePreviewUrlVisibility();
         }
 
         // ignore anything but real-time updates at the end of the room:
@@ -1541,15 +1548,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     }
 
-    private updatePreviewUrlVisibility(room: Room): void {
+    private updatePreviewUrlVisibility(): void {
         this.setState(({ isRoomEncrypted }) => ({
-            showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
+            showUrlPreview: this.getPreviewUrlVisibility(isRoomEncrypted),
         }));
     }
 
-    private getPreviewUrlVisibility({ roomId }: Room, isRoomEncrypted: boolean | null): boolean {
-        const key = isRoomEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled";
-        return SettingsStore.getValue(key, roomId);
+    private getPreviewUrlVisibility(isRoomEncrypted: boolean | null): boolean {
+        return SettingsStore.getValue(isRoomEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled");
     }
 
     private onRoom = (room: Room): void => {
@@ -1608,9 +1614,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private onUrlPreviewsEnabledChange = (): void => {
-        if (this.state.room) {
-            this.updatePreviewUrlVisibility(this.state.room);
-        }
+        this.updatePreviewUrlVisibility();
     };
 
     private onRoomStateEvents = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
@@ -1638,7 +1642,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         this.setState({
             isRoomEncrypted,
-            showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
+            showUrlPreview: this.getPreviewUrlVisibility(isRoomEncrypted),
             ...(newE2EStatus && { e2eStatus: newE2EStatus }),
         });
     }

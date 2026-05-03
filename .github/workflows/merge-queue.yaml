@@ -1,0 +1,29 @@
+# Tweaks the behaviour of Merge Queue to skip certain checks
+name: Merge Queue tweaks
+on:
+    merge_group:
+        types: [checks_requested]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+    run:
+        runs-on: ubuntu-24.04
+        permissions:
+            statuses: write
+        steps:
+            # This is only needed as license/cla at time of writing seems to be extraordinarily flaky
+            # and Github doesn't support conditional checks between PR & merge queue.
+            # This is fine to do as a PR won't make it to merge queue until it has license/cla passing.
+            - name: Skip license/cla on merge queues
+              uses: guibranco/github-status-action-v2@9bfa8773cdbdc6c185747fd43cd7faa9d7c32f09
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  context: license/cla
+                  sha: ${{ github.sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

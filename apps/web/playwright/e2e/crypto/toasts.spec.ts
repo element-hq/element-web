@@ -31,23 +31,10 @@ test.describe("Key storage out of sync toast", () => {
         await logIntoElementAndVerify(page, credentials, recoveryKey.encodedPrivateKey);
 
         await deleteCachedSecrets(page);
-
-        // We won't be prompted for crypto setup unless we have an e2e room, so make one
-        await page
-            .getByRole("navigation", { name: "Room list" })
-            .getByRole("button", { name: "New conversation" })
-            .click();
-        await page.getByRole("menuitem", { name: "New room" }).click();
-        await page.getByRole("textbox", { name: "Name" }).fill("Test room");
-        await page.getByRole("button", { name: "Create room" }).click();
     });
 
     test("should prompt for recovery key if 'enter recovery key' pressed", { tag: "@screenshot" }, async ({ page }) => {
-        // We need to wait for there to be two toasts as the wait below won't work in isolation:
-        // playwright only evaluates the 'first()' call initially, not subsequent times it checks, so
-        // it would always be checking the same toast, even if another one is now the first.
-        await expect(page.getByRole("alert")).toHaveCount(2);
-        await expect(page.getByRole("alert").first()).toMatchScreenshot(
+        await expect(page.getByRole("alert").filter({ hasText: "Your key storage is out of sync." })).toMatchScreenshot(
             "key-storage-out-of-sync-toast.png",
             screenshotOptions,
         );

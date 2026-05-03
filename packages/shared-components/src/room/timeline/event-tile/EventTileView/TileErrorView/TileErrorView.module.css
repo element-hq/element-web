@@ -1,0 +1,38 @@
+.tileErrorView {
+    color: var(--cpd-color-text-critical-primary);
+    list-style: none;
+    text-align: center;
+}
+
+.line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--cpd-space-2x);
+}
+
+.bubble .line {
+    flex-direction: column;
+}
+
+.message {
+    padding: var(--cpd-space-1x) var(--cpd-space-4x);
+}
+
+.viewSourceButton {
+    appearance: none;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--cpd-color-text-action-primary);
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+}
+
+.viewSourceButton:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 2px;
+    border-radius: var(--cpd-space-1x);
+}

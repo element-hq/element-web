@@ -17,13 +17,15 @@ test.describe("Appearance user settings tab", () => {
         test.beforeEach(async ({ app, user, util }) => {
             // Disable the default theme for consistency in case ThemeWatcher automatically chooses it
             await util.disableSystemTheme();
+            await app.closeVerifyToast();
+
             await util.openAppearanceTab();
         });
 
         test(
             "should be rendered with the light theme selected",
             { tag: "@screenshot" },
-            async ({ page, app, util }) => {
+            async ({ page, app, util, axe }) => {
                 // Assert that 'Match system theme' is not checked
                 await expect(util.getMatchSystemThemeSwitch()).not.toBeChecked();
 
@@ -34,6 +36,8 @@ test.describe("Appearance user settings tab", () => {
                 await expect(util.getHighContrastTheme()).not.toBeChecked();
 
                 await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-light.png");
+
+                await expect(axe).toHaveNoViolations();
             },
         );
 
@@ -100,6 +104,7 @@ test.describe("Appearance user settings tab", () => {
                     await expect(page).toMatchScreenshot("window-custom-theme.png");
 
                     await page.reload();
+                    await app.closeVerifyToast();
 
                     await util.openAppearanceTab();
                     // Assert that the custom theme is still selected after reloading the page

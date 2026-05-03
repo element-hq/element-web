@@ -4,12 +4,13 @@
 /pnpm-lock.yaml           @element-hq/element-web-team
 
 /apps/web/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
-/apps/web/test/SecurityManager-test.ts                                           @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/SecurityManager-test.ts                                @element-hq/element-crypto-web-reviewers
 /apps/web/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/async-components/dialogs/security/                     @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
-/apps/web/test/components/views/dialogs/security/                                @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/components/views/dialogs/security/                     @element-hq/element-crypto-web-reviewers
 /apps/web/src/stores/SetupEncryptionStore.ts                                     @element-hq/element-crypto-web-reviewers
-/apps/web/test/stores/SetupEncryptionStore-test.ts                               @element-hq/element-crypto-web-reviewers
+/apps/web/test/unit-tests/stores/SetupEncryptionStore-test.ts                    @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx  @element-hq/element-crypto-web-reviewers
 /apps/web/src/components/views/settings/encryption/                              @element-hq/element-crypto-web-reviewers
 /apps/web/test/unit-tests/components/views/settings/encryption/                  @element-hq/element-crypto-web-reviewers

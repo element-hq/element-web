@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Videochat",
         "view_message": "Nachricht anzeigen",
-        "voice": "Sprachanruf",
         "warning": "Warnung"
     },
     "composer": {
@@ -1551,9 +1550,6 @@
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "report_to_moderators": "An Moderatoren melden",
         "report_to_moderators_description": "In Chats, die Moderation unterstützen, kannst du mit der Schaltfläche „Melden“ missbräuchliche Verwendung an die Moderatoren melden.",
-        "share_history_on_invite": "Teile den verschlüsselten Nachrichtenverlauf mit neuen Mitgliedern",
-        "share_history_on_invite_description": "Wenn du einen Nutzer in einen Chat einlädst, bei dem die die Sichtbarkeit der Historie auf \"geteilt\" eingestellt ist, wird der verschlüsselte Nachrichtenverlauf mit diesem Nutzer geteilt. Du akzeptierst damit auch, einen solchen verschlüsselten Nachrichtenverlauf zu empfangen, wenn du selbst in einen solchen Chat eingeladen wirst.",
-        "share_history_on_invite_warning": "Diese Funktion ist EXPERIMENTELL und nicht alle Sicherheitsmaßnahmen sind aktiviert. Bitte nicht auf Konten verwenden, die für den Produktions-Betrieb gedacht sind.",
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_description": "In aktiver Entwicklung, kann nicht deaktiviert werden. Derzeit nicht mit Element Call kompatibel.",
         "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",
@@ -1798,7 +1794,6 @@
         "restricted": "Eingeschränkt"
     },
     "powered_by_matrix": "Betrieben mit Matrix",
-    "powered_by_matrix_with_logo": "Dezentraler, verschlüsselter Chat &amp; Zusammenarbeit auf Basis von $matrixLogo",
     "presence": {
         "away": "Abwesend",
         "busy": "Beschäftigt",
@@ -2219,8 +2214,6 @@
             "aliases_section": "Chatadressen",
             "avatar_field_label": "Chat Avatar",
             "canonical_alias_field_label": "Primäre Adresse",
-            "default_url_previews_off": "URL-Vorschau ist für Mitglieder des Chats standardmäßig deaktiviert.",
-            "default_url_previews_on": "URL-Vorschau ist für Mitglieder des Chats standardmäßig aktiviert.",
             "description_space": "Einstellungen vom Space bearbeiten.",
             "error_creating_alias_description": "Es gab einen Fehler beim Anlegen der Adresse. Entweder erlaubt es der Server nicht oder es gab ein temporäres Problem.",
             "error_creating_alias_title": "Fehler beim Anlegen der Adresse",
@@ -2251,12 +2244,7 @@
             "published_aliases_explainer_space": "Veröffentlichte Adressen erlauben jedem, den Space zu betreten.",
             "published_aliases_section": "Öffentliche Adresse",
             "save": "Speichern",
-            "topic_field_label": "Chat-Thema",
-            "url_preview_encryption_warning": "In verschlüsselten Chats wie diesem ist die Linkvorschau standardmäßig deaktiviert, damit dein Homeserver (der die Vorschau erzeugt) keine Informationen über Links in diesem Chat erhält.",
-            "url_preview_explainer": "Die URL-Vorschau kann Informationen wie den Titel, die Beschreibung sowie ein Vorschaubild der Website enthalten.",
-            "url_previews_section": "URL-Vorschau",
-            "user_url_previews_default_off": "Du hast die URL-Vorschau <a>standardmäßig deaktiviert</a>.",
-            "user_url_previews_default_on": "Du hast die URL-Vorschau <a>standardmäßig aktiviert</a>."
+            "topic_field_label": "Chat-Thema"
         },
         "notifications": {
             "browse_button": "Durchsuchen",
@@ -2678,8 +2666,6 @@
             "username": "Benutzername"
         },
         "inline_url_previews_default": "URL-Vorschau standardmäßig aktivieren",
-        "inline_url_previews_room": "URL-Vorschau für Chat Mitglieder",
-        "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Chat",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
         "invite_controls": {
             "default_label": "Nutzern erlauben, dich in Chats einzuladen"
@@ -3878,7 +3864,6 @@
         "connection_lost": "Verbindung zum Server unterbrochen",
         "connection_lost_description": "Du kannst ohne Verbindung zum Server keine Anrufe tätigen.",
         "consulting": "%(transferTarget)s wird angefragt. <a>Übertragung zu %(transferee)s</a>",
-        "decline_call": "Ablehnen",
         "default_device": "Standardgerät",
         "dial": "Wählen",
         "dialpad": "Telefontastatur",
@@ -3929,7 +3914,6 @@
         "show_sidebar_button": "Seitenleiste anzeigen",
         "silence": "Anruf stummschalten",
         "silenced": "Benachrichtigungen stummgeschaltet",
-        "skip_lobby_toggle_option": "Sofort beitreten",
         "start_screenshare": "Bildschirmfreigabe starten",
         "stop_screenshare": "Bildschirmfreigabe beenden",
         "too_many_calls": "Zu viele Anrufe",
@@ -3951,7 +3935,6 @@
         "user_is_presenting": "%(sharerName)s präsentiert",
         "video_call": "Videoanruf",
         "video_call_incoming": "Eingehender Videoanruf",
-        "video_call_started": "Videoanruf hat begonnen",
         "video_call_using": "Videoanruf mit:",
         "voice_call": "Sprachanruf",
         "voice_call_incoming": "Eingehender Anruf",
@@ -3959,7 +3942,6 @@
         "you_are_presenting": "Du präsentierst"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s auf %(osName)s",
-    "welcome_to_element": "Willkommen bei Element",
     "widget": {
         "added_by": "Widget hinzugefügt von",
         "capabilities_dialog": {

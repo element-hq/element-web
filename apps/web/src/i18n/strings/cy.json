@@ -591,7 +591,6 @@
         "video": "Fideo",
         "video_room": "Ystafell fideo",
         "view_message": "Gweld neges",
-        "voice": "Llais",
         "warning": "Rhybudd"
     },
     "composer": {
@@ -1563,9 +1562,6 @@
         "render_reaction_images_description": "Weithiau'n cael eu hadnabod fel \"emojis cyfaddas\".",
         "report_to_moderators": "Adrodd i cymedrolwyr",
         "report_to_moderators_description": "Mewn ystafelloedd sy'n cefnogi cymedroli, bydd y botwm “Adrodd” yn gadael i chi adrodd ar gam-drin i gymedrolwyr ystafelloedd.",
-        "share_history_on_invite": "Rhannwch hanes wedi'i amgryptio gydag aelodau newydd",
-        "share_history_on_invite_description": "Wrth wahodd defnyddiwr i ystafell wedi'i hamgryptio sydd â gwelededd hanes wedi'i osod i \"rhannu\", rhannwch hanes wedi'i amgryptio gyda'r defnyddiwr hwnnw, a derbyniwch hanes wedi'i amgryptio pan gewch eich gwahodd i ystafell o'r fath.",
-        "share_history_on_invite_warning": "Mae'r nodwedd hon yn ARBROFOL ac nid yw pob rhagofal diogelwch wedi'i weithredu. Peidiwch â'i galluogi ar gyfrifon cynhyrchu.",
         "sliding_sync": "Modd Cydweddu Llithro",
         "sliding_sync_description": "Wrthi'n datblygu, nid oes modd ei analluogi.",
         "sliding_sync_disabled_notice": "Allgofnodwch a mewngofnodi i analluogi",
@@ -1801,7 +1797,6 @@
         "restricted": "Cyfyngedig"
     },
     "powered_by_matrix": "Wedi'i bweru gan Matrix",
-    "powered_by_matrix_with_logo": "Sgwrs ddatganoledig, wedi'i hamgryptio &amp; cydweithrediad wedi'i bweru gan $matrixLogo",
     "presence": {
         "away": "I ffwrdd",
         "busy": "Prysur",
@@ -2227,8 +2222,6 @@
             "aliases_section": "Cyfeiriadau Ystafell",
             "avatar_field_label": "Afatar ystafell",
             "canonical_alias_field_label": "Prif gyfeiriad",
-            "default_url_previews_off": "Mae rhagolygon URL wedi'u hanalluogi fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon.",
-            "default_url_previews_on": "Mae rhagolygon URL wedi'u galluogi fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon.",
             "description_space": "Golygu gosodiadau sy'n ymwneud â'ch gofod.",
             "error_creating_alias_description": "Bu gwall wrth greu'r cyfeiriad hwnnw. Mae'n bosib na chaiff ei ganiatáu gan y gweinydd neu fe ddigwyddodd methiant dros dro.",
             "error_creating_alias_title": "Gwall wrth greu cyfeiriad",
@@ -2259,12 +2252,7 @@
             "published_aliases_explainer_space": "Gall unrhyw un ar unrhyw weinydd ddefnyddio cyfeiriadau cyhoeddedig i ymuno â'ch gofod.",
             "published_aliases_section": "Cyfeiriadau Cyhoeddedig",
             "save": "Cadw'r Newidiadau",
-            "topic_field_label": "Pwnc yr Ystafell",
-            "url_preview_encryption_warning": "Mewn ystafelloedd wedi'u hamgryptio, fel yr un hon, mae rhagolygon URL yn cael eu hanalluogi fel rhagosodiad i sicrhau na all eich gweinydd cartref (lle mae'r rhagolygon yn cael eu cynhyrchu) gasglu gwybodaeth am ddolenni welwch yn yr ystafell hon.",
-            "url_preview_explainer": "Pan fydd rhywun yn rhoi URL yn eu neges, mae modd dangos rhagolwg URL i roi mwy o wybodaeth am y ddolen honno fel y teitl, disgrifiad, a delwedd o'r wefan.",
-            "url_previews_section": "Rhagolygon URL",
-            "user_url_previews_default_off": "Rydych wedi <a>analluogi</a> rhagolygon URL fel rhagosodiad.",
-            "user_url_previews_default_on": "Rydych chi wedi <a>galluogi</a> rhagolygon URL fel rhagosodiad."
+            "topic_field_label": "Pwnc yr Ystafell"
         },
         "notifications": {
             "browse_button": "Pori",
@@ -2685,8 +2673,6 @@
             "username": "Enw defnyddiwr"
         },
         "inline_url_previews_default": "Galluogi rhagolygon URL mewnol fel rhagosodiad",
-        "inline_url_previews_room": "Galluogi rhagolygon URL fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon",
-        "inline_url_previews_room_account": "Galluogi rhagolygon URL ar gyfer yr ystafell hon (yn effeithio arnoch chi yn unig)",
         "insert_trailing_colon_mentions": "Mewnosod colon sy'n llusgo ar ôl i'r defnyddiwr sôn amdano ar ddechrau neges",
         "invite_controls": {
             "default_label": "Caniatáu i ddefnyddwyr eich gwahodd i ystafelloedd"
@@ -3885,7 +3871,6 @@
         "connection_lost": "Mae cysylltedd â'r gweinydd wedi'i golli",
         "connection_lost_description": "Allwch chi ddim osod galwadau heb gysylltiad â'r gweinydd.",
         "consulting": "Ymgynghori â %(transferTarget)s. <a>Trosglwyddo i %(transferee)s</a>",
-        "decline_call": "Gwrthod",
         "default_device": "Dyfais Rhagosodedig",
         "dial": "Deial",
         "dialpad": "Pad Deialu",
@@ -3936,7 +3921,6 @@
         "show_sidebar_button": "Dangos y bar ochr",
         "silence": "Distewi galwad",
         "silenced": "Hysbysiadau wedi'u distewi",
-        "skip_lobby_toggle_option": "Ymunwch ar unwaith",
         "start_screenshare": "Dechreuwch rannu'ch sgrin",
         "stop_screenshare": "Stopiwch rannu'ch sgrin",
         "too_many_calls": "Gormod o Alwadau",
@@ -3958,7 +3942,6 @@
         "user_is_presenting": "Mae %(sharerName)s yn cyflwyno",
         "video_call": "Galwad fideo",
         "video_call_incoming": "Galwad fideo i mewn",
-        "video_call_started": "Galwad fideo wedi dechrau",
         "video_call_using": "Galwad fideo gan ddefnyddio:",
         "voice_call": "Galwad llais",
         "voice_call_incoming": "Galwad llais i mewn",
@@ -3966,7 +3949,6 @@
         "you_are_presenting": "Rydych chi'n cyflwyno"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s ar %(osName)s",
-    "welcome_to_element": "Croeso i Element",
     "widget": {
         "added_by": "Ychwanegwyd teclyn gan",
         "capabilities_dialog": {
