@@ -3,11 +3,11 @@
 exports[`CallStartedTileView > renders the tile > video call 1`] = `
 <div>
   <div
-    class="flex container"
+    class="Flex-module_flex CallStartedTileView-module_container"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <svg
-      class="icon"
+      class="CallStartedTileView-module_icon"
       fill="currentColor"
       height="20"
       viewBox="0 0 24 24"
@@ -19,12 +19,12 @@ exports[`CallStartedTileView > renders the tile > video call 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="CallStartedTileView-module_title"
     >
       Video call
     </div>
     <div
-      class="time"
+      class="CallStartedTileView-module_time"
     >
       12:36
     </div>
@@ -35,11 +35,11 @@ exports[`CallStartedTileView > renders the tile > video call 1`] = `
 exports[`CallStartedTileView > renders the tile > voice call 1`] = `
 <div>
   <div
-    class="flex container"
+    class="Flex-module_flex CallStartedTileView-module_container"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
   >
     <svg
-      class="icon"
+      class="CallStartedTileView-module_icon"
       fill="currentColor"
       height="20"
       viewBox="0 0 24 24"
@@ -51,12 +51,12 @@ exports[`CallStartedTileView > renders the tile > voice call 1`] = `
       />
     </svg>
     <div
-      class="title"
+      class="CallStartedTileView-module_title"
     >
       Voice call
     </div>
     <div
-      class="time"
+      class="CallStartedTileView-module_time"
     >
       12:36
     </div>
