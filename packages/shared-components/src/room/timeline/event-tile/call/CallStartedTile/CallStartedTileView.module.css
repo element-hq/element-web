@@ -8,6 +8,7 @@
 .container {
     /* This is the height of the tile as per design */
     min-height: 39px;
+    width: 100%;
     border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: var(--cpd-space-2x);
     padding: var(--cpd-space-2x) var(--cpd-space-3x);
