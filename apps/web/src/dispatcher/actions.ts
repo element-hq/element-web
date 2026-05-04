@@ -43,6 +43,11 @@ export enum Action {
     ViewUserDeviceSettings = "view_user_device_settings",
 
     /**
+     * Opens the QR login flow. Only valid during authentication. No additional payload information required.
+     */
+    ViewQrLogin = "view_qr_login",
+
+    /**
      * Opens the room directory. No additional payload information required.
      */
     ViewRoomDirectory = "view_room_directory",

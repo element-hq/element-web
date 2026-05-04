@@ -142,6 +142,9 @@ import { isOnlyAdmin } from "../../utils/membership";
 import { ModuleApi } from "../../modules/Api.ts";
 import { type IScreen } from "../../vector/routing.ts";
 import { type URLParams } from "../../vector/url_utils.ts";
+import QrLoginDialog from "../views/dialogs/QrLoginDialog.tsx";
+import { type QrLoginCredentials } from "../views/auth/LoginWithQR.tsx";
+import { configureFromCompletedOAuthLogin } from "../../Lifecycle";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -825,6 +828,26 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
+                break;
+            }
+            case Action.ViewQrLogin: {
+                if (this.isLoggedInViewPageDisplayed()) {
+                    logger.warn("Ignoring payload due to unexpected call outside auth flows", payload);
+                } else {
+                    Modal.createDialog(
+                        QrLoginDialog,
+                        {
+                            serverConfig: this.getServerProperties().serverConfig,
+                            onLoggedIn: this.onUserCompletedQrLoginFlow,
+                        },
+                        "mx_LoginWithQR_dialog",
+                        false,
+                        true,
+                    );
+
+                    // View the welcome or home page if we need something to look at
+                    this.viewSomethingBehindModal();
+                }
                 break;
             }
             case "view_welcome_page":
@@ -1858,6 +1881,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params: params,
             });
             PerformanceMonitor.instance.start(PerformanceEntryNames.LOGIN);
+        } else if (screen === "qr_login") {
+            dis.fire(Action.ViewQrLogin);
         } else if (screen === "forgot_password") {
             dis.dispatch({
                 action: "start_password_recovery",
@@ -2131,6 +2156,38 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         PerformanceMonitor.instance.stop(PerformanceEntryNames.REGISTER);
     };
 
+    /**
+     * After successful qr login, load & persist the credentials, as well as the secrets bundle.
+     */
+    private onUserCompletedQrLoginFlow = async ({
+        secrets,
+        deviceId,
+        ...tokenResponse
+    }: QrLoginCredentials): Promise<void> => {
+        // store and use the new credentials
+        const matrixCreds = await configureFromCompletedOAuthLogin(tokenResponse);
+
+        // Create and start the client
+        await Lifecycle.setLoggedIn(matrixCreds);
+
+        if (secrets) {
+            const crypto = MatrixClientPeg.safeGet().getCrypto();
+            if (crypto?.importSecretsBundle) {
+                await crypto.importSecretsBundle(secrets);
+                // it should be sufficient to just upload the device keys with the signature but this seems to do the job for now
+                await crypto.crossSignDevice(deviceId);
+            } else {
+                logger.warn(
+                    "Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login",
+                );
+            }
+        } else {
+            logger.warn("No secrets received from QR login");
+        }
+
+        this.onShowPostLoginScreen();
+    };
+
     /** Called when {@link Views.E2E_SETUP} or {@link Views.COMPLETE_SECURITY} have completed. */
     private onCompleteSecurityE2eSetupFinished = async (): Promise<void> => {
         const forceVerify = await this.shouldForceVerification();
@@ -2220,7 +2277,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 );
             }
         } else if (this.state.view === Views.WELCOME) {
-            view = <Welcome />;
+            view = <Welcome {...this.getServerProperties()} />;
         } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
             const email = ThreepidInviteStore.instance.pickBestInvite()?.toEmail;
             view = (

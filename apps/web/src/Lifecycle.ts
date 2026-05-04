@@ -81,6 +81,7 @@ import {
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
+import { type QrLoginCredentials } from "./components/views/auth/LoginWithQR.tsx";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -302,26 +303,16 @@ async function attemptOidcNativeLogin(
         const { accessToken, refreshToken, homeserverUrl, identityServerUrl, idToken, clientId, issuer } =
             await completeOidcLogin(urlParams, responseMode);
 
-        const {
-            user_id: userId,
-            device_id: deviceId,
-            is_guest: isGuest,
-        } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
-
-        const credentials = {
+        await configureFromCompletedOAuthLogin({
             accessToken,
             refreshToken,
             homeserverUrl,
             identityServerUrl,
-            deviceId,
-            userId,
-            isGuest,
-        };
+            clientId,
+            issuer,
+            idToken,
+        });
 
-        logger.debug("Logged in via OIDC native flow");
-        await onSuccessfulDelegatedAuthLogin(credentials);
-        // this needs to happen after success handler which clears storages
-        persistOidcAuthenticatedSettings(clientId, issuer, idToken);
         return true;
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
@@ -329,6 +320,39 @@ async function attemptOidcNativeLogin(
         onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
     }
+}
+
+// TODO comment
+export async function configureFromCompletedOAuthLogin({
+    accessToken,
+    refreshToken,
+    homeserverUrl,
+    identityServerUrl,
+    clientId,
+    issuer,
+    idToken,
+}: Omit<QrLoginCredentials, "secrets" | "deviceId">): Promise<IMatrixClientCreds> {
+    const {
+        user_id: userId,
+        device_id: deviceId,
+        is_guest: isGuest,
+    } = await getUserIdFromAccessToken(accessToken, homeserverUrl, identityServerUrl);
+
+    const credentials = {
+        accessToken,
+        refreshToken,
+        homeserverUrl,
+        identityServerUrl,
+        deviceId,
+        userId,
+        isGuest,
+    };
+
+    logger.debug("Logged in via OIDC native flow");
+    await onSuccessfulDelegatedAuthLogin(credentials);
+    // this needs to happen after success handler which clears storages
+    persistOidcAuthenticatedSettings(clientId, issuer, idToken);
+    return credentials;
 }
 
 /**
