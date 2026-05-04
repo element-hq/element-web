@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { getSampleFilePath } from "../../sample-files";
 
 const CtrlOrMeta = process.platform === "darwin" ? "Meta" : "Control";
 
@@ -197,6 +198,17 @@ test.describe("Composer", () => {
 
             // Take a screenshot of the autocomplete
             await expect(autocomplete).toMatchScreenshot("emoji-autocomplete.png");
+        });
+
+        test("can paste a file", async ({ page, bot, app }) => {
+            // Set up a private room so we have another user to mention
+            await app.client.createRoom({
+                is_direct: true,
+                invite: [bot.credentials.userId],
+            });
+            await app.viewRoomByName("Bob");
+            await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
+            await expect(page.locator(".mx_MImageBody")).toBeVisible();
         });
     });
 });

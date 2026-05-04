@@ -258,6 +258,47 @@ test.describe("Room list custom sections", () => {
         });
     });
 
+    test.describe("Collapse and expand all sections", () => {
+        test("should collapse all sections when 'Collapse all sections' button is clicked", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+
+            const roomList = getRoomList(page);
+            const header = getRoomListHeader(page);
+
+            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+            await expect(getSectionHeader(page, "Work")).toBeVisible();
+
+            const collapseButton = header.getByRole("button", { name: "Collapse all sections" });
+            await expect(collapseButton).toBeVisible();
+
+            await expect(roomList.getByRole("row", { name: "Open room my room" })).toBeVisible();
+
+            await collapseButton.click();
+
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "false");
+            await expect(getSectionHeader(page, "Work")).toHaveAttribute("aria-expanded", "false");
+        });
+
+        test("should expand all sections when 'Expand all sections' button is clicked", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+            await createCustomSection(page, "Work");
+
+            const roomList = getRoomList(page);
+            const header = getRoomListHeader(page);
+
+            await expect(getSectionHeader(page, "Chats")).toBeVisible();
+
+            await header.getByRole("button", { name: "Collapse all sections" }).click();
+            await expect(roomList.getByRole("row", { name: "Open room my room" })).not.toBeVisible();
+
+            await header.getByRole("button", { name: "Expand all sections" }).click();
+
+            await expect(getSectionHeader(page, "Chats")).toHaveAttribute("aria-expanded", "true");
+            await expect(getSectionHeader(page, "Work")).toHaveAttribute("aria-expanded", "true");
+        });
+    });
+
     test.describe("Adding a room to a custom section", () => {
         test("should add a room to a custom section via the More Options menu", async ({ page, app }) => {
             await app.client.createRoom({ name: "my room" });

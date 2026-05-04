@@ -323,6 +323,89 @@ describe("RoomListHeaderViewModel", () => {
             expect(createSectionSpy).toHaveBeenCalled();
         });
 
+        describe("collapseOrExpandSections", () => {
+            it("should dispatch RoomListCollapseAllSections when collapseSections is not 'expand'", () => {
+                const fireSpy = jest.spyOn(defaultDispatcher, "fire");
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                vm.collapseOrExpandSections();
+
+                expect(fireSpy).toHaveBeenCalledWith(Action.RoomListCollapseAllSections);
+            });
+
+            it("should dispatch RoomListExpandAllSections when collapseSections is 'expand'", () => {
+                const fireSpy = jest.spyOn(defaultDispatcher, "fire");
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                // Drive the VM into the "expand" state by simulating all sections collapsed
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    },
+                    true,
+                );
+                expect(vm.getSnapshot().collapseSections).toBe("expand");
+                vm.collapseOrExpandSections();
+
+                expect(fireSpy).toHaveBeenCalledWith(Action.RoomListExpandAllSections);
+            });
+        });
+
+        describe("RoomListSectionsCollapseStateChanged handling", () => {
+            it("should set collapseSections to 'expand' when collapseSections is collapse", () => {
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    },
+                    true,
+                );
+
+                expect(vm.getSnapshot().collapseSections).toBe("expand");
+            });
+
+            it("should set collapseSections to 'collapse' when collapseSections is expand", () => {
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "expand",
+                    },
+                    true,
+                );
+
+                expect(vm.getSnapshot().collapseSections).toBe("collapse");
+            });
+
+            it("should set collapseSections to undefined when collapseSections is undefined", () => {
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                // First drive it into a non-undefined state
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    },
+                    true,
+                );
+                expect(vm.getSnapshot().collapseSections).toBe("expand");
+
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: undefined,
+                    },
+                    true,
+                );
+
+                expect(vm.getSnapshot().collapseSections).toBeUndefined();
+            });
+        });
+
         it("should toggle message preview from enabled to disabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
                 if (settingName === "RoomList.showMessagePreview") return true;

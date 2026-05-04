@@ -26,6 +26,7 @@ import {
     showSpaceSettings,
 } from "../../utils/space";
 import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import type { RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
 import { SortingAlgorithm } from "../../stores/room-list-v3/skip-list/sorters";
@@ -77,6 +78,10 @@ export class RoomListHeaderViewModel
         if (this.activeSpace) {
             this.disposables.trackListener(this.activeSpace, RoomEvent.Name, this.onSpaceNameChange);
         }
+
+        // Listen for section collapse state changes from RoomListViewModel
+        const dispatcherRef = defaultDispatcher.register(this.onDispatch);
+        this.disposables.track(() => defaultDispatcher.unregister(dispatcherRef));
     }
 
     /**
@@ -202,6 +207,23 @@ export class RoomListHeaderViewModel
 
     public createSection = (): void => {
         RoomListStoreV3.instance.createSection();
+    };
+
+    public collapseOrExpandSections = (): void => {
+        const action =
+            this.snapshot.current.collapseSections === "expand"
+                ? Action.RoomListExpandAllSections
+                : Action.RoomListCollapseAllSections;
+        defaultDispatcher.fire(action);
+    };
+
+    private readonly onDispatch = (payload: { action: string }): void => {
+        if (payload.action === Action.RoomListSectionsCollapseStateChanged) {
+            const { collapseSections } = payload as RoomListSectionsCollapseStateChangedPayload;
+            this.snapshot.merge({
+                collapseSections: collapseSections && (collapseSections === "collapse" ? "expand" : "collapse"),
+            });
+        }
     };
 }
 /**
