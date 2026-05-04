@@ -162,9 +162,19 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // not use this for new settings.
     invertedSettingName?: string;
 
-    // XXX: Keep this around for re-use in future Betas
+    /**
+     * If set, the setting is considered a beta.
+     * Please read the betas.md documentation before marking a setting a beta.
+     * @see `docs/betas.md`
+     */
     betaInfo?: {
         title: TranslationKey;
+        /**
+         * Set this when the feature has been removed from beta. Users who
+         * have not opted into the beta will not see it, but users who
+         * have it enabled will be able to turn it off.
+         */
+        removed?: boolean;
         caption: () => ReactNode;
         faq?: (enabled: boolean) => ReactNode;
         image?: string; // require(...)
@@ -388,6 +398,8 @@ export const SETTINGS: Settings = {
         controller: new ReloadOnChangeController(),
         betaInfo: {
             title: _td("labs|video_rooms"),
+            // Video rooms have been moved back to labs.
+            removed: true,
             caption: () => (
                 <>
                     <p>
@@ -410,8 +422,6 @@ export const SETTINGS: Settings = {
                     <p>{_t("labs|video_rooms_faq2_answer")}</p>
                 </>
             ),
-            feedbackLabel: "video-room-feedback",
-            feedbackSubheading: _td("labs|video_rooms_feedbackSubheading"),
             // eslint-disable-next-line @typescript-eslint/no-require-imports
             image: require("../../res/img/betas/video_rooms.png"),
             requiresRefresh: true,
