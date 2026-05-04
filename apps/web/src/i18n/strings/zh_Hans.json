@@ -1542,7 +1542,7 @@
         "feature_user_status": {
             "description": "启用以查看并设置当前状态。",
             "display_name": "用户状态",
-            "required_msc_support": "需要 MSC4429（基于旧版同步模式的配置文件更新）"
+            "required_msc_support": "需要 MSC4429（面向旧版同步模式的配置文件更新）"
         },
         "feature_wysiwyg_composer_description": "在消息编辑器中使用富文本取代 Markdown。",
         "group_calls": "新的群呼体验",
