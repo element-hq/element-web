@@ -3340,7 +3340,9 @@
         "my_threads": "My threads",
         "my_threads_description": "Shows all threads you've participated in",
         "open_thread": "Open thread",
-        "show_thread_filter": "Show:"
+        "show_thread_filter": "Show:",
+        "subscribe": "Follow",
+        "subscribed": "Following"
     },
     "threads_activity_centre": {
         "header": "Threads activity",
