@@ -751,7 +751,7 @@ test.describe("Timeline", () => {
             await expect(page.locator(".mx_EventTile[data-layout=irc] .mx_ViewSourceEvent_expanded")).toBeVisible();
         });
 
-        test("should render file size in kibibytes on a file tile", async ({ page, room }) => {
+        test("should render file size in kibibytes on a file tile", async ({ page, app, room }) => {
             await page.goto(`/#/room/${room.roomId}`);
             await expect(
                 page
@@ -760,12 +760,7 @@ test.describe("Timeline", () => {
             ).toBeVisible();
 
             // Upload a file from the message composer
-            await page
-                .locator(".mx_MessageComposer_actions input[type='file']")
-                .setInputFiles(getSampleFilePath("matrix-org-client-versions.json"));
-
-            // Click "Upload" button
-            await page.locator(".mx_Dialog").getByRole("button", { name: "Upload" }).click();
+            await app.composerUploadFiles("room", getSampleFilePath("matrix-org-client-versions.json"));
 
             // Wait until the file is sent
             await expect(page.locator(".mx_RoomView_statusArea_expanded")).not.toBeVisible();

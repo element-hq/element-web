@@ -29,7 +29,6 @@ import TimelinePanel from "./TimelinePanel";
 import dis from "../../dispatcher/dispatcher";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { type E2EStatus } from "../../utils/ShieldUtils";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
@@ -51,6 +50,7 @@ import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/paylo
 import Heading from "../views/typography/Heading";
 import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
+import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
 
 interface IProps {
     room: Room;
@@ -328,22 +328,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private onFileDrop = (dataTransfer: DataTransfer): void => {
-        const roomId = this.props.mxEvent.getRoomId();
-        if (roomId) {
-            ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(dataTransfer.files),
-                roomId,
-                this.threadRelation,
-                this.context.replyToEvent,
-                MatrixClientPeg.safeGet(),
-                TimelineRenderingType.Thread,
-            );
-        } else {
-            console.warn("Unknwon roomId for event", this.props.mxEvent);
-        }
-    };
-
     private get threadRelation(): IEventRelation {
         const relation: IEventRelation = {
             rel_type: THREAD_RELATION_TYPE.name,
@@ -390,7 +374,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
             timeline = (
                 <>
-                    <FileDropTarget parent={this.card.current} onFileDrop={this.onFileDrop} room={this.props.room} />
+                    <FileDropTarget parent={this.card.current} />
                     <TimelinePanel
                         key={this.state.thread.id}
                         ref={this.timelinePanel}
@@ -432,38 +416,40 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 liveTimeline={this.state?.thread?.timelineSet?.getLiveTimeline()}
                 narrow={this.state.narrow}
             >
-                <BaseCard
-                    className={classNames("mx_ThreadView mx_ThreadPanel", {
-                        mx_ThreadView_narrow: this.state.narrow,
-                    })}
-                    onClose={this.props.onClose}
-                    withoutScrollContainer={true}
-                    header={this.renderThreadViewHeader()}
-                    ref={this.card}
-                    onKeyDown={this.onKeyDown}
-                    onBack={(ev: ButtonEvent) => {
-                        PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
-                    }}
-                >
-                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
-                    <div className="mx_ThreadView_timelinePanelWrapper">{timeline}</div>
+                <RoomUploadContextProvider threadRelation={this.threadRelation}>
+                    <BaseCard
+                        className={classNames("mx_ThreadView mx_ThreadPanel", {
+                            mx_ThreadView_narrow: this.state.narrow,
+                        })}
+                        onClose={this.props.onClose}
+                        withoutScrollContainer={true}
+                        header={this.renderThreadViewHeader()}
+                        ref={this.card}
+                        onKeyDown={this.onKeyDown}
+                        onBack={(ev: ButtonEvent) => {
+                            PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
+                        }}
+                    >
+                        <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
+                        <div className="mx_ThreadView_timelinePanelWrapper">{timeline}</div>
 
-                    {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (
-                        <UploadBar room={this.props.room} relation={threadRelation} />
-                    )}
+                        {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (
+                            <UploadBar room={this.props.room} relation={threadRelation} />
+                        )}
 
-                    {this.state.thread?.timelineSet && (
-                        <MessageComposer
-                            room={this.props.room}
-                            resizeNotifier={this.props.resizeNotifier}
-                            relation={threadRelation}
-                            replyToEvent={this.state.replyToEvent}
-                            permalinkCreator={this.props.permalinkCreator}
-                            e2eStatus={this.props.e2eStatus}
-                            compact={true}
-                        />
-                    )}
-                </BaseCard>
+                        {this.state.thread?.timelineSet && (
+                            <MessageComposer
+                                room={this.props.room}
+                                resizeNotifier={this.props.resizeNotifier}
+                                relation={threadRelation}
+                                replyToEvent={this.state.replyToEvent}
+                                permalinkCreator={this.props.permalinkCreator}
+                                e2eStatus={this.props.e2eStatus}
+                                compact={true}
+                            />
+                        )}
+                    </BaseCard>
+                </RoomUploadContextProvider>
             </ScopedRoomContextProvider>
         );
     }

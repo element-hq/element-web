@@ -607,7 +607,7 @@ export default class ContentMessages {
                         throw e;
                     }
                     // Otherwise we failed to thumbnail, fall back to uploading an m.file
-                    logger.error(e);
+                    logger.error(`Expected file of type "${file.type}" to be an image, but got`, e);
                     content.msgtype = MsgType.File;
                 }
             } else if (file.type.startsWith("audio/")) {
