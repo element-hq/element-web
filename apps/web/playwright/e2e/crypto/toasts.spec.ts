@@ -119,7 +119,8 @@ test.describe("'Turn on key storage' toast", () => {
     test("should show toast if key storage is off but account data is missing", async ({ app, page, toasts }) => {
         // Given the backup is disabled but we didn't set account data saying that is expected
         await disableKeyBackup(app);
-        await botClient.setAccountData("m.org.matrix.custom.backup_disabled", { disabled: false });
+        await botClient.setAccountData("m.org.matrix.custom.backup_disabled", {} as any as { disabled: boolean });
+        await botClient.setAccountData("m.key_backup", {} as any as { enabled: boolean });
 
         // Wait for the account data setting to stick
         await new Promise((resolve) => setTimeout(resolve, 2000));

@@ -28,12 +28,11 @@ import { isSecretStorageBeingAccessed } from "../SecurityManager";
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
 /**
- * Unfortunately-named account data key used by Element X to indicate that the user
- * has chosen to disable server side key backups.
- *
- * We need to set and honour this to prevent Element X from automatically turning key backup back on.
+ * Account data key used to indicate that the user has chosen to enable or
+ * disable server side key backups.
  */
-export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
+export const ACCOUNT_DATA_KEY_M_KEY_BACKUP = "m.key_backup";
+export const ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE = "m.org.matrix.custom.backup_disabled";
 
 /**
  * Account data key to indicate whether the user has chosen to enable or disable recovery.
@@ -129,10 +128,11 @@ export class DeviceListenerCurrentDevice {
     }
 
     /**
-     * Set the account data "m.org.matrix.custom.backup_disabled" to `{ "disabled": true }`.
+     * Set the account data "m.key_backup" to `{ "enabled": false }`.
      */
     public async recordKeyBackupDisabled(): Promise<void> {
-        await this.client.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
+        await this.client.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP, { enabled: false });
+        await this.client.setAccountData(ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE, { disabled: true });
     }
 
     /**
@@ -285,8 +285,15 @@ export class DeviceListenerCurrentDevice {
      * Otherwise, fetch it from the store as normal.
      */
     public async recheckBackupDisabled(): Promise<boolean> {
-        const backupDisabled = await this.client.getAccountDataFromServer(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
-        return !!backupDisabled?.disabled;
+        const keyBackup = await this.client.getAccountDataFromServer(ACCOUNT_DATA_KEY_M_KEY_BACKUP);
+        if (keyBackup) {
+            return !keyBackup.enabled;
+        }
+
+        const keyBackupDisabledUnstable = await this.client.getAccountDataFromServer(
+            ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE,
+        );
+        return !!keyBackupDisabledUnstable?.disabled;
     }
 
     /**
@@ -335,7 +342,8 @@ export class DeviceListenerCurrentDevice {
             ev.getType().startsWith("m.secret_storage.") ||
             ev.getType().startsWith("m.cross_signing.") ||
             ev.getType() === "m.megolm_backup.v1" ||
-            ev.getType() === BACKUP_DISABLED_ACCOUNT_DATA_KEY ||
+            ev.getType() === ACCOUNT_DATA_KEY_M_KEY_BACKUP ||
+            ev.getType() === ACCOUNT_DATA_KEY_M_KEY_BACKUP_DISABLED_UNSTABLE ||
             ev.getType() === RECOVERY_ACCOUNT_DATA_KEY
         ) {
             this.deviceListener.recheck();
