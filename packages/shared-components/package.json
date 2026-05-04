@@ -51,6 +51,8 @@
         "lint:types": "nx lint:types"
     },
     "dependencies": {
+        "@dnd-kit/dom": "^0.4.0",
+        "@dnd-kit/react": "^0.4.0",
         "@element-hq/element-web-module-api": "workspace:*",
         "@matrix-org/spec": "^1.7.0",
         "@vector-im/compound-design-tokens": "catalog:",

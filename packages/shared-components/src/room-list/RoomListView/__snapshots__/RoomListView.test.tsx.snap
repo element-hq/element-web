@@ -8335,6 +8335,9 @@ exports[`<RoomListView /> > renders LargeSectionList story 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <div
+        data-dnd-overlay="true"
+      />
+      <div
         aria-label="Room list"
         aria-rowcount="103"
         class="VirtualizedRoomListView-module_roomList"
@@ -13663,6 +13666,9 @@ exports[`<RoomListView /> > renders SmallSectionList story 1`] = `
       class="Flex-module_flex RoomListView-module_list"
       style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
+      <div
+        data-dnd-overlay="true"
+      />
       <div
         aria-label="Room list"
         aria-rowcount="4"

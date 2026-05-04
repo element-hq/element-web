@@ -77,6 +77,8 @@ export interface RoomListViewActions {
     getSectionHeaderViewModel: (sectionId: string) => RoomListSectionHeaderViewModel;
     /** Called to close the toast message */
     closeToast: () => void;
+    /** Called to change the section of a room */
+    changeRoomSection: (roomId: string, tag: string) => void;
 }
 
 /**

@@ -70,6 +70,12 @@
     min-width: 0;
 }
 
+.dragging {
+    outline: 1px solid var(--cpd-color-border-interactive-hovered);
+    background-color: var(--cpd-color-bg-action-tertiary-hovered);
+    opacity: 0.9;
+}
+
 .content {
     flex: 1;
     min-width: 0;
@@ -127,3 +133,4 @@
 .lastItem {
     --padding-bottom: 0px;
 }
+

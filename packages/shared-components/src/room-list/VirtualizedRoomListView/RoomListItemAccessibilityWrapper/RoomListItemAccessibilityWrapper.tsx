@@ -44,7 +44,7 @@ export const RoomListItemAccessibilityWrapper = memo(function RoomListItemAccess
     ...rest
 }: RoomListItemAccessibilityWrapperPros): JSX.Element {
     const itemA11yProps = isInFlatList ? getItemAccessibleProps("listbox", roomIndex, roomCount) : { role: "gridcell" };
-    const item = <RoomListItemView {...rest} {...itemA11yProps} />;
+    const item = <RoomListItemView {...rest} {...itemA11yProps} isDraggable={!isInFlatList} />;
 
     if (isInFlatList) return item;
     return <div {...getItemAccessibleProps("treegrid", roomIndex, roomIndexInSection)}>{item}</div>;

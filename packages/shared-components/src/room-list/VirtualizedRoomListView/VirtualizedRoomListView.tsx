@@ -8,6 +8,7 @@
 import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type ReactNode } from "react";
 import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
+import { DragDropProvider, DragOverlay, useDragOperation } from "@dnd-kit/react";
 
 import { type Room } from "./RoomListItemAccessibilityWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
@@ -21,6 +22,7 @@ import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
+import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
 import styles from "./VirtualizedRoomListView.module.css";
 
 /**
@@ -383,15 +385,48 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     }
 
     return (
-        <GroupedVirtualizedList<string, string, Context>
-            {...commonProps}
-            {...getContainerAccessibleProps("treegrid", totalCount)}
-            scrollHandleRef={setVirtuosoHandle}
-            groups={groups}
-            getHeaderKey={getHeaderKey}
-            getGroupHeaderComponent={getGroupHeaderComponent}
-            getItemComponent={getItemComponentForGroupedList}
-            isGroupHeaderFocusable={isGroupHeaderFocusable}
-        />
+        <DragDropProvider
+            onDragEnd={(event) => {
+                if (event.canceled) return;
+                const { target, source } = event.operation;
+                if (!source || !target) return;
+
+                vm.changeRoomSection(source.id as string, target.id as string);
+            }}
+        >
+            <DragOverlay dropAnimation={null}>
+                <DragOverlayContent vm={vm} renderAvatar={renderAvatar} />
+            </DragOverlay>
+            <GroupedVirtualizedList<string, string, Context>
+                {...commonProps}
+                {...getContainerAccessibleProps("treegrid", totalCount)}
+                scrollHandleRef={setVirtuosoHandle}
+                groups={groups}
+                getHeaderKey={getHeaderKey}
+                getGroupHeaderComponent={getGroupHeaderComponent}
+                getItemComponent={getItemComponentForGroupedList}
+                isGroupHeaderFocusable={isGroupHeaderFocusable}
+            />
+        </DragDropProvider>
     );
+}
+
+interface DragOverlayContentProps {
+    /**  The room list view model */
+    vm: RoomListViewModel;
+    /** Function to render the room avatar */
+    renderAvatar: (room: Room) => ReactNode;
+}
+
+/**
+ * Component rendered in the drag overlay when dragging a room item. Renders a copy of the dragged item to avoid dragging the actual element out of virtualization.
+ */
+function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.Element | null {
+    const { source } = useDragOperation();
+    if (!source) return null;
+
+    const itemVm = vm.getRoomItemViewModel(source.id as string);
+    if (!itemVm) return null;
+
+    return <RoomListItemDragOverlayView vm={itemVm} renderAvatar={renderAvatar} />;
 }

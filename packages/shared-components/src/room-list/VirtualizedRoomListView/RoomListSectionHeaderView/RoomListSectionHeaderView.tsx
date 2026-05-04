@@ -10,6 +10,7 @@ import ChevronRightIcon from "@vector-im/compound-design-tokens/assets/web/icons
 import classNames from "classnames";
 import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
 import { OverflowHorizontalIcon, EditIcon, DeleteIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useDroppable } from "@dnd-kit/react";
 
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 import styles from "./RoomListSectionHeaderView.module.css";
@@ -103,12 +104,17 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
     const { id, title, isExpanded, isUnread, displaySectionMenu } = useViewModel(vm);
     const isLastSection = sectionIndex === sectionCount - 1;
 
+    const { ref, isDropTarget } = useDroppable({
+        id,
+    });
+
     return (
         <div
             aria-expanded={isExpanded}
             {...getGroupHeaderAccessibleProps(indexInList, sectionIndex, roomCountInSection)}
         >
             <button
+                ref={ref}
                 type="button"
                 role="gridcell"
                 className={classNames(styles.header, {
@@ -127,7 +133,14 @@ export const RoomListSectionHeaderView = memo(function RoomListSectionHeaderView
                         : _t("room_list|section_header|toggle", { section: title })
                 }
             >
-                <Flex className={styles.container} align="center" justify="space-between" gap="var(--cpd-space-2x)">
+                <Flex
+                    className={classNames(styles.container, {
+                        [styles.dropTarget]: isDropTarget,
+                    })}
+                    align="center"
+                    justify="space-between"
+                    gap="var(--cpd-space-2x)"
+                >
                     <Flex align="center" gap="var(--cpd-space-0-5x)">
                         <ChevronRightIcon
                             className={styles.chevron}
