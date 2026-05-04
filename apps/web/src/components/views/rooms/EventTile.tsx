@@ -57,7 +57,6 @@ import {
     ReactionsRowButtonView,
     ReactionsRowView,
     TileErrorView,
-    type TileErrorViewLayout,
     useViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -1579,23 +1578,18 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
  */
 interface EventTileErrorFallbackProps {
     error: Error;
-    layout: Layout;
     mxEvent: MatrixEvent;
 }
 
-function EventTileErrorFallback({ error, layout, mxEvent }: Readonly<EventTileErrorFallbackProps>): JSX.Element {
+function EventTileErrorFallback({ error, mxEvent }: Readonly<EventTileErrorFallbackProps>): JSX.Element {
     const developerMode = useSettingValue("developerMode");
     const vm = useCreateAutoDisposedViewModel(
-        () => new TileErrorViewModel({ error, layout: layout as TileErrorViewLayout, mxEvent, developerMode }),
+        () => new TileErrorViewModel({ error, mxEvent, developerMode }),
     );
 
     useEffect(() => {
         vm.setError(error);
     }, [error, vm]);
-
-    useEffect(() => {
-        vm.setLayout(layout as TileErrorViewLayout);
-    }, [layout, vm]);
 
     useEffect(() => {
         vm.setDeveloperMode(developerMode);
@@ -1606,7 +1600,6 @@ function EventTileErrorFallback({ error, layout, mxEvent }: Readonly<EventTileEr
 
 interface EventTileErrorBoundaryProps {
     children: ReactNode;
-    layout: Layout;
     mxEvent: MatrixEvent;
 }
 
@@ -1626,13 +1619,7 @@ class EventTileErrorBoundary extends React.Component<EventTileErrorBoundaryProps
 
     public render(): ReactNode {
         if (this.state.error) {
-            return (
-                <EventTileErrorFallback
-                    error={this.state.error}
-                    layout={this.props.layout}
-                    mxEvent={this.props.mxEvent}
-                />
-            );
+            return <EventTileErrorFallback error={this.state.error} mxEvent={this.props.mxEvent} />;
         }
 
         return this.props.children;
@@ -1642,7 +1629,7 @@ class EventTileErrorBoundary extends React.Component<EventTileErrorBoundaryProps
 // Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
 const SafeEventTile = (props: EventTileProps): JSX.Element => {
     return (
-        <EventTileErrorBoundary mxEvent={props.mxEvent} layout={props.layout ?? Layout.Group}>
+        <EventTileErrorBoundary mxEvent={props.mxEvent}>
             <UnwrappedEventTile {...props} />
         </EventTileErrorBoundary>
     );

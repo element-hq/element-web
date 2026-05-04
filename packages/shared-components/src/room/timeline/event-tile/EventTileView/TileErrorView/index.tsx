@@ -8,7 +8,6 @@
 export {
     TileErrorView,
     type TileErrorViewActions,
-    type TileErrorViewLayout,
     type TileErrorViewModel,
     type TileErrorViewSnapshot,
 } from "./TileErrorView";
