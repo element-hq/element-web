@@ -104,7 +104,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org/one"
+            href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -144,7 +144,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org/two"
+            href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -184,7 +184,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org/three"
+            href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -358,7 +358,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org/one"
+            href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -398,7 +398,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org/two"
+            href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -438,7 +438,7 @@ exports[`UrlPreviewGroupView > renders with compact density 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org/three"
+            href="https://matrix.org"
             rel="noreferrer noopener"
             target="_blank"
           >
