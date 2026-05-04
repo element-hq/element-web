@@ -11,8 +11,9 @@ import { describe, it, expect } from "vitest";
 import React from "react";
 
 import * as stories from "./UrlPreviewGroupView.stories.tsx";
+import { EventPresentationProvider } from "../../EventPresentation";
 
-const { Default, MultiplePreviewsHidden, MultiplePreviewsVisible, WithCompactView } = composeStories(stories);
+const { Default, MultiplePreviewsHidden, MultiplePreviewsVisible } = composeStories(stories);
 
 describe("UrlPreviewGroupView", () => {
     it("renders a single preview", () => {
@@ -27,8 +28,12 @@ describe("UrlPreviewGroupView", () => {
         const { container } = render(<MultiplePreviewsHidden />);
         expect(container).toMatchSnapshot();
     });
-    it("renders with a compact view", () => {
-        const { container } = render(<WithCompactView />);
+    it("renders with compact density", () => {
+        const { container } = render(
+            <EventPresentationProvider value={{ layout: "group", density: "compact" }}>
+                <MultiplePreviewsVisible />
+            </EventPresentationProvider>,
+        );
         expect(container).toMatchSnapshot();
     });
 });
