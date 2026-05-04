@@ -98,6 +98,8 @@ export interface RoomListItemViewSnapshot {
     canMoveToSection: boolean;
     /** Available sections the room can be assigned to */
     sections: Section[];
+    /** Whether drag-and-drop is enabled for this item */
+    isDraggable?: boolean;
 }
 
 /**
@@ -152,6 +154,8 @@ export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLBut
     isLastItem: boolean;
     /** Function to render the room avatar */
     renderAvatar: (room: Room) => ReactNode;
+    /** Whether drag-and-drop is enabled for this item */
+    isDraggable?: boolean;
 }
 
 /**
@@ -165,6 +169,7 @@ export const RoomListItemView = memo(function RoomListItemView({
     onFocus,
     isFirstItem,
     isLastItem,
+    isDraggable = false,
     renderAvatar,
     ...props
 }: RoomListItemViewProps): JSX.Element {
@@ -179,6 +184,7 @@ export const RoomListItemView = memo(function RoomListItemView({
 
     const { ref: draggableRef, handleRef } = useDraggable({
         id: item.id,
+        disabled: !isDraggable,
         // We clone the item in the dnd overlay to avoid to put a hole in the list
         plugins: [Feedback.configure({ feedback: "clone" })],
         sensors: [
