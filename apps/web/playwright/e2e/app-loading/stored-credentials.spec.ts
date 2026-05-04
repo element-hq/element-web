@@ -23,6 +23,18 @@ test("Shows the homepage by default", async ({ pageWithCredentials: page }) => {
     await expect(page.getByRole("heading", { name: "Welcome Boris", exact: true })).toBeVisible();
 });
 
+test(
+    "Adjusts homepage button layout in thin viewport",
+    { tag: "@screenshot" },
+    async ({ pageWithCredentials: page }) => {
+        await page.setViewportSize({ width: 920, height: 720 });
+        await page.goto("/#/home");
+        await page.waitForSelector(".mx_HomePage", { timeout: 30000 });
+
+        await expect(page.locator(".mx_HomePage")).toMatchScreenshot("home-thin-viewport.png");
+    },
+);
+
 test("Shows the last known page on reload", async ({ pageWithCredentials: page }) => {
     await page.goto("/");
     await page.waitForSelector(".mx_MatrixChat", { timeout: 30000 });
