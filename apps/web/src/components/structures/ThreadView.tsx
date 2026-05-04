@@ -18,6 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import classNames from "classnames";
+import { EventPresentationProvider } from "@element-hq/web-shared-components";
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
@@ -51,6 +52,7 @@ import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/paylo
 import Heading from "../views/typography/Heading";
 import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
+import { getEventPresentation } from "../../utils/EventPresentation";
 
 interface IProps {
     room: Room;
@@ -388,32 +390,39 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 );
             }
 
+            const layout = this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group;
+
             timeline = (
                 <>
                     <FileDropTarget parent={this.card.current} onFileDrop={this.onFileDrop} room={this.props.room} />
-                    <TimelinePanel
-                        key={this.state.thread.id}
-                        ref={this.timelinePanel}
-                        showReadReceipts={this.context.showReadReceipts}
-                        manageReadReceipts={true}
-                        manageReadMarkers={true}
-                        sendReadReceiptOnLoad={true}
-                        timelineSet={this.state.thread.timelineSet}
-                        showUrlPreview={this.context.showUrlPreview}
-                        // ThreadView doesn't support IRC layout at this time
-                        layout={this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group}
-                        hideThreadedMessages={false}
-                        hidden={false}
-                        showReactions={true}
-                        className="mx_RoomView_messagePanel"
-                        permalinkCreator={this.props.permalinkCreator}
-                        membersLoaded={true}
-                        editState={this.state.editState}
-                        eventId={this.props.initialEvent?.getId()}
-                        highlightedEventId={highlightedEventId}
-                        eventScrollIntoView={this.props.initialEventScrollIntoView}
-                        onEventScrolledIntoView={this.resetJumpToEvent}
-                    />
+                    {/* Compact layout is still owned by LoggedInView; this bridges it into shared event presentation. */}
+                    <EventPresentationProvider
+                        value={getEventPresentation(layout, SettingsStore.getValue("useCompactLayout"))}
+                    >
+                        <TimelinePanel
+                            key={this.state.thread.id}
+                            ref={this.timelinePanel}
+                            showReadReceipts={this.context.showReadReceipts}
+                            manageReadReceipts={true}
+                            manageReadMarkers={true}
+                            sendReadReceiptOnLoad={true}
+                            timelineSet={this.state.thread.timelineSet}
+                            showUrlPreview={this.context.showUrlPreview}
+                            // ThreadView doesn't support IRC layout at this time
+                            layout={layout}
+                            hideThreadedMessages={false}
+                            hidden={false}
+                            showReactions={true}
+                            className="mx_RoomView_messagePanel"
+                            permalinkCreator={this.props.permalinkCreator}
+                            membersLoaded={true}
+                            editState={this.state.editState}
+                            eventId={this.props.initialEvent?.getId()}
+                            highlightedEventId={highlightedEventId}
+                            eventScrollIntoView={this.props.initialEventScrollIntoView}
+                            onEventScrolledIntoView={this.resetJumpToEvent}
+                        />
+                    </EventPresentationProvider>
                 </>
             );
         } else {

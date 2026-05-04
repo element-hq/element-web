@@ -47,6 +47,7 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { type RoomViewProps } from "@element-hq/element-web-module-api";
 import {
+    EventPresentationProvider,
     EncryptionEventView,
     RoomStatusBarView,
     useCreateAutoDisposedViewModel,
@@ -142,6 +143,7 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
+import { getEventPresentation } from "../../utils/EventPresentation";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -2582,33 +2584,38 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         let messagePanel: JSX.Element | undefined;
         if (!isRoomEncryptionLoading) {
+            // Compact layout is still owned by LoggedInView; this bridges it into shared event presentation.
             messagePanel = (
-                <TimelinePanel
-                    ref={this.gatherTimelinePanelRef}
-                    timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                    showReadReceipts={this.state.showReadReceipts}
-                    manageReadReceipts={!this.state.isPeeking}
-                    sendReadReceiptOnLoad={
-                        !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
-                    }
-                    manageReadMarkers={!this.state.isPeeking}
-                    hidden={hideMessagePanel}
-                    highlightedEventId={highlightedEventId}
-                    eventId={this.state.initialEventId}
-                    eventScrollIntoView={this.state.initialEventScrollIntoView}
-                    eventPixelOffset={this.state.initialEventPixelOffset}
-                    onScroll={this.onMessageListScroll}
-                    onEventScrolledIntoView={this.resetJumpToEvent}
-                    onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
-                    showUrlPreview={this.state.showUrlPreview}
-                    className={this.messagePanelClassNames}
-                    membersLoaded={this.state.membersLoaded}
-                    permalinkCreator={this.permalinkCreator}
-                    showReactions={true}
-                    layout={this.state.layout}
-                    editState={this.state.editState}
-                    enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
-                />
+                <EventPresentationProvider
+                    value={getEventPresentation(this.state.layout, SettingsStore.getValue("useCompactLayout"))}
+                >
+                    <TimelinePanel
+                        ref={this.gatherTimelinePanelRef}
+                        timelineSet={this.state.room.getUnfilteredTimelineSet()}
+                        showReadReceipts={this.state.showReadReceipts}
+                        manageReadReceipts={!this.state.isPeeking}
+                        sendReadReceiptOnLoad={
+                            !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
+                        }
+                        manageReadMarkers={!this.state.isPeeking}
+                        hidden={hideMessagePanel}
+                        highlightedEventId={highlightedEventId}
+                        eventId={this.state.initialEventId}
+                        eventScrollIntoView={this.state.initialEventScrollIntoView}
+                        eventPixelOffset={this.state.initialEventPixelOffset}
+                        onScroll={this.onMessageListScroll}
+                        onEventScrolledIntoView={this.resetJumpToEvent}
+                        onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
+                        showUrlPreview={this.state.showUrlPreview}
+                        className={this.messagePanelClassNames}
+                        membersLoaded={this.state.membersLoaded}
+                        permalinkCreator={this.permalinkCreator}
+                        showReactions={true}
+                        layout={this.state.layout}
+                        editState={this.state.editState}
+                        enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
+                    />
+                </EventPresentationProvider>
             );
         }
 
