@@ -88,6 +88,10 @@ interface InternalState {
      * Current media sizing preference from settings.
      */
     imageSize: ImageSize;
+    /**
+     * Whether playback has started for the current event.
+     */
+    playbackStarted: boolean;
 }
 
 type VideoInfoWithBlurhash = VideoInfo & {
@@ -130,6 +134,7 @@ export class VideoBodyViewModel
             posterLoading: false,
             blurhashUrl: null,
             imageSize: SettingsStore.getValue("Images.size") as ImageSize,
+            playbackStarted: false,
         };
     }
 
@@ -196,7 +201,8 @@ export class VideoBodyViewModel
 
     private static computeSnapshot(props: VideoBodyViewModelProps, state: InternalState): VideoBodyViewSnapshot {
         const content = props.mxEvent.getContent<MediaEventContent>();
-        const autoplay = !props.inhibitInteraction && (SettingsStore.getValue("autoplayVideo") as boolean);
+        const autoplayEnabled = !props.inhibitInteraction && (SettingsStore.getValue("autoplayVideo") as boolean);
+        const autoplay = autoplayEnabled && !state.playbackStarted;
         const aspectRatio = VideoBodyViewModel.getAspectRatio(props.mxEvent);
         const { w: maxWidth, h: maxHeight } = VideoBodyViewModel.getDimensions(props.mxEvent, state.imageSize);
 
@@ -248,7 +254,7 @@ export class VideoBodyViewModel
             poster,
             preload,
             controls: !props.inhibitInteraction,
-            muted: autoplay,
+            muted: autoplayEnabled,
             autoPlay: autoplay,
         };
     }
@@ -284,6 +290,7 @@ export class VideoBodyViewModel
             fetchingData: false,
             posterLoading: false,
             blurhashUrl: null,
+            playbackStarted: false,
         };
     }
 
@@ -480,6 +487,14 @@ export class VideoBodyViewModel
     };
 
     public onPlay = async (): Promise<void> => {
+        if (!this.state.playbackStarted) {
+            this.state = {
+                ...this.state,
+                playbackStarted: true,
+            };
+            this.updateSnapshotFromState();
+        }
+
         if (this.hasContentUrl() || this.state.fetchingData || this.state.error !== null) {
             return;
         }

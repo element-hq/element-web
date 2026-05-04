@@ -232,6 +232,29 @@ describe("VideoBodyViewModel", () => {
         });
     });
 
+    it("only autoplays until playback starts", async () => {
+        const originalGetValue = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+            if (setting === "Images.size") return ImageSize.Normal;
+            if (setting === "autoplayVideo") return true;
+            return originalGetValue(setting, ...args);
+        });
+
+        const vm = createVm({ mediaVisible: true });
+
+        expect(vm.getSnapshot()).toMatchObject({
+            autoPlay: true,
+            muted: true,
+        });
+
+        await vm.onPlay();
+
+        expect(vm.getSnapshot()).toMatchObject({
+            autoPlay: false,
+            muted: true,
+        });
+    });
+
     it("keeps encrypted video lazy-loadable when autoplay is disabled", async () => {
         const vm = createVm({
             mxEvent: createEvent({
