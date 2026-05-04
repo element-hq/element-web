@@ -58,6 +58,7 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { TimelinePanelView } from "../views/rooms/timeline/Timeline";
 
 // These pagination sizes are higher than they may possibly need be
 // once https://github.com/matrix-org/matrix-spec-proposals/pull/3874 lands
@@ -1802,6 +1803,30 @@ class TimelinePanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const room = this.props.timelineSet.room;
+        const useNewTimeline = SettingsStore.getValue("feature_new_timeline") && !!room;
+
+        if (useNewTimeline) {
+            return (
+                <TimelinePanelView
+                    room={room}
+                    anchoredEventId={this.props.eventId}
+                    highlightedEventId={this.props.highlightedEventId}
+                    showReactions={this.props.showReactions}
+                    showUrlPreview={this.props.showUrlPreview}
+                    isTwelveHour={this.context?.showTwelveHourTimestamps ?? this.state.isTwelveHour}
+                    alwaysShowTimestamps={
+                        this.props.alwaysShowTimestamps ??
+                        this.context?.alwaysShowTimestamps ??
+                        this.state.alwaysShowTimestamps
+                    }
+                    layout={this.props.layout}
+                    getRelationsForEvent={this.getRelationsForEvent}
+                    permalinkCreator={this.props.permalinkCreator}
+                />
+            );
+        }
+
         // just show a spinner while the timeline loads.
         //
         // put it in a div of the right class (mx_RoomView_messagePanel) so
@@ -1843,6 +1868,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // the HS and fetch the latest events, so we are effectively forward paginating.
         const forwardPaginating = this.state.forwardPaginating || this.syncImpliesForwardPaginating;
         const events = this.state.events;
+
         return (
             <MessagePanel
                 ref={this.messagePanel}

@@ -1,0 +1,354 @@
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import {
+    TimelineWindow,
+    Direction,
+    RoomEvent,
+    type IRoomTimelineData,
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+} from "matrix-js-sdk/src/matrix";
+import { BaseViewModel } from "@element-hq/web-shared-components";
+
+import type { TimelineModelItem } from "../../../models/rooms/TimelineModel";
+import { TimelinePanelPresenter } from "../../../components/views/rooms/timeline/Timeline";
+import type {
+    TimelineViewSnapshot,
+    TimelineViewActions,
+    VisibleRange,
+    PaginationState,
+} from "@element-hq/web-shared-components";
+
+const PAGINATE_SIZE = 20;
+const INITIAL_SIZE = 40;
+const WINDOW_LIMIT = 200;
+
+type RoomTimelineListenerArgs = [
+    ev: MatrixEvent,
+    room: Room | undefined,
+    toStartOfTimeline: boolean | undefined,
+    removed: boolean,
+    data: IRoomTimelineData,
+];
+
+export interface TimelinePanelViewModelOpts {
+    client: MatrixClient;
+    room: Room;
+    /** Optional anchor for initial load (permalink, search result). */
+    initialEventId?: string;
+}
+
+/**
+ * Element Web implementation of the shared TimelineViewModel contract.
+ *
+ * Wraps the SDK's TimelineWindow and translates Matrix timeline state
+ * into the SDK-agnostic types that the shared TimelineView consumes.
+ */
+export class TimelinePanelViewModel
+    extends BaseViewModel<TimelineViewSnapshot<TimelineModelItem>, TimelinePanelViewModelOpts>
+    implements TimelineViewActions
+{
+    private readonly timelineWindow: TimelineWindow;
+    private readonly presenter: TimelinePanelPresenter;
+    private readonly accumulatedEventsById = new Map<string, MatrixEvent>();
+    private accumulatedEventIds: string[] = [];
+    private hasReachedStartOfTimeline = false;
+    private initialFillCompleted = false;
+    private started = false;
+    private lifecycleTracked = false;
+    // Stored for upcoming read-receipt integration.
+    public visibleRange: VisibleRange = { startKey: "", endKey: "" };
+    public isAtLiveEdge = false;
+
+    public constructor(opts: TimelinePanelViewModelOpts) {
+        super(opts, {
+            items: [],
+            canPaginateBackward: false,
+            canPaginateForward: false,
+            backwardPagination: "idle",
+            forwardPagination: "idle",
+            scrollTarget: opts.initialEventId ? { targetKey: opts.initialEventId, position: "bottom" } : null,
+        });
+
+        this.timelineWindow = new TimelineWindow(opts.client, opts.room.getUnfilteredTimelineSet(), {
+            windowLimit: WINDOW_LIMIT,
+        });
+        this.presenter = new TimelinePanelPresenter({
+            room: opts.room,
+        });
+    }
+
+    public start(): void {
+        if (this.started) {
+            return;
+        }
+
+        this.started = true;
+        if (!this.lifecycleTracked) {
+            this.lifecycleTracked = true;
+            this.disposables.trackListener(this.props.room, RoomEvent.Timeline, this.onRoomTimelineListener);
+            this.disposables.track({
+                dispose: () => this.presenter.dispose(),
+            });
+        }
+        void this.load(this.props.initialEventId);
+    }
+
+    public override dispose(): void {
+        super.dispose();
+    }
+
+    private readonly onRoomTimelineListener = (...args: unknown[]): void => {
+        this.onRoomTimeline(...(args as RoomTimelineListenerArgs));
+    };
+
+    private readonly onRoomTimeline = (
+        _ev: MatrixEvent,
+        room: Room | undefined,
+        toStartOfTimeline: boolean | undefined,
+        removed: boolean,
+        data: IRoomTimelineData,
+    ): void => {
+        if (!room || removed || room.roomId !== this.props.room.roomId) {
+            return;
+        }
+
+        // Ignore pagination and filtered-timeline updates. Only live-end
+        // mutations should extend the loaded window or expose forward paging.
+        if (data.timeline.getTimelineSet() !== room.getUnfilteredTimelineSet()) {
+            return;
+        }
+
+        if (toStartOfTimeline || !data.liveEvent) {
+            return;
+        }
+
+        const windowIsBehindLive = this.timelineWindow.canPaginate(Direction.Forward);
+
+        if (windowIsBehindLive) {
+            this.mergeSnapshot({
+                canPaginateForward: true,
+            });
+            return;
+        }
+
+        // Extend the loaded window when it was already caught up to the previous
+        // newest event. Whether the viewport is visually pinned to bottom is the
+        // TimelineView's concern, not the room timeline model's.
+        this.paginateDirection(Direction.Forward, 1, false, false);
+    };
+
+    private async load(eventId?: string): Promise<void> {
+        this.mergeSnapshot({
+            backwardPagination: "loading",
+            forwardPagination: "loading",
+        });
+
+        try {
+            await this.timelineWindow.load(eventId, INITIAL_SIZE);
+            if (this.isDisposed) {
+                return;
+            }
+
+            const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
+            const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
+            this.hasReachedStartOfTimeline ||= !canPaginateBackward;
+            const items = this.buildItems();
+
+            this.mergeSnapshot({
+                items,
+                canPaginateBackward,
+                canPaginateForward,
+                backwardPagination: "idle",
+                forwardPagination: "idle",
+                scrollTarget: eventId ? { targetKey: eventId, position: "bottom" } : null,
+            });
+        } catch {
+            this.mergeSnapshot({
+                canPaginateBackward: false,
+                canPaginateForward: false,
+                backwardPagination: "error",
+                forwardPagination: "error",
+            });
+        }
+    }
+
+    // ── TimelineViewActions ──────────────────────────────────────────
+
+    public onRequestMoreItems = (direction: "backward" | "forward"): void => {
+        if (direction === "forward" && !this.initialFillCompleted) {
+            return;
+        }
+
+        const dir = direction === "backward" ? Direction.Backward : Direction.Forward;
+        this.paginateDirection(dir, PAGINATE_SIZE, true, true);
+    };
+
+    public onInitialFillCompleted = (): void => {
+        this.initialFillCompleted = true;
+    };
+
+    public onVisibleRangeChanged = (range: VisibleRange): void => {
+        this.visibleRange = range;
+    };
+
+    public onScrollTargetReached = (): void => {
+        this.mergeSnapshot({ scrollTarget: null });
+    };
+
+    public onIsAtLiveEdgeChanged = (isAtLiveEdge: boolean): void => {
+        this.isAtLiveEdge = isAtLiveEdge;
+    };
+
+    private buildItems(direction?: Direction): TimelineModelItem[] {
+        this.mergeWindowEvents(direction);
+        return this.presenter.buildItems(this.getAccumulatedEvents(), !this.hasReachedStartOfTimeline);
+    }
+
+    private getAccumulatedEvents(): MatrixEvent[] {
+        return this.accumulatedEventIds
+            .map((eventId) => this.accumulatedEventsById.get(eventId))
+            .filter((event): event is MatrixEvent => event !== undefined);
+    }
+
+    private mergeWindowEvents(direction?: Direction): void {
+        const windowEvents = this.timelineWindow.getEvents();
+        if (windowEvents.length === 0) {
+            return;
+        }
+
+        if (this.accumulatedEventIds.length === 0) {
+            for (const event of windowEvents) {
+                const eventId = event.getId();
+                if (!eventId || this.accumulatedEventsById.has(eventId)) {
+                    continue;
+                }
+
+                this.accumulatedEventsById.set(eventId, event);
+                this.accumulatedEventIds.push(eventId);
+            }
+            return;
+        }
+
+        if (direction === Direction.Backward) {
+            this.prependWindowEvents(windowEvents);
+            return;
+        }
+
+        if (direction === Direction.Forward) {
+            this.appendWindowEvents(windowEvents);
+        }
+    }
+
+    private prependWindowEvents(windowEvents: MatrixEvent[]): void {
+        const prependedEventIds: string[] = [];
+
+        for (const event of windowEvents) {
+            const eventId = event.getId();
+            if (!eventId) {
+                continue;
+            }
+
+            if (this.accumulatedEventsById.has(eventId)) {
+                break;
+            }
+
+            this.accumulatedEventsById.set(eventId, event);
+            prependedEventIds.push(eventId);
+        }
+
+        if (prependedEventIds.length > 0) {
+            this.accumulatedEventIds = [...prependedEventIds, ...this.accumulatedEventIds];
+        }
+    }
+
+    private appendWindowEvents(windowEvents: MatrixEvent[]): void {
+        const appendedEventIds: string[] = [];
+
+        for (let index = windowEvents.length - 1; index >= 0; index -= 1) {
+            const event = windowEvents[index];
+            const eventId = event.getId();
+            if (!eventId) {
+                continue;
+            }
+
+            if (this.accumulatedEventsById.has(eventId)) {
+                break;
+            }
+
+            this.accumulatedEventsById.set(eventId, event);
+            appendedEventIds.unshift(eventId);
+        }
+
+        if (appendedEventIds.length > 0) {
+            this.accumulatedEventIds = [...this.accumulatedEventIds, ...appendedEventIds];
+        }
+    }
+
+    private mergeSnapshot(update: Partial<TimelineViewSnapshot<TimelineModelItem>>): void {
+        if (this.isDisposed) {
+            return;
+        }
+
+        this.snapshot.merge(update);
+    }
+
+    private paginateDirection(dir: Direction, size: number, allowRequest: boolean, requireCanPaginate: boolean): void {
+        const direction = dir === Direction.Backward ? "backward" : "forward";
+        const stateKey = direction === "backward" ? "backwardPagination" : "forwardPagination";
+        const capabilityKey = direction === "backward" ? "canPaginateBackward" : "canPaginateForward";
+        const currentState = this.snapshot.current[stateKey];
+        const canPaginate = this.timelineWindow.canPaginate(dir);
+
+        if (currentState === "loading") {
+            return;
+        }
+
+        if (requireCanPaginate && !canPaginate) {
+            this.mergeSnapshot({
+                [capabilityKey]: false,
+            });
+            return;
+        }
+
+        this.mergeSnapshot({ [stateKey]: "loading" as PaginationState });
+
+        const paginationRequest = allowRequest
+            ? this.timelineWindow.paginate(dir, size)
+            : this.timelineWindow.paginate(dir, size, false);
+
+        paginationRequest
+            .then((success) => {
+                if (this.isDisposed) {
+                    return;
+                }
+
+                const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
+                const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
+                this.hasReachedStartOfTimeline ||= !canPaginateBackward;
+                const items = this.buildItems(dir);
+
+                this.mergeSnapshot({
+                    items,
+                    canPaginateBackward,
+                    canPaginateForward,
+                    [stateKey]: "idle" as PaginationState,
+                });
+            })
+            .catch((e) => {
+                const canPaginateBackward = this.timelineWindow.canPaginate(Direction.Backward);
+                const canPaginateForward = this.timelineWindow.canPaginate(Direction.Forward);
+                this.mergeSnapshot({
+                    canPaginateBackward,
+                    canPaginateForward,
+                    [stateKey]: "error" as PaginationState,
+                });
+            });
+    }
+}
