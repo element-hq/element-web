@@ -142,6 +142,7 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
+import { EventPresentationProvider } from "../../utils/EventPresentationProvider";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -2583,32 +2584,34 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let messagePanel: JSX.Element | undefined;
         if (!isRoomEncryptionLoading) {
             messagePanel = (
-                <TimelinePanel
-                    ref={this.gatherTimelinePanelRef}
-                    timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                    showReadReceipts={this.state.showReadReceipts}
-                    manageReadReceipts={!this.state.isPeeking}
-                    sendReadReceiptOnLoad={
-                        !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
-                    }
-                    manageReadMarkers={!this.state.isPeeking}
-                    hidden={hideMessagePanel}
-                    highlightedEventId={highlightedEventId}
-                    eventId={this.state.initialEventId}
-                    eventScrollIntoView={this.state.initialEventScrollIntoView}
-                    eventPixelOffset={this.state.initialEventPixelOffset}
-                    onScroll={this.onMessageListScroll}
-                    onEventScrolledIntoView={this.resetJumpToEvent}
-                    onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
-                    showUrlPreview={this.state.showUrlPreview}
-                    className={this.messagePanelClassNames}
-                    membersLoaded={this.state.membersLoaded}
-                    permalinkCreator={this.permalinkCreator}
-                    showReactions={true}
-                    layout={this.state.layout}
-                    editState={this.state.editState}
-                    enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
-                />
+                <EventPresentationProvider layout={this.state.layout}>
+                    <TimelinePanel
+                        ref={this.gatherTimelinePanelRef}
+                        timelineSet={this.state.room.getUnfilteredTimelineSet()}
+                        showReadReceipts={this.state.showReadReceipts}
+                        manageReadReceipts={!this.state.isPeeking}
+                        sendReadReceiptOnLoad={
+                            !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
+                        }
+                        manageReadMarkers={!this.state.isPeeking}
+                        hidden={hideMessagePanel}
+                        highlightedEventId={highlightedEventId}
+                        eventId={this.state.initialEventId}
+                        eventScrollIntoView={this.state.initialEventScrollIntoView}
+                        eventPixelOffset={this.state.initialEventPixelOffset}
+                        onScroll={this.onMessageListScroll}
+                        onEventScrolledIntoView={this.resetJumpToEvent}
+                        onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
+                        showUrlPreview={this.state.showUrlPreview}
+                        className={this.messagePanelClassNames}
+                        membersLoaded={this.state.membersLoaded}
+                        permalinkCreator={this.permalinkCreator}
+                        showReactions={true}
+                        layout={this.state.layout}
+                        editState={this.state.editState}
+                        enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
+                    />
+                </EventPresentationProvider>
             );
         }
 

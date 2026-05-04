@@ -20,7 +20,6 @@ import { isPermalinkHost } from "../../utils/permalinks/Permalinks";
 import { mediaFromMxc } from "../../customisations/Media";
 import PlatformPeg from "../../PlatformPeg";
 import { thumbHeight } from "../../ImageUtils";
-import SettingsStore from "../../settings/SettingsStore";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 
 const logger = rootLogger.getChild("UrlPreviewGroupViewModel");
@@ -239,7 +238,6 @@ export class UrlPreviewGroupViewModel
     private readonly client: MatrixClient;
     private readonly storageKey: string;
     private readonly eventSendTime: number;
-    private readonly useCompactLayoutSettingWatcher: string;
 
     /**
      * Should the URL preview render according to the application.
@@ -282,7 +280,6 @@ export class UrlPreviewGroupViewModel
             totalPreviewCount: 0,
             previewsLimited: true,
             overPreviewLimit: false,
-            compactLayout: SettingsStore.getValue("useCompactLayout"),
         });
         this.urlPreviewEnabledByUser = globalThis.localStorage.getItem(storageKey) !== "1";
         this.urlPreviewVisible = props.visible;
@@ -291,15 +288,6 @@ export class UrlPreviewGroupViewModel
         this.client = props.client;
         this.eventSendTime = props.mxEvent.getTs();
         this.onImageClick = props.onImageClicked;
-        this.useCompactLayoutSettingWatcher = SettingsStore.watchSetting(
-            "useCompactLayout",
-            null,
-            (_setting, _roomid, _level, compactLayout) => {
-                this.snapshot.merge({
-                    compactLayout: !!compactLayout,
-                });
-            },
-        );
     }
 
     /**
@@ -381,11 +369,6 @@ export class UrlPreviewGroupViewModel
         } satisfies UrlPreview;
         this.previewCache.set(link, result);
         return result;
-    }
-
-    public dispose(): void {
-        super.dispose();
-        SettingsStore.unwatchSetting(this.useCompactLayoutSettingWatcher);
     }
 
     private get visibility(): PreviewVisibility {

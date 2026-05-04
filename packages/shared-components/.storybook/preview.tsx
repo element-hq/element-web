@@ -1,4 +1,11 @@
-import type { ArgTypes, Preview, Decorator, ReactRenderer, StrictArgs } from "@storybook/react-vite";
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import type { ArgTypes, Decorator, Preview, ReactRenderer, StrictArgs } from "@storybook/react-vite";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
@@ -7,10 +14,11 @@ import "@fontsource/inter/700.css";
 import "./compound.css";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
-import { setLanguage } from "../src/core/i18n/i18n";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { StoryContext } from "storybook/internal/csf";
-import { I18nApi, I18nContext } from "../src";
+import type { StoryContext } from "storybook/internal/csf";
+
+import { EventPresentationProvider, type EventDensity, type EventLayout, I18nApi, I18nContext } from "../src";
+import { setLanguage } from "../src/core/i18n/i18n";
 
 export const globalTypes = {
     theme: {
@@ -32,9 +40,36 @@ export const globalTypes = {
         name: "Language",
         description: "Global language for components",
     },
+    eventLayout: {
+        name: "Event layout",
+        description: "Global event layout for timeline components",
+        toolbar: {
+            icon: "component",
+            title: "Event layout",
+            items: [
+                { title: "Group", value: "group" },
+                { title: "Bubble", value: "bubble" },
+                { title: "IRC", value: "irc" },
+            ],
+        },
+    },
+    eventDensity: {
+        name: "Event density",
+        description: "Global event density for timeline components",
+        toolbar: {
+            icon: "listunordered",
+            title: "Event density",
+            items: [
+                { title: "Default", value: "default" },
+                { title: "Compact", value: "compact" },
+            ],
+        },
+    },
     initialGlobals: {
         theme: "system",
         language: "en",
+        eventLayout: "group",
+        eventDensity: "default",
     },
 } satisfies ArgTypes;
 
@@ -83,9 +118,28 @@ const withI18nProvider: Decorator = (Story) => {
     );
 };
 
-const preview: Preview = {
+const withEventPresentationProvider: Decorator = (Story, context) => {
+    return (
+        <EventPresentationProvider
+            value={{
+                layout: context.globals.eventLayout as EventLayout,
+                density: context.globals.eventDensity as EventDensity,
+            }}
+        >
+            <Story />
+        </EventPresentationProvider>
+    );
+};
+
+const preview = {
     tags: ["autodocs", "snapshot"],
-    decorators: [withThemeProvider, withTooltipProvider, withI18nProvider],
+    initialGlobals: {
+        theme: "system",
+        language: "en",
+        eventLayout: "group",
+        eventDensity: "default",
+    },
+    decorators: [withThemeProvider, withEventPresentationProvider, withTooltipProvider, withI18nProvider],
     parameters: {
         options: {
             storySort: {
@@ -101,6 +155,6 @@ const preview: Preview = {
         },
     },
     loaders: [languageLoader],
-};
+} satisfies Preview;
 
 export default preview;
