@@ -7,10 +7,17 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ClientEvent, type MatrixClient, MatrixEventEvent, type Room } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    type MatrixClient,
+    MatrixEventEvent,
+    NotificationCountType,
+    type Room,
+    type Thread,
+} from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
-import { doesRoomHaveUnreadThreads } from "../../../../Unread";
+import { doesRoomHaveUnreadThreads, doesTimelineHaveUnreadMessages } from "../../../../Unread";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { getThreadNotificationLevel } from "../../../../utils/notifications";
 import { useSettingValue } from "../../../../hooks/useSettings";
@@ -20,9 +27,17 @@ import { isRoomVisible } from "../../../../stores/room-list-v3/isRoomVisible";
 
 const MIN_UPDATE_INTERVAL_MS = 500;
 
+export type ThreadData = {
+    thread: Thread;
+    room: Room;
+    notificationLevel: NotificationLevel;
+};
+
 type Result = {
     greatestNotificationLevel: NotificationLevel;
     rooms: Array<{ room: Room; notificationLevel: NotificationLevel }>;
+    allUnreadThreads: Array<ThreadData>;
+    participatingThreads: Array<ThreadData>;
 };
 
 /**
@@ -36,7 +51,12 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
     const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
     const mxClient = useMatrixClientContext();
 
-    const [result, setResult] = useState<Result>({ greatestNotificationLevel: NotificationLevel.None, rooms: [] });
+    const [result, setResult] = useState<Result>({
+        greatestNotificationLevel: NotificationLevel.None,
+        rooms: [],
+        allUnreadThreads: [],
+        participatingThreads: [],
+    });
 
     const doUpdate = useCallback(() => {
         setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs));
@@ -69,8 +89,10 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
 
 /**
  * Compute the greatest notification level of all thread, the list of rooms with unread threads, and their notification level.
+ * Also computes the list of unread threads in which the current user has participated, across all rooms.
  * @param mxClient - MatrixClient
  * @param msc3946ProcessDynamicPredecessor
+ * @param settingTACOnlyNotifs
  */
 function computeUnreadThreadRooms(
     mxClient: MatrixClient,
@@ -80,31 +102,77 @@ function computeUnreadThreadRooms(
     // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
     // This will include highlights from the previous version of the room internally
     const visibleRooms = mxClient.getVisibleRooms(msc3946ProcessDynamicPredecessor);
+    const userId = mxClient.getUserId();
 
     let greatestNotificationLevel = NotificationLevel.None;
     const rooms: Result["rooms"] = [];
+    const allUnreadThreads: ThreadData[] = [];
+    const participatingThreads: ThreadData[] = [];
 
     for (const room of visibleRooms) {
         // We only care about rooms with unread threads
-        if (isRoomVisible(room) && doesRoomHaveUnreadThreads(room)) {
-            // Get the greatest notification level of all threads
-            const notificationLevel = getThreadNotificationLevel(room);
+        if (!isRoomVisible(room) || !doesRoomHaveUnreadThreads(room)) continue;
 
-            // If the room has an activity notification or less, we ignore it
-            if (settingTACOnlyNotifs && notificationLevel <= NotificationLevel.Activity) {
-                continue;
-            }
+        // Get the greatest notification level of all threads
+        const notificationLevel = getThreadNotificationLevel(room);
 
+        const roomPassesFilter = !settingTACOnlyNotifs || notificationLevel > NotificationLevel.Activity;
+
+        // If the room has an activity notification or less, we ignore it for the Rooms tab
+        if (roomPassesFilter) {
             if (notificationLevel > greatestNotificationLevel) {
                 greatestNotificationLevel = notificationLevel;
             }
-
             rooms.push({ room, notificationLevel });
+        }
+
+        for (const thread of room.getThreads()) {
+            // Use server-reported notification counts as the primary unread signal
+            // (more reliable than local timeline inspection which may be incomplete).
+            // Fall back to timeline inspection for activity-level unread (no count).
+            const highlight = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Highlight);
+            const total = room.getThreadUnreadNotificationCount(thread.id, NotificationCountType.Total);
+            const hasNotifications = highlight > 0 || total > 0;
+            const hasActivity = doesTimelineHaveUnreadMessages(room, thread.timeline);
+            if (!hasNotifications && !hasActivity) continue;
+
+            const threadNotifLevel =
+                highlight > 0
+                    ? NotificationLevel.Highlight
+                    : total > 0
+                      ? NotificationLevel.Notification
+                      : NotificationLevel.Activity;
+
+            // "All threads" tab: every unread thread from rooms that pass the Rooms filter
+            if (roomPassesFilter) {
+                allUnreadThreads.push({ thread, room, notificationLevel: threadNotifLevel });
+            }
+
+            // "My threads" tab: unread threads the user participated in, across all rooms.
+            // settingTACOnlyNotifs is intentionally NOT applied — show all participated threads.
+            if (userId) {
+                const participated =
+                    thread.rootEvent?.getSender() === userId ||
+                    thread.timeline.some((e) => e.getSender() === userId);
+                if (participated) {
+                    participatingThreads.push({ thread, room, notificationLevel: threadNotifLevel });
+                }
+            }
         }
     }
 
+    const sortThreads = (a: ThreadData, b: ThreadData): number => {
+        if (a.notificationLevel !== b.notificationLevel) return b.notificationLevel - a.notificationLevel;
+        const tsA = a.thread.timeline.at(-1)?.getTs() ?? 0;
+        const tsB = b.thread.timeline.at(-1)?.getTs() ?? 0;
+        return tsB - tsA;
+    };
+
     const sortedRooms = rooms.sort((a, b) => sortRoom(a, b));
-    return { greatestNotificationLevel, rooms: sortedRooms };
+    allUnreadThreads.sort(sortThreads);
+    participatingThreads.sort(sortThreads);
+
+    return { greatestNotificationLevel, rooms: sortedRooms, allUnreadThreads, participatingThreads };
 }
 
 /**
