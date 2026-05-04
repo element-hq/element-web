@@ -16,7 +16,6 @@ import {
     type Thread,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { EventPresentationProvider } from "@element-hq/web-shared-components";
 
 import BaseCard from "./BaseCard";
 import type ResizeNotifier from "../../../utils/ResizeNotifier";
@@ -39,7 +38,7 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import Measured from "../elements/Measured";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
-import { getEventPresentation } from "../../../utils/EventPresentation";
+import { EventPresentationProvider } from "../../../utils/EventPresentationProvider";
 
 interface IProps {
     room: Room;
@@ -218,10 +217,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     <div className="mx_TimelineCard_timeline">
                         {jumpToBottom}
-                        {/* Compact layout is still owned by LoggedInView; this bridges it into shared event presentation. */}
-                        <EventPresentationProvider
-                            value={getEventPresentation(layout, SettingsStore.getValue("useCompactLayout"))}
-                        >
+                        <EventPresentationProvider layout={layout}>
                             <TimelinePanel
                                 ref={this.timelinePanel}
                                 showReadReceipts={this.state.showReadReceipts}

@@ -21,7 +21,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
-import { EventPresentationProvider } from "@element-hq/web-shared-components";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import EventIndexPeg from "../../indexing/EventIndexPeg";
@@ -35,8 +34,7 @@ import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
-import SettingsStore from "../../settings/SettingsStore";
-import { getEventPresentation } from "../../utils/EventPresentation";
+import { EventPresentationProvider } from "../../utils/EventPresentationProvider";
 
 interface IProps {
     roomId: string;
@@ -289,10 +287,7 @@ class FilePanel extends React.Component<IProps, IState> {
                     >
                         <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
-                        {/* Compact layout is still owned by LoggedInView; this bridges it into shared event presentation. */}
-                        <EventPresentationProvider
-                            value={getEventPresentation(Layout.Group, SettingsStore.getValue("useCompactLayout"))}
-                        >
+                        <EventPresentationProvider layout={Layout.Group}>
                             <TimelinePanel
                                 manageReadReceipts={false}
                                 manageReadMarkers={false}
