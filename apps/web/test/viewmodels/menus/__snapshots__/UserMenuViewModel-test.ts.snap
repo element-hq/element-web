@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`UserMenuViewModel should generate a menu options for a guest 1`] = `
+{
+  "actions": {
+    "createAccount": true,
+    "linkNewDevice": false,
+    "openFeedback": false,
+    "openHomePage": false,
+    "openSecurity": false,
+    "openSettings": true,
+    "signIn": true,
+  },
+  "avatarUrl": undefined,
+  "displayName": "@alice:domain",
+  "expanded": false,
+  "manageAccountHref": undefined,
+  "open": true,
+  "showAvatar": false,
+  "userId": "@alice:domain",
+}
+`;
+
+exports[`UserMenuViewModel should generate a menu options for a logged in client 1`] = `
+{
+  "actions": {
+    "createAccount": false,
+    "linkNewDevice": true,
+    "openFeedback": false,
+    "openHomePage": false,
+    "openSecurity": true,
+    "openSettings": true,
+    "signIn": false,
+  },
+  "avatarUrl": undefined,
+  "displayName": "@alice:domain",
+  "expanded": false,
+  "manageAccountHref": undefined,
+  "open": true,
+  "showAvatar": true,
+  "userId": "@alice:domain",
+}
+`;

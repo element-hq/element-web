@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
@@ -18,6 +19,7 @@ import React, {
     useLayoutEffect,
     useRef,
     useState,
+    useContext,
 } from "react";
 import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";
@@ -31,6 +33,7 @@ import {
     PlusIcon,
     ChevronRightIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { useCreateAutoDisposedViewModel, UserMenu } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
@@ -62,7 +65,6 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import UIStore from "../../../stores/UIStore";
 import QuickSettingsButton from "./QuickSettingsButton";
 import { useSettingValue } from "../../../hooks/useSettings";
-import UserMenu from "../../structures/UserMenu";
 import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -79,6 +81,9 @@ import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNav
 import { KeyboardShortcut } from "../settings/KeyboardShortcut";
 import { ModuleApi } from "../../../modules/Api.ts";
 import { useModuleSpacePanelItems } from "../../../modules/ExtrasApi.ts";
+import { UserMenuViewModel } from "../../../viewmodels/menus/UserMenuViewModel.ts";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
+import { SDKContext } from "../../../contexts/SDKContext.ts";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -384,6 +389,7 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(
 );
 
 const SpacePanel: React.FC = () => {
+    const client = useMatrixClientContext();
     const [dragging, setDragging] = useState(false);
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
     const ref = useRef<HTMLDivElement>(null);
@@ -391,6 +397,7 @@ const SpacePanel: React.FC = () => {
         if (ref.current) UIStore.instance.trackElementDimensions("SpacePanel", ref.current);
         return () => UIStore.instance.stopTrackingElementDimensions("SpacePanel");
     }, []);
+    const sdkContext = useContext(SDKContext);
 
     useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
         if (payload.action === Action.ToggleSpacePanel) {
@@ -399,6 +406,26 @@ const SpacePanel: React.FC = () => {
     });
 
     const newRoomListEnabled = useSettingValue("feature_new_room_list");
+
+    const userMenuVm = useCreateAutoDisposedViewModel(
+        () =>
+            new UserMenuViewModel(
+                defaultDispatcher,
+                client,
+                isPanelCollapsed,
+                sdkContext.oidcClientStore.accountManagementEndpoint,
+            ),
+    );
+
+    useDispatcher(defaultDispatcher, (payload) => {
+        if (payload.action === Action.ToggleUserMenu) {
+            userMenuVm.setOpen(!userMenuVm.getSnapshot().open);
+        }
+    });
+
+    useEffect(() => {
+        userMenuVm.setExpanded(!isPanelCollapsed);
+    }, [userMenuVm, isPanelCollapsed]);
 
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
@@ -438,23 +465,22 @@ const SpacePanel: React.FC = () => {
                         ref={ref}
                         aria-label={_t("common|spaces")}
                     >
-                        <UserMenu isPanelCollapsed={isPanelCollapsed}>
-                            <AccessibleButton
-                                className={classNames("mx_SpacePanel_toggleCollapse", {
-                                    expanded: !isPanelCollapsed,
-                                })}
-                                onClick={() => setPanelCollapsed(!isPanelCollapsed)}
-                                title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
-                                caption={
-                                    <KeyboardShortcut
-                                        value={{ ctrlOrCmdKey: true, shiftKey: true, key: "d" }}
-                                        className="mx_SpacePanel_Tooltip_KeyboardShortcut"
-                                    />
-                                }
-                            >
-                                <ChevronRightIcon />
-                            </AccessibleButton>
-                        </UserMenu>
+                        <UserMenu vm={userMenuVm} />
+                        <AccessibleButton
+                            className={classNames("mx_SpacePanel_toggleCollapse", {
+                                expanded: !isPanelCollapsed,
+                            })}
+                            onClick={() => setPanelCollapsed(!isPanelCollapsed)}
+                            title={isPanelCollapsed ? _t("action|expand") : _t("action|collapse")}
+                            caption={
+                                <KeyboardShortcut
+                                    value={{ ctrlOrCmdKey: true, shiftKey: true, key: "d" }}
+                                    className="mx_SpacePanel_Tooltip_KeyboardShortcut"
+                                />
+                            }
+                        >
+                            <ChevronRightIcon />
+                        </AccessibleButton>
                         <Droppable droppableId="top-level-spaces">
                             {(provided, snapshot) => (
                                 <InnerSpacePanel

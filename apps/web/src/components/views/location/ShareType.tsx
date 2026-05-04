@@ -28,13 +28,7 @@ const UserAvatar: React.FC = () => {
 
     return (
         <div className={`mx_ShareType_option-icon ${LocationShareType.Own}`}>
-            <BaseAvatar
-                idName={userId}
-                name={displayName}
-                url={avatarUrl}
-                size={avatarSize}
-                className="mx_UserMenu_userAvatar_BaseAvatar"
-            />
+            <BaseAvatar idName={userId} name={displayName} url={avatarUrl} size={avatarSize} />
         </div>
     );
 };

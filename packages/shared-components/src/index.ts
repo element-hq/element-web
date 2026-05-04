@@ -1,4 +1,5 @@
 /*
+ * Copyright 2026 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -13,6 +14,7 @@ export * from "./core/AvatarWithDetails";
 export * from "./core/roving";
 export * from "./room/composer/Banner";
 export * from "./crypto/SasEmoji";
+export * from "./menus/UserMenu";
 export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
 export * from "./room/timeline/event-tile/body/RedactedBodyView";
