@@ -1583,9 +1583,7 @@ interface EventTileErrorFallbackProps {
 
 function EventTileErrorFallback({ error, mxEvent }: Readonly<EventTileErrorFallbackProps>): JSX.Element {
     const developerMode = useSettingValue("developerMode");
-    const vm = useCreateAutoDisposedViewModel(
-        () => new TileErrorViewModel({ error, mxEvent, developerMode }),
-    );
+    const vm = useCreateAutoDisposedViewModel(() => new TileErrorViewModel({ error, mxEvent, developerMode }));
 
     useEffect(() => {
         vm.setError(error);
