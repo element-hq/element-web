@@ -19,6 +19,7 @@ import {
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { LinkedTextContext } from "../../../../core/utils/LinkedText";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
+import { EventPresentationProvider } from "../../EventPresentation";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
@@ -94,7 +95,7 @@ MultiplePreviewsVisible.args = {
         {
             title: "One",
             description: "A regular square image.",
-            link: "https://matrix.org",
+            link: "https://matrix.org/one",
             siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
@@ -108,7 +109,7 @@ MultiplePreviewsVisible.args = {
         {
             title: "Two",
             description: "This one has a taller image which should crop nicely.",
-            link: "https://matrix.org",
+            link: "https://matrix.org/two",
             siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
@@ -121,7 +122,7 @@ MultiplePreviewsVisible.args = {
         {
             title: "Three",
             description: "One more description",
-            link: "https://matrix.org",
+            link: "https://matrix.org/three",
             siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
@@ -136,3 +137,15 @@ MultiplePreviewsVisible.args = {
     previewsLimited: false,
     totalPreviewCount: 10,
 };
+
+export const WithCompactView = Template.bind({});
+WithCompactView.args = {
+    ...MultiplePreviewsVisible.args,
+};
+WithCompactView.decorators = [
+    (Story): JSX.Element => (
+        <EventPresentationProvider value={{ layout: "group", density: "compact" }}>
+            <Story />
+        </EventPresentationProvider>
+    ),
+];
