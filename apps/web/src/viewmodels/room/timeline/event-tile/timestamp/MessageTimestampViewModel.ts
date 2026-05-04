@@ -15,57 +15,38 @@ import {
 import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from "../../../../../DateUtils";
 import { objectHasDiff } from "../../../../../utils/objects";
 
+/** Inputs used to derive a timestamp view snapshot and attach timestamp actions. */
 export interface MessageTimestampViewModelProps {
-    /**
-     * Message timestamp in milliseconds since the Unix epoch.
-     */
+    /** Message timestamp in milliseconds since the Unix epoch. */
     ts: number;
-    /**
-     * If specified will render both the sent-at and received-at timestamps in the tooltip
-     */
+    /** If specified, renders both the sent-at and received-at timestamps in the tooltip. */
     receivedTs?: number;
-    /**
-     * If set, use a 12-hour clock for formatted times.
-     */
+    /** If set, use a 12-hour clock for formatted times. */
     showTwelveHour?: boolean;
-    /**
-     * If set, include the full date in the displayed timestamp.
-     */
+    /** If set, include the full date in the displayed timestamp. */
     showFullDate?: boolean;
-    /**
-     * If set, include seconds in the displayed timestamp.
-     */
+    /** If set, include seconds in the displayed timestamp. */
     showSeconds?: boolean;
-    /**
-     * If set, display a relative timestamp (e.g. "5 minutes ago").
-     */
+    /** If set, display a relative timestamp (e.g. "5 minutes ago"). */
     showRelative?: boolean;
-    /**
-     * If set to true then no tooltip will be shown
-     */
+    /** If set to true, no tooltip will be shown. */
     inhibitTooltip?: boolean;
-    /**
-     * If specified, will be rendered as an anchor bearing the href, a `span` element will be used otherwise
-     */
+    /** If specified, renders as an anchor bearing the href; otherwise a `span` is used. */
     href?: string;
-    /**
-     * Optional onClick handler to attach to the DOM element
-     */
+    /** Optional onClick handler to attach to the DOM element. */
     onClick?: MouseEventHandler<HTMLElement>;
-    /**
-     * Optional onContextMenu handler to attach to the DOM element
-     */
+    /** Optional onContextMenu handler to attach to the DOM element. */
     onContextMenu?: MouseEventHandler<HTMLElement>;
 }
 
-/**
- * ViewModel for the message timestamp, providing the current state of the component.
- */
+/** ViewModel for the message timestamp, providing the current state of the component. */
 export class MessageTimestampViewModel
     extends BaseViewModel<MessageTimestampViewSnapshotInterface, MessageTimestampViewModelProps>
     implements MessageTimestampViewModelInterface
 {
+    /** Click handler exposed to the timestamp view. */
     public onClick?: MouseEventHandler<HTMLElement>;
+    /** Context-menu handler exposed to the timestamp view. */
     public onContextMenu?: MouseEventHandler<HTMLElement>;
 
     private static readonly computeSnapshot = (
@@ -100,72 +81,21 @@ export class MessageTimestampViewModel
         };
     };
 
-    private updateProps(newProps: Partial<MessageTimestampViewModelProps>): void {
+    /** Updates timestamp inputs and recomputes the displayed timestamp when they change. */
+    public setProps(newProps: Partial<MessageTimestampViewModelProps>): void {
         const nextProps = { ...this.props, ...newProps };
         if (!objectHasDiff(this.props, nextProps)) return;
 
         this.props = nextProps;
         this.onClick = this.props.onClick;
         this.onContextMenu = this.props.onContextMenu;
-        this.snapshot.set(MessageTimestampViewModel.computeSnapshot(this.props));
+        this.snapshot.merge(MessageTimestampViewModel.computeSnapshot(this.props));
     }
 
-    /**
-     * Create a timestamp view model with initial props and snapshot.
-     */
+    /** Creates a timestamp view model with initial props and snapshot. */
     public constructor(props: MessageTimestampViewModelProps) {
         super(props, MessageTimestampViewModel.computeSnapshot(props));
         this.onClick = props.onClick;
         this.onContextMenu = props.onContextMenu;
-    }
-
-    /**
-     * Update the base timestamp (milliseconds since Unix epoch).
-     */
-    public setTimestamp(ts: number): void {
-        this.updateProps({ ts });
-    }
-
-    /**
-     * Update the optional received timestamp (milliseconds since Unix epoch).
-     */
-    public setReceivedTimestamp(receivedTs?: number): void {
-        this.updateProps({ receivedTs });
-    }
-
-    /**
-     * Update display formatting options for the rendered timestamp.
-     */
-    public setDisplayOptions(options: {
-        showTwelveHour?: boolean;
-        showFullDate?: boolean;
-        showSeconds?: boolean;
-        showRelative?: boolean;
-    }): void {
-        this.updateProps(options);
-    }
-
-    /**
-     * Enable or disable the tooltip rendering.
-     */
-    public setTooltipInhibited(inhibitTooltip?: boolean): void {
-        this.updateProps({ inhibitTooltip });
-    }
-
-    /**
-     * Update the optional href for link rendering.
-     */
-    public setHref(href?: string): void {
-        this.updateProps({ href });
-    }
-
-    /**
-     * Update click and context-menu handlers for the rendered element.
-     */
-    public setHandlers(handlers: {
-        onClick?: MouseEventHandler<HTMLElement>;
-        onContextMenu?: MouseEventHandler<HTMLElement>;
-    }): void {
-        this.updateProps(handlers);
     }
 }

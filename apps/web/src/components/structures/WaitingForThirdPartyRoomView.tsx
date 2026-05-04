@@ -16,7 +16,7 @@ import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomHeader from "../views/rooms/RoomHeader/RoomHeader.tsx";
 import ScrollPanel from "./ScrollPanel";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
-import { UnwrappedEventTile } from "../views/rooms/EventTile";
+import EventTile from "../views/rooms/EventTile";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext.tsx";
@@ -50,7 +50,7 @@ export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resize
                                 subtitle={_t("room|waiting_for_join_subtitle", { brand })}
                             />
                             <NewRoomIntro />
-                            <UnwrappedEventTile mxEvent={inviteEvent} />
+                            <EventTile mxEvent={inviteEvent} withErrorBoundary={false} />
                         </ScrollPanel>
                     </div>
                 </main>

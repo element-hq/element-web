@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, createRef, type CSSProperties, useEffect } from "react";
+import React, { type JSX, createRef, type CSSProperties, useEffect, useRef } from "react";
 import FocusLock from "react-focus-lock";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
@@ -646,16 +646,12 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({ url, fileName, m
  */
 function MessageTimestampWrapper(props: MessageTimestampViewModelProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new MessageTimestampViewModel(props));
-    useEffect(() => {
-        vm.setTimestamp(props.ts);
-        vm.setDisplayOptions({
-            showTwelveHour: props.showTwelveHour,
-            showFullDate: props.showFullDate,
-            showSeconds: props.showSeconds,
-        });
-        vm.setTooltipInhibited(props.inhibitTooltip);
-        vm.setHref(props.href);
-        vm.setHandlers({ onClick: props.onClick });
-    }, [vm, props]);
+    const renderedPropsRef = useRef(props);
+
+    if (renderedPropsRef.current !== props) {
+        renderedPropsRef.current = props;
+        vm.setProps(props);
+    }
+
     return <MessageTimestampView vm={vm} className="mx_MessageTimestamp" />;
 }

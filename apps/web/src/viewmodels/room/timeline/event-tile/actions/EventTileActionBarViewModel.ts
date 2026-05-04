@@ -14,6 +14,7 @@ import {
     MsgType,
     RelationType,
     RoomStateEvent,
+    type RoomState,
     type MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -24,26 +25,26 @@ import {
     type ActionBarViewSnapshot,
 } from "@element-hq/web-shared-components";
 
-import { MatrixClientPeg } from "../../MatrixClientPeg";
-import defaultDispatcher from "../../dispatcher/dispatcher";
-import { Action } from "../../dispatcher/actions";
-import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
-import { type GetRelationsForEvent } from "../../components/views/rooms/EventTile";
-import { canCancel, canEditContent, editEvent, isContentActionable } from "../../utils/EventUtils";
-import { TimelineRenderingType } from "../../contexts/RoomContext";
-import Resend from "../../Resend";
-import PinningUtils from "../../utils/PinningUtils";
-import PosthogTrackers from "../../PosthogTrackers";
-import { shouldDisplayReply } from "../../utils/Reply";
-import { MediaEventHelper } from "../../utils/MediaEventHelper";
-import SettingsStore from "../../settings/SettingsStore";
-import { type SettingKey } from "../../settings/Settings";
-import { getMediaVisibility, setMediaVisibility } from "../../utils/media/mediaVisibility";
-import { FileDownloader } from "../../utils/FileDownloader";
-import { _t } from "../../languageHandler";
-import Modal from "../../Modal";
-import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
-import { ModuleApi } from "../../modules/Api";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
+import defaultDispatcher from "../../../../../dispatcher/dispatcher";
+import { Action } from "../../../../../dispatcher/actions";
+import { type ShowThreadPayload } from "../../../../../dispatcher/payloads/ShowThreadPayload";
+import { type GetRelationsForEvent } from "../../../../../components/views/rooms/EventTile";
+import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../../../utils/EventUtils";
+import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
+import Resend from "../../../../../Resend";
+import PinningUtils from "../../../../../utils/PinningUtils";
+import PosthogTrackers from "../../../../../PosthogTrackers";
+import { shouldDisplayReply } from "../../../../../utils/Reply";
+import { MediaEventHelper } from "../../../../../utils/MediaEventHelper";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import { type SettingKey } from "../../../../../settings/Settings";
+import { getMediaVisibility, setMediaVisibility } from "../../../../../utils/media/mediaVisibility";
+import { FileDownloader } from "../../../../../utils/FileDownloader";
+import { _t } from "../../../../../languageHandler";
+import Modal from "../../../../../Modal";
+import ErrorDialog from "../../../../../components/views/dialogs/ErrorDialog";
+import { ModuleApi } from "../../../../../modules/Api";
 
 /** Props for the event-tile action bar view model. */
 export interface EventTileActionBarViewModelProps {
@@ -61,19 +62,27 @@ export interface EventTileActionBarViewModelProps {
     isCard?: boolean;
     /** Whether the quoted reply chain is currently expanded. */
     isQuoteExpanded?: boolean;
-    /** Called when the overflow options action is activated. */
-    onOptionsClick?: (anchor: HTMLElement | null) => void;
-    /** Called when the reactions action is activated. */
-    onReactionsClick?: (anchor: HTMLElement | null) => void;
     /** Provides relations needed for editing when available. */
     getRelationsForEvent?: GetRelationsForEvent;
     /** Called when the expand or collapse thread action is activated. */
     onToggleThreadExpanded?: (anchor: HTMLElement | null) => void;
 }
 
+/** Event-tile action bar snapshot including locally rendered menu state. */
+export interface EventTileActionBarViewSnapshot extends ActionBarViewSnapshot {
+    /** Anchor rect for the overflow options menu, when open. */
+    optionsMenuAnchorRect?: DOMRect;
+    /** Anchor rect for the reactions menu, when open. */
+    reactionsMenuAnchorRect?: DOMRect;
+    /** Whether an action-bar menu is currently open. */
+    isMenuOpen: boolean;
+}
+
 interface LocalActionBarState {
     canDownload: boolean;
     isDownloadLoading: boolean;
+    optionsMenuAnchorRect?: DOMRect;
+    reactionsMenuAnchorRect?: DOMRect;
 }
 
 interface DerivedEventState {
@@ -100,9 +109,17 @@ interface DerivedMediaState {
 
 /** View model for the timeline event action bar shown on event tiles. */
 export class EventTileActionBarViewModel
-    extends BaseViewModel<ActionBarViewSnapshot, EventTileActionBarViewModelProps>
+    extends BaseViewModel<EventTileActionBarViewSnapshot, EventTileActionBarViewModelProps>
     implements ActionBarViewActions
 {
+    private static readonly roomStateListenerRegistry = new WeakMap<
+        RoomState,
+        {
+            listenersByType: Map<string, Set<() => void>>;
+            handler: (event?: MatrixEvent) => void;
+        }
+    >();
+
     private listenerCleanups: Array<() => void> = [];
     private downloadPermissionRequestId = 0;
     private downloadRequestId = 0;
@@ -125,7 +142,7 @@ export class EventTileActionBarViewModel
     private static buildSnapshot(
         props: EventTileActionBarViewModelProps,
         localState: LocalActionBarState,
-    ): ActionBarViewSnapshot {
+    ): EventTileActionBarViewSnapshot {
         const client = MatrixClientPeg.safeGet();
         const eventState = EventTileActionBarViewModel.getDerivedEventState(props, client);
         const mediaState = EventTileActionBarViewModel.getDerivedMediaState(props.mxEvent, client, localState);
@@ -138,6 +155,9 @@ export class EventTileActionBarViewModel
             isPinned: eventState.isPinned,
             isQuoteExpanded: eventState.isQuoteExpanded,
             isThreadReplyAllowed: eventState.isThreadReplyAllowed,
+            optionsMenuAnchorRect: localState.optionsMenuAnchorRect,
+            reactionsMenuAnchorRect: localState.reactionsMenuAnchorRect,
+            isMenuOpen: Boolean(localState.optionsMenuAnchorRect || localState.reactionsMenuAnchorRect),
         };
     }
 
@@ -229,11 +249,27 @@ export class EventTileActionBarViewModel
         };
     }
 
-    private computeSnapshot(): ActionBarViewSnapshot {
-        return EventTileActionBarViewModel.buildSnapshot(this.props, {
+    private computeSnapshot(localState: LocalActionBarState = this.getLocalState()): EventTileActionBarViewSnapshot {
+        return EventTileActionBarViewModel.buildSnapshot(this.props, localState);
+    }
+
+    private getLocalState(): LocalActionBarState {
+        return {
             canDownload: this.canDownload,
             isDownloadLoading: this.isDownloadLoading,
-        });
+            optionsMenuAnchorRect: this.snapshot.current.optionsMenuAnchorRect,
+            reactionsMenuAnchorRect: this.snapshot.current.reactionsMenuAnchorRect,
+        };
+    }
+
+    private static eventListenersNeedRebinding(
+        previousProps: EventTileActionBarViewModelProps,
+        nextProps: EventTileActionBarViewModelProps,
+    ): boolean {
+        return (
+            nextProps.mxEvent !== previousProps.mxEvent ||
+            nextProps.mxEvent.getRoomId() !== previousProps.mxEvent.getRoomId()
+        );
     }
 
     private static canShowReplyInThreadAction(props: EventTileActionBarViewModelProps): boolean {
@@ -252,8 +288,10 @@ export class EventTileActionBarViewModel
         const { mxEvent } = this.props;
         const roomId = mxEvent.getRoomId();
         this.trackEvent(mxEvent, MatrixEventEvent.Status, this.refreshSnapshot);
-        this.trackEvent(mxEvent, MatrixEventEvent.Decrypted, this.refreshSnapshot);
         this.trackEvent(mxEvent, MatrixEventEvent.BeforeRedaction, this.refreshSnapshot);
+        if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
+            this.trackEventOnce(mxEvent, MatrixEventEvent.Decrypted, this.refreshSnapshot);
+        }
         this.watchSetting("mediaPreviewConfig", roomId ?? null);
         this.watchSetting("showMediaEventIds", null);
 
@@ -261,8 +299,8 @@ export class EventTileActionBarViewModel
             ? MatrixClientPeg.safeGet().getRoom(roomId)?.getLiveTimeline().getState(EventTimeline.FORWARDS)
             : undefined;
         if (roomState) {
-            roomState.on(RoomStateEvent.Events, this.onRoomEvent);
-            this.addListenerCleanup(() => roomState.off(RoomStateEvent.Events, this.onRoomEvent));
+            this.trackRoomStateEvent(roomState, EventType.RoomPinnedEvents, this.refreshSnapshot);
+            this.trackRoomStateEvent(roomState, EventType.RoomJoinRules, this.refreshSnapshot);
         }
 
         MatrixClientPeg.safeGet().decryptEventIfNeeded(mxEvent);
@@ -283,6 +321,62 @@ export class EventTileActionBarViewModel
     private trackEvent(event: MatrixEvent, eventName: MatrixEventEvent, callback: (...args: unknown[]) => void): void {
         event.on(eventName, callback);
         this.addListenerCleanup(() => event.off(eventName, callback));
+    }
+
+    private trackEventOnce(
+        event: MatrixEvent,
+        eventName: MatrixEventEvent,
+        callback: (...args: unknown[]) => void,
+    ): void {
+        event.once(eventName, callback);
+        this.addListenerCleanup(() => event.off(eventName, callback));
+    }
+
+    private trackRoomStateEvent(roomState: RoomState, eventType: string, callback: () => void): void {
+        let entry = EventTileActionBarViewModel.roomStateListenerRegistry.get(roomState);
+
+        if (!entry) {
+            const listenersByType = new Map<string, Set<() => void>>();
+            const handler = (event?: MatrixEvent): void => {
+                if (!event) return;
+
+                const listeners = listenersByType.get(event.getType());
+                if (!listeners) return;
+
+                for (const listener of listeners) {
+                    listener();
+                }
+            };
+
+            entry = { listenersByType, handler };
+            EventTileActionBarViewModel.roomStateListenerRegistry.set(roomState, entry);
+            roomState.on(RoomStateEvent.Events, handler);
+        }
+
+        let listeners = entry.listenersByType.get(eventType);
+        if (!listeners) {
+            listeners = new Set();
+            entry.listenersByType.set(eventType, listeners);
+        }
+
+        listeners.add(callback);
+        this.addListenerCleanup(() => {
+            const currentEntry = EventTileActionBarViewModel.roomStateListenerRegistry.get(roomState);
+            if (!currentEntry) return;
+
+            const currentListeners = currentEntry.listenersByType.get(eventType);
+            if (!currentListeners) return;
+
+            currentListeners.delete(callback);
+            if (currentListeners.size === 0) {
+                currentEntry.listenersByType.delete(eventType);
+            }
+
+            if (currentEntry.listenersByType.size === 0) {
+                roomState.off(RoomStateEvent.Events, currentEntry.handler);
+                EventTileActionBarViewModel.roomStateListenerRegistry.delete(roomState);
+            }
+        });
     }
 
     private watchSetting(settingName: SettingKey, roomId: string | null): void {
@@ -342,12 +436,6 @@ export class EventTileActionBarViewModel
         return true;
     }
 
-    private readonly onRoomEvent = (event?: MatrixEvent): void => {
-        if (!event) return;
-        if (event.getType() !== EventType.RoomPinnedEvents && event.getType() !== EventType.RoomJoinRules) return;
-        this.refreshSnapshot();
-    };
-
     /**
      * Runs an action against the failed event variant that is still actionable.
      */
@@ -365,22 +453,54 @@ export class EventTileActionBarViewModel
     }
 
     /** Updates props, refreshes listeners when the event changes, and rebuilds the snapshot. */
-    public setProps(newProps: Partial<EventTileActionBarViewModelProps>): void {
-        const prevEvent = this.props.mxEvent;
-        const prevRoomId = prevEvent.getRoomId();
-
+    public updateProps(newProps: Partial<EventTileActionBarViewModelProps>): void {
+        const previousProps = this.props;
         this.props = {
             ...this.props,
             ...newProps,
         };
 
-        if (this.props.mxEvent !== prevEvent || this.props.mxEvent.getRoomId() !== prevRoomId) {
+        if (EventTileActionBarViewModel.eventListenersNeedRebinding(previousProps, this.props)) {
+            this.closeMenus();
             this.resetEventState();
             this.setupListeners();
         }
 
         this.refreshSnapshot();
     }
+
+    private setMenus(optionsMenuAnchorRect?: DOMRect, reactionsMenuAnchorRect?: DOMRect): void {
+        this.snapshot.merge({
+            optionsMenuAnchorRect,
+            reactionsMenuAnchorRect,
+            isMenuOpen: Boolean(optionsMenuAnchorRect || reactionsMenuAnchorRect),
+        });
+    }
+
+    /** Opens the overflow options menu at the action anchor. */
+    public openOptionsMenu(anchor: HTMLElement | null): void {
+        this.setMenus(anchor?.getBoundingClientRect(), undefined);
+    }
+
+    /** Opens the reactions menu at the action anchor. */
+    public openReactionsMenu(anchor: HTMLElement | null): void {
+        this.setMenus(undefined, anchor?.getBoundingClientRect());
+    }
+
+    /** Closes the overflow options menu. */
+    public closeOptionsMenu = (): void => {
+        this.closeMenus();
+    };
+
+    /** Closes the reactions menu. */
+    public closeReactionsMenu = (): void => {
+        this.closeMenus();
+    };
+
+    /** Closes all action-bar menus. */
+    public closeMenus = (): void => {
+        this.setMenus(undefined, undefined);
+    };
 
     /** Removes listeners and releases resources owned by the view model. */
     public override dispose(): void {
@@ -470,12 +590,12 @@ export class EventTileActionBarViewModel
 
     /** Forwards the overflow options action using the triggering button as the anchor. */
     public onOptionsClick = (anchor: HTMLElement | null): void => {
-        this.props.onOptionsClick?.(anchor);
+        this.openOptionsMenu(anchor);
     };
 
     /** Forwards the reactions action using the triggering button as the anchor. */
     public onReactionsClick = (anchor: HTMLElement | null): void => {
-        this.props.onReactionsClick?.(anchor);
+        this.openReactionsMenu(anchor);
     };
 
     /** Opens or starts the thread associated with the current event. */

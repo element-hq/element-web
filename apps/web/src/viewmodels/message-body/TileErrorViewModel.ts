@@ -23,22 +23,15 @@ import BugReportDialog from "../../components/views/dialogs/BugReportDialog";
 
 const TILE_ERROR_BUG_REPORT_LABEL = "react-tile-soft-crash";
 
+/** Inputs used to build the tile error fallback snapshot and actions. */
 export interface TileErrorViewModelProps {
-    /**
-     * Layout variant used by the host timeline.
-     */
+    /** Layout variant used by the host timeline. */
     layout: TileErrorViewLayout;
-    /**
-     * Event whose tile failed to render.
-     */
+    /** Event whose tile failed to render. */
     mxEvent: MatrixEvent;
-    /**
-     * Render error captured by the boundary.
-     */
+    /** Render error captured by the boundary. */
     error: Error;
-    /**
-     * Whether developer mode is enabled, which controls the view-source action.
-     */
+    /** Whether developer mode is enabled, which controls the view-source action. */
     developerMode: boolean;
 }
 
@@ -54,9 +47,7 @@ function getBugReportCtaLabel(): string | undefined {
         : _t("bug_reporting|submit_debug_logs");
 }
 
-/**
- * Returns the localized view-source action label when developer mode is enabled.
- */
+/** Returns the localized view-source action label when developer mode is enabled. */
 function getViewSourceCtaLabel(developerMode: boolean): string | undefined {
     return developerMode ? _t("action|view_source") : undefined;
 }
@@ -85,22 +76,16 @@ export class TileErrorViewModel
         super(props, TileErrorViewModel.computeSnapshot(props));
     }
 
-    public setLayout(layout: TileErrorViewLayout): void {
-        this.props.layout = layout;
-        this.snapshot.merge({ layout });
+    /** Updates fallback inputs after the error boundary catches an error or its host props change. */
+    public setProps(newProps: Partial<TileErrorViewModelProps>): void {
+        this.props = {
+            ...this.props,
+            ...newProps,
+        };
+        this.snapshot.merge(TileErrorViewModel.computeSnapshot(this.props));
     }
 
-    public setError(error: Error): void {
-        this.props.error = error;
-    }
-
-    public setDeveloperMode(developerMode: boolean): void {
-        this.props.developerMode = developerMode;
-
-        const nextViewSourceCtaLabel = getViewSourceCtaLabel(developerMode);
-        this.snapshot.merge({ viewSourceCtaLabel: nextViewSourceCtaLabel });
-    }
-
+    /** Opens the bug-report dialog with the render error captured by the boundary. */
     public onBugReportClick: MouseEventHandler<HTMLButtonElement> = () => {
         if (!this.snapshot.current.bugReportCtaLabel) {
             return;
@@ -112,6 +97,7 @@ export class TileErrorViewModel
         });
     };
 
+    /** Opens the source viewer for the event whose tile failed to render. */
     public onViewSourceClick: MouseEventHandler<HTMLButtonElement> = () => {
         if (!this.snapshot.current.viewSourceCtaLabel) {
             return;
