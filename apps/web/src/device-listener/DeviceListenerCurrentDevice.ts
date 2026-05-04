@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { type LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/src/logger";
+import { LogSpan, type BaseLogger, type Logger } from "matrix-js-sdk/src/logger";
 import {
     type MatrixEvent,
     type MatrixClient,
@@ -17,6 +17,7 @@ import {
     RoomStateEvent,
     ClientEvent,
 } from "matrix-js-sdk/src/matrix";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { type DeviceListener, type DeviceState } from ".";
 import {
@@ -39,6 +40,11 @@ export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disa
  * Account data key to indicate whether the user has chosen to enable or disable recovery.
  */
 export const RECOVERY_ACCOUNT_DATA_KEY = "io.element.recovery";
+
+/**
+ * We remind the user to verify their device 2 days after they dismiss the toast.
+ */
+const DEVICE_VERIFICATION_NAG_INTERVAL = 2 * 24 * 60 * 60 * 1000;
 
 /**
  * Handles all of DeviceListener's work that relates to the current device.
@@ -124,6 +130,19 @@ export class DeviceListenerCurrentDevice {
      * them again until they refresh or restart the app.
      */
     public dismissEncryptionSetup(): void {
+        // If the user dismissed the "verify this session" toast, then we will
+        // re-show it later if the device still isn't verified.
+        if (this.deviceState === "verify_this_session") {
+            setTimeout(() => {
+                if (this.deviceState === "verify_this_session") {
+                    const logSpan = new LogSpan(this.logger, "nag_" + secureRandomString(4));
+                    logSpan.info("Re-showing device verification toast");
+                    this.dismissedThisDeviceToast = false;
+                    this.setDeviceState("verify_this_session", logSpan);
+                }
+            }, DEVICE_VERIFICATION_NAG_INTERVAL);
+        }
+
         this.dismissedThisDeviceToast = true;
         this.deviceListener.recheck();
     }
@@ -189,7 +208,7 @@ export class DeviceListenerCurrentDevice {
 
         if (allSystemsReady) {
             logSpan.info("No toast needed");
-            await this.setDeviceState("ok", logSpan);
+            this.setDeviceState("ok", logSpan);
         } else {
             // make sure our keys are finished downloading
             await crypto.getUserDeviceInfo([this.client.getSafeUserId()]);
@@ -197,7 +216,7 @@ export class DeviceListenerCurrentDevice {
             if (!isCurrentDeviceTrusted) {
                 // the current device is not trusted: prompt the user to verify
                 logSpan.info("Current device not verified: setting state to VERIFY_THIS_SESSION");
-                await this.setDeviceState("verify_this_session", logSpan);
+                this.setDeviceState("verify_this_session", logSpan);
             } else if (!allCrossSigningSecretsCached) {
                 // cross signing ready & device trusted, but we are missing secrets from our local cache.
                 // prompt the user to enter their recovery key.
@@ -206,26 +225,26 @@ export class DeviceListenerCurrentDevice {
                     crossSigningStatus.privateKeysCachedLocally,
                     crossSigningStatus.privateKeysInSecretStorage,
                 );
-                await this.setDeviceState(
+                this.setDeviceState(
                     crossSigningStatus.privateKeysInSecretStorage ? "key_storage_out_of_sync" : "identity_needs_reset",
                     logSpan,
                 );
             } else if (!keyBackupUploadIsOk) {
                 logSpan.info("Key backup upload is unexpectedly turned off: setting state to TURN_ON_KEY_STORAGE");
-                await this.setDeviceState("turn_on_key_storage", logSpan);
+                this.setDeviceState("turn_on_key_storage", logSpan);
             } else if (secretStorageStatus.defaultKeyId === null) {
                 // The user just hasn't set up 4S yet: if they have key
                 // backup, prompt them to turn on recovery too. (If not, they
                 // have explicitly opted out, so don't hassle them.)
                 if (recoveryDisabled) {
                     logSpan.info("Recovery disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
+                    this.setDeviceState("ok", logSpan);
                 } else if (keyBackupUploadActive) {
                     logSpan.info("No default 4S key: setting state to SET_UP_RECOVERY");
-                    await this.setDeviceState("set_up_recovery", logSpan);
+                    this.setDeviceState("set_up_recovery", logSpan);
                 } else {
                     logSpan.info("No default 4S key but backup disabled: no toast needed");
-                    await this.setDeviceState("ok", logSpan);
+                    this.setDeviceState("ok", logSpan);
                 }
             } else if (!recoveryIsOk) {
                 logSpan.warn("4S is missing secrets: setting state to KEY_STORAGE_OUT_OF_SYNC", {
@@ -234,7 +253,7 @@ export class DeviceListenerCurrentDevice {
                     isCurrentDeviceTrusted,
                     keyBackupDownloadIsOk,
                 });
-                await this.setDeviceState("key_storage_out_of_sync", logSpan);
+                this.setDeviceState("key_storage_out_of_sync", logSpan);
             } else if (!keyBackupDownloadIsOk) {
                 logSpan.warn("Backup key is not cached locally: setting state to KEY_STORAGE_OUT_OF_SYNC", {
                     secretStorageStatus,
@@ -242,7 +261,7 @@ export class DeviceListenerCurrentDevice {
                     isCurrentDeviceTrusted,
                     keyBackupDownloadIsOk,
                 });
-                await this.setDeviceState("key_storage_out_of_sync", logSpan);
+                this.setDeviceState("key_storage_out_of_sync", logSpan);
             } else {
                 // We should not get here
                 logSpan.error("DeviceListenerCurrentDevice: allSystemsReady was false, but no case matched.");
@@ -263,7 +282,7 @@ export class DeviceListenerCurrentDevice {
      * Set the state of the device, and perform any actions necessary in
      * response to the state changing.
      */
-    private async setDeviceState(newState: DeviceState, logSpan: LogSpan): Promise<void> {
+    private setDeviceState(newState: DeviceState, logSpan: LogSpan): void {
         this.deviceState = newState;
 
         this.deviceListener.currentDeviceChangedEmitter.onStateChanged(newState);
