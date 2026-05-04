@@ -15,10 +15,6 @@ dropped. Ask in the room if you are unclear about any details here.**
 A new version of the "Report" dialog that lets users send abuse reports directly to room moderators,
 if the room supports it.
 
-## Render LaTeX maths in messages (`feature_latex_maths`)
-
-Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). LaTeX between single dollar-signs is interpreted as inline maths and double dollar-signs as display maths (i.e. centred on its own line).
-
 ## Message pinning (`feature_pinning`)
 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
