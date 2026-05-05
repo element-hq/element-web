@@ -231,7 +231,7 @@ export class EventContentBodyViewModel
             "TextualBody.enableBigEmoji",
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                this.setEnableBigEmoji(newVal);
+                this.setEnableBigEmoji(!!newVal);
             },
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(enableBigEmojiWatcherRef));
@@ -240,7 +240,7 @@ export class EventContentBodyViewModel
             "Pill.shouldShowPillAvatar",
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                this.setShouldShowPillAvatar(newVal);
+                this.setShouldShowPillAvatar(!!newVal);
             },
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(shouldShowPillAvatarWatcherRef));

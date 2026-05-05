@@ -123,7 +123,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Allow the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);
         await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Remove this device" }).click();
-        await expect(page).toHaveURL(/\/#\/login$/);
+        await expect(page).toHaveURL(/\/#\/welcome$/);
 
         // Log in again
         await page.goto("/#/login");
@@ -159,7 +159,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 .locator(".mx_UserMenu_contextMenu")
                 .getByRole("menuitem", { name: "Remove this device" })
                 .click();
-            await expect(page).toHaveURL(/\/#\/login$/);
+            await expect(page).toHaveURL(/\/#\/welcome$/);
 
             // Log in again
             await page.goto("/#/login");
@@ -209,7 +209,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                     .locator(".mx_UserMenu_contextMenu")
                     .getByRole("menuitem", { name: "Remove this device" })
                     .click();
-                await expect(page).toHaveURL(/\/#\/login$/);
+                await expect(page).toHaveURL(/\/#\/welcome$/);
 
                 // Log in again
                 await page.goto("/#/login");

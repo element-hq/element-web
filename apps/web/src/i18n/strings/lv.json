@@ -3354,7 +3354,6 @@
         "user_busy_description": "Lietotājs, kuram zvanāt, ir aizņemts.",
         "user_is_presenting": "%(sharerName)s prezentē",
         "video_call": "Video zvans",
-        "video_call_started": "Videozvans uzsākts",
         "voice_call": "Balss zvans",
         "you_are_presenting": "Jūs prezentējat"
     },

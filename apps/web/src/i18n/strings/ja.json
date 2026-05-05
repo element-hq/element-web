@@ -3136,7 +3136,6 @@
         "user_busy_description": "呼び出したユーザーは通話中です。",
         "user_is_presenting": "%(sharerName)sが画面を共有しています",
         "video_call": "ビデオ通話",
-        "video_call_started": "ビデオ通話を開始しました",
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },

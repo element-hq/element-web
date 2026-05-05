@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Video místnost",
         "view_message": "Zobrazit zprávu",
-        "voice": "Hlas",
         "warning": "Upozornění"
     },
     "composer": {
@@ -3909,7 +3908,6 @@
         "connection_lost": "Došlo ke ztrátě připojení k serveru",
         "connection_lost_description": "Bez připojení k serveru nelze uskutečňovat hovory.",
         "consulting": "Konzultace s %(transferTarget)s. <a>Převod na %(transferee)s</a>",
-        "decline_call": "Odmítnout",
         "default_device": "Výchozí zařízení",
         "dial": "Vytočit",
         "dialpad": "Číselník",
@@ -3960,7 +3958,6 @@
         "show_sidebar_button": "Zobrazit postranní panel",
         "silence": "Ztlumit zvonění",
         "silenced": "Oznámení ztlumena",
-        "skip_lobby_toggle_option": "Připojte se ihned",
         "start_screenshare": "Začít sdílet obrazovku",
         "stop_screenshare": "Ukončit sdílení obrazovky",
         "too_many_calls": "Přiliš mnoho hovorů",
@@ -3982,7 +3979,6 @@
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Videohovor",
         "video_call_incoming": "Příchozí videohovor",
-        "video_call_started": "Videohovor byl zahájen",
         "video_call_using": "Videohovor pomocí:",
         "voice_call": "Hlasový hovor",
         "voice_call_incoming": "Příchozí hlasový hovor",

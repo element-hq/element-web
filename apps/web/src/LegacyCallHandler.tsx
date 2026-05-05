@@ -725,7 +725,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         );
 
         finished.then(([allow]) => {
-            SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow);
+            SettingsStore.setValue("fallbackICEServerAllowed", null, SettingLevel.DEVICE, allow ?? null);
         });
     }
 

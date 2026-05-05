@@ -127,6 +127,8 @@ components that don't need a view model.
 
 All components should have accompanying Storybook stories for documentation and visual testing. Stories are written in TypeScript using the [Component Story Format (CSF)](https://storybook.js.org/docs/api/csf).
 
+Use shallow, browse-oriented story titles such as `RoomList/RoomListSearchView` or `TimelineBody/DecryptionFailureBodyView`. Do not mirror the full source path in the Storybook title.
+
 #### Story File Structure
 
 Place the story file next to the component with the `.stories.tsx` extension:
@@ -254,7 +256,7 @@ Example with Figma integration:
 
 ```tsx
 const meta = {
-    title: "Room List/RoomListSearchView",
+    title: "RoomList/RoomListSearchView",
     component: RoomListSearchViewWrapper,
     tags: ["autodocs"],
     args: {
@@ -277,7 +279,7 @@ The Figma design will appear in the "Design" tab in Storybook.
 
 For utility functions, helpers, and other non-UI exports, create documentation stories using TSX format with TypeDoc-generated markdown.
 
-`src/utils/humanize.stories.tsx`
+`src/core/utils/humanize.stories.tsx`
 
 ```tsx
 import React from "react";
@@ -287,7 +289,7 @@ import type { Meta } from "@storybook/react-vite";
 import humanizeTimeDoc from "../../typedoc/functions/humanizeTime.md?raw";
 
 const meta = {
-    title: "utils/humanize",
+    title: "Core/Humanize",
     parameters: {
         docs: {
             page: () => (

@@ -1,9 +1,11 @@
-@import "../../../../res/css/_font-sizes.pcss";
-@import "../../legacy-light/css/_fonts.pcss";
-@import "../../legacy-light/css/_legacy-light.pcss";
-@import "../../legacy-dark/css/_legacy-dark.pcss";
-@import "../../light-custom/css/_custom.pcss";
-@import "../../../../res/css/_components.pcss";
+@layer compound-tokens, compound-web, shared-components, app-web;
+
+@import "../../../../res/css/_font-sizes.pcss" layer(app-web);
+@import "../../legacy-light/css/_fonts.pcss" layer(app-web);
+@import "../../legacy-light/css/_legacy-light.pcss" layer(app-web);
+@import "../../legacy-dark/css/_legacy-dark.pcss" layer(app-web);
+@import "../../light-custom/css/_custom.pcss" layer(app-web);
+@import "../../../../res/css/_components.pcss" layer(app-web);
 @import "../../../../res/css/_compound.pcss";
-@import url("highlight.js/styles/atom-one-light.min.css");
-@import url("github-markdown-css/github-markdown-dark.css");
+@import url("highlight.js/styles/atom-one-light.min.css") layer(app-web);
+@import url("github-markdown-css/github-markdown-dark.css") layer(app-web);

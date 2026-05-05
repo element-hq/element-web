@@ -3836,7 +3836,6 @@
         "user_busy_description": "Användaren du ringde är upptagen.",
         "user_is_presenting": "%(sharerName)s presenterar",
         "video_call": "Videosamtal",
-        "video_call_started": "Videosamtal startat",
         "video_call_using": "Videosamtal med hjälp av:",
         "voice_call": "Röstsamtal",
         "you_are_presenting": "Du presenterar"

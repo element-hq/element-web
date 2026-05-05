@@ -3399,7 +3399,6 @@
         "user_busy_description": "您想要通話的使用者目前忙碌中。",
         "user_is_presenting": "%(sharerName)s 正在投影",
         "video_call": "視訊通話",
-        "video_call_started": "視訊通話已開始",
         "voice_call": "語音通話",
         "you_are_presenting": "您正在投影"
     },

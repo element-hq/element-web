@@ -1,7 +1,9 @@
-@import "../../../../res/css/_font-sizes.pcss";
-@import "_fonts.pcss";
-@import "_legacy-light.pcss";
-@import "../../../../res/css/_components.pcss";
+@layer compound-tokens, compound-web, shared-components, app-web;
+
+@import "../../../../res/css/_font-sizes.pcss" layer(app-web);
+@import "_fonts.pcss" layer(app-web);
+@import "_legacy-light.pcss" layer(app-web);
+@import "../../../../res/css/_components.pcss" layer(app-web);
 @import "../../../../res/css/_compound.pcss";
-@import url("highlight.js/styles/atom-one-light.min.css");
-@import url("github-markdown-css/github-markdown-light.css");
+@import url("highlight.js/styles/atom-one-light.min.css") layer(app-web);
+@import url("github-markdown-css/github-markdown-light.css") layer(app-web);

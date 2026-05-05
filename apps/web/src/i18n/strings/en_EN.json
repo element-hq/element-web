@@ -476,6 +476,7 @@
         "description": "Description",
         "deselect_all": "Deselect all",
         "device": "Device",
+        "disabled_by_homeserver": "Disabled by homeserver",
         "edited": "edited",
         "email_address": "Email address",
         "emoji": "Emoji",
@@ -683,8 +684,10 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
+        "edit_section": "Edit section",
         "label": "Section name",
-        "title": "Create a section"
+        "title": "Create a section",
+        "title_edition": "Edit a section"
     },
     "create_space": {
         "add_details_prompt": "Add some details to help people recognise it.",
@@ -1538,6 +1541,11 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_user_status": {
+            "description": "Enables being able to see and set a current status.",
+            "display_name": "User status",
+            "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
+        },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
         "group_calls": "New group call experience",
         "group_developer": "Developer",
@@ -1850,6 +1858,12 @@
         "error": "You cannot delete this message. (%(code)s)",
         "ongoing": "Removing…",
         "reason_label": "Reason (optional)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "Are you sure you want to remove this section?",
+        "description": "The chats in this section will still be available in your chats list.",
+        "remove_section": "Remove section",
+        "title": "Remove section?"
     },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
@@ -3139,6 +3153,14 @@
         "server_error_detail": "Server unavailable, overloaded, or something else went wrong.",
         "shrug": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
         "spoiler": "Sends the given message as a spoiler",
+        "status": {
+            "description": "Set your current status",
+            "no_args": "No arguments provided. You should supply an emoij and an optional text component.",
+            "no_emoji": "You did not provide an emoji",
+            "no_text": "You did not provide any status text",
+            "too_long_emoji": "The first argument must be an emoji",
+            "too_long_text": "The text you provided was too long."
+        },
         "tableflip": "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message",
         "topic": "Gets or sets the room topic",
         "topic_none": "This room has no topic.",

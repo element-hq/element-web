@@ -3412,7 +3412,6 @@
         "user_busy_description": "L'utente che hai chiamato è occupato.",
         "user_is_presenting": "%(sharerName)s sta presentando",
         "video_call": "Videochiamata",
-        "video_call_started": "Videochiamata iniziata",
         "video_call_using": "Videochiamata usando:",
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"

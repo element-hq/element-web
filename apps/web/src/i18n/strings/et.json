@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Videotuba",
         "view_message": "Vaata sõnumit",
-        "voice": "Hääl",
         "warning": "Hoiatus"
     },
     "composer": {
@@ -3865,7 +3864,6 @@
         "connection_lost": "Ühendus sinu serveriga on katkenud",
         "connection_lost_description": "Kui ühendus sinu serveriga on katkenud, siis sa ei saa helistada.",
         "consulting": "Suhtlen teise osapoolega %(transferTarget)s. <a>Saadan andmeid kasutajale %(transferee)s</a>",
-        "decline_call": "Keeldu",
         "default_device": "Vaikimisi seade",
         "dial": "Helista",
         "dialpad": "Numbriklahvistik",
@@ -3916,7 +3914,6 @@
         "show_sidebar_button": "Näita külgpaani",
         "silence": "Vaigista kõne",
         "silenced": "Teavitused on summutatud",
-        "skip_lobby_toggle_option": "Liitu kohe",
         "start_screenshare": "Alusta oma seadme ekraani jagamist",
         "stop_screenshare": "Lõpeta oma seadme ekraani jagamine",
         "too_many_calls": "Liiga palju kõnesid",
@@ -3938,7 +3935,6 @@
         "user_is_presenting": "%(sharerName)s esitab",
         "video_call": "Videokõne",
         "video_call_incoming": "Saabuv videokõne",
-        "video_call_started": "Videokõne algas",
         "video_call_using": "Videokõne, kus on kasutusel:",
         "voice_call": "Häälkõne",
         "voice_call_incoming": "Saaduv häälkõne",

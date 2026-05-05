@@ -27,12 +27,17 @@ test.describe("Image Upload", () => {
     });
 
     test("should show image preview when uploading an image", { tag: "@screenshot" }, async ({ page, app }) => {
-        await page
-            .locator(".mx_MessageComposer_actions input[type='file']")
-            .setInputFiles(getSampleFilePath("riot.png"));
+        await app.setComposerInputFiles("room", getSampleFilePath("riot.png"));
 
         await expect(page.getByRole("button", { name: "Upload" })).toBeEnabled();
         await expect(page.getByRole("button", { name: "Close dialog" })).toBeEnabled();
         await expect(page.locator(".mx_Dialog")).toMatchScreenshot("image-upload-preview.png");
+    });
+
+    test("should allow upload via drag and drop", { tag: "@screenshot" }, async ({ page, app }) => {
+        await app.composerDragAndUploadFiles("room", getSampleFilePath("riot.png"), "image/png");
+        await app.timeline.scrollToBottom();
+        const imgTile = page.locator(".mx_MImageBody").first();
+        await expect(imgTile).toBeVisible();
     });
 });

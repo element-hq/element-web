@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Videochat",
         "view_message": "Nachricht anzeigen",
-        "voice": "Sprachanruf",
         "warning": "Warnung"
     },
     "composer": {
@@ -3865,7 +3864,6 @@
         "connection_lost": "Verbindung zum Server unterbrochen",
         "connection_lost_description": "Du kannst ohne Verbindung zum Server keine Anrufe tätigen.",
         "consulting": "%(transferTarget)s wird angefragt. <a>Übertragung zu %(transferee)s</a>",
-        "decline_call": "Ablehnen",
         "default_device": "Standardgerät",
         "dial": "Wählen",
         "dialpad": "Telefontastatur",
@@ -3916,7 +3914,6 @@
         "show_sidebar_button": "Seitenleiste anzeigen",
         "silence": "Anruf stummschalten",
         "silenced": "Benachrichtigungen stummgeschaltet",
-        "skip_lobby_toggle_option": "Sofort beitreten",
         "start_screenshare": "Bildschirmfreigabe starten",
         "stop_screenshare": "Bildschirmfreigabe beenden",
         "too_many_calls": "Zu viele Anrufe",
@@ -3938,7 +3935,6 @@
         "user_is_presenting": "%(sharerName)s präsentiert",
         "video_call": "Videoanruf",
         "video_call_incoming": "Eingehender Videoanruf",
-        "video_call_started": "Videoanruf hat begonnen",
         "video_call_using": "Videoanruf mit:",
         "voice_call": "Sprachanruf",
         "voice_call_incoming": "Eingehender Anruf",

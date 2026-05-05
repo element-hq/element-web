@@ -12,7 +12,7 @@ import type { Meta } from "@storybook/react-vite";
 import humanizeTimeDoc from "../../../typedoc/functions/humanizeTime.md?raw";
 
 const meta = {
-    title: "utils/humanize",
+    title: "Core/Humanize",
     parameters: {
         docs: {
             page: () => (
