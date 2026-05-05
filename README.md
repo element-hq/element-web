@@ -115,3 +115,56 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 Please contact [licensing@element.io](mailto:licensing@element.io) to purchase
 an Element commercial license for this software.
+
+## Optimizing Event Handling for Custom Events
+
+When dealing with a high volume of custom events in a Matrix room, it's important to optimize how Element handles these events to maintain performance and usability. The issue described involves a large number of custom events that are not processed by Element, leading to performance degradation and a poor user experience.
+
+To address this, Element should be configured to ignore events it cannot process, thereby reducing the load on the client and improving the user experience. This can be achieved by filtering out events that are not relevant to the user's interaction with the room.
+
+Here's an example of how you can implement this in TypeScript:
+
+```typescript
+import { MatrixEvent } from 'matrix-js-sdk';
+
+// Function to check if an event should be ignored
+function shouldIgnoreEvent(event: MatrixEvent): boolean {
+  // Check if the event is a custom event
+  if (event.getType() !== 'm.room.message' && event.getType() !== 'm.room.state') {
+    // Check if the event is a custom event
+    if (event.getType().startsWith('io.')) {
+      // Check if the event is not a state event
+      if (event.getEvent().getContent().type !== 'm.room.state') {
+        // Ignore the event
+        return true;
+      }
+    }
+  }
+  // Do not ignore the event
+  return false;
+}
+
+// Example usage
+const event = new MatrixEvent({
+  type: 'io.t2l.matrix.weather',
+  content: {
+    temperature: 25,
+    humidity: 60,
+  },
+  room_id: '!example:room',
+  sender: '@user:example.com',
+  event_id: '$1234567890abcdef',
+  origin_server_ts: 1586400000000,
+  unsigned: {
+    age: 1586400000000,
+  },
+});
+
+if (shouldIgnoreEvent(event)) {
+  console.log('Ignoring event:', event.getEvent().getContent());
+} else {
+  console.log('Processing event:', event.getEvent().getContent());
+}
+```
+
+By implementing this logic, Element can efficiently filter out irrelevant events, improving performance and ensuring that the user experience remains smooth. This approach also helps in reducing the load on the client and the database, making the application more scalable and efficient.
