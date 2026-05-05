@@ -10,7 +10,7 @@ import { Avatar, Button, Link, Menu, MenuItem, Separator, Text } from "@vector-i
 import {
     ChatProblemIcon,
     DevicesIcon,
-    HomeSolidIcon,
+    HomeIcon,
     LockIcon,
     PopOutIcon,
     SettingsIcon,
@@ -167,7 +167,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
             <Separator />
             <section className={styles.actions}>
                 {actions.openHomePage && (
-                    <MenuItem Icon={HomeSolidIcon} label={_t("user_menu|open_home")} onSelect={vm.openHomePage} />
+                    <MenuItem Icon={HomeIcon} label={_t("user_menu|open_home")} onSelect={vm.openHomePage} />
                 )}
                 {actions.linkNewDevice && (
                     <MenuItem Icon={DevicesIcon} label={_t("user_menu|link_new_device")} onSelect={vm.linkNewDevice} />
