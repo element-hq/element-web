@@ -11,7 +11,6 @@ Please see LICENSE files in the repository root for full details.
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
 
     .mx_DisambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
@@ -25,6 +24,10 @@ Please see LICENSE files in the repository root for full details.
         font-size: var(--cpd-font-size-body-sm);
         margin-inline-start: 5px;
     }
+}
+
+button.mx_DisambiguatedProfile {
+    cursor: pointer;
 }
 
 /** Disambiguated profile needs to have a different layout in the member tile */

@@ -2,10 +2,9 @@
 
 exports[`DisambiguatedProfileView > renders the default state 1`] = `
 <div>
-  <div
-    class="DisambiguatedProfile-module_disambiguatedProfile"
-    role="button"
-    tabindex="0"
+  <button
+    class="DisambiguatedProfile-module_disambiguatedProfile DisambiguatedProfile-module_disambiguatedProfile_button"
+    type="button"
   >
     <span
       class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
@@ -13,17 +12,16 @@ exports[`DisambiguatedProfileView > renders the default state 1`] = `
     >
       Alice
     </span>
-  </div>
+  </button>
 </div>
 `;
 
 exports[`DisambiguatedProfileView > renders the full example 1`] = `
 <div>
-  <div
-    class="DisambiguatedProfile-module_disambiguatedProfile"
-    role="button"
-    tabindex="0"
+  <button
+    class="DisambiguatedProfile-module_disambiguatedProfile DisambiguatedProfile-module_disambiguatedProfile_button"
     title="Eve (@eve:matrix.org)"
+    type="button"
   >
     <span
       class="mx_Username_color5 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
@@ -41,16 +39,15 @@ exports[`DisambiguatedProfileView > renders the full example 1`] = `
     >
       🏝️
     </span>
-  </div>
+  </button>
 </div>
 `;
 
 exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
 <div>
-  <div
-    class="DisambiguatedProfile-module_disambiguatedProfile"
-    role="button"
-    tabindex="0"
+  <button
+    class="DisambiguatedProfile-module_disambiguatedProfile DisambiguatedProfile-module_disambiguatedProfile_button"
+    type="button"
   >
     <span
       class="mx_Username_color1 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
@@ -63,16 +60,15 @@ exports[`DisambiguatedProfileView > renders with MXID for disambiguation 1`] = `
     >
       @alice:example.org
     </span>
-  </div>
+  </button>
 </div>
 `;
 
 exports[`DisambiguatedProfileView > renders with color class 1`] = `
 <div>
-  <div
-    class="DisambiguatedProfile-module_disambiguatedProfile"
-    role="button"
-    tabindex="0"
+  <button
+    class="DisambiguatedProfile-module_disambiguatedProfile DisambiguatedProfile-module_disambiguatedProfile_button"
+    type="button"
   >
     <span
       class="mx_Username_color3 DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
@@ -80,16 +76,15 @@ exports[`DisambiguatedProfileView > renders with color class 1`] = `
     >
       Bob
     </span>
-  </div>
+  </button>
 </div>
 `;
 
 exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
 <div>
-  <div
-    class="DisambiguatedProfile-module_disambiguatedProfile"
-    role="button"
-    tabindex="0"
+  <button
+    class="DisambiguatedProfile-module_disambiguatedProfile DisambiguatedProfile-module_disambiguatedProfile_button"
+    type="button"
   >
     <span
       class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
@@ -97,17 +92,16 @@ exports[`DisambiguatedProfileView > renders with emphasized display name 1`] = `
     >
       Charlie
     </span>
-  </div>
+  </button>
 </div>
 `;
 
 exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
 <div>
-  <div
-    class="DisambiguatedProfile-module_disambiguatedProfile"
-    role="button"
-    tabindex="0"
+  <button
+    class="DisambiguatedProfile-module_disambiguatedProfile DisambiguatedProfile-module_disambiguatedProfile_button"
     title="Diana (@diana:example.org)"
+    type="button"
   >
     <span
       class="DisambiguatedProfile-module_disambiguatedProfile_displayName mx_DisambiguatedProfile_displayName"
@@ -115,6 +109,6 @@ exports[`DisambiguatedProfileView > renders with tooltip 1`] = `
     >
       Diana
     </span>
-  </div>
+  </button>
 </div>
 `;

@@ -10,7 +10,6 @@ import {
     type DisambiguatedProfileViewSnapshot,
     type DisambiguatedProfileViewModel as DisambiguatedProfileViewModelInterface,
 } from "@element-hq/web-shared-components";
-import { type MouseEvent } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { getUserNameColorClass } from "../../../../utils/FormattingUtils";
@@ -82,6 +81,8 @@ export class DisambiguatedProfileViewModel
     extends BaseViewModel<DisambiguatedProfileViewSnapshot, DisambiguatedProfileViewModelProps>
     implements DisambiguatedProfileViewModelInterface
 {
+    public readonly onClick?: DisambiguatedProfileViewActions["onClick"];
+
     private static readonly computeSnapshot = (
         props: DisambiguatedProfileViewModelProps,
     ): DisambiguatedProfileViewSnapshot => {
@@ -134,6 +135,11 @@ export class DisambiguatedProfileViewModel
 
     public constructor(props: DisambiguatedProfileViewModelProps) {
         super(props, DisambiguatedProfileViewModel.computeSnapshot(props));
+        if (props.onClick) {
+            this.onClick = (evt) => {
+                this.props.onClick?.(evt);
+            };
+        }
         this.snapshot.merge({
             userStatus: props.userStatus,
         });
@@ -152,8 +158,4 @@ export class DisambiguatedProfileViewModel
             userStatus,
         });
     }
-
-    public onClick = (evt: MouseEvent<HTMLDivElement>): void => {
-        this.props.onClick?.(evt);
-    };
 }

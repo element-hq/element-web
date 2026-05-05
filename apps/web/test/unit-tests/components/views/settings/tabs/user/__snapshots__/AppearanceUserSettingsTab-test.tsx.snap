@@ -213,18 +213,17 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         data-self="true"
                         tabindex="-1"
                       >
-                        <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
-                          role="button"
-                          tabindex="0"
+                        <button
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_14xy2_8 _disambiguatedProfile_button_14xy2_32"
+                          type="button"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_14xy2_13 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
                           </span>
-                        </div>
+                        </button>
                         <div
                           class="mx_EventTile_avatar"
                         >
@@ -307,18 +306,17 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         data-self="true"
                         tabindex="-1"
                       >
-                        <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
-                          role="button"
-                          tabindex="0"
+                        <button
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_14xy2_8 _disambiguatedProfile_button_14xy2_32"
+                          type="button"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_14xy2_13 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
                           </span>
-                        </div>
+                        </button>
                         <div
                           class="mx_EventTile_avatar"
                         >
@@ -404,18 +402,17 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         <span
                           class="mx_MessageTimestamp"
                         />
-                        <div
-                          class="mx_DisambiguatedProfile _disambiguatedProfile_4jooo_8"
-                          role="button"
-                          tabindex="0"
+                        <button
+                          class="mx_DisambiguatedProfile _disambiguatedProfile_14xy2_8 _disambiguatedProfile_button_14xy2_32"
+                          type="button"
                         >
                           <span
-                            class="mx_Username_color2 _disambiguatedProfile_displayName_4jooo_14 mx_DisambiguatedProfile_displayName"
+                            class="mx_Username_color2 _disambiguatedProfile_displayName_14xy2_13 mx_DisambiguatedProfile_displayName"
                             dir="auto"
                           >
                             @userId:matrix.org
                           </span>
-                        </div>
+                        </button>
                         <div
                           class="mx_EventTile_avatar"
                         >

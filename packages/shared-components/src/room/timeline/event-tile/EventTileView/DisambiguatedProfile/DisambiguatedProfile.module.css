@@ -9,7 +9,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    cursor: pointer;
 
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
@@ -28,4 +27,21 @@
     .userStatus {
         margin-inline-start: 5px;
     }
+}
+
+.disambiguatedProfile_button {
+    appearance: none;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    text-align: inherit;
+}
+
+.disambiguatedProfile_button:focus-visible {
+    outline: 2px solid var(--cpd-color-border-focused);
+    outline-offset: 2px;
+    border-radius: var(--cpd-space-0-5x);
 }

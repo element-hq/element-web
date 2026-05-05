@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, type KeyboardEventHandler, type MouseEventHandler } from "react";
+import React, { type JSX, type MouseEventHandler, type ReactNode } from "react";
 import classNames from "classnames";
 import { Text, Tooltip } from "@vector-im/compound-web";
 
@@ -56,7 +56,7 @@ export interface DisambiguatedProfileViewActions {
     /**
      * Optional click handler for the profile.
      */
-    onClick?: MouseEventHandler<HTMLDivElement>;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 /**
@@ -98,25 +98,12 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
         mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
 
-    // Handle keyboard interaction for accessibility if onClick is provided
-    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = vm.onClick
-        ? (event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  vm.onClick?.(event as unknown as React.MouseEvent<HTMLDivElement>);
-              }
-          }
-        : undefined;
+    const classNamesValue = classNames(className, styles.disambiguatedProfile, {
+        [styles.disambiguatedProfile_button]: vm.onClick,
+    });
 
-    return (
-        <div
-            className={classNames(className, styles.disambiguatedProfile)}
-            title={title}
-            onClick={vm.onClick}
-            onKeyDown={handleKeyDown}
-            role={vm.onClick ? "button" : undefined}
-            tabIndex={vm.onClick ? 0 : undefined}
-        >
+    const children: ReactNode = (
+        <>
             <span className={displayNameClasses} dir="auto">
                 {displayName}
             </span>
@@ -133,6 +120,20 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
                     </Text>
                 </Tooltip>
             )}
-        </div>
+        </>
+    );
+
+    if (vm.onClick) {
+        return (
+            <button type="button" className={classNamesValue} title={title} onClick={vm.onClick}>
+                {children}
+            </button>
+        );
+    }
+
+    return (
+        <span className={classNamesValue} title={title}>
+            {children}
+        </span>
     );
 }
