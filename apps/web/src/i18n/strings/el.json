@@ -107,7 +107,7 @@
         "show_advanced": "Εμφάνιση προχωρημένων",
         "show_all": "Εμφάνιση όλων",
         "sign_in": "Σύνδεση",
-        "sign_out": "Αποσύνδεση",
+        "sign_out": "Κατάργηση αυτής της συσκευής",
         "skip": "Παράβλεψη",
         "start": "Έναρξη",
         "start_chat": "Έναρξη συνομιλίας",
@@ -555,12 +555,12 @@
         "format_underline": "Υπογράμμιση",
         "format_unordered_list": "Λίστα με κουκκκίδες",
         "no_perms_notice": "Δεν έχετε δικαιώματα για να δημοσιεύσετε σε αυτό το δωμάτιο",
-        "placeholder": "Στείλτε ένα μήνυμα…",
-        "placeholder_encrypted": "Αποστολή κρυπτογραφημένου μηνύματος…",
-        "placeholder_reply": "Στείλτε μια απάντηση…",
-        "placeholder_reply_encrypted": "Αποστολή κρυπτογραφημένης απάντησης…",
-        "placeholder_thread": "Απάντηση στο νήμα…",
-        "placeholder_thread_encrypted": "Απάντηση στο κρυπτογραφημένο νήμα…",
+        "placeholder": "Στείλτε ένα μη κρυπτογραφημένο μήνυμα…",
+        "placeholder_encrypted": "Στείλτε ένα μήνυμα…",
+        "placeholder_reply": "Αποστολή μη κρυπτογραφημένης απάντησης…",
+        "placeholder_reply_encrypted": "Αποστολή απάντησης…",
+        "placeholder_thread": "Απάντηση σε μη κρυπτογραφημένο νήμα…",
+        "placeholder_thread_encrypted": "Απάντηση στο νήμα…",
         "poll_button": "Ψηφοφορία",
         "poll_button_no_perms_description": "Δεν έχετε άδεια να ξεκινήσετε ψηφοφορίες σε αυτήν την αίθουσα.",
         "poll_button_no_perms_title": "Απαιτείται Άδεια",
@@ -2030,7 +2030,7 @@
             "remove_msisdn_prompt": "Κατάργηση %(phone)s;",
             "spell_check_locale_placeholder": "Επιλογή τοπικών ρυθμίσεων"
         },
-        "inline_url_previews_default": "Ενεργοποιήστε τις ενσωματωμένες προεπισκοπήσεις URL από προεπιλογή",
+        "inline_url_previews_default": "Ενεργοποίηση προεπισκοπήσεων",
         "insert_trailing_colon_mentions": "Εισαγάγετε άνω και κάτω τελεία μετά την αναφορά του χρήστη στην αρχή ενός μηνύματος",
         "jump_to_bottom_on_send": "Μεταβείτε στο τέλος του χρονολογίου όταν στέλνετε ένα μήνυμα",
         "key_backup": {
@@ -2212,7 +2212,7 @@
                 "other": "Αποσύνδεση συσκευών"
             },
             "confirm_sign_out_sso": {
-                "one": "Επιβεβαιώστε ότι αποσυνδέεστε από αυτήν τη συσκευή χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
+                "one": "Επιβεβαιώστε την αποσύνδεση από αυτήν τη συσκευή χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
                 "other": "Επιβεβαιώστε την αποσύνδεση από αυτές τις συσκευές χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας."
             },
             "current_session": "Τρέχουσα συνεδρία",
@@ -2708,7 +2708,7 @@
             "unknown": "Ο %(senderDisplayName)s άλλαξε την πρόσβαση επισκεπτών σε %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο όλα τα μέλη, από τη στιγμή που προσκλήθηκαν.",
+            "invited": "Ο/Η %(senderName)s έκανε το μελλοντικό ιστορικό της αίθουσας ορατό σε όλα τα μέλη της αίθουσας, από τη στιγμή που προσκλήθηκαν.",
             "joined": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο όλα τα μέλη, από τη στιγμή που συνδέθηκαν.",
             "shared": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο όλα τα μέλη.",
             "unknown": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο άγνωστο (%(visibility)s).",
@@ -2725,8 +2725,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s αποδέχθηκε την πρόσκληση για %(displayName)s",
             "accepted_invite": "%(targetName)s αποδέχθηκε μια πρόσκληση",
-            "ban": "Ο %(senderName)s απέκλεισε τον/την %(targetName)s",
-            "ban_reason": "Ο %(senderName)s απέκλεισε τον/την %(targetName)s: %(reason)s",
+            "ban": "Ο/Η %(senderName)s απέκλεισε έναν χρήστη",
+            "ban_reason": "Ο/Η %(senderName)s απέκλεισε έναν χρήστη: %(reason)s",
             "change_avatar": "Ο %(senderName)s άλλαξε τη φωτογραφία του προφίλ του",
             "change_name": "Ο/η %(oldDisplayName)s άλλαξε το εμφανιζόμενο όνομα σε %(displayName)s",
             "change_name_avatar": "Ο χρήστης %(oldDisplayName)s άλλαξε το εμφανιζόμενο όνομα και την εικόνα προφίλ του",
