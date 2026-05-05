@@ -98,9 +98,7 @@ export function DisambiguatedProfileView({ vm, className }: Readonly<Disambiguat
         mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
     });
 
-    const classNamesValue = classNames(className, styles.disambiguatedProfile, {
-        [styles.disambiguatedProfile_button]: vm.onClick,
-    });
+    const classNamesValue = classNames(className, styles.disambiguatedProfile);
 
     const children: ReactNode = (
         <>

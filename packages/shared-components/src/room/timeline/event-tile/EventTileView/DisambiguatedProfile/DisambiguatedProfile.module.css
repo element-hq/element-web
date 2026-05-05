@@ -10,6 +10,27 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 
+    &:where(button) {
+        appearance: none;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+        box-sizing: content-box;
+        color: inherit;
+        cursor: pointer;
+        text-align: inherit;
+    }
+
+    &:where(button):focus-visible {
+        outline: 2px solid var(--cpd-color-border-focused);
+        outline-offset: 2px;
+        border-radius: var(--cpd-space-0-5x);
+    }
+
     .disambiguatedProfile_displayName {
         font: var(--cpd-font-body-md-semibold);
         letter-spacing: var(--cpd-letter-spacing-body-md);
@@ -27,21 +48,4 @@
     .userStatus {
         margin-inline-start: 5px;
     }
-}
-
-.disambiguatedProfile_button {
-    appearance: none;
-    border: 0;
-    background: none;
-    color: inherit;
-    cursor: pointer;
-    font: inherit;
-    padding: 0;
-    text-align: inherit;
-}
-
-.disambiguatedProfile_button:focus-visible {
-    outline: 2px solid var(--cpd-color-border-focused);
-    outline-offset: 2px;
-    border-radius: var(--cpd-space-0-5x);
 }
