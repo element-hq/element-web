@@ -200,6 +200,7 @@
     },
     "timeline": {
         "call_tile": {
+            "call_declined": "Call declined",
             "video_call_title": "Video call",
             "voice_call_title": "Voice call"
         },
