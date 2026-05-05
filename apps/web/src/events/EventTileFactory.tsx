@@ -18,6 +18,7 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
 import {
+    CallDeclinedTileView,
     CallStartedTileView,
     EncryptionEventView,
     HiddenBodyView,
@@ -52,7 +53,7 @@ import { MKeyVerificationRequestViewModel } from "../viewmodels/room/timeline/ev
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
 import { ElementCallEventType } from "../call-types";
-import { CallStartedTileViewModel } from "../viewmodels/room/timeline/event-tile/call/CallStartedTileViewModel";
+import { CallTileViewModel } from "../viewmodels/room/timeline/event-tile/call/CallTileViewModel";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps extends Pick<
@@ -124,9 +125,9 @@ function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 }
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBodyWrappedView ref={ref} {...props} />;
 
-function CallStartedTileViewWrapped({ mxEvent }: IBodyProps): JSX.Element {
-    const vm = useCreateAutoDisposedViewModel(() => new CallStartedTileViewModel({ mxEvent }));
-    return <CallStartedTileView vm={vm} />;
+function CallStartedTileViewWrapped({ mxEvent, getRelationsForEvent }: IBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new CallTileViewModel({ mxEvent, getRelationsForEvent }));
+    return vm.isCallDeclined ? <CallDeclinedTileView vm={vm} /> : <CallStartedTileView vm={vm} />;
 }
 
 export const CallStartedEventFactory: Factory = (ref, props) => {
