@@ -596,8 +596,8 @@ importers:
         specifier: ^7.12.7
         version: 7.28.5(@babel/core@7.29.0)
       '@casualbot/jest-sonar-reporter':
-        specifier: 2.6.0
-        version: 2.6.0
+        specifier: 2.7.0
+        version: 2.7.0
       '@element-hq/element-call-embedded':
         specifier: 0.19.2
         version: 0.19.2
@@ -2076,8 +2076,8 @@ packages:
   '@cacheable/utils@2.4.1':
     resolution: {integrity: sha512-eiFgzCbIneyMlLOmNG4g9xzF7Hv3Mga4LjxjcSC/ues6VYq2+gUbQI8JqNuw/ZM8tJIeIaBGpswAsqV2V7ApgA==}
 
-  '@casualbot/jest-sonar-reporter@2.6.0':
-    resolution: {integrity: sha512-PzOeZXtexA9bchpjlRsFsnzUD9NY6Rdzvqs4B3QYUfiYOzDYbxpn4beH3tiAaqNUHrI17AAEB9UGBYTUZHuaag==}
+  '@casualbot/jest-sonar-reporter@2.7.0':
+    resolution: {integrity: sha512-rm991pr7o+0MsHNY3t+2km+QVZ77m/rtZabt7xVp8k32zz6alhRtpueqhgTL7gTLLU0DRxJdIeAr+TfTxFtEVg==}
     engines: {node: '>=14.0.0'}
 
   '@chevrotain/cst-dts-gen@12.0.0':
@@ -14531,10 +14531,9 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
-  '@casualbot/jest-sonar-reporter@2.6.0':
+  '@casualbot/jest-sonar-reporter@2.7.0':
     dependencies:
       mkdirp: 1.0.4
-      uuid: 8.3.2
       xml: 1.0.1
 
   '@chevrotain/cst-dts-gen@12.0.0':
