@@ -86,7 +86,7 @@ type CompleteOidcLoginResponse = {
     // refreshToken gained from OIDC token issuer, when falsy token cannot be refreshed
     refreshToken?: string;
     // idToken gained from OIDC token issuer
-    idToken: string;
+    idToken?: string;
     // this client's id as registered with the OIDC issuer
     clientId: string;
     // issuer used during authentication

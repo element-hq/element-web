@@ -3412,7 +3412,6 @@
         "connection_lost": "Forbindelsen til serveren er tabt",
         "connection_lost_description": "Du kan ikke lave et opkald uden en forbindelse til serveren.",
         "consulting": "Konfererer med %(transferTarget)s. <a> Overfør til %(transferee)s</a>",
-        "decline_call": "Afvis",
         "default_device": "Standardenhed",
         "dial": "Ring",
         "dialpad": "Tastatur",
@@ -3480,7 +3479,6 @@
         "user_busy_description": "Brugeren du ringede til er optaget.",
         "user_is_presenting": "%(sharerName)s præsenterer",
         "video_call": "Videoopkald",
-        "video_call_started": "Videoopkald startet",
         "video_call_using": "Videoopkald med:",
         "voice_call": "Stemmeopkald",
         "you_are_presenting": "Du præsenterer"

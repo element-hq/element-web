@@ -99,6 +99,7 @@
             "voice_call": "Ouvrir le salon %(roomName)s contenant un appel vocal."
         },
         "appearance": "Apparence",
+        "chat_moved": "La conversation a été déplacée",
         "collapse_filters": "Réduire la liste des filtres",
         "empty": {
             "no_chats": "Pas encore de discussions",
@@ -224,6 +225,7 @@
         "message_timestamp_sent_at": "Envoyé à : %(dateTime)s",
         "url_preview": {
             "close": "Fermer l’aperçu",
+            "open_link": "Ouvrir le lien",
             "show_n_more": {
                 "one": "Montrer %(count)s autre preview",
                 "other": "Montrer %(count)s autres previews"

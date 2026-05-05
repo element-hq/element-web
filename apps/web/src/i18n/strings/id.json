@@ -588,7 +588,6 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "voice": "Suara",
         "warning": "Peringatan"
     },
     "composer": {
@@ -3852,7 +3851,6 @@
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
         "consulting": "Mengkonsultasi dengan %(transferTarget)s. <a>Transfer ke %(transferee)s</a>",
-        "decline_call": "Tolak",
         "default_device": "Perangkat Bawaan",
         "dial": "Panggil",
         "dialpad": "Tombol Penyetel",
@@ -3903,7 +3901,6 @@
         "show_sidebar_button": "Tampilkan sisi bilah",
         "silence": "Diamkan panggilan",
         "silenced": "Notifikasi dibisukan",
-        "skip_lobby_toggle_option": "Segera bergabung",
         "start_screenshare": "Mulai membagikan layar Anda",
         "stop_screenshare": "Berhenti membagikan layar Anda",
         "too_many_calls": "Terlalu Banyak Panggilan",
@@ -3925,7 +3922,6 @@
         "user_is_presenting": "%(sharerName)s sedang mempresentasi",
         "video_call": "Panggilan video",
         "video_call_incoming": "Panggilan video masuk",
-        "video_call_started": "Panggilan video dimulai",
         "video_call_using": "Panggilan video menggunakan:",
         "voice_call": "Panggilan suara",
         "voice_call_incoming": "Panggilan suara masuk",

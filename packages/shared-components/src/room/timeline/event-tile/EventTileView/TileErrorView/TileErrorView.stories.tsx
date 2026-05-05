@@ -34,7 +34,7 @@ const TileErrorViewWrapperImpl = ({
 const TileErrorViewWrapper = withViewDocs(TileErrorViewWrapperImpl, TileErrorView);
 
 const meta = {
-    title: "MessageBody/TileErrorView",
+    title: "Timeline/Timeline Event/TileErrorView",
     component: TileErrorViewWrapper,
     tags: ["autodocs"],
     decorators: [

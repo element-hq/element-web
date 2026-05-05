@@ -2669,7 +2669,6 @@
         "user_busy_description": "მომხმარებელი, რომელსაც დაურეკე, დაკავებულია.",
         "user_is_presenting": "%(sharerName)sწარმოადგენს",
         "video_call": "ვიდეო ზარი",
-        "video_call_started": "ვიდეო ზარი დაიწყო",
         "voice_call": "ხმოვანი ზარი",
         "you_are_presenting": "წარმოგიდგენთ"
     },

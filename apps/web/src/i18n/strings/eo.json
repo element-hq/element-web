@@ -2485,7 +2485,6 @@
         "user_busy_description": "La uzanto, kiun vi vokis, estas okupata.",
         "user_is_presenting": "%(sharerName)s prezentas",
         "video_call": "Vidvoko",
-        "video_call_started": "Videovoko komenciĝis",
         "voice_call": "Voĉvoko",
         "you_are_presenting": "Vi prezentas"
     },

@@ -34,45 +34,45 @@ Please see LICENSE files in the repository root for full details.
     font-size: $font-15px;
 }
 
-.mx_UserSettingsDialog .mx_LoginWithQR {
+.mx_LoginWithQR {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
     font: var(--cpd-font-body-md-regular);
 
     h1 {
         font-size: $font-24px;
         margin-bottom: 0;
+
+        svg {
+            &.normal {
+                color: $secondary-content;
+            }
+            &.error {
+                color: $alert;
+            }
+            &.success {
+                color: $accent;
+            }
+            height: 1.3em;
+            margin-right: $spacing-8;
+            vertical-align: middle;
+        }
     }
 
     h2 {
         margin-top: $spacing-24;
     }
 
-    .mx_QRCode {
-        margin: $spacing-28 0;
-    }
-
     .mx_LoginWithQR_qrWrapper {
         display: flex;
-    }
-}
+        padding: $spacing-28 0;
 
-.mx_LoginWithQR {
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-
-    h1 > svg {
-        &.normal {
-            color: $secondary-content;
+        .mx_Spinner {
+            /* Match the size of the QR code to prevent jumps */
+            height: 200px;
+            width: 200px;
         }
-        &.error {
-            color: $alert;
-        }
-        &.success {
-            color: $accent;
-        }
-        height: 1.3em;
-        margin-right: $spacing-8;
-        vertical-align: middle;
     }
 
     .mx_LoginWithQR_confirmationDigits {

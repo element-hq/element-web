@@ -100,6 +100,7 @@
         },
         "appearance": "Appearance",
         "chat_moved": "Chat moved",
+        "collapse_all_sections": "Collapse all sections",
         "collapse_filters": "Collapse filter list",
         "empty": {
             "no_chats": "No chats yet",
@@ -118,6 +119,7 @@
             "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
+        "expand_all_sections": "Expand all sections",
         "expand_filters": "Expand filter list",
         "filters": {
             "favourite": "Favourites",
@@ -147,6 +149,9 @@
         "room_options": "Room Options",
         "section_created": "Section created",
         "section_header": {
+            "edit_section": "Edit section",
+            "more_options": "More options",
+            "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
             "toggle_unread": "Toggle %(section)s section with unread room(s)"
         },

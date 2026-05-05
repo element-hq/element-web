@@ -3137,7 +3137,6 @@
         "user_busy_description": "Người dùng bạn vừa gọi hiện đang bận.",
         "user_is_presenting": "%(sharerName)s đang trình bày",
         "video_call": "Gọi video",
-        "video_call_started": "Cuộc gọi truyền hình đã bắt đầu",
         "voice_call": "Gọi thoại",
         "you_are_presenting": "Bạn đang trình bày"
     },

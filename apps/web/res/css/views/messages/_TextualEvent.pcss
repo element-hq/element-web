@@ -19,3 +19,12 @@ Please see LICENSE files in the repository root for full details.
         opacity: unset; /* Unset the opacity value specified above on the search results panel */
     }
 }
+
+.mx_TextualBody_urlPreviews {
+    /* Let shared-components own preview link colours instead of the app-wide anchor colour. */
+    a:where(:not([data-kind])):hover,
+    a:where(:not([data-kind])):link,
+    a:where(:not([data-kind])):visited {
+        color: revert-layer;
+    }
+}

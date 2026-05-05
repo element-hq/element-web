@@ -245,7 +245,7 @@ export async function logIntoElementAndVerify(page: Page, credentials: Credentia
 }
 
 /**
- * Click the "sign out" option in Element, and wait for the login page to load
+ * Click the "sign out" option in Element, and wait for the welcome page to load
  *
  * @param page - Playwright `Page` object.
  * @param discardKeys - if true, expect a "You'll lose access to your encrypted messages" dialog, and dismiss it.
@@ -259,8 +259,8 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
         await page.locator(".mx_Dialog .mx_QuestionDialog").getByRole("button", { name: "Remove this device" }).click();
     }
 
-    // Wait for the login page to load
-    await page.getByRole("heading", { name: "Sign in" }).click();
+    // Wait for the welcome page to load
+    await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
 }
 
 /**

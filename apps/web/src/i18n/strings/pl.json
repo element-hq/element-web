@@ -3829,7 +3829,6 @@
         "connection_lost": "Połączenie z serwerem zostało przerwane",
         "connection_lost_description": "Nie możesz wykonywać rozmów bez połączenia z serwerem.",
         "consulting": "Konsultowanie z %(transferTarget)s. <a>Transfer do %(transferee)s</a>",
-        "decline_call": "Odrzuć",
         "default_device": "Urządzenie domyślne",
         "dial": "Wybierz numer",
         "dialpad": "Klawiatura telefoniczna",
@@ -3881,7 +3880,6 @@
         "show_sidebar_button": "Pokaż pasek boczny",
         "silence": "Wycisz rozmowę",
         "silenced": "Wyciszono powiadomienia",
-        "skip_lobby_toggle_option": "Dołącz teraz",
         "start_screenshare": "Udostępnij ekran",
         "stop_screenshare": "Przestań udostępniać ekran",
         "too_many_calls": "Zbyt wiele połączeń",
@@ -3902,7 +3900,6 @@
         "user_busy_description": "Użytkownik, do którego zadzwoniłeś jest zajęty.",
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Rozmowa wideo",
-        "video_call_started": "Rozpoczęto rozmowę wideo",
         "video_call_using": "Połączenie wideo przy użyciu:",
         "voice_call": "Rozmowa głosowa",
         "you_are_presenting": "Prezentujesz"

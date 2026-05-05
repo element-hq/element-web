@@ -591,7 +591,6 @@
         "video": "Fideo",
         "video_room": "Ystafell fideo",
         "view_message": "Gweld neges",
-        "voice": "Llais",
         "warning": "Rhybudd"
     },
     "composer": {
@@ -3872,7 +3871,6 @@
         "connection_lost": "Mae cysylltedd â'r gweinydd wedi'i golli",
         "connection_lost_description": "Allwch chi ddim osod galwadau heb gysylltiad â'r gweinydd.",
         "consulting": "Ymgynghori â %(transferTarget)s. <a>Trosglwyddo i %(transferee)s</a>",
-        "decline_call": "Gwrthod",
         "default_device": "Dyfais Rhagosodedig",
         "dial": "Deial",
         "dialpad": "Pad Deialu",
@@ -3923,7 +3921,6 @@
         "show_sidebar_button": "Dangos y bar ochr",
         "silence": "Distewi galwad",
         "silenced": "Hysbysiadau wedi'u distewi",
-        "skip_lobby_toggle_option": "Ymunwch ar unwaith",
         "start_screenshare": "Dechreuwch rannu'ch sgrin",
         "stop_screenshare": "Stopiwch rannu'ch sgrin",
         "too_many_calls": "Gormod o Alwadau",
@@ -3945,7 +3942,6 @@
         "user_is_presenting": "Mae %(sharerName)s yn cyflwyno",
         "video_call": "Galwad fideo",
         "video_call_incoming": "Galwad fideo i mewn",
-        "video_call_started": "Galwad fideo wedi dechrau",
         "video_call_using": "Galwad fideo gan ddefnyddio:",
         "voice_call": "Galwad llais",
         "voice_call_incoming": "Galwad llais i mewn",

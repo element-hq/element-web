@@ -75,7 +75,7 @@ export class RedactedBodyViewModel
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
                 if (this.showTwelveHour === newVal) return;
 
-                this.showTwelveHour = newVal;
+                this.showTwelveHour = !!newVal;
                 this.updateTooltip();
             },
         );
