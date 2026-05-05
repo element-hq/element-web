@@ -6,11 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, type PropsWithChildren, useMemo } from "react";
-import {
-    EventPresentationProvider,
-    type EventLayout,
-    type EventPresentation,
-} from "@element-hq/web-shared-components";
+import { EventPresentationProvider, type EventLayout, type EventPresentation } from "@element-hq/web-shared-components";
 
 import { Layout } from "../settings/enums/Layout";
 import { useSettingValue } from "../hooks/useSettings";
