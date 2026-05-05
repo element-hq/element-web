@@ -42,7 +42,7 @@
         "rollup-plugin-external-globals": "^0.13.0",
         "semver": "^7.6.3",
         "typescript": "^6.0.0",
-        "unplugin-dts": "1.0.0-beta.6",
+        "unplugin-dts": "1.0.0",
         "vite": "catalog:",
         "vitest": "catalog:",
         "vitest-sonar-reporter": "catalog:"
