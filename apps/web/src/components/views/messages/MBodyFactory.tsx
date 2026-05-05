@@ -237,9 +237,9 @@ export function ImageBodyFactory({
     return (
         <ImageBodyView
             vm={vm}
-            className="mx_MImageBody"
-            containerClassName="mx_MImageBody_thumbnail_container"
-            imageClassName="mx_MImageBody_thumbnail"
+            className="mx_ImageBody"
+            containerClassName="mx_ImageBody_container"
+            imageClassName="mx_ImageBody_image"
             imageRef={imageRef}
         >
             {showFileBody ? (

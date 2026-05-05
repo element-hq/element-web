@@ -105,7 +105,7 @@ test.describe("Custom Component API", () => {
             });
 
             await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
+            const imgTile = page.locator(".mx_ImageBody").first();
             await expect(imgTile).toBeVisible();
             const image = imgTile.getByRole("img", { name: "bad.png" });
             await expect(image).toBeVisible();
@@ -131,7 +131,7 @@ test.describe("Custom Component API", () => {
             });
 
             await app.timeline.scrollToBottom();
-            const imgTile = page.locator(".mx_MImageBody").first();
+            const imgTile = page.locator(".mx_ImageBody").first();
             await expect(imgTile).toBeVisible();
             const image = imgTile.getByRole("img", { name: "good.png" });
             await expect(image).toBeVisible();

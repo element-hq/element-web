@@ -206,7 +206,7 @@ describe("MBodyFactory", () => {
                 </ScopedRoomContextProvider>,
             );
 
-            expect(container.querySelector(".mx_MImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).toBeNull();
         });
 
@@ -223,7 +223,7 @@ describe("MBodyFactory", () => {
                 </ScopedRoomContextProvider>,
             );
 
-            expect(container.querySelector(".mx_MImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
             expect(getByRole("link", { name: /Download/ })).toBeInTheDocument();
         });
@@ -247,7 +247,7 @@ describe("MBodyFactory", () => {
                 </ScopedRoomContextProvider>,
             );
 
-            expect(container.querySelector(".mx_MImageBody")).toBeNull();
+            expect(container.querySelector(".mx_ImageBody")).toBeNull();
             expect(container.querySelector(".mx_MFileBody")).not.toBeNull();
             expect(getByRole("button", { name: "alt" })).toBeInTheDocument();
         });
@@ -268,7 +268,7 @@ describe("MBodyFactory", () => {
                 </ScopedRoomContextProvider>,
             );
 
-            expect(container.querySelector(".mx_MImageBody")).not.toBeNull();
+            expect(container.querySelector(".mx_ImageBody")).not.toBeNull();
             expect(container.querySelector(".mx_MFileBody")).toBeNull();
         });
     });

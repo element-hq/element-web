@@ -112,10 +112,10 @@ describe("ImageBodyView", () => {
         expect(onLinkClick).toHaveBeenCalledTimes(1);
     });
 
-    it("preserves supplied legacy class names without appending module classes", () => {
+    it("merges supplied class names with module classes", () => {
         const vm = new TestImageBodyViewModel({
             state: ImageBodyViewState.READY,
-            alt: "Legacy class image",
+            alt: "Custom class image",
             src: "https://example.org/full.png",
             thumbnailSrc: "https://example.org/thumb.png",
             maxWidth: 320,
@@ -126,21 +126,22 @@ describe("ImageBodyView", () => {
         const { container } = render(
             <ImageBodyView
                 vm={vm}
-                className="mx_MImageBody"
-                containerClassName="mx_MImageBody_thumbnail_container"
-                imageClassName="mx_MImageBody_thumbnail"
+                className="customRoot"
+                containerClassName="customContainer"
+                imageClassName="customImage"
             />,
         );
 
-        expect(container.querySelector(".mx_MImageBody")).toHaveAttribute("class", "mx_MImageBody");
-        expect(container.querySelector(".mx_MImageBody_thumbnail_container")).toHaveAttribute(
-            "class",
-            "mx_MImageBody_thumbnail_container",
-        );
-        expect(screen.getByRole("img", { name: "Legacy class image" })).toHaveAttribute(
-            "class",
-            "mx_MImageBody_thumbnail",
-        );
+        const rootClassName = container.querySelector(".customRoot")?.className;
+        const containerClassName = container.querySelector(".customContainer")?.className;
+        const imageClassName = screen.getByRole("img", { name: "Custom class image" }).className;
+
+        expect(rootClassName).toContain("customRoot");
+        expect(rootClassName).not.toBe("customRoot");
+        expect(containerClassName).toContain("customContainer");
+        expect(containerClassName).not.toBe("customContainer");
+        expect(imageClassName).toContain("customImage");
+        expect(imageClassName).not.toBe("customImage");
     });
 
     it("swaps to the full source on hover for animated previews", async () => {
