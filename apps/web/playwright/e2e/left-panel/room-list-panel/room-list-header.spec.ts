@@ -7,7 +7,6 @@
 
 import { test, expect } from "../../../element-web-test";
 import { getHeaderSection } from "./utils";
-
 test.describe("Header section of the room list", () => {
     test.use({
         labsFlags: ["feature_new_room_list"],
@@ -76,5 +75,30 @@ test.describe("Header section of the room list", () => {
         await page.getByRole("menuitem", { name: "Space Settings" }).click();
         await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();
         await app.closeDialog();
+    });
+
+    // variant-b-spaces: compose menu in a space must include "New section"
+    test.describe("Variant-b: compose menu in spaces", () => {
+        test.use({
+            labsFlags: ["feature_new_room_list", "feature_room_list_sections"],
+        });
+
+        test(
+            "should show 'New section' in the compose menu when a space is active",
+            { tag: "@screenshot" },
+            async ({ page, app, user }) => {
+                await app.client.createSpace({ name: "MySpace" });
+                await page.getByRole("button", { name: "MySpace" }).click();
+
+                const roomListHeader = getHeaderSection(page);
+                const composeMenu = roomListHeader.getByRole("button", { name: "New conversation" });
+                await composeMenu.click();
+
+                await expect(page.getByRole("menuitem", { name: "New section" })).toBeVisible();
+                await expect(page.getByRole("menu")).toMatchScreenshot(
+                    "room-list-space-compose-menu-with-sections.png",
+                );
+            },
+        );
     });
 });

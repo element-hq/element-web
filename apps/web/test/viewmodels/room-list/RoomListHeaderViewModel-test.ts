@@ -177,6 +177,19 @@ describe("RoomListHeaderViewModel", () => {
                 expect(vm.getSnapshot().useComposeIcon).toBe(expectedUseComposeIcon);
             },
         );
+
+        it("should allow section creation when in a space (variant-b)", () => {
+            // variant-b-spaces: canCreateSection must be true even when a real space is active
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(mockSpace.roomId);
+            jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(mockSpace);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                if (settingName === "feature_room_list_sections") return true;
+                return false;
+            });
+
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            expect(vm.getSnapshot().canCreateSection).toBe(true);
+        });
     });
 
     describe("event listeners", () => {

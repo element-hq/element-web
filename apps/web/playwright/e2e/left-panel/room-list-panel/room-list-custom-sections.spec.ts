@@ -330,4 +330,54 @@ test.describe("Room list custom sections", () => {
             await assertRoomInSection(page, "Chats", "my room");
         });
     });
+
+    // variant-b-spaces: section creation and room moving must work in any space, not just Home
+    test.describe("Variant-b: section creation in spaces", () => {
+        test("should show 'New section' in the compose menu when a space is active", async ({ page, app }) => {
+            await app.client.createSpace({ name: "MySpace" });
+            await page.getByRole("button", { name: "MySpace" }).click();
+
+            const composeMenu = getRoomListHeader(page).getByRole("button", { name: "New conversation" });
+            await composeMenu.click();
+
+            await expect(page.getByRole("menuitem", { name: "New section" })).toBeVisible();
+        });
+
+        test("should create a custom section while a space is active", async ({ page, app }) => {
+            await app.client.createSpace({ name: "MySpace" });
+            await page.getByRole("button", { name: "MySpace" }).click();
+
+            await createCustomSection(page, "Work");
+
+            await expect(getSectionHeader(page, "Work")).toBeVisible();
+        });
+
+        test("should allow moving a space room into a custom section", async ({ page, app }) => {
+            const spaceId = await app.client.createSpace({ name: "MySpace" });
+            const roomId = await app.client.createRoom({ name: "space room" });
+            await app.client.evaluate(
+                async (client, { spaceId, roomId }) => {
+                    await client.sendStateEvent(spaceId, "m.space.child", { via: [client.getDomain()] }, roomId);
+                },
+                { spaceId, roomId },
+            );
+
+            await page.getByRole("button", { name: "MySpace" }).click();
+
+            // Create the section while in the space
+            await createCustomSection(page, "Projects");
+
+            const roomList = getRoomList(page);
+            const roomItem = roomList.getByRole("row", { name: "Open room space room" });
+            await expect(roomItem).toBeVisible();
+
+            // Move the room to the new section
+            await roomItem.hover();
+            await roomItem.getByRole("button", { name: "More Options" }).click();
+            await page.getByRole("menuitem", { name: "Move to" }).hover();
+            await page.getByRole("menuitem", { name: "Projects" }).click();
+
+            await assertRoomInSection(page, "Projects", "space room");
+        });
+    });
 });

@@ -20,7 +20,7 @@ import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import SpaceStore from "../spaces/SpaceStore";
-import { type SpaceKey, MetaSpace, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
@@ -40,7 +40,8 @@ import { DefaultTagID } from "./skip-list/tag";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
-import { createSection, deleteSection, editSection } from "./section";
+import { createSection, deleteSection, editSection, isCustomSectionTag } from "./section";
+import type { CustomSectionsData } from "./section";
 
 /**
  * These are the filters passed to the room skip list.
@@ -474,13 +475,20 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             };
         });
 
-        // When in a real space (not Home), hide sections that have no overlapping rooms
         const activeSpace = SpaceStore.instance.activeSpace;
-        if (activeSpace !== MetaSpace.Home) {
-            return sections.filter((section) => section.tag === CHATS_TAG || section.rooms.length > 0);
-        }
+        const customSectionData: CustomSectionsData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
 
-        return sections;
+        // A section is visible in the current context if:
+        //   - it has at least one room here, OR
+        //   - it is a built-in section (Favourites, Chats, Low Priority — always shown), OR
+        //   - it is a custom section created in this exact space/context (so it
+        //     appears immediately after creation even while still empty, but is
+        //     NOT shown empty anywhere else until a room is placed in it there).
+        return sections.filter((section) => {
+            if (section.rooms.length > 0) return true;
+            if (!isCustomSectionTag(section.tag)) return true; // built-in: always visible
+            return customSectionData[section.tag]?.spaceId === activeSpace;
+        });
     }
 
     /**
@@ -500,7 +508,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Emits {@link SECTION_CREATED_EVENT} if the section was successfully created.
      */
     public async createSection(): Promise<string | undefined> {
-        const tag = await createSection();
+        const tag = await createSection(SpaceStore.instance.activeSpace);
         if (!tag) return;
         this.emit(SECTION_CREATED_EVENT, tag);
         return tag;

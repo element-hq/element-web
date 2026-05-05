@@ -518,6 +518,17 @@ describe("RoomListItemViewModel", () => {
             viewModel = new RoomListItemViewModel({ room, client: matrixClient });
             expect(viewModel.getSnapshot().canMoveToSection).toBe(expected);
         });
+
+        it("should be true in a space context when feature is enabled (variant-b)", () => {
+            // variant-b-spaces: canMoveToSection must not be restricted to Home — it is based solely on the feature flag
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+                if (setting === "feature_room_list_sections") return true;
+                return false;
+            });
+            // RoomListItemViewModel does not receive a space prop; variant-b means it reads the feature flag only
+            viewModel = new RoomListItemViewModel({ room, client: matrixClient });
+            expect(viewModel.getSnapshot().canMoveToSection).toBe(true);
+        });
     });
 
     describe("Actions", () => {

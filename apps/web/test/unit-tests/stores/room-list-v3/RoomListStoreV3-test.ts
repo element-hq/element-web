@@ -1011,6 +1011,86 @@ describe("RoomListStoreV3", () => {
             expect(favSection.rooms).toContain(rooms[3]);
         });
 
+        it("shows empty custom sections in the space where they were created (variant-b)", async () => {
+            // variant-b-spaces: a newly created (empty) section is visible in its creation space
+            enableSections();
+            getClientAndRooms();
+
+            const spaceRoomId = "!space1:matrix.org";
+            jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockReturnValue(false);
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(spaceRoomId);
+
+            const customTag = "element.io.section.empty-section";
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((key) => {
+                if (key === "RoomList.OrderedCustomSections") return [customTag];
+                if (key === "RoomList.CustomSectionData")
+                    // Section was created in spaceRoomId
+                    return { [customTag]: { tag: customTag, name: "Empty Section", spaceId: spaceRoomId } };
+                if (key === "feature_room_list_sections") return true;
+                return false;
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            const emptySection = findSection(sections, customTag);
+            expect(emptySection).toBeDefined();
+            expect(emptySection!.rooms).toHaveLength(0);
+        });
+
+        it("hides empty custom sections in spaces where they were NOT created", async () => {
+            // variant-b-spaces: an empty section must NOT appear in a space it wasn't created in
+            enableSections();
+            getClientAndRooms();
+
+            const creationSpace = "!space1:matrix.org";
+            const otherSpace = "!space2:matrix.org";
+            jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockReturnValue(false);
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(otherSpace);
+
+            const customTag = "element.io.section.empty-section";
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((key) => {
+                if (key === "RoomList.OrderedCustomSections") return [customTag];
+                if (key === "RoomList.CustomSectionData")
+                    return { [customTag]: { tag: customTag, name: "Empty Section", spaceId: creationSpace } };
+                if (key === "feature_room_list_sections") return true;
+                return false;
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            const emptySection = findSection(sections, customTag);
+            expect(emptySection).toBeUndefined();
+        });
+
+        it("hides empty custom sections in Home when they were created in a space", async () => {
+            // variant-b-spaces: a section created in a space must not appear empty in Home
+            enableSections();
+            getClientAndRooms();
+
+            const creationSpace = "!space1:matrix.org";
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(MetaSpace.Home);
+
+            const customTag = "element.io.section.empty-section";
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((key) => {
+                if (key === "RoomList.OrderedCustomSections") return [customTag];
+                if (key === "RoomList.CustomSectionData")
+                    return { [customTag]: { tag: customTag, name: "Empty Section", spaceId: creationSpace } };
+                if (key === "feature_room_list_sections") return true;
+                return false;
+            });
+
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+
+            const { sections } = store.getSortedRoomsInActiveSpace();
+            const emptySection = findSection(sections, customTag);
+            expect(emptySection).toBeUndefined();
+        });
+
         describe("createSection", () => {
             it("emits SECTION_CREATED_EVENT and LISTS_UPDATE_EVENT when section is created", async () => {
                 enableSections();
@@ -1027,6 +1107,20 @@ describe("RoomListStoreV3", () => {
                 expect(tag).toBe("element.io.section.test-tag");
 
                 expect(sectionCreatedListener).toHaveBeenCalledWith("element.io.section.test-tag");
+            });
+
+            it("passes the active space as spaceId to createSection", async () => {
+                enableSections();
+                getClientAndRooms();
+                const spaceId = "!space1:matrix.org";
+                jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockReturnValue(spaceId);
+                const createSectionSpy = jest.spyOn(sectionModule, "createSection").mockResolvedValue("element.io.section.test-tag");
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                await store.createSection();
+                expect(createSectionSpy).toHaveBeenCalledWith(spaceId);
             });
 
             it("does not emit when section creation is cancelled", async () => {

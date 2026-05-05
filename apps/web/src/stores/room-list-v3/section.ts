@@ -35,6 +35,12 @@ export function isCustomSectionTag(tag: string): boolean {
 type CustomSection = {
     tag: Tag;
     name: string;
+    /**
+     * The ID of the space (or MetaSpace) in which this section was created.
+     * Used to decide whether to show the section in a given context even when it has no rooms there yet.
+     * Legacy sections created before this field was added will not have it set.
+     */
+    spaceId?: string;
 };
 
 /**
@@ -47,29 +53,47 @@ export type CustomSectionsData = Record<Tag, CustomSection>;
 export type OrderedCustomSections = Tag[];
 
 /**
+ * Persist a section setting value.
+ *
+ * Writes to DEVICE level (localStorage) first so the value survives tab switches
+ * and server-write failures immediately. Then fires a background write to ACCOUNT
+ * level so data syncs to other devices via account data.
+ *
+ * Reads already prefer DEVICE > ACCOUNT so the local value always wins on this device.
+ */
+async function saveSectionSetting(key: "RoomList.CustomSectionData" | "RoomList.OrderedCustomSections", value: unknown): Promise<void> {
+    // Write to localStorage immediately — survives tab switches and server failures.
+    await SettingsStore.setValue(key, null, SettingLevel.DEVICE, value);
+    // Also write to account data for cross-device sync (fire-and-forget — DEVICE copy is the source of truth).
+    SettingsStore.setValue(key, null, SettingLevel.ACCOUNT, value).catch((err) => {
+        logger.warn(`Failed to sync section setting ${key} to account data:`, err);
+    });
+}
+
+/**
  * Creates a new custom section by showing a dialog to the user to enter the section name.
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
+ * @param spaceId - The ID of the space (or MetaSpace) in which the section is being created.
+ *                  Stored so the section stays visible in that context even while empty.
  * @return A promise that resolves to the new section tag if created, or undefined if cancelled.
  */
-export async function createSection(): Promise<string | undefined> {
+export async function createSection(spaceId: string): Promise<string | undefined> {
     const modal = Modal.createDialog(CreateSectionDialog);
 
     const [shouldCreateSection, sectionName] = await modal.finished;
     if (!shouldCreateSection || !sectionName) return undefined;
 
     const tag = `${CUSTOM_SECTION_TAG_PREFIX}${window.crypto.randomUUID()}`;
-    const newSection: CustomSection = { tag, name: sectionName };
+    const newSection: CustomSection = { tag, name: sectionName, spaceId };
 
-    // Save the new section data
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
-    sectionData[tag] = newSection;
-    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
+    // Save the new section data — spread to avoid mutating the cached reference.
+    const sectionData = { ...(SettingsStore.getValue("RoomList.CustomSectionData") || {}), [tag]: newSection };
+    await saveSectionSetting("RoomList.CustomSectionData", sectionData);
 
-    // Add the new section to the ordered list of sections
-    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || [];
-    orderedSections.push(tag);
-    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
+    // Add the new section to the ordered list of sections — spread to avoid mutating the cached reference.
+    const orderedSections = [...(SettingsStore.getValue("RoomList.OrderedCustomSections") || []), tag];
+    await saveSectionSetting("RoomList.OrderedCustomSections", orderedSections);
     return tag;
 }
 
@@ -91,9 +115,9 @@ export async function editSection(tag: string): Promise<void> {
     const isSameName = newName === section.name;
     if (!shouldEditSection || !newName || isSameName) return;
 
-    // Save the new name
-    sectionData[tag].name = newName;
-    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
+    // Save the new name — spread to avoid mutating the cached reference.
+    const updatedSectionData = { ...sectionData, [tag]: { ...section, name: newName } };
+    await saveSectionSetting("RoomList.CustomSectionData", updatedSectionData);
 }
 
 /**
@@ -112,12 +136,12 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
     const [shouldRemoveSection] = await modal.finished;
     if (!shouldRemoveSection) return;
 
-    // Remove the section from the ordered list of sections
+    // Remove the section from the ordered list of sections.
     const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
     const newOrderedSections = orderedSections.filter((sectionTag) => sectionTag !== tag);
-    await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, newOrderedSections);
+    await saveSectionSetting("RoomList.OrderedCustomSections", newOrderedSections);
 
-    // Remove the section data
-    delete sectionData[tag];
-    await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
+    // Remove the section data — spread to avoid mutating the cached reference.
+    const { [tag]: _removed, ...remainingSectionData } = sectionData;
+    await saveSectionSetting("RoomList.CustomSectionData", remainingSectionData);
 }
