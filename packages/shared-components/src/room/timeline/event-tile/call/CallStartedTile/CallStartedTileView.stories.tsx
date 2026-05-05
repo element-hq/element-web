@@ -8,11 +8,12 @@
 import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CallStartedTileView, type CallStartedTileViewSnapshot, CallType } from "./CallStartedTileView";
+import { CallStartedTileView } from "./CallStartedTileView";
 import { useMockedViewModel } from "../../../../../core/viewmodel";
 import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
+import { CallType, type CallTileViewSnapshot } from "../common/types";
 
-const CallStartedTileViewWrapperImpl = ({ ...rest }: CallStartedTileViewSnapshot): React.ReactNode => {
+const CallStartedTileViewWrapperImpl = ({ ...rest }: CallTileViewSnapshot): React.ReactNode => {
     const vm = useMockedViewModel(rest, {});
     return <CallStartedTileView vm={vm} />;
 };
