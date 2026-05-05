@@ -428,6 +428,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 (actualRoomId: string) => this.props.mxClient.sendMessage(actualRoomId, threadId ?? null, content!),
                 this.props.mxClient,
             );
+            if (threadId) {
+                // MSC4306: subscribe-on-send. Manual subscription (no `automatic` field).
+                // Fire-and-forget: the subscription must not block the message send.
+                this.props.mxClient
+                    .subscribeToThread(roomId, threadId)
+                    .catch((e) => logger.warn("MSC4306 subscribe-on-send failed", e));
+            }
             if (replyToEvent) {
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
