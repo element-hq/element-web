@@ -34,7 +34,7 @@ import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
-import { EventPresentationProvider } from "../../utils/EventPresentationProvider";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 interface IProps {
     roomId: string;
@@ -287,7 +287,7 @@ class FilePanel extends React.Component<IProps, IState> {
                     >
                         <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
-                        <EventPresentationProvider layout={Layout.Group}>
+                        <EventPresentationContextProvider layout={Layout.Group}>
                             <TimelinePanel
                                 manageReadReceipts={false}
                                 manageReadMarkers={false}
@@ -297,7 +297,7 @@ class FilePanel extends React.Component<IProps, IState> {
                                 empty={emptyState}
                                 layout={Layout.Group}
                             />
-                        </EventPresentationProvider>
+                        </EventPresentationContextProvider>
                     </BaseCard>
                 </ScopedRoomContextProvider>
             );

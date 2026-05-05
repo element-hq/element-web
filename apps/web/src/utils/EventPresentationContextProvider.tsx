@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type PropsWithChildren, useMemo } from "react";
+import React, { type JSX, type PropsWithChildren, useMemo } from "react";
 import {
-    EventPresentationProvider as SharedEventPresentationProvider,
+    EventPresentationProvider,
     type EventLayout,
     type EventPresentation,
 } from "@element-hq/web-shared-components";
@@ -33,24 +33,22 @@ export function getEventPresentation(layout: Layout, useCompactLayout: boolean):
     };
 }
 
-/** Props for the app/web event presentation provider. */
-export interface EventPresentationProviderProps {
+/** Props for the app/web event presentation context provider. */
+export interface EventPresentationContextProviderProps {
     /** Layout selected by the app/web surface rendering the timeline. */
     layout: Layout;
-    /** Shared event/timeline components rendered inside the provider. */
-    children?: PropsWithChildren["children"];
 }
 
 /** Provides shared event presentation using app/web-owned layout settings. */
-export function EventPresentationProvider({
+export function EventPresentationContextProvider({
     layout,
     children,
-}: Readonly<EventPresentationProviderProps>): React.ReactElement {
+}: Readonly<PropsWithChildren<EventPresentationContextProviderProps>>): JSX.Element {
     // Compact density is still owned by app/web; this exposes it as shared event presentation.
     const useCompactLayout = useSettingValue("useCompactLayout");
     const eventLayout = EVENT_LAYOUT_BY_APP_LAYOUT[layout];
     const density = getEventDensity(layout, useCompactLayout);
     const value = useMemo<EventPresentation>(() => ({ layout: eventLayout, density }), [eventLayout, density]);
 
-    return React.createElement(SharedEventPresentationProvider, { value }, children);
+    return <EventPresentationProvider value={value}>{children}</EventPresentationProvider>;
 }

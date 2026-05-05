@@ -10,17 +10,20 @@ import { act, render, screen, waitFor } from "jest-matrix-react";
 import { useEventPresentation } from "@element-hq/web-shared-components";
 
 import { Layout } from "../../../src/settings/enums/Layout";
-import { EventPresentationProvider, getEventPresentation } from "../../../src/utils/EventPresentationProvider";
+import {
+    EventPresentationContextProvider,
+    getEventPresentation,
+} from "../../../src/utils/EventPresentationContextProvider";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
-function PresentationProbe(): React.ReactElement {
+const PresentationProbe: React.FC = () => {
     const { layout, density } = useEventPresentation();
 
-    return React.createElement("div", { "data-testid": "presentation" }, `${layout}:${density}`);
-}
+    return <div data-testid="presentation">{`${layout}:${density}`}</div>;
+};
 
-describe("EventPresentationProvider", () => {
+describe("EventPresentationContextProvider", () => {
     beforeEach(async () => {
         await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, false);
     });
@@ -38,11 +41,9 @@ describe("EventPresentationProvider", () => {
 
     it("updates provider density when compact layout changes", async () => {
         render(
-            React.createElement(
-                EventPresentationProvider,
-                { layout: Layout.Group },
-                React.createElement(PresentationProbe),
-            ),
+            <EventPresentationContextProvider layout={Layout.Group}>
+                <PresentationProbe />
+            </EventPresentationContextProvider>,
         );
 
         expect(screen.getByTestId("presentation")).toHaveTextContent("group:default");

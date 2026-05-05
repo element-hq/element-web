@@ -38,7 +38,7 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import Measured from "../elements/Measured";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
-import { EventPresentationProvider } from "../../../utils/EventPresentationProvider";
+import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
 
 interface IProps {
     room: Room;
@@ -217,7 +217,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     <div className="mx_TimelineCard_timeline">
                         {jumpToBottom}
-                        <EventPresentationProvider layout={layout}>
+                        <EventPresentationContextProvider layout={layout}>
                             <TimelinePanel
                                 ref={this.timelinePanel}
                                 showReadReceipts={this.state.showReadReceipts}
@@ -239,7 +239,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                                 highlightedEventId={highlightedEventId}
                                 onScroll={this.onScroll}
                             />
-                        </EventPresentationProvider>
+                        </EventPresentationContextProvider>
                     </div>
 
                     {isUploading && <UploadBar room={this.props.room} relation={this.props.composerRelation} />}

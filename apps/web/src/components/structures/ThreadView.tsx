@@ -51,7 +51,7 @@ import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/paylo
 import Heading from "../views/typography/Heading";
 import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
-import { EventPresentationProvider } from "../../utils/EventPresentationProvider";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 interface IProps {
     room: Room;
@@ -394,7 +394,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
             timeline = (
                 <>
                     <FileDropTarget parent={this.card.current} onFileDrop={this.onFileDrop} room={this.props.room} />
-                    <EventPresentationProvider layout={layout}>
+                    <EventPresentationContextProvider layout={layout}>
                         <TimelinePanel
                             key={this.state.thread.id}
                             ref={this.timelinePanel}
@@ -418,7 +418,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             eventScrollIntoView={this.props.initialEventScrollIntoView}
                             onEventScrolledIntoView={this.resetJumpToEvent}
                         />
-                    </EventPresentationProvider>
+                    </EventPresentationContextProvider>
                 </>
             );
         } else {

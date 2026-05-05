@@ -142,7 +142,7 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
-import { EventPresentationProvider } from "../../utils/EventPresentationProvider";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -2584,7 +2584,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let messagePanel: JSX.Element | undefined;
         if (!isRoomEncryptionLoading) {
             messagePanel = (
-                <EventPresentationProvider layout={this.state.layout}>
+                <EventPresentationContextProvider layout={this.state.layout}>
                     <TimelinePanel
                         ref={this.gatherTimelinePanelRef}
                         timelineSet={this.state.room.getUnfilteredTimelineSet()}
@@ -2611,7 +2611,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         editState={this.state.editState}
                         enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
                     />
-                </EventPresentationProvider>
+                </EventPresentationContextProvider>
             );
         }
 
