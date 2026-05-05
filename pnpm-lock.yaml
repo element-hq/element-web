@@ -52,7 +52,7 @@ overrides:
   '@types/react-dom': ^19.2.3
   oidc-client-ts: 3.5.0
   jwt-decode: 4.0.0
-  caniuse-lite: 1.0.30001788
+  caniuse-lite: 1.0.30001791
   markdown-it: 14.1.1
   testcontainers: ^11.0.0
   matrix-widget-api: ^1.17.0
@@ -473,7 +473,7 @@ importers:
         version: 1.0.3
       matrix-js-sdk:
         specifier: github:matrix-org/matrix-js-sdk#develop
-        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b0e92e5b312511285585e9022a1368c7a37f8f85
+        version: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2dd3b2f22e0b1d41a9a168676ae5df8fd12f0a6d
       matrix-widget-api:
         specifier: ^1.17.0
         version: 1.17.0
@@ -6816,8 +6816,8 @@ packages:
   caniuse-api@3.0.0:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
 
-  caniuse-lite@1.0.30001788:
-    resolution: {integrity: sha512-6q8HFp+lOQtcf7wBK+uEenxymVWkGKkjFpCvw5W25cmMwEDU45p1xQFBQv8JDlMMry7eNxyBaR+qxgmTUZkIRQ==}
+  caniuse-lite@1.0.30001791:
+    resolution: {integrity: sha512-yk0l/YSrOnFZk3UROpDLQD9+kC1l4meK/wed583AXrzoarMGJcbRi2Q4RaUYbKxYAsZ8sWmaSa/DsLmdBeI1vQ==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -9934,8 +9934,8 @@ packages:
   matrix-events-sdk@0.0.1:
     resolution: {integrity: sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b0e92e5b312511285585e9022a1368c7a37f8f85:
-    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b0e92e5b312511285585e9022a1368c7a37f8f85}
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2dd3b2f22e0b1d41a9a168676ae5df8fd12f0a6d:
+    resolution: {tarball: https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2dd3b2f22e0b1d41a9a168676ae5df8fd12f0a6d}
     version: 41.4.0
     engines: {node: '>=22.0.0'}
 
@@ -19305,7 +19305,7 @@ snapshots:
   autoprefixer@10.4.24(postcss@8.5.10):
     dependencies:
       browserslist: 4.28.2
-      caniuse-lite: 1.0.30001788
+      caniuse-lite: 1.0.30001791
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.10
@@ -19656,7 +19656,7 @@ snapshots:
   browserslist@4.28.2:
     dependencies:
       baseline-browser-mapping: 2.10.16
-      caniuse-lite: 1.0.30001788
+      caniuse-lite: 1.0.30001791
       electron-to-chromium: 1.5.332
       node-releases: 2.0.37
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
@@ -19813,11 +19813,11 @@ snapshots:
   caniuse-api@3.0.0:
     dependencies:
       browserslist: 4.28.2
-      caniuse-lite: 1.0.30001788
+      caniuse-lite: 1.0.30001791
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-lite@1.0.30001788: {}
+  caniuse-lite@1.0.30001791: {}
 
   ccount@2.0.1: {}
 
@@ -23489,7 +23489,7 @@ snapshots:
 
   matrix-events-sdk@0.0.1: {}
 
-  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b0e92e5b312511285585e9022a1368c7a37f8f85:
+  matrix-js-sdk@https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2dd3b2f22e0b1d41a9a168676ae5df8fd12f0a6d:
     dependencies:
       '@babel/runtime': 7.29.2
       '@matrix-org/matrix-sdk-crypto-wasm': 18.2.0
