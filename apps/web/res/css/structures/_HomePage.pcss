@@ -8,30 +8,27 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_HomePage {
-    max-width: 960px;
-    width: 100%;
+    display: grid;
+    place-items: center;
+    width: min(100% - 50px, 960px);
     height: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    container-type: inline-size;
+    container-name: homepage;
 }
 
 .mx_HomePage_default {
     text-align: center;
-    display: flex;
-
-    .mx_HomePage_default_wrapper {
-        margin: auto;
-    }
 
     img {
         height: 48px;
     }
 
     h1 {
+        margin-bottom: 4px;
         font-weight: var(--cpd-font-weight-semibold);
         font-size: $font-32px;
         line-height: 1.375;
-        margin-bottom: 4px;
     }
 
     h2 {
@@ -47,23 +44,24 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_HomePage_default_buttons {
-        display: flex;
-        margin: 60px auto 0;
-        width: fit-content;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px 40px;
+        width: 100%;
+        margin-top: 80px;
+        margin-bottom: 20px;
 
         .mx_AccessibleButton {
-            padding: 73px 8px 15px; /* top: 20px top padding + 40px icon + 13px margin */
-
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 13px;
+            box-sizing: border-box;
             width: 160px;
             min-height: 132px;
-            margin: 20px;
-            position: relative;
-            display: inline-block;
+            padding: 8px 15px;
             border-radius: 8px;
-            vertical-align: top;
-            word-break: break-word;
-            box-sizing: border-box;
-
             font-weight: var(--cpd-font-weight-semibold);
             font-size: $font-15px;
             line-height: $font-20px;
@@ -71,12 +69,25 @@ Please see LICENSE files in the repository root for full details.
             background-color: $accent;
 
             svg {
-                top: 20px;
-                left: 60px; /* (160px-40px)/2 */
-                width: 40px;
+                display: block;
+                width: 100%;
                 height: 40px;
-                position: absolute;
+                object-fit: contain;
                 color: #fff; /* on all themes */
+            }
+        }
+
+        @container homepage (max-width: 559px) {
+            grid-template-columns: 1fr;
+
+            .mx_AccessibleButton {
+                flex-direction: row;
+                width: 100%;
+                min-height: 0;
+
+                svg {
+                    width: 24px;
+                }
             }
         }
     }
