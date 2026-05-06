@@ -1,4 +1,5 @@
 /*
+Copyright 2026 Element Creations Ltd.
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2023 The Matrix.org Foundation C.I.C.
 
@@ -64,6 +65,7 @@ describe("<LoggedInView />", () => {
     const userId = "@alice:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
+        getClientWellKnown: jest.fn(),
         getAccountData: jest.fn(),
         getRoom: jest.fn(),
         getSyncState: jest.fn().mockReturnValue(null),
@@ -104,6 +106,7 @@ describe("<LoggedInView />", () => {
         mockClient.setPushRuleActions.mockReset().mockResolvedValue({});
         // @ts-expect-error
         mockClient.pushProcessor = new PushProcessor(mockClient);
+        mockSdkContext.client = mockClient;
     });
 
     describe("synced push rules", () => {

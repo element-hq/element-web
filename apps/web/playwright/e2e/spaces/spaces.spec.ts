@@ -318,6 +318,9 @@ test.describe("Spaces", () => {
             await spaceTree.getByRole("button", { name: "Expand" }).click();
             await expect(page.locator(".mx_SpacePanel:not(.collapsed)")).toBeVisible(); // TODO: replace :not() selector
 
+            // focus the quick settings button to ensure the spaces aren't being hovered over for consistent screenshots
+            await page.getByRole("button", { name: "Quick settings" }).focus();
+
             const item = page.locator(".mx_SpaceItem", { hasText: "Root Space" });
             await expect(item).toBeVisible();
             await expect(item.locator(".mx_SpaceItem", { hasText: "Child Space" })).toBeVisible();
