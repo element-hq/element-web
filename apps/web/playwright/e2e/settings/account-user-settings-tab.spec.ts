@@ -106,24 +106,20 @@ test.describe("Account user settings tab", () => {
             },
         });
 
-        test(
-            "should render the manage account button properly",
-            { tag: "@screenshot" },
-            async ({ uut, axe }) => {
-                const manageAccountButton = uut.getByTestId("external-account-management-link");
+        test("should render the manage account button properly", { tag: "@screenshot" }, async ({ uut, axe }) => {
+            const manageAccountButton = uut.getByTestId("external-account-management-link");
 
-                await expect(manageAccountButton).toBeVisible();
-                await expect(manageAccountButton).toHaveAttribute("href", EXTERNAL_ACCOUNT_MANAGEMENT_URL);
-                await expect(manageAccountButton).toHaveAttribute("target", "_blank");
-                await expect(manageAccountButton).toHaveText(/Manage account/);
+            await expect(manageAccountButton).toBeVisible();
+            await expect(manageAccountButton).toHaveAttribute("href", EXTERNAL_ACCOUNT_MANAGEMENT_URL);
+            await expect(manageAccountButton).toHaveAttribute("target", "_blank");
+            await expect(manageAccountButton).toHaveText(/Manage account/);
 
-                const profileButtons = uut.locator(".mx_UserProfileSettings_profile_buttons");
-                await profileButtons.scrollIntoViewIfNeeded();
-                await expect(profileButtons).toMatchScreenshot("account-manage-account-button.png");
+            const profileButtons = uut.locator(".mx_UserProfileSettings_profile_buttons");
+            await profileButtons.scrollIntoViewIfNeeded();
+            await expect(profileButtons).toMatchScreenshot("account-manage-account-button.png");
 
-                await expect(axe).toHaveNoViolations();
-            },
-        );
+            await expect(axe).toHaveNoViolations();
+        });
     });
 
     test("should show tooltips on narrow screen", async ({ page, uut }) => {
