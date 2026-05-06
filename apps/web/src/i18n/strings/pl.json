@@ -115,7 +115,7 @@
         "show_advanced": "Pokaż zaawansowane",
         "show_all": "Pokaż wszystko",
         "sign_in": "Zaloguj",
-        "sign_out": "Wyloguj",
+        "sign_out": "Usuń to urządzenie",
         "skip": "Pomiń",
         "start": "Rozpocznij",
         "start_chat": "Rozpocznij czat",
@@ -1526,7 +1526,7 @@
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
         "report_to_moderators": "Zgłoś do moderatorów",
         "report_to_moderators_description": "W pokojach, które wspierają moderacje, przycisk \"Zgłoś\" pozwoli Ci zgłosić nadużycia moderatorom.",
-        "sliding_sync": "Tryb synchronizacji przesuwanej",
+        "sliding_sync": "Tryb Sliding sync",
         "sliding_sync_description": "W trakcie aktywnego rozwoju, nie można wyłączyć.",
         "sliding_sync_disabled_notice": "Zaloguj się ponownie, aby wyłączyć",
         "sliding_sync_server_no_support": "Twój serwer nie ma wsparcia",
@@ -2627,7 +2627,7 @@
             "unable_to_load_msisdns": "Nie można załadować numerów telefonu",
             "username": "Nazwa użytkownika"
         },
-        "inline_url_previews_default": "Włącz domyślny podgląd URL w tekście",
+        "inline_url_previews_default": "Włącz podgląd",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
         "invite_controls": {
             "default_label": "Zezwól użytkownikom na zapraszanie Cię do pokojów"
@@ -2894,8 +2894,9 @@
             "sign_out": "Wyloguj się z tej sesji",
             "sign_out_all_other_sessions": "Wyloguj się z wszystkich pozostałych sesji (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
-                "one": "Czy na pewno chcesz się wylogować z %(count)s sesji?",
-                "other": "Czy na pewno chcesz się wylogować z %(count)s sesji?"
+                "one": "Czy na pewno chcesz usunąć %(count)s sesję?",
+                "few": "Czy na pewno chcesz usunąć %(count)s sesje?",
+                "many": "Czy na pewno chcesz usunąć %(count)s sesji?"
             },
             "sign_out_n_sessions": {
                 "one": "Wyloguj się z %(count)s sesji",
@@ -3412,8 +3413,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s zaakceptował zaproszenie do %(displayName)s",
             "accepted_invite": "%(targetName)s zaakceptował zaproszenie",
-            "ban": "%(senderName)s zbanował %(targetName)s",
-            "ban_reason": "%(senderName)s zbanował %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s zbanował użytkownika",
+            "ban_reason": "%(senderName)s zbanował użytkownika: %(reason)s",
             "change_avatar": "%(senderName)s zmienił swoje zdjęcie profilowe",
             "change_name": "%(oldDisplayName)s zmienił wyświetlaną nazwę na %(displayName)s",
             "change_name_avatar": "%(oldDisplayName)s zmienił swoją wyświetlaną nazwę i zdjęcie profilowe",
