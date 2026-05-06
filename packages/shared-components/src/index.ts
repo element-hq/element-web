@@ -16,6 +16,7 @@ export * from "./crypto/SasEmoji";
 export * from "./room/timeline/ReadMarker";
 export * from "./room/timeline/EventPresentation";
 export * from "./room/timeline/event-tile/body/EventContentBodyView";
+export * from "./room/timeline/event-tile/body/HiddenMediaPlaceholder";
 export * from "./room/timeline/event-tile/body/RedactedBodyView";
 export * from "./room/timeline/event-tile/body/MFileBodyView";
 export * from "./room/timeline/event-tile/body/MImageBodyView";
