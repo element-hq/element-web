@@ -1,5 +1,9 @@
 .tileErrorView {
-    color: var(--cpd-color-text-critical-primary);
+    font: var(--cpd-font-body-md-regular);
+    font-size: var(--cpd-font-size-body-sm);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+
+    color: var(--cpd-color-text-secondary);
     list-style: none;
     text-align: center;
 
