@@ -150,17 +150,9 @@ export class ImageBodyViewModel
     }
 
     private static computeErrorLabel(error: unknown, imgError: boolean): string {
-        if (error instanceof DecryptError) {
-            return _t("timeline|m.image|error_decrypting");
-        }
-
-        if (error instanceof DownloadError) {
-            return _t("timeline|m.image|error_downloading");
-        }
-
-        if (imgError || error) {
-            return _t("timeline|m.image|error");
-        }
+        if (error instanceof DecryptError)  return _t("timeline|m.image|error_decrypting");
+        if (error instanceof DownloadError)  return _t("timeline|m.image|error_downloading");
+        if (imgError || error)  return _t("timeline|m.image|error");
 
         return _t("timeline|m.image|error");
     }
