@@ -43,7 +43,7 @@ export class HiddenBodyViewModel
     }
 
     public setEvent(mxEvent: MatrixEvent): void {
-        this.props = { ...this.props, mxEvent };
+        this.props.mxEvent = mxEvent;
         this.snapshot.merge(HiddenBodyViewModel.computeSnapshot(this.props));
     }
 }
