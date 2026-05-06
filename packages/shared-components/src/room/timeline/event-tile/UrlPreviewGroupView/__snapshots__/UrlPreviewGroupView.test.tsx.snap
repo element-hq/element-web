@@ -104,7 +104,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org"
+            href="https://matrix.org/one"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -144,7 +144,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org"
+            href="https://matrix.org/two"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -184,7 +184,7 @@ exports[`UrlPreviewGroupView > renders multiple previews 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org"
+            href="https://matrix.org/three"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -332,7 +332,7 @@ exports[`UrlPreviewGroupView > renders multiple previews which are hidden 1`] = 
 </div>
 `;
 
-exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
+exports[`UrlPreviewGroupView > renders with compact density 1`] = `
 <div>
   <div
     class="UrlPreviewGroupView-module_wrapper"
@@ -358,7 +358,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org"
+            href="https://matrix.org/one"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -398,7 +398,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org"
+            href="https://matrix.org/two"
             rel="noreferrer noopener"
             target="_blank"
           >
@@ -438,7 +438,7 @@ exports[`UrlPreviewGroupView > renders with a compact view 1`] = `
         >
           <a
             class="_typography_6v6n8_153 _font-body-md-semibold_6v6n8_55 LinkPreview-module_title"
-            href="https://matrix.org"
+            href="https://matrix.org/three"
             rel="noreferrer noopener"
             target="_blank"
           >
