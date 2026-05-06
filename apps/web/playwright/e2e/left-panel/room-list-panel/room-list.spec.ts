@@ -328,8 +328,11 @@ test.describe("Room list", () => {
             const videoRoom = roomListView.getByRole("option", { name: "video room" });
             await expect(videoRoom).toHaveAttribute("aria-selected", "true"); // wait for room list update
 
+            // Ensure we highlight the video
+            await videoRoom.click();
+
             // focus the user menu to avoid to have hover decoration
-            await page.getByRole("button", { name: "User menu" }).focus();
+            await page.getByRole("button", { name: "User menu" }).hover();
 
             await expect(videoRoom).toMatchScreenshot("room-list-item-video.png");
         });
