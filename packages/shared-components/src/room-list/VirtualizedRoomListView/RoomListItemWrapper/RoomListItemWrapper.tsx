@@ -29,10 +29,6 @@ export interface RoomListItemWrapperProps extends RoomListItemViewProps {
 /**
  * Wraps RoomListItemView with the correct accessibility and drag-and-drop props
  * based on whether the list is flat (listbox) or grouped (treegrid).
- *
- * In a flat list each item gets listbox item props.
- * In a grouped list the item is wrapped in a treegrid row, with drag-and-drop
- * wired up via useDraggable in both modes.
  */
 export const RoomListItemWrapper = memo(function RoomListItemWrapper({
     roomIndex,
@@ -41,13 +37,22 @@ export const RoomListItemWrapper = memo(function RoomListItemWrapper({
     isInFlatList,
     ...rest
 }: RoomListItemWrapperProps): JSX.Element {
-    const itemA11yProps = isInFlatList ? getItemAccessibleProps("listbox", roomIndex, roomCount) : { role: "gridcell" };
-    const item = <DraggableWrapper {...rest} {...itemA11yProps} />;
+    if (isInFlatList) {
+        return <RoomListItemView {...rest} {...getItemAccessibleProps("listbox", roomIndex, roomCount)} />;
+    }
 
-    if (isInFlatList) return item;
-    return <div {...getItemAccessibleProps("treegrid", roomIndex, roomIndexInSection)}>{item}</div>;
+    return (
+        <div {...getItemAccessibleProps("treegrid", roomIndex, roomIndexInSection)}>
+            <div role="gridcell" aria-selected={rest.isSelected}>
+                <DraggableWrapper {...rest} />
+            </div>
+        </div>
+    );
 });
 
+/**
+ * Wraps RoomListItemView with the drag-and-drop functionality. This is only used for treegrid mode, as flat list items are not draggable.
+ */
 function DraggableWrapper(props: RoomListItemViewProps): JSX.Element {
     const item = useViewModel(props.vm);
     const { ref: draggableRef, handleRef } = useDraggable({
