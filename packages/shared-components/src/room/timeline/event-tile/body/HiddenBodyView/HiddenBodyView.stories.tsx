@@ -31,7 +31,6 @@ const meta = {
     tags: ["autodocs"],
     args: {
         reason: undefined,
-        className: "",
     },
 } satisfies Meta<typeof HiddenBodyViewWrapper>;
 
