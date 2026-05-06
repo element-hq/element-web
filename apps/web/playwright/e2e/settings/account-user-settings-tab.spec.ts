@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import { type Route } from "@playwright/test";
+
 import { test, expect } from "../../element-web-test";
 import { getSampleFilePath } from "../../sample-files";
 
 const USER_NAME = "Bob";
 const USER_NAME_NEW = "Alice";
+const EXTERNAL_ACCOUNT_MANAGEMENT_URL = "https://just.for.test.io/";
 
 test.describe("Account user settings tab", () => {
     test.use({
@@ -77,6 +80,46 @@ test.describe("Account user settings tab", () => {
     test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page, uut }) => {
         await page.setViewportSize({ width: 700, height: 600 });
         await expect(uut).toMatchScreenshot("account-smallscreen.png");
+    });
+
+    test.describe("with external account management", () => {
+        test.use({
+            page: async ({ page }, runFixture) => {
+                const authMetadataHandler = async (route: Route): Promise<void> => {
+                    await route.fulfill({
+                        json: {
+                            issuer: EXTERNAL_ACCOUNT_MANAGEMENT_URL,
+                            authorization_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}authorize`,
+                            token_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}token`,
+                            revocation_endpoint: `${EXTERNAL_ACCOUNT_MANAGEMENT_URL}revoke`,
+                            response_types_supported: ["code"],
+                            grant_types_supported: ["authorization_code"],
+                            code_challenge_methods_supported: ["S256"],
+                            account_management_uri: EXTERNAL_ACCOUNT_MANAGEMENT_URL,
+                        },
+                    });
+                };
+
+                await page.route("**/_matrix/client/v1/auth_metadata", authMetadataHandler);
+                await page.route("**/_matrix/client/unstable/org.matrix.msc2965/auth_metadata", authMetadataHandler);
+                await runFixture(page);
+            },
+        });
+
+        test("should render the manage account button properly", { tag: "@screenshot" }, async ({ uut, axe }) => {
+            const manageAccountButton = uut.getByTestId("external-account-management-link");
+
+            await expect(manageAccountButton).toBeVisible();
+            await expect(manageAccountButton).toHaveAttribute("href", EXTERNAL_ACCOUNT_MANAGEMENT_URL);
+            await expect(manageAccountButton).toHaveAttribute("target", "_blank");
+            await expect(manageAccountButton).toHaveText(/Manage account/);
+
+            const profileButtons = uut.locator(".mx_UserProfileSettings_profile_buttons");
+            await profileButtons.scrollIntoViewIfNeeded();
+            await expect(profileButtons).toMatchScreenshot("account-manage-account-button.png");
+
+            await expect(axe).toHaveNoViolations();
+        });
     });
 
     test("should show tooltips on narrow screen", async ({ page, uut }) => {
