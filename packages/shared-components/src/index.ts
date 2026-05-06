@@ -24,6 +24,7 @@ export * from "./room/timeline/event-tile/body/MFileBodyView";
 export * from "./room/timeline/event-tile/body/MImageBodyView";
 export * from "./room/timeline/event-tile/body/MVideoBodyView";
 export * from "./room/timeline/event-tile/body/TextualBodyView";
+export * from "./room/timeline/event-tile/body/UnknownBodyView";
 export * from "./room/timeline/event-tile/EventTileView/TileErrorView";
 export * from "./core/pill-input/Pill";
 export * from "./core/pill-input/PillInput";
