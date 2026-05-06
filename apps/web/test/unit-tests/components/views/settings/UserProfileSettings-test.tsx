@@ -18,7 +18,6 @@ import { mkStubRoom, stubClient } from "../../../../test-utils";
 import { ToastContext, type ToastRack } from "../../../../../src/contexts/ToastContext";
 import { OwnProfileStore } from "../../../../../src/stores/OwnProfileStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import dis from "../../../../../src/dispatcher/dispatcher";
 import Modal from "../../../../../src/Modal";
 
 interface MockedAvatarSettingProps {
@@ -218,13 +217,15 @@ describe("ProfileSettings", () => {
         expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
     });
 
-    it("signs out directly if no rooms are encrypted", async () => {
+    it("displays confirmation dialog if no rooms are encrypted", async () => {
+        jest.spyOn(Modal, "createDialog");
+
         renderProfileSettings(toastRack, client);
 
         const signOutButton = await screen.findByText("Remove this device");
         await userEvent.click(signOutButton);
 
-        expect(dis.dispatch).toHaveBeenCalledWith({ action: "logout" });
+        expect(Modal.createDialog).toHaveBeenCalled();
     });
 
     it("displays confirmation dialog if rooms are encrypted", async () => {

@@ -56,33 +56,33 @@ describe("LogoutDialog", () => {
         mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
         mockCrypto.isSecretStorageReady.mockResolvedValue(false);
         const rendered = renderComponent();
-        await rendered.findByText("You'll lose access to your encrypted messages");
+        await rendered.findByText("You're about to lose access to your encrypted chats");
     });
 
-    it("Prompts user to go to settings if there is a backup on the server", async () => {
+    it("Prompts user to set up recovery if there is a backup on the server but no secret storage", async () => {
         mockCrypto.getKeyBackupInfo.mockResolvedValue({} as KeyBackupInfo);
         const rendered = renderComponent();
-        await rendered.findByText("Go to Settings");
+        await rendered.findByText("Get recovery key");
         expect(rendered.container).toMatchSnapshot();
 
         jest.spyOn(dispatch, "dispatch");
-        fireEvent.click(await screen.findByRole("button", { name: "Go to Settings" }));
+        fireEvent.click(await screen.findByRole("button", { name: "Get recovery key" }));
         await waitFor(() =>
             expect(dispatch.dispatch).toHaveBeenCalledWith({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Encryption,
+                props: {
+                    initialEncryptionState: "set_recovery_key",
+                },
             }),
         );
     });
 
-    it("Prompts user to go to settings if there is no backup on the server", async () => {
+    it("Prompts user to set up recovery if there is no backup on the server", async () => {
         mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
         const rendered = renderComponent();
-        await rendered.findByText("Go to Settings");
+        await rendered.findByText("Get recovery key");
         expect(rendered.container).toMatchSnapshot();
-
-        fireEvent.click(await screen.findByRole("button", { name: "Manually export keys" }));
-        await expect(screen.findByRole("heading", { name: "Export room keys" })).resolves.toBeInTheDocument();
     });
 
     describe("when there is an error fetching backups", () => {
@@ -92,7 +92,7 @@ describe("LogoutDialog", () => {
                 throw new Error("beep");
             });
             const rendered = renderComponent();
-            await rendered.findByText("Go to Settings");
+            await rendered.findByText("Get recovery key");
         });
     });
 });
