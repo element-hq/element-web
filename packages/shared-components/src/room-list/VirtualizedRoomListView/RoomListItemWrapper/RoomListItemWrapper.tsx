@@ -6,9 +6,14 @@
  */
 
 import React, { memo, type JSX } from "react";
+import { useDraggable } from "@dnd-kit/react";
+import { Feedback } from "@dnd-kit/dom";
+import { RestrictToVerticalAxis } from "@dnd-kit/abstract/modifiers";
+import { useMergeRefs } from "react-merge-refs";
 
 import { RoomListItemView, type RoomListItemViewProps } from "./RoomListItemView";
 import { getItemAccessibleProps } from "../../../core/VirtualizedList";
+import { useViewModel } from "../../../core/viewmodel";
 
 export interface RoomListItemWrapperProps extends RoomListItemViewProps {
     /** Index of this room in the list */
@@ -22,19 +27,12 @@ export interface RoomListItemWrapperProps extends RoomListItemViewProps {
 }
 
 /**
- * Wrapper around RoomListItemView that adds accessibility props based on the room's position in the list and whether the list is flat or grouped.
- * In a flat list, each item gets listbox item props. In a grouped list, each item gets treegrid cell props.
+ * Wraps RoomListItemView with the correct accessibility and drag-and-drop props
+ * based on whether the list is flat (listbox) or grouped (treegrid).
  *
- * @example
- * ``
- * <RoomListItemWrapper
- *   roomIndex={0}
- *   roomIndexInSection={0}
- *   roomCount={10}
- *   isInFlatList={true}
- *   {...otherRoomListItemViewProps}
- * />
- * ```
+ * In a flat list each item gets listbox item props.
+ * In a grouped list the item is wrapped in a treegrid row, with drag-and-drop
+ * wired up via useDraggable in both modes.
  */
 export const RoomListItemWrapper = memo(function RoomListItemWrapper({
     roomIndex,
@@ -44,8 +42,20 @@ export const RoomListItemWrapper = memo(function RoomListItemWrapper({
     ...rest
 }: RoomListItemWrapperProps): JSX.Element {
     const itemA11yProps = isInFlatList ? getItemAccessibleProps("listbox", roomIndex, roomCount) : { role: "gridcell" };
-    const item = <RoomListItemView {...rest} {...itemA11yProps} />;
+    const item = <DraggableWrapper {...rest} {...itemA11yProps} />;
 
     if (isInFlatList) return item;
     return <div {...getItemAccessibleProps("treegrid", roomIndex, roomIndexInSection)}>{item}</div>;
 });
+
+function DraggableWrapper(props: RoomListItemViewProps): JSX.Element {
+    const item = useViewModel(props.vm);
+    const { ref: draggableRef, handleRef } = useDraggable({
+        id: item.id,
+        // We clone the item in the dnd overlay to avoid putting a hole in the list
+        plugins: [Feedback.configure({ feedback: "clone" })],
+        modifiers: [RestrictToVerticalAxis],
+    });
+    const dndRef = useMergeRefs([draggableRef, handleRef]);
+    return <RoomListItemView {...props} ref={dndRef} />;
+}

@@ -5,14 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, memo, useEffect, useRef, type ReactNode } from "react";
+import React, { type JSX, memo, useEffect, useRef, type ReactNode, type Ref } from "react";
 import classNames from "classnames";
-import { Text } from "@vector-im/compound-web";
+import { useMergeRefs } from "react-merge-refs";
 
 import { Flex } from "../../../../core/utils/Flex";
-import { NotificationDecoration, type NotificationDecorationData } from "./NotificationDecoration";
-import { RoomListItemHoverMenu } from "./RoomListItemHoverMenu";
+import { type NotificationDecorationData } from "./NotificationDecoration";
 import { RoomListItemContextMenu } from "./RoomListItemContextMenu";
+import { RoomListItemContent } from "./RoomListItemContent";
 import { type RoomNotifState } from "./RoomNotifs";
 import styles from "./RoomListItemView.module.css";
 import { useViewModel, type ViewModel } from "../../../../core/viewmodel";
@@ -150,6 +150,7 @@ export interface RoomListItemViewProps extends Omit<React.HTMLAttributes<HTMLBut
     isLastItem: boolean;
     /** Function to render the room avatar */
     renderAvatar: (room: Room) => ReactNode;
+    ref?: Ref<Element>;
 }
 
 /**
@@ -164,14 +165,16 @@ export const RoomListItemView = memo(function RoomListItemView({
     isFirstItem,
     isLastItem,
     renderAvatar,
+    ref,
     ...props
 }: RoomListItemViewProps): JSX.Element {
-    const ref = useRef<HTMLButtonElement>(null);
+    const internalRef = useRef<HTMLButtonElement>(null);
+    const mergedRef = useMergeRefs([ref, internalRef]);
     const item = useViewModel(vm);
 
     useEffect(() => {
         if (isFocused) {
-            ref.current?.focus({ preventScroll: true, focusVisible: true } as FocusOptions);
+            internalRef.current?.focus({ preventScroll: true, focusVisible: true } as FocusOptions);
         }
     }, [isFocused]);
 
@@ -182,7 +185,7 @@ export const RoomListItemView = memo(function RoomListItemView({
         <RoomListItemContextMenu vm={vm}>
             <Flex
                 as="button"
-                ref={ref}
+                ref={mergedRef}
                 className={classNames(styles.roomListItem, "mx_RoomListItemView", {
                     [styles.selected]: isSelected,
                     [styles.bold]: item.isBold,
@@ -193,41 +196,14 @@ export const RoomListItemView = memo(function RoomListItemView({
                 gap="var(--cpd-space-3x)"
                 align="stretch"
                 type="button"
-                aria-selected={isSelected}
                 aria-label={a11yLabel}
                 onClick={vm.onOpenRoom}
                 onFocus={(e: React.FocusEvent<HTMLButtonElement>) => onFocus(item.id, e)}
                 tabIndex={isFocused ? 0 : -1}
+                aria-selected={props.role === "option" ? isSelected : undefined}
                 {...props}
             >
-                <Flex className={styles.container} gap="var(--cpd-space-3x)" align="center">
-                    {renderAvatar(item.room)}
-                    <Flex className={styles.content} gap="var(--cpd-space-2x)" align="center" justify="space-between">
-                        {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                        <div className={styles.ellipsis}>
-                            <div className={styles.roomName} title={item.name} data-testid="room-name">
-                                {item.name}
-                            </div>
-                            {item.messagePreview && (
-                                <Text as="div" size="sm" className={styles.ellipsis} title={item.messagePreview}>
-                                    {item.messagePreview}
-                                </Text>
-                            )}
-                        </div>
-                        {(item.showMoreOptionsMenu || item.showNotificationMenu) && (
-                            <RoomListItemHoverMenu
-                                showMoreOptionsMenu={item.showMoreOptionsMenu}
-                                showNotificationMenu={item.showNotificationMenu}
-                                vm={vm}
-                            />
-                        )}
-
-                        {/* aria-hidden because we summarise the unread count/notification status in a11yLabel */}
-                        <div className={styles.notificationDecoration} aria-hidden={true}>
-                            <NotificationDecoration {...item.notification} />
-                        </div>
-                    </Flex>
-                </Flex>
+                <RoomListItemContent vm={vm} renderAvatar={renderAvatar} />
             </Flex>
         </RoomListItemContextMenu>
     );
