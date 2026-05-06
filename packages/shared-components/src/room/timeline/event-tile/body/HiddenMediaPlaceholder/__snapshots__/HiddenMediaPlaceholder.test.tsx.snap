@@ -6,7 +6,7 @@ exports[`HiddenMediaPlaceholder > renders the default story 1`] = `
     style="width: 320px; height: 180px;"
   >
     <button
-      class="mx_HiddenMediaPlaceholder HiddenMediaPlaceholder-module_button"
+      class="HiddenMediaPlaceholder-module_button"
       type="button"
     >
       <span

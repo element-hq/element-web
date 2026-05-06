@@ -31,11 +31,7 @@ export function HiddenMediaPlaceholder({
     children,
 }: Readonly<HiddenMediaPlaceholderProps>): JSX.Element {
     return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={classNames("mx_HiddenMediaPlaceholder", styles.button, className)}
-        >
+        <button type="button" onClick={onClick} className={classNames(styles.button, className)}>
             <span className={styles.content}>
                 <VisibilityOnIcon className={styles.icon} aria-hidden="true" />
                 <span>{children}</span>

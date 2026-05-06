@@ -42,9 +42,6 @@ describe("HiddenMediaPlaceholder", () => {
             </HiddenMediaPlaceholder>,
         );
 
-        expect(screen.getByRole("button", { name: "Show image" })).toHaveClass(
-            "mx_HiddenMediaPlaceholder",
-            "custom-hidden-media",
-        );
+        expect(screen.getByRole("button", { name: "Show image" })).toHaveClass("custom-hidden-media");
     });
 });
