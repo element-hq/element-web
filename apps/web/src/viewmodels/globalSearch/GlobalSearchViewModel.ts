@@ -87,9 +87,9 @@ export class GlobalSearchViewModel extends BaseViewModel<GlobalSearchViewSnapsho
         this.snapshot.merge({ query: transformSearchTerm(query) });
     };
 
-    /** Update the active filter */
+    /** Update the active filter (clicking the active filter deselects it, reverting to All) */
     public onFilterChange = (filter: GlobalSearchFilter): void => {
-        this.snapshot.merge({ filter });
+        this.snapshot.merge({ filter: this.snapshot.current.filter === filter ? GlobalSearchFilter.All : filter });
     };
 
     /** Expand to the full-view panel */
@@ -111,6 +111,7 @@ export class GlobalSearchViewModel extends BaseViewModel<GlobalSearchViewSnapsho
             metricsTrigger: "WebUnifiedSearch",
             metricsViaKeyboard: false,
         });
+        this.snapshot.merge({ query: "", isFullView: false });
         this.props.onClose();
     };
 
@@ -121,6 +122,7 @@ export class GlobalSearchViewModel extends BaseViewModel<GlobalSearchViewSnapsho
         } else {
             const cli = MatrixClientPeg.safeGet();
             startDmOnFirstMessage(cli, [result.member]);
+            this.snapshot.merge({ query: "", isFullView: false });
             this.props.onClose();
         }
     };
