@@ -36,6 +36,7 @@ const RoomListWrapperImpl = ({
     updateVisibleRooms,
     closeToast,
     renderAvatar: renderAvatarProp,
+    changeRoomSection,
     ...rest
 }: RoomListStoryProps): JSX.Element => {
     const vm = useMockedViewModel(rest, {
@@ -46,6 +47,7 @@ const RoomListWrapperImpl = ({
         getSectionHeaderViewModel,
         updateVisibleRooms,
         closeToast,
+        changeRoomSection,
     });
 
     return (
@@ -85,6 +87,7 @@ const meta = {
         renderAvatar,
         isFlatList: true,
         closeToast: fn(),
+        changeRoomSection: fn(),
     },
     parameters: {
         design: {
