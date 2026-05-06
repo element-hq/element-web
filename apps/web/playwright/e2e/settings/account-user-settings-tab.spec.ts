@@ -84,7 +84,7 @@ test.describe("Account user settings tab", () => {
 
     test.describe("with external account management", () => {
         test.use({
-            page: async ({ page }, use) => {
+            page: async ({ page }, runFixture) => {
                 const authMetadataHandler = async (route: Route): Promise<void> => {
                     await route.fulfill({
                         json: {
@@ -102,7 +102,7 @@ test.describe("Account user settings tab", () => {
 
                 await page.route("**/_matrix/client/v1/auth_metadata", authMetadataHandler);
                 await page.route("**/_matrix/client/unstable/org.matrix.msc2965/auth_metadata", authMetadataHandler);
-                await use(page);
+                await runFixture(page);
             },
         });
 
