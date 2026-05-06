@@ -9,12 +9,12 @@ import React from "react";
 import { fn } from "storybook/test";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
+import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import { createMockRoomItemViewModel, renderAvatar } from "../../story-mocks";
 
 const meta = {
-    title: "Room List/RoomListItemAccessibilityWrapper",
-    component: RoomListItemAccessibilityWrapper,
+    title: "Room List/RoomListItemWrapper",
+    component: RoomListItemWrapper,
     tags: ["autodocs"],
     args: {
         roomIndex: 0,
@@ -35,7 +35,7 @@ const meta = {
             </div>
         ),
     ],
-} satisfies Meta<typeof RoomListItemAccessibilityWrapper>;
+} satisfies Meta<typeof RoomListItemWrapper>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
