@@ -111,7 +111,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
     const { userId, displayName, avatarUrl, expanded, open, manageAccountHref, actions, showAvatar } = useViewModel(vm);
     const { translate: _t } = useI18n();
     const trigger = (
-        <button className={classNames(styles.triggerButton)} aria-label={_t("menus|user_menu|title")}>
+        <button className={classNames(styles.triggerButton, className)} aria-label={_t("menus|user_menu|title")}>
             <Avatar id={userId} name={displayName} type="round" size="36px" src={avatarUrl} />
             {expanded && (
                 <Text type="heading" size="sm" as="span" weight="semibold">
@@ -129,7 +129,7 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
             onOpenChange={vm.setOpen}
             align="start"
             side="bottom"
-            className={classNames(styles.container, className)}
+            className={styles.container}
         >
             <section className={styles.profile}>
                 {showAvatar && <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />}
