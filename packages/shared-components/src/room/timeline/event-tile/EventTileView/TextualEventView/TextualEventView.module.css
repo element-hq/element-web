@@ -8,12 +8,10 @@
 .textualEvent {
     overflow-y: hidden;
     font: var(--cpd-font-body-sm-regular);
-    line-height: var(--cpd-font-size-body-lg); /* Design says 18px, this is 17px */
-    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+    line-height: normal;
     color: var(--cpd-color-text-secondary);
 
     a {
-        text-decoration: none;
         cursor: pointer;
         color: var(--cpd-color-text-action-accent);
     }
@@ -22,4 +20,5 @@
 .textualEvent[data-event-layout="irc"] {
     padding: 1px 0; /* add a 1px padding top and bottom because our larger emoji font otherwise gets cropped by anti-zalgo */
     display: inline-block;
+    line-height: 1.125rem; /* $font-18px equivalent of the legacy --irc-line-height */
 }
