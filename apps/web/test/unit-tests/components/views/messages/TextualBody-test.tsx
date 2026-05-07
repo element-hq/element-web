@@ -174,6 +174,44 @@ describe("<TextualBody />", () => {
         expect(container).toHaveTextContent("* sender winks(edited)");
     });
 
+    it("updates the body kind when an edit changes msgtype to m.emote", async () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "hello",
+                msgtype: "m.text",
+            },
+            event: true,
+        });
+
+        const { container, rerender } = getComponent({ mxEvent: ev });
+        expect(container).toHaveTextContent("hello");
+
+        const edit = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "* waves",
+                msgtype: "m.emote",
+                "m.new_content": {
+                    body: "waves",
+                    msgtype: "m.emote",
+                },
+            },
+            event: true,
+        });
+        ev.makeReplaced(edit);
+
+        getComponent({ mxEvent: ev, replacingEventId: ev.replacingEventId() }, defaultMatrixClient, rerender);
+
+        await waitFor(() => expect(container).toHaveTextContent("* sender waves(edited)"));
+    });
+
     it("renders m.notice correctly", () => {
         DMRoomMap.makeShared(defaultMatrixClient);
 
