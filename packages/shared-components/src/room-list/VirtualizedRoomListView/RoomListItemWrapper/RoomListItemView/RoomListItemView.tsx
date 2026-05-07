@@ -174,7 +174,7 @@ export const RoomListItemView = memo(function RoomListItemView({
 
     useEffect(() => {
         if (isFocused) {
-            internalRef.current?.focus({ preventScroll: true, focusVisible: true } as FocusOptions);
+            internalRef.current?.focus({ preventScroll: true } as FocusOptions);
         }
     }, [isFocused]);
 
