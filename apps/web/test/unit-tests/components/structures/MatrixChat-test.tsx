@@ -1196,7 +1196,14 @@ describe("<MatrixChat />", () => {
                             .fn()
                             .mockReturnValue(
                                 new Map([
-                                    ["devid", { dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") }],
+                                    [
+                                        "devid",
+                                        {
+                                            deviceId: "devid",
+                                            dehydrated: false,
+                                            getIdentityKey: jest.fn().mockReturnValue("k"),
+                                        },
+                                    ],
                                 ]),
                             ),
                     }),
