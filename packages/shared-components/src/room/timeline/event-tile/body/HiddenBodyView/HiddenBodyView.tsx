@@ -8,6 +8,7 @@
 import classNames from "classnames";
 import React, { type JSX, type Ref } from "react";
 import { VisibilityOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { Text } from "@vector-im/compound-web";
 
 import { type ViewModel } from "../../../../../core/viewmodel";
 import { useViewModel } from "../../../../../core/viewmodel/useViewModel";
@@ -49,7 +50,7 @@ export function HiddenBodyView({ vm, className, ref }: Readonly<HiddenBodyViewPr
     return (
         <span className={classNames(styles.content, className)} ref={ref}>
             <VisibilityOffIcon className={styles.icon} aria-hidden="true" />
-            <span>{text}</span>
+            <Text as="span">{text}</Text>
         </span>
     );
 }
