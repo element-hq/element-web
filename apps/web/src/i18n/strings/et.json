@@ -42,7 +42,7 @@
         "copy_link": "Kopeeri link",
         "create": "Loo",
         "create_a_room": "Loo jututuba",
-        "create_account": "Loo konto",
+        "create_account": "Loo kasutajakonto",
         "decline": "Keeldu",
         "decline_and_block": "Keeldu ja blokeeri",
         "decline_invite": "Lükka kutse tagasi",
@@ -115,7 +115,7 @@
         "show_advanced": "Näita lisaseadistusi",
         "show_all": "Näita kõiki",
         "sign_in": "Logi sisse",
-        "sign_out": "Logi välja",
+        "sign_out": "Eemalda see seade",
         "skip": "Jäta vahele",
         "start": "Alusta",
         "start_chat": "Alusta vestlust",
@@ -219,7 +219,7 @@
         "incorrect_password": "Vale salasõna",
         "log_in_new_account": "<a>Logi sisse</a> oma uuele kasutajakontole.",
         "logout_dialog": {
-            "description": "Kas sa oled kindel, et soovid välja logida?",
+            "description": "Kas sa oled kindel, et soovid selle seadme eemaldada?",
             "megolm_export": "Ekspordi võtmed käsitsi",
             "setup_key_backup_title": "Sa kaotad ligipääsu oma krüptitud sõnumitele",
             "setup_secure_backup_description_1": "Krüptitud sõnumid kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.",
@@ -297,7 +297,7 @@
         "reset_password": {
             "confirm_new_password": "Kinnita oma uus salasõna",
             "devices_logout_success": "Sa oled kõikidest seadmetest välja logitud ning enam ei saa tõuketeavitusi. Nende taaskuvamiseks logi sisse igas oma soovitud seadmetes.",
-            "other_devices_logout_warning_1": "Kõikide sinu seadmete võrgust välja logimine kustutab ka nendes salvestatud krüptovõtmed ja sellega muutuvad ka krüptitud vestlused loetamatuteks.",
+            "other_devices_logout_warning_1": "Kõikide sinu seadmete eemaldamine kustutab ka nendes salvestatud krüptovõtmed ja sellega muutuvad ka krüptitud vestlused loetamatuteks.",
             "other_devices_logout_warning_2": "Kui sa soovid ligipääsu varasematele krüptitud vestlustele, palun seadista võtmete varundus või enne jätkamist ekspordi mõnest seadmest krüptovõtmed.",
             "password_not_entered": "Palun sisesta uus salasõna.",
             "passwords_mismatch": "Uued salasõnad peavad omavahel klappima.",
@@ -328,8 +328,8 @@
         "server_picker_title": "Logi sisse oma koduserverisse",
         "server_picker_title_default": "Serveri seadistused",
         "server_picker_title_registration": "Sinu kasutajakontot teenindab",
-        "session_logged_out_description": "Turvalisusega seotud põhjustel on see sessioon välja logitud. Palun logi uuesti sisse.",
-        "session_logged_out_title": "Välja logitud",
+        "session_logged_out_description": "Turvalisusega seotud põhjustel on see sessioon eemaldatud. Palun logi uuesti sisse.",
+        "session_logged_out_title": "Sessioon on eemaldatud",
         "set_email": {
             "description": "See võimaldab sul luua uue salasõna ning saada teavitusi.",
             "verification_pending_description": "Palun vaata oma e-kirju ning klõpsi meie saadetud kirjas leiduvat linki. Kui see on tehtud, siis vajuta Jätka-nuppu.",
@@ -476,6 +476,7 @@
         "description": "Kirjeldus",
         "deselect_all": "Eemalda kõik valikud",
         "device": "Seade",
+        "disabled_by_homeserver": "Koduserveri poolt keelatud",
         "edited": "muudetud",
         "email_address": "E-posti aadress",
         "emoji": "Emotikon",
@@ -666,7 +667,7 @@
         "join_rule_public_label": "Kõik saavad seda jututuba leida ja temaga liituda.",
         "join_rule_public_parent_space_label": "Mitte ainult <SpaceName/> kogukonna liikmed, vaid kõik saavad seda jututuba leida ja võivad temaga liituda.",
         "join_rule_restricted": "Nähtav kogukonnakeskuse liikmetele",
-        "join_rule_restricted_label": "Kõik <SpaceName/> kogukonna liikmed saavad seda jututuba leida ning võivad temaga liituda.",
+        "join_rule_restricted_label": "Kõik <SpaceName/> kogukonna liikmed liituda.",
         "name_validation_required": "Palun sisesta jututoa nimi",
         "room_visibility_label": "Jututoa nähtavus",
         "state_encrypted_warning": "Sellega võtad kasutusele olekusündmuste krüptimise, mis võimaldab serverist peita metateabe, nagu jututubade nimed ja teemad. See metateave pole nähtav ka jututoaga hiljem liitujatele ning neile, kelle kliendid ei toeta MSC4362 spetsifikatsiooni.",
@@ -810,6 +811,8 @@
         "event_id": "Sündmuse tunnus: %(eventId)s",
         "event_sent": "Sündmus on saadetud!",
         "event_type": "Sündmuse tüüp",
+        "expired": "Aegunud",
+        "expires_in": "Aegub",
         "explore_account_data": "Uuri konto andmeid",
         "explore_room_account_data": "Uuri kasutajakonto olekut",
         "explore_room_state": "Uuri jututoa olekut",
@@ -822,7 +825,7 @@
         "invalid_json": "See ei tundu olema korrektse json-andmestikuna.",
         "level": "Tase",
         "low_bandwidth_mode": "Vähese ribalaiusega režiim",
-        "low_bandwidth_mode_description": "Eeldab, et koduserver toetab sellist funktsionaalsust.",
+        "low_bandwidth_mode_description": "Lülitab välja krüpteerimise, olekuteated, tunnuspildid, lugemisteatised ja kirjutamisteatised",
         "main_timeline": "Peamine ajajoon",
         "manual_device_verification": "Seadme käsitsi verifitseerimine",
         "no_receipt_found": "Lugemisteatist ei leidu",
@@ -957,7 +960,7 @@
         "event_shield_reason_unverified_identity": "Krüptitud verifitseerimata kasutaja poolt.",
         "export_unsupported": "Sinu brauser ei toeta vajalikke krüptoteeke",
         "forgot_recovery_key": "Kas unustasid taastevõtme?",
-        "identity_needs_reset_description": "Sõnumite ajaloole juurdepääsu tagamiseks pead oma krüptograafilise võrguidentiteedi lähtestama.",
+        "identity_needs_reset_description": "Sõnumite ajaloole juurdepääsu tagamiseks pead oma krüptograafilise võrguidentiteedi lähtestama",
         "import_invalid_keyfile": "See ei ole sobilik võtmefail %(brand)s'i jaoks",
         "import_invalid_passphrase": "Autentimine ebaõnnestus: kas salasõna pole õige?",
         "key_storage_out_of_sync": "Sinu krüptovõtmete hoidla pole sünkroonis.",
@@ -985,7 +988,7 @@
             "title": "Taastemeetod on eemaldatud",
             "warning": "Kui sa ei ole ise taastamise meetodeid eemaldanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod."
         },
-        "set_up_recovery": "Seadista krüptovõtmete taastamine",
+        "set_up_recovery": "Varunda oma vestlused",
         "set_up_recovery_toast_description": "Kui peaksid kaotama ligipääsu oma seadmetele, siis siinloodava taastevõtmega saad taastada ligipääsu oma krüptitud sõnumitele.",
         "set_up_toast_title": "Võta kasutusele turvaline varundus",
         "setup_secure_backup": {
@@ -1102,7 +1105,7 @@
         "verification_requested_toast_title": "Verifitseerimistaotlus on saadetud",
         "verified_identity_changed": "Kasutaja %(displayName)s (<b>%(userId)s</b>) verifitseeritud võrguidentiteet on muutunud. <a>Lisateave</a>",
         "verified_identity_changed_no_displayname": "Kasutaja <b>%(userId)s</b> verifitseeritud identiteet on muutunud. <a>Lisateave</a>",
-        "verify_toast_description": "Teised kasutajad ei pruugi seda usaldada",
+        "verify_toast_description": "Alates 2026. aasta oktoobri lõpust ei saa verifitseerimata seadmed enam sõnumeid saata ega vastu võtta. <a>Lisateave</a>",
         "verify_toast_title": "Verifitseeri see seade",
         "withdraw_verification_action": "Eemalda verifitseerimine"
     },
@@ -1128,11 +1131,11 @@
         "non_urgent_echo_failure_toast": "Sinu koduserver ei vasta mõnedele <a>päringutele</a>.",
         "resource_limits": "See koduserver ületanud ühe oma ressursipiirangutest.",
         "session_restore": {
-            "clear_storage_button": "Tühjenda andmeruum ja logi välja",
+            "clear_storage_button": "Eemalda see seade",
             "clear_storage_description": "Logi välja ja eemalda krüptimisvõtmed?",
             "description_1": "Meil tekkis eelmise sessiooni taastamisel viga.",
             "description_2": "Kui sa varem oled kasutanud uuemat %(brand)s'i versiooni, siis sinu pragune sessioon ei pruugi olla sellega ühilduv. Sulge see aken ja jätka selle uuema versiooni kasutamist.",
-            "description_3": "Brauseri andmeruumi tühjendamine võib selle vea lahendada, kui samas logid sa ka välja ning kogu krüptitud vestlusajalugu muutub loetamatuks.",
+            "description_3": "Brauseri andmeruumi tühjendamine võib selle vea lahendada, kui samas eemaldad ka selle seadme ning kogu krüptitud vestlusajalugu muutub loetamatuks.",
             "title": "Sessiooni taastamine ei õnnestunud"
         },
         "something_went_wrong": "Midagi läks nüüd valesti!",
@@ -1350,6 +1353,9 @@
         "impossible_dialog_title": "Lõimingute kasutamine ei ole lubatud"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "start_chat_title_multiple_users": "Kas alustad vestlust nende uute kontaktidega?"
+        },
         "email_caption": "Saada kutse e-kirjaga",
         "email_limit_one": "Kutseid saad e-posti teel saata vaid ükshaaval",
         "email_use_default_is": "E-posti teel kutse saatmiseks kasuta isikutuvastusserverit. Võid kasutada <default>vaikimisi serverit (%(defaultIdentityServerName)s)</default> või määrata muud serverid <settings>seadistustes</settings>.",
@@ -1513,6 +1519,9 @@
         "experimental_section": "Varased arendusjärgud",
         "extended_profiles_msc_support": "See eeldab, et koduserver toetab MSC4133 spetsifikatsiooni",
         "feature_disable_call_per_sender_encryption": "Lülita Element Call'i kasutamisel krüptimine kasutajakohaselt välja",
+        "feature_user_status": {
+            "display_name": "Kasutaja olek"
+        },
         "feature_wysiwyg_composer_description": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
         "group_calls": "Uus rühmakõnede lahendus",
         "group_developer": "Arendajad",
@@ -1552,7 +1561,7 @@
         "report_to_moderators_description": "Kui jututoas on modereerimine kasutusel, siis nupust „Teata sisust“ avaneva vormi abil saad jututoa reegleid rikkuvast sisust teatada moderaatoritele.",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",
         "sliding_sync_description": "Aktiivselt arendamisel ega ole võimalik välja lülitada.",
-        "sliding_sync_disabled_notice": "Väljalülitamiseks logi Matrix'i võrgust välja ja seejärel tagasi",
+        "sliding_sync_disabled_notice": "Väljalülitamiseks logi uuesti sisse",
         "sliding_sync_server_no_support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu!",
         "under_active_development": "Aktiivselt arendamisel.",
         "unrealiable_e2e": "Krüptitud jututubades pole see töökindel",
@@ -1976,6 +1985,7 @@
         "error_join_incompatible_version_1": "Vabandust, sinu koduserver on siin osalemiseks liiga vana.",
         "error_join_incompatible_version_2": "Palun võta ühendust koduserveri haldajaga.",
         "error_join_title": "Liitumine ei õnnestunud",
+        "error_join_unknown": "Tekkis tundmatu viga.",
         "error_jump_to_date": "Päringu vastus koduserverilt: viga %(statusCode)s, veakood %(errorCode)s",
         "error_jump_to_date_connection": "Valitud kuupäeva vaate otsimisel ja avamisel tekkis võrguühenduse viga. Kas näiteks sinu koduserver hetkel ei tööta või on ajutisi katkestusi sinu internetiühenduses. Palun proovi mõne aja pärast uuesti. Kui viga kordub veel hiljemgi, siis palun suhtle oma koduserveri haldajaga.",
         "error_jump_to_date_details": "Vea teave",
@@ -2140,6 +2150,11 @@
         "redacting_messages_status": {
             "other": "Kustutame sõnumeid %(count)s jututoas",
             "one": "Kustutame sõnumeid %(count)s jututoas"
+        },
+        "section": {
+            "chats": "Vestlused",
+            "favourites": "Lemmikud",
+            "low_priority": "Vähetähtis"
         },
         "show_less": "Näita vähem",
         "show_n_more": {
@@ -2341,7 +2356,7 @@
             "join_rule_public_description": "Kõik võivad jututoaga liituda.",
             "join_rule_restricted": "Kogukonna liikmed",
             "join_rule_restricted_description": "Kõik kogukonnakeskuse liikmed saavad jututuba leida ja sellega liituda. <a>Muuda lubatud kogukonnakeskuste loendit.</a>",
-            "join_rule_restricted_description_active_space": "Kõik <spaceName/> kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka muid kogukonnakeskuseid.",
+            "join_rule_restricted_description_active_space": "Kõik <spaceName/> kogukonna liikmed võivad liituda.",
             "join_rule_restricted_description_prompt": "Kõik kogukonnakeskuse liikmed saavad leida ja liituda. Sa võid valida ka mitu kogukonnakeskust.",
             "join_rule_restricted_description_spaces": "Ligipääsuga kogukonnakeskused",
             "join_rule_restricted_dialog_description": "Vali missugustel kogukonnakeskustel on sellele jututoale ligipääs. Kui kogukonnakeskus on valitud, siis selle liikmed saavad <RoomName/> jututuba leida ja temaga liituda.",
@@ -2385,7 +2400,7 @@
         "upload_avatar_label": "Laadi üles profiilipilt ehk avatar",
         "visibility": {
             "alias_section": "Aadress",
-            "error_failed_save": "Kogukonnakeskuse nähtavust ei õnnestunud uuendada",
+            "error_failed_save": "Selle kogukonna seadistuste uuendamine ei õnnestunud",
             "error_update_guest_access": "Ei õnnestunud selle kogukonnakekuse külaliste ligipääsureegleid uuendada",
             "error_update_history_visibility": "Ei õnnestunud selle kogukonnakekuse ajaloo loetavust uuendada",
             "guest_access_disabled": "Sul pole õigust muuta külaliskasutajate ligipääsuvõimalusi.",
@@ -2665,7 +2680,7 @@
             "unable_to_load_msisdns": "Telefoninumbrite laadimine ei õnnestu",
             "username": "Kasutajanimi"
         },
-        "inline_url_previews_default": "Luba URL'ide vaikimisi eelvaated",
+        "inline_url_previews_default": "Luba eelvaated",
         "insert_trailing_colon_mentions": "Mainimiste järel näita sõnumi alguses koolonit",
         "invite_controls": {
             "default_label": "Luba kasutajatel sind kutsida jututubadesse"
@@ -2803,6 +2818,7 @@
             "enable_tray_icon": "Näita süsteemisalve ikooni ja Element'i akna sulgemisel minimeeri ta salve",
             "keyboard_heading": "Kiirklahvid",
             "keyboard_view_shortcuts_button": "<a>Vaata siit</a> kõiki kiirklahve.",
+            "link_previews_heading": "Linkide eelvaated",
             "media_heading": "Pildid, gif'id ja videod",
             "presence_description": "Jaga teistega oma olekut ja tegevusi.",
             "publish_timezone": "Avalda oma ajavööd oma avalikus profiilis",
@@ -2863,16 +2879,16 @@
             "best_security_note": "Parima turvalisuse nimel verifitseeri kõik oma sessioonid ning logi välja neist, mida sa enam ei kasuta või ei tunne ära.",
             "browser": "Brauser",
             "confirm_sign_out": {
-                "one": "Kinnita selle seadme väljalogimine",
-                "other": "Kinnita nende seadmete väljalogimine"
+                "one": "Kinnita selle seadme eemaldamine",
+                "other": "Kinnita nende seadmete eemaldamine"
             },
             "confirm_sign_out_body": {
-                "one": "Kinnitamaks selle seadme väljalogimine klõpsi järgnevat nuppu.",
-                "other": "Kinnitamaks nende seadmete väljalogimine klõpsi järgnevat nuppu."
+                "one": "Kinnitamaks selle seadme eemaldamine klõpsi järgnevat nuppu.",
+                "other": "Kinnitamaks nende seadmete eemaldamine klõpsi järgnevat nuppu."
             },
             "confirm_sign_out_continue": {
-                "other": "Logi seadmed võrgust välja",
-                "one": "Logi seade võrgust välja"
+                "one": "Eemalda seade",
+                "other": "Eemalda seadmed"
             },
             "confirm_sign_out_sso": {
                 "one": "Kasutades ühekordse sisselogimisega oma isiku tõestamist kinnita selle seadme väljalogimine.",
@@ -2899,7 +2915,7 @@
             "inactive_sessions": "Mitteaktiivsed sessioonid",
             "inactive_sessions_explainer_1": "Mitteaktiivsed seansid on seansid, mida sa ei ole mõnda aega kasutanud, kuid neil jätkuvalt lubatakse laadida krüptimisvõtmeid.",
             "inactive_sessions_explainer_2": "Mitteaktiivsete seansside eemaldamine parandab turvalisust ja jõudlust ning lihtsustab võimalike kahtlaste seansside tuvastamist.",
-            "inactive_sessions_list_description": "Võimalusel logi välja vanadest seanssidest (%(inactiveAgeDays)s päeva või vanemad), mida sa enam ei kasuta.",
+            "inactive_sessions_list_description": "Võimalusel eemalda vanad sessioonid (%(inactiveAgeDays)s päeva või vanemad), mida sa enam ei kasuta.",
             "ip": "IP-aadress",
             "last_activity": "Viimati kasutusel",
             "manage": "Halda seda sessiooni",
@@ -2929,12 +2945,12 @@
             "sign_in_with_qr": "Seosta uus seade",
             "sign_in_with_qr_button": "Näita QR-koodi",
             "sign_in_with_qr_description": "Kasuta QR-koodi teise seadmesse sisse logimiseks ja turvalise sõnumivahetuse seadistamiseks.",
-            "sign_in_with_qr_unsupported": "Seda võimalust ei toeta sinu teenusepakkuja",
-            "sign_out": "Logi sellest sessioonist välja",
-            "sign_out_all_other_sessions": "Logi kõikidest ülejäänud sessioonidest välja: %(otherSessionsCount)s sessioon(i)",
+            "sign_in_with_qr_unsupported": "Sinu teenusepakkuja ei toeta seda võimalust",
+            "sign_out": "Eemalda see sessioon",
+            "sign_out_all_other_sessions": "Eemalda kõik muud sessioonid: %(otherSessionsCount)s sessioon(i)",
             "sign_out_confirm_description": {
-                "one": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?",
-                "other": "Kas sa oled kindel et soovid %(count)s sessiooni võrgust välja logida?"
+                "one": "Kas sa oled kindel et soovid %(count)s sessiooni eemaldada?",
+                "other": "Kas sa oled kindel et soovid %(count)s sessiooni eemaldada?"
             },
             "sign_out_n_sessions": {
                 "one": "Eemalda %(count)s sessioon",
@@ -2949,13 +2965,13 @@
             "unverified_sessions": "Verifitseerimata sessioonid",
             "unverified_sessions_explainer_1": "Kontrollimata sessioonid on sessioonid, kuhu on sinu volitustega sisse logitud, kuid mida ei ole risttuvastamisega kontrollitud.",
             "unverified_sessions_explainer_2": "Kuna nende näol võib olla tegemist võimaliku konto volitamata kasutamisega, siis palun tee kindlaks, et need sessioonid on sulle tuttavad.",
-            "unverified_sessions_list_description": "Turvalise sõnumvahetuse nimel verifitseeri kõik oma sessioonid ning logi neist välja, mida sa enam ei kasuta või ei tunne enam ära.",
+            "unverified_sessions_list_description": "Turvalise sõnumvahetuse nimel verifitseeri kõik oma sessioonid ning eemalda need, mida sa enam ei kasuta või ei tunne enam ära.",
             "url": "URL",
             "verified_session": "Verifitseeritud sessioon",
             "verified_sessions": "Verifitseeritud sessioonid",
             "verified_sessions_explainer_1": "Verifitseeritud sessioonideks loetakse Element'is või mõnes muus Matrix'i rakenduses selliseid sessioone, kus sa kas oled sisestanud oma salafraasi või tuvastanud end mõne teise oma verifitseeritud sessiooni abil.",
             "verified_sessions_explainer_2": "See tähendab, et selles sessioonis on ka kõik vajalikud võtmed krüptitud sõnumite lugemiseks ja teistele kasutajatele kinnitamiseks, et sa usaldad seda sessiooni.",
-            "verified_sessions_list_description": "Parima turvalisuse nimel logi välja neist sessioonidest, mida sa enam ei kasuta või ei tunne ära.",
+            "verified_sessions_list_description": "Parima turvalisuse nimel eemalda need sessioonid, mida sa enam ei kasuta või ei tunne ära.",
             "verify_session": "Verifitseeri sessioon",
             "web_session": "Veebirakendus"
         },
@@ -3102,6 +3118,10 @@
         "server_error_detail": "Server pole kas saadaval, on ülekoormatud või midagi muud läks viltu.",
         "shrug": "Lisa ¯\\_(ツ)_/¯ smaili vormindamata teksti algusesse",
         "spoiler": "Saadab selle sõnumi rõõmurikkujana",
+        "status": {
+            "description": "Määratle oma praegune olek",
+            "too_long_text": "Sinu sisestatud tekst on liiga pikk."
+        },
         "tableflip": "Lisab vormindamata sõnumi ette (╯°□°）╯︵ ┻━┻",
         "topic": "Otsib või määrab jututoa teema",
         "topic_none": "Sellel jututoal puudub teema.",
@@ -3453,8 +3473,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s võttis vastu kutse %(displayName)s nimel",
             "accepted_invite": "%(targetName)s võttis kutse vastu",
-            "ban": "%(senderName)s keelas ligipääsu kasutajale %(targetName)s",
-            "ban_reason": "%(senderName)s keelas ligipääsu kasutajale %(targetName)s: %(reason)s",
+            "ban": "%(senderName)s keelas ligipääsu kasutajale",
+            "ban_reason": "%(senderName)s keelas ligipääsu kasutajale: %(reason)s",
             "change_avatar": "%(senderName)s muutis oma profiilipilti",
             "change_name": "%(oldDisplayName)s muutis oma kuvatava nime %(displayName)s-ks",
             "change_name_avatar": "%(oldDisplayName)s muutis oma kuvatavat nime ja tunnuspilti",
@@ -3855,6 +3875,16 @@
         "call_held": "%(peerName)s pani kõne ootele",
         "call_held_resume": "Sa panid kõne ootele. <a>Jätka kõnet</a>",
         "call_held_switch": "Sa panid kõne ootele <a>Lülita tagasi</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "Vestluses on <avatars/>",
+                "other": "Vestluses on <avatars/>"
+            },
+            "overflow": {
+                "one": "Kõnes osalevad <avatars/> + veel %(overflowCount)s osaleja",
+                "other": "Kõnes osalevad <avatars/> + veel %(overflowCount)s osalejat"
+            }
+        },
         "call_toast_unknown_room": "Teadmata jututuba",
         "camera_disabled": "Sinu seadme kaamera on välja lülitatud",
         "camera_enabled": "Sinu seadme kaamera on jätkuvalt kasutusel",
@@ -3877,10 +3907,12 @@
         "enable_microphone": "Eemalda mikrofoni summutamine",
         "expand": "Pöördu tagasi kõne juurde",
         "get_call_link": "Jaga kõne linki",
+        "group_call_started": "Grupikõne algas",
         "hangup": "Katkesta kõne",
         "hide_sidebar_button": "Peida külgpaan",
         "input_devices": "Sisendseadmed",
         "jitsi_call": "Jitsi-põhine kõne",
+        "join_with_video": "Liitu oma videovooga",
         "legacy_call": "Vana lahendusega kõne",
         "maximise": "Täida ekraan",
         "maximise_call": "Tee kõneaken suureks",
@@ -3942,6 +3974,11 @@
         "you_are_presenting": "Sina esitad"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
+    "welcome": {
+        "tagline_element": "Kiiruse ja lihtsuse huvides ülivõimas.",
+        "title_element": "Ole oma elemendis",
+        "title_generic": "Tere tulemast, see on %(brand)s"
+    },
     "widget": {
         "added_by": "Vidina lisaja",
         "capabilities_dialog": {
@@ -3963,6 +4000,7 @@
             "change_name_this_room": "Muuda selle jututoa nime",
             "change_topic_active_room": "Muuda oma aktiivse jututoa teemat",
             "change_topic_this_room": "Muuda selle jututoa teemat",
+            "download_file": "Laadi failid alla meediumihoidlast",
             "receive_membership_active_room": "Näita, millal teised sinu aktiivse toaga liituvad, sealt lahkuvad või sellesse tuppa kutsutakse",
             "receive_membership_this_room": "Näita, millal inimesed toaga liituvad, lahkuvad või siia tuppa kutsutakse",
             "remove_ban_invite_leave_active_room": "Aktiivsest jututoast inimeste eemaldamine, väljamüksamine, keelamine või tuppa kutsumine",
