@@ -110,6 +110,7 @@ export default mergeConfig(
                 "vite-plugin-node-polyfills/shims/buffer",
                 "vite-plugin-node-polyfills/shims/process",
                 "@vector-im/compound-design-tokens/assets/web/icons",
+                "storybook/preview-api",
             ],
         },
         resolve: {

@@ -56,6 +56,6 @@ export default defineConfig({
         reporters,
         pool: "threads",
         globals: false,
-        include: ["src/**/*.test.ts"],
+        include: ["src/**/*.test.{ts,tsx}"],
     },
 });

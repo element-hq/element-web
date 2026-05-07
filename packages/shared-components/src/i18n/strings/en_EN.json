@@ -48,6 +48,15 @@
         "open_dial_pad": "Open dial pad",
         "separator_label": "Click or drag to expand"
     },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Create an account",
+            "got_an_account": "Got an account?",
+            "manage_account": "Manage account",
+            "sign_in": "Sign in",
+            "title": "User menu"
+        }
+    },
     "notifications": {
         "all_messages": "All messages",
         "default_settings": "Match default settings",
@@ -100,6 +109,7 @@
         },
         "appearance": "Appearance",
         "chat_moved": "Chat moved",
+        "collapse_all_sections": "Collapse all sections",
         "collapse_filters": "Collapse filter list",
         "empty": {
             "no_chats": "No chats yet",
@@ -118,6 +128,7 @@
             "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
+        "expand_all_sections": "Expand all sections",
         "expand_filters": "Expand filter list",
         "filters": {
             "favourite": "Favourites",
@@ -226,6 +237,8 @@
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "pending_moderation": "Message pending moderation",
+        "pending_moderation_reason": "Message pending moderation: %(reason)s",
         "url_preview": {
             "close": "Close preview",
             "open_link": "Open link",
@@ -235,6 +248,13 @@
             },
             "view_image": "View image"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Link new device",
+        "open_feedback": "Feedback",
+        "open_home": "Home",
+        "open_security": "Security & Privacy",
+        "open_settings": "All settings"
     },
     "widget": {
         "context_menu": {
