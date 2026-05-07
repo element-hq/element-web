@@ -116,7 +116,7 @@ function TopBar({
                 height: "52px",
                 padding: "0 var(--cpd-space-4x)",
                 boxSizing: "border-box",
-                backgroundColor: "var(--cpd-color-bg-canvas-default)",
+                backgroundColor: "var(--cpd-color-gray-100)",
                 borderBottom: "1px solid var(--cpd-color-border-disabled)",
                 width: "100%",
             }}

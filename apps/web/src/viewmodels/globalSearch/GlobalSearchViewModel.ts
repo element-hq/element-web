@@ -102,6 +102,11 @@ export class GlobalSearchViewModel extends BaseViewModel<GlobalSearchViewSnapsho
         this.snapshot.merge({ isFullView: false });
     };
 
+    /** Clear query and filter, collapse to default state */
+    public onReset = (): void => {
+        this.snapshot.merge({ query: "", filter: GlobalSearchFilter.All, isFullView: false });
+    };
+
     /** Navigate to a room and close the panel */
     public onRoomClick = (roomId: string): void => {
         this.persistRecentSearch(roomId);
@@ -125,6 +130,11 @@ export class GlobalSearchViewModel extends BaseViewModel<GlobalSearchViewSnapsho
             this.snapshot.merge({ query: "", isFullView: false });
             this.props.onClose();
         }
+    };
+
+    /** Apply a filter command from the is: command list, clearing the typed command from the query */
+    public onCommandSelect = (filter: GlobalSearchFilter): void => {
+        this.snapshot.merge({ filter, query: "" });
     };
 
     /** Clear recent searches */

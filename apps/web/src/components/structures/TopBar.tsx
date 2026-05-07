@@ -7,7 +7,7 @@
 
 import React, { useCallback, useEffect, useRef, useState, type JSX } from "react";
 import { useCreateAutoDisposedViewModel, useViewModel } from "@element-hq/web-shared-components";
-import { ChevronLeftIcon, ChevronRightIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
@@ -15,6 +15,7 @@ import { Action } from "../../dispatcher/actions";
 import elementLogoUrl from "../../../res/themes/element/img/logos/element-logo.svg";
 import UserMenu from "./UserMenu";
 import { GlobalSearchViewModel } from "../../viewmodels/globalSearch/GlobalSearchViewModel";
+import { GlobalSearchFilter } from "../../hooks/useGlobalSearch";
 import { GlobalSearchDropdown } from "./GlobalSearchDropdown";
 import { GlobalSearchFullView } from "./GlobalSearchFullView";
 
@@ -80,12 +81,8 @@ export function TopBar(): JSX.Element {
     );
     const { query, filter, isFullView, recentSearches } = useViewModel(vm);
 
-    const handleChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            vm.onQueryChange(e.target.value);
-        },
-        [vm],
-    );
+    // Compute display value for the input: "is:FilterName query" when a filter is active
+    const isFilterActive = filter !== GlobalSearchFilter.All;
 
     const handleFocus = useCallback(() => {
         setIsOpen(true);
@@ -115,14 +112,15 @@ export function TopBar(): JSX.Element {
         return () => document.removeEventListener("pointerdown", handlePointerDown);
     }, [isOpen, vm]);
 
-    // Close full-view when user navigates to a room or switches space
+    // Clear search and return to default state when user navigates away
     useEffect(() => {
         const token = defaultDispatcher.register((payload) => {
             if (
                 payload.action === Action.ViewRoom ||
                 payload.action === Action.SwitchSpace
             ) {
-                vm.onCollapseToDropdown();
+                vm.onReset();
+                setIsOpen(false);
                 vm.onClose();
             }
         });
@@ -140,7 +138,7 @@ export function TopBar(): JSX.Element {
                 height: "52px",
                 padding: "0 var(--cpd-space-4x)",
                 boxSizing: "border-box",
-                backgroundColor: "var(--cpd-color-bg-canvas-default)",
+                backgroundColor: "var(--cpd-color-gray-100)",
                 borderBottom: "1px solid var(--cpd-color-border-disabled)",
                 width: "100%",
                 flexShrink: 0,
@@ -153,7 +151,7 @@ export function TopBar(): JSX.Element {
                     <button
                         type="button"
                         aria-label="Go back"
-                        onClick={() => isFullView ? vm.onCollapseToDropdown() : window.history.back()}
+                        onClick={() => { vm.onReset(); setIsOpen(false); window.history.back(); }}
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -199,35 +197,88 @@ export function TopBar(): JSX.Element {
 
             {/* Centre: Search */}
             <div ref={containerRef} style={{ flex: 1, minWidth: 0, maxWidth: "480px", margin: "0 auto", position: "relative" }}>
-                <input
-                    ref={inputRef}
-                    type="search"
-                    placeholder="Search…"
-                    value={query}
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                    onKeyDown={handleKeyDown}
-                    aria-label="Global search"
-                    aria-expanded={isOpen}
+                {/* Composite input: prefix label + raw query input inside a styled pill */}
+                <div
                     style={{
-                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
                         height: "36px",
                         padding: "0 var(--cpd-space-3x)",
                         boxSizing: "border-box",
                         border: "1px solid var(--cpd-color-border-interactive-secondary)",
                         borderRadius: "var(--cpd-radius-pill-effect)",
-                        background: "var(--cpd-color-bg-subtle-secondary)",
-                        color: "var(--cpd-color-text-primary)",
+                        background: "var(--cpd-color-bg-canvas-default)",
                         font: "var(--cpd-font-body-md-regular)",
-                        outline: "none",
+                        gap: "2px",
                     }}
-                />
+                    onClick={() => inputRef.current?.focus()}
+                >
+                    {isFilterActive && (
+                        <span
+                            style={{
+                                color: "var(--cpd-color-text-secondary)",
+                                whiteSpace: "nowrap",
+                                flexShrink: 0,
+                                userSelect: "none",
+                            }}
+                        >
+                            {`is:${filter}`}
+                        </span>
+                    )}
+                    <input
+                        ref={inputRef}
+                        type="search"
+                        placeholder={isFilterActive ? "" : "Search…"}
+                        value={query}
+                        onChange={(e) => vm.onQueryChange(e.target.value)}
+                        onFocus={handleFocus}
+                        onKeyDown={handleKeyDown}
+                        aria-label="Global search"
+                        aria-expanded={isOpen}
+                        style={{
+                            flex: 1,
+                            minWidth: 0,
+                            border: "none",
+                            background: "transparent",
+                            color: "var(--cpd-color-text-primary)",
+                            font: "var(--cpd-font-body-md-regular)",
+                            outline: "none",
+                            padding: 0,
+                        }}
+                    />
+                    {(isFilterActive || query.length > 0) && (
+                        <button
+                            type="button"
+                            aria-label="Clear search"
+                            onClick={() => { vm.onReset(); setIsOpen(false); }}
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "20px",
+                                height: "20px",
+                                border: "none",
+                                borderRadius: "50%",
+                                background: "var(--cpd-color-bg-subtle-secondary)",
+                                color: "var(--cpd-color-icon-secondary)",
+                                cursor: "pointer",
+                                padding: 0,
+                                flexShrink: 0,
+                            }}
+                            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
+                            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
+                        >
+                            <CloseIcon width={12} height={12} />
+                        </button>
+                    )}
+                </div>
                 {isOpen && (
                     <GlobalSearchDropdown
                         query={query}
                         activeFilter={filter}
                         recentSearches={recentSearches}
                         onFilterChange={vm.onFilterChange}
+                        onCommandSelect={vm.onCommandSelect}
                         onExpandToFullView={vm.onExpandToFullView}
                         onRoomClick={vm.onRoomClick}
                         onPersonClick={vm.onPersonClick}

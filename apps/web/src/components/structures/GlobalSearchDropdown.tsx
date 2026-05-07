@@ -8,7 +8,7 @@
 import React, { type JSX } from "react";
 import { type Room, RoomType } from "matrix-js-sdk/src/matrix";
 
-import { HistoryIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { FilterIcon, HistoryIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { GlobalSearchFilter, type PersonResult, useGlobalSearch } from "../../hooks/useGlobalSearch";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
@@ -85,7 +85,7 @@ function PersonPill({ room, onClick }: { room: Room; onClick?: () => void }): JS
                 minWidth: "56px",
                 maxWidth: "72px",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
         >
             <RoomAvatar room={room} size="40px" />
@@ -128,7 +128,7 @@ function SuggestionRow({ room, onClick }: { room: Room; onClick?: () => void }):
                 textAlign: "left",
                 boxSizing: "border-box",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
         >
             <RoomAvatar room={room} size="32px" />
@@ -149,7 +149,7 @@ function SuggestionRow({ room, onClick }: { room: Room; onClick?: () => void }):
 function SectionHeader({ label }: { label: string }): JSX.Element {
     return (
         <div style={{ padding: "var(--cpd-space-1x) var(--cpd-space-3x)", marginTop: "var(--cpd-space-1x)" }}>
-            <span style={{ font: "var(--cpd-font-body-xs-semibold)", color: "var(--cpd-color-text-secondary)", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+            <span style={{ font: "var(--cpd-font-body-sm-semibold)", color: "var(--cpd-color-text-secondary)" }}>
                 {label}
             </span>
         </div>
@@ -175,7 +175,7 @@ function PersonResultRow({ result, onClick }: { result: PersonResult; onClick: (
                 textAlign: "left",
                 boxSizing: "border-box",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
         >
             {result.member instanceof Object && "getMxcAvatarUrl" in result.member ? (
@@ -202,9 +202,124 @@ export interface GlobalSearchDropdownProps {
     activeFilter: GlobalSearchFilter;
     recentSearches: Room[];
     onFilterChange: (filter: GlobalSearchFilter) => void;
+    onCommandSelect: (filter: GlobalSearchFilter) => void;
     onExpandToFullView: () => void;
     onRoomClick: (roomId: string) => void;
     onPersonClick: (result: PersonResult) => void;
+}
+
+// ── Command row ───────────────────────────────────────────────────────────────
+
+function CommandRow({ filter, onClick }: { filter: GlobalSearchFilter; onClick: () => void }): JSX.Element {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--cpd-space-3x)",
+                width: "100%",
+                padding: "var(--cpd-space-2x) var(--cpd-space-3x)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                textAlign: "left",
+                boxSizing: "border-box",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
+        >
+            <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: "50%", background: "var(--cpd-color-bg-subtle-secondary)", flexShrink: 0 }}>
+                <FilterIcon width={16} height={16} style={{ color: "var(--cpd-color-icon-secondary)" }} />
+            </span>
+            <span style={{ font: "var(--cpd-font-body-md-regular)", color: "var(--cpd-color-text-primary)" }}>
+                is:<strong>{filter}</strong>
+            </span>
+        </button>
+    );
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+const FILTER_LABELS: Record<GlobalSearchFilter, string> = {
+    [GlobalSearchFilter.All]: "results",
+    [GlobalSearchFilter.People]: "people",
+    [GlobalSearchFilter.Rooms]: "rooms",
+    [GlobalSearchFilter.Messages]: "messages",
+    [GlobalSearchFilter.Spaces]: "spaces",
+};
+
+// ── View all CTA ──────────────────────────────────────────────────────────────
+
+function ViewAllButton({ label, onClick }: { label: string; onClick: () => void }): JSX.Element {
+    return (
+        <div style={{ borderTop: "1px solid var(--cpd-color-border-disabled)" }}>
+            <button
+                type="button"
+                onClick={onClick}
+                style={{
+                    display: "block",
+                    width: "100%",
+                    padding: "var(--cpd-space-3x)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    font: "var(--cpd-font-body-md-semibold)",
+                    color: "var(--cpd-color-text-link)",
+                    textAlign: "center",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
+            >
+                {label}
+            </button>
+        </div>
+    );
+}
+
+// ── Search results row (no-results fallback) ──────────────────────────────────
+
+function SearchResultsRow({ query, onClick }: { query: string; onClick: () => void }): JSX.Element {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+                padding: "var(--cpd-space-2x) var(--cpd-space-3x)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                textAlign: "left",
+                boxSizing: "border-box",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-action-secondary-hovered)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
+        >
+            <span style={{ font: "var(--cpd-font-body-md-regular)", color: "var(--cpd-color-text-secondary)" }}>
+                Search results for:{" "}
+                <span style={{ color: "var(--cpd-color-text-primary)", fontWeight: 600 }}>{query}</span>
+            </span>
+            <kbd style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "2px 6px",
+                borderRadius: "4px",
+                border: "1px solid var(--cpd-color-border-interactive-secondary)",
+                background: "var(--cpd-color-bg-subtle-secondary)",
+                font: "var(--cpd-font-body-xs-regular)",
+                color: "var(--cpd-color-text-secondary)",
+                flexShrink: 0,
+            }}>
+                Enter
+            </kbd>
+        </button>
+    );
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -214,26 +329,45 @@ export function GlobalSearchDropdown({
     activeFilter,
     recentSearches,
     onFilterChange,
+    onCommandSelect,
     onExpandToFullView,
     onRoomClick,
     onPersonClick,
 }: GlobalSearchDropdownProps): JSX.Element {
     const hasQuery = query.trim().length > 0;
+    const isFilterActive = activeFilter !== GlobalSearchFilter.All;
+
+    // Command mode: user typed "is:" (with colon, any casing) and no filter is active yet
+    const isCommandMode = !isFilterActive && query.toLowerCase().startsWith("is:");
+    const commandSearch = isCommandMode ? query.slice(3).toLowerCase() : "";
+    const matchingCommands = isCommandMode
+        ? DROPDOWN_FILTERS.filter((f) => f.toLowerCase().startsWith(commandSearch))
+        : [];
     const dmMap = DMRoomMap.shared();
 
-    // Recently viewed DM rooms (from BreadcrumbsStore = rooms the user actually opened)
+    // Recently viewed DM rooms (from BreadcrumbsStore)
     const recentPeople = BreadcrumbsStore.instance.rooms.filter((r) => dmMap.getUserIdForRoomId(r.roomId));
+
+    // Recently viewed: all rooms from BreadcrumbsStore (people + rooms), up to 8 for the horizontal row
+    const recentlyViewed = BreadcrumbsStore.instance.rooms.slice(0, 8);
 
     // Recent suggestions: non-DM rooms from recentSearches, up to 4
     const recentSuggestions = recentSearches.filter((r) => !dmMap.getUserIdForRoomId(r.roomId)).slice(0, 4);
-
-    // If there aren't enough non-DM items, pad suggestions with DM rooms too (up to 4 total)
     const suggestions = recentSuggestions.length < 4
         ? [...recentSuggestions, ...recentPeople.slice(0, 4 - recentSuggestions.length)]
         : recentSuggestions;
 
-    // Search results (only active when query is non-empty)
+    // Scoped recent items for filter-active default state
+    const filteredRecentPeople = recentPeople.slice(0, 6);
+    const filteredRecentRooms = recentSuggestions.slice(0, 4);
+
+    // Search results (driven by hook; hook respects the active filter)
     const searchResults = useGlobalSearch({ query, filter: activeFilter });
+
+    const hasFilteredResults =
+        searchResults.people.length > 0 || searchResults.rooms.length > 0 || searchResults.spaces.length > 0;
+
+    const viewAllLabel = `View all ${FILTER_LABELS[activeFilter]}`;
 
     return (
         <div
@@ -276,49 +410,48 @@ export function GlobalSearchDropdown({
                 ))}
             </div>
 
-            {/* Default state (no query) */}
-            {!hasQuery && (
+            {/* ── Command mode: user typed "is:" — show matching filter commands ── */}
+            {isCommandMode && (
+                <div>
+                    {matchingCommands.length > 0 ? (
+                        matchingCommands.map((f) => (
+                            <CommandRow key={f} filter={f} onClick={() => onCommandSelect(f)} />
+                        ))
+                    ) : (
+                        <div style={{ padding: "var(--cpd-space-3x)", font: "var(--cpd-font-body-sm-regular)", color: "var(--cpd-color-text-secondary)" }}>
+                            No matching filter
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* ── State 1: No filter, no query — recently viewed + recent searches ── */}
+            {!isFilterActive && !hasQuery && !isCommandMode && (
                 <>
-                    {/* Recent people row */}
-                    {recentPeople.length > 0 && (
+                    {/* Recently viewed: avatar row (people + rooms), max 6, no scroll */}
+                    {recentlyViewed.length > 0 && (
                         <div>
-                            <SectionHeader label="People" />
-                            <div
-                                style={{
-                                    display: "flex",
-                                    gap: "var(--cpd-space-2x)",
-                                    padding: "var(--cpd-space-2x) var(--cpd-space-3x) var(--cpd-space-3x)",
-                                    overflowX: "auto",
-                                }}
-                            >
-                                {recentPeople.map((room) => (
+                            <SectionHeader label="Recently viewed" />
+                            <div style={{ display: "flex", justifyContent: "space-between", padding: "var(--cpd-space-2x) var(--cpd-space-3x) var(--cpd-space-3x)" }}>
+                                {recentlyViewed.slice(0, 6).map((room) => (
                                     <PersonPill key={room.roomId} room={room} onClick={() => onRoomClick(room.roomId)} />
                                 ))}
                             </div>
                         </div>
                     )}
 
-                    {/* Suggestions */}
-                    {suggestions.length > 0 && (
-                        <div style={{ borderTop: recentPeople.length > 0 ? "1px solid var(--cpd-color-border-disabled)" : undefined }}>
-                            <SectionHeader label="Suggestions" />
-                            {suggestions.map((room) => (
+                    {/* Recent searches: up to 6 items from recentSearches (mix of rooms/spaces/people) */}
+                    {recentSearches.length > 0 && (
+                        <div style={{ borderTop: recentlyViewed.length > 0 ? "1px solid var(--cpd-color-border-disabled)" : undefined }}>
+                            <SectionHeader label="Recent searches" />
+                            {recentSearches.slice(0, 6).map((room) => (
                                 <SuggestionRow key={room.roomId} room={room} onClick={() => onRoomClick(room.roomId)} />
                             ))}
                         </div>
                     )}
 
-                    {/* Empty state */}
-                    {recentPeople.length === 0 && suggestions.length === 0 && (
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "var(--cpd-space-2x)",
-                                padding: "var(--cpd-space-4x) var(--cpd-space-3x)",
-                                color: "var(--cpd-color-text-secondary)",
-                            }}
-                        >
+                    {recentlyViewed.length === 0 && recentSearches.length === 0 && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)", padding: "var(--cpd-space-4x) var(--cpd-space-3x)", color: "var(--cpd-color-text-secondary)" }}>
                             <HistoryIcon width={16} height={16} />
                             <span style={{ font: "var(--cpd-font-body-sm-regular)" }}>No recent search to show</span>
                         </div>
@@ -326,73 +459,126 @@ export function GlobalSearchDropdown({
                 </>
             )}
 
-            {/* With query: grouped search results */}
-            {hasQuery && (
+            {/* ── State 2: No filter, with query — grouped results ── */}
+            {!isFilterActive && hasQuery && !isCommandMode && (
                 <div>
-                    {/* People */}
                     {searchResults.people.length > 0 && (
                         <div>
                             <SectionHeader label="People" />
                             {searchResults.people.slice(0, 3).map((result) => (
-                                <PersonResultRow
-                                    key={result.userId}
-                                    result={result}
-                                    onClick={() => onPersonClick(result)}
-                                />
+                                <PersonResultRow key={result.userId} result={result} onClick={() => onPersonClick(result)} />
                             ))}
                         </div>
                     )}
-
-                    {/* Rooms */}
                     {searchResults.rooms.length > 0 && (
                         <div style={{ borderTop: searchResults.people.length > 0 ? "1px solid var(--cpd-color-border-disabled)" : undefined }}>
                             <SectionHeader label="Rooms" />
                             {searchResults.rooms.slice(0, 3).map((result) => (
-                                <SuggestionRow
-                                    key={result.roomId}
-                                    room={result.room}
-                                    onClick={() => onRoomClick(result.roomId)}
-                                />
+                                <SuggestionRow key={result.roomId} room={result.room} onClick={() => onRoomClick(result.roomId)} />
                             ))}
                         </div>
                     )}
-
-                    {/* Spaces */}
                     {searchResults.spaces.length > 0 && (
                         <div style={{ borderTop: (searchResults.people.length > 0 || searchResults.rooms.length > 0) ? "1px solid var(--cpd-color-border-disabled)" : undefined }}>
                             <SectionHeader label="Spaces" />
                             {searchResults.spaces.slice(0, 3).map((result) => (
-                                <SuggestionRow
-                                    key={result.roomId}
-                                    room={result.room}
-                                    onClick={() => onRoomClick(result.roomId)}
-                                />
+                                <SuggestionRow key={result.roomId} room={result.room} onClick={() => onRoomClick(result.roomId)} />
                             ))}
                         </div>
                     )}
+                    {!hasFilteredResults && (
+                        <SearchResultsRow query={query} onClick={onExpandToFullView} />
+                    )}
+                    <ViewAllButton label="View all results" onClick={onExpandToFullView} />
+                </div>
+            )}
 
-                    {/* View all results */}
-                    <div style={{ borderTop: "1px solid var(--cpd-color-border-disabled)" }}>
-                        <button
-                            type="button"
-                            onClick={onExpandToFullView}
-                            style={{
-                                display: "block",
-                                width: "100%",
-                                padding: "var(--cpd-space-3x)",
-                                background: "none",
-                                border: "none",
-                                cursor: "pointer",
-                                font: "var(--cpd-font-body-md-semibold)",
-                                color: "var(--cpd-color-text-link)",
-                                textAlign: "center",
-                            }}
-                            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
-                            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
-                        >
-                            View all results
-                        </button>
-                    </div>
+            {/* ── State 3: Filter active, no query — scoped suggestions from hook ── */}
+            {isFilterActive && !hasQuery && (
+                <>
+                    {activeFilter === GlobalSearchFilter.People && (
+                        searchResults.people.length > 0 ? (
+                            <div>
+                                <SectionHeader label="Suggestions" />
+                                {searchResults.people.slice(0, 6).map((result) => (
+                                    <PersonResultRow key={result.userId} result={result} onClick={() => onPersonClick(result)} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)", padding: "var(--cpd-space-4x) var(--cpd-space-3x)", color: "var(--cpd-color-text-secondary)" }}>
+                                <HistoryIcon width={16} height={16} />
+                                <span style={{ font: "var(--cpd-font-body-sm-regular)" }}>No suggestions to show</span>
+                            </div>
+                        )
+                    )}
+                    {activeFilter === GlobalSearchFilter.Rooms && (
+                        searchResults.rooms.length > 0 ? (
+                            <div>
+                                <SectionHeader label="Suggestions" />
+                                {searchResults.rooms.slice(0, 6).map((result) => (
+                                    <SuggestionRow key={result.roomId} room={result.room} onClick={() => onRoomClick(result.roomId)} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)", padding: "var(--cpd-space-4x) var(--cpd-space-3x)", color: "var(--cpd-color-text-secondary)" }}>
+                                <HistoryIcon width={16} height={16} />
+                                <span style={{ font: "var(--cpd-font-body-sm-regular)" }}>No suggestions to show</span>
+                            </div>
+                        )
+                    )}
+                    {activeFilter === GlobalSearchFilter.Spaces && (
+                        searchResults.spaces.length > 0 ? (
+                            <div>
+                                <SectionHeader label="Suggestions" />
+                                {searchResults.spaces.slice(0, 6).map((result) => (
+                                    <SuggestionRow key={result.roomId} room={result.room} onClick={() => onRoomClick(result.roomId)} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)", padding: "var(--cpd-space-4x) var(--cpd-space-3x)", color: "var(--cpd-color-text-secondary)" }}>
+                                <HistoryIcon width={16} height={16} />
+                                <span style={{ font: "var(--cpd-font-body-sm-regular)" }}>No suggestions to show</span>
+                            </div>
+                        )
+                    )}
+                    {(activeFilter === GlobalSearchFilter.Messages || activeFilter === GlobalSearchFilter.Files) && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)", padding: "var(--cpd-space-4x) var(--cpd-space-3x)", color: "var(--cpd-color-text-secondary)" }}>
+                            <HistoryIcon width={16} height={16} />
+                            <span style={{ font: "var(--cpd-font-body-sm-regular)" }}>Start typing to search</span>
+                        </div>
+                    )}
+                    <ViewAllButton label={viewAllLabel} onClick={onExpandToFullView} />
+                </>
+            )}
+
+            {/* ── State 4: Filter active, with query — scoped results or no-results ── */}
+            {isFilterActive && hasQuery && (
+                <div>
+                    {activeFilter === GlobalSearchFilter.People && searchResults.people.length > 0 && (
+                        <div>
+                            {searchResults.people.slice(0, 6).map((result) => (
+                                <PersonResultRow key={result.userId} result={result} onClick={() => onPersonClick(result)} />
+                            ))}
+                        </div>
+                    )}
+                    {activeFilter === GlobalSearchFilter.Rooms && searchResults.rooms.length > 0 && (
+                        <div>
+                            {searchResults.rooms.slice(0, 6).map((result) => (
+                                <SuggestionRow key={result.roomId} room={result.room} onClick={() => onRoomClick(result.roomId)} />
+                            ))}
+                        </div>
+                    )}
+                    {activeFilter === GlobalSearchFilter.Spaces && searchResults.spaces.length > 0 && (
+                        <div>
+                            {searchResults.spaces.slice(0, 6).map((result) => (
+                                <SuggestionRow key={result.roomId} room={result.room} onClick={() => onRoomClick(result.roomId)} />
+                            ))}
+                        </div>
+                    )}
+                    {!hasFilteredResults && (
+                        <SearchResultsRow query={query} onClick={onExpandToFullView} />
+                    )}
+                    <ViewAllButton label={viewAllLabel} onClick={onExpandToFullView} />
                 </div>
             )}
         </div>
