@@ -75,6 +75,8 @@ export function TopBar(): JSX.Element {
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
+
+
     const vm = useCreateAutoDisposedViewModel(
         () => new GlobalSearchViewModel({ onClose: () => setIsOpen(false) }),
         [],
@@ -133,7 +135,7 @@ export function TopBar(): JSX.Element {
             style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "var(--cpd-space-4x)",
+                gap: "var(--cpd-space-3x)",
                 maxHeight: "52px",
                 height: "52px",
                 padding: "0 var(--cpd-space-4x)",
@@ -144,10 +146,15 @@ export function TopBar(): JSX.Element {
                 flexShrink: 0,
             }}
         >
-            {/* Left: Element logo + nav chevrons */}
-            <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)", flexShrink: 0 }}>
+            {/* Left: Element logo only */}
+            <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
                 <ElementLogo />
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-1x)", marginLeft: "var(--cpd-space-2x)" }}>
+            </div>
+
+            {/* Centre: nav chevrons + search field */}
+            <div ref={containerRef} style={{ flex: 1, minWidth: 0, maxWidth: "480px", margin: "0 auto", position: "relative", display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)" }}>
+                {/* Back / Forward buttons immediately left of the search pill */}
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-1x)", flexShrink: 0 }}>
                     <button
                         type="button"
                         aria-label="Go back"
@@ -193,10 +200,9 @@ export function TopBar(): JSX.Element {
                         <ChevronRightIcon width={18} height={18} />
                     </button>
                 </div>
-            </div>
 
-            {/* Centre: Search */}
-            <div ref={containerRef} style={{ flex: 1, minWidth: 0, maxWidth: "480px", margin: "0 auto", position: "relative" }}>
+                {/* Search pill */}
+                <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
                 {/* Composite input: prefix label + raw query input inside a styled pill */}
                 <div
                     style={{
@@ -272,6 +278,7 @@ export function TopBar(): JSX.Element {
                         </button>
                     )}
                 </div>
+                </div>
                 {isOpen && (
                     <GlobalSearchDropdown
                         query={query}
@@ -306,6 +313,8 @@ export function TopBar(): JSX.Element {
                 activeFilter={filter}
                 onFilterChange={vm.onFilterChange}
                 onCollapseToDropdown={vm.onCollapseToDropdown}
+                onRoomClick={vm.onRoomClick}
+                onPersonClick={vm.onPersonClick}
             />
         )}
         </>

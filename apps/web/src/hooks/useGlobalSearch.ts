@@ -29,6 +29,7 @@ export enum GlobalSearchFilter {
     Rooms = "Rooms",
     Spaces = "Spaces",
     Messages = "Messages",
+    Files = "Files",
 }
 
 // ── Result types ──────────────────────────────────────────────────────────────
