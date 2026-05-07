@@ -18,11 +18,10 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
-import { MjolnirBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { MjolnirBodyView, UnknownBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
-import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
@@ -93,6 +92,10 @@ function MjolnirBodyWrappedView({ mxEvent, onMessageAllowed, ref }: IBodyProps):
     }, [onMessageAllowed, vm]);
 
     return <MjolnirBodyView vm={vm} ref={ref} />;
+}
+
+function UnknownBody({ mxEvent, ref }: IBodyProps): JSX.Element {
+    return <UnknownBodyView text={mxEvent.getContent().body} ref={ref} className="mx_UnknownBody" />;
 }
 
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {

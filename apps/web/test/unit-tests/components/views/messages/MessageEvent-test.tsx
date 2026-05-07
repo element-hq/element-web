@@ -20,11 +20,6 @@ import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permal
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { Mjolnir } from "../../../../../src/mjolnir/Mjolnir";
 
-jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="unknown-body" />,
-}));
-
 jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-body" />,
@@ -151,6 +146,25 @@ describe("MessageEvent", () => {
         fireEvent.click(allowButton);
 
         expect(localStorage.getItem(`mx_mjolnir_render_${room.roomId}__$hidden:example.com`)).toBe("true");
+    });
+
+    it("renders the shared unknown body for unsupported message types", () => {
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@alice:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: "org.example.unsupported",
+                body: "Unsupported message body",
+            },
+        });
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText("Unsupported message body")).toBeInTheDocument();
+        expect(result.container.querySelector(".mx_UnknownBody")).not.toBeNull();
+        expect(result.queryByTestId("textual-body")).toBeNull();
     });
 
     describe("when an image with a caption is sent", () => {
