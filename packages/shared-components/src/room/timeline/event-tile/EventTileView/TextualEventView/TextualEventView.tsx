@@ -30,7 +30,7 @@ export interface Props {
  * This view is used for simple informational timeline entries where the
  * content is already prepared by the view model.
  */
-export function TextualEventView({ vm, className }: Props): JSX.Element {
+export function TextualEventView({ vm, className }: Readonly<Props>): JSX.Element {
     const eventPresentationAttributes = useEventPresentationAttributes();
     const snapshot = useViewModel(vm);
     return (
