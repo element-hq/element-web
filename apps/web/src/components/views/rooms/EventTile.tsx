@@ -620,6 +620,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     /** called when the event is edited after we show it. */
     private readonly onReplaced = (): void => {
+        this.forceUpdate();
         // re-verify the event if it is replaced (the edit may not be verified)
         this.verifyEvent();
     };
@@ -995,6 +996,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     public render(): ReactNode {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
+        const replacingEventId = this.props.mxEvent.replacingEventId();
 
         const {
             hasRenderer,
@@ -1335,6 +1337,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
                                 // overrides
                                 ref: this.tile,
+                                replacingEventId,
                                 isSeeingThroughMessageHiddenForModeration,
 
                                 // appease TS
