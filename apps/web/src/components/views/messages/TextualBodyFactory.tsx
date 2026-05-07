@@ -130,7 +130,7 @@ export function TextualBodyFactory(props: Readonly<IBodyProps>): JSX.Element {
 
     useEffect(() => {
         textualBodyVm.setEvent(props.mxEvent);
-    }, [content, props.mxEvent, textualBodyVm]);
+    }, [props.mxEvent, textualBodyVm]);
 
     useEffect(() => {
         textualBodyVm.setHighlightLink(props.highlightLink);

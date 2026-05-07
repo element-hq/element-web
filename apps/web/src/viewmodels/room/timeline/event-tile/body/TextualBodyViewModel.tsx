@@ -6,7 +6,7 @@
  */
 
 import React, { type MouseEvent } from "react";
-import { MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEventEvent, MsgType, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
     LINKIFIED_DATA_ATTRIBUTE,
@@ -60,6 +60,8 @@ export class TextualBodyViewModel
     extends BaseViewModel<TextualBodyViewSnapshot, TextualBodyViewModelProps>
     implements TextualBodyViewModelInterface
 {
+    private watchedEvent?: MatrixEvent;
+
     private static readonly getKind = (mxEvent: MatrixEvent): TextualBodyViewKind => {
         const msgtype = mxEvent.getContent().msgtype as MsgType | undefined;
 
@@ -120,7 +122,8 @@ export class TextualBodyViewModel
         | "editedMarkerTooltip"
         | "editedMarkerCaption"
     > => {
-        if (!props.replacingEventId) {
+        const replacingEventId = props.replacingEventId ?? props.mxEvent.replacingEventId();
+        if (!replacingEventId) {
             return {
                 showEditedMarker: false,
                 editedMarkerText: undefined,
@@ -197,7 +200,25 @@ export class TextualBodyViewModel
 
     public constructor(props: TextualBodyViewModelProps) {
         super(props, TextualBodyViewModel.computeSnapshot(props));
+        this.watchEvent(props.mxEvent);
+        this.disposables.track(this.unwatchEvent);
     }
+
+    private readonly onEventContentChanged = (): void => {
+        this.snapshot.merge(TextualBodyViewModel.computeEventSnapshot(this.props));
+    };
+
+    private watchEvent(mxEvent: MatrixEvent): void {
+        if (this.watchedEvent === mxEvent) return;
+        this.unwatchEvent();
+        this.watchedEvent = mxEvent;
+        this.watchedEvent.on(MatrixEventEvent.Replaced, this.onEventContentChanged);
+    }
+
+    private readonly unwatchEvent = (): void => {
+        this.watchedEvent?.off(MatrixEventEvent.Replaced, this.onEventContentChanged);
+        this.watchedEvent = undefined;
+    };
 
     public setId(id: string | undefined): void {
         this.props = {
@@ -213,6 +234,7 @@ export class TextualBodyViewModel
             ...this.props,
             mxEvent,
         };
+        this.watchEvent(mxEvent);
 
         this.snapshot.merge(TextualBodyViewModel.computeEventSnapshot(this.props));
     }

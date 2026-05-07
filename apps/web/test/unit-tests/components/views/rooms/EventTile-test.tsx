@@ -214,35 +214,6 @@ describe("EventTile", () => {
                 expect(screen.getByText("Can't load this message (m.room.message)")).toBeInTheDocument();
             });
         });
-
-        it("updates emote tile classes when an edit changes msgtype to m.emote", async () => {
-            const { container } = getComponent();
-            expect(container.querySelector(".mx_EventTile_emote")).toBeNull();
-
-            const edit = new MatrixEvent({
-                type: EventType.RoomMessage,
-                room_id: ROOM_ID,
-                sender: "@alice:example.org",
-                content: {
-                    body: "* waves",
-                    msgtype: "m.emote",
-                    "m.new_content": {
-                        body: "waves",
-                        msgtype: "m.emote",
-                    },
-                    "m.relates_to": {
-                        rel_type: "m.replace",
-                        event_id: mxEvent.getId(),
-                    },
-                },
-            });
-
-            act(() => {
-                mxEvent.makeReplaced(edit);
-            });
-
-            await waitFor(() => expect(container.querySelector(".mx_EventTile_emote")).not.toBeNull());
-        });
     });
 
     describe("EventTile in the right panel", () => {

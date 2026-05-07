@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ComponentProps } from "react";
 import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
-import { render, waitFor } from "jest-matrix-react";
+import { act, render, waitFor } from "jest-matrix-react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import {
@@ -188,7 +188,7 @@ describe("<TextualBody />", () => {
             event: true,
         });
 
-        const { container, rerender } = getComponent({ mxEvent: ev });
+        const { container } = getComponent({ mxEvent: ev });
         expect(container).toHaveTextContent("hello");
 
         const edit = mkEvent({
@@ -196,8 +196,8 @@ describe("<TextualBody />", () => {
             room: room1Id,
             user: "sender",
             content: {
-                body: "* waves",
-                msgtype: "m.emote",
+                "body": "* waves",
+                "msgtype": "m.emote",
                 "m.new_content": {
                     body: "waves",
                     msgtype: "m.emote",
@@ -205,9 +205,9 @@ describe("<TextualBody />", () => {
             },
             event: true,
         });
-        ev.makeReplaced(edit);
-
-        getComponent({ mxEvent: ev, replacingEventId: ev.replacingEventId() }, defaultMatrixClient, rerender);
+        act(() => {
+            ev.makeReplaced(edit);
+        });
 
         await waitFor(() => expect(container).toHaveTextContent("* sender waves(edited)"));
     });
