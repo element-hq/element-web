@@ -3590,7 +3590,6 @@
             "created_rule_rooms": "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s",
             "created_rule_servers": "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s",
             "created_rule_users": "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s",
-            "message_hidden": "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
             "removed_rule": "%(senderName)s removed a ban rule matching %(glob)s",
             "removed_rule_rooms": "%(senderName)s removed the rule banning rooms matching %(glob)s",
             "removed_rule_servers": "%(senderName)s removed the rule banning servers matching %(glob)s",
