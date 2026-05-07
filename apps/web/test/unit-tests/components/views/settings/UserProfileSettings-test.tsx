@@ -235,6 +235,7 @@ describe("ProfileSettings", () => {
         client.getRooms = jest.fn().mockReturnValue([mockRoom]);
         client.getCrypto = jest.fn().mockReturnValue({
             isEncryptionEnabledInRoom: jest.fn().mockReturnValue(true),
+            getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
         });
 
         renderProfileSettings(toastRack, client);

@@ -25,6 +25,7 @@ import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import Spinner from "../elements/Spinner";
 import { BackupStatus, useKeyBackupStatus } from "../../../hooks/useKeyBackupStatus";
+import { useHasOtherVerifiedDevices } from "../../../hooks/useHasOtherVerifiedDevices";
 import { EncryptionCard } from "../settings/encryption/EncryptionCard";
 import { EncryptionCardButtons } from "../settings/encryption/EncryptionCardButtons";
 import { EncryptionCardEmphasisedContent } from "../settings/encryption/EncryptionCardEmphasisedContent";
@@ -46,6 +47,7 @@ export async function shouldShowLogoutDialog(cli: MatrixClient): Promise<boolean
 export default function LogoutDialog(props: IProps): JSX.Element {
     const client = MatrixClientPeg.safeGet();
     const backupStatus = useKeyBackupStatus(client);
+    const hasOtherVerifiedDevices = useHasOtherVerifiedDevices(client);
 
     const onFinished = (confirmed?: boolean): void => {
         if (confirmed) {
@@ -75,31 +77,47 @@ export default function LogoutDialog(props: IProps): JSX.Element {
         props.onFinished(false);
     };
 
+    // Dialog contents to show a spinner while deciding whether to prompt the
+    // user to set up recovery
+    function loading(): JSX.Element {
+        return (
+            <BaseDialog
+                title={_t("action|sign_out")}
+                contentId="mx_Dialog_content"
+                hasCancel={true}
+                onFinished={onFinished}
+            >
+                <Spinner />
+            </BaseDialog>
+        );
+    }
+
+    // Dialog contents to confirm whether the user is sure if they want to log
+    // out.
+    function confirmLogout(): JSX.Element {
+        return (
+            <QuestionDialog
+                hasCancelButton={true}
+                title={_t("action|sign_out")}
+                description={_t("auth|logout_dialog|description")}
+                button={_t("action|sign_out")}
+                onFinished={onFinished}
+            />
+        );
+    }
+
+    if (hasOtherVerifiedDevices === undefined) {
+        return loading();
+    } else if (hasOtherVerifiedDevices) {
+        return confirmLogout();
+    }
     switch (backupStatus) {
         case BackupStatus.LOADING:
-            // while we're deciding if we have backups, show a spinner
-            return (
-                <BaseDialog
-                    title={_t("action|sign_out")}
-                    contentId="mx_Dialog_content"
-                    hasCancel={true}
-                    onFinished={onFinished}
-                >
-                    <Spinner />
-                </BaseDialog>
-            );
+            return loading();
 
         case BackupStatus.NO_CRYPTO:
         case BackupStatus.BACKUP_ACTIVE:
-            return (
-                <QuestionDialog
-                    hasCancelButton={true}
-                    title={_t("action|sign_out")}
-                    description={_t("auth|logout_dialog|description")}
-                    button={_t("action|sign_out")}
-                    onFinished={onFinished}
-                />
-            );
+            return confirmLogout();
 
         case BackupStatus.NO_BACKUP:
         case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
