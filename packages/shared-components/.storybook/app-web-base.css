@@ -1,0 +1,48 @@
+/*
+Copyright 2026 Element Creations Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+/*
+ * Match the app/web shell baseline without importing app/web component styles.
+ * Shared component stories should inherit the same root typography and font
+ * feature settings as the real app, while still owning their component styling.
+ */
+@layer app-web {
+    :root[data-storybook-base-css="app-web"] {
+        --emoji-font-family: "";
+    }
+
+    :root[data-storybook-base-css="app-web"][class^="cpd-theme"][class^="cpd-theme"] {
+        --cpd-font-family-sans:
+            "Inter", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif,
+            "Noto Color Emoji";
+    }
+
+    :root[data-storybook-base-css="app-web"] body {
+        font: var(--cpd-font-body-md-regular) !important;
+        letter-spacing: var(--cpd-font-letter-spacing-body-md) !important;
+        font-feature-settings:
+            "kern" 1,
+            "liga" 1,
+            "calt" 1 !important;
+
+        background-color: var(--cpd-color-bg-canvas-default);
+        color: var(--cpd-color-text-primary);
+        border: 0;
+        margin: 0;
+
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    :root[data-storybook-base-css="app-web"] pre,
+    :root[data-storybook-base-css="app-web"] code {
+        font-family:
+            "Fira Code", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Courier", monospace,
+            "Noto Color Emoji";
+        font-size: 100% !important;
+    }
+}

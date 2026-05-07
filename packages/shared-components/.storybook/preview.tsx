@@ -12,6 +12,7 @@ import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 
 import "./compound.css";
+import "./app-web-base.css";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { TooltipProvider } from "@vector-im/compound-web";
@@ -65,15 +66,46 @@ export const globalTypes = {
             ],
         },
     },
+    baseCss: {
+        name: "Base CSS",
+        description: "Global base CSS for component previews",
+        toolbar: {
+            icon: "paintbrush",
+            title: "Base CSS",
+            items: [
+                { title: "Default", value: "storybook" },
+                { title: "Element Web", value: "app-web" },
+            ],
+        },
+    },
     initialGlobals: {
-        theme: "system",
+        theme: "light",
         language: "en",
         eventLayout: "group",
         eventDensity: "default",
+        baseCss: "storybook",
     },
 } satisfies ArgTypes;
 
 const allThemesClasses = globalTypes.theme.toolbar.items.map(({ value }) => `cpd-theme-${value}`);
+
+const BaseCssSwitcher: React.FC<{
+    baseCss: string;
+}> = ({ baseCss }) => {
+    useLayoutEffect(() => {
+        if (baseCss === "app-web") {
+            document.documentElement.dataset.storybookBaseCss = baseCss;
+        } else {
+            delete document.documentElement.dataset.storybookBaseCss;
+        }
+
+        return () => {
+            delete document.documentElement.dataset.storybookBaseCss;
+        };
+    }, [baseCss]);
+
+    return null;
+};
 
 const ThemeSwitcher: React.FC<{
     theme: string;
@@ -87,6 +119,15 @@ const ThemeSwitcher: React.FC<{
     }, [theme]);
 
     return null;
+};
+
+const withBaseCss: Decorator = (Story, context) => {
+    return (
+        <>
+            <BaseCssSwitcher baseCss={context.globals.baseCss} />
+            <Story />
+        </>
+    );
 };
 
 const withThemeProvider: Decorator = (Story, context) => {
@@ -134,12 +175,13 @@ const withEventPresentationProvider: Decorator = (Story, context) => {
 const preview = {
     tags: ["autodocs", "snapshot"],
     initialGlobals: {
-        theme: "system",
+        baseCss: "storybook",
+        theme: "light",
         language: "en",
         eventLayout: "group",
         eventDensity: "default",
     },
-    decorators: [withThemeProvider, withEventPresentationProvider, withTooltipProvider, withI18nProvider],
+    decorators: [withBaseCss, withThemeProvider, withEventPresentationProvider, withTooltipProvider, withI18nProvider],
     parameters: {
         options: {
             storySort: {
