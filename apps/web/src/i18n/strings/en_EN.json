@@ -15,8 +15,7 @@
         "room_name": "Room %(name)s",
         "room_status_bar": "Room status bar",
         "seek_bar_label": "Audio seek bar",
-        "unread_messages": "Unread messages.",
-        "user_menu": "User menu"
+        "unread_messages": "Unread messages."
     },
     "a11y_jump_first_unread_room": "Jump to first unread room.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Already have an account? <a>Sign in here</a>",
         "sign_in_or_register": "Sign In or Create Account",
         "sign_in_or_register_description": "Use your account or create a new one to continue.",
-        "sign_in_prompt": "Got an account? <a>Sign in</a>",
         "sign_in_with_sso": "Sign in with single sign-on",
         "signing_in": "Signing In…",
         "soft_logout": {
@@ -3894,12 +3892,6 @@
         "verification_unavailable": "User verification unavailable",
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
-    },
-    "user_menu": {
-        "link_new_device": "Link new device",
-        "settings": "All settings",
-        "switch_theme_dark": "Switch to dark mode",
-        "switch_theme_light": "Switch to light mode"
     },
     "voip": {
         "already_in_call": "Already in call",

@@ -19,11 +19,6 @@ import MessageEvent from "../../../../../src/components/views/messages/MessageEv
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 
-jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
-    __esModule: true,
-    default: () => <div data-testid="unknown-body" />,
-}));
-
 jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-body" />,
@@ -115,6 +110,25 @@ describe("MessageEvent", () => {
 
         expect(result.getByText("Message deleted by Moderator")).toBeInTheDocument();
         expect(result.container.querySelector(".mx_RedactedBody")).not.toBeNull();
+        expect(result.queryByTestId("textual-body")).toBeNull();
+    });
+
+    it("renders the shared unknown body for unsupported message types", () => {
+        event = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@alice:example.com",
+            room: room.roomId,
+            content: {
+                msgtype: "org.example.unsupported",
+                body: "Unsupported message body",
+            },
+        });
+
+        const result = renderMessageEvent();
+
+        expect(result.getByText("Unsupported message body")).toBeInTheDocument();
+        expect(result.container.querySelector(".mx_UnknownBody")).not.toBeNull();
         expect(result.queryByTestId("textual-body")).toBeNull();
     });
 

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { createRef } from "react";
+import React, { createRef, type JSX } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -18,10 +18,10 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
+import { UnknownBodyView } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
-import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
@@ -79,6 +79,10 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [M_BEACON_INFO.name, MBeaconBody],
     [M_BEACON_INFO.altName, MBeaconBody],
 ]);
+
+function UnknownBody({ mxEvent, ref }: IBodyProps): JSX.Element {
+    return <UnknownBodyView text={mxEvent.getContent().body} ref={ref} className="mx_UnknownBody" />;
+}
 
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
     private body = createRef<React.Component | IOperableEventTile>();
