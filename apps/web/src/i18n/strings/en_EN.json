@@ -283,7 +283,7 @@
             "security_code_title": "Your verification code",
             "select_qr_code": "Select \"%(scanQRCode)s\"",
             "select_ready_to_scan": "Select \"%(readyToScan)s\" and scan the QR code shown here",
-            "start_over": "Ready to scan",
+            "start_over": "Start over",
             "tap_avatar_link_new_device": "Tap your avatar and select \"%(linkNewDevice)s\"",
             "unsupported_explainer": "Your account provider doesn't support signing into a new device with a QR code.",
             "unsupported_heading": "QR code not supported",

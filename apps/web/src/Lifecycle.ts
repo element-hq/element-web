@@ -58,7 +58,7 @@ import { Action } from "./dispatcher/actions";
 import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
-import { completeOidcLogin } from "./utils/oidc/authorize";
+import { completeOidcLogin, type CompleteOidcLoginResponse } from "./utils/oidc/authorize";
 import { getOidcErrorMessage } from "./utils/oidc/error";
 import { type OidcClientStore } from "./stores/oidc/OidcClientStore";
 import {
@@ -81,7 +81,6 @@ import {
 import { TokenRefresher } from "./utils/oidc/TokenRefresher";
 import { checkBrowserSupport } from "./SupportedBrowser";
 import { type URLParams } from "./vector/url_utils.ts";
-import { type QrLoginCredentials } from "./components/views/auth/LoginWithQR.tsx";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -322,7 +321,10 @@ async function attemptOidcNativeLogin(
     }
 }
 
-// TODO comment
+/**
+ * Exchange the given OIDC credentials for {@link IMatrixClientCreds}, additionally persisting them to storage.
+ * @param creds the credentials from the OIDC flow
+ */
 export async function configureFromCompletedOAuthLogin({
     accessToken,
     refreshToken,
@@ -331,7 +333,7 @@ export async function configureFromCompletedOAuthLogin({
     clientId,
     issuer,
     idToken,
-}: Omit<QrLoginCredentials, "secrets" | "deviceId">): Promise<IMatrixClientCreds> {
+}: Omit<CompleteOidcLoginResponse, "idTokenClaims">): Promise<IMatrixClientCreds> {
     const {
         user_id: userId,
         device_id: deviceId,

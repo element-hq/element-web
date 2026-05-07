@@ -39,7 +39,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders authorization_expi
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -83,7 +93,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders check_code_mismatc
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -127,7 +147,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_already_exi
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -171,7 +201,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders device_not_found 1
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -215,7 +255,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders etag_missing 1`] =
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -259,7 +309,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders expired 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -341,7 +401,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders homeserver_lacks_s
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -406,7 +476,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders insecure_channel_d
         role="button"
         tabindex="0"
       >
-        Learn more
+        Try again
       </button>
     </div>
   </div>
@@ -452,7 +522,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders invalid_code 1`] =
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -496,7 +576,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_alrea
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -540,7 +630,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders other_device_not_s
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -584,7 +684,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders rate_limited 1`] =
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -628,7 +738,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unexpected_message
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -672,7 +792,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unknown 1`] = `
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -724,7 +854,7 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders unsupported_protoc
         role="button"
         tabindex="0"
       >
-        Learn more
+        Try again
       </button>
     </div>
   </div>
@@ -770,7 +900,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_cancelled 1`]
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -814,7 +954,17 @@ exports[`<LoginWithQRFlow /> login.reciprocate errors renders user_declined 1`] 
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    />
+    >
+      <button
+        class="_button_1nw83_8"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Try again
+      </button>
+    </div>
   </div>
 </div>
 `;
@@ -1417,7 +1567,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders authorization_expired 1`
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1471,7 +1621,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders check_code_mismatch 1`] 
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1525,7 +1675,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_already_exists 1`
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1579,7 +1729,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders device_not_found 1`] = `
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1633,7 +1783,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders etag_missing 1`] = `
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1687,7 +1837,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders expired 1`] = `
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1746,10 +1896,11 @@ exports[`<LoginWithQRFlow /> login.start errors renders homeserver_lacks_support
         class="_button_1nw83_8"
         data-kind="primary"
         data-size="lg"
+        data-testid="cancel-button"
         role="button"
         tabindex="0"
       >
-        Close
+        Cancel
       </button>
     </div>
   </div>
@@ -1816,7 +1967,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders insecure_channel_detecte
         role="button"
         tabindex="0"
       >
-        Learn more
+        Start over
       </button>
     </div>
   </div>
@@ -1870,7 +2021,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders invalid_code 1`] = `
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1924,7 +2075,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_already_sig
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -1978,7 +2129,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders other_device_not_signed_
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -2032,7 +2183,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders rate_limited 1`] = `
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -2086,7 +2237,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders unexpected_message_recei
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -2140,7 +2291,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders unknown 1`] = `
         role="button"
         tabindex="0"
       >
-        Ready to scan
+        Start over
       </button>
     </div>
   </div>
@@ -2194,7 +2345,7 @@ exports[`<LoginWithQRFlow /> login.start errors renders unsupported_protocol 1`]
         role="button"
         tabindex="0"
       >
-        Learn more
+        Start over
       </button>
     </div>
   </div>
@@ -2245,10 +2396,11 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_cancelled 1`] = `
         class="_button_1nw83_8"
         data-kind="primary"
         data-size="lg"
+        data-testid="cancel-button"
         role="button"
         tabindex="0"
       >
-        Close
+        Cancel
       </button>
     </div>
   </div>
@@ -2299,10 +2451,11 @@ exports[`<LoginWithQRFlow /> login.start errors renders user_declined 1`] = `
         class="_button_1nw83_8"
         data-kind="primary"
         data-size="lg"
+        data-testid="cancel-button"
         role="button"
         tabindex="0"
       >
-        Close
+        Cancel
       </button>
     </div>
   </div>

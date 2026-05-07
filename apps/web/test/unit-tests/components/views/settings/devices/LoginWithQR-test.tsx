@@ -122,9 +122,9 @@ describe("<LoginWithQR />", () => {
                 expect(rendezvous.generateCode).toHaveBeenCalled();
                 expect(rendezvous.negotiateProtocols).toHaveBeenCalled();
 
-                // back
+                // back (cancel)
                 const onClick = mockedFlow.mock.calls[0][0].onClick;
-                await onClick(Click.Back);
+                await onClick(Click.Cancel);
                 expect(onFinished).toHaveBeenCalledWith(false);
                 expect(rendezvous.cancel).toHaveBeenCalledWith(MSC4108FailureReason.UserCancelled);
             });

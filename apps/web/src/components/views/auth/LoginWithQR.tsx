@@ -24,18 +24,12 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
+import { type CompleteOidcLoginResponse } from "../../../utils/oidc/authorize";
 
-export type QrLoginCredentials = {
-    accessToken: string;
-    refreshToken?: string;
-    homeserverUrl: string;
-    clientId: string;
-    idToken: string;
-    issuer: string;
-    identityServerUrl?: string;
-    deviceId: string;
-    secrets: Awaited<ReturnType<MSC4108SignInWithQR["shareSecrets"]>>["secrets"];
-};
+export type QrLoginCredentials = Omit<CompleteOidcLoginResponse, "idTokenClaims"> &
+    Awaited<ReturnType<MSC4108SignInWithQR["shareSecrets"]>> & {
+        deviceId: string;
+    };
 
 type BaseProps = {
     client: MatrixClient;
@@ -135,6 +129,9 @@ export default class LoginWithQR extends React.Component<Props, IState> {
 
     private onFinished(success: boolean): void {
         this.finished = true;
+        if (!success) {
+            this.abortController?.abort();
+        }
         this.props.onFinished(success);
     }
 
@@ -308,19 +305,17 @@ export default class LoginWithQR extends React.Component<Props, IState> {
         switch (type) {
             case Click.Cancel:
                 await this.state.rendezvous?.cancel(MSC4108FailureReason.UserCancelled);
-                this.reset();
                 this.onFinished(false);
                 break;
             case Click.Approve:
                 await this.approveLogin(checkCode);
                 break;
             case Click.Decline:
-                await this.state.rendezvous?.declineLoginOnExistingDevice();
-                this.reset();
-                this.onFinished(false);
-                break;
-            case Click.Back:
-                await this.state.rendezvous?.cancel(MSC4108FailureReason.UserCancelled);
+                if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
+                    await this.state.rendezvous?.cancel(MSC4108FailureReason.UserCancelled);
+                } else {
+                    await this.state.rendezvous?.declineLoginOnExistingDevice();
+                }
                 this.onFinished(false);
                 break;
             case Click.ShowQr:

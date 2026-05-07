@@ -54,18 +54,6 @@ export default class LoginWithQRFlow extends React.Component<Props> {
         </Button>
     );
 
-    private closeButton = (): JSX.Element => (
-        <Button kind="primary" size="lg" onClick={this.handleClick(Click.Back)}>
-            {_t("action|close")}
-        </Button>
-    );
-
-    private learnMoreButton = (): JSX.Element => (
-        <Button kind="primary" size="lg" onClick={this.handleClick()}>
-            {_t("action|learn_more")}
-        </Button>
-    );
-
     private simpleSpinner = (description?: string): JSX.Element => {
         return (
             <div className="mx_LoginWithQR_spinner">
@@ -86,13 +74,13 @@ export default class LoginWithQRFlow extends React.Component<Props> {
         switch (this.props.phase) {
             case Phase.Error: {
                 backButton = false;
-                if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
-                    buttons = (
-                        <Button kind="primary" size="lg" onClick={this.handleClick(Click.ShowQr)}>
-                            {_t("auth|qr_code_login|start_over")}
-                        </Button>
-                    );
-                }
+                buttons = (
+                    <Button kind="primary" size="lg" onClick={this.handleClick(Click.ShowQr)}>
+                        {this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE
+                            ? _t("auth|qr_code_login|start_over")
+                            : _t("action|try_again")}
+                    </Button>
+                );
 
                 let Icon = ErrorIcon;
                 let iconKind: ComponentProps<typeof BigIcon>["kind"] = "critical";
@@ -103,14 +91,13 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                     case MSC4108FailureReason.UnsupportedProtocol:
                         title = _t("auth|qr_code_login|error_unsupported_protocol_title");
                         message = _t("auth|qr_code_login|error_unsupported_protocol");
-                        buttons = this.learnMoreButton();
                         break;
 
                     case MSC4108FailureReason.UserCancelled:
                         title = _t("auth|qr_code_login|error_user_cancelled_title");
                         message = _t("auth|qr_code_login|error_user_cancelled");
                         if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
-                            buttons = this.closeButton();
+                            buttons = this.cancelButton();
                         }
                         break;
 
@@ -136,7 +123,6 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                                 </ol>
                             </>
                         );
-                        buttons = this.learnMoreButton();
                         break;
 
                     case ClientRendezvousFailureReason.OtherDeviceAlreadySignedIn:
@@ -150,7 +136,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         title = _t("auth|qr_code_login|error_user_declined_title");
                         message = _t("auth|qr_code_login|error_user_declined");
                         if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
-                            buttons = this.closeButton();
+                            buttons = this.cancelButton();
                         }
                         break;
 
@@ -171,7 +157,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         title = _t("auth|qr_code_login|unsupported_heading");
                         message = _t("auth|qr_code_login|unsupported_explainer");
                         if (this.props.intent === RendezvousIntent.LOGIN_ON_NEW_DEVICE) {
-                            buttons = this.closeButton();
+                            buttons = this.cancelButton();
                         }
                         break;
 
@@ -266,7 +252,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                             brand: SdkConfig.get().brand,
                         }),
                         _t("auth|qr_code_login|tap_avatar_link_new_device", {
-                            linkNewDevice: <strong>{_t("user_menu|link_new_device")}</strong>,
+                            linkNewDevice: <strong>{_t("settings|sessions|sign_in_with_qr")}</strong>,
                         }),
                         _t("auth|qr_code_login|choose_desktop_computer", {
                             desktopComputer: <strong>{_t("auth|qr_code_login|desktop_computer")}</strong>,
@@ -350,7 +336,7 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         <AccessibleButton
                             data-testid="back-button"
                             className="mx_LoginWithQR_BackButton"
-                            onClick={this.handleClick(Click.Back)}
+                            onClick={this.handleClick(Click.Cancel)}
                             title={_t("action|back")}
                         >
                             <ChevronLeftIcon />

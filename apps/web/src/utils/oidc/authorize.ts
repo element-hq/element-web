@@ -76,7 +76,7 @@ const getCodeAndStateFromParams = (
     return { code, state };
 };
 
-type CompleteOidcLoginResponse = {
+export type CompleteOidcLoginResponse = {
     // url of the homeserver selected during login
     homeserverUrl: string;
     // identity server url as discovered during login

@@ -27,9 +27,12 @@ export enum Phase {
 }
 
 export enum Click {
+    // Cancel the flow
     Cancel,
+    // A specific case of cancellation when the existing device declines the login
     Decline,
+    // Approve the login from the existing device
     Approve,
-    Back,
+    // Initialise the flow & show QR code
     ShowQr,
 }
