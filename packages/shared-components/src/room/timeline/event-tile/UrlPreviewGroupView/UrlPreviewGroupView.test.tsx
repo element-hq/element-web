@@ -27,7 +27,7 @@ describe("UrlPreviewGroupView", () => {
         const { container } = render(<MultiplePreviewsHidden />);
         expect(container).toMatchSnapshot();
     });
-    it("renders with a compact view", () => {
+    it("renders with compact density", () => {
         const { container } = render(<WithCompactView />);
         expect(container).toMatchSnapshot();
     });
