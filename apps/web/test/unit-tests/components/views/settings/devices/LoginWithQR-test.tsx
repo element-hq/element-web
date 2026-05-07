@@ -16,7 +16,14 @@ import {
     RendezvousError,
     RendezvousIntent,
 } from "matrix-js-sdk/src/rendezvous";
-import { HTTPError, type MatrixClient, MatrixHttpApi } from "matrix-js-sdk/src/matrix";
+import { mockOpenIdConfiguration } from "matrix-js-sdk/src/testing";
+import {
+    AutoDiscovery,
+    AutoDiscoveryAction,
+    HTTPError,
+    type MatrixClient,
+    MatrixHttpApi,
+} from "matrix-js-sdk/src/matrix";
 
 import LoginWithQR, { LoginWithQRFailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
@@ -51,6 +58,7 @@ function makeClient() {
         getClientWellKnown: jest.fn().mockReturnValue({}),
         getCrypto: jest.fn().mockReturnValue({}),
         getDomain: jest.fn(),
+        getAuthMetadata: jest.fn().mockReturnValue(mockOpenIdConfiguration()),
     } as unknown as MatrixClient);
 
     cli.http = new MatrixHttpApi(cli, {
@@ -81,7 +89,6 @@ describe("<LoginWithQR />", () => {
     });
 
     afterEach(() => {
-        client = makeClient();
         jest.clearAllMocks();
         jest.useRealTimers();
         cleanup();
@@ -328,6 +335,56 @@ describe("<LoginWithQR />", () => {
                         intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE,
                     }),
                 );
+            });
+
+            test("should handle qr login", async () => {
+                const ref = createRef<LoginWithQR>();
+
+                render(getComponent({ client, ref, clientId: "mock-client-id" }));
+                jest.spyOn(MSC4108SignInWithQR.prototype, "shareSecrets").mockResolvedValue({
+                    secrets: {
+                        cross_signing: {
+                            master_key: "mk",
+                            self_signing_key: "ssk",
+                            user_signing_key: "usk",
+                        },
+                    },
+                });
+                jest.spyOn(MSC4108SignInWithQR.prototype, "negotiateProtocols").mockResolvedValue({ serverName: "hs" });
+                jest.spyOn(MSC4108SignInWithQR.prototype, "deviceAuthorizationGrant").mockResolvedValue({
+                    userCode: "123456",
+                });
+                jest.spyOn(MSC4108SignInWithQR.prototype, "completeLoginOnNewDevice").mockResolvedValue({
+                    access_token: "token",
+                    token_type: "Bearer",
+                });
+                jest.spyOn(AutoDiscovery, "findClientConfig").mockResolvedValue({
+                    "m.homeserver": { base_url: "https://hs", state: AutoDiscoveryAction.SUCCESS },
+                    "m.identity_server": { state: AutoDiscoveryAction.PROMPT },
+                });
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.OutOfBandConfirmation,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE,
+                    }),
+                );
+
+                const onClick = mockedFlow.mock.calls[0][0].onClick;
+                await onClick(Click.Approve);
+
+                await waitFor(() =>
+                    expect(mockedFlow).toHaveBeenLastCalledWith({
+                        phase: Phase.WaitingForDevice,
+                        onClick: expect.any(Function),
+                        intent: RendezvousIntent.LOGIN_ON_NEW_DEVICE,
+                        userCode: "123456",
+                    }),
+                );
+
+                const rendezvous = ref.current!.state.rendezvous!;
+                expect(rendezvous.shareSecrets).toHaveBeenCalled();
             });
         });
     });

@@ -244,7 +244,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         throw new Error("Failed to discover homeserver URL");
                     }
 
-                    const identityServerUrl = clientConfig["m.identity_server"]?.base_url ?? undefined; // TODO fall back to config?
+                    const identityServerUrl = clientConfig["m.identity_server"]?.base_url ?? undefined;
 
                     const { secrets } = await this.state.rendezvous.shareSecrets();
 
