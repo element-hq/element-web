@@ -115,7 +115,7 @@
         "typedoc-plugin-markdown": "^4.9.0",
         "typedoc-plugin-missing-exports": "^4.1.2",
         "typescript": "catalog:",
-        "unplugin-dts": "1.0.0-beta.6",
+        "unplugin-dts": "1.0.0",
         "vite": "catalog:",
         "vite-plugin-node-polyfills": "^0.26.0",
         "vitest": "catalog:",
@@ -126,6 +126,7 @@
     },
     "packageManager": "pnpm@10.33.3+sha512.a19744364a7e248b92657a4ca5973f9354d21caf982579674b1c539f32c7420c47138ad8b1254df07aba9bc782d9b3029e3db34d5dbff974326eb74dac8ff489",
     "peerDependencies": {
-        "@vector-im/compound-web": "^8.3.5 || ^9.0.0"
+        "@vector-im/compound-web": "^8.3.5 || ^9.0.0",
+        "react": "catalog:"
     }
 }
