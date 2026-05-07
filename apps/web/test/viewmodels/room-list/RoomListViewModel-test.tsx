@@ -21,6 +21,16 @@ import { RoomListViewModel } from "../../../src/viewmodels/room-list/RoomListVie
 import { hasCreateRoomRights } from "../../../src/viewmodels/room-list/utils";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../../src/settings/SettingsStore";
+import { tagRoom } from "../../../src/utils/room/tagRoom";
+import { getSectionTagForRoom } from "../../../src/utils/room/getSectionTagForRoom";
+
+jest.mock("../../../src/utils/room/tagRoom", () => ({
+    tagRoom: jest.fn(),
+}));
+
+jest.mock("../../../src/utils/room/getSectionTagForRoom", () => ({
+    getSectionTagForRoom: jest.fn().mockReturnValue(null),
+}));
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -1106,6 +1116,39 @@ describe("RoomListViewModel", () => {
                 expect(snapshot.sections[0].roomIds[0]).toBe("!fav1:server");
                 expect(snapshot.roomListState.activeRoomIndex).toBe(0);
             });
+        });
+    });
+
+    describe("changeRoomSection", () => {
+        beforeEach(() => {
+            viewModel = new RoomListViewModel({ client: matrixClient });
+            mocked(tagRoom).mockClear();
+        });
+
+        it("should call tagRoom with the room and target tag", () => {
+            jest.spyOn(matrixClient, "getRoom").mockReturnValue(room1);
+            mocked(getSectionTagForRoom).mockReturnValue(null);
+
+            viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
+
+            expect(tagRoom).toHaveBeenCalledWith(room1, DefaultTagID.Favourite);
+        });
+
+        it("should do nothing when the room is not found", () => {
+            jest.spyOn(matrixClient, "getRoom").mockReturnValue(null);
+
+            viewModel.changeRoomSection("!unknown:server", DefaultTagID.Favourite);
+
+            expect(tagRoom).not.toHaveBeenCalled();
+        });
+
+        it("should do nothing when the room is already in the target section", () => {
+            jest.spyOn(matrixClient, "getRoom").mockReturnValue(room1);
+            mocked(getSectionTagForRoom).mockReturnValue(DefaultTagID.Favourite);
+
+            viewModel.changeRoomSection(room1.roomId, DefaultTagID.Favourite);
+
+            expect(tagRoom).not.toHaveBeenCalled();
         });
     });
 });
