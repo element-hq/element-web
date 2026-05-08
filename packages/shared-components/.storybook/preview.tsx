@@ -12,7 +12,7 @@ import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 
 import "./compound.css";
-import "./app-web-base.css";
+import "./app-web-root.css";
 import "./preview.css";
 import React, { useLayoutEffect } from "react";
 import { TooltipProvider } from "@vector-im/compound-web";
@@ -48,7 +48,7 @@ export const globalTypes = {
             icon: "component",
             title: "Event layout",
             items: [
-                { title: "Group", value: "group" },
+                { title: "Modern", value: "group" },
                 { title: "Bubble", value: "bubble" },
                 { title: "IRC", value: "irc" },
             ],
@@ -66,12 +66,12 @@ export const globalTypes = {
             ],
         },
     },
-    baseCss: {
-        name: "Base CSS",
-        description: "Global base CSS for component previews",
+    rootCss: {
+        name: "Root CSS",
+        description: "Global root CSS for component previews",
         toolbar: {
             icon: "paintbrush",
-            title: "Base CSS",
+            title: "Root CSS",
             items: [
                 { title: "Default", value: "storybook" },
                 { title: "Element Web", value: "app-web" },
@@ -83,26 +83,26 @@ export const globalTypes = {
         language: "en",
         eventLayout: "group",
         eventDensity: "default",
-        baseCss: "storybook",
+        rootCss: "storybook",
     },
 } satisfies ArgTypes;
 
 const allThemesClasses = globalTypes.theme.toolbar.items.map(({ value }) => `cpd-theme-${value}`);
 
-const BaseCssSwitcher: React.FC<{
-    baseCss: string;
-}> = ({ baseCss }) => {
+const RootCssSwitcher: React.FC<{
+    rootCss: string;
+}> = ({ rootCss }) => {
     useLayoutEffect(() => {
-        if (baseCss === "app-web") {
-            document.documentElement.dataset.storybookBaseCss = baseCss;
+        if (rootCss === "app-web") {
+            document.documentElement.dataset.storybookRootCss = rootCss;
         } else {
-            delete document.documentElement.dataset.storybookBaseCss;
+            delete document.documentElement.dataset.storybookRootCss;
         }
 
         return () => {
-            delete document.documentElement.dataset.storybookBaseCss;
+            delete document.documentElement.dataset.storybookRootCss;
         };
-    }, [baseCss]);
+    }, [rootCss]);
 
     return null;
 };
@@ -121,10 +121,10 @@ const ThemeSwitcher: React.FC<{
     return null;
 };
 
-const withBaseCss: Decorator = (Story, context) => {
+const withRootCss: Decorator = (Story, context) => {
     return (
         <>
-            <BaseCssSwitcher baseCss={context.globals.baseCss} />
+            <RootCssSwitcher rootCss={context.globals.rootCss} />
             <Story />
         </>
     );
@@ -175,13 +175,13 @@ const withEventPresentationProvider: Decorator = (Story, context) => {
 const preview = {
     tags: ["autodocs", "snapshot"],
     initialGlobals: {
-        baseCss: "storybook",
+        rootCss: "storybook",
         theme: "light",
         language: "en",
         eventLayout: "group",
         eventDensity: "default",
     },
-    decorators: [withBaseCss, withThemeProvider, withEventPresentationProvider, withTooltipProvider, withI18nProvider],
+    decorators: [withRootCss, withThemeProvider, withEventPresentationProvider, withTooltipProvider, withI18nProvider],
     parameters: {
         options: {
             storySort: {
