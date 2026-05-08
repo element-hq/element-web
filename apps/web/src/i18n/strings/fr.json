@@ -15,8 +15,7 @@
         "room_name": "Salon %(name)s",
         "room_status_bar": "Barre de statut du salon",
         "seek_bar_label": "Barre de recherche audio",
-        "unread_messages": "Messages non lus.",
-        "user_menu": "Menu utilisateur"
+        "unread_messages": "Messages non lus."
     },
     "a11y_jump_first_unread_room": "Sauter au premier salon non lu.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Vous avez déjà un compte ? <a>Connectez-vous ici</a>",
         "sign_in_or_register": "Se connecter ou créer un compte",
         "sign_in_or_register_description": "Utilisez votre compte ou créez en un pour continuer.",
-        "sign_in_prompt": "Vous avez un compte ? <a>Connectez-vous</a>",
         "sign_in_with_sso": "Se connecter avec l’authentification unique",
         "signing_in": "Authentification…",
         "soft_logout": {
@@ -476,6 +474,7 @@
         "description": "Description",
         "deselect_all": "Tout désélectionner",
         "device": "Appareil",
+        "disabled_by_homeserver": "Désactivé par le serveur d’accueil",
         "edited": "modifié",
         "email_address": "Adresse e-mail",
         "emoji": "Émojis",
@@ -683,8 +682,10 @@
     "create_section_dialog": {
         "create_section": "Créer une section",
         "description": "Ces sections sont réservées à vous.",
+        "edit_section": "Modifier la section",
         "label": "Nom de la section",
-        "title": "Créer une section"
+        "title": "Créer une section",
+        "title_edition": "Modifier une section"
     },
     "create_space": {
         "add_details_prompt": "Ajoutez des informations pour aider les personnes à l’identifier.",
@@ -1538,6 +1539,11 @@
         "experimental_section": "Avant-premières",
         "extended_profiles_msc_support": "Nécessite que votre serveur prenne en charge MSC4133",
         "feature_disable_call_per_sender_encryption": "Désactiver le chiffrement de chaque expéditeur pour Element Call",
+        "feature_user_status": {
+            "description": "Permet de visualiser et de définir un statut actuel.",
+            "display_name": "Statut de l'utilisateur",
+            "required_msc_support": "Nécessite MSC4429 (Mises à jour de profil pour Legacy Sync)"
+        },
         "feature_wysiwyg_composer_description": "Utilise le texte formaté au lieu de Markdown dans le compositeur de message.",
         "group_calls": "Nouvelle expérience d’appel de groupe",
         "group_developer": "Développeur",
@@ -1850,6 +1856,12 @@
         "error": "Vous ne pouvez pas supprimer ce message. (%(code)s)",
         "ongoing": "Suppression…",
         "reason_label": "Raison (optionnelle)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "Êtes-vous sûr de vouloir supprimer cette section ?",
+        "description": "Les discussions de cette section resteront disponibles dans votre liste de discussions.",
+        "remove_section": "Supprimer la section",
+        "title": "Supprimer la section ?"
     },
     "report_content": {
         "description": "Le signalement de ce message enverra son « event ID » unique à l’administrateur de votre serveur d’accueil. Si les messages dans ce salon sont chiffrés, l’administrateur ne pourra pas lire le texte du message ou voir les fichiers ou les images.",
@@ -3138,6 +3150,14 @@
         "server_error_detail": "Le serveur semble être inaccessible, surchargé ou quelque chose s’est mal passé.",
         "shrug": "Ajoute ¯\\_(ツ)_/¯ en préfixe du message",
         "spoiler": "Envoie le message flouté",
+        "status": {
+            "description": "Définissez votre statut actuel",
+            "no_args": "Aucun argument fourni. Vous devez fournir un emoji et un composant texte facultatif.",
+            "no_emoji": "Vous n'avez pas fourni d'emoji",
+            "no_text": "Vous n'avez fourni aucun texte de statut",
+            "too_long_emoji": "Le premier paramètre doit être un emoji.",
+            "too_long_text": "Le texte que vous avez fourni était trop long."
+        },
         "tableflip": "Ajoute (╯°□°）╯︵ ┻━┻ en préfixe du message",
         "topic": "Récupère ou définit le sujet du salon",
         "topic_none": "Ce salon n'a pas de sujet.",
@@ -3567,7 +3587,6 @@
             "created_rule_rooms": "%(senderName)s a créé une règle qui bannit les salons correspondant à %(glob)s pour %(reason)s",
             "created_rule_servers": "%(senderName)s a créé une règle qui bannit les serveurs correspondant à %(glob)s pour %(reason)s",
             "created_rule_users": "%(senderName)s a créé une règle qui bannit les utilisateurs correspondant à %(glob)s pour %(reason)s",
-            "message_hidden": "Vous avez ignoré cet utilisateur, donc ses messages sont cachés. <a>Les montrer quand même.</a>",
             "removed_rule": "%(senderName)s a supprimé une règle de bannissement correspondant à %(glob)s",
             "removed_rule_rooms": "%(senderName)s a supprimé la règle qui bannit les salons correspondant à %(glob)s",
             "removed_rule_servers": "%(senderName)s a supprimé la règle qui bannit les serveurs correspondant à %(glob)s",
@@ -3871,12 +3890,6 @@
         "verification_unavailable": "Vérification de l’utilisateur indisponible",
         "verify_button": "Vérifier l’utilisateur",
         "verify_explainer": "Pour une sécurité supplémentaire, vérifiez cet utilisateur en comparant un code à usage unique sur vos deux appareils."
-    },
-    "user_menu": {
-        "link_new_device": "Associer un nouvel appareil",
-        "settings": "Tous les paramètres",
-        "switch_theme_dark": "Passer au mode sombre",
-        "switch_theme_light": "Passer au mode clair"
     },
     "voip": {
         "already_in_call": "Déjà en cours d’appel",

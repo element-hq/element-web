@@ -15,8 +15,7 @@
         "room_name": "Rum %(name)s",
         "room_status_bar": "Rumsstatusfält",
         "seek_bar_label": "Förloppsfält för ljud",
-        "unread_messages": "Olästa meddelanden.",
-        "user_menu": "Användarmeny"
+        "unread_messages": "Olästa meddelanden."
     },
     "a11y_jump_first_unread_room": "Hoppa till första olästa rum.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Logga in istället",
         "sign_in_or_register": "Logga in eller skapa konto",
         "sign_in_or_register_description": "Använd ditt konto eller skapa ett nytt för att fortsätta.",
-        "sign_in_prompt": "Har du ett konto? <a>Logga in</a>",
         "sign_in_with_sso": "Logga in med samlad inloggning",
         "signing_in": "Loggar in …",
         "soft_logout": {
@@ -3431,7 +3429,6 @@
             "created_rule_rooms": "%(senderName)s skapade en regel som bannar rum som matchar %(glob)s på grund av %(reason)s",
             "created_rule_servers": "%(senderName)s skapade en regel som bannar servrar som matchar %(glob)s på grund av %(reason)s",
             "created_rule_users": "%(senderName)s skapade en regel som bannar användare som matchar %(glob)s på grund av %(reason)s",
-            "message_hidden": "Du har ignorerat den här användaren, så dess meddelande är dolt. <a>Visa ändå.</a>",
             "removed_rule": "%(senderName)s tog bort en bannregel som matchar %(glob)s",
             "removed_rule_rooms": "%(senderName)s tog bort regeln som bannar rum som matchar %(glob)s",
             "removed_rule_servers": "%(senderName)s tog bort regeln som bannar servrar som matchar %(glob)s",
@@ -3735,12 +3732,6 @@
         "verification_unavailable": "Användarverifiering inte tillgänglig",
         "verify_button": "Verifiera användare",
         "verify_explainer": "För extra säkerhet, verifiera den här användaren genom att kolla en engångskod på båda era enheter."
-    },
-    "user_menu": {
-        "link_new_device": "Länka ny enhet",
-        "settings": "Alla inställningar",
-        "switch_theme_dark": "Byt till mörkt läge",
-        "switch_theme_light": "Byt till ljust läge"
     },
     "voip": {
         "already_in_call": "Redan i samtal",

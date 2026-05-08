@@ -15,8 +15,7 @@
         "room_name": "Pokój %(name)s",
         "room_status_bar": "Pasek stanu pokoju",
         "seek_bar_label": "Pasek wyszukiwania audio",
-        "unread_messages": "Nieprzeczytane wiadomości.",
-        "user_menu": "Menu użytkownika"
+        "unread_messages": "Nieprzeczytane wiadomości."
     },
     "a11y_jump_first_unread_room": "Przejdź do pierwszego nieprzeczytanego pokoju.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Masz już konto? <a>Zaloguj się tutaj </a>",
         "sign_in_or_register": "Zaloguj się lub utwórz konto",
         "sign_in_or_register_description": "Użyj konta lub utwórz nowe, aby kontynuować.",
-        "sign_in_prompt": "Posiadasz już konto? <a>Zaloguj się</a>",
         "sign_in_with_sso": "Zaloguj się za pomocą pojedynczego logowania",
         "signing_in": "Logowanie…",
         "soft_logout": {
@@ -477,6 +475,7 @@
         "description": "Opis",
         "deselect_all": "Odznacz wszystkie",
         "device": "Urządzenie",
+        "disabled_by_homeserver": "Wyłączone przez serwer domowy",
         "edited": "edytowane",
         "email_address": "Adres e-mail",
         "emoji": "Emoji",
@@ -679,6 +678,10 @@
         "unfederated_label_default_on": "Możesz wyłączyć tę opcję, jeśli pokój będzie wykorzystywany jedynie do współpracy z wewnętrznymi zespołami, które posiadają swój serwer domowy. Nie będzie można zmienić tej opcji.",
         "unsupported_version": "Serwer nie wspiera tej wersji pokoju."
     },
+    "create_section_dialog": {
+        "edit_section": "Edytuj sekcję",
+        "title_edition": "Edytuj sekcję"
+    },
     "create_space": {
         "add_details_prompt": "Dodaj trochę szczegółów, aby ludzie mogli ją łatwo rozpoznać.",
         "add_details_prompt_2": "Możesz to zmienić w każdej chwili.",
@@ -747,6 +750,7 @@
         "category_other": "Inne",
         "category_room": "Pokój",
         "caution_colon": "Ostrzeżenie:",
+        "checking_sticky_events_support": "Sprawdzanie wsparcia dla sticky events...",
         "client_versions": "Wersje klientów",
         "crypto": {
             "4s_public_key_in_account_data": "w danych konta",
@@ -794,6 +798,8 @@
         "edit_setting": "Edytuj ustawienie",
         "edit_values": "Edytuj wartości",
         "empty_string": "<empty string>",
+        "error_sticky_duration_must_be_a_number": "stickyDuration musi być liczbą",
+        "error_sticky_duration_out_of_range": "stickyDuration musi być pomiędzy 0 a 36000 milisekund (1h)",
         "event_content": "Zawartość wydarzenia",
         "event_id": "ID wydarzenia: %(eventId)s",
         "event_sent": "Wydarzenie wysłane!",
@@ -801,6 +807,7 @@
         "explore_account_data": "Przeglądaj dane konta",
         "explore_room_account_data": "Przeglądaj dane konta pokoju",
         "explore_room_state": "Przeglądaj stan pokoju",
+        "explore_sticky_state": "Zbadaj stan lepkości",
         "failed_to_find_widget": "Wystąpił błąd podczas próby odnalezienia tego widżetu.",
         "failed_to_load": "Nie udało się wczytać.",
         "failed_to_save": "Nie udało się zapisać ustawień.",
@@ -813,6 +820,7 @@
         "main_timeline": "Główna oś czasu",
         "manual_device_verification": "Ręczna weryfikacja urządzenia",
         "no_receipt_found": "Nie znaleziono potwierdzenia",
+        "no_sticky_events": "Nie znaleziono sticky events w tym pokoju.",
         "notification_state": "Status powiadomień <strong>%(notificationState)s</strong>",
         "notifications_debug": "Debug powiadomień",
         "number_of_users": "Liczba użytkowników",
@@ -838,6 +846,7 @@
         "send_custom_account_data_event": "Wyślij własne wydarzenie danych konta",
         "send_custom_room_account_data_event": "Wyślij własne wydarzenie danych konta pokoju",
         "send_custom_state_event": "Wyślij własne wydarzenie stanu",
+        "send_custom_sticky_event": "Wyślij niestandardowe zdarzenie sticky",
         "send_custom_timeline_event": "Wyślij własne wydarzenie na osi czasu",
         "server_info": "Informacje serwera",
         "server_versions": "Wersje serwera",
@@ -858,6 +867,9 @@
             "many": "<%(count)s spacji>"
         },
         "state_key": "Klucz stanu",
+        "sticky_duration": "Czas trwania Sticky (ms)",
+        "sticky_events_not_supported": "Twój serwer domowy nie obsługuje jeszcze sticky events.",
+        "sticky_key": "Klucz Sticky",
         "thread_root_id": "ID Root Wątku:%(threadRootId)s",
         "threads_timeline": "Oś czasu wątków",
         "title": "Ustawienia deweloperskie",
@@ -1326,6 +1338,14 @@
         "impossible_dialog_title": "Integracje nie są dozwolone"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "Obecnie nie prowadzisz żadnych czatów z tymi kontaktami. Potwierdź zaproszenie, zanim przejdziesz dalej.",
+            "invite_title": "Zaprosić nowe kontakty do tego pokoju?",
+            "start_chat_subtitle_multiple_users": "Obecnie nie masz żadnych czatów z tymi osobami. Potwierdź ich zaproszenie, zanim przejdziesz dalej.",
+            "start_chat_subtitle_one_user": "Obecnie nie masz żadnych czatów z tą osobą. Potwierdź jego zaproszenie, zanim przejdziesz dalej.",
+            "start_chat_title_multiple_users": "Rozpocząć czat z nowymi kontaktami?",
+            "start_chat_title_one_user": "Rozpocząć czat z nowym kontaktem?"
+        },
         "email_caption": "Zaproś przez e-mail",
         "email_limit_one": "Zaproszenie e-mail może zostać wysłane tylko jedno na raz",
         "email_use_default_is": "Użyj serwera identyfikacji, aby zaprosić przez e-mail. <default>Użyj domyślnego (%(defaultIdentityServerName)s)</default> lub zarządzaj w <settings>Ustawieniach</settings>.",
@@ -1489,6 +1509,11 @@
         "experimental_section": "Wczesny podgląd",
         "extended_profiles_msc_support": "Wymaga, aby Twój serwer obsługiwał MSC4133",
         "feature_disable_call_per_sender_encryption": "Wyłącz szyfrowanie nadawcy dla Element Call",
+        "feature_user_status": {
+            "description": "Pozwala wyświetlić i ustawić aktualny status.",
+            "display_name": "Status użytkownika",
+            "required_msc_support": "Wymaga MSC4429 (aktualizacje profilu dla starszej wersji synchronizacji)"
+        },
         "feature_wysiwyg_composer_description": "Użyj bogatego edytora tekstu zamiast edytora Markdown podczas tworzenia wiadomości.",
         "group_calls": "Nowe wrażenia rozmów grupowych",
         "group_developer": "Deweloper",
@@ -1790,6 +1815,12 @@
         "error": "Nie możesz usunąć tej wiadomości. (%(code)s)",
         "ongoing": "Usuwanie…",
         "reason_label": "Powód (opcjonalne)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "Czy na pewno chcesz usunąć tę sekcję?",
+        "description": "Czaty z tej sekcji będą nadal dostępne na liście czatów.",
+        "remove_section": "Usuń sekcję",
+        "title": "Usunąć sekcję?"
     },
     "report_content": {
         "description": "Zgłoszenie tej wiadomości wyśle administratorowi serwera unikatowe „ID wydarzenia”. Jeżeli wiadomości w tym pokoju są szyfrowane, administrator serwera może nie być w stanie przeczytać treści wiadomości, lub zobaczyć plików bądź zdjęć.",
@@ -2821,28 +2852,32 @@
         "send_read_receipts_unsupported": "Twój serwer nie wspiera wyłączenia wysyłania potwierdzeń przeczytania.",
         "send_typing_notifications": "Wyślij powiadomienia o pisaniu",
         "sessions": {
-            "best_security_note": "Dla najlepszego bezpieczeństwa zweryfikuj swoje sesje i wyloguj się z każdej, której nie rozpoznajesz lub już nie korzystasz.",
+            "best_security_note": "Dla najlepszego bezpieczeństwa zweryfikuj swoje sesje i usuń każdą, której nie rozpoznajesz lub z której już nie korzystasz.",
             "browser": "Przeglądarka",
             "confirm_sign_out": {
-                "one": "Potwierdź wylogowanie z tego urządzenia",
-                "other": "Potwierdź wylogowanie z tych urządzeń"
+                "one": "Potwierdź usunięcie tego urządzenia",
+                "few": "Potwierdź usunięcie tych urządzeń",
+                "many": "Potwierdź usunięcie tych urządzeń"
             },
             "confirm_sign_out_body": {
-                "one": "Kliknij przycisk poniżej, aby potwierdzić wylogowanie tego urządzenia.",
-                "other": "Kliknij przycisk poniżej, aby potwierdzić wylogowanie tych urządzeń."
+                "one": "Kliknij przycisk poniżej, aby potwierdzić usunięcie tego urządzenia.",
+                "few": "Kliknij przycisk poniżej, aby potwierdzić usunięcie tych urządzeń.",
+                "many": "Kliknij przycisk poniżej, aby potwierdzić usunięcie tych urządzeń."
             },
             "confirm_sign_out_continue": {
-                "one": "Wyloguj urządzenie",
-                "other": "Wyloguj urządzenia"
+                "one": "Usuń urządzenie",
+                "few": "Usuń urządzenia",
+                "many": "Usuń urządzenia"
             },
             "confirm_sign_out_sso": {
-                "one": "Potwierdź wylogowanie z tego urządzenia, udowadniając swoją tożsamość za pomocą pojedynczego logowania.",
-                "other": "Potwierdź wylogowanie z tych urządzeń, udowadniając swoją tożsamość za pomocą pojedynczego logowania."
+                "one": "Potwierdź usunięcie tego urządzenia, logując się ponownie, by potwierdzić swoją tożsamość.",
+                "few": "Potwierdź usunięcie tych urządzeń, logując się ponownie, by potwierdzić swoją tożsamość.",
+                "many": "Potwierdź usunięcie tych urządzeń, logując się ponownie, by potwierdzić swoją tożsamość."
             },
             "current_session": "Bieżąca sesja",
             "desktop_session": "Sesja desktopowa",
             "details_heading": "Szczegóły sesji",
-            "device_unverified_description": "Zweryfikuj lub wyloguj się z tej sesji dla zapewnienia najlepszego bezpieczeństwa.",
+            "device_unverified_description": "Zweryfikuj lub usuń tę sesję, aby zapewnić najwyższe bezpieczeństwo i niezawodność.",
             "device_unverified_description_current": "Zweryfikuj swoją bieżącą sesję dla wzmocnienia bezpiecznych wiadomości.",
             "device_verified_description": "Sesja jest gotowa do wysyłania bezpiecznych wiadomości.",
             "device_verified_description_current": "Twoja bieżąca sesja jest gotowa do wysyłania bezpiecznych wiadomości.",
@@ -2860,7 +2895,7 @@
             "inactive_sessions": "Sesje nieaktywne",
             "inactive_sessions_explainer_1": "Sesje nieaktywne to sesje, które nie były używane przez dłuższy czas, ale wciąż otrzymują klucze szyfrujące.",
             "inactive_sessions_explainer_2": "Regularne usuwanie sesji nieaktywnych poprawia bezpieczeństwo, wydajność i upraszcza Tobie wykrywanie podejrzanych sesji.",
-            "inactive_sessions_list_description": "Rozważ wylogowanie się ze starych sesji (%(inactiveAgeDays)s dni lub starsze), jeśli już z nich nie korzystasz.",
+            "inactive_sessions_list_description": "Rozważ usunięcie starych sesji (%(inactiveAgeDays)s dni lub starsze), jeśli już z nich nie korzystasz.",
             "ip": "Adres IP",
             "last_activity": "Ostatnia aktywność",
             "manage": "Zarządzaj tą sesją",
@@ -2891,16 +2926,17 @@
             "sign_in_with_qr_button": "Pokaż kod QR",
             "sign_in_with_qr_description": "Użyj kodu QR, aby zalogować się na innym urządzeniu i skonfigurować bezpieczne przesyłanie wiadomości.",
             "sign_in_with_qr_unsupported": "Nieobsługiwane przez dostawcę konta",
-            "sign_out": "Wyloguj się z tej sesji",
-            "sign_out_all_other_sessions": "Wyloguj się z wszystkich pozostałych sesji (%(otherSessionsCount)s)",
+            "sign_out": "Usuń tę sesję",
+            "sign_out_all_other_sessions": "Usuń wszystkie pozostałe sesje (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
                 "one": "Czy na pewno chcesz usunąć %(count)s sesję?",
                 "few": "Czy na pewno chcesz usunąć %(count)s sesje?",
                 "many": "Czy na pewno chcesz usunąć %(count)s sesji?"
             },
             "sign_out_n_sessions": {
-                "one": "Wyloguj się z %(count)s sesji",
-                "other": "Wyloguj się z %(count)s sesji"
+                "one": "Usuń %(count)s sesję",
+                "few": "Usuń %(count)s sesje",
+                "many": "Usuń %(count)s sesji"
             },
             "title": "Sesje",
             "unknown_session": "Nieznany typ sesji",
@@ -2909,15 +2945,15 @@
             "unverified_session_explainer_2": "Nie będziesz w stanie uczestniczyć w pokojach, gdzie szyfrowane jest włączone.",
             "unverified_session_explainer_3": "Dla najlepszego bezpieczeństwa i prywatności zaleca się korzystania z klientów Matrix, które wspierają szyfrowanie.",
             "unverified_sessions": "Sesje niezweryfikowane",
-            "unverified_sessions_explainer_1": "Sesje niezweryfikowane to sesje, w których zalogowano się za pomocą Twoich danych, lecz nie zostały zweryfikowane inną sesją.",
+            "unverified_sessions_explainer_1": "Sesje niezweryfikowane to sesje, w których zalogowano się za pomocą Twoich danych, ale nie zostały potwierdzone tożsamością cyfrową.",
             "unverified_sessions_explainer_2": "W tym przypadku dokładnie się upewnij, że rozpoznajesz takie sesje, ponieważ mogą ujawnić nieautoryzowane użycie Twojego konta.",
-            "unverified_sessions_list_description": "Dla wzmocnienia bezpiecznych wiadomości, zweryfikuj swoje sesje i wyloguj się ze wszystkich sesji, których nie rozpoznajesz lub nie używasz.",
+            "unverified_sessions_list_description": "Zweryfikuj swoje sesje, aby zapewnić większe bezpieczeństwo komunikacji lub usuń te, których nie rozpoznajesz albo których już nie używasz.",
             "url": "URL",
             "verified_session": "Sesja zweryfikowana",
             "verified_sessions": "Sesje zweryfikowane",
-            "verified_sessions_explainer_1": "Sesje zweryfikowane są wszędzie, gdzie korzystasz z tego konta po wprowadzeniu swojego hasła lub zweryfikowaniu swojej tożsamości za pomocą innej sesji zweryfikowanej.",
+            "verified_sessions_explainer_1": "Zweryfikowane sesje zostały potwierdzone przez Twoją tożsamość cyfrową.",
             "verified_sessions_explainer_2": "To oznacza, że posiadasz wszystkie niezbędne klucze wymagane do odblokowania swoich zaszyfrowanych wiadomości i oznajmiasz innym użytkownikom, że ufasz tej sesji.",
-            "verified_sessions_list_description": "Dla najlepszego bezpieczeństwa, wyloguj się ze wszystkich sesji, których nie rozpoznajesz lub nie używasz.",
+            "verified_sessions_list_description": "Dla najlepszego bezpieczeństwa, usuń każdą sesję, której nie rozpoznajesz lub już nie używasz.",
             "verify_session": "Zweryfikuj sesję",
             "web_session": "Sesja internetowa"
         },
@@ -3062,6 +3098,14 @@
         "server_error_detail": "Serwer może być niedostępny, przeciążony, lub coś innego poszło źle.",
         "shrug": "Dodaje ¯\\_(ツ)_/¯ na początku wiadomości tekstowej",
         "spoiler": "Wysyła podaną wiadomość jako spoiler",
+        "status": {
+            "description": "Ustaw swój aktualny status",
+            "no_args": "Nie podano argumentów. Należy podać emoij i opcjonalny komponent tekstowy.",
+            "no_emoji": "Nie podano emoji",
+            "no_text": "Nie podano żadnego tekstu statusu",
+            "too_long_emoji": "Pierwszym argumentem musi być emoji",
+            "too_long_text": "Podany tekst jest za długi."
+        },
         "tableflip": "Dodaje (╯°□°）╯︵ ┻━┻ na początku wiadomości tekstowej",
         "topic": "Wyświetla lub ustawia temat pokoju",
         "topic_none": "Ten pokój nie ma tematu.",
@@ -3489,7 +3533,6 @@
             "created_rule_rooms": "%(senderName)s utworzył regułę banującą pokoje pasujące do wzorca %(glob)s z powodu %(reason)s",
             "created_rule_servers": "%(senderName)s utworzył regułę banującą serwery pasujące do wzorca %(glob)s z powodu %(reason)s",
             "created_rule_users": "%(senderName)s utworzył regułę banującą użytkowników pasujących do wzorca %(glob)s z powodu %(reason)s",
-            "message_hidden": "Zignorowałeś tego użytkownika, więc ich wiadomości są ukryte. <a>Pokaż mimo to</a>",
             "removed_rule": "%(senderName)s usunął zasadę banowania pasującą do %(glob)s",
             "removed_rule_rooms": "%(senderName)s usunął regułę banującą pokoje pasujące do wzorca %(glob)s",
             "removed_rule_servers": "%(senderName)s usunął regułę banującą serwery pasujące do wzorca %(glob)s",
@@ -3502,8 +3545,8 @@
         },
         "no_permission_messages_before_invite": "Nie posiadasz uprawnień, aby wyświetlić wiadomości, które wysłano zanim cię zaproszono.",
         "no_permission_messages_before_join": "Nie posiadasz uprawnień, aby wyświetlić wiadomości, które wysłano zanim dołączyłeś.",
-        "pending_moderation": "Wiadomość oczekuję na moderację",
-        "pending_moderation_reason": "Wiadomość oczekuję na moderację: %(reason)s",
+        "pending_moderation": "Wiadomość oczekuje na moderację",
+        "pending_moderation_reason": "Wiadomość oczekuje na moderację: %(reason)s",
         "reactions": {
             "add_reaction_prompt": "Dodaj reakcje",
             "custom_reaction_fallback_label": "Reakcja niestandardowa",
@@ -3800,12 +3843,6 @@
         "verify_button": "Zweryfikuj użytkownika",
         "verify_explainer": "Dla dodatkowego bezpieczeństwa, zweryfikuj tego użytkownika za pomocą jednorazowego kodu na obu waszych urządzeniach."
     },
-    "user_menu": {
-        "link_new_device": "Powiąż nowe urządzenie",
-        "settings": "Wszystkie ustawienia",
-        "switch_theme_dark": "Przełącz na tryb ciemny",
-        "switch_theme_light": "Przełącz na tryb jasny"
-    },
     "voip": {
         "already_in_call": "Już dzwoni",
         "already_in_call_person": "Prowadzisz już rozmowę z tą osobą.",
@@ -3821,6 +3858,18 @@
         "call_held": "%(peerName)s zawiesił rozmowę",
         "call_held_resume": "Zawieszono rozmowę <a>Wznów</a>",
         "call_held_switch": "Zawieszono rozmowę <a>Przełącz</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> w połączeniu",
+                "few": "<avatars/> w połączeniu",
+                "many": "<avatars/> w połączeniu"
+            },
+            "overflow": {
+                "one": "<avatars/> +%(overflowCount)s w połączeniu",
+                "few": "<avatars/> +%(overflowCount)s w połączeniu",
+                "many": "<avatars/> +%(overflowCount)s w połączeniu"
+            }
+        },
         "call_toast_unknown_room": "Nieznany pokój",
         "camera_disabled": "Twoja kamera jest wyłączona",
         "camera_enabled": "Twoja kamera jest nadal włączona",
@@ -3843,10 +3892,12 @@
         "enable_microphone": "Wyłącz wyciszenie mikrofonu",
         "expand": "Wróć do połączenia",
         "get_call_link": "Udostępnij link do połączenia",
+        "group_call_started": "Rozpoczęto połączenie grupowe",
         "hangup": "Rozłącz",
         "hide_sidebar_button": "Ukryj pasek boczny",
         "input_devices": "Urządzenia wejściowe",
         "jitsi_call": "Konferencja Jitsi",
+        "join_with_video": "Dołącz z wideo",
         "legacy_call": "Połączenie w starszej technologii.",
         "maximise": "Wypełnij ekran",
         "maximise_call": "Maksymalizuj połączenie",
@@ -3906,6 +3957,11 @@
         "you_are_presenting": "Prezentujesz"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s na %(osName)s",
+    "welcome": {
+        "tagline_element": "Zaprojektowany z myślą o szybkości i prostocie.",
+        "title_element": "Be in your element",
+        "title_generic": "Witaj w %(brand)s"
+    },
     "widget": {
         "added_by": "Widżet dodany przez",
         "capabilities_dialog": {

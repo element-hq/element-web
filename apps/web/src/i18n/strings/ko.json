@@ -13,8 +13,7 @@
         "room_name": "%(name)s 방",
         "room_status_bar": "방 상태 표시줄",
         "seek_bar_label": "오디오 탐색 바",
-        "unread_messages": "읽지 않은 메시지",
-        "user_menu": "사용자 메뉴"
+        "unread_messages": "읽지 않은 메시지"
     },
     "a11y_jump_first_unread_room": "읽지 않은 첫 채팅방으로 건너뜁니다.",
     "action": {
@@ -339,7 +338,6 @@
         "sign_in_instead_prompt": "이미 계정이 있으신가요? <a>여기서 로그인하세요</a>",
         "sign_in_or_register": "로그인 또는 계정 생성",
         "sign_in_or_register_description": "계속하려면 기존 계정을 사용하거나 새 계정을 만드세요.",
-        "sign_in_prompt": "계정이 있으신가요?<a> 로그인</a>",
         "sign_in_with_sso": "통합 인증(SSO)으로 로그인",
         "signing_in": "로그인 중…",
         "soft_logout": {
@@ -3486,7 +3484,6 @@
             "created_rule_rooms": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 채팅방 차단 규칙을 '%(reason)s' 사유로 생성했습니다.",
             "created_rule_servers": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 서버 차단 규칙을 '%(reason)s' 사유로 생성했습니다.",
             "created_rule_users": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 사용자 차단 규칙을 '%(reason)s' 사유로 생성했습니다.",
-            "message_hidden": "이 사용자를 무시했습니다. 사용자의 메시지는 숨겨집니다. <a>무시하고 보이기.</a>",
             "removed_rule": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 차단 규칙을 삭제했습니다.",
             "removed_rule_rooms": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 채팅방 차단 규칙을 삭제했습니다.",
             "removed_rule_servers": "%(senderName)s님이 '%(glob)s' 패턴과 일치하는 서버 차단 규칙을 삭제했습니다.",
@@ -3753,12 +3750,6 @@
         "verification_unavailable": "사용자 인증 불가",
         "verify_button": "사용자 확인",
         "verify_explainer": "추가 보안을 위해 양쪽 기기에서 일회용 인증 코드를 확인하여 이 사용자를 인증하세요."
-    },
-    "user_menu": {
-        "link_new_device": "새 기기 연결",
-        "settings": "전체 설정",
-        "switch_theme_dark": "다크 모드로 전환",
-        "switch_theme_light": "라이트 모드로 전환"
     },
     "voip": {
         "already_in_call": "이미 전화중",
