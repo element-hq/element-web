@@ -6,9 +6,10 @@
  */
 
 .textualEvent {
-    overflow-y: hidden;
-    font: var(--cpd-font-body-sm-regular);
+    font-size: var(--cpd-font-size-body-sm);
     line-height: normal;
+
+    overflow-y: hidden;
     color: var(--cpd-color-text-secondary);
 
     a {

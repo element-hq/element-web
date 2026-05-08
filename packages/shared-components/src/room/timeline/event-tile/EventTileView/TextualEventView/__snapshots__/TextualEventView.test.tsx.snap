@@ -20,7 +20,7 @@ exports[`TextualEventView > renders a textual event with link 1`] = `
     data-event-layout="group"
   >
     <span>
-      Dummy textual event text 
+      Dummy [🤒] textual event text 
     </span>
     <a
       href="~"

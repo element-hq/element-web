@@ -30,7 +30,7 @@ export const WithLink: Story = {
         vm: new MockViewModel({
             content: (
                 <>
-                    <span>Dummy textual event text </span>
+                    <span>Dummy [🤒] textual event text </span>
                     <a href="~">with link</a>
                 </>
             ),
