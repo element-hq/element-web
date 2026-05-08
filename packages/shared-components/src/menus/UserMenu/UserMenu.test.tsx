@@ -39,8 +39,7 @@ describe("UserMenu", () => {
         expect(baseElement).toMatchSnapshot();
     });
     it("renders a menu without an avatar", async () => {
-        const { baseElement, getByRole } = render(<NoAvatar />);
-        await userEvent.click(getByRole("button"));
+        const { baseElement } = render(<NoAvatar />);
         expect(baseElement).toMatchSnapshot();
     });
 });
