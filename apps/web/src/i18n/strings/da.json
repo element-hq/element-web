@@ -15,8 +15,7 @@
         "room_name": "Rum %(name)s",
         "room_status_bar": "Statusbjælke for rum",
         "seek_bar_label": "Progressionsmarkør for lydafspiller",
-        "unread_messages": "Ulæste beskeder.",
-        "user_menu": "Brugermenu"
+        "unread_messages": "Ulæste beskeder."
     },
     "a11y_jump_first_unread_room": "Gå til første ulæste rum.",
     "action": {
@@ -321,7 +320,6 @@
         "sign_in_instead_prompt": "Har du allerede en konto? <a>Log ind her</a>",
         "sign_in_or_register": "Log ind eller Opret bruger",
         "sign_in_or_register_description": "Brug din konto eller opret en ny for at fortsætte.",
-        "sign_in_prompt": "Har du en konto? <a>Log ind</a>",
         "sign_in_with_sso": "Log ind med single sign-on",
         "signing_in": "Logger ind…",
         "soft_logout": {
@@ -3091,7 +3089,6 @@
             "created_rule_rooms": "%(senderName)s oprettede en regel, som spærrer for rum, der matcher %(glob)s af %(reason)s",
             "created_rule_servers": "%(senderName)s oprettede en regel, som spærrer servere, der matcher %(glob)s af %(reason)s",
             "created_rule_users": "%(senderName)s oprettede en regel, som spærrer for brugere, der matcher %(glob)s af %(reason)s",
-            "message_hidden": "Du har ignoreret denne bruger, så deres besked er skjult. <a>Vis alligevel.</a>",
             "removed_rule": "%(senderName)s fjernede en spærringsregel der matcher %(glob)s",
             "removed_rule_rooms": "%(senderName)s fjernede den regel der spærrede brugere der matcher %(glob)s",
             "removed_rule_servers": "%(senderName)s fjernede den regel der spærrede servere som matcher %(glob)s",
@@ -3384,10 +3381,6 @@
         "unban_space_warning": "De vil ikke være i stand til at tilgå noget du ikke er admin for.",
         "verify_button": "Verificér bruger",
         "verify_explainer": "For ekstra sikkerhed skal du verificere denne bruger ved at kontrollere en engangskode på begge jeres enheder."
-    },
-    "user_menu": {
-        "link_new_device": "Forbind ny enhed",
-        "settings": "Alle indstillinger"
     },
     "voip": {
         "already_in_call": "Allerede i et opkald",

@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UnknownBodyView > renders multiline content 1`] = `
+<div>
+  <div
+    class="UnknownBodyView-module_content"
+  >
+    Unsupported message body
+with preserved line breaks
+  </div>
+</div>
+`;
+
+exports[`UnknownBodyView > renders the default story 1`] = `
+<div>
+  <div
+    class="UnknownBodyView-module_content"
+  >
+    Unsupported message body
+  </div>
+</div>
+`;

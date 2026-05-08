@@ -17,8 +17,7 @@
         "room_name": "Ystafell %(matere)s",
         "room_status_bar": "Bar statws ystafell",
         "seek_bar_label": "Bar chwilio sain",
-        "unread_messages": "Negeseuon heb eu darllen.",
-        "user_menu": "Dewislen defnyddiwr"
+        "unread_messages": "Negeseuon heb eu darllen."
     },
     "a11y_jump_first_unread_room": "Symud i'r ystafell gyntaf heb ei darllen.",
     "action": {
@@ -343,7 +342,6 @@
         "sign_in_instead_prompt": "Oes gennych chi gyfrif yn barod? <a>Mewngofnodwch yma</a>",
         "sign_in_or_register": "Mewngofnodi neu Creu Cyfrif",
         "sign_in_or_register_description": "Defnyddiwch eich cyfrif neu crëwch un newydd i barhau.",
-        "sign_in_prompt": "Oes gennych chi gyfrif? <a>Mewngofnodwch</a>",
         "sign_in_with_sso": "Mewngofnodwch gyda mewngofnod sengl",
         "signing_in": "Wrthi'n mewngofnodi…",
         "soft_logout": {
@@ -3530,7 +3528,6 @@
             "created_rule_rooms": "Creodd %(senderName)s reol yn gwahardd ystafelloedd sy'n cyfateb i %(glob)s am %(reason)s",
             "created_rule_servers": "Creodd %(senderName)s reol yn gwahardd gweinyddwyr sy'n cyfateb i %(glob)s am %(reason)s",
             "created_rule_users": "Creodd %(senderName)s reol yn gwahardd defnyddwyr rhag paru %(glob)s am %(reason)s",
-            "message_hidden": "Rydych chi wedi anwybyddu'r defnyddiwr hwn, felly mae eu neges wedi'i chuddio. <a>Dangos beth bynnag.</a>",
             "removed_rule": "Mae %(senderName)s wedi dileu rheol gwahardd sy'n cyfateb i %(glob)s",
             "removed_rule_rooms": "Mae %(senderName)s wedi dileu'r rheol sy'n gwahardd ystafelloedd sy'n cyfateb i %(glob)s",
             "removed_rule_servers": "Mae %(senderName)s wedi dileu'r rheol sy'n gwahardd gweinyddwyr sy'n cyfateb i %(glob)s",
@@ -3840,12 +3837,6 @@
         "verification_unavailable": "Nid yw dilysu defnyddiwr ar gael",
         "verify_button": "Dilysu Defnyddiwr",
         "verify_explainer": "Ar gyfer diogelwch ychwanegol, gwiriwch y defnyddiwr hwn trwy wirio cod un-amser ar eich dwy ddyfais."
-    },
-    "user_menu": {
-        "link_new_device": "Cysylltu'r ddyfais newydd",
-        "settings": "Pob gosodiad",
-        "switch_theme_dark": "Newid i'r modd tywyll",
-        "switch_theme_light": "Newid i'r modd golau"
     },
     "voip": {
         "already_in_call": "Eisoes mewn galwad",

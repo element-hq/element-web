@@ -15,8 +15,7 @@
         "room_name": "Efitra%(name)s",
         "room_status_bar": "Bara momba ny efitrano",
         "seek_bar_label": "Audio mitady bar",
-        "unread_messages": "Hafatra tsy novakiana.",
-        "user_menu": "Lisitra mpampiasa"
+        "unread_messages": "Hafatra tsy novakiana."
     },
     "a11y_jump_first_unread_room": "Mankanesa any amin'ny efitrano voalohany tsy voavaky.",
     "action": {
@@ -304,7 +303,6 @@
         "sign_in_instead_prompt": "Efa manana kaonty?<a> Midira eto</a>",
         "sign_in_or_register": "Midira na Mamorona kaonty",
         "sign_in_or_register_description": "Ampiasao ny kaontinao na mamorona vaovao hanohizana.",
-        "sign_in_prompt": "Manana kaonty?<a> Hiditra</a>",
         "sign_in_with_sso": "Midira miaraka amin'ny sonia tokana",
         "signing_in": "Midira…",
         "soft_logout": {
@@ -3010,7 +3008,6 @@
             "created_rule_rooms": "%(senderName)snamorona fitsipika mandràra ny efitrano mifanandrify%(glob)s Hoan'ny%(reason)s",
             "created_rule_servers": "%(senderName)snamorona fitsipika mandrara ny mpizara mifanentana%(glob)s hoan'ny%(reason)s",
             "created_rule_users": "%(senderName)snamorona fitsipika mandràra ny mpampiasa mifanandrify%(glob)s Hoan'ny%(reason)s",
-            "message_hidden": "Tsy niraharaha an'io mpampiasa io ianao, noho izany dia miafina ny hafatr'izy ireo. <a>Asehoy ihany.</a>",
             "removed_rule": "%(senderName)snesorina ny fitsipika fandrarana mifanandrify%(glob)s",
             "removed_rule_rooms": "%(senderName)snesorina ny fitsipika mandrara ny efitrano mifanentana%(glob)s",
             "removed_rule_servers": "%(senderName)snesorina ny fitsipika mandràra ireo mpizara mifanentana%(glob)s",
@@ -3298,11 +3295,6 @@
         "unban_space_warning": "Nandresy ry zareo tsy afaka mankany amin'ny izay rehetra tadiavinareo izao tsy admin",
         "verify_button": "Hamarino ny mpampiasa",
         "verify_explainer": "Ho fiarovana fanampiny, hamarino ity mpampiasa ity amin'ny alàlany fanamarinana kaody indray mandeha amin'ny fitaovanao roa."
-    },
-    "user_menu": {
-        "settings": "Fikirana rehetra",
-        "switch_theme_dark": "Midira amin'ny maody maizina",
-        "switch_theme_light": "Ovay amin'ny fomba mazava"
     },
     "voip": {
         "already_in_call": "Efa miantso",

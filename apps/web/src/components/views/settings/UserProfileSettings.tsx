@@ -63,10 +63,12 @@ const ManageAccountButton: React.FC<ManageAccountButtonProps> = ({ externalAccou
         onClick={null}
         element="a"
         kind="primary"
+        data-kind="primary"
         target="_blank"
         rel="noreferrer noopener"
         href={externalAccountManagementUrl}
         data-testid="external-account-management-link"
+        style={{ textDecoration: "none" }}
     >
         <PopOutIcon className="mx_UserProfileSettings_accountmanageIcon" width="24" height="24" />
         {_t("settings|general|oidc_manage_button")}
