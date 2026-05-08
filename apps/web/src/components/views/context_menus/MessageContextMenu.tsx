@@ -319,6 +319,14 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
+    private onCopyMessageClick = (): void => {
+        const body = this.props.mxEvent.getContent().body;
+        if (body) {
+            copyPlaintext(body);
+        }
+        this.closeMenu();
+    };
+
     private onQuoteClick = (): void => {
         const selectedText = getSelectedText();
         if (selectedText) {
@@ -640,6 +648,17 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
+        let copyMessageButton: JSX.Element | undefined;
+        if (contentActionable) {
+            copyMessageButton = (
+                <IconizedContextMenuOption
+                    icon={<CopyIcon />}
+                    label={_t("action|copy")}
+                    onClick={this.onCopyMessageClick}
+                />
+            );
+        }
+
         let replyButton: JSX.Element | undefined;
         if (rightClick && contentActionable && canSendMessages) {
             replyButton = (
@@ -709,12 +728,13 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let quickItemsList: JSX.Element | undefined;
-        if (editButton || replyButton || reactButton || pinButton) {
+        if (copyMessageButton || editButton || replyButton || reactButton || pinButton) {
             quickItemsList = (
                 <IconizedContextMenuOptionList>
                     {reactButton}
                     {replyButton}
                     {replyInThreadButton}
+                    {copyMessageButton}
                     {editButton}
                     {pinButton}
                 </IconizedContextMenuOptionList>
@@ -727,6 +747,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 {openInMapSiteButton}
                 {endPollButton}
                 {forwardButton}
+                {copyMessageButton}
                 {permalinkButton}
                 {reportEventButton}
                 {externalURLButton}

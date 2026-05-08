@@ -2010,6 +2010,7 @@ function ActionBarWrapper({
     const { isCard } = useContext(CardContext);
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
     const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
+    const [shiftKeyPressed, setShiftKeyPressed] = useState(false);
     const isSearch = Boolean(roomContext.search);
     const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
         setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
@@ -2017,6 +2018,26 @@ function ActionBarWrapper({
     const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
         setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
     }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent): void => {
+            if (e.key === "Shift") {
+                setShiftKeyPressed(true);
+            }
+        };
+        const handleKeyUp = (e: KeyboardEvent): void => {
+            if (e.key === "Shift") {
+                setShiftKeyPressed(false);
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+        return (): void => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+    }, []);
+
     const vm = useCreateAutoDisposedViewModel(
         () =>
             new EventTileActionBarViewModel({
@@ -2027,6 +2048,7 @@ function ActionBarWrapper({
                 isSearch,
                 isCard,
                 isQuoteExpanded,
+                showShiftActions: shiftKeyPressed,
                 onToggleThreadExpanded: toggleThreadExpanded,
                 onOptionsClick: handleOptionsClick,
                 onReactionsClick: handleReactionsClick,
@@ -2043,6 +2065,7 @@ function ActionBarWrapper({
             isSearch,
             isCard,
             isQuoteExpanded,
+            showShiftActions: shiftKeyPressed,
             getRelationsForEvent,
             onToggleThreadExpanded: toggleThreadExpanded,
             onOptionsClick: handleOptionsClick,
@@ -2057,6 +2080,7 @@ function ActionBarWrapper({
         isSearch,
         isCard,
         isQuoteExpanded,
+        shiftKeyPressed,
         getRelationsForEvent,
         handleOptionsClick,
         handleReactionsClick,
