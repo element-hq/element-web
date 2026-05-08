@@ -138,3 +138,8 @@ Requires [MSC4429](https://github.com/matrix-org/matrix-spec-proposals/pull/4429
 
 **Warning** This feature has options which are not backwards compatible, disabling
 it may have unintended consequences.
+
+## Log in with QR (`feature_login_with_qr`)
+
+Enables logging in to Element Web/Desktop by using Element X to scan a QR code.
+Requires server support, based on MSC4108. Can only be configured via config.
