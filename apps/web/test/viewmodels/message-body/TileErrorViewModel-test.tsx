@@ -76,17 +76,6 @@ describe("TileErrorViewModel", () => {
         expect(vm.getSnapshot().viewSourceCtaLabel).toBeUndefined();
     });
 
-    it("updates the layout when the host timeline layout changes", () => {
-        const vm = createVm();
-        const listener = jest.fn();
-        vm.subscribe(listener);
-
-        vm.setProps({ layout: "bubble" });
-
-        expect(vm.getSnapshot().layout).toBe("bubble");
-        expect(listener).toHaveBeenCalledTimes(1);
-    });
-
     it("guards setProps against unchanged values", () => {
         const error = new Error("Boom");
         const mxEvent = createEvent();
@@ -94,7 +83,7 @@ describe("TileErrorViewModel", () => {
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setProps({ developerMode: true, error, layout: "group" });
+        vm.setProps({ developerMode: true, error });
 
         expect(listener).not.toHaveBeenCalled();
     });

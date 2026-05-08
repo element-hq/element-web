@@ -29,9 +29,5 @@ export function EventTile(props: Readonly<EventTileProps>): JSX.Element {
         return tile;
     }
 
-    return (
-        <EventTileErrorBoundary mxEvent={tileProps.mxEvent} layout={tileProps.layout}>
-            {tile}
-        </EventTileErrorBoundary>
-    );
+    return <EventTileErrorBoundary mxEvent={tileProps.mxEvent}>{tile}</EventTileErrorBoundary>;
 }
