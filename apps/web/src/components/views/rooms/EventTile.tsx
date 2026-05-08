@@ -502,6 +502,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
 
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
+
+        if (
+            this.state.focusWithin &&
+            this.ref.current &&
+            document.activeElement instanceof HTMLElement &&
+            !this.ref.current.contains(document.activeElement)
+        ) {
+            this.setState({ focusWithin: false, showActionBarFromFocus: false });
+        }
     }
 
     private readonly onNewThread = (thread: Thread): void => {
