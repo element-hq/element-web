@@ -33,7 +33,6 @@ describe("TileErrorViewModel", () => {
         const mxEvent = overrides.mxEvent ?? createEvent();
 
         return new TileErrorViewModel({
-            layout: "group",
             developerMode: true,
             error,
             mxEvent,
@@ -56,7 +55,6 @@ describe("TileErrorViewModel", () => {
         const vm = createVm();
 
         expect(vm.getSnapshot()).toEqual({
-            layout: "group",
             message: "Can't load this message",
             eventType: "m.room.message",
             bugReportCtaLabel: "Submit debug logs",

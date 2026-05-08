@@ -19,6 +19,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import {
     EncryptionEventView,
+    HiddenBodyView,
     TextualEventView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -41,13 +42,13 @@ import { WidgetType } from "../widgets/WidgetType";
 import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
 import { getMessageModerationState, MessageModerationState } from "../utils/EventUtils";
-import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
 import { EncryptionEventViewModel } from "../viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
+import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
 import { ElementCallEventType } from "../call-types";
 
 // Subset of EventTile's IProps plus some mixins
@@ -103,7 +104,16 @@ const EncryptionEventFactory: Factory = (ref, props) => {
     return <EncryptionEventWrappedView ref={ref} {...props} />;
 };
 const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
-const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
+function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new HiddenBodyViewModel({ mxEvent }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    return <HiddenBodyView vm={vm} ref={ref} className="mx_HiddenBody" />;
+}
+const HiddenEventFactory: Factory = (ref, props) => <HiddenBodyWrappedView ref={ref} {...props} />;
 
 // These factories are exported for reference comparison against pickFactory()
 export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;

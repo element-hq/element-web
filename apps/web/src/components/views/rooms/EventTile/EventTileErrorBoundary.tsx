@@ -7,10 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode, type JSX } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { TileErrorView, type TileErrorViewLayout } from "@element-hq/web-shared-components";
+import { TileErrorView } from "@element-hq/web-shared-components";
 
 import { useSettingValue } from "../../../../hooks/useSettings";
-import { Layout } from "../../../../settings/enums/Layout";
 import {
     TileErrorViewModel,
     type TileErrorViewModelProps,
@@ -18,7 +17,6 @@ import {
 
 interface EventTileErrorBoundaryProps {
     children: ReactNode;
-    layout: Layout;
     mxEvent: MatrixEvent;
 }
 
@@ -53,7 +51,6 @@ class EventTileErrorBoundaryInner extends React.Component<
 
         const shouldUpdateViewModel =
             prevState.error !== this.state.error ||
-            prevProps.layout !== this.props.layout ||
             prevProps.mxEvent !== this.props.mxEvent ||
             prevProps.developerMode !== this.props.developerMode;
         if (!shouldUpdateViewModel) return;
@@ -68,22 +65,9 @@ class EventTileErrorBoundaryInner extends React.Component<
     private buildTileErrorViewModelProps(error: Error): TileErrorViewModelProps {
         return {
             error,
-            layout: this.getTileErrorLayout(),
             mxEvent: this.props.mxEvent,
             developerMode: this.props.developerMode,
         };
-    }
-
-    private getTileErrorLayout(): TileErrorViewLayout {
-        switch (this.props.layout) {
-            case Layout.Bubble:
-                return "bubble";
-            case Layout.IRC:
-                return "irc";
-            case Layout.Group:
-            default:
-                return "group";
-        }
     }
 
     private getFallbackViewModel(error: Error): TileErrorViewModel {

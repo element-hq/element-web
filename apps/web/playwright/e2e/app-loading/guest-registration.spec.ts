@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
  * Tests for application startup with guest registration enabled on the server.
  */
 
+import type { Page } from "playwright-core";
 import { expect, test } from "../../element-web-test";
 
 test.use({
@@ -18,10 +19,26 @@ test.use({
     },
 });
 
+const screenshotOptions = (page?: Page) => ({
+    // Hide the UserID
+    css: `
+        span[data-testid="userId"] {
+            display: none !important;
+        }
+    `,
+});
+
 test("Shows the welcome page by default", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { name: "Be in your element" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
+});
+
+test("Shows the user menu for guests", { tag: ["@screenshot"] }, async ({ page, app }) => {
+    await page.goto("/#/room/!room:id");
+    await page.waitForSelector(".mx_MatrixChat", { timeout: 30000 });
+    const menu = await app.openUserMenu();
+    await expect(menu).toMatchScreenshot("guest-menu.png", screenshotOptions(page));
 });
 
 test("Room link correctly loads a room view", async ({ page }) => {

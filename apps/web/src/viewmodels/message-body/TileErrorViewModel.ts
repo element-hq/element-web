@@ -9,7 +9,6 @@ import { type MouseEventHandler } from "react";
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
-    type TileErrorViewLayout,
     type TileErrorViewSnapshot as TileErrorViewSnapshotInterface,
     type TileErrorViewModel as TileErrorViewModelInterface,
 } from "@element-hq/web-shared-components";
@@ -25,8 +24,6 @@ const TILE_ERROR_BUG_REPORT_LABEL = "react-tile-soft-crash";
 
 /** Inputs used to build the tile error fallback snapshot and actions. */
 export interface TileErrorViewModelProps {
-    /** Layout variant used by the host timeline. */
-    layout: TileErrorViewLayout;
     /** Event whose tile failed to render. */
     mxEvent: MatrixEvent;
     /** Render error captured by the boundary. */
@@ -55,17 +52,15 @@ function getViewSourceCtaLabel(developerMode: boolean): string | undefined {
 /**
  * ViewModel for the tile error fallback, providing the snapshot shown when a tile fails to render.
  *
- * The snapshot includes the host timeline layout, the fallback message, the event type,
- * and optional bug-report and view-source action labels. The view model also exposes
- * click handlers for those actions, opening the bug-report or view-source dialog when
- * available.
+ * The snapshot includes the fallback message, event type, and optional bug-report and
+ * view-source action labels. The view model also exposes click handlers for those
+ * actions, opening the bug-report or view-source dialog when available.
  */
 export class TileErrorViewModel
     extends BaseViewModel<TileErrorViewSnapshotInterface, TileErrorViewModelProps>
     implements TileErrorViewModelInterface
 {
     private static readonly computeSnapshot = (props: TileErrorViewModelProps): TileErrorViewSnapshotInterface => ({
-        layout: props.layout,
         message: _t("timeline|error_rendering_message"),
         eventType: props.mxEvent.getType(),
         bugReportCtaLabel: getBugReportCtaLabel(),

@@ -75,7 +75,6 @@ exports[`UrlPreviewGroupViewModel handles different kinds of opengraph responses
 
 exports[`UrlPreviewGroupViewModel should deduplicate multiple versions of the same URL 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [
     {
@@ -96,7 +95,6 @@ exports[`UrlPreviewGroupViewModel should deduplicate multiple versions of the sa
 
 exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the user 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
@@ -106,7 +104,6 @@ exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the us
 
 exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the user 2`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [
     {
@@ -127,7 +124,6 @@ exports[`UrlPreviewGroupViewModel should handle being hidden and shown by the us
 
 exports[`UrlPreviewGroupViewModel should hide preview when invisible 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
@@ -137,7 +133,6 @@ exports[`UrlPreviewGroupViewModel should hide preview when invisible 1`] = `
 
 exports[`UrlPreviewGroupViewModel should ignore failed previews 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
@@ -147,7 +142,6 @@ exports[`UrlPreviewGroupViewModel should ignore failed previews 1`] = `
 
 exports[`UrlPreviewGroupViewModel should ignore media when mediaVisible is false 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [
     {
@@ -168,7 +162,6 @@ exports[`UrlPreviewGroupViewModel should ignore media when mediaVisible is false
 
 exports[`UrlPreviewGroupViewModel should preview a URL with media 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [
     {
@@ -197,7 +190,6 @@ exports[`UrlPreviewGroupViewModel should preview a URL with media 1`] = `
 
 exports[`UrlPreviewGroupViewModel should preview a single valid URL 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [
     {
@@ -218,7 +210,6 @@ exports[`UrlPreviewGroupViewModel should preview a single valid URL 1`] = `
 
 exports[`UrlPreviewGroupViewModel should return no previews by default 1`] = `
 {
-  "compactLayout": false,
   "overPreviewLimit": false,
   "previews": [],
   "previewsLimited": true,
