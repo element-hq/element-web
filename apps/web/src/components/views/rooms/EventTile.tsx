@@ -338,6 +338,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private unmounted = false;
     private readonly id = uniqueId();
+    private listeningForHover = false;
 
     public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -472,6 +473,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentWillUnmount(): void {
+        this.stopListeningForHover();
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
@@ -491,6 +493,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
+        if (!prevState.hover && this.state.hover) {
+            this.startListeningForHover();
+        } else if (prevState.hover && !this.state.hover) {
+            this.stopListeningForHover();
+        }
+
         // If we're not listening for receipts and expect to be, register a listener.
         if (!this.isListeningForReceipts && (this.shouldShowSentReceipt || this.shouldShowSendingReceipt)) {
             MatrixClientPeg.safeGet().on(RoomEvent.Receipt, this.onRoomReceipt);
@@ -872,6 +880,32 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             actionBarFocused,
             hover: actionBarFocused ? prevState.hover : (this.ref.current?.matches(":hover") ?? false),
         }));
+    };
+
+    private startListeningForHover(): void {
+        if (this.listeningForHover) return;
+        document.addEventListener("mousemove", this.onDocumentMouseMove, true);
+        this.listeningForHover = true;
+    }
+
+    private stopListeningForHover(): void {
+        if (!this.listeningForHover) return;
+        document.removeEventListener("mousemove", this.onDocumentMouseMove, true);
+        this.listeningForHover = false;
+    }
+
+    private readonly onDocumentMouseMove = (): void => {
+        if (this.state.hover && !(this.ref.current?.matches(":hover") ?? false)) {
+            this.setState({ hover: false });
+        }
+    };
+
+    private readonly onMouseEnter = (): void => {
+        this.setState({ hover: true });
+    };
+
+    private readonly onMouseLeave = (): void => {
+        this.setState({ hover: false });
     };
 
     private readonly onFocusWithin = (event: FocusEvent<HTMLElement>): void => {
@@ -1323,8 +1357,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
                         "data-event-id": this.props.mxEvent.getId(),
-                        "onMouseEnter": () => this.setState({ hover: true }),
-                        "onMouseLeave": () => this.setState({ hover: false }),
+                        "onMouseEnter": this.onMouseEnter,
+                        "onMouseLeave": this.onMouseLeave,
                         "onFocus": this.onFocusWithin,
                         "onBlur": this.onBlurWithin,
                     },
@@ -1386,8 +1420,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-shape": this.context.timelineRenderingType,
                         "data-self": isOwnEvent,
                         "data-has-reply": !!replyChain,
-                        "onMouseEnter": () => this.setState({ hover: true }),
-                        "onMouseLeave": () => this.setState({ hover: false }),
+                        "onMouseEnter": this.onMouseEnter,
+                        "onMouseLeave": this.onMouseLeave,
                         "onFocus": this.onFocusWithin,
                         "onBlur": this.onBlurWithin,
                         "onClick": (ev: MouseEvent) => {
@@ -1519,8 +1553,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-self": isOwnEvent,
                         "data-event-id": this.props.mxEvent.getId(),
                         "data-has-reply": !!replyChain,
-                        "onMouseEnter": () => this.setState({ hover: true }),
-                        "onMouseLeave": () => this.setState({ hover: false }),
+                        "onMouseEnter": this.onMouseEnter,
+                        "onMouseLeave": this.onMouseLeave,
                         "onFocus": this.onFocusWithin,
                         "onBlur": this.onBlurWithin,
                     },
