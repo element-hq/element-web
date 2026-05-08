@@ -13,7 +13,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as stories from "./UserMenu.stories.tsx";
 
-const { Default, LongerName, Condensed, Guest } = composeStories(stories);
+const { Default, LongerName, Condensed, Guest, NoAvatar } = composeStories(stories);
 
 describe("UserMenu", () => {
     it("renders a button", async () => {
@@ -35,6 +35,11 @@ describe("UserMenu", () => {
     });
     it("renders a guest menu", async () => {
         const { baseElement, getByRole } = render(<Guest />);
+        await userEvent.click(getByRole("button"));
+        expect(baseElement).toMatchSnapshot();
+    });
+    it("renders a menu without an avatar", async () => {
+        const { baseElement, getByRole } = render(<NoAvatar />);
         await userEvent.click(getByRole("button"));
         expect(baseElement).toMatchSnapshot();
     });
