@@ -52,6 +52,7 @@
     background: none;
     display: flex;
     color: var(--cpd-color-body-primary);
+    cursor: pointer;
     gap: var(--cpd-space-2x);
     > span {
         height: fit-content;

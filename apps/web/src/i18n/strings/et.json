@@ -15,8 +15,7 @@
         "room_name": "Jututuba %(name)s",
         "room_status_bar": "Jututoa olekuriba",
         "seek_bar_label": "Heli kerimisriba",
-        "unread_messages": "Lugemata sõnumid.",
-        "user_menu": "Kasutajamenüü"
+        "unread_messages": "Lugemata sõnumid."
     },
     "a11y_jump_first_unread_room": "Siirdu esimesse lugemata jututuppa.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Sul juba on kasutajakonto olemas? <a>Siis logi siin sisse</a>",
         "sign_in_or_register": "Logi sisse või loo uus konto",
         "sign_in_or_register_description": "Jätkamaks kasuta oma kontot või loo uus konto.",
-        "sign_in_prompt": "Sul on kasutajakonto olemas? <a>Siis logi sisse</a>",
         "sign_in_with_sso": "Logi sisse ühekordse sisselogimise abil",
         "signing_in": "Login sisse…",
         "soft_logout": {
@@ -3549,7 +3547,6 @@
             "created_rule_rooms": "%(senderName)s määras %(reason)s tõttu jututubade ligipääsukeelu reegli, mis vastas tingimusele %(glob)s",
             "created_rule_servers": "%(senderName)s määras %(reason)s tõttu serverite ligipääsukeelu reegli, mis vastas tingimusele %(glob)s",
             "created_rule_users": "%(senderName)s määras %(reason)s tõttu kasutajate ligipääsukeelu reegli, mis vastas tingimusele %(glob)s",
-            "message_hidden": "Sa oled seda kasutajat eiranud ja seega tema sõnum on peidetud. <a>Näita seda ikkagi.</a>",
             "removed_rule": "%(senderName)s eemaldas ligipääsukeelu reegli, mis vastas tingimusele %(glob)s",
             "removed_rule_rooms": "%(senderName)s eemaldas jututubade ligipääsukeelu reegli, mis vastas tingimusele %(glob)s",
             "removed_rule_servers": "%(senderName)s eemaldas serverite ligipääsukeelu reegli, mis vastas tingimusele %(glob)s",
@@ -3853,12 +3850,6 @@
         "verification_unavailable": "Kasutaja verifitseerimine pole saadaval",
         "verify_button": "Verifitseeri kasutaja",
         "verify_explainer": "Lisaturvalisus mõttes verifitseeri see kasutaja võrreldes selleks üheks korraks loodud koodi mõlemas seadmes."
-    },
-    "user_menu": {
-        "link_new_device": "Seo uus seade",
-        "settings": "Kõik seadistused",
-        "switch_theme_dark": "Kasuta tumedat kujundust",
-        "switch_theme_light": "Kasuta heledat kujundust"
     },
     "voip": {
         "already_in_call": "Kõne on juba pooleli",

@@ -15,8 +15,7 @@
         "room_name": "Oda %(name)s",
         "room_status_bar": "Oda durum çubuğu",
         "seek_bar_label": "Ses arama çubuğu",
-        "unread_messages": "Okunmamış mesajlar.",
-        "user_menu": "Kullanıcı menüsü"
+        "unread_messages": "Okunmamış mesajlar."
     },
     "a11y_jump_first_unread_room": "İlk okunmamış odaya git.",
     "action": {
@@ -337,7 +336,6 @@
         "sign_in_instead_prompt": "Zaten bir hesabınız var mı? <a>Buradan oturum açın</a>",
         "sign_in_or_register": "Giriş Yap veya Hesap Oluştur",
         "sign_in_or_register_description": "Devam etmek için hesabınızı kullanın veya yeni bir hesap oluşturun.",
-        "sign_in_prompt": "Hesabınız var mı? <a>Oturum aç</a>",
         "sign_in_with_sso": "Tek oturum açma ile oturum açın",
         "signing_in": "Oturum açılıyor…",
         "soft_logout": {
@@ -3336,7 +3334,6 @@
             "created_rule_rooms": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir oda yasaklama kuralı oluşturdu",
             "created_rule_servers": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen bir sunucular yasaklama kuralı oluşturdu",
             "created_rule_users": "%(senderName)s, %(reason)s nedeniyle %(glob)s ile eşleşen kullanıcıları yasaklama kuralı oluşturdu",
-            "message_hidden": "Bu kullanıcıyı yok saydınız, bu yüzden mesajları gizlidir. <a>Yine de göster.</a>",
             "removed_rule": "%(senderName)s %(glob)s ile eşleşen banlama kuralını kaldırdı",
             "removed_rule_rooms": "%(senderName)s %(glob)s ile eşleşen odaları banlama kuralını kaldırdı",
             "removed_rule_servers": "%(senderName)s %(glob)s ile eşleşen sunucuları banlama kuralını kaldırdı",
@@ -3635,12 +3632,6 @@
         "verification_unavailable": "Kullanıcı doğrulaması kullanılamıyor",
         "verify_button": "Kullanıcıyı Doğrula",
         "verify_explainer": "Ekstra güvenlik için, her iki cihazınızda da tek seferlik bir kodu kontrol ederek bu kullanıcıyı doğrulayın."
-    },
-    "user_menu": {
-        "link_new_device": "Yeni cihaz bağla",
-        "settings": "Tüm ayarlar",
-        "switch_theme_dark": "Karanlık Moda Geç",
-        "switch_theme_light": "Aydınlık Moda Geç"
     },
     "voip": {
         "already_in_call": "Bu kişi zaten çağrıda",

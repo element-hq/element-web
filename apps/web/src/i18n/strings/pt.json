@@ -15,8 +15,7 @@
         "room_name": "Sala %(name)s",
         "room_status_bar": "Barra de estado da sala",
         "seek_bar_label": "Barra de procura de áudio",
-        "unread_messages": "Mensagens não lidas",
-        "user_menu": "Menu do utilizador"
+        "unread_messages": "Mensagens não lidas"
     },
     "a11y_jump_first_unread_room": "Salta para a primeira sala não lida.",
     "action": {
@@ -337,7 +336,6 @@
         "sign_in_instead_prompt": "Já tem uma conta? <a>Entre aqui</a>",
         "sign_in_or_register": "Iniciar Sessão ou Criar Conta",
         "sign_in_or_register_description": "Use a sua conta ou crie uma nova conta para continuar.",
-        "sign_in_prompt": "Tens uma conta? <a>Inicia sessão</a>",
         "sign_in_with_sso": "Inicia sessão com o início de sessão único",
         "signing_in": "A iniciar sessão...",
         "soft_logout": {
@@ -3345,7 +3343,6 @@
             "created_rule_rooms": "%(senderName)s criou uma regra que bane salas que correspondam a %(glob)s porque %(reason)s",
             "created_rule_servers": "%(senderName)s criou uma regra proibindo servidores correspondentes a %(glob)s para %(reason)s",
             "created_rule_users": "%(senderName)s criou uma regra que bane os utilizadores que correspondam a %(glob)s porque %(reason)s",
-            "message_hidden": "Ignoraste este utilizador, por isso a sua mensagem está oculta. <a>Mostra de qualquer forma.</a>",
             "removed_rule": "%(senderName)sremoveu uma regra de proibição correspondente %(glob)s",
             "removed_rule_rooms": "%(senderName)s eliminou a regra que proibia a correspondência de salas %(glob)s",
             "removed_rule_servers": "%(senderName)s eliminou a regra que bania os servidores que correspondessem a %(glob)s",
@@ -3649,12 +3646,6 @@
         "verification_unavailable": "Verificação do usuário indisponível",
         "verify_button": "Verificar utilizador",
         "verify_explainer": "Para maior segurança, verifica este utilizador através de um código de utilização única em ambos os dispositivos."
-    },
-    "user_menu": {
-        "link_new_device": "Vincular novo dispositivo",
-        "settings": "Todas as definições",
-        "switch_theme_dark": "Mudar para o modo escuro",
-        "switch_theme_light": "Mudar para o modo claro"
     },
     "voip": {
         "already_in_call": "Já em chamada",
