@@ -15,8 +15,7 @@
         "room_name": "Huone %(name)s",
         "room_status_bar": "Huoneen tilapalkki",
         "seek_bar_label": "Äänen siirtymispalkki",
-        "unread_messages": "Lukemattomat viestit.",
-        "user_menu": "Käyttäjän valikko"
+        "unread_messages": "Lukemattomat viestit."
     },
     "a11y_jump_first_unread_room": "Siirry ensimmäiseen lukemattomaan huoneeseen.",
     "action": {
@@ -330,7 +329,6 @@
         "sign_in_instead_prompt": "Onko sinulla jo tili? <a>Kirjaudu tästä</a>",
         "sign_in_or_register": "Kirjaudu sisään tai luo tili",
         "sign_in_or_register_description": "Käytä tiliäsi tai luo uusi jatkaaksesi.",
-        "sign_in_prompt": "Sinulla on jo tili? <a>Kirjaudu sisään</a>",
         "sign_in_with_sso": "Kirjaudu sisään käyttäen kertakirjautumista",
         "signing_in": "Kirjaudutaan…",
         "soft_logout": {
@@ -2993,7 +2991,6 @@
             "created_rule_rooms": "%(senderName)s loi huoneita estävän säännön %(glob)s, syy: %(reason)s",
             "created_rule_servers": "%(senderName)s loi palvelimia estävän säännön %(glob)s, syy: %(reason)s",
             "created_rule_users": "%(senderName)s loi porttikiellonsäännön %(glob)s, syy: %(reason)s",
-            "message_hidden": "Olet sivuuttanut tämän käyttäjän, joten hänen viestinsä on piilotettu. <a>Näytä silti.</a>",
             "removed_rule": "%(senderName)s poisti estosäännön %(glob)s",
             "removed_rule_rooms": "%(senderName)s poisti huoneita estävän säännön %(glob)s",
             "removed_rule_servers": "%(senderName)s poisti palvelimia estävän säännön %(glob)s",
@@ -3268,12 +3265,6 @@
         "unban_space_everything": "Poista porttikielto kaikesta, mihin pystyn",
         "verify_button": "Varmenna käyttäjä",
         "verify_explainer": "Lisäturvaksi, varmenna tämä käyttäjä tarkistamalla koodin kummankin laitteella."
-    },
-    "user_menu": {
-        "link_new_device": "Yhdistä uusi laite",
-        "settings": "Kaikki asetukset",
-        "switch_theme_dark": "Vaihda tummaan teemaan",
-        "switch_theme_light": "Vaihda vaaleaan teemaan"
     },
     "voip": {
         "already_in_call": "Olet jo puhelussa",
