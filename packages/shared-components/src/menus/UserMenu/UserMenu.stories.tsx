@@ -113,6 +113,7 @@ export const Condensed: Story = {
 export const NoAvatar: Story = {
     args: {
         displayName: "Sally Sanderson",
+        expanded: true,
         showAvatar: false,
     },
 };
