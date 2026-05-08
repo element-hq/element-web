@@ -189,13 +189,13 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
     data-aria-hidden="true"
   >
     <button
-      aria-controls="radix-_r_1_"
+      aria-controls="radix-_r_b_"
       aria-expanded="true"
       aria-haspopup="menu"
       aria-label="User menu"
       class="UserMenu-module_triggerButton"
       data-state="open"
-      id="radix-_r_0_"
+      id="radix-_r_a_"
       type="button"
     >
       <span
@@ -231,7 +231,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
   >
     <div
       aria-label="User menu"
-      aria-labelledby="radix-_r_0_"
+      aria-labelledby="radix-_r_a_"
       aria-orientation="vertical"
       class="UserMenu-module_container _menu_1kl3y_8"
       data-align="start"
@@ -240,7 +240,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       data-side="bottom"
       data-state="open"
       dir="ltr"
-      id="radix-_r_1_"
+      id="radix-_r_b_"
       role="menu"
       style="outline: none; --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin); --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width); --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height); --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width); --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height); animation: auto ease 0s 1 normal none running none; pointer-events: auto;"
       tabindex="-1"
