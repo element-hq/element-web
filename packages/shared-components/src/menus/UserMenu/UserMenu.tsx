@@ -132,8 +132,8 @@ export function UserMenuView({ vm, className }: UserMenuViewProps): JSX.Element 
             className={styles.container}
         >
             <section className={styles.profile}>
-                {showAvatar && <Avatar id={userId} name={displayName} type="round" size="88px" src={avatarUrl} />}
-                <Text className={styles.displayname} type="heading" size="md" weight="semibold" as="span">
+                {showAvatar && <Avatar id={userId} name={displayName} type="round" size="64px" src={avatarUrl} />}
+                <Text className={styles.displayname} type="body" size="lg" weight="semibold" as="span">
                     {displayName}
                 </Text>
                 <Text data-testid="userId" size="md" as="span" type="body">
