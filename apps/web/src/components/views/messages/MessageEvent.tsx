@@ -31,7 +31,7 @@ import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MBeaconBody from "./MBeaconBody";
-import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
+import { type EventTileOps, type GetRelationsForEvent } from "../rooms/EventTile";
 import { MjolnirBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/MjolnirBodyViewModel";
 import {
     DecryptionFailureBodyFactory,
@@ -60,7 +60,7 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
 }
 
 export interface IOperableEventTile {
-    getEventTileOps(): IEventTileOps | null;
+    getEventTileOps(): EventTileOps | null;
 }
 
 const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
@@ -144,7 +144,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
     }
 
-    public getEventTileOps = (): IEventTileOps | null => {
+    public getEventTileOps = (): EventTileOps | null => {
         return (this.body.current as IOperableEventTile)?.getEventTileOps?.() || null;
     };
 

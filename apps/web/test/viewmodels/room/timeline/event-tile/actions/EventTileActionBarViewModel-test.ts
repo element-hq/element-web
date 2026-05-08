@@ -24,25 +24,25 @@ import { ActionBarAction } from "@element-hq/web-shared-components";
 import {
     EventTileActionBarViewModel,
     type EventTileActionBarViewModelProps,
-} from "../../../src/viewmodels/room/EventTileActionBarViewModel";
-import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
-import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import defaultDispatcher from "../../../src/dispatcher/dispatcher";
-import { Action } from "../../../src/dispatcher/actions";
-import Resend from "../../../src/Resend";
-import PinningUtils from "../../../src/utils/PinningUtils";
-import PosthogTrackers from "../../../src/PosthogTrackers";
-import Modal from "../../../src/Modal";
-import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
-import SettingsStore from "../../../src/settings/SettingsStore";
-import { ModuleApi } from "../../../src/modules/Api";
-import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../src/utils/EventUtils";
-import { shouldDisplayReply } from "../../../src/utils/Reply";
-import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
-import { getMediaVisibility, setMediaVisibility } from "../../../src/utils/media/mediaVisibility";
-import { createTestClient } from "../../test-utils";
+} from "../../../../../../src/viewmodels/room/timeline/event-tile/actions/EventTileActionBarViewModel";
+import { TimelineRenderingType } from "../../../../../../src/contexts/RoomContext";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../../src/dispatcher/actions";
+import Resend from "../../../../../../src/Resend";
+import PinningUtils from "../../../../../../src/utils/PinningUtils";
+import PosthogTrackers from "../../../../../../src/PosthogTrackers";
+import Modal from "../../../../../../src/Modal";
+import ErrorDialog from "../../../../../../src/components/views/dialogs/ErrorDialog";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import { ModuleApi } from "../../../../../../src/modules/Api";
+import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../../../../src/utils/EventUtils";
+import { shouldDisplayReply } from "../../../../../../src/utils/Reply";
+import { MediaEventHelper } from "../../../../../../src/utils/MediaEventHelper";
+import { getMediaVisibility, setMediaVisibility } from "../../../../../../src/utils/media/mediaVisibility";
+import { createTestClient } from "../../../../../test-utils";
 
-jest.mock("../../../src/dispatcher/dispatcher", () => ({
+jest.mock("../../../../../../src/dispatcher/dispatcher", () => ({
     __esModule: true,
     default: {
         dispatch: jest.fn(),
@@ -51,7 +51,7 @@ jest.mock("../../../src/dispatcher/dispatcher", () => ({
     },
 }));
 
-jest.mock("../../../src/Resend", () => ({
+jest.mock("../../../../../../src/Resend", () => ({
     __esModule: true,
     default: {
         resend: jest.fn(),
@@ -59,21 +59,21 @@ jest.mock("../../../src/Resend", () => ({
     },
 }));
 
-jest.mock("../../../src/PosthogTrackers", () => ({
+jest.mock("../../../../../../src/PosthogTrackers", () => ({
     __esModule: true,
     default: {
         trackPinUnpinMessage: jest.fn(),
     },
 }));
 
-jest.mock("../../../src/Modal", () => ({
+jest.mock("../../../../../../src/Modal", () => ({
     __esModule: true,
     default: {
         createDialog: jest.fn(),
     },
 }));
 
-jest.mock("../../../src/languageHandler", () => ({
+jest.mock("../../../../../../src/languageHandler", () => ({
     _t: (key: string) => {
         switch (key) {
             case "timeline|download_failed":
@@ -89,14 +89,14 @@ jest.mock("../../../src/languageHandler", () => ({
     _td: (key: string) => key,
 }));
 
-jest.mock("../../../src/utils/EventUtils", () => ({
+jest.mock("../../../../../../src/utils/EventUtils", () => ({
     canCancel: jest.fn(),
     canEditContent: jest.fn(),
     editEvent: jest.fn(),
     isContentActionable: jest.fn(),
 }));
 
-jest.mock("../../../src/utils/PinningUtils", () => ({
+jest.mock("../../../../../../src/utils/PinningUtils", () => ({
     __esModule: true,
     default: {
         canPin: jest.fn(),
@@ -106,17 +106,17 @@ jest.mock("../../../src/utils/PinningUtils", () => ({
     },
 }));
 
-jest.mock("../../../src/utils/Reply", () => ({
+jest.mock("../../../../../../src/utils/Reply", () => ({
     shouldDisplayReply: jest.fn(),
 }));
 
-jest.mock("../../../src/utils/media/mediaVisibility", () => ({
+jest.mock("../../../../../../src/utils/media/mediaVisibility", () => ({
     getMediaVisibility: jest.fn(),
     setMediaVisibility: jest.fn(),
 }));
 
 const mockDownload = jest.fn();
-jest.mock("../../../src/utils/FileDownloader", () => ({
+jest.mock("../../../../../../src/utils/FileDownloader", () => ({
     FileDownloader: jest.fn().mockImplementation(() => ({
         download: mockDownload,
     })),
@@ -150,15 +150,31 @@ describe("EventTileActionBarViewModel", () => {
             ...overrides,
         });
 
-    const createVm = (props: Partial<EventTileActionBarViewModelProps> = {}): EventTileActionBarViewModel => {
+    const makeProps = (props: Partial<EventTileActionBarViewModelProps> = {}): EventTileActionBarViewModelProps => {
         const mxEvent = props.mxEvent ?? createMessageEvent();
-        return new EventTileActionBarViewModel({
+        return {
             mxEvent,
             timelineRenderingType: TimelineRenderingType.Room,
             canSendMessages: true,
             canReact: true,
             ...props,
-        });
+        };
+    };
+
+    const createVm = (props: Partial<EventTileActionBarViewModelProps> = {}): EventTileActionBarViewModel => {
+        return new EventTileActionBarViewModel(makeProps(props));
+    };
+
+    const syncVmProps = (
+        vm: EventTileActionBarViewModel,
+        previousProps: EventTileActionBarViewModelProps,
+        newProps: Partial<EventTileActionBarViewModelProps>,
+    ): EventTileActionBarViewModelProps => {
+        const nextProps = { ...previousProps, ...newProps };
+
+        vm.updateProps(nextProps);
+
+        return nextProps;
     };
 
     const createPendingPromise = <T>(): {
@@ -285,6 +301,32 @@ describe("EventTileActionBarViewModel", () => {
         expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Hide);
     });
 
+    it("ignores unrelated room state events", () => {
+        const vm = createVm();
+
+        mocked(PinningUtils.isPinned).mockClear();
+        mocked(PinningUtils.canPin).mockClear();
+        mocked(PinningUtils.canUnpin).mockClear();
+        mocked(canEditContent).mockClear();
+
+        roomState.emit(
+            RoomStateEvent.Events,
+            new MatrixEvent({
+                type: EventType.RoomName,
+                room_id: roomId,
+                sender: userId,
+                content: { name: "Renamed room" },
+            }),
+        );
+
+        expect(PinningUtils.isPinned).not.toHaveBeenCalled();
+        expect(PinningUtils.canPin).not.toHaveBeenCalled();
+        expect(PinningUtils.canUnpin).not.toHaveBeenCalled();
+        expect(canEditContent).not.toHaveBeenCalled();
+
+        vm.dispose();
+    });
+
     it("ignores stale download permission results after setProps changes the event", async () => {
         jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
         const permissionA = createPendingPromise<boolean>();
@@ -314,10 +356,11 @@ describe("EventTileActionBarViewModel", () => {
             return null;
         });
 
-        const vm = createVm({ mxEvent: eventA });
+        const previousProps = makeProps({ mxEvent: eventA });
+        const vm = new EventTileActionBarViewModel(previousProps);
         expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
 
-        vm.setProps({ mxEvent: eventB });
+        syncVmProps(vm, previousProps, { mxEvent: eventB });
         permissionA.resolve(true);
         await Promise.resolve();
 
@@ -345,11 +388,58 @@ describe("EventTileActionBarViewModel", () => {
         vm.dispose();
 
         expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Status, expect.any(Function));
-        expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
         expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.BeforeRedaction, expect.any(Function));
         expect(roomStateOffSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
         expect(SettingsStore.unwatchSetting).toHaveBeenCalledWith("mediaPreviewConfig:!room:example.org");
         expect(SettingsStore.unwatchSetting).toHaveBeenCalledWith("showMediaEventIds:global");
+    });
+
+    it("shares a single room state listener across multiple action bars", () => {
+        const roomStateOnSpy = jest.spyOn(roomState, "on");
+        const roomStateOffSpy = jest.spyOn(roomState, "off");
+        const vms = Array.from({ length: 11 }, (_, index) =>
+            createVm({
+                mxEvent: createMessageEvent({ event_id: `$event-${index}` }),
+            }),
+        );
+
+        expect(roomStateOnSpy).toHaveBeenCalledTimes(1);
+        expect(roomStateOnSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+        vms.slice(0, -1).forEach((vm) => vm.dispose());
+        expect(roomStateOffSpy).not.toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+
+        vms.at(-1)?.dispose();
+        expect(roomStateOffSpy).toHaveBeenCalledTimes(1);
+        expect(roomStateOffSpy).toHaveBeenCalledWith(RoomStateEvent.Events, expect.any(Function));
+    });
+
+    it("only subscribes to decrypted while the event still needs decryption", () => {
+        const mxEvent = createMessageEvent();
+        jest.spyOn(mxEvent, "isBeingDecrypted").mockReturnValue(false);
+        jest.spyOn(mxEvent, "shouldAttemptDecryption").mockReturnValue(false);
+        const onSpy = jest.spyOn(mxEvent, "on");
+        const onceSpy = jest.spyOn(mxEvent, "once");
+
+        createVm({ mxEvent });
+
+        expect(onSpy).not.toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
+        expect(onceSpy).not.toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
+    });
+
+    it("subscribes once to decrypted when the event is still decrypting", () => {
+        const mxEvent = createMessageEvent();
+        jest.spyOn(mxEvent, "isBeingDecrypted").mockReturnValue(true);
+        jest.spyOn(mxEvent, "shouldAttemptDecryption").mockReturnValue(false);
+        const onceSpy = jest.spyOn(mxEvent, "once");
+        const offSpy = jest.spyOn(mxEvent, "off");
+        const vm = createVm({ mxEvent });
+
+        expect(onceSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
+
+        vm.dispose();
+
+        expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
     });
 
     it("routes resend and cancel actions to the actionable failed event variant", () => {
@@ -415,7 +505,8 @@ describe("EventTileActionBarViewModel", () => {
             content: { msgtype: MsgType.Image, body: "Image B", url: "mxc://example.org/b" },
         });
 
-        const vm = createVm({ mxEvent: eventA });
+        const previousProps = makeProps({ mxEvent: eventA });
+        const vm = new EventTileActionBarViewModel(previousProps);
         (vm as unknown as { downloadedBlob: Blob }).downloadedBlob = new Blob(["a"]);
         mockDownload.mockReturnValueOnce(firstDownload.promise);
 
@@ -423,7 +514,7 @@ describe("EventTileActionBarViewModel", () => {
 
         expect(vm.getSnapshot().isDownloadLoading).toBe(true);
 
-        vm.setProps({ mxEvent: eventB });
+        syncVmProps(vm, previousProps, { mxEvent: eventB });
         (vm as unknown as { downloadedBlob: Blob }).downloadedBlob = new Blob(["b"]);
 
         expect(vm.getSnapshot().isDownloadLoading).toBe(false);
@@ -464,9 +555,7 @@ describe("EventTileActionBarViewModel", () => {
         expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Download);
     });
 
-    it("dispatches reply and thread actions and forwards callbacks", async () => {
-        const onOptionsClick = jest.fn();
-        const onReactionsClick = jest.fn();
+    it("dispatches reply and thread actions and opens action menus", async () => {
         const onToggleThreadExpanded = jest.fn();
         const threadReply = createMessageEvent({
             sender: "@bob:example.org",
@@ -487,10 +576,14 @@ describe("EventTileActionBarViewModel", () => {
         const vm = createVm({
             mxEvent: threadReply,
             isCard: true,
-            onOptionsClick,
-            onReactionsClick,
             onToggleThreadExpanded,
         });
+        const optionsRect = new DOMRect(1, 2, 3, 4);
+        const reactionsRect = new DOMRect(5, 6, 7, 8);
+        const optionsAnchor = document.createElement("button");
+        const reactionsAnchor = document.createElement("button");
+        jest.spyOn(optionsAnchor, "getBoundingClientRect").mockReturnValue(optionsRect);
+        jest.spyOn(reactionsAnchor, "getBoundingClientRect").mockReturnValue(reactionsRect);
         mocked(PinningUtils.isPinned).mockReturnValue(false);
 
         vm.onReplyClick(null);
@@ -498,8 +591,21 @@ describe("EventTileActionBarViewModel", () => {
         vm.onEditClick(null);
         await vm.onPinClick(null);
         vm.onHideClick(null);
-        vm.onOptionsClick(null);
-        vm.onReactionsClick(null);
+        vm.onOptionsClick(optionsAnchor);
+
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBe(optionsRect);
+        expect(vm.getSnapshot().reactionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().isMenuOpen).toBe(true);
+
+        vm.onReactionsClick(reactionsAnchor);
+
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().reactionsMenuAnchorRect).toBe(reactionsRect);
+        expect(vm.getSnapshot().isMenuOpen).toBe(true);
+
+        vm.closeReactionsMenu();
+        expect(vm.getSnapshot().isMenuOpen).toBe(false);
+
         vm.onToggleThreadExpanded(null);
 
         expect(defaultDispatcher.dispatch).toHaveBeenNthCalledWith(1, {
@@ -519,9 +625,27 @@ describe("EventTileActionBarViewModel", () => {
         expect(PinningUtils.pinOrUnpinEvent).toHaveBeenCalledWith(client, threadReply);
         expect(PosthogTrackers.trackPinUnpinMessage).toHaveBeenCalledWith(expect.any(String), "Timeline");
         expect(setMediaVisibility).toHaveBeenCalledWith(threadReply, false);
-        expect(onOptionsClick).toHaveBeenCalledWith(null);
-        expect(onReactionsClick).toHaveBeenCalledWith(null);
         expect(onToggleThreadExpanded).toHaveBeenCalledWith(null);
+    });
+
+    it("closes action menus when the event changes", () => {
+        const eventA = createMessageEvent({ event_id: "$eventA" });
+        const eventB = createMessageEvent({ event_id: "$eventB" });
+        const previousProps = makeProps({ mxEvent: eventA });
+        const vm = new EventTileActionBarViewModel(previousProps);
+        const optionsRect = new DOMRect(1, 2, 3, 4);
+        const optionsAnchor = document.createElement("button");
+        jest.spyOn(optionsAnchor, "getBoundingClientRect").mockReturnValue(optionsRect);
+
+        vm.openOptionsMenu(optionsAnchor);
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBe(optionsRect);
+        expect(vm.getSnapshot().isMenuOpen).toBe(true);
+
+        syncVmProps(vm, previousProps, { mxEvent: eventB });
+
+        expect(vm.getSnapshot().optionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().reactionsMenuAnchorRect).toBeUndefined();
+        expect(vm.getSnapshot().isMenuOpen).toBe(false);
     });
 
     describe("business logic parity", () => {
@@ -687,19 +811,19 @@ describe("EventTileActionBarViewModel", () => {
         it("recomputes parity-relevant flags and resets download state when the event changes", () => {
             jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(true);
 
-            const vm = createVm({
-                mxEvent: createMessageEvent({
-                    event_id: "$image",
-                    content: { msgtype: MsgType.Image, body: "Image", url: "mxc://example.org/file" },
-                }),
+            const imageEvent = createMessageEvent({
+                event_id: "$image",
+                content: { msgtype: MsgType.Image, body: "Image", url: "mxc://example.org/file" },
             });
+            const previousProps = makeProps({ mxEvent: imageEvent });
+            const vm = new EventTileActionBarViewModel(previousProps);
             (vm as unknown as { downloadedBlob?: Blob; isDownloadLoading: boolean }).downloadedBlob = new Blob(["x"]);
             (vm as unknown as { downloadedBlob?: Blob; isDownloadLoading: boolean }).isDownloadLoading = true;
 
             mocked(isContentActionable).mockReturnValue(false);
             jest.spyOn(MediaEventHelper, "isEligible").mockReturnValue(false);
 
-            vm.setProps({
+            syncVmProps(vm, previousProps, {
                 mxEvent: createMessageEvent({
                     event_id: "$text",
                     content: { msgtype: MsgType.Text, body: "Text" },

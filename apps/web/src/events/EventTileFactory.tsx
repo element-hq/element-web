@@ -26,7 +26,7 @@ import {
 
 import SettingsStore from "../settings/SettingsStore";
 import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { type IEventTileType, type EventTileProps } from "../components/views/rooms/EventTile";
+import { type EventTileOps, type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
@@ -67,7 +67,7 @@ export interface EventTileTypeProps extends Pick<
     | "isSeeingThroughMessageHiddenForModeration"
     | "inhibitInteraction"
 > {
-    ref?: React.RefObject<IEventTileType | null>;
+    ref?: React.RefObject<EventTileOps | null>;
     maxImageHeight?: number; // pixels
     overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
     overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
@@ -82,9 +82,17 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-export const TextualEventFactory: Factory = (ref, props) => {
-    const vm = new TextualEventViewModel(props);
+function TextualEventWrappedView(props: Readonly<FactoryProps>): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new TextualEventViewModel(props));
+
+    useEffect(() => {
+        vm.updateProps(props);
+    }, [props, vm]);
+
     return <TextualEventView vm={vm} />;
+}
+export const TextualEventFactory: Factory = (_ref, props) => {
+    return <TextualEventWrappedView {...props} />;
 };
 function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const cli = useMatrixClientContext();

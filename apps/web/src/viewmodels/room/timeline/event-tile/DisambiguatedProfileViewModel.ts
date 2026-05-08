@@ -146,6 +146,11 @@ export class DisambiguatedProfileViewModel
         this.snapshot.set(DisambiguatedProfileViewModel.computeSnapshot(this.props));
     }
 
+    public setProps(props: DisambiguatedProfileViewModelProps): void {
+        this.props = props;
+        this.snapshot.merge(DisambiguatedProfileViewModel.computeSnapshot(this.props));
+    }
+
     public setUserStatus(userStatus?: UserStatus): void {
         this.props.userStatus = userStatus;
         this.snapshot.merge({

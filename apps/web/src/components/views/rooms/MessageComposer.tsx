@@ -599,9 +599,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 ? Math.round(this.state.recordingTimeLeftSeconds)
                 : 0;
             controls.push(
-                <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
+                <Tooltip
+                    key="controls_voice_record"
+                    open={isTooltipOpen}
+                    description={formatTimeLeft(secondsLeft)}
+                    placement="bottom"
+                >
                     <VoiceRecordComposerTile
-                        key="controls_voice_record"
                         ref={this.voiceRecordingButton}
                         room={this.props.room}
                         relation={this.props.relation}

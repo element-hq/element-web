@@ -65,7 +65,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import EndPollDialog from "../dialogs/EndPollDialog";
 import { isPollEnded } from "../messages/MPollBody";
 import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
+import { type EventTileOps, type GetRelationsForEvent } from "../rooms/EventTile";
 import { type OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { type OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
 import { createMapSiteLinkFromEvent } from "../../../utils/location";
@@ -115,7 +115,7 @@ interface IProps extends MenuProps {
     /* the MatrixEvent associated with the context menu */
     mxEvent: MatrixEvent;
     // An optional EventTileOps implementation that can be used to unhide preview widgets
-    eventTileOps?: IEventTileOps;
+    eventTileOps?: EventTileOps;
     // Callback called when the menu is dismissed
     permalinkCreator?: RoomPermalinkCreator;
     /* an optional function to be called when the user clicks collapse thread, if not provided hide button */
@@ -289,7 +289,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onUnhidePreviewClick = (): void => {
-        this.props.eventTileOps?.unhideWidget();
+        this.props.eventTileOps?.unhideWidget?.();
         this.closeMenu();
     };
 
@@ -488,7 +488,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         );
 
         let unhidePreviewButton: JSX.Element | undefined;
-        if (eventTileOps?.isWidgetHidden()) {
+        if (eventTileOps?.isWidgetHidden?.()) {
             unhidePreviewButton = (
                 <IconizedContextMenuOption
                     icon={<VisibilityOnIcon />}
