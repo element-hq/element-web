@@ -151,7 +151,6 @@ export default class LoginWithQRFlow extends React.Component<Props> {
                         break;
 
                     case ClientRendezvousFailureReason.HomeserverLacksSupport:
-                        iconKind = "critical";
                         Icon = QrCodeIcon;
                         backButton = true;
                         title = _t("auth|qr_code_login|unsupported_heading");

@@ -47,7 +47,6 @@ const DefaultWelcome: React.FC<Props> = ({ serverConfig }) => {
     if (loading) {
         body = <Spinner />;
     } else {
-        // TODO replace button actions with dispatch fires
         body = (
             <div className="mx_DefaultWelcome_buttons">
                 {showQrButton && (

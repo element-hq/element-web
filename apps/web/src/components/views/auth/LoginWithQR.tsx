@@ -253,7 +253,7 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                         refreshToken: tokenResponse.refresh_token,
                         homeserverUrl,
                         clientId: this.props.clientId!,
-                        idToken: tokenResponse.id_token ?? "", // TODO fix this - I'm not sure the idToken is actually required
+                        idToken: tokenResponse.id_token,
                         issuer: metadata!.issuer,
                         identityServerUrl,
                         secrets,
