@@ -75,6 +75,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         );
         const locator = await app.settings.openUserMenu();
         await locator.getByRole("menuitem", { name: "Remove this device", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
         await revokeAccessTokenPromise;
         await revokeRefreshTokenPromise;
     });
@@ -123,6 +124,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         // Allow the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);
         await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Remove this device" }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
         await expect(page).toHaveURL(/\/#\/welcome$/);
 
         // Log in again
@@ -159,6 +161,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 .locator(".mx_UserMenu_contextMenu")
                 .getByRole("menuitem", { name: "Remove this device" })
                 .click();
+            await page.getByRole("button", { name: "Remove this device anyway" }).click();
             await expect(page).toHaveURL(/\/#\/welcome$/);
 
             // Log in again

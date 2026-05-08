@@ -345,6 +345,7 @@ test.describe("Login", () => {
                 .locator(".mx_UserMenu_contextMenu")
                 .getByRole("menuitem", { name: "Remove this device" })
                 .click();
+            await page.getByRole("button", { name: "Remove this device anyway" }).click();
             await expect(page).toHaveURL(/\/#\/welcome$/);
         });
     });

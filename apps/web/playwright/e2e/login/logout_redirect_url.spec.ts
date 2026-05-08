@@ -30,6 +30,7 @@ test.describe("logout with logout_redirect_url", () => {
         await page.waitForTimeout(2000);
 
         await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Remove this device" }).click();
+        await page.getByRole("button", { name: "Remove this device anyway" }).click();
         await expect(page).toHaveURL(/\/decoder-ring\/$/);
     });
 });
