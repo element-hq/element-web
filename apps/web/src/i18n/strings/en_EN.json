@@ -892,7 +892,6 @@
         "thread_root_id": "Thread Root ID: %(threadRootId)s",
         "threads_timeline": "Threads timeline",
         "title": "Developer tools",
-        "toggle_event": "toggle event",
         "toolbox": "Toolbox",
         "use_at_own_risk": "This UI does NOT check the types of the values. Use at your own risk.",
         "user_avatar": "Avatar: %(avatar)s",
