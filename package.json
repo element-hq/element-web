@@ -47,8 +47,7 @@
     },
     "pnpm": {
         "onlyBuiltDependencies": [
-            "matrix-js-sdk",
-            "electron"
+            "matrix-js-sdk"
         ],
         "ignoredBuiltDependencies": [
             "@sentry/cli",
