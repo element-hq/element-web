@@ -213,6 +213,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                     .getByRole("menuitem", { name: "All settings" })
                     .click();
                 await page.getByRole("button", { name: "Remove this device" }).click();
+                await page.getByRole("button", { name: "Remove this device anyway" }).click();
                 await expect(page).toHaveURL(/\/#\/welcome$/);
 
                 // Log in again
