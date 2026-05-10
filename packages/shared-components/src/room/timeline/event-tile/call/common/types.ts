@@ -31,4 +31,9 @@ export type CallTileViewSnapshot = {
      * Time when this call was started.
      */
     timestamp: string;
+    /**
+     * Whether this call was declined by our user.
+     * Undefined if not rendering a declined call tile.
+     */
+    isCallDeclinedByUs?: boolean;
 };

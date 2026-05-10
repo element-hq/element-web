@@ -39,12 +39,16 @@ function getIconForCallType(type: CallType): React.ReactNode {
  */
 export function CallDeclinedTileView({ vm, className }: CallDeclinedTileViewProps): React.ReactNode {
     const { translate: _t } = useI18n();
-    const { type, timestamp } = useViewModel(vm);
+    const { type, timestamp, isCallDeclinedByUs } = useViewModel(vm);
     const classNames = classnames(className, styles.container);
     return (
         <Flex className={classNames} align="center" gap="var(--cpd-space-2x)">
             {getIconForCallType(type)}
-            <div className={styles.title}>{_t("timeline|call_tile|call_declined")}</div>
+            <div className={styles.title}>
+                {isCallDeclinedByUs
+                    ? _t("timeline|call_tile|declined|call_declined_by_us")
+                    : _t("timeline|call_tile|declined|call_declined")}
+            </div>
             <div className={styles.time}>{timestamp}</div>
         </Flex>
     );
