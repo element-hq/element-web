@@ -20,7 +20,7 @@ const CallStartedTileViewWrapperImpl = ({ ...rest }: CallStartedTileViewSnapshot
 const CallStartedTileViewWrapper = withViewDocs(CallStartedTileViewWrapperImpl, CallStartedTileView);
 
 const meta = {
-    title: "Event/Calls/CallStartedTileView",
+    title: "Timeline/Timeline Event/Call/CallStartedTileView",
     component: CallStartedTileViewWrapper,
     tags: ["autodocs"],
     argTypes: {
