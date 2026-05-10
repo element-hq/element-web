@@ -16,6 +16,7 @@ import type { SettingUpdatedPayload } from "../../../../../dispatcher/payloads/S
 import type { ActionPayload } from "../../../../../dispatcher/payloads";
 import { Action } from "../../../../../dispatcher/actions";
 import type { GetRelationsForEvent } from "../../../../../components/views/rooms/EventTile";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 
 export interface CallTileViewModelProps {
     /**
@@ -63,9 +64,13 @@ function getInitial(
 ): { snapshot: CallTileViewSnapshot; declineEvent: MatrixEvent | null } {
     const type = getIntentFromEvent(event);
     const declineEvent = getDeclinedEvent(event, getRelationsForEvent);
+    let isCallDeclinedByUs: boolean | undefined;
+    if (declineEvent) {
+        isCallDeclinedByUs = declineEvent.getSender() === MatrixClientPeg.get()?.getUserId();
+    }
     const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
     const timestamp = getTimeFromEvent(declineEvent ?? event, showTwelveHour);
-    return { snapshot: { type, timestamp }, declineEvent };
+    return { snapshot: { type, timestamp, isCallDeclinedByUs }, declineEvent };
 }
 
 function isSettingsChangedPayload(payload: ActionPayload): payload is SettingUpdatedPayload {
