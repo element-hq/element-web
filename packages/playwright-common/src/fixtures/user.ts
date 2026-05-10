@@ -12,7 +12,7 @@ import { sample, uniqueId } from "lodash-es";
 // We want to avoid using `mergeTests` in index.ts because it drops useful type
 // information about the fixtures. Instead, we add `toasts` into our fixture
 // suite by using its `test` as a base, so that there is a linear hierarchy.
-import { test as base } from "./toasts.js";
+import { test as base } from "./panel.js";
 import { type Credentials } from "../utils/api.js";
 
 /** Adds an initScript to the given page which will populate localStorage appropriately so that Element will use the given credentials. */
