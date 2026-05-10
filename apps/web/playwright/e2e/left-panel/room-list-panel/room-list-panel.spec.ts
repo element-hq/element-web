@@ -34,9 +34,12 @@ test.describe("Room list panel", () => {
         await expect(roomListView).toMatchScreenshot("room-list-panel.png");
     });
 
-    test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
-        await page.setViewportSize({ width: 575, height: 600 });
-        const roomListPanel = getRoomListView(page);
-        await expect(roomListPanel).toMatchScreenshot("room-list-panel-smallscreen.png");
+    test.describe("small screen", () => {
+        test.use({ lockLeftPanelWidth: false });
+        test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page }) => {
+            await page.setViewportSize({ width: 575, height: 600 });
+            const roomListPanel = getRoomListView(page);
+            await expect(roomListPanel).toMatchScreenshot("room-list-panel-smallscreen.png");
+        });
     });
 });
