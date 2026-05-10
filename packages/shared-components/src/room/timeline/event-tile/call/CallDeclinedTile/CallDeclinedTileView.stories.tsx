@@ -36,6 +36,7 @@ const meta = {
     args: {
         type: CallType.Voice,
         timestamp: "12:36",
+        isCallDeclinedByUs: false,
     },
     parameters: {
         design: {
@@ -59,5 +60,12 @@ export const VoiceCall: Story = {
 export const VideoCall: Story = {
     args: {
         type: CallType.Video,
+    },
+};
+
+export const CallDeclinedByUs: Story = {
+    args: {
+        type: CallType.Voice,
+        isCallDeclinedByUs: true,
     },
 };

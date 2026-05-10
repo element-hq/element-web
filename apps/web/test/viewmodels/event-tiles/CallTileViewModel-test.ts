@@ -9,10 +9,11 @@ import { EventType, type MatrixEvent, MatrixEventEvent, RelationType } from "mat
 import { CallType } from "@element-hq/web-shared-components";
 import { waitFor } from "jest-matrix-react";
 
-import { mkEvent } from "../../test-utils";
+import { mkEvent, stubClient } from "../../test-utils";
 import { CallTileViewModel } from "../../../src/viewmodels/room/timeline/event-tile/call/CallTileViewModel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 
 function getMockedRtcNotificationEvent(intent: string, senderTs: number, serverTs: number): MatrixEvent {
     const mockEvent = mkEvent({
@@ -28,10 +29,10 @@ function getMockedRtcNotificationEvent(intent: string, senderTs: number, serverT
     return mockEvent;
 }
 
-function getMockedRtcDeclineEvent(rtcNotificationEvent: MatrixEvent): MatrixEvent {
+function getMockedRtcDeclineEvent(rtcNotificationEvent: MatrixEvent, sender = "@foo:m.org"): MatrixEvent {
     const mockEvent = mkEvent({
         type: EventType.RTCDecline,
-        user: "@foo:m.org",
+        user: sender,
         content: {
             "m.relates_to": {
                 rel_type: "m.reference",
@@ -100,6 +101,28 @@ describe("CallTileViewModel", () => {
             });
             const vm2 = new CallTileViewModel({ mxEvent, getRelationsForEvent });
             expect(vm2.isCallDeclined).toStrictEqual(true);
+        });
+
+        it("should calculate isCallDeclinedByUs correctly", () => {
+            const cli = stubClient();
+            cli.getUserId = jest.fn().mockReturnValue("@bar:m.org");
+
+            const mxEvent = getMockedRtcNotificationEvent("audio", 924285348000, 924285348000);
+            const declineEvent: MatrixEvent[] = [];
+            const getRelationsForEvent = jest.fn().mockReturnValue({
+                getRelations: () => declineEvent,
+            });
+
+            // Decline event sent by somebody else
+            declineEvent.push(getMockedRtcDeclineEvent(mxEvent));
+            const vm = new CallTileViewModel({ mxEvent, getRelationsForEvent });
+            expect(vm.getSnapshot().isCallDeclinedByUs).toStrictEqual(false);
+
+            // Decline event sent by us
+            declineEvent.pop();
+            declineEvent.push(getMockedRtcDeclineEvent(mxEvent, MatrixClientPeg.get()!.getUserId()!));
+            const vm2 = new CallTileViewModel({ mxEvent, getRelationsForEvent });
+            expect(vm2.getSnapshot().isCallDeclinedByUs).toStrictEqual(true);
         });
 
         it("should recompute state when call is declined", () => {

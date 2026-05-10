@@ -12,7 +12,7 @@ import { render } from "@test-utils";
 
 import * as Stories from "./CallDeclinedTileView.stories";
 
-const { VideoCall, VoiceCall } = composeStories(Stories);
+const { VideoCall, VoiceCall, CallDeclinedByUs } = composeStories(Stories);
 
 describe("CallDeclinedTileView", () => {
     describe("renders the tile", () => {
@@ -23,6 +23,11 @@ describe("CallDeclinedTileView", () => {
 
         it("video call", () => {
             const { container } = render(<VideoCall />);
+            expect(container).toMatchSnapshot();
+        });
+
+        it("call declined by us", () => {
+            const { container } = render(<CallDeclinedByUs />);
             expect(container).toMatchSnapshot();
         });
     });
