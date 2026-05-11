@@ -465,7 +465,7 @@ const SpacePanel: React.FC = () => {
                         ref={ref}
                         aria-label={_t("common|spaces")}
                     >
-                        <UserMenu vm={userMenuVm} />
+                        <UserMenu vm={userMenuVm} className="mx_UserMenu" />
                         <AccessibleButton
                             className={classNames("mx_SpacePanel_toggleCollapse", {
                                 expanded: !isPanelCollapsed,
