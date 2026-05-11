@@ -48,6 +48,7 @@
     "pnpm": {
         "onlyBuiltDependencies": [],
         "ignoredBuiltDependencies": [
+            "matrix-js-sdk",
             "@sentry/cli",
             "nx"
         ],
