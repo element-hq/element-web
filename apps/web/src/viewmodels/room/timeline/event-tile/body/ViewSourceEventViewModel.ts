@@ -11,6 +11,7 @@ import { type MouseEvent } from "react";
 import { type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import {
     BaseViewModel,
+    Disposables,
     type ViewSourceEventViewModel as ViewSourceEventViewModelInterface,
     type ViewSourceEventViewSnapshot,
 } from "@element-hq/web-shared-components";
@@ -33,7 +34,7 @@ export class ViewSourceEventViewModel
     extends BaseViewModel<ViewSourceEventViewSnapshot, ViewSourceEventViewModelProps>
     implements ViewSourceEventViewModelInterface
 {
-    private decryptionListenerCleanup?: () => void;
+    private decryptionListenerDisposables?: Disposables;
 
     private static computeSnapshot(
         { mxEvent }: ViewSourceEventViewModelProps,
@@ -52,6 +53,7 @@ export class ViewSourceEventViewModel
 
     public constructor(props: ViewSourceEventViewModelProps) {
         super(props, ViewSourceEventViewModel.computeSnapshot(props, false));
+        this.disposables.track(() => this.removeDecryptionListener());
         this.setupDecryptionListener();
     }
 
@@ -80,11 +82,6 @@ export class ViewSourceEventViewModel
         });
     };
 
-    public override dispose(): void {
-        this.removeDecryptionListener();
-        super.dispose();
-    }
-
     private updateSnapshotFromProps(): void {
         this.snapshot.merge(ViewSourceEventViewModel.computeSnapshot(this.props, this.snapshot.current.expanded));
     }
@@ -104,12 +101,12 @@ export class ViewSourceEventViewModel
             this.updateSnapshotFromProps();
         };
 
-        mxEvent.once(MatrixEventEvent.Decrypted, onDecrypted);
-        this.decryptionListenerCleanup = () => mxEvent.off(MatrixEventEvent.Decrypted, onDecrypted);
+        this.decryptionListenerDisposables = new Disposables();
+        this.decryptionListenerDisposables.trackListener(mxEvent, MatrixEventEvent.Decrypted, onDecrypted);
     }
 
     private removeDecryptionListener(): void {
-        this.decryptionListenerCleanup?.();
-        this.decryptionListenerCleanup = undefined;
+        this.decryptionListenerDisposables?.dispose();
+        this.decryptionListenerDisposables = undefined;
     }
 }

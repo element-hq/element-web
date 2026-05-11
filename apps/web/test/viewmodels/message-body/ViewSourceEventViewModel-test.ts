@@ -78,6 +78,17 @@ describe("ViewSourceEventViewModel", () => {
         });
     });
 
+    it("removes the previous decryption listener when the event changes", () => {
+        const oldEvent = createEvent("m.room.encrypted");
+        jest.spyOn(oldEvent, "isBeingDecrypted").mockReturnValue(true);
+        const offSpy = jest.spyOn(oldEvent, "off");
+        const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent: oldEvent });
+
+        vm.setEvent(createEvent("m.room.message"));
+
+        expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
+    });
+
     it("does not emit when setEvent receives the current event", () => {
         const mxEvent = createEvent();
         const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent });
