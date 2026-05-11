@@ -20,11 +20,11 @@ import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 
 export interface CallTileViewModelProps {
     /**
-     * Event of type `org.matrix.msc4075.rtc.notification` or `org.matrix.msc4310.rtc.decline`.
+     * Event of type `org.matrix.msc4075.rtc.notification`.
      */
     mxEvent: MatrixEvent;
     /**
-     * Helper to fetch related event from a given event.
+     * Helper to fetch related events from a given event.
      */
     getRelationsForEvent?: GetRelationsForEvent;
 }
@@ -43,6 +43,10 @@ function getIntentFromEvent(event: MatrixEvent): CallTileViewSnapshot["type"] {
 
 function getTs(event: MatrixEvent): number {
     if (event.getType() === EventType.RTCNotification) {
+        /**
+         * According to the spec:
+         * Receivers SHOULD use origin_server_ts if |sender_ts - origin_server_ts| > 20000 ms.
+         */
         const content = event.getContent<IRTCNotificationContent>();
         const senderTs = content["sender_ts"];
         const originServerTs = event.getTs();
@@ -78,7 +82,7 @@ function isSettingsChangedPayload(payload: ActionPayload): payload is SettingUpd
 }
 
 /**
- * Get a declined event that related to the given rtc notification event.
+ * Get a declined event that is related to the given rtc notification event.
  * @param event rtc notification event
  */
 function getDeclinedEvent(event: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): MatrixEvent | null {
@@ -92,7 +96,7 @@ function getDeclinedEvent(event: MatrixEvent, getRelationsForEvent?: GetRelation
 
 /**
  * Common view-model for call tiles; currently used to render:
- * 1. A tile that indicates the start of a call.
+ * 1. A tile that indicates that a call occurred (call tombstone).
  * 2. A tile that indicates that a call was declined.
  */
 export class CallTileViewModel extends BaseViewModel<CallTileViewSnapshot, CallTileViewModelProps> {
