@@ -44,6 +44,7 @@ import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -101,6 +102,17 @@ describe("EventTile", () => {
             room: overrides.room ?? room.roomId,
             user: overrides.user ?? client.getSafeUserId(),
             msg: overrides.msg ?? "Hello world!",
+            event: overrides.event ?? true,
+        });
+    }
+
+    function makeTimestampedMessage(overrides: Partial<Parameters<typeof mkMessage>[0]> = {}): MatrixEvent {
+        return mkMessage({
+            ...overrides,
+            room: overrides.room ?? room.roomId,
+            user: overrides.user ?? "@alice:example.org",
+            msg: overrides.msg ?? "Hello world!",
+            ts: overrides.ts ?? 1234,
             event: overrides.event ?? true,
         });
     }
@@ -181,6 +193,83 @@ describe("EventTile", () => {
             const { container } = getComponent({ mxEvent: localEcho, eventSendStatus: EventStatus.SENDING });
 
             expect(getTile(container)).not.toHaveAttribute("data-scroll-tokens");
+        });
+    });
+
+    describe("timestamps", () => {
+        beforeEach(() => {
+            mxEvent = makeTimestampedMessage();
+        });
+
+        it("hides the timestamp by default in room timelines", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+        });
+
+        it("shows the timestamp when the tile is hovered", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("shows the timestamp when focus is within the tile", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+
+            fireEvent.focus(getTile(container));
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("shows the timestamp for the last event", () => {
+            const { container } = getComponent({ last: true });
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("shows the timestamp when timestamps are always shown", () => {
+            const { container } = getComponent({ alwaysShowTimestamps: true });
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("hides the timestamp when timestamps are disabled for the tile", () => {
+            const { container } = getComponent({ alwaysShowTimestamps: true, hideTimestamp: true });
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+        });
+
+        it("renders a placeholder timestamp in IRC layout", () => {
+            const { container } = getComponent({ layout: Layout.IRC });
+            const timestamp = container.querySelector(".mx_MessageTimestamp");
+
+            expect(timestamp).not.toBeNull();
+            expect(timestamp?.tagName).toBe("SPAN");
+        });
+
+        it("dispatches a room view when the linked timestamp is clicked", () => {
+            jest.spyOn(dis, "dispatch").mockImplementation(() => {});
+            const permalinkCreator = new RoomPermalinkCreator(room);
+            const { container } = getComponent({ alwaysShowTimestamps: true, permalinkCreator });
+            const timestamp = container.querySelector<HTMLAnchorElement>("a.mx_MessageTimestamp");
+
+            expect(timestamp).not.toBeNull();
+            fireEvent.click(timestamp!);
+
+            expect(dis.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ViewRoom,
+                    event_id: mxEvent.getId(),
+                    highlighted: true,
+                    room_id: room.roomId,
+                }),
+            );
         });
     });
 
