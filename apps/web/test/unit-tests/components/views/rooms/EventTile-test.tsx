@@ -83,6 +83,32 @@ describe("EventTile", () => {
         return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
     }
 
+    function getTile(container: HTMLElement): HTMLElement {
+        const tile = container.querySelector(".mx_EventTile");
+        expect(tile).not.toBeNull();
+        return tile as HTMLElement;
+    }
+
+    function getLine(container: HTMLElement): HTMLElement {
+        const line = container.querySelector(".mx_EventTile_line");
+        expect(line).not.toBeNull();
+        return line as HTMLElement;
+    }
+
+    function makeOwnMessage(overrides: Partial<Parameters<typeof mkMessage>[0]> = {}): MatrixEvent {
+        return mkMessage({
+            ...overrides,
+            room: overrides.room ?? room.roomId,
+            user: overrides.user ?? client.getSafeUserId(),
+            msg: overrides.msg ?? "Hello world!",
+            event: overrides.event ?? true,
+        });
+    }
+
+    function expectTileClass(container: HTMLElement, className: string): void {
+        expect(getTile(container)).toHaveClass(className);
+    }
+
     beforeEach(() => {
         jest.clearAllMocks();
 
@@ -108,6 +134,54 @@ describe("EventTile", () => {
 
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+
+    describe("layout and tile attributes", () => {
+        it.each([
+            ["last", { last: true }, "mx_EventTile_last"],
+            ["lastInSection", { lastInSection: true }, "mx_EventTile_lastInSection"],
+            ["contextual", { contextual: true }, "mx_EventTile_contextual"],
+            ["isSelectedEvent", { isSelectedEvent: true }, "mx_EventTile_selected"],
+            ["hideSender", { hideSender: true }, "mx_EventTile_noSender"],
+            ["isTwelveHour", { isTwelveHour: true }, "mx_EventTile_12hr"],
+        ] as const)("adds the %s class", (_propName, overrides, className) => {
+            const { container } = getComponent(overrides);
+
+            expectTileClass(container, className);
+        });
+
+        it("marks events from other users as non-self events", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toHaveAttribute("data-self", "false");
+        });
+
+        it("marks events from the current user as self events", () => {
+            const ownEvent = makeOwnMessage();
+            const { container } = getComponent({ mxEvent: ownEvent });
+
+            expect(getTile(container)).toHaveAttribute("data-self", "true");
+        });
+
+        it("exposes the rendered event id in room timelines", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toHaveAttribute("data-event-id", mxEvent.getId());
+        });
+
+        it("renders the event line inside the tile", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toContainElement(getLine(container));
+        });
+
+        it("does not expose a scroll token for local echo events", () => {
+            const localEcho = makeOwnMessage();
+            localEcho.setStatus(EventStatus.SENDING);
+            const { container } = getComponent({ mxEvent: localEcho, eventSendStatus: EventStatus.SENDING });
+
+            expect(getTile(container)).not.toHaveAttribute("data-scroll-tokens");
+        });
     });
 
     describe("EventTile thread summary", () => {
