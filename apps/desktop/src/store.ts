@@ -18,6 +18,7 @@ import ElectronStore from "electron-store";
 import { app, safeStorage, dialog, type SafeStorage, type Session } from "electron";
 
 import { _t } from "./language-helper.js";
+import { getConfig } from "./config.js";
 
 /**
  * String union type representing all the safeStorage backends.
@@ -373,7 +374,7 @@ class Store extends ElectronStore<StoreData> {
                 message: _t("store|error|backend_no_encryption"),
                 detail: _t("store|error|backend_no_encryption_detail", {
                     backend: safeStorage.getSelectedStorageBackend(),
-                    brand: global.vectorConfig.brand || "Element",
+                    brand: getConfig().brand,
                 }),
                 type: "error",
                 buttons: [_t("action|cancel"), _t("store|error|unsupported_keyring_use_plaintext")],
@@ -389,7 +390,7 @@ class Store extends ElectronStore<StoreData> {
                 title: _t("store|error|unsupported_keyring_title"),
                 message: _t("store|error|unsupported_keyring"),
                 detail: _t("store|error|unsupported_keyring_detail", {
-                    brand: global.vectorConfig.brand || "Element",
+                    brand: getConfig().brand,
                     link: "https://www.electronjs.org/docs/latest/api/safe-storage#safestoragegetselectedstoragebackend-linux",
                 }),
                 type: "error",
