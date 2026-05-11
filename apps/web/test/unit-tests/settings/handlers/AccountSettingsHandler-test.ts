@@ -35,4 +35,12 @@ describe("AccountSettingsHandler", () => {
 
         expect(fn).toHaveBeenCalledWith(null, "account", [{ emoji: "🤒", total: 1 }]);
     });
+
+    it("should write value to account data correctly", async () => {
+        void handler.setValue("pseudonymousAnalyticsOptIn", null, true);
+
+        expect(handler.client.setAccountData).toHaveBeenCalledWith("im.vector.analytics", {
+            pseudonymousAnalyticsOptIn: true,
+        });
+    });
 });

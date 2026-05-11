@@ -183,7 +183,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
     public async setValue<S extends SettingKey>(
         settingName: S,
-        roomId: string,
+        roomId: string | null,
         newValue: Settings[S]["default"],
     ): Promise<void> {
         switch (settingName) {

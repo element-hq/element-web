@@ -37,5 +37,9 @@ describe("recent", () => {
                 { emoji: "😀", total: 1 },
             ]);
         });
+
+        it("should handle data2 being undefined", () => {
+            expect(mergeEmojiData([{ emoji: "🤩", total: 1 }])).toEqual([{ emoji: "🤩", total: 1 }]);
+        });
     });
 });
