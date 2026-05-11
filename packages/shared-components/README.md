@@ -40,6 +40,21 @@ or in CSS file:
 @import url("@element-hq/web-shared-components");
 ```
 
+### Sub-path Imports
+
+Callers running outside the browser DOM (e.g. inside an `AudioWorkletGlobalScope`
+or a worker) can pull in the small standalone `numbers` utility bundle without
+loading the rest of the package barrel, which transitively imports React,
+dnd-kit, and other code that touches `window` / `document`:
+
+```javascript
+import { percentageOf, percentageWithin } from "@element-hq/web-shared-components/numbers";
+```
+
+The sub-path exposes the same functions listed under [Formatting](#formatting)
+and ships as its own ES/CJS bundle in `dist/numbers.{js,umd.cjs}`. Prefer the
+main package entry for everything else.
+
 ### Using Components
 
 There are two kinds of components in this library:
