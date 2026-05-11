@@ -16,6 +16,13 @@ import { SettingLevel } from "../settings/SettingLevel";
 export type RecentEmojiData = AccountDataEvents["m.recent_emoji"]["recent_emoji"];
 export type LegacyRecentEmojiData = [emoji: string, count: number][];
 
+// XXX: We can get rid of the legacy account data handling towards the end of 2026.
+declare module "matrix-js-sdk/src/types" {
+    export interface AccountDataEvents {
+        "io.element.recent_emoji": { recent_emoji: LegacyRecentEmojiData };
+    }
+}
+
 const SETTING_NAME = "recent_emoji";
 
 // we store more recents than we typically query but this lets us sort by weighted usage
