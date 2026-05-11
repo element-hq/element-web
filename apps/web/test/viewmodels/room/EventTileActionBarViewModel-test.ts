@@ -122,6 +122,11 @@ jest.mock("../../../src/utils/FileDownloader", () => ({
     })),
 }));
 
+const mockCopyPlaintext = jest.fn();
+jest.mock("../../../src/utils/strings", () => ({
+    copyPlaintext: mockCopyPlaintext,
+}));
+
 describe("EventTileActionBarViewModel", () => {
     const userId = "@alice:example.org";
     const roomId = "!room:example.org";
@@ -136,6 +141,9 @@ describe("EventTileActionBarViewModel", () => {
     let client: ReturnType<typeof createTestClient>;
     let roomState: EventEmitter;
     let room: {
+        currentState: {
+            maySendRedactionForEvent: jest.Mock;
+        };
         getLiveTimeline: jest.Mock;
     };
     let getHintsForMessageSpy: jest.SpyInstance;
@@ -185,6 +193,9 @@ describe("EventTileActionBarViewModel", () => {
                     .fn()
                     .mockImplementation((dir) => (dir === EventTimeline.FORWARDS ? roomState : undefined)),
             }),
+        };
+        room.currentState = {
+            maySendRedactionForEvent: jest.fn().mockReturnValue(true),
         };
 
         jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
@@ -522,6 +533,169 @@ describe("EventTileActionBarViewModel", () => {
         expect(onOptionsClick).toHaveBeenCalledWith(null);
         expect(onReactionsClick).toHaveBeenCalledWith(null);
         expect(onToggleThreadExpanded).toHaveBeenCalledWith(null);
+    });
+
+    describe("shift actions", () => {
+        it("shows copy action when showShiftActions is true", () => {
+            const vm = createVm({ showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Copy);
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Options);
+        });
+
+        it("shows remove action when showShiftActions is true and canRedact is true", () => {
+            const vm = createVm({ showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Copy);
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Remove);
+        });
+
+        it("hides copy and remove when showShiftActions is false", () => {
+            const vm = createVm();
+
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Copy);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Remove);
+        });
+
+        it("hides remove when canRedact is false", () => {
+            room.currentState.maySendRedactionForEvent.mockReturnValue(false);
+
+            const vm = createVm({ showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Copy);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Remove);
+        });
+    });
+
+    describe("canRedact derivation", () => {
+        it("evaluates canRedact as true when user has redaction permission", () => {
+            const vm = createVm({ showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).toContain(ActionBarAction.Remove);
+        });
+
+        it("evaluates canRedact as false when user lacks redaction permission", () => {
+            room.currentState.maySendRedactionForEvent.mockReturnValue(false);
+
+            const vm = createVm({ showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Remove);
+        });
+
+        it("evaluates canRedact as false for RoomServerAcl events", () => {
+            const mxEvent = new MatrixEvent({
+                type: EventType.RoomServerAcl,
+                room_id: roomId,
+                sender: userId,
+                event_id: "$acl",
+                content: {},
+            });
+
+            const vm = createVm({ mxEvent, showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Remove);
+        });
+
+        it("evaluates canRedact as false for RoomEncryption events", () => {
+            const mxEvent = new MatrixEvent({
+                type: EventType.RoomEncryption,
+                room_id: roomId,
+                sender: userId,
+                event_id: "$encryption",
+                content: {},
+            });
+
+            const vm = createVm({ mxEvent, showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Remove);
+        });
+    });
+
+    describe("onCopyClick", () => {
+        it("copies the event body to clipboard via copyPlaintext", async () => {
+            const mxEvent = createMessageEvent({
+                content: { msgtype: MsgType.Text, body: "Hello World" },
+            });
+            const vm = createVm({ mxEvent });
+
+            await vm.onCopyClick(null);
+
+            expect(mockCopyPlaintext).toHaveBeenCalledWith("Hello World");
+        });
+
+        it("does nothing when event body is empty", async () => {
+            const mxEvent = createMessageEvent({
+                content: { msgtype: MsgType.Text, body: "" },
+            });
+            const vm = createVm({ mxEvent });
+
+            await vm.onCopyClick(null);
+
+            expect(mockCopyPlaintext).not.toHaveBeenCalled();
+        });
+
+        it("does nothing when event body is missing", async () => {
+            const mxEvent = new MatrixEvent({
+                type: EventType.RoomMessage,
+                room_id: roomId,
+                sender: userId,
+                event_id: "$nobody",
+                content: {},
+            });
+            const vm = createVm({ mxEvent });
+
+            await vm.onCopyClick(null);
+
+            expect(mockCopyPlaintext).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("onRemoveClick", () => {
+        it("redacts the event via MatrixClient.redactEvent", async () => {
+            const mxEvent = createMessageEvent({ event_id: "$remove" });
+            const vm = createVm({ mxEvent });
+
+            await vm.onRemoveClick(null);
+
+            expect(client.redactEvent).toHaveBeenCalledWith(roomId, "$remove");
+        });
+
+        it("shows an error dialog when redaction fails with an errcode", async () => {
+            const mxEvent = createMessageEvent({ event_id: "$remove" });
+            const vm = createVm({ mxEvent });
+            (client.redactEvent as jest.Mock).mockRejectedValueOnce({ errcode: "M_FORBIDDEN" });
+
+            await vm.onRemoveClick(null);
+
+            expect(Modal.createDialog).toHaveBeenCalledWith(
+                ErrorDialog,
+                expect.objectContaining({
+                    title: expect.any(String),
+                    description: expect.any(String),
+                }),
+            );
+        });
+
+        it("does not show dialog when redaction fails without an errcode", async () => {
+            const mxEvent = createMessageEvent({ event_id: "$remove" });
+            const vm = createVm({ mxEvent });
+            (client.redactEvent as jest.Mock).mockRejectedValueOnce(new Error("network error"));
+
+            await vm.onRemoveClick(null);
+
+            expect(Modal.createDialog).not.toHaveBeenCalled();
+        });
+
+        it("does nothing when event has no id or room id", async () => {
+            const mxEventWithoutIdAndRoom = createMessageEvent({ room_id: "", event_id: "" });
+            jest.spyOn(mxEventWithoutIdAndRoom, "getRoomId").mockReturnValue(undefined);
+            jest.spyOn(mxEventWithoutIdAndRoom, "getId").mockReturnValue(undefined);
+            const vm = createVm({ mxEvent: mxEventWithoutIdAndRoom });
+
+            await vm.onRemoveClick(null);
+
+            expect(client.redactEvent).not.toHaveBeenCalled();
+        });
     });
 
     describe("business logic parity", () => {
