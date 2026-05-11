@@ -73,9 +73,9 @@ export function ViewSourceEventView({
     const toggleLabel = _t("devtools|toggle_event");
 
     const classes = classNames(styles.content, className, {
-   	[styles.expanded]: expanded,
-   	expandedClassName: expanded,
-   });
+        [styles.expanded]: expanded,
+        expandedClassName: expanded,
+    });
 
     return (
         <span className={classes} ref={ref}>
