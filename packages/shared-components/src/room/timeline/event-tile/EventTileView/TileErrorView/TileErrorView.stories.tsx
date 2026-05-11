@@ -11,7 +11,6 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
 import { useMockedViewModel } from "../../../../../core/viewmodel";
-import { EventPresentationProvider } from "../../../EventPresentation";
 import { TileErrorView, type TileErrorViewActions, type TileErrorViewSnapshot } from "./TileErrorView";
 
 type WrapperProps = TileErrorViewSnapshot &
@@ -59,13 +58,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const BubbleLayout: Story = {
-    decorators: [
-        (Story): JSX.Element => (
-            <EventPresentationProvider value={{ layout: "bubble", density: "default" }}>
-                <Story />
-            </EventPresentationProvider>
-        ),
-    ],
+    globals: {
+        eventLayout: "bubble",
+    },
 };
 
 export const WithoutActions: Story = {
