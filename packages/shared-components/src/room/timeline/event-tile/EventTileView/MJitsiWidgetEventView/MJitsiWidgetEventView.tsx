@@ -5,13 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import classNames from "classnames";
 import React, { type JSX } from "react";
 import { VideoCallSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import { EventTileBubble } from "../EventTileBubble";
-import styles from "./MJitsiWidgetEventView.module.css";
 
 export interface MJitsiWidgetEventViewSnapshot {
     /**
@@ -63,8 +61,8 @@ export function MJitsiWidgetEventView({
 
     return (
         <EventTileBubble
-            icon={<VideoCallSolidIcon />}
-            className={classNames(styles.content, className)}
+            icon={<VideoCallSolidIcon color="var(--cpd-color-text-primary)" />}
+            className={className}
             title={title}
             subtitle={subtitle || undefined}
             ref={ref}
