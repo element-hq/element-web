@@ -273,6 +273,49 @@ describe("EventTile", () => {
         });
     });
 
+    describe("sender and avatar rendering", () => {
+        it("shows sender and avatar in room timelines", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+        });
+
+        it("hides sender and avatar for continuation events in room timelines", () => {
+            const { container } = getComponent({ continuation: true });
+
+            expectTileClass(container, "mx_EventTile_continuation");
+            expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).toBeNull();
+        });
+
+        it("hides sender but keeps avatar when sender display is disabled", () => {
+            const { container } = getComponent({ hideSender: true });
+
+            expectTileClass(container, "mx_EventTile_noSender");
+            expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+        });
+
+        it("renders sender details as a permalink in file timelines", () => {
+            const { container } = getComponent({}, TimelineRenderingType.File);
+            const senderDetailsLink = container.querySelector(".mx_EventTile_senderDetailsLink");
+
+            expect(senderDetailsLink).not.toBeNull();
+            expect(senderDetailsLink).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
+            expect(senderDetailsLink).toContainElement(container.querySelector(".mx_EventTile_avatar"));
+        });
+
+        it("renders sender details in thread timelines", () => {
+            const { container } = getComponent({}, TimelineRenderingType.Thread);
+            const senderDetails = container.querySelector(".mx_EventTile_senderDetails");
+
+            expect(senderDetails).not.toBeNull();
+            expect(senderDetails).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
+            expect(senderDetails).toContainElement(container.querySelector(".mx_EventTile_avatar"));
+        });
+    });
+
     describe("EventTile thread summary", () => {
         beforeEach(() => {
             jest.spyOn(client, "supportsThreads").mockReturnValue(true);
