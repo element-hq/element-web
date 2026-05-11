@@ -63,15 +63,11 @@ export class MJitsiWidgetEventViewModel
     }
 
     public setEvent(mxEvent: MatrixEvent): void {
-        if (this.props.mxEvent === mxEvent) return;
-
         this.props = { ...this.props, mxEvent };
         this.updateSnapshotFromProps();
     }
 
     public setTimestamp(timestamp: JSX.Element | undefined): void {
-        if (this.props.timestamp === timestamp) return;
-
         this.props = { ...this.props, timestamp };
         this.snapshot.merge({ timestamp });
     }
