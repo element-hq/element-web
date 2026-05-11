@@ -10,10 +10,7 @@ import React, { type JSX } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMockedViewModel } from "../../../../../core/viewmodel";
 import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
-import {
-    MKeyVerificationRequestView,
-    type MKeyVerificationRequestViewSnapshot,
-} from "./MKeyVerificationRequestView";
+import { MKeyVerificationRequestView, type MKeyVerificationRequestViewSnapshot } from "./MKeyVerificationRequestView";
 
 type MKeyVerificationRequestViewProps = MKeyVerificationRequestViewSnapshot & {
     className?: string;
