@@ -62,7 +62,7 @@ function getTimeFromEvent(event: MatrixEvent, showTwelveHour: boolean): CallTile
     return timestamp;
 }
 
-function getInitial(
+function generateSnapshot(
     event: MatrixEvent,
     getRelationsForEvent?: GetRelationsForEvent,
 ): { snapshot: CallTileViewSnapshot; declineEvent: MatrixEvent | null } {
@@ -106,7 +106,7 @@ export class CallTileViewModel extends BaseViewModel<CallTileViewSnapshot, CallT
     private declineEvent: MatrixEvent | null;
 
     public constructor(props: CallTileViewModelProps) {
-        const { declineEvent, snapshot } = getInitial(props.mxEvent, props.getRelationsForEvent);
+        const { declineEvent, snapshot } = generateSnapshot(props.mxEvent, props.getRelationsForEvent);
         super(props, snapshot);
         this.declineEvent = declineEvent;
 
@@ -119,7 +119,7 @@ export class CallTileViewModel extends BaseViewModel<CallTileViewSnapshot, CallT
 
         // When a relation is added to the event, recompute the state.
         this.disposables.trackListener(props.mxEvent, MatrixEventEvent.RelationsCreated, () => {
-            const { declineEvent, snapshot } = getInitial(props.mxEvent, props.getRelationsForEvent);
+            const { declineEvent, snapshot } = generateSnapshot(props.mxEvent, props.getRelationsForEvent);
             this.declineEvent = declineEvent;
             this.snapshot.set(snapshot);
         });
