@@ -15,8 +15,7 @@
         "room_name": "Chat %(name)s",
         "room_status_bar": "Chat-Statusleiste",
         "seek_bar_label": "Audio-Suchleiste",
-        "unread_messages": "Ungelesene Nachrichten.",
-        "user_menu": "Benutzermenü"
+        "unread_messages": "Ungelesene Nachrichten."
     },
     "a11y_jump_first_unread_room": "Springe zum ersten ungelesenen Chat",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Konto schon vorhanden? <a>Hier anmelden</a>",
         "sign_in_or_register": "Anmelden oder Konto erstellen",
         "sign_in_or_register_description": "Benutze dein Konto oder erstelle ein neues, um fortzufahren.",
-        "sign_in_prompt": "Du hast bereits ein Konto? <a>Melde dich an</a>",
         "sign_in_with_sso": "Einmalanmeldung nutzen",
         "signing_in": "Melde an …",
         "soft_logout": {
@@ -3529,7 +3527,6 @@
             "created_rule_rooms": "%(senderName)s hat eine Sperr-Regel für Chats erstellt, die %(glob)s aufgrund von %(reason)s entspricht",
             "created_rule_servers": "%(senderName)s erstellte eine Ausschlussregel für Server, die aufgrund von %(reason)s %(glob)s entsprechen",
             "created_rule_users": "%(senderName)s hat eine Ausschlussregel für Nutzer erstellt, die aufgrund %(reason)s %(glob)s entsprechen",
-            "message_hidden": "Du ignorierst diesen Nutzer, so dass dessen Nachrichten verborgen werden. <a>Trotzdem anzeigen.</a>",
             "removed_rule": "%(senderName)s entfernte die Ausschlussregel, die %(glob)s entspricht",
             "removed_rule_rooms": "%(senderName)s hat die Sperr-Regel für Chats entfernt, die %(glob)s entsprechen",
             "removed_rule_servers": "%(senderName)s entfernte die Ausschlussregel für Server, die %(glob)s entsprechen",
@@ -3833,12 +3830,6 @@
         "verification_unavailable": "Benutzerverifizierung nicht verfügbar",
         "verify_button": "Nutzer verifizieren",
         "verify_explainer": "Für zusätzliche Sicherheit, verifiziere diesen Nutzer, durch Vergleichen eines Einmal-Codes auf euren beiden Geräten."
-    },
-    "user_menu": {
-        "link_new_device": "Neues Gerät verknüpfen",
-        "settings": "Alle Einstellungen",
-        "switch_theme_dark": "Zum dunklen Thema wechseln",
-        "switch_theme_light": "Zum hellen Thema wechseln"
     },
     "voip": {
         "already_in_call": "Schon im Anruf",

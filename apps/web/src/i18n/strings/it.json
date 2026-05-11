@@ -15,8 +15,7 @@
         "room_name": "Stanza %(name)s",
         "room_status_bar": "Barra di stato della stanza",
         "seek_bar_label": "Barra di ricerca audio",
-        "unread_messages": "Messaggi non letti.",
-        "user_menu": "Menu utente"
+        "unread_messages": "Messaggi non letti."
     },
     "a11y_jump_first_unread_room": "Salta alla prima stanza non letta.",
     "action": {
@@ -306,7 +305,6 @@
         "sign_in_instead_prompt": "Oppure accedi",
         "sign_in_or_register": "Accedi o crea account",
         "sign_in_or_register_description": "Usa il tuo account o creane uno nuovo per continuare.",
-        "sign_in_prompt": "Hai un account? <a>Accedi</a>",
         "sign_in_with_sso": "Accedi con single sign-on",
         "signing_in": "Accesso…",
         "soft_logout": {
@@ -3029,7 +3027,6 @@
             "created_rule_rooms": "%(senderName)s ha creato una regola che bandisce stanze corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_servers": "%(senderName)s ha creato una regola che bandisce server corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_users": "%(senderName)s ha creato una regola che bandisce utenti corrispondenti a %(glob)s perchè %(reason)s",
-            "message_hidden": "Hai ignorato questo utente, perciò il suo messaggio è nascosto. <a>Mostra comunque.</a>",
             "removed_rule": "%(senderName)s ha rimosso una regola di ban corrispondente a %(glob)s",
             "removed_rule_rooms": "%(senderName)s ha rimosso la regola che bandisce stanze corrispondenti a %(glob)s",
             "removed_rule_servers": "%(senderName)s ha rimosso la regola che bandisce server corrispondenti a %(glob)s",
@@ -3316,11 +3313,6 @@
         "unban_space_warning": "Non potrà più accedere anche dove non sei amministratore.",
         "verify_button": "Verifica utente",
         "verify_explainer": "Per maggiore sicurezza, verifica questo utente controllando un codice univoco sui vostri dispositivi."
-    },
-    "user_menu": {
-        "settings": "Tutte le impostazioni",
-        "switch_theme_dark": "Passa alla modalità scura",
-        "switch_theme_light": "Passa alla modalità chiara"
     },
     "voip": {
         "already_in_call": "Già in una chiamata",

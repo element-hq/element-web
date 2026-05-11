@@ -13,6 +13,25 @@
     "left_panel": {
         "open_dial_pad": "Otwórz klawiaturę numeryczną"
     },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Utwórz konto",
+            "got_an_account": "Masz już konto?",
+            "manage_account": "Zarządzaj kontem",
+            "sign_in": "Zaloguj się",
+            "title": "Menu użytkownika"
+        }
+    },
+    "room_list": {
+        "chat_moved": "Czat przeniesiony",
+        "collapse_all_sections": "Zwiń wszystkie sekcje",
+        "expand_all_sections": "Rozwiń wszystkie sekcje",
+        "section_header": {
+            "edit_section": "Edytuj sekcję",
+            "more_options": "Więcej opcji",
+            "remove_section": "Usuń sekcję"
+        }
+    },
     "time": {
         "about_day_ago": "około dzień temu",
         "about_hour_ago": "około godziny temu",
@@ -34,6 +53,21 @@
             "audio_player": "Odtwarzacz audio",
             "error_downloading_audio": "Wystąpił błąd w trakcie pobierania audio",
             "unnamed_audio": "Audio bez nazwy"
+        },
+        "mjolnir": {
+            "message_hidden": "Zignorowałeś tego użytkownika, więc jego wiadomość jest ukryta.<a> Pokaż mimo to.</a>"
+        },
+        "pending_moderation": "Wiadomość oczekuje na moderację",
+        "pending_moderation_reason": "Wiadomość oczekuje na moderację: %(reason)s",
+        "url_preview": {
+            "open_link": "Otwórz link"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Powiąż nowe urządzenie",
+        "open_feedback": "Feedback",
+        "open_home": "Strona główna",
+        "open_security": "Bezpieczeństwo i prywatność",
+        "open_settings": "Wszystkie ustawienia"
     }
 }

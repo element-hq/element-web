@@ -15,8 +15,7 @@
         "room_name": "Szoba: %(name)s",
         "room_status_bar": "Szoba állapotsora",
         "seek_bar_label": "Hang keresősávja",
-        "unread_messages": "Olvasatlan üzenetek.",
-        "user_menu": "Felhasználói menü"
+        "unread_messages": "Olvasatlan üzenetek."
     },
     "a11y_jump_first_unread_room": "Ugrás az első olvasatlan szobához.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Már van fiókja? <a>Jelentkezzen be itt</a>",
         "sign_in_or_register": "Bejelentkezés vagy fiók létrehozása",
         "sign_in_or_register_description": "A folytatáshoz használja a fiókját, vagy hozzon létre egy újat.",
-        "sign_in_prompt": "Van már fiókja? <a>Jelentkezzen be</a>",
         "sign_in_with_sso": "Bejelentkezés „egyszeri bejelentkezéssel”",
         "signing_in": "Bejelentkezés…",
         "soft_logout": {
@@ -3526,7 +3524,6 @@
             "created_rule_rooms": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s, ok: %(reason)s",
             "created_rule_servers": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő kiszolgálók voltak kitiltva: %(glob)s, ok: %(reason)s",
             "created_rule_users": "%(senderName)s hozzáadta azt a szabályt, amellyel az ennek megfelelő felhasználók voltak kitiltva: %(glob)s, ok: %(reason)s",
-            "message_hidden": "Ezt a felhasználót figyelmen kívül hagyod, így az üzenetei el lesznek rejtve. <a>Megjelenítés mindenképpen.</a>",
             "removed_rule": "%(senderName)s törölte az ennek megfelelő kitiltó szabályt: %(glob)s",
             "removed_rule_rooms": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő szobák voltak kitiltva: %(glob)s",
             "removed_rule_servers": "%(senderName)s törölte azt a szabályt, amellyel az ennek megfelelő kiszolgálók ki voltak tiltva: %(glob)s",
@@ -3828,12 +3825,6 @@
         "verification_unavailable": "A felhasználó-ellenőrzés nem érhető el",
         "verify_button": "Felhasználó ellenőrzése",
         "verify_explainer": "A biztonság fokozásáért ellenőrizd ezt a felhasználót egy egyszeri kód egyeztetésével mindkettőtök készülékén."
-    },
-    "user_menu": {
-        "link_new_device": "Új eszköz összekapcsolása",
-        "settings": "Összes beállítás",
-        "switch_theme_dark": "Sötét módra váltás",
-        "switch_theme_light": "Világos módra váltás"
     },
     "voip": {
         "already_in_call": "A hívás már folyamatban van",
