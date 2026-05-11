@@ -39,6 +39,7 @@ import Measured from "../elements/Measured";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
 
 interface IProps {
     room: Room;
@@ -198,6 +199,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
 
         const myMembership = this.props.room.getMyMembership();
         const showComposer = myMembership === KnownMembership.Join;
+        const layout = this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group;
 
         return (
             <ScopedRoomContextProvider
@@ -217,27 +219,29 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                         <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <div className="mx_TimelineCard_timeline">
                             {jumpToBottom}
-                            <TimelinePanel
-                                ref={this.timelinePanel}
-                                showReadReceipts={this.state.showReadReceipts}
-                                manageReadReceipts={true}
-                                manageReadMarkers={false} // No RM support in the TimelineCard
-                                sendReadReceiptOnLoad={true}
-                                timelineSet={this.props.timelineSet}
-                                showUrlPreview={this.context.showUrlPreview}
-                                // The right panel timeline (and therefore threads) don't support IRC layout at this time
-                                layout={this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group}
-                                hideThreadedMessages={false}
-                                hidden={false}
-                                showReactions={true}
-                                className="mx_RoomView_messagePanel"
-                                permalinkCreator={this.props.permalinkCreator}
-                                membersLoaded={true}
-                                editState={this.state.editState}
-                                eventId={this.state.initialEventId}
-                                highlightedEventId={highlightedEventId}
-                                onScroll={this.onScroll}
-                            />
+                            <EventPresentationContextProvider layout={layout}>
+                                <TimelinePanel
+                                    ref={this.timelinePanel}
+                                    showReadReceipts={this.state.showReadReceipts}
+                                    manageReadReceipts={true}
+                                    manageReadMarkers={false} // No RM support in the TimelineCard
+                                    sendReadReceiptOnLoad={true}
+                                    timelineSet={this.props.timelineSet}
+                                    showUrlPreview={this.context.showUrlPreview}
+                                    // The right panel timeline (and therefore threads) don't support IRC layout at this time
+                                    layout={layout}
+                                    hideThreadedMessages={false}
+                                    hidden={false}
+                                    showReactions={true}
+                                    className="mx_RoomView_messagePanel"
+                                    permalinkCreator={this.props.permalinkCreator}
+                                    membersLoaded={true}
+                                    editState={this.state.editState}
+                                    eventId={this.state.initialEventId}
+                                    highlightedEventId={highlightedEventId}
+                                    onScroll={this.onScroll}
+                                />
+                            </EventPresentationContextProvider>
                         </div>
 
                         {isUploading && <UploadBar room={this.props.room} relation={this.props.composerRelation} />}

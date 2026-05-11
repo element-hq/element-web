@@ -51,6 +51,7 @@ import Heading from "../views/typography/Heading";
 import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 import { RoomUploadContextProvider } from "../../viewmodels/room/RoomUploadViewModel.tsx";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 interface IProps {
     room: Room;
@@ -372,32 +373,36 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 );
             }
 
+            const layout = this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group;
+
             timeline = (
                 <>
                     <FileDropTarget parent={this.card.current} />
-                    <TimelinePanel
-                        key={this.state.thread.id}
-                        ref={this.timelinePanel}
-                        showReadReceipts={this.context.showReadReceipts}
-                        manageReadReceipts={true}
-                        manageReadMarkers={true}
-                        sendReadReceiptOnLoad={true}
-                        timelineSet={this.state.thread.timelineSet}
-                        showUrlPreview={this.context.showUrlPreview}
-                        // ThreadView doesn't support IRC layout at this time
-                        layout={this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group}
-                        hideThreadedMessages={false}
-                        hidden={false}
-                        showReactions={true}
-                        className="mx_RoomView_messagePanel"
-                        permalinkCreator={this.props.permalinkCreator}
-                        membersLoaded={true}
-                        editState={this.state.editState}
-                        eventId={this.props.initialEvent?.getId()}
-                        highlightedEventId={highlightedEventId}
-                        eventScrollIntoView={this.props.initialEventScrollIntoView}
-                        onEventScrolledIntoView={this.resetJumpToEvent}
-                    />
+                    <EventPresentationContextProvider layout={layout}>
+                        <TimelinePanel
+                            key={this.state.thread.id}
+                            ref={this.timelinePanel}
+                            showReadReceipts={this.context.showReadReceipts}
+                            manageReadReceipts={true}
+                            manageReadMarkers={true}
+                            sendReadReceiptOnLoad={true}
+                            timelineSet={this.state.thread.timelineSet}
+                            showUrlPreview={this.context.showUrlPreview}
+                            // ThreadView doesn't support IRC layout at this time
+                            layout={layout}
+                            hideThreadedMessages={false}
+                            hidden={false}
+                            showReactions={true}
+                            className="mx_RoomView_messagePanel"
+                            permalinkCreator={this.props.permalinkCreator}
+                            membersLoaded={true}
+                            editState={this.state.editState}
+                            eventId={this.props.initialEvent?.getId()}
+                            highlightedEventId={highlightedEventId}
+                            eventScrollIntoView={this.props.initialEventScrollIntoView}
+                            onEventScrolledIntoView={this.resetJumpToEvent}
+                        />
+                    </EventPresentationContextProvider>
                 </>
             );
         } else {
