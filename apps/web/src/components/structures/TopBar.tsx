@@ -11,6 +11,7 @@ import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from "@vector-im/compoun
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
+import { canNavigateBack, onNavigationChange } from "../../vector/routing";
 
 import elementLogoUrl from "../../../res/themes/element/img/logos/element-logo.svg";
 import UserMenu from "./UserMenu";
@@ -72,6 +73,7 @@ function ElementLogo(): JSX.Element {
  */
 export function TopBar(): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
+    const [canGoBack, setCanGoBack] = useState(canNavigateBack);
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -82,6 +84,11 @@ export function TopBar(): JSX.Element {
         [],
     );
     const { query, filter, isFullView, recentSearches } = useViewModel(vm);
+
+    // Keep canGoBack in sync with routing history depth.
+    useEffect(() => {
+        return onNavigationChange(() => setCanGoBack(canNavigateBack()));
+    }, []);
 
     // Compute display value for the input: "is:FilterName query" when a filter is active
     const isFilterActive = filter !== GlobalSearchFilter.All;
@@ -158,7 +165,8 @@ export function TopBar(): JSX.Element {
                     <button
                         type="button"
                         aria-label="Go back"
-                        onClick={() => { vm.onReset(); setIsOpen(false); window.history.back(); }}
+                        disabled={!canGoBack}
+                        onClick={() => { if (canGoBack) { vm.onReset(); setIsOpen(false); window.history.back(); } }}
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -168,11 +176,11 @@ export function TopBar(): JSX.Element {
                             border: "none",
                             borderRadius: "6px",
                             background: "none",
-                            color: "var(--cpd-color-icon-secondary)",
-                            cursor: "pointer",
+                            color: canGoBack ? "var(--cpd-color-icon-secondary)" : "var(--cpd-color-icon-disabled)",
+                            cursor: canGoBack ? "pointer" : "default",
                             padding: 0,
                         }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
+                        onMouseEnter={(e) => { if (canGoBack) (e.currentTarget as HTMLButtonElement).style.background = "var(--cpd-color-bg-subtle-secondary)"; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "none"; }}
                     >
                         <ChevronLeftIcon width={18} height={18} />
