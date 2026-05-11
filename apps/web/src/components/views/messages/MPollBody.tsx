@@ -224,9 +224,10 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             newSelected = currentSelected.filter((id) => id !== answerId);
         } else {
             if (currentSelected.length >= maxSelections) {
-                return;
+                newSelected = [answerId];
+            } else {
+                newSelected = [...currentSelected, answerId];
             }
-            newSelected = [...currentSelected, answerId];
         }
 
         const response = PollResponseEvent.from(newSelected, this.props.mxEvent.getId()!).serialize();
