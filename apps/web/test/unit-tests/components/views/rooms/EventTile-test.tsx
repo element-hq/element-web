@@ -968,6 +968,43 @@ describe("EventTile", () => {
             expect(isHighlighted(container)).toBeFalsy();
         });
 
+        it("does not highlight when exporting", () => {
+            mocked(client.getPushActionsForEvent).mockReturnValue({
+                notify: true,
+                tweaks: { [TweakName.Highlight]: true },
+            });
+            const { container } = getComponent({ forExport: true });
+
+            expect(client.getPushActionsForEvent).not.toHaveBeenCalled();
+            expect(isHighlighted(container)).toBeFalsy();
+        });
+
+        it.each([TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
+            "does not highlight in %s timelines",
+            (renderingType) => {
+                mocked(client.getPushActionsForEvent).mockReturnValue({
+                    notify: true,
+                    tweaks: { [TweakName.Highlight]: true },
+                });
+                const { container } = getComponent({}, renderingType);
+
+                expect(client.getPushActionsForEvent).not.toHaveBeenCalled();
+                expect(isHighlighted(container)).toBeFalsy();
+            },
+        );
+
+        it("does not highlight events sent by the current user", () => {
+            mocked(client.getPushActionsForEvent).mockReturnValue({
+                notify: true,
+                tweaks: { [TweakName.Highlight]: true },
+            });
+            const ownEvent = makeOwnMessage();
+            const { container } = getComponent({ mxEvent: ownEvent });
+
+            expect(client.getPushActionsForEvent).toHaveBeenCalledWith(ownEvent);
+            expect(isHighlighted(container)).toBeFalsy();
+        });
+
         it("highlights when message's push actions have a highlight tweak", () => {
             mocked(client.getPushActionsForEvent).mockReturnValue({
                 notify: true,
