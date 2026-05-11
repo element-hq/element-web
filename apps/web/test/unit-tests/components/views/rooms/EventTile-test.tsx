@@ -414,6 +414,36 @@ describe("EventTile", () => {
             expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
         });
 
+        it("renders the message action bar when the tile receives keyboard focus", () => {
+            const matches = HTMLElement.prototype.matches;
+            jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
+                if (selector === ":focus-visible") return true;
+                return matches.call(this, selector);
+            });
+            const { container } = getComponent();
+
+            fireEvent.focus(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
+        });
+
+        it("hides the keyboard-focused message action bar when focus leaves the tile", () => {
+            const matches = HTMLElement.prototype.matches;
+            jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
+                if (selector === ":focus-visible") return true;
+                return matches.call(this, selector);
+            });
+            const { container } = getComponent();
+            const tile = getTile(container);
+
+            fireEvent.focus(tile);
+            expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
+
+            fireEvent.blur(tile);
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+
         it("does not render the message action bar on hover when exporting", () => {
             const { container } = getComponent({ forExport: true });
 
