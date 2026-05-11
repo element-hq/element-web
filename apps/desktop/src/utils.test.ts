@@ -73,6 +73,6 @@ describe("tryPaths", () => {
     });
 
     it("should throw error if file does not exist", async () => {
-        await expect(tryPaths("name", "dir", ["a.json", "b.json"])).rejects.toThrow("Failed to find name directory");
+        await expect(tryPaths("name", "dir", ["a.json", "b.json"])).rejects.toThrow("Failed to find name path");
     });
 });
