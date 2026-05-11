@@ -366,6 +366,39 @@ describe("EventTile", () => {
         });
     });
 
+    describe("reactions and footer", () => {
+        it("gets annotation relations when reactions are enabled", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+
+            getComponent({ showReactions: true, getRelationsForEvent });
+
+            expect(getRelationsForEvent).toHaveBeenCalledWith(mxEvent.getId(), "m.annotation", "m.reaction");
+        });
+
+        it("does not get annotation relations when reactions are disabled", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+
+            getComponent({ getRelationsForEvent });
+
+            expect(getRelationsForEvent).not.toHaveBeenCalled();
+        });
+
+        it("does not render reactions for redacted events", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            const { container } = getComponent({ showReactions: true, getRelationsForEvent, isRedacted: true });
+
+            expect(container.querySelector(".mx_ReactionsRow")).toBeNull();
+        });
+
+        it("renders a footer for pinned messages", () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_EventTile_footer")).not.toBeNull();
+            expect(screen.getByText("Pinned message")).toBeInTheDocument();
+        });
+    });
+
     describe("EventTile thread summary", () => {
         beforeEach(() => {
             jest.spyOn(client, "supportsThreads").mockReturnValue(true);
