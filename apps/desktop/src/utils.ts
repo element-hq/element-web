@@ -51,7 +51,7 @@ export function loadJsonFile<T extends Json>(...paths: string[]): T {
 }
 
 /**
- * Looks for a given directory path relative to root
+ * Looks for a given path relative to root
  * @param name - dir name to use in logging
  * @param root - the root to search from
  * @param rawPaths - the paths to search, in order
@@ -70,5 +70,5 @@ export async function tryPaths(name: string, root: string, rawPaths: string[]): 
     for (const p of paths) {
         console.log("\t" + path.resolve(p));
     }
-    throw new Error(`Failed to find ${name} directory`);
+    throw new Error(`Failed to find ${name} path`);
 }
