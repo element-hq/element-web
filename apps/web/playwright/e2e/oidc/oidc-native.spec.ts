@@ -213,7 +213,10 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                     .getByRole("menuitem", { name: "All settings" })
                     .click();
                 await page.getByRole("button", { name: "Remove this device" }).click();
-                await page.getByRole("button", { name: "Remove this device anyway" }).click();
+                // Since we have another device, it only shows a normal logout
+                // confirmation dialog, rather than prompting the user to set up
+                // recovery.
+                await page.getByRole("button", { name: "Remove this device" }).click();
                 await expect(page).toHaveURL(/\/#\/welcome$/);
 
                 // Log in again
