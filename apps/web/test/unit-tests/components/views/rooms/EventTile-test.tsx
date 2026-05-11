@@ -45,6 +45,7 @@ import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import PlatformPeg from "../../../../../src/PlatformPeg";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -458,6 +459,61 @@ describe("EventTile", () => {
             fireEvent.mouseEnter(getTile(container));
 
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+    });
+
+    describe("context menu", () => {
+        it("renders the message context menu when the event line is right-clicked", async () => {
+            const { container } = getComponent();
+
+            fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
+
+            expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
+        });
+
+        it("marks the tile selected when the context menu is open", async () => {
+            const { container } = getComponent();
+            const tile = getTile(container);
+
+            fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
+
+            expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
+            expect(tile).toHaveClass("mx_EventTile_selected");
+        });
+
+        it("shows the timestamp while the context menu is open", async () => {
+            mxEvent = makeTimestampedMessage();
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+
+            fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
+
+            expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("does not render the message context menu while editing", () => {
+            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+
+            expect(container.querySelector(".mx_EventTile_line")).toBeNull();
+            expect(screen.queryByTestId("mx_MessageContextMenu")).toBeNull();
+        });
+
+        it("does not override the native browser context menu for links", () => {
+            const { container } = getComponent();
+            jest.spyOn(PlatformPeg, "get").mockReturnValue({
+                allowOverridingNativeContextMenus: () => false,
+            } as ReturnType<typeof PlatformPeg.get>);
+            const link = document.createElement("a");
+            link.href = "https://example.org/";
+            getLine(container).appendChild(link);
+
+            const event = new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 1, clientY: 2 });
+            link.dispatchEvent(event);
+
+            expect(event.defaultPrevented).toBe(false);
+            expect(screen.queryByTestId("mx_MessageContextMenu")).toBeNull();
         });
     });
 
