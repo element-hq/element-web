@@ -10,8 +10,7 @@
             "other": "メンションを含む未読メッセージ%(count)s件。"
         },
         "room_name": "ルーム %(name)s",
-        "unread_messages": "未読メッセージ。",
-        "user_menu": "ユーザーメニュー"
+        "unread_messages": "未読メッセージ。"
     },
     "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
     "action": {
@@ -290,7 +289,6 @@
         "sign_in_instead_prompt": "サインイン",
         "sign_in_or_register": "サインインするか、アカウントを作成してください",
         "sign_in_or_register_description": "続行するには、作成済のアカウントを使用するか、新しいアカウントを作成してください。",
-        "sign_in_prompt": "アカウントがありますか？<a>サインインしてください</a>",
         "sign_in_with_sso": "シングルサインオンを使用してサインイン",
         "signing_in": "サインインしています…",
         "soft_logout": {
@@ -2772,7 +2770,6 @@
             "created_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを作成しました（理由：%(reason)s）",
-            "message_hidden": "このユーザーを無視しているのでメッセージは隠されます。<a>表示する。</a>",
             "removed_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを削除しました",
             "removed_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを削除しました",
             "removed_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを削除しました",
@@ -3049,11 +3046,6 @@
         "verify_button": "ユーザーの認証",
         "verify_explainer": "セキュリティー強化のため、両者の端末でワンタイムコードを確認し、このユーザーを認証してください。"
     },
-    "user_menu": {
-        "settings": "全ての設定",
-        "switch_theme_dark": "ダークテーマに切り替える",
-        "switch_theme_light": "ライトテーマに切り替える"
-    },
     "voip": {
         "already_in_call": "既に通話中です",
         "already_in_call_person": "既にこの人と通話中です。",
@@ -3136,7 +3128,6 @@
         "user_busy_description": "呼び出したユーザーは通話中です。",
         "user_is_presenting": "%(sharerName)sが画面を共有しています",
         "video_call": "ビデオ通話",
-        "video_call_started": "ビデオ通話を開始しました",
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },

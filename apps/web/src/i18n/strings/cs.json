@@ -15,8 +15,7 @@
         "room_name": "Místnost %(name)s",
         "room_status_bar": "Stavový řádek místnosti",
         "seek_bar_label": "Panel posunu zvuku",
-        "unread_messages": "Nepřečtené zprávy.",
-        "user_menu": "Uživatelská nabídka"
+        "unread_messages": "Nepřečtené zprávy."
     },
     "a11y_jump_first_unread_room": "Přejít na první nepřečtenou místnost.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Namísto toho se přihlásit",
         "sign_in_or_register": "Přihlásit nebo vytvořit nový účet",
         "sign_in_or_register_description": "Pro pokračování se přihlaste stávajícím účtem, nebo si vytvořte nový.",
-        "sign_in_prompt": "Máte již účet? <a>Přihlásit se</a>",
         "sign_in_with_sso": "Přihlásit se přes jednotné přihlašování",
         "signing_in": "Přihlašování…",
         "soft_logout": {
@@ -588,7 +586,6 @@
         "video": "Video",
         "video_room": "Video místnost",
         "view_message": "Zobrazit zprávu",
-        "voice": "Hlas",
         "warning": "Upozornění"
     },
     "composer": {
@@ -3574,7 +3571,6 @@
             "created_rule_rooms": "%(senderName)s vytvořil pravidlo blokující místnosti odpovídající %(glob)s z důvodu %(reason)s",
             "created_rule_servers": "%(senderName)s vytvořil pravidlo blokující servery odpovídající %(glob)s z důvodu %(reason)s",
             "created_rule_users": "%(senderName)s vytvořil(a) pravidlo blokující uživatele odpovídající %(glob)s z důvodu %(reason)s",
-            "message_hidden": "Tohoto uživatele ignorujete, takže jsou jeho zprávy skryté. <a>Přesto zobrazit.</a>",
             "removed_rule": "%(senderName)s odstranil blokující pravidlo %(glob)s",
             "removed_rule_rooms": "%(senderName)s odstranil pravidlo blokující místnosti odpovídající %(glob)s",
             "removed_rule_servers": "%(senderName)s odstranil pravidlo blokující servery odpovídající %(glob)s",
@@ -3879,12 +3875,6 @@
         "verify_button": "Ověřit uživatele",
         "verify_explainer": "Pro lepší bezpečnost, ověřte uživatele zkontrolováním jednorázového kódu na vašich zařízeních."
     },
-    "user_menu": {
-        "link_new_device": "Připojit nové zařízení",
-        "settings": "Všechna nastavení",
-        "switch_theme_dark": "Přepnout do tmavého režimu",
-        "switch_theme_light": "Přepnout do světlého režimu"
-    },
     "voip": {
         "already_in_call": "Již máte hovor",
         "already_in_call_person": "S touto osobou již telefonujete.",
@@ -3909,7 +3899,6 @@
         "connection_lost": "Došlo ke ztrátě připojení k serveru",
         "connection_lost_description": "Bez připojení k serveru nelze uskutečňovat hovory.",
         "consulting": "Konzultace s %(transferTarget)s. <a>Převod na %(transferee)s</a>",
-        "decline_call": "Odmítnout",
         "default_device": "Výchozí zařízení",
         "dial": "Vytočit",
         "dialpad": "Číselník",
@@ -3960,7 +3949,6 @@
         "show_sidebar_button": "Zobrazit postranní panel",
         "silence": "Ztlumit zvonění",
         "silenced": "Oznámení ztlumena",
-        "skip_lobby_toggle_option": "Připojte se ihned",
         "start_screenshare": "Začít sdílet obrazovku",
         "stop_screenshare": "Ukončit sdílení obrazovky",
         "too_many_calls": "Přiliš mnoho hovorů",
@@ -3982,7 +3970,6 @@
         "user_is_presenting": "%(sharerName)s prezentuje",
         "video_call": "Videohovor",
         "video_call_incoming": "Příchozí videohovor",
-        "video_call_started": "Videohovor byl zahájen",
         "video_call_using": "Videohovor pomocí:",
         "voice_call": "Hlasový hovor",
         "voice_call_incoming": "Příchozí hlasový hovor",

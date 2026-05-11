@@ -12,8 +12,7 @@
             "other": "%(count)s tin nhắn chưa đọc bao gồm các đề cập."
         },
         "room_name": "Phòng %(name)s",
-        "unread_messages": "Các tin nhắn chưa đọc.",
-        "user_menu": "Menu người dùng"
+        "unread_messages": "Các tin nhắn chưa đọc."
     },
     "a11y_jump_first_unread_room": "Chuyển đến phòng chưa đọc đầu tiên.",
     "action": {
@@ -279,7 +278,6 @@
         "sign_in_instead_prompt": "Đăng nhập",
         "sign_in_or_register": "Đăng nhập hoặc Tạo tài khoản",
         "sign_in_or_register_description": "Sử dụng tài khoản của bạn hoặc tạo một tài khoản mới để tiếp tục.",
-        "sign_in_prompt": "Đã có một tài khoản? <a>Sign in</a>",
         "sign_in_with_sso": "Đăng nhập bằng đăng nhập một lần",
         "signing_in": "Đăng nhập…",
         "soft_logout": {
@@ -2783,7 +2781,6 @@
             "created_rule_rooms": "%(senderName)s đã tạo một quy tắc cấm các phòng khớp với %(glob)s vì %(reason)s",
             "created_rule_servers": "%(senderName)s đã tạo quy tắc cấm các máy chủ khớp với %(glob)s cho %(reason)s",
             "created_rule_users": "%(senderName)s đã tạo một quy tắc cấm những người dùng khớp với %(glob)s vì %(reason)s",
-            "message_hidden": "Bạn đã bỏ qua người dùng này, vì vậy tin nhắn của họ bị ẩn. Hiển thị cũng được <a>Show anyways.</a>",
             "removed_rule": "%(senderName)s đã xóa quy tắc cấm khớp với %(glob)s",
             "removed_rule_rooms": "%(senderName)s đã xóa quy tắc cấm các phòng khớp với %(glob)s",
             "removed_rule_servers": "%(senderName)s đã xóa quy tắc cấm các máy chủ khớp với %(glob)s",
@@ -3048,11 +3045,6 @@
         "verify_button": "Xác thực người dùng",
         "verify_explainer": "Để tăng cường bảo mật, hãy xác thực người dùng này bằng cách kiểm tra mã một lần trên cả hai thiết bị của bạn."
     },
-    "user_menu": {
-        "settings": "Tất cả cài đặt",
-        "switch_theme_dark": "Chuyển sang chế độ tối",
-        "switch_theme_light": "Chuyển sang chế độ ánh sáng"
-    },
     "voip": {
         "already_in_call": "Đang trong cuộc gọi",
         "already_in_call_person": "Bạn đang trong cuộc gọi với người này rồi.",
@@ -3137,7 +3129,6 @@
         "user_busy_description": "Người dùng bạn vừa gọi hiện đang bận.",
         "user_is_presenting": "%(sharerName)s đang trình bày",
         "video_call": "Gọi video",
-        "video_call_started": "Cuộc gọi truyền hình đã bắt đầu",
         "voice_call": "Gọi thoại",
         "you_are_presenting": "Bạn đang trình bày"
     },

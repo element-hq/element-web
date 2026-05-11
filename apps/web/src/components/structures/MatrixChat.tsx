@@ -1794,11 +1794,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             SettingsStore.watchSetting(
                 "blacklistUnverifiedDevices",
                 null,
-                (_settingName, _roomId, atLevel, blacklistEnabled: boolean) => {
+                (_settingName, _roomId, atLevel, blacklistEnabled) => {
                     if (atLevel != SettingLevel.DEVICE) {
                         return;
                     }
-                    crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
+                    crypto.globalBlacklistUnverifiedDevices = !!blacklistEnabled;
                 },
             );
         }

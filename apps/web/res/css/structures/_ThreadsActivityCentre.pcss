@@ -86,6 +86,12 @@
             /* Arbitrary size, keep the TAC as the wanted width */
             width: 202px;
         }
+
+        /* Hide the notification badge on hover — compound's `nav-hint ~ *` rule would normally
+         * do this, but the app-web CSS layer overrides compound-web regardless of specificity. */
+        &:hover .mx_NotificationBadge {
+            display: none;
+        }
     }
 }
 

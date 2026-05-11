@@ -6,15 +6,15 @@
  */
 
 .picker_menu_item {
-    padding: var(--cpd-space-3x) var(--cpd-space-5x) !important;
+    padding: var(--cpd-space-3x) var(--cpd-space-5x);
 }
 
 .picker_form {
     display: flex;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    padding: 0 !important;
-    gap: var(--cpd-space-2x) !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0;
+    gap: var(--cpd-space-2x);
     color: var(--cpd-color-text-primary);
     font: var(--cpd-font-body-md-medium);
 }
@@ -28,7 +28,7 @@
 .picker_input_date {
     font: inherit;
     color-scheme: light;
-    padding: var(--cpd-space-2x) !important;
+    padding: var(--cpd-space-2x);
 
     :global(.cpd-theme-dark) &,
     :global(.cpd-theme-dark-hc) & {

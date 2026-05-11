@@ -15,8 +15,7 @@
         "room_name": "Ruangan %(name)s",
         "room_status_bar": "Bilah status ruangan",
         "seek_bar_label": "Bilah pencarian audio",
-        "unread_messages": "Pesan yang belum dibaca.",
-        "user_menu": "Menu pengguna"
+        "unread_messages": "Pesan yang belum dibaca."
     },
     "a11y_jump_first_unread_room": "Pergi ke ruangan yang belum dibaca.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Masuk saja",
         "sign_in_or_register": "Masuk atau Buat Akun",
         "sign_in_or_register_description": "Gunakan akun Anda atau buat akun baru untuk lanjut.",
-        "sign_in_prompt": "Punya sebuah akun? <a>Masuk</a>",
         "sign_in_with_sso": "Masuk dengan single sign on",
         "signing_in": "Memasuki…",
         "soft_logout": {
@@ -588,7 +586,6 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "voice": "Suara",
         "warning": "Peringatan"
     },
     "composer": {
@@ -3517,7 +3514,6 @@
             "created_rule_rooms": "%(senderName)s membuat sebuah peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
             "created_rule_servers": "%(senderName)s membuat sebuah peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
             "created_rule_users": "%(senderName)s membuat sebuah peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
-            "message_hidden": "Anda telah mengabaikan pengguna ini, jadi pesannya disembunyikan. <a>Tampilkan saja.</a>",
             "removed_rule": "%(senderName)s menghapus sebuah peraturan pencekalan yang berisi %(glob)s",
             "removed_rule_rooms": "%(senderName)s menghapus peraturan pencekalan ruangan yang berisi %(glob)s",
             "removed_rule_servers": "%(senderName)s menghapus peraturan pencekalan server yang berisi %(glob)s",
@@ -3822,12 +3818,6 @@
         "verify_button": "Verifikasi Pengguna",
         "verify_explainer": "Untuk keamanan lebih, verifikasi pengguna ini dengan memeriksa kode satu kali di kedua perangkat Anda."
     },
-    "user_menu": {
-        "link_new_device": "Tautkan perangkat baru",
-        "settings": "Semua pengaturan",
-        "switch_theme_dark": "Ubah ke mode gelap",
-        "switch_theme_light": "Ubah ke mode terang"
-    },
     "voip": {
         "already_in_call": "Sudah ada di panggilan",
         "already_in_call_person": "Anda sudah ada di panggilan dengan orang itu.",
@@ -3852,7 +3842,6 @@
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
         "consulting": "Mengkonsultasi dengan %(transferTarget)s. <a>Transfer ke %(transferee)s</a>",
-        "decline_call": "Tolak",
         "default_device": "Perangkat Bawaan",
         "dial": "Panggil",
         "dialpad": "Tombol Penyetel",
@@ -3903,7 +3892,6 @@
         "show_sidebar_button": "Tampilkan sisi bilah",
         "silence": "Diamkan panggilan",
         "silenced": "Notifikasi dibisukan",
-        "skip_lobby_toggle_option": "Segera bergabung",
         "start_screenshare": "Mulai membagikan layar Anda",
         "stop_screenshare": "Berhenti membagikan layar Anda",
         "too_many_calls": "Terlalu Banyak Panggilan",
@@ -3925,7 +3913,6 @@
         "user_is_presenting": "%(sharerName)s sedang mempresentasi",
         "video_call": "Panggilan video",
         "video_call_incoming": "Panggilan video masuk",
-        "video_call_started": "Panggilan video dimulai",
         "video_call_using": "Panggilan video menggunakan:",
         "voice_call": "Panggilan suara",
         "voice_call_incoming": "Panggilan suara masuk",
