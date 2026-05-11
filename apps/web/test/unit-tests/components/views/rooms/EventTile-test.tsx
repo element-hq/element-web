@@ -16,6 +16,7 @@ import {
     type MatrixClient,
     MatrixEvent,
     MatrixEventEvent,
+    MsgType,
     NotificationCountType,
     PendingEventOrdering,
     Room,
@@ -256,6 +257,72 @@ describe("EventTile", () => {
                 }
             },
         );
+    });
+
+    describe("message type classes", () => {
+        it("adds media and image classes for image messages", () => {
+            const imageEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: {
+                    msgtype: MsgType.Image,
+                    body: "image.png",
+                    url: "mxc://example.org/image",
+                    info: {
+                        mimetype: "image/png",
+                        w: 100,
+                        h: 100,
+                        size: 1234,
+                    },
+                },
+            });
+            const { container } = getComponent({ mxEvent: imageEvent });
+
+            expect(getLine(container)).toHaveClass("mx_EventTile_mediaLine");
+            expect(getLine(container)).toHaveClass("mx_EventTile_image");
+        });
+
+        it("adds emote classes for emote messages", () => {
+            const emoteEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: {
+                    msgtype: MsgType.Emote,
+                    body: "waves",
+                },
+            });
+            const { container } = getComponent({ mxEvent: emoteEvent });
+
+            expect(getTile(container)).toHaveClass("mx_EventTile_emote");
+            expect(getLine(container)).toHaveClass("mx_EventTile_emote");
+        });
+
+        it("adds media and sticker classes for sticker events", () => {
+            const stickerEvent = mkEvent({
+                event: true,
+                type: EventType.Sticker,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: {
+                    body: "sticker.png",
+                    url: "mxc://example.org/sticker",
+                    info: {
+                        mimetype: "image/png",
+                        w: 100,
+                        h: 100,
+                        size: 1234,
+                    },
+                },
+            });
+            const { container } = getComponent({ mxEvent: stickerEvent });
+
+            expect(getLine(container)).toHaveClass("mx_EventTile_mediaLine");
+            expect(getLine(container)).toHaveClass("mx_EventTile_sticker");
+        });
     });
 
     describe("timestamps", () => {
