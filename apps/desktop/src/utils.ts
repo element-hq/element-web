@@ -10,6 +10,10 @@ import fs from "node:fs";
 import path from "node:path";
 import afs from "node:fs/promises";
 
+/**
+ * Returns a random array of a specified size in unpadded base64
+ * @param size - the size of the underlying random array
+ */
 export async function randomArray(size: number): Promise<string> {
     return new Promise((resolve, reject) => {
         crypto.randomBytes(size, (err, buf) => {
@@ -47,7 +51,7 @@ export function loadJsonFile<T extends Json>(...paths: string[]): T {
 }
 
 /**
- * Looks for a given path relative to root
+ * Looks for a given directory path relative to root
  * @param name - dir name to use in logging
  * @param root - the root to search from
  * @param rawPaths - the paths to search, in order
@@ -62,9 +66,9 @@ export async function tryPaths(name: string, root: string, rawPaths: string[]): 
             return p + "/";
         } catch {}
     }
-    console.log(`Couldn't find ${name} files in any of: `);
+    console.log(`Couldn't find '${name}' in any of: `);
     for (const p of paths) {
         console.log("\t" + path.resolve(p));
     }
-    throw new Error(`Failed to find ${name} files`);
+    throw new Error(`Failed to find ${name} directory`);
 }
