@@ -23,6 +23,7 @@
         color: inherit;
         cursor: pointer;
         text-align: inherit;
+        vertical-align: bottom;
     }
 
     &:where(button):focus-visible {
