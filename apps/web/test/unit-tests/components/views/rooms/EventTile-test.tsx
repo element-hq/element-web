@@ -15,6 +15,7 @@ import {
     type IEventDecryptionResult,
     type MatrixClient,
     MatrixEvent,
+    MatrixEventEvent,
     NotificationCountType,
     PendingEventOrdering,
     Room,
@@ -440,6 +441,30 @@ describe("EventTile", () => {
             const getRelationsForEvent = jest.fn().mockReturnValue(null);
 
             getComponent({ getRelationsForEvent });
+
+            expect(getRelationsForEvent).not.toHaveBeenCalled();
+        });
+
+        it("refreshes annotation relations when reaction relations are created", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            getComponent({ showReactions: true, getRelationsForEvent });
+            getRelationsForEvent.mockClear();
+
+            act(() => {
+                mxEvent.emit(MatrixEventEvent.RelationsCreated, "m.annotation", "m.reaction");
+            });
+
+            expect(getRelationsForEvent).toHaveBeenCalledWith(mxEvent.getId(), "m.annotation", "m.reaction");
+        });
+
+        it("does not refresh annotation relations for unrelated relations", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            getComponent({ showReactions: true, getRelationsForEvent });
+            getRelationsForEvent.mockClear();
+
+            act(() => {
+                mxEvent.emit(MatrixEventEvent.RelationsCreated, "m.reference", "m.room.message");
+            });
 
             expect(getRelationsForEvent).not.toHaveBeenCalled();
         });
