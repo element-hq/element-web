@@ -399,6 +399,38 @@ describe("EventTile", () => {
         });
     });
 
+    describe("action bar", () => {
+        it("does not render the message action bar by default", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+
+        it("renders the message action bar when the tile is hovered", () => {
+            const { container } = getComponent();
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
+        });
+
+        it("does not render the message action bar on hover when exporting", () => {
+            const { container } = getComponent({ forExport: true });
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+
+        it("does not render the message action bar on hover while editing", () => {
+            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+    });
+
     describe("EventTile thread summary", () => {
         beforeEach(() => {
             jest.spyOn(client, "supportsThreads").mockReturnValue(true);
