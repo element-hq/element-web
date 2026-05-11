@@ -21,6 +21,16 @@
                 "default": "./dist/element-web-shared-components.js"
             }
         },
+        "./numbers": {
+            "require": {
+                "types": "./dist/numbers.d.ts",
+                "default": "./dist/numbers.umd.cjs"
+            },
+            "import": {
+                "types": "./dist/numbers.d.ts",
+                "default": "./dist/numbers.js"
+            }
+        },
         "./dist/element-web-shared-components.css": {
             "require": "./dist/element-web-shared-components.css",
             "import": "./dist/element-web-shared-components.css"
