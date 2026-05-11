@@ -7,6 +7,7 @@
 
 import React, { type JSX } from "react";
 import { createPortal } from "react-dom";
+import { Link } from "@vector-im/compound-web";
 
 import {
     GlobalSearchFilter,
@@ -19,6 +20,8 @@ import RoomAvatar from "../views/avatars/RoomAvatar";
 import MemberAvatar from "../views/avatars/MemberAvatar";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
+
+const MAX_CATEGORY_RESULTS = 8;
 
 const FULL_VIEW_FILTERS = [
     GlobalSearchFilter.All,
@@ -266,6 +269,18 @@ function EmptyState({ query, label }: { query: string; label?: string }): JSX.El
     );
 }
 
+// ── "More" text button ────────────────────────────────────────────────────────
+
+function MoreButton({ label, onClick }: { label: string; onClick: () => void }): JSX.Element {
+    return (
+        <div style={{ marginTop: "16px" }}>
+            <Link kind="primary" onClick={onClick}>
+                {label}
+            </Link>
+        </div>
+    );
+}
+
 // ── Props ─────────────────────────────────────────────────────────────────────
 
 export interface GlobalSearchFullViewProps {
@@ -282,9 +297,10 @@ export interface GlobalSearchFullViewProps {
 function ResultsContent({
     query,
     activeFilter,
+    onFilterChange,
     onRoomClick,
     onPersonClick,
-}: Pick<GlobalSearchFullViewProps, "query" | "activeFilter" | "onRoomClick" | "onPersonClick">): JSX.Element {
+}: Pick<GlobalSearchFullViewProps, "query" | "activeFilter" | "onFilterChange" | "onRoomClick" | "onPersonClick">): JSX.Element {
     const { people, rooms, spaces } = useGlobalSearch({ query, filter: activeFilter });
 
     if (activeFilter === GlobalSearchFilter.Messages || activeFilter === GlobalSearchFilter.Files) {
@@ -307,6 +323,12 @@ function ResultsContent({
         return <EmptyState query={query} />;
     }
 
+    const isAll = activeFilter === GlobalSearchFilter.All;
+
+    const visiblePeople = isAll ? people.slice(0, MAX_CATEGORY_RESULTS) : people;
+    const visibleRooms = isAll ? rooms.slice(0, MAX_CATEGORY_RESULTS) : rooms;
+    const visibleSpaces = isAll ? spaces.slice(0, MAX_CATEGORY_RESULTS) : spaces;
+
     return (
         <div
             style={{
@@ -322,10 +344,16 @@ function ResultsContent({
                 <>
                     <SectionHeader title="People" />
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-2x)" }}>
-                        {people.map((p) => (
+                        {visiblePeople.map((p) => (
                             <PersonCard key={p.userId} result={p} onClick={() => onPersonClick(p)} />
                         ))}
                     </div>
+                    {isAll && people.length > MAX_CATEGORY_RESULTS && (
+                        <MoreButton
+                            label="More people"
+                            onClick={() => onFilterChange(GlobalSearchFilter.People)}
+                        />
+                    )}
                 </>
             )}
 
@@ -333,10 +361,16 @@ function ResultsContent({
                 <>
                     <SectionHeader title="Rooms" />
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-2x)" }}>
-                        {rooms.map((r) => (
+                        {visibleRooms.map((r) => (
                             <RoomCard key={r.roomId} result={r} onClick={() => onRoomClick(r.roomId)} />
                         ))}
                     </div>
+                    {isAll && rooms.length > MAX_CATEGORY_RESULTS && (
+                        <MoreButton
+                            label="More rooms"
+                            onClick={() => onFilterChange(GlobalSearchFilter.Rooms)}
+                        />
+                    )}
                 </>
             )}
 
@@ -344,10 +378,16 @@ function ResultsContent({
                 <>
                     <SectionHeader title="Spaces" />
                     <div style={{ display: "flex", flexDirection: "column", gap: "var(--cpd-space-2x)" }}>
-                        {spaces.map((s) => (
+                        {visibleSpaces.map((s) => (
                             <RoomCard key={s.roomId} result={s} onClick={() => onRoomClick(s.roomId)} />
                         ))}
                     </div>
+                    {isAll && spaces.length > MAX_CATEGORY_RESULTS && (
+                        <MoreButton
+                            label="More spaces"
+                            onClick={() => onFilterChange(GlobalSearchFilter.Spaces)}
+                        />
+                    )}
                 </>
             )}
         </div>
@@ -411,6 +451,7 @@ function GlobalSearchFullViewInner({
                 <ResultsContent
                     query={query}
                     activeFilter={activeFilter}
+                    onFilterChange={onFilterChange}
                     onRoomClick={onRoomClick}
                     onPersonClick={onPersonClick}
                 />
