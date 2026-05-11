@@ -18,6 +18,7 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
 import {
+    CallStartedTileView,
     EncryptionEventView,
     HiddenBodyView,
     MKeyVerificationRequestView,
@@ -51,6 +52,7 @@ import { MKeyVerificationRequestViewModel } from "../viewmodels/room/timeline/ev
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
 import { ElementCallEventType } from "../call-types";
+import { CallStartedTileViewModel } from "../viewmodels/room/timeline/event-tile/call/CallStartedTileViewModel";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps extends Pick<
@@ -122,6 +124,15 @@ function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 }
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBodyWrappedView ref={ref} {...props} />;
 
+function CallStartedTileViewWrapped({ mxEvent }: IBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new CallStartedTileViewModel({ mxEvent }));
+    return <CallStartedTileView vm={vm} />;
+}
+
+export const CallStartedEventFactory: Factory = (ref, props) => {
+    return <CallStartedTileViewWrapped {...props} />;
+};
+
 // These factories are exported for reference comparison against pickFactory()
 export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;
 export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEvent ref={ref} {...props} />;
@@ -135,6 +146,7 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
     [M_POLL_END.name, MessageEventFactory],
     [M_POLL_END.altName, MessageEventFactory],
     [EventType.CallInvite, LegacyCallEventFactory as Factory], // note that this requires a special factory type
+    [EventType.RTCNotification, CallStartedEventFactory],
 ]);
 
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
