@@ -6,7 +6,6 @@
  */
 
 import { EventEmitter } from "events";
-import React from "react";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { MJitsiWidgetEventViewModel } from "../../../src/viewmodels/room/timeline/event-tile/MJitsiWidgetEventViewModel";
@@ -144,27 +143,13 @@ describe("MJitsiWidgetEventViewModel", () => {
         expect(listener).toHaveBeenCalledTimes(1);
     });
 
-    it("updates only timestamp when the timestamp changes", () => {
-        const timestamp = <span>14:56</span>;
-        const vm = createVm();
-        const listener = jest.fn();
-        vm.subscribe(listener);
-
-        vm.setTimestamp(timestamp);
-
-        expect(vm.getSnapshot().timestamp).toBe(timestamp);
-        expect(listener).toHaveBeenCalledTimes(1);
-    });
-
-    it("does not emit updates when setters receive unchanged inputs", () => {
+    it("does not emit updates when setEvent receives the current event", () => {
         const mxEvent = createEvent({ url: "https://jitsi.example.com/room" });
-        const timestamp = <span>14:56</span>;
         const listener = jest.fn();
-        const vm = createVm({ mxEvent, timestamp });
+        const vm = createVm({ mxEvent });
 
         vm.subscribe(listener);
         vm.setEvent(mxEvent);
-        vm.setTimestamp(timestamp);
 
         expect(listener).not.toHaveBeenCalled();
     });

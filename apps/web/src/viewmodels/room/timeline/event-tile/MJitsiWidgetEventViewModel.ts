@@ -67,11 +67,6 @@ export class MJitsiWidgetEventViewModel
         this.updateSnapshotFromProps();
     }
 
-    public setTimestamp(timestamp: JSX.Element | undefined): void {
-        this.props = { ...this.props, timestamp };
-        this.snapshot.merge({ timestamp });
-    }
-
     private trackStoreUpdates(): void {
         const roomId = this.props.mxEvent.getRoomId();
         const room = roomId ? this.props.cli.getRoom(roomId) : null;
