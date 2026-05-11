@@ -68,7 +68,7 @@ describe("ViewSourceEventViewModel", () => {
         const vm = new ViewSourceEventViewModel({ cli, mxEvent: oldEvent });
 
         vm.onToggle(createClickEvent());
-        vm.setEvent(newEvent);
+        vm.setProps({ mxEvent: newEvent });
 
         expect(cli.decryptEventIfNeeded).toHaveBeenCalledWith(newEvent);
         expect(vm.getSnapshot()).toEqual({
@@ -84,29 +84,33 @@ describe("ViewSourceEventViewModel", () => {
         const offSpy = jest.spyOn(oldEvent, "off");
         const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent: oldEvent });
 
-        vm.setEvent(createEvent("m.room.message"));
+        vm.setProps({ mxEvent: createEvent("m.room.message") });
 
         expect(offSpy).toHaveBeenCalledWith(MatrixEventEvent.Decrypted, expect.any(Function));
     });
 
-    it("does not emit when setEvent receives the current event", () => {
+    it("updates the decryption request when the client changes", () => {
+        const oldClient = createClient();
+        const newClient = createClient();
         const mxEvent = createEvent();
-        const vm = new ViewSourceEventViewModel({ cli: createClient(), mxEvent });
+        const vm = new ViewSourceEventViewModel({ cli: oldClient, mxEvent });
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setEvent(mxEvent);
+        vm.setProps({ cli: newClient });
 
+        expect(newClient.decryptEventIfNeeded).toHaveBeenCalledWith(mxEvent);
         expect(listener).not.toHaveBeenCalled();
     });
 
-    it("does not emit when setClient receives the current client", () => {
+    it("does not emit when setProps receives unchanged props", () => {
         const cli = createClient();
-        const vm = new ViewSourceEventViewModel({ cli, mxEvent: createEvent() });
+        const mxEvent = createEvent();
+        const vm = new ViewSourceEventViewModel({ cli, mxEvent });
         const listener = jest.fn();
         vm.subscribe(listener);
 
-        vm.setClient(cli);
+        vm.setProps({ cli, mxEvent });
 
         expect(listener).not.toHaveBeenCalled();
     });

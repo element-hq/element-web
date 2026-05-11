@@ -113,8 +113,7 @@ function ViewSourceEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new ViewSourceEventViewModel({ mxEvent, cli }));
 
     useEffect(() => {
-        vm.setClient(cli);
-        vm.setEvent(mxEvent);
+        vm.setProps({ cli, mxEvent });
     }, [cli, mxEvent, vm]);
 
     return (

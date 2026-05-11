@@ -57,19 +57,20 @@ export class ViewSourceEventViewModel
         this.setupDecryptionListener();
     }
 
-    public setEvent(mxEvent: MatrixEvent): void {
-        if (this.props.mxEvent === mxEvent) return;
+    public setProps(newProps: Partial<ViewSourceEventViewModelProps>): void {
+        const nextProps = { ...this.props, ...newProps };
+        const eventChanged = this.props.mxEvent !== nextProps.mxEvent;
+        const clientChanged = this.props.cli !== nextProps.cli;
 
-        this.props = { ...this.props, mxEvent };
+        if (!eventChanged && !clientChanged) return;
+
+        this.props = nextProps;
+
         this.setupDecryptionListener();
-        this.updateSnapshotFromProps();
-    }
 
-    public setClient(cli: MatrixClient): void {
-        if (this.props.cli === cli) return;
-
-        this.props = { ...this.props, cli };
-        this.setupDecryptionListener();
+        if (eventChanged) {
+            this.updateSnapshotFromProps();
+        }
     }
 
     public onToggle = (event: MouseEvent<HTMLButtonElement>): void => {
