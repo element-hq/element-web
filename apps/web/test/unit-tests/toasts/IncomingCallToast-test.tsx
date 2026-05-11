@@ -167,7 +167,7 @@ describe("IncomingCallToast", () => {
         screen.getByText("on the call");
 
         screen.getByRole("button", { name: "Join" });
-        screen.getByRole("button", { name: "Ignore" });
+        screen.getByRole("button", { name: "Decline" });
         screen.getByRole("button", { name: "Expand" });
     });
 
@@ -187,7 +187,7 @@ describe("IncomingCallToast", () => {
             screen.getByLabelText("@alice:example.org");
 
             screen.getByRole("button", { name: "Join" });
-            screen.getByRole("button", { name: "Ignore" });
+            screen.getByRole("button", { name: "Decline" });
             screen.getByRole("button", { name: "Expand" });
         } finally {
             mocked(dmRoomMap.getUserIdForRoomId).mockReset();
@@ -210,7 +210,7 @@ describe("IncomingCallToast", () => {
         expect(screen.queryByText("on the call")).toBe(null);
 
         screen.getByRole("button", { name: "Join" });
-        screen.getByRole("button", { name: "Ignore" });
+        screen.getByRole("button", { name: "Decline" });
         screen.getByRole("button", { name: "Expand" });
     });
 
@@ -452,7 +452,7 @@ describe("IncomingCallToast", () => {
             return promise;
         });
 
-        fireEvent.click(screen.getByRole("button", { name: "Ignore" }));
+        fireEvent.click(screen.getByRole("button", { name: "Decline" }));
 
         expect(toastStore.dismissToast).not.toHaveBeenCalledWith(getIncomingCallToastKey(callId, room.roomId));
         expect(client.sendRtcDecline).toHaveBeenCalledWith("!1:example.org", "$notificationEventId");

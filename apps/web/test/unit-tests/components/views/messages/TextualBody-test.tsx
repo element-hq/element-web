@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ComponentProps } from "react";
 import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
-import { render, waitFor } from "jest-matrix-react";
+import { act, render, waitFor } from "jest-matrix-react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import {
@@ -172,6 +172,44 @@ describe("<TextualBody />", () => {
         const { container } = getComponent({ mxEvent: ev, replacingEventId: ev.getId() });
 
         expect(container).toHaveTextContent("* sender winks(edited)");
+    });
+
+    it("updates the body kind when an edit changes msgtype to m.emote", async () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "hello",
+                msgtype: "m.text",
+            },
+            event: true,
+        });
+
+        const { container } = getComponent({ mxEvent: ev });
+        expect(container).toHaveTextContent("hello");
+
+        const edit = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                "body": "* waves",
+                "msgtype": "m.emote",
+                "m.new_content": {
+                    body: "waves",
+                    msgtype: "m.emote",
+                },
+            },
+            event: true,
+        });
+        act(() => {
+            ev.makeReplaced(edit);
+        });
+
+        await waitFor(() => expect(container).toHaveTextContent("* sender waves(edited)"));
     });
 
     it("renders m.notice correctly", () => {
