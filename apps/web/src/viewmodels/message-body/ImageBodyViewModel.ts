@@ -35,14 +35,41 @@ import { isMimeTypeAllowed } from "../../utils/blobs";
 import ImageView from "../../components/views/elements/ImageView";
 
 export interface ImageBodyViewModelProps {
+    /**
+     * Image event being rendered.
+     */
     mxEvent: MatrixEvent;
+    /**
+     * Helper for resolving encrypted media sources.
+     */
     mediaEventHelper?: MediaEventHelper;
+    /**
+     * Whether the image is being rendered for export instead of the live timeline.
+     */
     forExport?: boolean;
+    /**
+     * Optional maximum height applied when computing the rendered image dimensions.
+     */
     maxImageHeight?: number;
+    /**
+     * Whether the media should currently be shown instead of the hidden-media preview.
+     */
     mediaVisible: boolean;
+    /**
+     * Permalink helper passed to the image lightbox.
+     */
     permalinkCreator?: RoomPermalinkCreator;
+    /**
+     * Timeline context used to decide which labels and supplemental content should be shown.
+     */
     timelineRenderingType: TimelineRenderingType;
+    /**
+     * Ref to the underlying image element used for load dimensions and lightbox animation.
+     */
     imageRef: RefObject<HTMLImageElement | null>;
+    /**
+     * Callback invoked when hidden media is revealed.
+     */
     setMediaVisible?: (visible: boolean) => void;
 }
 
@@ -68,6 +95,10 @@ type ImageInfoWithAnimationFlag = NonNullable<ImageContent["info"]> & {
     "org.matrix.msc4230.is_animated"?: boolean;
 };
 
+/**
+ * View model for the image message body, encapsulating media loading, sizing,
+ * visibility, animated-image previews, and lightbox interactions.
+ */
 export class ImageBodyViewModel
     extends BaseViewModel<ImageBodyViewSnapshot, ImageBodyViewModelProps>
     implements ImageBodyViewModelInterface
@@ -150,9 +181,9 @@ export class ImageBodyViewModel
     }
 
     private static computeErrorLabel(error: unknown, imgError: boolean): string {
-        if (error instanceof DecryptError)  return _t("timeline|m.image|error_decrypting");
-        if (error instanceof DownloadError)  return _t("timeline|m.image|error_downloading");
-        if (imgError || error)  return _t("timeline|m.image|error");
+        if (error instanceof DecryptError) return _t("timeline|m.image|error_decrypting");
+        if (error instanceof DownloadError) return _t("timeline|m.image|error_downloading");
+        if (imgError || error) return _t("timeline|m.image|error");
 
         return _t("timeline|m.image|error");
     }
