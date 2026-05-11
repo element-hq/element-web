@@ -431,6 +431,53 @@ describe("EventTile", () => {
         });
     });
 
+    describe("reply chain", () => {
+        function makeReplyEvent(): MatrixEvent {
+            const parentEvent = mkMessage({
+                room: room.roomId,
+                user: "@alice:example.org",
+                msg: "Original message",
+                event: true,
+            });
+
+            return mkMessage({
+                room: room.roomId,
+                user: "@bob:example.org",
+                msg: "Reply message",
+                event: true,
+                relatesTo: {
+                    "m.in_reply_to": {
+                        event_id: parentEvent.getId(),
+                    },
+                },
+            });
+        }
+
+        it("marks non-reply events as having no reply", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
+            expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
+        });
+
+        it("marks reply events as having a reply chain", () => {
+            const replyEvent = makeReplyEvent();
+            const { container } = getComponent({ mxEvent: replyEvent });
+
+            expect(getTile(container)).toHaveAttribute("data-has-reply", "true");
+            expect(container.querySelector(".mx_ReplyChain_wrapper")).not.toBeNull();
+        });
+
+        it("does not render the reply chain for redacted reply events", () => {
+            const replyEvent = makeReplyEvent();
+            jest.spyOn(replyEvent, "isRedacted").mockReturnValue(true);
+            const { container } = getComponent({ mxEvent: replyEvent });
+
+            expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
+            expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
+        });
+    });
+
     describe("EventTile thread summary", () => {
         beforeEach(() => {
             jest.spyOn(client, "supportsThreads").mockReturnValue(true);
