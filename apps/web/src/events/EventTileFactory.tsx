@@ -20,6 +20,7 @@ import {
 import {
     EncryptionEventView,
     HiddenBodyView,
+    MKeyVerificationRequestView,
     TextualEventView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -37,7 +38,6 @@ import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
-import MKeyVerificationRequest from "../components/views/messages/MKeyVerificationRequest";
 import { WidgetType } from "../widgets/WidgetType";
 import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
@@ -47,6 +47,7 @@ import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
 import { EncryptionEventViewModel } from "../viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
+import { MKeyVerificationRequestViewModel } from "../viewmodels/room/timeline/event-tile/MKeyVerificationRequestViewModel";
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
 import { ElementCallEventType } from "../call-types";
@@ -95,7 +96,21 @@ function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 const EncryptionEventFactory: Factory = (ref, props) => {
     return <EncryptionEventWrappedView ref={ref} {...props} />;
 };
-const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
+function MKeyVerificationRequestWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    if (!cli) {
+        throw new Error("Attempting to render verification request without a client context!");
+    }
+
+    const vm = useCreateAutoDisposedViewModel(() => new MKeyVerificationRequestViewModel({ mxEvent, cli }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    return <MKeyVerificationRequestView vm={vm} ref={ref} className="mx_EventTileBubble mx_cryptoEvent" />;
+}
+const VerificationReqFactory: Factory = (ref, props) => <MKeyVerificationRequestWrappedView ref={ref} {...props} />;
 function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new HiddenBodyViewModel({ mxEvent }));
 
