@@ -20,6 +20,7 @@ import {
 import {
     EncryptionEventView,
     HiddenBodyView,
+    MJitsiWidgetEventView,
     TextualEventView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -39,7 +40,6 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import MKeyVerificationRequest from "../components/views/messages/MKeyVerificationRequest";
 import { WidgetType } from "../widgets/WidgetType";
-import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
 import { getMessageModerationState, MessageModerationState } from "../utils/EventUtils";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
@@ -47,6 +47,7 @@ import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
 import { EncryptionEventViewModel } from "../viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
+import { MJitsiWidgetEventViewModel } from "../viewmodels/room/timeline/event-tile/MJitsiWidgetEventViewModel";
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
 import { ElementCallEventType } from "../call-types";
@@ -107,8 +108,19 @@ function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 }
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBodyWrappedView ref={ref} {...props} />;
 
+function MJitsiWidgetEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new MJitsiWidgetEventViewModel({ mxEvent, cli }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    return <MJitsiWidgetEventView vm={vm} ref={ref} className="mx_EventTileBubble" />;
+}
+
 // These factories are exported for reference comparison against pickFactory()
-export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;
+export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEventWrappedView ref={ref} {...props} />;
 export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEvent ref={ref} {...props} />;
 export const RoomCreateEventFactory: Factory = (_ref, props) => <RoomPredecessorTile {...props} />;
 
