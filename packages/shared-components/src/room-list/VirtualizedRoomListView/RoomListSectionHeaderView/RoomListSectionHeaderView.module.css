@@ -19,7 +19,8 @@
     background-color: var(--cpd-color-bg-canvas-default);
 
     &:hover,
-    &:focus-visible {
+    &:focus-visible,
+    &:has(button[data-state="open"]) {
         color: var(--cpd-color-text-primary);
 
         svg {
@@ -29,20 +30,24 @@
         .container {
             background-color: var(--cpd-color-bg-action-tertiary-hovered);
         }
+
+        .menu {
+            display: initial;
+        }
     }
 
-    svg {
+    .chevron {
         transition: transform 0.05s linear;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        svg {
+        .chevron {
             transition: none;
         }
     }
 
     &[aria-expanded="true"] {
-        svg {
+        .chevron {
             transform: rotate(90deg);
         }
     }
@@ -57,6 +62,10 @@
     margin: 0 var(--cpd-space-3x);
     padding: var(--cpd-space-1-5x) var(--cpd-space-2x) var(--cpd-space-1-5x) var(--cpd-space-1x);
     border-radius: 8px;
+
+    div {
+        min-width: 0;
+    }
 
     svg {
         flex-shrink: 0;
@@ -76,4 +85,8 @@
 
 .lastHeader {
     padding-bottom: 0;
+}
+
+.menu {
+    display: none;
 }

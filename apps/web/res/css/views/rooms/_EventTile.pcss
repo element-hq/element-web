@@ -636,19 +636,6 @@ $left-gutter: 64px;
     overflow-x: hidden;
     margin-right: var(--EventTile_content-margin-inline-end);
 
-    .mx_EventTile_edited,
-    .mx_EventTile_pendingModeration {
-        user-select: none;
-        font-size: $font-12px;
-        color: $secondary-content;
-        display: inline-block;
-        margin-inline-start: 9px;
-    }
-
-    .mx_EventTile_edited {
-        cursor: pointer;
-    }
-
     .markdown-body {
         font: var(--cpd-font-body-md-regular) !important;
         letter-spacing: var(--cpd-font-letter-spacing-body-md);
@@ -1372,14 +1359,6 @@ $left-gutter: 64px;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-}
-
-.mx_EventTile_annotated {
-    display: flex;
-}
-
-.mx_EventTile_annotatedInline {
-    display: inline-flex;
 }
 
 .mx_EventTile_footer {

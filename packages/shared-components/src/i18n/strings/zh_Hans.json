@@ -5,6 +5,7 @@
     "action": {
         "back": "返回",
         "click": "点击",
+        "close": "关闭",
         "collapse": "折叠",
         "delete": "删除",
         "dismiss": "忽略",
@@ -14,8 +15,11 @@
         "go": "转到",
         "hide": "隐藏",
         "invite": "邀请",
+        "new_conversation": "新对话",
         "new_room": "新房间",
+        "new_section": "新区域",
         "new_video_room": "新视频房间",
+        "open_menu": "打开菜单",
         "pause": "暂停",
         "pin": "置顶",
         "play": "播放",
@@ -32,12 +36,23 @@
     "common": {
         "attachment": "附件",
         "encryption_enabled": "加密已启用",
+        "loading": "正在载入…",
         "options": "选项",
         "preferences": "偏好",
         "state_encryption_enabled": "实验性的状态加密已启用"
     },
     "left_panel": {
-        "open_dial_pad": "打开拨号键盘"
+        "open_dial_pad": "打开拨号键盘",
+        "separator_label": "点击或拖动以展开"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "创建账户",
+            "got_an_account": "已有账户？",
+            "manage_account": "管理账户",
+            "sign_in": "登录",
+            "title": "用户菜单"
+        }
     },
     "notifications": {
         "all_messages": "所有消息",
@@ -75,6 +90,8 @@
     },
     "room_list": {
         "appearance": "外观",
+        "chat_moved": "聊天已移动",
+        "collapse_all_sections": "折叠所有区域",
         "collapse_filters": "折叠过滤器列表",
         "empty": {
             "no_chats": "暂无聊天",
@@ -93,6 +110,7 @@
             "show_activity": "查看所有活动",
             "show_chats": "显示所有聊天"
         },
+        "expand_all_sections": "展开所有区域",
         "expand_filters": "展开过滤器列表",
         "filters": {
             "favourite": "收藏",
@@ -110,7 +128,8 @@
             "leave_room": "离开房间",
             "low_priority": "低优先级",
             "mark_read": "设为已读",
-            "mark_unread": "设为未读"
+            "mark_unread": "设为未读",
+            "move_to_section": "移动到"
         },
         "notification_options": "通知选项",
         "open_space_menu": "打开空间菜单",
@@ -119,6 +138,14 @@
             "more_options": "更多选项"
         },
         "room_options": "房间选项",
+        "section_created": "区域已创建",
+        "section_header": {
+            "edit_section": "编辑区域",
+            "more_options": "更多选项",
+            "remove_section": "移除区域",
+            "toggle": "切换区域 %(section)s",
+            "toggle_unread": "切换到区域 %(section)s 中的未读房间"
+        },
         "show_message_previews": "显示消息预览",
         "sort": "排序",
         "sort_type": {
@@ -191,14 +218,27 @@
         },
         "message_timestamp_received_at": "接收于 %(dateTime)s",
         "message_timestamp_sent_at": "发送于 %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "你已忽略此用户，因此其消息已被隐藏。<a> 仍然显示</a>"
+        },
+        "pending_moderation": "消息等待审核",
+        "pending_moderation_reason": "消息等待审核：%(reason)s",
         "url_preview": {
             "close": "关闭预览",
+            "open_link": "打开链接",
             "show_n_more": {
                 "one": "显示剩余 %(count)s 个预览",
                 "other": "显示剩余 %(count)s 个预览"
             },
             "view_image": "查看图像"
         }
+    },
+    "user_menu": {
+        "link_new_device": "关联新设备",
+        "open_feedback": "反馈",
+        "open_home": "主页",
+        "open_security": "安全与隐私",
+        "open_settings": "所有设置"
     },
     "widget": {
         "context_menu": {

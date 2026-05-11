@@ -42,10 +42,8 @@ describe("<LoginWithQRFlow />", () => {
 
     it("renders spinner whilst QR generating", async () => {
         const { container } = render(getComponent({ phase: Phase.ShowingQR }));
-        expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
+        expect(screen.getAllByTestId("spinner")).toHaveLength(1);
         expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId("cancel-button"));
-        expect(onClick).toHaveBeenCalledWith(Click.Cancel, undefined);
     });
 
     it("renders QR code", async () => {

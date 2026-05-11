@@ -12,7 +12,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RoomListToast } from "./RoomListToast";
 
 const meta = {
-    title: "Room List/RoomListView/RoomListToast",
+    title: "Room List/RoomListToast",
     component: RoomListToast,
     tags: ["autodocs"],
     args: {
@@ -38,3 +38,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SectionCreated: Story = {};
+
+export const ChatMoved: Story = {
+    args: {
+        type: "chat_moved",
+    },
+};

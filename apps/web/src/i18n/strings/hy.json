@@ -15,8 +15,7 @@
         "room_name": "Սենյակ %(name)s",
         "room_status_bar": "Սենյակի կարգավիճակի գոտի/վահանակ",
         "seek_bar_label": "Աուդիո որոնման գոտի",
-        "unread_messages": "Չկարդացված հաղորդագրություններ։",
-        "user_menu": "Օգտվողի մենյու"
+        "unread_messages": "Չկարդացված հաղորդագրություններ։"
     },
     "a11y_jump_first_unread_room": "Անցնել առաջին չկարդացած սենյակ:",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Արդեն ունե՞ք հաշիվ։<a> Մուտք գործեք այստեղ</a>",
         "sign_in_or_register": "Մուտք գործել կամ ստեղծել հաշիվ",
         "sign_in_or_register_description": "Շարունակելու համար օգտագործեք ձեր հաշիվը կամ ստեղծեք նորը։",
-        "sign_in_prompt": "Ունե՞ք հաշիվ: <a>Մուտք գործեք</a>",
         "sign_in_with_sso": "Մուտք գործեք միասնական մուտքի միջոցով",
         "signing_in": "Մուտք գործում...",
         "soft_logout": {
@@ -1493,9 +1491,6 @@
         "render_reaction_images_description": "Երբեմն կոչվում է “հատուկ էմոջիներ”:",
         "report_to_moderators": "Հաղորդել մոդերատորներին",
         "report_to_moderators_description": "Սենյակներում, որոնք աջակցում են չափավորումը, “Հաշվետվություն” կոճակը թույլ կտա ձեզ հաղորդել չարաշահումների մասին սենյակների մոդերատորներին:",
-        "share_history_on_invite": "Կիսվել գաղտնսգրված պատմությամբ նոր անդամների հետ",
-        "share_history_on_invite_description": "Եթե օգտատիրոջը հրավիրում եք գաղտնագրված սենյակ, որի պատմության հասանելիությունը «կիսված» է, ապա նրա հետ կիսվում է գաղտնագրված պատմությունը, և դուք նույնպես ստանում եք գաղտնագրված պատմություն, երբ հրավիրվում եք նման սենյակ։",
-        "share_history_on_invite_warning": "Այս գործառույթը ՓՈՐՁԱՐԱՐԱԿԱՆ է, և ոչ բոլոր անվտանգության միջոցառումներն են ներդրված։ Մի՛ միացրեք այն իրական(կարևոր) հաշիվներում։",
         "sliding_sync": "Սահող համաժամեցման(Sliding Sync) ռեժիմ",
         "sliding_sync_description": "Ակտիվ մշակման փուլում է, չի կարող անջատվել։",
         "sliding_sync_disabled_notice": "Անջատելու համար դուրս եկեք և նորից մուտք գործեք",
@@ -1729,7 +1724,6 @@
         "restricted": "Սահմանափակված"
     },
     "powered_by_matrix": "Մշակված Matrix-ի կողմից",
-    "powered_by_matrix_with_logo": "Ապակենտրոնացված և գաղտնագրված զրույց ու համագործակցություն՝ $matrixLogo-ի աջակցությամբ",
     "presence": {
         "away": "Տեղում չէ",
         "busy": "Զբաղված",
@@ -3437,7 +3431,6 @@
             "created_rule_rooms": "%(senderName)s-ը ստեղծեց %(glob)s–ին համապատասխանող սենյակները արգելող կանոն՝ %(reason)s պատճառով",
             "created_rule_servers": "%(senderName)s-ը ստեղծեց %(glob)s–ին համապատասխանող սերվերները արգելող կանոն՝ %(reason)s պատճառով",
             "created_rule_users": "%(senderName)s-ը ստեղծեց %(glob)s–ին համապատասխանող օգտատերերին արգելող կանոն՝ %(reason)s պատճառով",
-            "message_hidden": "Դուք անտեսել եք այս օգտատիրոջը, ուստի նրա հաղորդագրությունը թաքցված է։<a> Ամեն դեպքում ցույց տալ։</a>",
             "removed_rule": "%(senderName)s-ը հեռացրել է %(glob)s-ին համապատասխանող արգելքի կանոնը",
             "removed_rule_rooms": "%(senderName)s-ը հեռացրեց %(glob)s-ին համապատասխանող սենյակներն արգելող կանոնը",
             "removed_rule_servers": "%(senderName)s-ը հեռացրեց %(glob)s-ին համապատասխանող սերվերներն արգելող կանոնը",
@@ -3743,12 +3736,6 @@
         "verify_button": "Հաստատել օգտատիրոջը",
         "verify_explainer": "Լրացուցիչ անվտանգության համար հաստատեք այս օգտատիրոջը՝ ստուգելով միանգամյա կոդը ձեր երկու սարքերի վրա։"
     },
-    "user_menu": {
-        "link_new_device": "Կապել նոր սարք",
-        "settings": "Բոլոր կարգավորումները",
-        "switch_theme_dark": "Անցնել մութ ռեժիմի",
-        "switch_theme_light": "Անցնել լուսավոր ռեժիմի"
-    },
     "voip": {
         "already_in_call": "Արդեն զանգի մեջ է",
         "already_in_call_person": "Դուք արդեն զանգի մեջ եք այս անձի հետ։",
@@ -3843,13 +3830,11 @@
         "user_busy_description": "Ձեր զանգահարած օգտատերը զբաղված է։",
         "user_is_presenting": "%(sharerName)s-ը ներկայացնում է",
         "video_call": "Տեսազանգ",
-        "video_call_started": "Տեսազանգը սկսվեց",
         "video_call_using": "Տեսազանգ՝ օգտագործելով՝",
         "voice_call": "Ձայնային զանգ",
         "you_are_presenting": "Դուք ներկայացնում եք"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s %(osName)s-ի վրա",
-    "welcome_to_element": "Բարի գալուստ Element",
     "widget": {
         "added_by": "Վիջեթը ավելացվել է",
         "capabilities_dialog": {

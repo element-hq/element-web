@@ -10,8 +10,7 @@
             "other": "%(count)s پیام‌های خوانده نشده از جمله اشاره‌ها."
         },
         "room_name": "اتاق %(name)s",
-        "unread_messages": "پیام های خوانده نشده.",
-        "user_menu": "منوی کاربر"
+        "unread_messages": "پیام های خوانده نشده."
     },
     "a11y_jump_first_unread_room": "به اولین اتاق خوانده نشده بروید.",
     "action": {
@@ -236,7 +235,6 @@
         "sign_in_instead_prompt": "حساب کاربری دارید؟ <a>وارد شوید</a>",
         "sign_in_or_register": "وارد شوید یا حساب کاربری بسازید",
         "sign_in_or_register_description": "برای ادامه کار از حساب کاربری خود استفاده کرده و یا حساب کاربری جدیدی ایجاد کنید.",
-        "sign_in_prompt": "حساب کاربری دارید؟ <a>وارد شوید</a>",
         "sign_in_with_sso": "با احراز هویت یکپارچه وارد شوید",
         "soft_logout": {
             "clear_data_button": "پاک کردن همه داده ها",
@@ -1043,7 +1041,6 @@
         "restricted": "ممنوع"
     },
     "powered_by_matrix": "راه اندازی شده با استفاده از ماتریکس",
-    "powered_by_matrix_with_logo": "همکاری چت غیرمتمرکز و رمزگذاری شده &amp; توسعه یافته با استفاده از $matrixLogo",
     "presence": {
         "away": "بعدا",
         "idle": "بلااستفاده",
@@ -1925,7 +1922,6 @@
             "created_rule_rooms": "%(senderName)s یک قاعده تحریم اتاق‌ها را که با %(glob)s تطابق دارد، به دلیل (دلایل) %(reason)s ایجاد کرد",
             "created_rule_servers": "%(senderName)s یک قاعده تحریم سرورها را که با %(glob)s تطابق دارد، به دلیل (دلایل) %(reason)s ایجاد کرد",
             "created_rule_users": "%(senderName)s یک قاعده تحریم کاربران را که با %(glob)s تطابق دارد، به دلیل (دلایل) %(reason)s ایجاد کرد",
-            "message_hidden": "شما این کاربر را نادیده گرفته‌اید، بنابراین پیام او نمایش داده نمی‌شود. <a>نمایش بده.</a>",
             "removed_rule": "%(senderName)s قاعده تحریمی را که با %(glob)s تطابق داشت، حذف کرد",
             "removed_rule_rooms": "%(senderName)s قاعده تحریم اتاق‌ها را که با %(glob)s تطابق داشت، حذف کرد",
             "removed_rule_servers": "%(senderName)s قاعده تحریم سرورها را که با %(glob)s تطابق داشت، حذف کرد",
@@ -2124,11 +2120,6 @@
         "verify_button": "تأیید هویت کاربر",
         "verify_explainer": "برای امنیت بیشتر، با بررسی کد یکبارمصرف در هر دو دستگاه، این کاربر را تأیید کنید."
     },
-    "user_menu": {
-        "settings": "همه تنظیمات",
-        "switch_theme_dark": "انتخاب حالت تاریک",
-        "switch_theme_light": "انتخاب حالت روشن"
-    },
     "voip": {
         "already_in_call": "هم‌اکنون در تماس هستید",
         "already_in_call_person": "شما هم‌اکنون با این فرد در تماس هستید.",
@@ -2188,11 +2179,9 @@
         "user_busy": "کاربر مشغول",
         "user_busy_description": "کاربر موردنظر مشغول است.",
         "video_call": "تماس تصویری",
-        "video_call_started": "تماس تصویری شروع شد",
         "voice_call": "تماس صوتی"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s: روی %(osName)s",
-    "welcome_to_element": "به Element خوش‌آمدید",
     "widget": {
         "added_by": "ابزارک اضافه شده توسط",
         "capabilities_dialog": {

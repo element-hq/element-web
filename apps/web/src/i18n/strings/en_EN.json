@@ -15,8 +15,7 @@
         "room_name": "Room %(name)s",
         "room_status_bar": "Room status bar",
         "seek_bar_label": "Audio seek bar",
-        "unread_messages": "Unread messages.",
-        "user_menu": "User menu"
+        "unread_messages": "Unread messages."
     },
     "a11y_jump_first_unread_room": "Jump to first unread room.",
     "action": {
@@ -42,7 +41,7 @@
         "copy_link": "Copy link",
         "create": "Create",
         "create_a_room": "Create a room",
-        "create_account": "Create Account",
+        "create_account": "Create account",
         "decline": "Decline",
         "decline_and_block": "Decline and block",
         "decline_invite": "Decline invite",
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Already have an account? <a>Sign in here</a>",
         "sign_in_or_register": "Sign In or Create Account",
         "sign_in_or_register_description": "Use your account or create a new one to continue.",
-        "sign_in_prompt": "Got an account? <a>Sign in</a>",
         "sign_in_with_sso": "Sign in with single sign-on",
         "signing_in": "Signing In…",
         "soft_logout": {
@@ -476,6 +474,7 @@
         "description": "Description",
         "deselect_all": "Deselect all",
         "device": "Device",
+        "disabled_by_homeserver": "Disabled by homeserver",
         "edited": "edited",
         "email_address": "Email address",
         "emoji": "Emoji",
@@ -588,7 +587,6 @@
         "video": "Video",
         "video_room": "Video room",
         "view_message": "View message",
-        "voice": "Voice",
         "warning": "Warning"
     },
     "composer": {
@@ -684,8 +682,10 @@
     "create_section_dialog": {
         "create_section": "Create section",
         "description": "Sections are only for you",
+        "edit_section": "Edit section",
         "label": "Section name",
-        "title": "Create a section"
+        "title": "Create a section",
+        "title_edition": "Edit a section"
     },
     "create_space": {
         "add_details_prompt": "Add some details to help people recognise it.",
@@ -1368,6 +1368,14 @@
         "impossible_dialog_title": "Integrations not allowed"
     },
     "invite": {
+        "confirm_unknown_users": {
+            "invite_subtitle": "You currently don't have any chats with these contacts. Confirm inviting them to this room before continuing.",
+            "invite_title": "Invite new contacts to this room?",
+            "start_chat_subtitle_multiple_users": "You currently don't have any chats with these people. Confirm inviting them before continuing.",
+            "start_chat_subtitle_one_user": "You currently don't have any chats with this person. Confirm inviting them before continuing.",
+            "start_chat_title_multiple_users": "Start a chat with these new contacts?",
+            "start_chat_title_one_user": "Start a chat with this new contact?"
+        },
         "email_caption": "Invite by email",
         "email_limit_one": "Invites by email can only be sent one at a time",
         "email_use_default_is": "Use an identity server to invite by email. <default>Use the default (%(defaultIdentityServerName)s)</default> or manage in <settings>Settings</settings>.",
@@ -1531,6 +1539,11 @@
         "experimental_section": "Early previews",
         "extended_profiles_msc_support": "Requires your server to support MSC4133",
         "feature_disable_call_per_sender_encryption": "Disable per-sender encryption for Element Call",
+        "feature_user_status": {
+            "description": "Enables being able to see and set a current status.",
+            "display_name": "User status",
+            "required_msc_support": "Requires MSC4429 (Profile Updates for Legacy Sync)"
+        },
         "feature_wysiwyg_composer_description": "Use rich text instead of Markdown in the message composer.",
         "group_calls": "New group call experience",
         "group_developer": "Developer",
@@ -1569,9 +1582,6 @@
         "report_to_moderators": "Report to moderators",
         "report_to_moderators_description": "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.",
         "room_list_sections": "Room list sections",
-        "share_history_on_invite": "Share encrypted history with new members",
-        "share_history_on_invite_description": "When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.",
-        "share_history_on_invite_warning": "This feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.",
         "sliding_sync": "Sliding Sync mode",
         "sliding_sync_description": "Under active development, cannot be disabled. Currently, not compatible with Element Call.",
         "sliding_sync_disabled_notice": "Sign in again to disable",
@@ -1816,7 +1826,6 @@
         "restricted": "Restricted"
     },
     "powered_by_matrix": "Powered by Matrix",
-    "powered_by_matrix_with_logo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "presence": {
         "away": "Away",
         "busy": "Busy",
@@ -1847,6 +1856,12 @@
         "error": "You cannot delete this message. (%(code)s)",
         "ongoing": "Removing…",
         "reason_label": "Reason (optional)"
+    },
+    "remove_section_dialog": {
+        "confirmation": "Are you sure you want to remove this section?",
+        "description": "The chats in this section will still be available in your chats list.",
+        "remove_section": "Remove section",
+        "title": "Remove section?"
     },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
@@ -3136,6 +3151,14 @@
         "server_error_detail": "Server unavailable, overloaded, or something else went wrong.",
         "shrug": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
         "spoiler": "Sends the given message as a spoiler",
+        "status": {
+            "description": "Set your current status",
+            "no_args": "No arguments provided. You should supply an emoij and an optional text component.",
+            "no_emoji": "You did not provide an emoji",
+            "no_text": "You did not provide any status text",
+            "too_long_emoji": "The first argument must be an emoji",
+            "too_long_text": "The text you provided was too long."
+        },
         "tableflip": "Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message",
         "topic": "Gets or sets the room topic",
         "topic_none": "This room has no topic.",
@@ -3565,7 +3588,6 @@
             "created_rule_rooms": "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s",
             "created_rule_servers": "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s",
             "created_rule_users": "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s",
-            "message_hidden": "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
             "removed_rule": "%(senderName)s removed a ban rule matching %(glob)s",
             "removed_rule_rooms": "%(senderName)s removed the rule banning rooms matching %(glob)s",
             "removed_rule_servers": "%(senderName)s removed the rule banning servers matching %(glob)s",
@@ -3870,12 +3892,6 @@
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
     },
-    "user_menu": {
-        "link_new_device": "Link new device",
-        "settings": "All settings",
-        "switch_theme_dark": "Switch to dark mode",
-        "switch_theme_light": "Switch to light mode"
-    },
     "voip": {
         "already_in_call": "Already in call",
         "already_in_call_person": "You're already in a call with this person.",
@@ -3891,6 +3907,16 @@
         "call_held": "%(peerName)s held the call",
         "call_held_resume": "You held the call <a>Resume</a>",
         "call_held_switch": "You held the call <a>Switch</a>",
+        "call_members": {
+            "exhaustive": {
+                "one": "<avatars/> on the call",
+                "other": "<avatars/> on the call"
+            },
+            "overflow": {
+                "one": "<avatars/> +%(overflowCount)s on the call",
+                "other": "<avatars/> +%(overflowCount)s on the call"
+            }
+        },
         "call_toast_unknown_room": "Unknown room",
         "camera_disabled": "Your camera is turned off",
         "camera_enabled": "Your camera is still enabled",
@@ -3900,7 +3926,6 @@
         "connection_lost": "Connectivity to the server has been lost",
         "connection_lost_description": "You cannot place calls without a connection to the server.",
         "consulting": "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>",
-        "decline_call": "Decline",
         "default_device": "Default Device",
         "dial": "Dial",
         "dialpad": "Dialpad",
@@ -3914,10 +3939,12 @@
         "enable_microphone": "Unmute microphone",
         "expand": "Return to call",
         "get_call_link": "Share call link",
+        "group_call_started": "Group call started",
         "hangup": "Hangup",
         "hide_sidebar_button": "Hide sidebar",
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
+        "join_with_video": "Join with video",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",
@@ -3951,7 +3978,6 @@
         "show_sidebar_button": "Show sidebar",
         "silence": "Silence call",
         "silenced": "Notifications silenced",
-        "skip_lobby_toggle_option": "Join immediately",
         "start_screenshare": "Start sharing your screen",
         "stop_screenshare": "Stop sharing your screen",
         "too_many_calls": "Too Many Calls",
@@ -3973,7 +3999,6 @@
         "user_is_presenting": "%(sharerName)s is presenting",
         "video_call": "Video call",
         "video_call_incoming": "Incoming video call",
-        "video_call_started": "Video call started",
         "video_call_using": "Video call using:",
         "voice_call": "Voice call",
         "voice_call_incoming": "Incoming voice call",
@@ -3981,7 +4006,11 @@
         "you_are_presenting": "You are presenting"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s on %(osName)s",
-    "welcome_to_element": "Welcome to Element",
+    "welcome": {
+        "tagline_element": "Supercharged for speed and simplicity.",
+        "title_element": "Be in your element",
+        "title_generic": "Welcome to %(brand)s"
+    },
     "widget": {
         "added_by": "Widget added by",
         "capabilities_dialog": {

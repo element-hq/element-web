@@ -65,6 +65,7 @@ test.describe("Room Directory", () => {
                 room_alias_name: "test1234",
             });
 
+            await app.closeVerifyToast();
             await page.getByRole("button", { name: "Explore rooms" }).click();
 
             const dialog = page.locator(".mx_SpotlightDialog");

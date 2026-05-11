@@ -48,11 +48,13 @@ describe("SendWysiwygComposer", () => {
     const registerId = defaultDispatcher.register((payload) => {
         switch (payload.action) {
             case Action.ComposerInsert: {
-                if (payload.composerType) break;
+                const insertPayload = payload as ComposerInsertPayload;
+                if (insertPayload.composerType) break;
 
                 // re-dispatch to the correct composer
                 defaultDispatcher.dispatch<ComposerInsertPayload>({
-                    ...(payload as ComposerInsertPayload),
+                    ...insertPayload,
+                    timelineRenderingType: insertPayload.timelineRenderingType!,
                     composerType: ComposerType.Send,
                 });
                 break;

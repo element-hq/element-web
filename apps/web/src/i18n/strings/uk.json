@@ -15,8 +15,7 @@
         "room_name": "Кімната %(name)s",
         "room_status_bar": "Панель стану кімнати",
         "seek_bar_label": "Панель гортання аудіо",
-        "unread_messages": "Непрочитані повідомлення.",
-        "user_menu": "Користувацьке меню"
+        "unread_messages": "Непрочитані повідомлення."
     },
     "a11y_jump_first_unread_room": "Перейти до першої непрочитаної кімнати.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Натомість увійти",
         "sign_in_or_register": "Увійти або створити обліковий запис",
         "sign_in_or_register_description": "Скористайтесь вашим обліковим записом або створіть новий, щоб продовжити.",
-        "sign_in_prompt": "Маєте обліковий запис? <a>Увійти</a>",
         "sign_in_with_sso": "Увійти за допомогою єдиного входу",
         "signing_in": "Вхід…",
         "soft_logout": {
@@ -589,7 +587,6 @@
         "video": "Відео",
         "video_room": "Відеокімната",
         "view_message": "Переглянути повідомлення",
-        "voice": "Голос",
         "warning": "Попередження"
     },
     "composer": {
@@ -1546,9 +1543,6 @@
         "render_reaction_images_description": "Іноді їх називають \"користувацькими емодзі\".",
         "report_to_moderators": "Поскаржитись модераторам",
         "report_to_moderators_description": "У кімнатах, які підтримують модерацію, кнопка «Поскаржитися» дає змогу повідомити про зловживання модераторам кімнати.",
-        "share_history_on_invite": "Ділитися зашифрованою історією з новими учасниками",
-        "share_history_on_invite_description": "Коли запрошуєте користувача до зашифрованої кімнати, в якій видимість історії встановлено як «спільна», поділіться зашифрованою історією з цим користувачем і прийміть зашифровану історію, коли вас запросять до такої кімнати.",
-        "share_history_on_invite_warning": "Ця функція ЕКСПЕРИМЕНТАЛЬНА, і впроваджено не всі заходи безпеки. Не вмикайте її на робочих облікових записах.",
         "sliding_sync": "Режим ковзної синхронізації",
         "sliding_sync_description": "На стадії активної розробки, вимкнути не можна.",
         "sliding_sync_disabled_notice": "Вийдіть і знову увійдіть, щоб вимкнути",
@@ -1791,7 +1785,6 @@
         "restricted": "Обмежено"
     },
     "powered_by_matrix": "Працює на Matrix",
-    "powered_by_matrix_with_logo": "Децентралізована, зашифрована бесіда та співпраця на основі $matrixLogo",
     "presence": {
         "away": "Не на зв'язку",
         "busy": "Зайнятий",
@@ -3528,7 +3521,6 @@
             "created_rule_rooms": "%(senderName)s створює правило блокування кімнат зі збігом з %(glob)s через %(reason)s",
             "created_rule_servers": "%(senderName)s створює правило блокування серверів зі збігом з %(glob)s через %(reason)s",
             "created_rule_users": "%(senderName)s створює правило блокування користувачів зі збігом з %(glob)s через %(reason)s",
-            "message_hidden": "Ви ігноруєте цього користувача, тож його повідомлення приховано. <a>Все одно показати.</a>",
             "removed_rule": "%(senderName)s вилучає правило блокування зі збігом з %(glob)s",
             "removed_rule_rooms": "%(senderName)s вилучає правило блокування кімнат зі збігом з %(glob)s",
             "removed_rule_servers": "%(senderName)s вилучає правило блокування серверів зі збігом з %(glob)s",
@@ -3844,12 +3836,6 @@
         "verify_button": "Звірити користувача",
         "verify_explainer": "Для додаткової безпеки перевірте цього користувача, звіривши одноразовий код на обох своїх пристроях."
     },
-    "user_menu": {
-        "link_new_device": "Під'єднати новий пристрій",
-        "settings": "Усі налаштування",
-        "switch_theme_dark": "Темна тема",
-        "switch_theme_light": "Світла тема"
-    },
     "voip": {
         "already_in_call": "Вже у виклику",
         "already_in_call_person": "Ви вже спілкуєтесь із цією особою.",
@@ -3874,7 +3860,6 @@
         "connection_lost": "Втрачено зʼєднання з сервером",
         "connection_lost_description": "Неможливо здійснювати виклики без з'єднання з сервером.",
         "consulting": "Консультація з %(transferTarget)s. <a>Переадресація на %(transferee)s</a>",
-        "decline_call": "Відхилити",
         "default_device": "Уставний пристрій",
         "dial": "Виклик",
         "dialpad": "Номеронабирач",
@@ -3926,7 +3911,6 @@
         "show_sidebar_button": "Показати бічну панель",
         "silence": "Тихий виклик",
         "silenced": "Сповіщення стишено",
-        "skip_lobby_toggle_option": "Приєднатися негайно",
         "start_screenshare": "Почати показ екрана",
         "stop_screenshare": "Вимкнути показ екрана",
         "too_many_calls": "Забагато викликів",
@@ -3948,7 +3932,6 @@
         "user_is_presenting": "%(sharerName)s показує",
         "video_call": "Відеовиклик",
         "video_call_incoming": "Вхідний відеовиклик",
-        "video_call_started": "Відеовиклик розпочато",
         "video_call_using": "Відеодзвінок за допомогою:",
         "voice_call": "Голосовий виклик",
         "voice_call_incoming": "Вхідний голосовий виклик",
@@ -3956,7 +3939,6 @@
         "you_are_presenting": "Ви показуєте"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s на %(osName)s",
-    "welcome_to_element": "Ласкаво просимо до Element",
     "widget": {
         "added_by": "Вджет додано",
         "capabilities_dialog": {

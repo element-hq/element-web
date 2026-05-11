@@ -9,6 +9,13 @@ import { describe, it, expect } from "vitest";
 
 import { formatSeconds, formatDateForInput } from "./DateUtils";
 
+function makeDate(year: number, month: number, day: number): Date {
+    const date = new Date(0);
+    date.setFullYear(year, month - 1, day);
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+
 describe("formatSeconds", () => {
     it("correctly formats time with hours", () => {
         expect(formatSeconds(60 * 60 * 3 + 60 * 31 + 55)).toBe("03:31:55");
@@ -26,10 +33,12 @@ describe("formatSeconds", () => {
 });
 
 describe("formatDateForInput", () => {
-    it.each([["1993-11-01"], ["1066-10-14"], ["0571-04-22"], ["0062-02-05"]])(
-        "should format %s",
-        (dateString: string) => {
-            expect(formatDateForInput(new Date(dateString))).toBe(dateString);
-        },
-    );
+    it.each([
+        ["1993-11-01", makeDate(1993, 11, 1)],
+        ["1066-10-14", makeDate(1066, 10, 14)],
+        ["0571-04-22", makeDate(571, 4, 22)],
+        ["0062-02-05", makeDate(62, 2, 5)],
+    ])("should format %s", (dateString: string, date: Date) => {
+        expect(formatDateForInput(date)).toBe(dateString);
+    });
 });

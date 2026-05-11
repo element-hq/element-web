@@ -5,11 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useCallback, useMemo, useRef, type JSX, type ReactNode } from "react";
-import { type ScrollIntoViewLocation } from "react-virtuoso";
+import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type ReactNode } from "react";
+import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
 
-import { type Room } from "./RoomListItemAccessibilityWrapper/RoomListItemView";
+import { type Room } from "./RoomListItemWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
 import { _t } from "../../core/i18n/i18n";
 import {
@@ -20,7 +20,7 @@ import {
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
-import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
+import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import styles from "./VirtualizedRoomListView.module.css";
 
 /**
@@ -38,6 +38,8 @@ export interface RoomListViewState {
     spaceId?: string;
     /** Active filter keys for context tracking */
     filterKeys?: FilterKey[];
+    /** Tag of a newly created section header to scroll into view */
+    scrollToSectionTag?: string;
 }
 
 /**
@@ -110,8 +112,13 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     const snapshot = useViewModel(vm);
     const { roomListState, sections, isFlatList } = snapshot;
     const activeRoomIndex = roomListState.activeRoomIndex;
+    const scrollToSectionTag = roomListState.scrollToSectionTag;
     const lastSpaceId = useRef<string | undefined>(undefined);
     const lastFilterKeys = useRef<FilterKey[] | undefined>(undefined);
+    const virtuosoHandleRef = useRef<VirtuosoHandle | null>(null);
+    const setVirtuosoHandle = useCallback((handle: VirtuosoHandle | null) => {
+        virtuosoHandleRef.current = handle;
+    }, []);
     const roomIds = useMemo(() => sections.flatMap((section) => section.roomIds), [sections]);
     const roomCount = roomIds.length;
     const sectionCount = sections.length;
@@ -174,7 +181,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             const isLastItem = Boolean((isFlatList || isInLastSection) && index === roomCount - 1);
 
             return (
-                <RoomListItemAccessibilityWrapper
+                <RoomListItemWrapper
                     key={roomId}
                     vm={roomItemVM}
                     renderAvatar={renderAvatar}
@@ -328,6 +335,16 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         [activeRoomIndex],
     );
 
+    // Imperatively scroll to a newly created section header.
+    // scrollIntoView on virtuoso handle is more reliable in this case vs scrollIntoViewOnChange
+    useLayoutEffect(() => {
+        if (scrollToSectionTag === undefined) return;
+        const sectionIndex = sections.findIndex((s) => s.id === scrollToSectionTag);
+        if (sectionIndex === -1) return;
+        const flatIndex = sections.slice(0, sectionIndex).reduce((acc, s) => acc + s.roomIds.length + 1, 0);
+        virtuosoHandleRef.current?.scrollIntoView({ index: flatIndex, align: "start", behavior: "auto" });
+    }, [scrollToSectionTag, sections]);
+
     const isItemFocusable = useCallback(() => true, []);
     const isGroupHeaderFocusable = useCallback(() => true, []);
     const increaseViewportBy = useMemo(
@@ -369,6 +386,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
         <GroupedVirtualizedList<string, string, Context>
             {...commonProps}
             {...getContainerAccessibleProps("treegrid", totalCount)}
+            scrollHandleRef={setVirtuosoHandle}
             groups={groups}
             getHeaderKey={getHeaderKey}
             getGroupHeaderComponent={getGroupHeaderComponent}

@@ -15,8 +15,7 @@
         "room_name": "Ruangan %(name)s",
         "room_status_bar": "Bilah status ruangan",
         "seek_bar_label": "Bilah pencarian audio",
-        "unread_messages": "Pesan yang belum dibaca.",
-        "user_menu": "Menu pengguna"
+        "unread_messages": "Pesan yang belum dibaca."
     },
     "a11y_jump_first_unread_room": "Pergi ke ruangan yang belum dibaca.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Masuk saja",
         "sign_in_or_register": "Masuk atau Buat Akun",
         "sign_in_or_register_description": "Gunakan akun Anda atau buat akun baru untuk lanjut.",
-        "sign_in_prompt": "Punya sebuah akun? <a>Masuk</a>",
         "sign_in_with_sso": "Masuk dengan single sign on",
         "signing_in": "Memasuki…",
         "soft_logout": {
@@ -588,7 +586,6 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "voice": "Suara",
         "warning": "Peringatan"
     },
     "composer": {
@@ -1550,9 +1547,6 @@
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
         "report_to_moderators_description": "Dalam ruangan yang mendukung moderasi, tombol “Laporkan” memungkinkan Anda untuk melaporkan penyalahgunaan ke moderator ruangan.",
-        "share_history_on_invite": "Bagikan riwayat terenkripsi dengan anggota baru",
-        "share_history_on_invite_description": "Saat mengundang pengguna ke ruangan terenkripsi yang memiliki keterlihatan riwayat yang diatur ke \"terbagi\", bagikan riwayat terenkripsi dengan pengguna tersebut, dan terima riwayat terenkripsi saat Anda diundang ke ruangan tersebut.",
-        "share_history_on_invite_warning": "Fitur ini bersifat EKSPERIMENTAL dan tidak semua tindakan pencegahan keamanan diterapkan. Jangan aktifkan pada akun produksi.",
         "sliding_sync": "Mode Sinkronisasi Geser",
         "sliding_sync_description": "Dalam pengembangan aktif, tidak dapat dinonaktifkan.",
         "sliding_sync_disabled_notice": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
@@ -1794,7 +1788,6 @@
         "restricted": "Dibatasi"
     },
     "powered_by_matrix": "Diberdayakan oleh Matrix",
-    "powered_by_matrix_with_logo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
     "presence": {
         "away": "Idle",
         "busy": "Sibuk",
@@ -3521,7 +3514,6 @@
             "created_rule_rooms": "%(senderName)s membuat sebuah peraturan pencekalan ruangan yang berisi %(glob)s untuk %(reason)s",
             "created_rule_servers": "%(senderName)s membuat sebuah peraturan pencekalan server yang berisi %(glob)s untuk %(reason)s",
             "created_rule_users": "%(senderName)s membuat sebuah peraturan pencekalan pengguna yang berisi %(glob)s untuk %(reason)s",
-            "message_hidden": "Anda telah mengabaikan pengguna ini, jadi pesannya disembunyikan. <a>Tampilkan saja.</a>",
             "removed_rule": "%(senderName)s menghapus sebuah peraturan pencekalan yang berisi %(glob)s",
             "removed_rule_rooms": "%(senderName)s menghapus peraturan pencekalan ruangan yang berisi %(glob)s",
             "removed_rule_servers": "%(senderName)s menghapus peraturan pencekalan server yang berisi %(glob)s",
@@ -3826,12 +3818,6 @@
         "verify_button": "Verifikasi Pengguna",
         "verify_explainer": "Untuk keamanan lebih, verifikasi pengguna ini dengan memeriksa kode satu kali di kedua perangkat Anda."
     },
-    "user_menu": {
-        "link_new_device": "Tautkan perangkat baru",
-        "settings": "Semua pengaturan",
-        "switch_theme_dark": "Ubah ke mode gelap",
-        "switch_theme_light": "Ubah ke mode terang"
-    },
     "voip": {
         "already_in_call": "Sudah ada di panggilan",
         "already_in_call_person": "Anda sudah ada di panggilan dengan orang itu.",
@@ -3856,7 +3842,6 @@
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
         "consulting": "Mengkonsultasi dengan %(transferTarget)s. <a>Transfer ke %(transferee)s</a>",
-        "decline_call": "Tolak",
         "default_device": "Perangkat Bawaan",
         "dial": "Panggil",
         "dialpad": "Tombol Penyetel",
@@ -3907,7 +3892,6 @@
         "show_sidebar_button": "Tampilkan sisi bilah",
         "silence": "Diamkan panggilan",
         "silenced": "Notifikasi dibisukan",
-        "skip_lobby_toggle_option": "Segera bergabung",
         "start_screenshare": "Mulai membagikan layar Anda",
         "stop_screenshare": "Berhenti membagikan layar Anda",
         "too_many_calls": "Terlalu Banyak Panggilan",
@@ -3929,7 +3913,6 @@
         "user_is_presenting": "%(sharerName)s sedang mempresentasi",
         "video_call": "Panggilan video",
         "video_call_incoming": "Panggilan video masuk",
-        "video_call_started": "Panggilan video dimulai",
         "video_call_using": "Panggilan video menggunakan:",
         "voice_call": "Panggilan suara",
         "voice_call_incoming": "Panggilan suara masuk",
@@ -3937,7 +3920,6 @@
         "you_are_presenting": "Anda sedang mempresentasi"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s di %(osName)s",
-    "welcome_to_element": "Selamat datang di Element",
     "widget": {
         "added_by": "Widget ditambahkan oleh",
         "capabilities_dialog": {

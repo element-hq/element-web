@@ -12,7 +12,13 @@ import userEvent from "@testing-library/user-event";
 
 import PreferencesUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
-import { mockPlatformPeg, stubClient } from "../../../../../../test-utils";
+import {
+    getMockClientWithEventEmitter,
+    mockClientMethodsServer,
+    mockClientMethodsUser,
+    mockPlatformPeg,
+    stubClient,
+} from "../../../../../../test-utils";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../../../../src/settings/controllers/MatrixClientBackedController";
@@ -29,6 +35,10 @@ describe("PreferencesUserSettingsTab", () => {
     };
 
     it("should render", () => {
+        MatrixClientBackedController.matrixClient = getMockClientWithEventEmitter({
+            ...mockClientMethodsServer(),
+            ...mockClientMethodsUser(),
+        });
         const { asFragment } = renderTab();
         expect(asFragment()).toMatchSnapshot();
     });

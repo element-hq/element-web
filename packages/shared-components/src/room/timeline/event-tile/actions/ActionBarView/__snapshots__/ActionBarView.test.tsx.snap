@@ -11,10 +11,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
   >
     <button
       aria-label="Hide"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -34,10 +34,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     <button
       aria-disabled="false"
       aria-label="Download"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -56,10 +56,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="React"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -81,10 +81,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="Reply"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -104,10 +104,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     <button
       aria-disabled="false"
       aria-label="Reply in thread"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -129,10 +129,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="Edit"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -154,10 +154,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     <button
       aria-label="Pin"
       aria-pressed="false"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -178,10 +178,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="Retry"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -200,10 +200,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="Delete"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -223,10 +223,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     <button
       aria-expanded="false"
       aria-label="Expand quotes"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -245,10 +245,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="Options"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -267,10 +267,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="View in room"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -289,10 +289,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="Copy link to thread"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -311,10 +311,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="Remove"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -333,10 +333,10 @@ exports[`ActionBarView > story snapshots > renders AllIconActions 1`] = `
     </button>
     <button
       aria-label="View Source"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -368,10 +368,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
   >
     <button
       aria-label="Hide"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -380,10 +380,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     <button
       aria-disabled="false"
       aria-label="Download"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -391,10 +391,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="React"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -402,10 +402,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="Reply"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -414,10 +414,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     <button
       aria-disabled="false"
       aria-label="Reply in thread"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -425,10 +425,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="Edit"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -437,10 +437,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     <button
       aria-label="Pin"
       aria-pressed="false"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -448,10 +448,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="Retry"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -459,10 +459,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="Delete"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -471,10 +471,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     <button
       aria-expanded="false"
       aria-label="Expand quotes"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -482,10 +482,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="Options"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -493,10 +493,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="View in room"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -504,10 +504,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="Copy link to thread"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -515,10 +515,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="Remove"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -526,10 +526,10 @@ exports[`ActionBarView > story snapshots > renders AllLabelActions 1`] = `
     </button>
     <button
       aria-label="View Source"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item"
       data-kind="tertiary"
       data-presentation="label"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -551,10 +551,10 @@ exports[`ActionBarView > story snapshots > renders DecryptingAttachment 1`] = `
     <button
       aria-disabled="true"
       aria-label="Decrypting"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -577,10 +577,10 @@ exports[`ActionBarView > story snapshots > renders DecryptingAttachment 1`] = `
     </button>
     <button
       aria-label="Options"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -612,10 +612,10 @@ exports[`ActionBarView > story snapshots > renders DisabledThreadReply 1`] = `
   >
     <button
       aria-label="React"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -637,10 +637,10 @@ exports[`ActionBarView > story snapshots > renders DisabledThreadReply 1`] = `
     </button>
     <button
       aria-label="Reply"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -660,10 +660,10 @@ exports[`ActionBarView > story snapshots > renders DisabledThreadReply 1`] = `
     <button
       aria-disabled="true"
       aria-label="Reply in thread"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -685,10 +685,10 @@ exports[`ActionBarView > story snapshots > renders DisabledThreadReply 1`] = `
     </button>
     <button
       aria-label="Options"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -721,10 +721,10 @@ exports[`ActionBarView > story snapshots > renders DownloadingAttachment 1`] = `
     <button
       aria-disabled="true"
       aria-label="Downloading"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -747,10 +747,10 @@ exports[`ActionBarView > story snapshots > renders DownloadingAttachment 1`] = `
     </button>
     <button
       aria-label="Options"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -782,10 +782,10 @@ exports[`ActionBarView > story snapshots > renders ExpandedReplyChain 1`] = `
   >
     <button
       aria-label="Reply"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -805,10 +805,10 @@ exports[`ActionBarView > story snapshots > renders ExpandedReplyChain 1`] = `
     <button
       aria-expanded="true"
       aria-label="Collapse quotes"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -827,10 +827,10 @@ exports[`ActionBarView > story snapshots > renders ExpandedReplyChain 1`] = `
     </button>
     <button
       aria-label="Options"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -862,10 +862,10 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
   >
     <button
       aria-label="React"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="0"
     >
@@ -887,10 +887,10 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
     </button>
     <button
       aria-label="Reply"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -910,10 +910,10 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
     <button
       aria-label="Unpin"
       aria-pressed="true"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >
@@ -937,10 +937,10 @@ exports[`ActionBarView > story snapshots > renders PinnedMessage 1`] = `
     </button>
     <button
       aria-label="Options"
-      class="_button_13vu4_8 ActionBarView-module_toolbar_item _has-icon_13vu4_60 _icon-only_13vu4_53"
+      class="_button_1nw83_8 ActionBarView-module_toolbar_item _has-icon_1nw83_60 _icon-only_1nw83_53"
       data-kind="tertiary"
       data-presentation="icon"
-      data-size="sm"
+      data-size="md"
       role="button"
       tabindex="-1"
     >

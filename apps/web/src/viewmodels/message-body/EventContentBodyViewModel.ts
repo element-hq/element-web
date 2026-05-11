@@ -5,7 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type IContent, type MatrixClient, type MatrixEvent, MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import {
+    type IContent,
+    type MatrixClient,
+    type MatrixEvent,
+    MatrixEventEvent,
+    MsgType,
+    PushRuleKind,
+} from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import {
@@ -169,6 +176,8 @@ export class EventContentBodyViewModel
     extends BaseViewModel<EventContentBodyViewSnapshot, EventContentBodyViewModelProps>
     implements EventContentBodyViewModelInterface
 {
+    private watchedEvent?: MatrixEvent;
+
     private static readonly computeBodySnapshot = (
         props: EventContentBodyViewModelProps,
     ): Pick<EventContentBodyViewSnapshot, "body" | "formattedBody" | "className"> => {
@@ -226,12 +235,14 @@ export class EventContentBodyViewModel
         };
 
         super(propsWithSettingDefaults, EventContentBodyViewModel.computeSnapshot(propsWithSettingDefaults));
+        this.watchEvent(propsWithSettingDefaults.mxEvent);
+        this.disposables.track(this.unwatchEvent);
 
         const enableBigEmojiWatcherRef = SettingsStore.watchSetting(
             "TextualBody.enableBigEmoji",
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                this.setEnableBigEmoji(newVal);
+                this.setEnableBigEmoji(!!newVal);
             },
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(enableBigEmojiWatcherRef));
@@ -240,13 +251,32 @@ export class EventContentBodyViewModel
             "Pill.shouldShowPillAvatar",
             null,
             (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
-                this.setShouldShowPillAvatar(newVal);
+                this.setShouldShowPillAvatar(!!newVal);
             },
         );
         this.disposables.track(() => SettingsStore.unwatchSetting(shouldShowPillAvatarWatcherRef));
     }
 
+    private readonly onEventContentChanged = (): void => {
+        const mxEvent = this.props.mxEvent;
+        if (!mxEvent) return;
+        this.setEventContent(mxEvent, mxEvent.getContent());
+    };
+
+    private watchEvent(mxEvent?: MatrixEvent): void {
+        if (this.watchedEvent === mxEvent) return;
+        this.unwatchEvent();
+        this.watchedEvent = mxEvent;
+        this.watchedEvent?.on(MatrixEventEvent.Replaced, this.onEventContentChanged);
+    }
+
+    private readonly unwatchEvent = (): void => {
+        this.watchedEvent?.off(MatrixEventEvent.Replaced, this.onEventContentChanged);
+        this.watchedEvent = undefined;
+    };
+
     public setEventContent = (mxEvent: MatrixEvent | undefined, content: IContent): void => {
+        this.watchEvent(mxEvent);
         this.props.mxEvent = mxEvent;
         this.props.content = content;
         const { body, formattedBody, className } = EventContentBodyViewModel.computeBodySnapshot(this.props);

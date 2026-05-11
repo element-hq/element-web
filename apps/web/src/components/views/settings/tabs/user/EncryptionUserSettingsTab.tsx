@@ -204,7 +204,7 @@ function SetUpEncryptionPanel({ onFinish }: SetUpEncryptionPanelProps): JSX.Elem
             }
         >
             <Button
-                size="sm"
+                size="md"
                 Icon={ComputerIcon}
                 onClick={() => {
                     const { finished } = Modal.createDialog(SetupEncryptionDialog);
@@ -237,7 +237,7 @@ function IdentityNeedsResetNoticePanel({ onContinue }: Readonly<IdentityNeedsRes
             }
         >
             <div>
-                <Button size="sm" kind="primary" onClick={onContinue}>
+                <Button size="md" kind="primary" onClick={onContinue}>
                     {_t("encryption|continue_with_reset")}
                 </Button>
             </div>

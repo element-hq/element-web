@@ -53,6 +53,8 @@ class Toasts {
      * @returns the Locator for the matching toast, or null if it is not
      *          visible. (null will only be returned if `required` is false.)
      */
+    public async getToast(title: string, timeout?: number, required?: true): Promise<Locator>;
+    public async getToast(title: string, timeout: number | undefined, required: false): Promise<Locator | null>;
     public async getToast(title: string, timeout?: number, required = true): Promise<Locator | null> {
         const toast = this.page.locator(".mx_Toast_toast", { hasText: title }).first();
 
@@ -148,7 +150,12 @@ async function clickToastButton(
     timeout?: number,
     required = true,
 ): Promise<void> {
-    const toast = await toasts.getToast(title, timeout, required);
+    let toast: Locator | null;
+    if (required) {
+        toast = await toasts.getToast(title, timeout, true);
+    } else {
+        toast = await toasts.getToast(title, timeout, false);
+    }
 
     if (toast) {
         await toast.locator(`.mx_Toast_buttons button[data-kind="${button}"]`).click();

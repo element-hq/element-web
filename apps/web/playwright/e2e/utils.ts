@@ -42,7 +42,7 @@ export async function waitForRoom(
             return new Promise<Room>((resolve) => {
                 const room = matrixClient.getRoom(roomId);
 
-                if (window[predicateId](room)) {
+                if ((<any>window)[predicateId](room)) {
                     resolve(room);
                     return;
                 }
@@ -50,7 +50,7 @@ export async function waitForRoom(
                 function onEvent(ev: MatrixEvent) {
                     if (ev.getRoomId() !== roomId) return;
 
-                    if (window[predicateId](room)) {
+                    if ((<any>window)[predicateId](room)) {
                         matrixClient.removeListener("event" as ClientEvent, onEvent);
                         resolve(room);
                     }

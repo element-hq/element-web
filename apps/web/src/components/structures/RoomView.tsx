@@ -142,6 +142,7 @@ import { type RoomViewStore } from "../../stores/RoomViewStore.tsx";
 import { RoomStatusBarViewModel } from "../../viewmodels/room/RoomStatusBar.ts";
 import { EncryptionEventViewModel } from "../../viewmodels/room/timeline/event-tile/EncryptionEventViewModel.ts";
 import { ModuleApi } from "../../modules/Api.ts";
+import { EventPresentationContextProvider } from "../../utils/EventPresentationContextProvider";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1293,23 +1294,30 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
 
             case Action.ComposerInsert: {
-                if (payload.composerType) break;
+                const composerInsertPayload = payload as ComposerInsertPayload;
+                if (composerInsertPayload.composerType) break;
 
-                let timelineRenderingType: TimelineRenderingType = payload.timelineRenderingType;
+                let timelineRenderingType: TimelineRenderingType | undefined;
                 // ThreadView handles Action.ComposerInsert itself due to it having its own editState
-                if (timelineRenderingType === TimelineRenderingType.Thread) break;
+                if (composerInsertPayload.timelineRenderingType === TimelineRenderingType.Thread) break;
                 if (
                     this.state.timelineRenderingType === TimelineRenderingType.Search &&
-                    payload.timelineRenderingType === TimelineRenderingType.Search
+                    composerInsertPayload.timelineRenderingType === TimelineRenderingType.Search
                 ) {
                     // we don't have the composer rendered in this state, so bring it back first
                     await this.onCancelSearchClick();
                     timelineRenderingType = TimelineRenderingType.Room;
                 }
 
+                // If the dispatchee didn't request a timeline rendering type, use the current one.
+                timelineRenderingType =
+                    timelineRenderingType ??
+                    composerInsertPayload.timelineRenderingType ??
+                    this.state.timelineRenderingType;
+
                 // re-dispatch to the correct composer
                 defaultDispatcher.dispatch<ComposerInsertPayload>({
-                    ...(payload as ComposerInsertPayload),
+                    ...composerInsertPayload,
                     timelineRenderingType,
                     composerType: this.state.editState ? ComposerType.Edit : ComposerType.Send,
                 });
@@ -2576,32 +2584,34 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let messagePanel: JSX.Element | undefined;
         if (!isRoomEncryptionLoading) {
             messagePanel = (
-                <TimelinePanel
-                    ref={this.gatherTimelinePanelRef}
-                    timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                    showReadReceipts={this.state.showReadReceipts}
-                    manageReadReceipts={!this.state.isPeeking}
-                    sendReadReceiptOnLoad={
-                        !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
-                    }
-                    manageReadMarkers={!this.state.isPeeking}
-                    hidden={hideMessagePanel}
-                    highlightedEventId={highlightedEventId}
-                    eventId={this.state.initialEventId}
-                    eventScrollIntoView={this.state.initialEventScrollIntoView}
-                    eventPixelOffset={this.state.initialEventPixelOffset}
-                    onScroll={this.onMessageListScroll}
-                    onEventScrolledIntoView={this.resetJumpToEvent}
-                    onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
-                    showUrlPreview={this.state.showUrlPreview}
-                    className={this.messagePanelClassNames}
-                    membersLoaded={this.state.membersLoaded}
-                    permalinkCreator={this.permalinkCreator}
-                    showReactions={true}
-                    layout={this.state.layout}
-                    editState={this.state.editState}
-                    enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
-                />
+                <EventPresentationContextProvider layout={this.state.layout}>
+                    <TimelinePanel
+                        ref={this.gatherTimelinePanelRef}
+                        timelineSet={this.state.room.getUnfilteredTimelineSet()}
+                        showReadReceipts={this.state.showReadReceipts}
+                        manageReadReceipts={!this.state.isPeeking}
+                        sendReadReceiptOnLoad={
+                            !this.state.wasContextSwitch && this.props.enableReadReceiptsAndMarkersOnActivity
+                        }
+                        manageReadMarkers={!this.state.isPeeking}
+                        hidden={hideMessagePanel}
+                        highlightedEventId={highlightedEventId}
+                        eventId={this.state.initialEventId}
+                        eventScrollIntoView={this.state.initialEventScrollIntoView}
+                        eventPixelOffset={this.state.initialEventPixelOffset}
+                        onScroll={this.onMessageListScroll}
+                        onEventScrolledIntoView={this.resetJumpToEvent}
+                        onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
+                        showUrlPreview={this.state.showUrlPreview}
+                        className={this.messagePanelClassNames}
+                        membersLoaded={this.state.membersLoaded}
+                        permalinkCreator={this.permalinkCreator}
+                        showReactions={true}
+                        layout={this.state.layout}
+                        editState={this.state.editState}
+                        enableReadReceiptsAndMarkersOnActivity={this.props.enableReadReceiptsAndMarkersOnActivity}
+                    />
+                </EventPresentationContextProvider>
             );
         }
 

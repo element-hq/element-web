@@ -10,8 +10,7 @@
             "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ."
         },
         "room_name": "ຫ້ອງ %(name)s",
-        "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-        "user_menu": "ເມນູຜູ້ໃຊ້"
+        "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
     },
     "a11y_jump_first_unread_room": "ໄປຫາຫ້ອງທໍາອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
     "action": {
@@ -257,7 +256,6 @@
         "sign_in_instead_prompt": "ມີບັນຊີແລ້ວບໍ? <a>ເຂົ້າສູ່ລະບົບທີ່ນີ້</a>",
         "sign_in_or_register": "ເຂົ້າສູ່ລະບົບ ຫຼື ສ້າງບັນຊີ",
         "sign_in_or_register_description": "ໃຊ້ບັນຊີຂອງທ່ານ ຫຼື ສ້າງອັນໃໝ່ເພື່ອສືບຕໍ່.",
-        "sign_in_prompt": "ມີບັນຊີບໍ? <a>ເຂົ້າສູ່ລະບົບ</a>",
         "sign_in_with_sso": "ເຂົ້າສູ່ລະບົບດ້ວຍການລົງຊື່ເຂົ້າໃຊ້ພຽງຄັ້ງດຽວ",
         "soft_logout": {
             "clear_data_button": "ລຶບລ້າງຂໍ້ມູນທັງໝົດ",
@@ -1281,7 +1279,6 @@
         "restricted": "ຖືກຈຳກັດ"
     },
     "powered_by_matrix": "ສະໜັບສະໜູນໂດຍ Matrix",
-    "powered_by_matrix_with_logo": "ການສົນທະນາແບບເຂົ້າລະຫັດ ແລະກະຈ່າຍການຄຸ້ມຄອງ &amp; ການຮ່ວມມື້ ແລະສະໜັບສະໜູນໂດຍ $matrixLogo",
     "presence": {
         "away": "ຫ່າງອອກໄປ",
         "busy": "ບໍ່ຫວ່າງ",
@@ -2458,7 +2455,6 @@
             "created_rule_rooms": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຫ້ອງທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
             "created_rule_servers": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມເຊີບເວີທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
             "created_rule_users": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຜູ້ໃຊ້ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
-            "message_hidden": "ທ່ານໄດ້ບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້, ດັ່ງນັ້ນຂໍ້ຄວາມຂອງພວກເຂົາຖືກເຊື່ອງໄວ້. <a>ສະແດງຕໍ່ໄປ.</a>",
             "removed_rule": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມທີ່ຄູ່ກັນ%(glob)s",
             "removed_rule_rooms": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມຫ້ອງທີ່ກົງກັບ %(glob)s",
             "removed_rule_servers": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມເຊີບເວີຄູ່ກັນ%(glob)s",
@@ -2728,11 +2724,6 @@
         "verify_button": "ຢືນຢັນຜູ້ໃຊ້",
         "verify_explainer": "ເພື່ອຄວາມປອດໄພເພີ່ມເຕີມ, ກະລຸນາຢັ້ງຢືນຜູ້ໃຊ້ນີ້ໂດຍການກວດສອບລະຫັດຄັ້ງດຽວໃນອຸປະກອນຂອງທ່ານທັງສອງ."
     },
-    "user_menu": {
-        "settings": "ການຕັ້ງຄ່າທັງໝົດ",
-        "switch_theme_dark": "ສະຫຼັບໄປໂໝດມືດ",
-        "switch_theme_light": "ສະຫຼັບໄປໂໝດແສງ"
-    },
     "voip": {
         "already_in_call": "ຢູ່ໃນສາຍໂທແລ້ວ",
         "already_in_call_person": "ທ່ານຢູ່ໃນການໂທກັບບຸກຄົນນີ້ແລ້ວ.",
@@ -2812,7 +2803,6 @@
         "voice_call": "ໂທດ້ວຍສຽງ",
         "you_are_presenting": "ທ່ານກໍາລັງນໍາສະເຫນີ"
     },
-    "welcome_to_element": "ຍິນດີຕ້ອນຮັບ",
     "widget": {
         "added_by": "ເພີ່ມWidgetໂດຍ",
         "capabilities_dialog": {

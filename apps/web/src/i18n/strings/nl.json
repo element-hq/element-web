@@ -15,8 +15,7 @@
         "room_name": "Kamer %(name)s",
         "room_status_bar": "Kamerstatus balk",
         "seek_bar_label": "Audio zoekbalk",
-        "unread_messages": "Ongelezen berichten.",
-        "user_menu": "Gebruikersmenu"
+        "unread_messages": "Ongelezen berichten."
     },
     "a11y_jump_first_unread_room": "Ga naar de eerste ongelezen kamer",
     "action": {
@@ -279,7 +278,6 @@
         "sign_in_instead_prompt": "Heb je al een account? <a>Inloggen</a>",
         "sign_in_or_register": "Meld je aan of maak een account aan",
         "sign_in_or_register_description": "Gebruik je bestaande account of maak een nieuwe aan om verder te gaan.",
-        "sign_in_prompt": "Heb je een account? <a>Inloggen</a>",
         "sign_in_with_sso": "Inloggen met eenmalig inloggen",
         "soft_logout": {
             "clear_data_button": "Alle gegevens wissen",
@@ -1324,7 +1322,6 @@
         "restricted": "Beperkte toegang"
     },
     "powered_by_matrix": "Mogelijk gemaakt door Matrix",
-    "powered_by_matrix_with_logo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo",
     "presence": {
         "away": "Afwezig",
         "busy": "Bezet",
@@ -2605,7 +2602,6 @@
             "created_rule_rooms": "%(senderName)s heeft geregeld dat kamers met %(glob)s verbannen worden vanwege %(reason)s",
             "created_rule_servers": "%(senderName)s heeft geregeld dat servers die met %(glob)s sporen verbannen worden vanwege %(reason)s",
             "created_rule_users": "%(senderName)s heeft geregeld dat personen die met %(glob)s sporen verbannen worden vanwege %(reason)s",
-            "message_hidden": "Je hebt deze persoon genegeerd, dus de berichten worden verborgen. <a>Toch tonen?</a>",
             "removed_rule": "%(senderName)s heeft een banregel die met %(glob)s strookt verwijderd",
             "removed_rule_rooms": "%(senderName)s heeft de banregel voor kamers met %(glob)s verwijderd",
             "removed_rule_servers": "%(senderName)s heeft de banregel voor servers die met %(glob)s stroken verwijderd",
@@ -2874,11 +2870,6 @@
         "verify_button": "Persoon verifiëren",
         "verify_explainer": "Als extra beveiliging kan je deze persoon verifiëren door een eenmalige code op jullie toestellen te controleren."
     },
-    "user_menu": {
-        "settings": "Instellingen",
-        "switch_theme_dark": "Naar donkere modus wisselen",
-        "switch_theme_light": "Naar lichte modus wisselen"
-    },
     "voip": {
         "already_in_call": "Al in de oproep",
         "already_in_call_person": "Je bent al in gesprek met deze persoon.",
@@ -2961,12 +2952,10 @@
         "user_busy_description": "De persoon die je belde is bezet.",
         "user_is_presenting": "%(sharerName)s is aan het presenteren",
         "video_call": "Video-oproep",
-        "video_call_started": "Videogesprek gestart",
         "voice_call": "Spraakoproep",
         "you_are_presenting": "Je bent aan het presenteren"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s op %(osName)s",
-    "welcome_to_element": "Welkom bij Element",
     "widget": {
         "added_by": "Widget toegevoegd door",
         "capabilities_dialog": {

@@ -68,6 +68,7 @@ test.describe("Spaces", () => {
         "should allow user to create public space",
         { tag: ["@screenshot", "@no-webkit"] },
         async ({ page, app, user }) => {
+            await app.closeVerifyToast();
             const contextMenu = await openSpaceCreateMenu(page);
             await expect(contextMenu).toMatchScreenshot("space-create-menu.png");
 
@@ -104,6 +105,7 @@ test.describe("Spaces", () => {
     );
 
     test("should allow user to create private space", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        await app.closeVerifyToast();
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
@@ -150,6 +152,7 @@ test.describe("Spaces", () => {
             name: "Sample Room",
         });
 
+        await app.closeVerifyToast();
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
@@ -184,6 +187,7 @@ test.describe("Spaces", () => {
                 name: "A Room that will not be selected",
             });
 
+            await app.closeVerifyToast();
             const menu = await openSpaceCreateMenu(page);
             await menu.getByRole("button", { name: "Private" }).click();
 
@@ -283,6 +287,8 @@ test.describe("Spaces", () => {
         "should render subspaces in the space panel only when expanded",
         { tag: "@screenshot" },
         async ({ page, app, user, axe }) => {
+            await app.closeVerifyToast();
+
             axe.disableRules([
                 // Disable this check as it triggers on nested roving tab index elements which are in practice fine
                 "nested-interactive",
@@ -311,6 +317,9 @@ test.describe("Spaces", () => {
             // button with the same name with different class name "mx_SpacePanel_toggleCollapse".
             await spaceTree.getByRole("button", { name: "Expand" }).click();
             await expect(page.locator(".mx_SpacePanel:not(.collapsed)")).toBeVisible(); // TODO: replace :not() selector
+
+            // focus the quick settings button to ensure the spaces aren't being hovered over for consistent screenshots
+            await page.getByRole("button", { name: "Quick settings" }).focus();
 
             const item = page.locator(".mx_SpaceItem", { hasText: "Root Space" });
             await expect(item).toBeVisible();
@@ -404,6 +413,7 @@ test.describe("Spaces", () => {
         });
 
         test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app }) => {
+            await app.closeVerifyToast();
             const menu = await openSpaceCreateMenu(page);
             await menu
                 .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')

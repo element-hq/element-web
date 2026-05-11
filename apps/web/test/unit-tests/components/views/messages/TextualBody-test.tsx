@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ComponentProps } from "react";
 import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
-import { render, waitFor } from "jest-matrix-react";
+import { act, render, waitFor } from "jest-matrix-react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import {
@@ -21,12 +21,17 @@ import {
 } from "../../../../test-utils";
 import * as languageHandler from "../../../../../src/languageHandler";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import TextualBody from "../../../../../src/components/views/messages/TextualBody";
+import { TextualBodyFactory as TextualBody } from "../../../../../src/components/views/messages/TextualBodyFactory";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../../src/contexts/RoomContext";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import { getRoomContext } from "../../../../test-utils/room";
+
+jest.mock("../../../../../src/hooks/useMediaVisible", () => ({
+    __esModule: true,
+    useMediaVisible: () => [true, jest.fn()],
+}));
 
 const room1Id = "!room1:example.com";
 const room2Id = "!room2:example.com";
@@ -104,7 +109,6 @@ describe("<TextualBody />", () => {
         defaultMatrixClient.pushProcessor = new PushProcessor(defaultMatrixClient);
 
         defaultRoom = mkStubRoom(room1Id, "test room", defaultMatrixClient);
-        defaultProps.permalinkCreator = new RoomPermalinkCreator(defaultRoom);
         otherRoom = mkStubRoom(room2Id, room2Name, defaultMatrixClient);
 
         mocked(defaultRoom).findEventById.mockImplementation((eventId: string) => {
@@ -117,10 +121,14 @@ describe("<TextualBody />", () => {
     const getComponent = (props = {}, matrixClient: MatrixClient = defaultMatrixClient, renderingFn?: any) => {
         const mergedProps = { ...defaultProps, ...props };
         const room = matrixClient.getRoom(mergedProps.mxEvent.getRoomId()) ?? defaultRoom;
+        const finalProps = {
+            ...mergedProps,
+            permalinkCreator: mergedProps.permalinkCreator ?? new RoomPermalinkCreator(room),
+        };
         return (renderingFn ?? render)(
             <MatrixClientContext.Provider value={matrixClient}>
                 <RoomContext.Provider value={getRoomContext(room, {})}>
-                    <TextualBody {...mergedProps} />
+                    <TextualBody {...finalProps} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
         );
@@ -163,9 +171,45 @@ describe("<TextualBody />", () => {
 
         const { container } = getComponent({ mxEvent: ev, replacingEventId: ev.getId() });
 
-        const annotated = container.querySelector(".mx_MEmoteBody > .mx_EventTile_annotatedInline");
-        expect(annotated).not.toBeNull();
-        expect(annotated?.tagName).toBe("DIV");
+        expect(container).toHaveTextContent("* sender winks(edited)");
+    });
+
+    it("updates the body kind when an edit changes msgtype to m.emote", async () => {
+        DMRoomMap.makeShared(defaultMatrixClient);
+
+        const ev = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                body: "hello",
+                msgtype: "m.text",
+            },
+            event: true,
+        });
+
+        const { container } = getComponent({ mxEvent: ev });
+        expect(container).toHaveTextContent("hello");
+
+        const edit = mkEvent({
+            type: "m.room.message",
+            room: room1Id,
+            user: "sender",
+            content: {
+                "body": "* waves",
+                "msgtype": "m.emote",
+                "m.new_content": {
+                    body: "waves",
+                    msgtype: "m.emote",
+                },
+            },
+            event: true,
+        });
+        act(() => {
+            ev.makeReplaced(edit);
+        });
+
+        await waitFor(() => expect(container).toHaveTextContent("* sender waves(edited)"));
     });
 
     it("renders m.notice correctly", () => {

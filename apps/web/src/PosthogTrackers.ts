@@ -13,7 +13,6 @@ import { type Interaction as InteractionEvent } from "@matrix-org/analytics-even
 import { type PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
 import { type RoomListSortingAlgorithmChanged } from "@matrix-org/analytics-events/types/typescript/RoomListSortingAlgorithmChanged";
 import { type UrlPreviewRendered } from "@matrix-org/analytics-events/types/typescript/UrlPreviewRendered";
-import { type UrlPreview } from "@element-hq/web-shared-components";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
@@ -151,7 +150,7 @@ export default class PosthogTrackers {
      * @param isEncrypted Whether the event (and effectively the room) was encrypted.
      * @param previews The previews generated from the event.
      */
-    public trackUrlPreview(eventId: string, isEncrypted: boolean, previews: UrlPreview[]): void {
+    public trackUrlPreview(eventId: string, isEncrypted: boolean, previews: { image?: unknown }[]): void {
         // Discount any previews that we have already tracked.
         if (this.previewedEventIds.get(eventId)) {
             return;

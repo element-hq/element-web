@@ -57,14 +57,14 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
             break;
         case "missing_recovery_key":
             content = (
-                <Button size="sm" kind="primary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(true)}>
+                <Button size="md" kind="primary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(true)}>
                     {_t("settings|encryption|recovery|set_up_recovery")}
                 </Button>
             );
             break;
         case "good":
             content = (
-                <Button size="sm" kind="secondary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(false)}>
+                <Button size="md" kind="secondary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(false)}>
                     {_t("settings|encryption|recovery|change_recovery_key")}
                 </Button>
             );

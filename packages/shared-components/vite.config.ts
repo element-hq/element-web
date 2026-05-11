@@ -6,12 +6,36 @@
  *
  */
 
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig, esmExternalRequirePlugin } from "vite";
-import dts from "vite-plugin-dts";
+import { defineConfig, esmExternalRequirePlugin, type Plugin } from "vite";
+import dts from "unplugin-dts/vite";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const cssLayerOrder = "@layer compound-tokens, compound-web, shared-components, app-web;";
+const sharedComponentsLayer = "shared-components";
+
+function layerCssAssets(): Plugin {
+    return {
+        name: "element-web-shared-components-css-layer",
+        writeBundle(_options, bundle): void {
+            for (const asset of Object.values(bundle)) {
+                if (asset.type !== "asset" || asset.fileName !== "element-web-shared-components.css") {
+                    continue;
+                }
+
+                const cssPath = resolve(__dirname, "dist", asset.fileName);
+                const source = readFileSync(cssPath, "utf-8");
+                if (source.startsWith(cssLayerOrder)) {
+                    continue;
+                }
+
+                writeFileSync(cssPath, `${cssLayerOrder}\n@layer ${sharedComponentsLayer} {\n${source}\n}\n`);
+            }
+        },
+    };
+}
 
 export default defineConfig({
     build: {
@@ -50,11 +74,12 @@ export default defineConfig({
         },
     },
     plugins: [
+        layerCssAssets(),
         dts({
-            rollupTypes: true,
+            bundleTypes: true,
             include: ["src/**/*.{ts,tsx}"],
             exclude: ["src/**/*.test.{ts,tsx}", "src/**/*.stories.{ts,tsx}"],
-            copyDtsFiles: true,
+            copyDtsFiles: false,
         }),
     ],
 });

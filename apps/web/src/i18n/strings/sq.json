@@ -10,8 +10,7 @@
             "one": "1 përmendje e palexuar."
         },
         "room_name": "Dhoma %(name)s",
-        "unread_messages": "Mesazhe të palexuar.",
-        "user_menu": "Menu përdoruesi"
+        "unread_messages": "Mesazhe të palexuar."
     },
     "a11y_jump_first_unread_room": "Hidhu te dhoma e parë e palexuar.",
     "action": {
@@ -292,7 +291,6 @@
         "sign_in_instead_prompt": "Në vend të kësaj, hyni",
         "sign_in_or_register": "Hyni ose Krijoni një Llogari",
         "sign_in_or_register_description": "Që të vazhdohet, përdorni llogarinë tuaj të përdoruesit ose krijoni një të re.",
-        "sign_in_prompt": "Keni një llogari? <a>Hyni</a>",
         "sign_in_with_sso": "Bëni hyrjen me hyrje njëshe",
         "signing_in": "Po hyhet…",
         "soft_logout": {
@@ -1442,7 +1440,6 @@
         "restricted": "E kufizuar"
     },
     "powered_by_matrix": "Bazuar në Matrix",
-    "powered_by_matrix_with_logo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo",
     "presence": {
         "away": "I larguar",
         "busy": "I zënë",
@@ -2835,7 +2832,6 @@
             "created_rule_rooms": "%(senderName)s krijoi një rregull mbi dëbim dhomash që kanë përputhje me %(glob)s për %(reason)s",
             "created_rule_servers": "%(senderName)s krijoi një rregull mbi dëbim shërbyesish që kanë përputhje me %(glob)s për %(reason)s",
             "created_rule_users": "%(senderName)s krijoi një rregull mbi dëbim përdoruesish që kanë përputhje me %(glob)s për %(reason)s",
-            "message_hidden": "E keni shpërfillur këtë përdorues, ndaj mesazhi i tij është fshehur. <a>Shfaqe, sido qoftë.</a>",
             "removed_rule": "%(senderName)s hoqi një rregull dëbimi mbi përputhje me %(glob)s",
             "removed_rule_rooms": "%(senderName)s hoqi rregullin që dëbon dhoma që kanë përputhje me %(glob)s",
             "removed_rule_servers": "%(senderName)s hoqi rregullin që dëbon shërbyes që kanë përputhje me %(glob)s",
@@ -3111,11 +3107,6 @@
         "verify_button": "Verifikoni Përdoruesin",
         "verify_explainer": "Për siguri ekstra, verifikojeni këtë përdorues duke kontrolluar në të dyja pajisjet tuaja një kod njëpërdorimsh."
     },
-    "user_menu": {
-        "settings": "Krejt rregullimet",
-        "switch_theme_dark": "Kalo nën mënyrën e errët",
-        "switch_theme_light": "Kalo nën mënyrën e çelët"
-    },
     "voip": {
         "already_in_call": "Tashmë në thirrje",
         "already_in_call_person": "Gjendeni tashmë në thirrje me këtë person.",
@@ -3197,12 +3188,10 @@
         "user_busy_description": "Përdoruesi që thirrët është i zënë.",
         "user_is_presenting": "%(sharerName)s përfaqëson",
         "video_call": "Thirrje video",
-        "video_call_started": "Nisi thirrje me video",
         "voice_call": "Thirrje audio",
         "you_are_presenting": "Përfaqësoni"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s në %(osName)s",
-    "welcome_to_element": "Mirë se vini te Element",
     "widget": {
         "added_by": "Widget i shtuar nga",
         "capabilities_dialog": {

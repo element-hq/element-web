@@ -15,8 +15,7 @@
         "room_name": "Rom %(name)s",
         "room_status_bar": "Statuslinje for rommet",
         "seek_bar_label": "Søkelinje for lyd",
-        "unread_messages": "Uleste meldinger.",
-        "user_menu": "Brukermeny"
+        "unread_messages": "Uleste meldinger."
     },
     "a11y_jump_first_unread_room": "Hopp til første uleste rom.",
     "action": {
@@ -341,7 +340,6 @@
         "sign_in_instead_prompt": "Har du allerede en konto? <a>Logg på</a>",
         "sign_in_or_register": "Logg inn eller lag en konto",
         "sign_in_or_register_description": "Bruk kontoen din eller opprett en ny for å fortsette.",
-        "sign_in_prompt": "Har du en konto? <a>Logg på</a>",
         "sign_in_with_sso": "Logg på med single sign-on",
         "signing_in": "Logger på...",
         "soft_logout": {
@@ -588,7 +586,6 @@
         "video": "Video",
         "video_room": "Videorom",
         "view_message": "Se melding",
-        "voice": "Tale",
         "warning": "Advarsel"
     },
     "composer": {
@@ -1551,9 +1548,6 @@
         "render_reaction_images_description": "Noen ganger omtalt som \"egendefinerte emojier\".",
         "report_to_moderators": "Rapporter til moderatorene",
         "report_to_moderators_description": "I rom som støtter moderering, kan du bruke \"Rapporter\"-knappen for å rapportere misbruk til rommoderatorene.",
-        "share_history_on_invite": "Del kryptert historikk med nye medlemmer",
-        "share_history_on_invite_description": "Når du inviterer en bruker til et kryptert rom som har historikkvisibilitet satt til «delt», deler du kryptert historikk med den brukeren, og aksepterer kryptert historikk når du blir invitert til et slikt rom.",
-        "share_history_on_invite_warning": "Denne funksjonen er EKSPERIMENTELL, og ikke alle sikkerhetstiltak er implementert. Ikke aktiver på produksjonskontoer.",
         "sliding_sync": "Sliding Sync modus",
         "sliding_sync_description": "Under aktiv utvikling, kan ikke deaktiveres.",
         "sliding_sync_disabled_notice": "Logg ut og inn igjen for å deaktivere",
@@ -1798,7 +1792,6 @@
         "restricted": "Begrenset"
     },
     "powered_by_matrix": "Drevet av Matrix",
-    "powered_by_matrix_with_logo": "Desentralisert, kryptert chat og samarbeid drevet av $matrixLogo",
     "presence": {
         "away": "Borte",
         "busy": "Opptatt",
@@ -2669,7 +2662,7 @@
             "unable_to_load_msisdns": "Kan ikke laste inn telefonnumre",
             "username": "Brukernavn"
         },
-        "inline_url_previews_default": "Skru på URL-forhåndsvisninger inni meldinger som standard",
+        "inline_url_previews_default": "Aktiver forhåndsvisninger",
         "insert_trailing_colon_mentions": "Sett inn et etterfølgende kolon etter at brukeromtaler i starten av en melding",
         "invite_controls": {
             "default_label": "Tillat brukere å invitere deg til rom"
@@ -2935,7 +2928,7 @@
             "sign_in_with_qr_description": "Bruk en QR-kode for å logge på en annen enhet og konfigurere sikker meldingsutveksling.",
             "sign_in_with_qr_unsupported": "Støttes ikke av din kontoleverandør",
             "sign_out": "Logg ut av denne sesjonen",
-            "sign_out_all_other_sessions": "Logg av alle andre sesjoner (%(otherSessionsCount)s)",
+            "sign_out_all_other_sessions": "Fjern alle andre sesjoner (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
                 "one": "Er du sikker på at du vil logge ut av %(count)s sesjonen?",
                 "other": "Er du sikker på at du vil logge av %(count)s sesjoner?"
@@ -3455,7 +3448,7 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s aksepterte invitasjonen til %(displayName)s",
             "accepted_invite": "%(targetName)s aksepterte en invitasjon",
-            "ban": "%(senderName)s utestengte %(targetName)s",
+            "ban": "%(senderName)s utestengte en bruker",
             "ban_reason": "%(senderName)s utestengte en bruker: %(reason)s",
             "change_avatar": "%(senderName)s endret profilbildet sitt",
             "change_name": "%(oldDisplayName)s endret visningsnavnet sitt til %(displayName)s",
@@ -3531,7 +3524,6 @@
             "created_rule_rooms": "%(senderName)s opprettet en regel som forbyr rom som samsvarer med %(glob)s for %(reason)s",
             "created_rule_servers": "%(senderName)s opprettet en regel som forbyr servere som samsvarer med %(glob)s for %(reason)s",
             "created_rule_users": "%(senderName)s opprettet en regel som utestenger brukere som matcher %(glob)s for %(reason)s",
-            "message_hidden": "Du har ignorert denne brukeren, så meldingen er skjult. <a>Vis likevel.</a>",
             "removed_rule": "%(senderName)s fjernet en forbudsregel som samsvarer %(glob)s",
             "removed_rule_rooms": "%(senderName)s fjernet regelen som forbyr rom som matcher %(glob)s",
             "removed_rule_servers": "%(senderName)s fjernet regelen som utestenger servere som matcher %(glob)s",
@@ -3833,12 +3825,6 @@
         "verify_button": "Verifiser bruker",
         "verify_explainer": "For ekstra sikkerhet, bekreft denne brukeren ved å sjekke en engangskode på begge enhetene dine."
     },
-    "user_menu": {
-        "link_new_device": "Lenke til ny enhet",
-        "settings": "Alle innstillinger",
-        "switch_theme_dark": "Bytt til mørk modus",
-        "switch_theme_light": "Bytt til lys modus"
-    },
     "voip": {
         "already_in_call": "Allerede i en samtale",
         "already_in_call_person": "Du er allerede i en samtale med denne personen.",
@@ -3863,7 +3849,6 @@
         "connection_lost": "Mistet forbindelsen til serveren",
         "connection_lost_description": "Du kan ikke ringe uten tilkobling til serveren.",
         "consulting": "Rådføring med %(transferTarget)s. <a>Overfør til %(transferee)s</a>",
-        "decline_call": "Avslå",
         "default_device": "Standardenhet",
         "dial": "Ring",
         "dialpad": "Nummerpanel",
@@ -3914,7 +3899,6 @@
         "show_sidebar_button": "Vis sidepanel",
         "silence": "Demp samtale",
         "silenced": "Varslinger er dempet",
-        "skip_lobby_toggle_option": "Bli med umiddelbart",
         "start_screenshare": "Begynn å dele skjermen din",
         "stop_screenshare": "Slutt å dele skjermen din",
         "too_many_calls": "For mange samtaler",
@@ -3936,7 +3920,6 @@
         "user_is_presenting": "%(sharerName)s presenterer",
         "video_call": "Videosamtale",
         "video_call_incoming": "Innkommende videosamtale",
-        "video_call_started": "Videosamtale startet",
         "video_call_using": "Videosamtale ved hjelp av:",
         "voice_call": "Stemmesamtale",
         "voice_call_incoming": "Innkommende taleanrop",
@@ -3944,7 +3927,6 @@
         "you_are_presenting": "Du presenterer"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s på %(osName)s",
-    "welcome_to_element": "Velkommen til Element",
     "widget": {
         "added_by": "Modulen ble lagt til av",
         "capabilities_dialog": {

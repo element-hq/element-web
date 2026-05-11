@@ -11,8 +11,7 @@
         },
         "recent_rooms": "Πρόσφατες αίθουσες",
         "room_name": "Αίθουσα %(name)s",
-        "unread_messages": "Μη αναγνωσμένα μηνύματα.",
-        "user_menu": "Μενού χρήστη"
+        "unread_messages": "Μη αναγνωσμένα μηνύματα."
     },
     "a11y_jump_first_unread_room": "Μετάβαση στην πρώτη μη αναγνωσμένη αίθουσα.",
     "action": {
@@ -107,7 +106,7 @@
         "show_advanced": "Εμφάνιση προχωρημένων",
         "show_all": "Εμφάνιση όλων",
         "sign_in": "Σύνδεση",
-        "sign_out": "Αποσύνδεση",
+        "sign_out": "Κατάργηση αυτής της συσκευής",
         "skip": "Παράβλεψη",
         "start": "Έναρξη",
         "start_chat": "Έναρξη συνομιλίας",
@@ -300,7 +299,6 @@
         "sign_in_instead_prompt": "Έχετε ήδη λογαριασμό; <a>Συνδεθείτε εδώ</a>",
         "sign_in_or_register": "Συνδεθείτε ή Δημιουργήστε Λογαριασμό",
         "sign_in_or_register_description": "Χρησιμοποιήστε τον λογαριασμό σας ή δημιουργήστε νέο για να συνεχίσετε.",
-        "sign_in_prompt": "Έχετε λογαριασμό; <a>Συνδεθείτε</a>",
         "sign_in_with_sso": "Συνδεθείτε με απλή σύνδεση",
         "signing_in": "Σύνδεση...",
         "soft_logout": {
@@ -555,12 +553,12 @@
         "format_underline": "Υπογράμμιση",
         "format_unordered_list": "Λίστα με κουκκκίδες",
         "no_perms_notice": "Δεν έχετε δικαιώματα για να δημοσιεύσετε σε αυτό το δωμάτιο",
-        "placeholder": "Στείλτε ένα μήνυμα…",
-        "placeholder_encrypted": "Αποστολή κρυπτογραφημένου μηνύματος…",
-        "placeholder_reply": "Στείλτε μια απάντηση…",
-        "placeholder_reply_encrypted": "Αποστολή κρυπτογραφημένης απάντησης…",
-        "placeholder_thread": "Απάντηση στο νήμα…",
-        "placeholder_thread_encrypted": "Απάντηση στο κρυπτογραφημένο νήμα…",
+        "placeholder": "Στείλτε ένα μη κρυπτογραφημένο μήνυμα…",
+        "placeholder_encrypted": "Στείλτε ένα μήνυμα…",
+        "placeholder_reply": "Αποστολή μη κρυπτογραφημένης απάντησης…",
+        "placeholder_reply_encrypted": "Αποστολή απάντησης…",
+        "placeholder_thread": "Απάντηση σε μη κρυπτογραφημένο νήμα…",
+        "placeholder_thread_encrypted": "Απάντηση στο νήμα…",
         "poll_button": "Ψηφοφορία",
         "poll_button_no_perms_description": "Δεν έχετε άδεια να ξεκινήσετε ψηφοφορίες σε αυτήν την αίθουσα.",
         "poll_button_no_perms_title": "Απαιτείται Άδεια",
@@ -1435,7 +1433,6 @@
         "restricted": "Περιορισμένο/η"
     },
     "powered_by_matrix": "Με την υποστήριξη του Matrix",
-    "powered_by_matrix_with_logo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo",
     "presence": {
         "away": "Απομακρυσμένος",
         "busy": "Απασχολημένος",
@@ -2031,7 +2028,7 @@
             "remove_msisdn_prompt": "Κατάργηση %(phone)s;",
             "spell_check_locale_placeholder": "Επιλογή τοπικών ρυθμίσεων"
         },
-        "inline_url_previews_default": "Ενεργοποιήστε τις ενσωματωμένες προεπισκοπήσεις URL από προεπιλογή",
+        "inline_url_previews_default": "Ενεργοποίηση προεπισκοπήσεων",
         "insert_trailing_colon_mentions": "Εισαγάγετε άνω και κάτω τελεία μετά την αναφορά του χρήστη στην αρχή ενός μηνύματος",
         "jump_to_bottom_on_send": "Μεταβείτε στο τέλος του χρονολογίου όταν στέλνετε ένα μήνυμα",
         "key_backup": {
@@ -2213,7 +2210,7 @@
                 "other": "Αποσύνδεση συσκευών"
             },
             "confirm_sign_out_sso": {
-                "one": "Επιβεβαιώστε ότι αποσυνδέεστε από αυτήν τη συσκευή χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
+                "one": "Επιβεβαιώστε την αποσύνδεση από αυτήν τη συσκευή χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας.",
                 "other": "Επιβεβαιώστε την αποσύνδεση από αυτές τις συσκευές χρησιμοποιώντας Single Sign On για να αποδείξετε την ταυτότητά σας."
             },
             "current_session": "Τρέχουσα συνεδρία",
@@ -2709,7 +2706,7 @@
             "unknown": "Ο %(senderDisplayName)s άλλαξε την πρόσβαση επισκεπτών σε %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο όλα τα μέλη, από τη στιγμή που προσκλήθηκαν.",
+            "invited": "Ο/Η %(senderName)s έκανε το μελλοντικό ιστορικό της αίθουσας ορατό σε όλα τα μέλη της αίθουσας, από τη στιγμή που προσκλήθηκαν.",
             "joined": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο όλα τα μέλη, από τη στιγμή που συνδέθηκαν.",
             "shared": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο όλα τα μέλη.",
             "unknown": "Ο %(senderName)s έκανε το μελλοντικό ιστορικό του δωματίου δημόσιο άγνωστο (%(visibility)s).",
@@ -2726,8 +2723,8 @@
         "m.room.member": {
             "accepted_3pid_invite": "%(targetName)s αποδέχθηκε την πρόσκληση για %(displayName)s",
             "accepted_invite": "%(targetName)s αποδέχθηκε μια πρόσκληση",
-            "ban": "Ο %(senderName)s απέκλεισε τον/την %(targetName)s",
-            "ban_reason": "Ο %(senderName)s απέκλεισε τον/την %(targetName)s: %(reason)s",
+            "ban": "Ο/Η %(senderName)s απέκλεισε έναν χρήστη",
+            "ban_reason": "Ο/Η %(senderName)s απέκλεισε έναν χρήστη: %(reason)s",
             "change_avatar": "Ο %(senderName)s άλλαξε τη φωτογραφία του προφίλ του",
             "change_name": "Ο/η %(oldDisplayName)s άλλαξε το εμφανιζόμενο όνομα σε %(displayName)s",
             "change_name_avatar": "Ο χρήστης %(oldDisplayName)s άλλαξε το εμφανιζόμενο όνομα και την εικόνα προφίλ του",
@@ -2799,7 +2796,6 @@
             "created_rule_rooms": "%(senderName)s δημιούργησε έναν κανόνα που απαγορεύει την αντιστοίχιση δωματίων %(glob)s για %(reason)s",
             "created_rule_servers": "%(senderName)s δημιούργησε έναν κανόνα που απαγορεύει την αντιστοίχιση διακομιστών %(glob)s για %(reason)s",
             "created_rule_users": "%(senderName)s δημιούργησε έναν κανόνα που απαγορεύει την αντιστοίχιση χρηστών %(glob)s για %(reason)s",
-            "message_hidden": "Έχετε αγνοήσει αυτόν τον χρήστη, επομένως τα μηνύματα του είναι κρυφά. <a>Εμφάνιση ούτως ή άλλως.</a>",
             "removed_rule": "%(senderName)s αφαίρεσε μια απαγόρευση αντιστοίχισης κανόνων %(glob)s",
             "removed_rule_rooms": "%(senderName)s αφαίρεσε τον κανόνα που απαγορεύει την αντιστοίχιση δωματίων %(glob)s",
             "removed_rule_servers": "%(senderName)s αφαίρεσε τον κανόνα που απαγορεύει την αντιστοίχιση διακομιστών %(glob)s",
@@ -3076,11 +3072,6 @@
         "verify_button": "Επαλήθευση Χρήστη",
         "verify_explainer": "Για επιπλέον ασφάλεια, επαληθεύστε αυτόν τον χρήστη ελέγχοντας έναν κωδικό μίας χρήσης και στις δύο συσκευές σας."
     },
-    "user_menu": {
-        "settings": "Όλες οι ρυθμίσεις",
-        "switch_theme_dark": "Αλλαγή σε σκοτεινό",
-        "switch_theme_light": "Αλλαγή σε φωτεινό"
-    },
     "voip": {
         "already_in_call": "Ήδη σε κλήση",
         "already_in_call_person": "Είστε ήδη σε κλήση με αυτόν τον χρήστη.",
@@ -3165,11 +3156,9 @@
         "user_busy_description": "Ο χρήστης που καλέσατε είναι απασχολημένος.",
         "user_is_presenting": "%(sharerName)s παρουσιάζει",
         "video_call": "Βιντεοκλήση",
-        "video_call_started": "Ξεκίνησε η βιντεοκλήση",
         "voice_call": "Φωνητική κλήση",
         "you_are_presenting": "Παρουσιάζετε"
     },
-    "welcome_to_element": "Καλώς ήλθατε στο Element",
     "widget": {
         "added_by": "Μικροεοεφαρμογή προστέθηκε από",
         "capabilities_dialog": {

@@ -12,6 +12,9 @@ import { RoomNotificationState } from "../../../src/stores/notifications/RoomNot
 import { RoomNotificationStateStore } from "../../../src/stores/notifications/RoomNotificationStateStore";
 import { NotificationStateEvents } from "../../../src/stores/notifications/NotificationState";
 import { createTestClient, mkRoom } from "../../test-utils";
+import SettingsStore from "../../../src/settings/SettingsStore";
+import RoomListStoreV3, { CHATS_TAG } from "../../../src/stores/room-list-v3/RoomListStoreV3";
+import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 
 describe("RoomListSectionHeaderViewModel", () => {
     let onToggleExpanded: jest.Mock;
@@ -20,6 +23,12 @@ describe("RoomListSectionHeaderViewModel", () => {
     beforeEach(() => {
         onToggleExpanded = jest.fn();
         matrixClient = createTestClient();
+        jest.spyOn(SettingsStore, "watchSetting").mockReturnValue("watcher-id");
+        jest.spyOn(SettingsStore, "unwatchSetting").mockReturnValue(undefined);
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
+            if (setting === "RoomList.OrderedCustomSections") return [];
+            return null;
+        });
     });
 
     afterEach(() => {
@@ -85,6 +94,121 @@ describe("RoomListSectionHeaderViewModel", () => {
         // Switch to the other space: should still be collapsed
         vm.setSpace("!space:server");
         expect(vm.isExpanded).toBe(false);
+    });
+
+    describe("displaySectionMenu", () => {
+        it.each([
+            [DefaultTagID.Favourite, false],
+            [DefaultTagID.LowPriority, false],
+            [CHATS_TAG, false],
+            ["element.io.section.custom", true],
+        ])("should be %s for tag %s", (tag, expected) => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            expect(vm.getSnapshot().displaySectionMenu).toBe(expected);
+        });
+    });
+
+    describe("onCustomSectionDataChange", () => {
+        let watchCallback: () => void;
+
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "watchSetting").mockImplementation((settingName, _roomId, callback) => {
+                if (settingName === "RoomList.CustomSectionData") watchCallback = callback as () => void;
+                return "watcher-id";
+            });
+        });
+
+        it("should update title when custom section data changes", () => {
+            const tag = "element.io.section.custom";
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Old Title",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            expect(vm.getSnapshot().title).toBe("Old Title");
+
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({ [tag]: { tag, name: "New Title" } });
+            watchCallback();
+
+            expect(vm.getSnapshot().title).toBe("New Title");
+        });
+
+        it("should not update title when section data is missing", () => {
+            const tag = "element.io.section.custom";
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "My Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({});
+            watchCallback();
+
+            expect(vm.getSnapshot().title).toBe("My Section");
+        });
+    });
+
+    describe("editSection", () => {
+        it("should delegate to RoomListStoreV3.instance.editSection", async () => {
+            const editSectionSpy = jest.spyOn(RoomListStoreV3.instance, "editSection").mockResolvedValue(undefined);
+            const tag = "element.io.section.custom";
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            await vm.editSection();
+            expect(editSectionSpy).toHaveBeenCalledWith(tag);
+        });
+    });
+
+    describe("removeSection", () => {
+        beforeEach(() => {
+            const mockState = {
+                on: jest.fn(),
+                off: jest.fn(),
+                hasAnyNotificationOrActivity: false,
+            } as unknown as RoomNotificationState;
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(mockState);
+        });
+
+        it("should delegate to RoomListStoreV3.instance.removeSection with isEmpty=true when no rooms", async () => {
+            const removeSectionSpy = jest.spyOn(RoomListStoreV3.instance, "removeSection").mockResolvedValue(undefined);
+            const tag = "element.io.section.custom";
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            await vm.removeSection();
+            expect(removeSectionSpy).toHaveBeenCalledWith(tag, true);
+        });
+
+        it("should delegate to RoomListStoreV3.instance.removeSection with isEmpty=false when rooms exist", async () => {
+            const removeSectionSpy = jest.spyOn(RoomListStoreV3.instance, "removeSection").mockResolvedValue(undefined);
+            const tag = "element.io.section.custom";
+            const vm = new RoomListSectionHeaderViewModel({
+                tag,
+                title: "Section",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+            vm.setRooms([mkRoom(matrixClient, "!room:server")]);
+
+            await vm.removeSection();
+            expect(removeSectionSpy).toHaveBeenCalledWith(tag, false);
+        });
     });
 
     describe("unread status", () => {

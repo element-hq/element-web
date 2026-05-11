@@ -24,7 +24,7 @@ const EventContentBodyWrapperImpl = ({ as, ...snapshot }: EventContentBodyStoryP
 const EventContentBodyWrapper = withViewDocs(EventContentBodyWrapperImpl, EventContentBodyView);
 
 const meta = {
-    title: "MessageBody/EventContentBody",
+    title: "Timeline/Timeline Body/EventContentBody",
     component: EventContentBodyWrapper,
     tags: ["autodocs"],
     args: {
