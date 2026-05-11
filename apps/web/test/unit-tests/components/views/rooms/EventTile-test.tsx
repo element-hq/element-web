@@ -664,6 +664,52 @@ describe("EventTile", () => {
         });
     });
 
+    describe("search thread info", () => {
+        function makeThreadReplyEvent(): MatrixEvent {
+            return makeTimestampedMessage({
+                relatesTo: {
+                    rel_type: "m.thread",
+                    event_id: "$thread-root",
+                },
+            });
+        }
+
+        it("renders search thread info for events in a thread", () => {
+            const threadEvent = makeThreadReplyEvent();
+            const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Search);
+
+            expect(container.querySelector(".mx_ThreadSummary_icon")).not.toBeNull();
+            expect(container.querySelector(".mx_ThreadSummary_icon")).toHaveTextContent("From a thread");
+        });
+
+        it("renders search thread info as a link when a highlight link is provided", () => {
+            const threadEvent = makeThreadReplyEvent();
+            const { container } = getComponent(
+                { mxEvent: threadEvent, highlightLink: "https://example.org/thread" },
+                TimelineRenderingType.Search,
+            );
+            const threadInfo = container.querySelector<HTMLAnchorElement>("a.mx_ThreadSummary_icon");
+
+            expect(threadInfo).not.toBeNull();
+            expect(threadInfo).toHaveAttribute("href", "https://example.org/thread");
+        });
+
+        it("renders search thread info as text when no highlight link is provided", () => {
+            const threadEvent = makeThreadReplyEvent();
+            const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Search);
+            const threadInfo = container.querySelector(".mx_ThreadSummary_icon");
+
+            expect(threadInfo?.tagName).toBe("P");
+        });
+
+        it("does not render search thread info outside search timelines", () => {
+            const threadEvent = makeThreadReplyEvent();
+            const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Room);
+
+            expect(container.querySelector(".mx_ThreadSummary_icon")).toBeNull();
+        });
+    });
+
     describe("EventTile renderingType: ThreadsList", () => {
         it("shows an unread notification badge", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
