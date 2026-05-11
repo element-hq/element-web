@@ -316,6 +316,56 @@ describe("EventTile", () => {
         });
     });
 
+    describe("read receipt option", () => {
+        it("shows a sent receipt for the current user's last successful event", () => {
+            const ownEvent = makeOwnMessage();
+            const { getByRole } = getComponent({ mxEvent: ownEvent, lastSuccessful: true });
+
+            expect(getByRole("status")).toHaveAccessibleName("Your message was sent");
+        });
+
+        it.each([
+            [EventStatus.SENDING, "Sending your message…"],
+            [EventStatus.ENCRYPTING, "Encrypting your message…"],
+            [EventStatus.NOT_SENT, "Failed to send"],
+        ])("shows the %s receipt for the current user's pending event", (eventSendStatus, label) => {
+            const ownEvent = makeOwnMessage();
+            ownEvent.setStatus(eventSendStatus);
+            const { getByRole } = getComponent({ mxEvent: ownEvent, eventSendStatus });
+
+            expect(getByRole("status")).toHaveAccessibleName(label);
+        });
+
+        it("does not show a sent receipt in the threads list", () => {
+            const ownEvent = makeOwnMessage();
+            const { queryByRole } = getComponent(
+                { mxEvent: ownEvent, lastSuccessful: true },
+                TimelineRenderingType.ThreadsList,
+            );
+
+            expect(queryByRole("status", { name: "Your message was sent" })).toBeNull();
+        });
+
+        it("shows normal read receipts instead of the sent receipt when other users have read the event", () => {
+            const ownEvent = makeOwnMessage();
+            const { getByRole, queryByRole } = getComponent({
+                mxEvent: ownEvent,
+                lastSuccessful: true,
+                showReadReceipts: true,
+                readReceipts: [
+                    {
+                        userId: "@bob:example.org",
+                        roomMember: null,
+                        ts: 1234,
+                    },
+                ],
+            });
+
+            expect(queryByRole("status", { name: "Your message was sent" })).toBeNull();
+            expect(getByRole("group", { name: "Seen by 1 person" })).toBeInTheDocument();
+        });
+    });
+
     describe("EventTile thread summary", () => {
         beforeEach(() => {
             jest.spyOn(client, "supportsThreads").mockReturnValue(true);
