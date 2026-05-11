@@ -45,6 +45,15 @@
         "open_dial_pad": "打开拨号键盘",
         "separator_label": "点击或拖动以展开"
     },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "创建账户",
+            "got_an_account": "已有账户？",
+            "manage_account": "管理账户",
+            "sign_in": "登录",
+            "title": "用户菜单"
+        }
+    },
     "notifications": {
         "all_messages": "所有消息",
         "default_settings": "跟随系统设置",
@@ -209,6 +218,11 @@
         },
         "message_timestamp_received_at": "接收于 %(dateTime)s",
         "message_timestamp_sent_at": "发送于 %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "你已忽略此用户，因此其消息已被隐藏。<a> 仍然显示</a>"
+        },
+        "pending_moderation": "消息等待审核",
+        "pending_moderation_reason": "消息等待审核：%(reason)s",
         "url_preview": {
             "close": "关闭预览",
             "open_link": "打开链接",
@@ -218,6 +232,13 @@
             },
             "view_image": "查看图像"
         }
+    },
+    "user_menu": {
+        "link_new_device": "关联新设备",
+        "open_feedback": "反馈",
+        "open_home": "主页",
+        "open_security": "安全与隐私",
+        "open_settings": "所有设置"
     },
     "widget": {
         "context_menu": {
