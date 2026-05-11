@@ -338,7 +338,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private unmounted = false;
     private readonly id = uniqueId();
-    private listeningForHover = false;
+    private staleHoverCheckActive = false;
 
     public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -473,7 +473,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentWillUnmount(): void {
-        this.stopListeningForHover();
+        this.stopStaleHoverCheck();
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
@@ -493,10 +493,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
+        // Some overlays, such as portalled tooltips, can interrupt the normal mouseleave path.
+        // While hover is active, verify it against the browser's real :hover state on mouse movement.
         if (!prevState.hover && this.state.hover) {
-            this.startListeningForHover();
+            this.startStaleHoverCheck();
         } else if (prevState.hover && !this.state.hover) {
-            this.stopListeningForHover();
+            this.stopStaleHoverCheck();
         }
 
         // If we're not listening for receipts and expect to be, register a listener.
@@ -511,6 +513,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.observe(this.ref.current);
 
+        // Moving between edited messages can remount the editor without a reliable blur event.
+        // Clear stale focus-derived action bar state when focus has actually left this tile.
         if (
             this.state.focusWithin &&
             this.ref.current &&
@@ -882,16 +886,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }));
     };
 
-    private startListeningForHover(): void {
-        if (this.listeningForHover) return;
+    private startStaleHoverCheck(): void {
+        if (this.staleHoverCheckActive) return;
         document.addEventListener("mousemove", this.onDocumentMouseMove, true);
-        this.listeningForHover = true;
+        this.staleHoverCheckActive = true;
     }
 
-    private stopListeningForHover(): void {
-        if (!this.listeningForHover) return;
+    private stopStaleHoverCheck(): void {
+        if (!this.staleHoverCheckActive) return;
         document.removeEventListener("mousemove", this.onDocumentMouseMove, true);
-        this.listeningForHover = false;
+        this.staleHoverCheckActive = false;
     }
 
     private readonly onDocumentMouseMove = (): void => {
