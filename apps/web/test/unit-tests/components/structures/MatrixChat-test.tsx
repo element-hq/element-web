@@ -557,7 +557,7 @@ describe("<MatrixChat />", () => {
             });
 
             it("should not persist device language when not available", async () => {
-                await SettingsStore.setValue("language", null, SettingLevel.DEVICE, undefined);
+                await SettingsStore.setValue("language", null, SettingLevel.DEVICE, null);
                 const languageBefore = SettingsStore.getValueAt(SettingLevel.DEVICE, "language", null, true, true);
 
                 jest.spyOn(Lifecycle, "attemptDelegatedAuthLogin");

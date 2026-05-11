@@ -203,13 +203,11 @@ describe("RoomListStore", () => {
         let featureFlagValue = false;
         jest.spyOn(SettingsStore, "getValue").mockImplementation(() => featureFlagValue);
 
-        let watchCallback: CallbackFn | undefined;
-        jest.spyOn(SettingsStore, "watchSetting").mockImplementation(
-            (_settingName: string, _roomId: string | null, callbackFn: CallbackFn) => {
-                watchCallback = callbackFn;
-                return "dyn_pred_ref";
-            },
-        );
+        let watchCallback: CallbackFn<any> | undefined;
+        jest.spyOn(SettingsStore, "watchSetting").mockImplementation((_settingName, _roomId, callbackFn) => {
+            watchCallback = callbackFn;
+            return "dyn_pred_ref";
+        });
         jest.spyOn(SettingsStore, "unwatchSetting");
 
         const { store } = createStore();

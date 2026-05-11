@@ -11,8 +11,7 @@
             "one": "1 則未讀的提及。"
         },
         "room_name": "聊天室 %(name)s",
-        "unread_messages": "未讀的訊息。",
-        "user_menu": "使用者選單"
+        "unread_messages": "未讀的訊息。"
     },
     "a11y_jump_first_unread_room": "跳到第一個未讀的聊天室。",
     "action": {
@@ -301,7 +300,6 @@
         "sign_in_instead_prompt": "改為登入",
         "sign_in_or_register": "登入或建立帳號",
         "sign_in_or_register_description": "使用您的帳號或建立新的以繼續。",
-        "sign_in_prompt": "有帳號了嗎？<a>登入</a>",
         "sign_in_with_sso": "以單一登入來登入",
         "signing_in": "正在登入…",
         "soft_logout": {
@@ -3024,7 +3022,6 @@
             "created_rule_rooms": "%(senderName)s 建立了封鎖符合 %(glob)s 聊天室的規則，因為 %(reason)s",
             "created_rule_servers": "%(senderName)s 建立了封鎖符合 %(glob)s 伺服器的規則，因為 %(reason)s",
             "created_rule_users": "%(senderName)s 建立了封鎖符合 %(glob)s 的使用者規則，因為 %(reason)s",
-            "message_hidden": "您已忽略這個使用者，所以他們的訊息會隱藏。<a>無論如何都顯示。</a>",
             "removed_rule": "%(senderName)s 移除了封鎖符合 %(glob)s 的規則",
             "removed_rule_rooms": "%(senderName)s 移除了封鎖符合 %(glob)s 聊天室的規則",
             "removed_rule_servers": "%(senderName)s 移除了封鎖符合 %(glob)s 伺服器的規則",
@@ -3310,11 +3307,6 @@
         "verify_button": "驗證使用者",
         "verify_explainer": "為了提高安全性，請透過檢查您兩個裝置上的一次性代碼來驗證此使用者。"
     },
-    "user_menu": {
-        "settings": "所有設定",
-        "switch_theme_dark": "切換至深色模式",
-        "switch_theme_light": "切換至淺色模式"
-    },
     "voip": {
         "already_in_call": "已在通話中",
         "already_in_call_person": "您正在與此人通話。",
@@ -3399,7 +3391,6 @@
         "user_busy_description": "您想要通話的使用者目前忙碌中。",
         "user_is_presenting": "%(sharerName)s 正在投影",
         "video_call": "視訊通話",
-        "video_call_started": "視訊通話已開始",
         "voice_call": "語音通話",
         "you_are_presenting": "您正在投影"
     },

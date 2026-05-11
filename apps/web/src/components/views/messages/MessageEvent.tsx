@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import mime from "mime";
-import React, { createRef } from "react";
+import React, { createRef, type JSX, useEffect } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     EventType,
@@ -18,10 +18,10 @@ import {
     M_POLL_START,
     type IContent,
 } from "matrix-js-sdk/src/matrix";
+import { MjolnirBodyView, UnknownBodyView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
-import UnknownBody from "./UnknownBody";
 import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { type IBodyProps } from "./IBodyProps";
@@ -30,9 +30,9 @@ import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
 import MStickerBody from "./MStickerBody";
 import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
-import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
+import { MjolnirBodyViewModel } from "../../../viewmodels/room/timeline/event-tile/body/MjolnirBodyViewModel";
 import {
     DecryptionFailureBodyFactory,
     FileBodyFactory,
@@ -79,6 +79,24 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [M_BEACON_INFO.name, MBeaconBody],
     [M_BEACON_INFO.altName, MBeaconBody],
 ]);
+
+function MjolnirBodyWrappedView({ mxEvent, onMessageAllowed, ref }: IBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new MjolnirBodyViewModel({ mxEvent, onMessageAllowed }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    useEffect(() => {
+        vm.setOnMessageAllowed(onMessageAllowed);
+    }, [onMessageAllowed, vm]);
+
+    return <MjolnirBodyView vm={vm} ref={ref} />;
+}
+
+function UnknownBody({ mxEvent, ref }: IBodyProps): JSX.Element {
+    return <UnknownBodyView text={mxEvent.getContent().body} ref={ref} className="mx_UnknownBody" />;
+}
 
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
     private body = createRef<React.Component | IOperableEventTile>();
@@ -288,7 +306,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                 const serverBanned = userDomain && Mjolnir.sharedInstance().isServerBanned(userDomain);
 
                 if (userBanned || serverBanned) {
-                    BodyType = MjolnirBody;
+                    BodyType = MjolnirBodyWrappedView;
                 }
             }
         }

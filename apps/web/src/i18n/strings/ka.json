@@ -1,7 +1,4 @@
 {
-    "a11y": {
-        "user_menu": ""
-    },
     "action": {
         "accept": "მიღება",
         "add": "რჩეულებში",
@@ -284,7 +281,6 @@
         "sign_in_instead_prompt": "უკვე გაქვთ ანგარიში?<a> შედით აქ</a>",
         "sign_in_or_register": "შედით ან შექმენით ანგარიში",
         "sign_in_or_register_description": "გამოიყენეთ თქვენი ანგარიში ან შექმენით ახალი გასაგრძელებლად.",
-        "sign_in_prompt": "გაქვთ ანგარიში?<a> შესვლა</a>",
         "sign_in_with_sso": "შედით ერთი შესვლით",
         "signing_in": "შესვლა…",
         "soft_logout": {
@@ -2384,7 +2380,6 @@
             "created_rule_rooms": "%(senderName)sშექმნეს წესი, რომელიც კრძალავს ოთახების შესაბამისობას%(glob)s ამისთვის%(reason)s",
             "created_rule_servers": "%(senderName)sშექმნა წესი, რომელიც კრძალავს სერვერების შესაბამისობას%(glob)s ამისთვის%(reason)s",
             "created_rule_users": "%(senderName)sშექმნეს წესი, რომელიც კრძალავს მომხმარებელთა შესაბამისობას%(glob)s ამისთვის%(reason)s",
-            "message_hidden": "თქვენ უგულებელყავით ეს მომხმარებელი, ამიტომ მისი შეტყობინება დამალულია.<a> აჩვენე მაინც.</a>",
             "removed_rule": "%(senderName)sამოღებულია აკრძალვის წესის შესატყვისი%(glob)s",
             "removed_rule_rooms": "%(senderName)sამოიღეს ოთახების შესატყვისი აკრძალვის წესი%(glob)s",
             "removed_rule_servers": "%(senderName)sწაშალეს სერვერების დამთხვევის აკრძალვის წესი%(glob)s",
@@ -2669,7 +2664,6 @@
         "user_busy_description": "მომხმარებელი, რომელსაც დაურეკე, დაკავებულია.",
         "user_is_presenting": "%(sharerName)sწარმოადგენს",
         "video_call": "ვიდეო ზარი",
-        "video_call_started": "ვიდეო ზარი დაიწყო",
         "voice_call": "ხმოვანი ზარი",
         "you_are_presenting": "წარმოგიდგენთ"
     },

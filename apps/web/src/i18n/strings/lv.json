@@ -16,8 +16,7 @@
         "room_name": "Istaba %(name)s",
         "room_status_bar": "Istabas statusa josla",
         "seek_bar_label": "Audio meklēšanas josla",
-        "unread_messages": "Nelasītās ziņas.",
-        "user_menu": "Lietotāja izvēlne"
+        "unread_messages": "Nelasītās ziņas."
     },
     "a11y_jump_first_unread_room": "Pāriet uz pirmo nelasīto istabu.",
     "action": {
@@ -338,7 +337,6 @@
         "sign_in_instead_prompt": "Jau ir konts? <a>Pierakstieties šeit</a>",
         "sign_in_or_register": "Pieteikties vai izveidot kontu",
         "sign_in_or_register_description": "Jāizmanto savs konts vai jāizveido jauns, lai turpinātu.",
-        "sign_in_prompt": "Vai ir konts? <a>Pieteikties</a>",
         "sign_in_with_sso": "Pieteikties ar vienoto pierakstīšanos",
         "signing_in": "Piesakās…",
         "soft_logout": {
@@ -2955,7 +2953,6 @@
             "created_rule_rooms": "%(senderName)s izveidoja noteikumu pieejas liegšanai istabām, kas atbilst %(glob)s dēļ %(reason)s",
             "created_rule_servers": "%(senderName)s izveidoja noteikumu pieejas liegšanai serveriem, kas atbilst %(glob)s dēļ %(reason)s",
             "created_rule_users": "%(senderName)s izveidoja noteikumu pieejas liegšanai lietotājiem, kas atbilst %(glob)s dēļ %(reason)s",
-            "message_hidden": "Šis lietotājs netiek ņemts vērā, tādēļ viņa ziņa ir paslēpta. <a>Vienalga rādīt.</a>",
             "removed_rule": "%(senderName)s dzēsa noteikumu pieejas liegšanai atbilstoši %(glob)s",
             "removed_rule_rooms": "%(senderName)s dzēsa noteikumu pieejas liegšanai istabām, kas atbilst %(glob)s",
             "removed_rule_servers": "%(senderName)s dzēsa noteikumu pieejas liegšanai serveriem, kas atbilst %(glob)s",
@@ -3260,11 +3257,6 @@
         "verify_button": "Apliecināt lietotāju",
         "verify_explainer": "Papildu drošībai jāapliecina šis lietotājs, pārbaudot vienreizēju kodu abās ierīcēs."
     },
-    "user_menu": {
-        "settings": "Visi iestatījumi",
-        "switch_theme_dark": "Pārslēgt tumšo režīmu",
-        "switch_theme_light": "Pārslēgt gaišo režīmu"
-    },
     "voip": {
         "already_in_call": "Notiek zvans",
         "already_in_call_person": "Tu jau sazvanies ar šo cilvēku.",
@@ -3354,7 +3346,6 @@
         "user_busy_description": "Lietotājs, kuram zvanāt, ir aizņemts.",
         "user_is_presenting": "%(sharerName)s prezentē",
         "video_call": "Video zvans",
-        "video_call_started": "Videozvans uzsākts",
         "voice_call": "Balss zvans",
         "you_are_presenting": "Jūs prezentējat"
     },

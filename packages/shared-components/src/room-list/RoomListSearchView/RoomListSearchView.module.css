@@ -16,9 +16,8 @@
 .search {
     /* The search button should take all the remaining space */
     flex: 1;
-    /* !important is needed to override compound button in EW */
-    font: var(--cpd-font-body-md-regular) !important;
-    color: var(--cpd-color-text-secondary) !important;
+    font: var(--cpd-font-body-md-regular);
+    color: var(--cpd-color-text-secondary);
     min-width: 0;
 
     svg {
