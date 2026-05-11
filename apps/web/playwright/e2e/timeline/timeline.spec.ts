@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Locator, Page } from "@playwright/test";
-import type { ISendEventResponse, EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import type { ISendEventResponse, EventType, MsgType, IContent } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
@@ -50,11 +50,9 @@ const expectAvatar = async (cli: Client, e: Locator, avatarUrl: string): Promise
 };
 
 const sendEvent = async (client: Client, roomId: string, html = false): Promise<ISendEventResponse> => {
-    const content = {
+    const content: IContent = {
         msgtype: "m.text" as MsgType,
         body: "Message",
-        format: undefined,
-        formatted_body: undefined,
     };
     if (html) {
         content.format = "org.matrix.custom.html";
@@ -790,6 +788,7 @@ test.describe("Timeline", () => {
                     await sendEvent(app.client, room.roomId);
                     await sendEvent(app.client, room.roomId, true);
                     await page.goto(`/#/room/${room.roomId}`);
+                    await app.closeVerifyToast();
 
                     await app.toggleRoomInfoPanel();
 
@@ -815,6 +814,7 @@ test.describe("Timeline", () => {
                 await sendEvent(app.client, room.roomId);
 
                 await page.goto(`/#/room/${room.roomId}`);
+                await app.closeVerifyToast();
 
                 // Open a room setting dialog
                 await app.toggleRoomInfoPanel();

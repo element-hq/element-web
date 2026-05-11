@@ -142,6 +142,16 @@ interface EmittedEvents {
     [NotifierEvent.NotificationHiddenChange]: (hidden: boolean) => void;
 }
 
+/**
+ * Type representing a notification sound setting
+ */
+export type NotificationSound = {
+    url: string;
+    name?: string;
+    type?: string;
+    size?: number;
+};
+
 class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents> {
     private notifsByRoom: Record<string, Notification[]> = {};
 
@@ -223,12 +233,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         }
     }
 
-    public getSoundForRoom(roomId: string): {
-        url: string;
-        name: string;
-        type: string;
-        size: number;
-    } | null {
+    public getSoundForRoom(roomId: string): NotificationSound | null {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
         const content = SettingsStore.getValue("notificationSound", roomId);

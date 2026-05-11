@@ -7,12 +7,13 @@
 
 import { render, screen } from "@test-utils";
 import { composeStories } from "@storybook/react-vite";
-import React from "react";
+import React, { createRef } from "react";
 import { describe, it, expect } from "vitest";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { BaseViewModel } from "../../../core/viewmodel/BaseViewModel";
+import { DateSeparatorButton } from "./DateSeparatorButton";
 import { DateSeparatorView, type DateSeparatorViewModel, type DateSeparatorViewSnapshot } from "./DateSeparatorView";
 import * as stories from "./DateSeparatorView.stories";
 
@@ -72,5 +73,13 @@ describe("DateSeparatorView", () => {
         expect(screen.getByText("Today", { selector: "h2" })).toBeInTheDocument();
         vm.setSnapshot({ label: "Yesterday" });
         await waitFor(() => expect(screen.getByText("Yesterday", { selector: "h2" })).toBeInTheDocument());
+    });
+
+    it("forwards refs to the trigger element", () => {
+        const ref = createRef<HTMLDivElement>();
+
+        render(<DateSeparatorButton ref={ref} label="Today" />);
+
+        expect(ref.current).toBe(screen.getByTestId("jump-to-date-separator-button"));
     });
 });

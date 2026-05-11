@@ -3,7 +3,7 @@
 exports[`HistoryVisibilityBadge > renders the badge for invited 1`] = `
 <div>
   <span
-    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_10dml_8"
     data-kind="blue"
   >
     <svg
@@ -26,7 +26,7 @@ exports[`HistoryVisibilityBadge > renders the badge for invited 1`] = `
 exports[`HistoryVisibilityBadge > renders the badge for joined 1`] = `
 <div>
   <span
-    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_10dml_8"
     data-kind="blue"
   >
     <svg
@@ -49,7 +49,7 @@ exports[`HistoryVisibilityBadge > renders the badge for joined 1`] = `
 exports[`HistoryVisibilityBadge > renders the badge for shared 1`] = `
 <div>
   <span
-    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_10dml_8"
     data-kind="blue"
   >
     <svg
@@ -75,7 +75,7 @@ exports[`HistoryVisibilityBadge > renders the badge for shared 1`] = `
 exports[`HistoryVisibilityBadge > renders the badge for world_readable 1`] = `
 <div>
   <span
-    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_18gm1_8"
+    class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_10dml_8"
     data-kind="blue"
   >
     <svg

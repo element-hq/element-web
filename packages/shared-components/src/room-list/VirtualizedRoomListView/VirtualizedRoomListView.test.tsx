@@ -13,7 +13,7 @@ import { describe, it, expect } from "vitest";
 
 import * as stories from "./VirtualizedRoomListView.stories";
 
-const { Default } = composeStories(stories);
+const { Default, Sections } = composeStories(stories);
 
 const renderWithMockContext = (component: React.ReactElement): ReturnType<typeof render> => {
     return render(component, {
@@ -63,5 +63,29 @@ describe("<VirtualizedRoomListView />", () => {
     it("should call updateVisibleRooms on render", () => {
         renderWithMockContext(<Default />);
         expect(Default.args.updateVisibleRooms).toHaveBeenCalled();
+    });
+
+    describe("scrollToSectionTag", () => {
+        it("skips scroll when scrollToSectionTag does not match any section", () => {
+            const roomListState = {
+                activeRoomIndex: 0,
+                spaceId: "!space:server",
+                scrollToSectionTag: "nonexistent",
+            };
+            renderWithMockContext(<Sections roomListState={roomListState} />);
+            expect(screen.getByRole("treegrid", { name: "Room list" })).toBeInTheDocument();
+        });
+
+        it("scrolls to the section when scrollToSectionTag matches", () => {
+            // sections: favourites(3 rooms), chats(1 room), low-priority(6 rooms)
+            // flat index for "chats" = 3 rooms + 1 header = 4
+            const roomListState = {
+                activeRoomIndex: 0,
+                spaceId: "!space:server",
+                scrollToSectionTag: "chats",
+            };
+            renderWithMockContext(<Sections roomListState={roomListState} />);
+            expect(screen.getByRole("treegrid", { name: "Room list" })).toBeInTheDocument();
+        });
     });
 });

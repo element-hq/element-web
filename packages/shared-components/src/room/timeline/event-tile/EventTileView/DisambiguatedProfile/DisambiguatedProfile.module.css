@@ -24,4 +24,8 @@
         font-size: var(--cpd-font-size-body-sm);
         margin-inline-start: 5px;
     }
+
+    .userStatus {
+        margin-inline-start: 5px;
+    }
 }

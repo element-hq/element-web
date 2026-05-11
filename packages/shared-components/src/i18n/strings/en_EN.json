@@ -5,6 +5,7 @@
     "action": {
         "back": "Back",
         "click": "Click",
+        "close": "Close",
         "collapse": "Collapse",
         "delete": "Delete",
         "dismiss": "Dismiss",
@@ -16,6 +17,7 @@
         "invite": "Invite",
         "new_conversation": "New conversation",
         "new_room": "New room",
+        "new_section": "New section",
         "new_video_room": "New video room",
         "open_menu": "Open menu",
         "pause": "Pause",
@@ -34,6 +36,7 @@
     "common": {
         "attachment": "Attachment",
         "encryption_enabled": "Encryption enabled",
+        "loading": "Loading…",
         "options": "Options",
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
@@ -44,6 +47,15 @@
     "left_panel": {
         "open_dial_pad": "Open dial pad",
         "separator_label": "Click or drag to expand"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Create an account",
+            "got_an_account": "Got an account?",
+            "manage_account": "Manage account",
+            "sign_in": "Sign in",
+            "title": "User menu"
+        }
     },
     "notifications": {
         "all_messages": "All messages",
@@ -96,6 +108,8 @@
             "voice_call": "Open room %(roomName)s with a voice call."
         },
         "appearance": "Appearance",
+        "chat_moved": "Chat moved",
+        "collapse_all_sections": "Collapse all sections",
         "collapse_filters": "Collapse filter list",
         "empty": {
             "no_chats": "No chats yet",
@@ -114,6 +128,7 @@
             "show_activity": "See all activity",
             "show_chats": "Show all chats"
         },
+        "expand_all_sections": "Expand all sections",
         "expand_filters": "Expand filter list",
         "filters": {
             "favourite": "Favourites",
@@ -131,7 +146,8 @@
             "leave_room": "Leave room",
             "low_priority": "Low priority",
             "mark_read": "Mark as read",
-            "mark_unread": "Mark as unread"
+            "mark_unread": "Mark as unread",
+            "move_to_section": "Move to"
         },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
@@ -140,7 +156,11 @@
             "more_options": "More Options"
         },
         "room_options": "Room Options",
+        "section_created": "Section created",
         "section_header": {
+            "edit_section": "Edit section",
+            "more_options": "More options",
+            "remove_section": "Remove section",
             "toggle": "Toggle %(section)s section",
             "toggle_unread": "Toggle %(section)s section with unread room(s)"
         },
@@ -217,14 +237,27 @@
         },
         "message_timestamp_received_at": "Received at: %(dateTime)s",
         "message_timestamp_sent_at": "Sent at: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "You have ignored this user, so their message is hidden.<a> Show anyways.</a>"
+        },
+        "pending_moderation": "Message pending moderation",
+        "pending_moderation_reason": "Message pending moderation: %(reason)s",
         "url_preview": {
             "close": "Close preview",
+            "open_link": "Open link",
             "show_n_more": {
                 "one": "Show %(count)s other preview",
                 "other": "Show %(count)s other previews"
             },
             "view_image": "View image"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Link new device",
+        "open_feedback": "Feedback",
+        "open_home": "Home",
+        "open_security": "Security & Privacy",
+        "open_settings": "All settings"
     },
     "widget": {
         "context_menu": {

@@ -57,13 +57,13 @@ HTMLCollection [
             class="mx_DeviceSecurityCard_description"
           >
             Verify your current session for enhanced secure messaging.
-            <div
+            <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
               tabindex="0"
             >
               Learn more
-            </div>
+            </button>
           </p>
           <div
             class="mx_DeviceSecurityCard_actions"
@@ -334,13 +334,13 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             class="mx_DeviceSecurityCard_description"
           >
             Verify your current session for enhanced secure messaging.
-            <div
+            <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
               tabindex="0"
             >
               Learn more
-            </div>
+            </button>
           </p>
           <div
             class="mx_DeviceSecurityCard_actions"
@@ -521,13 +521,13 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             class="mx_DeviceSecurityCard_description"
           >
             Verify your current session for enhanced secure messaging.
-            <div
+            <button
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
               tabindex="0"
             >
               Learn more
-            </div>
+            </button>
           </p>
           <div
             class="mx_DeviceSecurityCard_actions"

@@ -186,7 +186,7 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
          
         <span>
           To avoid these issues, create a 
-          <div
+          <a
             class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
             tabindex="0"
@@ -194,7 +194,7 @@ exports[`<SecurityRoomSettingsTab /> join rule warns when trying to make an encr
              
             new public room
              
-          </div>
+          </a>
            for the conversation you plan to have.
         </span>
          

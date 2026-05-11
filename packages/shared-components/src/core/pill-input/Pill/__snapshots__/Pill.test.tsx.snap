@@ -3,14 +3,14 @@
 exports[`Pill > renders the pill 1`] = `
 <div>
   <div
-    class="flex pill"
+    class="Flex-module_flex Pill-module_pill"
     style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <div
       style="width: 20px; height: 20px; border-radius: 100%; background-color: rgb(204, 204, 204);"
     />
     <span
-      class="label"
+      class="Pill-module_label"
       id="_r_0_"
     >
       Pill
@@ -48,14 +48,14 @@ exports[`Pill > renders the pill 1`] = `
 exports[`Pill > renders the pill without close button 1`] = `
 <div>
   <div
-    class="flex pill"
+    class="Flex-module_flex Pill-module_pill"
     style="--mx-flex-display: inline-flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <div
       style="width: 20px; height: 20px; border-radius: 100%; background-color: rgb(204, 204, 204);"
     />
     <span
-      class="label"
+      class="Pill-module_label"
       id="_r_1_"
     >
       Pill

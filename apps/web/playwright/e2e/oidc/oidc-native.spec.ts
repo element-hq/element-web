@@ -74,7 +74,8 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
             (request) => request.url() === revokeUri && request.postDataJSON()["token_type_hint"] === "refresh_token",
         );
         const locator = await app.settings.openUserMenu();
-        await locator.getByRole("menuitem", { name: "Remove this device", exact: true }).click();
+        await locator.getByRole("menuitem", { name: "All settings", exact: true }).click();
+        await page.getByRole("button", { name: "Remove this device", exact: true }).click();
         await revokeAccessTokenPromise;
         await revokeRefreshTokenPromise;
     });
@@ -122,8 +123,9 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         // Allow the outstanding requests queue to settle before logging out
         await page.waitForTimeout(2000);
-        await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Remove this device" }).click();
-        await expect(page).toHaveURL(/\/#\/login$/);
+        await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
+        await page.getByRole("button", { name: "Remove this device" }).click();
+        await expect(page).toHaveURL(/\/#\/welcome$/);
 
         // Log in again
         await page.goto("/#/login");
@@ -148,25 +150,27 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             const userId = `alice_${testInfo.testId}`;
             await registerAccountMas(page, mailpitClient, userId, `${userId}@email.com`, "Pa$sW0rD!");
-            await expect(page.getByText("Welcome")).toBeVisible();
+            // richvdh: This takes several seconds to happen on a dev instance
+            await expect(page.getByText("Welcome")).toBeVisible({ timeout: 10000 });
 
             // Log out
             await page.getByRole("button", { name: "User menu" }).click();
             await expect(page.getByText(userId, { exact: true })).toBeVisible();
             await page.waitForTimeout(2000);
-            await page
-                .locator(".mx_UserMenu_contextMenu")
-                .getByRole("menuitem", { name: "Remove this device" })
-                .click();
-            await expect(page).toHaveURL(/\/#\/login$/);
+            await page.getByRole("menu", { name: "User menu" }).getByRole("menuitem", { name: "All settings" }).click();
+            await page.getByRole("button", { name: "Remove this device" }).click();
+            await expect(page).toHaveURL(/\/#\/welcome$/);
 
             // Log in again
             await page.goto("/#/login");
+            await expect(page.getByText("Sign in")).toBeVisible();
             await page.getByRole("button", { name: "Continue" }).click();
+            await expect(page.getByText("Continue to Element?")).toBeVisible();
             await page.getByRole("button", { name: "Continue" }).click();
 
             // We should be being warned that we need to verify (but we can't)
-            await expect(page.getByText("Confirm your digital identity")).toBeVisible();
+            // richvdh: Again, Element takes several seconds to load on a dev instance
+            await expect(page.getByText("Confirm your digital identity")).toBeVisible({ timeout: 10000 });
 
             // And there should be no way to close this prompt
             await expect(page.getByRole("button", { name: "Skip verification for now" })).not.toBeVisible();
@@ -202,10 +206,11 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
                 await expect(page.getByText(userId, { exact: true })).toBeVisible();
                 await page.waitForTimeout(2000);
                 await page
-                    .locator(".mx_UserMenu_contextMenu")
-                    .getByRole("menuitem", { name: "Remove this device" })
+                    .getByRole("menu", { name: "User menu" })
+                    .getByRole("menuitem", { name: "All settings" })
                     .click();
-                await expect(page).toHaveURL(/\/#\/login$/);
+                await page.getByRole("button", { name: "Remove this device" }).click();
+                await expect(page).toHaveURL(/\/#\/welcome$/);
 
                 // Log in again
                 await page.goto("/#/login");

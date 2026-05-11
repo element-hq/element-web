@@ -1,0 +1,28 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "library",
+    "root": "packages/module-api",
+    "targets": {
+        "build": {
+            "cache": true,
+            "executor": "nx:run-commands",
+            "inputs": ["src"],
+            "outputs": ["{projectRoot}/lib"],
+            "options": {
+                "commands": ["vite build", "api-extractor run"],
+                "parallel": false,
+                "cwd": "packages/module-api"
+            }
+        },
+        "start": {
+            "command": "vite build --watch",
+            "options": { "cwd": "packages/module-api" },
+            "dependsOn": ["^start"],
+            "continuous": true
+        },
+        "lint:types": {
+            "command": "pnpm exec tsc --noEmit",
+            "options": { "cwd": "packages/module-api" }
+        }
+    }
+}

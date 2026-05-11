@@ -16,6 +16,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     inputRef?: Ref<HTMLInputElement>;
     id?: string;
     description?: ReactNode;
+    formWrap?: boolean;
     icon?: JSX.Element;
 }
 
@@ -25,6 +26,7 @@ const StyledCheckbox: React.FC<IProps> = ({
     className,
     inputRef,
     description,
+    formWrap = true,
     // icon prop is accepted for type compatibility but not used
     // compound-web CheckboxInput handles checked state natively
     ...otherProps
@@ -32,25 +34,30 @@ const StyledCheckbox: React.FC<IProps> = ({
     const id = initialId || "checkbox_" + secureRandomString(10);
     const name = useId();
     const descriptionId = useId();
-    return (
-        <Form.Root>
-            <InlineField
-                className={className}
-                name={name}
-                control={
-                    <CheckboxInput
-                        ref={inputRef}
-                        aria-describedby={description ? descriptionId : undefined}
-                        id={id}
-                        {...otherProps}
-                    />
-                }
-            >
-                {label && <Label htmlFor={id}>{label}</Label>}
-                {description && <HelpMessage id={descriptionId}>{description}</HelpMessage>}
-            </InlineField>
-        </Form.Root>
+
+    const field = (
+        <InlineField
+            className={className}
+            name={name}
+            control={
+                <CheckboxInput
+                    ref={inputRef}
+                    aria-describedby={description ? descriptionId : undefined}
+                    id={id}
+                    {...otherProps}
+                />
+            }
+        >
+            {label && <Label htmlFor={id}>{label}</Label>}
+            {description && <HelpMessage id={descriptionId}>{description}</HelpMessage>}
+        </InlineField>
     );
+
+    if (formWrap) {
+        return <Form.Root>{field}</Form.Root>;
+    }
+
+    return field;
 };
 
 export default StyledCheckbox;

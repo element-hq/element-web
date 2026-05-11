@@ -10,8 +10,7 @@
             "other": "メンションを含む未読メッセージ%(count)s件。"
         },
         "room_name": "ルーム %(name)s",
-        "unread_messages": "未読メッセージ。",
-        "user_menu": "ユーザーメニュー"
+        "unread_messages": "未読メッセージ。"
     },
     "a11y_jump_first_unread_room": "未読のある最初のルームにジャンプします。",
     "action": {
@@ -290,7 +289,6 @@
         "sign_in_instead_prompt": "サインイン",
         "sign_in_or_register": "サインインするか、アカウントを作成してください",
         "sign_in_or_register_description": "続行するには、作成済のアカウントを使用するか、新しいアカウントを作成してください。",
-        "sign_in_prompt": "アカウントがありますか？<a>サインインしてください</a>",
         "sign_in_with_sso": "シングルサインオンを使用してサインイン",
         "signing_in": "サインインしています…",
         "soft_logout": {
@@ -1431,7 +1429,6 @@
         "moderator": "モデレーター",
         "restricted": "制限"
     },
-    "powered_by_matrix_with_logo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
     "presence": {
         "away": "離席中",
         "busy": "取り込み中",
@@ -1739,8 +1736,6 @@
             "aliases_section": "ルームのアドレス",
             "avatar_field_label": "ルームのアバター",
             "canonical_alias_field_label": "メインアドレス",
-            "default_url_previews_off": "このルームの参加者には、既定でURLプレビューが無効です。",
-            "default_url_previews_on": "このルームの参加者には、既定でURLプレビューが有効です。",
             "description_space": "スペースの設定を変更します。",
             "error_creating_alias_description": "アドレスを作成する際にエラーが発生しました。サーバーで許可されていないか、一時的な障害が発生した可能性があります。",
             "error_creating_alias_title": "アドレスを作成する際にエラーが発生しました",
@@ -1767,12 +1762,7 @@
             "published_aliases_explainer_space": "公開アドレスを設定すると、どのサーバーのユーザーでも、あなたのスペースに参加できるようになります。",
             "published_aliases_section": "公開アドレス",
             "save": "変更を保存",
-            "topic_field_label": "ルームのトピック",
-            "url_preview_encryption_warning": "このルームを含めて、暗号化されたルームでは、あなたのホームサーバー（これがプレビューを作成します）によるリンクの情報の収集を防ぐため、URLプレビューは既定で無効になっています。",
-            "url_preview_explainer": "メッセージにURLが含まれる場合、タイトル、説明、ウェブサイトの画像などがURLプレビューとして表示されます。",
-            "url_previews_section": "URLプレビュー",
-            "user_url_previews_default_off": "URLプレビューが既定で<a>無効</a>です。",
-            "user_url_previews_default_on": "URLプレビューが既定で<a>有効</a>です。"
+            "topic_field_label": "ルームのトピック"
         },
         "notifications": {
             "browse_button": "参照",
@@ -2048,8 +2038,6 @@
             "spell_check_locale_placeholder": "ロケールを選択"
         },
         "inline_url_previews_default": "既定でインラインURLプレビューを有効にする",
-        "inline_url_previews_room": "このルームの参加者のために既定でURLプレビューを有効にする",
-        "inline_url_previews_room_account": "このルームのURLプレビューを有効にする（あなたにのみ適用）",
         "insert_trailing_colon_mentions": "ユーザーをメンションする際にコロンを挿入",
         "jump_to_bottom_on_send": "メッセージを送信する際にタイムラインの最下部に移動",
         "key_backup": {
@@ -2782,7 +2770,6 @@
             "created_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを作成しました（理由：%(reason)s）",
             "created_rule_users": "%(senderName)sが%(glob)sにマッチするユーザーをブロックするルールを作成しました（理由：%(reason)s）",
-            "message_hidden": "このユーザーを無視しているのでメッセージは隠されます。<a>表示する。</a>",
             "removed_rule": "%(senderName)sが%(glob)sにマッチするブロック用ルールを削除しました",
             "removed_rule_rooms": "%(senderName)sが%(glob)sにマッチするルームをブロックするルールを削除しました",
             "removed_rule_servers": "%(senderName)sが%(glob)sにマッチするサーバーをブロックするルールを削除しました",
@@ -3059,11 +3046,6 @@
         "verify_button": "ユーザーの認証",
         "verify_explainer": "セキュリティー強化のため、両者の端末でワンタイムコードを確認し、このユーザーを認証してください。"
     },
-    "user_menu": {
-        "settings": "全ての設定",
-        "switch_theme_dark": "ダークテーマに切り替える",
-        "switch_theme_light": "ライトテーマに切り替える"
-    },
     "voip": {
         "already_in_call": "既に通話中です",
         "already_in_call_person": "既にこの人と通話中です。",
@@ -3146,12 +3128,10 @@
         "user_busy_description": "呼び出したユーザーは通話中です。",
         "user_is_presenting": "%(sharerName)sが画面を共有しています",
         "video_call": "ビデオ通話",
-        "video_call_started": "ビデオ通話を開始しました",
         "voice_call": "音声通話",
         "you_are_presenting": "あなたが画面を共有しています"
     },
     "web_default_device_name": "%(appName)s： %(osName)sの%(browserName)s",
-    "welcome_to_element": "Elementにようこそ",
     "widget": {
         "added_by": "ウィジェットの追加者",
         "capabilities_dialog": {

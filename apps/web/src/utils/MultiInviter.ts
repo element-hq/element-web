@@ -228,10 +228,10 @@ export default class MultiInviter {
                 }
             }
 
-            const opts: InviteOpts = {};
+            const opts: InviteOpts = {
+                shareEncryptedHistory: true,
+            };
             if (this.reason !== undefined) opts.reason = this.reason;
-            if (SettingsStore.getValue("feature_share_history_on_invite")) opts.shareEncryptedHistory = true;
-
             return this.matrixClient.invite(roomId, addr, opts);
         } else {
             throw new Error("Unsupported address");

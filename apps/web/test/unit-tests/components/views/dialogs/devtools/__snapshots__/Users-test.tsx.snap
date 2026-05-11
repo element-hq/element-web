@@ -7,11 +7,11 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
   >
     <ul>
       <li>
-        <div
+        <span
           class="mx_CopyableText"
         >
           User ID: @alice:example.com
-          <div
+          <button
             aria-label="Copy"
             class="mx_AccessibleButton mx_CopyableText_copyButton"
             role="button"
@@ -31,15 +31,15 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
                 d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
               />
             </svg>
-          </div>
-        </div>
+          </button>
+        </span>
       </li>
       <li>
-        <div
+        <span
           class="mx_CopyableText"
         >
           Device ID: SIGNED
-          <div
+          <button
             aria-label="Copy"
             class="mx_AccessibleButton mx_CopyableText_copyButton"
             role="button"
@@ -59,8 +59,8 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
                 d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
               />
             </svg>
-          </div>
-        </div>
+          </button>
+        </span>
       </li>
       <li>
         Displayname: 
@@ -95,11 +95,11 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
         Device keys
         <ul>
           <li>
-            <div
+            <span
               class="mx_CopyableText"
             >
               ed25519: an_ed25519_public_key
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -119,15 +119,15 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </li>
           <li>
-            <div
+            <span
               class="mx_CopyableText"
             >
               curve25519: a_curve25519_public_key
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -147,8 +147,8 @@ exports[`<Users /> should render a single device - signed by owner 1`] = `
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </li>
         </ul>
       </li>
@@ -171,11 +171,11 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
   >
     <ul>
       <li>
-        <div
+        <span
           class="mx_CopyableText"
         >
           User ID: @alice:example.com
-          <div
+          <button
             aria-label="Copy"
             class="mx_AccessibleButton mx_CopyableText_copyButton"
             role="button"
@@ -195,15 +195,15 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
                 d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
               />
             </svg>
-          </div>
-        </div>
+          </button>
+        </span>
       </li>
       <li>
-        <div
+        <span
           class="mx_CopyableText"
         >
           Device ID: UNSIGNED
-          <div
+          <button
             aria-label="Copy"
             class="mx_AccessibleButton mx_CopyableText_copyButton"
             role="button"
@@ -223,8 +223,8 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
                 d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
               />
             </svg>
-          </div>
-        </div>
+          </button>
+        </span>
       </li>
       <li>
         Displayname: 
@@ -259,11 +259,11 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
         Device keys
         <ul>
           <li>
-            <div
+            <span
               class="mx_CopyableText"
             >
               ed25519: an_ed25519_public_key
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -283,15 +283,15 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </li>
           <li>
-            <div
+            <span
               class="mx_CopyableText"
             >
               curve25519: a_curve25519_public_key
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -311,8 +311,8 @@ exports[`<Users /> should render a single device - unsigned 1`] = `
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </li>
         </ul>
       </li>
@@ -335,11 +335,11 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
   >
     <ul>
       <li>
-        <div
+        <span
           class="mx_CopyableText"
         >
           User ID: @alice:example.com
-          <div
+          <button
             aria-label="Copy"
             class="mx_AccessibleButton mx_CopyableText_copyButton"
             role="button"
@@ -359,15 +359,15 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
                 d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
               />
             </svg>
-          </div>
-        </div>
+          </button>
+        </span>
       </li>
       <li>
-        <div
+        <span
           class="mx_CopyableText"
         >
           Device ID: VERIFIED
-          <div
+          <button
             aria-label="Copy"
             class="mx_AccessibleButton mx_CopyableText_copyButton"
             role="button"
@@ -387,8 +387,8 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
                 d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
               />
             </svg>
-          </div>
-        </div>
+          </button>
+        </span>
       </li>
       <li>
         Displayname: 
@@ -425,11 +425,11 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
         Device keys
         <ul>
           <li>
-            <div
+            <span
               class="mx_CopyableText"
             >
               ed25519: an_ed25519_public_key
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -449,15 +449,15 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </li>
           <li>
-            <div
+            <span
               class="mx_CopyableText"
             >
               curve25519: a_curve25519_public_key
-              <div
+              <button
                 aria-label="Copy"
                 class="mx_AccessibleButton mx_CopyableText_copyButton"
                 role="button"
@@ -477,8 +477,8 @@ exports[`<Users /> should render a single device - verified by cross-signing 1`]
                     d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
                   />
                 </svg>
-              </div>
-            </div>
+              </button>
+            </span>
           </li>
         </ul>
       </li>
@@ -501,11 +501,11 @@ exports[`<Users /> should render a single user 1`] = `
   >
     <ul>
       <li>
-        <div
+        <span
           class="mx_CopyableText"
         >
           User ID: @alice:example.com
-          <div
+          <button
             aria-label="Copy"
             class="mx_AccessibleButton mx_CopyableText_copyButton"
             role="button"
@@ -525,8 +525,8 @@ exports[`<Users /> should render a single user 1`] = `
                 d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2zm2 0v9h9v-9z"
               />
             </svg>
-          </div>
-        </div>
+          </button>
+        </span>
       </li>
       <li>
         Membership: join

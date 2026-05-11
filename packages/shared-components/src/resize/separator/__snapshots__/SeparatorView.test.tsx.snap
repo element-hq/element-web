@@ -21,7 +21,7 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
             tabindex="0"
           >
@@ -36,7 +36,7 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
         aria-valuemax="99.502"
         aria-valuemin="0"
         aria-valuenow="0"
-        class="separator Separator visible"
+        class="SeparatorView-module_separator Separator SeparatorView-module_visible"
         data-separator="inactive"
         data-testid="_r_2_"
         id="_r_2_"
@@ -67,7 +67,7 @@ exports[`<SeparatorView /> > renders Default story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             MAIN CONTENT
@@ -100,7 +100,7 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
             tabindex="0"
           >
@@ -115,7 +115,7 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
         aria-valuemax="99.502"
         aria-valuemin="0"
         aria-valuenow="49.751"
-        class="separator Separator visible"
+        class="SeparatorView-module_separator Separator SeparatorView-module_visible"
         data-separator="inactive"
         data-testid="_r_i_"
         id="_r_i_"
@@ -146,7 +146,7 @@ exports[`<SeparatorView /> > renders KeyboardFocused story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             MAIN CONTENT
@@ -179,7 +179,7 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
             tabindex="0"
           >
@@ -190,7 +190,7 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
       <div
         aria-label="Click or drag to expand"
         aria-orientation="vertical"
-        class="separator Separator"
+        class="SeparatorView-module_separator Separator"
         data-separator="inactive"
         data-testid="_r_a_"
         id="_r_a_"
@@ -221,7 +221,7 @@ exports[`<SeparatorView /> > renders LeftPanelExpanded story 1`] = `
           style="max-height: 100%; max-width: 100%; flex-grow: 1; overflow: auto; touch-action: pan-y;"
         >
           <div
-            class="flex"
+            class="Flex-module_flex"
             style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
           >
             MAIN CONTENT

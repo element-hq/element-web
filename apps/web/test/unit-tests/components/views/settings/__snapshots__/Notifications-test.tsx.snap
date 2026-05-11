@@ -42,74 +42,74 @@ exports[`<Notifications /> main notification switches renders only enable notifi
         </span>
       </div>
     </div>
-    <form
-      class="_root_19upo_16"
+  </form>
+  <form
+    class="_root_19upo_16"
+  >
+    <div
+      class="_inline-field_19upo_32"
     >
       <div
-        class="_inline-field_19upo_32"
+        class="_inline-field-control_19upo_44"
       >
         <div
-          class="_inline-field-control_19upo_44"
+          class="_container_udcm8_10"
         >
+          <input
+            checked=""
+            class="_input_udcm8_24"
+            id="mx_SettingsFlag_testid_0"
+            role="switch"
+            type="checkbox"
+          />
           <div
-            class="_container_udcm8_10"
-          >
-            <input
-              checked=""
-              class="_input_udcm8_24"
-              id="mx_SettingsFlag_testid_0"
-              role="switch"
-              type="checkbox"
-            />
-            <div
-              class="_ui_udcm8_34"
-            />
-          </div>
-        </div>
-        <div
-          class="_inline-field-body_19upo_38"
-        >
-          <label
-            class="_label_19upo_59"
-            for="mx_SettingsFlag_testid_0"
-          >
-            Show all activity in the room list (dots or number of unread messages)
-          </label>
+            class="_ui_udcm8_34"
+          />
         </div>
       </div>
       <div
-        class="_inline-field_19upo_32"
+        class="_inline-field-body_19upo_38"
+      >
+        <label
+          class="_label_19upo_59"
+          for="mx_SettingsFlag_testid_0"
+        >
+          Show all activity in the room list (dots or number of unread messages)
+        </label>
+      </div>
+    </div>
+    <div
+      class="_inline-field_19upo_32"
+    >
+      <div
+        class="_inline-field-control_19upo_44"
       >
         <div
-          class="_inline-field-control_19upo_44"
+          class="_container_udcm8_10"
         >
+          <input
+            checked=""
+            class="_input_udcm8_24"
+            id="mx_SettingsFlag_testid_1"
+            role="switch"
+            type="checkbox"
+          />
           <div
-            class="_container_udcm8_10"
-          >
-            <input
-              checked=""
-              class="_input_udcm8_24"
-              id="mx_SettingsFlag_testid_1"
-              role="switch"
-              type="checkbox"
-            />
-            <div
-              class="_ui_udcm8_34"
-            />
-          </div>
-        </div>
-        <div
-          class="_inline-field-body_19upo_38"
-        >
-          <label
-            class="_label_19upo_59"
-            for="mx_SettingsFlag_testid_1"
-          >
-            Only show notifications in the thread activity centre
-          </label>
+            class="_ui_udcm8_34"
+          />
         </div>
       </div>
-    </form>
+      <div
+        class="_inline-field-body_19upo_38"
+      >
+        <label
+          class="_label_19upo_59"
+          for="mx_SettingsFlag_testid_1"
+        >
+          Only show notifications in the thread activity centre
+        </label>
+      </div>
+    </div>
   </form>
 </div>
 `;

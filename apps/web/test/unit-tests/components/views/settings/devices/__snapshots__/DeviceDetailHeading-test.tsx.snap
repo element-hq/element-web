@@ -37,13 +37,13 @@ exports[`<DeviceDetailHeading /> displays name edit form on rename button click 
           id="device-rename-description-123"
         >
           Please be aware that session names are also visible to people you communicate with.
-          <div
+          <button
             class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
             tabindex="0"
           >
             Learn more
-          </div>
+          </button>
         </span>
       </div>
       <div

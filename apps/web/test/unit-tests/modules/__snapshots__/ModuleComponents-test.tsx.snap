@@ -7,7 +7,7 @@ exports[`Module Components should override the factory for a ModuleSpinner 1`] =
   >
     <svg
       aria-label="Loading…"
-      class="_icon_11k6c_18"
+      class="_icon_1855a_18"
       data-testid="spinner"
       fill="currentColor"
       height="1em"

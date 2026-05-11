@@ -31,7 +31,7 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import EmptyState from "./EmptyState";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
 import { UIComponent } from "../../../settings/UIFeature.ts";
-import { WidgetContextMenu } from "../../../viewmodels/right-panel/WidgetContextMenuViewModel.tsx";
+import { WidgetContextMenu } from "../../../viewmodels/room/right-panel/WidgetContextMenuViewModel.tsx";
 
 interface Props {
     room: Room;
@@ -191,7 +191,7 @@ const ExtensionsCard: React.FC<Props> = ({ room, onClose }) => {
     return (
         <BaseCard header={_t("right_panel|extensions_button")} className="mx_ExtensionsCard" onClose={onClose}>
             {shouldShowComponent(UIComponent.AddIntegrations) && (
-                <Button size="sm" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
+                <Button size="md" onClick={onManageIntegrations} kind="secondary" Icon={PlusIcon}>
                     {_t("right_panel|add_integrations")}
                 </Button>
             )}

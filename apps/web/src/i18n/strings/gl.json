@@ -10,8 +10,7 @@
             "one": "1 mención non lida."
         },
         "room_name": "Sala %(name)s",
-        "unread_messages": "Mensaxes non lidas.",
-        "user_menu": "Menú de usuaria"
+        "unread_messages": "Mensaxes non lidas."
     },
     "a11y_jump_first_unread_room": "Vaite a primeira sala non lida.",
     "action": {
@@ -261,7 +260,6 @@
         "sign_in_instead_prompt": "Xa tes unha conta? <a>Conecta aquí</a>",
         "sign_in_or_register": "Conéctate ou Crea unha Conta",
         "sign_in_or_register_description": "Usa a túa conta ou crea unha nova para continuar.",
-        "sign_in_prompt": "Tes unha conta? <a>Conéctate</a>",
         "sign_in_with_sso": "Entrar usando Single Sign On",
         "soft_logout": {
             "clear_data_button": "Eliminar todos os datos",
@@ -1314,7 +1312,6 @@
         "restricted": "Restrinxido"
     },
     "powered_by_matrix": "Funciona grazas a Matrix",
-    "powered_by_matrix_with_logo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo",
     "presence": {
         "away": "Fóra",
         "busy": "Ocupado",
@@ -1608,8 +1605,6 @@
             "aliases_section": "Enderezos da sala",
             "avatar_field_label": "Avatar da sala",
             "canonical_alias_field_label": "Enderezo principal",
-            "default_url_previews_off": "As vistas previas de URL están desactivadas por defecto para as participantes desta sala.",
-            "default_url_previews_on": "As vistas previas de URL están activas por defecto para os participantes desta sala.",
             "description_space": "Editar os axustes relativos ao teu espazo.",
             "error_creating_alias_description": "Algo fallou ao crear ese enderezo. Podería non estar autorizado polo servidor ou ser un fallo temporal.",
             "error_creating_alias_title": "Fallo ao crear o enderezo",
@@ -1636,12 +1631,7 @@
             "published_aliases_explainer_space": "Os enderezos publicados podense usar por calquera en calquera servidor para unirse ao teu espazo.",
             "published_aliases_section": "Enderezos publicados",
             "save": "Gardar cambios",
-            "topic_field_label": "Asunto da sala",
-            "url_preview_encryption_warning": "Nas salas cifradas, como é esta, está desactivado por defecto a previsualización das URL co fin de asegurarse de que o servidor local (que é onde se gardan as previsualizacións) non poida recoller información sobre das ligazóns que se ven nesta sala.",
-            "url_preview_explainer": "Cando alguén pon unha URL na mensaxe, esta previsualízarase para que así se coñezan xa cousas delas como o título, a descrición ou as imaxes que inclúe ese sitio web.",
-            "url_previews_section": "Vista previa de URL",
-            "user_url_previews_default_off": "<a>Desactivou</a> a vista previa de URL por defecto.",
-            "user_url_previews_default_on": "<a>Activou</a> a vista previa de URL por defecto."
+            "topic_field_label": "Asunto da sala"
         },
         "notifications": {
             "browse_button": "Buscar",
@@ -1907,8 +1897,6 @@
             "spell_check_locale_placeholder": "Elixe o idioma"
         },
         "inline_url_previews_default": "Activar por defecto as vistas previas en liña de URL",
-        "inline_url_previews_room": "Activar a vista previa de URL por defecto para as participantes nesta sala",
-        "inline_url_previews_room_account": "Activar vista previa de URL nesta sala (só che afecta a ti)",
         "insert_trailing_colon_mentions": "Inserir dous puntos tras mencionar a outra usuaria no inicio da mensaxe",
         "jump_to_bottom_on_send": "Ir ao final da cronoloxía cando envías unha mensaxe",
         "key_backup": {
@@ -2563,7 +2551,6 @@
             "created_rule_rooms": "%(senderName)s creou unha regra bloqueando salas con %(glob)s por %(reason)s",
             "created_rule_servers": "%(senderName)s creou unha regra bloqueando servidores con %(glob)s por %(reason)s",
             "created_rule_users": "%(senderName)s creou unha regra de bloqueo de usuarias con %(glob)s por %(reason)s",
-            "message_hidden": "Estás a ignorar a esta usuaria, polo que a imaxe está agochada. <a>Mostrar igualmente.</a>",
             "removed_rule": "%(senderName)s eliminou a regra de bloqueo con %(glob)s",
             "removed_rule_rooms": "%(senderName)s eliminou a regra que bloquea salas con %(glob)s",
             "removed_rule_servers": "%(senderName)s eliminou a regra que bloquea servidores con %(glob)s",
@@ -2832,11 +2819,6 @@
         "verify_button": "Verificar Usuaria",
         "verify_explainer": "Para maior seguridade, verifica esta usuaria comprobando o código temporal en dous dos teus dispositivos."
     },
-    "user_menu": {
-        "settings": "Todos os axustes",
-        "switch_theme_dark": "Cambiar a decorado escuro",
-        "switch_theme_light": "Cambiar a decorado claro"
-    },
     "voip": {
         "already_in_call": "Xa estás nunha chamada",
         "already_in_call_person": "Xa estás nunha conversa con esta persoa.",
@@ -2917,7 +2899,6 @@
         "you_are_presenting": "Estaste a presentar"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s en %(osName)s",
-    "welcome_to_element": "Benvida/o a Element",
     "widget": {
         "added_by": "Widget engadido por",
         "capabilities_dialog": {

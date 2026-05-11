@@ -97,7 +97,7 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
     >
       <svg
         aria-label="Loading…"
-        class="_icon_11k6c_18"
+        class="_icon_1855a_18"
         data-testid="spinner"
         fill="currentColor"
         height="1em"
@@ -124,13 +124,9 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
     class="mx_AuthPage"
   >
     <div
-      class="mx_AuthPage_modal mx_AuthPage_modal_withBlur"
+      class="mx_AuthPage_modal"
       style="position: relative;"
     >
-      <div
-        class="mx_AuthPage_modalBlur"
-        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
-      />
       <main
         aria-live="polite"
         class="mx_AuthPage_modalContent"
@@ -138,53 +134,99 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
         tabindex="-1"
       >
         <div
-          class="mx_Welcome"
-          data-testid="mx_welcome_screen"
+          class="_glass_sepwu_8"
         >
           <div
-            class="mx_WelcomePage mx_WelcomePage_loggedIn"
+            class="mx_Welcome"
           >
             <div
-              class="mx_WelcomePage_body"
+              class="mx_DefaultWelcome"
             >
-              <h1>
-                Hello
+              <a
+                class="mx_DefaultWelcome_logo"
+                href="https://element.io"
+                rel="noopener"
+                target="_blank"
+              >
+                <img
+                  alt="Test"
+                  src="themes/element/img/logos/element-logo.svg"
+                />
+              </a>
+              <h1
+                class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112"
+              >
+                Welcome to Test
               </h1>
+              <div
+                class="mx_DefaultWelcome_buttons"
+              >
+                <a
+                  class="_button_1nw83_8"
+                  data-kind="primary"
+                  data-size="md"
+                  href="#/login"
+                  role="link"
+                  tabindex="0"
+                >
+                  Sign in
+                </a>
+                <a
+                  class="_button_1nw83_8"
+                  data-kind="secondary"
+                  data-size="md"
+                  href="#/register"
+                  role="link"
+                  tabindex="0"
+                >
+                  Create account
+                </a>
+                <a
+                  class="_button_1nw83_8"
+                  data-kind="tertiary"
+                  data-size="md"
+                  href="#/directory"
+                  role="link"
+                  tabindex="0"
+                >
+                  Explore rooms
+                </a>
+              </div>
             </div>
-          </div>
-          <div
-            class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
-          >
             <div
-              aria-describedby="mx_LanguageDropdown_value"
-              aria-expanded="false"
-              aria-haspopup="listbox"
-              aria-label="Language Dropdown"
-              aria-owns="mx_LanguageDropdown_input"
-              class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
-              role="button"
-              tabindex="0"
+              class="mx_Dropdown mx_LanguageDropdown mx_AuthBody_language"
             >
               <div
-                class="mx_Dropdown_option"
-                id="mx_LanguageDropdown_value"
+                aria-describedby="mx_LanguageDropdown_value"
+                aria-expanded="false"
+                aria-haspopup="listbox"
+                aria-label="Language Dropdown"
+                aria-owns="mx_LanguageDropdown_input"
+                class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+                role="button"
+                tabindex="0"
               >
-                <div>
-                  English
+                <div
+                  class="mx_Dropdown_option"
+                  id="mx_LanguageDropdown_value"
+                >
+                  <div>
+                    English
+                  </div>
                 </div>
+                <svg
+                  class="mx_Dropdown_arrow"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+                  />
+                </svg>
               </div>
-              <svg
-                class="mx_Dropdown_arrow"
-                fill="currentColor"
-                height="1em"
-                viewBox="0 0 24 24"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
-                />
-              </svg>
             </div>
           </div>
         </div>
@@ -237,7 +279,7 @@ exports[`<MatrixChat /> should render spinner while app is loading 1`] = `
     >
       <svg
         aria-label="Loading…"
-        class="_icon_11k6c_18"
+        class="_icon_1855a_18"
         data-testid="spinner"
         fill="currentColor"
         height="1em"

@@ -22,6 +22,7 @@ test.describe("Create Room", () => {
         "should create a public room with name, topic & address set",
         { tag: "@screenshot" },
         async ({ page, user, app, axe }) => {
+            await app.closeVerifyToast();
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -50,12 +51,17 @@ test.describe("Create Room", () => {
     );
 
     test("should allow us to start a chat and show encryption state", async ({ page, user, app }) => {
+        await app.closeVerifyToast();
+
         await page.getByRole("button", { name: "New conversation", exact: true }).click();
         await page.getByRole("menuitem", { name: "Start chat" }).click();
 
         await page.getByTestId("invite-dialog-input").fill(user.userId);
 
         await page.getByRole("button", { name: "Go" }).click();
+
+        await expect(page.getByRole("heading", { name: "Start a chat with this new contact?" })).toBeVisible();
+        await page.getByRole("button", { name: "Continue" }).click();
 
         await expect(page.getByText("Encryption enabled")).toBeVisible();
         await expect(page.getByText("Send your first message to")).toBeVisible();
@@ -66,6 +72,7 @@ test.describe("Create Room", () => {
 
     test("should create a video room", { tag: "@screenshot" }, async ({ page, user, app }) => {
         await app.settings.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
+        await app.closeVerifyToast();
 
         const dialog = await app.openCreateRoomDialog("New video room");
         // Fill name & topic
@@ -100,6 +107,7 @@ test.describe("Create Room", () => {
         });
 
         test("should disallow creating public rooms", { tag: "@screenshot" }, async ({ page, user, app, axe }) => {
+            await app.closeVerifyToast();
             const dialog = await app.openCreateRoomDialog();
             // Fill name & topic
             await dialog.getByRole("textbox", { name: "Name" }).fill(name);
@@ -125,7 +133,9 @@ test.describe("Create Room", () => {
     test.describe("when the encrypted state labs flag is turned off", () => {
         test.use({ labsFlags: [] });
 
-        test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user }) => {
+        test("creates a room without encrypted state", { tag: "@screenshot" }, async ({ page, user: _user, app }) => {
+            await app.closeVerifyToast();
+
             // When we start to create a room
             await page.getByRole("button", { name: "New conversation", exact: true }).click();
             await page.getByRole("menuitem", { name: "New room" }).click();
@@ -154,7 +164,9 @@ test.describe("Create Room", () => {
         test(
             "creates a room with encrypted state if we check the box",
             { tag: "@screenshot" },
-            async ({ page, user: _user }) => {
+            async ({ page, user: _user, app }) => {
+                await app.closeVerifyToast();
+
                 // Given we check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();
@@ -181,7 +193,9 @@ test.describe("Create Room", () => {
         test(
             "creates a room without encrypted state if we don't check the box",
             { tag: "@screenshot" },
-            async ({ page, user: _user }) => {
+            async ({ page, user: _user, app }) => {
+                await app.closeVerifyToast();
+
                 // Given we did not check the Encrypted State checkbox
                 await page.getByRole("button", { name: "New conversation", exact: true }).click();
                 await page.getByRole("menuitem", { name: "New room" }).click();

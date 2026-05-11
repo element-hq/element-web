@@ -813,12 +813,12 @@ exports[`<LoginWithQRFlow /> renders QR code 1`] = `
         class="mx_LoginWithQR_qrWrapper"
       >
         <div
-          class="mx_QRCode mx_QRCode"
+          class="mx_QRCode"
         >
           <img
             alt="QR Code"
             class="mx_VerificationQRCode"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAYAAABUmhYnAAAAAklEQVR4AewaftIAAAKxSURBVO3BQW7kQAwEwSxC//9yro88NSBI4/UQjIg/WGMUa5RijVKsUYo1SrFGKdYoxRqlWKMUa5RijVKsUYo1SrFGKdYoxRrl4qEk/CaVkyR0Kl0STlS6JPwmlSeKNUqxRinWKBcvU3lTEp5IwonKHSpvSsKbijVKsUYp1igXH5aEO1TuSMKJSpeELgmdyh1JuEPlk4o1SrFGKdYoF19OpUvCHSqTFGuUYo1SrFEuhlHpktCpdEnoVL5ZsUYp1ijFGuXiw1T+J5VPUvlLijVKsUYp1igXL0vCb0pCp9IloVN5Igl/WbFGKdYoxRrl4iGVvyQJnUqXhDtUvkmxRinWKMUa5eKhJNyh0iXhk5JwotIl4UTljiR0Kp9UrFGKNUqxRok/eFESOpUuCZ3KN0nCiUqXhDtUnijWKMUapVijxB88kIQ3qXRJeELlJAmdSpeEJ1S6JJyoPFGsUYo1SrFGuXiZSpeETqVLwonKSRKeUDlROUlCp3Ki8knFGqVYoxRrlPiDB5LwhMpJEjqVO5LQqXRJ6FROktCp3JGETuVNxRqlWKMUa5T4gy+WhE7lJAmdyh1JuEOlS8KJyhPFGqVYoxRrlIuHkvCbVO5Iwh1J+GbFGqVYoxRrlIuXqbwpCXckoVPpktAl4UTlJAmdyonKJxVrlGKNUqxRLj4sCXeovCkJJyonSehU/rJijVKsUYo1ysWXUzlJQqfyRBJOknCHypuKNUqxRinWKBdfLgmdSqdykoROpVPpknCHykkSOpUnijVKsUYp1igXH6byPyWhU+lUTpLQqZwk4SQJncqbijVKsUYp1igXL0vC/5SEO5LQqZwkoVPpVO5IQqfyRLFGKdYoxRol/mCNUaxRijVKsUYp1ijFGqVYoxRrlGKNUqxRijVKsUYp1ijFGqVYoxRrlH+MbAvtLaAtKAAAAABJRU5ErkJggg=="
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAAklEQVR4AewaftIAAAPWSURBVO3BQY5jBxYDweSD7n9lTu+8aQJu+Y+gsjMi/QVJv3VImg5J0yFpOiRNh6TpkDQdkqZD0nRImg5J0yFpOiRNh6TpkDQdkqZD0nRImg5J0yFpOiRNh6TpkDQdkqZD0nRImg5J0yFpevFhSfjJ2vKOJCxtWZLwjrYsSfjJ2vIph6TpkDQdkqZD0nRImg5J04sv0pZvkIRPSsI72vK0tnyDJHyDQ9J0SJoOSdMhaTokTYek6cUPkYSnteVJSXhHW5YkLElY2vKkJDytLd/ukDQdkqZD0nRImg5J0yFpeqHHtGVJwtPaov+vQ9J0SJoOSdMhaTokTYek6YU+oi1LEpa2LElY2qJ/7pA0HZKmQ9J0SJoOSdMhaXrxQ7Tl36ot364t/0WHpOmQNB2SpkPSdEiaXnyRJPxkSVjasiRhacsnJUF/OSRNh6TpkDQdkqZD0nRIml58WFv+i5KwtGVJwtPaor/nkDQdkqZD0nRImg5J0yFpevFhSXhaW5YkfLskvKMtSxLe0ZYnJWFpy7c7JE2HpOmQNB2SpkPSdEia0l/4EklY2rIkYWmL/r4k/Km2LEl4Wls+5ZA0HZKmQ9J0SJoOSdMhaUp/4YOS8C3a8jtJ+KS2vCMJS1uWJHxKW5YkvKMtn3JImg5J0yFpOiRNh6TpkDS9+CJtWZKwtGVJwp9qyzuS8ElteUdb/lQSlra8oy3f7pA0HZKmQ9J0SJoOSdMhaUp/4YOS8Elt+VNJWNrytCQsbVmSsLTlHUn4nbY8LQlLW77BIWk6JE2HpOmQNB2SpkPSlP6CHpGEpS3vSMLSlqcl4UltWZLwjrZ8yiFpOiRNh6TpkDQdkqZD0vTiw5Lwk7XlaUl4WhL0zx2SpkPSdEiaDknTIWk6JE0vvkhbvkESnpaEpS1LEpYkvKMtfyoJS1ve0ZZvd0iaDknTIWk6JE2HpOnFD5GEp7XlGyThHW15RxKWtugvh6TpkDQdkqZD0nRImg5J0ws9pi3vSMLSlk9Kwp9KwtPa8g0OSdMhaTokTYek6ZA0HZKmF3pMEpa2LG15RxKWtixtWZLwpLa8IwlLWz7lkDQdkqZD0nRImg5J0yFpevFDtOXfKglLW5a2vCMJS1v+VBLekYSlLd/gkDQdkqZD0nRImg5J0yFpevFFkvBvlYSnJWFpyzuS8DttWdrytCQsbfmUQ9J0SJoOSdMhaTokTYekKf0FSb91SJoOSdMhaTokTYek6ZA0HZKmQ9J0SJoOSdMhaTokTYek6ZA0HZKmQ9J0SJoOSdMhaTokTYek6ZA0HZKmQ9J0SJoOSdP/AHKVDJXnVp/qAAAAAElFTkSuQmCC"
           />
         </div>
       </div>
@@ -875,11 +875,11 @@ exports[`<LoginWithQRFlow /> renders check code confirmation 1`] = `
         2-digit code
       </label>
       <div
-        class="_container_43om7_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
+        class="_container_17qhw_10 mx_LoginWithQR_checkCode_input mx_no_textinput"
       >
         <input
           autocomplete="one-time-code"
-          class="_control_43om7_25"
+          class="_control_17qhw_25"
           id="mx_LoginWithQR_checkCode"
           inputmode="numeric"
           maxlength="2"
@@ -889,11 +889,11 @@ exports[`<LoginWithQRFlow /> renders check code confirmation 1`] = `
         />
         <div
           aria-hidden="true"
-          class="_digit_43om7_49"
+          class="_digit_17qhw_49"
         />
         <div
           aria-hidden="true"
-          class="_digit_43om7_49"
+          class="_digit_17qhw_49"
         />
       </div>
       <div
@@ -972,7 +972,7 @@ exports[`<LoginWithQRFlow /> renders spinner while loading 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1047,7 +1047,7 @@ exports[`<LoginWithQRFlow /> renders spinner while signing in 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1134,7 +1134,7 @@ exports[`<LoginWithQRFlow /> renders spinner while verifying 1`] = `
           >
             <svg
               aria-label="Loading…"
-              class="_icon_11k6c_18"
+              class="_icon_1855a_18"
               data-testid="spinner"
               fill="currentColor"
               height="1em"
@@ -1203,47 +1203,61 @@ exports[`<LoginWithQRFlow /> renders spinner whilst QR generating 1`] = `
     <div
       class="mx_LoginWithQR_main"
     >
-      <div
-        class="mx_LoginWithQR_spinner"
+      <h1
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
-        <div>
-          <div
-            class="mx_Spinner"
+        Scan the QR code with another device
+      </h1>
+      <div
+        class="mx_LoginWithQR_qrWrapper"
+      >
+        <div
+          class="mx_Spinner"
+        >
+          <svg
+            aria-label="Loading…"
+            class="_icon_1855a_18"
+            data-testid="spinner"
+            fill="currentColor"
+            height="1em"
+            role="progressbar"
+            style="width: 32px; height: 32px;"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              aria-label="Loading…"
-              class="_icon_11k6c_18"
-              data-testid="spinner"
-              fill="currentColor"
-              height="1em"
-              role="progressbar"
-              style="width: 32px; height: 32px;"
-              viewBox="0 0 24 24"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </div>
+            <path
+              clip-rule="evenodd"
+              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+              fill-rule="evenodd"
+            />
+          </svg>
         </div>
       </div>
+      <ol>
+        <li>
+          Open Element on your other device
+        </li>
+        <li>
+          <span>
+            Select "
+            <strong>
+              Sign in with QR code
+            </strong>
+            "
+          </span>
+        </li>
+        <li>
+          Scan the QR code shown here
+        </li>
+        <li>
+          Follow the remaining instructions
+        </li>
+      </ol>
     </div>
     <div
       class="mx_LoginWithQR_buttons"
-    >
-      <div
-        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
-        data-testid="cancel-button"
-        role="button"
-        tabindex="0"
-      >
-        Cancel
-      </div>
-    </div>
+    />
   </div>
 </div>
 `;

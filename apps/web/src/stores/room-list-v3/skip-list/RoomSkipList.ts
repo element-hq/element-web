@@ -77,6 +77,17 @@ export class RoomSkipList implements Iterable<Room> {
     }
 
     /**
+     * Change the filters used by the skip list.
+     * This will apply the new filters to all existing nodes.
+     */
+    public useNewFilters(filters: Filter[]): void {
+        this.filters = filters;
+        for (const node of this.roomNodeMap.values()) {
+            node.applyFilters(this.filters);
+        }
+    }
+
+    /**
      * Removes a given room from the skip list.
      */
     public removeRoom(room: Room): void {

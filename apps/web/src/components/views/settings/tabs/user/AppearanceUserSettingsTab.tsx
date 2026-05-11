@@ -68,8 +68,6 @@ export default class AppearanceUserSettingsTab extends React.Component<EmptyObje
                         evt.stopPropagation();
                     }}
                 >
-                    <SettingsFlag name="useCompactLayout" level={SettingLevel.DEVICE} />
-
                     <SettingsFlag
                         name="useBundledEmojiFont"
                         level={SettingLevel.DEVICE}

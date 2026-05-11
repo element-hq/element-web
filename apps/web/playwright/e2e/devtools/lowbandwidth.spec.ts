@@ -19,6 +19,7 @@ test.describe("Devtools", () => {
         const profileSettings = userSettings.locator(".mx_UserProfileSettings");
         await profileSettings.getByAltText("Upload").setInputFiles(getSampleFilePath("riot.png"));
         await app.closeDialog();
+        await app.closeVerifyToast();
 
         // Create an initial room.
         const createRoomDialog = await app.openCreateRoomDialog();

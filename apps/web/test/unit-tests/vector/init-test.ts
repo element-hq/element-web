@@ -1,6 +1,6 @@
 /**
  * @jest-environment jest-fixed-jsdom
- * @jest-environment-options {"url": "https://app.element.io/?loginToken=123&state=abc&code=xyz&no_universal_links&something_else=value"}
+ * @jest-environment-options {"url": "https://app.element.io/?loginToken=123&no_universal_links&something_else=value#/home?state=abc&code=xyz"}
  */
 
 /*
@@ -16,6 +16,7 @@ import { waitFor, screen } from "jest-matrix-react";
 import { loadApp, showError, showIncompatibleBrowser } from "../../../src/vector/init.tsx";
 import SdkConfig from "../../../src/SdkConfig.ts";
 import MatrixChat from "../../../src/components/structures/MatrixChat.tsx";
+import { parseAppUrl } from "../../../src/vector/url_utils.ts";
 
 function setUpMatrixChatDiv() {
     document.getElementById("matrixchat")?.remove();
@@ -57,17 +58,13 @@ describe("loadApp", () => {
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
     });
 
-    it("should pass onTokenLoginCompleted which strips searchParams to MatrixChat", async () => {
+    it("should pass onTokenLoginCompleted which strips searchParams & fragment to MatrixChat", async () => {
         const spy = jest.spyOn(window.history, "replaceState");
 
         await loadApp({});
         await waitFor(() => expect(window.matrixChat).toBeInstanceOf(MatrixChat));
-        window.matrixChat!.props.onTokenLoginCompleted();
+        window.matrixChat!.props.onTokenLoginCompleted(parseAppUrl(window.location).params, "/home");
 
-        expect(spy).toHaveBeenCalledWith(
-            null,
-            "",
-            expect.stringContaining("https://app.element.io/?something_else=value"),
-        );
+        expect(spy).toHaveBeenCalledWith(null, "", "https://app.element.io/?something_else=value#/home");
     });
 });

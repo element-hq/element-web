@@ -4,7 +4,7 @@ exports[`MessageTimestampView > renders the message timestamp in default state 1
 <div>
   <span
     aria-live="off"
-    class="content"
+    class="MessageTimestampView-module_content"
     tabindex="0"
   >
     04:58
@@ -16,7 +16,7 @@ exports[`MessageTimestampView > renders the message timestamp with href 1`] = `
 <div>
   <a
     aria-live="off"
-    class="content"
+    class="MessageTimestampView-module_content"
     href="~"
   >
     04:58

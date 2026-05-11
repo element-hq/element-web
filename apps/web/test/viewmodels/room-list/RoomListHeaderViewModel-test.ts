@@ -61,6 +61,7 @@ describe("RoomListHeaderViewModel", () => {
             if (settingName === "RoomList.preferredSorting") return SortingAlgorithm.Recency;
             if (settingName === "feature_video_rooms") return true;
             if (settingName === "feature_element_call_video_rooms") return true;
+            if (settingName === "RoomList.OrderedCustomSections") return [];
             return false;
         });
     });
@@ -159,6 +160,23 @@ describe("RoomListHeaderViewModel", () => {
             vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
             expect(vm.getSnapshot().isMessagePreviewEnabled).toBe(true);
         });
+
+        it.each([
+            [true, true, false],
+            [false, false, true],
+        ])(
+            "when feature_room_list_sections is %s: canCreateSection=%s, useComposeIcon=%s",
+            (featureEnabled, expectedCanCreateSection, expectedUseComposeIcon) => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+                    if (settingName === "feature_room_list_sections") return featureEnabled;
+                    return false;
+                });
+
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+                expect(vm.getSnapshot().canCreateSection).toBe(expectedCanCreateSection);
+                expect(vm.getSnapshot().useComposeIcon).toBe(expectedUseComposeIcon);
+            },
+        );
     });
 
     describe("event listeners", () => {
@@ -294,6 +312,98 @@ describe("RoomListHeaderViewModel", () => {
                 SortingAlgorithm.Alphabetic,
                 SortingAlgorithm.Unread,
             );
+        });
+
+        it("should call createSection on RoomListStoreV3 when createSection is called", () => {
+            const createSectionSpy = jest
+                .spyOn(RoomListStoreV3.instance, "createSection")
+                .mockResolvedValue("element.io.section.work");
+            vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+            vm.createSection();
+            expect(createSectionSpy).toHaveBeenCalled();
+        });
+
+        describe("collapseOrExpandSections", () => {
+            it("should dispatch RoomListCollapseAllSections when collapseSections is not 'expand'", () => {
+                const fireSpy = jest.spyOn(defaultDispatcher, "fire");
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                vm.collapseOrExpandSections();
+
+                expect(fireSpy).toHaveBeenCalledWith(Action.RoomListCollapseAllSections);
+            });
+
+            it("should dispatch RoomListExpandAllSections when collapseSections is 'expand'", () => {
+                const fireSpy = jest.spyOn(defaultDispatcher, "fire");
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                // Drive the VM into the "expand" state by simulating all sections collapsed
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    },
+                    true,
+                );
+                expect(vm.getSnapshot().collapseSections).toBe("expand");
+                vm.collapseOrExpandSections();
+
+                expect(fireSpy).toHaveBeenCalledWith(Action.RoomListExpandAllSections);
+            });
+        });
+
+        describe("RoomListSectionsCollapseStateChanged handling", () => {
+            it("should set collapseSections to 'expand' when collapseSections is collapse", () => {
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    },
+                    true,
+                );
+
+                expect(vm.getSnapshot().collapseSections).toBe("expand");
+            });
+
+            it("should set collapseSections to 'collapse' when collapseSections is expand", () => {
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "expand",
+                    },
+                    true,
+                );
+
+                expect(vm.getSnapshot().collapseSections).toBe("collapse");
+            });
+
+            it("should set collapseSections to undefined when collapseSections is undefined", () => {
+                vm = new RoomListHeaderViewModel({ matrixClient, spaceStore: SpaceStore.instance });
+
+                // First drive it into a non-undefined state
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: "collapse",
+                    },
+                    true,
+                );
+                expect(vm.getSnapshot().collapseSections).toBe("expand");
+
+                defaultDispatcher.dispatch(
+                    {
+                        action: Action.RoomListSectionsCollapseStateChanged,
+                        collapseSections: undefined,
+                    },
+                    true,
+                );
+
+                expect(vm.getSnapshot().collapseSections).toBeUndefined();
+            });
         });
 
         it("should toggle message preview from enabled to disabled", () => {

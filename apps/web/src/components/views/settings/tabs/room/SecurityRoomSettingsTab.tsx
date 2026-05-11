@@ -137,6 +137,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                 {
                                     a: (sub) => (
                                         <AccessibleButton
+                                            element="a"
                                             kind="link_inline"
                                             onClick={() => {
                                                 dialog.close();
@@ -334,6 +335,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             {_t("room_settings|security|encrypted_room_public_confirm_description_2", undefined, {
                                 a: (sub) => (
                                     <AccessibleButton
+                                        element="a"
                                         kind="link_inline"
                                         onClick={(): void => {
                                             dialog.close();

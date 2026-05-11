@@ -192,11 +192,11 @@ export const UnsupportedBrowserView: React.FC<{
             </Text>
 
             <Flex gap="var(--cpd-space-4x)" className="mx_ErrorView_flexContainer mx_ErrorView_buttons">
-                <Button Icon={PopOutIcon} kind="secondary" size="sm">
+                <Button Icon={PopOutIcon} kind="secondary" size="md">
                     {_t("incompatible_browser|learn_more")}
                 </Button>
                 {onAccept && (
-                    <Button kind="primary" size="sm" onClick={onAccept}>
+                    <Button kind="primary" size="md" onClick={onAccept}>
                         {_t("incompatible_browser|continue")}
                     </Button>
                 )}

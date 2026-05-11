@@ -1,0 +1,144 @@
+/*
+ * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-2x);
+    min-width: var(--cpd-space-0x);
+}
+
+.link {
+    display: block;
+    width: fit-content;
+    color: inherit;
+    text-decoration: none;
+}
+
+.thumbnailContainer {
+    position: relative;
+    overflow: hidden;
+    contain: paint;
+    border-radius: var(--MBody-border-radius);
+}
+
+.placeholder {
+    position: absolute;
+    inset: var(--cpd-space-0x);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cpd-color-bg-canvas-default);
+    z-index: 1;
+}
+
+.placeholderBlurhash {
+    background-color: transparent;
+}
+
+.blurhash {
+    width: 100%;
+    height: 100%;
+}
+
+.blurhash > canvas {
+    width: 100%;
+    height: 100%;
+    animation: blurhashPulse 1.75s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.mediaContent {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.image {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.banner {
+    position: absolute;
+    bottom: var(--cpd-space-2x);
+    left: var(--cpd-space-2x);
+    max-width: min(100%, 350px);
+    overflow: hidden;
+    padding: var(--cpd-space-1x);
+    border-radius: var(--MBody-border-radius);
+    background-color: rgb(0 0 0 / 0.6);
+    color: #fff;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: var(--cpd-font-body-sm-regular);
+    user-select: none;
+    pointer-events: none;
+}
+
+.gifLabel {
+    position: absolute;
+    display: block;
+    top: var(--cpd-space-0x);
+    left: 14px; /* Preserve the original GIF badge offset from _MImageBody.pcss. */
+    padding: 5px; /* Preserve the original GIF badge padding from _MImageBody.pcss. */
+    border-radius: 5px; /* Preserve the original GIF badge corner radius from _MImageBody.pcss. */
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 1);
+    pointer-events: none;
+}
+
+.hiddenButton {
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: var(--cpd-space-0x);
+    inset: var(--cpd-space-0x);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+}
+
+.hiddenButton:hover,
+.hiddenButton:focus-visible {
+    background-color: var(--cpd-color-bg-canvas-default);
+}
+
+.hiddenButtonContent {
+    display: flex;
+    color: var(--cpd-color-text-action-accent);
+}
+
+.hiddenButtonContent > svg {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.error {
+    display: block;
+    color: var(--cpd-color-text-critical-primary);
+}
+
+.errorIcon {
+    margin-right: var(--cpd-space-1x);
+    vertical-align: text-top;
+}
+
+@keyframes blurhashPulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.65;
+    }
+}

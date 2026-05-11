@@ -11,6 +11,7 @@ import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ReactionsRowButtonView } from "../ReactionsRowButton";
 import { useMockedViewModel } from "../../../../../core/viewmodel";
+import { withViewDocs } from "../../../../../../.storybook/withViewDocs";
 import { ReactionsRowView, type ReactionsRowViewActions, type ReactionsRowViewSnapshot } from "./ReactionsRowView";
 
 interface MockReactionButtonProps {
@@ -56,7 +57,7 @@ const DefaultReactionButtons = (): JSX.Element => (
 
 type WrapperProps = ReactionsRowViewSnapshot & Partial<ReactionsRowViewActions>;
 
-const ReactionsRowViewWrapper = ({
+const ReactionsRowViewWrapperImpl = ({
     onShowAllClick,
     onAddReactionClick,
     onAddReactionContextMenu,
@@ -77,8 +78,10 @@ const ReactionsRowViewWrapper = ({
     );
 };
 
+const ReactionsRowViewWrapper = withViewDocs(ReactionsRowViewWrapperImpl, ReactionsRowView);
+
 const meta = {
-    title: "MessageBody/ReactionsRow",
+    title: "Timeline/Timeline Reaction/ReactionsRow",
     component: ReactionsRowViewWrapper,
     tags: ["autodocs"],
     args: {

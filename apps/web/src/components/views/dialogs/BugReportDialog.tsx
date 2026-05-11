@@ -120,7 +120,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                 <>
                     <p>{errorText}</p>
                     {error.policyURL && (
-                        <Link size="medium" target="_blank" href={error.policyURL}>
+                        <Link size="md" target="_blank" href={error.policyURL}>
                             {_t("action|learn_more")}
                         </Link>
                     )}

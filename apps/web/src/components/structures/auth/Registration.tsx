@@ -550,7 +550,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 <Button
                     className="mx_Login_fullWidthButton"
                     kind="primary"
-                    size="sm"
+                    size="md"
                     onClick={async () => {
                         await startOidcLogin(
                             this.props.serverConfig.delegatedAuthentication!,

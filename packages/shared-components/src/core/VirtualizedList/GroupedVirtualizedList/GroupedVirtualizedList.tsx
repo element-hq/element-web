@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX, useCallback, useMemo } from "react";
-import { Virtuoso } from "react-virtuoso";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 
 import { useVirtualizedList, type VirtualizedListContext, type VirtualizedListProps } from "../virtualized-list";
 
@@ -33,6 +33,11 @@ export interface GroupedVirtualizedListProps<Header, Item, Context> extends Omit
     VirtualizedListProps<Item, Context>,
     "items" | "isItemFocusable" | "getItemKey"
 > {
+    /**
+     * Optional ref to the underlying Virtuoso handle, for imperative scrolling.
+     */
+    scrollHandleRef?: React.RefCallback<VirtuosoHandle>;
+
     /**
      * The groups to display in the virtualized list.
      * Each group has a header and an array of child items.
@@ -126,6 +131,7 @@ export function GroupedVirtualizedList<Header, Item, Context>(
         isGroupHeaderFocusable,
         getItemKey,
         getHeaderKey,
+        scrollHandleRef,
         ...restProps
     } = props;
 
@@ -171,6 +177,7 @@ export function GroupedVirtualizedList<Header, Item, Context>(
             isItemFocusable: wrappedIsEntryFocusable,
             getItemKey: wrappedGetEntryKey,
         },
+        scrollHandleRef,
     );
 
     // Convert (Item, e) → (NavigationEntry, e) for regular items

@@ -3,7 +3,7 @@
 exports[`MediaBody > renders the media body 1`] = `
 <div>
   <div
-    class="mx_MediaBody mediaBody"
+    class="mx_MediaBody MediaBody-module_mediaBody"
   >
     Media content goes here
   </div>

@@ -9,6 +9,15 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 
+/**
+ * CSS which will hide the mxid in the user list of the "unknown users" confirmation dialog. This is useful because the
+ * MXID is not stable and the screenshot tests will otherwise fail.
+ *
+ * Ideally RichItem would give us a way to do this that doesn't involve gnarly CSS.
+ */
+const UNKNOWN_IDENTITY_USERS_DIALOG_HIDE_MXID_CSS =
+    '[data-testid="userlist"] li > span:nth-last-child(1) { display: none }';
+
 test.describe("Invite dialog", function () {
     test.use({
         displayName: "Hanako",
@@ -62,6 +71,15 @@ test.describe("Invite dialog", function () {
         // Invite the bot
         await other.getByRole("button", { name: "Invite" }).click();
 
+        // Expect a confirmation dialog, screenshot, and dismiss
+        await expect(
+            page.locator(".mx_Dialog").getByRole("heading", { name: "Invite new contacts to this room?" }),
+        ).toBeVisible();
+        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("confirm-invite-new-contact.png", {
+            css: UNKNOWN_IDENTITY_USERS_DIALOG_HIDE_MXID_CSS,
+        });
+        await page.locator(".mx_Dialog").getByRole("button", { name: "Invite" }).click();
+
         // Assert that the invite dialog disappears
         await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
 
@@ -73,6 +91,7 @@ test.describe("Invite dialog", function () {
         "should support inviting a user to Direct Messages",
         { tag: "@screenshot" },
         async ({ page, app, user, bot }) => {
+            await app.closeVerifyToast();
             await page
                 .getByRole("navigation", { name: "Room list" })
                 .getByRole("button", { name: "New conversation" })
@@ -103,6 +122,15 @@ test.describe("Invite dialog", function () {
 
             // Open a direct message UI
             await other.getByRole("button", { name: "Go" }).click();
+
+            // Expect a confirmation dialog, screenshot, and dismiss
+            await expect(
+                page.locator(".mx_Dialog").getByRole("heading", { name: "Start a chat with this new contact?" }),
+            ).toBeVisible();
+            await expect(page.locator(".mx_Dialog")).toMatchScreenshot("confirm-chat-with-new-contact.png", {
+                css: UNKNOWN_IDENTITY_USERS_DIALOG_HIDE_MXID_CSS,
+            });
+            await page.locator(".mx_Dialog").getByRole("button", { name: "Continue" }).click();
 
             // Assert that the invite dialog disappears
             await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();

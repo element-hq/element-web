@@ -5,6 +5,7 @@
     "action": {
         "back": "Vissza",
         "click": "Kattintson",
+        "close": "Bezárás",
         "collapse": "Összecsukás",
         "delete": "Törlés",
         "dismiss": "Eltüntetés",
@@ -16,6 +17,7 @@
         "invite": "Meghívás",
         "new_conversation": "Új beszélgetés",
         "new_room": "Új szoba",
+        "new_section": "Új szakasz",
         "new_video_room": "Új videószoba",
         "open_menu": "Menü megnyitása",
         "pause": "Szünet",
@@ -34,6 +36,7 @@
     "common": {
         "attachment": "Melléklet",
         "encryption_enabled": "Titkosítás engedélyezve",
+        "loading": "Betöltés…",
         "options": "Beállítások",
         "preferences": "Beállítások",
         "state_encryption_enabled": "Kísérleti állapottitkosítás engedélyezve"
@@ -44,6 +47,15 @@
     "left_panel": {
         "open_dial_pad": "Számlap megnyitása",
         "separator_label": "Kattintson vagy húzza az egérrel a kibontáshoz"
+    },
+    "menus": {
+        "user_menu": {
+            "create_an_account": "Fiók létrehozása",
+            "got_an_account": "Van már fiókja?",
+            "manage_account": "Fiók kezelése",
+            "sign_in": "Bejelentkezés",
+            "title": "Felhasználói menü"
+        }
     },
     "notifications": {
         "all_messages": "Összes üzenet",
@@ -96,6 +108,8 @@
             "voice_call": "Szoba megnyitása hanghívással itt: %(roomName)s"
         },
         "appearance": "Megjelenítés",
+        "chat_moved": "Csevegés áthelyezve",
+        "collapse_all_sections": "Az összes szakasz összecsukása",
         "collapse_filters": "Szűrőlista összecsukása",
         "empty": {
             "no_chats": "Még nincsenek csevegések",
@@ -114,6 +128,7 @@
             "show_activity": "Összes tevékenység megtekintése",
             "show_chats": "Összes csevegés megjelenítése"
         },
+        "expand_all_sections": "Az összes szakasz kibontása",
         "expand_filters": "Szűrőlista kibontása",
         "filters": {
             "favourite": "Kedvencek",
@@ -131,7 +146,8 @@
             "leave_room": "Szoba elhagyása",
             "low_priority": "Alacsony prioritás",
             "mark_read": "Megjelölés olvasottként",
-            "mark_unread": "Megjelölés olvasatlanként"
+            "mark_unread": "Megjelölés olvasatlanként",
+            "move_to_section": "Áthelyezés ide:"
         },
         "notification_options": "Értesítési beállítások",
         "open_space_menu": "Tér menü megnyitása",
@@ -140,8 +156,13 @@
             "more_options": "További lehetőségek"
         },
         "room_options": "Szobabeállítások",
+        "section_created": "Szakasz létrehozva",
         "section_header": {
-            "toggle": "%(section)s szakasz be/ki"
+            "edit_section": "Szakasz szerkesztése",
+            "more_options": "További beállítások",
+            "remove_section": "Szakasz eltávolítása",
+            "toggle": "%(section)s szakasz be/ki",
+            "toggle_unread": "Olvasatlan szobákat tartalmazó %(section)s szakasz be/ki"
         },
         "show_message_previews": "Üzenetelőnézetek megjelenítése",
         "sort": "Rendezés",
@@ -216,14 +237,27 @@
         },
         "message_timestamp_received_at": "Érkezett: %(dateTime)s",
         "message_timestamp_sent_at": "Elküldve: %(dateTime)s",
+        "mjolnir": {
+            "message_hidden": "Mellőzte ezt a felhasználót, így az üzenete rejtve van. <a>Megjelenítés mindenképp.</a>"
+        },
+        "pending_moderation": "Moderálásra váró üzenet",
+        "pending_moderation_reason": "Moderálásra váró üzenet: %(reason)s",
         "url_preview": {
             "close": "Előnézet bezárása",
+            "open_link": "Hivatkozás megnyitása",
             "show_n_more": {
                 "one": "%(count)s további előnézet megjelenítése",
                 "other": "%(count)s további előnézet megjelenítése"
             },
             "view_image": "Kép megtekintése"
         }
+    },
+    "user_menu": {
+        "link_new_device": "Új eszköz összekapcsolása",
+        "open_feedback": "Visszajelzés",
+        "open_home": "Kezdőlap",
+        "open_security": "Biztonság és adatvédelem",
+        "open_settings": "Összes beállítás"
     },
     "widget": {
         "context_menu": {

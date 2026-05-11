@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 // eslint-disable-next-line no-restricted-imports
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
-import "@types/modernizr";
 
 import type { ModuleLoader } from "@element-hq/element-web-module-api";
 import type { logger } from "matrix-js-sdk/src/logger";
@@ -184,14 +183,6 @@ declare global {
     // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-881509595
     interface AudioParamDescriptor {
         readonly port: MessagePort;
-    }
-
-    /**
-     * In future, browsers will support focusVisible option.
-     * See https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#focusvisible
-     */
-    interface FocusOptions {
-        focusVisible: boolean;
     }
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278

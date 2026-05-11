@@ -13,6 +13,7 @@ import { useCreateAutoDisposedViewModel, DisambiguatedProfileView } from "@eleme
 
 import { DisambiguatedProfileViewModel } from "../../../viewmodels/room/timeline/event-tile/DisambiguatedProfileViewModel";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
+import { useUserStatus } from "../../../hooks/useUserStatus";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -27,6 +28,7 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         userId: sender,
         member: mxEvent.sender,
     });
+    const userStatus = useUserStatus(sender);
 
     const disambiguatedProfileVM = useCreateAutoDisposedViewModel(
         () =>
@@ -37,9 +39,13 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
                 colored: true,
                 emphasizeDisplayName: true,
                 withTooltip,
+                userStatus,
             }),
     );
 
+    useEffect(() => {
+        disambiguatedProfileVM.setUserStatus(userStatus);
+    }, [disambiguatedProfileVM, userStatus]);
     useEffect(() => {
         disambiguatedProfileVM.setMember(sender ?? "", member);
     }, [disambiguatedProfileVM, member, sender]);

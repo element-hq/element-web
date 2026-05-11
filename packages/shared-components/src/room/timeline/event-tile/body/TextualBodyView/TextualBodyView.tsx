@@ -63,6 +63,10 @@ export interface TextualBodyViewSnapshot {
      */
     editedMarkerText?: string;
     /**
+     * Accessible label announced for the edited marker action.
+     */
+    editedMarkerAriaLabel?: string;
+    /**
      * Tooltip description for the edited marker.
      */
     editedMarkerTooltip?: string;
@@ -92,7 +96,7 @@ export interface TextualBodyViewActions {
     /**
      * Activation handler used when `bodyWrapper` is `ACTION`.
      */
-    onBodyActionClick?: MouseEventHandler<HTMLElement>;
+    onBodyActionClick?: MouseEventHandler<HTMLButtonElement>;
     /**
      * Click handler for the edited marker.
      */
@@ -143,6 +147,13 @@ function attachBodyRef(body: ReactElement, bodyRef?: TextualBodyContentRef): Rea
     return cloneElement(body as ReactElement<{ ref?: TextualBodyContentRef }>, { ref: bodyRef });
 }
 
+/**
+ * Renders a textual message body for timeline events.
+ *
+ * The view supports text, notice, emote, and caption layouts, optional
+ * link or action wrappers, edited and moderation markers, and appended
+ * URL previews.
+ */
 export function TextualBodyView({
     vm,
     body,
@@ -158,6 +169,7 @@ export function TextualBodyView({
         bodyActionAriaLabel,
         showEditedMarker,
         editedMarkerText,
+        editedMarkerAriaLabel,
         editedMarkerTooltip,
         editedMarkerCaption,
         showPendingModerationMarker,
@@ -188,6 +200,8 @@ export function TextualBodyView({
                 type="button"
                 className={classNames(styles.annotation, styles.editedMarker)}
                 onClick={onEditedMarkerClick}
+                aria-label={editedMarkerAriaLabel}
+                data-textual-body-edited-marker=""
             >
                 <span>{editedMarkerText}</span>
             </button>
@@ -211,7 +225,7 @@ export function TextualBodyView({
 
     if (showPendingModerationMarker) {
         markers.push(
-            <span key="pending-moderation-marker" className={styles.annotation}>
+            <span key="pending-moderation-marker" className={styles.annotation} data-textual-body-pending-moderation="">
                 {pendingModerationText}
             </span>,
         );

@@ -121,7 +121,7 @@ export const DateSeparatorDatePickerView: React.FC<DateSeparatorDatePickerViewPr
                     className={styles.picker_button}
                     type="submit"
                     kind="primary"
-                    size="sm"
+                    size="md"
                     onKeyDown={onSubmitButtonKeyDown}
                 >
                     {_t("action|go")}

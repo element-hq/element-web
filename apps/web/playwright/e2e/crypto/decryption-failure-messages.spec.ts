@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { EmittedEvents, Preset } from "matrix-js-sdk/src/matrix";
+import type { Preset, RoomMemberEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
 import {
     createRoom,
@@ -122,7 +122,7 @@ test.describe("Cryptography", function () {
                 const roomId = await bob.evaluate(
                     async (client, { alice }) => {
                         const encryptionStatePromise = new Promise<void>((resolve) => {
-                            client.on("RoomState.events" as EmittedEvents, (event, _state, _lastStateEvent) => {
+                            client.on("RoomState.events" as RoomStateEvent.Events, (event, _state, _lastStateEvent) => {
                                 if (event.getType() === "m.room.encryption") {
                                     resolve();
                                 }
@@ -253,11 +253,14 @@ test.describe("Cryptography", function () {
 
                         // invite Alice
                         const inviteAlicePromise = new Promise<void>((resolve) => {
-                            client.on("RoomMember.membership" as EmittedEvents, (_event, member, _oldMembership?) => {
-                                if (member.userId === alice.userId && member.membership === "invite") {
-                                    resolve();
-                                }
-                            });
+                            client.on(
+                                "RoomMember.membership" as RoomMemberEvent.Membership,
+                                (_event, member, _oldMembership?) => {
+                                    if (member.userId === alice.userId && member.membership === "invite") {
+                                        resolve();
+                                    }
+                                },
+                            );
                         });
                         await client.invite(roomId, alice.userId);
                         // wait for the invite to come back so that we encrypt to Alice
@@ -271,11 +274,14 @@ test.describe("Cryptography", function () {
 
                         // kick Alice
                         const kickAlicePromise = new Promise<void>((resolve) => {
-                            client.on("RoomMember.membership" as EmittedEvents, (_event, member, _oldMembership?) => {
-                                if (member.userId === alice.userId && member.membership === "leave") {
-                                    resolve();
-                                }
-                            });
+                            client.on(
+                                "RoomMember.membership" as RoomMemberEvent.Membership,
+                                (_event, member, _oldMembership?) => {
+                                    if (member.userId === alice.userId && member.membership === "leave") {
+                                        resolve();
+                                    }
+                                },
+                            );
                         });
                         await client.kick(roomId, alice.userId);
                         await kickAlicePromise;

@@ -4,7 +4,7 @@ exports[`Seekbar > renders the clock 1`] = `
 <div>
   <input
     aria-label="Audio seek bar"
-    class="seekBar"
+    class="SeekBar-module_seekBar"
     max="100"
     min="0"
     step="1"

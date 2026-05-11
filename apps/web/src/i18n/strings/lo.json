@@ -10,8 +10,7 @@
             "other": "%(count)s ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ ລວມທັງການກ່າວເຖິງ."
         },
         "room_name": "ຫ້ອງ %(name)s",
-        "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
-        "user_menu": "ເມນູຜູ້ໃຊ້"
+        "unread_messages": "ຂໍ້ຄວາມທີ່ຍັງບໍ່ໄດ້ອ່ານ."
     },
     "a11y_jump_first_unread_room": "ໄປຫາຫ້ອງທໍາອິດທີ່ຍັງບໍ່ໄດ້ອ່ານ.",
     "action": {
@@ -257,7 +256,6 @@
         "sign_in_instead_prompt": "ມີບັນຊີແລ້ວບໍ? <a>ເຂົ້າສູ່ລະບົບທີ່ນີ້</a>",
         "sign_in_or_register": "ເຂົ້າສູ່ລະບົບ ຫຼື ສ້າງບັນຊີ",
         "sign_in_or_register_description": "ໃຊ້ບັນຊີຂອງທ່ານ ຫຼື ສ້າງອັນໃໝ່ເພື່ອສືບຕໍ່.",
-        "sign_in_prompt": "ມີບັນຊີບໍ? <a>ເຂົ້າສູ່ລະບົບ</a>",
         "sign_in_with_sso": "ເຂົ້າສູ່ລະບົບດ້ວຍການລົງຊື່ເຂົ້າໃຊ້ພຽງຄັ້ງດຽວ",
         "soft_logout": {
             "clear_data_button": "ລຶບລ້າງຂໍ້ມູນທັງໝົດ",
@@ -1281,7 +1279,6 @@
         "restricted": "ຖືກຈຳກັດ"
     },
     "powered_by_matrix": "ສະໜັບສະໜູນໂດຍ Matrix",
-    "powered_by_matrix_with_logo": "ການສົນທະນາແບບເຂົ້າລະຫັດ ແລະກະຈ່າຍການຄຸ້ມຄອງ &amp; ການຮ່ວມມື້ ແລະສະໜັບສະໜູນໂດຍ $matrixLogo",
     "presence": {
         "away": "ຫ່າງອອກໄປ",
         "busy": "ບໍ່ຫວ່າງ",
@@ -1574,8 +1571,6 @@
             "aliases_section": "ທີ່ຢູ່ຂອງຫ້ອງ",
             "avatar_field_label": "ຮູບ avatar ຫ້ອງ",
             "canonical_alias_field_label": "ທີ່ຢູ່ຫຼັກ",
-            "default_url_previews_off": "ການສະແດງຕົວຢ່າງ URL ຖືກປິດການນຳໃຊ້ໂດຍຄ່າເລີ່ມຕົ້ນສຳລັບຜູ້ເຂົ້າຮ່ວມໃນຫ້ອງນີ້.",
-            "default_url_previews_on": "ການສະແດງຕົວຢ່າງ URL ຖືກເປີດໃຊ້ໂດຍຄ່າເລີ່ມຕົ້ນສໍາລັບຜູ້ເຂົ້າຮ່ວມໃນຫ້ອງນີ້.",
             "description_space": "ແກ້ໄຂການຕັ້ງຄ່າທີ່ກ່ຽວຂ້ອງກັບພື້ນທີ່ຂອງທ່ານ.",
             "error_creating_alias_description": "ເກີດຄວາມຜິດພາດໃນການສ້າງທີ່ຢູ່ນັ້ນ. ມັນອາດຈະບໍ່ໄດ້ຮັບການອະນຸຍາດຈາກເຊີບເວີ ຫຼືບໍ່ສຳເລັດ ຊົ່ວຄາວເກີດຂຶ້ນ.",
             "error_creating_alias_title": "ເກີດຄວາມຜິດພາດໃນການສ້າງທີ່ຢູ່",
@@ -1602,12 +1597,7 @@
             "published_aliases_explainer_space": "ທີ່ຢູ່ທີ່ເຜີຍແຜ່ສາມາດຖືກນໍາໃຊ້ໂດຍຜູ້ໃດຜູ້ຫນຶ່ງໃນເຊີບເວີຂອງການເຂົ້າຮ່ວມຊ່ອງຂອງທ່ານ.",
             "published_aliases_section": "ທີ່ຢູ່ເຜີຍແຜ່",
             "save": "ບັນທຶກການປ່ຽນແປງ",
-            "topic_field_label": "ຫົວຂໍ້ຫ້ອງ",
-            "url_preview_encryption_warning": "ໃນຫ້ອງທີ່ເຂົ້າລະຫັດ, ເຊັ່ນດຽວກັບ, ການສະແດງຕົວຢ່າງ URLໄດ້ປິດໃຊ້ງານໂດຍຄ່າເລີ່ມຕົ້ນເພື່ອຮັບປະກັນວ່າ homeserver ຂອງທ່ານ (ບ່ອນສະແດງຕົວຢ່າງ) ບໍ່ສາມາດລວບລວມຂໍ້ມູນກ່ຽວກັບການເຊື່ອມຕໍ່ທີ່ທ່ານເຫັນຢູ່ໃນຫ້ອງນີ້.",
-            "url_preview_explainer": "ເມື່ອຜູ້ໃດຜູ້ນຶ່ງໃສ່ URL ໃນຂໍ້ຄວາມຂອງພວກເຂົາ, ການສະແດງຕົວຢ່າງ URL ສາມາດສະແດງເພື່ອໃຫ້ຂໍ້ມູນເພີ່ມເຕີມກ່ຽວກັບການເຊື່ອມຕໍ່ນັ້ນເຊັ່ນຫົວຂໍ້, ຄໍາອະທິບາຍແລະຮູບພາບຈາກເວັບໄຊທ໌.",
-            "url_previews_section": "ຕົວຢ່າງ URL",
-            "user_url_previews_default_off": "ທ່ານໄດ້ <a>ປິດໃຊ້ງານ</a> ຕົວຢ່າງ URL ຕາມຄ່າເລີ່ມຕົ້ນ.",
-            "user_url_previews_default_on": "ທ່ານໄດ້ <a>ເປີດໃຊ້ງານ</a> ຕົວຢ່າງ URL ຕາມຄ່າເລີ່ມຕົ້ນ."
+            "topic_field_label": "ຫົວຂໍ້ຫ້ອງ"
         },
         "notifications": {
             "browse_button": "ຄົ້ນຫາ",
@@ -1869,8 +1859,6 @@
             "remove_msisdn_prompt": "ລຶບ %(phone)sອອກບໍ?"
         },
         "inline_url_previews_default": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໃນແຖວຕາມຄ່າເລີ່ມຕົ້ນ",
-        "inline_url_previews_room": "ເປີດໃຊ້ການສະແດງຕົວຢ່າງ URL ໂດຍຄ່າເລີ່ມຕົ້ນສໍາລັບຜູ້ເຂົ້າຮ່ວມໃນຫ້ອງນີ້",
-        "inline_url_previews_room_account": "ເປີດໃຊ້ຕົວຢ່າງ URL ສໍາລັບຫ້ອງນີ້ (ມີຜົນຕໍ່ທ່ານເທົ່ານັ້ນ)",
         "insert_trailing_colon_mentions": "ຈໍ້າສອງເມັດພາຍຫຼັງຈາກຜູ້ໃຊ້ກ່າວເຖິງໃນຕອນເລີ່ມຕົ້ນຂອງຂໍ້ຄວາມ",
         "jump_to_bottom_on_send": "ໄປຫາລຸ່ມສຸດຂອງທາມລາຍເມື່ອທ່ານສົ່ງຂໍ້ຄວາມ",
         "key_backup": {
@@ -2467,7 +2455,6 @@
             "created_rule_rooms": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຫ້ອງທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
             "created_rule_servers": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມເຊີບເວີທີ່ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ%(reason)s",
             "created_rule_users": "%(senderName)s ສ້າງກົດລະບຽບຫ້າມຜູ້ໃຊ້ຈັບຄູ່ກັນ %(glob)s ສໍາລັບ %(reason)s",
-            "message_hidden": "ທ່ານໄດ້ບໍ່ສົນໃຈຜູ້ໃຊ້ນີ້, ດັ່ງນັ້ນຂໍ້ຄວາມຂອງພວກເຂົາຖືກເຊື່ອງໄວ້. <a>ສະແດງຕໍ່ໄປ.</a>",
             "removed_rule": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມທີ່ຄູ່ກັນ%(glob)s",
             "removed_rule_rooms": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມຫ້ອງທີ່ກົງກັບ %(glob)s",
             "removed_rule_servers": "%(senderName)s ໄດ້ລຶບກົດລະບຽບການຫ້າມເຊີບເວີຄູ່ກັນ%(glob)s",
@@ -2737,11 +2724,6 @@
         "verify_button": "ຢືນຢັນຜູ້ໃຊ້",
         "verify_explainer": "ເພື່ອຄວາມປອດໄພເພີ່ມເຕີມ, ກະລຸນາຢັ້ງຢືນຜູ້ໃຊ້ນີ້ໂດຍການກວດສອບລະຫັດຄັ້ງດຽວໃນອຸປະກອນຂອງທ່ານທັງສອງ."
     },
-    "user_menu": {
-        "settings": "ການຕັ້ງຄ່າທັງໝົດ",
-        "switch_theme_dark": "ສະຫຼັບໄປໂໝດມືດ",
-        "switch_theme_light": "ສະຫຼັບໄປໂໝດແສງ"
-    },
     "voip": {
         "already_in_call": "ຢູ່ໃນສາຍໂທແລ້ວ",
         "already_in_call_person": "ທ່ານຢູ່ໃນການໂທກັບບຸກຄົນນີ້ແລ້ວ.",
@@ -2821,7 +2803,6 @@
         "voice_call": "ໂທດ້ວຍສຽງ",
         "you_are_presenting": "ທ່ານກໍາລັງນໍາສະເຫນີ"
     },
-    "welcome_to_element": "ຍິນດີຕ້ອນຮັບ",
     "widget": {
         "added_by": "ເພີ່ມWidgetໂດຍ",
         "capabilities_dialog": {

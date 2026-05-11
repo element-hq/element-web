@@ -212,7 +212,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             >
               <input
                 aria-describedby="radix-_r_2e_"
-                class="_control_sqdq4_10"
+                class="_control_d83jn_10"
                 id="radix-_r_2d_"
                 name="input"
                 title=""
@@ -270,7 +270,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
       </div>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
@@ -491,7 +491,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             >
               <input
                 aria-describedby="radix-_r_16_"
-                class="_control_sqdq4_10"
+                class="_control_d83jn_10"
                 id="radix-_r_15_"
                 name="input"
                 title=""
@@ -549,7 +549,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
       </div>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
@@ -719,7 +719,7 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
       </form>
     </div>
     <div
-      class="_separator_cqpyv_8"
+      class="_separator_13qwf_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"

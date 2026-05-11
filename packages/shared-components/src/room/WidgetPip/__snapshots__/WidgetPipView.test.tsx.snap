@@ -3,11 +3,11 @@
 exports[`WidgetPipView > detects back click action 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
         aria-labelledby="_r_6_"
@@ -41,7 +41,7 @@ exports[`WidgetPipView > detects back click action 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"
@@ -54,11 +54,11 @@ exports[`WidgetPipView > detects back click action 1`] = `
 exports[`WidgetPipView > detects double click triggers back 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
         aria-labelledby="_r_c_"
@@ -92,7 +92,7 @@ exports[`WidgetPipView > detects double click triggers back 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"
@@ -105,11 +105,11 @@ exports[`WidgetPipView > detects double click triggers back 1`] = `
 exports[`WidgetPipView > detects on mouse down for drag 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
         aria-labelledby="_r_i_"
@@ -143,7 +143,7 @@ exports[`WidgetPipView > detects on mouse down for drag 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"
@@ -156,11 +156,11 @@ exports[`WidgetPipView > detects on mouse down for drag 1`] = `
 exports[`WidgetPipView > renders with gray widget 1`] = `
 <div>
   <div
-    class="container"
+    class="WidgetPipView-module_container"
     data-testid="widget-pip-container"
   >
     <div
-      class="header"
+      class="WidgetPipView-module_header"
     >
       <button
         aria-labelledby="_r_0_"
@@ -194,7 +194,7 @@ exports[`WidgetPipView > renders with gray widget 1`] = `
       Room Name
     </div>
     <div
-      class="roundedCornerContainer"
+      class="WidgetPipView-module_roundedCornerContainer"
     >
       <div
         style="background-color: grey; flex-grow: 1;"

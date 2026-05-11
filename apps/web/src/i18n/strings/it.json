@@ -15,8 +15,7 @@
         "room_name": "Stanza %(name)s",
         "room_status_bar": "Barra di stato della stanza",
         "seek_bar_label": "Barra di ricerca audio",
-        "unread_messages": "Messaggi non letti.",
-        "user_menu": "Menu utente"
+        "unread_messages": "Messaggi non letti."
     },
     "a11y_jump_first_unread_room": "Salta alla prima stanza non letta.",
     "action": {
@@ -306,7 +305,6 @@
         "sign_in_instead_prompt": "Oppure accedi",
         "sign_in_or_register": "Accedi o crea account",
         "sign_in_or_register_description": "Usa il tuo account o creane uno nuovo per continuare.",
-        "sign_in_prompt": "Hai un account? <a>Accedi</a>",
         "sign_in_with_sso": "Accedi con single sign-on",
         "signing_in": "Accesso…",
         "soft_logout": {
@@ -1538,7 +1536,6 @@
         "restricted": "Limitato"
     },
     "powered_by_matrix": "Offerto da Matrix",
-    "powered_by_matrix_with_logo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo",
     "presence": {
         "away": "Assente",
         "busy": "Occupato",
@@ -1908,8 +1905,6 @@
             "aliases_section": "Indirizzi stanza",
             "avatar_field_label": "Avatar della stanza",
             "canonical_alias_field_label": "Indirizzo principale",
-            "default_url_previews_off": "Le anteprime degli URL sono inattive in modo predefinito per i partecipanti di questa stanza.",
-            "default_url_previews_on": "Le anteprime degli URL sono attive in modo predefinito per i partecipanti di questa stanza.",
             "description_space": "Modifica le impostazioni relative al tuo spazio.",
             "error_creating_alias_description": "Si è verificato un errore creando l'indirizzo. Potrebbe non essere permesso dal server o un problema temporaneo.",
             "error_creating_alias_title": "Errore creazione indirizzo",
@@ -1936,12 +1931,7 @@
             "published_aliases_explainer_space": "Gli indirizzi pubblicati possono essere usati da chiunque su tutti i server per entrare nel tuo spazio.",
             "published_aliases_section": "Indirizzi pubblicati",
             "save": "Salva modifiche",
-            "topic_field_label": "Argomento stanza",
-            "url_preview_encryption_warning": "Nelle stanze criptate, come questa, le anteprime degli URL sono disattivate in modo predefinito per garantire che il tuo homeserver (dove vengono generate le anteprime) non possa raccogliere informazioni sui collegamenti che vedi in questa stanza.",
-            "url_preview_explainer": "Quando qualcuno inserisce un URL nel proprio messaggio, è possibile mostrare un'anteprima dell'URL per fornire maggiori informazioni su quel collegamento, come il titolo, la descrizione e un'immagine dal sito web.",
-            "url_previews_section": "Anteprime URL",
-            "user_url_previews_default_off": "Hai <a>disattivato</a> le anteprime degli URL in modo predefinito.",
-            "user_url_previews_default_on": "Hai <a>attivato</a> le anteprime degli URL in modo predefinito."
+            "topic_field_label": "Argomento stanza"
         },
         "notifications": {
             "browse_button": "Sfoglia",
@@ -2247,8 +2237,6 @@
             "spell_check_locale_placeholder": "Scegli una lingua"
         },
         "inline_url_previews_default": "Attiva le anteprime URL in modo predefinito",
-        "inline_url_previews_room": "Attiva le anteprime URL in modo predefinito per i partecipanti in questa stanza",
-        "inline_url_previews_room_account": "Attiva le anteprime URL in questa stanza (riguarda solo te)",
         "insert_trailing_colon_mentions": "Inserisci dei due punti dopo le citazioni degli utenti all'inizio di un messaggio",
         "jump_to_bottom_on_send": "Salta in fondo alla linea temporale quando invii un messaggio",
         "key_backup": {
@@ -3039,7 +3027,6 @@
             "created_rule_rooms": "%(senderName)s ha creato una regola che bandisce stanze corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_servers": "%(senderName)s ha creato una regola che bandisce server corrispondenti a %(glob)s perchè %(reason)s",
             "created_rule_users": "%(senderName)s ha creato una regola che bandisce utenti corrispondenti a %(glob)s perchè %(reason)s",
-            "message_hidden": "Hai ignorato questo utente, perciò il suo messaggio è nascosto. <a>Mostra comunque.</a>",
             "removed_rule": "%(senderName)s ha rimosso una regola di ban corrispondente a %(glob)s",
             "removed_rule_rooms": "%(senderName)s ha rimosso la regola che bandisce stanze corrispondenti a %(glob)s",
             "removed_rule_servers": "%(senderName)s ha rimosso la regola che bandisce server corrispondenti a %(glob)s",
@@ -3327,11 +3314,6 @@
         "verify_button": "Verifica utente",
         "verify_explainer": "Per maggiore sicurezza, verifica questo utente controllando un codice univoco sui vostri dispositivi."
     },
-    "user_menu": {
-        "settings": "Tutte le impostazioni",
-        "switch_theme_dark": "Passa alla modalità scura",
-        "switch_theme_light": "Passa alla modalità chiara"
-    },
     "voip": {
         "already_in_call": "Già in una chiamata",
         "already_in_call_person": "Sei già in una chiamata con questa persona.",
@@ -3422,13 +3404,11 @@
         "user_busy_description": "L'utente che hai chiamato è occupato.",
         "user_is_presenting": "%(sharerName)s sta presentando",
         "video_call": "Videochiamata",
-        "video_call_started": "Videochiamata iniziata",
         "video_call_using": "Videochiamata usando:",
         "voice_call": "Telefonata",
         "you_are_presenting": "Stai presentando"
     },
     "web_default_device_name": "%(appName)s: %(browserName)s su %(osName)s",
-    "welcome_to_element": "Benvenuti su Element",
     "widget": {
         "added_by": "Widget aggiunto da",
         "capabilities_dialog": {
