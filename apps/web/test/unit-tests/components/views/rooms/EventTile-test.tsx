@@ -197,6 +197,66 @@ describe("EventTile", () => {
         });
     });
 
+    describe("rendering root attributes", () => {
+        type RootAttribute =
+            | "data-scroll-tokens"
+            | "data-layout"
+            | "data-shape"
+            | "data-self"
+            | "data-event-id"
+            | "data-has-reply";
+
+        it.each([
+            [
+                TimelineRenderingType.Room,
+                ["data-scroll-tokens", "data-layout", "data-self", "data-event-id", "data-has-reply"],
+                ["data-shape"],
+            ],
+            [
+                TimelineRenderingType.Thread,
+                ["data-scroll-tokens", "data-layout", "data-self", "data-event-id", "data-has-reply"],
+                ["data-shape"],
+            ],
+            [
+                TimelineRenderingType.ThreadsList,
+                ["data-scroll-tokens", "data-layout", "data-shape", "data-self", "data-has-reply"],
+                ["data-event-id"],
+            ],
+            [
+                TimelineRenderingType.Notification,
+                ["data-layout"],
+                ["data-scroll-tokens", "data-shape", "data-self", "data-event-id", "data-has-reply"],
+            ],
+            [
+                TimelineRenderingType.File,
+                ["data-scroll-tokens"],
+                ["data-layout", "data-shape", "data-self", "data-event-id", "data-has-reply"],
+            ],
+        ] as const)(
+            "sets root attributes for %s rendering",
+            (renderingType, expectedPresentAttributes, expectedAbsentAttributes) => {
+                const { container } = getComponent({}, renderingType);
+                const tile = getTile(container);
+                const expectedValues: Record<RootAttribute, string> = {
+                    "data-scroll-tokens": mxEvent.getId()!,
+                    "data-layout": Layout.Group,
+                    "data-shape": renderingType,
+                    "data-self": "false",
+                    "data-event-id": mxEvent.getId()!,
+                    "data-has-reply": "false",
+                };
+
+                for (const attribute of expectedPresentAttributes) {
+                    expect(tile).toHaveAttribute(attribute, expectedValues[attribute]);
+                }
+
+                for (const attribute of expectedAbsentAttributes) {
+                    expect(tile).not.toHaveAttribute(attribute);
+                }
+            },
+        );
+    });
+
     describe("timestamps", () => {
         beforeEach(() => {
             mxEvent = makeTimestampedMessage();
