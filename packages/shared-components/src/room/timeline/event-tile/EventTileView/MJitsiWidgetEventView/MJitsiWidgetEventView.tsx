@@ -23,7 +23,7 @@ export interface MJitsiWidgetEventViewSnapshot {
     /**
      * Optional join prompt shown below the title.
      */
-    subtitle?: string | null;
+    subtitle: string | null;
     /**
      * Optional timestamp element rendered in the EventTileBubble footer slot.
      */
