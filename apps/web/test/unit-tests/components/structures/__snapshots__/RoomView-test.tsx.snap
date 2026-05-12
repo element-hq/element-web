@@ -609,13 +609,13 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 </svg>
               </div>
               <button
+                aria-label="Attachment"
                 aria-labelledby="_r_1bs_"
                 class="_icon-button_1215g_8"
                 data-kind="primary"
                 role="button"
                 style="--cpd-icon-button-size: 32px;"
                 tabindex="0"
-                title="Attachment"
               >
                 <div
                   class="_indicator-icon_147l5_17"
@@ -990,13 +990,13 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 </svg>
               </div>
               <button
+                aria-label="Attachment"
                 aria-labelledby="_r_1dc_"
                 class="_icon-button_1215g_8"
                 data-kind="primary"
                 role="button"
                 style="--cpd-icon-button-size: 32px;"
                 tabindex="0"
-                title="Attachment"
               >
                 <div
                   class="_indicator-icon_147l5_17"
@@ -1616,13 +1616,13 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
                   </svg>
                 </div>
                 <button
+                  aria-label="Attachment"
                   aria-labelledby="_r_27_"
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 32px;"
                   tabindex="0"
-                  title="Attachment"
                 >
                   <div
                     class="_indicator-icon_147l5_17"
@@ -2100,13 +2100,13 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
                   </svg>
                 </div>
                 <button
+                  aria-label="Attachment"
                   aria-labelledby="_r_7n_"
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 32px;"
                   tabindex="0"
-                  title="Attachment"
                 >
                   <div
                     class="_indicator-icon_147l5_17"
@@ -2584,13 +2584,13 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
                   </svg>
                 </div>
                 <button
+                  aria-label="Attachment"
                   aria-labelledby="_r_4n_"
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 32px;"
                   tabindex="0"
-                  title="Attachment"
                 >
                   <div
                     class="_indicator-icon_147l5_17"
@@ -3316,13 +3316,13 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                   </svg>
                 </div>
                 <button
+                  aria-label="Attachment"
                   aria-labelledby="_r_i2_"
                   class="_icon-button_1215g_8"
                   data-kind="primary"
                   role="button"
                   style="--cpd-icon-button-size: 32px;"
                   tabindex="0"
-                  title="Attachment"
                 >
                   <div
                     class="_indicator-icon_147l5_17"
@@ -3881,13 +3881,13 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                       </svg>
                     </div>
                     <button
+                      aria-label="Attachment"
                       aria-labelledby="_r_ne_"
                       class="_icon-button_1215g_8"
                       data-kind="primary"
                       role="button"
                       style="--cpd-icon-button-size: 32px;"
                       tabindex="0"
-                      title="Attachment"
                     >
                       <div
                         class="_indicator-icon_147l5_17"
