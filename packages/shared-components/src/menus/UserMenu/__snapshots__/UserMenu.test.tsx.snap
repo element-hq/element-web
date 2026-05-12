@@ -2,141 +2,16 @@
 
 exports[`UserMenu > renders a button 1`] = `
 <div>
-  <button
-    aria-expanded="false"
-    aria-haspopup="menu"
-    aria-label="User menu"
-    class="UserMenu-module_triggerButton"
-    data-state="closed"
-    id="radix-_r_0_"
-    type="button"
+  <div
+    class="UserMenu-module_wrapper"
   >
-    <span
-      aria-label="@person-name:homeserver.com"
-      class="_avatar_va14e_8"
-      data-color="1"
-      data-type="round"
-      role="img"
-      style="--cpd-avatar-size: 36px;"
-    >
-      <img
-        alt=""
-        class="_image_va14e_43"
-        data-type="round"
-        height="36px"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-        src="/static/element.png"
-        width="36px"
-      />
-    </span>
-    <span
-      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
-    >
-      Sally Sanderson
-    </span>
-  </button>
-</div>
-`;
-
-exports[`UserMenu > renders a button with a longer name 1`] = `
-<div>
-  <button
-    aria-expanded="false"
-    aria-haspopup="menu"
-    aria-label="User menu"
-    class="UserMenu-module_triggerButton"
-    data-state="closed"
-    id="radix-_r_2_"
-    type="button"
-  >
-    <span
-      aria-label="@person-name:homeserver.com"
-      class="_avatar_va14e_8"
-      data-color="1"
-      data-type="round"
-      role="img"
-      style="--cpd-avatar-size: 36px;"
-    >
-      <img
-        alt=""
-        class="_image_va14e_43"
-        data-type="round"
-        height="36px"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-        src="/static/element.png"
-        width="36px"
-      />
-    </span>
-    <span
-      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
-    >
-      Sally Sanderson with a longer name
-    </span>
-  </button>
-</div>
-`;
-
-exports[`UserMenu > renders a guest menu 1`] = `
-<body>
-  
-  
-
-
-  <div>
     <button
       aria-expanded="false"
       aria-haspopup="menu"
       aria-label="User menu"
       class="UserMenu-module_triggerButton"
       data-state="closed"
-      id="radix-_r_8_"
-      type="button"
-    >
-      <span
-        aria-label="@guest:attendees.example.org"
-        class="_avatar_va14e_8"
-        data-color="4"
-        data-type="round"
-        role="img"
-        style="--cpd-avatar-size: 36px;"
-      >
-        <img
-          alt=""
-          class="_image_va14e_43"
-          data-type="round"
-          height="36px"
-          loading="lazy"
-          referrerpolicy="no-referrer"
-          src="/static/element.png"
-          width="36px"
-        />
-      </span>
-      <span
-        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
-      >
-        Guest
-      </span>
-    </button>
-  </div>
-</body>
-`;
-
-exports[`UserMenu > renders a menu 1`] = `
-<body>
-  
-  
-
-
-  <div>
-    <button
-      aria-expanded="false"
-      aria-haspopup="menu"
-      aria-label="User menu"
-      class="UserMenu-module_triggerButton"
-      data-state="closed"
-      id="radix-_r_6_"
+      id="radix-_r_0_"
       type="button"
     >
       <span
@@ -158,12 +33,153 @@ exports[`UserMenu > renders a menu 1`] = `
           width="36px"
         />
       </span>
+    </button>
+    <span
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+    >
+      Sally Sanderson
+    </span>
+  </div>
+</div>
+`;
+
+exports[`UserMenu > renders a button with a longer name 1`] = `
+<div>
+  <div
+    class="UserMenu-module_wrapper"
+  >
+    <button
+      aria-expanded="false"
+      aria-haspopup="menu"
+      aria-label="User menu"
+      class="UserMenu-module_triggerButton"
+      data-state="closed"
+      id="radix-_r_2_"
+      type="button"
+    >
+      <span
+        aria-label="@person-name:homeserver.com"
+        class="_avatar_va14e_8"
+        data-color="1"
+        data-type="round"
+        role="img"
+        style="--cpd-avatar-size: 36px;"
+      >
+        <img
+          alt=""
+          class="_image_va14e_43"
+          data-type="round"
+          height="36px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="/static/element.png"
+          width="36px"
+        />
+      </span>
+    </button>
+    <span
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+    >
+      Sally Sanderson with a longer name
+    </span>
+  </div>
+</div>
+`;
+
+exports[`UserMenu > renders a guest menu 1`] = `
+<body>
+  
+  
+
+
+  <div>
+    <div
+      class="UserMenu-module_wrapper"
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="User menu"
+        class="UserMenu-module_triggerButton"
+        data-state="closed"
+        id="radix-_r_8_"
+        type="button"
+      >
+        <span
+          aria-label="@guest:attendees.example.org"
+          class="_avatar_va14e_8"
+          data-color="4"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 36px;"
+        >
+          <img
+            alt=""
+            class="_image_va14e_43"
+            data-type="round"
+            height="36px"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            src="/static/element.png"
+            width="36px"
+          />
+        </span>
+      </button>
+      <span
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        Guest
+      </span>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`UserMenu > renders a menu 1`] = `
+<body>
+  
+  
+
+
+  <div>
+    <div
+      class="UserMenu-module_wrapper"
+    >
+      <button
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="User menu"
+        class="UserMenu-module_triggerButton"
+        data-state="closed"
+        id="radix-_r_6_"
+        type="button"
+      >
+        <span
+          aria-label="@person-name:homeserver.com"
+          class="_avatar_va14e_8"
+          data-color="1"
+          data-type="round"
+          role="img"
+          style="--cpd-avatar-size: 36px;"
+        >
+          <img
+            alt=""
+            class="_image_va14e_43"
+            data-type="round"
+            height="36px"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            src="/static/element.png"
+            width="36px"
+          />
+        </span>
+      </button>
       <span
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
         Sally Sanderson
       </span>
-    </button>
+    </div>
   </div>
 </body>
 `;
@@ -188,41 +204,45 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
     aria-hidden="true"
     data-aria-hidden="true"
   >
-    <button
-      aria-controls="radix-_r_i_"
-      aria-expanded="true"
-      aria-haspopup="menu"
-      aria-label="User menu"
-      class="UserMenu-module_triggerButton"
-      data-state="open"
-      id="radix-_r_h_"
-      type="button"
+    <div
+      class="UserMenu-module_wrapper"
     >
-      <span
-        aria-label="@person-name:homeserver.com"
-        class="_avatar_va14e_8"
-        data-color="1"
-        data-type="round"
-        role="img"
-        style="--cpd-avatar-size: 36px;"
+      <button
+        aria-controls="radix-_r_i_"
+        aria-expanded="true"
+        aria-haspopup="menu"
+        aria-label="User menu"
+        class="UserMenu-module_triggerButton"
+        data-state="open"
+        id="radix-_r_h_"
+        type="button"
       >
-        <img
-          alt=""
-          class="_image_va14e_43"
+        <span
+          aria-label="@person-name:homeserver.com"
+          class="_avatar_va14e_8"
+          data-color="1"
           data-type="round"
-          height="36px"
-          loading="lazy"
-          referrerpolicy="no-referrer"
-          src="/static/element.png"
-          width="36px"
-        />
-      </span>
+          role="img"
+          style="--cpd-avatar-size: 36px;"
+        >
+          <img
+            alt=""
+            class="_image_va14e_43"
+            data-type="round"
+            height="36px"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            src="/static/element.png"
+            width="36px"
+          />
+        </span>
+      </button>
       <span
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
         Sally Sanderson
       </span>
-    </button>
+    </div>
   </div>
   <div
     data-radix-popper-content-wrapper=""
@@ -237,7 +257,7 @@ exports[`UserMenu > renders a menu without an avatar 1`] = `
       data-align="start"
       data-orientation="vertical"
       data-radix-menu-content=""
-      data-side="bottom"
+      data-side="right"
       data-state="open"
       dir="ltr"
       id="radix-_r_i_"
@@ -493,41 +513,45 @@ exports[`UserMenu > renders an open menu 1`] = `
     aria-hidden="true"
     data-aria-hidden="true"
   >
-    <button
-      aria-controls="radix-_r_b_"
-      aria-expanded="true"
-      aria-haspopup="menu"
-      aria-label="User menu"
-      class="UserMenu-module_triggerButton"
-      data-state="open"
-      id="radix-_r_a_"
-      type="button"
+    <div
+      class="UserMenu-module_wrapper"
     >
-      <span
-        aria-label="@person-name:homeserver.com"
-        class="_avatar_va14e_8"
-        data-color="1"
-        data-type="round"
-        role="img"
-        style="--cpd-avatar-size: 36px;"
+      <button
+        aria-controls="radix-_r_b_"
+        aria-expanded="true"
+        aria-haspopup="menu"
+        aria-label="User menu"
+        class="UserMenu-module_triggerButton"
+        data-state="open"
+        id="radix-_r_a_"
+        type="button"
       >
-        <img
-          alt=""
-          class="_image_va14e_43"
+        <span
+          aria-label="@person-name:homeserver.com"
+          class="_avatar_va14e_8"
+          data-color="1"
           data-type="round"
-          height="36px"
-          loading="lazy"
-          referrerpolicy="no-referrer"
-          src="/static/element.png"
-          width="36px"
-        />
-      </span>
+          role="img"
+          style="--cpd-avatar-size: 36px;"
+        >
+          <img
+            alt=""
+            class="_image_va14e_43"
+            data-type="round"
+            height="36px"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            src="/static/element.png"
+            width="36px"
+          />
+        </span>
+      </button>
       <span
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
       >
         Sally Sanderson with a longer name
       </span>
-    </button>
+    </div>
   </div>
   <div
     data-radix-popper-content-wrapper=""
@@ -542,7 +566,7 @@ exports[`UserMenu > renders an open menu 1`] = `
       data-align="start"
       data-orientation="vertical"
       data-radix-menu-content=""
-      data-side="bottom"
+      data-side="right"
       data-state="open"
       dir="ltr"
       id="radix-_r_b_"
@@ -799,34 +823,38 @@ exports[`UserMenu > renders an open menu 1`] = `
 
 exports[`UserMenu > renders condensed view 1`] = `
 <div>
-  <button
-    aria-expanded="false"
-    aria-haspopup="menu"
-    aria-label="User menu"
-    class="UserMenu-module_triggerButton"
-    data-state="closed"
-    id="radix-_r_4_"
-    type="button"
+  <div
+    class="UserMenu-module_wrapper"
   >
-    <span
-      aria-label="@person-name:homeserver.com"
-      class="_avatar_va14e_8"
-      data-color="1"
-      data-type="round"
-      role="img"
-      style="--cpd-avatar-size: 36px;"
+    <button
+      aria-expanded="false"
+      aria-haspopup="menu"
+      aria-label="User menu"
+      class="UserMenu-module_triggerButton"
+      data-state="closed"
+      id="radix-_r_4_"
+      type="button"
     >
-      <img
-        alt=""
-        class="_image_va14e_43"
+      <span
+        aria-label="@person-name:homeserver.com"
+        class="_avatar_va14e_8"
+        data-color="1"
         data-type="round"
-        height="36px"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-        src="/static/element.png"
-        width="36px"
-      />
-    </span>
-  </button>
+        role="img"
+        style="--cpd-avatar-size: 36px;"
+      >
+        <img
+          alt=""
+          class="_image_va14e_43"
+          data-type="round"
+          height="36px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="/static/element.png"
+          width="36px"
+        />
+      </span>
+    </button>
+  </div>
 </div>
 `;
