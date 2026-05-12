@@ -19,7 +19,6 @@ import {
 import { useMockedViewModel } from "../../../../core/viewmodel";
 import { LinkedTextContext } from "../../../../core/utils/LinkedText";
 import { withViewDocs } from "../../../../../.storybook/withViewDocs";
-import { EventPresentationProvider } from "../../EventPresentation";
 
 type UrlPreviewGroupViewProps = UrlPreviewGroupViewSnapshot & UrlPreviewGroupViewActions;
 
@@ -142,10 +141,6 @@ export const WithCompactView = Template.bind({});
 WithCompactView.args = {
     ...MultiplePreviewsVisible.args,
 };
-WithCompactView.decorators = [
-    (Story): JSX.Element => (
-        <EventPresentationProvider value={{ layout: "group", density: "compact" }}>
-            <Story />
-        </EventPresentationProvider>
-    ),
-];
+WithCompactView.globals = {
+    eventDensity: "compact",
+};

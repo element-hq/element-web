@@ -10,8 +10,8 @@ import classNames from "classnames";
 import { Button } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
-import { useEventPresentation } from "../../../EventPresentation";
 import styles from "./TileErrorView.module.css";
+import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 
 /** Snapshot data for rendering an event tile error fallback. */
 export interface TileErrorViewSnapshot {
@@ -55,14 +55,11 @@ interface TileErrorViewProps {
  * actions when their labels are provided.
  */
 export function TileErrorView({ vm, className }: Readonly<TileErrorViewProps>): JSX.Element {
-    const { layout } = useEventPresentation();
+    const eventPresentationAttributes = useEventPresentationAttributes();
     const { message, eventType, bugReportCtaLabel, viewSourceCtaLabel } = useViewModel(vm);
 
     return (
-        <li
-            className={classNames(styles.tileErrorView, className, { [styles.bubble]: layout === "bubble" })}
-            data-layout={layout}
-        >
+        <li className={classNames(styles.tileErrorView, className)} {...eventPresentationAttributes}>
             <div className={styles.line} role="status">
                 <span className={styles.message}>
                     {message}

@@ -37,3 +37,20 @@ export const EventPresentationProvider = EventPresentationContext.Provider;
 export function useEventPresentation(): EventPresentation {
     return useContext(EventPresentationContext);
 }
+
+/** Returns the current event presentation settings attributes.
+ *
+ *  "data-event-layout": "group" | "bubble" | "irc"
+ *  "data-event-density": "default" | "compact"
+ */
+export function useEventPresentationAttributes(): {
+    "data-event-layout": EventLayout;
+    "data-event-density": EventDensity;
+} {
+    const { layout, density } = useEventPresentation();
+
+    return {
+        "data-event-layout": layout,
+        "data-event-density": density,
+    };
+}
