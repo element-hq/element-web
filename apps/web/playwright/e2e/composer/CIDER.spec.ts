@@ -192,7 +192,7 @@ test.describe("Composer", () => {
             await expect(page.locator(".mx_EventTile_body", { hasText: "Bob" })).toBeVisible();
         });
 
-        test("renders emoji autocomplete", async ({ page }) => {
+        test("renders emoji autocomplete", { tag: "@screenshot" }, async ({ page }) => {
             const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
 
             // Type ":+1" to trigger emoji autocomplete
