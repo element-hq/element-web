@@ -43,6 +43,7 @@ export * from "./room/timeline/event-tile/call";
 export * from "./room/timeline/event-tile/EventTileView/EventTileBubble";
 export * from "./room/timeline/event-tile/EventTileView/MKeyVerificationRequestView";
 export * from "./room/timeline/event-tile/EventTileView/PinnedMessageBadge";
+export * from "./room/timeline/event-tile/EventTileView/RoomAvatarEventView";
 export * from "./room/timeline/event-tile/EventTileView/TextualEventView";
 export * from "./room/timeline/event-tile/body/AudioPlayerView";
 export * from "./room/timeline/event-tile/body/DecryptionFailureBodyView";
