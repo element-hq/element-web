@@ -61,6 +61,10 @@ function getLine(container: HTMLElement): HTMLElement {
     return line as HTMLElement;
 }
 
+function expectTileClass(container: HTMLElement, className: string): void {
+    expect(getTile(container)).toHaveClass(className);
+}
+
 function makeReplyEvent(roomId: string): MatrixEvent {
     const parentEvent = mkMessage({
         room: roomId,
@@ -153,10 +157,6 @@ describe("EventTile", () => {
             ts: overrides.ts ?? 1234,
             event: overrides.event ?? true,
         });
-    }
-
-    function expectTileClass(container: HTMLElement, className: string): void {
-        expect(getTile(container)).toHaveClass(className);
     }
 
     beforeEach(() => {
