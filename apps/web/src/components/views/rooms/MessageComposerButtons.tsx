@@ -23,7 +23,7 @@ import {
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { UploadButton } from "@element-hq/web-shared-components";
+import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -34,7 +34,10 @@ import Modal from "../../../Modal";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
@@ -88,7 +91,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            <UploadButton key="upload" vm={roomUploadVM} />,
+            narrowUploadButtons(),
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -275,6 +278,22 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
             <TextFormattingIcon />
         </CollapsibleButton>
     );
+}
+
+function narrowUploadButtons(): JSX.Element[] {
+    const vm = useRoomUploadViewModel();
+    const snapshot = useViewModel(vm);
+    if (!snapshot.mayUpload) {
+        return [];
+    }
+    return snapshot.options.map(({ type, icon: Icon, label }) => (
+        <IconizedContextMenuOption
+            onClick={() => vm.onUploadOptionSelected(type)}
+            icon={Icon && <Icon />}
+            label={label}
+            key={type}
+        />
+    ));
 }
 
 export default MessageComposerButtons;
