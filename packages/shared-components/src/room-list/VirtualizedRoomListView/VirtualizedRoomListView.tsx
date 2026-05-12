@@ -395,10 +395,12 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
                 vm.changeRoomSection(source.id as string, target.id as string);
             }}
             sensors={[
-                // Start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
+                // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
+                // So we start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
                 PointerSensor.configure({
                     activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
                 }),
+                // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
                 KeyboardSensor.configure({
                     keyboardCodes: {
                         start: ["Space"],

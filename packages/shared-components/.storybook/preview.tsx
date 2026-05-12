@@ -183,7 +183,8 @@ const withDragDropProvider: Decorator = (Story) => {
     return (
         <DragDropProvider
             sensors={[
-                // Start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
+                // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
+                // So we start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
                 PointerSensor.configure({
                     activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
                 }),
