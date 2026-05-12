@@ -23,6 +23,8 @@ import { createTestClient, mkEvent } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { ModuleApi } from "../../../src/modules/Api";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 
 const roomId = "!room:example.com";
 
@@ -37,6 +39,18 @@ function makeVerificationRequestEvent({ sender, to }: { sender: string; to: stri
             from_device: "DEVICE",
             methods: ["m.sas.v1"],
             to,
+        },
+    });
+}
+
+function makeRoomAvatarEvent(url = "mxc://example.com/avatar"): MatrixEvent {
+    return new MatrixEvent({
+        type: EventType.RoomAvatar,
+        state_key: "",
+        room_id: roomId,
+        sender: "@alice:example.com",
+        content: {
+            url,
         },
     });
 }
@@ -362,5 +376,37 @@ describe("renderTile", () => {
         if (!tile) throw new Error("Expected a key verification request tile");
 
         expect(() => render(tile)).toThrow("Attempting to render verification request without a client context!");
+    });
+
+    it("renders room avatar events with the wrapped shared-components view", () => {
+        const room = new Room(roomId, client, client.getSafeUserId());
+        room.name = "General";
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: EventType.RoomCreate,
+                state_key: "",
+                room_id: room.roomId,
+                sender: client.getUserId()!,
+                content: {
+                    creator: client.getUserId()!,
+                    room_version: "9",
+                },
+            }),
+        ]);
+        mocked(client.getRoom).mockReturnValue(room);
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: jest.fn().mockReturnValue(null),
+        } as unknown as DMRoomMap);
+        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
+        const roomAvatarEvent = makeRoomAvatarEvent();
+        roomAvatarEvent.sender = { name: "Alice" } as MatrixEvent["sender"];
+
+        const tile = renderTile(TimelineRenderingType.Room, { mxEvent: roomAvatarEvent, showHiddenEvents: false }, client);
+        if (!tile) throw new Error("Expected a room avatar event tile");
+
+        render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
+
+        expect(screen.getByText("Alice changed the room avatar to")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Alice changed the avatar for General" })).toBeInTheDocument();
     });
 });
