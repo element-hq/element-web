@@ -5,4 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-export { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
+export { RoomListItemWrapper } from "./RoomListItemWrapper";

@@ -18,8 +18,10 @@ import {
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
 import {
+    CallStartedTileView,
     EncryptionEventView,
     HiddenBodyView,
+    MKeyVerificationRequestView,
     TextualEventView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
@@ -37,7 +39,6 @@ import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
-import MKeyVerificationRequest from "../components/views/messages/MKeyVerificationRequest";
 import { WidgetType } from "../widgets/WidgetType";
 import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
@@ -47,9 +48,11 @@ import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
 import { EncryptionEventViewModel } from "../viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
+import { MKeyVerificationRequestViewModel } from "../viewmodels/room/timeline/event-tile/MKeyVerificationRequestViewModel";
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
 import { ElementCallEventType } from "../call-types";
+import { CallStartedTileViewModel } from "../viewmodels/room/timeline/event-tile/call/CallStartedTileViewModel";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps extends Pick<
@@ -84,7 +87,7 @@ const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyC
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
 export const TextualEventFactory: Factory = (ref, props) => {
     const vm = new TextualEventViewModel(props);
-    return <TextualEventView vm={vm} />;
+    return <TextualEventView vm={vm} className="mx_TextualEvent" />;
 };
 function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const cli = useMatrixClientContext();
@@ -95,7 +98,21 @@ function EncryptionEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 const EncryptionEventFactory: Factory = (ref, props) => {
     return <EncryptionEventWrappedView ref={ref} {...props} />;
 };
-const VerificationReqFactory: Factory = (_ref, props) => <MKeyVerificationRequest {...props} />;
+function MKeyVerificationRequestWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    if (!cli) {
+        throw new Error("Attempting to render verification request without a client context!");
+    }
+
+    const vm = useCreateAutoDisposedViewModel(() => new MKeyVerificationRequestViewModel({ mxEvent, cli }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    return <MKeyVerificationRequestView vm={vm} ref={ref} className="mx_EventTileBubble mx_cryptoEvent" />;
+}
+const VerificationReqFactory: Factory = (ref, props) => <MKeyVerificationRequestWrappedView ref={ref} {...props} />;
 function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new HiddenBodyViewModel({ mxEvent }));
 
@@ -106,6 +123,15 @@ function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     return <HiddenBodyView vm={vm} ref={ref} className="mx_HiddenBody" />;
 }
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBodyWrappedView ref={ref} {...props} />;
+
+function CallStartedTileViewWrapped({ mxEvent }: IBodyProps): JSX.Element {
+    const vm = useCreateAutoDisposedViewModel(() => new CallStartedTileViewModel({ mxEvent }));
+    return <CallStartedTileView vm={vm} />;
+}
+
+export const CallStartedEventFactory: Factory = (ref, props) => {
+    return <CallStartedTileViewWrapped {...props} />;
+};
 
 // These factories are exported for reference comparison against pickFactory()
 export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;
@@ -120,6 +146,7 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
     [M_POLL_END.name, MessageEventFactory],
     [M_POLL_END.altName, MessageEventFactory],
     [EventType.CallInvite, LegacyCallEventFactory as Factory], // note that this requires a special factory type
+    [EventType.RTCNotification, CallStartedEventFactory],
 ]);
 
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
