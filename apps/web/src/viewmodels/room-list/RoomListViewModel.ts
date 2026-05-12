@@ -36,6 +36,7 @@ import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
+import { getCustomSectionData } from "../../stores/room-list-v3/section";
 import SettingsStore from "../../settings/SettingsStore";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
@@ -287,8 +288,7 @@ export class RoomListViewModel
     public getSectionHeaderViewModel(tag: string): RoomListSectionHeaderViewModel {
         if (this.roomSectionHeaderViewModels.has(tag)) return this.roomSectionHeaderViewModels.get(tag)!;
 
-        const customSections = SettingsStore.getValue("RoomList.CustomSectionData");
-        const title = TAG_TO_TITLE_MAP[tag] || customSections[tag]?.name || tag;
+        const title = TAG_TO_TITLE_MAP[tag] || getCustomSectionData()[tag]?.name || tag;
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
             title,
@@ -692,7 +692,7 @@ function computeSections(
     roomsResult: RoomsResult,
     isSectionExpanded: (tag: string) => boolean,
 ): { sections: Section[]; isFlatList: boolean } {
-    const customSections = SettingsStore.getValue("RoomList.CustomSectionData");
+    const customSections = getCustomSectionData();
 
     const sections = roomsResult.sections
         // Only include sections that have rooms or are custom sections (which may be empty but should still be shown)

@@ -72,6 +72,20 @@ export type CustomSectionsData = Record<Tag, CustomSection>;
 export type OrderedCustomSections = Tag[];
 
 /**
+ * Retrieves the custom sections data from the settings.
+ */
+export function getCustomSectionData(): CustomSectionsData {
+    return SettingsStore.getValue("RoomList.CustomSectionData") ?? {};
+}
+
+/**
+ * Retrieves the ordered list of custom section tags from the settings.
+ */
+export function getOrderedCustomSections(): OrderedCustomSections {
+    return SettingsStore.getValue("RoomList.OrderedCustomSections") ?? [];
+}
+
+/**
  * Creates a new custom section by showing a dialog to the user to enter the section name.
  * If the user confirms, it generates a unique tag for the section, saves the section data in the settings, and updates the ordered list of sections.
  *
@@ -87,7 +101,7 @@ export async function createSection(): Promise<string | undefined> {
     const newSection: CustomSection = { tag, name: sectionName };
 
     // Save the new section data
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+    const sectionData = getCustomSectionData();
     sectionData[tag] = newSection;
     await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 
@@ -103,7 +117,7 @@ export async function createSection(): Promise<string | undefined> {
  * @param tag - The tag of the section to edit.
  */
 export async function editSection(tag: string): Promise<void> {
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+    const sectionData = getCustomSectionData();
     const section = sectionData[tag];
     if (!section) {
         logger.info("Unknown section tag, cannot edit section", tag);
@@ -127,7 +141,7 @@ export async function editSection(tag: string): Promise<void> {
  * @param isEmpty - Whether the section is empty (has no rooms). If the section is not empty, the confirmation dialog will show a warning message.
  */
 export async function deleteSection(tag: string, isEmpty: boolean): Promise<void> {
-    const sectionData = SettingsStore.getValue("RoomList.CustomSectionData");
+    const sectionData = getCustomSectionData();
     if (!sectionData[tag]) {
         logger.info("Unknown section tag, cannot delete section", tag);
         return;
