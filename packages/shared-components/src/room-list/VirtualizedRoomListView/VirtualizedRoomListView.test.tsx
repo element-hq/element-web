@@ -93,7 +93,7 @@ describe("<VirtualizedRoomListView />", () => {
             await user.keyboard(" "); // drop onto current target
 
             await waitFor(() => {
-                expect(Sections.args.changeRoomSection).toHaveBeenCalledWith("!room0:server", expect.any(String));
+                expect(Sections.args.changeRoomSection).toHaveBeenCalledWith("!room0:server", "low-priority");
             });
         });
     });
