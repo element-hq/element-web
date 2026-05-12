@@ -5,29 +5,21 @@ Copyright 2023 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import { type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
 import fetchMock from "@fetch-mock/jest";
 
-import { TimelineRenderingType } from "../../../../../../../src/contexts/RoomContext";
-import { mkStubRoom, stubClient } from "../../../../../../test-utils";
-import ContentMessages from "../../../../../../../src/ContentMessages";
-import { type IRoomState } from "../../../../../../../src/components/structures/RoomView";
 import {
     handleClipboardEvent,
     isEventToHandleAsClipboardEvent,
 } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/utils";
+import type { RoomUploadViewModel } from "../../../../../../../src/viewmodels/room/RoomUploadViewModel";
+import type { MockedObject } from "jest-mock";
 
-const mockClient = stubClient();
-const mockRoom = mkStubRoom("mock room", "mock room", mockClient);
-const mockRoomState = {
-    room: mockRoom,
-    timelineRenderingType: TimelineRenderingType.Room,
-    replyToEvent: {} as unknown as MatrixEvent,
-} as unknown as IRoomState;
+const mockUploadVM = {
+    initiateViaDataTransfer: jest.fn().mockResolvedValue(undefined),
+    initiateViaInputFiles: jest.fn().mockResolvedValue(undefined),
+} as Partial<RoomUploadViewModel> as MockedObject<RoomUploadViewModel>;
 
-const sendContentListToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentListToRoom");
-const sendContentToRoomSpy = jest.spyOn(ContentMessages.sharedInstance(), "sendContentToRoom");
 const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
 
 describe("handleClipboardEvent", () => {
@@ -45,29 +37,16 @@ describe("handleClipboardEvent", () => {
 
     it("returns false if it is not a paste event", () => {
         const originalEvent = createMockClipboardEvent({ type: "copy" });
-        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockRoomState, mockClient);
-
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
         expect(output).toBe(false);
+        expect(mockUploadVM.initiateViaDataTransfer).not.toHaveBeenCalled();
     });
 
     it("returns false if clipboard data is null", () => {
         const originalEvent = createMockClipboardEvent({ type: "paste", clipboardData: null });
-        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockRoomState, mockClient);
-
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
         expect(output).toBe(false);
-    });
-
-    it("returns false if room is undefined", () => {
-        const originalEvent = createMockClipboardEvent({ type: "paste" });
-        const { room, ...roomStateWithoutRoom } = mockRoomState;
-        const output = handleClipboardEvent(
-            originalEvent,
-            originalEvent.clipboardData,
-            roomStateWithoutRoom,
-            mockClient,
-        );
-
-        expect(output).toBe(false);
+        expect(mockUploadVM.initiateViaDataTransfer).not.toHaveBeenCalled();
     });
 
     it("returns false if room clipboardData files and types are empty", () => {
@@ -75,8 +54,9 @@ describe("handleClipboardEvent", () => {
             type: "paste",
             clipboardData: { files: [], types: [] },
         });
-        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockRoomState, mockClient);
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
         expect(output).toBe(false);
+        expect(mockUploadVM.initiateViaDataTransfer).not.toHaveBeenCalled();
     });
 
     it("handles event and calls sendContentListToRoom when data files are present", () => {
@@ -84,65 +64,23 @@ describe("handleClipboardEvent", () => {
             type: "paste",
             clipboardData: { files: ["something here"], types: [] },
         });
-        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockRoomState, mockClient);
-        const mockReplyToEvent = {} as unknown as MatrixEvent;
-        expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1);
-        expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
-            originalEvent.clipboardData?.files,
-            mockRoom.roomId,
-            undefined, // this is the event relation, an optional arg
-            mockReplyToEvent,
-            mockClient,
-            mockRoomState.timelineRenderingType,
-        );
-        expect(output).toBe(true);
-    });
-
-    it("calls sendContentListToRoom with eventRelation when present", () => {
-        const originalEvent = createMockClipboardEvent({
-            type: "paste",
-            clipboardData: { files: ["something here"], types: [] },
-        });
-        const mockEventRelation = {} as unknown as IEventRelation;
-        const mockReplyToEvent = {} as unknown as MatrixEvent;
-        const output = handleClipboardEvent(
-            originalEvent,
-            originalEvent.clipboardData,
-            mockRoomState,
-            mockClient,
-            mockEventRelation,
-        );
-
-        expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1);
-        expect(sendContentListToRoomSpy).toHaveBeenCalledWith(
-            originalEvent.clipboardData?.files,
-            mockRoom.roomId,
-            mockEventRelation, // this is the event relation, an optional arg
-            mockReplyToEvent,
-            mockClient,
-            mockRoomState.timelineRenderingType,
-        );
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
+        expect(mockUploadVM.initiateViaDataTransfer).toHaveBeenCalledTimes(1);
+        expect(mockUploadVM.initiateViaDataTransfer).toHaveBeenCalledWith(originalEvent.clipboardData);
         expect(output).toBe(true);
     });
 
     it("calls the error handler when sentContentListToRoom errors", async () => {
         const mockErrorMessage = "something went wrong";
-        sendContentListToRoomSpy.mockRejectedValueOnce(new Error(mockErrorMessage));
+        mockUploadVM.initiateViaDataTransfer.mockRejectedValueOnce(new Error(mockErrorMessage));
 
         const originalEvent = createMockClipboardEvent({
             type: "paste",
             clipboardData: { files: ["something here"], types: [] },
         });
-        const mockEventRelation = {} as unknown as IEventRelation;
-        const output = handleClipboardEvent(
-            originalEvent,
-            originalEvent.clipboardData,
-            mockRoomState,
-            mockClient,
-            mockEventRelation,
-        );
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
 
-        expect(sendContentListToRoomSpy).toHaveBeenCalledTimes(1);
+        expect(mockUploadVM.initiateViaDataTransfer).toHaveBeenCalledTimes(1);
         await waitFor(() => {
             expect(logSpy).toHaveBeenCalledWith(mockErrorMessage);
         });
@@ -158,15 +96,7 @@ describe("handleClipboardEvent", () => {
                 getData: jest.fn().mockReturnValue("<div>invalid html"),
             },
         });
-        const mockEventRelation = {} as unknown as IEventRelation;
-        const output = handleClipboardEvent(
-            originalEvent,
-            originalEvent.clipboardData,
-            mockRoomState,
-            mockClient,
-            mockEventRelation,
-        );
-
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
         expect(logSpy).toHaveBeenCalledWith("Failed to handle pasted content as Safari inserted content");
         expect(output).toBe(false);
     });
@@ -180,10 +110,10 @@ describe("handleClipboardEvent", () => {
                 getData: jest.fn().mockReturnValue(`<img src="blob:" />`),
             },
         });
-        const mockEventRelation = {} as unknown as IEventRelation;
-        handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockRoomState, mockClient, mockEventRelation);
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
 
         expect(fetchMock).toHaveFetchedTimes(1, "blob:");
+        expect(output).toBe(true);
     });
 
     it("calls error handler when fetch fails", async () => {
@@ -197,14 +127,7 @@ describe("handleClipboardEvent", () => {
                 getData: jest.fn().mockReturnValue(`<img src="blob:" />`),
             },
         });
-        const mockEventRelation = {} as unknown as IEventRelation;
-        const output = handleClipboardEvent(
-            originalEvent,
-            originalEvent.clipboardData,
-            mockRoomState,
-            mockClient,
-            mockEventRelation,
-        );
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
 
         await waitFor(() => {
             expect(logSpy).toHaveBeenCalledWith(mockErrorMessage);
@@ -212,7 +135,7 @@ describe("handleClipboardEvent", () => {
         expect(output).toBe(true);
     });
 
-    it("calls sendContentToRoom when parsing is successful", async () => {
+    it("calls initiateViaInputFiles when parsing is successful", async () => {
         fetchMock.get("test/file", {
             blob: () => {
                 return Promise.resolve({ type: "image/jpeg" } as Blob);
@@ -227,23 +150,11 @@ describe("handleClipboardEvent", () => {
                 getData: jest.fn().mockReturnValue(`<img src="blob:" />`),
             },
         });
-        const mockEventRelation = {} as unknown as IEventRelation;
-        const output = handleClipboardEvent(
-            originalEvent,
-            originalEvent.clipboardData,
-            mockRoomState,
-            mockClient,
-            mockEventRelation,
-        );
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
 
         await waitFor(() => {
-            expect(sendContentToRoomSpy).toHaveBeenCalledWith(
-                expect.any(File),
-                mockRoom.roomId,
-                mockEventRelation,
-                mockClient,
-                mockRoomState.replyToEvent,
-            );
+            expect(mockUploadVM.initiateViaInputFiles).toHaveBeenCalledTimes(1);
+            expect(mockUploadVM.initiateViaInputFiles).toHaveBeenCalledWith([expect.any(File)]);
         });
         expect(output).toBe(true);
     });
@@ -254,8 +165,8 @@ describe("handleClipboardEvent", () => {
                 return Promise.resolve({ type: "image/jpeg" } as Blob);
             },
         });
-        const mockErrorMessage = "sendContentToRoom failed";
-        sendContentToRoomSpy.mockRejectedValueOnce(mockErrorMessage);
+        const mockErrorMessage = "initiateViaInputFiles failed";
+        mockUploadVM.initiateViaInputFiles.mockRejectedValueOnce(mockErrorMessage);
 
         const originalEvent = createMockClipboardEvent({
             type: "paste",
@@ -265,14 +176,7 @@ describe("handleClipboardEvent", () => {
                 getData: jest.fn().mockReturnValue(`<img src="blob:" />`),
             },
         });
-        const mockEventRelation = {} as unknown as IEventRelation;
-        const output = handleClipboardEvent(
-            originalEvent,
-            originalEvent.clipboardData,
-            mockRoomState,
-            mockClient,
-            mockEventRelation,
-        );
+        const output = handleClipboardEvent(originalEvent, originalEvent.clipboardData, mockUploadVM);
 
         await waitFor(() => {
             expect(logSpy).toHaveBeenCalledWith(mockErrorMessage);
