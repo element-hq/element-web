@@ -12,7 +12,8 @@ Please see LICENSE files in the repository root for full details.
     color: var(--cpd-color-text-secondary);
     font-size: var(--cpd-font-size-body-xs);
     width: 100%;
-    overflow-x: auto;
+    /* Override default overflow setting of EventTile */
+    overflow-inline: auto !important;
     line-height: normal;
 }
 
