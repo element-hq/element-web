@@ -25,6 +25,7 @@ import {
     MKeyVerificationRequestView,
     RoomAvatarEventView,
     TextualEventView,
+    ViewSourceEventView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -44,7 +45,6 @@ import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { WidgetType } from "../widgets/WidgetType";
 import { hasText } from "../TextForEvent";
 import { getMessageModerationState, MessageModerationState } from "../utils/EventUtils";
-import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
@@ -54,6 +54,7 @@ import { MKeyVerificationRequestViewModel } from "../viewmodels/room/timeline/ev
 import { RoomAvatarEventViewModel } from "../viewmodels/room/timeline/event-tile/RoomAvatarEventViewModel";
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
+import { ViewSourceEventViewModel } from "../viewmodels/room/timeline/event-tile/body/ViewSourceEventViewModel";
 import { ElementCallEventType } from "../call-types";
 import { CallStartedTileViewModel } from "../viewmodels/room/timeline/event-tile/call/CallStartedTileViewModel";
 
@@ -127,6 +128,24 @@ function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 }
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBodyWrappedView ref={ref} {...props} />;
 
+function ViewSourceEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new ViewSourceEventViewModel({ mxEvent, cli }));
+
+    useEffect(() => {
+        vm.setProps({ cli, mxEvent });
+    }, [cli, mxEvent, vm]);
+
+    return (
+        <ViewSourceEventView
+            vm={vm}
+            ref={ref}
+            className="mx_ViewSourceEvent mx_EventTile_content"
+            expandedClassName="mx_ViewSourceEvent_expanded"
+        />
+    );
+}
+
 function MJitsiWidgetEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
     const cli = useMatrixClientContext();
     const vm = useCreateAutoDisposedViewModel(() => new MJitsiWidgetEventViewModel({ mxEvent, cli }));
@@ -178,8 +197,8 @@ export const CallStartedEventFactory: Factory = (ref, props) => {
 };
 
 // These factories are exported for reference comparison against pickFactory()
+export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEventWrappedView ref={ref} {...props} />;
 export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEventWrappedView ref={ref} {...props} />;
-export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEvent ref={ref} {...props} />;
 export const RoomCreateEventFactory: Factory = (_ref, props) => <RoomPredecessorTile {...props} />;
 
 const EVENT_TILE_TYPES = new Map<string, Factory>([

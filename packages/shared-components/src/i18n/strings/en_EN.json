@@ -41,6 +41,9 @@
         "preferences": "Preferences",
         "state_encryption_enabled": "Experimental state encryption enabled"
     },
+    "devtools": {
+        "toggle_event": "toggle event"
+    },
     "keyboard": {
         "shift": "Shift"
     },
