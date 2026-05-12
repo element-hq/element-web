@@ -10,7 +10,7 @@ import React, { memo, type JSX } from "react";
 import { RoomListItemView, type RoomListItemViewProps } from "./RoomListItemView";
 import { getItemAccessibleProps } from "../../../core/VirtualizedList";
 
-export interface RoomListItemAccessibilityWrapperPros extends RoomListItemViewProps {
+export interface RoomListItemWrapperProps extends RoomListItemViewProps {
     /** Index of this room in the list */
     roomIndex: number;
     /** Index of this room in its section */
@@ -27,7 +27,7 @@ export interface RoomListItemAccessibilityWrapperPros extends RoomListItemViewPr
  *
  * @example
  * ``
- * <RoomListItemAccessibilityWrapper
+ * <RoomListItemWrapper
  *   roomIndex={0}
  *   roomIndexInSection={0}
  *   roomCount={10}
@@ -36,13 +36,13 @@ export interface RoomListItemAccessibilityWrapperPros extends RoomListItemViewPr
  * />
  * ```
  */
-export const RoomListItemAccessibilityWrapper = memo(function RoomListItemAccessibilityWrapper({
+export const RoomListItemWrapper = memo(function RoomListItemWrapper({
     roomIndex,
     roomCount,
     roomIndexInSection,
     isInFlatList,
     ...rest
-}: RoomListItemAccessibilityWrapperPros): JSX.Element {
+}: RoomListItemWrapperProps): JSX.Element {
     const itemA11yProps = isInFlatList ? getItemAccessibleProps("listbox", roomIndex, roomCount) : { role: "gridcell" };
     const item = <RoomListItemView {...rest} {...itemA11yProps} />;
 

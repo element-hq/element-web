@@ -1566,7 +1566,7 @@
         "latex_maths": "在消息中渲染 LaTeX 数学公式",
         "leave_beta": "退出 Beta 测试",
         "leave_beta_reload": "退出 Beta 测试将重载 %(brand)s。",
-        "location_share_live": "分享实时位置",
+        "location_share_live": "正在共享实时位置",
         "location_share_live_description": "临时实现。位置将持续保留于房间历史。",
         "mjolnir": "忽略人员的新方式",
         "msc3531_hide_messages_pending_moderation": "允许协管员隐藏等待审核的消息",
