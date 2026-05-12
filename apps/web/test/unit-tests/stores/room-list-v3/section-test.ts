@@ -11,6 +11,7 @@ import {
     createSection,
     editSection,
     deleteSection,
+    getCustomSectionData,
     getOrderedCustomSections,
     isDefaultSectionTag,
     CHATS_TAG,
@@ -24,6 +25,89 @@ import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag"
 describe("section", () => {
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+
+    describe("getCustomSectionData", () => {
+        const tag = "element.io.section.abc";
+        const validTag = "element.io.section.valid";
+        const invalidTag = "element.io.section.invalid";
+        const validEntry = { tag: validTag, name: "Valid" };
+
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        });
+
+        it.each([null, false, 42, "string", []] as const)("returns an empty object when the raw value is %p", (raw) => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
+            expect(getCustomSectionData()).toEqual({});
+        });
+
+        it("resets settings to {} when the raw value is not a recoverable object", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue("not-an-object" as any);
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            getCustomSectionData();
+
+            expect(setValueSpy).toHaveBeenCalledWith("RoomList.CustomSectionData", null, expect.anything(), {});
+        });
+
+        it.each([
+            ["tag does not match the record key", { [tag]: { tag: "element.io.section.other", name: "Mismatch" } }],
+            [
+                "the key does not start with the section prefix",
+                { "not-a-section-key": { tag: "not-a-section-key", name: "Bad" } },
+            ],
+            ["the tag does not start with the section prefix", { [tag]: { tag: "not-a-section-tag", name: "Bad" } }],
+            ["tag or name is not a string", { [tag]: { tag, name: 42 } }],
+        ])("drops entries where %s", (_desc, raw) => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
+            expect(getCustomSectionData()).toEqual({});
+        });
+
+        it("returns valid entries and drops invalid ones", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                [validTag]: validEntry,
+                [invalidTag]: { tag: "element.io.section.mismatch", name: "Bad" },
+            });
+            expect(getCustomSectionData()).toEqual({ [validTag]: validEntry });
+        });
+
+        it.each([
+            [
+                "tag mismatch",
+                { [validTag]: validEntry, [invalidTag]: { tag: "element.io.section.mismatch", name: "Bad" } },
+                { [validTag]: validEntry },
+            ],
+            [
+                "non-string name",
+                { [validTag]: validEntry, [invalidTag]: { tag: invalidTag, name: 42 } },
+                { [validTag]: validEntry },
+            ],
+        ])("saves cleaned data when an entry has %s", (_desc, raw, expectedSaved) => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            getCustomSectionData();
+
+            expect(setValueSpy).toHaveBeenCalledWith(
+                "RoomList.CustomSectionData",
+                null,
+                expect.anything(),
+                expectedSaved,
+            );
+        });
+
+        it.each([
+            ["all entries are valid", { [validTag]: validEntry }],
+            ["the record is empty", {}],
+        ])("does not save when %s", (_desc, raw) => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
+            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+
+            getCustomSectionData();
+
+            expect(setValueSpy).not.toHaveBeenCalled();
+        });
     });
 
     describe("getOrderedCustomSections", () => {

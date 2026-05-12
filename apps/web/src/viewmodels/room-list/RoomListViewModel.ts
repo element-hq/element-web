@@ -36,11 +36,10 @@ import { hasCreateRoomRights } from "./utils";
 import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
-import { getCustomSectionData } from "../../stores/room-list-v3/section";
+import { getCustomSectionData, isCustomSectionTag, CHATS_TAG } from "../../stores/room-list-v3/section";
 import SettingsStore from "../../settings/SettingsStore";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
-import { CHATS_TAG } from "../../stores/room-list-v3/section";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -288,7 +287,7 @@ export class RoomListViewModel
     public getSectionHeaderViewModel(tag: string): RoomListSectionHeaderViewModel {
         if (this.roomSectionHeaderViewModels.has(tag)) return this.roomSectionHeaderViewModels.get(tag)!;
 
-        const title = TAG_TO_TITLE_MAP[tag] || getCustomSectionData()[tag]?.name || tag;
+        const title = TAG_TO_TITLE_MAP[tag] || (isCustomSectionTag(tag) && getCustomSectionData()[tag]?.name) || tag;
         const viewModel = new RoomListSectionHeaderViewModel({
             tag,
             title,
@@ -696,7 +695,9 @@ function computeSections(
 
     const sections = roomsResult.sections
         // Only include sections that have rooms or are custom sections (which may be empty but should still be shown)
-        .filter((section) => section.rooms.length > 0 || customSections[section.tag])
+        .filter(
+            (section) => section.rooms.length > 0 || (isCustomSectionTag(section.tag) && customSections[section.tag]),
+        )
         // Remove roomIds for sections that are currently collapsed according to their section header view model
         .map((section) => ({
             ...section,
