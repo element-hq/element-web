@@ -263,9 +263,6 @@
             "view_image": "View image"
         }
     },
-    "composer": {
-        "attachment_button_label": "Attach files"
-    },
     "user_menu": {
         "link_new_device": "Link new device",
         "open_feedback": "Feedback",

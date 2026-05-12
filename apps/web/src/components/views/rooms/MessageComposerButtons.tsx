@@ -23,7 +23,7 @@ import {
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
+import { UploadButton } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -43,7 +43,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
-import { RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { type RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;

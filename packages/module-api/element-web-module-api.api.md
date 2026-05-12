@@ -103,7 +103,6 @@ export interface ComponentVisibilityCustomisations {
 // @alpha
 export interface ComposerApi {
     addFileUploadOption(option: ComposerApiFileUploadOption): void;
-    disableLocalFileUploads(): void;
     insertPlaintextIntoComposer(plaintext: string): void;
     openFileUploadConfirmation(file: File[]): void;
 }

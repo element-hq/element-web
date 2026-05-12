@@ -52,10 +52,6 @@ export interface ComposerApi {
      */
     addFileUploadOption(option: ComposerApiFileUploadOption): void;
     /**
-     * Disable local file uploads.
-     */
-    disableLocalFileUploads(): void;
-    /**
      * Open the file upload confirmation dialog. This may be used in conjunction
      * with `addFileUploadOption` to support an alternative file upload kind.
      */
