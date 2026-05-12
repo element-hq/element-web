@@ -88,7 +88,6 @@ export default class UIStore extends EventEmitter {
         entries.forEach((entry) => {
             const trackedElementName = this.trackedUiElements.get(entry.target);
             if (trackedElementName) {
-                console.log("resizeObserverCallback for tracked", trackedElementName);
                 this.uiElementDimensions.set(trackedElementName, entry.contentRect);
                 this.emit(trackedElementName, UI_EVENTS.Resize, entry);
             }
