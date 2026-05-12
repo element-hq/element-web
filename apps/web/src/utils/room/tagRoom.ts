@@ -26,7 +26,7 @@ export function tagRoom(room: Room, tagId: TagID): void {
     const isChatTag = tagId === CHATS_TAG;
     const tag = isChatTag ? null : tagId;
 
-    if (isSectionTag(tagId)) {
+    if (!isSectionTag(tagId)) {
         logger.warn(`Unexpected tag ${tag} applied to ${room.roomId}`);
         return;
     }
