@@ -48,7 +48,7 @@ function layerCssAssets(): Plugin {
 export default defineConfig({
     build: {
         lib: {
-            // Two entries: the main barrel and a standalone `numbers` utility that callers
+            // Two entries: the main bundle and a standalone `numbers` utility that callers
             // running outside the browser DOM (e.g. AudioWorkletGlobalScope) can import without
             // pulling in the rest of the package — which transitively loads dnd-kit and
             // other window/document-dependent code.

@@ -44,7 +44,7 @@ or in CSS file:
 
 Callers running outside the browser DOM (e.g. inside an `AudioWorkletGlobalScope`
 or a worker) can pull in the small standalone `numbers` utility bundle without
-loading the rest of the package barrel, which transitively imports React,
+loading the rest of the package bundle, which transitively imports React,
 dnd-kit, and other code that touches `window` / `document`:
 
 ```javascript
