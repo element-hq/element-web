@@ -10,25 +10,20 @@ import { render, fireEvent } from "jest-matrix-react";
 import { useMockedViewModel } from "@element-hq/web-shared-components";
 
 import FileDropTarget from "../../../../src/components/structures/FileDropTarget.tsx";
-import {
-    RoomUploadContext,
-    type RoomUploadViewActions,
-    type RoomUploadViewModel,
-    type RoomUploadViewSnapshot,
-} from "../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
+import { RoomUploadContext, type RoomUploadViewModel } from "../../../../src/viewmodels/room/RoomUploadViewModel.tsx";
 
 function FileDropTargetWrapped({
     element,
-    snapshot,
-    actions,
+    mayUpload = false,
+    onFileDrop,
 }: {
     element: HTMLDivElement;
-    snapshot: RoomUploadViewSnapshot;
-    actions: Partial<RoomUploadViewActions>;
+    mayUpload?: boolean;
+    onFileDrop: RoomUploadViewModel["initiateViaDataTransfer"];
 }) {
-    const mockVm = useMockedViewModel<RoomUploadViewSnapshot, RoomUploadViewActions>(
-        snapshot,
-        actions as RoomUploadViewActions,
+    const mockVm = useMockedViewModel<{ mayUpload: boolean }, Pick<RoomUploadViewModel, "initiateViaDataTransfer">>(
+        { mayUpload },
+        { initiateViaDataTransfer: onFileDrop },
     );
     return (
         <RoomUploadContext.Provider value={mockVm as RoomUploadViewModel}>
@@ -42,26 +37,14 @@ describe("FileDropTarget", () => {
         const element = document.createElement("div");
         const onFileDrop = jest.fn();
 
-        const { asFragment } = render(
-            <FileDropTargetWrapped
-                element={element}
-                snapshot={{ mayUpload: true }}
-                actions={{ initiateViaDataTransfer: onFileDrop }}
-            />,
-        );
+        const { asFragment } = render(<FileDropTargetWrapped element={element} mayUpload onFileDrop={onFileDrop} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should render drop file prompt on mouse over with file if permissions allow", () => {
         const element = document.createElement("div");
         const onFileDrop = jest.fn();
-        const { asFragment } = render(
-            <FileDropTargetWrapped
-                element={element}
-                snapshot={{ mayUpload: true }}
-                actions={{ initiateViaDataTransfer: onFileDrop }}
-            />,
-        );
+        const { asFragment } = render(<FileDropTargetWrapped element={element} mayUpload onFileDrop={onFileDrop} />);
         fireEvent.dragEnter(element, {
             dataTransfer: {
                 types: ["Files"],
@@ -73,13 +56,7 @@ describe("FileDropTarget", () => {
     it("should not render drop file prompt on mouse over with file if permissions do not allow", () => {
         const element = document.createElement("div");
         const onFileDrop = jest.fn();
-        const { asFragment } = render(
-            <FileDropTargetWrapped
-                element={element}
-                snapshot={{ mayUpload: false }}
-                actions={{ initiateViaDataTransfer: onFileDrop }}
-            />,
-        );
+        const { asFragment } = render(<FileDropTargetWrapped element={element} onFileDrop={onFileDrop} />);
         fireEvent.dragEnter(element, {
             dataTransfer: {
                 types: ["Files"],
