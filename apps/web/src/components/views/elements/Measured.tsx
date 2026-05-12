@@ -7,36 +7,38 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
-import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
+import UIStore from "../../../stores/UIStore";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 
 interface IProps {
+    /**
+     * Element to watch for resize changes on.
+     */
     sensor: RefObject<Element | null>;
+    /**
+     * Minimum width of element to be considered full-size.
+     * Defaults to `500px`
+     */
     breakpoint?: number;
+    /**
+     * Callback for when the narrowness property changes.
+     * @param narrow
+     * @returns
+     */
     onMeasurement: (narrow: boolean) => void;
 }
 
 let instanceCount = 0;
 
+/**
+ * This component can watch a single element for width changes, and will fire
+ * a callback if the width changes to be lower or higher than the `breakpoint`.
+ */
 export default function Measured({ sensor, breakpoint = 500, onMeasurement }: IProps): null {
     const instanceIdRef = useRef(instanceCount++);
     const instanceId = instanceIdRef.current;
-
-    const onResize = useCallback(
-        (type: UI_EVENTS, entry: ResizeObserverEntry): void => {
-            if (type !== UI_EVENTS.Resize) return;
-            onMeasurement(entry.contentRect.width <= breakpoint);
-        },
-        [onMeasurement, breakpoint],
-    );
-
-    useEffect(() => {
-        UIStore.instance.on(`Measured${instanceId}`, onResize);
-        return () => {
-            UIStore.instance.off(`Measured${instanceId}`, onResize);
-        };
-    }, [instanceId, onResize]);
 
     useEffect(() => {
         if (sensor.current) {
@@ -47,6 +49,20 @@ export default function Measured({ sensor, breakpoint = 500, onMeasurement }: IP
             UIStore.instance.stopTrackingElementDimensions(`Measured${instanceId}`);
         };
     }, [sensor, instanceId]);
+
+    const narrow = useEventEmitterState<boolean>(
+        UIStore.instance,
+        `Measured${instanceId}`,
+        (_type: unknown, entry: ResizeObserverEntry) => {
+            // N.B there is only one `_type` of resize event.
+            return entry.contentRect.width <= breakpoint;
+        },
+    );
+
+    // Only fire when the state changes.
+    useEffect(() => {
+        onMeasurement(narrow);
+    }, [onMeasurement, narrow]);
 
     return null;
 }
