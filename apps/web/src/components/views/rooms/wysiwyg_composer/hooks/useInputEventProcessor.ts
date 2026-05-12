@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Wysiwyg, type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 import { useCallback } from "react";
-import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";
@@ -26,13 +26,14 @@ import { endEditing } from "../utils/editing";
 import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
+import { useRoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 export function useInputEventProcessor(
     onSend: () => void,
     autocompleteRef: React.RefObject<Autocomplete | null>,
     initialContent?: string,
-    eventRelation?: IEventRelation,
 ): (event: WysiwygEvent, composer: Wysiwyg, editor: HTMLElement) => WysiwygEvent | null {
+    const roomUploadVm = useRoomUploadViewModel();
     const roomContext = useScopedRoomContext("liveTimeline", "room", "replyToEvent", "timelineRenderingType");
     const composerContext = useComposerContext();
     const mxClient = useMatrixClientContext();
@@ -52,7 +53,7 @@ export function useInputEventProcessor(
 
             if (isEventToHandleAsClipboardEvent(event)) {
                 const data = event instanceof ClipboardEvent ? event.clipboardData : event.dataTransfer;
-                const handled = handleClipboardEvent(event, data, roomContext, mxClient, eventRelation);
+                const handled = handleClipboardEvent(event, data, roomUploadVm);
                 return handled ? null : event;
             }
 
@@ -77,11 +78,11 @@ export function useInputEventProcessor(
             isCtrlEnterToSend,
             onSend,
             initialContent,
+            roomUploadVm,
             roomContext,
             composerContext,
             mxClient,
             autocompleteRef,
-            eventRelation,
         ],
     );
 }

@@ -270,6 +270,12 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
         </div>
       </div>
     </main>
+    <input
+      data-testid="room-upload-context-input"
+      multiple=""
+      style="display: none;"
+      type="file"
+    />
   </div>
 </div>
 `;
@@ -638,16 +644,17 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                   />
                 </svg>
               </div>
-              <input
-                multiple=""
-                style="display: none;"
-                type="file"
-              />
             </div>
           </div>
         </div>
       </div>
     </main>
+    <input
+      data-testid="room-upload-context-input"
+      multiple=""
+      style="display: none;"
+      type="file"
+    />
   </div>
 </div>
 `;
@@ -1010,16 +1017,17 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                   />
                 </svg>
               </div>
-              <input
-                multiple=""
-                style="display: none;"
-                type="file"
-              />
             </div>
           </div>
         </div>
       </div>
     </main>
+    <input
+      data-testid="room-upload-context-input"
+      multiple=""
+      style="display: none;"
+      type="file"
+    />
   </div>
 </div>
 `;
@@ -1320,6 +1328,12 @@ exports[`RoomView should hide the composer when hideComposer=true 1`] = `
             />
           </div>
         </div>
+        <input
+          data-testid="room-upload-context-input"
+          multiple=""
+          style="display: none;"
+          type="file"
+        />
       </div>
     </div>
   </div>
@@ -1621,15 +1635,16 @@ exports[`RoomView should hide the header when hideHeader=true 1`] = `
                     />
                   </svg>
                 </div>
-                <input
-                  multiple=""
-                  style="display: none;"
-                  type="file"
-                />
               </div>
             </div>
           </div>
         </div>
+        <input
+          data-testid="room-upload-context-input"
+          multiple=""
+          style="display: none;"
+          type="file"
+        />
       </div>
     </div>
   </div>
@@ -2096,15 +2111,16 @@ exports[`RoomView should hide the pinned message banner when hidePinnedMessageBa
                     />
                   </svg>
                 </div>
-                <input
-                  multiple=""
-                  style="display: none;"
-                  type="file"
-                />
               </div>
             </div>
           </div>
         </div>
+        <input
+          data-testid="room-upload-context-input"
+          multiple=""
+          style="display: none;"
+          type="file"
+        />
       </div>
     </div>
   </div>
@@ -2571,15 +2587,16 @@ exports[`RoomView should hide the right panel when hideRightPanel=true 1`] = `
                     />
                   </svg>
                 </div>
-                <input
-                  multiple=""
-                  style="display: none;"
-                  type="file"
-                />
               </div>
             </div>
           </div>
         </div>
+        <input
+          data-testid="room-upload-context-input"
+          multiple=""
+          style="display: none;"
+          type="file"
+        />
       </div>
     </div>
   </div>
@@ -2794,6 +2811,12 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             />
           </div>
         </div>
+        <input
+          data-testid="room-upload-context-input"
+          multiple=""
+          style="display: none;"
+          type="file"
+        />
       </div>
     </div>
   </div>
@@ -3288,15 +3311,16 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                     />
                   </svg>
                 </div>
-                <input
-                  multiple=""
-                  style="display: none;"
-                  type="file"
-                />
               </div>
             </div>
           </div>
         </div>
+        <input
+          data-testid="room-upload-context-input"
+          multiple=""
+          style="display: none;"
+          type="file"
+        />
       </div>
     </div>
   </div>
@@ -3844,15 +3868,16 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                         />
                       </svg>
                     </div>
-                    <input
-                      multiple=""
-                      style="display: none;"
-                      type="file"
-                    />
                   </div>
                 </div>
               </div>
             </div>
+            <input
+              data-testid="room-upload-context-input"
+              multiple=""
+              style="display: none;"
+              type="file"
+            />
           </div>
         </aside>
         <div>
