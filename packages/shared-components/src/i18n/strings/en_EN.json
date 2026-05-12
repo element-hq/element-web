@@ -222,6 +222,10 @@
         "m.file": {
             "error_invalid": "Invalid file"
         },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s changed the room avatar to<img/>",
+            "removed": "%(senderDisplayName)s removed the room avatar."
+        },
         "m.room.encryption": {
             "disable_attempt": "Ignored attempt to disable encryption",
             "disabled": "Encryption not enabled",
