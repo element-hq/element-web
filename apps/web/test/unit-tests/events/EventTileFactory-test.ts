@@ -401,7 +401,11 @@ describe("renderTile", () => {
         const roomAvatarEvent = makeRoomAvatarEvent();
         roomAvatarEvent.sender = { name: "Alice" } as MatrixEvent["sender"];
 
-        const tile = renderTile(TimelineRenderingType.Room, { mxEvent: roomAvatarEvent, showHiddenEvents: false }, client);
+        const tile = renderTile(
+            TimelineRenderingType.Room,
+            { mxEvent: roomAvatarEvent, showHiddenEvents: false },
+            client,
+        );
         if (!tile) throw new Error("Expected a room avatar event tile");
 
         render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
