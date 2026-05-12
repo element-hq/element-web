@@ -25,9 +25,9 @@ type RoomRef = { name: string; roomId: string };
  * - Invite the bot to both rooms and ensure that it has joined
  */
 export const test = base.extend<{
-    room1Name: string;
+    room1Name?: string;
     room1: { name: string; roomId: string };
-    room2Name: string;
+    room2Name?: string;
     room2: { name: string; roomId: string };
     msg: MessageBuilder;
     util: Helpers;
@@ -39,7 +39,7 @@ export const test = base.extend<{
     room1: async ({ room1Name: name, app, user, bot }, use) => {
         const roomId = await app.client.createRoom({
             name,
-            invite: [bot.credentials!.userId],
+            invite: [bot.credentials.userId],
             preset: "public_chat" as Preset,
         });
         await bot.awaitRoomMembership(roomId);
@@ -47,12 +47,12 @@ export const test = base.extend<{
     },
     room2Name: "Room 2",
     room2: async ({ room2Name: name, app, user, bot }, use) => {
-        const roomId = await app.client.createRoom({ name, invite: [bot.credentials!.userId] });
+        const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
         await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
     msg: async ({ page, app, util }, use) => {
-        await use(new MessageBuilder());
+        await use(new MessageBuilder(page, app, util));
     },
     util: async ({ room1, room2, page, app, bot }, use) => {
         await use(new Helpers(page, app, bot));
@@ -70,6 +70,12 @@ export const test = base.extend<{
  * which finds a message and then constructs a reply to it.
  */
 export class MessageBuilder {
+    constructor(
+        private page: Page,
+        private app: ElementAppPage,
+        private helpers: Helpers,
+    ) {}
+
     /**
      * Map of message content -> event.
      */
@@ -158,7 +164,11 @@ export class MessageBuilder {
  * MessageBuilder.replyTo} which creates a reply based on a previous message.
  */
 export abstract class MessageContentSpec {
-    constructor(public readonly messageFinder: MessageBuilder) {}
+    messageFinder: MessageBuilder | null;
+
+    constructor(messageFinder: MessageBuilder = null) {
+        this.messageFinder = messageFinder;
+    }
 
     public abstract getContent(room: JSHandle<Room>): Promise<Record<string, unknown>>;
 }
@@ -220,9 +230,9 @@ export class Helpers {
         await expect(this.page.locator(".mx_ThreadView_timelinePanelWrapper")).toBeVisible();
     }
 
-    async findRoomById(roomId: string): Promise<JSHandle<Room>> {
+    async findRoomById(roomId: string): Promise<JSHandle<Room | undefined>> {
         return this.app.client.evaluateHandle((cli, roomId) => {
-            return cli.getRooms().find((r) => r.roomId === roomId)!;
+            return cli.getRooms().find((r) => r.roomId === roomId);
         }, roomId);
     }
 
@@ -265,11 +275,18 @@ export class Helpers {
     }
 
     /**
-     * Click on a room in the Threads Activity Centre
-     * @param name - room name
+     * Click on a thread row in the Threads Activity Centre
+     * @param name - room or thread name
      */
-    clickRoomInTac(name: string) {
+    clickThreadInTac(name: string) {
         return this.getTacPanel().getByRole("menuitem", { name }).click();
+    }
+
+    /**
+     * Switch to the "Other threads" tab in the TAC
+     */
+    switchToOtherThreadsTab() {
+        return this.getTacPanel().getByRole("tab", { name: "Other threads" }).click();
     }
 
     /**
@@ -298,10 +315,15 @@ export class Helpers {
     }
 
     /**
-     * Assert that the threads activity centre panel has the expected rooms
+     * Assert that the threads activity centre panel has the expected thread rows
      * @param content - the expected rooms and their notification levels
      */
-    async assertRoomsInTac(content: Array<{ room: string; notificationLevel: "highlight" | "notification" }>) {
+    async assertThreadsInTac(content: Array<{ room: string; notificationLevel: "highlight" | "notification" }>) {
+        const getBadgeClass = (notificationLevel: "highlight" | "notification") =>
+            notificationLevel === "highlight"
+                ? "mx_NotificationBadge_level_highlight"
+                : "mx_NotificationBadge_level_notification";
+
         // Ensure that we have the right number of rooms
         await expect(this.getTacPanel().getByRole("menuitem")).toHaveCount(content.length);
 
@@ -312,7 +334,7 @@ export class Helpers {
             // Ensure that the room name are correct
             await expect(roomLocator).toHaveText(new RegExp(room));
             // There is no accessibility marker for the StatelessNotificationBadge
-            await expect(roomLocator.locator(`[data-notification-level="${notificationLevel}"]`)).toBeVisible();
+            await expect(roomLocator.locator(`.${getBadgeClass(notificationLevel)}`)).toBeVisible();
         }
     }
 
