@@ -334,7 +334,7 @@ function ResultsContent({
             style={{
                 display: "flex",
                 flexDirection: "column",
-                maxWidth: "560px",
+                maxWidth: "760px",
                 width: "100%",
                 margin: "0 auto",
                 padding: "0 var(--cpd-space-4x) var(--cpd-space-8x)",

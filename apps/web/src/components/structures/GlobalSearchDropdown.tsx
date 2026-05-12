@@ -375,10 +375,10 @@ export function GlobalSearchDropdown({
             aria-label="Search"
             style={{
                 position: "absolute",
-                top: "calc(100% + 8px)",
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: "480px",
+                top: "calc(100% + 4px)",
+                left: 0,
+                width: "100%",
+                boxSizing: "border-box",
                 background: "var(--cpd-color-bg-canvas-default)",
                 border: "1px solid var(--cpd-color-border-disabled)",
                 borderRadius: "12px",

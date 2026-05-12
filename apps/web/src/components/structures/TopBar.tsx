@@ -151,15 +151,16 @@ export function TopBar(): JSX.Element {
                 borderBottom: "1px solid var(--cpd-color-border-disabled)",
                 width: "100%",
                 flexShrink: 0,
+                position: "relative",
             }}
         >
-            {/* Left: Element logo only */}
-            <div style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+            {/* Left: Element logo only — flex:1 to balance the right side */}
+            <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
                 <ElementLogo />
             </div>
 
             {/* Centre: nav chevrons + search field */}
-            <div ref={containerRef} style={{ flex: 1, minWidth: 0, maxWidth: "480px", margin: "0 auto", position: "relative", display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)" }}>
+            <div ref={containerRef} style={{ flexShrink: 0, maxWidth: "calc(480px + 28px + 28px + var(--cpd-space-1x) + var(--cpd-space-2x))", width: "100%", position: "relative", display: "flex", alignItems: "center", gap: "var(--cpd-space-2x)" }}>
                 {/* Back / Forward buttons immediately left of the search pill */}
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--cpd-space-1x)", flexShrink: 0 }}>
                     <button
@@ -286,8 +287,7 @@ export function TopBar(): JSX.Element {
                         </button>
                     )}
                 </div>
-                </div>
-                {isOpen && (
+                {isOpen && !isFullView && (
                     <GlobalSearchDropdown
                         query={query}
                         activeFilter={filter}
@@ -299,15 +299,16 @@ export function TopBar(): JSX.Element {
                         onPersonClick={vm.onPersonClick}
                     />
                 )}
+                </div>
             </div>
 
-            {/* Right: User menu avatar */}
+            {/* Right: User menu avatar — flex:1 with justify-content:flex-end to balance the left side */}
             <div
                 style={{
                     display: "flex",
                     alignItems: "center",
-                    flexShrink: 0,
-                    marginLeft: "auto",
+                    flex: 1,
+                    justifyContent: "flex-end",
                 }}
             >
                 <UserMenu isPanelCollapsed={false} hideLabel={true} />
