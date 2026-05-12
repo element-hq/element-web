@@ -43,7 +43,7 @@ import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
-import { useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
+import { RoomUploadViewModel, useRoomUploadViewModel } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -91,7 +91,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             ),
         ];
         moreButtons = [
-            narrowUploadButtons(),
+            narrowUploadButtons(roomUploadVM),
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
             props.showPollsButton ? pollButton(room, props.relation) : null,
@@ -280,9 +280,8 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
     );
 }
 
-function narrowUploadButtons(): JSX.Element[] {
-    const vm = useRoomUploadViewModel();
-    const snapshot = useViewModel(vm);
+function narrowUploadButtons(vm: RoomUploadViewModel): JSX.Element[] {
+    const snapshot = vm.getSnapshot();
     if (!snapshot.mayUpload) {
         return [];
     }
