@@ -77,6 +77,12 @@ test.describe("Composer", () => {
             await expect(page.locator(".mx_EventTile_body", { hasText: "😇" })).toBeVisible();
         });
 
+        test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
+            // Shrink the viewport
+            await page.setViewportSize({ width: 500, height: 1080 });
+            await expect(app.getComposer()).toMatchScreenshot("narrow.png");
+        });
+
         test.describe("render emoji picker with larger viewport height", async () => {
             test.use({ viewport: { width: 1280, height: 720 } });
             test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
@@ -186,7 +192,7 @@ test.describe("Composer", () => {
             await expect(page.locator(".mx_EventTile_body", { hasText: "Bob" })).toBeVisible();
         });
 
-        test("renders emoji autocomplete", { tag: "@screenshot" }, async ({ page }) => {
+        test("renders emoji autocomplete", async ({ page }) => {
             const composer = page.getByRole("textbox", { name: "Send an unencrypted message…" });
 
             // Type ":+1" to trigger emoji autocomplete
