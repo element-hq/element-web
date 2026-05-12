@@ -13,7 +13,7 @@ import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
 
 interface IProps {
     sensor: RefObject<Element | null>;
-    breakpoint: number;
+    breakpoint?: number;
     onMeasurement: (narrow: boolean) => void;
 }
 
