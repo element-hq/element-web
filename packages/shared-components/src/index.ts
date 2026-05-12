@@ -41,6 +41,7 @@ export * from "./room/timeline/event-tile/EventTileView/DisambiguatedProfile";
 export * from "./room/timeline/event-tile/EventTileView/EncryptionEventView";
 export * from "./room/timeline/event-tile/call";
 export * from "./room/timeline/event-tile/EventTileView/EventTileBubble";
+export * from "./room/timeline/event-tile/EventTileView/MJitsiWidgetEventView";
 export * from "./room/timeline/event-tile/EventTileView/MKeyVerificationRequestView";
 export * from "./room/timeline/event-tile/EventTileView/PinnedMessageBadge";
 export * from "./room/timeline/event-tile/EventTileView/RoomAvatarEventView";
