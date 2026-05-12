@@ -31,17 +31,23 @@ export default class Measured extends React.PureComponent<IProps> {
     }
 
     public componentDidMount(): void {
+        console.log("Measured componentDidMount", this.props.sensor.current);
+        if (this.props.sensor.current) {
+            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, this.props.sensor.current);
+        }
         UIStore.instance.on(`Measured${this.instanceId}`, this.onResize);
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>): void {
         const previous = prevProps.sensor.current;
         const current = this.props.sensor.current;
+        console.log("Measured componentDidUpdate", current);
         if (previous === current) return;
         if (previous) {
             UIStore.instance.stopTrackingElementDimensions(`Measured${this.instanceId}`);
         }
         if (current) {
+            console.log("Measured trackElementDimensions");
             UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, current);
         }
     }

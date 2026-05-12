@@ -6,7 +6,7 @@
  */
 
 import React, { type JSX } from "react";
-import { type Meta, type StoryFn } from "@storybook/react-vite";
+import { type StoryObj, type Meta } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { AttachmentIcon, ReactionIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
@@ -16,22 +16,49 @@ import { withViewDocs } from "../../../../.storybook/withViewDocs";
 
 const UploadButtonWrapperImpl = ({
     onUploadOptionSelected,
+    defaultOpen,
     ...rest
-}: UploadButtonViewSnapshot & UploadButtonViewActions): JSX.Element => {
+}: UploadButtonViewSnapshot & UploadButtonViewActions & { defaultOpen: boolean }): JSX.Element => {
     const vm = useMockedViewModel(rest, {
         onUploadOptionSelected,
     });
-    return <UploadButton vm={vm} />;
+    return <UploadButton defaultOpen={defaultOpen} vm={vm} />;
 };
 
 const UploadButtonWrapper = withViewDocs(UploadButtonWrapperImpl, UploadButton);
 
-export default {
+const meta = {
     title: "Room/UploadButton",
     component: UploadButtonWrapper,
     tags: ["autodocs"],
     args: {
+        mayUpload: true,
+        defaultOpen: false,
         onUploadOptionSelected: fn(),
+        options: [
+            {
+                type: "local",
+                label: "Attachment",
+                icon: AttachmentIcon,
+            },
+            {
+                label: "Fun Button",
+                icon: ReactionIcon,
+                type: "fun",
+            },
+        ],
+    },
+} satisfies Meta<typeof UploadButtonWrapper>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
+
+export const WithOneOption: Story = {
+    // No visible difference
+    tags: ["skip-test"],
+    args: {
         options: [
             {
                 type: "local",
@@ -40,34 +67,28 @@ export default {
             },
         ],
     },
-} satisfies Meta<typeof UploadButtonWrapper>;
-
-const Template: StoryFn<typeof UploadButtonWrapper> = (args) => <UploadButtonWrapper {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-    options: [
-        {
-            type: "local",
-            label: "Attachment",
-            icon: AttachmentIcon,
-        },
-        {
-            label: "Fun Button",
-            icon: ReactionIcon,
-            type: "fun",
-        },
-    ],
 };
 
-export const WithOneOption = Template.bind({});
-
-WithOneOption.args = {
-    options: [
-        {
-            type: "local",
-            label: "Attachment",
-            icon: AttachmentIcon,
+export const WithOpen: Story = {
+    args: {
+        defaultOpen: true,
+    },
+    parameters: {
+        a11y: {
+            config: {
+                rules: [
+                    {
+                        // Menu contains a header which is invalid
+                        id: "aria-required-children",
+                        enabled: false,
+                    },
+                    {
+                        // Menu pops open by default
+                        id: "aria-hidden-focus",
+                        enabled: false,
+                    },
+                ],
+            },
         },
-    ],
+    },
 };

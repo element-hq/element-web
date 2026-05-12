@@ -23,7 +23,7 @@ import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 
 export interface UploadButtonViewSnapshot {
     mayUpload: boolean;
-    options: { type: string; label: string; icon: ComponentType<SVGAttributes<SVGElement>> }[];
+    options: { type: string; label: string; icon?: ComponentType<SVGAttributes<SVGElement>> }[];
 }
 
 export interface UploadButtonViewActions {
@@ -41,12 +41,15 @@ export interface UploadButtonViewActions {
  */
 export function UploadButton({
     vm,
+    defaultOpen = false,
     ...rootButtonProps
 }: PropsWithChildren<
-    { vm: ViewModel<UploadButtonViewSnapshot, UploadButtonViewActions> } & ComponentProps<typeof IconButton>
+    { vm: ViewModel<UploadButtonViewSnapshot, UploadButtonViewActions>; defaultOpen?: boolean } & ComponentProps<
+        typeof IconButton
+    >
 >): ReactElement {
     const i18n = useI18n();
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(defaultOpen);
     const { options } = useViewModel(vm);
     // Ctrl+click is a shortcut to selecting the first item.
     // N.B. Clicking and shift clicking is handled by radix and
@@ -68,10 +71,10 @@ export function UploadButton({
             <IconButton
                 {...rootButtonProps}
                 tooltip={label}
-                title={label}
+                aria-label={label}
                 onClick={() => vm.onUploadOptionSelected(options[0].type)}
             >
-                <Icon />
+                {Icon ? <Icon /> : <AttachmentIcon />}
             </IconButton>
         );
     }

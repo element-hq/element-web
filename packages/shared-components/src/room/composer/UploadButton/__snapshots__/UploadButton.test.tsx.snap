@@ -18,7 +18,7 @@ exports[`UploadButton > can open the menu and select an option 1`] = `
     role="button"
     style="--cpd-icon-button-size: 32px;"
     tabindex="0"
-    title="Open attachment menu"
+    title="Attachment"
     type="button"
   >
     <div
@@ -55,7 +55,7 @@ exports[`UploadButton > renders a default button 1`] = `
     role="button"
     style="--cpd-icon-button-size: 32px;"
     tabindex="0"
-    title="Open attachment menu"
+    title="Attachment"
     type="button"
   >
     <div

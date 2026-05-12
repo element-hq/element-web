@@ -23,7 +23,7 @@ describe("UploadButton", () => {
     it("can open the menu and select an option", async () => {
         const onUploadOptionSelected = fn();
         const { container, getByRole } = render(<Default onUploadOptionSelected={onUploadOptionSelected} />);
-        await userEvent.click(getByRole("button", { name: "Open attachment menu" }));
+        await userEvent.click(getByRole("button", { name: "Attachment" }));
         expect(container).toMatchSnapshot();
         await userEvent.click(screen.getByRole("menuitem", { name: "Fun Button" }));
         expect(onUploadOptionSelected).toHaveBeenCalledWith("fun");
@@ -33,7 +33,7 @@ describe("UploadButton", () => {
         const onUploadOptionSelected = fn();
         const { getByRole } = render(<Default onUploadOptionSelected={onUploadOptionSelected} />);
         await userEvent.keyboard("[ControlLeft>]");
-        await userEvent.click(getByRole("button", { name: "Open attachment menu" }));
+        await userEvent.click(getByRole("button", { name: "Attachment" }));
         expect(onUploadOptionSelected).toHaveBeenCalledWith("local");
     });
 });

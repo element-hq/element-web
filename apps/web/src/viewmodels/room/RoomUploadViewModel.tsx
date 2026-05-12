@@ -229,7 +229,6 @@ export function RoomUploadContextProvider({
     });
 
     useEffect(() => {
-        console.log("Reply to event!", replyToEvent);
         vm.setReplyToEvent(replyToEvent);
     }, [vm, replyToEvent]);
 
