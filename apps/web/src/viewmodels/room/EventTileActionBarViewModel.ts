@@ -88,6 +88,7 @@ interface DerivedEventState {
     showExpandCollapse: boolean;
     showReplyInThread: boolean;
     showThreadForDeletedMessage: boolean;
+    contentActionable: boolean;
     canRedact: boolean;
     isFailed: boolean;
     isPinned: boolean;
@@ -188,7 +189,7 @@ export class EventTileActionBarViewModel
             actions.push(ActionBarAction.Expand);
         }
 
-        if (showShiftActions) {
+        if (showShiftActions && eventState.contentActionable) {
             actions.push(ActionBarAction.Copy);
             if (eventState.canRedact) {
                 actions.push(ActionBarAction.Remove);
@@ -230,6 +231,7 @@ export class EventTileActionBarViewModel
                 props.timelineRenderingType === TimelineRenderingType.Room &&
                 Boolean(mxEvent.getThread()),
             canRedact,
+            contentActionable,
             isFailed: [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT),
             isPinned: PinningUtils.isPinned(client, mxEvent),
             isQuoteExpanded: props.isQuoteExpanded ?? false,

@@ -37,6 +37,7 @@ import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { ModuleApi } from "../../../src/modules/Api";
 import { canCancel, canEditContent, editEvent, isContentActionable } from "../../../src/utils/EventUtils";
+import { copyPlaintext } from "../../../src/utils/strings";
 import { shouldDisplayReply } from "../../../src/utils/Reply";
 import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import { getMediaVisibility, setMediaVisibility } from "../../../src/utils/media/mediaVisibility";
@@ -122,9 +123,8 @@ jest.mock("../../../src/utils/FileDownloader", () => ({
     })),
 }));
 
-const mockCopyPlaintext = jest.fn();
 jest.mock("../../../src/utils/strings", () => ({
-    copyPlaintext: mockCopyPlaintext,
+    copyPlaintext: jest.fn(),
 }));
 
 describe("EventTileActionBarViewModel", () => {
@@ -565,6 +565,15 @@ describe("EventTileActionBarViewModel", () => {
             expect(vm.getSnapshot().actions).toContain(ActionBarAction.Copy);
             expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Remove);
         });
+
+        it("hides copy and remove when event is not content actionable (e.g. redacted)", () => {
+            mocked(isContentActionable).mockReturnValue(false);
+
+            const vm = createVm({ showShiftActions: true });
+
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Copy);
+            expect(vm.getSnapshot().actions).not.toContain(ActionBarAction.Remove);
+        });
     });
 
     describe("canRedact derivation", () => {
@@ -620,7 +629,7 @@ describe("EventTileActionBarViewModel", () => {
 
             await vm.onCopyClick(null);
 
-            expect(mockCopyPlaintext).toHaveBeenCalledWith("Hello World");
+            expect(copyPlaintext).toHaveBeenCalledWith("Hello World");
         });
 
         it("does nothing when event body is empty", async () => {
@@ -631,7 +640,7 @@ describe("EventTileActionBarViewModel", () => {
 
             await vm.onCopyClick(null);
 
-            expect(mockCopyPlaintext).not.toHaveBeenCalled();
+            expect(copyPlaintext).not.toHaveBeenCalled();
         });
 
         it("does nothing when event body is missing", async () => {
@@ -646,7 +655,7 @@ describe("EventTileActionBarViewModel", () => {
 
             await vm.onCopyClick(null);
 
-            expect(mockCopyPlaintext).not.toHaveBeenCalled();
+            expect(copyPlaintext).not.toHaveBeenCalled();
         });
     });
 

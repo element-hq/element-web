@@ -302,6 +302,9 @@ interface IState {
 
     thread: Thread | null;
     threadNotification?: NotificationCountType;
+
+    /** Whether the Shift key is currently held down, for showing extra action bar options. */
+    shiftKeyPressed: boolean;
 }
 
 /**
@@ -359,6 +362,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             focusWithin: false,
 
             thread,
+            shiftKeyPressed: false,
         };
 
         // don't do RR animations until we are mounted
@@ -457,7 +461,21 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         room?.on(ThreadEvent.New, this.onNewThread);
 
         this.verifyEvent();
+        window.addEventListener("keydown", this.onShiftKeyDown);
+        window.addEventListener("keyup", this.onShiftKeyUp);
     }
+
+    private readonly onShiftKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === "Shift") {
+            this.setState({ shiftKeyPressed: true });
+        }
+    };
+
+    private readonly onShiftKeyUp = (e: KeyboardEvent): void => {
+        if (e.key === "Shift") {
+            this.setState({ shiftKeyPressed: false });
+        }
+    };
 
     private readonly updateThread = (thread: Thread): void => {
         this.setState({ thread });
@@ -487,6 +505,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
         this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
         this.unmounted = false;
+        window.removeEventListener("keydown", this.onShiftKeyDown);
+        window.removeEventListener("keyup", this.onShiftKeyUp);
         if (this.props.resizeObserver && this.ref.current) this.props.resizeObserver.unobserve(this.ref.current);
     }
 
@@ -1192,6 +1212,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 isQuoteExpanded={isQuoteExpanded}
                 toggleThreadExpanded={() => this.setQuoteExpanded(!isQuoteExpanded)}
                 getRelationsForEvent={this.props.getRelationsForEvent}
+                shiftKeyPressed={this.state.shiftKeyPressed}
             />
         ) : undefined;
 
@@ -1954,6 +1975,7 @@ interface ActionBarWrapperProps {
     isQuoteExpanded?: boolean;
     toggleThreadExpanded: () => void;
     getRelationsForEvent?: GetRelationsForEvent;
+    shiftKeyPressed: boolean;
 }
 
 interface ThreadListActionBarWrapperProps {
@@ -1993,37 +2015,18 @@ function ActionBarWrapper({
     isQuoteExpanded,
     toggleThreadExpanded,
     getRelationsForEvent,
+    shiftKeyPressed,
 }: Readonly<ActionBarWrapperProps>): JSX.Element {
     const roomContext = useContext(RoomContext);
     const { isCard } = useContext(CardContext);
     const [optionsMenuAnchorRect, setOptionsMenuAnchorRect] = useState<DOMRect | null>(null);
     const [reactionsMenuAnchorRect, setReactionsMenuAnchorRect] = useState<DOMRect | null>(null);
-    const [shiftKeyPressed, setShiftKeyPressed] = useState(false);
     const isSearch = Boolean(roomContext.search);
     const handleOptionsClick = useCallback((anchor: HTMLElement | null): void => {
         setOptionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
     }, []);
     const handleReactionsClick = useCallback((anchor: HTMLElement | null): void => {
         setReactionsMenuAnchorRect(anchor?.getBoundingClientRect() ?? null);
-    }, []);
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent): void => {
-            if (e.key === "Shift") {
-                setShiftKeyPressed(true);
-            }
-        };
-        const handleKeyUp = (e: KeyboardEvent): void => {
-            if (e.key === "Shift") {
-                setShiftKeyPressed(false);
-            }
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("keyup", handleKeyUp);
-        return (): void => {
-            window.removeEventListener("keydown", handleKeyDown);
-            window.removeEventListener("keyup", handleKeyUp);
-        };
     }, []);
 
     const vm = useCreateAutoDisposedViewModel(
