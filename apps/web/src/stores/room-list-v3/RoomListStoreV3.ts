@@ -128,7 +128,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         });
         SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
         SettingsStore.watchSetting("RoomList.OrderedCustomSections", null, () => this.onOrderedCustomSectionsChange());
-        this.loadCustomSections();
     }
 
     /**
@@ -200,6 +199,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
+        await this.loadCustomSections();
+
         const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
 
         this.roomSkipList = new RoomSkipList(sorter, this.getSkipListFilters());
@@ -474,8 +475,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Reloads the custom sections, updates the skip list filters to reflect the new order and emits an update.
      * Emit {@link LISTS_UPDATE_EVENT}.
      */
-    private onOrderedCustomSectionsChange(): void {
-        this.loadCustomSections();
+    private async onOrderedCustomSectionsChange(): Promise<void> {
+        await this.loadCustomSections();
         if (!this.roomSkipList) return;
         this.roomSkipList.useNewFilters(this.getSkipListFilters());
         this.scheduleEmit();
@@ -521,8 +522,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Load the custom sections from the settings store and update the sorted tags.
      */
-    private loadCustomSections(): void {
-        const orderedCustomSections = getOrderedCustomSections();
+    private async loadCustomSections(): Promise<void> {
+        const orderedCustomSections = await getOrderedCustomSections();
         this.sortedTags = [DefaultTagID.Favourite, ...orderedCustomSections, CHATS_TAG, DefaultTagID.LowPriority];
     }
 }

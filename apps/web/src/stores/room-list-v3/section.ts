@@ -80,9 +80,18 @@ export function getCustomSectionData(): CustomSectionsData {
 
 /**
  * Retrieves the ordered list of custom section tags from the settings.
+ * If the settings contain tags that are not present in the custom section data, they will be filtered out and the settings will be updated to remove the unknown tags.
  */
-export function getOrderedCustomSections(): OrderedCustomSections {
-    return SettingsStore.getValue("RoomList.OrderedCustomSections") ?? [];
+export async function getOrderedCustomSections(): Promise<OrderedCustomSections> {
+    const sectionData = getCustomSectionData();
+    const rawValue = SettingsStore.getValue("RoomList.OrderedCustomSections");
+    const orderedSections: OrderedCustomSections = Array.isArray(rawValue) ? rawValue : [];
+    const knownSections = orderedSections.filter((tag) => tag in sectionData);
+    if (knownSections.length !== orderedSections.length) {
+        // Some sections were not found in the section data
+        await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, knownSections);
+    }
+    return knownSections;
 }
 
 /**
@@ -106,7 +115,7 @@ export async function createSection(): Promise<string | undefined> {
     await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 
     // Add the new section to the ordered list of sections
-    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections") || [];
+    const orderedSections = await getOrderedCustomSections();
     orderedSections.push(tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
     return tag;
@@ -152,8 +161,7 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
     if (!shouldRemoveSection) return;
 
     // Remove the section from the ordered list of sections
-    const orderedSections = SettingsStore.getValue("RoomList.OrderedCustomSections");
-    const newOrderedSections = orderedSections.filter((sectionTag) => sectionTag !== tag);
+    const newOrderedSections = (await getOrderedCustomSections()).filter((sectionTag) => sectionTag !== tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, newOrderedSections);
 
     // Remove the section data

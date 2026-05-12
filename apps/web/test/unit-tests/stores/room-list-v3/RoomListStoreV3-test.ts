@@ -833,6 +833,7 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
+                if (setting === "RoomList.CustomSectionData") return {};
                 return false;
             });
         }
@@ -1093,6 +1094,7 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [];
+                if (setting === "RoomList.CustomSectionData") return {};
                 return false;
             });
 
@@ -1107,11 +1109,13 @@ describe("RoomListStoreV3", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
                 if (setting === "feature_room_list_sections") return true;
                 if (setting === "RoomList.OrderedCustomSections") return [customTag];
+                if (setting === "RoomList.CustomSectionData")
+                    return { [customTag]: { tag: customTag, name: "Custom" } };
                 return false;
             });
 
             // Trigger the settings watcher
-            settingsWatcher("RoomList.OrderedCustomSections");
+            await Promise.resolve(settingsWatcher("RoomList.OrderedCustomSections"));
 
             // Now there should be 4 sections (Favourite, custom, Chats, LowPriority)
             expect(store.getSortedRoomsInActiveSpace().sections).toHaveLength(4);
