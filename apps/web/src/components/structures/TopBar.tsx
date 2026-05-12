@@ -48,7 +48,7 @@ function ElementLogo(): JSX.Element {
                     display: "inline-flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: "0 10px",
+                    padding: "4px 8px",
                     borderRadius: "6px",
                     border: "1px solid var(--cpd-color-green-800)",
                     background: "var(--cpd-color-green-300)",
