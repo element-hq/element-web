@@ -129,6 +129,9 @@ describe("EventTile", () => {
 
         stubClient();
         client = MatrixClientPeg.safeGet();
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: jest.fn().mockReturnValue(undefined),
+        } as unknown as DMRoomMap);
 
         room = new Room(ROOM_ID, client, client.getSafeUserId(), {
             pendingEventOrdering: PendingEventOrdering.Detached,
@@ -226,8 +229,8 @@ describe("EventTile", () => {
             ],
             [
                 TimelineRenderingType.Notification,
-                ["data-layout"],
-                ["data-scroll-tokens", "data-shape", "data-self", "data-event-id", "data-has-reply"],
+                ["data-scroll-tokens", "data-layout", "data-shape", "data-self", "data-has-reply"],
+                ["data-event-id"],
             ],
             [
                 TimelineRenderingType.File,
@@ -898,13 +901,6 @@ describe("EventTile", () => {
     });
 
     describe("EventTile in the right panel", () => {
-        beforeAll(() => {
-            const dmRoomMap: DMRoomMap = {
-                getUserIdForRoomId: jest.fn(),
-            } as unknown as DMRoomMap;
-            DMRoomMap.setShared(dmRoomMap);
-        });
-
         it("renders the room name for notifications", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
             expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
