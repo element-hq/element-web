@@ -1,0 +1,64 @@
+/* * Copyright 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import { type Meta, type StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
+
+import { VerticalFileListView } from "./VerticalFileList";
+
+const meta = {
+    title: "FileShare/VerticalFileList",
+    component: VerticalFileListView,
+    tags: ["autodocs"],
+    args: {
+        selectedFiles: [],
+        files: [
+            {
+                id: "0",
+                name: "testfile.txt",
+                updatedAt: new Date(2026, 1, 15),
+            },
+            {
+                id: "1",
+                name: "image.png",
+                updatedAt: new Date(2026, 1, 15),
+            },
+            {
+                id: "2",
+                name: "compressed.tar.gz",
+                updatedAt: new Date(2026, 1, 15),
+            },
+            {
+                id: "3",
+                name: "no-extension",
+                updatedAt: new Date(2026, 3, 15),
+            },
+            {
+                id: "4",
+                name: "no modified time",
+            },
+        ],
+        directories: [
+            {
+                id: "1",
+                name: "A directory",
+            },
+        ],
+        onFileSelected: fn(),
+        onDirectoryChange: fn(),
+    },
+    parameters: {
+        design: {
+            type: "figma",
+            url: "https://www.figma.com/design/1UCf1hF507QaRus3CUBKGn/Nectcloud-File-Picker?node-id=2138-14865&t=njpHkpdk8tVhp7cr-0",
+        },
+    },
+} satisfies Meta<typeof VerticalFileListView>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

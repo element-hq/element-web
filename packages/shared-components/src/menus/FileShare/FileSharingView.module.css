@@ -1,0 +1,7 @@
+.dialogButtons {
+    display: flex;
+    gap: var(--cpd-space-4x);
+    padding: 40px;
+    margin-left: auto;
+    justify-content: end;
+}

@@ -1,0 +1,73 @@
+.fileEntryComponent {
+    text-align: left;
+    font: var(--cpd-font-body-lg-medium);
+    .fileEntryComponentName {
+        color: var(--cpd-color-text-primary);
+        &:disabled {
+            background: none;
+            color: var(--cpd-color-bg-canvas-disabled);
+        }
+        &:hover {
+            background: var(--cpd-color-bg-action-secondary-hovered);
+        }
+        border-radius: 0 !important;
+        text-align: left;
+        font: var(--cpd-font-body-lg-medium) !important;
+        border: none !important;
+        display: flex !important;
+        padding: var(--cpd-space-2x) 0 !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        gap: var(--cpd-space-2x);
+        > * {
+            margin: auto 0;
+        }
+    }
+}
+
+.fileEntryNameExtension {
+    color: var(--cpd-color-text-secondary);
+}
+
+.fileRow {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    > * {
+        margin: auto 0;
+    }
+}
+
+.directoryListing {
+    padding: 0 var(--cpd-space-8x);
+    list-style: none;
+    max-height: 430px;
+    overflow: scroll;
+}
+
+.header {
+    padding: 0 var(--cpd-space-8x);
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--cpd-color-border-interactive-secondary);
+
+    > nav {
+        border: none;
+    }
+}
+
+.folderIcon {
+    color: var(--cpd-color-icon-primary);
+    font-size: 36px;
+    line-height: 0px;
+}
+
+.timestamp {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.spinner {
+    margin: var(--cpd-space-6x) auto;
+    display: block;
+}

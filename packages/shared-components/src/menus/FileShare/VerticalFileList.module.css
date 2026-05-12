@@ -1,0 +1,59 @@
+.container {
+    padding: 0 var(--cpd-space-8x);
+    list-style: none;
+    overflow: scroll;
+    height: 431px;
+}
+
+.fileEntryComponent {
+    text-align: left;
+    font: var(--cpd-font-body-lg-medium);
+    .fileEntryComponentName {
+        background: none;
+        color: var(--cpd-color-text-primary);
+        &:disabled {
+            background: none;
+            color: var(--cpd-color-bg-canvas-disabled);
+        }
+        &:hover {
+            background: var(--cpd-color-bg-action-secondary-hovered);
+        }
+        border-radius: 0;
+        text-align: left;
+        font: var(--cpd-font-body-lg-medium);
+        border: none;
+        display: flex;
+        padding: var(--cpd-space-2x) 0;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        gap: var(--cpd-space-2x);
+        > * {
+            margin: auto 0;
+        }
+    }
+}
+
+.fileEntryNameExtension {
+    color: var(--cpd-color-text-secondary);
+}
+
+.fileRow {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    > * {
+        margin: auto 0;
+    }
+}
+
+.folderIcon {
+    color: var(--cpd-color-icon-primary);
+    font-size: 36px;
+    line-height: 0px;
+}
+
+.timestamp {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
