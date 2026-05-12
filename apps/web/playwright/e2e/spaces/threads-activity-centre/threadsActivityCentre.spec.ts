@@ -89,7 +89,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     });
 
     test(
-        "should show the rooms with unread threads",
+        "should show threads from other users in the Other threads tab",
         { tag: "@screenshot" },
         async ({ room1, room2, util, msg, user, app }) => {
             await app.closeVerifyToast();
@@ -99,9 +99,10 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
             // The indicator should be shown
             await util.assertHighlightIndicator();
 
-            // Verify that we have the expected rooms in the TAC
+            // Bot-sent threads appear in "Other threads" tab
             await util.openTac();
-            await util.assertRoomsInTac([
+            await util.switchToOtherThreadsTab();
+            await util.assertThreadsInTac([
                 { room: room2.name, notificationLevel: "highlight" },
                 { room: room1.name, notificationLevel: "notification" },
             ]);
@@ -120,11 +121,12 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
             await util.goTo(room2);
             await util.populateThreads(room1, room2, msg, user);
 
-            // Click on the first room in TAC
+            // Click on the first thread in TAC (switch to Other threads tab first)
             await util.openTac();
-            await util.clickRoomInTac(room2.name);
+            await util.switchToOtherThreadsTab();
+            await util.clickThreadInTac(room2.name);
 
-            // Verify that the thread panel is opened after a click on the room in the TAC
+            // Verify that the thread panel is opened after a click on a thread in the TAC
             await util.assertThreadPanelIsOpened();
 
             // Open a thread and mark it as read
@@ -132,7 +134,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
             await util.openThread("Msg1");
             await util.assertNotificationTac();
             await util.openTac();
-            await util.assertRoomsInTac([
+            await util.switchToOtherThreadsTab();
+            await util.assertThreadsInTac([
                 { room: room1.name, notificationLevel: "notification" },
                 { room: room2.name, notificationLevel: "notification" },
             ]);
@@ -147,7 +150,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await util.populateThreads(room1, room2, msg, user, false);
 
         await util.openTac();
-        await util.assertRoomsInTac([
+        await util.switchToOtherThreadsTab();
+        await util.assertThreadsInTac([
             { room: room1.name, notificationLevel: "notification" },
             { room: room2.name, notificationLevel: "notification" },
         ]);
@@ -189,21 +193,24 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
 
         await util.assertNotificationTac();
 
+        // Bot-sent thread appears in "Other threads" tab
         await util.openTac();
-        await util.clickRoomInTac(room1.name);
+        await util.switchToOtherThreadsTab();
+        await util.clickThreadInTac(room1.name);
 
         await util.clickMarkAllThreadsRead();
 
         await util.assertNoTacIndicator();
     });
 
-    test("should focus the thread tab when clicking an item in the TAC", async ({ room1, room2, util, msg, app }) => {
+    test("should focus the thread panel when clicking an item in the TAC", async ({ room1, room2, util, msg, app }) => {
         await app.closeVerifyToast();
-
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
+        // Bot-sent thread appears in "Other threads" tab
         await util.openTac();
-        await util.clickRoomInTac(room1.name);
+        await util.switchToOtherThreadsTab();
+        await util.clickThreadInTac(room1.name);
 
         await util.assertThreadPanelIsOpened();
     });
