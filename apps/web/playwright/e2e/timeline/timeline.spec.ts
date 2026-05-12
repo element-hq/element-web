@@ -718,7 +718,7 @@ test.describe("Timeline", () => {
             await viewSourceEventExpanded.hover();
             const toggleEventButton = viewSourceEventExpanded.getByRole("button", { name: "toggle event" });
             // Check size and position of toggle on expanded view source event
-            // See: _ViewSourceEvent.pcss
+            // See: ViewSourceEventView.module.css
             await expect(toggleEventButton).toHaveCSS("height", "16px"); // --ViewSourceEvent_toggle-size
             await expect(toggleEventButton).toHaveCSS("align-self", "flex-end");
             // Click again to collapse the source

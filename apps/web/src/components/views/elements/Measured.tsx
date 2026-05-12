@@ -1,4 +1,5 @@
 /*
+Copyright (C) 2026 Element Creations Ltd
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -6,63 +7,62 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
-import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
+import UIStore from "../../../stores/UIStore";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 
 interface IProps {
+    /**
+     * Element to watch for resize changes on.
+     */
     sensor: RefObject<Element | null>;
-    breakpoint: number;
-    onMeasurement(narrow: boolean): void;
+    /**
+     * Minimum width of element to be considered full-size.
+     * Defaults to `500px`
+     */
+    breakpoint?: number;
+    /**
+     * Callback for when the narrowness property changes.
+     * @param narrow
+     * @returns
+     */
+    onMeasurement: (narrow: boolean) => void;
 }
 
-export default class Measured extends React.PureComponent<IProps> {
-    private static instanceCount = 0;
-    private readonly instanceId: number;
+let instanceCount = 0;
 
-    public static defaultProps = {
-        breakpoint: 500,
-    };
+/**
+ * This component can watch a single element for width changes, and will fire
+ * a callback if the width changes to be lower or higher than the `breakpoint`.
+ */
+export default function Measured({ sensor, breakpoint = 500, onMeasurement }: IProps): null {
+    const instanceIdRef = useRef(instanceCount++);
+    const instanceId = instanceIdRef.current;
 
-    public constructor(props: IProps) {
-        super(props);
-
-        this.instanceId = Measured.instanceCount++;
-    }
-
-    public componentDidMount(): void {
-        console.log("Measured componentDidMount", this.props.sensor.current);
-        if (this.props.sensor.current) {
-            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, this.props.sensor.current);
+    useEffect(() => {
+        if (sensor.current) {
+            UIStore.instance.trackElementDimensions(`Measured${instanceId}`, sensor.current);
         }
-        UIStore.instance.on(`Measured${this.instanceId}`, this.onResize);
-    }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>): void {
-        const previous = prevProps.sensor.current;
-        const current = this.props.sensor.current;
-        console.log("Measured componentDidUpdate", current);
-        if (previous === current) return;
-        if (previous) {
-            UIStore.instance.stopTrackingElementDimensions(`Measured${this.instanceId}`);
-        }
-        if (current) {
-            console.log("Measured trackElementDimensions");
-            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, current);
-        }
-    }
+        return () => {
+            UIStore.instance.stopTrackingElementDimensions(`Measured${instanceId}`);
+        };
+    }, [sensor, instanceId]);
 
-    public componentWillUnmount(): void {
-        UIStore.instance.off(`Measured${this.instanceId}`, this.onResize);
-        UIStore.instance.stopTrackingElementDimensions(`Measured${this.instanceId}`);
-    }
+    const narrow = useEventEmitterState<boolean>(
+        UIStore.instance,
+        `Measured${instanceId}`,
+        (_type: unknown, entry: ResizeObserverEntry) => {
+            // N.B there is only one `_type` of resize event.
+            return entry?.contentRect.width <= breakpoint;
+        },
+    );
 
-    private onResize = (type: UI_EVENTS, entry: ResizeObserverEntry): void => {
-        if (type !== UI_EVENTS.Resize) return;
-        this.props.onMeasurement(entry.contentRect.width <= this.props.breakpoint);
-    };
+    // Only fire when the state changes.
+    useEffect(() => {
+        onMeasurement(narrow);
+    }, [onMeasurement, narrow]);
 
-    public render(): React.ReactNode {
-        return null;
-    }
+    return null;
 }

@@ -440,6 +440,9 @@ importers:
       is-ip:
         specifier: ^5.0.0
         version: 5.0.1
+      jest-silent-reporter:
+        specifier: ^0.6.0
+        version: 0.6.0
       js-xxhash:
         specifier: ^5.0.0
         version: 5.0.1
@@ -2956,6 +2959,10 @@ packages:
   '@jest/transform@30.3.0':
     resolution: {integrity: sha512-TLKY33fSLVd/lKB2YI1pH69ijyUblO/BQvCj566YvnwuzoTNr648iE0j22vRvVNk2HsPwByPxATg3MleS3gf5A==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
+
+  '@jest/types@26.6.2':
+    resolution: {integrity: sha512-fC6QCp7Sc5sX6g8Tvbmj4XUTbyrik0akgRy03yjXbQaBWWNWGE7SGtJk98m0N8nzegD/7SggrUlivxo5ax4KWQ==}
+    engines: {node: '>= 10.14.2'}
 
   '@jest/types@30.3.0':
     resolution: {integrity: sha512-JHm87k7bA33hpBngtU8h6UBub/fqqA9uXfw+21j5Hmk7ooPHlboRNxHq0JcMtC+n8VJGP1mcfnD3Mk+XKe1oSw==}
@@ -5685,6 +5692,9 @@ packages:
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
 
+  '@types/yargs@15.0.20':
+    resolution: {integrity: sha512-KIkX+/GgfFitlASYCGoSF+T4XRXhOubJLhkLVtSfsRTe9jWMmuM2g28zQ41BtPTG7TRBb2xHW+LCNVE9QR/vsg==}
+
   '@types/yargs@17.0.35':
     resolution: {integrity: sha512-qUHkeCyQFxMXg79wQfTtfndEC+N9ZZg76HJftDJp+qH2tV7Gj4OJi7l+PiWwJ+pWtW8GwSmqsDj/oymhrTWXjg==}
 
@@ -6874,6 +6884,9 @@ packages:
 
   chromium-pickle-js@0.2.0:
     resolution: {integrity: sha512-1R5Fho+jBq0DDydt+/vHWj5KJNJCKdARKOCwZUen84I5BreWoLqRLANH1U87eJy1tiASPtMnGqJJq0ZsLoRPOw==}
+
+  ci-info@2.0.0:
+    resolution: {integrity: sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==}
 
   ci-info@4.3.1:
     resolution: {integrity: sha512-Wdy2Igu8OcBpI2pZePZ5oWjPC38tmDVx5WKUXKwlLYkA0ozo85sLsLvkBbBn/sZaSCMFOGZJ14fvW9t5/d7kdA==}
@@ -9070,6 +9083,10 @@ packages:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
 
+  is-ci@2.0.0:
+    resolution: {integrity: sha512-YfJT7rkpQB0updsdHLGWrvhBJfcfzNNawYDNIyQXJz0IViGf75O8EBPKSdvw2rF+LGCsX4FZ8tcr3b19LcZq4w==}
+    hasBin: true
+
   is-ci@4.1.0:
     resolution: {integrity: sha512-Ab9bQDQ11lWootZUI5qxgN2ZXwxNI5hTwnsvOc1wyxQ7zQ8OkEDw79mI0+9jI3x432NfwbVRru+3noJfXF6lSQ==}
     hasBin: true
@@ -9438,9 +9455,16 @@ packages:
     resolution: {integrity: sha512-CgC+hIBJbuh78HEffkhNKcbXAytQViplcl8xupqeIWyKQF50kCQA8J7GeJCkjisC6hpnC9Muf8jV5RdtdFbGng==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
+  jest-silent-reporter@0.6.0:
+    resolution: {integrity: sha512-4nmS+5o7ycVlvbQOTx7CnGdbBtP2646hnDgQpQLaVhjHcQNHD+gqBAetyjRDlgpZ8+8N82MWI59K+EX2LsVk7g==}
+
   jest-snapshot@30.3.0:
     resolution: {integrity: sha512-f14c7atpb4O2DeNhwcvS810Y63wEn8O1HqK/luJ4F6M4NjvxmAKQwBUWjbExUtMxWJQ0wVgmCKymeJK6NZMnfQ==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
+
+  jest-util@26.6.2:
+    resolution: {integrity: sha512-MDW0fKfsn0OI7MS7Euz6h8HNDXVQ0gaM9uW6RjfDmd1DAFcaxX9OqIakHIqhbnmF08Cf2DLDG+ulq8YQQ0Lp0Q==}
+    engines: {node: '>= 10.14.2'}
 
   jest-util@30.3.0:
     resolution: {integrity: sha512-/jZDa00a3Sz7rdyu55NLrQCIrbyIkbBxareejQI315f/i8HjYN+ZWsDLLpoQSiUIEIyZF/R8fDg3BmB8AtHttg==}
@@ -15525,6 +15549,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@jest/types@26.6.2':
+    dependencies:
+      '@types/istanbul-lib-coverage': 2.0.6
+      '@types/istanbul-reports': 3.0.4
+      '@types/node': 18.19.130
+      '@types/yargs': 15.0.20
+      chalk: 4.1.2
+
   '@jest/types@30.3.0':
     dependencies:
       '@jest/pattern': 30.0.1
@@ -18430,6 +18462,10 @@ snapshots:
 
   '@types/yargs-parser@21.0.3': {}
 
+  '@types/yargs@15.0.20':
+    dependencies:
+      '@types/yargs-parser': 21.0.3
+
   '@types/yargs@17.0.35':
     dependencies:
       '@types/yargs-parser': 21.0.3
@@ -19878,6 +19914,8 @@ snapshots:
   chrome-trace-event@1.0.4: {}
 
   chromium-pickle-js@0.2.0: {}
+
+  ci-info@2.0.0: {}
 
   ci-info@4.3.1: {}
 
@@ -22440,6 +22478,10 @@ snapshots:
 
   is-callable@1.2.7: {}
 
+  is-ci@2.0.0:
+    dependencies:
+      ci-info: 2.0.0
+
   is-ci@4.1.0:
     dependencies:
       ci-info: 4.4.0
@@ -22925,6 +22967,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  jest-silent-reporter@0.6.0:
+    dependencies:
+      chalk: 4.1.2
+      jest-util: 26.6.2
+
   jest-snapshot@30.3.0:
     dependencies:
       '@babel/core': 7.29.0
@@ -22950,6 +22997,15 @@ snapshots:
       synckit: 0.11.12
     transitivePeerDependencies:
       - supports-color
+
+  jest-util@26.6.2:
+    dependencies:
+      '@jest/types': 26.6.2
+      '@types/node': 18.19.130
+      chalk: 4.1.2
+      graceful-fs: 4.2.11
+      is-ci: 2.0.0
+      micromatch: 4.0.8
 
   jest-util@30.3.0:
     dependencies:

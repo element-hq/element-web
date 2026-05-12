@@ -74,6 +74,7 @@
         "html-entities": "^2.0.0",
         "html-react-parser": "^6.0.0",
         "is-ip": "^5.0.0",
+        "jest-silent-reporter": "^0.6.0",
         "js-xxhash": "^5.0.0",
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",

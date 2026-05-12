@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RoomAvatarEventView > renders a changed room avatar event 1`] = `
+<div>
+  <span
+    class="RoomAvatarEventView-module_textualEvent"
+    data-event-density="default"
+    data-event-layout="group"
+  >
+    <span>
+      Alice changed the room avatar to
+      <button
+        aria-label="Alice changed the avatar for General"
+        class="RoomAvatarEventView-module_avatarButton"
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: rgb(13, 189, 139);"
+        />
+      </button>
+    </span>
+  </span>
+</div>
+`;
+
+exports[`RoomAvatarEventView > renders a removed room avatar event 1`] = `
+<div>
+  <div
+    class="RoomAvatarEventView-module_textualEvent"
+    data-event-density="default"
+    data-event-layout="group"
+  >
+    Alice removed the room avatar.
+  </div>
+</div>
+`;
