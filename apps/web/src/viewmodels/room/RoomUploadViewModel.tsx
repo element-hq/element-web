@@ -141,7 +141,7 @@ export const RoomUploadContext = createContext<RoomUploadViewModel | null>(null)
 export function useRoomUploadViewModel(): RoomUploadViewModel {
     const ctx = useContext(RoomUploadContext);
     if (!ctx) {
-        throw Error("RoomFileUploadProvider is not present");
+        throw new Error("RoomFileUploadProvider is not present");
     }
     return ctx;
 }
@@ -163,14 +163,14 @@ export function RoomUploadContextProvider({
 
     const openFilePicker = useCallback((): void => {
         if (!uploadInput.current) {
-            throw Error("Input not ready");
+            throw new Error("Input not ready");
         }
         uploadInput.current.click();
     }, [uploadInput]);
 
     const vm = useCreateAutoDisposedViewModel(() => {
         if (!room) {
-            throw Error("RoomUploadContextProvider must have a room");
+            throw new Error("RoomUploadContextProvider must have a room");
         }
         return new RoomUploadViewModel(
             room,
