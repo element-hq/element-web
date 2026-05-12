@@ -9,7 +9,7 @@ import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type Re
 import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
 
-import { type Room } from "./RoomListItemAccessibilityWrapper/RoomListItemView";
+import { type Room } from "./RoomListItemWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
 import { _t } from "../../core/i18n/i18n";
 import {
@@ -20,7 +20,7 @@ import {
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
 import { GroupedVirtualizedList } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
-import { RoomListItemAccessibilityWrapper } from "./RoomListItemAccessibilityWrapper";
+import { RoomListItemWrapper } from "./RoomListItemWrapper";
 import styles from "./VirtualizedRoomListView.module.css";
 
 /**
@@ -181,7 +181,7 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
             const isLastItem = Boolean((isFlatList || isInLastSection) && index === roomCount - 1);
 
             return (
-                <RoomListItemAccessibilityWrapper
+                <RoomListItemWrapper
                     key={roomId}
                     vm={roomItemVM}
                     renderAvatar={renderAvatar}

@@ -15,7 +15,7 @@ import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
 import { type ComposerFunctions } from "../types";
-import { ComposerInsertPayload, ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
+import { type ComposerInsertPayload, ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 import { useComposerContext } from "../ComposerContext";
 import { setSelection } from "../utils/selection";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";

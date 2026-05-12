@@ -94,7 +94,7 @@ MultiplePreviewsVisible.args = {
         {
             title: "One",
             description: "A regular square image.",
-            link: "https://matrix.org",
+            link: "https://matrix.org/one",
             siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
@@ -108,7 +108,7 @@ MultiplePreviewsVisible.args = {
         {
             title: "Two",
             description: "This one has a taller image which should crop nicely.",
-            link: "https://matrix.org",
+            link: "https://matrix.org/two",
             siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
@@ -121,7 +121,7 @@ MultiplePreviewsVisible.args = {
         {
             title: "Three",
             description: "One more description",
-            link: "https://matrix.org",
+            link: "https://matrix.org/three",
             siteName: "matrix.org",
             showTooltipOnLink: false,
             image: {
@@ -140,5 +140,7 @@ MultiplePreviewsVisible.args = {
 export const WithCompactView = Template.bind({});
 WithCompactView.args = {
     ...MultiplePreviewsVisible.args,
-    compactLayout: true,
+};
+WithCompactView.globals = {
+    eventDensity: "compact",
 };

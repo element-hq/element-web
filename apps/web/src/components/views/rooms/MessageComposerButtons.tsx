@@ -23,7 +23,7 @@ import {
     StickerIcon,
     TextFormattingIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { UploadButton, useViewModel } from "@element-hq/web-shared-components";
+import { UploadButton } from "@element-hq/web-shared-components";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";

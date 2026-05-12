@@ -54,7 +54,7 @@ import { type ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import DocumentPosition from "../../../editor/position";
-import { ComposerInsertPayload, ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { type ComposerInsertPayload, ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";

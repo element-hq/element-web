@@ -12,9 +12,7 @@ import {
     type UploadButtonViewSnapshot,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
-
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
-import type { ComposerApiFileUploadOption } from "@element-hq/element-web-module-api";
 import { AttachmentIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 import React, {
     type ChangeEventHandler,
@@ -33,6 +31,7 @@ import {
     RoomEvent,
 } from "matrix-js-sdk/src/matrix";
 
+import type { ComposerApiFileUploadOption } from "@element-hq/element-web-module-api";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ContentMessages from "../../ContentMessages";

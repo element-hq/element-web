@@ -31,7 +31,8 @@ export interface UploadButtonViewActions {
 }
 
 /**
- * A button that may have one or more options that the user can select.
+ * A composer button to initiate uploading files. The button may also be
+ * Ctrl+Clicked to initiate the
  *
  * @example
  * ```tsx
@@ -47,7 +48,9 @@ export function UploadButton({
     const i18n = useI18n();
     const [open, setOpen] = useState(false);
     const { options } = useViewModel(vm);
-    // Shift click is a shortcut to selecting the first item.
+    // Ctrl+click is a shortcut to selecting the first item.
+    // N.B. Clicking and shift clicking is handled by radix and
+    // can't be intercepted.
     const onMenuClick: MouseEventHandler<HTMLButtonElement> = useCallback(
         (ev) => {
             if (!ev.ctrlKey) {
@@ -76,9 +79,9 @@ export function UploadButton({
     const trigger = (
         <IconButton
             {...rootButtonProps}
-            tooltip={i18n.translate("composer|attachment_button_label")}
+            tooltip={i18n.translate("common|attachment")}
             onClick={onMenuClick}
-            title={i18n.translate("composer|attachment_button_label")}
+            title={i18n.translate("common|attachment")}
         >
             <AttachmentIcon />
         </IconButton>
@@ -87,7 +90,7 @@ export function UploadButton({
     return (
         <Menu
             side="top"
-            title={i18n.translate("composer|attachment_button_label")}
+            title={i18n.translate("common|attachment")}
             trigger={trigger}
             open={open}
             onOpenChange={(o) => setOpen(o)}

@@ -11,43 +11,29 @@ import { Button } from "@vector-im/compound-web";
 
 import { type ViewModel, useViewModel } from "../../../../../core/viewmodel";
 import styles from "./TileErrorView.module.css";
+import { useEventPresentationAttributes } from "../../../EventPresentation/EventPresentationContext";
 
-export type TileErrorViewLayout = "bubble" | "group" | "irc";
-
+/** Snapshot data for rendering an event tile error fallback. */
 export interface TileErrorViewSnapshot {
-    /**
-     * Layout variant used by the host timeline.
-     */
-    layout?: TileErrorViewLayout;
-    /**
-     * Primary fallback text shown when a tile fails to render.
-     */
+    /** Primary fallback text shown when a tile fails to render. */
     message: string;
-    /**
-     * Optional event type appended to the fallback text.
-     */
+    /** Optional event type appended to the fallback text. */
     eventType?: string;
-    /**
-     * Optional label for the bug-report action button.
-     */
+    /** Optional label for the bug-report action button. */
     bugReportCtaLabel?: string;
-    /**
-     * Optional label for the view-source action.
-     */
+    /** Optional label for the view-source action. */
     viewSourceCtaLabel?: string;
 }
 
+/** User actions emitted by the tile error fallback. */
 export interface TileErrorViewActions {
-    /**
-     * Invoked when the bug-report button is clicked.
-     */
+    /** Invoked when the bug-report button is clicked. */
     onBugReportClick?: MouseEventHandler<HTMLButtonElement>;
-    /**
-     * Invoked when the view-source action is clicked.
-     */
+    /** Invoked when the view-source action is clicked. */
     onViewSourceClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
+/** View model contract for the tile error fallback. */
 export type TileErrorViewModel = ViewModel<TileErrorViewSnapshot, TileErrorViewActions>;
 
 interface TileErrorViewProps {
@@ -66,17 +52,14 @@ interface TileErrorViewProps {
  *
  * The component shows the fallback error message from the view model, optionally
  * appends the event type in parentheses, and can render bug-report and view-source
- * actions when their labels are provided. The layout in the view-model snapshot
- * selects the timeline presentation variant.
+ * actions when their labels are provided.
  */
 export function TileErrorView({ vm, className }: Readonly<TileErrorViewProps>): JSX.Element {
-    const { message, eventType, bugReportCtaLabel, viewSourceCtaLabel, layout = "group" } = useViewModel(vm);
+    const eventPresentationAttributes = useEventPresentationAttributes();
+    const { message, eventType, bugReportCtaLabel, viewSourceCtaLabel } = useViewModel(vm);
 
     return (
-        <li
-            className={classNames(styles.tileErrorView, className, { [styles.bubble]: layout === "bubble" })}
-            data-layout={layout}
-        >
+        <li className={classNames(styles.tileErrorView, className)} {...eventPresentationAttributes}>
             <div className={styles.line} role="status">
                 <span className={styles.message}>
                     {message}
