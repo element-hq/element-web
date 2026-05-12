@@ -24,7 +24,6 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
-    CHATS_TAG,
     RoomListStoreV3Event,
     type RoomsResult,
     type Section,
@@ -40,6 +39,7 @@ import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel
 import SettingsStore from "../../settings/SettingsStore";
 import { tagRoom } from "../../utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
+import { CHATS_TAG } from "../../stores/room-list-v3/section";
 
 /**
  * Tracks the position of the active room within a specific section.

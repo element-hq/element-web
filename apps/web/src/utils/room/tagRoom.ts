@@ -9,11 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
+import { type TagID } from "../../stores/room-list-v3/skip-list/tag";
 import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";
-import { isCustomSectionTag } from "../../stores/room-list-v3/section";
-import { CHATS_TAG } from "../../stores/room-list-v3/RoomListStoreV3";
+import { CHATS_TAG, isSectionTag } from "../../stores/room-list-v3/section";
 import { getSectionTagForRoom } from "./getSectionTagForRoom";
 
 /**
@@ -27,7 +26,7 @@ export function tagRoom(room: Room, tagId: TagID): void {
     const isChatTag = tagId === CHATS_TAG;
     const tag = isChatTag ? null : tagId;
 
-    if (tag && tag !== DefaultTagID.Favourite && tag !== DefaultTagID.LowPriority && !isCustomSectionTag(tag)) {
+    if (isSectionTag(tagId)) {
         logger.warn(`Unexpected tag ${tag} applied to ${room.roomId}`);
         return;
     }

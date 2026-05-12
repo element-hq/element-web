@@ -7,9 +7,9 @@
 
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
+import { type TagID } from "../../stores/room-list-v3/skip-list/tag";
 import { getTagsForRoom } from "./getTagsForRoom";
-import { isCustomSectionTag } from "../../stores/room-list-v3/section";
+import { isSectionTag } from "../../stores/room-list-v3/section";
 
 /**
  * Get the section tag for a given room.
@@ -17,9 +17,5 @@ import { isCustomSectionTag } from "../../stores/room-list-v3/section";
  * @returns The section tag ID or null if none found.
  */
 export function getSectionTagForRoom(room: Room): TagID | null {
-    return (
-        getTagsForRoom(room).find(
-            (t) => t === DefaultTagID.Favourite || t === DefaultTagID.LowPriority || isCustomSectionTag(t),
-        ) ?? null
-    );
+    return getTagsForRoom(room).find((t) => isSectionTag(t)) ?? null;
 }

@@ -10,7 +10,7 @@ import { mocked } from "jest-mock";
 import { waitFor } from "jest-matrix-react";
 
 import { createTestClient, flushPromises, flushPromisesWithFakeTimers, mkStubRoom, stubClient } from "../../test-utils";
-import RoomListStoreV3, { CHATS_TAG, RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3, { RoomListStoreV3Event } from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { FilterEnum } from "../../../src/stores/room-list-v3/skip-list/filters";
 import dispatcher from "../../../src/dispatcher/dispatcher";
@@ -23,6 +23,7 @@ import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { tagRoom } from "../../../src/utils/room/tagRoom";
 import { getSectionTagForRoom } from "../../../src/utils/room/getSectionTagForRoom";
+import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
 
 jest.mock("../../../src/utils/room/tagRoom", () => ({
     tagRoom: jest.fn(),
