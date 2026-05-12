@@ -49,6 +49,53 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import PlatformPeg from "../../../../../src/PlatformPeg";
 
+function getTile(container: HTMLElement): HTMLElement {
+    const tile = container.querySelector(".mx_EventTile");
+    expect(tile).not.toBeNull();
+    return tile as HTMLElement;
+}
+
+function getLine(container: HTMLElement): HTMLElement {
+    const line = container.querySelector(".mx_EventTile_line");
+    expect(line).not.toBeNull();
+    return line as HTMLElement;
+}
+
+function makeReplyEvent(roomId: string): MatrixEvent {
+    const parentEvent = mkMessage({
+        room: roomId,
+        user: "@alice:example.org",
+        msg: "Original message",
+        event: true,
+    });
+
+    return mkMessage({
+        room: roomId,
+        user: "@bob:example.org",
+        msg: "Reply message",
+        event: true,
+        relatesTo: {
+            "m.in_reply_to": {
+                event_id: parentEvent.getId(),
+            },
+        },
+    });
+}
+
+function makeThreadReplyEvent(roomId: string): MatrixEvent {
+    return mkMessage({
+        room: roomId,
+        user: "@alice:example.org",
+        msg: "Hello world!",
+        ts: 1234,
+        event: true,
+        relatesTo: {
+            rel_type: "m.thread",
+            event_id: "$thread-root",
+        },
+    });
+}
+
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
     let mxEvent: MatrixEvent;
@@ -85,18 +132,6 @@ describe("EventTile", () => {
             ...roomContext,
         });
         return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
-    }
-
-    function getTile(container: HTMLElement): HTMLElement {
-        const tile = container.querySelector(".mx_EventTile");
-        expect(tile).not.toBeNull();
-        return tile as HTMLElement;
-    }
-
-    function getLine(container: HTMLElement): HTMLElement {
-        const line = container.querySelector(".mx_EventTile_line");
-        expect(line).not.toBeNull();
-        return line as HTMLElement;
     }
 
     function makeOwnMessage(overrides: Partial<Parameters<typeof mkMessage>[0]> = {}): MatrixEvent {
@@ -673,27 +708,6 @@ describe("EventTile", () => {
     });
 
     describe("reply chain", () => {
-        function makeReplyEvent(): MatrixEvent {
-            const parentEvent = mkMessage({
-                room: room.roomId,
-                user: "@alice:example.org",
-                msg: "Original message",
-                event: true,
-            });
-
-            return mkMessage({
-                room: room.roomId,
-                user: "@bob:example.org",
-                msg: "Reply message",
-                event: true,
-                relatesTo: {
-                    "m.in_reply_to": {
-                        event_id: parentEvent.getId(),
-                    },
-                },
-            });
-        }
-
         it("marks non-reply events as having no reply", () => {
             const { container } = getComponent();
 
@@ -702,7 +716,7 @@ describe("EventTile", () => {
         });
 
         it("marks reply events as having a reply chain", () => {
-            const replyEvent = makeReplyEvent();
+            const replyEvent = makeReplyEvent(room.roomId);
             const { container } = getComponent({ mxEvent: replyEvent });
 
             expect(getTile(container)).toHaveAttribute("data-has-reply", "true");
@@ -710,7 +724,7 @@ describe("EventTile", () => {
         });
 
         it("does not render the reply chain for redacted reply events", () => {
-            const replyEvent = makeReplyEvent();
+            const replyEvent = makeReplyEvent(room.roomId);
             jest.spyOn(replyEvent, "isRedacted").mockReturnValue(true);
             const { container } = getComponent({ mxEvent: replyEvent });
 
@@ -760,17 +774,8 @@ describe("EventTile", () => {
     });
 
     describe("search thread info", () => {
-        function makeThreadReplyEvent(): MatrixEvent {
-            return makeTimestampedMessage({
-                relatesTo: {
-                    rel_type: "m.thread",
-                    event_id: "$thread-root",
-                },
-            });
-        }
-
         it("renders search thread info for events in a thread", () => {
-            const threadEvent = makeThreadReplyEvent();
+            const threadEvent = makeThreadReplyEvent(room.roomId);
             const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Search);
 
             expect(container.querySelector(".mx_ThreadSummary_icon")).not.toBeNull();
@@ -778,7 +783,7 @@ describe("EventTile", () => {
         });
 
         it("renders search thread info as a link when a highlight link is provided", () => {
-            const threadEvent = makeThreadReplyEvent();
+            const threadEvent = makeThreadReplyEvent(room.roomId);
             const { container } = getComponent(
                 { mxEvent: threadEvent, highlightLink: "https://example.org/thread" },
                 TimelineRenderingType.Search,
@@ -790,7 +795,7 @@ describe("EventTile", () => {
         });
 
         it("renders search thread info as text when no highlight link is provided", () => {
-            const threadEvent = makeThreadReplyEvent();
+            const threadEvent = makeThreadReplyEvent(room.roomId);
             const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Search);
             const threadInfo = container.querySelector(".mx_ThreadSummary_icon");
 
@@ -798,7 +803,7 @@ describe("EventTile", () => {
         });
 
         it("does not render search thread info outside search timelines", () => {
-            const threadEvent = makeThreadReplyEvent();
+            const threadEvent = makeThreadReplyEvent(room.roomId);
             const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Room);
 
             expect(container.querySelector(".mx_ThreadSummary_icon")).toBeNull();
