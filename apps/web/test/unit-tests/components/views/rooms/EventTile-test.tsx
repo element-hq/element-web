@@ -48,6 +48,7 @@ import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import PlatformPeg from "../../../../../src/PlatformPeg";
 
@@ -194,6 +195,29 @@ describe("EventTile", () => {
             ts: overrides.ts ?? 1234,
             event: overrides.event ?? true,
         });
+    }
+
+    function WrappedEventTiles(props: { events: MatrixEvent[]; editEvent?: MatrixEvent }) {
+        const roomContext = getRoomContext(room, {
+            timelineRenderingType: TimelineRenderingType.Room,
+        });
+
+        return (
+            <MatrixClientContext.Provider value={client}>
+                <ScopedRoomContextProvider {...roomContext}>
+                    {props.events.map((event) => (
+                        <EventTile
+                            key={event.getId()}
+                            mxEvent={event}
+                            replacingEventId={event.replacingEventId()}
+                            editState={
+                                props.editEvent?.getId() === event.getId() ? new EditorStateTransfer(event) : undefined
+                            }
+                        />
+                    ))}
+                </ScopedRoomContextProvider>
+            </MatrixClientContext.Provider>
+        );
     }
 
     beforeEach(() => {
@@ -438,7 +462,9 @@ describe("EventTile", () => {
 
             expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
 
-            fireEvent.focus(getTile(container));
+            act(() => {
+                getTile(container).focus();
+            });
 
             expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
         });
@@ -773,7 +799,9 @@ describe("EventTile", () => {
             });
             const { container } = getComponent();
 
-            fireEvent.focus(getTile(container));
+            act(() => {
+                getTile(container).focus();
+            });
 
             expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
         });
@@ -787,10 +815,14 @@ describe("EventTile", () => {
             const { container } = getComponent();
             const tile = getTile(container);
 
-            fireEvent.focus(tile);
+            act(() => {
+                tile.focus();
+            });
             expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
 
-            fireEvent.blur(tile);
+            act(() => {
+                tile.blur();
+            });
 
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
         });
@@ -1589,6 +1621,48 @@ describe("EventTile", () => {
                 expect(isHighlighted(container)).toBeTruthy();
             });
         });
+    });
+
+    it("does not leave a stale message action bar when switching edited events", async () => {
+        const firstEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "First message",
+            event: true,
+        });
+        const secondEvent = mkMessage({
+            room: room.roomId,
+            user: "@alice:example.org",
+            msg: "Second message",
+            event: true,
+        });
+        const events = [firstEvent, secondEvent];
+
+        const matches = jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (
+            this: HTMLElement,
+            selector: string,
+        ) {
+            if (selector === ":focus-visible") {
+                return true;
+            }
+            return Element.prototype.matches.call(this, selector);
+        });
+
+        const { container, rerender } = render(<WrappedEventTiles events={events} editEvent={firstEvent} />);
+        const editingTile = container.querySelector(".mx_EventTile_isEditing");
+
+        expect(editingTile).not.toBeNull();
+        fireEvent.focusIn(editingTile!);
+        expect(container.querySelectorAll(".mx_MessageActionBar")).toHaveLength(0);
+
+        rerender(<WrappedEventTiles events={events} editEvent={secondEvent} />);
+
+        await waitFor(() => {
+            expect(container.querySelectorAll(".mx_EventTile_isEditing")).toHaveLength(1);
+            expect(container.querySelectorAll(".mx_MessageActionBar")).toHaveLength(0);
+        });
+
+        matches.mockRestore();
     });
 
     it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {
