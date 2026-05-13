@@ -8,6 +8,8 @@
 import React, { useCallback, useLayoutEffect, useMemo, useRef, type JSX, type ReactNode } from "react";
 import { type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 import { isEqual } from "lodash";
+import { DragDropProvider, DragOverlay, useDragOperation } from "@dnd-kit/react";
+import { KeyboardSensor, PointerActivationConstraints, PointerSensor } from "@dnd-kit/dom";
 
 import { type Room } from "./RoomListItemWrapper/RoomListItemView";
 import { useViewModel } from "../../core/viewmodel";
@@ -18,9 +20,10 @@ import {
     type VirtualizedListContext,
 } from "../../core/VirtualizedList";
 import type { RoomListViewSnapshot, RoomListViewModel } from "../RoomListView";
-import { GroupedVirtualizedList } from "../../core/VirtualizedList";
+import { GroupedVirtualizedList, type GroupedVirtualizedListProps } from "../../core/VirtualizedList";
 import { RoomListSectionHeaderView } from "./RoomListSectionHeaderView";
 import { RoomListItemWrapper } from "./RoomListItemWrapper";
+import { RoomListItemDragOverlayView } from "./RoomListItemDragOverlayView";
 import styles from "./VirtualizedRoomListView.module.css";
 
 /**
@@ -383,15 +386,78 @@ export function VirtualizedRoomListView({ vm, renderAvatar, onKeyDown }: Virtual
     }
 
     return (
-        <GroupedVirtualizedList<string, string, Context>
-            {...commonProps}
-            {...getContainerAccessibleProps("treegrid", totalCount)}
-            scrollHandleRef={setVirtuosoHandle}
-            groups={groups}
-            getHeaderKey={getHeaderKey}
-            getGroupHeaderComponent={getGroupHeaderComponent}
-            getItemComponent={getItemComponentForGroupedList}
-            isGroupHeaderFocusable={isGroupHeaderFocusable}
-        />
+        <DragDropProvider
+            onDragEnd={(event) => {
+                if (event.canceled) return;
+                const { target, source } = event.operation;
+                if (!source || !target) return;
+
+                vm.changeRoomSection(source.id as string, target.id as string);
+            }}
+            sensors={[
+                // By default, the PointerSensor activates dragging immediately on pointer down, which interferes with keyboard navigation.
+                // So we start dragging after the pointer has moved by 5 pixels, to allow for click without dragging
+                PointerSensor.configure({
+                    activationConstraints: [new PointerActivationConstraints.Distance({ value: 5 })],
+                }),
+                // By default, the KeyboardSensor uses both space and enter to start dragging, which interferes with the keyboard enter shortcut to open a room.
+                KeyboardSensor.configure({
+                    keyboardCodes: {
+                        start: ["Space"],
+                        cancel: ["Escape"],
+                        end: ["Space"],
+                        up: ["ArrowUp"],
+                        down: ["ArrowDown"],
+                        left: ["ArrowLeft"],
+                        right: ["ArrowRight"],
+                    },
+                }),
+            ]}
+        >
+            <DragOverlay dropAnimation={null}>
+                <DragOverlayContent vm={vm} renderAvatar={renderAvatar} />
+            </DragOverlay>
+            <GroupedRoomList
+                {...commonProps}
+                {...getContainerAccessibleProps("treegrid", totalCount)}
+                scrollHandleRef={setVirtuosoHandle}
+                groups={groups}
+                getHeaderKey={getHeaderKey}
+                getGroupHeaderComponent={getGroupHeaderComponent}
+                getItemComponent={getItemComponentForGroupedList}
+                isGroupHeaderFocusable={isGroupHeaderFocusable}
+            />
+        </DragDropProvider>
     );
+}
+
+/**
+ * Inner component rendered inside DragDropProvider that renders the grouped virtualized list.
+ * Uses useDragOperation to detect active keyboard drags and disable the list's own keyboard
+ * navigation shortcuts while a drag is in progress, preventing unwanted list scrolling.
+ */
+function GroupedRoomList(props: GroupedVirtualizedListProps<string, string, Context>): JSX.Element {
+    const { source } = useDragOperation();
+
+    return <GroupedVirtualizedList<string, string, Context> {...props} disableKeyboardNavigation={source !== null} />;
+}
+
+interface DragOverlayContentProps {
+    /**  The room list view model */
+    vm: RoomListViewModel;
+    /** Function to render the room avatar */
+    renderAvatar: (room: Room) => ReactNode;
+}
+
+/**
+ * Component rendered in the drag overlay when dragging a room item. Renders a copy of the dragged item to avoid dragging the actual element out of virtualization.
+ */
+function DragOverlayContent({ vm, renderAvatar }: DragOverlayContentProps): JSX.Element | null {
+    const { source } = useDragOperation();
+    if (!source) return null;
+
+    const itemVm = vm.getRoomItemViewModel(source.id as string);
+    if (!itemVm) return null;
+
+    return <RoomListItemDragOverlayView vm={itemVm} renderAvatar={renderAvatar} />;
 }

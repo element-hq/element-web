@@ -30,8 +30,9 @@ import { Action } from "../../../src/dispatcher/actions";
 import { CallStore } from "../../../src/stores/CallStore";
 import { CallEvent, type Call } from "../../../src/models/Call";
 import { RoomListItemViewModel } from "../../../src/viewmodels/room-list/RoomListItemViewModel";
-import RoomListStoreV3, { CHATS_TAG } from "../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import * as tagRoomModule from "../../../src/utils/room/tagRoom";
+import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
 
 jest.mock("../../../src/viewmodels/room-list/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(true),
