@@ -103,6 +103,7 @@ import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
+import { getAriaLive, getScrollToken, isSendingStatus } from "./EventTile/eventTileDerivedState";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
 import {
@@ -1087,7 +1088,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 this.props.mxEvent.getContent().msgtype === MsgType.Emote,
         });
 
-        const isSending = ["sending", "queued", "encrypting"].includes(this.props.eventSendStatus!);
+        const isSending = isSendingStatus(this.props.eventSendStatus);
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
@@ -1130,7 +1131,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
 
         // If the tile is in the Sending state, don't speak the message.
-        const ariaLive = this.props.eventSendStatus !== null ? "off" : undefined;
+        const ariaLive = getAriaLive(this.props.eventSendStatus);
 
         let permalink = "#";
         if (this.props.permalinkCreator) {
@@ -1139,7 +1140,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // we can't use local echoes as scroll tokens, because their event IDs change.
         // Local echos have a send "status".
-        const scrollToken = this.props.mxEvent.status ? undefined : this.props.mxEvent.getId();
+        const scrollToken = getScrollToken(this.props.mxEvent);
 
         let avatar: JSX.Element | null = null;
         let sender: JSX.Element | null = null;
