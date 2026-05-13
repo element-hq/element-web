@@ -89,42 +89,24 @@ export type OrderedCustomSections = CustomTag[];
  */
 export function getCustomSectionData(): CustomSectionsData {
     const raw = SettingsStore.getValue("RoomList.CustomSectionData");
-    if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
-        // The data is malformed, reset it in background
-        SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, {});
-        return {};
-    }
+    // Data are malformed
+    if (typeof raw !== "object" || raw === null || Array.isArray(raw)) return {};
 
-    const result: CustomSectionsData = {};
-    let hasInvalid = false;
-    for (const [key, value] of Object.entries(raw)) {
-        if (!isValidCustomSection(value) || value.tag !== key) {
-            logger.warn("Dropping invalid custom section", key, value);
-            hasInvalid = true;
-            continue;
-        }
-        result[key as CustomTag] = value;
-    }
-    // If there were invalid entries, persist the cleaned data back to settings
-    if (hasInvalid) SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, result);
-
-    return result;
+    // Filter out invalid entries
+    return Object.fromEntries(
+        Object.entries(raw).filter(([key, value]) => isValidCustomSection(value) && value.tag === key),
+    ) as CustomSectionsData;
 }
 
 /**
  * Retrieves the ordered list of custom section tags from the settings.
  * If the settings contain tags that are not present in the custom section data, they will be filtered out and the settings will be updated to remove the unknown tags.
  */
-export async function getOrderedCustomSections(): Promise<OrderedCustomSections> {
+export function getOrderedCustomSections(): OrderedCustomSections {
     const sectionData = getCustomSectionData();
     const rawValue = SettingsStore.getValue("RoomList.OrderedCustomSections");
     const orderedSections: OrderedCustomSections = Array.isArray(rawValue) ? rawValue : [];
-    const knownSections = orderedSections.filter((tag) => tag in sectionData);
-    if (knownSections.length !== orderedSections.length) {
-        // Some sections were not found in the section data
-        await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, knownSections);
-    }
-    return knownSections;
+    return orderedSections.filter((tag) => tag in sectionData);
 }
 
 /**
@@ -148,7 +130,7 @@ export async function createSection(): Promise<string | undefined> {
     await SettingsStore.setValue("RoomList.CustomSectionData", null, SettingLevel.ACCOUNT, sectionData);
 
     // Add the new section to the ordered list of sections
-    const orderedSections = await getOrderedCustomSections();
+    const orderedSections = getOrderedCustomSections();
     orderedSections.push(tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, orderedSections);
     return tag;
@@ -202,7 +184,7 @@ export async function deleteSection(tag: string, isEmpty: boolean): Promise<void
     if (!shouldRemoveSection) return;
 
     // Remove the section from the ordered list of sections
-    const newOrderedSections = (await getOrderedCustomSections()).filter((sectionTag) => sectionTag !== tag);
+    const newOrderedSections = getOrderedCustomSections().filter((sectionTag) => sectionTag !== tag);
     await SettingsStore.setValue("RoomList.OrderedCustomSections", null, SettingLevel.ACCOUNT, newOrderedSections);
 
     // Remove the section data

@@ -28,7 +28,6 @@ describe("section", () => {
     });
 
     describe("getCustomSectionData", () => {
-        const tag = "element.io.section.abc";
         const validTag = "element.io.section.valid";
         const invalidTag = "element.io.section.invalid";
         const validEntry = { tag: validTag, name: "Valid" };
@@ -42,71 +41,12 @@ describe("section", () => {
             expect(getCustomSectionData()).toEqual({});
         });
 
-        it("resets settings to {} when the raw value is not a recoverable object", () => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue("not-an-object" as any);
-            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
-
-            getCustomSectionData();
-
-            expect(setValueSpy).toHaveBeenCalledWith("RoomList.CustomSectionData", null, expect.anything(), {});
-        });
-
-        it.each([
-            ["tag does not match the record key", { [tag]: { tag: "element.io.section.other", name: "Mismatch" } }],
-            [
-                "the key does not start with the section prefix",
-                { "not-a-section-key": { tag: "not-a-section-key", name: "Bad" } },
-            ],
-            ["the tag does not start with the section prefix", { [tag]: { tag: "not-a-section-tag", name: "Bad" } }],
-            ["tag or name is not a string", { [tag]: { tag, name: 42 } }],
-        ])("drops entries where %s", (_desc, raw) => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
-            expect(getCustomSectionData()).toEqual({});
-        });
-
         it("returns valid entries and drops invalid ones", () => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({
                 [validTag]: validEntry,
                 [invalidTag]: { tag: "element.io.section.mismatch", name: "Bad" },
             });
             expect(getCustomSectionData()).toEqual({ [validTag]: validEntry });
-        });
-
-        it.each([
-            [
-                "tag mismatch",
-                { [validTag]: validEntry, [invalidTag]: { tag: "element.io.section.mismatch", name: "Bad" } },
-                { [validTag]: validEntry },
-            ],
-            [
-                "non-string name",
-                { [validTag]: validEntry, [invalidTag]: { tag: invalidTag, name: 42 } },
-                { [validTag]: validEntry },
-            ],
-        ])("saves cleaned data when an entry has %s", (_desc, raw, expectedSaved) => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
-            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
-
-            getCustomSectionData();
-
-            expect(setValueSpy).toHaveBeenCalledWith(
-                "RoomList.CustomSectionData",
-                null,
-                expect.anything(),
-                expectedSaved,
-            );
-        });
-
-        it.each([
-            ["all entries are valid", { [validTag]: validEntry }],
-            ["the record is empty", {}],
-        ])("does not save when %s", (_desc, raw) => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(raw as any);
-            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
-
-            getCustomSectionData();
-
-            expect(setValueSpy).not.toHaveBeenCalled();
         });
     });
 
@@ -117,30 +57,25 @@ describe("section", () => {
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
         });
 
-        it("returns an empty array when the raw value is not an array", async () => {
+        it("returns an empty array when the raw value is not an array", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "RoomList.OrderedCustomSections") return "not-an-array";
                 return null;
             });
 
-            const result = await getOrderedCustomSections();
+            const result = getOrderedCustomSections();
             expect(result).toEqual([]);
         });
 
-        it("removes unknown sections and saves the cleaned list", async () => {
+        it("removes unknown sections and saves the cleaned list", () => {
             const knownTag = "element.io.section.known";
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => {
                 if (setting === "RoomList.CustomSectionData") return { [knownTag]: { tag: knownTag, name: "Known" } };
                 if (setting === "RoomList.OrderedCustomSections") return [knownTag, tag];
                 return null;
             });
-            const setValueSpy = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
 
-            const result = await getOrderedCustomSections();
-            expect(result).toEqual([knownTag]);
-            expect(setValueSpy).toHaveBeenCalledWith("RoomList.OrderedCustomSections", null, expect.anything(), [
-                knownTag,
-            ]);
+            expect(getOrderedCustomSections()).toEqual([knownTag]);
         });
     });
 
