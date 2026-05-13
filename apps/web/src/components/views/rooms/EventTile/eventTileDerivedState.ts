@@ -5,8 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventStatus, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventStatus, EventType, type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
+import { ElementCallEventType } from "../../../../call-types";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
 import { Layout } from "../../../../settings/enums/Layout";
 
@@ -46,4 +47,96 @@ export function getIsContinuation(
     }
 
     return continuation;
+}
+
+/** Inputs for EventTile root CSS class derivation. */
+export interface EventTileClassState {
+    /** Whether the tile should use bubble container styling. */
+    isBubbleMessage: boolean;
+    /** Whether the bubble tile is left-aligned. */
+    isLeftAlignedBubbleMessage: boolean;
+    /** Whether the event is currently being edited. */
+    isEditing: boolean;
+    /** Whether the event renders as an informational timeline item. */
+    isInfoMessage: boolean;
+    /** Whether timestamps use twelve-hour formatting. */
+    isTwelveHour?: boolean;
+    /** Whether the event is in a pending send state. */
+    isSending: boolean;
+    /** Whether the event should be highlighted. */
+    isHighlighted: boolean;
+    /** Whether the tile is selected or has an open context menu. */
+    isSelected: boolean;
+    /** Whether the tile is a continuation of the previous event. */
+    isContinuation?: boolean;
+    /** The Matrix event type for event-type class derivation. */
+    eventType: string;
+    /** Whether the tile is the last event in the timeline. */
+    isLast?: boolean;
+    /** Whether the tile is the last event in its section. */
+    isLastInSection?: boolean;
+    /** Whether the tile is being rendered in contextual mode. */
+    isContextual?: boolean;
+    /** Whether the action bar currently has focus. */
+    isActionBarFocused: boolean;
+    /** Whether the event failed decryption. */
+    isEncryptionFailure: boolean;
+    /** The Matrix message type for message-type class derivation. */
+    msgtype: string | undefined;
+    /** Whether sender details should be hidden. */
+    hideSender?: boolean;
+    /** The current timeline rendering mode. */
+    timelineRenderingType: TimelineRenderingType;
+    /** Whether the tile is rendering as a notification. */
+    isRenderingNotification: boolean;
+    /** Whether bubble styling should be suppressed for this event. */
+    noBubbleEvent: boolean;
+}
+
+/** The EventTile root CSS class flags for the current derived state. */
+export function getEventTileClassState({
+    isBubbleMessage,
+    isLeftAlignedBubbleMessage,
+    isEditing,
+    isInfoMessage,
+    isTwelveHour,
+    isSending,
+    isHighlighted,
+    isSelected,
+    isContinuation,
+    eventType,
+    isLast,
+    isLastInSection,
+    isContextual,
+    isActionBarFocused,
+    isEncryptionFailure,
+    msgtype,
+    hideSender,
+    timelineRenderingType,
+    isRenderingNotification,
+    noBubbleEvent,
+}: EventTileClassState): Record<string, boolean | undefined> {
+    return {
+        mx_EventTile_bubbleContainer: isBubbleMessage,
+        mx_EventTile_leftAlignedBubble: isLeftAlignedBubbleMessage,
+        mx_EventTile: true,
+        mx_EventTile_isEditing: isEditing,
+        mx_EventTile_info: isInfoMessage,
+        mx_EventTile_12hr: isTwelveHour,
+        // Note: we keep the `sending` state class for tests, not for our styles
+        mx_EventTile_sending: !isEditing && isSending,
+        mx_EventTile_highlight: isHighlighted,
+        mx_EventTile_selected: isSelected,
+        mx_EventTile_continuation:
+            isContinuation || eventType === EventType.CallInvite || ElementCallEventType.matches(eventType),
+        mx_EventTile_last: isLast,
+        mx_EventTile_lastInSection: isLastInSection,
+        mx_EventTile_contextual: isContextual,
+        mx_EventTile_actionBarFocused: isActionBarFocused,
+        mx_EventTile_bad: isEncryptionFailure,
+        mx_EventTile_emote: msgtype === MsgType.Emote,
+        mx_EventTile_noSender: hideSender,
+        mx_EventTile_clamp: timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
+        mx_EventTile_noBubble: noBubbleEvent,
+    };
 }

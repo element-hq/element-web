@@ -103,7 +103,13 @@ import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
-import { getAriaLive, getIsContinuation, getScrollToken, isSendingStatus } from "./EventTile/eventTileDerivedState";
+import {
+    getAriaLive,
+    getEventTileClassState,
+    getIsContinuation,
+    getScrollToken,
+    isSendingStatus,
+} from "./EventTile/eventTileDerivedState";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
 import {
@@ -1101,30 +1107,30 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isRenderingNotification = this.context.timelineRenderingType === TimelineRenderingType.Notification;
 
         const isEditing = !!this.props.editState;
-        const classes = classNames({
-            mx_EventTile_bubbleContainer: isBubbleMessage,
-            mx_EventTile_leftAlignedBubble: isLeftAlignedBubbleMessage,
-            mx_EventTile: true,
-            mx_EventTile_isEditing: isEditing,
-            mx_EventTile_info: isInfoMessage,
-            mx_EventTile_12hr: this.props.isTwelveHour,
-            // Note: we keep the `sending` state class for tests, not for our styles
-            mx_EventTile_sending: !isEditing && isSending,
-            mx_EventTile_highlight: this.shouldHighlight(),
-            mx_EventTile_selected: this.props.isSelectedEvent || this.state.contextMenu,
-            mx_EventTile_continuation:
-                isContinuation || eventType === EventType.CallInvite || ElementCallEventType.matches(eventType),
-            mx_EventTile_last: this.props.last,
-            mx_EventTile_lastInSection: this.props.lastInSection,
-            mx_EventTile_contextual: this.props.contextual,
-            mx_EventTile_actionBarFocused: this.state.actionBarFocused,
-            mx_EventTile_bad: isEncryptionFailure,
-            mx_EventTile_emote: msgtype === MsgType.Emote,
-            mx_EventTile_noSender: this.props.hideSender,
-            mx_EventTile_clamp:
-                this.context.timelineRenderingType === TimelineRenderingType.ThreadsList || isRenderingNotification,
-            mx_EventTile_noBubble: noBubbleEvent,
-        });
+        const classes = classNames(
+            getEventTileClassState({
+                isBubbleMessage,
+                isLeftAlignedBubbleMessage,
+                isEditing,
+                isInfoMessage,
+                isTwelveHour: this.props.isTwelveHour,
+                isSending,
+                isHighlighted: this.shouldHighlight(),
+                isSelected: this.props.isSelectedEvent || !!this.state.contextMenu,
+                isContinuation,
+                eventType,
+                isLast: this.props.last,
+                isLastInSection: this.props.lastInSection,
+                isContextual: this.props.contextual,
+                isActionBarFocused: this.state.actionBarFocused,
+                isEncryptionFailure,
+                msgtype,
+                hideSender: this.props.hideSender,
+                timelineRenderingType: this.context.timelineRenderingType,
+                isRenderingNotification,
+                noBubbleEvent,
+            }),
+        );
 
         // If the tile is in the Sending state, don't speak the message.
         const ariaLive = getAriaLive(this.props.eventSendStatus);
