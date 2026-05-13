@@ -15,7 +15,7 @@ import {
     _t,
     type ToastType,
 } from "@element-hq/web-shared-components";
-import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { Action } from "../../dispatcher/actions";
 import dispatcher from "../../dispatcher/dispatcher";
@@ -24,7 +24,6 @@ import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import { type RoomListSectionsCollapseStateChangedPayload } from "../../dispatcher/payloads/RoomListSectionsCollapseStateChangedPayload";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import RoomListStoreV3, {
-    CHATS_TAG,
     RoomListStoreV3Event,
     type RoomsResult,
     type Section,
@@ -38,6 +37,9 @@ import { keepIfSame } from "../../utils/keepIfSame";
 import { DefaultTagID } from "../../stores/room-list-v3/skip-list/tag";
 import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
 import SettingsStore from "../../settings/SettingsStore";
+import { tagRoom } from "../../utils/room/tagRoom";
+import { getSectionTagForRoom } from "../../utils/room/getSectionTagForRoom";
+import { CHATS_TAG } from "../../stores/room-list-v3/section";
 
 /**
  * Tracks the position of the active room within a specific section.
@@ -667,6 +669,17 @@ export class RoomListViewModel
             this.closeToast();
         }, 15 * 1000);
     }
+
+    public changeRoomSection = (roomId: string, tag: string): void => {
+        const room = this.props.client.getRoom(roomId);
+        if (!room) return;
+
+        const currentTag = getSectionTagForRoom(room);
+        // Room is already in the section
+        if (currentTag === tag) return;
+
+        tagRoom(room, tag);
+    };
 }
 
 /**

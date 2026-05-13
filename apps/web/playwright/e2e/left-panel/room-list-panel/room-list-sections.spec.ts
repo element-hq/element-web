@@ -6,7 +6,7 @@
  */
 
 import { expect, test } from "../../../element-web-test";
-import { getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
+import { assertRoomInSection, dragRoomToSection, getPrimaryFilters, getRoomList, getSectionHeader } from "./utils";
 
 test.describe("Room list sections", () => {
     test.use({
@@ -181,6 +181,37 @@ test.describe("Room list sections", () => {
             await expect(getSectionHeader(page, "Low Priority")).toBeVisible();
             roomItem = roomList.getByRole("row", { name: "Open room my room" });
             await expect(roomItem).toBeVisible();
+        });
+
+        test("should move a room from Chats to Favourites when using dnd", async ({ page, app }) => {
+            await app.client.createRoom({ name: "my room" });
+
+            const favouriteId = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            await dragRoomToSection(page, "my room", "Favourites");
+            await assertRoomInSection(page, "Favourites", "my room");
+        });
+
+        test("should move a room from Favourites to Chats when using dnd", async ({ page, app }) => {
+            const favouriteId = await app.client.createRoom({ name: "my room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId);
+
+            // Create a second favourite room to ensure we stay in section mode (not flat list)
+            const favouriteId2 = await app.client.createRoom({ name: "favourite room" });
+            await app.client.evaluate(async (client, roomId) => {
+                await client.setRoomTag(roomId, "m.favourite");
+            }, favouriteId2);
+
+            // Ensure the Chats section is visible by creating a room in it
+            await app.client.createRoom({ name: "room in chats" });
+
+            await dragRoomToSection(page, "my room", "Chats");
+            await assertRoomInSection(page, "Chats", "my room");
         });
     });
 

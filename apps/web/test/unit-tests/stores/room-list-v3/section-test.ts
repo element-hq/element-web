@@ -7,9 +7,18 @@
 
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { createSection, editSection, deleteSection } from "../../../../src/stores/room-list-v3/section";
+import {
+    CHATS_TAG,
+    CUSTOM_SECTION_TAG_PREFIX,
+    createSection,
+    editSection,
+    deleteSection,
+    isDefaultSectionTag,
+    isSectionTag,
+} from "../../../../src/stores/room-list-v3/section";
 import { CreateSectionDialog } from "../../../../src/components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../../../src/components/views/dialogs/RemoveSectionDialog";
+import { DefaultTagID } from "../../../../src/stores/room-list-v3/skip-list/tag";
 
 describe("section", () => {
     afterEach(() => {
@@ -201,6 +210,29 @@ describe("section", () => {
 
             const customDataCall = setValueSpy.mock.calls.find(([name]) => name === "RoomList.CustomSectionData");
             expect(customDataCall![3]).not.toHaveProperty(tag);
+        });
+    });
+
+    describe("isDefaultSectionTag", () => {
+        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG])("returns true for %s", (tag) => {
+            expect(isDefaultSectionTag(tag)).toBe(true);
+        });
+
+        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+            expect(isDefaultSectionTag(tag)).toBe(false);
+        });
+    });
+
+    describe("isSectionTag", () => {
+        it.each([DefaultTagID.Favourite, DefaultTagID.LowPriority, CHATS_TAG, `${CUSTOM_SECTION_TAG_PREFIX}some-uuid`])(
+            "returns true for %s",
+            (tag) => {
+                expect(isSectionTag(tag)).toBe(true);
+            },
+        );
+
+        it.each([DefaultTagID.Invite, "some.random.tag"])("returns false for %s", (tag) => {
+            expect(isSectionTag(tag)).toBe(false);
         });
     });
 });

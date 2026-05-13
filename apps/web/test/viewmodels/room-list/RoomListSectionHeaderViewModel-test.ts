@@ -13,8 +13,9 @@ import { RoomNotificationStateStore } from "../../../src/stores/notifications/Ro
 import { NotificationStateEvents } from "../../../src/stores/notifications/NotificationState";
 import { createTestClient, mkRoom } from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import RoomListStoreV3, { CHATS_TAG } from "../../../src/stores/room-list-v3/RoomListStoreV3";
+import RoomListStoreV3 from "../../../src/stores/room-list-v3/RoomListStoreV3";
 import { DefaultTagID } from "../../../src/stores/room-list-v3/skip-list/tag";
+import { CHATS_TAG } from "../../../src/stores/room-list-v3/section";
 
 describe("RoomListSectionHeaderViewModel", () => {
     let onToggleExpanded: jest.Mock;

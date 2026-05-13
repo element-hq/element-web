@@ -12,7 +12,6 @@ import { mocked } from "jest-mock";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
 import {
-    CHATS_TAG,
     LISTS_UPDATE_EVENT,
     SECTION_CREATED_EVENT,
     RoomListStoreV3Class,
@@ -37,6 +36,7 @@ import * as utils from "../../../../src/utils/notifications";
 import * as utilsRLS from "../../../../src/stores/room-list-v3/utils.ts";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SettingLevel } from "../../../../src/settings/SettingLevel.ts";
+import { CHATS_TAG } from "../../../../src/stores/room-list-v3/section";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {

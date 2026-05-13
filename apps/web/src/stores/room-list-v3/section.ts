@@ -12,8 +12,15 @@ import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import { CreateSectionDialog } from "../../components/views/dialogs/CreateSectionDialog";
 import { RemoveSectionDialog } from "../../components/views/dialogs/RemoveSectionDialog";
+import { DefaultTagID, type TagID } from "./skip-list/tag";
 
 type Tag = string;
+
+/**
+ * A synthetic tag used to represent the "Chats" section, which contains
+ * every room that does not belong to any other explicit tag section.
+ */
+export const CHATS_TAG = "chats";
 
 /**
  * Prefix for custom section tags.
@@ -27,6 +34,24 @@ export const CUSTOM_SECTION_TAG_PREFIX = "element.io.section.";
  */
 export function isCustomSectionTag(tag: string): boolean {
     return tag.startsWith(CUSTOM_SECTION_TAG_PREFIX);
+}
+
+/**
+ * Checks if a given tag is a default section tag.
+ * @param tagId - The tag to check.
+ * @returns True if the tag is a default section tag, false otherwise.
+ */
+export function isDefaultSectionTag(tagId: TagID): boolean {
+    return tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority || tagId === CHATS_TAG;
+}
+
+/**
+ * Checks if a given tag is a section tag.
+ * @param tagId - The tag to check.
+ * @returns True if the tag is a section tag, false otherwise.
+ */
+export function isSectionTag(tagId: TagID): boolean {
+    return isCustomSectionTag(tagId) || isDefaultSectionTag(tagId);
 }
 
 /**

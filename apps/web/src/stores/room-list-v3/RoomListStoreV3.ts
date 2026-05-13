@@ -40,7 +40,7 @@ import { DefaultTagID } from "./skip-list/tag";
 import { ExcludeTagsFilter } from "./skip-list/filters/ExcludeTagsFilter";
 import { TagFilter } from "./skip-list/filters/TagFilter";
 import { filterBoolean } from "../../utils/arrays";
-import { createSection, deleteSection, editSection } from "./section";
+import { CHATS_TAG, createSection, deleteSection, editSection } from "./section";
 
 /**
  * These are the filters passed to the room skip list.
@@ -85,12 +85,6 @@ export interface Section {
     /** The ordered list of rooms belonging to this section. */
     rooms: Room[];
 }
-
-/**
- * A synthetic tag used to represent the "Chats" section, which contains
- * every room that does not belong to any other explicit tag section.
- */
-export const CHATS_TAG = "chats";
 
 export const LISTS_UPDATE_EVENT = RoomListStoreV3Event.ListsUpdate;
 export const LISTS_LOADED_EVENT = RoomListStoreV3Event.ListsLoaded;

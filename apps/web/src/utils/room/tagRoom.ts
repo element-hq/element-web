@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { DefaultTagID, type TagID } from "../../stores/room-list-v3/skip-list/tag";
+import { type TagID } from "../../stores/room-list-v3/skip-list/tag";
 import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";
-import { getTagsForRoom } from "./getTagsForRoom";
-import { isCustomSectionTag } from "../../stores/room-list-v3/section";
+import { CHATS_TAG, isSectionTag } from "../../stores/room-list-v3/section";
+import { getSectionTagForRoom } from "./getSectionTagForRoom";
 
 /**
  * Toggle tag for a given room.
@@ -23,19 +23,19 @@ import { isCustomSectionTag } from "../../stores/room-list-v3/section";
  * @param tagId The tag to invert
  */
 export function tagRoom(room: Room, tagId: TagID): void {
-    if (tagId !== DefaultTagID.Favourite && tagId !== DefaultTagID.LowPriority && !isCustomSectionTag(tagId)) {
-        logger.warn(`Unexpected tag ${tagId} applied to ${room.roomId}`);
+    const isChatTag = tagId === CHATS_TAG;
+    const tag = isChatTag ? null : tagId;
+
+    if (!isSectionTag(tagId)) {
+        logger.warn(`Unexpected tag ${tag} applied to ${room.roomId}`);
         return;
     }
 
     // Find the section tag currently applied (Fav, LowPriority, or custom) — at most one exists
-    const currentSectionTag =
-        getTagsForRoom(room).find(
-            (t) => t === DefaultTagID.Favourite || t === DefaultTagID.LowPriority || isCustomSectionTag(t),
-        ) ?? null;
+    const currentSectionTag = getSectionTagForRoom(room);
 
-    const isApplied = currentSectionTag === tagId;
+    const isApplied = currentSectionTag === tag;
     const removeTag = currentSectionTag;
-    const addTag = isApplied ? null : tagId;
+    const addTag = isApplied ? null : tag;
     dis.dispatch(RoomListActions.tagRoom(room.client, room, removeTag, addTag));
 }
