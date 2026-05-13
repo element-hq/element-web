@@ -107,6 +107,7 @@ import {
     getEventTileClassState,
     getEventTileLineClassState,
     getEventTileSenderProfileState,
+    getEventTileTimestamp,
     getIsContinuation,
     getScrollToken,
     getSenderProfileMode,
@@ -1225,14 +1226,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
 
         // Thread panel shows the timestamp of the last reply in that thread
-        let ts =
-            this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList
-                ? this.props.mxEvent.getTs()
-                : this.state.thread?.replyToEvent?.getTs();
-        if (typeof ts !== "number") {
-            // Fall back to something we can use
-            ts = this.props.mxEvent.getTs();
-        }
+        const ts = getEventTileTimestamp({
+            timelineRenderingType: this.context.timelineRenderingType,
+            eventTs: this.props.mxEvent.getTs(),
+            threadReplyEventTs: this.state.thread?.replyToEvent?.getTs(),
+        });
 
         const messageTimestampProps: MessageTimestampViewModelProps = {
             showRelative: this.context.timelineRenderingType === TimelineRenderingType.ThreadsList,

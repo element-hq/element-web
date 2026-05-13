@@ -277,6 +277,29 @@ export function getShouldShowTimestamp({
     );
 }
 
+/** Inputs for EventTile timestamp value derivation. */
+export interface EventTileTimestampInput {
+    /** The current timeline rendering mode. */
+    timelineRenderingType: TimelineRenderingType;
+    /** The event origin timestamp. */
+    eventTs: number;
+    /** The latest thread reply timestamp, when available. */
+    threadReplyEventTs?: number;
+}
+
+/** The timestamp EventTile should display for the current rendering mode. */
+export function getEventTileTimestamp({
+    timelineRenderingType,
+    eventTs,
+    threadReplyEventTs,
+}: EventTileTimestampInput): number {
+    if (timelineRenderingType === TimelineRenderingType.ThreadsList && typeof threadReplyEventTs === "number") {
+        return threadReplyEventTs;
+    }
+
+    return eventTs;
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */
