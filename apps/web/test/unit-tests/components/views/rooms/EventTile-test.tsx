@@ -413,7 +413,9 @@ describe("EventTile", () => {
 
             expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
 
-            fireEvent.focus(getTile(container));
+            act(() => {
+                getTile(container).focus();
+            });
 
             expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
         });
@@ -637,7 +639,9 @@ describe("EventTile", () => {
             });
             const { container } = getComponent();
 
-            fireEvent.focus(getTile(container));
+            act(() => {
+                getTile(container).focus();
+            });
 
             expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
         });
@@ -651,10 +655,14 @@ describe("EventTile", () => {
             const { container } = getComponent();
             const tile = getTile(container);
 
-            fireEvent.focus(tile);
+            act(() => {
+                tile.focus();
+            });
             expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
 
-            fireEvent.blur(tile);
+            act(() => {
+                tile.blur();
+            });
 
             expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
         });
