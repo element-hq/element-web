@@ -28,7 +28,9 @@ test.describe("Composer", () => {
         },
     });
 
-    test.beforeEach(async ({ room }) => {}); // trigger room fixture
+    test.beforeEach(async ({ app, room /* trigger room fixture */ }) => {
+        await app.closeNotificationToast();
+    });
 
     test.describe("CIDER", () => {
         test("sends a message when you click send or press Enter", async ({ page }) => {

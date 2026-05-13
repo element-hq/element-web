@@ -95,6 +95,8 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
+        await this.closeVerifyToast();
+
         // We get the room list by test-id which is a listbox and matching title=name
         return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
     }
