@@ -26,7 +26,6 @@ import {
     EventType,
     type MatrixEvent,
     MatrixEventEvent,
-    MsgType,
     type NotificationCountType,
     type Relations,
     type RelationType,
@@ -106,6 +105,7 @@ import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import {
     getAriaLive,
     getEventTileClassState,
+    getEventTileLineClassState,
     getIsContinuation,
     getScrollToken,
     isSendingStatus,
@@ -1083,16 +1083,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
 
-        const lineClasses = classNames("mx_EventTile_line", {
-            mx_EventTile_mediaLine: isProbablyMedia,
-            mx_EventTile_image:
-                this.props.mxEvent.getType() === EventType.RoomMessage &&
-                this.props.mxEvent.getContent().msgtype === MsgType.Image,
-            mx_EventTile_sticker: this.props.mxEvent.getType() === EventType.Sticker,
-            mx_EventTile_emote:
-                this.props.mxEvent.getType() === EventType.RoomMessage &&
-                this.props.mxEvent.getContent().msgtype === MsgType.Emote,
-        });
+        const lineClasses = classNames(
+            "mx_EventTile_line",
+            getEventTileLineClassState({
+                isProbablyMedia,
+                eventType,
+                msgtype,
+            }),
+        );
 
         const isSending = isSendingStatus(this.props.eventSendStatus);
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;

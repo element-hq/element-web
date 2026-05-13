@@ -49,6 +49,30 @@ export function getIsContinuation(
     return continuation;
 }
 
+/** Inputs for EventTile line CSS class derivation. */
+export interface EventTileLineClassState {
+    /** Whether the event body is likely to render media content. */
+    isProbablyMedia: boolean;
+    /** The Matrix event type for event-type class derivation. */
+    eventType: string;
+    /** The Matrix message type for message-type class derivation. */
+    msgtype?: string;
+}
+
+/** The EventTile line CSS class flags for the current derived state. */
+export function getEventTileLineClassState({
+    isProbablyMedia,
+    eventType,
+    msgtype,
+}: EventTileLineClassState): Record<string, boolean> {
+    return {
+        mx_EventTile_mediaLine: isProbablyMedia,
+        mx_EventTile_image: eventType === EventType.RoomMessage && msgtype === MsgType.Image,
+        mx_EventTile_sticker: eventType === EventType.Sticker,
+        mx_EventTile_emote: eventType === EventType.RoomMessage && msgtype === MsgType.Emote,
+    };
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */
@@ -82,7 +106,7 @@ export interface EventTileClassState {
     /** Whether the event failed decryption. */
     isEncryptionFailure: boolean;
     /** The Matrix message type for message-type class derivation. */
-    msgtype: string | undefined;
+    msgtype?: string;
     /** Whether sender details should be hidden. */
     hideSender?: boolean;
     /** The current timeline rendering mode. */
