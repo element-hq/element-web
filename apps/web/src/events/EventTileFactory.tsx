@@ -21,8 +21,11 @@ import {
     CallStartedTileView,
     EncryptionEventView,
     HiddenBodyView,
+    MJitsiWidgetEventView,
     MKeyVerificationRequestView,
+    RoomAvatarEventView,
     TextualEventView,
+    ViewSourceEventView,
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 
@@ -34,23 +37,24 @@ import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
 import { RoomPredecessorTile } from "../components/views/messages/RoomPredecessorTile";
-import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { WidgetType } from "../widgets/WidgetType";
-import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
 import { getMessageModerationState, MessageModerationState } from "../utils/EventUtils";
-import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { type IBodyProps } from "../components/views/messages/IBodyProps";
 import { ModuleApi } from "../modules/Api";
 import { EncryptionEventViewModel } from "../viewmodels/room/timeline/event-tile/EncryptionEventViewModel";
+import { MJitsiWidgetEventViewModel } from "../viewmodels/room/timeline/event-tile/MJitsiWidgetEventViewModel";
 import { MKeyVerificationRequestViewModel } from "../viewmodels/room/timeline/event-tile/MKeyVerificationRequestViewModel";
+import { RoomAvatarEventViewModel } from "../viewmodels/room/timeline/event-tile/RoomAvatarEventViewModel";
 import { TextualEventViewModel } from "../viewmodels/room/timeline/event-tile/TextualEventViewModel";
 import { HiddenBodyViewModel } from "../viewmodels/room/timeline/event-tile/body/HiddenBodyViewModel";
+import { ViewSourceEventViewModel } from "../viewmodels/room/timeline/event-tile/body/ViewSourceEventViewModel";
 import { ElementCallEventType } from "../call-types";
 import { CallStartedTileViewModel } from "../viewmodels/room/timeline/event-tile/call/CallStartedTileViewModel";
 
@@ -124,6 +128,65 @@ function HiddenBodyWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
 }
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBodyWrappedView ref={ref} {...props} />;
 
+function ViewSourceEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new ViewSourceEventViewModel({ mxEvent, cli }));
+
+    useEffect(() => {
+        vm.setProps({ cli, mxEvent });
+    }, [cli, mxEvent, vm]);
+
+    return (
+        <ViewSourceEventView
+            vm={vm}
+            ref={ref}
+            className="mx_ViewSourceEvent mx_EventTile_content"
+            expandedClassName="mx_ViewSourceEvent_expanded"
+        />
+    );
+}
+
+function MJitsiWidgetEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext();
+    const vm = useCreateAutoDisposedViewModel(() => new MJitsiWidgetEventViewModel({ mxEvent, cli }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    return <MJitsiWidgetEventView vm={vm} ref={ref} className="mx_EventTileBubble" />;
+}
+
+function RoomAvatarEventWrappedView({ mxEvent, ref }: IBodyProps): JSX.Element {
+    const cli = useMatrixClientContext() ?? MatrixClientPeg.safeGet();
+    const vm = useCreateAutoDisposedViewModel(() => new RoomAvatarEventViewModel({ mxEvent, cli }));
+
+    useEffect(() => {
+        vm.setEvent(mxEvent);
+    }, [mxEvent, vm]);
+
+    const roomId = mxEvent.getRoomId();
+    const room = roomId ? cli.getRoom(roomId) : null;
+
+    return (
+        <RoomAvatarEventView
+            vm={vm}
+            ref={ref}
+            renderAvatar={(snapshot) => (
+                <RoomAvatar
+                    room={room ?? undefined}
+                    size="14px"
+                    oobData={{
+                        avatarUrl: snapshot.avatarUrl,
+                        name: snapshot.roomName,
+                    }}
+                />
+            )}
+        />
+    );
+}
+const RoomAvatarEventFactory: Factory = (ref, props) => <RoomAvatarEventWrappedView ref={ref} {...props} />;
+
 function CallStartedTileViewWrapped({ mxEvent }: IBodyProps): JSX.Element {
     const vm = useCreateAutoDisposedViewModel(() => new CallStartedTileViewModel({ mxEvent }));
     return <CallStartedTileView vm={vm} />;
@@ -134,8 +197,8 @@ export const CallStartedEventFactory: Factory = (ref, props) => {
 };
 
 // These factories are exported for reference comparison against pickFactory()
-export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;
-export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEvent ref={ref} {...props} />;
+export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEventWrappedView ref={ref} {...props} />;
+export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEventWrappedView ref={ref} {...props} />;
 export const RoomCreateEventFactory: Factory = (_ref, props) => <RoomPredecessorTile {...props} />;
 
 const EVENT_TILE_TYPES = new Map<string, Factory>([
@@ -155,7 +218,7 @@ const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomCreate, RoomCreateEventFactory],
     [EventType.RoomMember, TextualEventFactory],
     [EventType.RoomName, TextualEventFactory],
-    [EventType.RoomAvatar, (ref, props) => <RoomAvatarEvent ref={ref} {...props} />],
+    [EventType.RoomAvatar, RoomAvatarEventFactory],
     [EventType.RoomThirdPartyInvite, TextualEventFactory],
     [EventType.RoomHistoryVisibility, TextualEventFactory],
     [EventType.RoomTopic, TextualEventFactory],

@@ -15,6 +15,8 @@ import {
     type IEventDecryptionResult,
     type MatrixClient,
     MatrixEvent,
+    MatrixEventEvent,
+    MsgType,
     NotificationCountType,
     PendingEventOrdering,
     Room,
@@ -45,6 +47,59 @@ import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
+import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import PlatformPeg from "../../../../../src/PlatformPeg";
+
+function getTile(container: HTMLElement): HTMLElement {
+    const tile = container.querySelector(".mx_EventTile");
+    expect(tile).not.toBeNull();
+    return tile as HTMLElement;
+}
+
+function getLine(container: HTMLElement): HTMLElement {
+    const line = container.querySelector(".mx_EventTile_line");
+    expect(line).not.toBeNull();
+    return line as HTMLElement;
+}
+
+function expectTileClass(container: HTMLElement, className: string): void {
+    expect(getTile(container)).toHaveClass(className);
+}
+
+function makeReplyEvent(roomId: string): MatrixEvent {
+    const parentEvent = mkMessage({
+        room: roomId,
+        user: "@alice:example.org",
+        msg: "Original message",
+        event: true,
+    });
+
+    return mkMessage({
+        room: roomId,
+        user: "@bob:example.org",
+        msg: "Reply message",
+        event: true,
+        relatesTo: {
+            "m.in_reply_to": {
+                event_id: parentEvent.getId(),
+            },
+        },
+    });
+}
+
+function makeThreadReplyEvent(roomId: string): MatrixEvent {
+    return mkMessage({
+        room: roomId,
+        user: "@alice:example.org",
+        msg: "Hello world!",
+        ts: 1234,
+        event: true,
+        relatesTo: {
+            rel_type: "m.thread",
+            event_id: "$thread-root",
+        },
+    });
+}
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -84,6 +139,27 @@ describe("EventTile", () => {
         return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
     }
 
+    function makeOwnMessage(overrides: Partial<Parameters<typeof mkMessage>[0]> = {}): MatrixEvent {
+        return mkMessage({
+            ...overrides,
+            room: overrides.room ?? room.roomId,
+            user: overrides.user ?? client.getSafeUserId(),
+            msg: overrides.msg ?? "Hello world!",
+            event: overrides.event ?? true,
+        });
+    }
+
+    function makeTimestampedMessage(overrides: Partial<Parameters<typeof mkMessage>[0]> = {}): MatrixEvent {
+        return mkMessage({
+            ...overrides,
+            room: overrides.room ?? room.roomId,
+            user: overrides.user ?? "@alice:example.org",
+            msg: overrides.msg ?? "Hello world!",
+            ts: overrides.ts ?? 1234,
+            event: overrides.event ?? true,
+        });
+    }
+
     function WrappedEventTiles(props: { events: MatrixEvent[]; editEvent?: MatrixEvent }) {
         const roomContext = getRoomContext(room, {
             timelineRenderingType: TimelineRenderingType.Room,
@@ -112,6 +188,9 @@ describe("EventTile", () => {
 
         stubClient();
         client = MatrixClientPeg.safeGet();
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: jest.fn().mockReturnValue(undefined),
+        } as unknown as DMRoomMap);
 
         room = new Room(ROOM_ID, client, client.getSafeUserId(), {
             pendingEventOrdering: PendingEventOrdering.Detached,
@@ -132,6 +211,550 @@ describe("EventTile", () => {
 
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+
+    describe("layout and tile attributes", () => {
+        it.each([
+            ["last", { last: true }, "mx_EventTile_last"],
+            ["lastInSection", { lastInSection: true }, "mx_EventTile_lastInSection"],
+            ["contextual", { contextual: true }, "mx_EventTile_contextual"],
+            ["isSelectedEvent", { isSelectedEvent: true }, "mx_EventTile_selected"],
+            ["hideSender", { hideSender: true }, "mx_EventTile_noSender"],
+            ["isTwelveHour", { isTwelveHour: true }, "mx_EventTile_12hr"],
+        ] as const)("adds the %s class", (_propName, overrides, className) => {
+            const { container } = getComponent(overrides);
+
+            expectTileClass(container, className);
+        });
+
+        it("marks events from other users as non-self events", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toHaveAttribute("data-self", "false");
+        });
+
+        it("marks events from the current user as self events", () => {
+            const ownEvent = makeOwnMessage();
+            const { container } = getComponent({ mxEvent: ownEvent });
+
+            expect(getTile(container)).toHaveAttribute("data-self", "true");
+        });
+
+        it("exposes the rendered event id in room timelines", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toHaveAttribute("data-event-id", mxEvent.getId());
+        });
+
+        it("renders the event line inside the tile", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toContainElement(getLine(container));
+        });
+
+        it("does not expose a scroll token for local echo events", () => {
+            const localEcho = makeOwnMessage();
+            localEcho.setStatus(EventStatus.SENDING);
+            const { container } = getComponent({ mxEvent: localEcho, eventSendStatus: EventStatus.SENDING });
+
+            expect(getTile(container)).not.toHaveAttribute("data-scroll-tokens");
+        });
+    });
+
+    describe("rendering root attributes", () => {
+        type RootAttribute =
+            | "data-scroll-tokens"
+            | "data-layout"
+            | "data-shape"
+            | "data-self"
+            | "data-event-id"
+            | "data-has-reply";
+
+        it.each([
+            [
+                TimelineRenderingType.Room,
+                ["data-scroll-tokens", "data-layout", "data-self", "data-event-id", "data-has-reply"],
+                ["data-shape"],
+            ],
+            [
+                TimelineRenderingType.Thread,
+                ["data-scroll-tokens", "data-layout", "data-self", "data-event-id", "data-has-reply"],
+                ["data-shape"],
+            ],
+            [
+                TimelineRenderingType.ThreadsList,
+                ["data-scroll-tokens", "data-layout", "data-shape", "data-self", "data-has-reply"],
+                ["data-event-id"],
+            ],
+            [
+                TimelineRenderingType.Notification,
+                ["data-scroll-tokens", "data-layout", "data-shape", "data-self", "data-has-reply"],
+                ["data-event-id"],
+            ],
+            [
+                TimelineRenderingType.File,
+                ["data-scroll-tokens"],
+                ["data-layout", "data-shape", "data-self", "data-event-id", "data-has-reply"],
+            ],
+        ] as const)(
+            "sets root attributes for %s rendering",
+            (renderingType, expectedPresentAttributes, expectedAbsentAttributes) => {
+                const { container } = getComponent({}, renderingType);
+                const tile = getTile(container);
+                const expectedValues: Record<RootAttribute, string> = {
+                    "data-scroll-tokens": mxEvent.getId()!,
+                    "data-layout": Layout.Group,
+                    "data-shape": renderingType,
+                    "data-self": "false",
+                    "data-event-id": mxEvent.getId()!,
+                    "data-has-reply": "false",
+                };
+
+                for (const attribute of expectedPresentAttributes) {
+                    expect(tile).toHaveAttribute(attribute, expectedValues[attribute]);
+                }
+
+                for (const attribute of expectedAbsentAttributes) {
+                    expect(tile).not.toHaveAttribute(attribute);
+                }
+            },
+        );
+    });
+
+    describe("message type classes", () => {
+        it("adds media and image classes for image messages", () => {
+            const imageEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: {
+                    msgtype: MsgType.Image,
+                    body: "image.png",
+                    url: "mxc://example.org/image",
+                    info: {
+                        mimetype: "image/png",
+                        w: 100,
+                        h: 100,
+                        size: 1234,
+                    },
+                },
+            });
+            const { container } = getComponent({ mxEvent: imageEvent });
+
+            expect(getLine(container)).toHaveClass("mx_EventTile_mediaLine");
+            expect(getLine(container)).toHaveClass("mx_EventTile_image");
+        });
+
+        it("adds emote classes for emote messages", () => {
+            const emoteEvent = mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: {
+                    msgtype: MsgType.Emote,
+                    body: "waves",
+                },
+            });
+            const { container } = getComponent({ mxEvent: emoteEvent });
+
+            expect(getTile(container)).toHaveClass("mx_EventTile_emote");
+            expect(getLine(container)).toHaveClass("mx_EventTile_emote");
+        });
+
+        it("adds media and sticker classes for sticker events", () => {
+            const stickerEvent = mkEvent({
+                event: true,
+                type: EventType.Sticker,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: {
+                    body: "sticker.png",
+                    url: "mxc://example.org/sticker",
+                    info: {
+                        mimetype: "image/png",
+                        w: 100,
+                        h: 100,
+                        size: 1234,
+                    },
+                },
+            });
+            const { container } = getComponent({ mxEvent: stickerEvent });
+
+            expect(getLine(container)).toHaveClass("mx_EventTile_mediaLine");
+            expect(getLine(container)).toHaveClass("mx_EventTile_sticker");
+        });
+    });
+
+    describe("timestamps", () => {
+        beforeEach(() => {
+            mxEvent = makeTimestampedMessage();
+        });
+
+        it("hides the timestamp by default in room timelines", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+        });
+
+        it("shows the timestamp when the tile is hovered", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("shows the timestamp when focus is within the tile", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+
+            fireEvent.focus(getTile(container));
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("shows the timestamp for the last event", () => {
+            const { container } = getComponent({ last: true });
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("shows the timestamp when timestamps are always shown", () => {
+            const { container } = getComponent({ alwaysShowTimestamps: true });
+
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("hides the timestamp when timestamps are disabled for the tile", () => {
+            const { container } = getComponent({ alwaysShowTimestamps: true, hideTimestamp: true });
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+        });
+
+        it("renders a placeholder timestamp in IRC layout", () => {
+            const { container } = getComponent({ layout: Layout.IRC });
+            const timestamp = container.querySelector(".mx_MessageTimestamp");
+
+            expect(timestamp).not.toBeNull();
+            expect(timestamp?.tagName).toBe("SPAN");
+        });
+
+        it("dispatches a room view when the linked timestamp is clicked", () => {
+            jest.spyOn(dis, "dispatch").mockImplementation(() => {});
+            const permalinkCreator = new RoomPermalinkCreator(room);
+            const { container } = getComponent({ alwaysShowTimestamps: true, permalinkCreator });
+            const timestamp = container.querySelector<HTMLAnchorElement>("a.mx_MessageTimestamp");
+
+            expect(timestamp).not.toBeNull();
+            fireEvent.click(timestamp!);
+
+            expect(dis.dispatch).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.ViewRoom,
+                    event_id: mxEvent.getId(),
+                    highlighted: true,
+                    room_id: room.roomId,
+                }),
+            );
+        });
+    });
+
+    describe("sender and avatar rendering", () => {
+        it("shows sender and avatar in room timelines", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_DisambiguatedProfile")).not.toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+        });
+
+        it("hides sender and avatar for continuation events in room timelines", () => {
+            const { container } = getComponent({ continuation: true });
+
+            expectTileClass(container, "mx_EventTile_continuation");
+            expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).toBeNull();
+        });
+
+        it("hides sender but keeps avatar when sender display is disabled", () => {
+            const { container } = getComponent({ hideSender: true });
+
+            expectTileClass(container, "mx_EventTile_noSender");
+            expect(container.querySelector(".mx_DisambiguatedProfile")).toBeNull();
+            expect(container.querySelector(".mx_EventTile_avatar")).not.toBeNull();
+        });
+
+        it("renders sender details as a permalink in file timelines", () => {
+            const { container } = getComponent({}, TimelineRenderingType.File);
+            const senderDetailsLink = container.querySelector(".mx_EventTile_senderDetailsLink");
+
+            expect(senderDetailsLink).not.toBeNull();
+            expect(senderDetailsLink).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
+            expect(senderDetailsLink).toContainElement(container.querySelector(".mx_EventTile_avatar"));
+        });
+
+        it("renders sender details in thread timelines", () => {
+            const { container } = getComponent({}, TimelineRenderingType.Thread);
+            const senderDetails = container.querySelector(".mx_EventTile_senderDetails");
+
+            expect(senderDetails).not.toBeNull();
+            expect(senderDetails).toContainElement(container.querySelector(".mx_DisambiguatedProfile"));
+            expect(senderDetails).toContainElement(container.querySelector(".mx_EventTile_avatar"));
+        });
+    });
+
+    describe("read receipt option", () => {
+        it("shows a sent receipt for the current user's last successful event", () => {
+            const ownEvent = makeOwnMessage();
+            const { getByRole } = getComponent({ mxEvent: ownEvent, lastSuccessful: true });
+
+            expect(getByRole("status")).toHaveAccessibleName("Your message was sent");
+        });
+
+        it.each([
+            [EventStatus.SENDING, "Sending your message…"],
+            [EventStatus.ENCRYPTING, "Encrypting your message…"],
+            [EventStatus.NOT_SENT, "Failed to send"],
+        ])("shows the %s receipt for the current user's pending event", (eventSendStatus, label) => {
+            const ownEvent = makeOwnMessage();
+            ownEvent.setStatus(eventSendStatus);
+            const { getByRole } = getComponent({ mxEvent: ownEvent, eventSendStatus });
+
+            expect(getByRole("status")).toHaveAccessibleName(label);
+        });
+
+        it("does not show a sent receipt in the threads list", () => {
+            const ownEvent = makeOwnMessage();
+            const { queryByRole } = getComponent(
+                { mxEvent: ownEvent, lastSuccessful: true },
+                TimelineRenderingType.ThreadsList,
+            );
+
+            expect(queryByRole("status", { name: "Your message was sent" })).toBeNull();
+        });
+
+        it("shows normal read receipts instead of the sent receipt when other users have read the event", () => {
+            const ownEvent = makeOwnMessage();
+            const { getByRole, queryByRole } = getComponent({
+                mxEvent: ownEvent,
+                lastSuccessful: true,
+                showReadReceipts: true,
+                readReceipts: [
+                    {
+                        userId: "@bob:example.org",
+                        roomMember: null,
+                        ts: 1234,
+                    },
+                ],
+            });
+
+            expect(queryByRole("status", { name: "Your message was sent" })).toBeNull();
+            expect(getByRole("group", { name: "Seen by 1 person" })).toBeInTheDocument();
+        });
+    });
+
+    describe("reactions and footer", () => {
+        it("gets annotation relations when reactions are enabled", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+
+            getComponent({ showReactions: true, getRelationsForEvent });
+
+            expect(getRelationsForEvent).toHaveBeenCalledWith(mxEvent.getId(), "m.annotation", "m.reaction");
+        });
+
+        it("does not get annotation relations when reactions are disabled", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+
+            getComponent({ getRelationsForEvent });
+
+            expect(getRelationsForEvent).not.toHaveBeenCalled();
+        });
+
+        it("refreshes annotation relations when reaction relations are created", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            getComponent({ showReactions: true, getRelationsForEvent });
+            getRelationsForEvent.mockClear();
+
+            act(() => {
+                mxEvent.emit(MatrixEventEvent.RelationsCreated, "m.annotation", "m.reaction");
+            });
+
+            expect(getRelationsForEvent).toHaveBeenCalledWith(mxEvent.getId(), "m.annotation", "m.reaction");
+        });
+
+        it("does not refresh annotation relations for unrelated relations", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            getComponent({ showReactions: true, getRelationsForEvent });
+            getRelationsForEvent.mockClear();
+
+            act(() => {
+                mxEvent.emit(MatrixEventEvent.RelationsCreated, "m.reference", "m.room.message");
+            });
+
+            expect(getRelationsForEvent).not.toHaveBeenCalled();
+        });
+
+        it("does not render reactions for redacted events", () => {
+            const getRelationsForEvent = jest.fn().mockReturnValue(null);
+            const { container } = getComponent({ showReactions: true, getRelationsForEvent, isRedacted: true });
+
+            expect(container.querySelector(".mx_ReactionsRow")).toBeNull();
+        });
+
+        it("renders a footer for pinned messages", () => {
+            jest.spyOn(PinningUtils, "isPinned").mockReturnValue(true);
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_EventTile_footer")).not.toBeNull();
+            expect(screen.getByText("Pinned message")).toBeInTheDocument();
+        });
+    });
+
+    describe("action bar", () => {
+        it("does not render the message action bar by default", () => {
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+
+        it("renders the message action bar when the tile is hovered", () => {
+            const { container } = getComponent();
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
+        });
+
+        it("renders the message action bar when the tile receives keyboard focus", () => {
+            const matches = HTMLElement.prototype.matches;
+            jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
+                if (selector === ":focus-visible") return true;
+                return matches.call(this, selector);
+            });
+            const { container } = getComponent();
+
+            fireEvent.focus(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
+        });
+
+        it("hides the keyboard-focused message action bar when focus leaves the tile", () => {
+            const matches = HTMLElement.prototype.matches;
+            jest.spyOn(HTMLElement.prototype, "matches").mockImplementation(function (this: HTMLElement, selector) {
+                if (selector === ":focus-visible") return true;
+                return matches.call(this, selector);
+            });
+            const { container } = getComponent();
+            const tile = getTile(container);
+
+            fireEvent.focus(tile);
+            expect(container.querySelector(".mx_MessageActionBar")).not.toBeNull();
+
+            fireEvent.blur(tile);
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+
+        it("does not render the message action bar on hover when exporting", () => {
+            const { container } = getComponent({ forExport: true });
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+
+        it("does not render the message action bar on hover while editing", () => {
+            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+
+            fireEvent.mouseEnter(getTile(container));
+
+            expect(container.querySelector(".mx_MessageActionBar")).toBeNull();
+        });
+    });
+
+    describe("context menu", () => {
+        it("renders the message context menu when the event line is right-clicked", async () => {
+            const { container } = getComponent();
+
+            fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
+
+            expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
+        });
+
+        it("marks the tile selected when the context menu is open", async () => {
+            const { container } = getComponent();
+            const tile = getTile(container);
+
+            fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
+
+            expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
+            expect(tile).toHaveClass("mx_EventTile_selected");
+        });
+
+        it("shows the timestamp while the context menu is open", async () => {
+            mxEvent = makeTimestampedMessage();
+            const { container } = getComponent();
+
+            expect(container.querySelector(".mx_MessageTimestamp")).toBeNull();
+
+            fireEvent.contextMenu(getLine(container), { clientX: 1, clientY: 2 });
+
+            expect(await screen.findByTestId("mx_MessageContextMenu")).toBeInTheDocument();
+            expect(container.querySelector(".mx_MessageTimestamp")).not.toBeNull();
+        });
+
+        it("does not render the message context menu while editing", () => {
+            const { container } = getComponent({ editState: {} as EventTileProps["editState"] });
+
+            expect(container.querySelector(".mx_EventTile_line")).toBeNull();
+            expect(screen.queryByTestId("mx_MessageContextMenu")).toBeNull();
+        });
+
+        it("does not override the native browser context menu for links", () => {
+            const { container } = getComponent();
+            jest.spyOn(PlatformPeg, "get").mockReturnValue({
+                allowOverridingNativeContextMenus: () => false,
+            } as ReturnType<typeof PlatformPeg.get>);
+            const link = document.createElement("a");
+            link.href = "https://example.org/";
+            getLine(container).appendChild(link);
+
+            const event = new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 1, clientY: 2 });
+            link.dispatchEvent(event);
+
+            expect(event.defaultPrevented).toBe(false);
+            expect(screen.queryByTestId("mx_MessageContextMenu")).toBeNull();
+        });
+    });
+
+    describe("reply chain", () => {
+        it("marks non-reply events as having no reply", () => {
+            const { container } = getComponent();
+
+            expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
+            expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
+        });
+
+        it("marks reply events as having a reply chain", () => {
+            const replyEvent = makeReplyEvent(room.roomId);
+            const { container } = getComponent({ mxEvent: replyEvent });
+
+            expect(getTile(container)).toHaveAttribute("data-has-reply", "true");
+            expect(container.querySelector(".mx_ReplyChain_wrapper")).not.toBeNull();
+        });
+
+        it("does not render the reply chain for redacted reply events", () => {
+            const replyEvent = makeReplyEvent(room.roomId);
+            jest.spyOn(replyEvent, "isRedacted").mockReturnValue(true);
+            const { container } = getComponent({ mxEvent: replyEvent });
+
+            expect(getTile(container)).toHaveAttribute("data-has-reply", "false");
+            expect(container.querySelector(".mx_ReplyChain_wrapper")).toBeNull();
+        });
     });
 
     describe("EventTile thread summary", () => {
@@ -171,6 +794,43 @@ describe("EventTile", () => {
             act(() => room.processThreadedEvents([redaction], false));
 
             await waitFor(() => expect(screen.queryByTestId("thread-summary")).toBeNull());
+        });
+    });
+
+    describe("search thread info", () => {
+        it("renders search thread info for events in a thread", () => {
+            const threadEvent = makeThreadReplyEvent(room.roomId);
+            const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Search);
+
+            expect(container.querySelector(".mx_ThreadSummary_icon")).not.toBeNull();
+            expect(container.querySelector(".mx_ThreadSummary_icon")).toHaveTextContent("From a thread");
+        });
+
+        it("renders search thread info as a link when a highlight link is provided", () => {
+            const threadEvent = makeThreadReplyEvent(room.roomId);
+            const { container } = getComponent(
+                { mxEvent: threadEvent, highlightLink: "https://example.org/thread" },
+                TimelineRenderingType.Search,
+            );
+            const threadInfo = container.querySelector<HTMLAnchorElement>("a.mx_ThreadSummary_icon");
+
+            expect(threadInfo).not.toBeNull();
+            expect(threadInfo).toHaveAttribute("href", "https://example.org/thread");
+        });
+
+        it("renders search thread info as text when no highlight link is provided", () => {
+            const threadEvent = makeThreadReplyEvent(room.roomId);
+            const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Search);
+            const threadInfo = container.querySelector(".mx_ThreadSummary_icon");
+
+            expect(threadInfo?.tagName).toBe("P");
+        });
+
+        it("does not render search thread info outside search timelines", () => {
+            const threadEvent = makeThreadReplyEvent(room.roomId);
+            const { container } = getComponent({ mxEvent: threadEvent }, TimelineRenderingType.Room);
+
+            expect(container.querySelector(".mx_ThreadSummary_icon")).toBeNull();
         });
     });
 
@@ -270,13 +930,6 @@ describe("EventTile", () => {
     });
 
     describe("EventTile in the right panel", () => {
-        beforeAll(() => {
-            const dmRoomMap: DMRoomMap = {
-                getUserIdForRoomId: jest.fn(),
-            } as unknown as DMRoomMap;
-            DMRoomMap.setShared(dmRoomMap);
-        });
-
         it("renders the room name for notifications", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
             expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
@@ -621,6 +1274,43 @@ describe("EventTile", () => {
             });
             const { container } = getComponent({ isRedacted: true });
 
+            expect(isHighlighted(container)).toBeFalsy();
+        });
+
+        it("does not highlight when exporting", () => {
+            mocked(client.getPushActionsForEvent).mockReturnValue({
+                notify: true,
+                tweaks: { [TweakName.Highlight]: true },
+            });
+            const { container } = getComponent({ forExport: true });
+
+            expect(client.getPushActionsForEvent).not.toHaveBeenCalled();
+            expect(isHighlighted(container)).toBeFalsy();
+        });
+
+        it.each([TimelineRenderingType.Notification, TimelineRenderingType.ThreadsList])(
+            "does not highlight in %s timelines",
+            (renderingType) => {
+                mocked(client.getPushActionsForEvent).mockReturnValue({
+                    notify: true,
+                    tweaks: { [TweakName.Highlight]: true },
+                });
+                const { container } = getComponent({}, renderingType);
+
+                expect(client.getPushActionsForEvent).not.toHaveBeenCalled();
+                expect(isHighlighted(container)).toBeFalsy();
+            },
+        );
+
+        it("does not highlight events sent by the current user", () => {
+            mocked(client.getPushActionsForEvent).mockReturnValue({
+                notify: true,
+                tweaks: { [TweakName.Highlight]: true },
+            });
+            const ownEvent = makeOwnMessage();
+            const { container } = getComponent({ mxEvent: ownEvent });
+
+            expect(client.getPushActionsForEvent).toHaveBeenCalledWith(ownEvent);
             expect(isHighlighted(container)).toBeFalsy();
         });
 
