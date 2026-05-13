@@ -103,7 +103,7 @@ import { EventPreview } from "./EventPreview";
 import { ElementCallEventType } from "../../../call-types";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
-import { getAriaLive, getScrollToken, isSendingStatus } from "./EventTile/eventTileDerivedState";
+import { getAriaLive, getIsContinuation, getScrollToken, isSendingStatus } from "./EventTile/eventTileDerivedState";
 import SettingsStore from "../../../settings/SettingsStore";
 import { CardContext } from "../right_panel/context";
 import {
@@ -1092,15 +1092,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
-        let isContinuation = this.props.continuation;
-        if (
-            this.context.timelineRenderingType !== TimelineRenderingType.Room &&
-            this.context.timelineRenderingType !== TimelineRenderingType.Search &&
-            this.context.timelineRenderingType !== TimelineRenderingType.Thread &&
-            this.props.layout !== Layout.Bubble
-        ) {
-            isContinuation = false;
-        }
+        const isContinuation = getIsContinuation(
+            this.props.continuation,
+            this.context.timelineRenderingType,
+            this.props.layout,
+        );
 
         const isRenderingNotification = this.context.timelineRenderingType === TimelineRenderingType.Notification;
 
