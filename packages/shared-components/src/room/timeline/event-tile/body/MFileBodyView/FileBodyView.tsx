@@ -235,12 +235,12 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                 <span className={classes}>
                     {info}
                     {showDownload && (
-                        <MediaBody data-type="download">
+                        <div data-type="download">
                             {/* Decrypt/download is triggered by the view model action, not by an anchor `href`. */}
                             <Button size="md" kind="secondary" Icon={DownloadIcon} onClick={vm.onDownloadClick}>
                                 {resolvedDownloadLabel}
                             </Button>
-                        </MediaBody>
+                        </div>
                     )}
                 </span>
             );
@@ -250,7 +250,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                 <span className={classes}>
                     {info}
                     {showDownload && (
-                        <MediaBody data-type="download">
+                        <div data-type="download">
                             <div aria-hidden style={{ display: "none" }}>
                                 {/*
                                  * Add dummy copy of the button
@@ -274,7 +274,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                                 ref={refIFrame}
                                 sandbox="allow-scripts allow-downloads"
                             />
-                        </MediaBody>
+                        </div>
                     )}
                 </span>
             );
@@ -284,7 +284,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                 <span className={classes}>
                     {info}
                     {showDownload && (
-                        <MediaBody data-type="download">
+                        <div data-type="download">
                             {/* Unencrypted media uses an anchor element with VM-controlled click behavior. */}
                             <Button
                                 size="md"
@@ -298,7 +298,7 @@ export function FileBodyView({ vm, refIFrame, refLink, className }: Readonly<Fil
                             >
                                 {resolvedDownloadLabel}
                             </Button>
-                        </MediaBody>
+                        </div>
                     )}
                 </span>
             );
