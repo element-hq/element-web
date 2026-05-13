@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MediaBody } from "@element-hq/web-shared-components";
 
 import InlineSpinner from "../elements/InlineSpinner";
 import { _t } from "../../../languageHandler";
@@ -46,9 +45,7 @@ export default class MVoiceMessageBody extends MAudioBody {
         if (!this.state.playback) {
             return (
                 <span className="mx_MVoiceMessageBody">
-                    <MediaBody>
-                        <InlineSpinner />
-                    </MediaBody>
+                    <InlineSpinner />
                 </span>
             );
         }

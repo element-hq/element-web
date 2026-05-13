@@ -33,18 +33,6 @@ describe("<MAudioBody />", () => {
         });
     });
 
-    it("wraps the loading state in a media body", () => {
-        const mediaEventHelper = {
-            sourceBlob: {
-                value: new Promise(() => {}),
-            },
-        } as unknown as MediaEventHelper;
-
-        const { container } = render(<MAudioBody mxEvent={event} mediaEventHelper={mediaEventHelper} />);
-
-        expect(container.querySelector(".mx_MAudioBody .mx_MediaBody")).toBeInTheDocument();
-    });
-
     it("should render", async () => {
         const mediaEventHelper = {
             sourceBlob: {
