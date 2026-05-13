@@ -14,6 +14,8 @@ export type {
     RoomListItemViewProps,
     Section,
 } from "./RoomListItemView";
+export { RoomListItemContent } from "./RoomListItemContent";
+export type { RoomListItemContentProps } from "./RoomListItemContent";
 export { RoomListItemNotificationMenu } from "./RoomListItemNotificationMenu";
 export type { RoomListItemNotificationMenuProps } from "./RoomListItemNotificationMenu";
 export { RoomListItemMoreOptionsMenu, MoreOptionContent } from "./RoomListItemMoreOptionsMenu";
