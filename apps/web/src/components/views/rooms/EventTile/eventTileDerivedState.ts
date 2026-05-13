@@ -23,7 +23,7 @@ export function isSendingStatus(eventSendStatus?: EventStatus): boolean {
 
 /** The aria-live setting used by EventTile for the current send status. */
 export function getAriaLive(eventSendStatus?: EventStatus | null): "off" | undefined {
-    return eventSendStatus !== null ? "off" : undefined;
+    return eventSendStatus === null ? undefined : "off";
 }
 
 /** The stable scroll token for a non-local-echo event. */
