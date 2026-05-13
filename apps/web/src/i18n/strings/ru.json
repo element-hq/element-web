@@ -879,7 +879,6 @@
         "thread_root_id": "Идентификатор Root ID: %(threadRootId)s",
         "threads_timeline": "Хронология обсуждений",
         "title": "Инструменты разработчика",
-        "toggle_event": "переключить событие",
         "toolbox": "Панель инструментов",
         "use_at_own_risk": "Этот пользовательский интерфейс НЕ проверяет типы значений. Используйте на свой страх и риск.",
         "user_avatar": "Аватар: %(avatar)s",
@@ -3436,9 +3435,7 @@
         "m.poll.start": "%(senderName)s начал(а) опрос — %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s изменил(а) аватар комнаты.",
-            "changed_img": "%(senderDisplayName)s изменил(а) аватар комнаты на <img/>",
-            "lightbox_title": "%(senderDisplayName)s изменил(а) аватар комнаты %(roomName)s",
-            "removed": "%(senderDisplayName)s удалил(а) аватар комнаты."
+            "lightbox_title": "%(senderDisplayName)s изменил(а) аватар комнаты %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

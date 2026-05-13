@@ -877,7 +877,6 @@
         "thread_root_id": "ID Gwraidd Edefyn: %(threadRootId)s",
         "threads_timeline": "Llinell amser edafedd",
         "title": "Offer datblygwr",
-        "toggle_event": "toglo digwyddiad",
         "toolbox": "Blwch offer",
         "use_at_own_risk": "NID yw'r UI hwn yn gwirio'r mathau o werthoedd. Defnyddiwch ar eich menter eich hun.",
         "user_avatar": "Afatar: %(avatar)s",
@@ -3404,9 +3403,7 @@
         "m.poll.start": "Mae %(senderName)s wedi dechrau arolwg - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "Mae %(senderDisplayName)s wedi newid afatar yr ystafell.",
-            "changed_img": "Mae %(senderDisplayName)s wedi newid yr afatar ystafell i<img/>",
-            "lightbox_title": "Newidiodd %(senderDisplayName)s yr afatar ar gyfer %(roomName)s",
-            "removed": "Mae %(senderDisplayName)s wedi tynnu afatar yr ystafell."
+            "lightbox_title": "Newidiodd %(senderDisplayName)s yr afatar ar gyfer %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

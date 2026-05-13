@@ -871,7 +871,6 @@
         "thread_root_id": "ID Akar Utas: %(threadRootId)s",
         "threads_timeline": "Lini masa utasan",
         "title": "Alat pengembang",
-        "toggle_event": "alih peristiwa",
         "toolbox": "Kotak Peralatan",
         "use_at_own_risk": "UI ini TIDAK memeriksa tipe nilai. Gunakan dengan hati-hati.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3390,9 +3389,7 @@
         "m.poll.start": "%(senderName)s telah memulai sebuah pungutan suara — %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mengubah avatar ruangan ini.",
-            "changed_img": "%(senderDisplayName)s mengubah avatar ruangan ke <img/>",
-            "lightbox_title": "%(senderDisplayName)s mengubah avatar untuk %(roomName)s",
-            "removed": "%(senderDisplayName)s menghapus avatar ruangan."
+            "lightbox_title": "%(senderDisplayName)s mengubah avatar untuk %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

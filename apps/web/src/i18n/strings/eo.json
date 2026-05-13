@@ -2095,9 +2095,7 @@
         "m.poll.start": "%(senderName)s komencis balotenketon - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ŝanĝis la profilbildon de ĉambro.",
-            "changed_img": "%(senderDisplayName)s agordis la ĉambran profilbildon al <img/>",
-            "lightbox_title": "%(senderDisplayName)s ŝanĝis la profilbildon de %(roomName)s",
-            "removed": "%(senderDisplayName)s forigis la ĉambran profilbildon."
+            "lightbox_title": "%(senderDisplayName)s ŝanĝis la profilbildon de %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
