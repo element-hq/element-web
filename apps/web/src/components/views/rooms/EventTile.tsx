@@ -114,6 +114,7 @@ import {
     getShouldShowMessageActionBar,
     getShouldShowTimestamp,
     getShouldViewUserOnClick,
+    getTimestampDisplayState,
     isSendingStatus,
 } from "./EventTile/eventTileDerivedState";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -1248,12 +1249,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         );
 
-        const useIRCLayout = this.props.layout === Layout.IRC;
+        const { useIRCLayout, showRealTimestamp, showLinkedTimestamp } = getTimestampDisplayState({
+            layout: this.props.layout,
+            showTimestamp,
+            timestamp: ts,
+            hideTimestamp: this.props.hideTimestamp,
+        });
         // Used to simplify the UI layout where necessary by not conditionally rendering an element at the start
         const dummyTimestamp = useIRCLayout ? <span className="mx_MessageTimestamp" /> : null;
-        const timestamp = showTimestamp && ts ? messageTimestamp : dummyTimestamp;
-        const linkedTimestamp =
-            timestamp !== dummyTimestamp && !this.props.hideTimestamp ? linkedMessageTimestamp : dummyTimestamp;
+        const timestamp = showRealTimestamp ? messageTimestamp : dummyTimestamp;
+        const linkedTimestamp = showLinkedTimestamp ? linkedMessageTimestamp : dummyTimestamp;
 
         let pinnedMessageBadge: JSX.Element | undefined;
         if (PinningUtils.isPinned(MatrixClientPeg.safeGet(), this.props.mxEvent)) {

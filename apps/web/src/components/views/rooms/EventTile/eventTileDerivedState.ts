@@ -300,6 +300,44 @@ export function getEventTileTimestamp({
     return eventTs;
 }
 
+/** Inputs for EventTile timestamp display state derivation. */
+export interface TimestampDisplayStateInput {
+    /** The current timeline layout. */
+    layout?: Layout;
+    /** Whether the timestamp should render. */
+    showTimestamp: boolean;
+    /** The timestamp EventTile may display. */
+    timestamp: number;
+    /** Whether timestamp rendering is disabled. */
+    hideTimestamp?: boolean;
+}
+
+/** EventTile timestamp display state. */
+export interface TimestampDisplayState {
+    /** Whether the current layout is IRC. */
+    useIRCLayout: boolean;
+    /** Whether EventTile should render the real timestamp element. */
+    showRealTimestamp: boolean;
+    /** Whether EventTile should render the linked timestamp element. */
+    showLinkedTimestamp: boolean;
+}
+
+/** The EventTile timestamp display state for the current derived state. */
+export function getTimestampDisplayState({
+    layout,
+    showTimestamp,
+    timestamp,
+    hideTimestamp,
+}: TimestampDisplayStateInput): TimestampDisplayState {
+    const showRealTimestamp = showTimestamp && !!timestamp;
+
+    return {
+        useIRCLayout: layout === Layout.IRC,
+        showRealTimestamp,
+        showLinkedTimestamp: showRealTimestamp && !hideTimestamp,
+    };
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */
