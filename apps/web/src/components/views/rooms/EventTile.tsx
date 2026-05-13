@@ -109,6 +109,7 @@ import {
     getEventTileSenderProfileState,
     getIsContinuation,
     getScrollToken,
+    getShouldViewUserOnClick,
     isSendingStatus,
 } from "./EventTile/eventTileDerivedState";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -1157,12 +1158,10 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         if (this.props.mxEvent.sender && avatarSize !== null) {
             const member = getEventTileAvatarMember(this.props.mxEvent);
-            // In the ThreadsList view we use the entire EventTile as a click target to open the thread instead
-            const viewUserOnClick =
-                !this.props.inhibitInteraction &&
-                ![TimelineRenderingType.ThreadsList, TimelineRenderingType.Notification].includes(
-                    this.context.timelineRenderingType,
-                );
+            const viewUserOnClick = getShouldViewUserOnClick(
+                this.props.inhibitInteraction,
+                this.context.timelineRenderingType,
+            );
             avatar = (
                 <div className="mx_EventTile_avatar">
                     <MemberAvatar

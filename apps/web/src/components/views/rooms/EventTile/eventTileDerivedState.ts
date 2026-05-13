@@ -157,6 +157,17 @@ export function getEventTileAvatarMember(mxEvent: MatrixEvent): RoomMember | nul
     return mxEvent.sender;
 }
 
+/** Whether clicking the avatar should open the user profile. */
+export function getShouldViewUserOnClick(
+    inhibitInteraction: boolean | undefined,
+    timelineRenderingType: TimelineRenderingType,
+): boolean {
+    return (
+        !inhibitInteraction &&
+        ![TimelineRenderingType.ThreadsList, TimelineRenderingType.Notification].includes(timelineRenderingType)
+    );
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */
