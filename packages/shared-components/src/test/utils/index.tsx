@@ -16,7 +16,13 @@ import React, { type ReactElement } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
 
-import { DEFAULT_EVENT_PRESENTATION, EventPresentationProvider, I18nApi, I18nContext, type EventPresentation } from "../..";
+import {
+    DEFAULT_EVENT_PRESENTATION,
+    EventPresentationProvider,
+    I18nApi,
+    I18nContext,
+    type EventPresentation,
+} from "../..";
 
 type SharedRenderOptions = RenderOptions & {
     presentation?: Partial<EventPresentation>;
