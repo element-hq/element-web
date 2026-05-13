@@ -48,6 +48,16 @@ describe("section", () => {
             });
             expect(getCustomSectionData()).toEqual({ [validTag]: validEntry });
         });
+
+        it("drops entries that fail the isValidCustomSection check", () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue({
+                "element.io.section.null-val": null,
+                "element.io.section.str-val": "not-an-object",
+                "element.io.section.bad-tag": { tag: "not-a-custom-tag", name: "Bad" },
+                "element.io.section.bad-name": { tag: "element.io.section.bad-name", name: 42 },
+            });
+            expect(getCustomSectionData()).toEqual({});
+        });
     });
 
     describe("getOrderedCustomSections", () => {
@@ -157,6 +167,12 @@ describe("section", () => {
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
         });
 
+        it("does nothing if the tag is not a custom section tag", async () => {
+            const createDialogSpy = jest.spyOn(Modal, "createDialog");
+            await editSection("m.favourite");
+            expect(createDialogSpy).not.toHaveBeenCalled();
+        });
+
         it("does nothing if the section does not exist", async () => {
             jest.spyOn(SettingsStore, "getValue").mockReturnValue({});
             const createDialogSpy = jest.spyOn(Modal, "createDialog");
@@ -220,6 +236,12 @@ describe("section", () => {
                 return null;
             });
             jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        });
+
+        it("does nothing if the tag is not a custom section tag", async () => {
+            const createDialogSpy = jest.spyOn(Modal, "createDialog");
+            await deleteSection("m.favourite", false);
+            expect(createDialogSpy).not.toHaveBeenCalled();
         });
 
         it("does nothing if the section does not exist", async () => {
