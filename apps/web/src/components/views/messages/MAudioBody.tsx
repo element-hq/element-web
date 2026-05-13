@@ -10,7 +10,7 @@ import React, { type JSX, useEffect } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type MediaEventContent } from "matrix-js-sdk/src/types";
-import { AudioPlayerView, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
+import { AudioPlayerView, MediaBody, useCreateAutoDisposedViewModel } from "@element-hq/web-shared-components";
 
 import { type Playback } from "../../../audio/Playback";
 import InlineSpinner from "../elements/InlineSpinner";
@@ -102,7 +102,9 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         if (!this.state.playback) {
             return (
                 <span className="mx_MAudioBody">
-                    <InlineSpinner />
+                    <MediaBody>
+                        <InlineSpinner />
+                    </MediaBody>
                 </span>
             );
         }

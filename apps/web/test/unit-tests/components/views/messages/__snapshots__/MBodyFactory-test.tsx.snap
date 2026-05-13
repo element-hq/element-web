@@ -85,6 +85,7 @@ exports[`MBodyFactory renderMBody renders download button for m.file in file ren
     class="_content_bibip_8 mx_MFileBody"
   >
     <div
+      class="mx_MediaBody _mediaBody_14jys_8"
       data-type="download"
     >
       <a
