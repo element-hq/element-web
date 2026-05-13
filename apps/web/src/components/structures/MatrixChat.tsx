@@ -2173,9 +2173,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (secrets) {
             const crypto = MatrixClientPeg.safeGet().getCrypto();
             if (crypto?.importSecretsBundle) {
+                // This imports the secrets and cross-signs the device in one go
                 await crypto.importSecretsBundle(secrets);
-                // it should be sufficient to just upload the device keys with the signature but this seems to do the job for now
-                await crypto.crossSignDevice(deviceId);
             } else {
                 logger.warn(
                     "Crypto not initialised or no importSecretsBundle() method, cannot import secrets from QR login",
