@@ -73,6 +73,81 @@ export function getEventTileLineClassState({
     };
 }
 
+/** Inputs for EventTile avatar and sender profile derivation. */
+export interface EventTileSenderProfileStateInput {
+    /** Whether the tile is rendering as a notification. */
+    isRenderingNotification: boolean;
+    /** Whether the event renders as an informational timeline item. */
+    isInfoMessage: boolean;
+    /** The current timeline rendering mode. */
+    timelineRenderingType: TimelineRenderingType;
+    /** Whether the tile is a continuation of the previous event. */
+    continuation?: boolean;
+    /** The Matrix event type for event-type sender profile derivation. */
+    eventType: string;
+    /** Whether the tile should use bubble container styling. */
+    isBubbleMessage: boolean;
+    /** The current timeline layout. */
+    layout?: Layout;
+}
+
+/** EventTile avatar and sender profile display state. */
+export interface EventTileSenderProfileState {
+    /** The avatar size to render, or null when no avatar should render. */
+    avatarSize: string | null;
+    /** Whether sender profile details should render. */
+    needsSenderProfile: boolean;
+}
+
+/** The EventTile avatar and sender profile state for the current derived state. */
+export function getEventTileSenderProfileState({
+    isRenderingNotification,
+    isInfoMessage,
+    timelineRenderingType,
+    continuation,
+    eventType,
+    isBubbleMessage,
+    layout,
+}: EventTileSenderProfileStateInput): EventTileSenderProfileState {
+    if (isRenderingNotification) {
+        return { avatarSize: "24px", needsSenderProfile: true };
+    }
+
+    if (isInfoMessage) {
+        return { avatarSize: "14px", needsSenderProfile: false };
+    }
+
+    if (
+        timelineRenderingType === TimelineRenderingType.ThreadsList ||
+        (timelineRenderingType === TimelineRenderingType.Thread && !continuation)
+    ) {
+        return { avatarSize: "32px", needsSenderProfile: true };
+    }
+
+    if (eventType === EventType.RoomCreate || isBubbleMessage) {
+        return { avatarSize: null, needsSenderProfile: false };
+    }
+
+    if (layout === Layout.IRC) {
+        return { avatarSize: "14px", needsSenderProfile: true };
+    }
+
+    if (
+        (continuation && timelineRenderingType !== TimelineRenderingType.File) ||
+        eventType === EventType.CallInvite ||
+        ElementCallEventType.matches(eventType) ||
+        eventType === EventType.RTCNotification
+    ) {
+        return { avatarSize: null, needsSenderProfile: false };
+    }
+
+    if (timelineRenderingType === TimelineRenderingType.File) {
+        return { avatarSize: "20px", needsSenderProfile: true };
+    }
+
+    return { avatarSize: "30px", needsSenderProfile: true };
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */

@@ -99,13 +99,13 @@ import { getLateEventInfo } from "../../structures/grouper/LateEventGrouper";
 import { Icon as LateIcon } from "../../../../res/img/sensor.svg";
 import PinningUtils from "../../../utils/PinningUtils";
 import { EventPreview } from "./EventPreview";
-import { ElementCallEventType } from "../../../call-types";
 import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import {
     getAriaLive,
     getEventTileClassState,
     getEventTileLineClassState,
+    getEventTileSenderProfileState,
     getIsContinuation,
     getScrollToken,
     isSendingStatus,
@@ -1144,45 +1144,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         let avatar: JSX.Element | null = null;
         let sender: JSX.Element | null = null;
-        let avatarSize: string | null;
-        let needsSenderProfile: boolean;
-
-        if (isRenderingNotification) {
-            avatarSize = "24px";
-            needsSenderProfile = true;
-        } else if (isInfoMessage) {
-            // a small avatar, with no sender profile, for
-            // joins/parts/etc
-            avatarSize = "14px";
-            needsSenderProfile = false;
-        } else if (
-            this.context.timelineRenderingType === TimelineRenderingType.ThreadsList ||
-            (this.context.timelineRenderingType === TimelineRenderingType.Thread && !this.props.continuation)
-        ) {
-            avatarSize = "32px";
-            needsSenderProfile = true;
-        } else if (eventType === EventType.RoomCreate || isBubbleMessage) {
-            avatarSize = null;
-            needsSenderProfile = false;
-        } else if (this.props.layout == Layout.IRC) {
-            avatarSize = "14px";
-            needsSenderProfile = true;
-        } else if (
-            (this.props.continuation && this.context.timelineRenderingType !== TimelineRenderingType.File) ||
-            eventType === EventType.CallInvite ||
-            ElementCallEventType.matches(eventType) ||
-            eventType === EventType.RTCNotification
-        ) {
-            // no avatar or sender profile for continuation messages and call tiles
-            avatarSize = null;
-            needsSenderProfile = false;
-        } else if (this.context.timelineRenderingType === TimelineRenderingType.File) {
-            avatarSize = "20px";
-            needsSenderProfile = true;
-        } else {
-            avatarSize = "30px";
-            needsSenderProfile = true;
-        }
+        const { avatarSize, needsSenderProfile } = getEventTileSenderProfileState({
+            isRenderingNotification,
+            isInfoMessage,
+            timelineRenderingType: this.context.timelineRenderingType,
+            continuation: this.props.continuation,
+            eventType,
+            isBubbleMessage,
+            layout: this.props.layout,
+        });
 
         if (this.props.mxEvent.sender && avatarSize !== null) {
             let member: RoomMember | null = null;
