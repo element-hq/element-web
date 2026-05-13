@@ -474,8 +474,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      * Reloads the custom sections, updates the skip list filters to reflect the new order and emits an update.
      * Emit {@link LISTS_UPDATE_EVENT}.
      */
-    private async onOrderedCustomSectionsChange(): Promise<void> {
-        await this.loadCustomSections();
+    private onOrderedCustomSectionsChange(): void {
+        this.loadCustomSections();
         if (!this.roomSkipList) return;
         this.roomSkipList.useNewFilters(this.getSkipListFilters());
         this.scheduleEmit();
