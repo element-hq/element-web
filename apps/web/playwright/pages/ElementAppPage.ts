@@ -95,7 +95,7 @@ export class ElementAppPage {
      * @param name The exact room name to find and click on/open.
      */
     public async viewRoomByName(name: string): Promise<void> {
-        await this.closeVerifyToast();
+        await this.closeVerifyToast(true);
 
         // We get the room list by test-id which is a listbox and matching title=name
         return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();
@@ -356,30 +356,32 @@ export class ElementAppPage {
         }
     }
 
-    async closeToast(title: string, button: string): Promise<void> {
-        await this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button }).click();
+    async closeToast(title: string, button: string, optional = false): Promise<void> {
+        const locator = this.page.locator(".mx_Toast_toast", { hasText: title }).getByRole("button", { name: button });
+        if (optional && !(await locator.isVisible())) return;
+        await locator.click();
     }
 
     /**
      * Dismiss the "Notifications" toast.
      */
-    public async closeNotificationToast(): Promise<void> {
-        await this.closeToast("Notifications", "Dismiss");
+    public async closeNotificationToast(optional = false): Promise<void> {
+        await this.closeToast("Notifications", "Dismiss", optional);
     }
 
     /**
      * Dismiss the "Turn on key storage" toast.
      */
-    public async closeKeyStorageToast() {
-        await this.closeToast("Turn on key storage", "Dismiss");
+    public async closeKeyStorageToast(optional = false) {
+        await this.closeToast("Turn on key storage", "Dismiss", optional);
         await this.page.getByRole("button", { name: "Yes, dismiss" }).click();
     }
 
     /**
      * Dismiss the "Verify this device" toast by clicking "Later".
      */
-    public async closeVerifyToast() {
-        await this.closeToast("Verify this device", "Later");
+    public async closeVerifyToast(optional = false) {
+        await this.closeToast("Verify this device", "Later", optional);
     }
 
     /**
