@@ -6,8 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import React from "react";
+import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { EventType, type MatrixClient, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, MatrixEvent, MsgType, Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import {
     JSONEventFactory,
@@ -20,8 +22,38 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { createTestClient, mkEvent } from "../../test-utils";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { ModuleApi } from "../../../src/modules/Api";
+import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 
 const roomId = "!room:example.com";
+
+function makeVerificationRequestEvent({ sender, to }: { sender: string; to: string }): MatrixEvent {
+    return mkEvent({
+        event: true,
+        type: EventType.RoomMessage,
+        user: sender,
+        room: roomId,
+        content: {
+            msgtype: MsgType.KeyVerificationRequest,
+            from_device: "DEVICE",
+            methods: ["m.sas.v1"],
+            to,
+        },
+    });
+}
+
+function makeRoomAvatarEvent(url = "mxc://example.com/avatar"): MatrixEvent {
+    return new MatrixEvent({
+        type: EventType.RoomAvatar,
+        state_key: "",
+        room_id: roomId,
+        sender: "@alice:example.com",
+        content: {
+            url,
+        },
+    });
+}
 
 describe("pickFactory", () => {
     let client: MatrixClient;
@@ -206,14 +238,30 @@ describe("pickFactory", () => {
         it("should return a MessageEventFactory for a UTD event", () => {
             expect(pickFactory(utdEvent, client, false)).toBe(MessageEventFactory);
         });
+
+        it("should not render key verification requests which do not involve the current user", () => {
+            const event = makeVerificationRequestEvent({
+                sender: "@alice:example.com",
+                to: "@bob:example.com",
+            });
+
+            expect(pickFactory(event, client, false)).toBeUndefined();
+        });
     });
 });
 
 describe("renderTile", () => {
     let client: MatrixClient;
+    let originalRenderMessage: typeof ModuleApi.instance.customComponents.renderMessage;
 
     beforeEach(() => {
         client = createTestClient();
+        originalRenderMessage = ModuleApi.instance.customComponents.renderMessage;
+    });
+
+    afterEach(() => {
+        ModuleApi.instance.customComponents.renderMessage = originalRenderMessage;
+        jest.restoreAllMocks();
     });
 
     it("rendering a tile defers to the module API", () => {
@@ -257,5 +305,112 @@ describe("renderTile", () => {
         expect(ModuleApi.instance.customComponents.renderMessage).toHaveBeenCalledWith({
             mxEvent: messageEvent,
         });
+    });
+
+    it("renders an incoming key verification request with the wrapped shared-components view", () => {
+        const sender = "@alice:example.com";
+        const room = new Room(roomId, client, client.getSafeUserId());
+        jest.spyOn(room, "getMember").mockImplementation((userId: string) => {
+            if (userId === sender) return { name: "Alice" } as RoomMember;
+            return null;
+        });
+        mocked(client.getRoom).mockReturnValue(room);
+
+        const verificationRequestEvent = makeVerificationRequestEvent({
+            sender,
+            to: client.getUserId()!,
+        });
+
+        const tile = renderTile(
+            TimelineRenderingType.Room,
+            { mxEvent: verificationRequestEvent, showHiddenEvents: false },
+            client,
+        );
+        if (!tile) throw new Error("Expected a key verification request tile");
+
+        render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
+
+        expect(screen.getByText("Alice wants to verify")).toBeInTheDocument();
+        expect(screen.getByText("Alice (@alice:example.com)")).toBeInTheDocument();
+    });
+
+    it("renders an outgoing key verification request with the wrapped shared-components view", () => {
+        const recipient = "@alice:example.com";
+        const room = new Room(roomId, client, client.getSafeUserId());
+        jest.spyOn(room, "getMember").mockImplementation((userId: string) => {
+            if (userId === recipient) return { name: "Alice" } as RoomMember;
+            return null;
+        });
+        mocked(client.getRoom).mockReturnValue(room);
+
+        const verificationRequestEvent = makeVerificationRequestEvent({
+            sender: client.getUserId()!,
+            to: recipient,
+        });
+
+        const tile = renderTile(
+            TimelineRenderingType.Room,
+            { mxEvent: verificationRequestEvent, showHiddenEvents: false },
+            client,
+        );
+        if (!tile) throw new Error("Expected a key verification request tile");
+
+        render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
+
+        expect(screen.getByText("You sent a verification request")).toBeInTheDocument();
+        expect(screen.getByText("Alice (@alice:example.com)")).toBeInTheDocument();
+    });
+
+    it("throws when a key verification request tile is rendered without a client context", () => {
+        jest.spyOn(console, "error").mockImplementation(() => {});
+        const verificationRequestEvent = makeVerificationRequestEvent({
+            sender: client.getUserId()!,
+            to: "@alice:example.com",
+        });
+
+        const tile = renderTile(
+            TimelineRenderingType.Room,
+            { mxEvent: verificationRequestEvent, showHiddenEvents: false },
+            client,
+        );
+        if (!tile) throw new Error("Expected a key verification request tile");
+
+        expect(() => render(tile)).toThrow("Attempting to render verification request without a client context!");
+    });
+
+    it("renders room avatar events with the wrapped shared-components view", () => {
+        const room = new Room(roomId, client, client.getSafeUserId());
+        room.name = "General";
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: EventType.RoomCreate,
+                state_key: "",
+                room_id: room.roomId,
+                sender: client.getUserId()!,
+                content: {
+                    creator: client.getUserId()!,
+                    room_version: "9",
+                },
+            }),
+        ]);
+        mocked(client.getRoom).mockReturnValue(room);
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue({
+            getUserIdForRoomId: jest.fn().mockReturnValue(null),
+        } as unknown as DMRoomMap);
+        jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
+        const roomAvatarEvent = makeRoomAvatarEvent();
+        roomAvatarEvent.sender = { name: "Alice" } as MatrixEvent["sender"];
+
+        const tile = renderTile(
+            TimelineRenderingType.Room,
+            { mxEvent: roomAvatarEvent, showHiddenEvents: false },
+            client,
+        );
+        if (!tile) throw new Error("Expected a room avatar event tile");
+
+        render(React.createElement(MatrixClientContext.Provider, { value: client }, tile));
+
+        expect(screen.getByText("Alice changed the room avatar to")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Alice changed the avatar for General" })).toBeInTheDocument();
     });
 });

@@ -1,3 +1,36 @@
+Changes in [1.12.18](https://github.com/element-hq/element-web/releases/tag/v1.12.18) (2026-05-12)
+==================================================================================================
+## ✨ Features
+
+* Room list: add collapse/expand all sections ([#33318](https://github.com/element-hq/element-web/pull/33318)). Contributed by @florianduros.
+* Show user status in timeline ([#32991](https://github.com/element-hq/element-web/pull/32991)). Contributed by @Half-Shot.
+* Disable URL Preview setting if disabled on the homeserver ([#33279](https://github.com/element-hq/element-web/pull/33279)). Contributed by @Half-Shot.
+* Go to welcome on logout ([#33306](https://github.com/element-hq/element-web/pull/33306)). Contributed by @t3chguy.
+* Room list: edit or remove custom sections ([#33283](https://github.com/element-hq/element-web/pull/33283)). Contributed by @florianduros.
+* Re-generate QR code if the channel expires before scan ([#33303](https://github.com/element-hq/element-web/pull/33303)). Contributed by @t3chguy.
+* Update toast styles, improve incoming call notifications ([#33043](https://github.com/element-hq/element-web/pull/33043)). Contributed by @robintown.
+* Add Module Composer API ([#33284](https://github.com/element-hq/element-web/pull/33284)). Contributed by @Half-Shot.
+* Room list: exclude default section from room list item menu ([#33278](https://github.com/element-hq/element-web/pull/33278)). Contributed by @florianduros.
+* Show 'Verify this device' toast even if there are no encrypted rooms yet ([#32891](https://github.com/element-hq/element-web/pull/32891)). Contributed by @andybalaam.
+* Promote "Share encrypted history" from labs ([#33281](https://github.com/element-hq/element-web/pull/33281)). Contributed by @richvdh.
+* Room list: assign room to section when section is created ([#33240](https://github.com/element-hq/element-web/pull/33240)). Contributed by @florianduros.
+* Confirm before inviting unknown users to a DM/room ([#33171](https://github.com/element-hq/element-web/pull/33171)). Contributed by @richvdh.
+* Room list: assign room to custom section ([#33238](https://github.com/element-hq/element-web/pull/33238)). Contributed by @florianduros.
+* Redesign link previews ([#33061](https://github.com/element-hq/element-web/pull/33061)). Contributed by @Half-Shot.
+* Room list: scroll to newly creation section ([#33210](https://github.com/element-hq/element-web/pull/33210)). Contributed by @florianduros.
+
+## 🐛 Bug Fixes
+
+* Update home page CSS ([#32723](https://github.com/element-hq/element-web/pull/32723)). Contributed by @wolterkam.
+* Web: Fix typo in `152x152` icon source of `manifest.json` ([#33369](https://github.com/element-hq/element-web/pull/33369)). Contributed by @bartvdbraak.
+* prevent replay hover from restarting playback ([#33364](https://github.com/element-hq/element-web/pull/33364)). Contributed by @ZacksBot.
+* Properly save `undefined` id tokens from OIDC login ([#33345](https://github.com/element-hq/element-web/pull/33345)). Contributed by @gingershaped.
+* Show the right cursor when hovering over a space ([#33351](https://github.com/element-hq/element-web/pull/33351)). Contributed by @robintown.
+* Set `type` in auth dict for `m.oauth` UIA stage ([#33344](https://github.com/element-hq/element-web/pull/33344)). Contributed by @gingershaped.
+* Remove duplicated UI in appearance settings ([#33336](https://github.com/element-hq/element-web/pull/33336)). Contributed by @t3chguy.
+* Move playwright-common wait-on from devDependencies to dependencies ([#33272](https://github.com/element-hq/element-web/pull/33272)). Contributed by @t3chguy.
+
+
 Changes in [1.12.17](https://github.com/element-hq/element-web/releases/tag/v1.12.17) (2026-04-30)
 ==================================================================================================
 ## 🐛 Bug Fixes

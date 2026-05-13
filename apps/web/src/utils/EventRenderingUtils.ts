@@ -35,6 +35,7 @@ const calcIsInfoMessage = (
         eventType !== EventType.RoomMessageEncrypted &&
         eventType !== EventType.Sticker &&
         eventType !== EventType.RoomCreate &&
+        eventType !== EventType.RTCNotification &&
         !M_POLL_START.matches(eventType) &&
         !M_POLL_END.matches(eventType) &&
         !M_BEACON_INFO.matches(eventType)
@@ -76,6 +77,7 @@ export function getEventDisplayInfo(
 
     // Info messages are basically information about commands processed on a room
     let isBubbleMessage =
+        eventType === EventType.RTCNotification ||
         eventType.startsWith("m.key.verification") ||
         (eventType === EventType.RoomMessage && msgtype?.startsWith("m.key.verification")) ||
         eventType === EventType.RoomCreate ||
