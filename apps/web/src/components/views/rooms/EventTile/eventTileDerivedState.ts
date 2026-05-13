@@ -168,6 +168,45 @@ export function getShouldViewUserOnClick(
     );
 }
 
+/** SenderProfile rendering mode for EventTile. */
+export type SenderProfileMode = "hidden" | "clickable" | "tooltip" | "default";
+
+/** Inputs for EventTile sender profile mode derivation. */
+export interface SenderProfileModeInput {
+    /** Whether sender profile details should render. */
+    needsSenderProfile: boolean;
+    /** Whether sender details should be hidden. */
+    hideSender?: boolean;
+    /** The current timeline rendering mode. */
+    timelineRenderingType: TimelineRenderingType;
+}
+
+/** The SenderProfile rendering mode for the current EventTile state. */
+export function getSenderProfileMode({
+    needsSenderProfile,
+    hideSender,
+    timelineRenderingType,
+}: SenderProfileModeInput): SenderProfileMode {
+    if (!needsSenderProfile || hideSender === true) {
+        return "hidden";
+    }
+
+    if (
+        timelineRenderingType === TimelineRenderingType.Room ||
+        timelineRenderingType === TimelineRenderingType.Search ||
+        timelineRenderingType === TimelineRenderingType.Pinned ||
+        timelineRenderingType === TimelineRenderingType.Thread
+    ) {
+        return "clickable";
+    }
+
+    if (timelineRenderingType === TimelineRenderingType.ThreadsList) {
+        return "tooltip";
+    }
+
+    return "default";
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */

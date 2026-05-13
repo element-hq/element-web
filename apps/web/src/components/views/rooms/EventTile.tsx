@@ -109,6 +109,7 @@ import {
     getEventTileSenderProfileState,
     getIsContinuation,
     getScrollToken,
+    getSenderProfileMode,
     getShouldViewUserOnClick,
     isSendingStatus,
 } from "./EventTile/eventTileDerivedState";
@@ -1174,19 +1175,17 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        if (needsSenderProfile && this.props.hideSender !== true) {
-            if (
-                this.context.timelineRenderingType === TimelineRenderingType.Room ||
-                this.context.timelineRenderingType === TimelineRenderingType.Search ||
-                this.context.timelineRenderingType === TimelineRenderingType.Pinned ||
-                this.context.timelineRenderingType === TimelineRenderingType.Thread
-            ) {
-                sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
-            } else if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} withTooltip />;
-            } else {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} />;
-            }
+        const senderProfileMode = getSenderProfileMode({
+            needsSenderProfile,
+            hideSender: this.props.hideSender,
+            timelineRenderingType: this.context.timelineRenderingType,
+        });
+        if (senderProfileMode === "clickable") {
+            sender = <SenderProfile onClick={this.onSenderProfileClick} mxEvent={this.props.mxEvent} />;
+        } else if (senderProfileMode === "tooltip") {
+            sender = <SenderProfile mxEvent={this.props.mxEvent} withTooltip />;
+        } else if (senderProfileMode === "default") {
+            sender = <SenderProfile mxEvent={this.props.mxEvent} />;
         }
 
         const showMessageActionBar =
