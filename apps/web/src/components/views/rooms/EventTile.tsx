@@ -110,6 +110,7 @@ import {
     getIsContinuation,
     getScrollToken,
     getSenderProfileMode,
+    getShouldShowMessageActionBar,
     getShouldViewUserOnClick,
     isSendingStatus,
 } from "./EventTile/eventTileDerivedState";
@@ -1188,12 +1189,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             sender = <SenderProfile mxEvent={this.props.mxEvent} />;
         }
 
-        const showMessageActionBar =
-            !isEditing &&
-            !this.props.forExport &&
-            (this.state.hover ||
-                this.state.showActionBarFromFocus ||
-                (this.state.actionBarFocused && !this.state.contextMenu));
+        const showMessageActionBar = getShouldShowMessageActionBar({
+            isEditing,
+            forExport: this.props.forExport,
+            hover: this.state.hover,
+            showActionBarFromFocus: this.state.showActionBarFromFocus,
+            actionBarFocused: this.state.actionBarFocused,
+            hasContextMenu: !!this.state.contextMenu,
+        });
         const actionBar = showMessageActionBar ? (
             <ActionBarWrapper
                 mxEvent={this.props.mxEvent}

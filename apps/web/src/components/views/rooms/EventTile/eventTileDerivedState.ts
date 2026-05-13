@@ -207,6 +207,34 @@ export function getSenderProfileMode({
     return "default";
 }
 
+/** Inputs for EventTile message action bar visibility derivation. */
+export interface ShouldShowMessageActionBarInput {
+    /** Whether the event is currently being edited. */
+    isEditing: boolean;
+    /** Whether the tile is rendering for export. */
+    forExport?: boolean;
+    /** Whether the tile is currently hovered. */
+    hover: boolean;
+    /** Whether focus should force the action bar visible. */
+    showActionBarFromFocus: boolean;
+    /** Whether the action bar currently has focus. */
+    actionBarFocused: boolean;
+    /** Whether an EventTile context menu is currently open. */
+    hasContextMenu: boolean;
+}
+
+/** Whether EventTile should render the message action bar. */
+export function getShouldShowMessageActionBar({
+    isEditing,
+    forExport,
+    hover,
+    showActionBarFromFocus,
+    actionBarFocused,
+    hasContextMenu,
+}: ShouldShowMessageActionBarInput): boolean {
+    return !isEditing && !forExport && (hover || showActionBarFromFocus || (actionBarFocused && !hasContextMenu));
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */
