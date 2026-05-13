@@ -70,6 +70,11 @@
     min-width: 0;
 }
 
+.dragging {
+    outline: 1px solid var(--cpd-color-border-interactive-hovered);
+    background-color: color-mix(in srgb, var(--cpd-color-bg-action-tertiary-hovered) 90%, transparent);
+}
+
 .content {
     flex: 1;
     min-width: 0;

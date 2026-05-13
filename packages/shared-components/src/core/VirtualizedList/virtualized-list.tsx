@@ -82,6 +82,13 @@ export interface VirtualizedListProps<Item, Context> extends Omit<
     onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 
     /**
+     * When true, keyboard navigation (Arrow keys, Home, End, Page Up/Down) is disabled.
+     * All key events are forwarded directly to `onKeyDown` instead.
+     * Use this to prevent the list from scrolling while an item is being dragged via keyboard.
+     */
+    disableKeyboardNavigation?: boolean;
+
+    /**
      * Optional total count of items (for virtualization with partial data loading).
      * If provided, this will be used instead of items.length for the total count.
      */
@@ -164,6 +171,7 @@ export function useVirtualizedList<Item, Context>(
         getItemKey,
         context,
         onKeyDown,
+        disableKeyboardNavigation,
         totalCount,
         rangeChanged,
         mapScrollIndex,
@@ -260,6 +268,13 @@ export function useVirtualizedList<Item, Context>(
                 return;
             }
 
+            // When keyboard navigation is disabled (e.g. during a keyboard drag),
+            // forward all events to the parent handler without handling navigation.
+            if (disableKeyboardNavigation) {
+                onKeyDown?.(e);
+                return;
+            }
+
             if (e.code === Key.ARROW_UP && currentIndex !== undefined) {
                 scrollToItem(currentIndex - 1, false);
                 handled = true;
@@ -300,7 +315,16 @@ export function useVirtualizedList<Item, Context>(
                 onKeyDown?.(e);
             }
         },
-        [scrollToIndex, scrollToItem, tabIndexKey, keyToIndexMap, visibleRange, items, onKeyDown],
+        [
+            scrollToIndex,
+            scrollToItem,
+            tabIndexKey,
+            keyToIndexMap,
+            visibleRange,
+            items,
+            onKeyDown,
+            disableKeyboardNavigation,
+        ],
     );
 
     /**
