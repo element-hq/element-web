@@ -154,6 +154,19 @@ describe("RoomListSectionHeaderViewModel", () => {
 
             expect(vm.getSnapshot().title).toBe("My Section");
         });
+
+        it("should not update title when tag is not a custom section tag", () => {
+            const vm = new RoomListSectionHeaderViewModel({
+                tag: "m.favourite",
+                title: "Favourites",
+                spaceId: "!space:server",
+                onToggleExpanded,
+            });
+
+            watchCallback();
+
+            expect(vm.getSnapshot().title).toBe("Favourites");
+        });
     });
 
     describe("editSection", () => {

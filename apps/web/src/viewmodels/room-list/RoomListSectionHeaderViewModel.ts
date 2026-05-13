@@ -17,7 +17,7 @@ import { NotificationStateEvents } from "../../stores/notifications/Notification
 import { type RoomNotificationState } from "../../stores/notifications/RoomNotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
-import { isDefaultSectionTag } from "../../stores/room-list-v3/section";
+import { getCustomSectionData, isCustomSectionTag, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 
 interface RoomListSectionHeaderViewModelProps {
     tag: string;
@@ -139,8 +139,7 @@ export class RoomListSectionHeaderViewModel
      * Handle changes to custom section data.
      */
     private onCustomSectionDataChange(): void {
-        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
-        const sectionData = customSectionData[this.props.tag];
+        const sectionData = isCustomSectionTag(this.props.tag) ? getCustomSectionData()[this.props.tag] : undefined;
         if (sectionData) {
             this.snapshot.merge({ title: sectionData.name });
         }

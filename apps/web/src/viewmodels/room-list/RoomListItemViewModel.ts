@@ -39,8 +39,8 @@ import type { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload"
 import PosthogTrackers from "../../PosthogTrackers";
 import { type Call, CallEvent } from "../../models/Call";
 import RoomListStoreV3 from "../../stores/room-list-v3/RoomListStoreV3";
+import { getCustomSectionData, isDefaultSectionTag } from "../../stores/room-list-v3/section";
 import { _t } from "../../languageHandler";
-import { isDefaultSectionTag } from "../../stores/room-list-v3/section";
 
 interface RoomItemProps {
     room: Room;
@@ -424,7 +424,7 @@ export class RoomListItemViewModel
      * Order follows the canonical section order from RoomListStoreV3.
      */
     private static buildSections(roomTags: Room["tags"]): Section[] {
-        const customSectionData = SettingsStore.getValue("RoomList.CustomSectionData") || {};
+        const customSectionData = getCustomSectionData();
 
         return (
             RoomListStoreV3.instance.orderedSectionTags
