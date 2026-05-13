@@ -34,7 +34,7 @@ try {
         try {
             try {
                 const stat = await fs.lstat(dependencyPath);
-                console.log(`Existing is ${stat.isSymbolicLink() ? 'symlink' : 'directory'}`);
+                console.log(`Existing is ${stat.isSymbolicLink() ? "symlink" : "directory"}`);
                 if (stat.isSymbolicLink()) {
                     const linkPath = await fs.readlink(dependencyPath);
                     if (linkPath === path) {
@@ -44,7 +44,7 @@ try {
                         await fs.unlink(dependencyPath);
                     }
                 } else {
-                    await fs.rm(dependencyPath, {recursive: true});
+                    await fs.rm(dependencyPath, { recursive: true });
                 }
             } catch (e: any) {
                 // fs.lstat throws ENOENT if the path doesn't exist (on Windows)
@@ -56,7 +56,7 @@ try {
             }
 
             console.log(`Linking ${dependency} to ${path}`);
-            await fs.symlink(path, dependencyPath, 'junction'); // use a junction type to avoid EPERM errors on Windows
+            await fs.symlink(path, dependencyPath, "junction"); // use a junction type to avoid EPERM errors on Windows
 
             const pkgJson = await fs.readFile(join(path, "package.json"), "utf-8");
             const pkgManager = JSON.parse(pkgJson)["packageManager"]?.split("@").at(0) ?? "yarn";
