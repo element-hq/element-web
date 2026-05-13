@@ -96,6 +96,8 @@ export class ElementAppPage {
      */
     public async viewRoomByName(name: string): Promise<void> {
         await this.closeVerifyToast(true);
+        await this.closeKeyStorageToast(true);
+        await this.closeNotificationToast(true);
 
         // We get the room list by test-id which is a listbox and matching title=name
         return this.page.getByTestId("room-list").locator(`[title="${name}"]`).first().click();

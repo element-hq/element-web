@@ -118,6 +118,9 @@ test.describe("Cryptography", function () {
                 user: alice,
                 bot: bob,
             }) => {
+                await app.closeVerifyToast(true);
+                await app.closeNotificationToast(true);
+
                 // Bob creates an encrypted room and sends a message to it. He then invites Alice
                 const roomId = await bob.evaluate(
                     async (client, { alice }) => {
@@ -224,6 +227,9 @@ test.describe("Cryptography", function () {
                 user: alice,
                 bot: bob,
             }) => {
+                await app.closeVerifyToast(true);
+                await app.closeNotificationToast(true);
+
                 // Bob:
                 // - creates an encrypted room,
                 // - invites Alice,
