@@ -955,7 +955,7 @@ describe("RoomView", () => {
             expect(searchResultTile).not.toBeNull();
 
             await userEvent.hover(searchResultTile!);
-            await userEvent.click(await findByLabelText("Edit"));
+            await userEvent.click(await findByLabelText("Edit"), { skipHover: true });
 
             await waitFor(() => {
                 expect(container.querySelector(".mx_RoomView_searchResultsPanel")).not.toBeInTheDocument();
@@ -1024,7 +1024,7 @@ describe("RoomView", () => {
             expect(searchResultTile).not.toBeNull();
 
             await userEvent.hover(searchResultTile!);
-            await userEvent.click(await findByLabelText("Edit"));
+            await userEvent.click(await findByLabelText("Edit"), { skipHover: true });
 
             await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
         });
