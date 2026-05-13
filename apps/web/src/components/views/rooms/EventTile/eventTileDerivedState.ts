@@ -235,6 +235,48 @@ export function getShouldShowMessageActionBar({
     return !isEditing && !forExport && (hover || showActionBarFromFocus || (actionBarFocused && !hasContextMenu));
 }
 
+/** Inputs for EventTile timestamp visibility derivation. */
+export interface ShouldShowTimestampInput {
+    /** The event origin timestamp. */
+    eventTs: number;
+    /** The Matrix event type for event-type timestamp derivation. */
+    eventType: string;
+    /** Whether timestamp rendering is disabled. */
+    hideTimestamp?: boolean;
+    /** Whether timestamps should always show. */
+    alwaysShowTimestamps?: boolean;
+    /** Whether the tile is the last event in the timeline. */
+    last?: boolean;
+    /** Whether the tile is currently hovered. */
+    hover: boolean;
+    /** Whether focus is currently inside the tile. */
+    focusWithin: boolean;
+    /** Whether the action bar currently has focus. */
+    actionBarFocused: boolean;
+    /** Whether an EventTile context menu is currently open. */
+    hasContextMenu: boolean;
+}
+
+/** Whether EventTile should render the message timestamp. */
+export function getShouldShowTimestamp({
+    eventTs,
+    eventType,
+    hideTimestamp,
+    alwaysShowTimestamps,
+    last,
+    hover,
+    focusWithin,
+    actionBarFocused,
+    hasContextMenu,
+}: ShouldShowTimestampInput): boolean {
+    return (
+        !!eventTs &&
+        eventType !== EventType.RTCNotification &&
+        !hideTimestamp &&
+        (alwaysShowTimestamps || last || hover || focusWithin || actionBarFocused || hasContextMenu)
+    );
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */

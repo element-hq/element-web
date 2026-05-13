@@ -111,6 +111,7 @@ import {
     getScrollToken,
     getSenderProfileMode,
     getShouldShowMessageActionBar,
+    getShouldShowTimestamp,
     getShouldViewUserOnClick,
     isSendingStatus,
 } from "./EventTile/eventTileDerivedState";
@@ -1211,18 +1212,17 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             />
         ) : undefined;
 
-        const showTimestamp =
-            this.props.mxEvent.getTs() &&
-            // Don't show timestamp for the CallStarted tile because
-            // the tile content already renders a timestamp.
-            this.props.mxEvent.getType() !== EventType.RTCNotification &&
-            !this.props.hideTimestamp &&
-            (this.props.alwaysShowTimestamps ||
-                this.props.last ||
-                this.state.hover ||
-                this.state.focusWithin ||
-                this.state.actionBarFocused ||
-                Boolean(this.state.contextMenu));
+        const showTimestamp = getShouldShowTimestamp({
+            eventTs: this.props.mxEvent.getTs(),
+            eventType,
+            hideTimestamp: this.props.hideTimestamp,
+            alwaysShowTimestamps: this.props.alwaysShowTimestamps,
+            last: this.props.last,
+            hover: this.state.hover,
+            focusWithin: this.state.focusWithin,
+            actionBarFocused: this.state.actionBarFocused,
+            hasContextMenu: Boolean(this.state.contextMenu),
+        });
 
         // Thread panel shows the timestamp of the last reply in that thread
         let ts =
