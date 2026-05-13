@@ -907,7 +907,7 @@ test.describe("Timeline", () => {
 
                 await sendImage(bot, room.roomId, NEW_AVATAR);
                 await app.timeline.scrollToBottom();
-                const imgTile = page.locator(".mx_MImageBody").first();
+                const imgTile = page.locator(".mx_ImageBody").first();
                 await expect(imgTile).toBeVisible();
                 await imgTile.hover();
                 await page.getByRole("button", { name: "Hide" }).click();
@@ -1314,7 +1314,7 @@ test.describe("Timeline", () => {
 
             await sendImage(app.client, room.roomId, NEW_AVATAR);
             await app.timeline.scrollToBottom();
-            await expect(page.locator(".mx_MImageBody").first()).toBeVisible();
+            await expect(page.locator(".mx_ImageBody").first()).toBeVisible();
 
             // Exclude timestamp and read marker from snapshot
             const screenshotOptions = {

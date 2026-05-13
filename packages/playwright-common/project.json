@@ -32,6 +32,7 @@
                 "platforms": ["linux/amd64", "linux/arm64"],
                 "provenance": "true",
                 "sbom": true,
+                "env-file": ["{projectRoot}/.env.docker:build"],
                 "build-args": ["PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION"],
                 "context": "{projectRoot}",
                 "metadata": {
