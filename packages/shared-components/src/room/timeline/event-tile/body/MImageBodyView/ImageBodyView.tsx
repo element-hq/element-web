@@ -12,6 +12,7 @@ import React, {
     type MouseEventHandler,
     type PropsWithChildren,
     type ReactEventHandler,
+    type Ref,
     useState,
 } from "react";
 import classNames from "classnames";
@@ -149,6 +150,18 @@ interface ImageBodyViewProps {
      */
     className?: string;
     /**
+     * Optional CSS class applied to the media frame container.
+     */
+    containerClassName?: string;
+    /**
+     * Optional CSS class applied to the rendered image element.
+     */
+    imageClassName?: string;
+    /**
+     * Optional ref to the rendered image element.
+     */
+    imageRef?: Ref<HTMLImageElement>;
+    /**
      * Optional supplemental content rendered after the media frame.
      */
     children?: PropsWithChildren["children"];
@@ -202,7 +215,14 @@ function renderPlaceholder({
  * </ImageBodyView>
  * ```
  */
-export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyViewProps>): JSX.Element {
+export function ImageBodyView({
+    vm,
+    className,
+    containerClassName,
+    imageClassName,
+    imageRef,
+    children,
+}: Readonly<ImageBodyViewProps>): JSX.Element {
     const { translate: _t } = useI18n();
     const {
         state,
@@ -230,6 +250,8 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
     const hoverOrFocus = hover || focus;
 
     const rootClassName = classNames(className, styles.root);
+    const resolvedContainerClassName = classNames(containerClassName, styles.thumbnailContainer);
+    const resolvedImageClassName = classNames(imageClassName, styles.image);
 
     if (state === ImageBodyViewState.ERROR) {
         return (
@@ -281,9 +303,10 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
             </div>
         ) : resolvedImageSrc ? (
             <img
-                className={styles.image}
+                className={resolvedImageClassName}
                 src={resolvedImageSrc}
                 alt={alt}
+                ref={imageRef}
                 onError={vm.onImageError}
                 onLoad={vm.onImageLoad}
                 onMouseEnter={(): void => setHover(true)}
@@ -302,7 +325,7 @@ export function ImageBodyView({ vm, className, children }: Readonly<ImageBodyVie
         ) : null;
 
     let frame = (
-        <div className={styles.thumbnailContainer} style={containerStyle}>
+        <div className={resolvedContainerClassName} style={containerStyle}>
             {showPlaceholder && (
                 <div
                     className={classNames(styles.placeholder, {

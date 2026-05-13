@@ -892,7 +892,6 @@
         "thread_root_id": "Thread Root ID: %(threadRootId)s",
         "threads_timeline": "Threads timeline",
         "title": "Developer tools",
-        "toggle_event": "toggle event",
         "toolbox": "Toolbox",
         "use_at_own_risk": "This UI does NOT check the types of the values. Use at your own risk.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3462,9 +3461,7 @@
         "m.poll.start": "%(senderName)s has started a poll - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s changed the room avatar.",
-            "changed_img": "%(senderDisplayName)s changed the room avatar to <img/>",
-            "lightbox_title": "%(senderDisplayName)s changed the avatar for %(roomName)s",
-            "removed": "%(senderDisplayName)s removed the room avatar."
+            "lightbox_title": "%(senderDisplayName)s changed the avatar for %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

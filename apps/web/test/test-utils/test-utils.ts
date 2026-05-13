@@ -659,8 +659,8 @@ export function mkMessage({
 
 export function mkStubRoom(
     roomId: string | null | undefined = null,
-    name: string | undefined,
-    client: MatrixClient | undefined,
+    name?: string | undefined,
+    client?: MatrixClient | undefined,
     state?: RoomState | undefined,
 ): Room {
     const stubTimeline = {
