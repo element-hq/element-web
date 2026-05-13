@@ -33,6 +33,7 @@ exports[`TextualBodyView > renders emote messages with annotations 1`] = `
      
     <span
       class="TextualBody-module_annotated TextualBody-module_annotatedInline"
+      data-textual-body-annotation-wrapper=""
       dir="auto"
     >
       <span>
