@@ -338,6 +338,25 @@ export function getTimestampDisplayState({
     };
 }
 
+/** Inputs for ReplyChain timestamp visibility derivation. */
+export interface ReplyChainTimestampInput {
+    /** Whether timestamps should always show. */
+    alwaysShowTimestamps?: boolean;
+    /** Whether the tile is currently hovered. */
+    hover: boolean;
+    /** Whether focus is currently inside the tile. */
+    focusWithin: boolean;
+}
+
+/** Whether ReplyChain should always show timestamps. */
+export function getReplyChainAlwaysShowTimestamps({
+    alwaysShowTimestamps,
+    hover,
+    focusWithin,
+}: ReplyChainTimestampInput): boolean {
+    return !!alwaysShowTimestamps || hover || focusWithin;
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */

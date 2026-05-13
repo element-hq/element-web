@@ -109,6 +109,7 @@ import {
     getEventTileSenderProfileState,
     getEventTileTimestamp,
     getIsContinuation,
+    getReplyChainAlwaysShowTimestamps,
     getScrollToken,
     getSenderProfileMode,
     getShouldShowMessageActionBar,
@@ -1311,7 +1312,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     forExport={this.props.forExport}
                     permalinkCreator={this.props.permalinkCreator}
                     layout={this.props.layout}
-                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover || this.state.focusWithin}
+                    alwaysShowTimestamps={getReplyChainAlwaysShowTimestamps({
+                        alwaysShowTimestamps: this.props.alwaysShowTimestamps,
+                        hover: this.state.hover,
+                        focusWithin: this.state.focusWithin,
+                    })}
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}
                     getRelationsForEvent={this.props.getRelationsForEvent}
