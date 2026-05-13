@@ -357,6 +357,45 @@ export function getReplyChainAlwaysShowTimestamps({
     return !!alwaysShowTimestamps || hover || focusWithin;
 }
 
+/** Inputs for EventTile footer display state derivation. */
+export interface FooterDisplayStateInput {
+    /** Whether a reactions row element will render. */
+    hasReactionsRow: boolean;
+    /** Whether reactions data is available. */
+    hasReactions: boolean;
+    /** Whether a pinned message badge element will render. */
+    hasPinnedMessageBadge: boolean;
+    /** The current timeline layout. */
+    layout?: Layout;
+    /** Whether the event was sent by the current user. */
+    isOwnEvent: boolean;
+}
+
+/** EventTile footer display state. */
+export interface FooterDisplayState {
+    /** Whether EventTile should render a footer. */
+    hasFooter: boolean;
+    /** Whether the main footer position should render the pinned message badge. */
+    showMainPinnedMessageBadge: boolean;
+    /** Whether the bubble footer position should render the pinned message badge. */
+    showBubblePinnedMessageBadge: boolean;
+}
+
+/** The EventTile footer display state for the current derived state. */
+export function getFooterDisplayState({
+    hasReactionsRow,
+    hasReactions,
+    hasPinnedMessageBadge,
+    layout,
+    isOwnEvent,
+}: FooterDisplayStateInput): FooterDisplayState {
+    return {
+        hasFooter: (hasReactionsRow && hasReactions) || hasPinnedMessageBadge,
+        showMainPinnedMessageBadge: hasPinnedMessageBadge && (layout === Layout.Group || !isOwnEvent),
+        showBubblePinnedMessageBadge: hasPinnedMessageBadge && layout === Layout.Bubble && isOwnEvent,
+    };
+}
+
 /** Inputs for EventTile root CSS class derivation. */
 export interface EventTileClassState {
     /** Whether the tile should use bubble container styling. */

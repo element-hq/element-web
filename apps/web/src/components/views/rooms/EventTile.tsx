@@ -108,6 +108,7 @@ import {
     getEventTileLineClassState,
     getEventTileSenderProfileState,
     getEventTileTimestamp,
+    getFooterDisplayState,
     getIsContinuation,
     getReplyChainAlwaysShowTimestamps,
     getScrollToken,
@@ -1277,9 +1278,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             );
         }
 
-        // If we have reactions or a pinned message badge, we need a footer
-        const hasFooter = Boolean((reactionsRow && this.state.reactions) || pinnedMessageBadge);
-
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
@@ -1326,6 +1324,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         // Use `getSender()` because searched events might not have a proper `sender`.
         const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.safeGet().getUserId();
+
+        const { hasFooter, showMainPinnedMessageBadge, showBubblePinnedMessageBadge } = getFooterDisplayState({
+            hasReactionsRow: !!reactionsRow,
+            hasReactions: !!this.state.reactions,
+            hasPinnedMessageBadge: !!pinnedMessageBadge,
+            layout: this.props.layout,
+            isOwnEvent,
+        });
 
         switch (this.context.timelineRenderingType) {
             case TimelineRenderingType.Thread: {
@@ -1379,9 +1385,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         </div>,
                         hasFooter && (
                             <div className="mx_EventTile_footer" key="mx_EventTile_footer">
-                                {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                {showMainPinnedMessageBadge && pinnedMessageBadge}
                                 {reactionsRow}
-                                {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                                {showBubblePinnedMessageBadge && pinnedMessageBadge}
                             </div>
                         ),
                     ],
@@ -1587,9 +1593,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                             <>
                                 {hasFooter && (
                                     <div className="mx_EventTile_footer">
-                                        {(this.props.layout === Layout.Group || !isOwnEvent) && pinnedMessageBadge}
+                                        {showMainPinnedMessageBadge && pinnedMessageBadge}
                                         {reactionsRow}
-                                        {this.props.layout === Layout.Bubble && isOwnEvent && pinnedMessageBadge}
+                                        {showBubblePinnedMessageBadge && pinnedMessageBadge}
                                     </div>
                                 )}
                                 {this.renderThreadInfo()}
