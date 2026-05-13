@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventStatus, EventType, type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventStatus, EventType, type MatrixEvent, MsgType, type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { ElementCallEventType } from "../../../../call-types";
 import { TimelineRenderingType } from "../../../../contexts/RoomContext";
@@ -146,6 +146,15 @@ export function getEventTileSenderProfileState({
     }
 
     return { avatarSize: "30px", needsSenderProfile: true };
+}
+
+/** The room member whose avatar should render for the EventTile. */
+export function getEventTileAvatarMember(mxEvent: MatrixEvent): RoomMember | null {
+    if (mxEvent.getContent().third_party_invite) {
+        return mxEvent.target;
+    }
+
+    return mxEvent.sender;
 }
 
 /** Inputs for EventTile root CSS class derivation. */

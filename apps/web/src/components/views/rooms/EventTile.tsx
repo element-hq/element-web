@@ -103,6 +103,7 @@ import { E2eMessageSharedIcon } from "./EventTile/E2eMessageSharedIcon.tsx";
 import { E2ePadlock, E2ePadlockIcon } from "./EventTile/E2ePadlock.tsx";
 import {
     getAriaLive,
+    getEventTileAvatarMember,
     getEventTileClassState,
     getEventTileLineClassState,
     getEventTileSenderProfileState,
@@ -1155,15 +1156,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
 
         if (this.props.mxEvent.sender && avatarSize !== null) {
-            let member: RoomMember | null = null;
-            // set member to receiver (target) if it is a 3PID invite
-            // so that the correct avatar is shown as the text is
-            // `$target accepted the invitation for $email`
-            if (this.props.mxEvent.getContent().third_party_invite) {
-                member = this.props.mxEvent.target;
-            } else {
-                member = this.props.mxEvent.sender;
-            }
+            const member = getEventTileAvatarMember(this.props.mxEvent);
             // In the ThreadsList view we use the entire EventTile as a click target to open the thread instead
             const viewUserOnClick =
                 !this.props.inhibitInteraction &&
