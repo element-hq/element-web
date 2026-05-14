@@ -180,6 +180,10 @@
         "n_minutes_ago": "%(num)s分钟前"
     },
     "timeline": {
+        "call_tile": {
+            "video_call_title": "视频通话",
+            "voice_call_title": "语音通话"
+        },
         "decryption_failure": {
             "blocked": "由于你的设备未经验证，发件人已阻止你接收此消息。",
             "historical_event_no_key_backup": "消息历史在此设备上不可用",
@@ -198,6 +202,10 @@
         },
         "m.file": {
             "error_invalid": "无效文件"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s 将房间头像更改为 <img/>",
+            "removed": "%(senderDisplayName)s 已移除房间头像。"
         },
         "m.room.encryption": {
             "disable_attempt": "已忽略尝试禁用加密",

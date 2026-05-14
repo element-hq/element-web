@@ -628,7 +628,6 @@
         },
         "state_key": "Stöðulykill",
         "title": "Forritunartól",
-        "toggle_event": "víxla atburði af/á",
         "toolbox": "Verkfærakassi",
         "use_at_own_risk": "Þetta viðmót athugar EKKI tegundir gildanna. Notist á eigin ábyrgð.",
         "value": "Gildi",
@@ -2372,9 +2371,7 @@
         "m.poll.start": "%(senderName)s hefur sett í gang könnun - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar.",
-            "changed_img": "%(senderDisplayName)s breytti auðkennismynd spjallrásarinnar í <img/>",
-            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s",
-            "removed": "%(senderDisplayName)s fjarlægði auðkennismynd spjallrásarinnar."
+            "lightbox_title": "%(senderDisplayName)s breytti auðkennismyndinni fyrir %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

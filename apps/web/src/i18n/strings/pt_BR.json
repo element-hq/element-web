@@ -868,7 +868,6 @@
         "thread_root_id": "ID raiz do tópico: %(threadRootId)s",
         "threads_timeline": "Linha do tempo dos tópicos",
         "title": "Ferramentas de desenvolvimento",
-        "toggle_event": "alternar evento",
         "toolbox": "Ferramentas",
         "use_at_own_risk": "Esta interface de usuário NÃO verifica os tipos de valores. Use por sua conta e risco.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3372,9 +3371,7 @@
         "m.poll.start": "%(senderName)s começou uma enquete - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mudou a foto da sala.",
-            "changed_img": "%(senderDisplayName)s alterou a foto da sala para <img/>",
-            "lightbox_title": "%(senderDisplayName)s alterou a foto da sala %(roomName)s",
-            "removed": "%(senderDisplayName)s removeu a foto da sala."
+            "lightbox_title": "%(senderDisplayName)s alterou a foto da sala %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

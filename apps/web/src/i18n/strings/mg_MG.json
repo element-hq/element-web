@@ -741,7 +741,6 @@
         "thread_root_id": "Id fototra :%(threadRootId)s",
         "threads_timeline": "Laha-tahirin'ny randram-potoana",
         "title": "Fitaovana ny mampandroso",
-        "toggle_event": "Itsipaka hetsika",
         "toolbox": "Toeram-pitahirizana ny mety ilaina",
         "use_at_own_risk": "TSY manamarina ny karazana soatoavina ity UI ity. Ampiasao amin'ny risikao manokana.",
         "user_read_up_to": "Ny mpampiasa dia namaky hatramin'ny :",
@@ -2890,9 +2889,7 @@
         "m.poll.start": "%(senderName)snanomboka ny fitsapan-kevitra -%(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)snanova ny avatar.",
-            "changed_img": "%(senderDisplayName)sniova ny avatar ho<img/>",
-            "lightbox_title": "%(senderDisplayName)sniova ny avatar ho%(roomName)s",
-            "removed": "%(senderDisplayName)snesorina ny avatar."
+            "lightbox_title": "%(senderDisplayName)sniova ny avatar ho%(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

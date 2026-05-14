@@ -889,7 +889,6 @@
         "thread_root_id": "Üzenetszál gyökérazonosítója: %(threadRootId)s",
         "threads_timeline": "Üzenetszálak idővonala",
         "title": "Fejlesztői eszközök",
-        "toggle_event": "esemény be/ki",
         "toolbox": "Eszköztár",
         "use_at_own_risk": "Ez a felület nem ellenőrzi az érték típusát. Csak saját felelősségére használja.",
         "user_avatar": "Profilkép: %(avatar)s",
@@ -3437,9 +3436,7 @@
         "m.poll.start": "%(senderName)s szavazást indított - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s megváltoztatta a szoba profilképét.",
-            "changed_img": "%(senderDisplayName)s megváltoztatta a szoba profilképét: <img/>",
-            "lightbox_title": "%(senderDisplayName)s megváltoztatta %(roomName)s szoba profilképét",
-            "removed": "%(senderDisplayName)s törölte a szoba profilképét."
+            "lightbox_title": "%(senderDisplayName)s megváltoztatta %(roomName)s szoba profilképét"
         },
         "m.room.canonical_alias": {
             "alt_added": {

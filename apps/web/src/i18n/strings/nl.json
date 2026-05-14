@@ -647,7 +647,6 @@
         "show_hidden_events": "Verborgen gebeurtenissen op de tijdslijn weergeven",
         "state_key": "Toestandssleutel",
         "title": "Ontwikkelaarstools",
-        "toggle_event": "wissel gebeurtenis",
         "toolbox": "Gereedschap",
         "use_at_own_risk": "De UI heeft GEEN controle op het type van de waardes. Gebruik op eigen risico.",
         "value": "Waarde",
@@ -2485,9 +2484,7 @@
         "m.poll.start": "%(senderName)s is een poll gestart - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s veranderde de kamerafbeelding.",
-            "changed_img": "%(senderDisplayName)s heeft de kamerafbeelding aangepast naar <img/>",
-            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd",
-            "removed": "%(senderDisplayName)s heeft de kamerafbeelding verwijderd."
+            "lightbox_title": "%(senderDisplayName)s heeft de afbeelding van %(roomName)s veranderd"
         },
         "m.room.canonical_alias": {
             "alt_added": {
