@@ -54,8 +54,11 @@ export default function Measured({ sensor, breakpoint = 500, onMeasurement }: IP
         UIStore.instance,
         `Measured${instanceId}`,
         (_type: unknown, entry: ResizeObserverEntry) => {
+            if (!entry) {
+                return false;
+            }
             // N.B there is only one `_type` of resize event.
-            return entry?.contentRect.width <= breakpoint;
+            return entry.contentRect.width <= breakpoint;
         },
     );
 
