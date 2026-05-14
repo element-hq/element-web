@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useRef, type JSX, type ReactNode, type PropsWithChildren } from "react";
+import React, { useCallback, useEffect, useRef, type JSX, type ReactNode, type PropsWithChildren, useMemo } from "react";
 import { LogLevel, Virtuoso, type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
@@ -60,11 +60,6 @@ function HeightDebugWrapper({ itemKey, label, children }: PropsWithChildren<{ it
     return <div ref={ref} style={{ display: "flow-root" }}>{children}</div>;
 }
 
-/** Pre-render this many pixels above and below the visible viewport.
- * A large value keeps items mounted long enough for async content (avatars,
- * reactions, E2E shields) to settle before the user scrolls to them,
- * preventing the height-change → Virtuoso compensation → flicker cycle. */
-// const OVERSCAN_PX = 2000;
 
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
@@ -185,6 +180,15 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
         [snapshot.atLiveEnd, snapshot.pendingAnchor],
     );
 
+    const EXTENDED_VIEWPORT_HEIGHT = 2000;
+    const increaseViewportBy = useMemo(
+        () => ({
+            top: EXTENDED_VIEWPORT_HEIGHT,
+            bottom: EXTENDED_VIEWPORT_HEIGHT,
+        }),
+        [],
+    );
+
     // Don't mount Virtuoso until items are ready
     if (snapshot.items.length === 0) {
         return <div style={{ height: "100%", width: "100%" }} />;
@@ -196,7 +200,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 ref={virtuosoRef}
                 data={snapshot.items}
                 firstItemIndex={snapshot.firstItemIndex}
-                itemContent={itemContent}
+                itemContent={itemContent} 
                 computeItemKey={computeItemKey}
                 startReached={vm.onStartReached}
                 atBottomStateChange={vm.onAtBottomStateChange}
@@ -208,6 +212,8 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 logLevel={LogLevel.DEBUG}
                 alignToBottom
                 style={{ height: "100%", width: "100%" }}
+                skipAnimationFrameInResizeObserver={true}
+                // increaseViewportBy={increaseViewportBy}
             />
             <TimelineOverlayButtons snapshot={snapshot} vm={vm} />
         </div>
