@@ -694,7 +694,6 @@
         "thread_root_id": "ID luồng gốc: %(threadRootId)s",
         "threads_timeline": "Dòng thời gian luồng",
         "title": "Công cụ phát triển",
-        "toggle_event": "chuyển đổi sự kiện",
         "toolbox": "Hộp công cụ",
         "use_at_own_risk": "Giao diện người dùng này KHÔNG kiểm tra các loại giá trị. Sử dụng và hãy biết nguy cơ.",
         "user_read_up_to": "Người dùng đọc lên tới: ",
@@ -2662,9 +2661,7 @@
         "m.poll.start": "%(senderName)s vừa bắt đầu một cuộc bình chọn - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s đã thay đổi avatar phòng.",
-            "changed_img": "%(senderDisplayName)s đã thay đổi hình đại diện của phòng thành <img />",
-            "lightbox_title": "%(senderDisplayName)s đã thay đổi hình đại diện cho %(roomName)s",
-            "removed": "%(senderDisplayName)s đã xóa hình đại diện của phòng."
+            "lightbox_title": "%(senderDisplayName)s đã thay đổi hình đại diện cho %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

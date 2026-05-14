@@ -831,7 +831,6 @@
         "thread_root_id": "Konu Kök Kimliği: %(threadRootId)s",
         "threads_timeline": "Dizi mesajlar zaman çizelgesi",
         "title": "Geliştirici araçları",
-        "toggle_event": "etkinliği değiştir",
         "toolbox": "Araç Kutusu",
         "use_at_own_risk": "Bu kullanıcı arayüzü, değerlerin türlerini kontrol ETMEZ. Kendi sorumluluğunuzda kullanın.",
         "user_read_up_to": "Kullanıcı buraya kadar okudu: ",
@@ -3211,9 +3210,7 @@
         "m.poll.start": "%(senderName)s bir anket başlattı - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s odanın avatarını değiştirdi.",
-            "changed_img": "%(senderDisplayName)s odanın avatarını <img/> olarak çevirdi",
-            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi",
-            "removed": "%(senderDisplayName)s odanın avatarını kaldırdı."
+            "lightbox_title": "%(senderDisplayName)s %(roomName)s için avatarı değiştirdi"
         },
         "m.room.canonical_alias": {
             "alt_added": {

@@ -208,7 +208,7 @@ test.describe("Composer", () => {
 
         test("can paste a file", async ({ page, bot, app }) => {
             await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
-            await expect(page.locator(".mx_MImageBody")).toBeVisible();
+            await expect(page.locator(".mx_ImageBody")).toBeVisible();
         });
     });
 });

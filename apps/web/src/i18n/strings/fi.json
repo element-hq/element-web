@@ -2868,9 +2868,7 @@
         "m.poll.start": "%(senderName)s on aloittanut kyselyn - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s vaihtoi huoneen kuvan.",
-            "changed_img": "%(senderDisplayName)s vaihtoi huoneen kuvaksi <img/>",
-            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan",
-            "removed": "%(senderDisplayName)s poisti huoneen kuvan."
+            "lightbox_title": "%(senderDisplayName)s vaihtoi huoneen %(roomName)s kuvan"
         },
         "m.room.canonical_alias": {
             "alt_added": {

@@ -41,6 +41,9 @@
         "preferences": "Preferencje",
         "state_encryption_enabled": "Eksperymentalne szyfrowanie włączone"
     },
+    "devtools": {
+        "toggle_event": "przełącz zdarzenie"
+    },
     "keyboard": {
         "shift": "Shift"
     },
@@ -201,6 +204,10 @@
         "n_minutes_ago": "%(num)s minut temu"
     },
     "timeline": {
+        "call_tile": {
+            "video_call_title": "Połączenie wideo",
+            "voice_call_title": "Połączenie głosowe"
+        },
         "decryption_failure": {
             "blocked": "Nadawca zablokował Ci możliwość otrzymania tej wiadomości, ponieważ Twoje urządzenie nie zostało zweryfikowane",
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
@@ -219,6 +226,10 @@
         },
         "m.file": {
             "error_invalid": "Nieprawidłowy plik"
+        },
+        "m.room.avatar": {
+            "changed_img": "%(senderDisplayName)s zmienił awatar pokoju na <img/>",
+            "removed": "%(senderDisplayName)s usunął awatar pokoju."
         },
         "m.room.encryption": {
             "disable_attempt": "Zignorowano próbę wyłączenia szyfrowania",

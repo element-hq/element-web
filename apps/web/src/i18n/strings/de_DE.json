@@ -872,7 +872,6 @@
         "thread_root_id": "Thread-Ursprungs-ID: %(threadRootId)s",
         "threads_timeline": "Thread-Verlauf",
         "title": "Entwicklungswerkzeuge",
-        "toggle_event": "Event umschalten",
         "toolbox": "Werkzeugkasten",
         "use_at_own_risk": "Diese Benutzeroberfläche prüft nicht auf richtige Datentypen. Benutzung auf eigene Gefahr.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3403,9 +3402,7 @@
         "m.poll.start": "%(senderName)s hat eine Umfrage begonnen – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s hat den Avatar des Chats geändert.",
-            "changed_img": "%(senderDisplayName)s hat den Avatar des Chats zu <img/> geändert",
-            "lightbox_title": "%(senderDisplayName)s hat den Avatar des Chats %(roomName)s geändert",
-            "removed": "%(senderDisplayName)s hat den Avatar des Chats entfernt."
+            "lightbox_title": "%(senderDisplayName)s hat den Avatar des Chats %(roomName)s geändert"
         },
         "m.room.canonical_alias": {
             "alt_added": {
