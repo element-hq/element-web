@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { rejectToast } from "@element-hq/element-web-playwright-common";
+
 import { expect, test } from ".";
 import { CommandOrControl } from "../../utils";
 import { isDendrite } from "../../../plugins/homeserver/dendrite";
@@ -24,8 +26,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test(
         "should have the button correctly aligned and displayed in the space panel when expanded",
         { tag: "@screenshot" },
-        async ({ util, app }) => {
-            await app.closeVerifyToast();
+        async ({ util, page }) => {
+            await rejectToast(page, "Verify this device");
 
             // Open the space panel
             await util.expandSpacePanel();
@@ -34,26 +36,31 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         },
     );
 
-    test("should not show indicator when there is no thread", { tag: "@screenshot" }, async ({ room1, util, app }) => {
-        await app.closeVerifyToast();
+    test(
+        "should not show indicator when there is no thread",
+        { tag: "@screenshot" },
+        async ({ room1, util, app, page }) => {
+            await rejectToast(page, "Verify this device");
 
-        // No indicator should be shown
-        await util.assertNoTacIndicator();
+            // No indicator should be shown
+            await util.assertNoTacIndicator();
 
-        await util.goTo(room1);
-        await util.receiveMessages(room1, ["Msg1"]);
+            await util.goTo(room1);
+            await util.receiveMessages(room1, ["Msg1"]);
 
-        // A message in the main timeline should not affect the indicator
-        await util.assertNoTacIndicator();
-    });
+            // A message in the main timeline should not affect the indicator
+            await util.assertNoTacIndicator();
+        },
+    );
 
     test("should show a notification indicator when there is a message in a thread", async ({
         room1,
         util,
         msg,
         app,
+        page,
     }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
@@ -68,8 +75,9 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         msg,
         user,
         app,
+        page,
     }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         await util.goTo(room1);
         await util.receiveMessages(room1, [
@@ -91,8 +99,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test(
         "should show the rooms with unread threads",
         { tag: "@screenshot" },
-        async ({ room1, room2, util, msg, user, app }) => {
-            await app.closeVerifyToast();
+        async ({ room1, room2, util, msg, user, app, page }) => {
+            await rejectToast(page, "Verify this device");
 
             await util.goTo(room2);
             await util.populateThreads(room1, room2, msg, user);
@@ -114,8 +122,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test(
         "should update with a thread is read",
         { tag: "@screenshot" },
-        async ({ room1, room2, util, msg, user, app }) => {
-            await app.closeVerifyToast();
+        async ({ room1, room2, util, msg, user, app, page }) => {
+            await rejectToast(page, "Verify this device");
 
             await util.goTo(room2);
             await util.populateThreads(room1, room2, msg, user);
@@ -140,8 +148,8 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         },
     );
 
-    test("should order by recency after notification level", async ({ room1, room2, util, msg, user, app }) => {
-        await app.closeVerifyToast();
+    test("should order by recency after notification level", async ({ room1, room2, util, msg, user, app, page }) => {
+        await rejectToast(page, "Verify this device");
 
         await util.goTo(room2);
         await util.populateThreads(room1, room2, msg, user, false);
@@ -154,7 +162,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     });
 
     test("should block the Spotlight to open when the TAC is opened", async ({ util, page, app }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         const toggleSpotlight = () => page.keyboard.press(`${CommandOrControl}+k`);
 
@@ -171,7 +179,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     });
 
     test("should have the correct hover state", { tag: "@screenshot" }, async ({ util, page, app }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         await util.hoverTacButton();
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered.png");
@@ -183,7 +191,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     });
 
     test("should mark all threads as read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, page, app }) => {
-        await app.closeVerifyToast();
+        await rejectToast(page, "Verify this device");
 
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
@@ -197,8 +205,15 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         await util.assertNoTacIndicator();
     });
 
-    test("should focus the thread tab when clicking an item in the TAC", async ({ room1, room2, util, msg, app }) => {
-        await app.closeVerifyToast();
+    test("should focus the thread tab when clicking an item in the TAC", async ({
+        room1,
+        room2,
+        util,
+        msg,
+        app,
+        page,
+    }) => {
+        await rejectToast(page, "Verify this device");
 
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
