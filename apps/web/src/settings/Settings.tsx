@@ -209,7 +209,7 @@ export interface Settings {
     [Features.NotificationSettings2]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
     "feature_report_to_moderators": IFeature;
-    "feature_latex_maths": IFeature;
+    "feature_latex_maths": IBaseSetting<boolean>;
     "feature_wysiwyg_composer": IFeature;
     "feature_mjolnir": IFeature;
     "feature_custom_themes": IFeature;
@@ -473,12 +473,10 @@ export const SETTINGS: Settings = {
         default: false,
     },
     "feature_latex_maths": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
         displayName: _td("labs|latex_maths"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        default: false,
+        default: true,
     },
     "feature_wysiwyg_composer": {
         isFeature: true,
