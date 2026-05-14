@@ -55,6 +55,18 @@ const meta = {
             type: "figma",
             url: "https://www.figma.com/design/1UCf1hF507QaRus3CUBKGn/Nectcloud-File-Picker?node-id=2138-14865&t=njpHkpdk8tVhp7cr-0",
         },
+        a11y: {
+            config: {
+                rules: [
+                    {
+                        // TODO: We need a new folder icon, the current one is a emoji and we
+                        // can't determine the contrast.
+                        id: "color-contrast",
+                        enabled: false,
+                    },
+                ],
+            },
+        },
     },
 } satisfies Meta<typeof VerticalFileListView>;
 

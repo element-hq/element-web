@@ -38,21 +38,23 @@ function DirectoryItem({
     );
 
     return (
-        <button
-            data-kind="primary"
-            className={classNames(styles.fileTile)}
-            disabled={disabled}
-            onClick={onTileClick}
-            id={id}
-        >
-            <BigIcon size="md" className={styles.bigIcon}>
-                <span>🗀</span>
-            </BigIcon>
-            <div>
-                <label htmlFor={id}>{name}</label>
-                {updatedAt && <span className={styles.timestamp}>{i18n.humanizeTime(updatedAt.getTime())}</span>}
-            </div>
-        </button>
+        <li>
+            <button
+                data-kind="primary"
+                className={classNames(styles.fileTile)}
+                disabled={disabled}
+                onClick={onTileClick}
+                id={id}
+            >
+                <BigIcon size="md" className={styles.bigIcon}>
+                    <span>🗀</span>
+                </BigIcon>
+                <div>
+                    <label htmlFor={id}>{name}</label>
+                    {updatedAt && <span className={styles.timestamp}>{i18n.humanizeTime(updatedAt.getTime())}</span>}
+                </div>
+            </button>
+        </li>
     );
 }
 
@@ -83,24 +85,29 @@ function FileItem({
     }, [fileId, previewEngine]);
 
     return (
-        <button
-            data-kind="primary"
-            className={classNames(styles.fileTile)}
-            disabled={disabled}
-            onClick={() => onChange()}
-            id={id}
-        >
-            <div
-                className={classNames(styles.previewThumb)}
-                style={{ backgroundImage: previewUrl ? `url("${previewUrl}")` : undefined }}
+        <li>
+            <button
+                data-kind="primary"
+                className={classNames(styles.fileTile)}
+                disabled={disabled}
+                onClick={() => onChange()}
+                id={id}
+                tabIndex={-1}
+                /* For keyboard nav, use the checkbox. The button is just a bigger target. */
+                aria-hidden
             >
-                <Checkbox checked={selected} id={id} disabled={disabled} onChange={() => onChange()} />
-            </div>
-            <div>
-                <label htmlFor={id}>{name}</label>
-                {updatedAt && <span className={styles.timestamp}>{i18n.humanizeTime(updatedAt.getTime())}</span>}
-            </div>
-        </button>
+                <div
+                    className={classNames(styles.previewThumb)}
+                    style={{ backgroundImage: previewUrl ? `url("${previewUrl}")` : undefined }}
+                >
+                    <Checkbox aria-labelledby={id} checked={selected} />
+                </div>
+                <div>
+                    <label htmlFor={id}>{name}</label>
+                    {updatedAt && <span className={styles.timestamp}>{i18n.humanizeTime(updatedAt.getTime())}</span>}
+                </div>
+            </button>
+        </li>
     );
 }
 

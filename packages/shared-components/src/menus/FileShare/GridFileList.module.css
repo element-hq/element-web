@@ -4,8 +4,17 @@
     display: grid;
     gap: 0 var(--cpd-space-4x);
     padding: var(--cpd-space-4x);
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
     border-radius: var(--cpd-space-2x);
+
+    li {
+        list-style: none;
+        gap: var(--cpd-space-3x);
+        > button {
+            width: fit-content;
+        }
+    }
+
     button.fileTile:hover {
         background: var(--cpd-color-bg-action-tertiary-hovered);
     }
@@ -17,7 +26,6 @@
         label {
             display: block;
         }
-        gap: var(--cpd-space-3x);
         border: none;
 
         label {
@@ -29,6 +37,8 @@
         }
 
         .previewThumb {
+            width: 128px;
+            height: 128px;
             width: 100%;
             aspect-ratio: 1;
             background-size: cover;
@@ -42,15 +52,16 @@
         }
 
         .bigIcon {
-            width: fit-content;
+            max-width: 128px;
+            max-height: 128px;
+            padding: 4em;
+            aspect-ratio: 1;
             margin: 0 auto;
-            width: 48px;
-            height: 48px;
             color: var(--cpd-color-icon-secondary);
             > span {
+                line-height: 0.6;
                 font-size: 36px;
-                margin-left: auto;
-                margin-right: auto;
+                margin: auto;
             }
         }
     }

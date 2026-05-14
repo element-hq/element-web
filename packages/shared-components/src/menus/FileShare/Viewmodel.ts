@@ -5,7 +5,7 @@
  */
 
 import type { ViewModel } from "../../core/viewmodel";
-import { GridFileListPreviewEngine } from "./GridFileList";
+import type { GridFileListPreviewEngine } from "./GridFileList";
 
 export type FileId = string;
 export type FileShareViewSetting = "list" | "grid";
@@ -23,7 +23,6 @@ export interface FileShareViewSnapshot {
 }
 
 export interface FileShareActions {
-    loadFiles(): Promise<void>;
     setCurrentDirectory(name: string): void;
     goBackDirectory(index?: number): void;
     onFileSelected(name: string): void;

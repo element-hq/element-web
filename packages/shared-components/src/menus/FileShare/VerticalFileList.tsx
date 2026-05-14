@@ -62,8 +62,10 @@ function FileItem({
             <div className={styles.fileEntryComponentName}>
                 <Checkbox checked={selected} id={id} disabled={disabled} onChange={() => onChange()} />
                 <div>
-                    <label htmlFor={id}>{fileName}</label>
-                    {fileExt[0] && <span className={styles.fileEntryNameExtension}>.{fileExt.join(".")}</span>}
+                    <label htmlFor={id}>
+                        {fileName}
+                        {fileExt[0] && <span className={styles.fileEntryNameExtension}>.{fileExt.join(".")}</span>}
+                    </label>
                 </div>
             </div>
             {updatedAt && <span className={styles.timestamp}>{i18n.humanizeTime(updatedAt.getTime())}</span>}
