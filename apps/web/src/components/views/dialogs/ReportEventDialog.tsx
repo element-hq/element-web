@@ -33,10 +33,6 @@ interface IState {
     busy: boolean;
     err?: string;
     ignoreUserToo: boolean; // if true, user will be ignored/blocked on submit
-    /*
-     * Whether the room is encrypted.
-     */
-    isRoomEncrypted: boolean;
 }
 
 /*
@@ -52,19 +48,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             busy: false,
             err: undefined,
             ignoreUserToo: false, // default false, for now. Could easily be argued as default true
-            isRoomEncrypted: false, // async, will be set later
         };
     }
-
-    public componentDidMount = async (): Promise<void> => {
-        const crypto = MatrixClientPeg.safeGet().getCrypto();
-        const roomId = this.props.mxEvent.getRoomId();
-        if (!crypto || !roomId) return;
-
-        this.setState({
-            isRoomEncrypted: await crypto.isEncryptionEnabledInRoom(roomId),
-        });
-    };
 
     private onIgnoreUserTooChanged = (newVal: boolean): void => {
         this.setState({ ignoreUserToo: newVal });
