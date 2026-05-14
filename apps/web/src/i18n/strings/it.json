@@ -744,7 +744,6 @@
         "thread_root_id": "ID root del thread: %(threadRootId)s",
         "threads_timeline": "Linea temporale conversazioni",
         "title": "Strumenti per sviluppatori",
-        "toggle_event": "commuta evento",
         "toolbox": "Strumenti",
         "use_at_own_risk": "Questa interfaccia NON controlla i tipi dei valori. Usa a tuo rischio.",
         "user_read_up_to": "L'utente ha letto fino: ",
@@ -2906,9 +2905,7 @@
         "m.poll.start": "%(senderName)s ha iniziato un sondaggio - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ha cambiato l'avatar della stanza.",
-            "changed_img": "%(senderDisplayName)s ha cambiato l'avatar della stanza a <img/>",
-            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s",
-            "removed": "%(senderDisplayName)s ha rimosso l'avatar della stanza."
+            "lightbox_title": "%(senderDisplayName)s ha cambiato l'avatar per %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

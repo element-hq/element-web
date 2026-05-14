@@ -11,35 +11,11 @@ import classnames from "classnames";
 
 import { useViewModel, type ViewModel } from "../../../../../core/viewmodel";
 import { Flex } from "../../../../../core/utils/Flex";
-import styles from "./CallStartedTileView.module.css";
+import styles from "../common/CallTileView.module.css";
 import { useI18n } from "../../../../../core/i18n/i18nContext";
+import { type CallTileViewSnapshot, CallType } from "../common/types";
 
-/**
- * Represents whether a call is a voice call or video call.
- */
-export const enum CallType {
-    /**
-     * This is a voice call.
-     */
-    Voice = "voice",
-    /**
-     * This is a video call.
-     */
-    Video = "video",
-}
-
-export type CallStartedTileViewSnapshot = {
-    /**
-     * What type of call this tile needs to render for.
-     */
-    type: CallType;
-    /**
-     * Time when this call was started.
-     */
-    timestamp: string;
-};
-
-export type CallStartedTileViewModel = ViewModel<CallStartedTileViewSnapshot>;
+export type CallStartedTileViewModel = ViewModel<CallTileViewSnapshot>;
 
 export interface CallStartedTileViewProps {
     vm: CallStartedTileViewModel;

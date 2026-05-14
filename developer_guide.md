@@ -45,6 +45,8 @@ Set up your local development link by creating a `.link-config` file with conten
 matrix-js-sdk=/path/to/matrix-js-sdk
 ```
 
+**Note for Windows users**: Your link config path might need escaping. For example, `matrix-js-sdk=C:\\path\\to\\matrix-js-sdk`.
+
 Switch to the `apps/web` directory: `cd apps/web`
 
 Configure the app by copying `config.sample.json` to `config.json` and
@@ -56,6 +58,8 @@ Finally, build and start Element itself:
 pnpm install
 pnpm start
 ```
+
+**Note for Windows users**: `pnpm start` needs to be run from a terminal with bash/shell support.
 
 Wait a few seconds for the initial build to finish; you should see something like:
 

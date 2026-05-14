@@ -832,7 +832,6 @@
         "thread_root_id": "ID da raiz do tópico: %(threadRootId)s",
         "threads_timeline": "Cronograma de tópicos",
         "title": "Ferramentas de desenvolvedor",
-        "toggle_event": "alternar evento",
         "toolbox": "Caixa de ferramentas",
         "use_at_own_risk": "Esta interface de utilizador NÃO verifica os tipos dos valores. Utiliza-a por tua conta e risco.",
         "user_read_up_to": "O utilizador leu até: ",
@@ -3220,9 +3219,7 @@
         "m.poll.start": "%(senderName)s iniciou uma sondagem - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s mudaste o avatar da sala.",
-            "changed_img": "%(senderDisplayName)s alterou a imagem da sala para <img/>",
-            "lightbox_title": "%(senderDisplayName)s alterou a imagem da sala %(roomName)s",
-            "removed": "%(senderDisplayName)s removeu a imagem da sala."
+            "lightbox_title": "%(senderDisplayName)s alterou a imagem da sala %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

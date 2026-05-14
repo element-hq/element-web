@@ -611,7 +611,6 @@
         "thread_root_id": "თემის ფესვის ID:%(threadRootId)s",
         "threads_timeline": "თემების ვადები",
         "title": "დეველოპერის ინსტრუმენტები",
-        "toggle_event": "მოვლენის გადართვა",
         "toolbox": "ხელსაწყოს ყუთი",
         "use_at_own_risk": "ეს UI არ ამოწმებს მნიშვნელობების ტიპებს. გამოიყენეთ საკუთარი რისკის ქვეშ.",
         "user_read_up_to": "მომხმარებელმა წაიკითხა: ",
@@ -2262,9 +2261,7 @@
         "m.poll.start": "%(senderName)sდაიწყო გამოკითხვა - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)sშეცვალა ოთახის ავატარი.",
-            "changed_img": "%(senderDisplayName)sშეცვალა ოთახის ავატარი<img/>",
-            "lightbox_title": "%(senderDisplayName)sშეცვალე ავატარი%(roomName)s",
-            "removed": "%(senderDisplayName)sამოიღო ოთახის ავატარი."
+            "lightbox_title": "%(senderDisplayName)sშეცვალე ავატარი%(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

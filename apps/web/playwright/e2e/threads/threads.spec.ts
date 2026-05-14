@@ -327,19 +327,19 @@ test.describe("Threads", () => {
 
     test.describe("with larger viewport", async () => {
         // Increase viewport size so that voice messages fit
-        test.use({ viewport: { width: 1280, height: 720 } });
+        test.use({ viewport: { width: 1440, height: 720 } });
 
         test.beforeEach(async ({ page }) => {
             // Increase right-panel size, so that voice messages fit
             await page.addInitScript(() => {
-                window.localStorage.setItem("mx_rhs_size", "600");
+                window.localStorage.setItem("mx_rhs_size", "700");
             });
         });
 
         test("can send voice messages", { tag: ["@no-firefox", "@no-webkit"] }, async ({ page, app, user }) => {
             // Increase right-panel size, so that voice messages fit
             await page.evaluate(() => {
-                window.localStorage.setItem("mx_rhs_size", "600");
+                window.localStorage.setItem("mx_rhs_size", "700");
             });
 
             const roomId = await app.client.createRoom({});

@@ -6,3 +6,5 @@
  */
 
 export * from "./CallStartedTile/CallStartedTileView";
+export * from "./CallDeclinedTile/CallDeclinedTileView";
+export * from "./common/types";

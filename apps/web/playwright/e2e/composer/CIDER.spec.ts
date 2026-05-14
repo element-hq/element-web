@@ -77,6 +77,12 @@ test.describe("Composer", () => {
             await expect(page.locator(".mx_EventTile_body", { hasText: "😇" })).toBeVisible();
         });
 
+        test("renders in narrow viewports", { tag: "@screenshot" }, async ({ page, bot, app }) => {
+            // Shrink the viewport
+            await page.setViewportSize({ width: 500, height: 1080 });
+            await expect(app.getComposer()).toMatchScreenshot("narrow.png");
+        });
+
         test.describe("render emoji picker with larger viewport height", async () => {
             test.use({ viewport: { width: 1280, height: 720 } });
             test("render emoji picker", { tag: "@screenshot" }, async ({ page, app }) => {
@@ -201,12 +207,6 @@ test.describe("Composer", () => {
         });
 
         test("can paste a file", async ({ page, bot, app }) => {
-            // Set up a private room so we have another user to mention
-            await app.client.createRoom({
-                is_direct: true,
-                invite: [bot.credentials.userId],
-            });
-            await app.viewRoomByName("Bob");
             await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
             await expect(page.locator(".mx_ImageBody")).toBeVisible();
         });
