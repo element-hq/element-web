@@ -207,12 +207,6 @@ test.describe("Composer", () => {
         });
 
         test("can paste a file", async ({ page, bot, app }) => {
-            // Set up a private room so we have another user to mention
-            await app.client.createRoom({
-                is_direct: true,
-                invite: [bot.credentials.userId],
-            });
-            await app.viewRoomByName("Bob");
             await app.composerDragAndPasteFile("room", getSampleFilePath("riot.png"), "image/png");
             await expect(page.locator(".mx_MImageBody")).toBeVisible();
         });
