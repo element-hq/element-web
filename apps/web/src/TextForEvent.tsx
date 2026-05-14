@@ -60,10 +60,27 @@ function textForCallEvent(event: MatrixEvent, client: MatrixClient): () => strin
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
+
+
+/**
+ * Resolves the textual content for incoming call events.
+ * Supports both legacy WebRTC invites (m.call.invite) and modern MatrixRTC notifications (MSC4075).
+ */
 function textForCallInviteEvent(event: MatrixEvent, client: MatrixClient): (() => string) | null {
     const senderName = getSenderName(event);
-    // FIXME: Find a better way to determine this from the event?
-    const isVoice = !event.getContent().offer?.sdp?.includes("m=video");
+    const content = event.getContent();
+
+    let isVoice = false;
+
+    // Check if this is a modern MatrixRTC (MSC4075) call event which cleanly defines its intent.
+    if (content["m.call.intent"]) {
+        isVoice = content["m.call.intent"] === "audio";
+    } else {
+        // Fallback for legacy WebRTC signaling
+        // FIXME: Find a better way to determine this from the event?
+        isVoice = !content.offer?.sdp?.includes("m=video");
+    }
+
     const isSupported = client.supportsVoip();
 
     // This ladder could be reduced down to a couple string variables, however other languages
@@ -881,6 +898,7 @@ const handlers: IHandlers = {
     [EventType.RoomMessage]: textForMessageEvent,
     [EventType.Sticker]: textForMessageEvent,
     [EventType.CallInvite]: textForCallInviteEvent,
+    [EventType.RTCNotification]: textForCallInviteEvent,
     [M_POLL_START.name]: textForPollStartEvent,
     [M_POLL_END.name]: textForPollEndEvent,
     [M_POLL_START.altName]: textForPollStartEvent,
