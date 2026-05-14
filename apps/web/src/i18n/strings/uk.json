@@ -871,7 +871,6 @@
         "thread_root_id": "ID кореневої гілки: %(threadRootId)s",
         "threads_timeline": "Стрічка гілок",
         "title": "Інструменти розробника",
-        "toggle_event": "перемкнути подію",
         "toolbox": "Панель інструментів",
         "use_at_own_risk": "Цей інтерфейс НЕ перевіряє типи значень. Користуйтесь на свій ризик.",
         "user_avatar": "Аватар: %(avatar)s",
@@ -3397,9 +3396,7 @@
         "m.poll.start": "%(senderName)s починає опитування - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s змінює аватар кімнати.",
-            "changed_img": "%(senderDisplayName)s змінює аватар кімнати на <img/>",
-            "lightbox_title": "%(senderDisplayName)s змінює аватар %(roomName)s",
-            "removed": "%(senderDisplayName)s вилучає аватар кімнати."
+            "lightbox_title": "%(senderDisplayName)s змінює аватар %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

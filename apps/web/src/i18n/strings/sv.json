@@ -853,7 +853,6 @@
         "thread_root_id": "Trådroots-ID: %(threadRootId)s",
         "threads_timeline": "Trådtidslinje",
         "title": "Utvecklarverktyg",
-        "toggle_event": "växla händelse",
         "toolbox": "Verktygslåda",
         "use_at_own_risk": "Det här UI:t kontrollerar inte typer för värden. Använd på egen risk.",
         "user_read_up_to": "Användaren har läst fram till: ",
@@ -3305,9 +3304,7 @@
         "m.poll.start": "%(senderName)s har startat en omröstning - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s bytte rummets avatar.",
-            "changed_img": "%(senderDisplayName)s bytte rummets avatar till <img/>",
-            "lightbox_title": "%(senderDisplayName)s bytte avatar för %(roomName)s",
-            "removed": "%(senderDisplayName)s tog bort rummets avatar."
+            "lightbox_title": "%(senderDisplayName)s bytte avatar för %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

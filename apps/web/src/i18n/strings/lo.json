@@ -617,7 +617,6 @@
         "show_hidden_events": "ສະແດງເຫດການທີ່ເຊື່ອງໄວ້ໃນທາມລາຍ",
         "state_key": "ປຸມລັດ",
         "title": "ເຄື່ອງມືພັດທະນາ",
-        "toggle_event": "ສະຫຼັບກິດຈະກຳ",
         "toolbox": "ກ່ອງເຄື່ອງມື",
         "use_at_own_risk": "UI ນີ້ບໍ່ໄດ້ກວດເບິ່ງປະເພດຂອງຄ່າ. ໃຊ້ຢູ່ໃນຄວາມສ່ຽງຂອງທ່ານເອງ.",
         "value": "ຄ່າ",
@@ -2338,9 +2337,7 @@
         "m.poll.start": "%(senderName)s ໄດ້ເລີ່ມສຳຫຼວດ - %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s ໄດ້ປ່ຽນແປງຮູບແທນຕົວຂອງຫ້ອງ.",
-            "changed_img": "%(senderDisplayName)s ໄດ້ປ່ຽນຮູບແທນຕົວຂອງຫ້ອງເປັນ <img/>",
-            "lightbox_title": "%(senderDisplayName)s ໄດ້ປ່ຽນຮູບແທນຕົວຂອງ %(roomName)s",
-            "removed": "%(senderDisplayName)s ເອົາຮູບແທນຕົວຂອງຫ້ອງອອກແລ້ວ."
+            "lightbox_title": "%(senderDisplayName)s ໄດ້ປ່ຽນຮູບແທນຕົວຂອງ %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {

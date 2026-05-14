@@ -892,7 +892,6 @@
         "thread_root_id": "ID du fil de discussion racine : %(threadRootId)s",
         "threads_timeline": "Historique des fils de discussion",
         "title": "Outils de développement",
-        "toggle_event": "Afficher/masquer l’évènement",
         "toolbox": "Boîte à outils",
         "use_at_own_risk": "Cette interface ne vérifie pas les types des valeurs. Utilisez la à vos propres risques.",
         "user_avatar": "Avatar: %(avatar)s",
@@ -3461,9 +3460,7 @@
         "m.poll.start": "%(senderName)s a démarré un sondage – %(pollQuestion)s",
         "m.room.avatar": {
             "changed": "%(senderDisplayName)s a changé l’avatar du salon.",
-            "changed_img": "%(senderDisplayName)s a changé l’avatar du salon en <img/>",
-            "lightbox_title": "%(senderDisplayName)s a changé l’avatar de %(roomName)s",
-            "removed": "%(senderDisplayName)s a supprimé l'avatar du salon."
+            "lightbox_title": "%(senderDisplayName)s a changé l’avatar de %(roomName)s"
         },
         "m.room.canonical_alias": {
             "alt_added": {
