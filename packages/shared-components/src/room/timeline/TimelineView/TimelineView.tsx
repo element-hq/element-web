@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useRef, type JSX, type ReactNode, type PropsWithChildren, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, type JSX, type ReactNode, type PropsWithChildren } from "react";
 import { LogLevel, Virtuoso, type ScrollIntoViewLocation, type VirtuosoHandle } from "react-virtuoso";
 
 import { useViewModel } from "../../../core/viewmodel/useViewModel";
@@ -63,8 +63,6 @@ function HeightDebugWrapper({ itemKey, label, children }: PropsWithChildren<{ it
 
 export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element {
     const snapshot = useViewModel(vm);
-    // eslint-disable-next-line no-console
-    console.debug(`[TimelineView] render — items=${snapshot.items.length} atLiveEnd=${snapshot.atLiveEnd}`);
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
     // Always-current snapshot reference for callbacks that fire outside React's
@@ -77,9 +75,20 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // so that scroll events emitted by that scroll are ignored.
     const isAnchorScrollInProgressRef = useRef(false);
 
+    // Wrap each item in `display: flow-root` to establish a block formatting
+    // context. Without this, vertical margins on the item's outermost element
+    // collapse *through* virtuoso's item wrapper (which has no border, padding,
+    // or non-zero margin of its own), so the wrapper's offsetHeight measured by
+    // virtuoso's ResizeObserver under-reports actual layout space. The cumulative
+    // under-report shows up as a few px of "missing" scrollTop at the bottom of
+    // the timeline and small scroll-position jumps during back-pagination. A BFC
+    // contains those margins inside the wrapper so the measured size matches the
+    // laid-out size.
     const itemContent = useCallback(
         (_index: number, item: TimelineItem): ReactNode => {
-            if (!DEBUG_SIZES) return renderItem(item);
+            if (!DEBUG_SIZES) {
+                return <div style={{ display: "flow-root" }}>{renderItem(item)}</div>;
+            }
             const label =
                 item.kind === "event" ? `event(continuation=${item.continuation})` : item.kind;
             return (
@@ -124,24 +133,19 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
             const arrayIndex = snap.items.findIndex((item) => item.key === anchor.targetKey);
             if (arrayIndex === -1) return false;
 
-            // eslint-disable-next-line no-console
-            console.debug(
-                `[TimelineView][scrollIntoViewOnChange] firstItemIndex=${snap.firstItemIndex} arrayIndex=${arrayIndex} totalCount=${_params.totalCount} count=${snap.items.length} key=${anchor.targetKey} align=${anchor.align} forwardPagination=${snap.forwardPagination} backwardPagination=${snap.backwardPagination} atLiveEnd=${snap.atLiveEnd}`,
-            );
-
             return {
                 index: arrayIndex,
                 align: anchor.align,
                 behavior: "auto",
                 done: () => {
-                    // eslint-disable-next-line no-console
-                    console.debug(`[TimelineView][scrollIntoViewOnChange done] arrayIndex=${arrayIndex} key=${anchor.targetKey} align=${anchor.align}`);
                     isAnchorScrollInProgressRef.current = true;
-                    virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });                    // Clear the anchor now that we've issued the imperative scroll. This
+                    virtuosoRef.current?.scrollToIndex({ index: arrayIndex, align: anchor.align, behavior: "auto" });
+                    // Clear the anchor now that we've issued the imperative scroll. This
                     // prevents Virtuoso's internal scroll-compensation events (size changes,
                     // upward compensation) from being misidentified as user scrolls by
                     // onScroll after isAnchorScrollInProgressRef is cleared by the rAF below.
-                    vm.onAnchorReached();                    requestAnimationFrame(() => { isAnchorScrollInProgressRef.current = false; });
+                    vm.onAnchorReached();
+                    requestAnimationFrame(() => { isAnchorScrollInProgressRef.current = false; });
                 },
             };
         },
@@ -154,8 +158,6 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // ignore scrolls we initiated ourselves via scrollToIndex.
     const onScroll = useCallback(() => {
         if (!isAnchorScrollInProgressRef.current && snapshotRef.current.pendingAnchor !== null) {
-            // eslint-disable-next-line no-console
-            console.debug(`[TimelineView] user scroll — clearing pendingAnchor`);
             vm.onAnchorReached();
         }
     }, [vm]);
@@ -172,22 +174,30 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
     // - the user is already at the bottom of the rendered list, AND
     // - the timeline window has reached the live end, AND
     // - no anchor scroll is in progress (pendingAnchor is null).
-    // The pendingAnchor guard prevents auto-scroll from firing while the view
-    // is still navigating to a permalink or restore position, even when the
-    // window happens to have reached the live end.
-    const followOutput = useCallback(
-        (isAtBottom: boolean) => isAtBottom && snapshot.atLiveEnd && snapshot.pendingAnchor === null,
+    //
+    // When `pendingAnchor` is set we pass `false` rather than a function, because
+    // Virtuoso's `trapNextSizeIncrease` (followOutputSystem.ts) checks the prop's
+    // identity (`!== false`), not the function's return value. As items are
+    // measured during initial load the list grows, Virtuoso interprets that as
+    // "user was at bottom, list grew, scroll to bottom" and would hijack the
+    // anchor scroll with a scroll to LAST. Passing false outright disables that
+    // path while the anchor is being resolved.
+    const followOutput = useMemo<boolean | ((isAtBottom: boolean) => boolean)>(
+        () => {
+            if (snapshot.pendingAnchor !== null) return false;
+            return (isAtBottom: boolean) => isAtBottom && snapshot.atLiveEnd;
+        },
         [snapshot.atLiveEnd, snapshot.pendingAnchor],
     );
 
-    const EXTENDED_VIEWPORT_HEIGHT = 2000;
-    const increaseViewportBy = useMemo(
-        () => ({
-            top: EXTENDED_VIEWPORT_HEIGHT,
-            bottom: EXTENDED_VIEWPORT_HEIGHT,
-        }),
-        [],
-    );
+    // const EXTENDED_VIEWPORT_HEIGHT = 2000;
+    // const increaseViewportBy = useMemo(
+    //     () => ({
+    //         top: EXTENDED_VIEWPORT_HEIGHT,
+    //         bottom: EXTENDED_VIEWPORT_HEIGHT,
+    //     }),
+    //     [],
+    // );
 
     // Don't mount Virtuoso until items are ready
     if (snapshot.items.length === 0) {
@@ -200,7 +210,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 ref={virtuosoRef}
                 data={snapshot.items}
                 firstItemIndex={snapshot.firstItemIndex}
-                itemContent={itemContent} 
+                itemContent={itemContent}
                 computeItemKey={computeItemKey}
                 startReached={vm.onStartReached}
                 atBottomStateChange={vm.onAtBottomStateChange}
@@ -209,7 +219,7 @@ export function TimelineView({ vm, renderItem }: TimelineViewProps): JSX.Element
                 scrollIntoViewOnChange={scrollIntoViewOnChange}
                 onScroll={onScroll}
                 rangeChanged={onRangeChanged}
-                logLevel={LogLevel.DEBUG}
+                logLevel={LogLevel.ERROR}
                 alignToBottom
                 style={{ height: "100%", width: "100%" }}
                 skipAnimationFrameInResizeObserver={true}

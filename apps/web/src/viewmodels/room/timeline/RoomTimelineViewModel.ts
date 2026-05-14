@@ -300,8 +300,11 @@ export class RoomTimelineViewModel
         const newMarker = (ev.getContent()?.event_id as string | undefined) ?? null;
         if (newMarker === this.readMarkerEventId) return;
         this.readMarkerEventId = newMarker;
-        const items = this.snapshot.current.items;
-        this.snapshot.merge({ canJumpToReadMarker: this.computeCanJumpToReadMarker(items) });
+        // Rebuild items so the read-marker row moves to the new position (or is
+        // stripped by the trailing-strip rule when the marker has advanced to
+        // the last event in the window).
+        const items = this.buildItems();
+        this.snapshot.merge({ items, canJumpToReadMarker: this.computeCanJumpToReadMarker(items) });
     };
 
     private async load(target: LoadTarget): Promise<void> {
@@ -590,31 +593,62 @@ export class RoomTimelineViewModel
      * - `"above"` — marker is above the visible start (or above the loaded window).
      * - `"below"` — marker is below the visible end (within the loaded window).
      * - `false`   — marker is visible, not set, or unreachable.
+     *
+     * The marker row may have been stripped from `items` by the trailing-strip
+     * rule in {@link buildItems} when the marker is on the last event of the
+     * window AND we're at the live end (fully read). We detect that case by
+     * consulting the timeline window directly, before falling back to the
+     * "marker is older than oldest loaded event" interpretation.
      */
     private computeCanJumpToReadMarker(items: TimelineItem[]): "above" | "below" | false {
         if (!this.readMarkerEventId) return false;
+
+        // Source-of-truth check: is the marker on the room's latest known event?
+        // If so, the user has read everything — never show the button, regardless
+        // of whether the marker happens to be in our (possibly trimmed) timeline
+        // window. This covers the case where back-pagination has caused the live
+        // edge to be trimmed off the window so the marker is no longer findable
+        // in our local events but the user is still fully read.
+        const liveEvents = this.opts.room.getLiveTimeline().getEvents();
+        const lastLiveEventId = liveEvents[liveEvents.length - 1]?.getId();
+        if (lastLiveEventId && lastLiveEventId === this.readMarkerEventId) {
+            logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker is on room's latest event → false`);
+            return false;
+        }
+
+        const events = this.timelineWindow.getEvents();
+        const markerInWindow = events.some((e) => e.getId() === this.readMarkerEventId);
+
         const rmIdx = items.findIndex((item) => item.kind === "read-marker");
         if (rmIdx === -1) {
-            // Marker may be above the loaded window.
-            const canPaginate = this.timelineWindow.canPaginate(Direction.Backward);
-            logger.debug(
-                `[TimelineVM] computeCanJumpToReadMarker — marker not in items, ` +
-                `canPaginate(Backward)=${canPaginate} → ${canPaginate ? "above" : false}`,
-            );
-            return canPaginate ? "above" : false;
+            if (markerInWindow) {
+                // Marker is in the window but was stripped (trailing without being at
+                // live end). Don't show a misleading "above" button.
+                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker stripped but in window → false`);
+                return false;
+            }
+            // Marker is genuinely outside the loaded window. Direction depends on
+            // which side has unloaded events. If forward pagination is possible,
+            // the marker is newer than our window (the user has back-paginated past
+            // the live edge and the marker fell off via window trimming): "below".
+            // Otherwise the marker is older than our window: "above".
+            const canForward = this.timelineWindow.canPaginate(Direction.Forward);
+            const canBackward = this.timelineWindow.canPaginate(Direction.Backward);
+            if (canForward) {
+                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker not in window, canPaginate(Forward)=true → below`);
+                return "below";
+            }
+            if (canBackward) {
+                logger.debug(`[TimelineVM] computeCanJumpToReadMarker — marker not in window, canPaginate(Backward)=true → above`);
+                return "above";
+            }
+            return false;
         }
         if (rmIdx < this.visibleStartArrayIndex) {
             logger.debug(
                 `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} < visibleStartArrayIndex=${this.visibleStartArrayIndex} → "above"`,
             );
             return "above";
-        }
-        // If the read marker is the last item, the timeline is fully read — nothing to jump to.
-        if (rmIdx === items.length - 1) {
-            logger.debug(
-                `[TimelineVM] computeCanJumpToReadMarker — rmIdx=${rmIdx} is last item → false`,
-            );
-            return false;
         }
         if (rmIdx > this.visibleEndArrayIndex) {
             logger.debug(
@@ -788,12 +822,22 @@ export class RoomTimelineViewModel
                     const items = this.mergePrepended(postItems, rebuilt);
                     const prepended = items.length - postItems.length;
                     added = prepended;
+                    // Backward pagination can cause the window to trim from the forward
+                    // (live) end once it exceeds the SDK's window limit. Recompute
+                    // atLiveEnd after every backward batch so the snapshot reflects
+                    // whether forward pagination is still possible.
+                    const newAtLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
                     logger.debug(
                         `[TimelineVM] paginate(backward) batch done — ` +
                         `prepended=${prepended}, hasMore=${hasMore}, emptyBatches=${emptyBatches}, ` +
-                        `firstItemIndex: ${postFirstItemIndex} → ${postFirstItemIndex - prepended}`,
+                        `firstItemIndex: ${postFirstItemIndex} → ${postFirstItemIndex - prepended}, atLiveEnd=${newAtLiveEnd}`,
                     );
-                    this.snapshot.merge({ items, firstItemIndex: postFirstItemIndex - prepended, canJumpToReadMarker: this.computeCanJumpToReadMarker(items) });
+                    this.snapshot.merge({
+                        items,
+                        firstItemIndex: postFirstItemIndex - prepended,
+                        atLiveEnd: newAtLiveEnd,
+                        canJumpToReadMarker: this.computeCanJumpToReadMarker(items),
+                    });
                 } else {
                     added = rebuilt.length - currentItems.length;
                     logger.debug(
@@ -809,11 +853,12 @@ export class RoomTimelineViewModel
                 emptyBatches++;
             }
 
-            const completionUpdate: Partial<TimelineViewSnapshot> = { [loadingKey]: "idle" };
-            if (!isBackward) {
-                completionUpdate.atLiveEnd = !this.timelineWindow.canPaginate(Direction.Forward);
-            }
-            this.snapshot.merge(completionUpdate);
+            // Always recompute atLiveEnd at chain completion. Backward chains can
+            // cause forward trimming; forward chains can reach (or leave) live end.
+            this.snapshot.merge({
+                [loadingKey]: "idle",
+                atLiveEnd: !this.timelineWindow.canPaginate(Direction.Forward),
+            });
         } catch (e) {
             logger.error(`[TimelineVM] paginate(${dirLabel}) error`, e);
             this.snapshot.merge({ [loadingKey]: "error" });
