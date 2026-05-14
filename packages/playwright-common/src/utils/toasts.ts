@@ -27,7 +27,7 @@ export async function assertNoToasts(page: Page): Promise<void> {
  *                  not exist.
  * @returns the Locator for the matching toast.
  */
-export async function getToast(page: Page, title: string, timeout?: number) {
+export async function getToast(page: Page, title: string, timeout?: number): Promise<Locator> {
     const toast = page.locator(".mx_Toast_toast", { hasText: title }).first();
     await expect(toast).toBeVisible({ timeout });
     return toast;
@@ -43,10 +43,7 @@ export async function getToast(page: Page, title: string, timeout?: number) {
  *                  not exist.
  * @returns the Locator for the matching toast, or null if it does not exist.
  */
-export async function getToastIfExists(page: Page, title: string, timeout?: number) {
-    // If we don't set a timeout, waitFor will wait forever, so default to 2 seconds.
-    timeout = timeout ?? 2000;
-
+export async function getToastIfExists(page: Page, title: string, timeout = 2000): Promise<Locator | null> {
     const toast = page.locator(".mx_Toast_toast", { hasText: title }).first();
     try {
         await toast.waitFor({ state: "visible", timeout });
