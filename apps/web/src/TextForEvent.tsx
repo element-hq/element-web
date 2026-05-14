@@ -60,11 +60,9 @@ function textForCallEvent(event: MatrixEvent, client: MatrixClient): () => strin
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
 
-
-
 /**
  * Resolves the textual content for incoming call events.
- * Supports both legacy WebRTC invites (m.call.invite) and modern MatrixRTC notifications (MSC4075).
+ * Supports both legacy WebRTC invites (m.call.invite) and MatrixRTC notifications (MSC4075).
  */
 function textForCallInviteEvent(event: MatrixEvent, client: MatrixClient): (() => string) | null {
     const senderName = getSenderName(event);
@@ -72,7 +70,7 @@ function textForCallInviteEvent(event: MatrixEvent, client: MatrixClient): (() =
 
     let isVoice = false;
 
-    // Check if this is a modern MatrixRTC (MSC4075) call event which cleanly defines its intent.
+    // Check if this is MatrixRTC (MSC4075) call event which defines its intent.
     if (content["m.call.intent"]) {
         isVoice = content["m.call.intent"] === "audio";
     } else {
