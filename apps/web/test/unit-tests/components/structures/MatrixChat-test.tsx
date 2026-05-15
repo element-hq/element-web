@@ -423,20 +423,19 @@ describe("<MatrixChat />", () => {
                 onLoggedIn(creds: QrLoginCredentials): Promise<void>;
             };
 
-            const setLoggedInSpy = jest.spyOn(Lifecycle, "setLoggedIn");
+            const configureFromCompletedSpy = jest.spyOn(Lifecycle, "configureFromCompletedOAuthLogin");
+            const restoreSessionSpy = jest.spyOn(Lifecycle, "restoreSessionFromStorage");
             const prom = onLoggedIn(qrCreds);
 
             await waitFor(() =>
-                expect(setLoggedInSpy).toHaveBeenCalledWith(
+                expect(configureFromCompletedSpy).toHaveBeenCalledWith(
                     expect.objectContaining({
                         accessToken: qrCreds.accessToken,
-                        deviceId: qrCreds.deviceId,
-                        freshLogin: true,
                         homeserverUrl: qrCreds.homeserverUrl,
-                        userId: "@user:homeserver",
                     }),
                 ),
             );
+            await waitFor(() => expect(restoreSessionSpy).toHaveBeenCalled());
             await waitFor(() =>
                 expect(mockClient.getCrypto()!.importSecretsBundle).toHaveBeenCalledWith(qrCreds.secrets),
             );
