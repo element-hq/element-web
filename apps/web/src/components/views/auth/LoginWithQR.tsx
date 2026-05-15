@@ -166,9 +166,12 @@ export default class LoginWithQR extends React.Component<Props, IState> {
                 });
             } else {
                 const { serverName } = await rendezvous.negotiateProtocols();
+                // TODO: matrix-rust-sdk sends a URL with a trailing slash instead of a bare
+                // server name (spec: https://github.com/matrix-org/matrix-spec-proposals/blob/87f8317a902cd7bc5c2d2d225f71021b3a509e2d/proposals/4108-oidc-qr-login.md).
+                // Fix there (cf. msc_4388.rs) and remove this workaround if appropriate.
                 this.setState({
                     phase: Phase.OutOfBandConfirmation,
-                    homeserverName: serverName,
+                    homeserverName: serverName?.replace(/\/$/, ""),
                 });
             }
 
