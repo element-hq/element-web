@@ -282,9 +282,6 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
 
 function narrowUploadButtons(vm: RoomUploadViewModel): JSX.Element[] {
     const snapshot = vm.getSnapshot();
-    if (!snapshot.mayUpload) {
-        return [];
-    }
     return snapshot.options.map(({ type, icon: Icon, label }) => (
         <IconizedContextMenuOption
             onClick={() => vm.onUploadOptionSelected(type)}
