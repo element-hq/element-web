@@ -35,12 +35,16 @@ import type { ComposerApiFileUploadOption } from "@element-hq/element-web-module
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import ContentMessages from "../../ContentMessages";
-import type { TimelineRenderingType } from "../../contexts/RoomContext";
+import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { chromeFileInputFix } from "../../utils/BrowserWorkarounds";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ModuleApi } from "../../modules/Api";
 import { ModuleComposerApiEvents } from "../../modules/ComposerApi";
+import { Action } from "../../dispatcher/actions";
+import type { ComposerInsertFilesPayload } from "../../dispatcher/payloads/ComposerInsertFilePayload";
+import { useDispatcher } from "../../hooks/useDispatcher";
+import { ActionPayload } from "../../dispatcher/payloads";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
@@ -49,6 +53,7 @@ export class RoomUploadViewModel
     implements UploadButtonViewActions
 {
     private readonly uploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
+    private readonly instanceId = window.crypto.randomUUID();
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
@@ -65,21 +70,29 @@ export class RoomUploadViewModel
                 options: [],
             },
         );
+        logger.info(`Creating ${this.instanceId}`);
         // Initial check.
         this.onRoomCurrentStateUpdated();
-
         // Configure upload functions
         for (const option of moduleComposerApi.fileUploadOptions) {
             this.uploadSelectFns.set(option.type, option.onSelected);
         }
         this.uploadSelectFns.set("local", this.openUploadDialog);
-
         room.on(RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
+        this.disposables.trackListener(room, RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
+
         moduleComposerApi.on(ModuleComposerApiEvents.UploaderOptionsChanged, this.onUploaderOptionsChanged);
-        this.disposables.track(() => {
-            room.off(RoomEvent.CurrentStateUpdated, this.onRoomCurrentStateUpdated);
-            moduleComposerApi.off(ModuleComposerApiEvents.UploaderOptionsChanged, this.onUploaderOptionsChanged);
-        });
+        this.disposables.trackListener(
+            moduleComposerApi,
+            ModuleComposerApiEvents.UploaderOptionsChanged,
+            // Types issue.
+            this.onUploaderOptionsChanged as any,
+        );
+    }
+
+    public dispose(): void {
+        logger.info(`Disposing of ${this.instanceId}`);
+        super.dispose();
     }
 
     private onRoomCurrentStateUpdated = (): void => {
@@ -168,14 +181,23 @@ export class RoomUploadViewModel
     };
 
     public onUploadOptionSelected = (type: ComposerApiFileUploadOption["type"]): void => {
+        if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(this.timelineRenderingType)) {
+            throw new Error("Unexpectedly called onUploadOptionSelected outside the context of a room or thread");
+        }
         const fn = this.uploadSelectFns.get(type);
         if (!fn) {
             throw new Error("Unexpectedly called onUploadOptionSelected with an unknown type");
         }
-        fn(this.room.roomId, {
-            inReplyToEventId: this.replyToEvent?.getId(),
-            relType: this.threadRelation?.rel_type,
-        });
+        fn(
+            this.room.roomId,
+            {
+                view: this.timelineRenderingType === TimelineRenderingType.Room ? "room" : "thread",
+            },
+            {
+                inReplyToEventId: this.replyToEvent?.getId(),
+                relType: this.threadRelation?.rel_type,
+            },
+        );
     };
 
     private checkCanUpload(): boolean {
@@ -209,6 +231,9 @@ export function RoomUploadContextProvider({
         "timelineRenderingType",
         "replyToEvent",
     );
+    if (!room) {
+        throw new Error("RoomUploadContextProvider must have a room");
+    }
     const client = useMatrixClientContext();
     const uploadInput = useRef<HTMLInputElement>(null);
 
@@ -219,20 +244,18 @@ export function RoomUploadContextProvider({
         uploadInput.current.click();
     }, [uploadInput]);
 
-    const vm = useCreateAutoDisposedViewModel(() => {
-        if (!room) {
-            throw new Error("RoomUploadContextProvider must have a room");
-        }
-        return new RoomUploadViewModel(
-            room,
-            client,
-            timelineRenderingType,
-            defaultDispatcher,
-            replyToEvent,
-            threadRelation,
-            openFilePicker,
-        );
-    });
+    const vm = useCreateAutoDisposedViewModel(
+        () =>
+            new RoomUploadViewModel(
+                room,
+                client,
+                timelineRenderingType,
+                defaultDispatcher,
+                replyToEvent,
+                threadRelation,
+                openFilePicker,
+            ),
+    );
 
     useEffect(() => {
         vm.setReplyToEvent(replyToEvent);
@@ -258,6 +281,21 @@ export function RoomUploadContextProvider({
         },
         [vm],
     );
+
+    useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
+        if (payload.action !== Action.ComposerFileInsert) {
+            return;
+        }
+        const fileInsert = payload as ComposerInsertFilesPayload;
+        if (fileInsert.timelineRenderingType === timelineRenderingType) {
+            logger.info(
+                `Got ComposerFileInsert with ${fileInsert.files.length} files`,
+                timelineRenderingType,
+                threadRelation,
+            );
+            vm.initiateViaInputFiles(fileInsert.files);
+        }
+    });
 
     // Note, while this logic could be largely replaced with https://developer.mozilla.org/en-US/docs/Web/API/Window/showOpenFilePicker
     // it does not enjoy support across all our target platforms.

@@ -32,13 +32,20 @@ export type ComposerApiFileUploadOption = {
      * @returns
      */
     onSelected: (
-        roomId: string,
+        roomId?: string,
+        view?: ComposerApiTarget,
         relation?: {
             inReplyToEventId?: string;
             relType?: string;
         },
     ) => Promise<void> | void;
 };
+
+/**
+ * When handling composer interactions, this represents the target composer.
+ * @alpha Likely to change. This is intentionally left as an object so it may be extended later.
+ */
+export type ComposerApiTarget = { view: "room" } | { view: "thread" };
 
 /**
  * API to interact with the message composer.
@@ -54,13 +61,18 @@ export interface ComposerApi {
     /**
      * Open the file upload confirmation dialog. This may be used in conjunction
      * with `addFileUploadOption` to support an alternative file upload kind.
-     */
-    openFileUploadConfirmation(file: File[]): void;
-    /**
-     * Insert plaintext into the current composer.
-     * @param plaintext - The plain text to insert
+     * @param files - The files to prompt for
+     * @param view - The target view to send the file into.
      * @returns Returns immediately, does not await action.
      * @alpha Likely to change
      */
-    insertPlaintextIntoComposer(plaintext: string): void;
+    openFileUploadConfirmation(files: File[], view: ComposerApiTarget): void;
+    /**
+     * Insert plaintext into the current composer.
+     * @param plaintext - The plain text to insert
+     * @param view - The target view to insert into
+     * @returns Returns immediately, does not await action.
+     * @alpha Likely to change
+     */
+    insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget): void;
 }

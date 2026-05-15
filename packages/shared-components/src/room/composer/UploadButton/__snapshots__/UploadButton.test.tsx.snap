@@ -6,15 +6,15 @@ exports[`UploadButton > can open the menu and select an option 1`] = `
   data-aria-hidden="true"
 >
   <button
-    aria-controls="radix-_r_9_"
+    aria-controls="radix-_r_f_"
     aria-disabled="false"
     aria-expanded="true"
     aria-haspopup="menu"
-    aria-labelledby="_r_a_"
+    aria-labelledby="_r_g_"
     class="_icon-button_1215g_8"
     data-kind="primary"
     data-state="open"
-    id="radix-_r_8_"
+    id="radix-_r_e_"
     role="button"
     style="--cpd-icon-button-size: 26px;"
     tabindex="0"

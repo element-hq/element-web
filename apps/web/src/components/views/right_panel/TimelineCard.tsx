@@ -38,7 +38,6 @@ import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import Measured from "../elements/Measured";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
-import { RoomUploadContextProvider } from "../../../viewmodels/room/RoomUploadViewModel.tsx";
 import { EventPresentationContextProvider } from "../../../utils/EventPresentationContextProvider";
 
 interface IProps {
@@ -215,49 +214,47 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     header={_t("right_panel|video_room_chat|title")}
                     ref={this.card}
                 >
-                    <RoomUploadContextProvider>
-                        <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
-                        <div className="mx_TimelineCard_timeline">
-                            {jumpToBottom}
-                            <EventPresentationContextProvider layout={layout}>
-                                <TimelinePanel
-                                    ref={this.timelinePanel}
-                                    showReadReceipts={this.state.showReadReceipts}
-                                    manageReadReceipts={true}
-                                    manageReadMarkers={false} // No RM support in the TimelineCard
-                                    sendReadReceiptOnLoad={true}
-                                    timelineSet={this.props.timelineSet}
-                                    showUrlPreview={this.context.showUrlPreview}
-                                    // The right panel timeline (and therefore threads) don't support IRC layout at this time
-                                    layout={layout}
-                                    hideThreadedMessages={false}
-                                    hidden={false}
-                                    showReactions={true}
-                                    className="mx_RoomView_messagePanel"
-                                    permalinkCreator={this.props.permalinkCreator}
-                                    membersLoaded={true}
-                                    editState={this.state.editState}
-                                    eventId={this.state.initialEventId}
-                                    highlightedEventId={highlightedEventId}
-                                    onScroll={this.onScroll}
-                                />
-                            </EventPresentationContextProvider>
-                        </div>
-
-                        {isUploading && <UploadBar room={this.props.room} relation={this.props.composerRelation} />}
-
-                        {showComposer && (
-                            <MessageComposer
-                                room={this.props.room}
-                                relation={this.props.composerRelation}
-                                resizeNotifier={this.props.resizeNotifier}
-                                replyToEvent={this.state.replyToEvent}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
+                    <div className="mx_TimelineCard_timeline">
+                        {jumpToBottom}
+                        <EventPresentationContextProvider layout={layout}>
+                            <TimelinePanel
+                                ref={this.timelinePanel}
+                                showReadReceipts={this.state.showReadReceipts}
+                                manageReadReceipts={true}
+                                manageReadMarkers={false} // No RM support in the TimelineCard
+                                sendReadReceiptOnLoad={true}
+                                timelineSet={this.props.timelineSet}
+                                showUrlPreview={this.context.showUrlPreview}
+                                // The right panel timeline (and therefore threads) don't support IRC layout at this time
+                                layout={layout}
+                                hideThreadedMessages={false}
+                                hidden={false}
+                                showReactions={true}
+                                className="mx_RoomView_messagePanel"
                                 permalinkCreator={this.props.permalinkCreator}
-                                e2eStatus={this.props.e2eStatus}
-                                compact={true}
+                                membersLoaded={true}
+                                editState={this.state.editState}
+                                eventId={this.state.initialEventId}
+                                highlightedEventId={highlightedEventId}
+                                onScroll={this.onScroll}
                             />
-                        )}
-                    </RoomUploadContextProvider>
+                        </EventPresentationContextProvider>
+                    </div>
+
+                    {isUploading && <UploadBar room={this.props.room} relation={this.props.composerRelation} />}
+
+                    {showComposer && (
+                        <MessageComposer
+                            room={this.props.room}
+                            relation={this.props.composerRelation}
+                            resizeNotifier={this.props.resizeNotifier}
+                            replyToEvent={this.state.replyToEvent}
+                            permalinkCreator={this.props.permalinkCreator}
+                            e2eStatus={this.props.e2eStatus}
+                            compact={true}
+                        />
+                    )}
                 </BaseCard>
             </ScopedRoomContextProvider>
         );

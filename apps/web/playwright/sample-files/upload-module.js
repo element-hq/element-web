@@ -24,10 +24,11 @@ export default class CustomComponentModule {
         this.api.composer.addFileUploadOption({
             type: "org.example.uploader",
             label: "Example uploader",
-            onSelected: () => {
-                this.api.composer.openFileUploadConfirmation([
-                    new File(["test"], "testfile.txt", { type: "text/plain" }),
-                ]);
+            onSelected: (_roomId, view) => {
+                this.api.composer.openFileUploadConfirmation(
+                    [new File(["test"], "testfile.txt", { type: "text/plain" })],
+                    view,
+                );
             },
         });
     }

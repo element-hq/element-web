@@ -9,7 +9,7 @@
             "inputs": ["src"],
             "outputs": ["{projectRoot}/lib"],
             "options": {
-                "commands": ["vite build", "api-extractor run"],
+                "commands": ["vite build", "api-extractor run -l"],
                 "parallel": false,
                 "cwd": "packages/module-api"
             }

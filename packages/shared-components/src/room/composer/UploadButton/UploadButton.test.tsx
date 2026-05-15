@@ -13,12 +13,19 @@ import { fn } from "storybook/test";
 
 import * as stories from "./UploadButton.stories.tsx";
 
-const { Default } = composeStories(stories);
+const { Default, WithOneOption } = composeStories(stories);
 
 describe("UploadButton", () => {
     it("renders a default button", () => {
         const { container } = render(<Default />);
         expect(container).toMatchSnapshot();
+    });
+    it("will provide one option when only one is available", async () => {
+        userEvent.setup();
+        const onUploadOptionSelected = fn();
+        const { getByRole } = render(<WithOneOption onUploadOptionSelected={onUploadOptionSelected} />);
+        await userEvent.click(getByRole("button", { name: "Attachment" }));
+        expect(onUploadOptionSelected).toHaveBeenCalledWith("local");
     });
     it("can open the menu and select an option", async () => {
         const onUploadOptionSelected = fn();

@@ -8,12 +8,15 @@ Please see LICENSE files in the repository root for full details.
 import {
     type ComposerApi as ModuleComposerApi,
     type ComposerApiFileUploadOption,
+    type ComposerApiView,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
-import type { ComposerInsertPayload } from "../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerType, type ComposerInsertPayload } from "../dispatcher/payloads/ComposerInsertPayload";
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import type { ComposerInsertFilesPayload } from "../dispatcher/payloads/ComposerInsertFilePayload";
 
 export enum ModuleComposerApiEvents {
     UploaderOptionsChanged = "uploaderOptionsChanged",
@@ -51,17 +54,27 @@ export class ComposerApi
         this.emit(ModuleComposerApiEvents.UploaderOptionsChanged, option);
     }
 
-    public openFileUploadConfirmation(files: File[]): void {
+    public openFileUploadConfirmation(files: File[], view: ComposerApiView): void {
+        if (!["room", "thread"].includes(view.view)) {
+            throw new Error(`Invalid view '${view.view}'`);
+        }
         this.dispatcher.dispatch({
-            action: Action.ComposerInsert,
+            action: Action.ComposerFileInsert,
             files,
-        } satisfies ComposerInsertPayload);
+            timelineRenderingType: view.view === "room" ? TimelineRenderingType.Room : TimelineRenderingType.Thread,
+        } satisfies ComposerInsertFilesPayload);
     }
 
-    public insertPlaintextIntoComposer(plaintext: string): void {
+    public insertPlaintextIntoComposer(plaintext: string, view: ComposerApiView): void {
+        if (!["room", "thread"].includes(view.view)) {
+            throw new Error(`Invalid view '${view.view}'`);
+        }
         this.dispatcher.dispatch({
             action: Action.ComposerInsert,
             text: plaintext,
+            timelineRenderingType: view.view === "room" ? TimelineRenderingType.Room : TimelineRenderingType.Thread,
+            // We only support send.
+            composerType: ComposerType.Send,
         } satisfies ComposerInsertPayload);
     }
 }

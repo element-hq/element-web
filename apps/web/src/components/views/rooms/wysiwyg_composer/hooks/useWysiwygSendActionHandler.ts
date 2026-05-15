@@ -15,11 +15,10 @@ import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
 import { type ComposerFunctions } from "../types";
-import { type ComposerInsertPayload, ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 import { useComposerContext } from "../ComposerContext";
 import { setSelection } from "../utils/selection";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
-import { useRoomUploadViewModel } from "../../../../../viewmodels/room/RoomUploadViewModel.tsx";
 
 export function useWysiwygSendActionHandler(
     disabled: boolean,
@@ -28,7 +27,6 @@ export function useWysiwygSendActionHandler(
 ): void {
     const roomContext = useScopedRoomContext("timelineRenderingType");
     const composerContext = useComposerContext();
-    const uploadVm = useRoomUploadViewModel();
     const timeoutId = useRef<number | null>(null);
 
     const handler = useCallback(
@@ -52,25 +50,21 @@ export function useWysiwygSendActionHandler(
                     composerFunctions.clear();
                     focusComposer(composerElement, context, roomContext, timeoutId);
                     break;
-                case Action.ComposerInsert: {
-                    const insertPayload = payload as ComposerInsertPayload;
-                    if (insertPayload.timelineRenderingType !== roomContext.timelineRenderingType) break;
-                    if (insertPayload.composerType !== ComposerType.Send) break;
+                case Action.ComposerInsert:
+                    if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
+                    if (payload.composerType !== ComposerType.Send) break;
 
-                    if (insertPayload.userId) {
+                    if (payload.userId) {
                         // TODO insert mention - see SendMessageComposer
-                    } else if (insertPayload.event) {
+                    } else if (payload.event) {
                         // TODO insert quote message - see SendMessageComposer
-                    } else if (insertPayload.text) {
+                    } else if (payload.text) {
                         setSelection(composerContext.selection).then(() => composerFunctions.insertText(payload.text));
-                    } else if (insertPayload.files) {
-                        uploadVm.initiateViaInputFiles(insertPayload.files);
                     }
                     break;
-                }
             }
         },
-        [disabled, composerElement, roomContext, composerFunctions, composerContext, uploadVm],
+        [disabled, composerElement, roomContext, composerFunctions, composerContext],
     );
 
     useDispatcher(defaultDispatcher, handler);

@@ -103,8 +103,8 @@ export interface ComponentVisibilityCustomisations {
 // @alpha
 export interface ComposerApi {
     addFileUploadOption(option: ComposerApiFileUploadOption): void;
-    insertPlaintextIntoComposer(plaintext: string): void;
-    openFileUploadConfirmation(file: File[]): void;
+    insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget): void;
+    openFileUploadConfirmation(files: File[], view: ComposerApiTarget): void;
 }
 
 // @alpha
@@ -112,10 +112,17 @@ export type ComposerApiFileUploadOption = {
     type: string;
     label: string;
     icon?: ComponentType<SVGAttributes<SVGElement>>;
-    onSelected: (roomId: string, relation?: {
+    onSelected: (roomId?: string, view?: ComposerApiTarget, relation?: {
         inReplyToEventId?: string;
         relType?: string;
     }) => Promise<void> | void;
+};
+
+// @alpha
+export type ComposerApiTarget = {
+    view: "room";
+} | {
+    view: "thread";
 };
 
 // @public
