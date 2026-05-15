@@ -22,7 +22,6 @@ import { useI18n } from "../../../core/i18n/i18nContext";
 import { useViewModel, type ViewModel } from "../../../core/viewmodel";
 
 export interface UploadButtonViewSnapshot {
-    mayDragAndDropFile?: boolean;
     options: { type: string; label: string; icon?: ComponentType<SVGAttributes<SVGElement>> }[];
 }
 
@@ -32,7 +31,7 @@ export interface UploadButtonViewActions {
 
 /**
  * A composer button to initiate uploading files. The button may also be
- * Ctrl+Clicked to initiate the
+ * Ctrl+Clicked to pick the first option automatically.
  *
  * @example
  * ```tsx
@@ -51,9 +50,8 @@ export function UploadButton({
     const i18n = useI18n();
     const [open, setOpen] = useState(defaultOpen);
     const { options } = useViewModel(vm);
+
     // Ctrl+click is a shortcut to selecting the first item.
-    // N.B. Clicking and shift clicking is handled by radix and
-    // can't be intercepted.
     const onMenuClick: MouseEventHandler<HTMLButtonElement> = useCallback(
         (ev) => {
             if (!ev.ctrlKey) {
@@ -96,6 +94,7 @@ export function UploadButton({
         <Menu
             side="top"
             title={i18n.translate("common|attachment")}
+            showTitle={false}
             trigger={trigger}
             open={open}
             onOpenChange={(o) => setOpen(o)}

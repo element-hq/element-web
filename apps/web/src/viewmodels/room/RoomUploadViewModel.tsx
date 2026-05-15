@@ -44,12 +44,16 @@ import { ModuleComposerApiEvents } from "../../modules/ComposerApi";
 import { Action } from "../../dispatcher/actions";
 import type { ComposerInsertFilesPayload } from "../../dispatcher/payloads/ComposerInsertFilePayload";
 import { useDispatcher } from "../../hooks/useDispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import type { ActionPayload } from "../../dispatcher/payloads";
 
 const logger = rootLogger.getChild("RoomUploadViewModel");
 
+interface RoomUploadViewSnapshot extends UploadButtonViewSnapshot {
+    mayDragAndDropFile: boolean;
+}
+
 export class RoomUploadViewModel
-    extends BaseViewModel<UploadButtonViewSnapshot, Record<string, never>>
+    extends BaseViewModel<RoomUploadViewSnapshot, Record<string, never>>
     implements UploadButtonViewActions
 {
     private readonly uploadSelectFns = new Map<string, ComposerApiFileUploadOption["onSelected"]>();
@@ -57,7 +61,7 @@ export class RoomUploadViewModel
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
-        private readonly timelineRenderingType: TimelineRenderingType,
+        private readonly timelineRenderingType: TimelineRenderingType.Room | TimelineRenderingType.Thread,
         private readonly dispatcher: MatrixDispatcher,
         private replyToEvent: MatrixEvent | undefined,
         private threadRelation: IEventRelation | undefined,
@@ -68,6 +72,7 @@ export class RoomUploadViewModel
             {},
             {
                 options: [],
+                mayDragAndDropFile: false,
             },
         );
         logger.info(`Creating ${this.instanceId}`);
@@ -96,8 +101,10 @@ export class RoomUploadViewModel
     }
 
     private onRoomCurrentStateUpdated = (): void => {
+        const maySendMessage = this.room.maySendMessage();
         this.snapshot.merge({
-            options: this.room.maySendMessage()
+            mayDragAndDropFile: maySendMessage,
+            options: maySendMessage
                 ? [
                       {
                           type: "local",
@@ -181,9 +188,6 @@ export class RoomUploadViewModel
     };
 
     public onUploadOptionSelected = (type: ComposerApiFileUploadOption["type"]): void => {
-        if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(this.timelineRenderingType)) {
-            throw new Error("Unexpectedly called onUploadOptionSelected outside the context of a room or thread");
-        }
         const fn = this.uploadSelectFns.get(type);
         if (!fn) {
             throw new Error("Unexpectedly called onUploadOptionSelected with an unknown type");
@@ -234,6 +238,9 @@ export function RoomUploadContextProvider({
     if (!room) {
         throw new Error("RoomUploadContextProvider must have a room");
     }
+    if (![TimelineRenderingType.Room, TimelineRenderingType.Thread].includes(timelineRenderingType)) {
+        throw new Error("TimelineRenderingType must be Room or Thread");
+    }
     const client = useMatrixClientContext();
     const uploadInput = useRef<HTMLInputElement>(null);
 
@@ -249,7 +256,8 @@ export function RoomUploadContextProvider({
             new RoomUploadViewModel(
                 room,
                 client,
-                timelineRenderingType,
+                // Checked earlier
+                timelineRenderingType as TimelineRenderingType.Room | TimelineRenderingType.Thread,
                 defaultDispatcher,
                 replyToEvent,
                 threadRelation,

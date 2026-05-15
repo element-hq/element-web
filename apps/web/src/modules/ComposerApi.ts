@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import {
     type ComposerApi as ModuleComposerApi,
     type ComposerApiFileUploadOption,
-    type ComposerApiView,
+    type ComposerApiTarget,
 } from "@element-hq/element-web-module-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
@@ -54,7 +54,7 @@ export class ComposerApi
         this.emit(ModuleComposerApiEvents.UploaderOptionsChanged, option);
     }
 
-    public openFileUploadConfirmation(files: File[], view: ComposerApiView): void {
+    public openFileUploadConfirmation(files: File[], view: ComposerApiTarget): void {
         if (!["room", "thread"].includes(view.view)) {
             throw new Error(`Invalid view '${view.view}'`);
         }
@@ -65,7 +65,7 @@ export class ComposerApi
         } satisfies ComposerInsertFilesPayload);
     }
 
-    public insertPlaintextIntoComposer(plaintext: string, view: ComposerApiView): void {
+    public insertPlaintextIntoComposer(plaintext: string, view: ComposerApiTarget): void {
         if (!["room", "thread"].includes(view.view)) {
             throw new Error(`Invalid view '${view.view}'`);
         }
